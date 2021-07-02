@@ -1,8 +1,8 @@
 {
-  "name": "hmpps-template-typescript",
+  "name": "create-and-vary-a-licence",
   "version": "0.0.1",
-  "description": "HMPPS Typescript Template",
-  "repository": "git@github.com:ministryofjustice/hmpps-template-typescript.git",
+  "description": "Create And Vary A Licence",
+  "repository": "git@github.com:ministryofjustice/create-and-vary-a-licence.git",
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
