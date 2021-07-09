@@ -1,7 +1,7 @@
 const page = require('./page')
 
 const indexPage = () =>
-  page('This site is under construction...', {
+  page('Welcome', {
     headerUserName: () => cy.get('[data-qa=header-user-name]'),
   })
 
