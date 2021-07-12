@@ -24,10 +24,25 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - DELIUS_ENABLED=false
 
-  app:
+  # For the API to seed & interact with - there is no direct connection from the UI service
+  licences-db:
+    image: postgres
+    networks:
+      - hmpps
+    container_name: licences-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=licences
+      - POSTGRES_DB=licences
+
+  create-and-vary-a-licence:
     build: .
     networks:
       - hmpps
+    container_name: create-and-vary-a-licence
     depends_on: [redis]
     ports:
       - "3000:3000"
@@ -36,9 +51,9 @@ services:
       - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
       - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
       # These will need to match new creds in the seed auth service auth
-      - API_CLIENT_ID=client-id
+      - API_CLIENT_ID=create-and-vary-a-licence-client
       - API_CLIENT_SECRET=client-secret
-      - SYSTEM_CLIENT_ID=system-client-id
+      - SYSTEM_CLIENT_ID=create-and-vary-a-licence-admin
       - SYSTEM_CLIENT_SECRET=system-client-secret
 
 networks:

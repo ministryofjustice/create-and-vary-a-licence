@@ -5,6 +5,7 @@ services:
     image: 'bitnami/redis:5.0'
     networks:
       - hmpps_int
+    container_name: redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
