@@ -1,12 +1,73 @@
 {% extends "../partials/layout.njk" %}
+{% from "../partials/card.njk" import card %}
 
 {% set pageTitle = applicationName + " - Home" %}
 
 {% block content %}
+  <div class="govuk-width-container">
+    <h1 class="govuk-heading-l govuk-!-margin-top-7">Create and vary a licence</h1>
+    <p class="govuk-body govuk-!-margin-bottom-7">A service for requesting, creating, viewing and approving licences.</p>
+  </div>
 
-  <main class="app-container govuk-body">
-    <h1>Welcome</h1>
-    <p>Please check back later when there is content to view.</p>
-  </main>
+<div class="homepage-content">
+  <div class="govuk-width-container">
+    <ul class="govuk-grid-row card-group">
 
+      <li class="govuk-grid-column-one-third card-group__item">
+       {{ card({
+         "href": '/',
+         "clickable": "true",
+         "heading": 'Create a licence',
+         "description": 'Create a licence for a person in your probation caseload.',
+         "data-qa": "create-licence-link"
+       }) }}
+      </li>
+
+      <li class="govuk-grid-column-one-third card-group__item">
+        {{ card({
+          "href": '/',
+          "clickable": "true",
+          "heading": 'View or print a licence',
+          "description": 'View or print an approved licence for an offender in your prison caseload.',
+          "data-qa": "view-print-licence-link"
+        }) }}
+      </li>
+
+      <li class="govuk-grid-column-one-third card-group__item">
+        {{ card({
+          "href": '/',
+          "clickable": "true",
+          "heading": 'Approve a licence',
+          "description": 'Approve a licence for an offender who will be released from your prison caseload.',
+          "data-qa": "approve-licence-link"
+        }) }}
+      </li>
+
+      <li class="govuk-grid-column-one-third card-group__item">
+        {{ card({
+          "href": '/',
+          "clickable": "true",
+          "heading": 'Request a licence',
+          "description": 'Request that a licence be created for an offender in your prison caseload.',
+          "data-qa": "request-licence-link"
+        }) }}
+      </li>
+
+      <li class="govuk-grid-column-one-third card-group__item">
+        {{ card({
+          "href": '/',
+          "clickable": "true",
+          "heading": 'Approve bespoke terms',
+          "description": 'Review and approve bespoke terms on licences in your probation caseload.',
+          "data-qa": "approve-bespoke-link"
+        }) }}
+      </li>
+
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/assets/js/card.js"></script>
 {% endblock %}
