@@ -18,7 +18,12 @@ describe('GET /', () => {
       .get('/')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Welcome')
+        expect(res.text).toContain('Create and vary a licence')
+        expect(res.text).toContain('Create a licence')
+        expect(res.text).toContain('View or print a licence')
+        expect(res.text).toContain('Approve a licence')
+        expect(res.text).toContain('Request a licence')
+        expect(res.text).toContain('Approve bespoke terms')
       })
   })
 })
