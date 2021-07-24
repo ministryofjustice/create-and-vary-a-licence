@@ -53,10 +53,10 @@ export default {
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
       agent: new AgentConfig(),
-      apiClientId: get('API_CLIENT_ID', 'clientid', requiredInProduction),
+      apiClientId: get('API_CLIENT_ID', 'create-and-vary-a-licence-client', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
-      systemClientId: get('SYSTEM_CLIENT_ID', 'clientid', requiredInProduction),
-      systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
+      systemClientId: get('SYSTEM_CLIENT_ID', 'create-and-vary-a-licence-admin', requiredInProduction),
+      systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'client_secret', requiredInProduction),
     },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
@@ -66,6 +66,30 @@ export default {
       },
       agent: new AgentConfig(),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
+    },
+    licenceApi: {
+      url: get('LICENCE_API_URL', 'http://localhost:8089', requiredInProduction),
+      timeout: {
+        response: get('LICENCE_API_TIMEOUT_RESPONSE', 10000),
+        deadline: get('LICENCE_API_TIMEOUT_DEADLINE', 10000),
+      },
+      agent: new AgentConfig(),
+    },
+    prisonApi: {
+      url: get('PRISON_API_URL', 'http://localhost:8080', requiredInProduction),
+      timeout: {
+        response: get('PRISON_API_TIMEOUT_RESPONSE', 10000),
+        deadline: get('PRISON_API_TIMEOUT_DEADLINE', 10000),
+      },
+      agent: new AgentConfig(),
+    },
+    communityApi: {
+      url: get('COMMUNITY_API_URL', 'http://localhost:8088', requiredInProduction),
+      timeout: {
+        response: get('COMMUNITY_API_TIMEOUT_RESPONSE', 10000),
+        deadline: get('COMMUNITY_API_TIMEOUT_DEADLINE', 10000),
+      },
+      agent: new AgentConfig(),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
