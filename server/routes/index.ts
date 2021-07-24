@@ -2,6 +2,9 @@ import { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
 import OtherRoutes from './OtherRoutes'
+import auth from '../authentication/auth'
+import tokenVerifier from '../data/tokenVerification'
+import populateCurrentUser from '../middleware/populateCurrentUser'
 
 export default function Index({ userService, prisonerService, licenceService, communityService }: Services): Router {
   const router = Router({ mergeParams: true })
@@ -22,6 +25,15 @@ export default function Index({ userService, prisonerService, licenceService, co
     get('/staff/:staffId/caseload', otherAccessRoutes.getStaffCaseload)
     get('/prisoner/:nomsId/detail', otherAccessRoutes.getPrisonerDetail)
   }
+
+  router.use(auth.authenticationMiddleware(tokenVerifier))
+  router.use(populateCurrentUser(userService))
+  router.use((req, res, next) => {
+    if (typeof req.csrfToken === 'function') {
+      res.locals.csrfToken = req.csrfToken()
+    }
+    next()
+  })
 
   indexRoutes()
   otherRoutes()

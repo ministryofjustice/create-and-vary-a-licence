@@ -51,7 +51,7 @@ function appSetup({
   nunjucksSetup(app, path)
 
   app.use((req, res, next) => {
-    req.user = { username: 'user1', token: 'token1', authSource: 'nomis' }
+    req.user = { ...user, token: 'token1', authSource: 'nomis' }
     res.locals = { user: { ...req.user, userRoles } }
     next()
   })
