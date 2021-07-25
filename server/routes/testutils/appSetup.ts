@@ -6,7 +6,7 @@ import path from 'path'
 import allRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
-import UserService from '../../services/userService'
+import UserService, { UserDetails } from '../../services/userService'
 import LicenceService from '../../services/licenceService'
 import PrisonerService from '../../services/prisonerService'
 import CommunityService from '../../services/communityService'
@@ -14,11 +14,8 @@ import * as auth from '../../authentication/auth'
 import { AuthRole } from '../../middleware/authorisationMiddleware'
 import { Services } from '../../services'
 
-const user = {
+export const user: UserDetails = {
   name: 'john smith',
-  firstName: 'john',
-  lastName: 'smith',
-  username: 'user1',
   displayName: 'John Smith',
 }
 
@@ -51,7 +48,7 @@ function appSetup({
   nunjucksSetup(app, path)
 
   app.use((req, res, next) => {
-    req.user = { ...user, token: 'token1', authSource: 'nomis' }
+    req.user = { ...user, token: 'token1', authSource: 'nomis', username: 'user1' }
     res.locals = { user: { ...req.user, userRoles } }
     next()
   })

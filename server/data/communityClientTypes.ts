@@ -1,14 +1,14 @@
-type Staff = {
+export type Staff = {
   forenames: string
   surname: string
 }
 
-type CodeDescription = {
+export type CodeDescription = {
   code: string
   description: string
 }
 
-type Team = {
+export type Team = {
   borough: CodeDescription
   code: string
   description: string

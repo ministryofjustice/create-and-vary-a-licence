@@ -1,7 +1,7 @@
 import { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import { Services } from '../services'
-import OtherRoutes from './OtherRoutes'
+import OtherRoutes from './otherRoutes'
 import auth from '../authentication/auth'
 import tokenVerifier from '../data/tokenVerification'
 import populateCurrentUser from '../middleware/populateCurrentUser'
