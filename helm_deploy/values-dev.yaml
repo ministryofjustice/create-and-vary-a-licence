@@ -11,6 +11,9 @@ generic-service:
     INGRESS_URL: "https://create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
+    PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
+    LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
