@@ -34,9 +34,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=licences
-      - POSTGRES_DB=licences
+      - POSTGRES_PASSWORD=create-and-vary-a-licence
+      - POSTGRES_USER=create-and-vary-a-licence
+      - POSTGRES_DB=create-and-vary-a-licence-db
 
   create-and-vary-a-licence:
     build: .
@@ -50,11 +50,10 @@ services:
       - REDIS_HOST=redis
       - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
       - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
-      # These will need to match new creds in the seed auth service auth
       - API_CLIENT_ID=create-and-vary-a-licence-client
-      - API_CLIENT_SECRET=client-secret
+      - API_CLIENT_SECRET=clientsecret
       - SYSTEM_CLIENT_ID=create-and-vary-a-licence-admin
-      - SYSTEM_CLIENT_SECRET=system-client-secret
+      - SYSTEM_CLIENT_SECRET=client_secret
 
 networks:
   hmpps:

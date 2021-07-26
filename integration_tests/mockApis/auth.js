@@ -8,7 +8,7 @@ const createToken = () => {
     user_name: 'USER1',
     scope: ['read'],
     auth_source: 'nomis',
-    authorities: [],
+    authorities: ['ROLE_CVL_OMU'],
     jti: '83b50a10-cca6-41db-985f-e87efb303ddb',
     client_id: 'clientid',
   }
@@ -131,7 +131,7 @@ const stubUserRoles = () =>
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      jsonBody: [{ roleId: 'SOME_USER_ROLE' }],
+      jsonBody: [{ roleId: 'ROLE_CVL_OMU' }],
     },
   })
 

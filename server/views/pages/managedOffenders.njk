@@ -1,0 +1,44 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set pageTitle = applicationName + " - Caseload" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <h1 class="govuk-heading-l govuk-!-margin-top-7">Create and vary a licence</h1>
+        <p class="govuk-body govuk-!-margin-bottom-7">Staff caseload</p>
+    </div>
+
+    <div class="staff-detail-content">
+        <div class="govuk-width-container">
+            <table id="staff-caseload" class="govuk-table" data-qa="staff-caseload">
+
+                <thead class="govuk-table__head">
+                  <th scope="col" class="govuk-table__header">CRN</th>
+                  <th scope="col" class="govuk-table__header">Staff code</th>
+                  <th scope="col" class="govuk-table__header">OM</th>
+                  <th scope="col" class="govuk-table__header">POM</th>
+                  <th scope="col" class="govuk-table__header">RO</th>
+                  <th scope="col" class="govuk-table__header">Nomis ID</th>
+                  <th scope="col" class="govuk-table__header">Surname</th>
+                </thead>
+
+                <tbody class="govuk-table__body govuk-body-s">
+                  {% for offender in managedOffenders %}
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell">{{ offender.crnNumber }}</td>
+                      <td class="govuk-table__cell">{{ offender.staffCode }}</td>
+                      <td class="govuk-table__cell">{{ offender.currentOm }}</td>
+                      <td class="govuk-table__cell">{{ offender.currentPom }}</td>
+                      <td class="govuk-table__cell">{{ offender.currentRo }}</td>
+                      <td class="govuk-table__cell">{{ offender.nomsNumber }}</td>
+                      <td class="govuk-table__cell">{{ offender.offenderSurname }}</td>
+                    </tr>
+                  {%  endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+{% endblock %}
