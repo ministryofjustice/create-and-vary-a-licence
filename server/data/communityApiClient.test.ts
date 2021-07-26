@@ -23,11 +23,6 @@ const stubbedManagedOffenders: ManagedOffender[] = [
   } as ManagedOffender,
 ]
 
-const errorNotFound = {
-  developerMessage: 'Staff identifier required',
-  status: 400,
-}
-
 const communityService = new CommunityService(hmppsAuthClient)
 
 describe('Community API client tests', () => {
@@ -73,9 +68,9 @@ describe('Community API client tests', () => {
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
     })
 
-    it('Staff code not valid', async () => {
+    it('Staff code not found', async () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get('/secure/staff/staffIdentifier/1234/managedOffenders', '').reply(404, errorNotFound)
+      fakeApi.get('/secure/staff/staffIdentifier/1234/managedOffenders', '').reply(404)
       try {
         await communityService.getManagedOffenders('XTEST1', 1234)
       } catch (e) {
