@@ -1,6 +1,6 @@
 import nock from 'nock'
 import config from '../config'
-import { ManagedOffender } from './communityClientTypes'
+import { CommunityApiStaffDetails, CommunityApiManagedOffender } from './communityClientTypes'
 import CommunityService from '../services/communityService'
 import HmppsAuthClient from './hmppsAuthClient'
 
@@ -8,7 +8,7 @@ jest.mock('./hmppsAuthClient')
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 
-const stubbedManagedOffenders: ManagedOffender[] = [
+const stubbedManagedOffenders: CommunityApiManagedOffender[] = [
   {
     crnNumber: 'CRN001',
     currentOm: true,
@@ -16,12 +16,19 @@ const stubbedManagedOffenders: ManagedOffender[] = [
     currentRo: true,
     nomsNumber: 'A1234AA',
     offenderSurname: 'McCartney',
-    omEndDate: '12/12/2021',
-    omStartDate: '01/12/2021',
     staffCode: 'ST0001',
     staffIdentifier: 1234,
-  } as ManagedOffender,
+  } as CommunityApiManagedOffender,
 ]
+
+const stubbedStaffDetails: CommunityApiStaffDetails = {
+  email: 'test@test.com',
+  staff: { forenames: 'Test test', surname: 'Test' },
+  staffCode: 'X400',
+  staffIdentifier: 1234,
+  telephoneNumber: '0111 1111111',
+  username: 'TestUserNPS',
+}
 
 const communityService = new CommunityService(hmppsAuthClient)
 
@@ -70,12 +77,23 @@ describe('Community API client tests', () => {
 
     it('Staff code not found', async () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get('/secure/staff/staffIdentifier/1234/managedOffenders', '').reply(404)
+      fakeApi.get('/secure/staff/staffIdentifier/1111/managedOffenders', '').reply(404)
       try {
-        await communityService.getManagedOffenders('XTEST1', 1234)
+        await communityService.getManagedOffenders('XTEST1', 1111)
       } catch (e) {
         expect(e.message).toContain('Not Found')
       }
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+  })
+
+  describe('Get staff details for a probation officer', () => {
+    it('Get staff details', async () => {
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/secure/staff/username/XTEST1', '').reply(200, stubbedStaffDetails)
+      const data = await communityService.getStaffDetail('XTEST1')
+      expect(data).toEqual(stubbedStaffDetails)
       expect(nock.isDone()).toBe(true)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
     })

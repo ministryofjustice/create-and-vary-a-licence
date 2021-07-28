@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
-import type { StaffDetail, ManagedOffender } from './communityClientTypes'
+import { CommunityApiStaffDetails, CommunityApiManagedOffender } from './communityClientTypes'
 
 export default class CommunityApiClient {
   restClient: RestClient
@@ -9,13 +9,13 @@ export default class CommunityApiClient {
     this.restClient = new RestClient('Community API', config.apis.communityApi as ApiConfig, token)
   }
 
-  async getStaffDetailByUsername(username: string): Promise<StaffDetail> {
-    return this.restClient.get({ path: `/secure/staff/username/${username}` }) as Promise<StaffDetail>
+  async getStaffDetailByUsername(username: string): Promise<CommunityApiStaffDetails> {
+    return this.restClient.get({ path: `/secure/staff/username/${username}` }) as Promise<CommunityApiStaffDetails>
   }
 
-  async getStaffCaseload(staffId: number): Promise<ManagedOffender[]> {
+  async getStaffCaseload(staffId: number): Promise<CommunityApiManagedOffender[]> {
     return this.restClient.get({
       path: `/secure/staff/staffIdentifier/${staffId}/managedOffenders`,
-    }) as Promise<ManagedOffender[]>
+    }) as Promise<CommunityApiManagedOffender[]>
   }
 }

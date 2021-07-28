@@ -7,8 +7,13 @@ import PrisonerService from '../services/prisonerService'
 import { AuthRole } from '../middleware/authorisationMiddleware'
 import UserService, { UserDetails } from '../services/userService'
 import { TestData } from '../data/licenceClientTypes'
-import { PrisonerDetail } from '../data/prisonClientTypes'
-import { StaffDetail, ManagedOffender } from '../data/communityClientTypes'
+import { PrisonerDetail, SentenceDetail } from '../data/prisonClientTypes'
+import {
+  CommunityApiStaffDetails,
+  CommunityApiManagedOffender,
+  CommunityApiTeam,
+  CommunityApiHuman,
+} from '../data/communityClientTypes'
 
 jest.mock('../services/userService')
 jest.mock('../services/licenceService')
@@ -28,16 +33,16 @@ const stubbedUserDetails: UserDetails = {
 }
 
 const stubbedStaffDetail = {
-  staff: { forenames: 'John', surname: 'Lennon' },
+  staff: { forenames: 'John', surname: 'Lennon' } as CommunityApiHuman,
   staffCode: 'JL1',
   staffIdentifier: 1234,
-  teams: [{ code: 'T1', description: 'Team Beatles', emailAddress: 'team@beatles.com' }],
+  teams: [{ code: 'T1', description: 'Team Beatles', emailAddress: 'team@beatles.com' } as CommunityApiTeam],
   email: 'john.lennon@beatles.com',
   telephoneNumber: '0161 232232',
   username: 'JL001',
-} as StaffDetail
+} as CommunityApiStaffDetails
 
-const stubbedManagedOffenders: ManagedOffender[] = [
+const stubbedManagedOffenders = [
   {
     crnNumber: 'CRN001',
     currentOm: true,
@@ -45,25 +50,36 @@ const stubbedManagedOffenders: ManagedOffender[] = [
     currentRo: true,
     nomsNumber: 'A1234AA',
     offenderSurname: 'McCartney',
-    omEndDate: '12/12/2021',
-    omStartDate: '01/12/2021',
     staffCode: 'ST0001',
     staffIdentifier: 1234,
-  } as ManagedOffender,
+  } as CommunityApiManagedOffender,
 ]
 
 const stubbedLicenceData: TestData[] = [{ key: 'GH', value: 'George Harrison' }]
 
 const stubbedPrisonerData = {
   offenderNo: 'A1234AA',
-  title: 'Mr',
   firstName: 'Ringo',
   lastName: 'Starr',
-  sexCode: 'M',
-  currentlyInPrison: 'Y',
   latestLocationId: 'LEI',
-  pncNumber: '2014/12344',
-  croNumber: 'CR11111',
+  dateOfBirth: '24/06/2000',
+  age: 21,
+  activeFlag: true,
+  legalStatus: 'REMAND',
+  category: 'Cat C',
+  imprisonmentStatus: 'LIFE',
+  imprisonmentStatusDescription: 'Serving Life Imprisonment',
+  religion: 'Christian',
+  sentenceDetail: {
+    sentenceStartDate: '12/12/2019',
+    additionalDaysAwarded: 4,
+    tariffDate: '12/12/2030',
+    releaseDate: '12/12/2028',
+    conditionalReleaseDate: '12/12/2025',
+    confirmedReleaseDate: '12/12/2026',
+    sentenceExpiryDate: '16/12/2030',
+    licenceExpiryDate: '16/12/2030',
+  } as SentenceDetail,
 } as PrisonerDetail
 
 beforeEach(() => {
@@ -123,6 +139,9 @@ describe('Prisoner routes', () => {
         expect(res.text).toContain('A1234AA')
         expect(res.text).toContain('Ringo')
         expect(res.text).toContain('Starr')
+        expect(res.text).toContain('12/12/2019') // sentence start
+        expect(res.text).toContain('12/12/2025') // conditional release
+        expect(res.text).toContain('16/12/2030') // licence expiry
       })
   })
 })

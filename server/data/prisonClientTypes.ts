@@ -1,40 +1,51 @@
-type Alert = {
+export type Alert = {
   alertType: string
-  alertCode: string
   alertTypeDescription: string
+  alertCode: string
+  alertCodeDescription: string
   active: boolean
+  dateCreated: string
+  dateExpired: string
+}
+
+export type Identifiers = {
+  type: string
+  value: string
+}
+
+export type SentenceDetail = {
+  sentenceStartDate: string
+  additionalDaysAwarded: number
+  tariffDate: string
+  releaseDate: string
+  conditionalReleaseDate: string
+  confirmedReleaseDate: string
+  sentenceExpiryDate: string
+  licenceExpiryDate: string
+  homeDetentionCurfewEligibilityDate: string
 }
 
 export interface PrisonerDetail {
   offenderNo: string
-  title: string
-  suffix: string
   firstName: string
-  middleNames: string
   lastName: string
   dateOfBirth: string
-  gender: string
-  sexCode?: 'M' | 'F'
-  nationalities: string
-  currentlyInPrison?: 'Y' | 'N'
-  latestBookingId: number
+  age: number
+  activeFlag: boolean
+  activeAlertCount: number
+  legalStatus: string
   latestLocationId: string
-  latestLocation: string
-  internalLocation: string
-  pncNumber: string
-  croNumber: string
-  ethnicity: string
-  ethnicityCode: string
-  birthCountry: string
-  religion: string
-  religionCode: string
-  convictedStatus: string
-  bandCode: string
+  locationDescription: string
+  status: string
+  bookingId: number
+  bookingNo: string
+  category: string
   imprisonmentStatus: string
-  imprisonmentStatusDesc: string
-  receptionDate?: string // ISO-8601 date format
-  maritalStatus: string
+  imprisonmentStatusDescription: string
+  religion: string
   alerts: Alert[]
+  identifiers: Identifiers[]
+  sentenceDetail: SentenceDetail
 }
 
 export interface PrisonUser {

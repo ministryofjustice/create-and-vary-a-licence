@@ -2,22 +2,36 @@ import nock from 'nock'
 import config from '../config'
 import PrisonerService from '../services/prisonerService'
 import HmppsAuthClient from './hmppsAuthClient'
-import { PrisonerDetail } from './prisonClientTypes'
+import { PrisonerDetail, SentenceDetail } from './prisonClientTypes'
 
 jest.mock('./hmppsAuthClient')
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const prisonerService = new PrisonerService(hmppsAuthClient)
+
 const stubbedPrisonerData = {
   offenderNo: 'A1234AA',
-  title: 'Mr',
   firstName: 'Ringo',
   lastName: 'Starr',
-  sexCode: 'M',
-  currentlyInPrison: 'Y',
   latestLocationId: 'LEI',
-  pncNumber: '2014/12344',
-  croNumber: 'CR11111',
+  dateOfBirth: '24/06/2000',
+  age: 21,
+  activeFlag: true,
+  legalStatus: 'REMAND',
+  category: 'Cat C',
+  imprisonmentStatus: 'LIFE',
+  imprisonmentStatusDescription: 'Serving Life Imprisonment',
+  religion: 'Christian',
+  sentenceDetail: {
+    sentenceStartDate: '12/12/2019',
+    additionalDaysAwarded: 4,
+    tariffDate: '12/12/2030',
+    releaseDate: '12/12/2028',
+    conditionalReleaseDate: '12/12/2025',
+    confirmedReleaseDate: '12/12/2026',
+    sentenceExpiryDate: '16/12/2030',
+    licenceExpiryDate: '16/12/2030',
+  } as SentenceDetail,
 } as PrisonerDetail
 
 describe('Prison API client tests', () => {

@@ -18,9 +18,12 @@
                   <th scope="col" class="govuk-table__header">Prisoner Number</th>
                   <th scope="col" class="govuk-table__header">First Name</th>
                   <th scope="col" class="govuk-table__header">Last Name</th>
+                  <th scope="col" class="govuk-table__header">Legal Status</th>
                   <th scope="col" class="govuk-table__header">Prison code</th>
-                  <th scope="col" class="govuk-table__header">PNC</th>
-                  <th scope="col" class="govuk-table__header">CRO</th>
+                  <th scope="col" class="govuk-table__header">Location Description</th>
+                  <th scope="col" class="govuk-table__header">Sentence start</th>
+                  <th scope="col" class="govuk-table__header">Conditional Release</th>
+                  <th scope="col" class="govuk-table__header">Licence expiry</th>
                 </thead>
 
                 <tbody class="govuk-table__body govuk-body-s">
@@ -28,9 +31,12 @@
                     <td class="govuk-table__cell">{{ prisonerDetail.offenderNo }}</td>
                     <td class="govuk-table__cell">{{ prisonerDetail.firstName }}</td>
                     <td class="govuk-table__cell">{{ prisonerDetail.lastName }}</td>
+                    <td class="govuk-table__cell">{{ prisonerDetail.legalStatus }}</td>
                     <td class="govuk-table__cell">{{ prisonerDetail.latestLocationId }}</td>
-                    <td class="govuk-table__cell">{{ prisonerDetail.pncNumber }}</td>
-                    <td class="govuk-table__cell">{{ prisonerDetail.croNumber }}</td>
+                    <td class="govuk-table__cell">{{ prisonerDetail.locationDescription }}</td>
+                    <td class="govuk-table__cell">{{ prisonerDetail.sentenceDetail.sentenceStartDate or "NA" }}</td>
+                    <td class="govuk-table__cell">{{ prisonerDetail.sentenceDetail.conditionalReleaseDate or "NA" }}</td>
+                    <td class="govuk-table__cell">{{ prisonerDetail.sentenceDetail.licenceExpiryDate or "NA" }}</td>
                   </tr>
                 </tbody>
 
