@@ -7,7 +7,7 @@ import PrisonerService from '../services/prisonerService'
 import { AuthRole } from '../middleware/authorisationMiddleware'
 import UserService, { UserDetails } from '../services/userService'
 import { TestData } from '../data/licenceClientTypes'
-import { PrisonerDetail, SentenceDetail } from '../data/prisonClientTypes'
+import { PrisonApiPrisoner, PrisonApiSentenceDetail } from '../data/prisonClientTypes'
 import {
   CommunityApiStaffDetails,
   CommunityApiManagedOffender,
@@ -62,6 +62,7 @@ const stubbedPrisonerData = {
   firstName: 'Ringo',
   lastName: 'Starr',
   latestLocationId: 'LEI',
+  locationDescription: 'Inside - Leeds HMP',
   dateOfBirth: '24/06/2000',
   age: 21,
   activeFlag: true,
@@ -79,8 +80,8 @@ const stubbedPrisonerData = {
     confirmedReleaseDate: '12/12/2026',
     sentenceExpiryDate: '16/12/2030',
     licenceExpiryDate: '16/12/2030',
-  } as SentenceDetail,
-} as PrisonerDetail
+  } as PrisonApiSentenceDetail,
+} as PrisonApiPrisoner
 
 beforeEach(() => {
   app = appWithAllRoutes({ userService, prisonerService, licenceService, communityService }, [AuthRole.OMU])
@@ -131,6 +132,7 @@ describe('Licence routes', () => {
 describe('Prisoner routes', () => {
   it('GET /prisoner/:nomsId/detail should return prisoner detail', () => {
     prisonerService.getPrisonerDetail.mockResolvedValue(stubbedPrisonerData)
+    prisonerService.getPrisonerImage.mockResolvedValue(null)
     return request(app)
       .get('/prisoner/A1234AA/detail')
       .expect(200)

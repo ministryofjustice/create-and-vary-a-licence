@@ -2,7 +2,7 @@ import nock from 'nock'
 import config from '../config'
 import PrisonerService from '../services/prisonerService'
 import HmppsAuthClient from './hmppsAuthClient'
-import { PrisonerDetail, SentenceDetail } from './prisonClientTypes'
+import { PrisonApiPrisoner, PrisonApiSentenceDetail } from './prisonClientTypes'
 
 jest.mock('./hmppsAuthClient')
 
@@ -14,6 +14,7 @@ const stubbedPrisonerData = {
   firstName: 'Ringo',
   lastName: 'Starr',
   latestLocationId: 'LEI',
+  locationDescription: 'Inside - Leeds HMP',
   dateOfBirth: '24/06/2000',
   age: 21,
   activeFlag: true,
@@ -31,8 +32,8 @@ const stubbedPrisonerData = {
     confirmedReleaseDate: '12/12/2026',
     sentenceExpiryDate: '16/12/2030',
     licenceExpiryDate: '16/12/2030',
-  } as SentenceDetail,
-} as PrisonerDetail
+  } as PrisonApiSentenceDetail,
+} as PrisonApiPrisoner
 
 describe('Prison API client tests', () => {
   let fakeApi: nock.Scope
