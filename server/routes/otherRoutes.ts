@@ -21,7 +21,8 @@ export default class OtherRoutes {
 
   public getStaffDetail: RequestHandler = async (req, res): Promise<void> => {
     const { username } = res.locals.user
-    const staffDetail = await this.communityService.getStaffDetail(username)
+    const deliusUsername = req.params.username
+    const staffDetail = await this.communityService.getStaffDetail(username, deliusUsername)
     res.render('pages/staffDetail', { staffDetail })
   }
 

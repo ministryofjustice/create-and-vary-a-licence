@@ -31,9 +31,9 @@
                     <td class="govuk-table__cell">{{ staffDetail.staffCode }}</td>
                     <td class="govuk-table__cell">{{ staffDetail.staff.forenames }}</td>
                     <td class="govuk-table__cell">{{ staffDetail.staff.surname }}</td>
-                    <td class="govuk-table__cell">{{ staffDetail.email }}</td>
+                    <td class="govuk-table__cell">{{ staffDetail.email or "NA" }}</td>
                     <td class="govuk-table__cell">{{ staffDetail.username }}</td>
-                    <td class="govuk-table__cell">{{ staffDetail.telephoneNumber }}</td>
+                    <td class="govuk-table__cell">{{ staffDetail.telephoneNumber or "NA" }}</td>
                   </tr>
                 </tbody>
 
