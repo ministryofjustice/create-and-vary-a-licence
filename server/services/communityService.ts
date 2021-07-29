@@ -16,7 +16,7 @@ export default class CommunityService {
   async getManagedOffenders(username: string, staffIdentifier: number): Promise<CommunityApiManagedOffender[]> {
     logger.info(`communityService: getManagedOffenders(${username},${staffIdentifier}`)
     logger.info(`Getting a system token`)
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    const token = await this.hmppsAuthClient.getSystemClientToken()
     logger.info(`system token = ${token}`)
     return new CommunityApiClient(token).getStaffCaseload(staffIdentifier)
   }
