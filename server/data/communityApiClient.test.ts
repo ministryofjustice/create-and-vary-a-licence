@@ -91,8 +91,8 @@ describe('Community API client tests', () => {
   describe('Get staff details for a probation officer', () => {
     it('Get staff details', async () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get('/secure/staff/username/XTEST1', '').reply(200, stubbedStaffDetails)
-      const data = await communityService.getStaffDetail('XTEST1')
+      fakeApi.get('/secure/staff/username/TestUserNPS', '').reply(200, stubbedStaffDetails)
+      const data = await communityService.getStaffDetail('XTEST1', 'TestUserNPS')
       expect(data).toEqual(stubbedStaffDetails)
       expect(nock.isDone()).toBe(true)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()

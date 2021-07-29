@@ -10,8 +10,11 @@ export default class CommunityApiClient {
     this.restClient = new RestClient('Community API', config.apis.communityApi as ApiConfig, token)
   }
 
-  async getStaffDetailByUsername(username: string): Promise<CommunityApiStaffDetails> {
-    return this.restClient.get({ path: `/secure/staff/username/${username}` }) as Promise<CommunityApiStaffDetails>
+  async getStaffDetailByUsername(deliusUsername: string): Promise<CommunityApiStaffDetails> {
+    logger.info(`communityClient: getStaffDetailByUsername(${deliusUsername}`)
+    return this.restClient.get({
+      path: `/secure/staff/username/${deliusUsername}`,
+    }) as Promise<CommunityApiStaffDetails>
   }
 
   async getStaffCaseload(staffId: number): Promise<CommunityApiManagedOffender[]> {
