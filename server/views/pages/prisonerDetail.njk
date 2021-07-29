@@ -11,30 +11,104 @@
     </div>
 
     <div class="prisoner-content">
-        <div class="govuk-width-container">
-            <table id="prisoner-detail" class="govuk-table" data-qa="prisoner-detail">
+        <div class="govuk-width-container govuk-body">
 
-                <thead class="govuk-table__head">
-                  <th scope="col" class="govuk-table__header">Prisoner Number</th>
-                  <th scope="col" class="govuk-table__header">First Name</th>
-                  <th scope="col" class="govuk-table__header">Last Name</th>
-                  <th scope="col" class="govuk-table__header">Prison code</th>
-                  <th scope="col" class="govuk-table__header">PNC</th>
-                  <th scope="col" class="govuk-table__header">CRO</th>
-                </thead>
+            <div class="govuk-grid-row">
 
-                <tbody class="govuk-table__body govuk-body-s">
-                  <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">{{ prisonerDetail.offenderNo }}</td>
-                    <td class="govuk-table__cell">{{ prisonerDetail.firstName }}</td>
-                    <td class="govuk-table__cell">{{ prisonerDetail.lastName }}</td>
-                    <td class="govuk-table__cell">{{ prisonerDetail.latestLocationId }}</td>
-                    <td class="govuk-table__cell">{{ prisonerDetail.pncNumber }}</td>
-                    <td class="govuk-table__cell">{{ prisonerDetail.croNumber }}</td>
-                  </tr>
-                </tbody>
+                {# Offender image #}
 
-            </table>
+                <div class="govuk-grid-column-one-quarter">
+                    <div class="govuk-!-margin-right-3">
+                        <img
+                                src="/prisoner/{{ prisonerDetail.offenderNo }}/image"
+                                width="100%"
+                                alt="Headshot of {{ prisonerDetail.offenderNo }}"
+                                data-qa="offender-image"
+                        />
+                        <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                              data-qa="prisoner-name">{{ prisonerDetail.lastName }}, {{ prisonerDetail.firstName }}</span>
+                    </div>
+                </div>
+
+                {# Prisoner identifiers, category and status #}
+
+                <div class="govuk-grid-column-one-quarter">
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-1"><strong>Prison number</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="prison-number">{{ prisonerDetail.offenderNo }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Age</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="dob">{{ prisonerDetail.age or 'not entered' }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Date of birth</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="pnc">{{ prisonerDetail.dateOfBirth or 'not entered' }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Category</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="main-offence">{{ prisonerDetail.category or 'not entered' }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Legal status</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="main-offence">{{ prisonerDetail.legalStatus or 'not entered' }}</span>
+
+                </div>
+
+                {# Location, nationality, religion, language #}
+
+                <div class="govuk-grid-column-one-quarter">
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>In/Out Status</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="category">{{ prisonerDetail.inOutStatus }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Current Location</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="prison-description">{{ prisonerDetail.locationDescription }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Last location</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="category">{{ prisonerDetail.latestLocationId }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Nationality</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="nationality">{{ prisonerDetail.birthPlace or 'not entered' }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Language</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="nationality">{{ prisonerDetail.language or 'not entered' }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Religion</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="religion">{{ prisonerDetail.religion or 'not entered' }}</span>
+                </div>
+
+                {# Key dates #}
+
+                <div class="govuk-grid-column-one-quarter">
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Sentence start date</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="release-date">{{ prisonerDetail.sentenceDetail.sentenceStartDate or 'not entered' }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Conditional release date</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="release-date">{{ prisonerDetail.sentenceDetail.conditionalReleaseDate or 'not entered' }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Release date</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="release-date">{{ prisonerDetail.sentenceDetail.releaseDate or 'not entered' }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>Licence Expiry Date</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="release-date">{{ prisonerDetail.sentenceDetail.licenceExpiryDate or 'not entered' }}</span>
+
+                    <p class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"><strong>HDC Eligibility Date</strong></p>
+                    <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
+                          data-qa="release-date">{{ prisonerDetail.sentenceDetail.homeDetentionCurfewEligibilityDate or 'not entered' }}</span>
+                </div>
+            </div>
         </div>
     </div>
+
 {% endblock %}

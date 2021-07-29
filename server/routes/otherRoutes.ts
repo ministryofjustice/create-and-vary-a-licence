@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express'
+import path from 'path'
 import UserService from '../services/userService'
 import LicenceService from '../services/licenceService'
 import PrisonerService from '../services/prisonerService'
@@ -37,5 +38,20 @@ export default class OtherRoutes {
     const staffIdentifier = staffId as unknown as number
     const managedOffenders = await this.communityService.getManagedOffenders(username, staffIdentifier)
     res.render('pages/managedOffenders', { managedOffenders })
+  }
+
+  public getPrisonerImage: RequestHandler = async (req, res): Promise<void> => {
+    const { username } = res.locals.user
+    const { nomsId } = req.params
+    this.prisonerService
+      .getPrisonerImage(username, nomsId)
+      .then(data => {
+        res.type('image/jpeg')
+        data.pipe(res)
+      })
+      .catch(() => {
+        const placeHolder = path.join(process.cwd(), '/assets/images/image-missing.png')
+        res.sendFile(placeHolder)
+      })
   }
 }

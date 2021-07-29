@@ -24,6 +24,7 @@ export default function Index({ userService, prisonerService, licenceService, co
     get('/staff/:username/detail', otherAccessRoutes.getStaffDetail)
     get('/staff/:staffId/caseload', otherAccessRoutes.getStaffCaseload)
     get('/prisoner/:nomsId/detail', otherAccessRoutes.getPrisonerDetail)
+    get('/prisoner/:nomsId/image', otherAccessRoutes.getPrisonerImage)
   }
 
   router.use(auth.authenticationMiddleware(tokenVerifier))
