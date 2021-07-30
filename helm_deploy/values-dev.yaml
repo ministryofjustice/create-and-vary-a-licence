@@ -5,7 +5,6 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    enable_allow_list: false
     host: create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk
 
   env:
@@ -15,6 +14,8 @@ generic-service:
     COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
     PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
+
+  allowlist: null
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
