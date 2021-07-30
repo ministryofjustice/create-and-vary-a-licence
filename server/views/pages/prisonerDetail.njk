@@ -20,13 +20,11 @@
                 <div class="govuk-grid-column-one-quarter">
                     <div class="govuk-!-margin-right-3">
                         <img
-                                src="/prisoner/{{ prisonerDetail.offenderNo }}/image"
-                                width="100%"
-                                alt="Headshot of {{ prisonerDetail.offenderNo }}"
-                                data-qa="offender-image"
+                          src="/prisoner/{{ prisonerDetail.offenderNo or 'placeholder' }}/image"
+                          width="100%"
+                          alt="Headshot of {{ prisonerDetail.lastName }}, {{ prisonerDetail.firstName }}"
+                          data-qa="offender-image"
                         />
-                        <span class="govuk-!-margin-bottom-0 govuk-!-margin-top-2"
-                              data-qa="prisoner-name">{{ prisonerDetail.lastName }}, {{ prisonerDetail.firstName }}</span>
                     </div>
                 </div>
 

@@ -15,6 +15,8 @@ generic-service:
     PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
 
+  allowlist: null
+
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
 

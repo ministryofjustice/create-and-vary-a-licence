@@ -1,4 +1,3 @@
-export interface TestData {
-  key: string
-  value: string
-}
+import { components } from '../@types/licenceApiImport'
+
+export type LicenceApiTestData = components['schemas']['TestData']
