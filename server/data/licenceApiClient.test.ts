@@ -2,13 +2,13 @@ import nock from 'nock'
 import config from '../config'
 import LicenceService from '../services/licenceService'
 import HmppsAuthClient from './hmppsAuthClient'
-import { TestData } from './licenceClientTypes'
+import { LicenceApiTestData } from './licenceClientTypes'
 
 jest.mock('./hmppsAuthClient')
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const licenceService = new LicenceService(hmppsAuthClient)
-const stubbedTestData: TestData[] = [{ key: 'X', value: 'Y' } as TestData]
+const stubbedTestData: LicenceApiTestData[] = [{ key: 'X', value: 'Y' } as LicenceApiTestData]
 
 describe('Licence API client tests', () => {
   let fakeApi: nock.Scope
