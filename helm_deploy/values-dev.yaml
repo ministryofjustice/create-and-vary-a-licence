@@ -5,6 +5,7 @@ generic-service:
   replicaCount: 2
 
   ingress:
+    enable_allow_list: false
     host: create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk
 
   env:

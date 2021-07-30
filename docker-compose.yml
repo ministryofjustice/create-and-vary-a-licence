@@ -55,5 +55,17 @@ services:
       - SYSTEM_CLIENT_ID=create-and-vary-a-licence-admin
       - SYSTEM_CLIENT_SECRET=client_secret
 
+  prison-api:
+    image: quay.io/hmpps/prison-api:latest
+    networks:
+      - hmpps
+    container_name: prison-api
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+    environment:
+      - SPRING_PROFILES_ACTIVE=nomis-hsqldb
+
 networks:
   hmpps:

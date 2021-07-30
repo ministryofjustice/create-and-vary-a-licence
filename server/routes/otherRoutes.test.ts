@@ -6,7 +6,7 @@ import CommunityService from '../services/communityService'
 import PrisonerService from '../services/prisonerService'
 import { AuthRole } from '../middleware/authorisationMiddleware'
 import UserService, { UserDetails } from '../services/userService'
-import { TestData } from '../data/licenceClientTypes'
+import { LicenceApiTestData } from '../data/licenceClientTypes'
 import { PrisonApiPrisoner, PrisonApiSentenceDetail } from '../data/prisonClientTypes'
 import {
   CommunityApiStaffDetails,
@@ -55,7 +55,7 @@ const stubbedManagedOffenders = [
   } as CommunityApiManagedOffender,
 ]
 
-const stubbedLicenceData: TestData[] = [{ key: 'GH', value: 'George Harrison' }]
+const stubbedLicenceData: LicenceApiTestData[] = [{ key: 'GH', value: 'George Harrison' }]
 
 const stubbedPrisonerData = {
   offenderNo: 'A1234AA',
