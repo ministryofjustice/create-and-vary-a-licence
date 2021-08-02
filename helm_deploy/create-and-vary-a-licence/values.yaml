@@ -82,10 +82,10 @@ gotenberg:
     failureThreshold: 15
 
   podSecurityContext:
-    fsGroup: 2000
+    fsGroup: 1001
 
   securityContext:
-    runAsUser: 2000
+    runAsUser: 1001
     runAsNonRoot: true
 
 generic-prometheus-alerts:
