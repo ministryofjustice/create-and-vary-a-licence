@@ -81,9 +81,12 @@ gotenberg:
     timeoutSeconds: 30
     failureThreshold: 15
 
+  podSecurityContext:
+    fsGroup: 2000
+
   securityContext:
-    runAsUser: 1001
-    runAsGroup: 1001
+    runAsUser: 2000
+    runAsNonRoot: true
 
 generic-prometheus-alerts:
   targetApplication: create-and-vary-a-licence
