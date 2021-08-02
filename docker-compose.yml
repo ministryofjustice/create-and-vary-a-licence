@@ -52,8 +52,10 @@ services:
       - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
       - API_CLIENT_ID=create-and-vary-a-licence-client
       - API_CLIENT_SECRET=clientsecret
+      - NODE_ENV=development
       - SYSTEM_CLIENT_ID=create-and-vary-a-licence-admin
       - SYSTEM_CLIENT_SECRET=client_secret
+      - GOTENBERG_API_URL=http://gotenberg:3001
 
   prison-api:
     image: quay.io/hmpps/prison-api:latest
@@ -66,6 +68,17 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
     environment:
       - SPRING_PROFILES_ACTIVE=nomis-hsqldb
+
+  gotenberg:
+    image: thecodingmachine/gotenberg:6.4.3
+    networks:
+      - hmpps
+    container_name: gotenberg
+    ports:
+      - "3001:3000"
+    restart: always
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
 
 networks:
   hmpps:

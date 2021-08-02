@@ -1,7 +1,6 @@
 ---
 generic-service:
   nameOverride: create-and-vary-a-licence
-
   replicaCount: 4
 
   image:
@@ -53,6 +52,39 @@ generic-service:
     cloudplatform-live1-1: "35.178.209.113/32"
     cloudplatform-live1-2: "3.8.51.207/32"
     cloudplatform-live1-3: "35.177.252.54/32"
+
+gotenberg:
+  nameOverride: gotenberg
+  replicaCount: 2
+
+  image:
+    repository: thecodingmachine/gotenberg
+    tag: 6.3.0
+    port: 3000
+
+  ingress:
+    enabled: false
+
+  livenessProbe:
+    httpGet:
+      path: /ping
+    periodSeconds: 30
+    initialDelaySeconds: 60
+    timeoutSeconds: 20
+    failureThreshold: 10
+
+  readinessProbe:
+    httpGet:
+      path: /ping
+    periodSeconds: 20
+    initialDelaySeconds: 60
+    timeoutSeconds: 30
+    failureThreshold: 15
+
+  securityContext:
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
 
 generic-prometheus-alerts:
   targetApplication: create-and-vary-a-licence
