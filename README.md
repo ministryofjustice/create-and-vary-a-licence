@@ -32,21 +32,36 @@ Then:
 
 `$ npm run test` - to run unit tests
 
+## Integration test (Jest) for Gotenberg
+
+There is a single integration test to verify that the Gotenberg container can support the
+conversion of HTML to PDF documents. To run this, follow these instructions:
+
+`$ docker-compose -f docker-compose-dev.yaml up -d`
+
+This runs local redis and gotenberg containers.
+
+`$ npm run integrationTest`
+
+This runs the specific integration test `gotenbergIntegration.test.ts` causing a HTML document
+to be sent to the local Gotenberg container, converted to PDF and returned. The PDF is parsed
+to check that it contains some of the wording requested.
+
 ## Integration tests (Cypress/Wiremock)
 
 Pull images and start dependent services:
 
-`$ docker-compise -f docker-compose-test.yaml pull`
+`$ docker-compose -f docker-compose-test.yaml pull`
 
-`$ docker-compose -f docker-compose-test.yaml up`
+`$ docker-compose -f docker-compose-test.yaml up -d`
 
 In a different terminal:
+
+`$ npm run build` - to compile resources
 
 `$ npm run start-feature` - to start the UI service with env settings to reference locally-mocked (wiremock) APIs:
 
 In a third terminal:
-
-`$ npm run build` - to compile resources
 
 `$ npm run int-test` - to run Cypress tests in the background
 
@@ -60,13 +75,15 @@ OR
 
 `$ docker-compose pull` - To pull the latest images for the service and dependent containers.
 
-`$ docker-compose up` - To start these containers locally (resource intensive!)
+`$ docker-compose up -d` - To start these containers locally (resource intensive!)
 
 Point a browser to `localhost:3000`
 
-###2. Running via npm
+###2. Running via npm  (local UI service)
 
-`$ npm run start:dev`  - to start the UI service 
+`$ docker-compose up --scale create-and-vary-a-licence=0 -d` - To start containers except the UI
+
+`$ npm run start:dev`  - to start the UI service separately 
 
 Point a browser to `localhost:3000`
 
@@ -75,23 +92,16 @@ Point a browser to `localhost:3000`
 Where your local machine does not cope well with multiple required containers it is possible to run a small number of 
 containers locally whilst relying on the development services for others. You will need a VPN active.
 
-###1. Edit the docker-compose.yaml to remove these sections:
+###1. Locally required containers
 
-* licences-db
-* hmpps-auth
-* prison-api
-* community-api  
-* create-and-vary-a-licence-api
-* create-and-vary-a-licence
-
-Which leaves these in place:
+These are:
 
 * redis
 * gotenberg
 
 2. Create a `.env` file in the root of the project with the following content :
 
-```
+```angular2html
 HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
 TOKEN_VERIFICATION_API_URL=https://token-verification-api-dev.prison.service.justice.gov.uk
 LICENCE_API_URL=https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk
@@ -105,12 +115,14 @@ SYSTEM_CLIENT_SECRET=<fill this in>
 GOTENBERG_API_URL=http://localhost:3001
 ```
 
-3. `docker-compose up` to start the local services
+3. Start the two required containers.
+
+   `$ docker-compose -f docker-compose-dev.yaml up -d` 
 
 
-4. Start a local `create-and-vary-a-licence` service with `$ npm run start:dev` which will use the `.env` file to set 
+4. Start a local `create-and-vary-a-licence` service with `$ npm run start`, which will use the `.env` file to set 
    up its environment to reference the DEV APIs.
-
+   
 
 5. Bear in mind that the login details, and all data you will see, will be from the `licence-db` and APIs in the DEV 
    environment. Only the redis functions and any use of the gotenberg container will be local operations.
@@ -151,3 +163,33 @@ Scripts are provided to generate these types from the development instances:
 
 `generate-prisoner-offender-search-types.sh`  Re-run when offender search API types change
 
+## Gotenberg Container
+
+The Gotenberg container is used only to convert templated HTML into PDF files for viewing and saving.
+
+Whilst running locally, the Gotenberg container needs to know how to contact the `create-and-vary-a-licence` service
+using a hostname. It does this to pull in resources like stylesheets and images whilst rendering the HTML.
+
+For any docker container to reference the docker host (where the UI service is running), the hostname 
+`host.docker-internal` is used. For Mac and Windows users, this just works. For Linux users, this host
+needs to be passed into Gotenburg as an `extra-host`. See the `docker-compose-test.yaml` file for this.
+
+e.g. 
+```angular2html
+gotenberg:
+    image: thecodingmachine/gotenberg:6.4.3
+    networks:
+      - hmpps
+    container_name: gotenberg
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+```
+
+When Gotenberg is running in the Cloud Platform environments, it can reference the UI service using its
+container name, like this:
+
+```angular2html
+LICENCES_URL: "http://create-and-vary-a-licence:80"
+```
+
+It uses HTTP for these requests which stay local within the Cloud Platform namespace.
