@@ -1,4 +1,5 @@
 import superagent from 'superagent'
+import logger from '../../logger'
 
 export type PdfOptions = {
   headerHtml?: string
@@ -26,19 +27,21 @@ export default class GotenbergClient {
         .attach('files', Buffer.from(html), 'index.html')
         .responseType('blob')
 
+      // Attach header and footer HTML blocks if specified
       if (headerHtml) request.attach('files', Buffer.from(headerHtml), 'header.html')
       if (footerHtml) request.attach('files', Buffer.from(footerHtml), 'footer.html')
 
       // Gotenberg defaults to using A4 format. Page size and margins specified in inches
-
       if (marginTop) request.field('marginTop', marginTop)
       if (marginBottom) request.field('marginBottom', marginBottom)
       if (marginLeft) request.field('marginLeft', marginLeft)
       if (marginRight) request.field('marginRight', marginRight)
 
+      // Execute the POST to the Gotenberg container
       const response = await request
       return response.body
     } catch (err) {
+      logger.error(`Error POST to gotenberg:/convert/html - {}`, err)
       return undefined
     }
   }

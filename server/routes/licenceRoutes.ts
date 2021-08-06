@@ -55,7 +55,7 @@ export default class LicenceRoutes {
     const { id } = req.params
     logger.info(`Request to print PDF for licence ${id} from user ${username}`)
     const filename = 'generated-file.pdf'
-    // There is a value for the licencesUrl so this is used in the template as http://10.0.2.5:3000/assets ..
+    // Specify licencesUrl so that it is used in the NJK template as http://host.docker.internal:3000/assets
     const { licencesUrl } = config.apis.gotenberg
     res.renderPDF(
       `pages/licence/preview`,
