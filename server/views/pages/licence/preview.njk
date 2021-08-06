@@ -1,0 +1,52 @@
+<html>
+<head>
+    <link href="{{ licencesUrl }}/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- Cover page -->
+<div id="cover-page" class="page">
+    <div id="moj-icon"><img src="{{ licencesUrl }}/assets/images/MOJ_logo1.png" width="150px"></div>
+    <div class="central-content">
+        <p class="sensitive-badge">SENSITIVE</p>
+        <p>Her Majesty's Prison & Probation Service</p>
+        <h1>Licence</h1>
+        <h2>{{ licence.lastName }}, {{ licence.firstName }}</h2>
+        <h2>Type of licence {{ licence.licenceType  }}</h2>
+    </div>
+</div>
+
+<!-- Licence page 1 -->
+<div class="page">
+    <h2>Licence Details</h2>
+
+    <div class="pdf-panel govuk-!-margin-bottom-7">
+        <p class="panel-title">This is the person being released on licence</p>
+        <div class="panel-content">
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">Name</p>
+            <p class="govuk-!-margin-bottom-1">{{licence.lastName }}, {{ licence.firstName }}</p>
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">Released from</p>
+            <p class="greyed-text">{{ licence.prisonId }} : {{ licence.prisonDescription }}</p>
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">Prison identifier</p>
+            <p class="govuk-!-margin-bottom-1">{{ licence.nomsId }}</p>
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">PNC number</p>
+            <p class="greyed-text">{{ licence.pnc }}</p>
+        </div>
+    </div>
+
+    <div class="pdf-panel">
+        <p class="panel-title">Supervising Probation Officer</p>
+        <div class="panel-content">
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">Name</p>
+            <p>{{ licence.roLastName }}, {{ licence.roFirstName }}</p>
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">Email</p>
+            <p>{{ licence.roEmail }}</p>
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">Email</p>
+            <p>{{ licence.roTelephone }}</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
