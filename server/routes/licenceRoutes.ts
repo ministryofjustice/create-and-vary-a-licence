@@ -8,7 +8,7 @@ import CommunityService from '../services/communityService'
 import config from '../config'
 import logger from '../../logger'
 
-import { pdfOptions, footerHtml } from '../utils/pdfFormat'
+import { pdfOptions, getHeader, getFooter } from '../utils/pdfFormat'
 
 // Stubbed licence detail initially
 const licence = {
@@ -16,6 +16,7 @@ const licence = {
   licenceType: 'AP',
   lastName: 'Harrison',
   firstName: 'Tim',
+  dateOfBirth: '11/02/1970',
   prisonId: 'MDI',
   prisonDescription: 'HMP Moorland',
   roLastName: 'Smith',
@@ -45,22 +46,26 @@ export default class LicenceRoutes {
   public previewLicence: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { username } = res.locals.user
     const { id } = req.params
+    const headerHtml = getHeader(licence)
+    const footerHtml = getFooter(licence)
     logger.info(`Request to preview licence ${id} from user ${username}`)
-    // No licencesUrl specified, so it defaults to empty, and references assets at /assets
-    res.render(`pages/licence/preview`, { licence })
+    // No licencesUrl specified, so it defaults to empty, and references assets locally at /assets
+    res.render(`pages/licence/preview`, { licence, headerHtml, footerHtml })
   }
 
   public renderPdfLicence: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { username } = res.locals.user
     const { id } = req.params
     logger.info(`Request to print PDF for licence ${id} from user ${username}`)
-    const filename = 'generated-file.pdf'
+    const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.lastName}.pdf`
+    const headerHtml = getHeader(licence)
+    const footerHtml = getFooter(licence)
     // Specify licencesUrl so that it is used in the NJK template as http://host.docker.internal:3000/assets
     const { licencesUrl } = config.apis.gotenberg
     res.renderPDF(
       `pages/licence/preview`,
       { licencesUrl, licence },
-      { filename, pdfOptions: { ...pdfOptions, footerHtml } }
+      { filename, pdfOptions: { ...pdfOptions, headerHtml, footerHtml } }
     )
   }
 }
