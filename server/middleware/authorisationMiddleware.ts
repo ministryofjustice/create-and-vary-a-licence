@@ -17,10 +17,10 @@ export default function authorisationMiddleware(req: Request, res: Response, nex
     const { authorities: roles = [] } = jwtDecode(res.locals.user.token) as { authorities?: string[] }
     logger.info(`User roles: ${JSON.stringify(roles)}, Allowed roles: ${JSON.stringify(AuthRole)}`)
 
-    if (!roles?.some(isAuthorisedRole)) {
-      logger.error('User is not authorised to access this service')
-      return res.redirect('/authError')
-    }
+    // if (!roles?.some(isAuthorisedRole)) {
+    //   logger.error('User is not authorised to access this service')
+    //   return res.redirect('/authError')
+    // }
 
     logger.info(`User is allowed in`)
 
