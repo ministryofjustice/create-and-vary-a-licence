@@ -21,7 +21,7 @@
     "record-build-info": "node ./bin/record-build-info",
     "lint": "eslint . --cache --max-warnings 0",
     "typecheck": "tsc",
-    "test": "jest --forceExit --testPathPattern=/server/.*",
+    "test": "jest --runInBand --detectOpenHandles --testPathPattern=/server/.*",
     "integrationTest": "jest --runInBand --testPathPattern=/integration_tests/.*",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run --config video=false",
