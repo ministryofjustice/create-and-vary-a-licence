@@ -185,8 +185,8 @@ gotenberg:
       - "host.docker.internal:host-gateway"
 ```
 
-When Gotenberg is running in the Cloud Platform environments, it can reference the UI service using its
-container name, like this:
+When Gotenberg is running in the Cloud Platform environments it can reference the UI service using its
+Kubernetes service name like this:
 
 ```angular2html
 LICENCES_URL: "http://create-and-vary-a-licence:80"
