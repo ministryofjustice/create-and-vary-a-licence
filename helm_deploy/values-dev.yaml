@@ -14,13 +14,23 @@ generic-service:
     COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
     PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
+
+    # A reference to the local Gotenberg container to send HTML to PDF conversions
     GOTENBERG_API_URL: "http://gotenberg:3000"
+
+    # A reference from the Gotenberg container to the CVL container to get images/stylesheets
+    LICENCES_URL: "http://create-and-vary-a-licence:80"
 
   # Switches off the allow list in the DEV env only.
   allowlist: null
 
 gotenberg:
   replicaCount: 1
+
+  env:
+    GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
+    DISABLE_UNOCONV: 1
+    DEFAULT_WAIT_TIMEOUT: 30
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev

@@ -91,6 +91,20 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    gotenberg: {
+      apiUrl: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
+      /*
+       This is specific to the machine type you use locally:
+       - For Mac or Docker-for-Windows users,  http://host.docker.internal:3000 finds the docker host
+       - For Linux users, this will also work, but you need to define it as a host at docker startup
+         e.g. $ docker-compose -f <file> up --add-host host.docker.internal:host-gateway -d
+       - In Cloud Platform environments, this value is overridden with a URL with the container name
+       You can check if this works using curl from within the Gotenberg container:
+         $ docker exec -it <gotenberg-container-id> /bin/bash
+         $ curl http://host.docker.internal:3000  (should show redirect /login)
+       */
+      licencesUrl: get('LICENCES_URL', 'http://host.docker.internal:3000', requiredInProduction),
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
 }

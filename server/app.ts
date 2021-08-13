@@ -7,6 +7,9 @@ import setupRoutes from './routes'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { Services } from './services'
+import GotenbergClient from './data/gotenbergClient'
+import pdfRenderer from './utils/pdfRenderer'
+import config from './config'
 
 import setUpWebSession from './middleware/setUpWebSession'
 import setUpStaticResources from './middleware/setUpStaticResources'
@@ -32,6 +35,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpStaticResources())
   nunjucksSetup(app, path)
   app.use(setUpAuthentication())
+  app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
 
   // CSRF protection
   if (!testMode) {

@@ -1,0 +1,100 @@
+.page {
+  position: relative;
+  width: 100%;
+  height: 260mm;
+  font-family: "GDS Transport",arial,sans-serif;
+  font-size: 12px;
+
+  p {
+    font-size: 12px;
+  }
+
+  .red-text {
+    color: red;
+  }
+
+  .pdf-panel {
+    border: 1px solid govuk-colour("dark-blue");
+
+    .panel-title {
+      background-color: govuk-colour("dark-blue");
+      color: white;
+      padding: 5px;
+    }
+
+    .panel-content {
+      padding: 10px;
+    }
+  }
+}
+
+#cover-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  div#moj-icon {
+    padding-bottom: 200px;
+  }
+  div.central-content {
+    width: 70%;
+    height: 60%;
+    p {
+      margin-bottom: 10px;
+      &:last-of-type {
+        font-size: 12px;
+      }
+      &.sensitive-badge {
+        width: 190px;
+        color: white;
+        background-color: $govuk-error-colour;
+        padding: 5px;
+        margin-bottom: 10px;
+      }
+    }
+    h1 {
+      margin: 0 0 15px 0;
+      font-size: 40px;
+    }
+  }
+}
+
+#licence-output {
+  div {
+    border-bottom: 2px solid white;
+  }
+
+  .title {
+    font-size: 18px;
+    color: white;
+    background-color: govuk-colour("dark-blue");
+    padding: 10px;
+  }
+
+  .sub-title {
+    background-color: #E0EEF8;
+    padding: 10px;
+  }
+
+  ul.summary-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      display: flex;
+      div {
+        padding: 10px;
+      }
+      p {
+        margin-bottom: 0;
+      }
+      .summary-key {
+        background-color: #dddddd;
+        width: 200px;
+      }
+      .summary-value {
+        flex-grow: 1;
+        background-color: #eeeeee;
+      }
+    }
+  }
+}
