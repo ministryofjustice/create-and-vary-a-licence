@@ -15,11 +15,11 @@ generic-service:
     PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
 
-    # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within cluster)
-    GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg:3000"
+    # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
+    GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
 
-    # A reference to the CVL service - to get images/stylesheets (internal within cluster)
-    LICENCES_URL: "http://create-and-vary-a-licence:80"
+    # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
+    LICENCES_URL: "http://create-and-vary-a-licence"
 
   # Switches off the allow list in the DEV env only.
   allowlist: null
