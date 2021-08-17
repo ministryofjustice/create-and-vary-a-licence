@@ -1,0 +1,189 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
+
+{% macro additionalConditionHtml(template, data) %}
+    <div class="govuk-!-margin-bottom-4">
+        {{ template }}
+    </div>
+    <div class="govuk-!-font-weight-bold">
+        {% for entry in data %}
+            <span class="govuk-!-display-block">{{ entry }}</span>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <span class="govuk-caption-m">{{ licence.offender.name }}</span>
+            <h1 class="govuk-heading-l">Check your answers</h1>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+
+            <div class="govuk-grid-row check-answers-header">
+                <div class="govuk-grid-column-three-quarters">
+                    <h2 class="govuk-heading-m">Induction meeting details</h2>
+                </div>
+            </div>
+
+            {{ govukSummaryList({
+                classes: 'govuk-!-margin-bottom-9',
+                rows: [
+                    {
+                        key: {
+                            text: "Name"
+                        },
+                        value: {
+                            text: licence.induction.name
+                        },
+                        actions: {
+                            items: [
+                                {
+                                    href: "#",
+                                    text: "Change",
+                                    visuallyHiddenText: "name"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        key: {
+                            text: "Address"
+                        },
+                        value: {
+                            text: licence.induction.address | concatValues
+                        },
+                        actions: {
+                            items: [
+                                {
+                                    href: "#",
+                                    text: "Change",
+                                    visuallyHiddenText: "address"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        key: {
+                            text: "Contact phone number"
+                        },
+                        value: {
+                            text: licence.induction.telephone
+                        },
+                        actions: {
+                            items: [
+                                {
+                                    href: "#",
+                                    text: "Change",
+                                    visuallyHiddenText: "telephone"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        key: {
+                            text: "Date"
+                         },
+                        value: {
+                            text: licence.induction.date
+                        },
+                        actions: {
+                            items: [
+                                {
+                                    href: "#",
+                                    text: "Change",
+                                    visuallyHiddenText: "date"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        key: {
+                            text: "Time"
+                        },
+                        value: {
+                            text: licence.induction.time
+                        },
+                        actions: {
+                            items: [
+                                {
+                                    href: "#",
+                                    text: "Change",
+                                    visuallyHiddenText: "time"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }) }}
+
+            <div class="govuk-grid-row check-answers-header">
+                <div class="govuk-grid-column-three-quarters">
+                    <h2 class="govuk-heading-m">Additional licence conditions details</h2>
+                </div>
+                <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
+                    <a href="#" class="govuk-link govuk-!-font-size-19">Change</a>
+                </div>
+            </div>
+
+            {% set additionalConditions = [] %}
+
+            {% for condition in licence.additionalConditions %}
+                {% set additionalConditions = (additionalConditions.push({
+                    key: {
+                        text: condition.category
+                    },
+                    value: {
+                        html: additionalConditionHtml(condition.template, condition.data)
+                    }
+                }), additionalConditions) %}
+            {% endfor %}
+
+            {{ govukSummaryList({
+                classes: 'govuk-!-margin-bottom-9',
+                rows: additionalConditions
+            }) }}
+
+            <div class="govuk-grid-row check-answers-header">
+                <div class="govuk-grid-column-three-quarters">
+                    <h2 class="govuk-heading-m">Bespoke licence conditions details</h2>
+                </div>
+                <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
+                    <a href="#" class="govuk-link govuk-!-font-size-19">Change</a>
+                </div>
+            </div>
+
+            {% set bespokeConditions = [] %}
+
+            {% for condition in licence.bespokeConditions %}
+                {% set bespokeConditions = (bespokeConditions.push({
+                    key: {
+                        text: 'Bespoke condition'
+                    },
+                    value: {
+                        text: condition
+                    }
+                }), bespokeConditions) %}
+            {% endfor %}
+
+            {{ govukSummaryList({
+                classes: 'govuk-!-margin-bottom-9',
+                rows: bespokeConditions
+            }) }}
+
+            <form method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <input type="hidden" name="answers-checked" value="true">
+                {{ govukButton({
+                    text: "Send licence conditions to prison"
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

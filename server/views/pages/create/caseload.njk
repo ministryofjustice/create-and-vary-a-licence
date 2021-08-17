@@ -1,0 +1,46 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set pageTitle = applicationName + " - Create a licence - Caseload" %}
+
+{% set offenders = [] %}
+
+{% for offender in caseload %}
+    {% set offenders = (offenders.push([
+        {
+            html: '<h3 class="govuk-heading-m govuk-!-margin-bottom-3"><a href="/licence/create/crn/' + offender.crnNumber + '/initial-meeting-name" class="govuk-link govuk-link--no-visited-state">' + offender.name + '</a></h3>'
+        },
+        {
+            text: offender.crnNumber
+        },
+        {
+            text: offender.conditionalReleaseDate
+        }
+    ]), offenders) %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl">Select a person to start creating their licence</h1>
+        </div>
+    </div>
+
+    {{ govukTable({
+        caption: "Caseload",
+        captionClasses: "govuk-visually-hidden",
+        head: [
+            {
+                text: "Name"
+            },
+            {
+                text: "Case reference number"
+            },
+            {
+                text: "Conditional release date"
+            }
+        ],
+        rows: offenders
+    }) }}
+{% endblock %}

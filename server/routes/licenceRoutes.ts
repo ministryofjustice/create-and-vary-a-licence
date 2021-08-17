@@ -68,4 +68,137 @@ export default class LicenceRoutes {
       { filename, pdfOptions: { ...pdfOptions, headerHtml, footerHtml } }
     )
   }
+
+  public getCaseloadForLicenceCreation: RequestHandler = async (req, res): Promise<void> => {
+    const caseload = [
+      {
+        name: 'Adam Balasaravika',
+        crnNumber: 'X381306',
+        conditionalReleaseDate: '03 August 2022',
+      },
+    ]
+    res.render('pages/create/caseload', { caseload })
+  }
+
+  public getInitialMeetingPerson: RequestHandler = async (req, res): Promise<void> => {
+    const offender = {
+      name: 'Adam Balasaravika',
+    }
+    res.render('pages/create/initialMeetingPerson', { offender })
+  }
+
+  public postInitialMeetingPerson: RequestHandler = async (req, res): Promise<void> => {
+    const id = 1
+    res.redirect(`/licence/create/id/${id}/initial-meeting-place`)
+  }
+
+  public getInitialMeetingPlace: RequestHandler = async (req, res): Promise<void> => {
+    const offender = {
+      name: 'Adam Balasaravika',
+    }
+    res.render('pages/create/initialMeetingPlace', { offender })
+  }
+
+  public postInitialMeetingPlace: RequestHandler = async (req, res): Promise<void> => {
+    const { id } = req.params
+    res.redirect(`/licence/create/id/${id}/initial-meeting-contact`)
+  }
+
+  public getInitialMeetingContact: RequestHandler = async (req, res): Promise<void> => {
+    res.render('pages/create/initialMeetingContact', {})
+  }
+
+  public postInitialMeetingContact: RequestHandler = async (req, res): Promise<void> => {
+    const { id } = req.params
+    res.redirect(`/licence/create/id/${id}/initial-meeting-time`)
+  }
+
+  public getInitialMeetingTime: RequestHandler = async (req, res): Promise<void> => {
+    const offender = {
+      name: 'Adam Balasaravika',
+    }
+    res.render('pages/create/initialMeetingTime', { offender })
+  }
+
+  public postInitialMeetingTime: RequestHandler = async (req, res): Promise<void> => {
+    const { id } = req.params
+    res.redirect(`/licence/create/id/${id}/additional-conditions-question`)
+  }
+
+  public getAdditionalConditionsQuestion: RequestHandler = async (req, res): Promise<void> => {
+    const offender = {
+      name: 'Adam Balasaravika',
+    }
+    res.render('pages/create/additionalConditionsQuestion', { offender })
+  }
+
+  public postAdditionalConditionsQuestion: RequestHandler = async (req, res): Promise<void> => {
+    const { id } = req.params
+    const payload = req.body
+    if (payload['additional-conditions-required'] === 'yes') {
+      res.redirect(`/licence/create/id/${id}/additional-conditions`)
+    } else {
+      res.redirect(`/licence/create/id/${id}/bespoke-conditions-question`)
+    }
+  }
+
+  public getAdditionalConditions: RequestHandler = async (req, res): Promise<void> => {
+    const offender = {
+      name: 'Adam Balasaravika',
+    }
+    res.render('pages/create/additionalConditions', { offender })
+  }
+
+  public postAdditionalConditions: RequestHandler = async (req, res): Promise<void> => {
+    const { id } = req.params
+    res.redirect(`/licence/create/id/${id}/bespoke-conditions-question`)
+  }
+
+  public getBespokeConditionsQuestion: RequestHandler = async (req, res): Promise<void> => {
+    const offender = {
+      name: 'Adam Balasaravika',
+    }
+    res.render('pages/create/bespokeConditionsQuestion', { offender })
+  }
+
+  public postBespokeConditionsQuestion: RequestHandler = async (req, res): Promise<void> => {
+    const { id } = req.params
+    const payload = req.body
+    if (payload['bespoke-conditions-required'] === 'yes') {
+      res.redirect(`/licence/create/id/${id}/bespoke-conditions`)
+    } else {
+      res.redirect(`/licence/create/id/${id}/check-your-answers`)
+    }
+  }
+
+  public getBespokeConditions: RequestHandler = async (req, res): Promise<void> => {
+    const offender = {
+      name: 'Adam Balasaravika',
+    }
+    res.render('pages/create/bespokeConditions', { offender })
+  }
+
+  public postBespokeConditions: RequestHandler = async (req, res): Promise<void> => {
+    // TODO: Some work to do here to redirect to the same page if "Add another" or "Remove" is selected and javascript is turned off browserside
+    const { id } = req.params
+    res.redirect(`/licence/create/id/${id}/check-your-answers`)
+  }
+
+  public getCheckAnswers: RequestHandler = async (req, res): Promise<void> => {
+    const mockLicence = this.licenceService.getLicence()
+    res.render('pages/create/checkAnswers', { licence: mockLicence })
+  }
+
+  public postCheckAnswers: RequestHandler = async (req, res): Promise<void> => {
+    const { id } = req.params
+    res.redirect(`/licence/create/id/${id}/confirmation`)
+  }
+
+  public getConfirmation: RequestHandler = async (req, res): Promise<void> => {
+    const offender = {
+      name: 'Adam Balasaravika',
+      prison: 'Brixton Prison',
+    }
+    res.render('pages/create/confirmation', { offender })
+  }
 }

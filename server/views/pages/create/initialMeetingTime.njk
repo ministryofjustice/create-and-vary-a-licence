@@ -1,0 +1,45 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "../../partials/timePicker.njk" import timePicker %}
+
+{% set pageTitle = applicationName + " - Create a licence - Induction meeting" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">When does {{ offender.name }} need to go to their induction appointment?</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ govukDateInput({
+                    id: "induction-date",
+                    namePrefix: "induction-date",
+                    hint: {
+                        text: "For example, 12 11 2022"
+                    }
+                }) }}
+
+                {{ timePicker({
+                    id: "induction-time",
+                    namePrefix: "induction-time",
+                    label: {
+                        text: "Time"
+                    },
+                    hint: {
+                        text: "For example, 9:30am or 2:55pm"
+                    }
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit"
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

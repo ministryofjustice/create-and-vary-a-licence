@@ -1,0 +1,31 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Create a licence - Induction meeting" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Who does {{ offender.name }} need to meet for their induction appointment?</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ govukInput({
+                    id: "contact-name",
+                    name: "contact-name",
+                    classes: "govuk-!-width-one-third"
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit"
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

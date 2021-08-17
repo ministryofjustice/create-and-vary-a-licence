@@ -81,3 +81,8 @@
     }
   }
 }
+
+// Overrides GOV.UK css library
+.govuk-header {
+  border-bottom: none;
+}
