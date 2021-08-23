@@ -1,7 +1,6 @@
 import express, { Router, Express } from 'express'
 import cookieSession from 'cookie-session'
 import createError from 'http-errors'
-import path from 'path'
 
 import allRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
@@ -45,7 +44,7 @@ function appSetup({
 
   app.set('view engine', 'njk')
 
-  nunjucksSetup(app, path)
+  nunjucksSetup(app)
 
   app.use((req, res, next) => {
     req.user = { ...user, token: 'token1', authSource: 'nomis', username: 'user1' }

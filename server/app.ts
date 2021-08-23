@@ -1,6 +1,5 @@
 import express from 'express'
 
-import path from 'path'
 import createError from 'http-errors'
 import csurf from 'csurf'
 import setupRoutes from './routes'
@@ -33,7 +32,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
-  nunjucksSetup(app, path)
+  nunjucksSetup(app)
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
 
