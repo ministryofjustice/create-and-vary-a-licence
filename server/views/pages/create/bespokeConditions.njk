@@ -1,0 +1,55 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% set pageTitle = applicationName + " - Create a licence - Bespoke Conditions" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Create a bespoke condition for {{ offender.name }}</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <div data-module="moj-add-another">
+                    {% call govukFieldset({
+                        classes: 'moj-add-another__item'
+                    }) %}
+
+                        {{ govukTextarea({
+                            id: 'condition[0]',
+                            name: 'condition[0]',
+                            label: {
+                                html: 'Bespoke condition',
+                                classes: 'govuk-visually-hidden'
+                            },
+                            attributes: {
+                                'data-name': 'condition[%index%]',
+                                'data-id': 'condition[%index%]'
+                            }
+                        }) }}
+
+                    {% endcall %}
+
+                    <div class="moj-button-action">
+                        {{ govukButton({
+                            text: 'Add another bespoke condition',
+                            classes: 'govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4'
+                        }) }}
+                    </div>
+                </div>
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit"
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

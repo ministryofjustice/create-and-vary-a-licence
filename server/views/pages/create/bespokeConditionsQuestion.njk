@@ -1,0 +1,47 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Create a licence - Bespoke Conditions" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Does {{ offender.name }} need bespoke licence conditions?</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    idPrefix: "bespoke-conditions-required",
+                    name: "bespoke-conditions-required",
+                    fieldset: {
+                        legend: {
+                            text: "Bespoke conditions question",
+                            classes: "govuk-visually-hidden"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "no",
+                            text: "No"
+                        }
+                    ]
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit"
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

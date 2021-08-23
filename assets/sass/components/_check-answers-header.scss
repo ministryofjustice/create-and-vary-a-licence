@@ -1,0 +1,13 @@
+.check-answers-header {
+  h1,h2,h3,h4,h5,h6 {
+    margin-bottom: 5px;
+  }
+
+  &__change-link {
+    @include govuk-media-query($until: tablet) {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    text-align: right;
+  }
+}

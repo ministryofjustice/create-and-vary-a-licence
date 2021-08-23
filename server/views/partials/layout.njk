@@ -28,10 +28,20 @@
 {% block bodyStart %}
 {% endblock %}
 
+{% block beforeContent %}
+  {{ govukPhaseBanner({
+    tag: {
+      text: "alpha"
+    },
+    html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
+  }) }}
+{% endblock %}
+
 {% block bodyEnd %}
-  {# Run JavaScript at end of the
-  <body>, to avoid blocking the initial render. #}
+  {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
   <script src="/assets/govuk/all.js"></script>
-  <script src="/assets/govukFrontendInit.js"></script>
   <script src="/assets/moj/all.js"></script>
+  <script src="/assets/govukFrontendInit.js"></script>
+  <script src="/assets/mojFrontendInit.js"></script>
+  {% block pageScripts %}{% endblock %}
 {% endblock %}
