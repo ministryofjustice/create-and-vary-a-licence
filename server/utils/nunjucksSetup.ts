@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
+import path from 'path'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -28,7 +29,7 @@ export default function nunjucksSetup(app: express.Express): void {
 export function registerNunjucks(app?: express.Express): Environment {
   const njkEnv = nunjucks.configure(
     [
-      'server/views',
+      path.join(__dirname, '../views'),
       'node_modules/govuk-frontend/',
       'node_modules/govuk-frontend/components/',
       'node_modules/@ministryofjustice/frontend/',
