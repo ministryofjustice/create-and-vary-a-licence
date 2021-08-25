@@ -10,6 +10,7 @@ export default class LicenceService {
     return new LicenceApiClient(token).getTestData()
   }
 
+  // Stubbed data
   getLicence(): Record<string, unknown> {
     return {
       offender: {
@@ -44,6 +45,24 @@ export default class LicenceService {
         },
       ],
       bespokeConditions: ['You must not enter Tesco supermarket 290, 290A Lewisham Road, London, SE13 7PA'],
+    }
+  }
+
+  getLicenceForPdf(): Record<string, unknown> {
+    return {
+      licenceId: 1,
+      licenceType: 'AP',
+      lastName: 'Harrison',
+      firstName: 'Tim',
+      dateOfBirth: '11/02/1970',
+      prisonId: 'MDI',
+      prisonDescription: 'HMP Moorland',
+      roLastName: 'Smith',
+      roFirstName: 'Sarah',
+      roEmail: 'sarah.smith@nps.north.gov.uk',
+      roTelephone: '0161 234 234',
+      nomsId: 'A1234AG',
+      pnc: '2015/1234344',
     }
   }
 }

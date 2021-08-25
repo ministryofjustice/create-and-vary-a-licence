@@ -1,16 +1,14 @@
 import { RequestHandler } from 'express'
 import path from 'path'
-import UserService from '../services/userService'
-import LicenceService from '../services/licenceService'
-import PrisonerService from '../services/prisonerService'
-import CommunityService from '../services/communityService'
+import LicenceService from '../../../services/licenceService'
+import CommunityService from '../../../services/communityService'
+import PrisonerService from '../../../services/prisonerService'
 
-export default class OtherRoutes {
+export default class SpikeRoutes {
   constructor(
-    private readonly userServiceService: UserService,
-    private readonly prisonerService: PrisonerService,
     private readonly licenceService: LicenceService,
-    private readonly communityService: CommunityService
+    private readonly communityService: CommunityService,
+    private readonly prisonerService: PrisonerService
   ) {}
 
   public listTestData: RequestHandler = async (req, res): Promise<void> => {
@@ -58,5 +56,13 @@ export default class OtherRoutes {
     } else {
       res.sendFile(placeHolder)
     }
+  }
+
+  public getUserCaseload: RequestHandler = async (req, res): Promise<void> => {
+    const { username } = res.locals.user
+    const { staffId } = req.params // Get this from res.locals or leave in path?
+    const staffIdentifier = staffId as unknown as number
+    const managedOffenders = await this.communityService.getManagedOffenders(username, staffIdentifier)
+    res.render('pages/managedOffenders', { managedOffenders })
   }
 }
