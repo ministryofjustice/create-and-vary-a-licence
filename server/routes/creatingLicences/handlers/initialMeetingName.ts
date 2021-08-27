@@ -5,7 +5,7 @@ export default class InitialMeetingNameRoutes {
     const offender = {
       name: 'Adam Balasaravika',
     }
-    res.render('pages/create/initialMeetingName', { offender })
+    res.render('pages/create/initialMeetingPerson', { offender })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
