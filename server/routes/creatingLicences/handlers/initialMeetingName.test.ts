@@ -19,7 +19,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingName', {
+      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPerson', {
         offender: {
           name: 'Adam Balasaravika',
         },
