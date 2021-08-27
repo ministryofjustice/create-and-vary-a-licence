@@ -1,7 +1,7 @@
 {% macro timePicker(params) %}
     <div class="govuk-form-group">
         {% if params.label %}
-            <label for="{{ params.id }}" class="govuk-label {{ params.label.classes }}">
+            <label id="{{ params.id }}-label" for="{{ params.id }}" class="govuk-label {{ params.label.classes }}">
                 {{ params.label.text }}
             </label>
         {% endif %}

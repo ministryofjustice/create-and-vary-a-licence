@@ -50,7 +50,10 @@ export function registerNunjucks(app?: express.Express): Environment {
     return `${array[0][0]}. ${array.reverse()[0]}`
   })
 
-  njkEnv.addFilter('concatValues', (object: Record<string, unknown>) => {
+  njkEnv.addFilter('concatValues', (object?: Record<string, unknown>) => {
+    if (!object) {
+      return null
+    }
     return Object.values(object).join(', ')
   })
 

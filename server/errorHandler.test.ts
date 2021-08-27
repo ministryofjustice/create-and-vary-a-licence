@@ -1,49 +1,104 @@
-import type { Express } from 'express'
-import request from 'supertest'
-import { appWithAllRoutes } from './routes/testutils/appSetup'
-import PrisonerService from './services/prisonerService'
-import LicenceService from './services/licenceService'
-import CommunityService from './services/communityService'
-import { AuthRole } from './middleware/authorisationMiddleware'
+import type { Request, Response } from 'express'
 
-jest.mock('./services/prisonerService')
-jest.mock('./services/licenceService')
-jest.mock('./services/communityService')
+import { HTTPError } from 'superagent'
+import createErrorHandler from './errorHandler'
 
-const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
-const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
-const communityService = new CommunityService(null) as jest.Mocked<CommunityService>
+describe('Error Handler', () => {
+  let req: Request
+  let res: Response
+  let error: HTTPError
 
-let app: Express
+  beforeEach(() => {
+    req = {} as Request
 
-beforeEach(() => {
-  app = appWithAllRoutes({ prisonerService, licenceService, communityService })
-})
-
-afterEach(() => {
-  jest.resetAllMocks()
-})
-
-describe('GET 404', () => {
-  it('should render content with stack in dev mode', () => {
-    return request(app)
-      .get('/unknown')
-      .expect(404)
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('NotFoundError: Not found')
-        expect(res.text).not.toContain('Something went wrong. The error has been logged. Please try again')
-      })
+    res = {
+      redirect: jest.fn(),
+      render: jest.fn(),
+      status: jest.fn(),
+      locals: {
+        user: {
+          username: 'user',
+        },
+      },
+    } as unknown as Response
   })
 
-  it('should render content without stack in production mode', () => {
-    return request(appWithAllRoutes({ prisonerService, licenceService, communityService }, [AuthRole.OMU], true))
-      .get('/unknown')
-      .expect(404)
-      .expect('Content-Type', /html/)
-      .expect(res => {
-        expect(res.text).toContain('Something went wrong. The error has been logged. Please try again')
-        expect(res.text).not.toContain('NotFoundError: Not found')
-      })
+  it('should log user out if error is 401', () => {
+    const handler = createErrorHandler(false)
+
+    error = {
+      status: 401,
+    } as HTTPError
+
+    handler(error, req, res, jest.fn)
+
+    expect(res.redirect).toHaveBeenCalledWith('/logout')
+  })
+
+  it('should log user out if error is 403', () => {
+    const handler = createErrorHandler(false)
+
+    error = {
+      status: 403,
+    } as HTTPError
+
+    handler(error, req, res, jest.fn)
+
+    expect(res.redirect).toHaveBeenCalledWith('/logout')
+  })
+
+  it('should render error page with stacktrace if not in production', () => {
+    const handler = createErrorHandler(false)
+
+    error = {
+      status: 400,
+      message: 'bad request',
+      stack: 'stacktrace',
+    } as HTTPError
+
+    handler(error, req, res, jest.fn)
+
+    expect(res.render).toHaveBeenCalledWith('pages/error', {
+      message: 'bad request',
+      status: 400,
+      stack: 'stacktrace',
+    })
+    expect(res.status).toHaveBeenCalledWith(400)
+  })
+
+  it('should render error page with error message if not in production', () => {
+    const handler = createErrorHandler(true)
+
+    error = {
+      status: 400,
+      message: 'bad request',
+      stack: 'stacktrace',
+    } as HTTPError
+
+    handler(error, req, res, jest.fn)
+
+    expect(res.render).toHaveBeenCalledWith('pages/error', {
+      message: 'Something went wrong. The error has been logged. Please try again',
+      status: 400,
+      stack: null,
+    })
+    expect(res.status).toHaveBeenCalledWith(400)
+  })
+
+  it('should set status to 500 if status not supplied in error', () => {
+    const handler = createErrorHandler(true)
+
+    error = {
+      message: 'error',
+      stack: 'stacktrace',
+    } as HTTPError
+
+    handler(error, req, res, jest.fn)
+
+    expect(res.render).toHaveBeenCalledWith('pages/error', {
+      message: 'Something went wrong. The error has been logged. Please try again',
+      stack: null,
+    })
+    expect(res.status).toHaveBeenCalledWith(500)
   })
 })

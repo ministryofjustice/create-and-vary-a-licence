@@ -33,6 +33,9 @@
             </div>
 
             {{ govukSummaryList({
+                attributes: {
+                    id: 'induction-meeting-details'
+                },
                 classes: 'govuk-!-margin-bottom-9',
                 rows: [
                     {
@@ -146,6 +149,9 @@
             {% endfor %}
 
             {{ govukSummaryList({
+                attributes: {
+                    id: 'additional-conditions-details'
+                },
                 classes: 'govuk-!-margin-bottom-9',
                 rows: additionalConditions
             }) }}
@@ -173,6 +179,9 @@
             {% endfor %}
 
             {{ govukSummaryList({
+                attributes: {
+                    id: 'bespoke-conditions-details'
+                },
                 classes: 'govuk-!-margin-bottom-9',
                 rows: bespokeConditions
             }) }}
