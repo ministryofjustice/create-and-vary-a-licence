@@ -1,21 +1,22 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { Request, Response } from 'express'
+
 import ConfirmationRoutes from './confirmation'
 
 describe('Route Handlers - Create Licence - Confirmation', () => {
   const handler = new ConfirmationRoutes()
-  let req: any
-  let res: any
+  let req: Request
+  let res: Response
 
   beforeEach(() => {
     req = {
       params: {
         id: 1,
       },
-    }
+    } as unknown as Request
 
     res = {
       render: jest.fn(),
-    }
+    } as unknown as Response
   })
 
   describe('GET', () => {

@@ -1,16 +1,15 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import type { Request, Response } from 'express'
 
+import { HTTPError } from 'superagent'
 import createErrorHandler from './errorHandler'
 
 describe('Error Handler', () => {
-  let req: any
-  let res: any
-  let error: any
+  let req: Request
+  let res: Response
+  let error: HTTPError
 
   beforeEach(() => {
-    req = {
-      params: 'id',
-    }
+    req = {} as Request
 
     res = {
       redirect: jest.fn(),
@@ -21,7 +20,7 @@ describe('Error Handler', () => {
           username: 'user',
         },
       },
-    }
+    } as unknown as Response
   })
 
   it('should log user out if error is 401', () => {
@@ -29,7 +28,7 @@ describe('Error Handler', () => {
 
     error = {
       status: 401,
-    }
+    } as HTTPError
 
     handler(error, req, res, jest.fn)
 
@@ -41,7 +40,7 @@ describe('Error Handler', () => {
 
     error = {
       status: 403,
-    }
+    } as HTTPError
 
     handler(error, req, res, jest.fn)
 
@@ -55,7 +54,7 @@ describe('Error Handler', () => {
       status: 400,
       message: 'bad request',
       stack: 'stacktrace',
-    }
+    } as HTTPError
 
     handler(error, req, res, jest.fn)
 
@@ -74,7 +73,7 @@ describe('Error Handler', () => {
       status: 400,
       message: 'bad request',
       stack: 'stacktrace',
-    }
+    } as HTTPError
 
     handler(error, req, res, jest.fn)
 
@@ -92,7 +91,7 @@ describe('Error Handler', () => {
     error = {
       message: 'error',
       stack: 'stacktrace',
-    }
+    } as HTTPError
 
     handler(error, req, res, jest.fn)
 

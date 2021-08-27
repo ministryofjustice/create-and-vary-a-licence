@@ -1,22 +1,23 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { Request, Response } from 'express'
+
 import AdditionalConditionsQuestionRoutes from './additionalConditionsQuestion'
 
 describe('Route Handlers - Create Licence - Additional Conditions Question', () => {
   const handler = new AdditionalConditionsQuestionRoutes()
-  let req: any
-  let res: any
+  let req: Request
+  let res: Response
 
   beforeEach(() => {
     req = {
       params: {
         id: 1,
       },
-    }
+    } as unknown as Request
 
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
-    }
+    } as unknown as Response
   })
 
   describe('GET', () => {
@@ -31,24 +32,24 @@ describe('Route Handlers - Create Licence - Additional Conditions Question', () 
   })
 
   describe('POST', () => {
-    it('should redirect to the expected page when answer is YES', async () => {
+    it('should redirect to the additional conditions page when answer is YES', async () => {
       req = {
         ...req,
         body: {
           'additional-conditions-required': 'yes',
         },
-      }
+      } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions')
     })
 
-    it('should redirect to the expected page when answer is NO', async () => {
+    it('should redirect to the bespoke conditions question page when answer is NO', async () => {
       req = {
         ...req,
         body: {
           'additional-conditions-required': 'no',
         },
-      }
+      } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions-question')
     })

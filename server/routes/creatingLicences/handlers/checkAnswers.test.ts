@@ -1,4 +1,5 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { Request, Response } from 'express'
+
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
 
@@ -8,20 +9,20 @@ const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Check Answers', () => {
   const handler = new CheckAnswersRoutes(licenceService)
-  let req: any
-  let res: any
+  let req: Request
+  let res: Response
 
   beforeEach(() => {
     req = {
       params: {
         id: 1,
       },
-    }
+    } as unknown as Request
 
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
-    }
+    } as unknown as Response
 
     licenceService.getLicence.mockReturnValue({
       offender: {
@@ -46,7 +47,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   })
 
   describe('POST', () => {
-    it('should redirect to the expected page', async () => {
+    it('should redirect to the confirmation page', async () => {
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/confirmation')
     })

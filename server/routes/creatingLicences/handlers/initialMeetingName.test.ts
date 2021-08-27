@@ -1,18 +1,19 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { Request, Response } from 'express'
+
 import InitialMeetingNameRoutes from './initialMeetingName'
 
 describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
   const handler = new InitialMeetingNameRoutes()
-  let req: any
-  let res: any
+  let req: Request
+  let res: Response
 
   beforeEach(() => {
-    req = {}
+    req = {} as Request
 
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
-    }
+    } as unknown as Response
   })
 
   describe('GET', () => {
@@ -27,7 +28,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
   })
 
   describe('POST', () => {
-    it('should redirect to the expected page', async () => {
+    it('should redirect to the meeting place page', async () => {
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-place')
     })

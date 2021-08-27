@@ -1,20 +1,18 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { Request, Response } from 'express'
 
 import HomeRoutes from './home'
 
 describe('Route Handlers - Home', () => {
   const handler = new HomeRoutes()
-  let req: any
-  let res: any
+  let req: Request
+  let res: Response
 
   beforeEach(() => {
-    req = {
-      params: 'id',
-    }
+    req = {} as Request
 
     res = {
       render: jest.fn(),
-    }
+    } as unknown as Response
   })
 
   describe('GET', () => {

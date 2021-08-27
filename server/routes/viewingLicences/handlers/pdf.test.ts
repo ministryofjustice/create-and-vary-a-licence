@@ -1,4 +1,5 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { Request, Response } from 'express'
+
 import PdfRoutes from './pdf'
 import LicenceService from '../../../services/licenceService'
 
@@ -8,13 +9,15 @@ const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - View Licence - PDF', () => {
   const handler = new PdfRoutes(licenceService)
-  let req: any
-  let res: any
+  let req: Request
+  let res: Response
 
   beforeEach(() => {
     req = {
-      params: 'id',
-    }
+      params: {
+        id: 'id',
+      },
+    } as unknown as Request
 
     res = {
       render: jest.fn(),
@@ -24,7 +27,7 @@ describe('Route Handlers - View Licence - PDF', () => {
           username: 'user',
         },
       },
-    }
+    } as unknown as Response
 
     licenceService.getLicenceForPdf.mockReturnValue({
       nomsId: 123,
