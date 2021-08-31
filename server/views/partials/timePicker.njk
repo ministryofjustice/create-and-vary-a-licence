@@ -1,7 +1,7 @@
 {% macro timePicker(params) %}
-    <div class="govuk-form-group">
+    <div class="govuk-form-group {% if params.errorMessage %}govuk-form-group--error{% endif %}">
         {% if params.label %}
-            <label id="{{ params.id }}-label" for="{{ params.id }}" class="govuk-label {{ params.label.classes }}">
+            <label id="{{ params.id }}-label" class="govuk-label {{ params.label.classes }}">
                 {{ params.label.text }}
             </label>
         {% endif %}
@@ -10,34 +10,49 @@
                 {{ params.hint.text }}
             </div>
         {% endif %}
+        {% if params.errorMessage %}
+            <span id="{{ params.id }}-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span>
+                <span>{{ params.errorMessage.text }}</span>
+            </span>
+        {% endif %}
         <div class="govuk-date-input" id="{{ params.id }}">
             <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
                     <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-hour">
                         Hour
                     </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{ params.id }}-hour"
-                           name="{{ params.namePrefix }}-hour" type="text" pattern="[0-9]*" inputmode="numeric">
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
+                           id="{{ params.id }}-hour"
+                           name="{{ params.id }}[hour]" type="text" pattern="[0-9]*" inputmode="numeric"
+                           value="{{ params.formResponses[params.id]['hour'] }}">
                 </div>
             </div>
             <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-month">
+                    <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-minute">
                         Minute
                     </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{ params.id }}-month"
-                           name="{{ params.namePrefix }}-month" type="text" pattern="[0-9]*" inputmode="numeric">
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
+                           id="{{ params.id }}-minute"
+                           name="{{ params.id }}[minute]" type="text" pattern="[0-9]*" inputmode="numeric"
+                           value="{{ params.formResponses[params.id]['minute'] }}">
                 </div>
             </div>
             <div class="govuk-date-input__item">
                 <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-year">
+                    <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-ampm">
                         am or pm
                     </label>
-                    <select class="govuk-select govuk-date-input__input govuk-input--width-2" id="{{ params.id }}-year"
-                           name="{{ params.namePrefix }}-year">
-                        <option value="am">am</option>
-                        <option value="pm">pm</option>
+                    <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"
+                            id="{{ params.id }}-ampm"
+                            name="{{ params.id }}[ampm]">
+                        <option value="am" {% if params.formResponses[params.id]['ampm'] == 'am' %} selected {% endif %}>
+                            am
+                        </option>
+                        <option value="pm" {% if params.formResponses[params.id]['ampm'] == 'pm' %} selected {% endif %}>
+                            pm
+                        </option>
                     </select>
                 </div>
             </div>

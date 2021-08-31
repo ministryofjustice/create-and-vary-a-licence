@@ -9,6 +9,7 @@ export default function setUpWebSecurity(): Router {
   // 2. https://www.npmjs.com/package/helmet
   router.use(
     helmet({
+      referrerPolicy: { policy: 'same-origin' },
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],

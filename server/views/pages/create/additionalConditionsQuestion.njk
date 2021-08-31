@@ -17,14 +17,18 @@
             <div class="govuk-grid-column-full">
                 {{ govukRadios({
                     classes: "govuk-radios--inline",
-                    idPrefix: "additional-conditions-required",
-                    name: "additional-conditions-required",
+                    idPrefix: "radio-option",
+                    name: "answer",
                     fieldset: {
+                        attributes: {
+                            id: 'answer'
+                        },
                         legend: {
                             text: "Additional conditions question",
                             classes: "govuk-visually-hidden"
                         }
                     },
+                    errorMessage: validationErrors | findError('answer'),
                     items: [
                         {
                             value: "yes",

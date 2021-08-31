@@ -36,7 +36,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Question', () 
       req = {
         ...req,
         body: {
-          'additional-conditions-required': 'yes',
+          answer: 'yes',
         },
       } as unknown as Request
       await handler.POST(req, res)
@@ -47,7 +47,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Question', () 
       req = {
         ...req,
         body: {
-          'additional-conditions-required': 'no',
+          answer: 'no',
         },
       } as unknown as Request
       await handler.POST(req, res)

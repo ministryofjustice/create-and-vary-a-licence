@@ -13,12 +13,21 @@ import BespokeConditionsRoutes from './handlers/bespokeConditions'
 import CheckAnswersRoutes from './handlers/checkAnswers'
 import ConfirmationRoutes from './handlers/confirmation'
 import { Services } from '../../services'
+import PersonName from './types/personName'
+import validationMiddleware from '../../middleware/validationMiddleware'
+import Address from './types/address'
+import Telephone from './types/telephone'
+import SimpleDateTime from './types/simpleDateTime'
+import YesOrNoQuestion from './types/yesOrNo'
 
 export default function Index({ licenceService }: Services): Router {
   const router = Router()
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const routePrefix = (path: string) => `/licence/create${path}`
+
+  const get = (path: string, handler: RequestHandler) => router.get(routePrefix(path), asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler, type?: new () => unknown) =>
+    router.post(routePrefix(path), validationMiddleware(type), asyncMiddleware(handler))
 
   const caseloadHandler = new CaseloadRoutes()
   const initialMeetingNameHandler = new InitialMeetingNameRoutes()
@@ -32,26 +41,26 @@ export default function Index({ licenceService }: Services): Router {
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
 
-  get('/licence/create/caseload', caseloadHandler.GET)
-  get('/licence/create/crn/:crn/initial-meeting-name', initialMeetingNameHandler.GET)
-  post('/licence/create/crn/:crn/initial-meeting-name', initialMeetingNameHandler.POST)
-  get('/licence/create/id/:id/initial-meeting-place', initialMeetingPlaceHandler.GET)
-  post('/licence/create/id/:id/initial-meeting-place', initialMeetingPlaceHandler.POST)
-  get('/licence/create/id/:id/initial-meeting-contact', initialMeetingContactHandler.GET)
-  post('/licence/create/id/:id/initial-meeting-contact', initialMeetingContactHandler.POST)
-  get('/licence/create/id/:id/initial-meeting-time', initialMeetingTimeHandler.GET)
-  post('/licence/create/id/:id/initial-meeting-time', initialMeetingTimeHandler.POST)
-  get('/licence/create/id/:id/additional-conditions-question', additionalConditionsQuestionHandler.GET)
-  post('/licence/create/id/:id/additional-conditions-question', additionalConditionsQuestionHandler.POST)
-  get('/licence/create/id/:id/additional-conditions', additionalConditionsHandler.GET)
-  post('/licence/create/id/:id/additional-conditions', additionalConditionsHandler.POST)
-  get('/licence/create/id/:id/bespoke-conditions-question', bespokeConditionsQuestionHandler.GET)
-  post('/licence/create/id/:id/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST)
-  get('/licence/create/id/:id/bespoke-conditions', bespokeConditionsHandler.GET)
-  post('/licence/create/id/:id/bespoke-conditions', bespokeConditionsHandler.POST)
-  get('/licence/create/id/:id/check-your-answers', checkAnswersHandler.GET)
-  post('/licence/create/id/:id/check-your-answers', checkAnswersHandler.POST)
-  get('/licence/create/id/:id/confirmation', confirmationHandler.GET)
+  get('/caseload', caseloadHandler.GET)
+  get('/crn/:crn/initial-meeting-name', initialMeetingNameHandler.GET)
+  post('/crn/:crn/initial-meeting-name', initialMeetingNameHandler.POST, PersonName)
+  get('/id/:id/initial-meeting-place', initialMeetingPlaceHandler.GET)
+  post('/id/:id/initial-meeting-place', initialMeetingPlaceHandler.POST, Address)
+  get('/id/:id/initial-meeting-contact', initialMeetingContactHandler.GET)
+  post('/id/:id/initial-meeting-contact', initialMeetingContactHandler.POST, Telephone)
+  get('/id/:id/initial-meeting-time', initialMeetingTimeHandler.GET)
+  post('/id/:id/initial-meeting-time', initialMeetingTimeHandler.POST, SimpleDateTime)
+  get('/id/:id/additional-conditions-question', additionalConditionsQuestionHandler.GET)
+  post('/id/:id/additional-conditions-question', additionalConditionsQuestionHandler.POST, YesOrNoQuestion)
+  get('/id/:id/additional-conditions', additionalConditionsHandler.GET)
+  post('/id/:id/additional-conditions', additionalConditionsHandler.POST)
+  get('/id/:id/bespoke-conditions-question', bespokeConditionsQuestionHandler.GET)
+  post('/id/:id/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, YesOrNoQuestion)
+  get('/id/:id/bespoke-conditions', bespokeConditionsHandler.GET)
+  post('/id/:id/bespoke-conditions', bespokeConditionsHandler.POST)
+  get('/id/:id/check-your-answers', checkAnswersHandler.GET)
+  post('/id/:id/check-your-answers', checkAnswersHandler.POST)
+  get('/id/:id/confirmation', confirmationHandler.GET)
 
   return router
 }
