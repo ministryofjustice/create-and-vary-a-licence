@@ -29,12 +29,14 @@
 {% endblock %}
 
 {% block beforeContent %}
+  <nav>
   {{ govukPhaseBanner({
     tag: {
       text: "alpha"
     },
     html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
   }) }}
+  </nav>
 {% endblock %}
 
 {% block bodyEnd %}

@@ -15,6 +15,7 @@ export default function setUpStaticResources(): Router {
   ;[
     '/assets',
     '/assets/stylesheets',
+    '/assets/images',
     '/assets/js',
     '/node_modules/govuk-frontend/govuk/assets',
     '/node_modules/govuk-frontend',
