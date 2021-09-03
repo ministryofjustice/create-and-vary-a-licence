@@ -93,6 +93,8 @@
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "compression": "^1.7.4",
     "connect-flash": "^0.1.1",
     "connect-redis": "^6.0.0",
@@ -108,6 +110,7 @@
     "http-errors": "^1.8.0",
     "jquery": "^3.6.0",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.1",
     "nocache": "^3.0.1",
     "nunjucks": "^3.2.3",
     "passport": "^0.4.1",
@@ -160,6 +163,7 @@
     "path-parse": "^1.0.7",
     "pdf-parse": "^1.1.1",
     "prettier": "^2.3.2",
+    "reflect-metadata": "^0.1.13",
     "ts-jest": "^27.0.3",
     "typescript": "^4.4.2"
   }

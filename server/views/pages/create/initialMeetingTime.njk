@@ -1,8 +1,8 @@
 {% extends "layout.njk" %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "../../partials/timePicker.njk" import timePicker %}
+{% from "../../partials/datePicker.njk" import datePicker %}
 
 {% set pageTitle = applicationName + " - Create a licence - Induction meeting" %}
 
@@ -16,23 +16,25 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                {{ govukDateInput({
-                    id: "induction-date",
-                    namePrefix: "induction-date",
+                {{ datePicker({
+                    id: "inductionDate",
                     hint: {
                         text: "For example, 12 11 2022"
-                    }
+                    },
+                    errorMessage: validationErrors | findError('inductionDate'),
+                    formResponses: formResponses
                 }) }}
 
                 {{ timePicker({
-                    id: "induction-time",
-                    namePrefix: "induction-time",
+                    id: "inductionTime",
                     label: {
                         text: "Time"
                     },
                     hint: {
                         text: "For example, 9:30am or 2:55pm"
-                    }
+                    },
+                    errorMessage: validationErrors | findError('inductionTime'),
+                    formResponses: formResponses
                 }) }}
 
                 {{ govukButton({

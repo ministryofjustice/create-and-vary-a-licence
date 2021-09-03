@@ -32,11 +32,13 @@
   <nav>
   {{ govukPhaseBanner({
     tag: {
-      text: "alpha"
+      text: "beta"
     },
     html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
   }) }}
   </nav>
+
+  {% include 'partials/formError.njk' %}
 {% endblock %}
 
 {% block bodyEnd %}

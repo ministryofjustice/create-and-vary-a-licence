@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'reflect-metadata'
 import express from 'express'
 
 import createError from 'http-errors'
