@@ -1,0 +1,36 @@
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% macro datePicker(params) %}
+    {% set errorClass = '' %}
+    {% if params.errorMessage %}
+        {% set errorClass = ' govuk-input--error' %}
+    {% endif %}
+    {{ govukDateInput({
+        id: params.id,
+        hint: params.hint,
+        errorMessage: params.errorMessage,
+        items: [
+            {
+                id: params.id + '-day',
+                label: 'Day',
+                name: params.id + '[day]',
+                classes: 'govuk-input--width-2' + errorClass,
+                value: params.formResponses[params.id]['day']
+            },
+            {
+                id: params.id + '-month',
+                label: 'Month',
+                name: params.id + '[month]',
+                classes: 'govuk-input--width-2' + errorClass,
+                value: params.formResponses[params.id]['month']
+            },
+            {
+                id: params.id + '-year',
+                label: 'Year',
+                name: params.id + '[year]',
+                classes: 'govuk-input--width-4' + errorClass,
+                value: params.formResponses[params.id]['year']
+            }
+        ]
+    }) }}
+{% endmacro %}

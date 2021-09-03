@@ -2,6 +2,7 @@
 import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
 import path from 'path'
+import { FieldValidationError } from '../middleware/validationMiddleware'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -55,6 +56,23 @@ export function registerNunjucks(app?: express.Express): Environment {
       return null
     }
     return Object.values(object).join(', ')
+  })
+
+  njkEnv.addFilter('errorSummaryList', (array = []) => {
+    return array.map((error: FieldValidationError) => ({
+      text: error.message,
+      href: `#${error.field}`,
+    }))
+  })
+
+  njkEnv.addFilter('findError', (array: FieldValidationError[] = [], formFieldId: string) => {
+    const item = array.find(error => error.field === formFieldId)
+    if (item) {
+      return {
+        text: item.message,
+      }
+    }
+    return null
   })
 
   return njkEnv

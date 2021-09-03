@@ -8,6 +8,7 @@ import spikeRoutes from './spikes'
 import auth from '../authentication/auth'
 import tokenVerifier from '../data/tokenVerification'
 import populateCurrentUser from '../middleware/populateCurrentUser'
+import flashMessages from '../middleware/flashMessageMiddleware'
 
 export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
@@ -15,6 +16,7 @@ export default function Index(services: Services): Router {
   router.use(auth.authenticationMiddleware(tokenVerifier))
   router.use(populateCurrentUser(services.userService))
   router.use(csrf())
+  router.use(flashMessages())
 
   router.use(homeRoutes())
   router.use(createLicenceRoutes(services))
