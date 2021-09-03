@@ -16,6 +16,7 @@ export default function Index({ licenceService, communityService, prisonerServic
   get('/prisoner/:nomsId/detail', spikeHandlers.getPrisonerDetail)
   get('/prisoner/:nomsId/image', spikeHandlers.getPrisonerImage)
   get('/licence/staffId/:staffId/caseload', spikeHandlers.getUserCaseload)
+  get('/caseload', spikeHandlers.getCaseloadView)
 
   return router
 }

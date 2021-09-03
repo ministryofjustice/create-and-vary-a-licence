@@ -10,7 +10,6 @@ export default class LicenceService {
     return new LicenceApiClient(token).getTestData()
   }
 
-  // Stubbed data
   getLicence(): Record<string, unknown> {
     return {
       offender: {
@@ -64,5 +63,134 @@ export default class LicenceService {
       nomsId: 'A1234AG',
       pnc: '2015/1234344',
     }
+  }
+
+  /**
+   * Get the offenders managed by this staff member.
+   */
+  getManagedOffenders(): Record<string, unknown>[] {
+    return [
+      {
+        crnNumber: 'X10745',
+        currentOm: true,
+        currentPom: false,
+        currentRo: true,
+        nomsNumber: 'A1234AA',
+        offenderId: 1,
+        offenderSurname: 'HARRISON',
+        omEndDate: '01/11/2021',
+        omStartDate: '01/03/2019',
+        staffCode: 'X333',
+        staffIdentifier: 1,
+      },
+      {
+        crnNumber: 'X10843',
+        currentOm: true,
+        currentPom: false,
+        currentRo: true,
+        nomsNumber: 'A1234AB',
+        offenderId: 2,
+        offenderSurname: 'MCVEIGH',
+        omEndDate: '01/11/2021',
+        omStartDate: '01/03/2019',
+        staffCode: 'X333',
+        staffIdentifier: 1,
+      },
+      {
+        crnNumber: 'X10786',
+        currentOm: true,
+        currentPom: false,
+        currentRo: true,
+        nomsNumber: 'A1234AC',
+        offenderId: 3,
+        offenderSurname: 'MUSTAFA',
+        omEndDate: '01/11/2021',
+        omStartDate: '01/03/2019',
+        staffCode: 'X333',
+        staffIdentifier: 1,
+      },
+      {
+        crnNumber: 'X10234',
+        currentOm: true,
+        currentPom: false,
+        currentRo: true,
+        nomsNumber: 'A1234AD',
+        offenderId: 4,
+        offenderSurname: 'Stobart',
+        omEndDate: '01/11/2022',
+        omStartDate: '01/03/2018',
+        staffCode: 'X333',
+        staffIdentifier: 1,
+      },
+    ]
+  }
+
+  /**
+   * Return a list of licences for this staff member where their statusCode in (CREATED, SUBMITTED, REJECTED, ACTIVE).
+   * This will ignore SUPERSEDED.
+   */
+  getLicencesForManagedOffenders(): Record<string, unknown>[] {
+    return [
+      {
+        id: 1,
+        typeCode: 'AP',
+        nomsId: 'A1234AC',
+        crn: 'X10786',
+        prisonCode: 'LEI',
+        prisonDescription: 'Leeds HMP',
+        conditionalReleaseDate: '23/02/2022',
+        surname: 'Mustafa',
+        forename: 'Yasin',
+        dateOfBirth: '20/12/1978',
+        releaseDate: '20/12/2021',
+        statusCode: 'CREATED',
+        staffId: 1,
+      },
+      {
+        id: 2,
+        typeCode: 'AP',
+        nomsId: 'A1234AB',
+        crn: 'X10843',
+        prisonCode: 'MDI',
+        prisonDescription: 'Moorland HMP',
+        conditionalReleaseDate: '12/09/2021',
+        surname: 'McVeigh',
+        forename: 'Stephen',
+        dateOfBirth: '01/10/1994',
+        releaseDate: '19/09/2021',
+        statusCode: 'SUBMITTED',
+        staffId: 1,
+      },
+      {
+        id: 3,
+        typeCode: 'AP',
+        nomsId: 'A1234AA',
+        crn: 'X10745',
+        prisonCode: 'LVI',
+        prisonDescription: 'Liverpool HMP',
+        conditionalReleaseDate: '19/01/2022',
+        surname: 'Harrison',
+        forename: 'Tim',
+        dateOfBirth: '11/02/1971',
+        releaseDate: '18/08/2021',
+        statusCode: 'ACTIVE',
+        staffId: 1,
+      },
+      {
+        id: 4,
+        typeCode: null,
+        nomsId: 'A1234AD',
+        crn: 'X10743',
+        prisonCode: null,
+        prisonDescription: null,
+        conditionalReleaseDate: '19/01/2022',
+        surname: 'Stobart',
+        forename: 'Joel',
+        dateOfBirth: '12/03/1978',
+        releaseDate: '18/09/2021',
+        statusCode: null,
+        staffId: 1,
+      },
+    ]
   }
 }

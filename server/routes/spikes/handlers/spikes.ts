@@ -3,6 +3,7 @@ import path from 'path'
 import LicenceService from '../../../services/licenceService'
 import CommunityService from '../../../services/communityService'
 import PrisonerService from '../../../services/prisonerService'
+import logger from '../../../../logger'
 
 export default class SpikeRoutes {
   constructor(
@@ -65,4 +66,23 @@ export default class SpikeRoutes {
     const managedOffenders = await this.communityService.getManagedOffenders(username, staffIdentifier)
     res.render('pages/managedOffenders', { managedOffenders })
   }
+
+  public getCaseloadView: RequestHandler = async (req, res): Promise<void> => {
+    const managedOffenders = this.licenceService.getManagedOffenders()
+    const licences = this.licenceService.getLicencesForManagedOffenders()
+    const offenderLicences = mergeByNomsId(managedOffenders, licences)
+    logger.debug(`Offender licences to show:  ${JSON.stringify(offenderLicences)}`)
+    res.render('pages/caseload', { offenderLicences })
+  }
+}
+
+// Temporary - to mock the caseload view
+const mergeByNomsId = (
+  offenders: Record<string, unknown>[],
+  licences: Record<string, unknown>[]
+): Record<string, unknown>[] => {
+  return offenders.map(offender => ({
+    ...licences.find(licence => licence && (licence.nomsId === offender.nomsNumber || licence.crn === offender.crn)),
+    ...offender,
+  }))
 }
