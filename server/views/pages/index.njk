@@ -4,15 +4,12 @@
 {% set pageTitle = applicationName + " - Home" %}
 
 {% block content %}
+<div class="homepage-content">
   <div class="govuk-width-container">
     <h1 class="govuk-heading-l govuk-!-margin-top-7">Create and vary a licence</h1>
     <p class="govuk-body govuk-!-margin-bottom-7">A service for requesting, creating, viewing and approving licences.</p>
-  </div>
 
-<div class="homepage-content">
-  <div class="govuk-width-container">
     <ul class="govuk-grid-row card-group">
-
       <li class="govuk-grid-column-one-third card-group__item">
        {{ card({
          "href": '/licence/create/caseload',
