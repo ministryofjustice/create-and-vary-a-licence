@@ -29,14 +29,15 @@
 {% endblock %}
 
 {% block beforeContent %}
-  <div id="phase-banner" role="complementary">
     {{ govukPhaseBanner({
+      attributes: {
+        role: "complementary"
+      },
       tag: {
         text: "beta"
       },
       html: 'This is a new service – your <a class="govuk-link" href="#">feedback</a> will help us to improve it.'
     }) }}
-  </div>
   {% include 'partials/formError.njk' %}
 {% endblock %}
 
