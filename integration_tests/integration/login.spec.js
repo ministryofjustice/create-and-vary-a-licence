@@ -12,11 +12,19 @@ context('Login', () => {
     cy.visit('/')
     AuthLoginPage.verifyOnPage()
   })
+
   it('User name visible in header', () => {
     cy.login()
     const landingPage = IndexPage.verifyOnPage()
     landingPage.headerUserName().should('contain.text', 'J. Smith')
   })
+
+  it('Login page is accessible', () => {
+    cy.login()
+    cy.injectAxe()
+    cy.checkA11y()
+  })
+
   it('User can log out', () => {
     cy.login()
     const landingPage = IndexPage.verifyOnPage()

@@ -21,7 +21,9 @@
                     },
                     id: "telephone",
                     name: "telephone",
-                    classes: "govuk-input--width-20"
+                    classes: "govuk-input--width-20",
+                    errorMessage: validationErrors | findError('telephone'),
+                    value: formResponses.telephone
                 }) }}
 
                 {{ govukButton({

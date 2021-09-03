@@ -27,20 +27,23 @@
                         label: {
                             html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
                         },
-                        id: "address-line-1",
-                        name: "address-line-1",
+                        id: "addressLine1",
+                        name: "addressLine1",
                         autocomplete: "address-line1",
-                        classes: 'govuk-!-width-one-third'
+                        classes: 'govuk-!-width-one-third',
+                        errorMessage: validationErrors | findError('addressLine1'),
+                        value: formResponses.addressLine1
                     }) }}
 
                     {{ govukInput({
                         label: {
                             html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
                         },
-                        id: "address-line-2",
-                        name: "address-line-2",
+                        id: "addressLine2",
+                        name: "addressLine2",
                         autocomplete: "address-line2",
-                        classes: 'govuk-!-width-one-third'
+                        classes: 'govuk-!-width-one-third',
+                        value: formResponses.addressLine2
                     }) }}
 
                     {{ govukInput({
@@ -48,9 +51,11 @@
                             text: "Town or city"
                         },
                         classes: "govuk-!-width-one-quarter",
-                        id: "address-town",
-                        name: "address-town",
-                        autocomplete: "address-level2"
+                        id: "addressTown",
+                        name: "addressTown",
+                        autocomplete: "address-level2",
+                        errorMessage: validationErrors | findError('addressTown'),
+                        value: formResponses.addressTown
                     }) }}
 
                     {{ govukInput({
@@ -58,8 +63,10 @@
                             text: "County"
                         },
                         classes: "govuk-!-width-one-quarter",
-                        id: "address-county",
-                        name: "address-county"
+                        id: "addressCounty",
+                        name: "addressCounty",
+                        errorMessage: validationErrors | findError('addressCounty'),
+                        value: formResponses.addressCounty
                     }) }}
 
                     {{ govukInput({
@@ -67,9 +74,11 @@
                             text: "Postcode"
                         },
                         classes: "govuk-input--width-10",
-                        id: "address-postcode",
-                        name: "address-postcode",
-                        autocomplete: "postal-code"
+                        id: "addressPostcode",
+                        name: "addressPostcode",
+                        autocomplete: "postal-code",
+                        errorMessage: validationErrors | findError('addressPostcode'),
+                        value: formResponses.addressPostcode
                     }) }}
 
                 {% endcall %}
