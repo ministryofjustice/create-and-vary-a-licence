@@ -1,0 +1,64 @@
+#caseload	{
+  border: none;
+  border-collapse: collapse;
+}
+
+#caseload th	{
+  border: none;
+}
+
+#caseload td	{
+  border: none;
+}
+
+@media only screen and (max-width: 1000px) {
+  #location, tr td:nth-child(5) {
+    display: none;
+    visibility: hidden;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  #nomisId, tr td:nth-child(2) {
+    display: none;
+    visibility: hidden;
+  }
+  #location, tr td:nth-child(5) {
+    display: none;
+    visibility: hidden;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  #nomisId, tr td:nth-child(2) {
+    display: none;
+    visibility: hidden;
+  }
+  #crn, tr td:nth-child(3) {
+    display: none;
+    visibility: hidden;
+  }
+  #location, tr td:nth-child(5) {
+    display: none;
+    visibility: hidden;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #nomisId, tr td:nth-child(2) {
+    display: none;
+    visibility: hidden;
+  }
+  #crn, tr td:nth-child(3) {
+    display: none;
+    visibility: hidden;
+  }
+  #releaseDate, tr td:nth-child(4) {
+    display: none;
+    visibility: hidden;
+  }
+  #location, tr td:nth-child(5) {
+    display: none;
+    visibility: hidden;
+  }
+}

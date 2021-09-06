@@ -9,19 +9,19 @@ export enum LicenceStatus {
 type LicenceStatusConfig = {
   label: string
   description: string
-  colour: 'green' | 'blue' | 'red' | 'turquoise' | 'grey'
+  colour: 'green' | 'blue' | 'red' | 'amber' | 'grey'
 }
 
 export const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   IN_PROGRESS: {
     label: 'IN PROGRESS',
     description: 'Created and being worked on',
-    colour: 'turquoise',
+    colour: 'blue',
   },
   SUBMITTED: {
     label: 'SUBMITTED',
     description: 'Submitted to the prison for approval',
-    colour: 'blue',
+    colour: 'amber',
   },
   ACTIVE: {
     label: 'ACTIVE',
