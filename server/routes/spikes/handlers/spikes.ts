@@ -3,6 +3,7 @@ import path from 'path'
 import LicenceService from '../../../services/licenceService'
 import CommunityService from '../../../services/communityService'
 import PrisonerService from '../../../services/prisonerService'
+import { statusConfig } from '../../../licences/licenceStatus'
 
 export default class SpikeRoutes {
   constructor(
@@ -58,11 +59,11 @@ export default class SpikeRoutes {
     }
   }
 
-  public getUserCaseload: RequestHandler = async (req, res): Promise<void> => {
+  public getCaseloadView: RequestHandler = async (req, res): Promise<void> => {
     const { username } = res.locals.user
-    const { staffId } = req.params // Get this from res.locals or leave in path?
+    const { staffId } = req.params
     const staffIdentifier = staffId as unknown as number
-    const managedOffenders = await this.communityService.getManagedOffenders(username, staffIdentifier)
-    res.render('pages/managedOffenders', { managedOffenders })
+    const caseload = this.licenceService.getCaseload(username, staffIdentifier)
+    res.render('pages/caseload', { caseload, statusConfig })
   }
 }

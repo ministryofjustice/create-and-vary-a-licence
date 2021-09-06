@@ -1,0 +1,18 @@
+{% extends "layout.njk" %}
+
+{% from "moj/components/pagination/macro.njk" import mojPagination %}
+
+{% set pageTitle = applicationName + " - Caseload" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <h1 class="govuk-heading-l govuk-!-padding-0 govuk-!-margin-top-3">My caseload</h1>
+        <div class="govuk-grid-row">
+          <div id="content-container">
+              {{ mojPagination(caseload) }}
+              {%  include "../partials/caseloadTable.njk" %}
+              {{ mojPagination(caseload) }}
+          </div>
+        </div>
+    </div>
+{% endblock %}
