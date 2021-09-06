@@ -1,6 +1,7 @@
 import type HmppsAuthClient from '../data/hmppsAuthClient'
 import { LicenceApiTestData } from '../data/licenceClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
+import logger from '../../logger'
 
 export default class LicenceService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -66,74 +67,18 @@ export default class LicenceService {
   }
 
   /**
-   * Get the offenders managed by this staff member.
+   * Build the list for the staff caseload view.
+   * Return the caseload for this staff member, merged with the licences which exist for these people.
+   * Only concerned with licences that have a statusCode in (CREATED, SUBMITTED, REJECTED, ACTIVE) - ignore SUPERSEDED.
+   * When implemented for real this will use:
+   *   - communityService - get the caseload summary list (surname, crn, nomsNumber, currentRo, currentOm)
+   *   - prisonerService - use prisoner-offender-search to pull prisoner details matching the nomsNumber
+   *   - licenceService - pull back licences matching these people, assembled into a licence[]
    */
-  getManagedOffenders(): Record<string, unknown>[] {
+  getCaseload(username: string, staffId: number): Record<string, unknown>[] {
+    logger.debug(`getCaseload for ${username}  staffId: ${staffId}`)
     return [
       {
-        crnNumber: 'X10745',
-        currentOm: true,
-        currentPom: false,
-        currentRo: true,
-        nomsNumber: 'A1234AA',
-        offenderId: 1,
-        offenderSurname: 'HARRISON',
-        omEndDate: '01/11/2021',
-        omStartDate: '01/03/2019',
-        staffCode: 'X333',
-        staffIdentifier: 1,
-      },
-      {
-        crnNumber: 'X10843',
-        currentOm: true,
-        currentPom: false,
-        currentRo: true,
-        nomsNumber: 'A1234AB',
-        offenderId: 2,
-        offenderSurname: 'MCVEIGH',
-        omEndDate: '01/11/2021',
-        omStartDate: '01/03/2019',
-        staffCode: 'X333',
-        staffIdentifier: 1,
-      },
-      {
-        crnNumber: 'X10786',
-        currentOm: true,
-        currentPom: false,
-        currentRo: true,
-        nomsNumber: 'A1234AC',
-        offenderId: 3,
-        offenderSurname: 'MUSTAFA',
-        omEndDate: '01/11/2021',
-        omStartDate: '01/03/2019',
-        staffCode: 'X333',
-        staffIdentifier: 1,
-      },
-      {
-        crnNumber: 'X10234',
-        currentOm: true,
-        currentPom: false,
-        currentRo: true,
-        nomsNumber: 'A1234AD',
-        offenderId: 4,
-        offenderSurname: 'Stobart',
-        omEndDate: '01/11/2022',
-        omStartDate: '01/03/2018',
-        staffCode: 'X333',
-        staffIdentifier: 1,
-      },
-    ]
-  }
-
-  /**
-   * Return a list of licences for this staff member where their statusCode in (CREATED, SUBMITTED, REJECTED, ACTIVE).
-   * This will ignore SUPERSEDED.
-   */
-  getLicencesForManagedOffenders(): Record<string, unknown>[] {
-    return [
-      {
-        id: 1,
-        typeCode: 'AP',
         nomsId: 'A1234AC',
         crn: 'X10786',
         prisonCode: 'LEI',
@@ -143,12 +88,16 @@ export default class LicenceService {
         forename: 'Yasin',
         dateOfBirth: '20/12/1978',
         releaseDate: '20/12/2021',
-        statusCode: 'CREATED',
-        staffId: 1,
+        staffId,
+        licences: [
+          {
+            id: 1,
+            typeCode: 'AP',
+            statusCode: 'IN_PROGRESS',
+          },
+        ],
       },
       {
-        id: 2,
-        typeCode: 'AP',
         nomsId: 'A1234AB',
         crn: 'X10843',
         prisonCode: 'MDI',
@@ -158,12 +107,16 @@ export default class LicenceService {
         forename: 'Stephen',
         dateOfBirth: '01/10/1994',
         releaseDate: '19/09/2021',
-        statusCode: 'SUBMITTED',
-        staffId: 1,
+        staffId,
+        licences: [
+          {
+            id: 2,
+            typeCode: 'AP',
+            statusCode: 'REJECTED',
+          },
+        ],
       },
       {
-        id: 3,
-        typeCode: 'AP',
         nomsId: 'A1234AA',
         crn: 'X10745',
         prisonCode: 'LVI',
@@ -173,12 +126,21 @@ export default class LicenceService {
         forename: 'Tim',
         dateOfBirth: '11/02/1971',
         releaseDate: '18/08/2021',
-        statusCode: 'ACTIVE',
-        staffId: 1,
+        staffId,
+        licences: [
+          {
+            id: 3,
+            typeCode: 'AP',
+            statusCode: 'ACTIVE',
+          },
+          {
+            id: 4,
+            typeCode: 'AP',
+            statusCode: 'IN_PROGRESS',
+          },
+        ],
       },
       {
-        id: 4,
-        typeCode: null,
         nomsId: 'A1234AD',
         crn: 'X10743',
         prisonCode: null,
@@ -188,8 +150,8 @@ export default class LicenceService {
         forename: 'Joel',
         dateOfBirth: '12/03/1978',
         releaseDate: '18/09/2021',
-        statusCode: null,
-        staffId: 1,
+        staffId,
+        licences: [],
       },
     ]
   }

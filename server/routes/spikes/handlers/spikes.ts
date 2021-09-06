@@ -3,7 +3,7 @@ import path from 'path'
 import LicenceService from '../../../services/licenceService'
 import CommunityService from '../../../services/communityService'
 import PrisonerService from '../../../services/prisonerService'
-import logger from '../../../../logger'
+import { statusConfig } from '../../../licences/licenceStatus'
 
 export default class SpikeRoutes {
   constructor(
@@ -59,30 +59,11 @@ export default class SpikeRoutes {
     }
   }
 
-  public getUserCaseload: RequestHandler = async (req, res): Promise<void> => {
-    const { username } = res.locals.user
-    const { staffId } = req.params // Get this from res.locals or leave in path?
-    const staffIdentifier = staffId as unknown as number
-    const managedOffenders = await this.communityService.getManagedOffenders(username, staffIdentifier)
-    res.render('pages/managedOffenders', { managedOffenders })
-  }
-
   public getCaseloadView: RequestHandler = async (req, res): Promise<void> => {
-    const managedOffenders = this.licenceService.getManagedOffenders()
-    const licences = this.licenceService.getLicencesForManagedOffenders()
-    const offenderLicences = mergeByNomsId(managedOffenders, licences)
-    logger.debug(`Offender licences to show:  ${JSON.stringify(offenderLicences)}`)
-    res.render('pages/caseload', { offenderLicences })
+    const { username } = res.locals.user
+    const { staffId } = req.params
+    const staffIdentifier = staffId as unknown as number
+    const caseload = this.licenceService.getCaseload(username, staffIdentifier)
+    res.render('pages/caseload', { caseload, statusConfig })
   }
-}
-
-// Temporary - to mock the caseload view
-const mergeByNomsId = (
-  offenders: Record<string, unknown>[],
-  licences: Record<string, unknown>[]
-): Record<string, unknown>[] => {
-  return offenders.map(offender => ({
-    ...licences.find(licence => licence && (licence.nomsId === offender.nomsNumber || licence.crn === offender.crn)),
-    ...offender,
-  }))
 }

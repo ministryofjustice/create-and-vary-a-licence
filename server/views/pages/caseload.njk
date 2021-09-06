@@ -1,81 +1,14 @@
 {% extends "layout.njk" %}
 
-{% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
 {% set pageTitle = applicationName + " - Caseload" %}
 
 {% block content %}
     <div class="govuk-width-container">
         <h1 class="govuk-heading-l govuk-!-margin-top-7">My caseload</h1>
-    </div>
-
-    <div class="caseload-content">
-        <div class="govuk-width-container">
-
-            <table id="caseload" class="govuk-table" data-qa="caseload-detail">
-              <thead class="govuk-table__head">
-                <th scope="col" class="govuk-table__header">Name</th>
-                <th scope="col" class="govuk-table__header">Nomis ID</th>
-                <th scope="col" class="govuk-table__header">CRN</th>
-                <th scope="col" class="govuk-table__header">Release Date</th>
-                <th scope="col" class="govuk-table__header">Location</th>
-                <th scope="col" class="govuk-table__header">Licence(s)</th>
-                <th scope="col" class="govuk-table__header"></th>
-              </thead>
-              <tbody class="govuk-table__body govuk-body-s">
-                {% for licence in offenderLicences %}
-                  <tr class="govuk-table__row">
-                    <td class="govuk-table__cell">{{ licence.surname }},{{ licence.forename }}</td>
-                    <td class="govuk-table__cell">{{ licence.nomsId }}</td>
-                    <td class="govuk-table__cell">{{ licence.crn }}</td>
-                    <td class="govuk-table__cell">{{ licence.releaseDate }}</td>
-                    <td class="govuk-table__cell">{{ licence.prisonDescription or "Community" }}</td>
-                    <td class="govuk-table__cell">
-                      {% if licence.typeCode %}
-                        {{ licence.typeCode }} - {{ licence.statusCode }}
-                        {% if licence.statusCode === 'ACTIVE' or licence.statusCode === 'SUBMITTED' %}
-                         - <a href="#">View</a>
-                        {% endif %}
-                      {% endif %}
-                    </td>
-                    <td class="govuk-table__cell">
-                        {% if licence.statusCode %}
-                          {% if licence.statusCode === 'CREATED' or licence.statusCode === 'REJECTED' %}
-                            {{ govukButton({
-                                text: "Edit",
-                                href: "#",
-                                classes: "govuk-button--primary"
-                            }) }}
-                          {% elseif licence.statusCode === 'ACTIVE' %}
-                            {{ govukButton({
-                                text: "Vary",
-                                href: "#",
-                                classes: "govuk-button--primary"
-                            }) }}
-                          {% elseif licence.statusCode === 'SUBMITTED' %}
-                              {{ govukButton({
-                                  text: "Status",
-                                  href: "#",
-                                  classes: "govuk-button--primary"
-                              }) }}
-                          {% endif %}
-                        {%  else %}
-                            {{ govukButton({
-                                text: "Create",
-                                href: "#",
-                                classes: "govuk-button--primary"
-                            }) }}
-                        {% endif %}
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-
-            </table>
-            <div id="row-count" class="govuk-body-s">
-                {{ offenderLicences.length }} cases(s)
-            </div>
+        <div class="govuk-grid-row">
+          <div id="content-container">
+              {%  include "../partials/caseloadTable.njk" %}
+          </div>
         </div>
     </div>
 {% endblock %}

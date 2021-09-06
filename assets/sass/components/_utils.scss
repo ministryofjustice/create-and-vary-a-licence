@@ -1,0 +1,42 @@
+.text-align-right {
+  text-align: right
+}
+
+.greyed-text {
+  color: $govuk-secondary-text-colour;
+}
+
+.govuk-radios--inline .govuk-radios__item {
+  margin-right: 0
+}
+
+.force-uppercase {
+  text-transform: uppercase
+}
+
+.force-titlecase {
+  text-transform: capitalize
+}
+
+table.alternate-shade {
+  tr:nth-child(odd) {
+    background-color: #f3f2f1;
+  }
+  tr:only-child {
+    background-color: #ffffff;
+  }
+}
+
+table.vertical-middle {
+  td, th {
+    vertical-align: middle;
+  }
+}
+
+table.last-col-right {
+  td, th {
+    &:last-of-type {
+      text-align: right;
+    }
+  }
+}
