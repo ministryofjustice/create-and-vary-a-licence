@@ -22,23 +22,21 @@
             <td class="govuk-table__cell">{{ case.releaseDate }}</td>
             <td class="govuk-table__cell">{{ case.prisonDescription or "Community" }}</td>
             <td class="govuk-table__cell">
-                <div class="govuk-grid-row govuk-!-margin-0">
                 {%  for licence in case.licences %}
-                    <div class="govuk-grid-column-one-quarter">
-                      {{ licence.typeCode }}
-                    </div>
-                    <div class="govuk-grid-column-one-half">
-                      {{ statusBadge({ status: licence.statusCode, size: 'small' }, statusConfig) }}
-                    </div>
-                    <div class="govuk-grid-column-one-quarter">
-                      {% if licence.statusCode === 'ACTIVE' or licence.statusCode === 'SUBMITTED' %}
-                         <a href="#">
-                           <img src="/assets/images/view-eye.png" alt="View licence" width="30" height="25"/>
-                        </a>
-                    {% endif %}
+                    <div class="govuk-grid-row govuk-!-margin-bottom-2">
+                        <div class="govuk-grid-column-one-quarter">
+                          {{ licence.typeCode }}
+                        </div>
+                        <div class="govuk-grid-column-one-half">
+                          {{ statusBadge({ status: licence.statusCode, size: 'small' }, statusConfig) }}
+                        </div>
+                        <div class="govuk-grid-column-one-quarter">
+                          {% if licence.statusCode === 'ACTIVE' or licence.statusCode === 'SUBMITTED' %}
+                             <a href="#" class="govuk-link">View</a>
+                        {% endif %}
+                        </div>
                     </div>
                 {% endfor %}
-                </div>
             </td>
             <td class="govuk-table__cell">
                 {% set index = case.licences.length -1 %}
