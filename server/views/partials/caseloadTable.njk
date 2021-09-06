@@ -14,7 +14,7 @@
     </thead>
 
     <tbody class="govuk-table__body govuk-body-s">
-    {% for case in caseload %}
+    {% for case in caseload.content %}
         <tr class="govuk-table__row">
             <td class="govuk-table__cell">{{ case.surname + ", " + case.forename }}</td>
             <td class="govuk-table__cell">{{ case.nomsId }}</td>
@@ -22,17 +22,23 @@
             <td class="govuk-table__cell">{{ case.releaseDate }}</td>
             <td class="govuk-table__cell">{{ case.prisonDescription or "Community" }}</td>
             <td class="govuk-table__cell">
+                <div class="govuk-grid-row govuk-!-margin-0">
                 {%  for licence in case.licences %}
-                    {{ licence.typeCode }} -
-                    {{ statusBadge({ status: licence.statusCode, size: 'small' }, statusConfig) }}
-                    {% if licence.statusCode === 'ACTIVE' or licence.statusCode === 'SUBMITTED' %}
-                      <div class="govuk-!-margin-2">
-                       <a href="#">
-                         <img src="/assets/images/view-eye.png" alt="View licence" width="30" height="25"/>
-                       </a>
-                      </div>
+                    <div class="govuk-grid-column-one-quarter">
+                      {{ licence.typeCode }}
+                    </div>
+                    <div class="govuk-grid-column-one-half">
+                      {{ statusBadge({ status: licence.statusCode, size: 'small' }, statusConfig) }}
+                    </div>
+                    <div class="govuk-grid-column-one-quarter">
+                      {% if licence.statusCode === 'ACTIVE' or licence.statusCode === 'SUBMITTED' %}
+                         <a href="#">
+                           <img src="/assets/images/view-eye.png" alt="View licence" width="30" height="25"/>
+                        </a>
                     {% endif %}
+                    </div>
                 {% endfor %}
+                </div>
             </td>
             <td class="govuk-table__cell">
                 {% set index = case.licences.length -1 %}

@@ -75,9 +75,9 @@ export default class LicenceService {
    *   - prisonerService - use prisoner-offender-search to pull prisoner details matching the nomsNumber
    *   - licenceService - pull back licences matching these people, assembled into a licence[]
    */
-  getCaseload(username: string, staffId: number): Record<string, unknown>[] {
+  getCaseload(username: string, staffId: number): Record<string, unknown> {
     logger.debug(`getCaseload for ${username}  staffId: ${staffId}`)
-    return [
+    const content = [
       {
         nomsId: 'A1234AC',
         crn: 'X10786',
@@ -153,6 +153,49 @@ export default class LicenceService {
         staffId,
         licences: [],
       },
+      {
+        nomsId: 'A1234AE',
+        crn: 'X10677',
+        prisonCode: 'DVI',
+        prisonDescription: 'Doncaster HMP',
+        conditionalReleaseDate: '19/02/2022',
+        surname: 'Elango',
+        forename: 'Arul',
+        dateOfBirth: '23/05/1975',
+        releaseDate: '16/07/2021',
+        staffId,
+        licences: [
+          {
+            id: 5,
+            typeCode: 'AP',
+            statusCode: 'ACTIVE',
+          },
+        ],
+      },
     ]
+
+    return {
+      content,
+      results: {
+        from: 1,
+        to: 5,
+        count: 5,
+      },
+      previous: {
+        text: 'Previous',
+        ref: '#',
+      },
+      next: {
+        text: 'Next',
+        href: '#',
+      },
+      items: [
+        {
+          text: '1',
+          href: '#',
+          selected: true,
+        },
+      ],
+    }
   }
 }
