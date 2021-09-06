@@ -47,13 +47,13 @@
                         {{ govukButton({
                             text: "Edit",
                             href: "#",
-                            classes: "govuk-button--primary govuk-body-s"
+                            classes: "govuk-button--primary govuk-body-s fixed-width govuk-!-margin-right-2"
                         }) }}
                     {% elseif case.licences[index].statusCode === 'ACTIVE' %}
                         {{ govukButton({
                             text: "Vary",
                             href: "#",
-                            classes: "govuk-button--primary govuk-body-s"
+                            classes: "govuk-button--primary govuk-body-s fixed-width govuk-!-margin-right-2"
                         }) }}
                     {% else %}
                         <span class="greyed-text govuk-body-s">Awaiting approval</span>
@@ -64,7 +64,7 @@
                     {{ govukButton({
                         text: "Create",
                         href: "#",
-                        classes: "govuk-button--primary width-80px govuk-body-s"
+                        classes: "govuk-button--primary govuk-body-s fixed-width govuk-!-margin-right-2"
                     }) }}
                 {% endif %}
             </td>

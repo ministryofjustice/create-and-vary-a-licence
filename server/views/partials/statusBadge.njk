@@ -1,5 +1,5 @@
 {% macro statusBadge(params, statusConfig) %}
-    <span class="status-badge {{ statusConfig[params.status].colour }} {{ params.size }}">
+    <span class="status-badge fixed-width {{ statusConfig[params.status].colour }} {{ params.size }}">
       {{ statusConfig[params.status].label }}
     </span>
 {% endmacro %}
