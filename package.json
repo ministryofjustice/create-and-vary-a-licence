@@ -81,7 +81,7 @@
       "prettier --write",
       "eslint --fix"
     ],
-    "*.{json}": [
+    "*.json": [
       "prettier --write"
     ]
   },
@@ -105,7 +105,7 @@
     "express": "^4.17.1",
     "express-request-id": "^1.4.1",
     "express-session": "^1.17.2",
-    "govuk-frontend": "^3.13.0",
+    "govuk-frontend": "^3.13.1",
     "helmet": "^4.6.0",
     "http-errors": "^1.8.0",
     "jquery": "^3.6.0",
@@ -117,7 +117,7 @@
     "passport-oauth2": "^1.5.0",
     "redis": "^3.1.2",
     "reflect-metadata": "^0.1.13",
-    "sass": "^1.32.13",
+    "sass": "^1.39.0",
     "superagent": "^6.1.0"
   },
   "devDependencies": {
