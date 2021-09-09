@@ -1,0 +1,5 @@
+{% macro formBuilder(params) %}
+    {% if params.inputTemplate == 'placeOfResidence' %}
+        {% include 'partials/additionalConditionsInputs/placeOfResidence.njk' %}
+    {% endif %}
+{% endmacro %}

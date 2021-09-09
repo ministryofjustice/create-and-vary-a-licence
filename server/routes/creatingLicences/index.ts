@@ -19,6 +19,7 @@ import Address from './types/address'
 import Telephone from './types/telephone'
 import SimpleDateTime from './types/simpleDateTime'
 import YesOrNoQuestion from './types/yesOrNo'
+import AdditionalConditions from './types/additionalConditions'
 
 export default function Index({ licenceService }: Services): Router {
   const router = Router()
@@ -53,7 +54,7 @@ export default function Index({ licenceService }: Services): Router {
   get('/id/:id/additional-conditions-question', additionalConditionsQuestionHandler.GET)
   post('/id/:id/additional-conditions-question', additionalConditionsQuestionHandler.POST, YesOrNoQuestion)
   get('/id/:id/additional-conditions', additionalConditionsHandler.GET)
-  post('/id/:id/additional-conditions', additionalConditionsHandler.POST)
+  post('/id/:id/additional-conditions', additionalConditionsHandler.POST, AdditionalConditions)
   get('/id/:id/bespoke-conditions-question', bespokeConditionsQuestionHandler.GET)
   post('/id/:id/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, YesOrNoQuestion)
   get('/id/:id/bespoke-conditions', bespokeConditionsHandler.GET)

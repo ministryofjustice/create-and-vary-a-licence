@@ -62,7 +62,7 @@ describe('validationMiddleware', () => {
       expect(req.flash).toHaveBeenCalledWith('formResponses', JSON.stringify(req.body))
     })
 
-    it('should return the top level property on the error messages', async () => {
+    it('should return the bottom level property on the error messages', async () => {
       const next = jest.fn()
       const req = {
         flash: jest.fn(),
@@ -77,26 +77,7 @@ describe('validationMiddleware', () => {
       expect(next).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        JSON.stringify([{ field: 'child', message: notEmptyMessage }])
-      )
-    })
-
-    it('should return the full path property on the error messages', async () => {
-      const next = jest.fn()
-      const req = {
-        flash: jest.fn(),
-        body: {
-          id: 'abc',
-          child: { name: '' },
-        },
-      } as unknown as Request
-      const res = { redirect: jest.fn() } as unknown as Response
-      await validationMiddleware(DummyForm, true)(req, res, next)
-
-      expect(next).not.toHaveBeenCalled()
-      expect(req.flash).toHaveBeenCalledWith(
-        'validationErrors',
-        JSON.stringify([{ field: 'child[name]', message: notEmptyMessage }])
+        JSON.stringify([{ field: 'name', message: notEmptyMessage }])
       )
     })
   })

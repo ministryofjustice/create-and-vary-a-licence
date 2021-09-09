@@ -1,6 +1,9 @@
 import { Request, Response } from 'express'
 
 import AdditionalConditionsRoutes from './additionalConditions'
+import * as conditionsProvider from '../../../utils/conditionsProvider'
+
+jest.spyOn(conditionsProvider, 'default').mockReturnValue([{ groupName: 'group1', conditions: [{ id: 'condition1' }] }])
 
 describe('Route Handlers - Create Licence - Additional Conditions', () => {
   const handler = new AdditionalConditionsRoutes()
@@ -27,6 +30,12 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
         offender: {
           name: 'Adam Balasaravika',
         },
+        additionalConditions: [
+          {
+            groupName: 'group1',
+            conditions: [{ id: 'condition1' }],
+          },
+        ],
       })
     })
   })

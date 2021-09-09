@@ -1,9 +1,9 @@
 {% extends "layout.njk" %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "formBuilder.njk" import formBuilder %}
+
 
 {% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
 
@@ -20,98 +20,42 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
 
-                {{ govukCheckboxes({
-                    name: "additional-conditions",
-                    fieldset: {
-                        legend: {
-                            text: "Residence at a specific place",
-                            isPageHeading: true,
-                            classes: "govuk-fieldset__legend--l"
-                        },
-                        classes: "govuk-!-margin-top-6"
-                    },
-                    items: [
-                        {
-                            value: "residence-condition-id-0",
-                            text: "You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.",
-                            conditional: {
-                                html: govukInput({
-                                    name: "supplementary-data[residence-condition-id-0][probation-region]",
-                                    classes: "govuk-!-width-one-third",
-                                    label: {
-                                        text: "Enter probation region"
-                                    }
+                {% for group in additionalConditions %}
+                    {% set items = [] %}
+                    {% for condition in group.conditions %}
+                        {% set conditionalHtml = {} %}
+                        {% if condition.inputTemplate %}
+                            {% set conditionalHtml = {
+                                html: formBuilder({
+                                    id: condition.id,
+                                    inputTemplate: condition.inputTemplate,
+                                    errorMessages: validationErrors,
+                                    formResponses: formResponses
                                 })
-                            }
-                        }
-                    ]
-                }) }}
+                            } %}
+                        {% endif %}
+                        {% set items = (items.push({
+                            id: condition.id,
+                            value: condition.id,
+                            text: condition.text,
+                            checked: formResponses.additionalConditions and condition.id in formResponses.additionalConditions,
+                            conditional: conditionalHtml
+                        }), items) %}
+                    {% endfor %}
 
-                {% set restrictionOfResidencyHtml %}
-                    {{ govukRadios({
-                        name: "supplementary-data[restriction-of-residency-condition-id-0][gender]",
+                    {{ govukCheckboxes({
+                        name: "additionalConditions",
                         fieldset: {
                             legend: {
-                                text: "Select the relevent text"
-                            }
+                                text: group.groupName,
+                                isPageHeading: true,
+                                classes: "govuk-fieldset__legend--l"
+                            },
+                            classes: "govuk-!-margin-top-6"
                         },
-                        items: [
-                            {
-                                value: "any",
-                                text: "any"
-                            },
-                            {
-                                value: "any female",
-                                text: "any female"
-                            },
-                            {
-                                value: "any male",
-                                text: "any male"
-                            }
-                        ]
+                        items: items
                     }) }}
-
-                    {{ govukRadios({
-                        classes: "govuk-radios--inline",
-                        name: "supplementary-data[restriction-of-residency-condition-id-0][age]",
-                        fieldset: {
-                            legend: {
-                                text: "Select the relevent age"
-                            }
-                        },
-                        items: [
-                            {
-                                value: "16",
-                                text: "16 years"
-                            },
-                            {
-                                value: "18",
-                                text: "18 years"
-                            }
-                        ]
-                    }) }}
-                {% endset %}
-
-                {{ govukCheckboxes({
-                    name: "additional-conditions",
-                    fieldset: {
-                        legend: {
-                            text: "Restriction of residency",
-                            isPageHeading: true,
-                            classes: "govuk-fieldset__legend--l"
-                        },
-                        classes: "govuk-!-margin-top-6"
-                    },
-                    items: [
-                        {
-                            value: "restriction-of-residency-condition-id-0",
-                            text: "Not to reside (not even to stay for one night) in the same household as [ANY / ANY FEMALE / ANY MALE] child under the age of [INSERT AGE] without the prior approval of your supervising officer.",
-                            conditional: {
-                                html: restrictionOfResidencyHtml
-                            }
-                        }
-                    ]
-                }) }}
+                {% endfor %}
 
                 {{ govukButton({
                     text: "Continue",
