@@ -30,9 +30,9 @@ export default {
       inputTemplate: 'placeOfResidence',
     },
     {
-      id: 'restrictionOfResidency',
-      groupName: 'Restriction of residency',
-      text: 'Not to reside (not even to stay for one night) in the same household as [ANY / ANY FEMALE / ANY MALE] child under the age of [INSERT AGE] without the prior approval of your supervising officer.',
+      id: 'attendAppointments',
+      groupName: 'Making or maintaining contact with a person',
+      text: 'Attend all appointments arranged for you with a psychiatrist / psychologist / medical practitioner.',
     },
   ],
 }
