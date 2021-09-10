@@ -1,5 +1,10 @@
 {% macro formBuilder(params) %}
-    {% if params.inputTemplate == 'placeOfResidence' %}
+    {% set id = params.id %}
+    {% set inputTemplate = params.inputTemplate %}
+    {% set errorMessages = params.errorMessages %}
+    {% set formResponses = params.formResponses %}
+
+    {% if inputTemplate == 'placeOfResidence' %}
         {% include 'partials/additionalConditionsInputs/placeOfResidence.njk' %}
     {% endif %}
 {% endmacro %}

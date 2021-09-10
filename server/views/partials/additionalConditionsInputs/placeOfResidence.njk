@@ -2,11 +2,11 @@
 
 {{ govukInput({
     id: 'regionOfResidence',
-    name: params.id + '[regionOfResidence]',
+    name: id + '[regionOfResidence]',
     classes: "govuk-!-width-one-third",
     label: {
         text: "Enter probation region"
     },
-    errorMessage: params.errorMessages | findError('regionOfResidence'),
-    value: params.formResponses[params.id].regionOfResidence
+    errorMessage: errorMessages | findError('regionOfResidence'),
+    value: formResponses[id].regionOfResidence
 }) }}

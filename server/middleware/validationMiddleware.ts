@@ -18,7 +18,7 @@ function validationMiddleware(type: new () => unknown): RequestHandler {
       return next()
     }
 
-    const addError = (
+    const buildError = (
       error: ValidationError,
       constraints: {
         [type: string]: string
@@ -29,10 +29,14 @@ function validationMiddleware(type: new () => unknown): RequestHandler {
     })
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mapErrors: any = (error: ValidationError) =>
-      error.children.length > 0 ? error.children.flatMap(mapErrors) : addError(error, error.constraints)
+    const flattenErrors: any = (errorList: ValidationError[]) => {
+      // Flat pack a list of errors with child errors into a 1-dimensional list of errors.
+      return errorList.flatMap(error => {
+        return error.children.length > 0 ? flattenErrors(error.children) : buildError(error, error.constraints)
+      })
+    }
 
-    req.flash('validationErrors', JSON.stringify(errors.flatMap(mapErrors)))
+    req.flash('validationErrors', JSON.stringify(flattenErrors(errors)))
     req.flash('formResponses', JSON.stringify(req.body))
 
     return res.redirect('back')
