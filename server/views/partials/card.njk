@@ -1,5 +1,5 @@
 {% macro card(params) %}
-<div class="card{% if params.clickable %} card--clickable{% endif %}" data-qa="{{ params['data-qa'] }}">
+<div id="{{ params.id }}" class="card{% if params.clickable %} card--clickable{% endif %}" data-qa="{{ params['data-qa'] }}">
     <h2 class="govuk-heading-m card__heading">
         {%- if params.href %}
             <a class="govuk-link card__link" href="{{ params.href }}">{{ params.heading | safe }}</a>

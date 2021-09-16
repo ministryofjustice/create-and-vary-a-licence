@@ -14,6 +14,7 @@ export declare global {
       username: string
       token: string
       authSource: string
+      userRoles: string[]
     }
 
     interface Request {

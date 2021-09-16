@@ -1,10 +1,4 @@
-export enum LicenceStatus {
-  IN_PROGRESS = 'IN_PROGRESS',
-  SUBMITTED = 'SUBMITTED',
-  ACTIVE = 'ACTIVE',
-  REJECTED = 'REJECTED',
-  SUPERSEDED = 'SUPERSEDED',
-}
+import LicenceStatus from '../enumeration/licenceStatus'
 
 type LicenceStatusConfig = {
   label: string
@@ -12,7 +6,7 @@ type LicenceStatusConfig = {
   colour: 'green' | 'blue' | 'red' | 'amber' | 'grey'
 }
 
-export const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
+const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   IN_PROGRESS: {
     label: 'IN PROGRESS',
     description: 'Created and being worked on',
@@ -39,3 +33,5 @@ export const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     colour: 'grey',
   },
 }
+
+export default statusConfig

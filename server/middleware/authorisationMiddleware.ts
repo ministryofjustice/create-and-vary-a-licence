@@ -1,13 +1,9 @@
 import jwtDecode from 'jwt-decode'
 import { Request, Response, NextFunction } from 'express'
 import logger from '../../logger'
+import AuthRole from '../enumeration/authRole'
 
-export enum AuthRole {
-  OMU = 'ROLE_CVL_OMU',
-  GLOBAL_SEARCH = 'ROLE_GLOBAL_SEARCH',
-}
-
-export const isAuthorisedRole = (role: string): boolean =>
+const isAuthorisedRole = (role: string): boolean =>
   Object.keys(AuthRole)
     .map(key => AuthRole[key])
     .includes(role)
