@@ -1,5 +1,5 @@
 import type HmppsAuthClient from '../data/hmppsAuthClient'
-import { LicenceApiTestData } from '../data/licenceClientTypes'
+import { LicenceApiTestData } from '../data/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import logger from '../../logger'
 

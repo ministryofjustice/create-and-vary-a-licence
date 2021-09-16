@@ -83,6 +83,22 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    prisonerSearchApi: {
+      url: get('PRISONER_SEARCH_API_URL', 'http://localhost:8090', requiredInProduction),
+      timeout: {
+        response: get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 10000),
+        deadline: get('PRISONER_SEARCH_API_TIMEOUT_DEADLINE', 10000),
+      },
+      agent: new AgentConfig(),
+    },
+    probationSearchApi: {
+      url: get('PROBATION_SEARCH_API_URL', 'http://localhost:8091', requiredInProduction),
+      timeout: {
+        response: get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 10000),
+        deadline: get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 10000),
+      },
+      agent: new AgentConfig(),
+    },
     communityApi: {
       url: get('COMMUNITY_API_URL', 'http://localhost:8088', requiredInProduction),
       timeout: {
