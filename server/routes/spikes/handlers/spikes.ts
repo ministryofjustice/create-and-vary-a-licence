@@ -3,7 +3,7 @@ import path from 'path'
 import LicenceService from '../../../services/licenceService'
 import CommunityService from '../../../services/communityService'
 import PrisonerService from '../../../services/prisonerService'
-import { statusConfig } from '../../../licences/licenceStatus'
+import statusConfig from '../../../licences/licenceStatus'
 import { PrisonerSearchCriteria } from '../../../data/prisonerSearchApiClientTypes'
 import { SearchDto } from '../../../data/probationSearchApiClientTypes'
 

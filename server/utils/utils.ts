@@ -1,3 +1,5 @@
+import AuthRole from '../enumeration/authRole'
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -14,4 +16,6 @@ const properCaseName = (name: string): string => (isBlank(name) ? '' : name.spli
 const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
-export default convertToTitleCase
+const hasRole = (user: Express.User, role: AuthRole): boolean => user?.userRoles.includes(role) || false
+
+export { convertToTitleCase, hasRole }

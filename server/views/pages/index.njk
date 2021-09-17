@@ -4,67 +4,64 @@
 {% set pageTitle = applicationName + " - Home" %}
 
 {% block content %}
-<div class="homepage-content">
-  <div class="govuk-width-container">
-    <h1 class="govuk-heading-l govuk-!-margin-top-7">Create and vary a licence</h1>
-    <p class="govuk-body govuk-!-margin-bottom-7">A service for requesting, creating, viewing and approving licences.</p>
+    <div class="grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">Create and vary a licence</h1>
+            <div class="govuk-grid-row card-group">
+                {% if shouldShowCreateLicenceCard %}
+                    <div class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "id": "createLicenceCard",
+                            "href": "/licence/create/caseload",
+                            "clickable": "true",
+                            "heading": "Create a licence",
+                            "description": "Create a licence for a person in your probation caseload.",
+                            "data-qa": "create-licence-link"
+                        }) }}
+                    </div>
+                {% endif %}
 
-    <ul class="govuk-grid-row card-group">
-      <li class="govuk-grid-column-one-third card-group__item">
-       {{ card({
-         "href": '/licence/create/caseload',
-         "clickable": "true",
-         "heading": 'Create a licence',
-         "description": 'Create a licence for a person in your probation caseload.',
-         "data-qa": "create-licence-link"
-       }) }}
-      </li>
+                <div class="govuk-grid-column-one-third card-group__item">
+                    {{ card({
+                        "id": "viewLicenceCard",
+                        "href": "/",
+                        "clickable": "true",
+                        "heading": "View or print a licence",
+                        "description": "View or print an approved licence for an offender in your prison caseload.",
+                        "data-qa": "view-print-licence-link"
+                    }) }}
+                </div>
 
-      <li class="govuk-grid-column-one-third card-group__item">
-        {{ card({
-          "href": '/',
-          "clickable": "true",
-          "heading": 'View or print a licence',
-          "description": 'View or print an approved licence for an offender in your prison caseload.',
-          "data-qa": "view-print-licence-link"
-        }) }}
-      </li>
+                {% if shouldShowApproveLicenceCard %}
+                    <div class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "id": "approveLicenceCard",
+                            "href": "/",
+                            "clickable": "true",
+                            "heading": "Approve a licence",
+                            "description": "Approve a licence for an offender who will be released from your prison caseload.",
+                            "data-qa": "approve-licence-link"
+                        }) }}
+                    </div>
+                {% endif %}
 
-      <li class="govuk-grid-column-one-third card-group__item">
-        {{ card({
-          "href": '/',
-          "clickable": "true",
-          "heading": 'Approve a licence',
-          "description": 'Approve a licence for an offender who will be released from your prison caseload.',
-          "data-qa": "approve-licence-link"
-        }) }}
-      </li>
-
-      <li class="govuk-grid-column-one-third card-group__item">
-        {{ card({
-          "href": '/caseload/staffId/1',
-          "clickable": "true",
-          "heading": 'My caseload',
-          "description": 'View a list of my cases and their licences.',
-          "data-qa": "my-caseload--link"
-        }) }}
-      </li>
-
-      <li class="govuk-grid-column-one-third card-group__item">
-        {{ card({
-          "href": '/',
-          "clickable": "true",
-          "heading": 'Approve bespoke terms',
-          "description": 'Review and approve bespoke terms on licences in your probation caseload.',
-          "data-qa": "approve-bespoke-link"
-        }) }}
-      </li>
-
-    </ul>
-  </div>
-</div>
+                {% if shouldShowMyCaseloadCard %}
+                    <div class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "id": "myCaseloadCard",
+                            "href": "/caseload/staffId/1",
+                            "clickable": "true",
+                            "heading": "My caseload",
+                            "description": "View a list of my cases and their licences.",
+                            "data-qa": "my-caseload--link"
+                        }) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block pageScripts %}
-  <script src="/assets/js/card.js"></script>
+    <script src="/assets/js/card.js"></script>
 {% endblock %}
