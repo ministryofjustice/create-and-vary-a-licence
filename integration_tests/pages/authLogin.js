@@ -1,5 +1,5 @@
 const page = require('./page')
 
 module.exports = {
-  verifyOnPage: () => page('Sign in', {}),
+  verifyOnPage: () => page('Sign in', {}, false),
 }
