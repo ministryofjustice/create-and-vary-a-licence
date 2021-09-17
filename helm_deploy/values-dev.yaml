@@ -14,6 +14,8 @@ generic-service:
     COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
     PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
+    PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
+    PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
 
     # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
     GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"

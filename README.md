@@ -101,17 +101,19 @@ These are:
 
 2. Create a `.env` file in the root of the project with the following content :
 
-```angular2html
+```
 HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
 TOKEN_VERIFICATION_API_URL=https://token-verification-api-dev.prison.service.justice.gov.uk
 LICENCE_API_URL=https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk
 PRISON_API_URL=https://api-dev.prison.service.justice.gov.uk
 OFFENDER_SEARCH_API_URL=https://prisoner-offender-search-dev.prison.service.justice.gov.uk
 COMMUNITY_API_URL=https://community-api-secure.test.delius.probation.hmpps.dsd.io
+PRISONER_SEARCH_API_URL=https://prisoner-offender-search-dev.prison.service.justice.gov.uk
+PROBATION_SEARCH_API_URL=https://probation-offender-search-dev.hmpps.service.justice.gov.uk
 API_CLIENT_ID=create-and-vary-a-licence-client
-API_CLIENT_SECRET=<fill this in>
+API_CLIENT_SECRET=fill this in
 SYSTEM_CLIENT_ID=create-and-vary-a-licence-admin
-SYSTEM_CLIENT_SECRET=<fill this in>
+SYSTEM_CLIENT_SECRET=fill this in
 GOTENBERG_API_URL=http://localhost:3001
 ```
 
@@ -153,6 +155,7 @@ They are implemented via a scheduled job in CircleCI. See the `check_outdated` j
 This service makes use of imported types generated from the openAPI definitions offered by each of the APIs.
 Whenever the APIs change or new types are added, the scripts can be re-run to import these and make them available.
 The types are committed into Git.
+
 Scripts are provided to generate these types from the development instances:
 
 `generate-community-api-types.sh` - Re-run when Community API types change
@@ -161,7 +164,17 @@ Scripts are provided to generate these types from the development instances:
 
 `generate-prison-api-types.sh` - Re-run when prisoner API types change
 
-`generate-prisoner-offender-search-types.sh`  Re-run when offender search API types change
+`generate-prisoner-offender-search-types.sh`  Re-run when prisoner offender search API types change
+
+`generate-probation-offender-search-types.sh`  Re-run when probation offender search API types change
+
+There may be some manual editing needed, particularly to:
+
+  - Replace double quotes with single-quotes
+  - Remove all semi-colons
+  - Validate the api-docs endpoint for swagger (in case it changes)
+  - Eslint ignore any lines which complain about not being camel-case with `eslint-disable camelcase`
+  - Eslint ignore empty interfaces with `eslint-disable-next-line @typescript-eslint/no-empty-interface`
 
 ## Gotenberg Container
 

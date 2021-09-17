@@ -2,7 +2,7 @@ import nock from 'nock'
 import config from '../config'
 import LicenceService from '../services/licenceService'
 import HmppsAuthClient from './hmppsAuthClient'
-import { LicenceApiTestData } from './licenceClientTypes'
+import { LicenceApiTestData } from './licenceApiClientTypes'
 
 jest.mock('./hmppsAuthClient')
 

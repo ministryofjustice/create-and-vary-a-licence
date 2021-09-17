@@ -4,6 +4,8 @@ import LicenceService from '../../../services/licenceService'
 import CommunityService from '../../../services/communityService'
 import PrisonerService from '../../../services/prisonerService'
 import statusConfig from '../../../licences/licenceStatus'
+import { PrisonerSearchCriteria } from '../../../data/prisonerSearchApiClientTypes'
+import { SearchDto } from '../../../data/probationSearchApiClientTypes'
 
 export default class SpikeRoutes {
   constructor(
@@ -65,5 +67,44 @@ export default class SpikeRoutes {
     const staffIdentifier = staffId as unknown as number
     const caseload = this.licenceService.getCaseload(username, staffIdentifier)
     res.render('pages/caseload', { caseload, statusConfig })
+  }
+
+  public searchPrison: RequestHandler = async (req, res): Promise<void> => {
+    const { firstName, lastName, prisonerIdentifier } = req.query as Record<string, string>
+    const { username } = res.locals.user
+    const searchValues = { firstName, lastName, prisonerIdentifier }
+
+    if (!(prisonerIdentifier || firstName || lastName)) {
+      return res.render('pages/prisoners')
+    }
+
+    const prisoners = await this.prisonerService.searchPrisoners(username, {
+      firstName,
+      lastName,
+      prisonerIdentifier: prisonerIdentifier || null,
+      // prisonIds - for prison user caseloads
+      includeAliases: false,
+    } as PrisonerSearchCriteria)
+
+    return res.render('pages/prisoners', { prisoners, searchValues })
+  }
+
+  public searchProbation: RequestHandler = async (req, res): Promise<void> => {
+    const { prisonerIdentifier, firstName, lastName, crn } = req.query as Record<string, string>
+    const { username } = res.locals.user
+    const searchValues = { prisonerIdentifier, firstName, lastName, crn }
+
+    if (!(prisonerIdentifier || firstName || lastName || crn)) {
+      return res.render('pages/probationers')
+    }
+
+    const probationers = await this.communityService.searchProbationers(username, {
+      firstName,
+      surname: lastName,
+      nomsNumber: prisonerIdentifier || null,
+      crn,
+    } as SearchDto)
+
+    return res.render('pages/probationers', { probationers, searchValues })
   }
 }
