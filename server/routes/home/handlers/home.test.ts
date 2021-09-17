@@ -1,6 +1,9 @@
 import { Request, Response } from 'express'
 
 import HomeRoutes from './home'
+import * as utils from '../../../utils/utils'
+
+jest.spyOn(utils, 'hasRole').mockReturnValue(true)
 
 describe('Route Handlers - Home', () => {
   const handler = new HomeRoutes()
@@ -18,7 +21,11 @@ describe('Route Handlers - Home', () => {
   describe('GET', () => {
     it('', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/index')
+      expect(res.render).toHaveBeenCalledWith('pages/index', {
+        shouldShowCreateLicenceCard: true,
+        shouldShowApproveLicenceCard: true,
+        shouldShowMyCaseloadCard: true,
+      })
     })
   })
 })

@@ -68,8 +68,6 @@ $card-border-color: lighten($card-border-hover-color, 15%);
   flex-wrap: wrap;
   margin-bottom: govuk-spacing(3);
   padding: 0;
-  // justify-content: normal;
-  // justify-content: space-around;
 
   @include govuk-media-query($until: desktop) {
     margin-bottom: govuk-spacing(6);
