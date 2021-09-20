@@ -9,12 +9,12 @@ export default class AdditionalConditionsQuestionRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
+    const { licenceId } = req.params
     const payload = req.body
     if (payload.answer === 'yes') {
-      res.redirect(`/licence/create/id/${id}/additional-conditions`)
+      res.redirect(`/licence/create/id/${licenceId}/additional-conditions`)
     } else {
-      res.redirect(`/licence/create/id/${id}/bespoke-conditions-question`)
+      res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)
     }
   }
 }

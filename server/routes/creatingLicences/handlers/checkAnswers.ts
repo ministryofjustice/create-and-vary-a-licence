@@ -10,7 +10,7 @@ export default class CheckAnswersRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
-    res.redirect(`/licence/create/id/${id}/confirmation`)
+    const { licenceId } = req.params
+    res.redirect(`/licence/create/id/${licenceId}/confirmation`)
   }
 }

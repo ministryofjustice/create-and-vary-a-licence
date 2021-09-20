@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Create a licence - Caseload" %}
 
@@ -12,7 +13,7 @@
             attributes: {
                 id: 'name-' + loop.index
             },
-            html: '<h3 class="govuk-heading-m govuk-!-margin-bottom-3"><a href="/licence/create/crn/' + offender.crnNumber + '/initial-meeting-name" class="govuk-link govuk-link--no-visited-state">' + offender.name + '</a></h3>'
+            html: '<h3 class="govuk-heading-m govuk-!-margin-bottom-3">' + offender.name + '</h3>'
         },
         {
             attributes: {
@@ -25,6 +26,17 @@
                 id: 'release-date-' + loop.index
             },
             text: offender.conditionalReleaseDate
+        },
+        {
+            attributes: {
+                id: 'create-licence-' + loop.index
+            },
+            html: govukButton({
+                text: "Create licence",
+                classes: "govuk-button--secondary govuk-!-margin-bottom-0",
+                name: "crn",
+                value: offender.crn
+            })
         }
     ]), offenders) %}
 {% endfor %}
@@ -36,20 +48,26 @@
         </div>
     </div>
 
-    {{ govukTable({
-        caption: "Caseload",
-        captionClasses: "govuk-visually-hidden",
-        head: [
-            {
-                text: "Name"
-            },
-            {
-                text: "Case reference number"
-            },
-            {
-                text: "Conditional release date"
-            }
-        ],
-        rows: offenders
-    }) }}
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        {{ govukTable({
+            caption: "Caseload",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "Name"
+                },
+                {
+                    text: "Case reference number"
+                },
+                {
+                    text: "Conditional release date"
+                },
+                {
+                    text: ''
+                }
+            ],
+            rows: offenders
+        }) }}
+    </form>
 {% endblock %}

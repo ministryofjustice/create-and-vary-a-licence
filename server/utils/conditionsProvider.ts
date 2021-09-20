@@ -1,6 +1,10 @@
 import conditionsConfig from '../config/conditions'
 
-export default function getGroupedAdditionalConditions(): Record<string, unknown>[] {
+export function getStandardConditions(): Record<string, unknown>[] {
+  return conditionsConfig.standardConditions
+}
+
+export function getGroupedAdditionalConditions(): Record<string, unknown>[] {
   const map = new Map()
   conditionsConfig.additionalConditions.forEach(condition => {
     const collection = map.get(condition.groupName)

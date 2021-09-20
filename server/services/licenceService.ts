@@ -1,6 +1,7 @@
 import type HmppsAuthClient from '../data/hmppsAuthClient'
-import { LicenceApiTestData } from '../data/licenceApiClientTypes'
+import { CreateLicenceRequest, CreateLicenceResponse, LicenceApiTestData } from '../data/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
+import { getStandardConditions } from '../utils/conditionsProvider'
 import logger from '../../logger'
 
 export default class LicenceService {
@@ -9,6 +10,44 @@ export default class LicenceService {
   async getTestData(username: string): Promise<LicenceApiTestData[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return new LicenceApiClient(token).getTestData()
+  }
+
+  async createLicence(username: string): Promise<CreateLicenceResponse> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    // TODO construct with real licence data using prison and community APIs
+    const licence = {
+      typeCode: 'AP',
+      version: '1.0',
+      nomsId: Math.floor(Math.random() * 900000 + 100).toString(), // Generate random nomsId for now ... should be unique ID from nomis later
+      bookingNo: '12334',
+      bookingId: 87666,
+      crn: 'X12344',
+      pnc: '2014/12344A',
+      cro: '2014/12344A',
+      prisonCode: 'MDI',
+      prisonDescription: 'Leeds (HMP)',
+      prisonTelephone: '+44 276 54545',
+      forename: 'Adam',
+      middleNames: 'Jason Kyle',
+      surname: 'Balasaravika',
+      dateOfBirth: '14/09/2021',
+      conditionalReleaseDate: '14/09/2021',
+      actualReleaseDate: '14/09/2021',
+      sentenceStartDate: '14/09/2021',
+      sentenceEndDate: '14/09/2021',
+      licenceStartDate: '14/09/2021',
+      licenceExpiryDate: '14/09/2021',
+      comFirstName: 'Paula',
+      comLastName: 'Wells',
+      comUsername: 'X1233',
+      comStaffId: 44553343,
+      comEmail: 'paula.wells@northeast.probation.gov.uk',
+      comTelephone: '07876 443554',
+      probationAreaCode: 'N01',
+      probationLduCode: 'LDU1332',
+      standardConditions: getStandardConditions(),
+    } as CreateLicenceRequest
+    return new LicenceApiClient(token).createLicence(licence)
   }
 
   getLicence(): Record<string, unknown> {

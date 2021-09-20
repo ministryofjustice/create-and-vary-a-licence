@@ -15,7 +15,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   beforeEach(() => {
     req = {
       params: {
-        id: 1,
+        licenceId: 1,
       },
     } as unknown as Request
 

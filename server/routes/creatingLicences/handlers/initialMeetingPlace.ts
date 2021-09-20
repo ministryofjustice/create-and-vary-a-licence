@@ -9,7 +9,7 @@ export default class InitialMeetingPlaceRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
-    res.redirect(`/licence/create/id/${id}/initial-meeting-contact`)
+    const { licenceId } = req.params
+    res.redirect(`/licence/create/id/${licenceId}/initial-meeting-contact`)
   }
 }
