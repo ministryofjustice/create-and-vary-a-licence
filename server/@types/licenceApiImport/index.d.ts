@@ -5,7 +5,7 @@
 
 export interface paths {
   '/licence/create': {
-    /** Creates a licence with the default status IN_PROGRESS and populates it with the details provided. */
+    /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. */
     post: operations['createLicence']
   }
   '/test/data': {
@@ -94,6 +94,13 @@ export interface components {
       /** The text of this standard condition */
       text?: string
     }
+    ErrorResponse: {
+      status: number
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     /** Response object for a created licence */
     CreateLicenceResponse: {
       /** Internal identifier for this licence generated within this service */
@@ -110,6 +117,7 @@ export interface components {
       /** The value */
       value: string
     }
+    TestDataResponse: components['schemas']['TestData'][]
     /** Describes an additional condition */
     AdditionalCondition: {
       /** The internal ID for this additional condition for this licence */
@@ -150,21 +158,11 @@ export interface components {
       /** Unique identifier for this licence within the service */
       id: number
       /** The licence type code */
-      typeCode: 'AP' | 'AP_PSS' | 'PSS' | 'AP' | 'PSS' | 'AP_PSS'
+      typeCode: 'AP' | 'AP_PSS' | 'PSS'
       /** The version number used for standard and additional conditions */
       version?: string
       /** The current status code for this licence */
-      statusCode?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'SUPERSEDED'
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'REJECTED'
-        | 'ACTIVE'
-        | 'SUPERSEDED'
+      statusCode?: 'IN_PROGRESS' | 'SUBMITTED' | 'ACTIVE' | 'REJECTED' | 'SUPERSEDED'
       /** The prison identifier for the person on this licence */
       nomsId?: string
       /** The prison booking number for the person on this licence */
@@ -252,19 +250,25 @@ export interface components {
 }
 
 export interface operations {
-  /** Creates a licence with the default status IN_PROGRESS and populates it with the details provided. */
+  /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. */
   createLicence: {
     responses: {
+      /** Licence created */
+      200: {
+        content: {
+          'application/json': components['schemas']['CreateLicenceResponse']
+        }
+      }
       /** Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {
-          'application/json': components['schemas']['CreateLicenceResponse']
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** Forbidden, requires an appropriate role */
       403: {
         content: {
-          'application/json': components['schemas']['CreateLicenceResponse']
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -277,16 +281,22 @@ export interface operations {
   /** Just a test API to verify that the full stack of components are working together */
   getTestData: {
     responses: {
+      /** Test data found */
+      200: {
+        content: {
+          'application/json': components['schemas']['TestDataResponse']
+        }
+      }
       /** Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {
-          'application/json': components['schemas']['TestData'][]
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** Forbidden, requires an appropriate role */
       403: {
         content: {
-          'application/json': components['schemas']['TestData'][]
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -299,22 +309,28 @@ export interface operations {
       }
     }
     responses: {
+      /** Licence found */
+      200: {
+        content: {
+          'application/json': components['schemas']['Licence']
+        }
+      }
       /** Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {
-          'application/json': components['schemas']['Licence']
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** Forbidden, requires an appropriate role */
       403: {
         content: {
-          'application/json': components['schemas']['Licence']
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** The licence for this ID was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['Licence']
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }

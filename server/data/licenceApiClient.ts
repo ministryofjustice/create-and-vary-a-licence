@@ -1,7 +1,6 @@
 import RestClient from './restClient'
-import type { CreateLicenceResponse, LicenceApiTestData } from './licenceApiClientTypes'
+import type { CreateLicenceRequest, CreateLicenceResponse, LicenceApiTestData } from './licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
-import { CreateLicenceRequest } from './licenceApiClientTypes'
 
 export default class LicenceApiClient {
   restClient: RestClient
