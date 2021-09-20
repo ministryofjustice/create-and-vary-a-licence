@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import getGroupedAdditionalConditions from '../../../utils/conditionsProvider'
+import { getGroupedAdditionalConditions } from '../../../utils/conditionsProvider'
 
 export default class AdditionalConditionsRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -11,7 +11,7 @@ export default class AdditionalConditionsRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
-    res.redirect(`/licence/create/id/${id}/bespoke-conditions-question`)
+    const { licenceId } = req.params
+    res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)
   }
 }

@@ -1,4 +1,4 @@
-import getGroupedAdditionalConditions from './conditionsProvider'
+import { getGroupedAdditionalConditions } from './conditionsProvider'
 
 jest.mock('../config/conditions', () => ({
   additionalConditions: [

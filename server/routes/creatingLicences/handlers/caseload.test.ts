@@ -1,18 +1,17 @@
 import { Request, Response } from 'express'
 
 import CaseloadRoutes from './caseload'
+import LicenceService from '../../../services/licenceService'
+
+const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Caseload', () => {
-  const handler = new CaseloadRoutes()
+  const handler = new CaseloadRoutes(licenceService)
   let req: Request
   let res: Response
 
   beforeEach(() => {
-    req = {
-      params: {
-        id: 1,
-      },
-    } as unknown as Request
+    req = {} as Request
 
     res = {
       render: jest.fn(),

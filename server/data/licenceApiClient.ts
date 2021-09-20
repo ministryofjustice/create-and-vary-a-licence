@@ -1,5 +1,5 @@
 import RestClient from './restClient'
-import type { LicenceApiTestData } from './licenceApiClientTypes'
+import type { CreateLicenceRequest, CreateLicenceResponse, LicenceApiTestData } from './licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 
 export default class LicenceApiClient {
@@ -10,6 +10,13 @@ export default class LicenceApiClient {
   }
 
   async getTestData(): Promise<LicenceApiTestData[]> {
-    return this.restClient.get({ path: `/test/data` }) as Promise<LicenceApiTestData[]>
+    return (await this.restClient.get({ path: `/test/data` })) as Promise<LicenceApiTestData[]>
+  }
+
+  async createLicence(licence: CreateLicenceRequest): Promise<CreateLicenceResponse> {
+    return (await this.restClient.post({
+      path: `/licence/create`,
+      data: licence,
+    })) as Promise<CreateLicenceResponse>
   }
 }

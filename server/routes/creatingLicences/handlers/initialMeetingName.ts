@@ -9,7 +9,7 @@ export default class InitialMeetingNameRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const id = 1
-    res.redirect(`/licence/create/id/${id}/initial-meeting-place`)
+    const licenceId = 1
+    res.redirect(`/licence/create/id/${licenceId}/initial-meeting-place`)
   }
 }
