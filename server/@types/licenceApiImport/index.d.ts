@@ -108,7 +108,7 @@ export interface components {
       /** Licence type code */
       licenceType: 'AP' | 'AP_PSS' | 'PSS'
       /** The status of this new licence after creation */
-      licenceStatus: 'IN_PROGRESS' | 'SUBMITTED' | 'ACTIVE' | 'REJECTED' | 'SUPERSEDED'
+      licenceStatus: 'IN_PROGRESS' | 'SUBMITTED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
     }
     /** Describes a test data object */
     TestData: {
@@ -162,7 +162,7 @@ export interface components {
       /** The version number used for standard and additional conditions */
       version?: string
       /** The current status code for this licence */
-      statusCode?: 'IN_PROGRESS' | 'SUBMITTED' | 'ACTIVE' | 'REJECTED' | 'SUPERSEDED'
+      statusCode?: 'IN_PROGRESS' | 'SUBMITTED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
       /** The prison identifier for the person on this licence */
       nomsId?: string
       /** The prison booking number for the person on this licence */

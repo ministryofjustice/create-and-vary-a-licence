@@ -3,7 +3,8 @@ enum LicenceStatus {
   SUBMITTED = 'SUBMITTED',
   ACTIVE = 'ACTIVE',
   REJECTED = 'REJECTED',
-  SUPERSEDED = 'SUPERSEDED',
+  INACTIVE = 'INACTIVE',
+  RECALLED = 'RECALLED',
 }
 
 export default LicenceStatus

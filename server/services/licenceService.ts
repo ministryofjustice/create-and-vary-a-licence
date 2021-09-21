@@ -108,7 +108,7 @@ export default class LicenceService {
   /**
    * Build the list for the staff caseload view.
    * Return the caseload for this staff member, merged with the licences which exist for these people.
-   * Only concerned with licences that have a statusCode in (CREATED, SUBMITTED, REJECTED, ACTIVE) - ignore SUPERSEDED.
+   * Only concerned with licences that have a statusCode in (IN_PROGRESS, SUBMITTED, REJECTED, ACTIVE, RECALLED) - ignore INACTIVE.
    * When implemented for real this will use:
    *   - communityService - get the caseload summary list (surname, crn, nomsNumber, currentRo, currentOm)
    *   - prisonerService - use prisoner-offender-search to pull prisoner details matching the nomsNumber

@@ -27,9 +27,14 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     description: 'Rejected by the prison',
     colour: 'red',
   },
-  SUPERSEDED: {
-    label: 'SUPERSEDED',
+  INACTIVE: {
+    label: 'INACTIVE',
     description: 'Superseded by a later licence variation',
+    colour: 'grey',
+  },
+  RECALLED: {
+    label: 'RECALLED',
+    description: 'Recalled back to prison',
     colour: 'grey',
   },
 }

@@ -38,25 +38,6 @@ services:
       - POSTGRES_USER=create-and-vary-a-licence
       - POSTGRES_DB=create-and-vary-a-licence-db
 
-  create-and-vary-a-licence:
-    build: .
-    networks:
-      - hmpps
-    container_name: create-and-vary-a-licence
-    depends_on: [redis]
-    ports:
-      - "3000:3000"
-    environment:
-      - REDIS_HOST=redis
-      - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
-      - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
-      - API_CLIENT_ID=create-and-vary-a-licence-client
-      - API_CLIENT_SECRET=clientsecret
-      - NODE_ENV=development
-      - SYSTEM_CLIENT_ID=create-and-vary-a-licence-admin
-      - SYSTEM_CLIENT_SECRET=client_secret
-      - GOTENBERG_API_URL=http://gotenberg:3001
-
   prison-api:
     image: quay.io/hmpps/prison-api:latest
     networks:
