@@ -7,21 +7,10 @@
 #
 
 # Create docker containers
-docker-compose up --no-start --scale=create-and-vary-a-licence=0
+docker-compose up --no-start 
 
 echo "Starting required docker containers"
-docker start redis hmpps-auth licences-db
-
-# These will be needed if we use localstack and prisoner-offender-search - quite likely
-
-# echo "Now run localstack in another terminal:"
-# echo " $ docker logs --follow localstack"
-# echo " Wait for the logs to indicate setup complete"
-
-# echo "Now run prisoner-offender search - and setup the indexed data"
-# echo " $ docker start prisoner-offender-search"
-# echo " $ ./setup-prisoner-search.sh"
-# echo "This will index prisoners into prisoner-offender-search service - wait until it exits"
+docker start redis hmpps-auth licences-db prison-api gotenberg
 
 echo "Run the create-and-vary-a-licence-api in another terminal"
 echo " $ ./run-local.sh  - to run the api and migrate/seed the database"

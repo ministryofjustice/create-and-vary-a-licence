@@ -75,15 +75,12 @@ OR
 
 `$ docker-compose pull` - To pull the latest images for the service and dependent containers.
 
-`$ docker-compose up -d` - To start these containers locally (resource intensive!)
+Then use the script:
 
-Point a browser to `localhost:3000`
+`$ run-full.sh` -follow the onscreen instructions.
 
-###2. Running via npm  (local UI service)
-
-`$ docker-compose up --scale create-and-vary-a-licence=0 -d` - To start containers except the UI
-
-`$ npm run start:dev`  - to start the UI service separately 
+Point a browser to `localhost:3000` and login as a user with any of the roles - ROLE_LICENCE_CA, ROLE_LICENCE_CA, ROLE_LICENCE_DM.
+e.g. AUTH_RO_USER2 or CVL_OMU_LOCAL (both with the standard local password)
 
 Point a browser to `localhost:3000`
 
