@@ -2,10 +2,7 @@ import { Request, Response } from 'express'
 
 export default class InitialMeetingNameRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
-    const offender = {
-      name: 'Adam Balasaravika',
-    }
-    res.render('pages/create/initialMeetingPerson', { offender })
+    res.render('pages/create/initialMeetingPerson')
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

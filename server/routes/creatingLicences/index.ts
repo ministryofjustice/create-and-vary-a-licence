@@ -20,13 +20,15 @@ import Telephone from './types/telephone'
 import SimpleDateTime from './types/simpleDateTime'
 import YesOrNoQuestion from './types/yesOrNo'
 import AdditionalConditions from './types/additionalConditions'
+import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 
 export default function Index({ licenceService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create${path}`
 
-  const get = (path: string, handler: RequestHandler) => router.get(routePrefix(path), asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) =>
+    router.get(routePrefix(path), fetchLicence(licenceService), asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler, type?: new () => unknown) =>
     router.post(routePrefix(path), validationMiddleware(type), asyncMiddleware(handler))
 

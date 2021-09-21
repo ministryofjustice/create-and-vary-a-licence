@@ -1,5 +1,5 @@
 import type HmppsAuthClient from '../data/hmppsAuthClient'
-import { CreateLicenceRequest, CreateLicenceResponse, LicenceApiTestData } from '../data/licenceApiClientTypes'
+import { CreateLicenceRequest, CreateLicenceResponse, Licence, LicenceApiTestData } from '../data/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getStandardConditions } from '../utils/conditionsProvider'
 import logger from '../../logger'
@@ -50,7 +50,12 @@ export default class LicenceService {
     return new LicenceApiClient(token).createLicence(licence)
   }
 
-  getLicence(): Record<string, unknown> {
+  async getLicence(id: string, username: string): Promise<Licence> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    return new LicenceApiClient(token).getLicenceById(id)
+  }
+
+  getLicenceStub(): Record<string, unknown> {
     return {
       offender: {
         name: 'Adam Balasaravika',
