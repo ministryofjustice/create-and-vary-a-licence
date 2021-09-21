@@ -33,7 +33,7 @@ export default function Index({ licenceService }: Services): Router {
     router.post(routePrefix(path), validationMiddleware(type), asyncMiddleware(handler))
 
   const caseloadHandler = new CaseloadRoutes(licenceService)
-  const initialMeetingNameHandler = new InitialMeetingNameRoutes()
+  const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes()
   const initialMeetingContactHandler = new InitialMeetingContactRoutes()
   const initialMeetingTimeHandler = new InitialMeetingTimeRoutes()

@@ -1,6 +1,7 @@
 import RestClient from './restClient'
 import type { CreateLicenceRequest, CreateLicenceResponse, Licence, LicenceApiTestData } from './licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
+import { AppointmentPersonRequest } from './licenceApiClientTypes'
 
 export default class LicenceApiClient {
   restClient: RestClient
@@ -22,5 +23,9 @@ export default class LicenceApiClient {
 
   async getLicenceById(licenceId: string): Promise<Licence> {
     return (await this.restClient.get({ path: `/licence/id/${licenceId}` })) as Promise<Licence>
+  }
+
+  async updateAppointmentPerson(licenceId: string, appointmentPerson: AppointmentPersonRequest): Promise<void> {
+    await this.restClient.put({ path: `/licence/id/${licenceId}/appointmentPerson`, data: appointmentPerson })
   }
 }

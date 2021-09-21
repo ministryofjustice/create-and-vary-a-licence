@@ -1,9 +1,12 @@
 import { Request, Response } from 'express'
 
 import InitialMeetingNameRoutes from './initialMeetingName'
+import LicenceService from '../../../services/licenceService'
+
+const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
-  const handler = new InitialMeetingNameRoutes()
+  const handler = new InitialMeetingNameRoutes(licenceService)
   let req: Request
   let res: Response
 
