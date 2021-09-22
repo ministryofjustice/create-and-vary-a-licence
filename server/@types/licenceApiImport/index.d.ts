@@ -4,8 +4,12 @@
  */
 
 export interface paths {
+  '/licence/id/{licenceId}/appointmentPerson': {
+    /** Update the person the person on probation will meet at the initial appointment Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateAppointmentPerson']
+  }
   '/licence/create': {
-    /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. */
+    /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createLicence']
   }
   '/test/data': {
@@ -13,13 +17,25 @@ export interface paths {
     get: operations['getTestData']
   }
   '/licence/id/{licenceId}': {
-    /** Returns a single licence detail by its unique identifier. */
+    /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getLicenceById']
   }
 }
 
 export interface components {
   schemas: {
+    /** Request object for updating the person the person on probation will meet at the initial appointment */
+    AppointmentPersonRequest: {
+      /** The name of the person the person on probation will meet at the initial appointment */
+      appointmentPerson: string
+    }
+    ErrorResponse: {
+      status: number
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     /** Request object for creating a new licence */
     CreateLicenceRequest: {
       /** Type of licence requested - one of AP, PSS or AP_PSS */
@@ -93,13 +109,6 @@ export interface components {
       sequence?: number
       /** The text of this standard condition */
       text?: string
-    }
-    ErrorResponse: {
-      status: number
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** Response object for a created licence */
     CreateLicenceResponse: {
@@ -250,7 +259,48 @@ export interface components {
 }
 
 export interface operations {
-  /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. */
+  /** Update the person the person on probation will meet at the initial appointment Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateAppointmentPerson: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Appointment person updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AppointmentPersonRequest']
+      }
+    }
+  }
+  /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   createLicence: {
     responses: {
       /** Licence created */
@@ -301,7 +351,7 @@ export interface operations {
       }
     }
   }
-  /** Returns a single licence detail by its unique identifier. */
+  /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   getLicenceById: {
     parameters: {
       path: {

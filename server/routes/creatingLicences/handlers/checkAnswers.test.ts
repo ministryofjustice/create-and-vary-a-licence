@@ -24,7 +24,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       redirect: jest.fn(),
     } as unknown as Response
 
-    licenceService.getLicence.mockReturnValue({
+    licenceService.getLicenceStub.mockReturnValue({
       offender: {
         name: 'Adam Balasaravika',
         prison: 'Brixton Prison',

@@ -1,5 +1,7 @@
 import { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
+import fetchLicence from '../../middleware/fetchLicenceMiddleware'
+import validationMiddleware from '../../middleware/validationMiddleware'
 
 import CaseloadRoutes from './handlers/caseload'
 import InitialMeetingNameRoutes from './handlers/initialMeetingName'
@@ -14,7 +16,6 @@ import CheckAnswersRoutes from './handlers/checkAnswers'
 import ConfirmationRoutes from './handlers/confirmation'
 import { Services } from '../../services'
 import PersonName from './types/personName'
-import validationMiddleware from '../../middleware/validationMiddleware'
 import Address from './types/address'
 import Telephone from './types/telephone'
 import SimpleDateTime from './types/simpleDateTime'
@@ -26,12 +27,19 @@ export default function Index({ licenceService }: Services): Router {
 
   const routePrefix = (path: string) => `/licence/create${path}`
 
-  const get = (path: string, handler: RequestHandler) => router.get(routePrefix(path), asyncMiddleware(handler))
+  /*
+   * The fetchLicence middleware will call the licenceAPI during each GET request on the create a licence journey
+   * to populate the session with the latest licence.
+   * This means that for each page, the licence will already exist in context, and so the handlers will not need
+   * to explicitly inject the licence data into their individual view contexts.
+   */
+  const get = (path: string, handler: RequestHandler) =>
+    router.get(routePrefix(path), fetchLicence(licenceService), asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler, type?: new () => unknown) =>
     router.post(routePrefix(path), validationMiddleware(type), asyncMiddleware(handler))
 
   const caseloadHandler = new CaseloadRoutes(licenceService)
-  const initialMeetingNameHandler = new InitialMeetingNameRoutes()
+  const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes()
   const initialMeetingContactHandler = new InitialMeetingContactRoutes()
   const initialMeetingTimeHandler = new InitialMeetingTimeRoutes()

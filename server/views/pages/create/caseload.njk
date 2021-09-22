@@ -13,7 +13,7 @@
             attributes: {
                 id: 'name-' + loop.index
             },
-            html: '<h3 class="govuk-heading-m govuk-!-margin-bottom-3">' + offender.name + '</h3>'
+            html: '<h2 class="govuk-heading-m govuk-!-margin-bottom-3">' + offender.name + '</h2>'
         },
         {
             attributes: {
@@ -28,10 +28,10 @@
             text: offender.conditionalReleaseDate
         },
         {
-            attributes: {
-                id: 'create-licence-' + loop.index
-            },
             html: govukButton({
+                attributes: {
+                    id: 'create-licence-' + loop.index
+                },
                 text: "Create licence",
                 classes: "govuk-button--secondary govuk-!-margin-bottom-0",
                 name: "crn",
