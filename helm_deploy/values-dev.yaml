@@ -16,6 +16,8 @@ generic-service:
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
     PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
     PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
+    EXIT_SURVEY_LINK: "#"
+    PHASE_BANNER_LINK: "#"
 
     # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
     GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
