@@ -11,28 +11,36 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
   let res: Response
 
   beforeEach(() => {
-    req = {} as Request
+    req = {
+      params: {
+        licenceId: '1',
+      },
+      body: {},
+    } as unknown as Request
 
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
+      locals: {
+        user: {
+          username: 'joebloggs',
+        },
+      },
     } as unknown as Response
+    licenceService.updateAppointmentPerson = jest.fn()
   })
 
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPerson', {
-        offender: {
-          name: 'Adam Balasaravika',
-        },
-      })
+      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPerson')
     })
   })
 
   describe('POST', () => {
     it('should redirect to the meeting place page', async () => {
       await handler.POST(req, res)
+      expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', {}, 'joebloggs')
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-place')
     })
   })

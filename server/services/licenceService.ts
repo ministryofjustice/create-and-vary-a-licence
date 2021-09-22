@@ -62,10 +62,10 @@ export default class LicenceService {
     return new LicenceApiClient(token).getLicenceById(id)
   }
 
-  async updateAppointmentPerson(id: string, contactName: PersonName, username: string): Promise<void> {
+  async updateAppointmentPerson(id: string, formData: PersonName, username: string): Promise<void> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const requestBody = {
-      appointmentPerson: contactName.contactName,
+      appointmentPerson: formData.contactName,
     } as AppointmentPersonRequest
 
     return new LicenceApiClient(token).updateAppointmentPerson(id, requestBody)
