@@ -23,11 +23,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Question', () 
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalConditionsQuestion', {
-        offender: {
-          name: 'Adam Balasaravika',
-        },
-      })
+      expect(res.render).toHaveBeenCalledWith('pages/create/additionalConditionsQuestion')
     })
   })
 
