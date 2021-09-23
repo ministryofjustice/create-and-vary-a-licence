@@ -3,6 +3,7 @@ import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
 import path from 'path'
 import { FieldValidationError } from '../middleware/validationMiddleware'
+import config from '../config'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -11,6 +12,10 @@ export default function nunjucksSetup(app: express.Express): void {
 
   app.locals.asset_path = '/assets/'
   app.locals.applicationName = 'Create And Vary A Licence'
+
+  // Set the values for the phase banner and exit survey links from config
+  app.locals.phaseBannerLink = config.phaseBannerLink
+  app.locals.exitSurveyLink = config.exitSurveyLink
 
   // Cachebusting version string
   if (production) {

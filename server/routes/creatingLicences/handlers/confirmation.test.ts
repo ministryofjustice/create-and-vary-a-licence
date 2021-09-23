@@ -22,12 +22,7 @@ describe('Route Handlers - Create Licence - Confirmation', () => {
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
-        offender: {
-          name: 'Adam Balasaravika',
-          prison: 'Brixton Prison',
-        },
-      })
+      expect(res.render).toHaveBeenCalledWith('pages/create/confirmation')
     })
   })
 })

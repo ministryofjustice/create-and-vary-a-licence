@@ -1,6 +1,7 @@
 const { resetStubs } = require('../mockApis/wiremock')
 
 const auth = require('../mockApis/auth')
+const licence = require('../mockApis/licence')
 const tokenVerification = require('../mockApis/tokenVerification')
 
 module.exports = on => {
@@ -14,5 +15,7 @@ module.exports = on => {
     stubAuthPing: auth.stubPing,
 
     stubTokenVerificationPing: tokenVerification.stubPing,
+
+    stubGetLicence: licence.stubGetLicence,
   })
 }
