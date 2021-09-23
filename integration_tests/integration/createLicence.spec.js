@@ -1,4 +1,5 @@
 const IndexPage = require('../pages/index')
+// const ConfirmationPage = require('../pages/confirmation')
 
 context('Create a Licence', () => {
   beforeEach(() => {
@@ -10,6 +11,7 @@ context('Create a Licence', () => {
   it('User can create a licence', () => {
     cy.login()
     IndexPage.verifyOnPage()
-    // TODO: Expand this test as the journey is built
+    // TODO: Needs forerunners to be implemented first
+    // ConfirmationPage.verifyOnPage()
   })
 })

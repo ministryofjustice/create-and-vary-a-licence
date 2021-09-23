@@ -123,6 +123,6 @@ export default {
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
-  exitSurveyLink: get('EXIT_SURVEY_LINK', 'http://tim-test-exit', requiredInProduction),
-  phaseBannerLink: get('PHASE_BANNER_LINK', 'http://tim-test-phase', requiredInProduction),
+  exitSurveyLink: get('EXIT_SURVEY_LINK', 'https://exit-survey-placeholder-link', requiredInProduction),
+  phaseBannerLink: get('PHASE_BANNER_LINK', 'https://phase-banner-placeholder-link', requiredInProduction),
 }
