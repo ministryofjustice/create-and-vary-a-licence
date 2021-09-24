@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Create a licence - Induction meeting" %}
+{% set pageId = "appointment-person-page" %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -18,6 +19,10 @@
                 {{ govukInput({
                     id: "contactName",
                     name: "contactName",
+                    label: {
+                        text: "contact name",
+                        classes: "govuk-visually-hidden"
+                    },
                     classes: "govuk-!-width-one-third",
                     errorMessage: validationErrors | findError('contactName'),
                     value: formResponses.contactName or licence.appointmentPerson
@@ -25,7 +30,8 @@
 
                 {{ govukButton({
                     text: "Continue",
-                    type: "submit"
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
                 }) }}
             </div>
         </div>

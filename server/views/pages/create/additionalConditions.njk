@@ -6,6 +6,7 @@
 
 
 {% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
+{% set pageId = "additional-conditions-page" %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -59,7 +60,8 @@
 
                 {{ govukButton({
                     text: "Continue",
-                    type: "submit"
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
                 }) }}
             </div>
         </div>

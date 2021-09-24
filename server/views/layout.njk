@@ -39,6 +39,7 @@
       html: 'This is a new service – your <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="'+ phaseBannerLink +'">feedback</a> will help us to improve it.'
     }) }}
   {% include 'partials/formError.njk' %}
+  <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
 {% endblock %}
 
 {% block bodyEnd %}
