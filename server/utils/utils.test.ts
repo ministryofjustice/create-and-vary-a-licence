@@ -86,21 +86,9 @@ test.each`
   ${'30'} | ${'12'} | ${'2024'} | ${'09'} | ${'59'} | ${'pm'} | ${'30/12/2024 21:59'}
   ${'32'} | ${'01'} | ${'2025'} | ${'00'} | ${'00'} | ${'am'} | ${'null'}
 `('convert simple date time to JSON date time', ({ day, month, year, hour, min, ampm, jsonDateTime }) => {
-  const inductionDate = new SimpleDate()
-  inductionDate.day = day
-  inductionDate.month = month
-  inductionDate.year = year
-
-  const inductionTime = new SimpleTime()
-  inductionTime.hour = hour
-  inductionTime.minute = min
-  inductionTime.ampm = ampm === 'am' ? AmPm.AM : AmPm.PM
-
-  const simpleDateTime = new SimpleDateTime()
-  simpleDateTime.inductionDate = inductionDate
-  simpleDateTime.inductionTime = inductionTime
-
-  const jsonDt = simpleDateTimeToJson(simpleDateTime)
+  const inductionDate = new SimpleDate(day, month, year)
+  const inductionTime = new SimpleTime(hour, min, ampm === 'am' ? AmPm.AM : AmPm.PM)
+  const jsonDt = simpleDateTimeToJson(SimpleDateTime.fromSimpleDateAndTime(inductionDate, inductionTime))
   if (isDefined(jsonDt)) {
     expect(jsonDt).toEqual(jsonDateTime)
   } else {

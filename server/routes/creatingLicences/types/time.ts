@@ -6,6 +6,12 @@ export enum AmPm {
 }
 
 class SimpleTime {
+  constructor(hour: string, minute: string, ampm: AmPm) {
+    this.hour = hour
+    this.minute = minute
+    this.ampm = ampm
+  }
+
   @Expose()
   hour: string
 

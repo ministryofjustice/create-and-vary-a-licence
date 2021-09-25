@@ -2,6 +2,12 @@ import { Expose } from 'class-transformer'
 import moment, { Moment } from 'moment'
 
 class SimpleDate {
+  constructor(day: string, month: string, year: string) {
+    this.day = day
+    this.month = month
+    this.year = year
+  }
+
   @Expose()
   day: string
 
