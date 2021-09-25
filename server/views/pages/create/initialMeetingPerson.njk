@@ -20,7 +20,7 @@
                     name: "contactName",
                     classes: "govuk-!-width-one-third",
                     errorMessage: validationErrors | findError('contactName'),
-                    value: formResponses.contactName
+                    value: formResponses.contactName or licence.appointmentPerson
                 }) }}
 
                 {{ govukButton({

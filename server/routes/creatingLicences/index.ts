@@ -42,7 +42,7 @@ export default function Index({ licenceService }: Services): Router {
   const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes()
   const initialMeetingContactHandler = new InitialMeetingContactRoutes()
-  const initialMeetingTimeHandler = new InitialMeetingTimeRoutes()
+  const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService)
   const additionalConditionsQuestionHandler = new AdditionalConditionsQuestionRoutes()
   const additionalConditionsHandler = new AdditionalConditionsRoutes()
   const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()

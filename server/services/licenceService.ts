@@ -1,6 +1,7 @@
 import type HmppsAuthClient from '../data/hmppsAuthClient'
 import {
   AppointmentPersonRequest,
+  AppointmentTimeRequest,
   CreateLicenceRequest,
   CreateLicenceResponse,
   Licence,
@@ -8,8 +9,10 @@ import {
 } from '../data/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getStandardConditions } from '../utils/conditionsProvider'
+import { simpleDateTimeToJson } from '../utils/utils'
 import logger from '../../logger'
 import PersonName from '../routes/creatingLicences/types/personName'
+import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 
 export default class LicenceService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -69,6 +72,13 @@ export default class LicenceService {
     } as AppointmentPersonRequest
 
     return new LicenceApiClient(token).updateAppointmentPerson(id, requestBody)
+  }
+
+  async updateAppointmentTime(id: string, formData: SimpleDateTime, username: string): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    const appointmentTime = simpleDateTimeToJson(formData)
+    const requestBody = { appointmentTime } as AppointmentTimeRequest
+    return new LicenceApiClient(token).updateAppointmentTime(id, requestBody)
   }
 
   getLicenceStub(): Record<string, unknown> {
