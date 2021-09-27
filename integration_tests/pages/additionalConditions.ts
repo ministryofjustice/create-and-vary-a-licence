@@ -5,7 +5,7 @@ export default class AdditionalConditionsPage extends Page {
   private continueButtonId = '[data-qa=continue]'
 
   constructor() {
-    super('additional-conditions-page')
+    super('additional-conditions-page', false)
   }
 
   clickContinue = (): BespokeConditionsQuestionPage => {

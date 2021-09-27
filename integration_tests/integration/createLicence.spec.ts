@@ -10,6 +10,7 @@ context('Create a licence', () => {
     cy.task('stubGetLicence', 1)
     cy.task('stubPostLicence')
     cy.task('stubPutAppointmentPerson', 1)
+    cy.task('stubPutAppointmentTime', 1)
     cy.signIn()
   })
 

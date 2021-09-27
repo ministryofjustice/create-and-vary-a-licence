@@ -86,4 +86,18 @@ export default {
       },
     })
   },
+
+  stubPutAppointmentTime: (licenceId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/${licenceId}/appointmentTime`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
 }
