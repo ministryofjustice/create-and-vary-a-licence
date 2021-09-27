@@ -6,6 +6,7 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
 {% set pageTitle = applicationName + " - Create a licence - Bespoke Conditions" %}
+{% set pageId = "bespoke-conditions-page" %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -47,7 +48,8 @@
 
                 {{ govukButton({
                     text: "Continue",
-                    type: "submit"
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
                 }) }}
             </div>
         </div>

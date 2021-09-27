@@ -11,6 +11,7 @@
 {% from "../../partials/datePicker.njk" import datePicker %}
 
 {% set pageTitle = applicationName + " - Create a licence - Induction meeting" %}
+{% set pageId = "appointment-time-page" %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -45,7 +46,8 @@
 
                 {{ govukButton({
                     text: "Continue",
-                    type: "submit"
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
                 }) }}
             </div>
         </div>

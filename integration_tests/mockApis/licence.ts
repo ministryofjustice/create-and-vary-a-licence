@@ -1,7 +1,8 @@
-const { stubFor } = require('./wiremock')
+import { SuperAgentRequest } from 'superagent'
+import { stubFor } from '../wiremock'
 
-module.exports = {
-  stubGetLicence: ({ licenceId }) => {
+export default {
+  stubGetLicence: (licenceId: string): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -54,7 +55,49 @@ module.exports = {
     })
   },
 
-  // TODO: POST for createLicenceRequest with createLicenceResponse
-  // TODO: Additional POSTs for each creation stage too
-  // As we are working with a single licence for the creation flow - all operations relate to this licence
+  stubPostLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/licence/create',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          licenceId: 1,
+          licenceType: 'AP',
+          licenceStatus: 'IN_PROGRESS',
+        },
+      },
+    })
+  },
+
+  stubPutAppointmentPerson: (licenceId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/${licenceId}/appointmentPerson`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubPutAppointmentTime: (licenceId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/${licenceId}/appointmentTime`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
 }

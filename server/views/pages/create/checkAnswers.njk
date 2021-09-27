@@ -4,6 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
+{% set pageId = "check-answers-page" %}
 
 {% macro additionalConditionHtml(template, data) %}
     <div class="govuk-!-margin-bottom-4">
@@ -190,7 +191,8 @@
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <input type="hidden" name="answers-checked" value="true">
                 {{ govukButton({
-                    text: "Send licence conditions to prison"
+                    text: "Send licence conditions to prison",
+                    attributes: { 'data-qa': 'send-licence-conditions' }
                 }) }}
             </form>
         </div>

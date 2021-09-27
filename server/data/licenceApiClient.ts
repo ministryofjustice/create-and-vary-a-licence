@@ -13,7 +13,7 @@ export default class LicenceApiClient {
   restClient: RestClient
 
   constructor(token: string) {
-    this.restClient = new RestClient('Prison API', config.apis.licenceApi as ApiConfig, token)
+    this.restClient = new RestClient('Licence API', config.apis.licenceApi as ApiConfig, token)
   }
 
   async getTestData(): Promise<LicenceApiTestData[]> {
