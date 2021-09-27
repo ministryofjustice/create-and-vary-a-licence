@@ -28,23 +28,16 @@ const hasRole = (user: Express.User, role: AuthRole): boolean => user?.userRoles
  */
 const simpleDateTimeToJson = (dt: SimpleDateTime): string | undefined => {
   const { inductionDate, inductionTime } = dt
-  const momentDt = moment(
-    [inductionDate.year, inductionDate.month, inductionDate.day].join('-'),
-    ['YYYY-M-D', 'YY-M-D'],
-    true
-  )
-  if (!momentDt.isValid()) {
-    return undefined
-  }
-  let hour
-  if (inductionTime.ampm === 'pm') {
-    hour = +inductionTime.hour < 12 ? +inductionTime.hour + 12 : +inductionTime.hour
-  } else {
-    hour = +inductionTime.hour === 12 ? +inductionTime.hour - 12 : +inductionTime.hour
-  }
-  momentDt.add(hour, 'hours')
-  momentDt.add(+inductionTime.minute, 'minutes')
-  return momentDt.format('DD/MM/YYYY HH:mm')
+  const dateTimeString = [
+    inductionDate.year,
+    inductionDate.month,
+    inductionDate.day,
+    inductionTime.hour,
+    inductionTime.minute,
+    inductionTime.ampm,
+  ].join(' ')
+  const momentDt = moment(dateTimeString, 'YYYY MM DD hh mm a')
+  return momentDt.isValid() ? momentDt.format('DD/MM/YYYY HH:mm') : undefined
 }
 
 /**
