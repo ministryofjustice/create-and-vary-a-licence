@@ -38,7 +38,7 @@ export default {
           comUsername: 'X12345',
           comStaffId: '12345',
           comEmail: 'stephen.mills@nps.gov.uk',
-          comTelephone: '0116 2788777',
+          comTelephone: null,
           probationAreaCode: 'N01',
           probationLduCode: 'LDU1',
           dateCreated: '10/009/2021 10:00:00', // Make dynamic to now?
@@ -92,6 +92,20 @@ export default {
       request: {
         method: 'PUT',
         urlPattern: `/licence/id/${licenceId}/appointmentTime`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubPutContactNumber: (licenceId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/${licenceId}/contact-number`,
       },
       response: {
         status: 200,
