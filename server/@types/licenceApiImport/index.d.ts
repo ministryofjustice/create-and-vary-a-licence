@@ -4,6 +4,10 @@
  */
 
 export interface paths {
+  '/licence/id/{licenceId}/appointmentTime': {
+    /** Update the date and time for the initial appointmen. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateAppointmentTime']
+  }
   '/licence/id/{licenceId}/appointmentPerson': {
     /** Update the person the person on probation will meet at the initial appointment Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateAppointmentPerson']
@@ -24,10 +28,10 @@ export interface paths {
 
 export interface components {
   schemas: {
-    /** Request object for updating the person the person on probation will meet at the initial appointment */
-    AppointmentPersonRequest: {
-      /** The name of the person the person on probation will meet at the initial appointment */
-      appointmentPerson: string
+    /** Request object for updating the date and time of the initial appointment */
+    AppointmentTimeRequest: {
+      /** The date and time of the initial appointment */
+      appointmentTime: string
     }
     ErrorResponse: {
       status: number
@@ -35,6 +39,11 @@ export interface components {
       userMessage?: string
       developerMessage?: string
       moreInfo?: string
+    }
+    /** Request object for updating the person the person on probation will meet at the initial appointment */
+    AppointmentPersonRequest: {
+      /** The name of the person the person on probation will meet at the initial appointment */
+      appointmentPerson: string
     }
     /** Request object for creating a new licence */
     CreateLicenceRequest: {
@@ -228,9 +237,7 @@ export interface components {
       probationLduCode?: string
       /** Who the person will meet at their initial appointment */
       appointmentPerson?: string
-      /** The date of the initial appointment */
-      appointmentDate?: string
-      /** The time of the initial appointment */
+      /** The date and time of the initial appointment */
       appointmentTime?: string
       /** The address of initial appointment */
       appointmentAddress?: string
@@ -259,6 +266,47 @@ export interface components {
 }
 
 export interface operations {
+  /** Update the date and time for the initial appointmen. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateAppointmentTime: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Appointment date and time updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AppointmentTimeRequest']
+      }
+    }
+  }
   /** Update the person the person on probation will meet at the initial appointment Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   updateAppointmentPerson: {
     parameters: {
