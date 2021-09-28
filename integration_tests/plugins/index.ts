@@ -19,6 +19,7 @@ export default (on: (string, Record) => void): void => {
     stubPostLicence: licence.stubPostLicence,
     stubPutAppointmentPerson: licence.stubPutAppointmentPerson,
     stubPutAppointmentTime: licence.stubPutAppointmentTime,
+    stubPutAppointmentAddress: licence.stubPutAppointmentAddress,
     stubPutContactNumber: licence.stubPutContactNumber,
   })
 }
