@@ -4,6 +4,10 @@
  */
 
 export interface paths {
+  '/licence/id/{licenceId}/contact-number': {
+    /** Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateContactNumber']
+  }
   '/licence/id/{licenceId}/appointmentTime': {
     /** Update the date and time for the initial appointmen. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateAppointmentTime']
@@ -28,10 +32,10 @@ export interface paths {
 
 export interface components {
   schemas: {
-    /** Request object for updating the date and time of the initial appointment */
-    AppointmentTimeRequest: {
-      /** The date and time of the initial appointment */
-      appointmentTime: string
+    /** Request object for updating the contact number of the officer on a licence */
+    ContactNumberRequest: {
+      /** The UK telephone number to contact the responsible officer for a licence */
+      comTelephone: string
     }
     ErrorResponse: {
       status: number
@@ -39,6 +43,11 @@ export interface components {
       userMessage?: string
       developerMessage?: string
       moreInfo?: string
+    }
+    /** Request object for updating the date and time of the initial appointment */
+    AppointmentTimeRequest: {
+      /** The date and time of the initial appointment */
+      appointmentTime: string
     }
     /** Request object for updating the person the person on probation will meet at the initial appointment */
     AppointmentPersonRequest: {
@@ -266,6 +275,47 @@ export interface components {
 }
 
 export interface operations {
+  /** Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateContactNumber: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Contact number updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ContactNumberRequest']
+      }
+    }
+  }
   /** Update the date and time for the initial appointmen. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   updateAppointmentTime: {
     parameters: {

@@ -11,7 +11,6 @@ export default class InitialMeetingNameRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { username } = res.locals.user
-
     await this.licenceService.updateAppointmentPerson(licenceId, req.body, username)
     res.redirect(`/licence/create/id/${licenceId}/initial-meeting-place`)
   }

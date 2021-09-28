@@ -1,5 +1,6 @@
 import RestClient from './restClient'
 import type {
+  ContactNumberRequest,
   CreateLicenceRequest,
   CreateLicenceResponse,
   Licence,
@@ -37,5 +38,9 @@ export default class LicenceApiClient {
 
   async updateAppointmentTime(licenceId: string, appointmentTime: AppointmentTimeRequest): Promise<void> {
     await this.restClient.put({ path: `/licence/id/${licenceId}/appointmentTime`, data: appointmentTime })
+  }
+
+  async updateContactNumber(licenceId: string, contactNumber: ContactNumberRequest): Promise<void> {
+    await this.restClient.put({ path: `/licence/id/${licenceId}/contact-number`, data: contactNumber })
   }
 }

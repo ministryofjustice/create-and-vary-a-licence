@@ -5,8 +5,14 @@ import HmppsAuthClient from './hmppsAuthClient'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
-import { AppointmentPersonRequest, AppointmentTimeRequest, LicenceApiTestData } from './licenceApiClientTypes'
+import {
+  AppointmentPersonRequest,
+  AppointmentTimeRequest,
+  ContactNumberRequest,
+  LicenceApiTestData,
+} from './licenceApiClientTypes'
 import PersonName from '../routes/creatingLicences/types/personName'
+import Telephone from '../routes/creatingLicences/types/telephone'
 
 jest.mock('./hmppsAuthClient')
 
@@ -61,28 +67,47 @@ describe('Licence API client tests', () => {
     })
   })
 
-  describe('Licence updates', () => {
-    const person = { contactName: 'Fred' } as PersonName
-    const appointmentPersonRequest = { appointmentPerson: person.contactName } as AppointmentPersonRequest
-    const appointmentTimeRequest = { appointmentTime: '12/12/2022 11:15' } as AppointmentTimeRequest
-    const simpleDate = new SimpleDate('12', '12', '2022')
-    const simpleTime = new SimpleTime('11', '15', AmPm.AM)
-    const simpleDateTime = SimpleDateTime.fromSimpleDateAndTime(simpleDate, simpleTime)
+  describe('Licence creation stages', () => {
+    describe('Who to meet', () => {
+      const person = { contactName: 'Fred' } as PersonName
+      const appointmentPersonRequest = { appointmentPerson: person.contactName } as AppointmentPersonRequest
 
-    it('Update appointment person to meet', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.put('/licence/id/1/appointmentPerson', appointmentPersonRequest).reply(200)
-      await licenceService.updateAppointmentPerson('1', person, username)
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      it('Update the person to meet', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/appointmentPerson', appointmentPersonRequest).reply(200)
+        await licenceService.updateAppointmentPerson('1', person, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
     })
 
-    it('Update appointment date and time', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.put('/licence/id/1/appointmentTime', appointmentTimeRequest).reply(200)
-      await licenceService.updateAppointmentTime('1', simpleDateTime, username)
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    describe('When to meet', () => {
+      const appointmentTimeRequest = { appointmentTime: '12/12/2022 11:15' } as AppointmentTimeRequest
+      const simpleDate = new SimpleDate('12', '12', '2022')
+      const simpleTime = new SimpleTime('11', '15', AmPm.AM)
+      const simpleDateTime = SimpleDateTime.fromSimpleDateAndTime(simpleDate, simpleTime)
+
+      it('Update the date and time of the appointment', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/appointmentTime', appointmentTimeRequest).reply(200)
+        await licenceService.updateAppointmentTime('1', simpleDateTime, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+
+    describe('Officer contact number', () => {
+      const contactNumberRequest = { comTelephone: '0114 2556556' } as ContactNumberRequest
+      const telephoneContact = new Telephone()
+      telephoneContact.telephone = '0114 2556556'
+
+      it('Update the officer contact telephone number', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/contact-number', contactNumberRequest).reply(200)
+        await licenceService.updateContactNumber('1', telephoneContact, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
     })
   })
 })
