@@ -6,6 +6,7 @@ import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import {
+  AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   ContactNumberRequest,
@@ -13,6 +14,7 @@ import {
 } from './licenceApiClientTypes'
 import PersonName from '../routes/creatingLicences/types/personName'
 import Telephone from '../routes/creatingLicences/types/telephone'
+import { stringToAddressObject } from '../utils/utils'
 
 jest.mock('./hmppsAuthClient')
 
@@ -91,6 +93,21 @@ describe('Licence API client tests', () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
         fakeApi.put('/licence/id/1/appointmentTime', appointmentTimeRequest).reply(200)
         await licenceService.updateAppointmentTime('1', simpleDateTime, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+
+    describe('Where to meet', () => {
+      const appointmentAddressRequest = {
+        appointmentAddress: 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
+      } as AppointmentAddressRequest
+      const address = stringToAddressObject(appointmentAddressRequest.appointmentAddress)
+
+      it('Update the date and time of the appointment', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/appointment-address', appointmentAddressRequest).reply(200)
+        await licenceService.updateAppointmentAddress('1', address, username)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })

@@ -9,12 +9,15 @@ export type FieldValidationError = {
 
 function validationMiddleware(type: new () => unknown): RequestHandler {
   return async (req, res, next) => {
+    const bodyAsClass = plainToClass(type, req.body, { excludeExtraneousValues: true })
+
     const errors: ValidationError[] = await validate(
       // eslint-disable-next-line @typescript-eslint/ban-types
-      plainToClass(type, req.body, { excludeExtraneousValues: true }) as object
+      bodyAsClass as object
     )
 
     if (errors.length === 0) {
+      req.body = bodyAsClass
       return next()
     }
 

@@ -1,15 +1,20 @@
 import { Request, Response } from 'express'
+import { stringToAddressObject } from '../../../utils/utils'
+import LicenceService from '../../../services/licenceService'
 
 export default class InitialMeetingPlaceRoutes {
+  constructor(private readonly licenceService: LicenceService) {}
+
   GET = async (req: Request, res: Response): Promise<void> => {
-    const offender = {
-      name: 'Adam Balasaravika',
-    }
-    res.render('pages/create/initialMeetingPlace', { offender })
+    const { appointmentAddress } = res.locals.licence
+    const formAddress = stringToAddressObject(appointmentAddress)
+    res.render('pages/create/initialMeetingPlace', { formAddress })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
+    const { username } = res.locals.user
+    await this.licenceService.updateAppointmentAddress(licenceId, req.body, username)
     res.redirect(`/licence/create/id/${licenceId}/initial-meeting-contact`)
   }
 }

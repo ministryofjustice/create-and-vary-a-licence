@@ -9,12 +9,16 @@ export interface paths {
     put: operations['updateContactNumber']
   }
   '/licence/id/{licenceId}/appointmentTime': {
-    /** Update the date and time for the initial appointmen. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    /** Update the date and time for the initial appointment. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateAppointmentTime']
   }
   '/licence/id/{licenceId}/appointmentPerson': {
     /** Update the person the person on probation will meet at the initial appointment Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateAppointmentPerson']
+  }
+  '/licence/id/{licenceId}/appointment-address': {
+    /** Update the address where the initial appointment will take place. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateAppointmentAddress']
   }
   '/licence/create': {
     /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -53,6 +57,11 @@ export interface components {
     AppointmentPersonRequest: {
       /** The name of the person the person on probation will meet at the initial appointment */
       appointmentPerson: string
+    }
+    /** Request object for updating the address of the initial appointment */
+    AppointmentAddressRequest: {
+      /** The address of initial appointment */
+      appointmentAddress?: string
     }
     /** Request object for creating a new licence */
     CreateLicenceRequest: {
@@ -316,7 +325,7 @@ export interface operations {
       }
     }
   }
-  /** Update the date and time for the initial appointmen. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  /** Update the date and time for the initial appointment. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   updateAppointmentTime: {
     parameters: {
       path: {
@@ -395,6 +404,47 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['AppointmentPersonRequest']
+      }
+    }
+  }
+  /** Update the address where the initial appointment will take place. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateAppointmentAddress: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Address updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AppointmentAddressRequest']
       }
     }
   }

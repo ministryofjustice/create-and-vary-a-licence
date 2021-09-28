@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer'
-import { IsNotEmpty, IsOptional, Matches } from 'class-validator'
+import { IsNotEmpty, IsOptional } from 'class-validator'
 
 class Address {
   @Expose()
@@ -20,9 +20,6 @@ class Address {
 
   @Expose()
   @IsNotEmpty({ message: 'Enter a postcode' })
-  @Matches(/[A-Za-z]{1,2}[0-9Rr][0-9A-Za-z]?\s?[0-9][ABD-HJLNP-UW-Zabd-hjlnp-uw-z]{2}/, {
-    message: 'Enter a valid postcode',
-  })
   addressPostcode: string
 }
 

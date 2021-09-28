@@ -10,7 +10,7 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">Where does {{ offender.name }} need to go for their induction appointment?</h1>
+            <h1 class="govuk-heading-l">Where does {{ licence.forename }} {{ licence.surname }} need to go for their induction appointment?</h1>
         </div>
     </div>
     <form method="POST">
@@ -33,7 +33,7 @@
                         autocomplete: "address-line1",
                         classes: 'govuk-!-width-one-third',
                         errorMessage: validationErrors | findError('addressLine1'),
-                        value: formResponses.addressLine1
+                        value: formResponses.addressLine1 or formAddress.addressLine1
                     }) }}
 
                     {{ govukInput({
@@ -44,7 +44,7 @@
                         name: "addressLine2",
                         autocomplete: "address-line2",
                         classes: 'govuk-!-width-one-third',
-                        value: formResponses.addressLine2
+                        value: formResponses.addressLine2 or formAddress.addressLine2
                     }) }}
 
                     {{ govukInput({
@@ -56,7 +56,7 @@
                         name: "addressTown",
                         autocomplete: "address-level2",
                         errorMessage: validationErrors | findError('addressTown'),
-                        value: formResponses.addressTown
+                        value: formResponses.addressTown or formAddress.addressTown
                     }) }}
 
                     {{ govukInput({
@@ -67,7 +67,7 @@
                         id: "addressCounty",
                         name: "addressCounty",
                         errorMessage: validationErrors | findError('addressCounty'),
-                        value: formResponses.addressCounty
+                        value: formResponses.addressCounty or formAddress.addressCounty
                     }) }}
 
                     {{ govukInput({
@@ -79,7 +79,7 @@
                         name: "addressPostcode",
                         autocomplete: "postal-code",
                         errorMessage: validationErrors | findError('addressPostcode'),
-                        value: formResponses.addressPostcode
+                        value: formResponses.addressPostcode or formAddress.addressPostcode
                     }) }}
 
                 {% endcall %}
