@@ -80,5 +80,12 @@ export function registerNunjucks(app?: express.Express): Environment {
     return null
   })
 
+  njkEnv.addFilter('fillFormResponse', (defaultValue: unknown, overrideValue: unknown) => {
+    if (overrideValue !== undefined) {
+      return overrideValue
+    }
+    return defaultValue
+  })
+
   return njkEnv
 }

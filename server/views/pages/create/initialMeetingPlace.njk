@@ -33,7 +33,7 @@
                         autocomplete: "address-line1",
                         classes: 'govuk-!-width-one-third',
                         errorMessage: validationErrors | findError('addressLine1'),
-                        value: formResponses.addressLine1 or formAddress.addressLine1
+                        value: formAddress.addressLine1 | fillFormResponse(formResponses.addressLine1)
                     }) }}
 
                     {{ govukInput({
@@ -44,7 +44,7 @@
                         name: "addressLine2",
                         autocomplete: "address-line2",
                         classes: 'govuk-!-width-one-third',
-                        value: formResponses.addressLine2 or formAddress.addressLine2
+                        value: formAddress.addressLine2 | fillFormResponse(formResponses.addressLine2)
                     }) }}
 
                     {{ govukInput({
@@ -56,7 +56,7 @@
                         name: "addressTown",
                         autocomplete: "address-level2",
                         errorMessage: validationErrors | findError('addressTown'),
-                        value: formResponses.addressTown or formAddress.addressTown
+                        value: formAddress.addressTown | fillFormResponse(formResponses.addressTown)
                     }) }}
 
                     {{ govukInput({
@@ -67,7 +67,7 @@
                         id: "addressCounty",
                         name: "addressCounty",
                         errorMessage: validationErrors | findError('addressCounty'),
-                        value: formResponses.addressCounty or formAddress.addressCounty
+                        value: formAddress.addressCounty | fillFormResponse(formResponses.addressCounty)
                     }) }}
 
                     {{ govukInput({
@@ -79,7 +79,7 @@
                         name: "addressPostcode",
                         autocomplete: "postal-code",
                         errorMessage: validationErrors | findError('addressPostcode'),
-                        value: formResponses.addressPostcode or formAddress.addressPostcode
+                        value: formAddress.addressPostcode | fillFormResponse(formResponses.addressPostcode)
                     }) }}
 
                 {% endcall %}
