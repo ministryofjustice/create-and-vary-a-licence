@@ -3,6 +3,7 @@ import { resetStubs } from '../wiremock'
 import auth from '../mockApis/auth'
 import tokenVerification from '../mockApis/tokenVerification'
 import licence from '../mockApis/licence'
+import community from '../mockApis/community'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
@@ -21,5 +22,7 @@ export default (on: (string, Record) => void): void => {
     stubPutAppointmentTime: licence.stubPutAppointmentTime,
     stubPutAppointmentAddress: licence.stubPutAppointmentAddress,
     stubPutContactNumber: licence.stubPutContactNumber,
+
+    stubGetManagedOffenders: community.stubGetManagedOffenders,
   })
 }
