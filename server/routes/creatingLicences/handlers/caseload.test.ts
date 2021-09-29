@@ -27,6 +27,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       {
         offenderSurname: 'Balasaravika',
         crnNumber: 'X381306',
+        currentOm: false,
       } as unknown as CommunityApiManagedOffender,
     ])
   })

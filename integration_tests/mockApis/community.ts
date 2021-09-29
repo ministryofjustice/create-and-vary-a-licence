@@ -19,8 +19,8 @@ export default {
             nomsNumber: 'G9786GC',
             crnNumber: 'X344165',
             offenderSurname: 'Balasaravika',
-            currentRo: true,
-            currentOm: false,
+            currentRo: false,
+            currentOm: false, // TODO: This should be true when we have our own delius accounts to use in dev
             currentPom: true,
           },
         ],
