@@ -7,6 +7,7 @@ import type {
   LicenceApiTestData,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
+  AppointmentAddressRequest,
 } from './licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 
@@ -38,6 +39,10 @@ export default class LicenceApiClient {
 
   async updateAppointmentTime(licenceId: string, appointmentTime: AppointmentTimeRequest): Promise<void> {
     await this.restClient.put({ path: `/licence/id/${licenceId}/appointmentTime`, data: appointmentTime })
+  }
+
+  async updateAppointmentAddress(licenceId: string, appointmentAddress: AppointmentAddressRequest): Promise<void> {
+    await this.restClient.put({ path: `/licence/id/${licenceId}/appointment-address`, data: appointmentAddress })
   }
 
   async updateContactNumber(licenceId: string, contactNumber: ContactNumberRequest): Promise<void> {

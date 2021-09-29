@@ -29,7 +29,7 @@
                         text: "For example, 12 11 2022"
                     },
                     errorMessage: validationErrors | findError('inductionDate'),
-                    formResponses: formResponses or formDate
+                    formResponses: formDate | fillFormResponse(formResponses)
                 }) }}
 
                 {{ timePicker({
@@ -41,7 +41,7 @@
                         text: "For example, 9:30am or 2:55pm"
                     },
                     errorMessage: validationErrors | findError('inductionTime'),
-                    formResponses: formResponses or formDate
+                    formResponses: formDate | fillFormResponse(formResponses)
                 }) }}
 
                 {{ govukButton({

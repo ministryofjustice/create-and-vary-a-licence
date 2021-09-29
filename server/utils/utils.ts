@@ -3,6 +3,7 @@ import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
+import Address from '../routes/creatingLicences/types/address'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -55,4 +56,37 @@ const jsonToSimpleDateTime = (dt: string): SimpleDateTime | undefined => {
   return SimpleDateTime.fromSimpleDateAndTime(simpleDate, simpleTime)
 }
 
-export { convertToTitleCase, hasRole, simpleDateTimeToJson, jsonToSimpleDateTime }
+/**
+ * Converts an Address object to a comma-separated string
+ * @param address: SimpleDateTime
+ */
+const addressObjectToString = (address: Address): string => {
+  return Object.values(address).join(', ')
+}
+
+/**
+ * Converts a comma-separated string to an address object for display
+ * @param address
+ */
+const stringToAddressObject = (address: string): Address => {
+  if (!address) {
+    return undefined
+  }
+  const addressParts = address.split(', ')
+  return {
+    addressLine1: addressParts[0] || null,
+    addressLine2: addressParts[1] || null,
+    addressTown: addressParts[2] || null,
+    addressCounty: addressParts[3] || null,
+    addressPostcode: addressParts[4] || null,
+  } as Address
+}
+
+export {
+  convertToTitleCase,
+  hasRole,
+  simpleDateTimeToJson,
+  jsonToSimpleDateTime,
+  addressObjectToString,
+  stringToAddressObject,
+}

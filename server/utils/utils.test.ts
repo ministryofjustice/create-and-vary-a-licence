@@ -1,9 +1,17 @@
 import { isDefined } from 'class-validator'
-import { convertToTitleCase, hasRole, jsonToSimpleDateTime, simpleDateTimeToJson } from './utils'
+import {
+  addressObjectToString,
+  convertToTitleCase,
+  hasRole,
+  jsonToSimpleDateTime,
+  simpleDateTimeToJson,
+  stringToAddressObject,
+} from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
+import Address from '../routes/creatingLicences/types/address'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -48,6 +56,60 @@ describe("Check user's role", () => {
   it('should false true if user does not have role', () => {
     const user = { userRoles: [] } as Express.User
     expect(hasRole(user, AuthRole.CASE_ADMIN)).toBe(false)
+  })
+})
+
+describe('Convert Address to comma-separated string', () => {
+  it('should return all values in comma-separated string', () => {
+    const address = {
+      addressLine1: 'Manchester Probation Service',
+      addressLine2: 'Unit 4',
+      addressTown: 'Smith Street',
+      addressCounty: 'Stockport',
+      addressPostcode: 'SP1 3DN',
+    } as unknown as Address
+    expect(addressObjectToString(address)).toBe(
+      'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN'
+    )
+  })
+
+  it('should return comma-separated string with values missing', () => {
+    const address = {
+      addressLine1: 'Manchester Probation Service',
+      addressLine2: null,
+      addressTown: 'Smith Street',
+      addressCounty: 'Stockport',
+      addressPostcode: 'SP1 3DN',
+    } as unknown as Address
+    expect(addressObjectToString(address)).toBe('Manchester Probation Service, , Smith Street, Stockport, SP1 3DN')
+  })
+})
+
+describe('Convert comma-separated string to address', () => {
+  it('should construct object from string', () => {
+    const address = 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN'
+    expect(stringToAddressObject(address)).toStrictEqual({
+      addressLine1: 'Manchester Probation Service',
+      addressLine2: 'Unit 4',
+      addressTown: 'Smith Street',
+      addressCounty: 'Stockport',
+      addressPostcode: 'SP1 3DN',
+    } as unknown as Address)
+  })
+
+  it('should construct object from string with missing values', () => {
+    const address = ', , , , '
+    expect(stringToAddressObject(address)).toStrictEqual({
+      addressLine1: null,
+      addressLine2: null,
+      addressTown: null,
+      addressCounty: null,
+      addressPostcode: null,
+    } as unknown as Address)
+  })
+
+  it('should return undefined', () => {
+    expect(stringToAddressObject(undefined)).toBeUndefined()
   })
 })
 

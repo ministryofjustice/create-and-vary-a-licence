@@ -1,5 +1,6 @@
 import type HmppsAuthClient from '../data/hmppsAuthClient'
 import {
+  AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   ContactNumberRequest,
@@ -10,11 +11,12 @@ import {
 } from '../data/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getStandardConditions } from '../utils/conditionsProvider'
-import { simpleDateTimeToJson } from '../utils/utils'
+import { simpleDateTimeToJson, addressObjectToString } from '../utils/utils'
 import logger from '../../logger'
 import PersonName from '../routes/creatingLicences/types/personName'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
+import Address from '../routes/creatingLicences/types/address'
 
 export default class LicenceService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -81,6 +83,13 @@ export default class LicenceService {
     const appointmentTime = simpleDateTimeToJson(formData)
     const requestBody = { appointmentTime } as AppointmentTimeRequest
     return new LicenceApiClient(token).updateAppointmentTime(id, requestBody)
+  }
+
+  async updateAppointmentAddress(id: string, formData: Address, username: string): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    const appointmentAddress = addressObjectToString(formData)
+    const requestBody = { appointmentAddress } as AppointmentAddressRequest
+    return new LicenceApiClient(token).updateAppointmentAddress(id, requestBody)
   }
 
   async updateContactNumber(id: string, formData: Telephone, username: string): Promise<void> {

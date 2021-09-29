@@ -109,4 +109,34 @@ describe('Nunjucks Filters', () => {
       expect($('div').text()).toBe('message1')
     })
   })
+
+  describe('fillFormResponse', () => {
+    it('should return the override value if not undefined', () => {
+      viewContext = {
+        defaultValue: 'default',
+        overrideValue: 'override',
+      }
+      const nunjucksString = `
+        <div>{{ (defaultValue | fillFormResponse(overrideValue)) }}</div>
+      `
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+      expect($('div').text()).toBe('override')
+    })
+
+    it('should return the default value if override is undefined', () => {
+      viewContext = {
+        defaultValue: 'default',
+        overrideValue: undefined,
+      }
+      const nunjucksString = `
+        <div>{{ (defaultValue | fillFormResponse(overrideValue)) }}</div>
+      `
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+      expect($('div').text()).toBe('default')
+    })
+  })
 })

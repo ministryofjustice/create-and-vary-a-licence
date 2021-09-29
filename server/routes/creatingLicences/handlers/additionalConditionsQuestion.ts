@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import YesOrNoQuestion from '../types/yesOrNo'
 import YesOrNo from '../../../enumeration/yesOrNo'
 
 export default class AdditionalConditionsQuestionRoutes {
@@ -9,8 +8,8 @@ export default class AdditionalConditionsQuestionRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const payload = req.body as YesOrNoQuestion
-    if (payload.answer === YesOrNo.YES) {
+    const { answer } = req.body
+    if (answer === YesOrNo.YES) {
       res.redirect(`/licence/create/id/${licenceId}/additional-conditions`)
     } else {
       res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)
