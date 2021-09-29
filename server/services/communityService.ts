@@ -7,21 +7,21 @@ import { CommunityApiStaffDetails, CommunityApiManagedOffender } from '../data/c
 export default class CommunityService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  async getStaffDetail(username: string, deliusUsername: string): Promise<CommunityApiStaffDetails> {
+  async getStaffDetail(deliusUsername: string): Promise<CommunityApiStaffDetails> {
     // Important: No username is passed into the getSystemClientToken for the community API
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return new CommunityApiClient(token).getStaffDetailByUsername(deliusUsername)
   }
 
-  async getManagedOffenders(username: string, staffIdentifier: number): Promise<CommunityApiManagedOffender[]> {
+  async getManagedOffenders(staffIdentifier: number): Promise<CommunityApiManagedOffender[]> {
     // Important: No username is passed into the getSystemClientToken for the community API
     const token = await this.hmppsAuthClient.getSystemClientToken()
     return new CommunityApiClient(token).getStaffCaseload(staffIdentifier)
   }
 
-  async searchProbationers(username: string, searchCriteria: SearchDto): Promise<OffenderDetail[]> {
-    // Important: Check whether the username is required for probation-offender-search-api??
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+  async searchProbationers(searchCriteria: SearchDto): Promise<OffenderDetail[]> {
+    // Important: No username is passed into the getSystemClientToken for the community search API
+    const token = await this.hmppsAuthClient.getSystemClientToken()
     return new ProbationSearchApiClient(token).searchProbationer(searchCriteria)
   }
 }
