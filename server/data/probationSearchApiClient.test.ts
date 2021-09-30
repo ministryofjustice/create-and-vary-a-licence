@@ -36,7 +36,7 @@ describe('Probation search API client', () => {
     it('Get search results', async () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
       fakeApi.post('/search', searchCriteria).reply(200, stubbedSearchResult)
-      const data = await communityService.searchProbationers('user1', searchCriteria)
+      const data = await communityService.searchProbationers(searchCriteria)
       expect(data).toEqual(stubbedSearchResult)
       expect(nock.isDone()).toBe(true)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
@@ -46,7 +46,7 @@ describe('Probation search API client', () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('')
       fakeApi.post('/search', searchCriteria).reply(401)
       try {
-        await communityService.searchProbationers('user1', searchCriteria)
+        await communityService.searchProbationers(searchCriteria)
       } catch (e) {
         expect(e.message).toContain('Unauthorized')
       }
@@ -57,7 +57,7 @@ describe('Probation search API client', () => {
     it('Search - no matches', async () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
       fakeApi.post('/search', searchCriteria).reply(200, [])
-      const data = await communityService.searchProbationers('user1', searchCriteria)
+      const data = await communityService.searchProbationers(searchCriteria)
       expect(data).toEqual([])
       expect(nock.isDone()).toBe(true)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()

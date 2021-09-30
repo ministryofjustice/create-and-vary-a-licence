@@ -13,6 +13,8 @@ context('Create a licence', () => {
     cy.task('stubPutAppointmentTime', 1)
     cy.task('stubPutAppointmentAddress', 1)
     cy.task('stubPutContactNumber', 1)
+    cy.task('stubGetStaffDetails', 'USER1')
+    cy.task('stubGetManagedOffenders', 2000)
     cy.signIn()
   })
 

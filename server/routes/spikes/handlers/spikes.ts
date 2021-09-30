@@ -21,9 +21,8 @@ export default class SpikeRoutes {
   }
 
   public getStaffDetail: RequestHandler = async (req, res): Promise<void> => {
-    const { username } = res.locals.user
     const deliusUsername = req.params.username
-    const staffDetail = await this.communityService.getStaffDetail(username, deliusUsername)
+    const staffDetail = await this.communityService.getStaffDetail(deliusUsername)
     res.render('pages/staffDetail', { staffDetail })
   }
 
@@ -35,10 +34,9 @@ export default class SpikeRoutes {
   }
 
   public getStaffCaseload: RequestHandler = async (req, res): Promise<void> => {
-    const { username } = res.locals.user
     const { staffId } = req.params
     const staffIdentifier = staffId as unknown as number
-    const managedOffenders = await this.communityService.getManagedOffenders(username, staffIdentifier)
+    const managedOffenders = await this.communityService.getManagedOffenders(staffIdentifier)
     res.render('pages/managedOffenders', { managedOffenders })
   }
 
@@ -91,14 +89,13 @@ export default class SpikeRoutes {
 
   public searchProbation: RequestHandler = async (req, res): Promise<void> => {
     const { prisonerIdentifier, firstName, lastName, crn } = req.query as Record<string, string>
-    const { username } = res.locals.user
     const searchValues = { prisonerIdentifier, firstName, lastName, crn }
 
     if (!(prisonerIdentifier || firstName || lastName || crn)) {
       return res.render('pages/probationers')
     }
 
-    const probationers = await this.communityService.searchProbationers(username, {
+    const probationers = await this.communityService.searchProbationers({
       firstName,
       surname: lastName,
       nomsNumber: prisonerIdentifier || null,
