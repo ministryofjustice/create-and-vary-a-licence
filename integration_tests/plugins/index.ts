@@ -23,6 +23,7 @@ export default (on: (string, Record) => void): void => {
     stubPutAppointmentAddress: licence.stubPutAppointmentAddress,
     stubPutContactNumber: licence.stubPutContactNumber,
 
+    stubGetStaffDetails: community.stubGetStaffDetails,
     stubGetManagedOffenders: community.stubGetManagedOffenders,
   })
 }

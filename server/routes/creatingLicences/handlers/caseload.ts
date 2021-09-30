@@ -6,10 +6,10 @@ export default class CaseloadRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly communityService: CommunityService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const staffId = 2500012436 // TODO: This needs to be looked up in delius using res.locals.user.username
-    const managedOffenders = await this.communityService.getManagedOffenders(staffId)
+    const { staffIdentifier } = await this.communityService.getStaffDetail(res.locals.user.username)
+    const managedOffenders = await this.communityService.getManagedOffenders(staffIdentifier)
     const caseload = managedOffenders
-      .filter(offender => !offender.currentOm) // TODO: This should be (offender => offender.currentOm) but until we have a delius user to use, we need to negate this clause for now
+      .filter(offender => offender.currentOm)
       .map(offender => {
         return {
           name: offender.offenderSurname,

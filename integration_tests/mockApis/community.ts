@@ -2,6 +2,22 @@ import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
 
 export default {
+  stubGetStaffDetails: (deliusUsername: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/secure/staff/username/${deliusUsername}`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          staffIdentifier: 2000,
+        },
+      },
+    })
+  },
+
   stubGetManagedOffenders: (staffId: string): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -20,8 +36,8 @@ export default {
             crnNumber: 'X344165',
             offenderSurname: 'Balasaravika',
             currentRo: false,
-            currentOm: false, // TODO: This should be true when we have our own delius accounts to use in dev
-            currentPom: true,
+            currentOm: true,
+            currentPom: false,
           },
         ],
       },
