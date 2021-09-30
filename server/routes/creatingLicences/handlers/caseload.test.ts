@@ -34,7 +34,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
 
     communityService.getManagedOffenders.mockResolvedValue([
       {
-        offenderSurname: 'Balasaravika',
+        offenderSurname: 'Jones',
         crnNumber: 'X381306',
         currentOm: true,
       } as unknown as CommunityApiManagedOffender,
@@ -47,8 +47,13 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
           {
-            name: 'Balasaravika',
+            name: 'Jones',
             crnNumber: 'X381306',
+            conditionalReleaseDate: '03 August 2022',
+          },
+          {
+            name: 'Adam Balasaravika',
+            crnNumber: 'X344165',
             conditionalReleaseDate: '03 August 2022',
           },
         ],
