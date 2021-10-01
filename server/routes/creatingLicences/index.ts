@@ -12,6 +12,7 @@ import AdditionalConditionsQuestionRoutes from './handlers/additionalConditionsQ
 import AdditionalConditionsRoutes from './handlers/additionalConditions'
 import BespokeConditionsQuestionRoutes from './handlers/bespokeConditionsQuestion'
 import BespokeConditionsRoutes from './handlers/bespokeConditions'
+import BespokeConditions from './types/bespokeConditions'
 import CheckAnswersRoutes from './handlers/checkAnswers'
 import ConfirmationRoutes from './handlers/confirmation'
 import { Services } from '../../services'
@@ -46,7 +47,7 @@ export default function Index({ licenceService, communityService }: Services): R
   const additionalConditionsQuestionHandler = new AdditionalConditionsQuestionRoutes()
   const additionalConditionsHandler = new AdditionalConditionsRoutes()
   const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
-  const bespokeConditionsHandler = new BespokeConditionsRoutes()
+  const bespokeConditionsHandler = new BespokeConditionsRoutes(licenceService)
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
 
@@ -67,7 +68,7 @@ export default function Index({ licenceService, communityService }: Services): R
   get('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.GET)
   post('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.GET)
-  post('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.POST)
+  post('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.POST, BespokeConditions)
   get('/id/:licenceId/check-your-answers', checkAnswersHandler.GET)
   post('/id/:licenceId/check-your-answers', checkAnswersHandler.POST)
   get('/id/:licenceId/confirmation', confirmationHandler.GET)

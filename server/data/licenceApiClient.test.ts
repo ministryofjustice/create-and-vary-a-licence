@@ -2,6 +2,7 @@ import nock from 'nock'
 import config from '../config'
 import LicenceService from '../services/licenceService'
 import HmppsAuthClient from './hmppsAuthClient'
+import BespokeCondition from '../routes/creatingLicences/types/bespokeConditions'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
@@ -9,6 +10,7 @@ import {
   AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
+  BespokeConditionsRequest,
   ContactNumberRequest,
   LicenceApiTestData,
 } from './licenceApiClientTypes'
@@ -126,5 +128,47 @@ describe('Licence API client tests', () => {
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
     })
+
+    describe('Bespoke conditions', () => {
+      it('No bespoke conditions entered', async () => {
+        const formConditions = makeFormBespokeConditions([])
+        const apiRequestConditions = makeApiRequestBespokeConditions([])
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/bespoke-conditions', apiRequestConditions).reply(200)
+        await licenceService.updateBespokeConditions('1', formConditions, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+
+      it('Three bespoke conditions entered', async () => {
+        const formConditions = makeFormBespokeConditions(['C1', 'C2', 'C3'])
+        const apiRequestConditions = makeApiRequestBespokeConditions(formConditions.conditions)
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/bespoke-conditions', apiRequestConditions).reply(200)
+        await licenceService.updateBespokeConditions('1', formConditions, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+
+      it('Remove empty bespoke conditions', async () => {
+        const formConditions = makeFormBespokeConditions(['C1', '', '', 'C4'])
+        const apiRequestConditions = makeApiRequestBespokeConditions(['C1', 'C4'])
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/bespoke-conditions', apiRequestConditions).reply(200)
+        await licenceService.updateBespokeConditions('1', formConditions, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
   })
 })
+
+const makeFormBespokeConditions = (conditions: string[]): BespokeCondition => {
+  const formConditions = new BespokeCondition()
+  formConditions.conditions = conditions
+  return formConditions
+}
+
+const makeApiRequestBespokeConditions = (conditions: string[]): BespokeConditionsRequest => {
+  return { conditions } as BespokeConditionsRequest
+}
