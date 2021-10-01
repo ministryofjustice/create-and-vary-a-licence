@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import fetchLicence from './fetchLicenceMiddleware'
 import LicenceService from '../services/licenceService'
-import { Licence } from '../data/licenceApiClientTypes'
+import { Licence } from '../@types/licenceApiClientTypes'
 
 jest.mock('../services/licenceService')
 

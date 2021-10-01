@@ -1,8 +1,8 @@
 import type HmppsAuthClient from '../data/hmppsAuthClient'
 import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
-import { SearchDto, OffenderDetail } from '../data/probationSearchApiClientTypes'
-import { CommunityApiStaffDetails, CommunityApiManagedOffender } from '../data/communityClientTypes'
+import { SearchDto, OffenderDetail } from '../@types/probationSearchApiClientTypes'
+import { CommunityApiStaffDetails, CommunityApiManagedOffender } from '../@types/communityClientTypes'
 
 export default class CommunityService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}

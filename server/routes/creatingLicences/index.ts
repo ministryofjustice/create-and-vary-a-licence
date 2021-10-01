@@ -23,7 +23,7 @@ import SimpleDateTime from './types/simpleDateTime'
 import YesOrNoQuestion from './types/yesOrNo'
 import AdditionalConditions from './types/additionalConditions'
 
-export default function Index({ licenceService, communityService }: Services): Router {
+export default function Index({ licenceService, caseloadService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create${path}`
@@ -39,7 +39,7 @@ export default function Index({ licenceService, communityService }: Services): R
   const post = (path: string, handler: RequestHandler, type?: new () => unknown) =>
     router.post(routePrefix(path), validationMiddleware(type), asyncMiddleware(handler))
 
-  const caseloadHandler = new CaseloadRoutes(licenceService, communityService)
+  const caseloadHandler = new CaseloadRoutes(licenceService, caseloadService)
   const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService)
   const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService)

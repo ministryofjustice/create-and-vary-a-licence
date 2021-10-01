@@ -4,8 +4,8 @@ import LicenceService from '../../../services/licenceService'
 import CommunityService from '../../../services/communityService'
 import PrisonerService from '../../../services/prisonerService'
 import statusConfig from '../../../licences/licenceStatus'
-import { PrisonerSearchCriteria } from '../../../data/prisonerSearchApiClientTypes'
-import { SearchDto } from '../../../data/probationSearchApiClientTypes'
+import { PrisonerSearchCriteria } from '../../../@types/prisonerSearchApiClientTypes'
+import { SearchDto } from '../../../@types/probationSearchApiClientTypes'
 
 export default class SpikeRoutes {
   constructor(

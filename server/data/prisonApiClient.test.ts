@@ -2,7 +2,7 @@ import nock from 'nock'
 import config from '../config'
 import PrisonerService from '../services/prisonerService'
 import HmppsAuthClient from './hmppsAuthClient'
-import { PrisonApiPrisoner, PrisonApiSentenceDetail } from './prisonApiClientTypes'
+import { PrisonApiPrisoner, PrisonApiSentenceDetail } from '../@types/prisonApiClientTypes'
 
 jest.mock('./hmppsAuthClient')
 

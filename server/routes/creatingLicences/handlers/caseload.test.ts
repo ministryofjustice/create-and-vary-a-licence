@@ -2,17 +2,17 @@ import { Request, Response } from 'express'
 
 import CaseloadRoutes from './caseload'
 import LicenceService from '../../../services/licenceService'
-import CommunityService from '../../../services/communityService'
-import { CommunityApiManagedOffender, CommunityApiStaffDetails } from '../../../data/communityClientTypes'
+import CaseloadService from '../../../services/caseloadService'
+import { ManagedCase } from '../../../@types/managedCase'
 
 const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
-const communityService = new CommunityService(null) as jest.Mocked<CommunityService>
+const caseloadService = new CaseloadService(null, null) as jest.Mocked<CaseloadService>
 
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/communityService')
+jest.mock('../../../services/caseloadService')
 
 describe('Route Handlers - Create Licence - Caseload', () => {
-  const handler = new CaseloadRoutes(licenceService, communityService)
+  const handler = new CaseloadRoutes(licenceService, caseloadService)
   let req: Request
   let res: Response
 
@@ -28,17 +28,14 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       },
     } as unknown as Response
 
-    communityService.getStaffDetail.mockResolvedValue({
-      staffIdentifier: 2000,
-    } as unknown as CommunityApiStaffDetails)
-
-    communityService.getManagedOffenders.mockResolvedValue([
+    caseloadService.getStaffCaseload.mockResolvedValue([
       {
-        offenderSurname: 'Jones',
         crnNumber: 'X381306',
-        currentOm: true,
-      } as unknown as CommunityApiManagedOffender,
-    ])
+        firstName: 'Joe',
+        lastName: 'Rogan',
+        conditionalReleaseDate: '09/09/2022',
+      },
+    ] as unknown as ManagedCase[])
   })
 
   describe('GET', () => {
@@ -47,9 +44,9 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
           {
-            name: 'Jones',
+            name: 'Joe Rogan',
             crnNumber: 'X381306',
-            conditionalReleaseDate: '03 August 2022',
+            conditionalReleaseDate: '09/09/2022',
           },
           {
             name: 'Adam Balasaravika',
@@ -58,8 +55,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           },
         ],
       })
-      expect(communityService.getStaffDetail).toHaveBeenCalledWith('USER1')
-      expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
+      expect(caseloadService.getStaffCaseload).toHaveBeenCalledWith('USER1')
     })
   })
 })

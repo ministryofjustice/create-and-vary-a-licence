@@ -1,4 +1,4 @@
-import { definitions } from '../@types/communityApiImport'
+import { definitions } from './communityApiImport'
 
 // export type CommunityApiOffenderDetail = definitions['OffenderDetail']
 export type CommunityApiManagedOffender = definitions['ManagedOffender']

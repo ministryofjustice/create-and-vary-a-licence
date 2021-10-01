@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
-import type { OffenderDetail, SearchDto } from './probationSearchApiClientTypes'
+import type { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
 
 export default class ProbationSearchApiClient {
   restClient: RestClient

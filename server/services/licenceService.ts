@@ -9,7 +9,7 @@ import {
   CreateLicenceResponse,
   Licence,
   LicenceApiTestData,
-} from '../data/licenceApiClientTypes'
+} from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getStandardConditions } from '../utils/conditionsProvider'
 import { simpleDateTimeToJson, addressObjectToString } from '../utils/utils'
