@@ -10,8 +10,12 @@ export default class BespokeConditionsQuestionPage extends Page {
     super('bespoke-conditions-question-page')
   }
 
-  selectYes = (): BespokeConditionsPage => {
+  selectYes = (): BespokeConditionsQuestionPage => {
     cy.get(this.yesRadioButtonId).click()
+    return this
+  }
+
+  clickContinue = (): BespokeConditionsPage => {
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(BespokeConditionsPage)
   }

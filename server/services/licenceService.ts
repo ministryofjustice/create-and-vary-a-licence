@@ -13,7 +13,6 @@ import {
 import LicenceApiClient from '../data/licenceApiClient'
 import { getStandardConditions } from '../utils/conditionsProvider'
 import { simpleDateTimeToJson, addressObjectToString } from '../utils/utils'
-import logger from '../../logger'
 import PersonName from '../routes/creatingLicences/types/personName'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
@@ -172,7 +171,6 @@ export default class LicenceService {
    *   - licenceService - pull back licences matching these people, assembled into a licence[]
    */
   getCaseload(username: string, staffId: number): Record<string, unknown> {
-    logger.debug(`getCaseload for ${username}  staffId: ${staffId}`)
     const content = [
       {
         nomsId: 'A1234AC',

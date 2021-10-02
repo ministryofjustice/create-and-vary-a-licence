@@ -24,7 +24,7 @@
                         {% if conditions and conditions.length > 0 %}
                             {%  for c in conditions %}
                                 {{ govukTextarea({
-                                    id: 'conditions[' + loop.index + ']',
+                                    id: 'conditions['+ loop.index + ']',
                                     name: 'conditions[' + loop.index + ']',
                                     label: {
                                         html: 'Bespoke condition',
@@ -32,7 +32,7 @@
                                     },
                                     attributes: {
                                         'data-name': 'conditions[%index%]',
-                                        'data-id': 'condition[%index%]'
+                                        'data-id': 'conditions[%index%]'
                                     },
                                     value: c
                                 }) }}
@@ -48,7 +48,7 @@
                                 },
                                 attributes: {
                                     'data-name': 'conditions[%index%]',
-                                    'data-id': 'condition[%index%]'
+                                    'data-id': 'conditions[%index%]'
                                 }
                             }) }}
                         {% endif %}
@@ -58,7 +58,8 @@
                     <div class="moj-button-action">
                         {{ govukButton({
                             text: 'Add another bespoke condition',
-                            classes: 'govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4'
+                            classes: 'govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4',
+                            attributes: { 'data-qa': 'add-another' }
                         }) }}
                     </div>
                 </div>
