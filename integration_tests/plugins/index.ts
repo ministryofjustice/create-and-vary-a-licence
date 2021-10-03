@@ -4,7 +4,7 @@ import auth from '../mockApis/auth'
 import tokenVerification from '../mockApis/tokenVerification'
 import licence from '../mockApis/licence'
 import community from '../mockApis/community'
-import prison from '../mockApis/prison'
+import prison from '../mockApis/prisonerSearch'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
