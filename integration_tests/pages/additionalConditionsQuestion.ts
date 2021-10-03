@@ -10,8 +10,12 @@ export default class AdditionalConditionsQuestionPage extends Page {
     super('additional-conditions-question-page', false)
   }
 
-  selectYes = (): AdditionalConditionsPage => {
+  selectYes = (): AdditionalConditionsQuestionPage => {
     cy.get(this.yesRadioButtonId).click()
+    return this
+  }
+
+  clickContinue = (): AdditionalConditionsPage => {
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsPage)
   }

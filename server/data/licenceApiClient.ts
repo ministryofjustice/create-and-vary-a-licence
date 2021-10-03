@@ -8,6 +8,7 @@ import type {
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   AppointmentAddressRequest,
+  BespokeConditionsRequest,
 } from './licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 
@@ -47,5 +48,9 @@ export default class LicenceApiClient {
 
   async updateContactNumber(licenceId: string, contactNumber: ContactNumberRequest): Promise<void> {
     await this.restClient.put({ path: `/licence/id/${licenceId}/contact-number`, data: contactNumber })
+  }
+
+  async updateBespokeConditions(licenceId: string, bespokeConditions: BespokeConditionsRequest): Promise<void> {
+    await this.restClient.put({ path: `/licence/id/${licenceId}/bespoke-conditions`, data: bespokeConditions })
   }
 }

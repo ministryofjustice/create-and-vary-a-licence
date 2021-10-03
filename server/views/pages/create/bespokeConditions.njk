@@ -11,7 +11,7 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">Create a bespoke condition for {{ offender.name }}</h1>
+            <h1 class="govuk-heading-l">Create bespoke conditions for {{ licence.forename }} {{ licence.surname }}</h1>
         </div>
     </div>
     <form method="POST">
@@ -19,29 +19,47 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <div data-module="moj-add-another">
-                    {% call govukFieldset({
-                        classes: 'moj-add-another__item'
-                    }) %}
-
-                        {{ govukTextarea({
-                            id: 'condition[0]',
-                            name: 'condition[0]',
-                            label: {
-                                html: 'Bespoke condition',
-                                classes: 'govuk-visually-hidden'
-                            },
-                            attributes: {
-                                'data-name': 'condition[%index%]',
-                                'data-id': 'condition[%index%]'
-                            }
-                        }) }}
+                    {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
+                        {# Show the existing bespoke conditions #}
+                        {% if conditions and conditions.length > 0 %}
+                            {%  for c in conditions %}
+                                {{ govukTextarea({
+                                    id: 'conditions['+ loop.index + ']',
+                                    name: 'conditions[' + loop.index + ']',
+                                    label: {
+                                        html: 'Bespoke condition',
+                                        classes: 'govuk-visually-hidden'
+                                    },
+                                    attributes: {
+                                        'data-name': 'conditions[%index%]',
+                                        'data-id': 'conditions[%index%]'
+                                    },
+                                    value: c
+                                }) }}
+                            {% endfor  %}
+                        {%  else %}
+                            {# Show an empty text area to accept a new condition #}
+                            {{ govukTextarea({
+                                id: 'conditions[0]',
+                                name: 'conditions[0]',
+                                label: {
+                                    html: 'Bespoke condition',
+                                    classes: 'govuk-visually-hidden'
+                                },
+                                attributes: {
+                                    'data-name': 'conditions[%index%]',
+                                    'data-id': 'conditions[%index%]'
+                                }
+                            }) }}
+                        {% endif %}
 
                     {% endcall %}
 
                     <div class="moj-button-action">
                         {{ govukButton({
                             text: 'Add another bespoke condition',
-                            classes: 'govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4'
+                            classes: 'govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4',
+                            attributes: { 'data-qa': 'add-another' }
                         }) }}
                     </div>
                 </div>

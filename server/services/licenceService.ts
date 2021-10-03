@@ -3,6 +3,7 @@ import {
   AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
+  BespokeConditionsRequest,
   ContactNumberRequest,
   CreateLicenceRequest,
   CreateLicenceResponse,
@@ -12,11 +13,11 @@ import {
 import LicenceApiClient from '../data/licenceApiClient'
 import { getStandardConditions } from '../utils/conditionsProvider'
 import { simpleDateTimeToJson, addressObjectToString } from '../utils/utils'
-import logger from '../../logger'
 import PersonName from '../routes/creatingLicences/types/personName'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
 import Address from '../routes/creatingLicences/types/address'
+import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 
 export default class LicenceService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -98,6 +99,13 @@ export default class LicenceService {
     return new LicenceApiClient(token).updateContactNumber(id, requestBody)
   }
 
+  async updateBespokeConditions(id: string, formData: BespokeConditions, username: string): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    const sanitised = formData.conditions.filter((c: string) => c !== null && c.length > 0)
+    const requestBody = { conditions: sanitised } as BespokeConditionsRequest
+    return new LicenceApiClient(token).updateBespokeConditions(id, requestBody)
+  }
+
   getLicenceStub(): Record<string, unknown> {
     return {
       offender: {
@@ -163,7 +171,6 @@ export default class LicenceService {
    *   - licenceService - pull back licences matching these people, assembled into a licence[]
    */
   getCaseload(username: string, staffId: number): Record<string, unknown> {
-    logger.debug(`getCaseload for ${username}  staffId: ${staffId}`)
     const content = [
       {
         nomsId: 'A1234AC',

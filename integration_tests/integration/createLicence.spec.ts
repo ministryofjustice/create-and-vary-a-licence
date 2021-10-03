@@ -12,6 +12,7 @@ context('Create a licence', () => {
     cy.task('stubPutAppointmentPerson', 1)
     cy.task('stubPutAppointmentTime', 1)
     cy.task('stubPutAppointmentAddress', 1)
+    cy.task('stubPutBespokeConditions', 1)
     cy.task('stubPutContactNumber', 1)
     cy.task('stubGetStaffDetails', 'USER1')
     cy.task('stubGetManagedOffenders', 2000)
@@ -39,13 +40,19 @@ context('Create a licence', () => {
       .enterTime(moment())
       .clickContinue()
 
-    const additionalConditionsPage = additionalConditionsQuestionPage.selectYes()
+    const additionalConditionsPage = additionalConditionsQuestionPage.selectYes().clickContinue()
 
     const bespokeConditionsQuestionPage = additionalConditionsPage.clickContinue()
 
-    const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes()
+    const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
 
-    const checkAnswersPage = bespokeConditionsPage.clickContinue()
+    const checkAnswersPage = bespokeConditionsPage
+      .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
+      .clickAddAnother()
+      .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
+      .clickAddAnother()
+      .enterBespokeCondition(2, 'A third bespoke condition must surely be be a mistake')
+      .clickContinue()
 
     const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
 

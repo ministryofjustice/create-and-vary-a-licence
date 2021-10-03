@@ -2,7 +2,7 @@ import { Expose } from 'class-transformer'
 import { IsIn, IsNotEmpty } from 'class-validator'
 import YesOrNo from '../../../enumeration/yesOrNo'
 
-const message = 'Select either Yes or No'
+const message = 'Select yes or no'
 
 class YesOrNoQuestion {
   @Expose()

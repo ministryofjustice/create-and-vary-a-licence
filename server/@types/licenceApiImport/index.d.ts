@@ -8,6 +8,10 @@ export interface paths {
     /** Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateContactNumber']
   }
+  '/licence/id/{licenceId}/bespoke-conditions': {
+    /** Add or replace the bespoke conditions on a licence with the content of this request. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateBespokeConditions']
+  }
   '/licence/id/{licenceId}/appointmentTime': {
     /** Update the date and time for the initial appointment. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateAppointmentTime']
@@ -48,6 +52,11 @@ export interface components {
       developerMessage?: string
       moreInfo?: string
     }
+    /** A list of bespoke conditions to add to a licence */
+    BespokeConditionRequest: {
+      /** A list of bespoke conditions to add to a licence */
+      conditions: string[]
+    }
     /** Request object for updating the date and time of the initial appointment */
     AppointmentTimeRequest: {
       /** The date and time of the initial appointment */
@@ -61,7 +70,7 @@ export interface components {
     /** Request object for updating the address of the initial appointment */
     AppointmentAddressRequest: {
       /** The address of initial appointment */
-      appointmentAddress?: string
+      appointmentAddress: string
     }
     /** Request object for creating a new licence */
     CreateLicenceRequest: {
@@ -322,6 +331,47 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['ContactNumberRequest']
+      }
+    }
+  }
+  /** Add or replace the bespoke conditions on a licence with the content of this request. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateBespokeConditions: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Bespoke conditions added or replaced */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['BespokeConditionRequest']
       }
     }
   }
