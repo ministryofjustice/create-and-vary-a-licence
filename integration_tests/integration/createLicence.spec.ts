@@ -17,6 +17,7 @@ context('Create a licence', () => {
     cy.task('stubGetStaffDetails', 'USER1')
     cy.task('stubGetManagedOffenders', 2000)
     cy.task('searchPrisonersByNomisIds')
+    cy.task('stubGetPrisonDescription', 'LEI')
     cy.signIn()
   })
 

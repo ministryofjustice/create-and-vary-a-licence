@@ -10,6 +10,9 @@ This service requires instances of these dependent services:
 * `prison-api` - prison data
 * `community-api` - probation data  
 * `create-and-vary-a-licence-api` - licence data  
+* `prisoner-offender-search` - prisoner search
+* `probation-offender-search` - probation search
+* `prison-register` - prison register and contant information
 * `gotenberg` - produce PDFs from HTML templated URLs
 
 ## Building
@@ -165,6 +168,8 @@ Scripts are provided to generate these types from the development instances:
 
 `generate-probation-offender-search-types.sh`  Re-run when probation offender search API types change
 
+`generate-prison-register-types.sh`  Re-run when prison register API types change
+
 There may be some manual editing needed, particularly to:
 
   - Replace double quotes with single-quotes
@@ -172,6 +177,7 @@ There may be some manual editing needed, particularly to:
   - Validate the api-docs endpoint for swagger (in case it changes)
   - Eslint ignore any lines which complain about not being camel-case with `eslint-disable camelcase`
   - Eslint ignore empty interfaces with `eslint-disable-next-line @typescript-eslint/no-empty-interface`
+or remove the unused and empty interface.
 
 ## Gotenberg Container
 

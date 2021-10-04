@@ -91,6 +91,14 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    prisonRegisterApi: {
+      url: get('PRISON_REGISTER_API_URL', 'http://localhost:8092', requiredInProduction),
+      timeout: {
+        response: get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 10000),
+        deadline: get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 10000),
+      },
+      agent: new AgentConfig(),
+    },
     probationSearchApi: {
       url: get('PROBATION_SEARCH_API_URL', 'http://localhost:8091', requiredInProduction),
       timeout: {
