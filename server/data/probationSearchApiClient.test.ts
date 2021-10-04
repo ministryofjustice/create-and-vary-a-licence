@@ -2,7 +2,7 @@ import nock from 'nock'
 import config from '../config'
 import CommunityService from '../services/communityService'
 import HmppsAuthClient from './hmppsAuthClient'
-import type { OffenderDetail, SearchDto } from './probationSearchApiClientTypes'
+import type { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
 
 jest.mock('./hmppsAuthClient')
 

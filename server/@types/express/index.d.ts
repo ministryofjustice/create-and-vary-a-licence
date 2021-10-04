@@ -20,5 +20,10 @@ export declare global {
     interface Request {
       verified?: boolean
     }
+
+    interface Response {
+      internalRedirect(url: string): void
+      renderPDF(view: string, pageData: Record<string, unknown>, options: Record<string, unknown>): void
+    }
   }
 }

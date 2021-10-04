@@ -1,4 +1,4 @@
-import { components } from '../@types/licenceApiImport'
+import { components } from './licenceApiImport'
 
 export type AppointmentAddressRequest = components['schemas']['AppointmentAddressRequest']
 export type AppointmentPersonRequest = components['schemas']['AppointmentPersonRequest']

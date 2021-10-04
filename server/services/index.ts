@@ -4,17 +4,24 @@ import LicenceService from './licenceService'
 import CommunityService from './communityService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import TokenStore from '../data/tokenStore'
+import CaseloadService from './caseloadService'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
 const prisonerService = new PrisonerService(hmppsAuthClient)
 const licenceService = new LicenceService(hmppsAuthClient)
 const communityService = new CommunityService(hmppsAuthClient)
+const caseloadService = new CaseloadService(prisonerService, communityService)
+
+// TODO - Remove prisonerService and community service as exports
+// The following services should not be exported eventually (after spikes have been removed), they should only ever be consumed by the caseload service.
+// CaseloadService is a one stop shop for a combination of data from DELIUS and NOMIS
 
 export const services = {
   userService,
-  prisonerService,
   licenceService,
+  caseloadService,
+  prisonerService,
   communityService,
 }
 

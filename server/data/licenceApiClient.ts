@@ -9,7 +9,7 @@ import type {
   AppointmentTimeRequest,
   AppointmentAddressRequest,
   BespokeConditionsRequest,
-} from './licenceApiClientTypes'
+} from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 
 export default class LicenceApiClient {

@@ -1,6 +1,7 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
-import type { Prisoner, PrisonerSearchCriteria } from './prisonerSearchApiClientTypes'
+import type { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
+import { PrisonerSearchByNomisIds } from '../@types/prisonerSearchApiClientTypes'
 
 export default class PrisonerSearchApiClient {
   restClient: RestClient
@@ -10,9 +11,16 @@ export default class PrisonerSearchApiClient {
   }
 
   async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria): Promise<Prisoner[]> {
-    return this.restClient.post({
+    return (await this.restClient.post({
       path: '/prisoner-search/match-prisoners',
       data: prisonerSearchCriteria,
-    }) as Promise<Prisoner[]>
+    })) as Promise<Prisoner[]>
+  }
+
+  async searchPrisonersByNomsIds(nomisIdsToSearch: PrisonerSearchByNomisIds): Promise<Prisoner[]> {
+    return (await this.restClient.post({
+      path: '/prisoner-search/prisoner-numbers',
+      data: nomisIdsToSearch,
+    })) as Promise<Prisoner[]>
   }
 }

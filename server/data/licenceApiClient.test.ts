@@ -13,7 +13,7 @@ import {
   BespokeConditionsRequest,
   ContactNumberRequest,
   LicenceApiTestData,
-} from './licenceApiClientTypes'
+} from '../@types/licenceApiClientTypes'
 import PersonName from '../routes/creatingLicences/types/personName'
 import Telephone from '../routes/creatingLicences/types/telephone'
 import { stringToAddressObject } from '../utils/utils'

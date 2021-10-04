@@ -4,6 +4,7 @@ import auth from '../mockApis/auth'
 import tokenVerification from '../mockApis/tokenVerification'
 import licence from '../mockApis/licence'
 import community from '../mockApis/community'
+import prison from '../mockApis/prisonerSearch'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
@@ -26,5 +27,7 @@ export default (on: (string, Record) => void): void => {
 
     stubGetStaffDetails: community.stubGetStaffDetails,
     stubGetManagedOffenders: community.stubGetManagedOffenders,
+
+    searchPrisonersByNomisIds: prison.searchPrisonersByNomisIds,
   })
 }

@@ -1,6 +1,6 @@
 import nock from 'nock'
 import config from '../config'
-import { CommunityApiStaffDetails, CommunityApiManagedOffender } from './communityClientTypes'
+import { CommunityApiStaffDetails, CommunityApiManagedOffender } from '../@types/communityClientTypes'
 import CommunityService from '../services/communityService'
 import HmppsAuthClient from './hmppsAuthClient'
 

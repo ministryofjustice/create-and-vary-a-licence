@@ -34,7 +34,7 @@ export default {
             offenderId: 2500368308,
             nomsNumber: 'G9786GC',
             crnNumber: 'X344165',
-            offenderSurname: 'Balasaravika',
+            offenderSurname: 'MCGUIRE',
             currentRo: false,
             currentOm: true,
             currentPom: false,

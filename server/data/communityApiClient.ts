@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
-import { CommunityApiStaffDetails, CommunityApiManagedOffender } from './communityClientTypes'
+import { CommunityApiStaffDetails, CommunityApiManagedOffender } from '../@types/communityClientTypes'
 import logger from '../../logger'
 
 export default class CommunityApiClient {
