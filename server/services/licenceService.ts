@@ -6,7 +6,7 @@ import {
   BespokeConditionsRequest,
   ContactNumberRequest,
   CreateLicenceRequest,
-  CreateLicenceResponse,
+  LicenceSummary,
   Licence,
   LicenceApiTestData,
 } from '../@types/licenceApiClientTypes'
@@ -27,7 +27,7 @@ export default class LicenceService {
     return new LicenceApiClient(token).getTestData()
   }
 
-  async createLicence(username: string): Promise<CreateLicenceResponse> {
+  async createLicence(username: string): Promise<LicenceSummary> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     // TODO construct with real licence data using prison and community APIs
     const licence = {
