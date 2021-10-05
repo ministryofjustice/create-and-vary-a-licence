@@ -18,6 +18,7 @@ export default class PrisonRegisterApiClient {
   async getPrisonOmuContactEmail(agencyId: string): Promise<string> {
     return this.restClient.get({
       path: `/secure/prisons/id/${agencyId}/offender-management-unit/email-address`,
+      responseType: 'text',
     }) as Promise<string>
   }
 }
