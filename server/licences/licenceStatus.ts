@@ -3,7 +3,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 type LicenceStatusConfig = {
   label: string
   description: string
-  colour: 'green' | 'blue' | 'red' | 'amber' | 'grey'
+  colour: 'green' | 'blue' | 'red' | 'amber' | 'grey' | 'yellow'
 }
 
 const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
@@ -36,6 +36,11 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     label: 'RECALLED',
     description: 'Recalled back to prison',
     colour: 'grey',
+  },
+  APPROVED: {
+    label: 'APPROVED',
+    description: 'Approved by prison',
+    colour: 'yellow',
   },
 }
 
