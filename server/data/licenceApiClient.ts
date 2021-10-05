@@ -2,7 +2,7 @@ import RestClient from './restClient'
 import type {
   ContactNumberRequest,
   CreateLicenceRequest,
-  CreateLicenceResponse,
+  LicenceSummary,
   Licence,
   LicenceApiTestData,
   AppointmentPersonRequest,
@@ -23,11 +23,11 @@ export default class LicenceApiClient {
     return (await this.restClient.get({ path: `/test/data` })) as Promise<LicenceApiTestData[]>
   }
 
-  async createLicence(licence: CreateLicenceRequest): Promise<CreateLicenceResponse> {
+  async createLicence(licence: CreateLicenceRequest): Promise<LicenceSummary> {
     return (await this.restClient.post({
       path: `/licence/create`,
       data: licence,
-    })) as Promise<CreateLicenceResponse>
+    })) as Promise<LicenceSummary>
   }
 
   async getLicenceById(licenceId: string): Promise<Licence> {
