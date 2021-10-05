@@ -32,6 +32,10 @@ export interface paths {
     /** Just a test API to verify that the full stack of components are working together */
     get: operations['getTestData']
   }
+  '/licence/staffId/{staffId}': {
+    /** Find licences associated with a supervising probation officer. Can be filtered by licence status. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getLicencesByStaffIdAndStatuses']
+  }
   '/licence/id/{licenceId}': {
     /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getLicenceById']
@@ -146,14 +150,22 @@ export interface components {
       /** The text of this standard condition */
       text?: string
     }
-    /** Response object for a created licence */
-    CreateLicenceResponse: {
+    /** Response object which summarises a licence */
+    LicenceSummary: {
       /** Internal identifier for this licence generated within this service */
       licenceId: number
       /** Licence type code */
       licenceType: 'AP' | 'AP_PSS' | 'PSS'
-      /** The status of this new licence after creation */
-      licenceStatus: 'IN_PROGRESS' | 'SUBMITTED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
+      /** The status of this licence */
+      licenceStatus: 'IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
+      /** The prison nomis identifier for this offender */
+      nomisId?: string
+      /** The offender surname */
+      surname?: string
+      /** The case reference number (CRN) of this person, from either prison or probation service */
+      crn?: string
+      /** The offender's date of birth, from either prison or probation services */
+      dateOfBirth?: string
     }
     /** Describes a test data object */
     TestData: {
@@ -207,7 +219,7 @@ export interface components {
       /** The version number used for standard and additional conditions */
       version?: string
       /** The current status code for this licence */
-      statusCode?: 'IN_PROGRESS' | 'SUBMITTED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
+      statusCode?: 'IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
       /** The prison identifier for the person on this licence */
       nomsId?: string
       /** The prison booking number for the person on this licence */
@@ -504,7 +516,7 @@ export interface operations {
       /** Licence created */
       200: {
         content: {
-          'application/json': components['schemas']['CreateLicenceResponse']
+          'application/json': components['schemas']['LicenceSummary']
         }
       }
       /** Unauthorised, requires a valid Oauth2 token */
@@ -533,6 +545,37 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['TestDataResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Find licences associated with a supervising probation officer. Can be filtered by licence status. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getLicencesByStaffIdAndStatuses: {
+    parameters: {
+      path: {
+        staffId: number
+      }
+      query: {
+        status?: ('IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED')[]
+      }
+    }
+    responses: {
+      /** Licence details returned */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary'][]
         }
       }
       /** Unauthorised, requires a valid Oauth2 token */

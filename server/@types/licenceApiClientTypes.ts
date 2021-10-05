@@ -6,6 +6,6 @@ export type AppointmentTimeRequest = components['schemas']['AppointmentTimeReque
 export type BespokeConditionsRequest = components['schemas']['BespokeConditionRequest']
 export type ContactNumberRequest = components['schemas']['ContactNumberRequest']
 export type CreateLicenceRequest = components['schemas']['CreateLicenceRequest']
-export type CreateLicenceResponse = components['schemas']['CreateLicenceResponse']
+export type LicenceSummary = components['schemas']['LicenceSummary']
 export type Licence = components['schemas']['Licence']
 export type LicenceApiTestData = components['schemas']['TestData']
