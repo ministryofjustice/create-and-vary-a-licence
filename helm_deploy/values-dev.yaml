@@ -16,6 +16,7 @@ generic-service:
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
     PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
     PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
+    PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
     EXIT_SURVEY_LINK: "https://eu.surveymonkey.com/r/Preview/?sm=CQIWAIrnp68aIE1_2BNn3aRSTf_2BXWLpL8B9mtgPre1TKl4OznrnkajcbEz6SvRvXwn"
     PHASE_BANNER_LINK: "https://eu.surveymonkey.com/r/Preview/?sm=CQIWAIrnp68aIE1_2BNn3aRSTf_2BXWLpL8B9mtgPre1TKl4OznrnkajcbEz6SvRvXwn"
 

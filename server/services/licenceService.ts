@@ -18,6 +18,7 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
 import Address from '../routes/creatingLicences/types/address'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
+import PrisonRegisterApiClient from '../data/prisonRegisterApiClient'
 
 export default class LicenceService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -29,7 +30,10 @@ export default class LicenceService {
 
   async createLicence(username: string): Promise<LicenceSummary> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    // TODO construct with real licence data using prison and community APIs
+
+    const prisonDto = await new PrisonRegisterApiClient(token).getPrisonDescription('LEI')
+
+    // TODO: construct with real licence data using prison and community APIs
     const licence = {
       typeCode: 'AP',
       version: '1.0',
@@ -39,8 +43,8 @@ export default class LicenceService {
       crn: 'X12344',
       pnc: '2014/12344A',
       cro: '2014/12344A',
-      prisonCode: 'MDI',
-      prisonDescription: 'Leeds (HMP)',
+      prisonCode: 'LEI',
+      prisonDescription: prisonDto?.prisonName ? prisonDto.prisonName : 'Not known',
       prisonTelephone: '+44 276 54545',
       forename: 'Adam',
       middleNames: 'Jason Kyle',
@@ -62,6 +66,7 @@ export default class LicenceService {
       probationLduCode: 'LDU1332',
       standardConditions: getStandardConditions(),
     } as CreateLicenceRequest
+
     return new LicenceApiClient(token).createLicence(licence)
   }
 
