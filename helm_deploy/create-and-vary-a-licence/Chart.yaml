@@ -11,6 +11,10 @@ dependencies:
     alias: gotenberg
     version: 1.0.10
     repository: https://ministryofjustice.github.io/hmpps-helm-charts
+  - name: generic-service
+    alias: delius-wiremock
+    version: 1.0.10
+    repository: https://ministryofjustice.github.io/hmpps-helm-charts
   - name: generic-prometheus-alerts
     version: 0.1.4
     repository: https://ministryofjustice.github.io/hmpps-helm-charts

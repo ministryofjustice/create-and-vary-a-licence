@@ -88,5 +88,45 @@ gotenberg:
     runAsUser: 1001
     runAsNonRoot: true
 
+delius-wiremock:
+  nameOverride: delius-wiremock
+  replicaCount: 2
+
+  image:
+    repository: smcveigh941/delius-wiremock
+    tag: latest
+    port: 5000
+
+  namespace_secrets:
+    create-and-vary-a-licence:
+      SYSTEM_CLIENT_ID: "SYSTEM_CLIENT_ID"
+      SYSTEM_CLIENT_SECRET: "SYSTEM_CLIENT_SECRET"
+
+  ingress:
+    enabled: false
+
+  livenessProbe:
+    httpGet:
+      path: /ping
+    periodSeconds: 30
+    initialDelaySeconds: 60
+    timeoutSeconds: 20
+    failureThreshold: 10
+
+  readinessProbe:
+    httpGet:
+      path: /ping
+    periodSeconds: 20
+    initialDelaySeconds: 60
+    timeoutSeconds: 30
+    failureThreshold: 15
+
+  podSecurityContext:
+    fsGroup: 1001
+
+  securityContext:
+    runAsUser: 1001
+    runAsNonRoot: true
+
 generic-prometheus-alerts:
   targetApplication: create-and-vary-a-licence
