@@ -48,11 +48,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             conditionalReleaseDate: '09/09/2022',
           },
-          {
-            name: 'Adam Balasaravika',
-            crnNumber: 'X344165',
-            conditionalReleaseDate: '03 August 2022',
-          },
         ],
       })
       expect(caseloadService.getStaffCaseload).toHaveBeenCalledWith('USER1')

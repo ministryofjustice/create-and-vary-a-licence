@@ -1,23 +1,14 @@
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
-import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
 import { ManagedCase } from '../@types/managedCase'
 
 export default class CaseloadService {
   constructor(private readonly prisonerService: PrisonerService, private readonly communityService: CommunityService) {}
 
   async getStaffCaseload(username: string): Promise<ManagedCase[]> {
-    // TODO: Change this - How should we handle the error for when users do not have an account in delius?
     // TODO Cache the result in redis
-    let managedOffenders: CommunityApiManagedOffender[]
-    try {
-      const { staffIdentifier } = await this.communityService.getStaffDetail(username)
-      managedOffenders = await this.communityService.getManagedOffenders(staffIdentifier)
-    } catch (e) {
-      if (e.status === 404) {
-        managedOffenders = []
-      }
-    }
+    const { staffIdentifier } = await this.communityService.getStaffDetail(username)
+    const managedOffenders = await this.communityService.getManagedOffenders(staffIdentifier)
 
     const caseloadNomisIds = managedOffenders
       .filter(offender => offender.currentOm)

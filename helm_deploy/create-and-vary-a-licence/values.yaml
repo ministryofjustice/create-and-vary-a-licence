@@ -107,7 +107,7 @@ delius-wiremock:
 
   livenessProbe:
     httpGet:
-      path: /ping
+      path: /actuator/health
     periodSeconds: 30
     initialDelaySeconds: 60
     timeoutSeconds: 20
@@ -115,7 +115,7 @@ delius-wiremock:
 
   readinessProbe:
     httpGet:
-      path: /ping
+      path: /actuator/health
     periodSeconds: 20
     initialDelaySeconds: 60
     timeoutSeconds: 30

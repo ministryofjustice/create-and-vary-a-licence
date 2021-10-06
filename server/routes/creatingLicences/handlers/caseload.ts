@@ -15,13 +15,6 @@ export default class CaseloadRoutes {
         conditionalReleaseDate: offender.conditionalReleaseDate,
       }
     })
-
-    // TODO: Remove the below stubbed case when we have set up users in delius with a real caseload
-    caseloadViewModel.push({
-      name: 'Adam Balasaravika',
-      crnNumber: 'X344165',
-      conditionalReleaseDate: '03 August 2022',
-    })
     res.render('pages/create/caseload', { caseload: caseloadViewModel })
   }
 

@@ -11,6 +11,16 @@ services:
     ports:
       - '6379:6379'
 
+  delius-wiremock:
+    container_name: delius-wiremock
+    image: smcveigh941/delius-wiremock
+    env_file:
+      - ./.env
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:5000/actuator/health' ]
+
   gotenberg:
     image: thecodingmachine/gotenberg:6.4.3
     networks:
