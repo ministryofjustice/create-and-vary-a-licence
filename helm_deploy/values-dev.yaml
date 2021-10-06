@@ -11,7 +11,7 @@ generic-service:
     INGRESS_URL: "https://create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
-    COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
+    # COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
     PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
     PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
@@ -22,6 +22,9 @@ generic-service:
 
     # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
     GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
+
+    # A temporary reference to a local container which provides a stubbed Delius caseload
+    COMMUNITY_API_URL: "http://create-and-vary-a-licence-delius-wiremock:5000"
 
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: "http://create-and-vary-a-licence"
@@ -36,6 +39,13 @@ gotenberg:
     GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
     DISABLE_UNOCONV: 1
     DEFAULT_WAIT_TIMEOUT: 30
+
+delius-wiremock:
+  replicaCount: 1
+
+  env:
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
 
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service-dev
