@@ -11,7 +11,7 @@ const userService = new UserService(hmppsAuthClient)
 const prisonerService = new PrisonerService(hmppsAuthClient)
 const licenceService = new LicenceService(hmppsAuthClient)
 const communityService = new CommunityService(hmppsAuthClient)
-const caseloadService = new CaseloadService(prisonerService, communityService)
+const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
 
 // TODO - Remove prisonerService and community service as exports
 // The following services should not be exported eventually (after spikes have been removed), they should only ever be consumed by the caseload service.

@@ -11,6 +11,7 @@ import type {
   BespokeConditionsRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
+import LicenceStatus from '../enumeration/licenceStatus'
 
 export default class LicenceApiClient {
   restClient: RestClient
@@ -52,5 +53,15 @@ export default class LicenceApiClient {
 
   async updateBespokeConditions(licenceId: string, bespokeConditions: BespokeConditionsRequest): Promise<void> {
     await this.restClient.put({ path: `/licence/id/${licenceId}/bespoke-conditions`, data: bespokeConditions })
+  }
+
+  async getLicencesByStaffIdAndStatus(staffId: number, statuses: LicenceStatus[]): Promise<LicenceSummary[]> {
+    const queryParameters: string[] = []
+    statuses.forEach(status => {
+      queryParameters.push(`status=${status}`)
+    })
+    return (await this.restClient.get({
+      path: `/licence/staffId/${staffId}${queryParameters.length > 0 ? `?${queryParameters.join('&')}` : ''}`,
+    })) as LicenceSummary[]
   }
 }
