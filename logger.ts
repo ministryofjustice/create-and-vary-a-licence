@@ -3,6 +3,6 @@ import bunyanFormat from 'bunyan-format'
 
 const formatOut = bunyanFormat({ outputMode: 'short', color: true })
 
-const logger = bunyan.createLogger({ name: 'Create And Vary A Licence', stream: formatOut, level: 'debug' })
+const logger = bunyan.createLogger({ name: 'Create and vary a licence', stream: formatOut, level: 'debug' })
 
 export default logger
