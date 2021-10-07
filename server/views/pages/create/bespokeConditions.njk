@@ -14,46 +14,29 @@
             <h1 class="govuk-heading-l">Create bespoke conditions for {{ licence.forename }} {{ licence.surname }}</h1>
         </div>
     </div>
+
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <div data-module="moj-add-another">
-                    {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
-                        {# Show the existing bespoke conditions #}
-                        {% if conditions and conditions.length > 0 %}
-                            {%  for c in conditions %}
-                                {{ govukTextarea({
-                                    id: 'conditions['+ loop.index + ']',
-                                    name: 'conditions[' + loop.index + ']',
-                                    label: {
-                                        html: 'Bespoke condition',
-                                        classes: 'govuk-visually-hidden'
-                                    },
-                                    attributes: {
-                                        'data-name': 'conditions[%index%]',
-                                        'data-id': 'conditions[%index%]'
-                                    },
-                                    value: c
-                                }) }}
-                            {% endfor  %}
-                        {%  else %}
-                            {# Show an empty text area to accept a new condition #}
-                            {{ govukTextarea({
-                                id: 'conditions[0]',
-                                name: 'conditions[0]',
-                                label: {
-                                    html: 'Bespoke condition',
-                                    classes: 'govuk-visually-hidden'
-                                },
-                                attributes: {
-                                    'data-name': 'conditions[%index%]',
-                                    'data-id': 'conditions[%index%]'
-                                }
-                            }) }}
-                        {% endif %}
+                    <h2 class="moj-add-another__heading govuk-visually-hidden" tabindex="-1">Bespoke conditions</h2>
 
-                    {% endcall %}
+                    {% if conditions and conditions.length > 0 %}
+                        {% set counter = 0 %}
+                        {% for c in conditions %}
+                            {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
+                                {{  bespokeCondition(counter, c) }}
+                                <button type="button" class="govuk-button govuk-button--secondary moj-add-another__remove-button">Remove</button>
+                            {% endcall %}
+                            {%  set counter = counter + 1 %}
+                        {% endfor %}
+                    {% else %}
+                        {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
+                            {{  bespokeCondition(0, '') }}
+                        {% endcall %}
+                    {% endif %}
 
                     <div class="moj-button-action">
                         {{ govukButton({
@@ -63,7 +46,11 @@
                         }) }}
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
                 {{ govukButton({
                     text: "Continue",
                     type: "submit",
@@ -71,5 +58,22 @@
                 }) }}
             </div>
         </div>
+
     </form>
 {% endblock %}
+
+{% macro bespokeCondition(conditionIndex, conditionValue) %}
+    {{ govukTextarea({
+        id: 'conditions['+ conditionIndex + ']',
+        name: 'conditions[' + conditionIndex + ']',
+        label: {
+            html: 'Bespoke condition',
+            classes: 'govuk-visually-hidden'
+        },
+        attributes: {
+            'data-name': 'conditions[%index%]',
+            'data-id': 'conditions[%index%]'
+        },
+        value: conditionValue
+    }) }}
+{% endmacro %}
