@@ -17,6 +17,7 @@ import {
 import PersonName from '../routes/creatingLicences/types/personName'
 import Telephone from '../routes/creatingLicences/types/telephone'
 import { stringToAddressObject } from '../utils/utils'
+import LicenceStatus from '../enumeration/licenceStatus'
 
 jest.mock('./hmppsAuthClient')
 
@@ -159,6 +160,32 @@ describe('Licence API client tests', () => {
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
+    })
+  })
+
+  describe('Caseload information', () => {
+    it('should make request to get licences by staff ID for any status', async () => {
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/licence/staffId/2000').reply(200)
+      await licenceService.getLicencesByStaffIdAndStatus(2000, username, [])
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+
+    it('should make request to get licences by staff ID for a single status', async () => {
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/licence/staffId/2000?status=ACTIVE').reply(200)
+      await licenceService.getLicencesByStaffIdAndStatus(2000, username, [LicenceStatus.ACTIVE])
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+
+    it('should make request to get licences by staff ID for multiple statuses', async () => {
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/licence/staffId/2000?status=ACTIVE&status=INACTIVE').reply(200)
+      await licenceService.getLicencesByStaffIdAndStatus(2000, username, [LicenceStatus.ACTIVE, LicenceStatus.INACTIVE])
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
     })
   })
 })

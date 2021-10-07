@@ -142,4 +142,23 @@ export default {
       },
     })
   },
+
+  stubGetLicencesByStaffIdAndStatus: (staffId: number): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/licence/staffId/${staffId}`,
+        queryParameters: {
+          status: {
+            matches: '.*',
+          },
+        },
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [],
+      },
+    })
+  },
 }
