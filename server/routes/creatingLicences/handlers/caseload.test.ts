@@ -6,7 +6,7 @@ import CaseloadService from '../../../services/caseloadService'
 import { ManagedCase } from '../../../@types/managedCase'
 
 const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
-const caseloadService = new CaseloadService(null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/caseloadService')

@@ -12,8 +12,10 @@ services:
       - '6379:6379'
 
   delius-wiremock:
-    container_name: delius-wiremock
     image: smcveigh941/delius-wiremock
+    networks:
+      - hmpps
+    container_name: delius-wiremock
     env_file:
       - ./.env
     ports:

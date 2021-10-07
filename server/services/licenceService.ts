@@ -19,6 +19,7 @@ import Telephone from '../routes/creatingLicences/types/telephone'
 import Address from '../routes/creatingLicences/types/address'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 import PrisonRegisterApiClient from '../data/prisonRegisterApiClient'
+import LicenceStatus from '../enumeration/licenceStatus'
 
 export default class LicenceService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -109,6 +110,15 @@ export default class LicenceService {
     const sanitised = formData.conditions.filter((c: string) => c !== null && c.length > 0)
     const requestBody = { conditions: sanitised } as BespokeConditionsRequest
     return new LicenceApiClient(token).updateBespokeConditions(id, requestBody)
+  }
+
+  async getLicencesByStaffIdAndStatus(
+    staffId: number,
+    username: string,
+    statuses: LicenceStatus[]
+  ): Promise<LicenceSummary[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    return new LicenceApiClient(token).getLicencesByStaffIdAndStatus(staffId, statuses)
   }
 
   getLicenceStub(): Record<string, unknown> {
