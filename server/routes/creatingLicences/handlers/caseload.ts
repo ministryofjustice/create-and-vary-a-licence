@@ -13,6 +13,7 @@ export default class CaseloadRoutes {
       return {
         name: [offender.firstName, offender.lastName].join(' '),
         crnNumber: offender.crnNumber,
+        prisonerNumber: offender.prisonerNumber,
         conditionalReleaseDate: moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').format('Do MMMM YYYY'),
       }
     })
@@ -21,7 +22,8 @@ export default class CaseloadRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { username } = res.locals.user
-    const { licenceId } = await this.licenceService.createLicence(username)
+    const { prisonerNumber } = req.body
+    const { licenceId } = await this.licenceService.createLicence(prisonerNumber, username)
     res.redirect(`/licence/create/id/${licenceId}/initial-meeting-name`)
   }
 }

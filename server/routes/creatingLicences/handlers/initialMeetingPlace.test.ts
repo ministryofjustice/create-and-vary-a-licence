@@ -4,7 +4,7 @@ import InitialMeetingPlaceRoutes from './initialMeetingPlace'
 import LicenceService from '../../../services/licenceService'
 import Address from '../types/address'
 
-const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
   const handler = new InitialMeetingPlaceRoutes(licenceService)

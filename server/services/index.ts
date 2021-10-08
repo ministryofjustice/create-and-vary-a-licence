@@ -5,12 +5,14 @@ import CommunityService from './communityService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import TokenStore from '../data/tokenStore'
 import CaseloadService from './caseloadService'
+import PrisonRegisterService from './prisonRegisterService'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
 const prisonerService = new PrisonerService(hmppsAuthClient)
-const licenceService = new LicenceService(hmppsAuthClient)
+const prisonRegisterService = new PrisonRegisterService(hmppsAuthClient)
 const communityService = new CommunityService(hmppsAuthClient)
+const licenceService = new LicenceService(hmppsAuthClient, prisonerService, communityService, prisonRegisterService)
 const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
 
 // TODO - Remove prisonerService and community service as exports

@@ -18,21 +18,28 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
 import Address from '../routes/creatingLicences/types/address'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
-import PrisonRegisterApiClient from '../data/prisonRegisterApiClient'
 import LicenceStatus from '../enumeration/licenceStatus'
+import PrisonRegisterService from './prisonRegisterService'
+import PrisonerService from './prisonerService'
+import CommunityService from './communityService'
 
 export default class LicenceService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+  constructor(
+    private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly prisonerService: PrisonerService,
+    private readonly communityService: CommunityService,
+    private readonly prisonRegisterService: PrisonRegisterService
+  ) {}
 
   async getTestData(username: string): Promise<LicenceApiTestData[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return new LicenceApiClient(token).getTestData()
   }
 
-  async createLicence(username: string): Promise<LicenceSummary> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-
-    const prisonDto = await new PrisonRegisterApiClient(token).getPrisonDescription('LEI')
+  async createLicence(prisonerNumber: string, username: string): Promise<LicenceSummary> {
+    const nomisRecord = await this.prisonerService.getPrisonerDetail(username, prisonerNumber)
+    const deliusRecord = await this.communityService.searchProbationers({ nomsNumber: prisonerNumber })
+    const prisonInformation = await this.prisonRegisterService.getPrisonDescription(username, 'LEI')
 
     // TODO: construct with real licence data using prison and community APIs
     const licence = {
@@ -45,7 +52,7 @@ export default class LicenceService {
       pnc: '2014/12344A',
       cro: '2014/12344A',
       prisonCode: 'LEI',
-      prisonDescription: prisonDto?.prisonName ? prisonDto.prisonName : 'Not known',
+      prisonDescription: prisonInformation?.prisonName ? prisonInformation.prisonName : 'Not known',
       prisonTelephone: '+44 276 54545',
       forename: 'Adam',
       middleNames: 'Jason Kyle',
@@ -68,6 +75,7 @@ export default class LicenceService {
       standardConditions: getStandardConditions(),
     } as CreateLicenceRequest
 
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return new LicenceApiClient(token).createLicence(licence)
   }
 
