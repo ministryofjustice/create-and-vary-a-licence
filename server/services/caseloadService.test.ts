@@ -336,4 +336,68 @@ describe('Caseload Service', () => {
       LicenceStatus.RECALLED,
     ])
   })
+
+  it('should sort offenders by conditional release date ascending', async () => {
+    communityService.getManagedOffenders.mockResolvedValue([
+      {
+        nomsNumber: '1',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '2',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '3',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '4',
+        currentOm: true,
+      },
+    ] as CommunityApiManagedOffender[])
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+      { prisonerNumber: '1', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2022-04-30' },
+      { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2024-04-30' },
+      { prisonerNumber: '3', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2021-04-30' },
+      { prisonerNumber: '4', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-04-30' },
+    ] as Prisoner[])
+
+    const caseload = await caseloadService.getStaffCaseload('USER1')
+
+    expect(caseload).toStrictEqual([
+      {
+        nomsNumber: '3',
+        prisonerNumber: '3',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2021-04-30',
+      },
+      {
+        nomsNumber: '1',
+        prisonerNumber: '1',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2022-04-30',
+      },
+      {
+        nomsNumber: '4',
+        prisonerNumber: '4',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-04-30',
+      },
+      {
+        nomsNumber: '2',
+        prisonerNumber: '2',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2024-04-30',
+      },
+    ])
+  })
 })

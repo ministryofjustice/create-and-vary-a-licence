@@ -33,7 +33,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         crnNumber: 'X381306',
         firstName: 'Joe',
         lastName: 'Rogan',
-        conditionalReleaseDate: '09/09/2022',
+        conditionalReleaseDate: '2022-10-12',
       },
     ] as unknown as ManagedCase[])
   })
@@ -46,7 +46,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             name: 'Joe Rogan',
             crnNumber: 'X381306',
-            conditionalReleaseDate: '09/09/2022',
+            conditionalReleaseDate: '12th October 2022',
           },
         ],
       })

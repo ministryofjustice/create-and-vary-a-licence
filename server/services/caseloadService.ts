@@ -50,11 +50,16 @@ export default class CaseloadService {
       .filter(offender => !offender.paroleEligibilityDate)
       .filter(offender => offender.legalStatus !== 'DEAD')
       .filter(offender => offender.status && offender.status.startsWith('ACTIVE'))
-      .filter(offender => !offender.releaseDate || moment().isBefore(moment(offender.releaseDate, 'yyyy-MM-DD')))
+      .filter(offender => !offender.releaseDate || moment().isBefore(moment(offender.releaseDate, 'YYYY-MM-DD')))
       .filter(offender => !offender.homeDetentionCurfewEndDate)
       .filter(offender => {
         const existingLicence = existingLicences.find(licence => licence.nomisId === offender.nomsNumber)
         return !existingLicence
+      })
+      .sort((a, b) => {
+        const crd1 = moment(a.conditionalReleaseDate, 'YYYY-MM-DD').unix()
+        const crd2 = moment(b.conditionalReleaseDate, 'YYYY-MM-DD').unix()
+        return crd1 - crd2
       })
   }
 }
