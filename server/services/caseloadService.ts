@@ -46,10 +46,10 @@ export default class CaseloadService {
         } as ManagedCase
       })
       .filter(offender => offender)
-      .filter(offender => !offender.indeterminateSentence)
       .filter(offender => !offender.paroleEligibilityDate)
       .filter(offender => offender.legalStatus !== 'DEAD')
       .filter(offender => offender.status && offender.status.startsWith('ACTIVE'))
+      .filter(offender => !offender.indeterminateSentence && offender.conditionalReleaseDate)
       .filter(offender => !offender.releaseDate || moment().isBefore(moment(offender.releaseDate, 'YYYY-MM-DD')))
       .filter(offender => !offender.homeDetentionCurfewEndDate)
       .filter(offender => {
