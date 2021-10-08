@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import moment from 'moment'
 import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
 
@@ -12,7 +13,7 @@ export default class CaseloadRoutes {
       return {
         name: [offender.firstName, offender.lastName].join(' '),
         crnNumber: offender.crnNumber,
-        conditionalReleaseDate: offender.conditionalReleaseDate,
+        conditionalReleaseDate: moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').format('Do MMMM YYYY'),
       }
     })
     res.render('pages/create/caseload', { caseload: caseloadViewModel })
