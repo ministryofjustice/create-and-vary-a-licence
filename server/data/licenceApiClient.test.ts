@@ -13,6 +13,7 @@ import {
   BespokeConditionsRequest,
   ContactNumberRequest,
   LicenceApiTestData,
+  StatusUpdateRequest,
 } from '../@types/licenceApiClientTypes'
 import PersonName from '../routes/creatingLicences/types/personName'
 import Telephone from '../routes/creatingLicences/types/telephone'
@@ -186,6 +187,43 @@ describe('Licence API client tests', () => {
       await licenceService.getLicencesByStaffIdAndStatus(2000, username, [LicenceStatus.ACTIVE, LicenceStatus.INACTIVE])
       expect(nock.isDone()).toBe(true)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+  })
+
+  describe('Licence status updates', () => {
+    describe('Approved', () => {
+      const statusUpdateRequest = { status: LicenceStatus.APPROVED, username } as StatusUpdateRequest
+      it('Update the licence to APPROVED', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/status', statusUpdateRequest).reply(200)
+        await licenceService.updateStatus('1', LicenceStatus.APPROVED, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+
+    describe('Rejected', () => {
+      const statusUpdateRequest = { status: LicenceStatus.REJECTED, username } as StatusUpdateRequest
+      it('Update the licence to REJECTED', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/status', statusUpdateRequest).reply(200)
+        await licenceService.updateStatus('1', LicenceStatus.REJECTED, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+  })
+
+  describe('Get licences for approval', () => {
+    describe('List licences for approval in my prison caseload', () => {
+      const prisonCaseload = ['LEI', 'MDI']
+      it('Get approval cases in my prison caseload', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.get('/licence/approval-candidates?prison=LEI&prison=MDI').reply(200)
+        await licenceService.getLicencesForApproval(username, prisonCaseload)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
     })
   })
 })
