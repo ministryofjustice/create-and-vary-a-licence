@@ -11,7 +11,7 @@ import {
   LicenceApiTestData,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
-import { getStandardConditions } from '../utils/conditionsProvider'
+import { getStandardConditions, getVersion } from '../utils/conditionsProvider'
 import { simpleDateTimeToJson, addressObjectToString, convertToTitleCase, convertDateFormat } from '../utils/utils'
 import PersonName from '../routes/creatingLicences/types/personName'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
@@ -44,7 +44,7 @@ export default class LicenceService {
 
     const licence = {
       typeCode: 'AP',
-      version: '1.0',
+      version: getVersion(),
       nomsId: prisonerNumber,
       bookingNo: nomisRecord.bookingNo,
       bookingId: nomisRecord.bookingId,
@@ -79,7 +79,7 @@ export default class LicenceService {
       crn: deliusRecord.otherIds?.crn,
       pnc: deliusRecord.otherIds?.pncNumber,
       cro: deliusRecord.otherIds?.croNumber,
-      standardConditions: getStandardConditions(),
+      standardConditions: getStandardConditions('AP'),
     } as CreateLicenceRequest
 
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
