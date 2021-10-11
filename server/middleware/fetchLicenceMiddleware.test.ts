@@ -8,7 +8,7 @@ jest.mock('../services/licenceService')
 const req = {} as Request
 const res = { locals: { user: { username: '' } } } as unknown as Response
 const next = jest.fn()
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 
 const middleware = fetchLicence(licenceService)
 

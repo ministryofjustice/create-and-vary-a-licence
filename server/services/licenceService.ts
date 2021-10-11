@@ -19,7 +19,6 @@ import Telephone from '../routes/creatingLicences/types/telephone'
 import Address from '../routes/creatingLicences/types/address'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
-import PrisonRegisterService from './prisonRegisterService'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
 
@@ -27,8 +26,7 @@ export default class LicenceService {
   constructor(
     private readonly hmppsAuthClient: HmppsAuthClient,
     private readonly prisonerService: PrisonerService,
-    private readonly communityService: CommunityService,
-    private readonly prisonRegisterService: PrisonRegisterService
+    private readonly communityService: CommunityService
   ) {}
 
   async getTestData(username: string): Promise<LicenceApiTestData[]> {
