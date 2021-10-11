@@ -2,7 +2,7 @@ import { Readable } from 'stream'
 import type HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
-import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
+import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 
 export default class PrisonerService {
@@ -16,6 +16,11 @@ export default class PrisonerService {
   async getPrisonerDetail(username: string, nomsId: string): Promise<PrisonApiPrisoner> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return new PrisonApiClient(token).getPrisonerDetail(nomsId)
+  }
+
+  async getPrisonInformation(username: string, prisonId: string): Promise<PrisonInformation> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    return new PrisonApiClient(token).getPrisonInformation(prisonId)
   }
 
   async searchPrisoners(username: string, prisonerSearchCriteria: PrisonerSearchCriteria): Promise<Prisoner[]> {

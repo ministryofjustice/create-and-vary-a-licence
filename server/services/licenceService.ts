@@ -12,7 +12,7 @@ import {
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getStandardConditions } from '../utils/conditionsProvider'
-import { simpleDateTimeToJson, addressObjectToString } from '../utils/utils'
+import { simpleDateTimeToJson, addressObjectToString, convertToTitleCase, convertDateFormat } from '../utils/utils'
 import PersonName from '../routes/creatingLicences/types/personName'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
@@ -37,41 +37,50 @@ export default class LicenceService {
   }
 
   async createLicence(prisonerNumber: string, username: string): Promise<LicenceSummary> {
+    const staffDetail = await this.communityService.getStaffDetail(username)
     const nomisRecord = await this.prisonerService.getPrisonerDetail(username, prisonerNumber)
-    const deliusRecord = await this.communityService.searchProbationers({ nomsNumber: prisonerNumber })
-    const prisonInformation = await this.prisonRegisterService.getPrisonDescription(username, 'LEI')
+    const deliusRecord = await this.communityService.getProbationer(prisonerNumber)
+    const prisonInformation = await this.prisonerService.getPrisonInformation(username, nomisRecord.agencyId)
 
-    // TODO: construct with real licence data using prison and community APIs
+    const offenderManager = deliusRecord.offenderManagers.find(om => om.active)
+
     const licence = {
       typeCode: 'AP',
       version: '1.0',
-      nomsId: Math.floor(Math.random() * 900000 + 100).toString(), // Generate random nomsId for now ... should be unique ID from nomis later
-      bookingNo: '12334',
-      bookingId: 87666,
-      crn: 'X12344',
-      pnc: '2014/12344A',
-      cro: '2014/12344A',
-      prisonCode: 'LEI',
-      prisonDescription: prisonInformation?.prisonName ? prisonInformation.prisonName : 'Not known',
-      prisonTelephone: '+44 276 54545',
-      forename: 'Adam',
-      middleNames: 'Jason Kyle',
-      surname: 'Balasaravika',
-      dateOfBirth: '14/09/2021',
-      conditionalReleaseDate: '14/09/2021',
-      actualReleaseDate: '14/09/2021',
-      sentenceStartDate: '14/09/2021',
-      sentenceEndDate: '14/09/2021',
-      licenceStartDate: '14/09/2021',
-      licenceExpiryDate: '14/09/2021',
-      comFirstName: 'Paula',
-      comLastName: 'Wells',
-      comUsername: 'X1233',
-      comStaffId: 44553343,
-      comEmail: 'paula.wells@northeast.probation.gov.uk',
-      comTelephone: '07876 443554',
-      probationAreaCode: 'N01',
-      probationLduCode: 'LDU1332',
+      nomsId: prisonerNumber,
+      bookingNo: nomisRecord.bookingNo,
+      bookingId: nomisRecord.bookingId,
+      prisonCode: nomisRecord.agencyId,
+      prisonDescription: prisonInformation.formattedDescription || 'Not known',
+      prisonTelephone: [
+        prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
+        prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
+      ].join(' '),
+      forename: convertToTitleCase(nomisRecord.firstName),
+      middleNames: convertToTitleCase(nomisRecord.middleName),
+      surname: convertToTitleCase(nomisRecord.lastName),
+      dateOfBirth: convertDateFormat(nomisRecord.dateOfBirth),
+      conditionalReleaseDate:
+        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseOverrideDate) ||
+        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseDate),
+      actualReleaseDate: convertDateFormat(nomisRecord.sentenceDetail?.releaseDate),
+      sentenceStartDate: convertDateFormat(nomisRecord.sentenceDetail?.sentenceStartDate),
+      sentenceEndDate: convertDateFormat(nomisRecord.sentenceDetail?.effectiveSentenceEndDate),
+      licenceStartDate:
+        convertDateFormat(nomisRecord.sentenceDetail?.releaseDate) ||
+        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseOverrideDate) ||
+        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseDate),
+      licenceExpiryDate: convertDateFormat(nomisRecord.sentenceDetail?.licenceExpiryDate),
+      comUsername: staffDetail.username,
+      comStaffId: staffDetail.staffIdentifier,
+      comEmail: staffDetail.email,
+      comFirstName: offenderManager?.staff?.forenames,
+      comLastName: offenderManager?.staff?.surname,
+      probationAreaCode: offenderManager?.probationArea?.code,
+      probationLduCode: offenderManager?.team?.localDeliveryUnit?.code,
+      crn: deliusRecord.otherIds?.crn,
+      pnc: deliusRecord.otherIds?.pncNumber,
+      cro: deliusRecord.otherIds?.croNumber,
       standardConditions: getStandardConditions(),
     } as CreateLicenceRequest
 
