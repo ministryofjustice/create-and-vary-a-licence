@@ -148,11 +148,6 @@ export default {
       request: {
         method: 'GET',
         urlPathPattern: `/licence/staffId/${staffId}`,
-        queryParameters: {
-          status: {
-            matches: '.*',
-          },
-        },
       },
       response: {
         status: 200,

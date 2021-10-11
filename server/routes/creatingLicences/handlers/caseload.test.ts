@@ -75,6 +75,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           },
         },
       } as unknown as Response
+      licenceService.getLicencesByStaffIdAndStatus.mockResolvedValue([])
     })
 
     it('should create a licence and redirect to the initial meeting screen', async () => {

@@ -49,11 +49,6 @@ export default class LicenceService {
       bookingNo: nomisRecord.bookingNo,
       bookingId: nomisRecord.bookingId,
       prisonCode: nomisRecord.agencyId,
-      prisonDescription: prisonInformation.formattedDescription || 'Not known',
-      prisonTelephone: [
-        prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
-        prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
-      ].join(' '),
       forename: convertToTitleCase(nomisRecord.firstName),
       middleNames: convertToTitleCase(nomisRecord.middleName),
       surname: convertToTitleCase(nomisRecord.lastName),
@@ -69,6 +64,11 @@ export default class LicenceService {
         convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseOverrideDate) ||
         convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseDate),
       licenceExpiryDate: convertDateFormat(nomisRecord.sentenceDetail?.licenceExpiryDate),
+      prisonDescription: prisonInformation.formattedDescription || 'Not known',
+      prisonTelephone: [
+        prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
+        prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
+      ].join(' '),
       comUsername: staffDetail.username,
       comStaffId: staffDetail.staffIdentifier,
       comEmail: staffDetail.email,
