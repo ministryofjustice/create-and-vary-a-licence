@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
+import LicenceStatus from '../../../enumeration/licenceStatus'
 
 jest.mock('../../../services/licenceService')
 
@@ -15,7 +16,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   beforeEach(() => {
     req = {
       params: {
-        licenceId: 1,
+        licenceId: '1',
+      },
+      user: {
+        username: 'joebloggs',
       },
     } as unknown as Request
 
@@ -47,6 +51,11 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   })
 
   describe('POST', () => {
+    it('should call the licence API to update the status of the licence', async () => {
+      await handler.POST(req, res)
+      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.SUBMITTED, 'joebloggs')
+    })
+
     it('should redirect to the confirmation page', async () => {
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/confirmation')

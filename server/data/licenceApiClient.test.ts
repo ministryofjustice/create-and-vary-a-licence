@@ -164,6 +164,18 @@ describe('Licence API client tests', () => {
     })
   })
 
+  describe('Update licence status', () => {
+    const statusUpdateRequest = { status: LicenceStatus.SUBMITTED, username } as StatusUpdateRequest
+
+    it('should call the PUT endpoint to update the licence status', async () => {
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.put('/licence/id/1/status', statusUpdateRequest).reply(200)
+      await licenceService.updateStatus('1', LicenceStatus.SUBMITTED, username)
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+  })
+
   describe('Caseload information', () => {
     it('should make request to get licences by staff ID for any status', async () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
