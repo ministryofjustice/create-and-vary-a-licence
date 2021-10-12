@@ -35,10 +35,12 @@ export default class LicenceService {
   }
 
   async createLicence(prisonerNumber: string, username: string): Promise<LicenceSummary> {
-    const staffDetail = await this.communityService.getStaffDetail(username)
     const nomisRecord = await this.prisonerService.getPrisonerDetail(username, prisonerNumber)
-    const deliusRecord = await this.communityService.getProbationer(prisonerNumber)
-    const prisonInformation = await this.prisonerService.getPrisonInformation(username, nomisRecord.agencyId)
+    const [staffDetail, deliusRecord, prisonInformation] = await Promise.all([
+      this.communityService.getStaffDetail(username),
+      this.communityService.getProbationer(prisonerNumber),
+      this.prisonerService.getPrisonInformation(username, nomisRecord.agencyId),
+    ])
 
     const offenderManager = deliusRecord.offenderManagers.find(om => om.active)
 
