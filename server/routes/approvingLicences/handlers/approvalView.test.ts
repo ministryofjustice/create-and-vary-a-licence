@@ -41,10 +41,7 @@ describe('Route - view and approve a licence', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
-        appointmentDate: '12/12/2022',
-        appointmentTime: '14:16',
-      })
+      expect(res.render).toHaveBeenCalledWith('pages/approve/view')
     })
 
     it('should check status is SUBMITTED else redirect to case list', async () => {
@@ -73,19 +70,12 @@ describe('Route - view and approve a licence', () => {
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
-      locals: {
-        user: {
-          username,
-        },
-      },
+      locals: { user: { username } },
     } as unknown as Response
 
     it('should approve a licence', async () => {
       req = {
-        body: {
-          licenceId: '1',
-          result: 'approve',
-        },
+        body: { licenceId: '1', result: 'approve' },
       } as unknown as Request
 
       await handler.POST(req, res)
@@ -95,11 +85,9 @@ describe('Route - view and approve a licence', () => {
 
     it('should reject a licence', async () => {
       req = {
-        body: {
-          licenceId: '1',
-          result: 'reject',
-        },
+        body: { licenceId: '1', result: 'reject' },
       } as unknown as Request
+
       await handler.POST(req, res)
       expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.REJECTED, username)
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/id/1/confirm-rejected')

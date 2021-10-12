@@ -12,7 +12,7 @@
     {% set licences = (licences.push([
         {
             attributes: { id: 'name-' + loop.index },
-            html: '<h2 class="govuk-heading-m govuk-!-margin-bottom-3">' + case.forename + ' ' + case.surname + '</h2>'
+            html: '<h2 class="govuk-heading-s govuk-!-margin-bottom-1">' + case.forename + ' ' + case.surname + '</h2>'
         },
         {
             attributes: { id: 'nomis-id-' + loop.index },
@@ -24,7 +24,7 @@
         },
         {
             attributes: { id: 'conditional-release-date-' + loop.index },
-            text: case.conditionalReleaseDate
+            text: case.conditionalReleaseDate | datetimeToDate
         },
         {
             html: govukButton({
@@ -48,17 +48,27 @@
 
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
         {{ govukTable({
             caption: "Cases for approval",
             captionClasses: "govuk-visually-hidden",
             head: [
-                { text: "Name" },
-                { text: "Nomis ID" },
-                { text: "Prison" },
-                { text: "Conditional release date" },
-                { text: '' }
+              { text: "Name" },
+              { text: "Nomis ID" },
+              { text: "Prison" },
+              { text: "Conditional release date" },
+              { text: '' }
             ],
             rows: licences
         }) }}
+
+        {% if licences.length === 0 %}
+          <div class="govuk-grid-row">
+              <div class="govuk-grid-column-three-quarters">
+                 <h3 class="govuk-heading-s">There are no licences to approve</h3>
+              </div>
+          </div>
+        {% endif %}
+
     </form>
 {% endblock %}

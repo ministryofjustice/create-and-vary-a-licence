@@ -16,7 +16,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
 
-            {{ inductionMeetingDetails(licence, appointmentDate, appointmentTime) }}
+            {{ inductionMeetingDetails(licence) }}
 
             {{ additionalConditions(licence) }}
 
@@ -100,7 +100,7 @@
     }) }}
 {% endmacro %}
 
-{%  macro inductionMeetingDetails(licence, appointmentDate, appointmentTime) %}
+{%  macro inductionMeetingDetails(licence) %}
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
             <h2 class="govuk-heading-m">Induction meeting details</h2>
@@ -125,11 +125,11 @@
             },
             {
                 key: { text: "Date" },
-                value: { text: appointmentDate }
+                value: { text: licence.appointmentTime | datetimeToDate }
             },
             {
                 key: { text: "Time" },
-                value: { text: appointmentTime }
+                value: { text: licence.appointmentTime | datetimeTo12HourTime }
             }
         ]
     }) }}

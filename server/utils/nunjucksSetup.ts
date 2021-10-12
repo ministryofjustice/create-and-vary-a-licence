@@ -4,6 +4,7 @@ import express from 'express'
 import path from 'path'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
+import { jsonDtTo12HourTime, jsonDtToDate } from './utils'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -85,6 +86,14 @@ export function registerNunjucks(app?: express.Express): Environment {
       return overrideValue
     }
     return defaultValue
+  })
+
+  njkEnv.addFilter('datetimeToDate', (dt: string) => {
+    return jsonDtToDate(dt)
+  })
+
+  njkEnv.addFilter('datetimeTo12HourTime', (dt: string) => {
+    return jsonDtTo12HourTime(dt)
   })
 
   return njkEnv

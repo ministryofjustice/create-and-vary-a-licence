@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
-// import logger from '../../../../logger'
 
 export default class ApprovalCaseRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
@@ -16,6 +15,7 @@ export default class ApprovalCaseRoutes {
     // const prisonCaseload = await this prisonerService.getPrisonCaseload()
 
     const cases = await this.licenceService.getLicencesForApproval(username, prisonCaseload)
+
     const caseViewModel = cases.map(licence => {
       return {
         licenceId: licence.licenceId,
@@ -33,7 +33,6 @@ export default class ApprovalCaseRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.body
-    // logger.info(`Body of post = ${JSON.stringify(req.body)}`)
     res.redirect(`/licence/approve/id/${licenceId}/view`)
   }
 }

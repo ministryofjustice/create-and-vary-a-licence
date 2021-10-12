@@ -6,6 +6,8 @@ import {
   jsonToSimpleDateTime,
   simpleDateTimeToJson,
   stringToAddressObject,
+  jsonDtTo12HourTime,
+  jsonDtToDate,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -156,5 +158,44 @@ test.each`
     expect(jsonDt).toEqual(jsonDateTime)
   } else {
     expect(jsonDt).toBeUndefined()
+  }
+})
+
+test.each`
+  jsonDateTime          | time12Hour
+  ${'12/12/2021 23:15'} | ${'11 15 pm'}
+  ${'31/01/2022 12:01'} | ${'12 01 pm'}
+  ${'31/12/2022 12:00'} | ${'12 00 pm'}
+  ${'31/12/2022 00:00'} | ${'12 00 am'}
+  ${'01/01/2022 01:01'} | ${'01 01 am'}
+  ${'22/10/2024 14:23'} | ${'02 23 pm'}
+  ${'22/10/24 14:23'}   | ${'02 23 pm'}
+  ${'null'}             | ${'null'}
+`('convert JSON datetime to 12 hour time value', ({ jsonDateTime, time12Hour }) => {
+  const timeValue = jsonDtTo12HourTime(jsonDateTime)
+  if (isDefined(timeValue)) {
+    expect(timeValue).toEqual(time12Hour)
+  } else {
+    expect(timeValue).toBeNull()
+  }
+})
+
+test.each`
+  jsonDateTime          | dateFull
+  ${'12/12/2021 23:15'} | ${'12th December 2021'}
+  ${'31/01/2022 12:01'} | ${'31st January 2022'}
+  ${'31/12/2022 12:00'} | ${'31st December 2022'}
+  ${'31/12/2022 00:00'} | ${'31st December 2022'}
+  ${'01/01/2022 01:01'} | ${'1st January 2022'}
+  ${'22/10/2024 14:23'} | ${'22nd October 2024'}
+  ${'22/10/24 14:23'}   | ${'22nd October 2024'}
+  ${'22/10/24'}         | ${'22nd October 2024'}
+  ${'null'}             | ${'null'}
+`('convert JSON datetime to long date', ({ jsonDateTime, dateFull }) => {
+  const dateValue = jsonDtToDate(jsonDateTime)
+  if (isDefined(dateValue)) {
+    expect(dateValue).toEqual(dateFull)
+  } else {
+    expect(dateValue).toBeNull()
   }
 })
