@@ -5,7 +5,7 @@ import LicenceService from '../../../services/licenceService'
 
 jest.mock('../../../services/licenceService')
 
-const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - View Licence - PDF', () => {
   const handler = new PdfRoutes(licenceService)

@@ -24,7 +24,7 @@ jest.mock('./hmppsAuthClient')
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 
-const licenceService = new LicenceService(hmppsAuthClient)
+const licenceService = new LicenceService(hmppsAuthClient, null, null)
 
 describe('Licence API client tests', () => {
   let fakeApi: nock.Scope

@@ -81,4 +81,14 @@ describe('Prison API client tests', () => {
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
     })
   })
+
+  describe('Prison information', () => {
+    it('Get prison information', async () => {
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/api/agencies/prison/BMI', '').reply(200, stubbedPrisonerData)
+      await prisonerService.getPrisonInformation('XTEST1', 'BMI')
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+  })
 })

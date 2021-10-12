@@ -24,6 +24,14 @@ const convertToTitleCase = (sentence: string): string =>
 const hasRole = (user: Express.User, role: AuthRole): boolean => user?.userRoles.includes(role) || false
 
 /**
+ * Converts a date returned from nomis in the format YYYY-MM-DD to a format which is accepted by
+ * create-and-vary-a-licence-api (i.e. DD/MM/YYYY)
+ * @param date date to be converted.
+ * @returns date converted to format DD/MM/YYYY.
+ */
+const convertDateFormat = (date: string): string => (date ? moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY') : undefined)
+
+/**
  * Converts a SimpleDateTime display value to a JSON string format dd/mm/yyyy hh:mm
  * @param dt: SimpleDateTime
  */
@@ -101,4 +109,5 @@ export {
   stringToAddressObject,
   jsonDtToDate,
   jsonDtTo12HourTime,
+  convertDateFormat,
 }

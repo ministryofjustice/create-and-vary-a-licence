@@ -95,6 +95,7 @@ delius-wiremock:
   image:
     repository: smcveigh941/delius-wiremock
     tag: latest
+    pullPolicy: Always
     port: 5000
 
   namespace_secrets:

@@ -15,7 +15,7 @@ jest.mock('./licenceService')
 describe('Caseload Service', () => {
   const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null) as jest.Mocked<CommunityService>
-  const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
+  const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
   const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
 
   beforeEach(() => {
@@ -67,14 +67,22 @@ describe('Caseload Service', () => {
         },
       ] as CommunityApiManagedOffender[])
       prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-        { prisonerNumber: '1', status: 'ACTIVE' },
+        { prisonerNumber: '1', status: 'ACTIVE', conditionalReleaseDate: '2023-05-12' },
       ] as Prisoner[])
 
       const caseload = await caseloadService.getStaffCaseload('USER1')
-      expect(caseload).toEqual([{ nomsNumber: '1', prisonerNumber: '1', currentOm: true, status: 'ACTIVE' }])
+      expect(caseload).toEqual([
+        {
+          nomsNumber: '1',
+          prisonerNumber: '1',
+          currentOm: true,
+          status: 'ACTIVE',
+          conditionalReleaseDate: '2023-05-12',
+        },
+      ])
     })
 
-    it('should filter out offenders who have an indeterminate sentence type', async () => {
+    it('should filter out offenders who have an indeterminate sentence type or do not have a conditional release date', async () => {
       communityService.getManagedOffenders.mockResolvedValue([
         {
           nomsNumber: '1',
@@ -84,16 +92,28 @@ describe('Caseload Service', () => {
           nomsNumber: '2',
           currentOm: true,
         },
+        {
+          nomsNumber: '3',
+          currentOm: true,
+        },
       ] as CommunityApiManagedOffender[])
       prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-        { prisonerNumber: '1', status: 'ACTIVE', indeterminateSentence: true },
-        { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false },
+        { prisonerNumber: '1', status: 'ACTIVE', indeterminateSentence: true, conditionalReleaseDate: '2023-05-12' },
+        { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-05-12' },
+        { prisonerNumber: '3', status: 'ACTIVE', indeterminateSentence: false },
       ] as Prisoner[])
 
       const caseload = await caseloadService.getStaffCaseload('USER1')
 
       expect(caseload).toEqual([
-        { nomsNumber: '2', prisonerNumber: '2', currentOm: true, status: 'ACTIVE', indeterminateSentence: false },
+        {
+          nomsNumber: '2',
+          prisonerNumber: '2',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
+        },
       ])
     })
 
@@ -109,14 +129,27 @@ describe('Caseload Service', () => {
         },
       ] as CommunityApiManagedOffender[])
       prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-        { prisonerNumber: '1', status: 'ACTIVE', indeterminateSentence: false, paroleEligibilityDate: '20/12/2022' },
-        { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false },
+        {
+          prisonerNumber: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          paroleEligibilityDate: '20/12/2022',
+          conditionalReleaseDate: '2023-05-12',
+        },
+        { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-05-12' },
       ] as Prisoner[])
 
       const caseload = await caseloadService.getStaffCaseload('USER1')
 
       expect(caseload).toEqual([
-        { nomsNumber: '2', prisonerNumber: '2', currentOm: true, status: 'ACTIVE', indeterminateSentence: false },
+        {
+          nomsNumber: '2',
+          prisonerNumber: '2',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
+        },
       ])
     })
 
@@ -132,8 +165,20 @@ describe('Caseload Service', () => {
         },
       ] as CommunityApiManagedOffender[])
       prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-        { prisonerNumber: '1', indeterminateSentence: false, status: 'ACTIVE', legalStatus: 'DEAD' },
-        { prisonerNumber: '2', indeterminateSentence: false, status: 'ACTIVE', legalStatus: 'REMAND' },
+        {
+          prisonerNumber: '1',
+          indeterminateSentence: false,
+          status: 'ACTIVE',
+          legalStatus: 'DEAD',
+          conditionalReleaseDate: '2023-05-12',
+        },
+        {
+          prisonerNumber: '2',
+          indeterminateSentence: false,
+          status: 'ACTIVE',
+          legalStatus: 'REMAND',
+          conditionalReleaseDate: '2023-05-12',
+        },
       ] as Prisoner[])
 
       const caseload = await caseloadService.getStaffCaseload('USER1')
@@ -146,6 +191,7 @@ describe('Caseload Service', () => {
           status: 'ACTIVE',
           indeterminateSentence: false,
           legalStatus: 'REMAND',
+          conditionalReleaseDate: '2023-05-12',
         },
       ])
     })
@@ -162,8 +208,13 @@ describe('Caseload Service', () => {
         },
       ] as CommunityApiManagedOffender[])
       prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-        { prisonerNumber: '1', indeterminateSentence: false },
-        { prisonerNumber: '2', indeterminateSentence: false, status: 'ACTIVE IN' },
+        { prisonerNumber: '1', indeterminateSentence: false, conditionalReleaseDate: '2023-05-12' },
+        {
+          prisonerNumber: '2',
+          indeterminateSentence: false,
+          status: 'ACTIVE IN',
+          conditionalReleaseDate: '2023-05-12',
+        },
       ] as Prisoner[])
 
       const caseload = await caseloadService.getStaffCaseload('USER1')
@@ -175,6 +226,7 @@ describe('Caseload Service', () => {
           currentOm: true,
           status: 'ACTIVE IN',
           indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
         },
       ])
     })
@@ -191,8 +243,18 @@ describe('Caseload Service', () => {
         },
       ] as CommunityApiManagedOffender[])
       prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-        { prisonerNumber: '1', indeterminateSentence: false, status: 'INACTIVE OUT' },
-        { prisonerNumber: '2', indeterminateSentence: false, status: 'ACTIVE IN' },
+        {
+          prisonerNumber: '1',
+          indeterminateSentence: false,
+          status: 'INACTIVE OUT',
+          conditionalReleaseDate: '2023-05-12',
+        },
+        {
+          prisonerNumber: '2',
+          indeterminateSentence: false,
+          status: 'ACTIVE IN',
+          conditionalReleaseDate: '2023-05-12',
+        },
       ] as Prisoner[])
 
       const caseload = await caseloadService.getStaffCaseload('USER1')
@@ -204,6 +266,7 @@ describe('Caseload Service', () => {
           currentOm: true,
           status: 'ACTIVE IN',
           indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
         },
       ])
     })
@@ -225,8 +288,9 @@ describe('Caseload Service', () => {
           indeterminateSentence: false,
           status: 'ACTIVE',
           releaseDate: moment().subtract(1, 'day').format('yyyy-MM-dd'),
+          conditionalReleaseDate: '2023-05-12',
         },
-        { prisonerNumber: '2', indeterminateSentence: false, status: 'ACTIVE' },
+        { prisonerNumber: '2', indeterminateSentence: false, status: 'ACTIVE', conditionalReleaseDate: '2023-05-12' },
       ] as Prisoner[])
 
       const caseload = await caseloadService.getStaffCaseload('USER1')
@@ -238,6 +302,7 @@ describe('Caseload Service', () => {
           currentOm: true,
           status: 'ACTIVE',
           indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
         },
       ])
     })
@@ -259,8 +324,9 @@ describe('Caseload Service', () => {
           indeterminateSentence: false,
           status: 'ACTIVE',
           releaseDate: moment().add(1, 'day').format('yyyy-MM-DD'),
+          conditionalReleaseDate: '2023-05-12',
         },
-        { prisonerNumber: '2', indeterminateSentence: false, status: 'ACTIVE' },
+        { prisonerNumber: '2', indeterminateSentence: false, status: 'ACTIVE', conditionalReleaseDate: '2023-05-12' },
       ] as Prisoner[])
 
       const caseload = await caseloadService.getStaffCaseload('USER1')
@@ -273,6 +339,7 @@ describe('Caseload Service', () => {
           prisonerNumber: '1',
           releaseDate: moment().add(1, 'day').format('yyyy-MM-DD'),
           status: 'ACTIVE',
+          conditionalReleaseDate: '2023-05-12',
         },
         {
           nomsNumber: '2',
@@ -280,6 +347,7 @@ describe('Caseload Service', () => {
           currentOm: true,
           status: 'ACTIVE',
           indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
         },
       ])
     })
@@ -297,14 +365,27 @@ describe('Caseload Service', () => {
       },
     ] as CommunityApiManagedOffender[])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: '1', status: 'ACTIVE', indeterminateSentence: false, homeDetentionCurfewEndDate: '2021-10-07' },
-      { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false },
+      {
+        prisonerNumber: '1',
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        homeDetentionCurfewEndDate: '2021-10-07',
+        conditionalReleaseDate: '2023-05-12',
+      },
+      { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-05-12' },
     ] as Prisoner[])
 
     const caseload = await caseloadService.getStaffCaseload('USER1')
 
     expect(caseload).toEqual([
-      { nomsNumber: '2', prisonerNumber: '2', currentOm: true, status: 'ACTIVE', indeterminateSentence: false },
+      {
+        nomsNumber: '2',
+        prisonerNumber: '2',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-12',
+      },
     ])
   })
 
@@ -320,20 +401,91 @@ describe('Caseload Service', () => {
       },
     ] as CommunityApiManagedOffender[])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: '1', status: 'ACTIVE', indeterminateSentence: false },
-      { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false },
+      { prisonerNumber: '1', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-05-12' },
+      { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-05-12' },
     ] as Prisoner[])
     licenceService.getLicencesByStaffIdAndStatus.mockResolvedValue([{ nomisId: '1' }] as LicenceSummary[])
 
     const caseload = await caseloadService.getStaffCaseload('USER1')
 
     expect(caseload).toEqual([
-      { nomsNumber: '2', prisonerNumber: '2', currentOm: true, status: 'ACTIVE', indeterminateSentence: false },
+      {
+        nomsNumber: '2',
+        prisonerNumber: '2',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-12',
+      },
     ])
     expect(licenceService.getLicencesByStaffIdAndStatus).toHaveBeenCalledWith(2000, 'USER1', [
       LicenceStatus.ACTIVE,
       LicenceStatus.INACTIVE,
       LicenceStatus.RECALLED,
+    ])
+  })
+
+  it('should sort offenders by conditional release date ascending', async () => {
+    communityService.getManagedOffenders.mockResolvedValue([
+      {
+        nomsNumber: '1',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '2',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '3',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '4',
+        currentOm: true,
+      },
+    ] as CommunityApiManagedOffender[])
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+      { prisonerNumber: '1', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2022-04-30' },
+      { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2024-04-30' },
+      { prisonerNumber: '3', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2021-04-30' },
+      { prisonerNumber: '4', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-04-30' },
+    ] as Prisoner[])
+
+    const caseload = await caseloadService.getStaffCaseload('USER1')
+
+    expect(caseload).toStrictEqual([
+      {
+        nomsNumber: '3',
+        prisonerNumber: '3',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2021-04-30',
+      },
+      {
+        nomsNumber: '1',
+        prisonerNumber: '1',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2022-04-30',
+      },
+      {
+        nomsNumber: '4',
+        prisonerNumber: '4',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-04-30',
+      },
+      {
+        nomsNumber: '2',
+        prisonerNumber: '2',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2024-04-30',
+      },
     ])
   })
 })

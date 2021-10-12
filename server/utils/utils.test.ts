@@ -1,6 +1,7 @@
 import { isDefined } from 'class-validator'
 import {
   addressObjectToString,
+  convertDateFormat,
   convertToTitleCase,
   hasRole,
   jsonToSimpleDateTime,
@@ -112,6 +113,13 @@ describe('Convert comma-separated string to address', () => {
 
   it('should return undefined', () => {
     expect(stringToAddressObject(undefined)).toBeUndefined()
+  })
+})
+
+describe('Convert date format', () => {
+  it('should return YYYY-MM-DD date in format DD/MM/YYYY', () => {
+    const date = '2015-04-26'
+    expect(convertDateFormat(date)).toEqual('26/04/2015')
   })
 })
 
