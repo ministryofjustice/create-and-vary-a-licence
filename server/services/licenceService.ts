@@ -11,63 +11,80 @@ import {
   LicenceApiTestData,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
-import { getStandardConditions } from '../utils/conditionsProvider'
-import { simpleDateTimeToJson, addressObjectToString } from '../utils/utils'
+import { getStandardConditions, getVersion } from '../utils/conditionsProvider'
+import { simpleDateTimeToJson, addressObjectToString, convertToTitleCase, convertDateFormat } from '../utils/utils'
 import PersonName from '../routes/creatingLicences/types/personName'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
 import Address from '../routes/creatingLicences/types/address'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
-import PrisonRegisterApiClient from '../data/prisonRegisterApiClient'
 import LicenceStatus from '../enumeration/licenceStatus'
+import PrisonerService from './prisonerService'
+import CommunityService from './communityService'
 
 export default class LicenceService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+  constructor(
+    private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly prisonerService: PrisonerService,
+    private readonly communityService: CommunityService
+  ) {}
 
   async getTestData(username: string): Promise<LicenceApiTestData[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return new LicenceApiClient(token).getTestData()
   }
 
-  async createLicence(username: string): Promise<LicenceSummary> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+  async createLicence(prisonerNumber: string, username: string): Promise<LicenceSummary> {
+    const nomisRecord = await this.prisonerService.getPrisonerDetail(username, prisonerNumber)
+    const [staffDetail, deliusRecord, prisonInformation] = await Promise.all([
+      this.communityService.getStaffDetail(username),
+      this.communityService.getProbationer(prisonerNumber),
+      this.prisonerService.getPrisonInformation(username, nomisRecord.agencyId),
+    ])
 
-    const prisonDto = await new PrisonRegisterApiClient(token).getPrisonDescription('LEI')
+    const offenderManager = deliusRecord.offenderManagers.find(om => om.active)
 
-    // TODO: construct with real licence data using prison and community APIs
     const licence = {
       typeCode: 'AP',
-      version: '1.0',
-      nomsId: Math.floor(Math.random() * 900000 + 100).toString(), // Generate random nomsId for now ... should be unique ID from nomis later
-      bookingNo: '12334',
-      bookingId: 87666,
-      crn: 'X12344',
-      pnc: '2014/12344A',
-      cro: '2014/12344A',
-      prisonCode: 'LEI',
-      prisonDescription: prisonDto?.prisonName ? prisonDto.prisonName : 'Not known',
-      prisonTelephone: '+44 276 54545',
-      forename: 'Adam',
-      middleNames: 'Jason Kyle',
-      surname: 'Balasaravika',
-      dateOfBirth: '14/09/2021',
-      conditionalReleaseDate: '14/09/2021',
-      actualReleaseDate: '14/09/2021',
-      sentenceStartDate: '14/09/2021',
-      sentenceEndDate: '14/09/2021',
-      licenceStartDate: '14/09/2021',
-      licenceExpiryDate: '14/09/2021',
-      comFirstName: 'Paula',
-      comLastName: 'Wells',
-      comUsername: 'X1233',
-      comStaffId: 44553343,
-      comEmail: 'paula.wells@northeast.probation.gov.uk',
-      comTelephone: '07876 443554',
-      probationAreaCode: 'N01',
-      probationLduCode: 'LDU1332',
-      standardConditions: getStandardConditions(),
+      version: getVersion(),
+      nomsId: prisonerNumber,
+      bookingNo: nomisRecord.bookingNo,
+      bookingId: nomisRecord.bookingId,
+      prisonCode: nomisRecord.agencyId,
+      forename: convertToTitleCase(nomisRecord.firstName),
+      middleNames: convertToTitleCase(nomisRecord.middleName),
+      surname: convertToTitleCase(nomisRecord.lastName),
+      dateOfBirth: convertDateFormat(nomisRecord.dateOfBirth),
+      conditionalReleaseDate:
+        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseOverrideDate) ||
+        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseDate),
+      actualReleaseDate: convertDateFormat(nomisRecord.sentenceDetail?.releaseDate),
+      sentenceStartDate: convertDateFormat(nomisRecord.sentenceDetail?.sentenceStartDate),
+      sentenceEndDate: convertDateFormat(nomisRecord.sentenceDetail?.effectiveSentenceEndDate),
+      licenceStartDate:
+        convertDateFormat(nomisRecord.sentenceDetail?.releaseDate) ||
+        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseOverrideDate) ||
+        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseDate),
+      licenceExpiryDate: convertDateFormat(nomisRecord.sentenceDetail?.licenceExpiryDate),
+      prisonDescription: prisonInformation.formattedDescription || 'Not known',
+      prisonTelephone: [
+        prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
+        prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
+      ].join(' '),
+      comUsername: staffDetail.username,
+      comStaffId: staffDetail.staffIdentifier,
+      comEmail: staffDetail.email,
+      comFirstName: offenderManager?.staff?.forenames,
+      comLastName: offenderManager?.staff?.surname,
+      probationAreaCode: offenderManager?.probationArea?.code,
+      probationLduCode: offenderManager?.team?.localDeliveryUnit?.code,
+      crn: deliusRecord.otherIds?.crn,
+      pnc: deliusRecord.otherIds?.pncNumber,
+      cro: deliusRecord.otherIds?.croNumber,
+      standardConditions: getStandardConditions('AP'),
     } as CreateLicenceRequest
 
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return new LicenceApiClient(token).createLicence(licence)
   }
 

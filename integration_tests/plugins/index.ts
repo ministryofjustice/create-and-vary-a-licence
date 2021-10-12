@@ -4,8 +4,9 @@ import auth from '../mockApis/auth'
 import tokenVerification from '../mockApis/tokenVerification'
 import licence from '../mockApis/licence'
 import community from '../mockApis/community'
-import prison from '../mockApis/prisonerSearch'
-import prisonRegister from '../mockApis/prisonRegister'
+import prisonerSearch from '../mockApis/prisonerSearch'
+import prison from '../mockApis/prison'
+import probationSearch from '../mockApis/probationSearch'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
@@ -30,8 +31,11 @@ export default (on: (string, Record) => void): void => {
     stubGetStaffDetails: community.stubGetStaffDetails,
     stubGetManagedOffenders: community.stubGetManagedOffenders,
 
-    searchPrisonersByNomisIds: prison.searchPrisonersByNomisIds,
+    searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
 
-    stubGetPrisonDescription: prisonRegister.stubGetPrisonDescription,
+    stubGetPrisonerDetail: prison.stubGetPrisonerDetail,
+    stubGetPrisonInformation: prison.stubGetPrisonInformation,
+
+    stubGetProbationer: probationSearch.stubGetProbationer,
   })
 }

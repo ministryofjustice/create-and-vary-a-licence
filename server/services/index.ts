@@ -9,8 +9,8 @@ import CaseloadService from './caseloadService'
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
 const userService = new UserService(hmppsAuthClient)
 const prisonerService = new PrisonerService(hmppsAuthClient)
-const licenceService = new LicenceService(hmppsAuthClient)
 const communityService = new CommunityService(hmppsAuthClient)
+const licenceService = new LicenceService(hmppsAuthClient, prisonerService, communityService)
 const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
 
 // TODO - Remove prisonerService and community service as exports

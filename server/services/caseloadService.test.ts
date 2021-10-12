@@ -15,7 +15,7 @@ jest.mock('./licenceService')
 describe('Caseload Service', () => {
   const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null) as jest.Mocked<CommunityService>
-  const licenceService = new LicenceService(null) as jest.Mocked<LicenceService>
+  const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
   const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
 
   beforeEach(() => {
