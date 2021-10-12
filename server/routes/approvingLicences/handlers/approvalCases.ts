@@ -1,21 +1,16 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import PrisonerService from '../../../services/prisonerService'
 
 export default class ApprovalCaseRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
+  constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { username } = res.locals.user
 
-    // Get prison caseload list - either here or in the service layer
+    // TODO: Get prison caseload - this will come from stored values in the user session (populateCurrentUser)
     const prisonCaseload = ['MDI', 'LEI']
 
-    // Get prison caseload list - the proper way
-    // const prisonCaseload = await this prisonerService.getPrisonCaseload()
-
     const cases = await this.licenceService.getLicencesForApproval(username, prisonCaseload)
-
     const caseViewModel = cases.map(licence => {
       return {
         licenceId: licence.licenceId,

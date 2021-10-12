@@ -2,12 +2,10 @@ import { Request, Response } from 'express'
 
 import ApprovalCaseRoutes from './approvalCases'
 import LicenceService from '../../../services/licenceService'
-import PrisonerService from '../../../services/prisonerService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
-const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
 const username = 'joebloggs'
 
 // TODO: Get the real prison caseload here - mocked from prison API
@@ -40,7 +38,7 @@ const caseloadViewList = [
 ]
 
 describe('Route Handlers - Approval - case list', () => {
-  const handler = new ApprovalCaseRoutes(licenceService, prisonerService)
+  const handler = new ApprovalCaseRoutes(licenceService)
   let req: Request
   let res: Response
 

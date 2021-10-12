@@ -10,7 +10,7 @@ import ConfirmRejectedRoutes from './handlers/confirmRejected'
 
 import { Services } from '../../services'
 
-export default function Index({ licenceService, prisonerService }: Services): Router {
+export default function Index({ licenceService }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/approve${path}`
 
@@ -20,7 +20,7 @@ export default function Index({ licenceService, prisonerService }: Services): Ro
   const post = (path: string, handler: RequestHandler, type?: new () => unknown) =>
     router.post(routePrefix(path), validationMiddleware(type), asyncMiddleware(handler))
 
-  const approvalCasesHandler = new ApprovalCaseRoutes(licenceService, prisonerService)
+  const approvalCasesHandler = new ApprovalCaseRoutes(licenceService)
   const approvalViewHandler = new ApprovalViewRoutes(licenceService)
   const approvalConfirmedHandler = new ConfirmApprovedRoutes()
   const approvalRejectedHandler = new ConfirmRejectedRoutes()
