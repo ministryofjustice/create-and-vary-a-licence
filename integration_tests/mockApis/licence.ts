@@ -156,4 +156,18 @@ export default {
       },
     })
   },
+
+  stubUpdateLicenceStatus: (licenceId: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/${licenceId}/status`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
 }
