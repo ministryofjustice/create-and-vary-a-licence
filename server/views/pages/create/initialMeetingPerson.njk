@@ -30,7 +30,7 @@
                 }) }}
 
                 {{ govukButton({
-                    text: "Continue",
+                    text: "Return to check your answers" if fromReview else "Continue",
                     type: "submit",
                     attributes: { 'data-qa': 'continue' }
                 }) }}
