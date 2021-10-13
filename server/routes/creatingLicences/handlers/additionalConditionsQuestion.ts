@@ -12,6 +12,7 @@ export default class AdditionalConditionsQuestionRoutes {
     if (answer === YesOrNo.YES) {
       res.redirect(`/licence/create/id/${licenceId}/additional-conditions`)
     } else {
+      // TODO Remove any additional conditions which may exist on the licence - i.e. if they arrive here from check answers page
       res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)
     }
   }
