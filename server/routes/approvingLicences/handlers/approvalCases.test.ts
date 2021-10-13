@@ -24,19 +24,6 @@ const fakeSummary = {
 
 const fakeSummaryList = [fakeSummary] as LicenceSummary[]
 
-const caseloadViewList = [
-  {
-    licenceId: fakeSummary.licenceId,
-    licenceType: fakeSummary.licenceType,
-    surname: fakeSummary.surname,
-    forename: fakeSummary.forename,
-    nomisId: fakeSummary.nomisId,
-    status: fakeSummary.licenceStatus,
-    prisonDescription: fakeSummary.prisonDescription,
-    conditionalReleaseDate: fakeSummary.conditionalReleaseDate,
-  },
-]
-
 describe('Route Handlers - Approval - case list', () => {
   const handler = new ApprovalCaseRoutes(licenceService)
   let req: Request
@@ -67,7 +54,7 @@ describe('Route Handlers - Approval - case list', () => {
       licenceService.getLicencesForApproval.mockResolvedValue(fakeSummaryList)
       await handler.GET(req, res)
       expect(licenceService.getLicencesForApproval).toHaveBeenCalledWith(username, prisonCaseload)
-      expect(res.render).toHaveBeenCalledWith('pages/approve/cases', { cases: caseloadViewList })
+      expect(res.render).toHaveBeenCalledWith('pages/approve/cases', { cases: fakeSummaryList })
     })
   })
 

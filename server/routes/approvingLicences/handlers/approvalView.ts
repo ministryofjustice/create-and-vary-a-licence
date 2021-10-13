@@ -7,11 +7,12 @@ export default class ApprovalViewRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
+
     // Check whether this licence is still in a SUBMITTED state - back button pressed - avoid re-approval
-    if (licence && licence?.statusCode && licence?.statusCode !== LicenceStatus.SUBMITTED) {
-      res.redirect(`/licence/approve/cases`)
-    } else {
+    if (licence?.statusCode === LicenceStatus.SUBMITTED) {
       res.render('pages/approve/view')
+    } else {
+      res.redirect(`/licence/approve/cases`)
     }
   }
 
