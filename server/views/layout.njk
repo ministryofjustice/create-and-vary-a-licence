@@ -42,10 +42,12 @@
   {% include 'partials/formError.njk' %}
   <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
   {% if backLinkHref %}
-    {{ govukBackLink({
-      text: "Back",
-      href: backLinkHref
-    }) }}
+    <nav>
+      {{ govukBackLink({
+        text: "Back",
+        href: backLinkHref
+      }) }}
+    </nav>
   {% endif %}
 {% endblock %}
 
