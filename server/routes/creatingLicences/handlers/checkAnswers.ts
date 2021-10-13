@@ -6,8 +6,7 @@ export default class CheckAnswersRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const mockLicence = this.licenceService.getLicenceStub()
-    res.render('pages/create/checkAnswers', { licence: mockLicence })
+    res.render('pages/create/checkAnswers')
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

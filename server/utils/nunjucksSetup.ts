@@ -96,5 +96,12 @@ export function registerNunjucks(app?: express.Express): Environment {
     return jsonDtTo12HourTime(dt)
   })
 
+  njkEnv.addFilter('formatAddress', (address: string) => {
+    return address
+      .split(', ')
+      .filter(line => line.trim().length > 0)
+      .join(', ')
+  })
+
   return njkEnv
 }
