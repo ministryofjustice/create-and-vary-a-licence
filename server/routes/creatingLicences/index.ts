@@ -46,7 +46,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService)
   const additionalConditionsQuestionHandler = new AdditionalConditionsQuestionRoutes()
   const additionalConditionsHandler = new AdditionalConditionsRoutes()
-  const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
+  const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes(licenceService)
   const bespokeConditionsHandler = new BespokeConditionsRoutes(licenceService)
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
