@@ -12,7 +12,6 @@ generic-service:
     enabled: true
     host: app-hostname.local    # override per environment
     tlsSecretName: create-and-vary-a-licence-cert
-    path: /
 
   livenessProbe:
     httpGet:
