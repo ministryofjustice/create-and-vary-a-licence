@@ -139,10 +139,11 @@ GOTENBERG_API_URL=http://localhost:3001
 
 ## Helm
 
-There are three services associated with this UI service:
+There are four services associated with this UI service:
 
 * create-and-vary-a-licence  (generic-service)
 * gotenberg (generic-service)
+* delius-wiremock (generic-service)
 * generic-prometheus-alerts
 
 ## Dependency Checks
