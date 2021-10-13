@@ -9,6 +9,7 @@ import type {
   AppointmentTimeRequest,
   AppointmentAddressRequest,
   BespokeConditionsRequest,
+  StatusUpdateRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -55,6 +56,10 @@ export default class LicenceApiClient {
     await this.restClient.put({ path: `/licence/id/${licenceId}/bespoke-conditions`, data: bespokeConditions })
   }
 
+  async updateLicenceStatus(licenceId: string, statusRequest: StatusUpdateRequest): Promise<void> {
+    await this.restClient.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest })
+  }
+
   async getLicencesByStaffIdAndStatus(staffId: number, statuses: LicenceStatus[]): Promise<LicenceSummary[]> {
     const queryParameters: string[] = []
     statuses.forEach(status => {
@@ -62,6 +67,16 @@ export default class LicenceApiClient {
     })
     return (await this.restClient.get({
       path: `/licence/staffId/${staffId}${queryParameters.length > 0 ? `?${queryParameters.join('&')}` : ''}`,
+    })) as LicenceSummary[]
+  }
+
+  async getLicencesForApproval(prisonCaseload: string[]): Promise<LicenceSummary[]> {
+    const queryParameters: string[] = []
+    prisonCaseload.forEach(prison => {
+      queryParameters.push(`prison=${prison}`)
+    })
+    return (await this.restClient.get({
+      path: `/licence/approval-candidates${queryParameters.length > 0 ? `?${queryParameters.join('&')}` : ''}`,
     })) as LicenceSummary[]
   }
 }

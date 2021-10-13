@@ -4,6 +4,10 @@
  */
 
 export interface paths {
+  '/licence/id/{licenceId}/status': {
+    /** Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateLicenceStatus']
+  }
   '/licence/id/{licenceId}/contact-number': {
     /** Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateContactNumber']
@@ -40,14 +44,20 @@ export interface paths {
     /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getLicenceById']
   }
+  '/licence/approval-candidates': {
+    /** Get the licences awaiting approval within a specified (or all) prison caseloads. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getLicencesForApprovalByPrisonCaseload']
+  }
 }
 
 export interface components {
   schemas: {
-    /** Request object for updating the contact number of the officer on a licence */
-    ContactNumberRequest: {
-      /** The UK telephone number to contact the responsible officer for a licence */
-      comTelephone: string
+    /** Request object for updating the status of a licence */
+    StatusUpdateRequest: {
+      /** The new status for this licence */
+      status: 'IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
+      /** The username of the person who is updating this status */
+      username: string
     }
     ErrorResponse: {
       status: number
@@ -55,6 +65,11 @@ export interface components {
       userMessage?: string
       developerMessage?: string
       moreInfo?: string
+    }
+    /** Request object for updating the contact number of the officer on a licence */
+    ContactNumberRequest: {
+      /** The UK telephone number to contact the responsible officer for a licence */
+      comTelephone: string
     }
     /** A list of bespoke conditions to add to a licence */
     BespokeConditionRequest: {
@@ -162,6 +177,16 @@ export interface components {
       nomisId?: string
       /** The offender surname */
       surname?: string
+      /** The offender forename */
+      forename?: string
+      /** The prison code where this offender resides or was released from */
+      prisonCode?: string
+      /** The prison where this offender resides or was released from */
+      prisonDescription?: string
+      /** The conditional release date on the licence */
+      conditionalReleaseDate?: string
+      /** The actual release date on the licence */
+      actualReleaseDate?: string
       /** The case reference number (CRN) of this person, from either prison or probation service */
       crn?: string
       /** The offender's date of birth, from either prison or probation services */
@@ -305,6 +330,47 @@ export interface components {
 }
 
 export interface operations {
+  /** Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateLicenceStatus: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Licence status updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['StatusUpdateRequest']
+      }
+    }
+  }
   /** Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   updateContactNumber: {
     parameters: {
@@ -620,6 +686,34 @@ export interface operations {
       }
       /** The licence for this ID was not found. */
       404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Get the licences awaiting approval within a specified (or all) prison caseloads. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getLicencesForApprovalByPrisonCaseload: {
+    parameters: {
+      query: {
+        prison?: string[]
+      }
+    }
+    responses: {
+      /** Licence summary details returned - could be empty. */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary'][]
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }

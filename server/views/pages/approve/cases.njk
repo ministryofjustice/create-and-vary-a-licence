@@ -1,0 +1,74 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - approval cases" %}
+{% set pageId = "approval-cases-page" %}
+
+{% set licences = [] %}
+
+{% for case in cases %}
+    {% set licences = (licences.push([
+        {
+            attributes: { id: 'name-' + loop.index },
+            html: '<h2 class="govuk-heading-s govuk-!-margin-bottom-1">' + case.forename + ' ' + case.surname + '</h2>'
+        },
+        {
+            attributes: { id: 'nomis-id-' + loop.index },
+            text: case.nomisId
+        },
+        {
+            attributes: { id: 'prison-description-' + loop.index },
+            text: case.prisonDescription
+        },
+        {
+            attributes: { id: 'conditional-release-date-' + loop.index },
+            text: case.conditionalReleaseDate | datetimeToDate
+        },
+        {
+            html: govukButton({
+              attributes: { id: 'view-licence-' + loop.index },
+              text: "View licence",
+              classes: "govuk-button--secondary govuk-!-margin-bottom-0",
+              name: "licenceId",
+              id: "licenceId",
+              value: case.licenceId
+            })
+        }
+    ]), licences) %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl">Select a person to approve their licence</h1>
+        </div>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+        {{ govukTable({
+            caption: "Cases for approval",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+              { text: "Name" },
+              { text: "Nomis ID" },
+              { text: "Prison" },
+              { text: "Conditional release date" },
+              { text: '' }
+            ],
+            rows: licences
+        }) }}
+
+        {% if licences.length === 0 %}
+          <div class="govuk-grid-row">
+              <div class="govuk-grid-column-three-quarters">
+                 <h3 class="govuk-heading-s">There are no licences to approve</h3>
+              </div>
+          </div>
+        {% endif %}
+
+    </form>
+{% endblock %}

@@ -2,6 +2,7 @@ import { Router } from 'express'
 import csrf from '../middleware/csrfMiddleware'
 import { Services } from '../services'
 import createLicenceRoutes from './creatingLicences'
+import approveLicenceRoutes from './approvingLicences'
 import homeRoutes from './home'
 import viewLicenceRoutes from './viewingLicences'
 import spikeRoutes from './spikes'
@@ -20,6 +21,7 @@ export default function Index(services: Services): Router {
 
   router.use(homeRoutes())
   router.use(createLicenceRoutes(services))
+  router.use(approveLicenceRoutes(services))
   router.use(viewLicenceRoutes(services))
   router.use(spikeRoutes(services))
 

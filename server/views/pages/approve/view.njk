@@ -1,0 +1,136 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Approve a licence" %}
+{% set pageId = "view-approve-licence-page" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Approve a licence for {{ licence.forename }} {{ licence.surname }}</h1>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+
+            {{ inductionMeetingDetails(licence) }}
+
+            {{ additionalConditions(licence) }}
+
+            {{ bespokeConditions(licence) }}
+
+            <form method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <input type="hidden" name="licenceId" value="{{ licence.id }}">
+
+                {{ govukButton({
+                    text: "Approve licence",
+                    classes: "govuk-button--primary",
+                    type: "submit",
+                    name: "result",
+                    value: "approve",
+                    attributes: { 'data-qa': 'approve-licence' }
+                }) }}
+
+                <button type="submit" name="result" value="reject" class="govuk-body link-button govuk-!-margin-top-2" data-qa="reject-licence">
+                    Reject and send back to probation
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% macro additionalConditionHtml(template, data) %}
+    <div class="govuk-!-margin-bottom-4">
+        {{ template }}
+    </div>
+    <div class="govuk-!-font-weight-bold">
+        {% for entry in data %}
+            <span class="govuk-!-display-block">{{ entry }}</span>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro additionalConditions(licence) %}
+    <div class="govuk-grid-row check-answers-header">
+        <div class="govuk-grid-column-three-quarters">
+            <h2 class="govuk-heading-m">Additional licence conditions</h2>
+        </div>
+    </div>
+
+    {% set additionalConditions = [] %}
+
+    {% for condition in licence.additionalConditions %}
+        {% set additionalConditions = (additionalConditions.push({
+            key: {  text: condition.category },
+            value: { html: additionalConditionHtml(condition.template, condition.data) }
+        }), additionalConditions) %}
+    {% endfor %}
+
+    {{ govukSummaryList({
+        attributes: { id: 'additional-conditions-details' },
+        classes: 'govuk-!-margin-bottom-9',
+        rows: additionalConditions
+    }) }}
+{% endmacro %}
+
+{%  macro bespokeConditions(licence) %}
+    <div class="govuk-grid-row check-answers-header">
+        <div class="govuk-grid-column-three-quarters">
+            <h2 class="govuk-heading-m">Bespoke licence conditions details</h2>
+        </div>
+    </div>
+
+    {% set bespokeConditions = [] %}
+
+    {% for condition in licence.bespokeConditions %}
+        {% set bespokeConditions = (bespokeConditions.push({
+            key: { text: 'Bespoke condition' },
+            value: { text: condition.text }
+        }), bespokeConditions) %}
+    {% endfor %}
+
+    {{ govukSummaryList({
+        attributes: { id: 'bespoke-conditions-details' },
+        classes: 'govuk-!-margin-bottom-9',
+        rows: bespokeConditions
+    }) }}
+{% endmacro %}
+
+{%  macro inductionMeetingDetails(licence) %}
+    <div class="govuk-grid-row check-answers-header">
+        <div class="govuk-grid-column-three-quarters">
+            <h2 class="govuk-heading-m">Induction meeting details</h2>
+        </div>
+    </div>
+
+    {{ govukSummaryList({
+        attributes: { id: 'induction-meeting-details' },
+        classes: 'govuk-!-margin-bottom-9',
+        rows: [
+            {
+                key: { text: "Name" },
+                value: { text: licence.appointmentPerson }
+            },
+            {
+                key: { text: "Address" },
+                value: { html: licence.appointmentAddress | replace(',','<br/>') }
+            },
+            {
+                key: { text: "Contact phone number" },
+                value: { text: licence.comTelephone }
+            },
+            {
+                key: { text: "Date" },
+                value: { text: licence.appointmentTime | datetimeToDate }
+            },
+            {
+                key: { text: "Time" },
+                value: { text: licence.appointmentTime | datetimeTo12HourTime }
+            }
+        ]
+    }) }}
+{% endmacro %}

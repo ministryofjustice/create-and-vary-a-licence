@@ -9,6 +9,7 @@ import {
   LicenceSummary,
   Licence,
   LicenceApiTestData,
+  StatusUpdateRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getStandardConditions, getVersion } from '../utils/conditionsProvider'
@@ -129,6 +130,12 @@ export default class LicenceService {
     return new LicenceApiClient(token).updateBespokeConditions(id, requestBody)
   }
 
+  async updateStatus(id: string, newStatus: LicenceStatus, username: string): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    const requestBody = { status: newStatus, username } as StatusUpdateRequest
+    return new LicenceApiClient(token).updateLicenceStatus(id, requestBody)
+  }
+
   async getLicencesByStaffIdAndStatus(
     staffId: number,
     username: string,
@@ -136,6 +143,11 @@ export default class LicenceService {
   ): Promise<LicenceSummary[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return new LicenceApiClient(token).getLicencesByStaffIdAndStatus(staffId, statuses)
+  }
+
+  async getLicencesForApproval(username: string, prisonCaseload: string[]): Promise<LicenceSummary[]> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    return new LicenceApiClient(token).getLicencesForApproval(prisonCaseload)
   }
 
   getLicenceStub(): Record<string, unknown> {
