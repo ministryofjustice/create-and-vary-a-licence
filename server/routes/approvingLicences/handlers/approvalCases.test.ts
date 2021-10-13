@@ -8,8 +8,8 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const username = 'joebloggs'
 
-// TODO: Get the real prison caseload here - mocked from prison API
-const prisonCaseload = ['MDI', 'LEI']
+// TODO: Get the real prison caseload here
+const prisonCaseload = ['MDI', 'LEI', 'BMI']
 
 const fakeSummary = {
   licenceId: 1,
