@@ -12,7 +12,7 @@ export default class BespokeConditionsPage extends Page {
 
   enterBespokeCondition = (conditionId: number, condition: string): BespokeConditionsPage => {
     const fieldName = `conditions[${conditionId}]`
-    cy.get(`textarea[name="${fieldName}"]`).type(condition)
+    cy.get(`textarea[name="${fieldName}"]`).clear().type(condition)
     return this
   }
 

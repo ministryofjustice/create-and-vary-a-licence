@@ -11,7 +11,7 @@ export default class AppointmentPersonPage extends Page {
   }
 
   enterPerson = (text: string): AppointmentPersonPage => {
-    cy.get(this.personTextInputId).type(text)
+    cy.get(this.personTextInputId).clear().type(text)
     return this
   }
 

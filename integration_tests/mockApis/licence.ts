@@ -38,10 +38,9 @@ export default {
           comUsername: 'X12345',
           comStaffId: '12345',
           comEmail: 'stephen.mills@nps.gov.uk',
-          comTelephone: null,
           probationAreaCode: 'N01',
           probationLduCode: 'LDU1',
-          dateCreated: '10/009/2021 10:00:00', // Make dynamic to now?
+          dateCreated: '10/09/2021 10:00:00', // Make dynamic to now?
           createdByUsername: 'X12345',
           standardConditions: [
             { id: 1, code: 'goodBehaviour', sequence: 1, text: 'Be of good behaviour' },
@@ -50,6 +49,10 @@ export default {
           ],
           additionalConditions: [],
           bespokeConditions: [],
+          appointmentPerson: 'Isaac Newton',
+          appointmentAddress: 'Down the road, over there',
+          comTelephone: '07891245678',
+          appointmentTime: '01/12/2021 00:34',
         },
       },
     })

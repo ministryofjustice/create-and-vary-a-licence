@@ -22,16 +22,16 @@ export default class AppointmentTimePage extends Page {
   }
 
   enterDate = (moment: Moment): AppointmentTimePage => {
-    cy.get(this.inductionDateDayId).type(moment.date().toString())
-    cy.get(this.inductionDateMonthId).type(moment.month().toString())
-    cy.get(this.inductionDateYearId).type(moment.year().toString())
+    cy.get(this.inductionDateDayId).clear().type(moment.date().toString())
+    cy.get(this.inductionDateMonthId).clear().type(moment.month().toString())
+    cy.get(this.inductionDateYearId).clear().type(moment.year().toString())
     return this
   }
 
   enterTime = (moment: Moment): AppointmentTimePage => {
     const time = moment.format('hh mm a')
-    cy.get(this.inductionTimeHourId).type(time.split(' ')[0])
-    cy.get(this.inductionTimeMinuteId).type(time.split(' ')[1])
+    cy.get(this.inductionTimeHourId).clear().type(time.split(' ')[0])
+    cy.get(this.inductionTimeMinuteId).clear().type(time.split(' ')[1])
     cy.get(this.inductionTimeAmpmId).select(time.split(' ')[2])
     return this
   }

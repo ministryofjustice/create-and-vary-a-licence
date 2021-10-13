@@ -17,22 +17,22 @@ export default class AppointmentPlacePage extends Page {
   }
 
   enterAddressLine1 = (text: string): AppointmentPlacePage => {
-    cy.get(this.addressTextInputId).type(text)
+    cy.get(this.addressTextInputId).clear().type(text)
     return this
   }
 
   enterTown = (text: string): AppointmentPlacePage => {
-    cy.get(this.addressTownTextInputId).type(text)
+    cy.get(this.addressTownTextInputId).clear().type(text)
     return this
   }
 
   enterCounty = (text: string): AppointmentPlacePage => {
-    cy.get(this.addressCountyTextInputId).type(text)
+    cy.get(this.addressCountyTextInputId).clear().type(text)
     return this
   }
 
   enterPostcode = (text: string): AppointmentPlacePage => {
-    cy.get(this.addressPostcodeTextInputId).type(text)
+    cy.get(this.addressPostcodeTextInputId).clear().type(text)
     return this
   }
 
