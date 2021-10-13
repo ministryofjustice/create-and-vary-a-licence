@@ -1,5 +1,6 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block head %}
   <!--[if !IE 8]><!-->
@@ -40,6 +41,12 @@
     }) }}
   {% include 'partials/formError.njk' %}
   <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
+  {% if backLinkHref %}
+    {{ govukBackLink({
+      text: "Back",
+      href: backLinkHref
+    }) }}
+  {% endif %}
 {% endblock %}
 
 {% block bodyEnd %}
