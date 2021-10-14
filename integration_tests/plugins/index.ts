@@ -28,6 +28,7 @@ export default (on: (string, Record) => void): void => {
     stubPutBespokeConditions: licence.stubPutBespokeConditions,
     stubGetLicencesByStaffIdAndStatus: licence.stubGetLicencesByStaffIdAndStatus,
     stubUpdateLicenceStatus: licence.stubUpdateLicenceStatus,
+    stubGetCompletedLicence: licence.stubGetCompletedLicence,
 
     stubGetStaffDetails: community.stubGetStaffDetails,
     stubGetManagedOffenders: community.stubGetManagedOffenders,

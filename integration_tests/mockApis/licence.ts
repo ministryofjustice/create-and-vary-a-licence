@@ -2,11 +2,63 @@ import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
 
 export default {
-  stubGetLicence: (licenceId: string): SuperAgentRequest => {
+  stubGetLicence: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/${licenceId}`,
+        urlPattern: `/licence/id/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          id: 1,
+          typeCode: 'AP',
+          version: '1.1',
+          statusCode: 'IN_PROGRESS',
+          nomsId: 'A1234AA',
+          bookingNo: '123456',
+          bookingId: '54321',
+          crn: 'X12345',
+          pnc: '2019/123445',
+          cro: '12345',
+          prisonCode: 'LEI',
+          prisonDescription: 'Leeds (HMP)',
+          forename: 'Bob',
+          surname: 'Zimmer',
+          dateOfBirth: '12/02/1980',
+          conditionalReleaseDate: '13/03/2021',
+          actualReleaseDate: '01/04/2021',
+          sentenceStartDate: '10/01/2019',
+          sentenceEndDate: '26/04/2022',
+          licenceStartDate: '01/04/2021',
+          licenceExpiryDate: '26/04/2022',
+          comFirstName: 'Stephen',
+          comLastName: 'Mills',
+          comUsername: 'X12345',
+          comStaffId: '12345',
+          comEmail: 'stephen.mills@nps.gov.uk',
+          probationAreaCode: 'N01',
+          probationLduCode: 'LDU1',
+          dateCreated: '10/09/2021 10:00:00', // Make dynamic to now?
+          createdByUsername: 'X12345',
+          standardConditions: [
+            { id: 1, code: 'goodBehaviour', sequence: 1, text: 'Be of good behaviour' },
+            { id: 2, code: 'notBreakLaw', sequence: 2, text: 'Do not break the law' },
+            { id: 3, code: 'attendMeetings', sequence: 3, text: 'Attend arranged meetings' },
+          ],
+          additionalConditions: [],
+          bespokeConditions: [],
+        },
+      },
+    })
+  },
+
+  stubGetCompletedLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/id/(\\d)*`,
       },
       response: {
         status: 200,
@@ -76,11 +128,11 @@ export default {
     })
   },
 
-  stubPutAppointmentPerson: (licenceId: string): SuperAgentRequest => {
+  stubPutAppointmentPerson: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/${licenceId}/appointmentPerson`,
+        urlPattern: `/licence/id/(\\d)*/appointmentPerson`,
       },
       response: {
         status: 200,
@@ -90,11 +142,11 @@ export default {
     })
   },
 
-  stubPutAppointmentTime: (licenceId: string): SuperAgentRequest => {
+  stubPutAppointmentTime: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/${licenceId}/appointmentTime`,
+        urlPattern: `/licence/id/(\\d)*/appointmentTime`,
       },
       response: {
         status: 200,
@@ -104,11 +156,11 @@ export default {
     })
   },
 
-  stubPutAppointmentAddress: (licenceId: string): SuperAgentRequest => {
+  stubPutAppointmentAddress: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/${licenceId}/appointment-address`,
+        urlPattern: `/licence/id/(\\d)*/appointment-address`,
       },
       response: {
         status: 200,
@@ -118,11 +170,11 @@ export default {
     })
   },
 
-  stubPutContactNumber: (licenceId: string): SuperAgentRequest => {
+  stubPutContactNumber: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/${licenceId}/contact-number`,
+        urlPattern: `/licence/id/(\\d)*/contact-number`,
       },
       response: {
         status: 200,
@@ -132,11 +184,11 @@ export default {
     })
   },
 
-  stubPutBespokeConditions: (licenceId: string): SuperAgentRequest => {
+  stubPutBespokeConditions: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/${licenceId}/bespoke-conditions`,
+        urlPattern: `/licence/id/(\\d)*/bespoke-conditions`,
       },
       response: {
         status: 200,
@@ -146,11 +198,11 @@ export default {
     })
   },
 
-  stubGetLicencesByStaffIdAndStatus: (staffId: number): SuperAgentRequest => {
+  stubGetLicencesByStaffIdAndStatus: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/licence/staffId/${staffId}`,
+        urlPathPattern: `/licence/staffId/2000`,
       },
       response: {
         status: 200,
@@ -160,11 +212,11 @@ export default {
     })
   },
 
-  stubUpdateLicenceStatus: (licenceId: string): SuperAgentRequest => {
+  stubUpdateLicenceStatus: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/${licenceId}/status`,
+        urlPattern: `/licence/id/(\\d*)/status`,
       },
       response: {
         status: 200,

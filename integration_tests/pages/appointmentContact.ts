@@ -11,11 +11,12 @@ export default class AppointmentContactPage extends Page {
   }
 
   enterTelephone = (text: string): AppointmentContactPage => {
-    cy.get(this.telephoneTextboxId).clear().type(text)
+    cy.get(this.telephoneTextboxId).type(text)
     return this
   }
 
   clickContinue = (): AppointmentTimePage => {
+    cy.task('stubPutContactNumber')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AppointmentTimePage)
   }

@@ -2,11 +2,11 @@ import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
 
 export default {
-  stubGetStaffDetails: (deliusUsername: string): SuperAgentRequest => {
+  stubGetStaffDetails: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/secure/staff/username/${deliusUsername}`,
+        urlPattern: `/secure/staff/username/USER1`,
       },
       response: {
         status: 200,
@@ -18,11 +18,11 @@ export default {
     })
   },
 
-  stubGetManagedOffenders: (staffId: string): SuperAgentRequest => {
+  stubGetManagedOffenders: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/secure/staff/staffIdentifier/${staffId}/managedOffenders`,
+        urlPattern: `/secure/staff/staffIdentifier/2000/managedOffenders`,
       },
       response: {
         status: 200,

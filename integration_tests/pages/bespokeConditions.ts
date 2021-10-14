@@ -22,6 +22,8 @@ export default class BespokeConditionsPage extends Page {
   }
 
   clickContinue = (): CheckAnswersPage => {
+    cy.task('stubPutBespokeConditions')
+    cy.task('stubGetCompletedLicence')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
   }
