@@ -4,12 +4,12 @@ import { Response } from 'superagent'
 import { stubFor, getRequests } from '../wiremock'
 import tokenVerification from './tokenVerification'
 
-const createToken = () => {
+const createToken = (authorities: string[], authSource: string) => {
   const payload = {
     user_name: 'USER1',
     scope: ['read'],
-    auth_source: 'nomis',
-    authorities: ['ROLE_LICENCE_RO'],
+    auth_source: authSource,
+    authorities,
     jti: '83b50a10-cca6-41db-985f-e87efb303ddb',
     client_id: 'clientid',
   }
@@ -59,7 +59,7 @@ const redirect = () =>
         'Content-Type': 'text/html',
         Location: 'http://localhost:3007/login/callback?code=codexxxx&state=stateyyyy',
       },
-      body: '<html><body id="sign-in-page">SignIn page<h1>Sign in</h1></body></html>',
+      body: '<html lang=""><body id="sign-in-page">SignIn page<h1>Sign in</h1></body></html>',
     },
   })
 
@@ -74,11 +74,11 @@ const signOut = () =>
       headers: {
         'Content-Type': 'text/html',
       },
-      body: '<html><body id="sign-in-page">SignIn page<h1>Sign in</h1></body></html>',
+      body: '<html lang=""><body id="sign-in-page">SignIn page<h1>Sign in</h1></body></html>',
     },
   })
 
-const token = () =>
+const token = (authorities: string[], authSource: string) =>
   stubFor({
     request: {
       method: 'POST',
@@ -91,7 +91,7 @@ const token = () =>
         Location: 'http://localhost:3007/login/callback?code=codexxxx&state=stateyyyy',
       },
       jsonBody: {
-        access_token: createToken(),
+        access_token: createToken(authorities, authSource),
         token_type: 'bearer',
         user_name: 'USER1',
         expires_in: 599,
@@ -121,7 +121,7 @@ const stubUser = () =>
     },
   })
 
-const stubUserRoles = () =>
+const stubUserRoles = (role: string) =>
   stubFor({
     request: {
       method: 'GET',
@@ -132,14 +132,28 @@ const stubUserRoles = () =>
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      jsonBody: [{ roleId: 'ROLE_LICENCE_RO' }],
+      jsonBody: [{ roleId: role }],
     },
   })
 
 export default {
   getSignInUrl,
   stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubPing()]),
-  stubSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
-    Promise.all([favicon(), redirect(), signOut(), token(), tokenVerification.stubVerifyToken()]),
-  stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles()]),
+  stubProbationSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
+    Promise.all([
+      favicon(),
+      redirect(),
+      signOut(),
+      token(['ROLE_LICENCE_RO'], 'delius'),
+      tokenVerification.stubVerifyToken(),
+    ]),
+  stubPrisonSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
+    Promise.all([
+      favicon(),
+      redirect(),
+      signOut(),
+      token(['ROLE_LICENCE_DM'], 'nomis'),
+      tokenVerification.stubVerifyToken(),
+    ]),
+  stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles('ROLE_LICENCE_RO')]),
 }

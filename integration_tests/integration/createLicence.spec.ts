@@ -5,7 +5,7 @@ import IndexPage from '../pages'
 context('Create a licence', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubProbationSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetLicence', 1)
     cy.task('stubPostLicence')

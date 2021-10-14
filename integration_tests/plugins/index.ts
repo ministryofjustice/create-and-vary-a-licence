@@ -13,7 +13,8 @@ export default (on: (string, Record) => void): void => {
     reset: resetStubs,
 
     getSignInUrl: auth.getSignInUrl,
-    stubSignIn: auth.stubSignIn,
+    stubPrisonSignIn: auth.stubPrisonSignIn,
+    stubProbationSignIn: auth.stubProbationSignIn,
     stubAuthUser: auth.stubUser,
     stubAuthPing: auth.stubPing,
 
@@ -28,6 +29,7 @@ export default (on: (string, Record) => void): void => {
     stubPutBespokeConditions: licence.stubPutBespokeConditions,
     stubGetLicencesByStaffIdAndStatus: licence.stubGetLicencesByStaffIdAndStatus,
     stubUpdateLicenceStatus: licence.stubUpdateLicenceStatus,
+    stubGetLicencesForApproval: licence.stubGetLicencesForApproval,
 
     stubGetStaffDetails: community.stubGetStaffDetails,
     stubGetManagedOffenders: community.stubGetManagedOffenders,

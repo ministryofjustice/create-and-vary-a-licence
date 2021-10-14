@@ -15,7 +15,7 @@ export default {
           id: 1,
           typeCode: 'AP',
           version: '1.1',
-          statusCode: 'IN_PROGRESS',
+          statusCode: 'SUBMITTED',
           nomsId: 'A1234AA',
           bookingNo: '123456',
           bookingId: '54321',
@@ -153,6 +153,40 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [],
+      },
+    })
+  },
+
+  stubGetLicencesForApproval: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/licence/approval-candidates`,
+        queryParameters: {
+          prison: {
+            matches: '.*',
+          },
+        },
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: 1,
+            licenceType: 'AP',
+            licenceStatus: 'SUBMITTED',
+            nomisId: 'A1234AA',
+            surname: 'Zimmer',
+            forename: 'Bob',
+            prisonCode: 'MDI',
+            prisonDescription: 'Moorland (HMP)',
+            conditionalReleaseDate: '12/12/2022',
+            actualReleaseDate: '01/02/2023',
+            crn: 'X12345',
+            dateOfBirth: '25/12/2000',
+          },
+        ],
       },
     })
   },

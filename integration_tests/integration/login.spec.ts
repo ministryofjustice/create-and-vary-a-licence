@@ -5,7 +5,7 @@ import Page from '../pages/page'
 context('SignIn', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubProbationSignIn')
     cy.task('stubAuthUser')
   })
 
