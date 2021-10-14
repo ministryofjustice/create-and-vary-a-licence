@@ -35,12 +35,18 @@ describe('flashMessageMiddleware', () => {
   })
 
   it('should set validation errors if they exist', async () => {
-    flashMock
-      .mockReturnValueOnce([JSON.stringify({ val: 'error' })])
-      .mockReturnValueOnce([JSON.stringify({ form: 'response' })])
+    flashMock.mockReturnValueOnce([JSON.stringify({ val: 'error' })])
 
     middleware(req, res, next)
-    expect(res.locals).toEqual({ validationErrors: { val: 'error' }, formResponses: { form: 'response' } })
+    expect(res.locals).toMatchObject({ validationErrors: { val: 'error' } })
+    expect(next).toBeCalledTimes(1)
+  })
+
+  it('should set formResponses if they exist', async () => {
+    flashMock.mockReturnValueOnce([JSON.stringify({ form: 'response' })])
+
+    middleware(req, res, next)
+    expect(res.locals).toMatchObject({ validationErrors: { form: 'response' } })
     expect(next).toBeCalledTimes(1)
   })
 })

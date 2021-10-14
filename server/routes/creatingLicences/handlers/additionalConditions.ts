@@ -3,11 +3,8 @@ import { getGroupedAdditionalConditions } from '../../../utils/conditionsProvide
 
 export default class AdditionalConditionsRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
-    const offender = {
-      name: 'Adam Balasaravika',
-    }
     const additionalConditions = getGroupedAdditionalConditions()
-    return res.render('pages/create/additionalConditions', { offender, additionalConditions })
+    return res.render('pages/create/additionalConditions', { additionalConditions })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

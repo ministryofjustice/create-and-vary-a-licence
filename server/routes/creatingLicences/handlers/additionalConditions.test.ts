@@ -17,6 +17,7 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
       params: {
         licenceId: 1,
       },
+      query: {},
     } as unknown as Request
 
     res = {
@@ -29,9 +30,6 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/additionalConditions', {
-        offender: {
-          name: 'Adam Balasaravika',
-        },
         additionalConditions: [
           {
             groupName: 'group1',
@@ -46,6 +44,12 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
     it('should redirect to the bespoke conditions question page', async () => {
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions-question')
+    })
+
+    it('should redirect to the check your answers page if fromReview flag is true', async () => {
+      req.query.fromReview = 'true'
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })
 })

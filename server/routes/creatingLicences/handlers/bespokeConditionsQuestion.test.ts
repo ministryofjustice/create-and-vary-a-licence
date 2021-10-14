@@ -48,6 +48,20 @@ describe('Route Handlers - Create Licence - Bespoke Conditions Question', () => 
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions')
     })
 
+    it('should redirect to the bespoke conditions page with fromReviewFlag when answer is YES', async () => {
+      req = {
+        ...req,
+        body: {
+          answer: 'yes',
+        },
+        query: {
+          fromReview: 'true',
+        },
+      } as unknown as Request
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions?fromReview=true')
+    })
+
     it('should clear any existing bespoke conditions on the licence when the answer is NO', async () => {
       req = {
         ...req,

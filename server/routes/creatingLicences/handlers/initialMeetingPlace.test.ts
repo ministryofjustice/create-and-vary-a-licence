@@ -26,6 +26,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         licenceId: 1,
       },
       body: formAddress,
+      query: {},
     } as unknown as Request
 
     res = {
@@ -56,6 +57,12 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       await handler.POST(req, res)
       expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, res.locals.user.username)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-contact')
+    })
+
+    it('should redirect to the check your answers page if fromReview flag is set', async () => {
+      req.query.fromReview = 'true'
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })
 })
