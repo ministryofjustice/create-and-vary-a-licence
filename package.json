@@ -23,7 +23,7 @@
     "typecheck": "tsc",
     "test": "jest --runInBand --detectOpenHandles --testPathPattern=/server/.*",
     "integrationTest": "jest --runInBand --testPathPattern=/integration_tests/.*",
-    "security_audit": "npx audit-ci --config audit-ci.json",
+    "security_audit": "better-npm-audit audit",
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open",
     "clean": "rm -rf dist build node_modules stylesheets"
@@ -90,6 +90,7 @@
     "agentkeepalive": "^4.1.4",
     "applicationinsights": "^2.1.8",
     "axe-core": "^4.3.3",
+    "better-npm-audit": "^3.4.0",
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
