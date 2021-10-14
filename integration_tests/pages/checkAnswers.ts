@@ -9,6 +9,7 @@ export default class CheckAnswersPage extends Page {
   }
 
   clickSendLicenceConditionsToPrison = (): ConfirmationPage => {
+    cy.task('stubUpdateLicenceStatus')
     cy.get(this.sendLicenceConditionsButtonId).click()
     return Page.verifyOnPage(ConfirmationPage)
   }

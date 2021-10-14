@@ -15,6 +15,11 @@ export default class InitialMeetingPlaceRoutes {
     const { licenceId } = req.params
     const { username } = res.locals.user
     await this.licenceService.updateAppointmentAddress(licenceId, req.body, username)
-    res.redirect(`/licence/create/id/${licenceId}/initial-meeting-contact`)
+
+    if (req.query?.fromReview) {
+      res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
+    } else {
+      res.redirect(`/licence/create/id/${licenceId}/initial-meeting-contact`)
+    }
   }
 }

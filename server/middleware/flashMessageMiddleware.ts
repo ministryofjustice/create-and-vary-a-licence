@@ -8,6 +8,9 @@ export default function checkForFlashMessages(): RequestHandler {
 
       if (validationErrors) {
         res.locals.validationErrors = JSON.parse(validationErrors)
+      }
+
+      if (formResponses) {
         res.locals.formResponses = JSON.parse(formResponses)
       }
     }

@@ -1,0 +1,81 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro inductionMeetingDetails(licence, isEditable) %}
+    <div class="govuk-grid-row check-answers-header">
+        <div class="govuk-grid-column-three-quarters">
+            <h2 class="govuk-heading-m">Induction meeting details</h2>
+        </div>
+    </div>
+
+    {{ govukSummaryList({
+        attributes: { id: 'induction-meeting-details' },
+        classes: 'govuk-!-margin-bottom-9',
+        rows: [
+            {
+                key: { text: "Name" },
+                value: { text: licence.appointmentPerson },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/create/id/" + licence.id + "/initial-meeting-name?fromReview=true",
+                            text: "Change",
+                            visuallyHiddenText: "name"
+                        }
+                    ]
+                } if isEditable
+            },
+            {
+                key: { text: "Address" },
+                value: { html: licence.appointmentAddress | formatAddress },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/create/id/" + licence.id + "/initial-meeting-place?fromReview=true",
+                            text: "Change",
+                            visuallyHiddenText: "address"
+                        }
+                    ]
+                } if isEditable
+            },
+            {
+                key: { text: "Contact phone number" },
+                value: { text: licence.comTelephone },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/create/id/" + licence.id + "/initial-meeting-contact?fromReview=true",
+                            text: "Change",
+                            visuallyHiddenText: "telephone"
+                        }
+                    ]
+                } if isEditable
+            },
+            {
+                key: { text: "Date" },
+                value: { text: licence.appointmentTime | datetimeToDate },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/create/id/" + licence.id + "/initial-meeting-time?fromReview=true",
+                            text: "Change",
+                            visuallyHiddenText: "date"
+                        }
+                    ]
+                } if isEditable
+            },
+            {
+                key: { text: "Time" },
+                value: { text: licence.appointmentTime | datetimeTo12HourTime },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/create/id/" + licence.id + "/initial-meeting-time?fromReview=true",
+                            text: "Change",
+                            visuallyHiddenText: "time"
+                        }
+                    ]
+                } if isEditable
+            }
+        ]
+    }) }}
+{% endmacro %}

@@ -16,6 +16,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
         licenceId: '1',
       },
       body: {},
+      query: {},
     } as unknown as Request
 
     res = {
@@ -42,6 +43,12 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
       await handler.POST(req, res)
       expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', {}, 'joebloggs')
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-place')
+    })
+
+    it('should redirect to the check your answers page if fromReview flag is set', async () => {
+      req.query.fromReview = 'true'
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })
 })

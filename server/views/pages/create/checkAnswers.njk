@@ -1,10 +1,14 @@
 {% extends "layout.njk" %}
 
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
+{% from "partials/additionalConditionsSummary.njk" import additionalConditions %}
+{% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
+
+{% set isEditable = licence.statusCode == 'IN_PROGRESS' %}
 
 {% macro additionalConditionHtml(template, data) %}
     <div class="govuk-!-margin-bottom-4">
@@ -20,181 +24,28 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <span class="govuk-caption-m">{{ licence.offender.name }}</span>
+            <span class="govuk-caption-m">{{ licence.forename + " " + licence.surname }}</span>
             <h1 class="govuk-heading-l">Check your answers</h1>
         </div>
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
 
-            <div class="govuk-grid-row check-answers-header">
-                <div class="govuk-grid-column-three-quarters">
-                    <h2 class="govuk-heading-m">Induction meeting details</h2>
-                </div>
-            </div>
+            {{ inductionMeetingDetails(licence, isEditable) }}
+            {{ additionalConditions(licence, isEditable) }}
+            {{ bespokeConditions(licence, isEditable) }}
 
-            {{ govukSummaryList({
-                attributes: {
-                    id: 'induction-meeting-details'
-                },
-                classes: 'govuk-!-margin-bottom-9',
-                rows: [
-                    {
-                        key: {
-                            text: "Name"
-                        },
-                        value: {
-                            text: licence.induction.name
-                        },
-                        actions: {
-                            items: [
-                                {
-                                    href: "#",
-                                    text: "Change",
-                                    visuallyHiddenText: "name"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        key: {
-                            text: "Address"
-                        },
-                        value: {
-                            text: licence.induction.address | concatValues
-                        },
-                        actions: {
-                            items: [
-                                {
-                                    href: "#",
-                                    text: "Change",
-                                    visuallyHiddenText: "address"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        key: {
-                            text: "Contact phone number"
-                        },
-                        value: {
-                            text: licence.induction.telephone
-                        },
-                        actions: {
-                            items: [
-                                {
-                                    href: "#",
-                                    text: "Change",
-                                    visuallyHiddenText: "telephone"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        key: {
-                            text: "Date"
-                         },
-                        value: {
-                            text: licence.induction.date
-                        },
-                        actions: {
-                            items: [
-                                {
-                                    href: "#",
-                                    text: "Change",
-                                    visuallyHiddenText: "date"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        key: {
-                            text: "Time"
-                        },
-                        value: {
-                            text: licence.induction.time
-                        },
-                        actions: {
-                            items: [
-                                {
-                                    href: "#",
-                                    text: "Change",
-                                    visuallyHiddenText: "time"
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }) }}
-
-            <div class="govuk-grid-row check-answers-header">
-                <div class="govuk-grid-column-three-quarters">
-                    <h2 class="govuk-heading-m">Additional licence conditions details</h2>
-                </div>
-                <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
-                    <a href="#" class="govuk-link govuk-!-font-size-19">Change</a>
-                </div>
-            </div>
-
-            {% set additionalConditions = [] %}
-
-            {% for condition in licence.additionalConditions %}
-                {% set additionalConditions = (additionalConditions.push({
-                    key: {
-                        text: condition.category
-                    },
-                    value: {
-                        html: additionalConditionHtml(condition.template, condition.data)
-                    }
-                }), additionalConditions) %}
-            {% endfor %}
-
-            {{ govukSummaryList({
-                attributes: {
-                    id: 'additional-conditions-details'
-                },
-                classes: 'govuk-!-margin-bottom-9',
-                rows: additionalConditions
-            }) }}
-
-            <div class="govuk-grid-row check-answers-header">
-                <div class="govuk-grid-column-three-quarters">
-                    <h2 class="govuk-heading-m">Bespoke licence conditions details</h2>
-                </div>
-                <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
-                    <a href="#" class="govuk-link govuk-!-font-size-19">Change</a>
-                </div>
-            </div>
-
-            {% set bespokeConditions = [] %}
-
-            {% for condition in licence.bespokeConditions %}
-                {% set bespokeConditions = (bespokeConditions.push({
-                    key: {
-                        text: 'Bespoke condition'
-                    },
-                    value: {
-                        text: condition
-                    }
-                }), bespokeConditions) %}
-            {% endfor %}
-
-            {{ govukSummaryList({
-                attributes: {
-                    id: 'bespoke-conditions-details'
-                },
-                classes: 'govuk-!-margin-bottom-9',
-                rows: bespokeConditions
-            }) }}
-
-            <form method="POST">
-                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                <input type="hidden" name="answers-checked" value="true">
-                {{ govukButton({
-                    text: "Send licence conditions to prison",
-                    attributes: { 'data-qa': 'send-licence-conditions' }
-                }) }}
-            </form>
+            {% if isEditable %}
+                <form method="POST">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                    <input type="hidden" name="answers-checked" value="true">
+                    {{ govukButton({
+                        text: "Send licence conditions to prison",
+                        attributes: { 'data-qa': 'send-licence-conditions' }
+                    }) }}
+                </form>
+            {% endif %}
+            <a href="/licence/create/caseload" class="govuk-link govuk-!-font-size-19">Return to caseload</a>
         </div>
     </div>
 {% endblock %}

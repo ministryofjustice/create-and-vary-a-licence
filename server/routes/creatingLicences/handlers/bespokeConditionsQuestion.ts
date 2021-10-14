@@ -15,7 +15,9 @@ export default class BespokeConditionsQuestionRoutes {
     const { username } = req.user
     const { answer } = req.body
     if (answer === YesOrNo.YES) {
-      res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions`)
+      res.redirect(
+        `/licence/create/id/${licenceId}/bespoke-conditions${req.query?.fromReview ? '?fromReview=true' : ''}`
+      )
     } else {
       await this.licenceService.updateBespokeConditions(licenceId, { conditions: [] } as BespokeConditions, username)
       res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
