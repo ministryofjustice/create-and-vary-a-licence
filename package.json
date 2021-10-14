@@ -23,7 +23,7 @@
     "typecheck": "tsc",
     "test": "jest --runInBand --detectOpenHandles --testPathPattern=/server/.*",
     "integrationTest": "jest --runInBand --testPathPattern=/integration_tests/.*",
-    "security_audit": "npx audit-ci --config audit-ci.json",
+    "security_audit": "better-npm-audit audit",
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open",
     "clean": "rm -rf dist build node_modules stylesheets"
@@ -140,6 +140,7 @@
     "@types/superagent": "^4.1.13",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "better-npm-audit": "^3.4.0",
     "cheerio": "^1.0.0-rc.10",
     "concurrently": "^6.3.0",
     "cypress": "^8.5.0",
