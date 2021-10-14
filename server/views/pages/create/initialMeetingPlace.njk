@@ -85,7 +85,7 @@
 
                 {% endcall %}
                 {{ govukButton({
-                    text: "Return to check your answers" if fromReview else "Continue",
+                    text: continueOrReturnToCheckAnswers,
                     type: "submit",
                     attributes: { 'data-qa': 'continue' }
                 }) }}

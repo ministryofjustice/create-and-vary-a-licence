@@ -53,7 +53,7 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 {{ govukButton({
-                    text: "Return to check your answers" if fromReview else "Continue",
+                    text: continueOrReturnToCheckAnswers,
                     type: "submit",
                     attributes: { 'data-qa': 'continue' }
                 }) }}
