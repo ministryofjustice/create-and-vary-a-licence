@@ -11,10 +11,9 @@
 {% for offender in caseload %}
     {% set offenders = (offenders.push([
         {
-            attributes: {
-                id: 'name-' + loop.index
-            },
-            html: '<h2 class="govuk-heading-m govuk-!-margin-bottom-3">' + offender.name + '</h2>'
+            attributes: { id: 'name-' + loop.index },
+            html: '<button type="submit" name="prisonerNumber" value=' + offender.prisonerNumber +
+                  ' class="link-button govuk-heading-s">' + offender.name + '</button>'
         },
         {
             attributes: {
@@ -27,17 +26,6 @@
                 id: 'release-date-' + loop.index
             },
             text: offender.conditionalReleaseDate
-        },
-        {
-            html: govukButton({
-                attributes: {
-                    id: 'create-licence-' + loop.index
-                },
-                text: "Create licence",
-                classes: "govuk-button--secondary govuk-!-margin-bottom-0",
-                name: "prisonerNumber",
-                value: offender.prisonerNumber
-            })
         }
     ]), offenders) %}
 {% endfor %}
@@ -63,9 +51,6 @@
                 },
                 {
                     text: "Conditional release date"
-                },
-                {
-                    text: ''
                 }
             ],
             rows: offenders

@@ -5,6 +5,7 @@
 
 {% set pageTitle = applicationName + " - approval cases" %}
 {% set pageId = "approval-cases-page" %}
+{% set backLinkHref = "/" %}
 
 {% set licences = [] %}
 
@@ -13,7 +14,7 @@
         {
             attributes: { id: 'name-' + loop.index },
             html: '<button type="submit" name="licenceId" value=' + case.licenceId +
-                  ' class="link-button govuk-body govuk-heading-m govuk-!-font-weight-bold">' +
+                  ' class="link-button govuk-heading-s">' +
                   case.forename + ' ' + case.surname +
                   '</button>'
         },
@@ -61,6 +62,5 @@
               </div>
           </div>
         {% endif %}
-
     </form>
 {% endblock %}
