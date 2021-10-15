@@ -5,7 +5,7 @@ import IndexPage from '../pages'
 context('Create a licence', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubSignIn')
+    cy.task('stubProbationSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetLicence')
     cy.signIn()
@@ -47,7 +47,7 @@ context('Create a licence', () => {
       .clickContinue()
 
     const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
-
-    confirmationPage.clickReturnHome()
+    const indexPageExit = confirmationPage.clickReturnHome()
+    indexPageExit.signOut().click()
   })
 })

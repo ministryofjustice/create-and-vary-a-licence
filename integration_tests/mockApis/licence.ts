@@ -54,7 +54,7 @@ export default {
     })
   },
 
-  stubGetCompletedLicence: (): SuperAgentRequest => {
+  stubGetCompletedLicence: (statusCode: string): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -65,6 +65,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
+          statusCode, // Overrides licencePlaceHolder status
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
           comTelephone: '07891245678',
@@ -185,6 +186,40 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [],
+      },
+    })
+  },
+
+  stubGetLicencesForApproval: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/licence/approval-candidates`,
+        queryParameters: {
+          prison: {
+            matches: '.*',
+          },
+        },
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: licencePlaceholder.id,
+            licenceType: licencePlaceholder.typeCode,
+            licenceStatus: 'SUBMITTED',
+            nomisId: licencePlaceholder.nomsId,
+            surname: licencePlaceholder.surname,
+            forename: licencePlaceholder.forename,
+            prisonCode: licencePlaceholder.prisonCode,
+            prisonDescription: licencePlaceholder.prisonDescription,
+            conditionalReleaseDate: licencePlaceholder.conditionalReleaseDate,
+            actualReleaseDate: licencePlaceholder.actualReleaseDate,
+            crn: licencePlaceholder.crn,
+            dateOfBirth: licencePlaceholder.dateOfBirth,
+          },
+        ],
       },
     })
   },
