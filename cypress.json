@@ -14,6 +14,6 @@
   },
   "videoUploadOnPasses": false,
   "taskTimeout": 60000,
-  "viewportHeight": 1000,
+  "viewportHeight": 1200,
   "viewportWidth": 1300
 }
