@@ -10,7 +10,7 @@
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
 
 {% block content %}
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Select additional conditions</h1>
             <span class="govuk-hint">Select all relevent conditions</span>
@@ -25,23 +25,14 @@
                 {% for group in additionalConditions %}
                     {% set items = [] %}
                     {% for condition in group.conditions %}
-                        {% set conditionalHtml = {} %}
-                        {% if condition.inputTemplate %}
-                            {% set conditionalHtml = {
-                                html: formBuilder({
-                                    id: condition.id,
-                                    inputTemplate: condition.inputTemplate,
-                                    errorMessages: validationErrors,
-                                    formResponses: formResponses
-                                })
-                            } %}
-                        {% endif %}
                         {% set items = (items.push({
                             id: condition.id,
                             value: condition.id,
                             text: condition.text,
                             checked: formResponses.additionalConditions and condition.id in formResponses.additionalConditions,
-                            conditional: conditionalHtml
+                            label: {
+                                classes: 'govuk-!-padding-top-0'
+                            }
                         }), items) %}
                     {% endfor %}
 
@@ -52,8 +43,7 @@
                                 text: group.groupName,
                                 isPageHeading: true,
                                 classes: "govuk-fieldset__legend--l"
-                            },
-                            classes: "govuk-!-margin-top-6"
+                            }
                         },
                         items: items
                     }) }}
@@ -62,6 +52,7 @@
                 {{ govukButton({
                     text: continueOrReturnToCheckAnswers,
                     type: "submit",
+                    classes: 'govuk-!-margin-top-6',
                     attributes: { 'data-qa': 'continue' }
                 }) }}
             </div>
