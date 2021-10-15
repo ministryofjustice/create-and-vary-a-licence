@@ -1,12 +1,13 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
+import { GetLicenceArgs } from '../types/testArguments'
 
 export default {
-  stubGetLicence: (licenceId: string): SuperAgentRequest => {
+  stubGetLicence: (args: GetLicenceArgs): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/${licenceId}`,
+        urlPattern: `/licence/id/${args.licenceId}`,
       },
       response: {
         status: 200,
@@ -15,7 +16,7 @@ export default {
           id: 1,
           typeCode: 'AP',
           version: '1.1',
-          statusCode: 'SUBMITTED',
+          statusCode: args.licenceStatus,
           nomsId: 'A1234AA',
           bookingNo: '123456',
           bookingId: '54321',

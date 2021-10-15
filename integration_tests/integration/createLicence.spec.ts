@@ -1,13 +1,15 @@
 import moment from 'moment'
 import Page from '../pages/page'
 import IndexPage from '../pages'
+import LicenceStatus from '../../server/enumeration/licenceStatus'
+import { GetLicenceArgs } from '../types/testArguments'
 
 context('Create a licence', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetLicence', 1)
+    cy.task('stubGetLicence', { licenceId: '1', licenceStatus: LicenceStatus.IN_PROGRESS } as GetLicenceArgs)
     cy.task('stubPostLicence')
     cy.task('stubPutAppointmentPerson', 1)
     cy.task('stubPutAppointmentTime', 1)
@@ -61,7 +63,7 @@ context('Create a licence', () => {
       .clickContinue()
 
     const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
-
-    confirmationPage.clickReturnHome()
+    const indexPageExit = confirmationPage.clickReturnHome()
+    indexPageExit.signOut().click()
   })
 })
