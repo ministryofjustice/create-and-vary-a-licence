@@ -9,6 +9,7 @@ export default class CaseloadPage extends Page {
   }
 
   clickCreateLicence = (): AppointmentPersonPage => {
+    cy.task('stubPostLicence')
     cy.get(this.createLicenceButtonId).click()
     return Page.verifyOnPage(AppointmentPersonPage)
   }

@@ -97,7 +97,7 @@ const jsonDtToDate = (dt: string): string => {
 
 const jsonDtTo12HourTime = (dt: string): string => {
   const momentTime = moment(dt, 'DD/MM/YYYY HH:mm')
-  return momentTime.isValid() ? momentTime.format('hh mm a') : null
+  return momentTime.isValid() ? momentTime.format('hh:mm a') : null
 }
 
 export {

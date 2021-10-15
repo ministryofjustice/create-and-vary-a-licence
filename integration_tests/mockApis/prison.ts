@@ -2,11 +2,11 @@ import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
 
 export default {
-  stubGetPrisonerDetail: (nomisId: string): SuperAgentRequest => {
+  stubGetPrisonerDetail: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/offenders/${nomisId}`,
+        urlPattern: `/api/offenders/G9786GC`,
       },
       response: {
         status: 200,

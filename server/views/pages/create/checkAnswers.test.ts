@@ -61,7 +61,7 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display a table containing the bespoke conditions', () => {
     viewContext = {
       licence: {
-        bespokeConditions: ['Bespoke condition 1', 'Bespoke condition 2'],
+        bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
       },
     }
 
@@ -70,5 +70,31 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)
     expect($('#bespoke-conditions-details > div:nth-child(1) > dd').text().trim()).toBe('Bespoke condition 1')
     expect($('#bespoke-conditions-details > div:nth-child(2) > dd').text().trim()).toBe('Bespoke condition 2')
+  })
+
+  it('should show change links and submit button when licence status is IN_PROGRESS', () => {
+    viewContext = {
+      licence: {
+        statusCode: 'IN_PROGRESS',
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    expect($('.govuk-summary-list__actions').length).toBe(5)
+    expect($('.check-answers-header__change-link').length).toBe(2)
+    expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
+  })
+
+  it('should hide change links and submit button when licence status is not IN_PROGRESS', () => {
+    viewContext = {
+      licence: {
+        statusCode: 'SUBMITTED',
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    expect($('.govuk-summary-list__actions').length).toBe(0)
+    expect($('.check-answers-header__change-link').length).toBe(0)
+    expect($('[data-qa="send-licence-conditions"]').length).toBe(0)
   })
 })

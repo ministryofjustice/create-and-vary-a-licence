@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 jest.mock('../../../services/licenceService')
 
@@ -21,36 +22,54 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       user: {
         username: 'joebloggs',
       },
+      flash: jest.fn(),
     } as unknown as Request
 
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
     } as unknown as Response
-
-    licenceService.getLicenceStub.mockReturnValue({
-      offender: {
-        name: 'Adam Balasaravika',
-        prison: 'Brixton Prison',
-      },
-    })
   })
 
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        licence: {
-          offender: {
-            name: 'Adam Balasaravika',
-            prison: 'Brixton Prison',
-          },
-        },
-      })
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers')
     })
   })
 
   describe('POST', () => {
+    beforeEach(() => {
+      licenceService.getLicence.mockResolvedValue({
+        appointmentPerson: 'Isaac Newton',
+        appointmentAddress: 'Down the road, over there',
+        comTelephone: '07891245678',
+        appointmentTime: '01/12/2021 00:34',
+      } as Licence)
+    })
+
+    it('should redirect back with error messages in flash if licence fields are empty', async () => {
+      licenceService.getLicence.mockResolvedValue({
+        appointmentPerson: '',
+        appointmentAddress: '',
+        comTelephone: '',
+        appointmentTime: '',
+      } as Licence)
+
+      await handler.POST(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith(
+        'validationErrors',
+        JSON.stringify([
+          { field: 'appointmentPerson', message: 'The person to meet at the induction meeting must be entered' },
+          { field: 'appointmentAddress', message: 'The address of the induction meeting must be entered' },
+          { field: 'comTelephone', message: 'The telephone number for the induction meeting must be entered' },
+          { field: 'appointmentTime', message: 'The date and time of the induction meeting must be entered' },
+        ])
+      )
+      expect(res.redirect).toHaveBeenCalledWith('back')
+    })
+
     it('should call the licence API to update the status of the licence', async () => {
       await handler.POST(req, res)
       expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.SUBMITTED, 'joebloggs')

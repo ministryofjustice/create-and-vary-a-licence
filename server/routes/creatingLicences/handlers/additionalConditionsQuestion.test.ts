@@ -39,6 +39,20 @@ describe('Route Handlers - Create Licence - Additional Conditions Question', () 
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions')
     })
 
+    it('should redirect to the additional conditions page with fromReview flag', async () => {
+      req = {
+        ...req,
+        body: {
+          answer: 'yes',
+        },
+        query: {
+          fromReview: 'true',
+        },
+      } as unknown as Request
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions?fromReview=true')
+    })
+
     it('should redirect to the bespoke conditions question page when answer is NO', async () => {
       req = {
         ...req,
@@ -48,6 +62,20 @@ describe('Route Handlers - Create Licence - Additional Conditions Question', () 
       } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions-question')
+    })
+
+    it('should redirect to check your answers page when answer is NO and fromReview flag is true', async () => {
+      req = {
+        ...req,
+        body: {
+          answer: 'no',
+        },
+        query: {
+          fromReview: 'true',
+        },
+      } as unknown as Request
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })
 })

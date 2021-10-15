@@ -16,6 +16,7 @@ export default class AppointmentPersonPage extends Page {
   }
 
   clickContinue = (): AppointmentPlacePage => {
+    cy.task('stubPutAppointmentPerson')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AppointmentPlacePage)
   }

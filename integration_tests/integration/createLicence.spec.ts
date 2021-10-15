@@ -1,29 +1,13 @@
 import moment from 'moment'
 import Page from '../pages/page'
 import IndexPage from '../pages'
-import LicenceStatus from '../../server/enumeration/licenceStatus'
-import { GetLicenceArgs } from '../types/testArguments'
 
 context('Create a licence', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubAuthUser')
-    cy.task('stubGetLicence', { licenceId: '1', licenceStatus: LicenceStatus.IN_PROGRESS } as GetLicenceArgs)
-    cy.task('stubPostLicence')
-    cy.task('stubPutAppointmentPerson', 1)
-    cy.task('stubPutAppointmentTime', 1)
-    cy.task('stubPutAppointmentAddress', 1)
-    cy.task('stubPutBespokeConditions', 1)
-    cy.task('stubPutContactNumber', 1)
-    cy.task('stubGetStaffDetails', 'USER1')
-    cy.task('stubGetManagedOffenders', 2000)
-    cy.task('searchPrisonersByNomisIds')
-    cy.task('stubGetLicencesByStaffIdAndStatus', 2000)
-    cy.task('stubGetPrisonerDetail', 'G9786GC')
-    cy.task('stubGetProbationer')
-    cy.task('stubGetPrisonInformation')
-    cy.task('stubUpdateLicenceStatus', 1)
+    cy.task('stubGetLicence')
     cy.signIn()
   })
 

@@ -30,6 +30,7 @@ export default (on: (string, Record) => void): void => {
     stubGetLicencesByStaffIdAndStatus: licence.stubGetLicencesByStaffIdAndStatus,
     stubUpdateLicenceStatus: licence.stubUpdateLicenceStatus,
     stubGetLicencesForApproval: licence.stubGetLicencesForApproval,
+    stubGetCompletedLicence: licence.stubGetCompletedLicence,
 
     stubGetStaffDetails: community.stubGetStaffDetails,
     stubGetManagedOffenders: community.stubGetManagedOffenders,

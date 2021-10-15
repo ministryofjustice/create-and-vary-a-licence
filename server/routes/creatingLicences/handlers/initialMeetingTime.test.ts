@@ -31,6 +31,7 @@ describe('Route - create licence - initial meeting date and time', () => {
         licenceId: 1,
       },
       body: formDate,
+      query: {},
     } as unknown as Request
 
     res = {
@@ -61,6 +62,12 @@ describe('Route - create licence - initial meeting date and time', () => {
       await handler.POST(req, res)
       expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, res.locals.user.username)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions-question')
+    })
+
+    it('should redirect to the check your answers page if fromReview flag is set', async () => {
+      req.query.fromReview = 'true'
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })
 })

@@ -37,6 +37,7 @@ export default class AppointmentTimePage extends Page {
   }
 
   clickContinue = (): AdditionalConditionsQuestionPage => {
+    cy.task('stubPutAppointmentTime')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsQuestionPage)
   }
