@@ -2,7 +2,7 @@ import Page from './page'
 import ApprovalViewPage from './approvalView'
 
 export default class ApprovalCasesPage extends Page {
-  private approveLicenceButtonId = '#view-licence-1'
+  private approveLicenceButtonId = '#name-1'
 
   constructor() {
     super('approval-cases-page')

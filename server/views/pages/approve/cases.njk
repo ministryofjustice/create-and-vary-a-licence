@@ -12,7 +12,10 @@
     {% set licences = (licences.push([
         {
             attributes: { id: 'name-' + loop.index },
-            html: '<h2 class="govuk-heading-s govuk-!-margin-bottom-1">' + case.forename + ' ' + case.surname + '</h2>'
+            html: '<button type="submit" name="licenceId" value=' + case.licenceId +
+                  ' class="link-button govuk-body govuk-heading-m govuk-!-font-weight-bold">' +
+                  case.forename + ' ' + case.surname +
+                  '</button>'
         },
         {
             attributes: { id: 'nomis-id-' + loop.index },
@@ -25,16 +28,6 @@
         {
             attributes: { id: 'conditional-release-date-' + loop.index },
             text: case.conditionalReleaseDate | datetimeToDate
-        },
-        {
-            html: govukButton({
-              attributes: { id: 'view-licence-' + loop.index },
-              text: "View licence",
-              classes: "govuk-button--secondary govuk-!-margin-bottom-0",
-              name: "licenceId",
-              id: "licenceId",
-              value: case.licenceId
-            })
         }
     ]), licences) %}
 {% endfor %}
@@ -56,8 +49,7 @@
               { text: "Name" },
               { text: "Nomis ID" },
               { text: "Prison" },
-              { text: "Conditional release date" },
-              { text: '' }
+              { text: "Conditional release date" }
             ],
             rows: licences
         }) }}
