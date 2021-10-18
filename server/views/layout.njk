@@ -47,7 +47,8 @@
     <nav>
       {{ govukBackLink({
         text: "Back",
-        href: backLinkHref
+        href: backLinkHref,
+        classes: 'js-backlink' if not noJsBackLink
       }) }}
     </nav>
   {% endif %}
