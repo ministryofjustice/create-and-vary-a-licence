@@ -12,14 +12,13 @@
         {% endif %}
     {% endmacro %}
 
-
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
             <h2 class="govuk-heading-m">Additional licence conditions details</h2>
         </div>
         {% if isEditable %}
             <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
-                <a href="{{ '/licence/create/id/' + licence.id + '/additional-conditions-question?fromReview=true'}}" class="govuk-link govuk-!-font-size-19">Change</a>
+                <a href="{{ '/licence/create/id/' + licence.id + '/additional-conditions?fromReview=true'}}" class="govuk-link govuk-!-font-size-19">Change</a>
             </div>
         {% endif %}
     </div>

@@ -131,13 +131,14 @@ export default class LicenceService {
     const additionalConditions = getAdditionalConditions()
 
     const requestBody = {
-      additionalConditions: formData.additionalConditions.map((conditionCode, index) => {
-        return {
-          code: conditionCode,
-          sequence: index,
-          text: additionalConditions.find(c => c.id === conditionCode)?.text,
-        }
-      }),
+      additionalConditions:
+        formData.additionalConditions?.map((conditionCode, index) => {
+          return {
+            code: conditionCode,
+            sequence: index,
+            text: additionalConditions.find(c => c.id === conditionCode)?.text,
+          }
+        }) || [],
     } as AdditionalConditionsRequest
 
     return new LicenceApiClient(token).updateAdditionalConditions(id, requestBody)
