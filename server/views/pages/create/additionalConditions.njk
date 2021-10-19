@@ -28,7 +28,7 @@
                             id: condition.id,
                             value: condition.id,
                             text: condition.text,
-                            checked: formResponses.additionalConditions and condition.id in formResponses.additionalConditions,
+                            checked: condition.id | additionalConditionChecked(licence.additionalConditions),
                             label: {
                                 classes: 'govuk-!-padding-top-0'
                             }

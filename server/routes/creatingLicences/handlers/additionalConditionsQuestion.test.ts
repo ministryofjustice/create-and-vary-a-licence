@@ -2,8 +2,12 @@ import { Request, Response } from 'express'
 
 import AdditionalConditionsQuestionRoutes from './additionalConditionsQuestion'
 
+import LicenceService from '../../../services/licenceService'
+
+const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+
 describe('Route Handlers - Create Licence - Additional Conditions Question', () => {
-  const handler = new AdditionalConditionsQuestionRoutes()
+  const handler = new AdditionalConditionsQuestionRoutes(licenceService)
   let req: Request
   let res: Response
 

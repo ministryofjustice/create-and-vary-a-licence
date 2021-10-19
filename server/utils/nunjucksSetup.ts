@@ -88,6 +88,13 @@ export function registerNunjucks(app?: express.Express): Environment {
     return defaultValue
   })
 
+  njkEnv.addFilter(
+    'additionalConditionChecked',
+    (conditionId: string, additionalConditions: Record<string, unknown>[]) => {
+      return additionalConditions.find(c => c.code === conditionId) !== undefined
+    }
+  )
+
   njkEnv.addFilter('datetimeToDate', (dt: string) => {
     return jsonDtToDate(dt)
   })

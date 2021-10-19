@@ -2,14 +2,14 @@
 
 {% macro additionalConditions(licence, isEditable) %}
     {% macro additionalConditionHtml(template, data) %}
-        <div class="govuk-!-margin-bottom-4">
-            {{ template }}
-        </div>
-        <div class="govuk-!-font-weight-bold">
-            {% for entry in data %}
-                <span class="govuk-!-display-block">{{ entry }}</span>
-            {% endfor %}
-        </div>
+        {{ template }}
+        {% if data.length %}
+            <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
+                {% for entry in data %}
+                    <span class="govuk-!-display-block">{{ entry }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endmacro %}
 
 
@@ -29,7 +29,7 @@
     {% for condition in licence.additionalConditions %}
         {% set additionalConditions = (additionalConditions.push({
             key: {  text: condition.category },
-            value: { html: additionalConditionHtml(condition.template, condition.data) }
+            value: { html: additionalConditionHtml(condition.text, condition.data) }
         }), additionalConditions) %}
     {% endfor %}
 
