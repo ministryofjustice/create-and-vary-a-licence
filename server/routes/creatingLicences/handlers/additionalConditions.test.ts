@@ -1,14 +1,17 @@
 import { Request, Response } from 'express'
 
 import AdditionalConditionsRoutes from './additionalConditions'
+import LicenceService from '../../../services/licenceService'
 import * as conditionsProvider from '../../../utils/conditionsProvider'
+
+const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 
 jest
   .spyOn(conditionsProvider, 'getGroupedAdditionalConditions')
   .mockReturnValue([{ groupName: 'group1', conditions: [{ id: 'condition1' }] }])
 
 describe('Route Handlers - Create Licence - Additional Conditions', () => {
-  const handler = new AdditionalConditionsRoutes()
+  const handler = new AdditionalConditionsRoutes(licenceService)
   let req: Request
   let res: Response
 

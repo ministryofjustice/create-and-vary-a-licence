@@ -14,6 +14,10 @@ export function getStandardConditions(licenceType: string): Record<string, unkno
   }
 }
 
+export function getAdditionalConditions(): Record<string, unknown>[] {
+  return conditionsConfig.additionalConditions
+}
+
 export function getGroupedAdditionalConditions(): Record<string, unknown>[] {
   const map = new Map()
   conditionsConfig.additionalConditions.forEach(condition => {
