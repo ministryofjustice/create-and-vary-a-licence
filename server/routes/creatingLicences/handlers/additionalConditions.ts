@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { getGroupedAdditionalConditions } from '../../../utils/conditionsProvider'
 import LicenceService from '../../../services/licenceService'
-import AdditionalConditions from '../types/additionalConditions'
 
 export default class AdditionalConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}

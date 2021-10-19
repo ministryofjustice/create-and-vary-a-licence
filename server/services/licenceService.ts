@@ -136,6 +136,7 @@ export default class LicenceService {
           return {
             code: conditionCode,
             sequence: index,
+            category: additionalConditions.find(c => c.id === conditionCode)?.category,
             text: additionalConditions.find(c => c.id === conditionCode)?.text,
           }
         }) || [],

@@ -101,6 +101,8 @@ export interface components {
       id?: number
       /** Coded value for the additional condition */
       code?: string
+      /** The category of the additional condition */
+      category?: string
       /** Sequence of this additional condition within the additional conditions */
       sequence?: number
       /** The textual value for this additional condition */
