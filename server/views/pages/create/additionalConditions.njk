@@ -25,10 +25,10 @@
                     {% set items = [] %}
                     {% for condition in group.conditions %}
                         {% set items = (items.push({
-                            id: condition.id,
-                            value: condition.id,
+                            id: condition.code,
+                            value: condition.code,
                             text: condition.text,
-                            checked: condition.id | additionalConditionChecked(licence.additionalConditions),
+                            checked: condition.code | additionalConditionChecked(licence.additionalConditions),
                             label: {
                                 classes: 'govuk-!-padding-top-0'
                             }
