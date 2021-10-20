@@ -1,7 +1,18 @@
 export default {
   version: '1.0',
 
-  // TODO: Remove the sequence numbers from config + replace codes with UUID (needs DB schema change)
+  /*
+    Each condition below has a universally unique identifier (UUID) as its 'code'.
+    This UUID should stay constant for the entire lifetime of the condition policy.
+
+    If a change in policy means the content of a particular licence condition should be updated, including conditions on any existing or varied licences,
+    then the content can be changed here whilst ensuring the condition keeps the same UUID.
+
+    Any condition added with a new UUID will be treated as a new condition and any edit of an in-flight or varied licence will not be affected by the change.
+
+    A UUID can be generated on MacOS or Linux terminal by running the command 'uuidgen'
+ */
+  // TODO: Standard conditons are not yet subject to the above comment about UUID - Remove the sequence numbers from config + replace codes with UUID (needs DB schema change)
   standardConditions: {
     AP: [
       {
@@ -41,21 +52,6 @@ export default {
       },
     ],
   },
-
-  /*
-      ###ADDITIONAL CONDITIONS###
-
-      Each additional condition below has a universally unique identifier (UUID).
-      This UUID should stay constant for the entire lifetime of the condition policy.
-
-      If a change in policy means the content of a particular licence condition should be updated, including conditions on any existing or varied licences,
-      then the content can be changed here whilst ensuring the condition keeps the same UUID.
-
-      Any condition added with a new UUID will be treated as a new additional condition and any edit of an in-flight or varied licence will not be affected by the change.
-
-      A UUID can be generated on MacOS or Linux terminal by running the command 'uuidgen'
-   */
-
   // TODO: Add input template names for conditions which require additional data
   additionalConditions: [
     {
