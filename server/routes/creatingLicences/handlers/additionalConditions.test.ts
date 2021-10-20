@@ -8,7 +8,7 @@ const licenceService = new LicenceService(null, null, null) as jest.Mocked<Licen
 
 jest
   .spyOn(conditionsProvider, 'getGroupedAdditionalConditions')
-  .mockReturnValue([{ groupName: 'group1', conditions: [{ id: 'condition1' }] }])
+  .mockReturnValue([{ groupName: 'group1', conditions: [{ code: 'condition1' }] }])
 
 describe('Route Handlers - Create Licence - Additional Conditions', () => {
   const handler = new AdditionalConditionsRoutes(licenceService)
@@ -40,7 +40,7 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
         additionalConditions: [
           {
             groupName: 'group1',
-            conditions: [{ id: 'condition1' }],
+            conditions: [{ code: 'condition1' }],
           },
         ],
       })
