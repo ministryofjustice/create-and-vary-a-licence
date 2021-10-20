@@ -39,6 +39,20 @@ export default {
       },
     ],
   },
+
+  /*
+      ###ADDITIONAL CONDITIONS###
+
+      Each additional condition below has a universally unique identifier (UUID).
+      This UUID should stay constant for the entire lifetime of the condition policy.
+
+      If a change in policy means the content of a particular licence condition should be updated, including conditions on any existing or varied licences,
+      then the content can be changed here whilst ensuring the condition keeps the same UUID.
+
+      Any condition added with a new UUID will be treated as a new additional condition and any edit of an in-flight or varied licence will not be affected by the change.
+
+      A UUID can be generated on MacOS or Linux terminal by running the command 'uuidgen'
+   */
   additionalConditions: [
     {
       id: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
