@@ -5,9 +5,11 @@ import CommunityService from './communityService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import TokenStore from '../data/tokenStore'
 import CaseloadService from './caseloadService'
+import PrisonApiClient from '../data/prisonApiClient'
 
 const hmppsAuthClient = new HmppsAuthClient(new TokenStore())
-const userService = new UserService(hmppsAuthClient)
+const prisonApiClient = new PrisonApiClient('no admin token required for user service')
+const userService = new UserService(hmppsAuthClient, prisonApiClient)
 const prisonerService = new PrisonerService(hmppsAuthClient)
 const communityService = new CommunityService(hmppsAuthClient)
 const licenceService = new LicenceService(hmppsAuthClient, prisonerService, communityService)

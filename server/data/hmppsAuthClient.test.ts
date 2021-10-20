@@ -39,6 +39,18 @@ describe('hmppsAuthClient', () => {
     })
   })
 
+  describe('getUserEmail', () => {
+    it('should return email address', async () => {
+      const response = { data: 'data' }
+      fakeHmppsAuthApi
+        .get('/api/me/email')
+        .matchHeader('authorization', `Bearer ${token.access_token}`)
+        .reply(200, response)
+      const output = await hmppsAuthClient.getUserEmail(token.access_token)
+      expect(output).toEqual(response)
+    })
+  })
+
   describe('getUserRoles', () => {
     it('should return data from api', async () => {
       fakeHmppsAuthApi

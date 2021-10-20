@@ -37,6 +37,8 @@ export default (on: (string, Record) => void): void => {
 
     searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
 
+    stubGetPrisonUserDetails: prison.stubGetUserDetails,
+    stubGetPrisonUserCaseloads: prison.stubGetUserCaseloads,
     stubGetPrisonerDetail: prison.stubGetPrisonerDetail,
     stubGetPrisonInformation: prison.stubGetPrisonInformation,
 

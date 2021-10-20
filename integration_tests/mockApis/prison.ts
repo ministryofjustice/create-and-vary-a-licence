@@ -45,4 +45,50 @@ export default {
       },
     })
   },
+
+  stubGetUserDetails: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/users/me`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          accountStatus: 'ACTIVE',
+          active: true,
+          activeCaseLoadId: 'LEI',
+          expiredFlag: false,
+          firstName: 'john',
+          lastName: 'smith',
+          lockedFlag: false,
+          staffId: 231232,
+          username: 'USER1',
+        },
+      },
+    })
+  },
+
+  stubGetUserCaseloads: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/users/me/caseLoads`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            caseLoadId: 'LEI',
+            caseloadFunction: 'GENERAL',
+            currentlyActive: true,
+            description: 'Leeds (HMP)',
+            type: 'INST',
+          },
+        ],
+      },
+    })
+  },
 }

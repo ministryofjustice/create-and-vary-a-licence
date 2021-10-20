@@ -121,6 +121,25 @@ const stubUser = () =>
     },
   })
 
+const stubUserEmail = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/auth/api/me/email',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        username: 'USER1',
+        email: 'john.smith@not-a-valid-domain.com',
+        verified: true,
+      },
+    },
+  })
+
 const stubUserRoles = (role: string) =>
   stubFor({
     request: {
@@ -155,5 +174,6 @@ export default {
       token(['ROLE_LICENCE_DM'], 'nomis'),
       tokenVerification.stubVerifyToken(),
     ]),
-  stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles('ROLE_LICENCE_RO')]),
+  stubUser: (): Promise<[Response, Response, Response]> =>
+    Promise.all([stubUser(), stubUserEmail(), stubUserRoles('ROLE_LICENCE_RO')]),
 }

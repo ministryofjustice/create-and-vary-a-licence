@@ -39,6 +39,7 @@ export default function setUpAuth(): Router {
     res.redirect(authLogoutUrl)
   })
 
+  // Copies the req.user values - stored in session - into res.locals.user for this request
   router.use((req, res, next) => {
     res.locals.user = req.user
     next()

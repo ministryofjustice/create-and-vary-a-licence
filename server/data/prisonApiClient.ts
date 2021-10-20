@@ -1,7 +1,12 @@
 import { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
-import type { PrisonApiPrisoner, PrisonApiUserDetail, PrisonInformation } from '../@types/prisonApiClientTypes'
+import type {
+  PrisonApiCaseload,
+  PrisonApiPrisoner,
+  PrisonApiUserDetail,
+  PrisonInformation,
+} from '../@types/prisonApiClientTypes'
 
 export default class PrisonApiClient {
   restClient: RestClient
@@ -24,8 +29,19 @@ export default class PrisonApiClient {
     return this.restClient.get({ path: `/api/agencies/prison/${prisonId}` }) as Promise<PrisonInformation>
   }
 
-  // TODO: Currently unused
-  async getPrisonUser(targetUsername: string): Promise<PrisonApiUserDetail> {
-    return this.restClient.get({ path: `/api/users/${targetUsername}` }) as Promise<PrisonApiUserDetail>
+  // Uses the USER token, not the ADMIN token
+  async getUser(userToken: string): Promise<PrisonApiUserDetail> {
+    return this.restClient.getWithUserToken({
+      userToken,
+      path: '/api/users/me',
+    }) as Promise<PrisonApiUserDetail>
+  }
+
+  // Uses the USER token, not th ADMIN token
+  async getUserCaseloads(userToken: string): Promise<PrisonApiCaseload[]> {
+    return this.restClient.getWithUserToken({
+      userToken,
+      path: '/api/users/me/caseLoads',
+    }) as Promise<PrisonApiCaseload[]>
   }
 }

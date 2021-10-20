@@ -1,7 +1,6 @@
 import superagent from 'superagent'
 import querystring from 'querystring'
 import type TokenStore from './tokenStore'
-
 import logger from '../../logger'
 import config from '../config'
 import generateOauthClientToken from '../authentication/clientCredentials'
@@ -9,6 +8,21 @@ import RestClient from './restClient'
 
 const timeoutSpec = config.apis.hmppsAuth.timeout
 const hmppsAuthUrl = config.apis.hmppsAuth.url
+
+export type AuthUserDetails = {
+  name: string
+  activeCaseLoadId: string
+}
+
+export type AuthUserEmail = {
+  username: string
+  email?: string
+  verified: boolean
+}
+
+export type AuthUserRole = {
+  roleCode: string
+}
 
 function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagent.Response> {
   const clientToken = generateOauthClientToken(
@@ -32,46 +46,38 @@ function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagen
     .timeout(timeoutSpec)
 }
 
-export interface User {
-  name: string
-  activeCaseLoadId: string
-}
-
-export interface UserRole {
-  roleCode: string
-}
-
 export default class HmppsAuthClient {
   constructor(private readonly tokenStore: TokenStore) {}
 
-  private restClient(token: string): RestClient {
+  public restClient(token: string): RestClient {
     return new RestClient('HMPPS Auth Client', config.apis.hmppsAuth, token)
   }
 
-  getUser(token: string): Promise<User> {
+  async getUser(token: string): Promise<AuthUserDetails> {
     logger.info(`Getting user details: calling HMPPS Auth`)
-    return this.restClient(token).get({ path: '/api/user/me' }) as Promise<User>
+    return this.restClient(token).get({ path: '/api/user/me' }) as Promise<AuthUserDetails>
   }
 
-  getUserRoles(token: string): Promise<string[]> {
+  async getUserEmail(token: string): Promise<AuthUserEmail> {
+    logger.info(`Getting user email: calling HMPPS Auth`)
+    return this.restClient(token).get({ path: '/api/me/email' }) as Promise<AuthUserEmail>
+  }
+
+  async getUserRoles(token: string): Promise<string[]> {
     return this.restClient(token)
       .get({ path: '/api/user/me/roles' })
-      .then(roles => (<UserRole[]>roles).map(role => role.roleCode)) as Promise<string[]>
+      .then(roles => (<AuthUserRole[]>roles).map(role => role.roleCode)) as Promise<string[]>
   }
 
   async getSystemClientToken(username?: string): Promise<string> {
     const key = username || '%ANONYMOUS%'
-
     const token = await this.tokenStore.getToken(key)
     if (token) {
       return token
     }
-
     const newToken = await getSystemClientTokenFromHmppsAuth(username)
-
-    // set TTL slightly less than expiry of token. Async but no need to wait
+    // Set the TTL slightly less than expiry of token
     await this.tokenStore.setToken(key, newToken.body.access_token, newToken.body.expires_in - 60)
-
     return newToken.body.access_token
   }
 }
