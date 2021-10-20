@@ -21,6 +21,10 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
         licenceId: 1,
       },
       query: {},
+      body: {},
+      user: {
+        username: 'joebloggs',
+      },
     } as unknown as Request
 
     res = {
@@ -44,6 +48,15 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
   })
 
   describe('POST', () => {
+    beforeEach(() => {
+      licenceService.updateAdditionalConditions = jest.fn()
+    })
+
+    it('should call licence service to update the list of additional conditions', async () => {
+      await handler.POST(req, res)
+      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(1, {}, 'joebloggs')
+    })
+
     it('should redirect to the bespoke conditions question page', async () => {
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions-question')

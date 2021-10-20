@@ -22,12 +22,12 @@ describe('Create a Licence Views - Check Answers', () => {
         additionalConditions: [
           {
             category: 'Category 1',
-            template: 'Template 1',
+            text: 'Template 1',
             data: ['Data 1'],
           },
           {
             category: 'Category 2',
-            template: 'Template 2',
+            text: 'Template 2',
             data: ['Data 2A', 'Data 2B'],
           },
         ],

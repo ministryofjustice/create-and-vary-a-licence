@@ -2,7 +2,9 @@
 
 {% macro additionalConditions(licence, isEditable) %}
     {% macro additionalConditionHtml(template, data) %}
-        {{ template }}
+        <div>
+            {{ template }}
+        </div>
         {% if data.length %}
             <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
                 {% for entry in data %}
