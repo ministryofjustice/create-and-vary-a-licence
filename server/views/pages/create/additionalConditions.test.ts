@@ -44,11 +44,11 @@ describe('Create a Licence Views - Additional Conditions', () => {
           category: 'Group 1',
           conditions: [
             {
-              id: 'condition1',
+              code: 'condition1',
               text: 'conditionText1',
             },
             {
-              id: 'condition2',
+              code: 'condition2',
               text: 'conditionText2',
             },
           ],
@@ -57,7 +57,7 @@ describe('Create a Licence Views - Additional Conditions', () => {
           category: 'Group 2',
           conditions: [
             {
-              id: 'condition3',
+              code: 'condition3',
               text: 'conditionText3',
             },
           ],
@@ -85,11 +85,11 @@ describe('Create a Licence Views - Additional Conditions', () => {
           category: 'Group 1',
           conditions: [
             {
-              id: 'condition1',
+              code: 'condition1',
               text: 'conditionText1',
             },
             {
-              id: 'condition2',
+              code: 'condition2',
               text: 'conditionText2',
             },
           ],
@@ -98,7 +98,7 @@ describe('Create a Licence Views - Additional Conditions', () => {
           category: 'Group 2',
           conditions: [
             {
-              id: 'condition3',
+              code: 'condition3',
               text: 'conditionText3',
             },
           ],
