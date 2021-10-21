@@ -24,20 +24,18 @@
                 <div data-module="moj-add-another">
                     <h2 class="moj-add-another__heading govuk-visually-hidden" tabindex="-1">Bespoke conditions</h2>
 
-                    {% if conditions and conditions.length > 0 %}
-                        {% set counter = 0 %}
-                        {% for c in conditions %}
-                            {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
-                                {{  bespokeCondition(counter, c) }}
+                    {% for c in conditions %}
+                        {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
+                            {{  bespokeCondition(loop.index0, c) }}
+                            {% if conditions.length > 1 %}
                                 <button type="button" class="govuk-button govuk-button--secondary moj-add-another__remove-button">Remove</button>
-                            {% endcall %}
-                            {%  set counter = counter + 1 %}
-                        {% endfor %}
+                            {% endif %}
+                        {% endcall %}
                     {% else %}
                         {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
                             {{  bespokeCondition(0, '') }}
                         {% endcall %}
-                    {% endif %}
+                    {% endfor %}
 
                     <div class="moj-button-action">
                         {{ govukButton({
@@ -65,7 +63,7 @@
 
 {% macro bespokeCondition(conditionIndex, conditionValue) %}
     {{ govukTextarea({
-        id: 'conditions['+ conditionIndex + ']',
+        id: 'condition-' + conditionIndex,
         name: 'conditions[' + conditionIndex + ']',
         label: {
             html: 'Bespoke condition',
