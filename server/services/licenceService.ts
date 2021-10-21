@@ -169,7 +169,19 @@ export default class LicenceService {
 
   async getLicencesForApproval(username: string, prisonCaseload: string[]): Promise<LicenceSummary[]> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return new LicenceApiClient(token).getLicencesForApproval(prisonCaseload)
+    const filteredPrisonCaseload: string[] = []
+
+    // Where a user has a CADM_I caseload (central admin) - we filter it out.
+    // If they have other prisons in their caseload it will use these only, otherwise send an empty list.
+    // For an empty list the API will return all licences in a SUBMITTED state, for all prisons.
+
+    prisonCaseload
+      .filter(cl => !cl.includes('CADM'))
+      .forEach(prison => {
+        filteredPrisonCaseload.push(`${prison}`)
+      })
+
+    return new LicenceApiClient(token).getLicencesForApproval(filteredPrisonCaseload)
   }
 
   getLicenceStub(): Record<string, unknown> {

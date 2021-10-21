@@ -31,6 +31,7 @@ function init(): void {
     },
     (token, refreshToken, params, profile, done) => {
       return done(null, {
+        // Populating the Passport user details - data extracted from the token
         token,
         username: params.user_name,
         authSource: params.auth_source,
@@ -42,6 +43,7 @@ function init(): void {
   passport.use(strategy)
 
   passport.serializeUser((user, done) => {
+    // Could populate the Passport user object with more detail here - but done in populateCurrentUser middleware
     done(null, user)
   })
 

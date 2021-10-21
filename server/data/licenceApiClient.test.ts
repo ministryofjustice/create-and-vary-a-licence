@@ -247,11 +247,33 @@ describe('Licence API client tests', () => {
   })
 
   describe('Get licences for approval', () => {
-    describe('List licences for approval in my prison caseload', () => {
+    describe('Licences for approval in my prison caseload', () => {
       const prisonCaseload = ['LEI', 'MDI']
       it('Get approval cases in my prison caseload', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
         fakeApi.get('/licence/approval-candidates?prison=LEI&prison=MDI').reply(200)
+        await licenceService.getLicencesForApproval(username, prisonCaseload)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+
+    describe('Licences for approval with a CADM_I (central admin) caseload only', () => {
+      const prisonCaseload = ['CADM_I']
+      it('Get approval cases in my prison caseload', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.get('/licence/approval-candidates').reply(200)
+        await licenceService.getLicencesForApproval(username, prisonCaseload)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+
+    describe('List licences for approval with a CADM_I and others in caseload', () => {
+      const prisonCaseload = ['MDI', 'CADM_I']
+      it('Get approval cases in my prison caseload', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.get('/licence/approval-candidates?prison=MDI').reply(200)
         await licenceService.getLicencesForApproval(username, prisonCaseload)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
