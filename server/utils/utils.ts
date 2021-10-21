@@ -100,6 +100,11 @@ const jsonDtTo12HourTime = (dt: string): string => {
   return momentTime.isValid() ? momentTime.format('hh:mm a') : null
 }
 
+const removeDuplicates = (list: string[]): string[] => {
+  const deDuplicatedList = [...new Set(list.map(s => s))].map(s => s)
+  return deDuplicatedList
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -110,4 +115,5 @@ export {
   jsonDtToDate,
   jsonDtTo12HourTime,
   convertDateFormat,
+  removeDuplicates,
 }

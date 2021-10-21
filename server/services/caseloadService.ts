@@ -12,11 +12,9 @@ export default class CaseloadService {
     private readonly licenceService: LicenceService
   ) {}
 
-  async getStaffCaseload(username: string): Promise<ManagedCase[]> {
-    // TODO Cache the result in redis
-    const { staffIdentifier } = await this.communityService.getStaffDetail(username)
+  async getStaffCaseload(username: string, staffIdentifier: number): Promise<ManagedCase[]> {
+    // TODO: We could cache the entire caseload here?
     const managedOffenders = await this.communityService.getManagedOffenders(staffIdentifier)
-
     const caseloadNomisIds = managedOffenders
       .filter(offender => offender.currentOm)
       .filter(offender => offender.nomsNumber)

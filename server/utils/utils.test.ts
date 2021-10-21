@@ -9,6 +9,7 @@ import {
   stringToAddressObject,
   jsonDtTo12HourTime,
   jsonDtToDate,
+  removeDuplicates,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -206,4 +207,18 @@ test.each`
   } else {
     expect(dateValue).toBeNull()
   }
+})
+
+describe('Remove duplicates', () => {
+  it('should remove duplicates from a list of strings', () => {
+    const listWithDuplicates = ['A', 'B', 'C', 'C', 'C']
+    expect(removeDuplicates(listWithDuplicates)).toHaveLength(3)
+    expect(removeDuplicates(listWithDuplicates)).toEqual(['A', 'B', 'C'])
+  })
+
+  it('should remove duplicates from a more challenging list', () => {
+    const listWithDuplicates = ['MDI', 'LEI', 'MDI', 'LEI', 'BMI', 'LEI', 'MDI']
+    expect(removeDuplicates(listWithDuplicates)).toHaveLength(3)
+    expect(removeDuplicates(listWithDuplicates)).toEqual(['MDI', 'LEI', 'BMI'])
+  })
 })

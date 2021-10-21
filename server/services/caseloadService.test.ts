@@ -17,9 +17,9 @@ describe('Caseload Service', () => {
   const communityService = new CommunityService(null) as jest.Mocked<CommunityService>
   const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
   const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
+  const staffIdentifier = 2000
 
   beforeEach(() => {
-    communityService.getStaffDetail.mockResolvedValue({ staffIdentifier: 2000 })
     communityService.getManagedOffenders.mockResolvedValue([])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([])
     licenceService.getLicencesByStaffIdAndStatus.mockResolvedValue([])
@@ -30,13 +30,10 @@ describe('Caseload Service', () => {
   })
 
   describe('getStaffCaseload', () => {
-    it('should get managed offenders by the the users staffIdentifier', async () => {
-      communityService.getStaffDetail.mockResolvedValue({ staffIdentifier: 2000 })
-      await caseloadService.getStaffCaseload('USER1')
-      expect(communityService.getStaffDetail).toBeCalledTimes(1)
-      expect(communityService.getStaffDetail).toHaveBeenCalledWith('USER1')
+    it('should get managed offenders by the staffIdentifier for this user', async () => {
+      await caseloadService.getStaffCaseload('USER1', staffIdentifier)
       expect(communityService.getManagedOffenders).toBeCalledTimes(1)
-      expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
+      expect(communityService.getManagedOffenders).toHaveBeenCalledWith(staffIdentifier)
     })
 
     it('should filter out offenders who are not managed by the current user', async () => {
@@ -51,7 +48,7 @@ describe('Caseload Service', () => {
         },
       ] as CommunityApiManagedOffender[])
 
-      await caseloadService.getStaffCaseload('USER1')
+      await caseloadService.getStaffCaseload('USER1', staffIdentifier)
       expect(prisonerService.searchPrisonersByNomisIds).toHaveBeenCalledWith('USER1', ['2'])
     })
 
@@ -70,7 +67,7 @@ describe('Caseload Service', () => {
         { prisonerNumber: '1', status: 'ACTIVE', conditionalReleaseDate: '2023-05-12' },
       ] as Prisoner[])
 
-      const caseload = await caseloadService.getStaffCaseload('USER1')
+      const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
       expect(caseload).toEqual([
         {
           nomsNumber: '1',
@@ -103,7 +100,7 @@ describe('Caseload Service', () => {
         { prisonerNumber: '3', status: 'ACTIVE', indeterminateSentence: false },
       ] as Prisoner[])
 
-      const caseload = await caseloadService.getStaffCaseload('USER1')
+      const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
       expect(caseload).toEqual([
         {
@@ -139,7 +136,7 @@ describe('Caseload Service', () => {
         { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-05-12' },
       ] as Prisoner[])
 
-      const caseload = await caseloadService.getStaffCaseload('USER1')
+      const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
       expect(caseload).toEqual([
         {
@@ -181,7 +178,7 @@ describe('Caseload Service', () => {
         },
       ] as Prisoner[])
 
-      const caseload = await caseloadService.getStaffCaseload('USER1')
+      const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
       expect(caseload).toEqual([
         {
@@ -217,7 +214,7 @@ describe('Caseload Service', () => {
         },
       ] as Prisoner[])
 
-      const caseload = await caseloadService.getStaffCaseload('USER1')
+      const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
       expect(caseload).toEqual([
         {
@@ -257,7 +254,7 @@ describe('Caseload Service', () => {
         },
       ] as Prisoner[])
 
-      const caseload = await caseloadService.getStaffCaseload('USER1')
+      const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
       expect(caseload).toEqual([
         {
@@ -293,7 +290,7 @@ describe('Caseload Service', () => {
         { prisonerNumber: '2', indeterminateSentence: false, status: 'ACTIVE', conditionalReleaseDate: '2023-05-12' },
       ] as Prisoner[])
 
-      const caseload = await caseloadService.getStaffCaseload('USER1')
+      const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
       expect(caseload).toEqual([
         {
@@ -329,7 +326,7 @@ describe('Caseload Service', () => {
         { prisonerNumber: '2', indeterminateSentence: false, status: 'ACTIVE', conditionalReleaseDate: '2023-05-12' },
       ] as Prisoner[])
 
-      const caseload = await caseloadService.getStaffCaseload('USER1')
+      const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
       expect(caseload).toEqual([
         {
@@ -375,7 +372,7 @@ describe('Caseload Service', () => {
       { prisonerNumber: '2', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-05-12' },
     ] as Prisoner[])
 
-    const caseload = await caseloadService.getStaffCaseload('USER1')
+    const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
     expect(caseload).toEqual([
       {
@@ -406,7 +403,7 @@ describe('Caseload Service', () => {
     ] as Prisoner[])
     licenceService.getLicencesByStaffIdAndStatus.mockResolvedValue([{ nomisId: '1' }] as LicenceSummary[])
 
-    const caseload = await caseloadService.getStaffCaseload('USER1')
+    const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
     expect(caseload).toEqual([
       {
@@ -451,7 +448,7 @@ describe('Caseload Service', () => {
       { prisonerNumber: '4', status: 'ACTIVE', indeterminateSentence: false, conditionalReleaseDate: '2023-04-30' },
     ] as Prisoner[])
 
-    const caseload = await caseloadService.getStaffCaseload('USER1')
+    const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
     expect(caseload).toStrictEqual([
       {

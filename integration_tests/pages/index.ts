@@ -12,7 +12,6 @@ export default class IndexPage extends Page {
   }
 
   clickCreateALicence = (): CaseloadPage => {
-    cy.task('stubGetStaffDetails')
     cy.task('stubGetManagedOffenders')
     cy.task('searchPrisonersByNomisIds')
     cy.task('stubGetLicencesByStaffIdAndStatus')

@@ -6,6 +6,7 @@ context('SignIn', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
+    cy.task('stubGetStaffDetails')
     cy.task('stubAuthUser')
   })
 
