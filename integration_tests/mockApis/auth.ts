@@ -94,6 +94,8 @@ const token = (authorities: string[], authSource: string) =>
         access_token: createToken(authorities, authSource),
         token_type: 'bearer',
         user_name: 'USER1',
+        auth_source: authSource,
+        authorities,
         expires_in: 599,
         scope: 'read',
         internalUser: true,
