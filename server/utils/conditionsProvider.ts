@@ -8,7 +8,12 @@ export function getVersion(): string {
 export function getStandardConditions(licenceType: string): Record<string, unknown>[] {
   switch (licenceType) {
     case LicenceType.AP:
-      return conditionsConfig.standardConditions.AP
+      return conditionsConfig.standardConditions.AP.map((condition, index) => {
+        return {
+          ...condition,
+          sequence: index,
+        }
+      })
     default:
       throw new Error(`No licence type found with code : '${licenceType}'`)
   }

@@ -12,43 +12,35 @@ export default {
 
     A UUID can be generated on MacOS or Linux terminal by running the command 'uuidgen'
  */
-  // TODO: Standard conditons are not yet subject to the above comment about UUID - Remove the sequence numbers from config + replace codes with UUID (needs DB schema change)
   standardConditions: {
     AP: [
       {
-        code: 'generalGoodBehaviour',
+        code: '9ce9d594-e346-4785-9642-c87e764bee37',
         text: 'Be of good behaviour and not behave in a way which undermines the purpose of the licence period.',
-        sequence: 1,
       },
       {
-        code: 'noOffences',
+        code: '3b19fdb0-4ca3-4615-9fdd-61fabc1587af',
         text: 'Not commit any offence.',
-        sequence: 1,
       },
       {
-        code: 'keepInTouch',
+        code: '3361683a-504a-4357-ae22-6aa01b370b4a',
         text: 'Keep in touch with the supervising officer in accordance with instructions given by the supervising officer.',
-        sequence: 1,
       },
       {
-        code: 'takeVisits',
+        code: '9fc04065-df29-4bda-9b1d-bced8335c356',
         text: 'Receive visits from the supervising officer in accordance with instructions given by the supervising officer.',
-        sequence: 1,
       },
       {
-        code: 'residence',
+        code: 'e670ac69-eda2-4b04-a0a1-a3c8492fe1e6',
         text: 'Reside permanently at an address approved by the supervising officer and obtain the prior permission of the supervising officer for any stay of one or more nights at a different address.',
-        sequence: 1,
       },
       {
-        code: 'noEmployment',
+        code: '88069445-08cb-4f16-915f-5a162d085c26',
         text: 'Not undertake work, or a particular type of work, unless it is approved by the supervising officer and notify the supervising officer in advance of any proposal to undertake work or a particular type of work.',
-        sequence: 1,
       },
       {
-        code: 'noTravel',
+        code: '7d416906-0e94-4fde-ae86-8339d339ccb7',
         text: 'Not travel outside the United Kingdom, the Channel Islands or the Isle of Man except with the prior permission of your supervising officer or for the purposes of immigration deportation or removal.',
-        sequence: 1,
       },
     ],
   },

@@ -1,20 +1,20 @@
 import type HmppsAuthClient from '../data/hmppsAuthClient'
 import {
+  AdditionalConditionsRequest,
   AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   BespokeConditionsRequest,
   ContactNumberRequest,
   CreateLicenceRequest,
-  LicenceSummary,
   Licence,
   LicenceApiTestData,
+  LicenceSummary,
   StatusUpdateRequest,
-  AdditionalConditionsRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getAdditionalConditions, getStandardConditions, getVersion } from '../utils/conditionsProvider'
-import { simpleDateTimeToJson, addressObjectToString, convertToTitleCase, convertDateFormat } from '../utils/utils'
+import { addressObjectToString, convertDateFormat, convertToTitleCase, simpleDateTimeToJson } from '../utils/utils'
 import PersonName from '../routes/creatingLicences/types/personName'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
