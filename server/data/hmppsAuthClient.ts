@@ -54,12 +54,10 @@ export default class HmppsAuthClient {
   }
 
   async getUser(token: string): Promise<AuthUserDetails> {
-    logger.info(`Getting user details: calling HMPPS Auth`)
     return this.restClient(token).get({ path: '/api/user/me' }) as Promise<AuthUserDetails>
   }
 
   async getUserEmail(token: string): Promise<AuthUserEmail> {
-    logger.info(`Getting user email: calling HMPPS Auth`)
     return this.restClient(token).get({ path: '/api/me/email' }) as Promise<AuthUserEmail>
   }
 
