@@ -14,15 +14,19 @@ export function getStandardConditions(licenceType: string): Record<string, unkno
   }
 }
 
+export function getAdditionalConditions(): Record<string, unknown>[] {
+  return conditionsConfig.additionalConditions
+}
+
 export function getGroupedAdditionalConditions(): Record<string, unknown>[] {
   const map = new Map()
   conditionsConfig.additionalConditions.forEach(condition => {
-    const collection = map.get(condition.groupName)
+    const collection = map.get(condition.category)
     if (!collection) {
-      map.set(condition.groupName, [condition])
+      map.set(condition.category, [condition])
     } else {
       collection.push(condition)
     }
   })
-  return Array.from(map, ([groupName, conditions]) => ({ groupName, conditions }))
+  return Array.from(map, ([category, conditions]) => ({ category, conditions }))
 }

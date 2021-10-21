@@ -27,6 +27,7 @@ export default (on: (string, Record) => void): void => {
     stubPutAppointmentAddress: licence.stubPutAppointmentAddress,
     stubPutContactNumber: licence.stubPutContactNumber,
     stubPutBespokeConditions: licence.stubPutBespokeConditions,
+    stubPutAdditionalConditions: licence.stubPutAdditionalConditions,
     stubGetLicencesByStaffIdAndStatus: licence.stubGetLicencesByStaffIdAndStatus,
     stubUpdateLicenceStatus: licence.stubUpdateLicenceStatus,
     stubGetLicencesForApproval: licence.stubGetLicencesForApproval,

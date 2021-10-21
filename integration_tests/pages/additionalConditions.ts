@@ -8,7 +8,13 @@ export default class AdditionalConditionsPage extends Page {
     super('additional-conditions-page', false)
   }
 
+  selectConditions = (conditionIds: string[]): AdditionalConditionsPage => {
+    conditionIds.forEach(id => cy.get(`#${id}`).click())
+    return this
+  }
+
   clickContinue = (): BespokeConditionsQuestionPage => {
+    cy.task('stubPutAdditionalConditions')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(BespokeConditionsQuestionPage)
   }

@@ -10,17 +10,6 @@
 
 {% set isEditable = licence.statusCode == 'IN_PROGRESS' %}
 
-{% macro additionalConditionHtml(template, data) %}
-    <div class="govuk-!-margin-bottom-4">
-        {{ template }}
-    </div>
-    <div class="govuk-!-font-weight-bold">
-        {% for entry in data %}
-            <span class="govuk-!-display-block">{{ entry }}</span>
-        {% endfor %}
-    </div>
-{% endmacro %}
-
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">

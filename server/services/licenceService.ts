@@ -10,9 +10,10 @@ import {
   Licence,
   LicenceApiTestData,
   StatusUpdateRequest,
+  AdditionalConditionsRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
-import { getStandardConditions, getVersion } from '../utils/conditionsProvider'
+import { getAdditionalConditions, getStandardConditions, getVersion } from '../utils/conditionsProvider'
 import { simpleDateTimeToJson, addressObjectToString, convertToTitleCase, convertDateFormat } from '../utils/utils'
 import PersonName from '../routes/creatingLicences/types/personName'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
@@ -22,6 +23,7 @@ import BespokeConditions from '../routes/creatingLicences/types/bespokeCondition
 import LicenceStatus from '../enumeration/licenceStatus'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
+import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
 
 export default class LicenceService {
   constructor(
@@ -121,6 +123,26 @@ export default class LicenceService {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const requestBody = { comTelephone: formData.telephone } as ContactNumberRequest
     return new LicenceApiClient(token).updateContactNumber(id, requestBody)
+  }
+
+  async updateAdditionalConditions(id: string, formData: AdditionalConditions, username: string): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+
+    const additionalConditions = getAdditionalConditions()
+
+    const requestBody = {
+      additionalConditions:
+        formData.additionalConditions?.map((conditionCode, index) => {
+          return {
+            code: conditionCode,
+            sequence: index,
+            category: additionalConditions.find(c => c.code === conditionCode)?.category,
+            text: additionalConditions.find(c => c.code === conditionCode)?.text,
+          }
+        }) || [],
+    } as AdditionalConditionsRequest
+
+    return new LicenceApiClient(token).updateAdditionalConditions(id, requestBody)
   }
 
   async updateBespokeConditions(id: string, formData: BespokeConditions, username: string): Promise<void> {

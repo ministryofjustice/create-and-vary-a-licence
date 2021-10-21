@@ -1,14 +1,17 @@
 import { Request, Response } from 'express'
 
 import AdditionalConditionsRoutes from './additionalConditions'
+import LicenceService from '../../../services/licenceService'
 import * as conditionsProvider from '../../../utils/conditionsProvider'
+
+const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 
 jest
   .spyOn(conditionsProvider, 'getGroupedAdditionalConditions')
-  .mockReturnValue([{ groupName: 'group1', conditions: [{ id: 'condition1' }] }])
+  .mockReturnValue([{ groupName: 'group1', conditions: [{ code: 'condition1' }] }])
 
 describe('Route Handlers - Create Licence - Additional Conditions', () => {
-  const handler = new AdditionalConditionsRoutes()
+  const handler = new AdditionalConditionsRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -18,6 +21,10 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
         licenceId: 1,
       },
       query: {},
+      body: {},
+      user: {
+        username: 'joebloggs',
+      },
     } as unknown as Request
 
     res = {
@@ -33,7 +40,7 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
         additionalConditions: [
           {
             groupName: 'group1',
-            conditions: [{ id: 'condition1' }],
+            conditions: [{ code: 'condition1' }],
           },
         ],
       })
@@ -41,6 +48,15 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
   })
 
   describe('POST', () => {
+    beforeEach(() => {
+      licenceService.updateAdditionalConditions = jest.fn()
+    })
+
+    it('should call licence service to update the list of additional conditions', async () => {
+      await handler.POST(req, res)
+      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(1, {}, 'joebloggs')
+    })
+
     it('should redirect to the bespoke conditions question page', async () => {
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions-question')

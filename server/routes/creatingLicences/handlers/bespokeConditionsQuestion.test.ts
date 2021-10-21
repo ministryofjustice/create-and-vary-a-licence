@@ -1,15 +1,9 @@
 import { Request, Response } from 'express'
 
 import BespokeConditionsQuestionRoutes from './bespokeConditionsQuestion'
-import LicenceService from '../../../services/licenceService'
-import BespokeConditions from '../types/bespokeConditions'
-
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
-
-jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Create Licence - Bespoke Conditions Question', () => {
-  const handler = new BespokeConditionsQuestionRoutes(licenceService)
+  const handler = new BespokeConditionsQuestionRoutes()
   let req: Request
   let res: Response
 
@@ -46,35 +40,6 @@ describe('Route Handlers - Create Licence - Bespoke Conditions Question', () => 
       } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions')
-    })
-
-    it('should redirect to the bespoke conditions page with fromReviewFlag when answer is YES', async () => {
-      req = {
-        ...req,
-        body: {
-          answer: 'yes',
-        },
-        query: {
-          fromReview: 'true',
-        },
-      } as unknown as Request
-      await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions?fromReview=true')
-    })
-
-    it('should clear any existing bespoke conditions on the licence when the answer is NO', async () => {
-      req = {
-        ...req,
-        body: {
-          answer: 'no',
-        },
-      } as unknown as Request
-      await handler.POST(req, res)
-      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(
-        '1',
-        { conditions: [] } as BespokeConditions,
-        'joebloggs'
-      )
     })
 
     it('should redirect to the check answers page when answer is NO', async () => {
