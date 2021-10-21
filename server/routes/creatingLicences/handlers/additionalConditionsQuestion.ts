@@ -10,15 +10,7 @@ export default class AdditionalConditionsQuestionRoutes {
     const { licenceId } = req.params
     const { answer } = req.body
     if (answer === YesOrNo.YES) {
-      return res.redirect(
-        `/licence/create/id/${licenceId}/additional-conditions${req.query?.fromReview ? '?fromReview=true' : ''}`
-      )
-    }
-
-    // TODO Remove any additional conditions which may exist on the licence - i.e. if they arrive here from check answers page
-
-    if (req.query?.fromReview) {
-      return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
+      return res.redirect(`/licence/create/id/${licenceId}/additional-conditions`)
     }
 
     return res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)

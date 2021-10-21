@@ -10,6 +10,7 @@ import type {
   AppointmentAddressRequest,
   BespokeConditionsRequest,
   StatusUpdateRequest,
+  AdditionalConditionsRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -54,6 +55,13 @@ export default class LicenceApiClient {
 
   async updateBespokeConditions(licenceId: string, bespokeConditions: BespokeConditionsRequest): Promise<void> {
     await this.restClient.put({ path: `/licence/id/${licenceId}/bespoke-conditions`, data: bespokeConditions })
+  }
+
+  async updateAdditionalConditions(
+    licenceId: string,
+    additionalConditions: AdditionalConditionsRequest
+  ): Promise<void> {
+    await this.restClient.put({ path: `/licence/id/${licenceId}/additional-conditions`, data: additionalConditions })
   }
 
   async updateLicenceStatus(licenceId: string, statusRequest: StatusUpdateRequest): Promise<void> {

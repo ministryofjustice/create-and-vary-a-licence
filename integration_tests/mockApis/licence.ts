@@ -70,7 +70,16 @@ export default {
           appointmentAddress: 'Down the road, over there',
           comTelephone: '07891245678',
           appointmentTime: '01/12/2021 00:34',
-          additionalConditions: [],
+          additionalConditions: [
+            {
+              id: 1,
+              code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
+              category: 'Residence at a specific place',
+              sequence: 0,
+              text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
+              data: [],
+            },
+          ],
           bespokeConditions: [
             {
               id: 133,
@@ -167,6 +176,20 @@ export default {
       request: {
         method: 'PUT',
         urlPattern: `/licence/id/(\\d)*/bespoke-conditions`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubPutAdditionalConditions: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d)*/additional-conditions`,
       },
       response: {
         status: 200,

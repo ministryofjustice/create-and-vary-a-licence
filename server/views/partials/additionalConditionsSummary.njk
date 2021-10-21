@@ -2,16 +2,17 @@
 
 {% macro additionalConditions(licence, isEditable) %}
     {% macro additionalConditionHtml(template, data) %}
-        <div class="govuk-!-margin-bottom-4">
+        <div>
             {{ template }}
         </div>
-        <div class="govuk-!-font-weight-bold">
-            {% for entry in data %}
-                <span class="govuk-!-display-block">{{ entry }}</span>
-            {% endfor %}
-        </div>
+        {% if data.length %}
+            <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
+                {% for entry in data %}
+                    <span class="govuk-!-display-block">{{ entry }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endmacro %}
-
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
@@ -19,7 +20,7 @@
         </div>
         {% if isEditable %}
             <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
-                <a href="{{ '/licence/create/id/' + licence.id + '/additional-conditions-question?fromReview=true'}}" class="govuk-link govuk-!-font-size-19">Change</a>
+                <a href="{{ '/licence/create/id/' + licence.id + '/additional-conditions?fromReview=true'}}" class="govuk-link govuk-!-font-size-19">Change</a>
             </div>
         {% endif %}
     </div>
@@ -29,7 +30,7 @@
     {% for condition in licence.additionalConditions %}
         {% set additionalConditions = (additionalConditions.push({
             key: {  text: condition.category },
-            value: { html: additionalConditionHtml(condition.template, condition.data) }
+            value: { html: additionalConditionHtml(condition.text, condition.data) }
         }), additionalConditions) %}
     {% endfor %}
 

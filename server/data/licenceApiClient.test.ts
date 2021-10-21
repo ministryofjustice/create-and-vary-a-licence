@@ -7,6 +7,7 @@ import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import {
+  AdditionalConditionsRequest,
   AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
@@ -19,12 +20,20 @@ import PersonName from '../routes/creatingLicences/types/personName'
 import Telephone from '../routes/creatingLicences/types/telephone'
 import { stringToAddressObject } from '../utils/utils'
 import LicenceStatus from '../enumeration/licenceStatus'
-
-jest.mock('./hmppsAuthClient')
+import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
+import * as conditionsProvider from '../utils/conditionsProvider'
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-
 const licenceService = new LicenceService(hmppsAuthClient, null, null)
+const additionalConditions = [
+  { code: 'condition1', text: 'text', category: 'category' },
+  { code: 'condition2', text: 'text', category: 'category' },
+  { code: 'condition3', text: 'text', category: 'category' },
+]
+
+jest.spyOn(conditionsProvider, 'getAdditionalConditions').mockReturnValue(additionalConditions)
+
+jest.mock('./hmppsAuthClient')
 
 describe('Licence API client tests', () => {
   let fakeApi: nock.Scope
@@ -162,6 +171,29 @@ describe('Licence API client tests', () => {
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
     })
+
+    describe('Additional conditions', () => {
+      it('No additional conditions entered', async () => {
+        const formConditions = new AdditionalConditions()
+        const apiRequestConditions = makeApiRequestAdditionalConditions(formConditions.additionalConditions)
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/additional-conditions', apiRequestConditions).reply(200)
+        await licenceService.updateAdditionalConditions('1', formConditions, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+
+      it('Three additional conditions entered', async () => {
+        const formConditions = new AdditionalConditions()
+        formConditions.additionalConditions = ['condition1', 'condition2', 'condition3']
+        const apiRequestConditions = makeApiRequestAdditionalConditions(formConditions.additionalConditions)
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.put('/licence/id/1/additional-conditions', apiRequestConditions).reply(200)
+        await licenceService.updateAdditionalConditions('1', formConditions, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
   })
 
   describe('Caseload information', () => {
@@ -236,4 +268,18 @@ const makeFormBespokeConditions = (conditions: string[]): BespokeCondition => {
 
 const makeApiRequestBespokeConditions = (conditions: string[]): BespokeConditionsRequest => {
   return { conditions } as BespokeConditionsRequest
+}
+
+const makeApiRequestAdditionalConditions = (conditionIds: string[]): AdditionalConditionsRequest => {
+  const expectedConditions =
+    conditionIds?.map((conditionCode, index) => {
+      return {
+        code: conditionCode,
+        sequence: index,
+        category: additionalConditions.find(c => c.code === conditionCode)?.category,
+        text: additionalConditions.find(c => c.code === conditionCode)?.text,
+      }
+    }) || []
+
+  return { additionalConditions: expectedConditions } as AdditionalConditionsRequest
 }

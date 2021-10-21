@@ -28,6 +28,10 @@ export interface paths {
     /** Update the address where the initial appointment will take place. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateAppointmentAddress']
   }
+  '/licence/id/{licenceId}/additional-conditions': {
+    /** Update the set of additional conditons on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateAdditionalConditions']
+  }
   '/licence/create': {
     /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createLicence']
@@ -90,6 +94,39 @@ export interface components {
     AppointmentAddressRequest: {
       /** The address of initial appointment */
       appointmentAddress: string
+    }
+    /** Describes an additional condition */
+    AdditionalCondition: {
+      /** The internal ID for this additional condition for this licence */
+      id?: number
+      /** Coded value for the additional condition */
+      code?: string
+      /** The category of the additional condition */
+      category?: string
+      /** Sequence of this additional condition within the additional conditions */
+      sequence?: number
+      /** The textual value for this additional condition */
+      text?: string
+      /** The list of data items entered for this additional condition */
+      data: components['schemas']['AdditionalConditionData'][]
+    }
+    /** Describes the data entered for an additional condition */
+    AdditionalConditionData: {
+      /** The internal ID of this data item, for this condition on this licence */
+      id: number
+      /** The sequence of this data item, for this condition on this licence */
+      sequence: number
+      /** The description of this data item for this condition on this licence */
+      description?: string
+      /** The format of this data item */
+      format?: string
+      /** The value of this data item */
+      value?: string
+    }
+    /** Request object for updating the list of additional conditions on a licence */
+    AdditionalConditionsRequest: {
+      /** The list of additional conditions */
+      additionalConditions: components['schemas']['AdditionalCondition'][]
     }
     /** Request object for creating a new licence */
     CreateLicenceRequest: {
@@ -200,32 +237,6 @@ export interface components {
       value: string
     }
     TestDataResponse: components['schemas']['TestData'][]
-    /** Describes an additional condition */
-    AdditionalCondition: {
-      /** The internal ID for this additional condition for this licence */
-      id: number
-      /** Coded value for the additional condition */
-      code?: string
-      /** Sequence of this additional condition within the additional conditions */
-      sequence?: number
-      /** The textual value for this additional condition */
-      text?: string
-      /** The list of data items entered for this additional condition */
-      data: components['schemas']['AdditionalConditionData'][]
-    }
-    /** Describes the data entered for an additional condition */
-    AdditionalConditionData: {
-      /** The internal ID of this data item, for this condition on this licence */
-      id: number
-      /** The sequence of this data item, for this condition on this licence */
-      sequence: number
-      /** The description of this data item for this condition on this licence */
-      description?: string
-      /** The format of this data item */
-      format?: string
-      /** The value of this data item */
-      value?: string
-    }
     /** Describes a bespoke condition on a licence */
     BespokeCondition: {
       /** The internal ID for this condition on this licence */
@@ -573,6 +584,47 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['AppointmentAddressRequest']
+      }
+    }
+  }
+  /** Update the set of additional conditons on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateAdditionalConditions: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Set of additional conditions updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AdditionalConditionsRequest']
       }
     }
   }
