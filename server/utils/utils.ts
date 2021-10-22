@@ -101,8 +101,7 @@ const jsonDtTo12HourTime = (dt: string): string => {
 }
 
 const removeDuplicates = (list: string[]): string[] => {
-  const deDuplicatedList = [...new Set(list.map(s => s))].map(s => s)
-  return deDuplicatedList
+  return [...new Set(list)]
 }
 
 export {

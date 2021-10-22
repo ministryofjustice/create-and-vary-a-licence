@@ -30,7 +30,7 @@ describe('User service', () => {
 
     it('Propagates any errors', async () => {
       hmppsAuthClient.getUser.mockRejectedValue(new Error('some error'))
-      await expect(userService.getAuthUser(token)).rejects.toEqual(new Error('some error'))
+      await expect(() => userService.getAuthUser(token)).rejects.toThrow('some error')
       expect(hmppsAuthClient.getUser).toBeCalled()
     })
   })
@@ -49,7 +49,7 @@ describe('User service', () => {
 
     it('Propagates any errors', async () => {
       hmppsAuthClient.getUserEmail.mockRejectedValue(new Error('some error'))
-      await expect(userService.getAuthUserEmail(token)).rejects.toEqual(new Error('some error'))
+      await expect(() => userService.getAuthUserEmail(token)).rejects.toThrow('some error')
       expect(hmppsAuthClient.getUserEmail).toBeCalled()
     })
   })
@@ -77,7 +77,7 @@ describe('User service', () => {
 
     it('Propagates any errors', async () => {
       prisonApiClient.getUser.mockRejectedValue(new Error('some error'))
-      await expect(userService.getPrisonUser(token)).rejects.toEqual(new Error('some error'))
+      await expect(() => userService.getPrisonUser(token)).rejects.toThrow('some error')
     })
   })
 
@@ -118,7 +118,7 @@ describe('User service', () => {
 
     it('Propagates any errors', async () => {
       prisonApiClient.getUserCaseloads.mockRejectedValue(new Error('some error'))
-      await expect(userService.getPrisonUserCaseloads(token)).rejects.toEqual(new Error('some error'))
+      await expect(() => userService.getPrisonUserCaseloads(token)).rejects.toThrow('some error')
     })
   })
 })
