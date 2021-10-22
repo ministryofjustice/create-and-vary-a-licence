@@ -1,11 +1,15 @@
 import HmppsAuthClient, { AuthUserDetails, AuthUserEmail } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
-import CommunityApiClient from '../data/communityApiClient'
+import CommunityService from './communityService'
 import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
 
 export default class UserService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient, private readonly prisonApiClient: PrisonApiClient) {}
+  constructor(
+    private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly prisonApiClient: PrisonApiClient,
+    private readonly communityService: CommunityService
+  ) {}
 
   // Users own token
   async getAuthUser(token: string): Promise<AuthUserDetails> {
@@ -27,9 +31,8 @@ export default class UserService {
     return this.prisonApiClient.getUserCaseloads(token)
   }
 
-  // Admin token with no username
+  // Will use an admin token generated in the communityService
   async getProbationUser(deliusUsername: string): Promise<CommunityApiStaffDetails> {
-    const token = await this.hmppsAuthClient.getSystemClientToken()
-    return new CommunityApiClient(token).getStaffDetailByUsername(deliusUsername)
+    return this.communityService.getStaffDetail(deliusUsername)
   }
 }

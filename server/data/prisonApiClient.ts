@@ -11,7 +11,7 @@ import type {
 export default class PrisonApiClient {
   restClient: RestClient
 
-  constructor(token: string) {
+  constructor(token = '') {
     this.restClient = new RestClient('Prison API', config.apis.prisonApi as ApiConfig, token)
   }
 
@@ -29,7 +29,7 @@ export default class PrisonApiClient {
     return this.restClient.get({ path: `/api/agencies/prison/${prisonId}` }) as Promise<PrisonInformation>
   }
 
-  // Uses the USER token, not the ADMIN token
+  // Called with the user's own token
   async getUser(userToken: string): Promise<PrisonApiUserDetail> {
     return this.restClient.getWithUserToken({
       userToken,
@@ -37,7 +37,7 @@ export default class PrisonApiClient {
     }) as Promise<PrisonApiUserDetail>
   }
 
-  // Uses the USER token, not th ADMIN token
+  // Called with the user's own token
   async getUserCaseloads(userToken: string): Promise<PrisonApiCaseload[]> {
     return this.restClient.getWithUserToken({
       userToken,
