@@ -22,16 +22,18 @@
                     </div>
                 {% endif %}
 
-                <div class="govuk-grid-column-one-third card-group__item">
-                    {{ card({
-                        "id": "viewLicenceCard",
-                        "href": "/",
-                        "clickable": "true",
-                        "heading": "View or print a licence",
-                        "description": "View or print an approved licence for an offender in your prison caseload.",
-                        "data-qa": "view-print-licence-link"
-                    }) }}
-                </div>
+                {% if shouldShowViewOrPrintCard %}
+                    <div class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "id": "viewLicenceCard",
+                            "href": "/",
+                            "clickable": "true",
+                            "heading": "Print a licence",
+                            "description": "View and print an approved licence.",
+                            "data-qa": "view-print-licence-link"
+                        }) }}
+                    </div>
+                {% endif %}
 
                 {% if shouldShowApproveLicenceCard %}
                     <div class="govuk-grid-column-one-third card-group__item">

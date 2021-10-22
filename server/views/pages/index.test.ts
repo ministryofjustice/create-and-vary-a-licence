@@ -75,4 +75,20 @@ describe('Views - Home', () => {
 
     expect($('#myCaseloadCard').length).toBe(0)
   })
+
+  it('should show only view and print card for readonly users', () => {
+    viewContext = {
+      shouldShowViewOrPrintCard: true,
+      shouldShowMyCaseloadCard: false,
+      shouldShowApproveLicenceCard: false,
+      shouldShowCreateLicenceCard: false,
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#viewLicenceCard').length).toBe(1)
+    expect($('#myCaseloadCard').length).toBe(0)
+    expect($('#approveLicenceCard').length).toBe(0)
+    expect($('#createLicenceCard').length).toBe(0)
+  })
 })

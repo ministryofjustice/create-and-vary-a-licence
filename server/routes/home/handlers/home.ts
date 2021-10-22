@@ -7,6 +7,10 @@ export default class HomeRoutes {
     const viewContext = {
       shouldShowCreateLicenceCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER),
       shouldShowApproveLicenceCard: hasRole(req.user, AuthRole.DECISION_MAKER),
+      shouldShowViewOrPrintCard:
+        hasRole(req.user, AuthRole.CASE_ADMIN) ||
+        hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) ||
+        hasRole(req.user, AuthRole.READONLY),
       shouldShowMyCaseloadCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER),
     }
     res.render('pages/index', viewContext)

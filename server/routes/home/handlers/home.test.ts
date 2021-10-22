@@ -25,6 +25,7 @@ describe('Route Handlers - Home', () => {
         shouldShowCreateLicenceCard: true,
         shouldShowApproveLicenceCard: true,
         shouldShowMyCaseloadCard: true,
+        shouldShowViewOrPrintCard: true,
       })
     })
   })
