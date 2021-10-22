@@ -49,4 +49,10 @@ describe('authorisationMiddleware', () => {
     const authorisationResponse = authorisationMiddleware(req, res, next)
     expect(authorisationResponse).toEqual(next())
   })
+
+  it('should return next when user has a READONLY role', () => {
+    const res = createResWithToken({ authorities: ['ROLE_LICENCE_READONLY'] })
+    const authorisationResponse = authorisationMiddleware(req, res, next)
+    expect(authorisationResponse).toEqual(next())
+  })
 })

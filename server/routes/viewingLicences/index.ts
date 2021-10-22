@@ -8,8 +8,10 @@ export default function Index({ licenceService }: Services): Router {
 
   const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  const pdfHandlers = new PdfRoutes(licenceService)
+  // TODO: These are REAL routes
 
+  // These are SPIKE routes
+  const pdfHandlers = new PdfRoutes(licenceService)
   get('/licence/id/:id/pdf/preview', pdfHandlers.renderPdf)
   get('/licence/id/:id/preview', pdfHandlers.preview)
 
