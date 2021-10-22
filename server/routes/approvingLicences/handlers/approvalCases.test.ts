@@ -7,10 +7,6 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const username = 'joebloggs'
-
-// TODO: Get the real prison caseload here
-const prisonCaseload = ['MDI', 'LEI', 'BMI']
-
 const fakeSummary = {
   licenceId: 1,
   licenceType: 'AP',
@@ -42,6 +38,7 @@ describe('Route Handlers - Approval - case list', () => {
       locals: {
         user: {
           username,
+          prisonCaseload: ['MDI', 'LEI', 'BMI'],
         },
       },
     } as unknown as Response
@@ -53,7 +50,7 @@ describe('Route Handlers - Approval - case list', () => {
     it('should render list of licences for approval', async () => {
       licenceService.getLicencesForApproval.mockResolvedValue(fakeSummaryList)
       await handler.GET(req, res)
-      expect(licenceService.getLicencesForApproval).toHaveBeenCalledWith(username, prisonCaseload)
+      expect(licenceService.getLicencesForApproval).toHaveBeenCalledWith(username, res.locals.user.prisonCaseload)
       expect(res.render).toHaveBeenCalledWith('pages/approve/cases', { cases: fakeSummaryList })
     })
   })

@@ -6,16 +6,6 @@ import config from '../config'
 import generateOauthClientToken from './clientCredentials'
 import type { TokenVerifier } from '../data/tokenVerification'
 
-passport.serializeUser((user, done) => {
-  // Not used but required for Passport
-  done(null, user)
-})
-
-passport.deserializeUser((user, done) => {
-  // Not used but required for Passport
-  done(null, user as Express.User)
-})
-
 export type AuthenticationMiddleware = (tokenVerifier: TokenVerifier) => RequestHandler
 
 const authenticationMiddleware: AuthenticationMiddleware = verifyToken => {
@@ -41,6 +31,7 @@ function init(): void {
     },
     (token, refreshToken, params, profile, done) => {
       return done(null, {
+        // Populating the Passport user details - data extracted from the token
         token,
         username: params.user_name,
         authSource: params.auth_source,
@@ -50,6 +41,15 @@ function init(): void {
   )
 
   passport.use(strategy)
+
+  passport.serializeUser((user, done) => {
+    // Could populate the Passport user object with more detail here - but done in populateCurrentUser middleware
+    done(null, user)
+  })
+
+  passport.deserializeUser((user, done) => {
+    done(null, user as Express.User)
+  })
 }
 
 export default {

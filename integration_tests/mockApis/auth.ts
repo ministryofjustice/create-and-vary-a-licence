@@ -94,6 +94,8 @@ const token = (authorities: string[], authSource: string) =>
         access_token: createToken(authorities, authSource),
         token_type: 'bearer',
         user_name: 'USER1',
+        auth_source: authSource,
+        authorities,
         expires_in: 599,
         scope: 'read',
         internalUser: true,
@@ -117,6 +119,25 @@ const stubUser = () =>
         username: 'USER1',
         active: true,
         name: 'john smith',
+      },
+    },
+  })
+
+const stubUserEmail = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/auth/api/me/email',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        username: 'USER1',
+        email: 'john.smith@not-a-valid-domain.com',
+        verified: true,
       },
     },
   })
@@ -155,5 +176,6 @@ export default {
       token(['ROLE_LICENCE_DM'], 'nomis'),
       tokenVerification.stubVerifyToken(),
     ]),
-  stubUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserRoles('ROLE_LICENCE_RO')]),
+  stubUser: (): Promise<[Response, Response, Response]> =>
+    Promise.all([stubUser(), stubUserEmail(), stubUserRoles('ROLE_LICENCE_RO')]),
 }

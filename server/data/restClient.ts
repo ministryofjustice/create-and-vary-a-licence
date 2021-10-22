@@ -8,6 +8,7 @@ import { ApiConfig } from '../config'
 import type { UnsanitisedError } from '../sanitisedError'
 
 interface GetRequest {
+  userToken?: string
   path?: string
   query?: string
   headers?: Record<string, string>
@@ -53,7 +54,7 @@ export default class RestClient {
   }
 
   async get({ path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest): Promise<unknown> {
-    logger.info(`Get using user credentials: calling ${this.name}: ${path} ${query}`)
+    logger.info(`Get using admin client credentials: calling ${this.name}: ${path} ${query}`)
     try {
       const result = await superagent
         .get(`${this.apiUrl()}${path}`)
@@ -83,7 +84,7 @@ export default class RestClient {
     data = {},
     raw = false,
   }: PostRequest = {}): Promise<unknown> {
-    logger.info(`Post using user credentials: calling ${this.name}: ${path}`)
+    logger.info(`Post using admin client credentials: calling ${this.name}: ${path}`)
     try {
       const result = await superagent
         .post(`${this.apiUrl()}${path}`)
@@ -113,7 +114,7 @@ export default class RestClient {
     data = {},
     raw = false,
   }: PutRequest = {}): Promise<unknown> {
-    logger.info(`Put using user credentials: calling ${this.name}: ${path}`)
+    logger.info(`Put using admin client credentials: calling ${this.name}: ${path}`)
     try {
       const result = await superagent
         .put(`${this.apiUrl()}${path}`)
@@ -137,7 +138,7 @@ export default class RestClient {
   }
 
   async stream({ path = null, headers = {} }: StreamRequest = {}): Promise<unknown> {
-    logger.info(`Get using user credentials: calling ${this.name}: ${path}`)
+    logger.info(`Get using admin client credentials: calling ${this.name}: ${path}`)
     return new Promise((resolve, reject) => {
       superagent
         .get(`${this.apiUrl()}${path}`)
@@ -163,5 +164,36 @@ export default class RestClient {
           }
         })
     })
+  }
+
+  async getWithUserToken({
+    userToken = null,
+    path = null,
+    query = '',
+    headers = {},
+    responseType = '',
+    raw = false,
+  }: GetRequest): Promise<unknown> {
+    logger.info(`Get using user token: calling ${this.name}: ${path} ${query}`)
+    try {
+      const result = await superagent
+        .get(`${this.apiUrl()}${path}`)
+        .agent(this.agent)
+        .retry(2, (err, res) => {
+          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+          return undefined // retry handler only for logging retries, not to influence retry logic
+        })
+        .query(query)
+        .auth(userToken, { type: 'bearer' })
+        .set(headers)
+        .responseType(responseType)
+        .timeout(this.timeoutConfig())
+
+      return raw ? result : result.body
+    } catch (error) {
+      const sanitisedError = sanitiseError(error)
+      logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
+      throw sanitisedError
+    }
   }
 }

@@ -6,6 +6,8 @@ context('Reject a licence', () => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
     cy.task('stubAuthUser')
+    cy.task('stubGetPrisonUserDetails')
+    cy.task('stubGetPrisonUserCaseloads')
     cy.task('stubGetCompletedLicence', 'SUBMITTED')
     cy.task('stubGetLicencesForApproval')
     cy.task('stubUpdateLicenceStatus', 1)

@@ -13,6 +13,17 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           staffIdentifier: 2000,
+          staffCode: 'X12345',
+          staff: {
+            forenames: 'john',
+            surname: 'smith',
+          },
+          teams: [
+            { code: 'A', description: 'Team A' },
+            { code: 'B', description: 'Team B' },
+          ],
+          telephoneNumber: '07786 989777',
+          email: 'jsmith@probation.com',
         },
       },
     })

@@ -8,8 +8,8 @@ export default class CaseloadRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly caseloadService: CaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const caseload = await this.caseloadService.getStaffCaseload(res.locals.user.username)
-
+    const { username, deliusStaffIdentifier } = res.locals.user
+    const caseload = await this.caseloadService.getStaffCaseload(username, deliusStaffIdentifier)
     const caseloadViewModel = caseload.map(offender => {
       return {
         name: convertToTitleCase([offender.firstName, offender.lastName].join(' ')),
@@ -22,11 +22,11 @@ export default class CaseloadRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const { username } = res.locals.user
+    const { username, deliusStaffIdentifier } = res.locals.user
     const { prisonerNumber } = req.body
 
     // TODO: This block is temporary, remove this when we have a design for editing existing licences
-    const comLicenses = await this.licenceService.getLicencesByStaffIdAndStatus(2000, username, [])
+    const comLicenses = await this.licenceService.getLicencesByStaffIdAndStatus(deliusStaffIdentifier, username, [])
     const existingLicense = comLicenses.find(licence => licence.nomisId === prisonerNumber)
     if (existingLicense) {
       return res.redirect(`/licence/create/id/${existingLicense.licenceId}/check-your-answers`)

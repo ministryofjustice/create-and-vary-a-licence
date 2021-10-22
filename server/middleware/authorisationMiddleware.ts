@@ -9,8 +9,13 @@ const isAuthorisedRole = (role: string): boolean =>
     .includes(role)
 
 export default function authorisationMiddleware(req: Request, res: Response, next: NextFunction): void {
-  if (res.locals && res.locals.user && res.locals.user.token) {
-    const { authorities: roles = [] } = jwtDecode(res.locals.user.token) as { authorities?: string[] }
+  if (res.locals?.user?.token) {
+    let roles = res.locals.user?.userRoles
+    if (!roles) {
+      const { authorities: tokenRoles = [] } = jwtDecode(res.locals.user.token) as { authorities?: string[] }
+      roles = tokenRoles
+    }
+
     logger.info(`User roles: ${JSON.stringify(roles)}, Allowed roles: ${JSON.stringify(AuthRole)}`)
 
     if (!roles?.some(isAuthorisedRole)) {
@@ -18,12 +23,11 @@ export default function authorisationMiddleware(req: Request, res: Response, nex
       return res.redirect('/authError')
     }
 
-    logger.info(`User is allowed in`)
-
     res.locals.user.userRoles = roles
-
     return next()
   }
+
+  // No token is present so redirect to /login
   req.session.returnTo = req.originalUrl
   return res.redirect('/login')
 }

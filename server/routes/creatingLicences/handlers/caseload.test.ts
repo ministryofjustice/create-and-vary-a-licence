@@ -38,6 +38,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         locals: {
           user: {
             username: 'USER1',
+            deliusStaffIdentifier: 2000,
           },
         },
       } as unknown as Response
@@ -55,7 +56,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           },
         ],
       })
-      expect(caseloadService.getStaffCaseload).toHaveBeenCalledWith('USER1')
+      expect(caseloadService.getStaffCaseload).toHaveBeenCalledWith('USER1', 2000)
     })
   })
 
