@@ -11,11 +11,14 @@ import {
 } from '../@types/prisonApiClientTypes'
 import PrisonApiClient from './prisonApiClient'
 import UserService from '../services/userService'
+import CommunityService from '../services/communityService'
 
 jest.mock('./hmppsAuthClient')
-const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+jest.mock('../services/communityService')
 
-// Use the real prisonService, userService and prisonApiClient, but mock the prisonAPI endpoints using nock
+const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+const communityService = new CommunityService(hmppsAuthClient) as jest.Mocked<CommunityService>
+
 const prisonerService = new PrisonerService(hmppsAuthClient)
 let prisonApiClient: PrisonApiClient
 let userService: UserService
@@ -26,8 +29,8 @@ describe('Prison API client tests', () => {
   beforeEach(() => {
     config.apis.prisonApi.url = 'http://localhost:8100'
     fakeApi = nock(config.apis.prisonApi.url)
-    prisonApiClient = new PrisonApiClient('a token')
-    userService = new UserService(hmppsAuthClient, prisonApiClient)
+    prisonApiClient = new PrisonApiClient()
+    userService = new UserService(hmppsAuthClient, prisonApiClient, communityService)
   })
 
   afterEach(() => {
