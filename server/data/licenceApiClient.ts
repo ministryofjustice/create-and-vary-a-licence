@@ -87,4 +87,14 @@ export default class LicenceApiClient {
       path: `/licence/approval-candidates${queryParameters.length > 0 ? `?${queryParameters.join('&')}` : ''}`,
     })) as LicenceSummary[]
   }
+
+  async getLicencesForPrinting(prisonCaseload: string[]): Promise<LicenceSummary[]> {
+    const queryParameters: string[] = []
+    prisonCaseload.forEach(prison => {
+      queryParameters.push(`prison=${prison}`)
+    })
+    return (await this.restClient.get({
+      path: `/licence/printing-candidates${queryParameters.length > 0 ? `?${queryParameters.join('&')}` : ''}`,
+    })) as LicenceSummary[]
+  }
 }

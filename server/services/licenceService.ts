@@ -184,6 +184,26 @@ export default class LicenceService {
     return new LicenceApiClient(token).getLicencesForApproval(filteredPrisonCaseload)
   }
 
+  async getLicencesForPrinting(
+    username: string,
+    authSource: string,
+    prisonCaseload: string[],
+    deliusStaffIdentifier: number
+  ): Promise<LicenceSummary[]> {
+    if (authSource === 'nomis' && prisonCaseload.length > 0) {
+      const token = await this.hmppsAuthClient.getSystemClientToken(username)
+      const filteredPrisonCaseload: string[] = []
+      prisonCaseload
+        .filter(cl => !cl.includes('CADM'))
+        .forEach(prison => {
+          filteredPrisonCaseload.push(`${prison}`)
+        })
+      return new LicenceApiClient(token).getLicencesForPrinting(filteredPrisonCaseload)
+    }
+    // TODO: Ignore if not a Nomis user or they have no prison caseload
+    return []
+  }
+
   getLicenceStub(): Record<string, unknown> {
     return {
       offender: {
