@@ -1,0 +1,7 @@
+coverage:
+  precision: 2
+  round: down
+comment:
+  layout: "reach,diff,files"
+  behavior: new
+  require_changes: false

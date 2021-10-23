@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/ministryofjustice/create-and-vary-a-licence/branch/main/graph/badge.svg?token=S8DS3BV91P)](https://codecov.io/gh/ministryofjustice/create-and-vary-a-licence)
+
 # Create and vary a licence
 
 This is the user interface service for creating and varying licences for people

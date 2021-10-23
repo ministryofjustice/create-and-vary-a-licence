@@ -21,7 +21,7 @@
     "record-build-info": "node ./bin/record-build-info",
     "lint": "eslint . --cache --max-warnings 0",
     "typecheck": "tsc",
-    "test": "jest --runInBand --detectOpenHandles --collectCoverage=true --testPathPattern=/server/.* && rm -rf coverage",
+    "test": "jest --runInBand --detectOpenHandles --collectCoverage=true --testPathPattern=/server/.*",
     "integrationTest": "jest --runInBand --testPathPattern=/integration_tests/.*",
     "security_audit": "better-npm-audit audit",
     "int-test": "cypress run --config video=false",
