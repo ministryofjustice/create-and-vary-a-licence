@@ -2,21 +2,26 @@ import UserService from './userService'
 import HmppsAuthClient, { AuthUserEmail, AuthUserDetails } from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
+import CommunityService from './communityService'
+import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient')
+jest.mock('./communityService')
 
 const token = 'some token'
 
 describe('User service', () => {
   let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
   let prisonApiClient: jest.Mocked<PrisonApiClient>
+  let communityService: jest.Mocked<CommunityService>
   let userService: UserService
 
   beforeEach(() => {
     hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-    prisonApiClient = new PrisonApiClient(null) as jest.Mocked<PrisonApiClient>
-    userService = new UserService(hmppsAuthClient, prisonApiClient)
+    prisonApiClient = new PrisonApiClient() as jest.Mocked<PrisonApiClient>
+    communityService = new CommunityService(hmppsAuthClient) as jest.Mocked<CommunityService>
+    userService = new UserService(hmppsAuthClient, prisonApiClient, communityService)
   })
 
   describe('getAuthUser', () => {
@@ -86,7 +91,7 @@ describe('User service', () => {
       {
         caseLoadId: 'MDI',
         caseloadFunction: 'GENERAL',
-        currentlyActive: true,
+        currentlyActive: false,
         description: 'Moorland (HMP)',
         type: 'INST',
       },
@@ -109,16 +114,44 @@ describe('User service', () => {
     it('Retrieves prison user caseload details', async () => {
       prisonApiClient.getUserCaseloads.mockResolvedValue(stubbedPrisonCaseloadData)
       const result = await userService.getPrisonUserCaseloads(token)
-      const activeCaseload = result.map(cs => (cs.currentlyActive ? cs.caseLoadId : null)).filter(cs => cs)
-      expect(activeCaseload).toHaveLength(2)
+      const activeCaseload = result.map(cs => cs.caseLoadId)
+      expect(activeCaseload).toHaveLength(3)
       expect(activeCaseload[0]).toEqual('MDI')
       expect(activeCaseload[1]).toEqual('LEI')
+      expect(activeCaseload[2]).toEqual('BMI')
       expect(prisonApiClient.getUserCaseloads).toBeCalled()
     })
 
     it('Propagates any errors', async () => {
       prisonApiClient.getUserCaseloads.mockRejectedValue(new Error('some error'))
       await expect(() => userService.getPrisonUserCaseloads(token)).rejects.toThrow('some error')
+    })
+  })
+
+  describe('getProbationUser', () => {
+    it('Retrieves probation user details', async () => {
+      communityService.getStaffDetail.mockResolvedValue({
+        email: 'test@test.com',
+        staff: { forenames: 'Test test', surname: 'Test' },
+        staffCode: 'X400',
+        staffIdentifier: 1234,
+        telephoneNumber: '0111 1111111',
+        username: 'TestUserNPS',
+      } as CommunityApiStaffDetails)
+
+      const result = await userService.getProbationUser('DELIUS_USER')
+
+      expect(result.email).toEqual('test@test.com')
+      expect(result.staff.forenames).toEqual('Test test')
+      expect(result.staff.surname).toEqual('Test')
+      expect(result.staffIdentifier).toEqual(1234)
+      expect(result.username).toEqual('TestUserNPS')
+      expect(communityService.getStaffDetail).toBeCalled()
+    })
+
+    it('Propagates any errors', async () => {
+      communityService.getStaffDetail.mockRejectedValue(new Error('some error'))
+      await expect(() => userService.getProbationUser('DELIUS_USER')).rejects.toThrow('some error')
     })
   })
 })

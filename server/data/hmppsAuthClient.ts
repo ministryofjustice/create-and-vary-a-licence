@@ -49,7 +49,7 @@ function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagen
 export default class HmppsAuthClient {
   constructor(private readonly tokenStore: TokenStore) {}
 
-  public restClient(token: string): RestClient {
+  private restClient(token: string): RestClient {
     return new RestClient('HMPPS Auth Client', config.apis.hmppsAuth, token)
   }
 
