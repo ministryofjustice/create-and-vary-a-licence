@@ -1,4 +1,5 @@
 import InputTypes from '../enumeration/inputTypes'
+import RegionOfResidence from '../routes/creatingLicences/types/regionOfResidence'
 
 export default {
   version: '1.0',
@@ -61,6 +62,7 @@ export default {
           name: 'probationRegion',
         },
       ],
+      type: RegionOfResidence,
     },
     {
       code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',

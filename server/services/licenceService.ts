@@ -11,6 +11,7 @@ import {
   LicenceApiTestData,
   LicenceSummary,
   StatusUpdateRequest,
+  UpdateAdditionalConditionDataRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getAdditionalConditionByCode, getStandardConditions, getVersion } from '../utils/conditionsProvider'
@@ -157,7 +158,15 @@ export default class LicenceService {
   ): Promise<void> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
 
-    const requestBody = {} as AdditionalConditionsRequest
+    const requestBody = {
+      data: Object.keys(formData).map((key, index) => {
+        return {
+          field: key,
+          value: formData[key],
+          sequence: index,
+        }
+      }),
+    } as UpdateAdditionalConditionDataRequest
 
     return new LicenceApiClient(token).updateAdditionalConditionData(licenceId, additionalConditionId, requestBody)
   }
