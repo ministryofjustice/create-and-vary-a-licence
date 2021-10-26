@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@3.11
   slack: circleci/slack@4.4.2
+  codecov: codecov/codecov@3.2.0
 
 parameters:
   alerts-slack-channel:
@@ -89,6 +90,8 @@ jobs:
       - run:
           name: unit tests
           command: npm run test
+      - codecov/upload:
+          file: coverage/coverage-final.json
       - store_test_results:
           path: test_results
       - store_artifacts:
