@@ -19,6 +19,14 @@
         {% endif %}
 
         {% if input.type == 'radio' %}
+            {% set options = [] %}
+            {% for option in input.options %}
+                {% set options = (options.push({
+                    text: option.value,
+                    value: option.value
+                }), options) %}
+            {% endfor %}
+
             {{ govukRadios({
                 idPrefix: input.name,
                 name: input.name,
@@ -27,7 +35,7 @@
                         text: input.label
                     }
                 },
-                items: input.options
+                items: options
             }) }}
         {% endif %}
 

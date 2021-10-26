@@ -1,4 +1,4 @@
-import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
+import InputTypes from '../enumeration/inputTypes'
 
 export default {
   version: '1.0',
@@ -56,12 +56,11 @@ export default {
       requiresInput: true,
       inputs: [
         {
-          type: 'text',
+          type: InputTypes.TEXT,
           label: 'What is the probation region?',
           name: 'probationRegion',
         },
       ],
-      validationClass: SimpleDateTime,
     },
     {
       code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
@@ -70,35 +69,30 @@ export default {
       requiresInput: true,
       inputs: [
         {
-          type: 'radio',
+          type: InputTypes.RADIO,
           label: 'Which gender?',
           name: 'gender',
           options: [
             {
-              text: 'Any',
-              value: 'any',
+              value: 'Any',
             },
             {
-              text: 'Any female',
-              value: 'female',
+              value: 'Any female',
             },
             {
-              text: 'Any male',
-              value: 'male',
+              value: 'Any male',
             },
           ],
         },
         {
-          type: 'radio',
+          type: InputTypes.RADIO,
           label: 'Which age?',
           name: 'age',
           options: [
             {
-              text: '16',
               value: '16',
             },
             {
-              text: '18',
               value: '18',
             },
           ],
@@ -112,21 +106,18 @@ export default {
       requiresInput: true,
       inputs: [
         {
-          type: 'radio',
+          type: InputTypes.RADIO,
           label: 'Who will the appointments be with?',
           name: 'appointmentType',
           options: [
             {
-              text: 'Psychiatrist',
-              value: 'psychiatrist',
+              value: 'Psychiatrist',
             },
             {
-              text: 'Psychologist',
-              value: 'psychologist',
+              value: 'Psychologist',
             },
             {
-              text: 'Medical practitioner',
-              value: 'medicalPractitioner',
+              value: 'Medical practitioner',
             },
           ],
         },
@@ -173,41 +164,36 @@ export default {
       requiresInput: true,
       inputs: [
         {
-          type: 'radio',
+          type: InputTypes.RADIO,
           label: 'Which gender?',
           name: 'gender',
           options: [
             {
-              text: 'Any',
-              value: 'any',
+              value: 'Any',
             },
             {
-              text: 'Any female',
-              value: 'female',
+              value: 'Any female',
             },
             {
-              text: 'Any male',
-              value: 'male',
+              value: 'Any male',
             },
           ],
         },
         {
-          type: 'radio',
+          type: InputTypes.RADIO,
           label: 'Which age?',
           name: 'age',
           options: [
             {
-              text: '16',
               value: '16',
             },
             {
-              text: '18',
               value: '18',
             },
           ],
         },
         {
-          type: 'text',
+          type: InputTypes.TEXT,
           label: 'What is the social services department?',
           name: 'socialServicesDepartment',
         },
@@ -250,16 +236,14 @@ export default {
       requiresInput: true,
       inputs: [
         {
-          type: 'radio',
+          type: InputTypes.RADIO,
           label: 'What is the age?',
           name: 'age',
           options: [
             {
-              text: '16',
               value: '16',
             },
             {
-              text: '18',
               value: '18',
             },
           ],
@@ -327,21 +311,18 @@ export default {
       requiresInput: true,
       inputs: [
         {
-          type: 'radio',
+          type: InputTypes.RADIO,
           label: 'Which gender?',
           name: 'gender',
           options: [
             {
-              text: 'Men',
-              value: 'men',
+              value: 'Men',
             },
             {
-              text: 'Women',
-              value: 'women',
+              value: 'Women',
             },
             {
-              text: 'Women or men',
-              value: 'any',
+              value: 'Women or men',
             },
           ],
         },
