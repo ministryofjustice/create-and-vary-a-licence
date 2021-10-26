@@ -13,7 +13,7 @@ import {
   StatusUpdateRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
-import { getAdditionalConditions, getStandardConditions, getVersion } from '../utils/conditionsProvider'
+import { getAdditionalConditionByCode, getStandardConditions, getVersion } from '../utils/conditionsProvider'
 import {
   addressObjectToString,
   convertDateFormat,
@@ -134,16 +134,14 @@ export default class LicenceService {
   async updateAdditionalConditions(id: string, formData: AdditionalConditions, username: string): Promise<void> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
 
-    const additionalConditions = getAdditionalConditions()
-
     const requestBody = {
       additionalConditions:
         formData.additionalConditions?.map((conditionCode, index) => {
           return {
             code: conditionCode,
             sequence: index,
-            category: additionalConditions.find(c => c.code === conditionCode)?.category,
-            text: additionalConditions.find(c => c.code === conditionCode)?.text,
+            category: getAdditionalConditionByCode(conditionCode)?.category,
+            text: getAdditionalConditionByCode(conditionCode)?.text,
           }
         }) || [],
     } as AdditionalConditionsRequest

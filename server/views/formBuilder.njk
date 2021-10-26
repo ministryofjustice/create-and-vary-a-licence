@@ -1,10 +1,57 @@
-{% macro formBuilder(params) %}
-    {% set id = params.id %}
-    {% set inputTemplate = params.inputTemplate %}
-    {% set errorMessages = params.errorMessages %}
-    {% set formResponses = params.formResponses %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "partials/datePicker.njk" import datePicker %}
+{% from "partials/timePicker.njk" import timePicker %}
 
-    {% if inputTemplate == 'placeOfResidence' %}
-        {% include 'partials/additionalConditionsInputs/placeOfResidence.njk' %}
-    {% endif %}
+{% macro formBuilder(params) %}
+
+    {% for input in params.inputs %}
+
+        {% if input.type == 'text' %}
+            {{ govukInput({
+                label: {
+                    text: input.label
+                },
+                id: input.name,
+                name: input.name,
+                classes: "govuk-!-width-one-half"
+            }) }}
+        {% endif %}
+
+        {% if input.type == 'radio' %}
+            {{ govukRadios({
+                idPrefix: input.name,
+                name: input.name,
+                fieldset: {
+                    legend: {
+                        text: input.label
+                    }
+                },
+                items: input.options
+            }) }}
+        {% endif %}
+
+        {% if input.type == 'datePicker' %}
+            {{ datePicker({
+                id: input.name,
+                hint: {
+                    text: "For example, 12 11 2022"
+                }
+            }) }}
+        {% endif %}
+
+        {% if input.type == 'timePicker' %}
+            {{ timePicker({
+                id: input.name,
+                label: {
+                    text: "Time"
+                },
+                hint: {
+                    text: "For example, 9:30am or 2:55pm"
+                }
+            }) }}
+        {% endif %}
+
+    {% endfor %}
+
 {% endmacro %}

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getAdditionalConditions } from '../../../utils/conditionsProvider'
+import { getAdditionalConditionByCode } from '../../../utils/conditionsProvider'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 
 export default class AdditionalConditionsCallbackRoutes {
@@ -7,12 +7,8 @@ export default class AdditionalConditionsCallbackRoutes {
     const { licenceId } = req.params
     const { additionalConditions } = res.locals.licence
 
-    const additionalConditionsConfig = getAdditionalConditions()
-
     const requiringInput = additionalConditions
-      .filter((condition: AdditionalCondition) =>
-        additionalConditionsConfig.find(config => config.code === condition.code && config.requiresInput)
-      )
+      .filter((condition: AdditionalCondition) => getAdditionalConditionByCode(condition.code)?.requiresInput)
       .sort((a: AdditionalCondition, b: AdditionalCondition) => (a.sequence > b.sequence ? 1 : -1))
       .find((condition: AdditionalCondition) => condition.data.length === 0)
 

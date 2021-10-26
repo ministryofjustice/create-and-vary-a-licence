@@ -31,8 +31,6 @@ const additionalConditions = [
   { code: 'condition3', text: 'text', category: 'category' },
 ]
 
-jest.spyOn(conditionsProvider, 'getAdditionalConditions').mockReturnValue(additionalConditions)
-
 jest.mock('./hmppsAuthClient')
 
 describe('Licence API client tests', () => {
