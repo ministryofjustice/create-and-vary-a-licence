@@ -30,7 +30,16 @@
     {% for condition in licence.additionalConditions %}
         {% set additionalConditions = (additionalConditions.push({
             key: {  text: condition.category },
-            value: { html: additionalConditionHtml(condition.text, condition.data) }
+            value: { html: additionalConditionHtml(condition.text, condition.data) },
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licence.id + "/additional-conditions/condition/" + condition.id + "?fromReview=true",
+                        text: "Edit",
+                        visuallyHiddenText: "name"
+                    }
+                ]
+            } if condition | checkConditionRequiresInput
         }), additionalConditions) %}
     {% endfor %}
 
