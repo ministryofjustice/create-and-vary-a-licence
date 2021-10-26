@@ -8,7 +8,7 @@
         {% if data.length %}
             <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
                 {% for entry in data %}
-                    <span class="govuk-!-display-block">{{ entry }}</span>
+                    <span class="govuk-!-display-block">{{ entry.value }}</span>
                 {% endfor %}
             </div>
         {% endif %}
