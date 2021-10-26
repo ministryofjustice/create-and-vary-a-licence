@@ -7,6 +7,7 @@ export type AppointmentTimeRequest = components['schemas']['AppointmentTimeReque
 export type BespokeConditionsRequest = components['schemas']['BespokeConditionRequest']
 export type AdditionalConditionsRequest = components['schemas']['AdditionalConditionsRequest']
 export type UpdateAdditionalConditionDataRequest = components['schemas']['UpdateAdditionalConditionDataRequest']
+export type AdditionalConditionData = components['schemas']['AdditionalConditionData']
 export type ContactNumberRequest = components['schemas']['ContactNumberRequest']
 export type CreateLicenceRequest = components['schemas']['CreateLicenceRequest']
 export type LicenceSummary = components['schemas']['LicenceSummary']

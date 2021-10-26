@@ -5,6 +5,7 @@ import path from 'path'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
 import { jsonDtTo12HourTime, jsonDtToDate } from './utils'
+import { AdditionalConditionData } from '../@types/licenceApiClientTypes'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -92,6 +93,13 @@ export function registerNunjucks(app?: express.Express): Environment {
     'additionalConditionChecked',
     (conditionId: string, additionalConditions: Record<string, unknown>[]) => {
       return additionalConditions?.find(c => c.code === conditionId) !== undefined
+    }
+  )
+
+  njkEnv.addFilter(
+    'getAdditionalConditionDataValue',
+    (additionalConditionData: AdditionalConditionData[], fieldName: string) => {
+      return additionalConditionData.find(data => data.field === fieldName)?.value
     }
   )
 
