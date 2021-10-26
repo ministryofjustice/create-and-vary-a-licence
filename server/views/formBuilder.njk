@@ -23,7 +23,8 @@
         {% for option in input.options %}
             {% set options = (options.push({
                 text: option.value,
-                value: option.value
+                value: option.value,
+                checked: additionalCondition.data | getAdditionalConditionDataValue(input.name) === option.value
             }), options) %}
         {% endfor %}
 
@@ -35,7 +36,8 @@
                     text: input.label
                 }
             },
-            items: options
+            items: options,
+            errorMessage: validationErrors | findError(input.name)
         }) }}
     {% endif %}
 

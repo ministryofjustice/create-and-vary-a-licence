@@ -89,6 +89,10 @@ export function registerNunjucks(app?: express.Express): Environment {
     return defaultValue
   })
 
+  njkEnv.addFilter('radioButtonChecked', (conditionId: string, additionalConditions: Record<string, unknown>[]) => {
+    return additionalConditions?.find(c => c.code === conditionId) !== undefined
+  })
+
   njkEnv.addFilter(
     'additionalConditionChecked',
     (conditionId: string, additionalConditions: Record<string, unknown>[]) => {

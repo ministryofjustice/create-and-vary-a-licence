@@ -1,5 +1,6 @@
 import InputTypes from '../enumeration/inputTypes'
 import RegionOfResidence from '../routes/creatingLicences/types/regionOfResidence'
+import RestrictionOfResidency from '../routes/creatingLicences/types/restrictionOfResidency'
 
 export default {
   version: '1.0',
@@ -100,6 +101,7 @@ export default {
           ],
         },
       ],
+      type: RestrictionOfResidency,
     },
     {
       code: 'b72fdbf2-0dc9-4e7f-81e4-c2ccb5d1bc90',
