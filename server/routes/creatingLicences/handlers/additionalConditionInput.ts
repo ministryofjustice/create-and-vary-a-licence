@@ -24,9 +24,10 @@ export default class AdditionalConditionInputRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
+    const { additionalConditionId } = req.params
     const { username } = req.user
 
-    // await this.licenceService.updateAdditionalConditions(licenceId, req.body, username)
+    await this.licenceService.updateAdditionalConditionData(licenceId, additionalConditionId, req.body, username)
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-conditions/callback${req.query?.fromReview ? '?fromReview=true' : ''}`

@@ -149,6 +149,19 @@ export default class LicenceService {
     return new LicenceApiClient(token).updateAdditionalConditions(id, requestBody)
   }
 
+  async updateAdditionalConditionData(
+    licenceId: string,
+    additionalConditionId: string,
+    formData: unknown,
+    username: string
+  ): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+
+    const requestBody = {} as AdditionalConditionsRequest
+
+    return new LicenceApiClient(token).updateAdditionalConditionData(licenceId, additionalConditionId, requestBody)
+  }
+
   async updateBespokeConditions(id: string, formData: BespokeConditions, username: string): Promise<void> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const sanitised = formData.conditions.filter((c: string) => c !== null && c.length > 0)

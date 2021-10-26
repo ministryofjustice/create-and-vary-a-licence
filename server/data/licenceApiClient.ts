@@ -64,6 +64,17 @@ export default class LicenceApiClient {
     await this.restClient.put({ path: `/licence/id/${licenceId}/additional-conditions`, data: additionalConditions })
   }
 
+  async updateAdditionalConditionData(
+    licenceId: string,
+    additionalConditionId: string,
+    additionalConditions: AdditionalConditionsRequest
+  ): Promise<void> {
+    await this.restClient.put({
+      path: `/licence/id/${licenceId}/additional-conditions/condition/${additionalConditionId}`,
+      data: additionalConditions,
+    })
+  }
+
   async updateLicenceStatus(licenceId: string, statusRequest: StatusUpdateRequest): Promise<void> {
     await this.restClient.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest })
   }
