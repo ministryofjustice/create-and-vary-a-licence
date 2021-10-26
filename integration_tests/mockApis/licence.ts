@@ -217,9 +217,12 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/licence/approval-candidates`,
+        urlPathPattern: `/licence/match`,
         queryParameters: {
           prison: {
+            matches: '.*',
+          },
+          status: {
             matches: '.*',
           },
         },

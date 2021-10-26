@@ -46,6 +46,7 @@ describe('Licence API client tests', () => {
 
   afterEach(() => {
     nock.cleanAll()
+    jest.clearAllMocks()
   })
 
   describe('Test data', () => {
@@ -251,7 +252,7 @@ describe('Licence API client tests', () => {
       const prisonCaseload = ['LEI', 'MDI']
       it('Get approval cases in my prison caseload', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-        fakeApi.get('/licence/approval-candidates?prison=LEI&prison=MDI').reply(200)
+        fakeApi.get('/licence/match?prison=LEI&prison=MDI&status=SUBMITTED').reply(200)
         await licenceService.getLicencesForApproval(username, prisonCaseload)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
@@ -262,7 +263,7 @@ describe('Licence API client tests', () => {
       const prisonCaseload = ['CADM_I']
       it('Get approval cases in my prison caseload', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-        fakeApi.get('/licence/approval-candidates').reply(200)
+        fakeApi.get('/licence/match?status=SUBMITTED').reply(200)
         await licenceService.getLicencesForApproval(username, prisonCaseload)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
@@ -273,10 +274,61 @@ describe('Licence API client tests', () => {
       const prisonCaseload = ['MDI', 'CADM_I']
       it('Get approval cases in my prison caseload', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-        fakeApi.get('/licence/approval-candidates?prison=MDI').reply(200)
+        fakeApi.get('/licence/match?prison=MDI&status=SUBMITTED').reply(200)
         await licenceService.getLicencesForApproval(username, prisonCaseload)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+  })
+
+  describe('Get licences for view and print', () => {
+    describe('Prison user caseload', () => {
+      const prisons = ['LEI', 'MDI']
+      const authSource = 'nomis'
+      it('Get licences in prison caseload', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.get('/licence/match?prison=LEI&prison=MDI&status=ACTIVE&status=APPROVED').reply(200)
+        await licenceService.getLicencesForPrinting(username, authSource, prisons)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+
+    describe('Prison user with CADM_I (central admin) caseload', () => {
+      const prisons = ['CADM_I']
+      const authSource = 'nomis'
+      it('Get licences with central caseload', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.get('/licence/match?status=ACTIVE&status=APPROVED').reply(200)
+        await licenceService.getLicencesForPrinting(username, authSource, prisons)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+
+    describe('Probation user - filters by staffId', () => {
+      const prisons: string[] = []
+      const authSource = 'delius'
+      const staffId = 123
+      it('Get licences by probation staff id', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.get('/licence/match?staffId=123&status=ACTIVE&status=APPROVED').reply(200)
+        await licenceService.getLicencesForPrinting(username, authSource, prisons, staffId)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
+    })
+
+    describe('Auth user - always empty for now', () => {
+      const prisons: string[] = []
+      const authSource = 'auth'
+      it('Get licences - does not call out so returns an empty list', async () => {
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi.get('/licence/match?status=ACTIVE&status=APPROVED').reply(200)
+        await licenceService.getLicencesForPrinting(username, authSource, prisons)
+        expect(nock.isDone()).toBe(false)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalledTimes(0)
       })
     })
   })

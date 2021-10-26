@@ -88,13 +88,28 @@ export default class LicenceApiClient {
     })) as LicenceSummary[]
   }
 
-  async getLicencesForPrinting(prisonCaseload: string[]): Promise<LicenceSummary[]> {
+  async matchLicences(
+    prisons: string[] = [],
+    statuses: string[] = [],
+    staffIds: number[] = [],
+    nomisIds: string[] = []
+  ): Promise<LicenceSummary[]> {
     const queryParameters: string[] = []
-    prisonCaseload.forEach(prison => {
+    prisons.forEach(prison => {
       queryParameters.push(`prison=${prison}`)
     })
+    statuses.forEach(statusCode => {
+      queryParameters.push(`status=${statusCode}`)
+    })
+    staffIds.forEach(staffId => {
+      queryParameters.push(`staffId=${staffId}`)
+    })
+    nomisIds.forEach(nomisId => {
+      queryParameters.push(`nomisId=${nomisId}`)
+    })
+
     return (await this.restClient.get({
-      path: `/licence/printing-candidates${queryParameters.length > 0 ? `?${queryParameters.join('&')}` : ''}`,
+      path: `/licence/match${queryParameters.length > 0 ? `?${queryParameters.join('&')}` : ''}`,
     })) as LicenceSummary[]
   }
 }

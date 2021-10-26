@@ -104,6 +104,16 @@ const removeDuplicates = (list: string[]): string[] => {
   return [...new Set(list)]
 }
 
+const filterCentralCaseload = (list: string[]): string[] => {
+  const filteredCaseload: string[] = []
+  list
+    .filter(cl => !cl.includes('CADM'))
+    .forEach(prison => {
+      filteredCaseload.push(`${prison}`)
+    })
+  return filteredCaseload
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -115,4 +125,5 @@ export {
   jsonDtTo12HourTime,
   convertDateFormat,
   removeDuplicates,
+  filterCentralCaseload,
 }

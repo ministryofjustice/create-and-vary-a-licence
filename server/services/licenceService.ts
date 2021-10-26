@@ -14,7 +14,13 @@ import {
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getAdditionalConditions, getStandardConditions, getVersion } from '../utils/conditionsProvider'
-import { addressObjectToString, convertDateFormat, convertToTitleCase, simpleDateTimeToJson } from '../utils/utils'
+import {
+  addressObjectToString,
+  convertDateFormat,
+  convertToTitleCase,
+  filterCentralCaseload,
+  simpleDateTimeToJson,
+} from '../utils/utils'
 import PersonName from '../routes/creatingLicences/types/personName'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
@@ -167,78 +173,30 @@ export default class LicenceService {
     return new LicenceApiClient(token).getLicencesByStaffIdAndStatus(staffId, statuses)
   }
 
-  async getLicencesForApproval(username: string, prisonCaseload: string[]): Promise<LicenceSummary[]> {
+  async getLicencesForApproval(username: string, prisons: string[]): Promise<LicenceSummary[]> {
+    const statuses = [LicenceStatus.SUBMITTED.valueOf()]
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    const filteredPrisonCaseload: string[] = []
-
-    // Where a user has a CADM_I caseload (central admin) - we filter it out.
-    // If they have other prisons in their caseload it will use these only, otherwise send an empty list.
-    // For an empty list the API will return all licences in a SUBMITTED state, for all prisons.
-
-    prisonCaseload
-      .filter(cl => !cl.includes('CADM'))
-      .forEach(prison => {
-        filteredPrisonCaseload.push(`${prison}`)
-      })
-
-    return new LicenceApiClient(token).getLicencesForApproval(filteredPrisonCaseload)
+    const filteredPrisons = filterCentralCaseload(prisons)
+    return new LicenceApiClient(token).matchLicences(filteredPrisons, statuses)
   }
 
   async getLicencesForPrinting(
     username: string,
     authSource: string,
-    prisonCaseload: string[],
-    deliusStaffIdentifier: number
+    prisons: string[] = [],
+    staffId: number = null
   ): Promise<LicenceSummary[]> {
-    if (authSource === 'nomis' && prisonCaseload.length > 0) {
+    const statuses = [LicenceStatus.ACTIVE.valueOf(), LicenceStatus.APPROVED.valueOf()]
+    if (authSource === 'nomis') {
       const token = await this.hmppsAuthClient.getSystemClientToken(username)
-      const filteredPrisonCaseload: string[] = []
-      prisonCaseload
-        .filter(cl => !cl.includes('CADM'))
-        .forEach(prison => {
-          filteredPrisonCaseload.push(`${prison}`)
-        })
-      return new LicenceApiClient(token).getLicencesForPrinting(filteredPrisonCaseload)
+      const filteredPrisons = filterCentralCaseload(prisons)
+      return new LicenceApiClient(token).matchLicences(filteredPrisons, statuses)
     }
-    // TODO: Ignore if not a Nomis user or they have no prison caseload
+    if (authSource === 'delius') {
+      const token = await this.hmppsAuthClient.getSystemClientToken(username)
+      return new LicenceApiClient(token).matchLicences([], statuses, [staffId])
+    }
     return []
-  }
-
-  getLicenceStub(): Record<string, unknown> {
-    return {
-      offender: {
-        name: 'Adam Balasaravika',
-        prison: 'Brixton Prison',
-      },
-      induction: {
-        name: 'Joe Bloggs',
-        address: {
-          line1: 'Fake House',
-          line2: 'Fake Street',
-          city: 'Fakestown',
-          county: 'Durham',
-          postcode: 'LE123UT',
-        },
-        telephone: '07712345678',
-        date: '31st May 2021',
-        time: '5:30pm',
-      },
-      additionalConditions: [
-        {
-          category: 'Restriction of residency',
-          template:
-            'Not to reside (not even to stay for one night) in the same household as [ANY / ANY FEMALE / ANY MALE] child under the age of [INSERT AGE] without the prior approval of your supervising officer.',
-          data: ['Any child under 18'],
-        },
-        {
-          category: 'Contact with a person',
-          template:
-            'Not to have unsupervised contact with [ANY / ANY FEMALE / ANY MALE] children under the age of [INSERT AGE] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT] except where that contact is inadvertent and not reasonably avoidable in the course of lawful daily life.',
-          data: ['Any children under 18', 'Lewisham Social Services'],
-        },
-      ],
-      bespokeConditions: ['You must not enter Tesco supermarket 290, 290A Lewisham Road, London, SE13 7PA'],
-    }
   }
 
   getLicenceForPdf(): Record<string, unknown> {
