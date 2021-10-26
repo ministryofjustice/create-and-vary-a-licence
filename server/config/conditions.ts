@@ -1,6 +1,10 @@
 import InputTypes from '../enumeration/inputTypes'
-import RegionOfResidence from '../routes/creatingLicences/types/regionOfResidence'
-import RestrictionOfResidency from '../routes/creatingLicences/types/restrictionOfResidency'
+import RegionOfResidence from '../routes/creatingLicences/types/additionalConditionInputs/regionOfResidence'
+import RestrictionOfResidency from '../routes/creatingLicences/types/additionalConditionInputs/restrictionOfResidency'
+import MedicalAppointmentType from '../routes/creatingLicences/types/additionalConditionInputs/medicalAppointmentType'
+import UnsupervisedContact from '../routes/creatingLicences/types/additionalConditionInputs/unsupervisedContact'
+import WorkingWithChildren from '../routes/creatingLicences/types/additionalConditionInputs/workingWithChildren'
+import IntimateRelationshipWithGender from '../routes/creatingLicences/types/additionalConditionInputs/intimateRelationshipWithGender'
 
 export default {
   version: '1.0',
@@ -126,6 +130,7 @@ export default {
           ],
         },
       ],
+      type: MedicalAppointmentType,
     },
     {
       code: '9ae2a336-3491-4667-aaed-dd852b09b4b9',
@@ -202,6 +207,7 @@ export default {
           name: 'socialServicesDepartment',
         },
       ],
+      type: UnsupervisedContact,
     },
     // {
     //   code: '355700a9-6184-40c0-9759-0dfed1994e1e',
@@ -253,6 +259,7 @@ export default {
           ],
         },
       ],
+      type: WorkingWithChildren,
     },
     {
       code: '8e52e16e-1abf-4251-baca-2fabfcb243d0',
@@ -331,6 +338,7 @@ export default {
           ],
         },
       ],
+      type: IntimateRelationshipWithGender,
     },
     {
       code: 'c5e91330-748d-46f3-93f6-bbe5ea8324ce',
