@@ -12,6 +12,6 @@ export default class ViewAndPrintCaseRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.body
-    res.redirect(`/licence/view-and-print/id/${licenceId}/show`)
+    res.redirect(`/licence/view/id/${licenceId}/show`)
   }
 }
