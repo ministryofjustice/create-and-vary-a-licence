@@ -1,0 +1,55 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../../partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
+{% from "../../partials/additionalConditionsSummary.njk" import additionalConditions %}
+{% from "../../partials/bespokeConditionsSummary.njk" import bespokeConditions %}
+
+{% set pageTitle = applicationName + " - Print a licence" %}
+{% set pageId = "print-view-page" %}
+{% set backLinkHref = "/licence/view/cases" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Print a licence for {{ licence.forename }} {{ licence.surname }}</h1>
+        </div>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <input type="hidden" name="licenceId" value="{{ licence.id }}">
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds-from-desktop">
+
+                {{ inductionMeetingDetails(licence) }}
+
+                {{ additionalConditions(licence) }}
+
+                {{ bespokeConditions(licence) }}
+
+                <p class="govuk-body">
+                    {{ govukButton({
+                        text: "Return to case list",
+                        classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                        href: '/licence/view/cases',
+                        attributes: { 'data-qa': 'return-to-view-list' }
+                    }) }}
+                </p>
+            </div>
+
+            <div class="govuk-grid-column-two-thirds-from-desktop">
+                {{ govukButton({
+                    text: "Print licence",
+                    classes: "govuk-button--primary",
+                    type: "submit",
+                    name: "result",
+                    value: "print",
+                    attributes: { 'data-qa': 'print-licence' }
+                }) }}
+            </div>
+
+        </div>
+    </form>
+{% endblock %}

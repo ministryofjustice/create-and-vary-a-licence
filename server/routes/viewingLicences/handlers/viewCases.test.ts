@@ -101,7 +101,7 @@ describe('Route handlers - View and print case list', () => {
   describe('POST', () => {
     it('should select a licence to view', async () => {
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/view-and-print/id/1/show')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')
     })
   })
 })

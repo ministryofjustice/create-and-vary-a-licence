@@ -5,6 +5,7 @@ import { Services } from '../../services'
 import ViewAndPrintCaseRoutes from './handlers/viewCases'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
+import ViewAndPrintLicenceRoutes from './handlers/viewLicence'
 
 export default function Index({ licenceService }: Services): Router {
   const router = Router()
@@ -18,8 +19,12 @@ export default function Index({ licenceService }: Services): Router {
 
   // These are REAL routes
   const viewCasesHandler = new ViewAndPrintCaseRoutes(licenceService)
+  const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService)
+
   get('/cases', viewCasesHandler.GET)
   post('/cases', viewCasesHandler.POST)
+  get('/id/:licenceId/show', viewLicenceHandler.GET)
+  post('/id/:licenceId/show', viewLicenceHandler.POST)
 
   // These are SPIKE routes
   const spikeGet = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
