@@ -1,6 +1,5 @@
 import conditionsConfig from '../config/conditions'
 import LicenceType from '../enumeration/licenceType'
-import { AdditionalCondition } from '../@types/licenceApiClientTypes'
 
 export function getVersion(): string {
   return conditionsConfig.version

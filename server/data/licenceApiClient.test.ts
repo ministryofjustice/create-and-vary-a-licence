@@ -21,7 +21,6 @@ import Telephone from '../routes/creatingLicences/types/telephone'
 import { stringToAddressObject } from '../utils/utils'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
-import * as conditionsProvider from '../utils/conditionsProvider'
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const licenceService = new LicenceService(hmppsAuthClient, null, null)
