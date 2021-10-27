@@ -37,6 +37,8 @@ const licencePlaceholder = {
     { id: 2, code: 'notBreakLaw', sequence: 2, text: 'Do not break the law' },
     { id: 3, code: 'attendMeetings', sequence: 3, text: 'Attend arranged meetings' },
   ],
+  additionalConditions: [],
+  bespokeConditions: [],
 }
 
 export default {
