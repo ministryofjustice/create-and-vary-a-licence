@@ -29,7 +29,7 @@ export interface paths {
     put: operations['updateAppointmentAddress']
   }
   '/licence/id/{licenceId}/additional-conditions': {
-    /** Update the set of additional conditons on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    /** Update the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateAdditionalConditions']
   }
   '/licence/create': {
@@ -43,6 +43,10 @@ export interface paths {
   '/licence/staffId/{staffId}': {
     /** Find licences associated with a supervising probation officer. Can be filtered by licence status. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getLicencesByStaffIdAndStatuses']
+  }
+  '/licence/match': {
+    /** Get the licences matching the supplied lists of status, prison, staffId and nomsId. Requires ROLE_CVL_ADMIN. */
+    get: operations['getLicencesMatchingCriteria']
   }
   '/licence/id/{licenceId}': {
     /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -587,7 +591,7 @@ export interface operations {
       }
     }
   }
-  /** Update the set of additional conditons on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  /** Update the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   updateAdditionalConditions: {
     parameters: {
       path: {
@@ -691,6 +695,37 @@ export interface operations {
     }
     responses: {
       /** Licence details returned */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary'][]
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Get the licences matching the supplied lists of status, prison, staffId and nomsId. Requires ROLE_CVL_ADMIN. */
+  getLicencesMatchingCriteria: {
+    parameters: {
+      query: {
+        prison?: string[]
+        status?: ('IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED')[]
+        staffId?: number[]
+        nomsId?: string[]
+      }
+    }
+    responses: {
+      /** Returned matching licence summary details - empty if no matches. */
       200: {
         content: {
           'application/json': components['schemas']['LicenceSummary'][]

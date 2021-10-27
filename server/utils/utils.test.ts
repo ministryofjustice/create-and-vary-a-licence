@@ -10,6 +10,7 @@ import {
   jsonDtTo12HourTime,
   jsonDtToDate,
   removeDuplicates,
+  filterCentralCaseload,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -212,13 +213,23 @@ test.each`
 describe('Remove duplicates', () => {
   it('should remove duplicates from a list of strings', () => {
     const listWithDuplicates = ['A', 'B', 'C', 'C', 'C']
-    expect(removeDuplicates(listWithDuplicates)).toHaveLength(3)
     expect(removeDuplicates(listWithDuplicates)).toEqual(['A', 'B', 'C'])
   })
 
   it('should remove duplicates from a more challenging list', () => {
     const listWithDuplicates = ['MDI', 'LEI', 'MDI', 'LEI', 'BMI', 'LEI', 'MDI']
-    expect(removeDuplicates(listWithDuplicates)).toHaveLength(3)
     expect(removeDuplicates(listWithDuplicates)).toEqual(['MDI', 'LEI', 'BMI'])
+  })
+})
+
+describe('Filter central case load', () => {
+  it('should remove central caseload CADM*', () => {
+    const withCentralCaseoad = ['A', 'B', 'CADM_I', 'D', 'E']
+    expect(filterCentralCaseload(withCentralCaseoad)).toEqual(['A', 'B', 'D', 'E'])
+  })
+
+  it('should return an empty list', () => {
+    const onlyCentralCaseload = ['CADM_I']
+    expect(filterCentralCaseload(onlyCentralCaseload)).toHaveLength(0)
   })
 })
