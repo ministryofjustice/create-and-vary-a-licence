@@ -21,7 +21,7 @@ describe('Route - view and approve a licence', () => {
   })
 
   describe('GET', () => {
-    it('should render a single licence view for printing', async () => {
+    it('should render a single licence view for printing when ACTIVE', async () => {
       res = {
         render: jest.fn(),
         redirect: jest.fn(),
@@ -42,7 +42,28 @@ describe('Route - view and approve a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/view')
     })
 
-    it('should check status is ACTIVE or APPROVED else redirect to case list', async () => {
+    it('should render a single licence view for printing when APPROVED', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.APPROVED,
+            surname: 'Bobson',
+            forename: 'Bob',
+            appointmentTime: '12/12/2022 14:16',
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/view')
+    })
+
+    it('should not print unless status is ACTIVE or APPROVED', async () => {
       res = {
         render: jest.fn(),
         redirect: jest.fn(),
