@@ -189,6 +189,33 @@ describe('Licence API client tests', () => {
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
+
+      it('Update additional condition data from object', async () => {
+        const form = {
+          input1: 'testData1',
+          input2: 'testData2',
+        }
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi
+          .put('/licence/id/1/additional-conditions/condition/1', {
+            data: [
+              {
+                field: 'input1',
+                value: 'testData1',
+                sequence: 0,
+              },
+              {
+                field: 'input2',
+                value: 'testData2',
+                sequence: 1,
+              },
+            ],
+          })
+          .reply(200)
+        await licenceService.updateAdditionalConditionData('1', '1', form, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
     })
   })
 

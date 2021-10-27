@@ -1,4 +1,8 @@
-import { getGroupedAdditionalConditions, getStandardConditions } from './conditionsProvider'
+import {
+  getAdditionalConditionByCode,
+  getGroupedAdditionalConditions,
+  getStandardConditions,
+} from './conditionsProvider'
 
 jest.mock('../config/conditions', () => ({
   standardConditions: {
@@ -43,6 +47,16 @@ describe('Conditions Provider', () => {
           ],
         },
       ])
+    })
+  })
+
+  describe('getAdditionalConditionByCode', () => {
+    it('should the additional condition which matches the given code', () => {
+      expect(getAdditionalConditionByCode('code1')).toEqual({ category: 'group1', code: 'code1' })
+    })
+
+    it('should return undefined if a matching additional condition is not found', () => {
+      expect(getAdditionalConditionByCode('unknown')).toBeUndefined()
     })
   })
 
