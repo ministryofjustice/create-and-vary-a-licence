@@ -24,10 +24,6 @@
             text: case.nomisId
         },
         {
-            attributes: { id: 'prison-description-' + loop.index },
-            text: case.prisonDescription
-        },
-        {
             attributes: { id: 'conditional-release-date-' + loop.index },
             text: case.conditionalReleaseDate | datetimeToDate
         }
@@ -50,7 +46,6 @@
             head: [
                 { text: "Name" },
                 { text: "Nomis ID" },
-                { text: "Prison" },
                 { text: "Conditional release date" }
             ],
             rows: licences
