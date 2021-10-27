@@ -21,15 +21,13 @@ import Telephone from '../routes/creatingLicences/types/telephone'
 import { stringToAddressObject } from '../utils/utils'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
+import * as conditionsProvider from '../utils/conditionsProvider'
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const licenceService = new LicenceService(hmppsAuthClient, null, null)
-const additionalConditions = [
-  { code: 'condition1', text: 'text', category: 'category' },
-  { code: 'condition2', text: 'text', category: 'category' },
-  { code: 'condition3', text: 'text', category: 'category' },
-]
+const additionalCondition = { code: 'condition1', text: 'text', category: 'category' }
 
+jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode').mockReturnValue(additionalCondition)
 jest.mock('./hmppsAuthClient')
 
 describe('Licence API client tests', () => {
@@ -347,8 +345,8 @@ const makeApiRequestAdditionalConditions = (conditionIds: string[]): AdditionalC
       return {
         code: conditionCode,
         sequence: index,
-        category: additionalConditions.find(c => c.code === conditionCode)?.category,
-        text: additionalConditions.find(c => c.code === conditionCode)?.text,
+        category: additionalCondition.category,
+        text: additionalCondition.text,
       }
     }) || []
 

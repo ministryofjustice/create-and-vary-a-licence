@@ -8,7 +8,7 @@ export type FieldValidationError = {
   message: string
 }
 
-function validationMiddleware(type: new () => unknown): RequestHandler {
+function validationMiddleware(type?: new () => unknown): RequestHandler {
   return async (req, res, next) => {
     const { additionalConditionId } = req.params
     let additionalConditionType

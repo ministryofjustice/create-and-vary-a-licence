@@ -57,15 +57,15 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
       expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(1, {}, 'joebloggs')
     })
 
-    it('should redirect to the bespoke conditions question page', async () => {
+    it('should redirect to the callback function', async () => {
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions-question')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions/callback')
     })
 
-    it('should redirect to the check your answers page if fromReview flag is true', async () => {
+    it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions/callback?fromReview=true')
     })
   })
 })
