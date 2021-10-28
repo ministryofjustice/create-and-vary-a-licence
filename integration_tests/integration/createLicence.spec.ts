@@ -35,13 +35,7 @@ context('Create a licence', () => {
 
     const additionalConditionsPage = additionalConditionsQuestionPage.selectYes().clickContinue()
 
-    const bespokeConditionsQuestionPage = additionalConditionsPage
-      .selectConditions([
-        '79ac033f-9d7a-4dab-8344-475106e58b71',
-        '8686a815-b7f0-43b6-9886-f01df6a48773',
-        '0a370862-5426-49c1-b6d4-3d074d78a81a',
-      ])
-      .clickContinue()
+    const bespokeConditionsQuestionPage = additionalConditionsPage.clickContinue()
 
     const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
 

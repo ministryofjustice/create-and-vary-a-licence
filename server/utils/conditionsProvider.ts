@@ -19,8 +19,8 @@ export function getStandardConditions(licenceType: string): Record<string, unkno
   }
 }
 
-export function getAdditionalConditions(): Record<string, unknown>[] {
-  return conditionsConfig.additionalConditions
+export function getAdditionalConditionByCode(code: string): Record<string, unknown> {
+  return conditionsConfig.additionalConditions.find(config => config.code === code)
 }
 
 export function getGroupedAdditionalConditions(): Record<string, unknown>[] {

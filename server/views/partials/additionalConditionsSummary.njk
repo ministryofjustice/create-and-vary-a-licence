@@ -8,7 +8,7 @@
         {% if data.length %}
             <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
                 {% for entry in data %}
-                    <span class="govuk-!-display-block">{{ entry }}</span>
+                    <span class="govuk-!-display-block">{{ entry.value }}</span>
                 {% endfor %}
             </div>
         {% endif %}
@@ -30,7 +30,16 @@
     {% for condition in licence.additionalConditions %}
         {% set additionalConditions = (additionalConditions.push({
             key: {  text: condition.category },
-            value: { html: additionalConditionHtml(condition.text, condition.data) }
+            value: { html: additionalConditionHtml(condition.text, condition.data) },
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licence.id + "/additional-conditions/condition/" + condition.id + "?fromReview=true",
+                        text: "Edit",
+                        visuallyHiddenText: "name"
+                    }
+                ]
+            } if condition | checkConditionRequiresInput and isEditable
         }), additionalConditions) %}
     {% endfor %}
 

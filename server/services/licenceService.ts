@@ -11,9 +11,10 @@ import {
   LicenceApiTestData,
   LicenceSummary,
   StatusUpdateRequest,
+  UpdateAdditionalConditionDataRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
-import { getAdditionalConditions, getStandardConditions, getVersion } from '../utils/conditionsProvider'
+import { getAdditionalConditionByCode, getStandardConditions, getVersion } from '../utils/conditionsProvider'
 import {
   addressObjectToString,
   convertDateFormat,
@@ -134,21 +135,40 @@ export default class LicenceService {
   async updateAdditionalConditions(id: string, formData: AdditionalConditions, username: string): Promise<void> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
 
-    const additionalConditions = getAdditionalConditions()
-
     const requestBody = {
       additionalConditions:
         formData.additionalConditions?.map((conditionCode, index) => {
           return {
             code: conditionCode,
             sequence: index,
-            category: additionalConditions.find(c => c.code === conditionCode)?.category,
-            text: additionalConditions.find(c => c.code === conditionCode)?.text,
+            category: getAdditionalConditionByCode(conditionCode)?.category,
+            text: getAdditionalConditionByCode(conditionCode)?.text,
           }
         }) || [],
     } as AdditionalConditionsRequest
 
     return new LicenceApiClient(token).updateAdditionalConditions(id, requestBody)
+  }
+
+  async updateAdditionalConditionData(
+    licenceId: string,
+    additionalConditionId: string,
+    formData: unknown,
+    username: string
+  ): Promise<void> {
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+
+    const requestBody = {
+      data: Object.keys(formData).map((key, index) => {
+        return {
+          field: key,
+          value: formData[key],
+          sequence: index,
+        }
+      }),
+    } as UpdateAdditionalConditionDataRequest
+
+    return new LicenceApiClient(token).updateAdditionalConditionData(licenceId, additionalConditionId, requestBody)
   }
 
   async updateBespokeConditions(id: string, formData: BespokeConditions, username: string): Promise<void> {

@@ -3,6 +3,12 @@ import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
+import * as conditionsProvider from '../../../utils/conditionsProvider'
+
+const additionalCondition = { code: 'condition1', inputRequired: true }
+
+jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode').mockReturnValue(additionalCondition)
+
 const snippet = fs.readFileSync('server/views/pages/create/checkAnswers.njk')
 
 describe('Create a Licence Views - Check Answers', () => {
@@ -21,14 +27,27 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: {
         additionalConditions: [
           {
+            code: 'condition1',
             category: 'Category 1',
             text: 'Template 1',
-            data: ['Data 1'],
+            data: [
+              {
+                value: 'Data 1',
+              },
+            ],
           },
           {
+            code: 'condition2',
             category: 'Category 2',
             text: 'Template 2',
-            data: ['Data 2A', 'Data 2B'],
+            data: [
+              {
+                value: 'Data 2A',
+              },
+              {
+                value: 'Data 2B',
+              },
+            ],
           },
         ],
       },

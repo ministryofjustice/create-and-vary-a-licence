@@ -11,6 +11,7 @@ import type {
   BespokeConditionsRequest,
   StatusUpdateRequest,
   AdditionalConditionsRequest,
+  UpdateAdditionalConditionDataRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -62,6 +63,17 @@ export default class LicenceApiClient {
     additionalConditions: AdditionalConditionsRequest
   ): Promise<void> {
     await this.restClient.put({ path: `/licence/id/${licenceId}/additional-conditions`, data: additionalConditions })
+  }
+
+  async updateAdditionalConditionData(
+    licenceId: string,
+    additionalConditionId: string,
+    additionalConditionData: UpdateAdditionalConditionDataRequest
+  ): Promise<void> {
+    await this.restClient.put({
+      path: `/licence/id/${licenceId}/additional-conditions/condition/${additionalConditionId}`,
+      data: additionalConditionData,
+    })
   }
 
   async updateLicenceStatus(licenceId: string, statusRequest: StatusUpdateRequest): Promise<void> {

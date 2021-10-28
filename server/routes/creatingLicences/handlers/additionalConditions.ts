@@ -16,10 +16,8 @@ export default class AdditionalConditionsRoutes {
 
     await this.licenceService.updateAdditionalConditions(licenceId, req.body, username)
 
-    if (req.query?.fromReview) {
-      res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
-    } else {
-      res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)
-    }
+    return res.redirect(
+      `/licence/create/id/${licenceId}/additional-conditions/callback${req.query?.fromReview ? '?fromReview=true' : ''}`
+    )
   }
 }

@@ -4,7 +4,7 @@ import { IsNotEmpty } from 'class-validator'
 class RegionOfResidence {
   @Expose()
   @IsNotEmpty({ message: 'Enter the probation region' })
-  regionOfResidence: string
+  probationRegion: string
 }
 
 export default RegionOfResidence

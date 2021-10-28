@@ -2,7 +2,6 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from "formBuilder.njk" import formBuilder %}
 
 {% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
 {% set pageId = "additional-conditions-page" %}
@@ -49,7 +48,7 @@
                 {% endfor %}
 
                 {{ govukButton({
-                    text: continueOrReturnToCheckAnswers,
+                    text: "Continue",
                     type: "submit",
                     classes: 'govuk-!-margin-top-6',
                     attributes: { 'data-qa': 'continue' }

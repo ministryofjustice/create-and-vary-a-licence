@@ -25,14 +25,9 @@ import * as conditionsProvider from '../utils/conditionsProvider'
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const licenceService = new LicenceService(hmppsAuthClient, null, null)
-const additionalConditions = [
-  { code: 'condition1', text: 'text', category: 'category' },
-  { code: 'condition2', text: 'text', category: 'category' },
-  { code: 'condition3', text: 'text', category: 'category' },
-]
+const additionalCondition = { code: 'condition1', text: 'text', category: 'category' }
 
-jest.spyOn(conditionsProvider, 'getAdditionalConditions').mockReturnValue(additionalConditions)
-
+jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode').mockReturnValue(additionalCondition)
 jest.mock('./hmppsAuthClient')
 
 describe('Licence API client tests', () => {
@@ -194,6 +189,33 @@ describe('Licence API client tests', () => {
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
+
+      it('Update additional condition data from object', async () => {
+        const form = {
+          input1: 'testData1',
+          input2: 'testData2',
+        }
+        hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+        fakeApi
+          .put('/licence/id/1/additional-conditions/condition/1', {
+            data: [
+              {
+                field: 'input1',
+                value: 'testData1',
+                sequence: 0,
+              },
+              {
+                field: 'input2',
+                value: 'testData2',
+                sequence: 1,
+              },
+            ],
+          })
+          .reply(200)
+        await licenceService.updateAdditionalConditionData('1', '1', form, username)
+        expect(nock.isDone()).toBe(true)
+        expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      })
     })
   })
 
@@ -350,8 +372,8 @@ const makeApiRequestAdditionalConditions = (conditionIds: string[]): AdditionalC
       return {
         code: conditionCode,
         sequence: index,
-        category: additionalConditions.find(c => c.code === conditionCode)?.category,
-        text: additionalConditions.find(c => c.code === conditionCode)?.text,
+        category: additionalCondition.category,
+        text: additionalCondition.text,
       }
     }) || []
 

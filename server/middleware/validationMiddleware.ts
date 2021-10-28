@@ -1,15 +1,22 @@
-import { plainToClass } from 'class-transformer'
+import { ClassConstructor, plainToClass } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
+import { getAdditionalConditionByCode } from '../utils/conditionsProvider'
 
 export type FieldValidationError = {
   field: string
   message: string
 }
 
-function validationMiddleware(type: new () => unknown): RequestHandler {
+function validationMiddleware(type?: new () => unknown): RequestHandler {
   return async (req, res, next) => {
-    const bodyAsClass = plainToClass(type, req.body, { excludeExtraneousValues: true })
+    const { additionalConditionId } = req.params
+    let additionalConditionType
+    if (additionalConditionId) {
+      additionalConditionType = getAdditionalConditionByCode(req.body.code)?.type as ClassConstructor<unknown>
+    }
+
+    const bodyAsClass = plainToClass(additionalConditionType || type, req.body, { excludeExtraneousValues: true })
 
     const errors: ValidationError[] = await validate(
       // eslint-disable-next-line @typescript-eslint/ban-types

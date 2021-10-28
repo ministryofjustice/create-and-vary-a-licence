@@ -22,6 +22,8 @@ import Telephone from './types/telephone'
 import SimpleDateTime from './types/simpleDateTime'
 import YesOrNoQuestion from './types/yesOrNo'
 import AdditionalConditions from './types/additionalConditions'
+import AdditionalConditionsCallbackRoutes from './handlers/additionalConditionsCallback'
+import AdditionalConditionInputRoutes from './handlers/additionalConditionInput'
 
 export default function Index({ licenceService, caseloadService }: Services): Router {
   const router = Router()
@@ -46,6 +48,8 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService)
   const additionalConditionsQuestionHandler = new AdditionalConditionsQuestionRoutes()
   const additionalConditionsHandler = new AdditionalConditionsRoutes(licenceService)
+  const additionalConditionsCallbackHandler = new AdditionalConditionsCallbackRoutes()
+  const additionalConditionInputHandler = new AdditionalConditionInputRoutes(licenceService)
   const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
   const bespokeConditionsHandler = new BespokeConditionsRoutes(licenceService)
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService)
@@ -65,6 +69,9 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   post('/id/:licenceId/additional-conditions-question', additionalConditionsQuestionHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/additional-conditions', additionalConditionsHandler.GET)
   post('/id/:licenceId/additional-conditions', additionalConditionsHandler.POST, AdditionalConditions)
+  get('/id/:licenceId/additional-conditions/callback', additionalConditionsCallbackHandler.GET)
+  get('/id/:licenceId/additional-conditions/condition/:additionalConditionId', additionalConditionInputHandler.GET)
+  post('/id/:licenceId/additional-conditions/condition/:additionalConditionId', additionalConditionInputHandler.POST)
   get('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.GET)
   post('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.GET)
