@@ -19,6 +19,7 @@ import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+import trimRequestBody from './middleware/trimBodyMiddleware'
 
 const testMode = process.env.NODE_ENV === 'test'
 
@@ -37,6 +38,7 @@ export default function createApp(services: Services): express.Application {
   nunjucksSetup(app)
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
+  app.use(trimRequestBody())
 
   // CSRF protection
   if (!testMode) {
