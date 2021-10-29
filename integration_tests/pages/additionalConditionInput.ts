@@ -30,6 +30,8 @@ export default class AdditionalConditionsInputPage extends Page {
     cy.task('stubPutAdditionalConditionData')
     cy.task('stubGetLicenceWithConditionToComplete', this.additionalConditionsToInput.shift())
     cy.get(this.continueButtonId).click()
+    this.checkOnPage()
+    this.runAxe()
     return this
   }
 
