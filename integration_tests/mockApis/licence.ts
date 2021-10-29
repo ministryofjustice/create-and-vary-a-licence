@@ -79,6 +79,42 @@ export default {
               category: 'Residence at a specific place',
               sequence: 0,
               text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
+              data: [
+                {
+                  id: 1,
+                  sequence: 0,
+                  field: 'probationRegion',
+                  value: 'London',
+                },
+              ],
+            },
+            {
+              id: 2,
+              code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
+              category: 'Restriction of residency',
+              sequence: 1,
+              text: 'Not to reside (not even to stay for one night) in the same household as [ANY / ANY FEMALE / ANY MALE] child under the age of [INSERT AGE] without the prior approval of your supervising officer.',
+              data: [
+                {
+                  id: 2,
+                  sequence: 0,
+                  field: 'gender',
+                  value: 'Any',
+                },
+                {
+                  id: 3,
+                  sequence: 0,
+                  field: 'age',
+                  value: '16',
+                },
+              ],
+            },
+            {
+              id: 3,
+              code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
+              category: 'Making or maintaining contact with a person',
+              sequence: 2,
+              text: 'Receive home visits from a Mental Health Worker.',
               data: [],
             },
           ],
@@ -192,6 +228,43 @@ export default {
       request: {
         method: 'PUT',
         urlPattern: `/licence/id/(\\d)*/additional-conditions`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubGetLicenceWithConditionToComplete: (code: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/id/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          additionalConditions: [
+            {
+              id: 1,
+              code,
+              data: [],
+            },
+          ],
+        },
+      },
+    })
+  },
+
+  stubPutAdditionalConditionData: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d)*/additional-conditions/condition/(\\d)*`,
       },
       response: {
         status: 200,
