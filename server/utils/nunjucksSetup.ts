@@ -129,5 +129,9 @@ export function registerNunjucks(app?: express.Express): Environment {
       : undefined
   })
 
+  njkEnv.addFilter('formatAddressAsList', (address?: string) => {
+    return address ? address.split(', ').filter(line => line.trim().length > 0) : undefined
+  })
+
   return njkEnv
 }

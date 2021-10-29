@@ -30,6 +30,6 @@
     {{ cancellation() }}
     {{ recall() }}
     {{ failureToComply() }}
-    {{ signatures(licence.actualReleaseDate, approverName, offenderName) }}
-    {{ footer(licence.nomsId, licence.pnc, licence.cro, licence.bookingNo, licence.id, licence.version, licence.prisonCode) }}
+    {{ signatures(licence.actualReleaseDate, approverName, licence.approvedDate, offenderName) }}
+    {{ footer(licence.nomsId, licence.pnc, licence.cro, licence.bookingNo, licence.typeCode, licence.id, licence.version, licence.prisonCode) }}
 {% endblock %}

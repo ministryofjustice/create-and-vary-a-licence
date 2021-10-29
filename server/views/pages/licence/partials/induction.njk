@@ -1,16 +1,19 @@
 {% macro induction(person, address, timeOfMeeting, contactNumber) %}
     <div class="section" id="induction">
-        <p>
-         On release from prison (including, if applicable, any release from from detention under the
-         Immigration Act 1971 during the currency of your licence, whether or not leave has been granted
-         for you to remain in the United Kingdom), unless otherwise directed by your supervising officer,
-         you must report without delay to:
-        </p>
-        <p>
+         On release from prison (including, if applicable, any release from from detention under the Immigration Act 1971
+        during the currency of your licence, whether or not leave has been granted for you to remain in the United Kingdom),
+        unless otherwise directed by your supervising officer, you must report without delay to:
+        <br/>
+        <br/>
         {{ person }}<br/>
-        {{ address | formatAddress }}
-        </p>
-        <p>On {{ timeOfMeeting | datetimeToDate }} at {{ timeOfMeeting | datetimeTo12HourTime }}</p>
-        <p>Contact telephone number: {{ contactNumber }}</p>
+        {% for a in (address | formatAddressAsList) %}
+            {{ a }}<br>
+        {% endfor %}
+        <br/>
+        On {{ timeOfMeeting | datetimeToDate }} at {{ timeOfMeeting | datetimeTo12HourTime }}
+        <br/>
+        <br/>
+        Contact telephone number: {{ contactNumber }}
+        <br/>
     </div>
 {% endmacro %}

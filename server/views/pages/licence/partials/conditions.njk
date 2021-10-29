@@ -1,7 +1,6 @@
 
 {% macro conditions(standard, additional, bespoke) %}
-    <div class="section" id="conditions">
-        <p>While under supervision you must:</p>
+    <div class="section" id="conditions">While under supervision you must:<br/>
        {{ standardConditions(standard) }}
        {{ additionalConditions(additional) }}
        {{ bespokeConditions(bespoke) }}
@@ -11,7 +10,7 @@
 {%  macro standardConditions(standardConditions) %}
     {% for condition in standardConditions %}
         <div class="condition" id="standard-{{ loop.index }}">
-          {{ condition.text }}
+            {{ condition.text }}
         </div>
     {% endfor %}
 {% endmacro %}

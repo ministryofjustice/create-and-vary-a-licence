@@ -1,0 +1,143 @@
+@page {
+  size: A4 portrait;
+  margin: 70pt 60pt 70pt;
+  @bottom-center {
+    font-size: 8pt;
+    content: "NOMS Id:" string(noms-id)  "Page " counter(page) " of " counter(pages);
+  }
+}
+
+@page :first {
+  // Logo at top left
+}
+
+.text-wrap {
+  float: left;
+  margin: 10px;
+}
+
+.bullet-point {
+  font-family: "GDS Transport",arial,sans-serif;
+  font-size: 12pt;
+  font-weight: normal;
+  line-height: normal;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.section::before {
+  counter-increment: sectionCounter;
+  content: "\a" counter(sectionCounter) ". ";
+  white-space: pre;
+}
+
+.section {
+  font-family: "GDS Transport",arial,sans-serif;
+  font-size: 12pt;
+  font-weight: normal;
+  line-height: normal;
+  clear: left;
+  text-align: justify-all;
+}
+
+.section::after {
+  content: "\a";
+  white-space: pre;
+}
+
+.condition::before {
+  counter-increment: conditionCounter;
+  content: "\a" counter(sectionCounter) "." counter(conditionCounter) ". ";
+  white-space: pre;
+}
+
+.condition {
+  font-family: "GDS Transport",arial,sans-serif;
+  font-size: 12pt;
+  font-weight: normal;
+  line-height: normal;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-left: 20px;
+  text-align: justify-all;
+}
+
+.condition::after {
+  content: "\a";
+  white-space: pre;
+}
+
+.title {
+  font-family: "GDS Transport",arial,sans-serif;
+  font-size: 15pt;
+  font-weight: bold;
+}
+
+.tab-20 {
+  text-indent: 20px;
+}
+
+.title::after {
+  content: "\a";
+  clear: left;
+}
+
+body {
+  counter-reset: sectionCounter conditionCounter;
+}
+
+.footer-tiny {
+  font-size: 6px;
+}
+
+.boxed {
+  border: 1px solid black;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.signatures::before {
+  content: "\a";
+  white-space: pre;
+}
+
+.signatures {
+  font-family: "GDS Transport",arial,sans-serif;
+  font-size: 12pt;
+  font-weight: normal;
+  line-height: normal;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+span .hidden-noms-id {
+  string-set: noms-id content()
+}
+
+span .hidden-pnc {
+  string-set: pnc content()
+}
+
+span .hidden-cro {
+  string-set: cro content()
+}
+
+span .hidden-booking-no {
+  string-set: booking-no content()
+}
+
+span .hidden-licence-id {
+  string-set: licence-id content()
+}
+
+span .hidden-prison-code {
+  string-set: prison-code content()
+}
+
+span .hidden-version {
+  string-set: version content()
+}
+
+span .hidden-licence-type {
+  string-set: licence-type content()
+}
