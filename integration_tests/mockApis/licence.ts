@@ -88,6 +88,35 @@ export default {
                 },
               ],
             },
+            {
+              id: 2,
+              code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
+              category: 'Restriction of residency',
+              sequence: 1,
+              text: 'Not to reside (not even to stay for one night) in the same household as [ANY / ANY FEMALE / ANY MALE] child under the age of [INSERT AGE] without the prior approval of your supervising officer.',
+              data: [
+                {
+                  id: 2,
+                  sequence: 0,
+                  field: 'gender',
+                  value: 'Any',
+                },
+                {
+                  id: 3,
+                  sequence: 0,
+                  field: 'age',
+                  value: '16',
+                },
+              ],
+            },
+            {
+              id: 3,
+              code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
+              category: 'Making or maintaining contact with a person',
+              sequence: 2,
+              text: 'Receive home visits from a Mental Health Worker.',
+              data: [],
+            },
           ],
           bespokeConditions: [
             {
