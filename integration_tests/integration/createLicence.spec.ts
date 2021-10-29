@@ -35,7 +35,11 @@ context('Create a licence', () => {
 
     const additionalConditionsPage = additionalConditionsQuestionPage.selectYes().clickContinue()
 
-    const bespokeConditionsQuestionPage = additionalConditionsPage.clickContinue()
+    const additionalConditionsInputPage = additionalConditionsPage
+      .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
+      .clickContinue()
+
+    const bespokeConditionsQuestionPage = additionalConditionsInputPage.enterData('London').clickContinue()
 
     const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
 

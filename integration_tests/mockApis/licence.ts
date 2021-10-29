@@ -79,7 +79,14 @@ export default {
               category: 'Residence at a specific place',
               sequence: 0,
               text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
-              data: [],
+              data: [
+                {
+                  id: 1,
+                  sequence: 0,
+                  field: 'probationRegion',
+                  value: 'London',
+                },
+              ],
             },
           ],
           bespokeConditions: [
@@ -192,6 +199,43 @@ export default {
       request: {
         method: 'PUT',
         urlPattern: `/licence/id/(\\d)*/additional-conditions`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubGetLicenceWithConditionToComplete: (code: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/id/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          additionalConditions: [
+            {
+              id: 1,
+              code,
+              data: [],
+            },
+          ],
+        },
+      },
+    })
+  },
+
+  stubPutAdditionalConditionData: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d)*/additional-conditions/condition/(\\d)*`,
       },
       response: {
         status: 200,

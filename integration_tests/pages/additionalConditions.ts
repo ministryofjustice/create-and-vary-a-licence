@@ -1,21 +1,25 @@
 import Page from './page'
-import BespokeConditionsQuestionPage from './bespokeConditionsQuestion'
+import AdditionalConditionsInputPage from './additionalConditionInput'
 
 export default class AdditionalConditionsPage extends Page {
   private continueButtonId = '[data-qa=continue]'
+
+  private selectedCondition: string
 
   constructor() {
     super('additional-conditions-page', false)
   }
 
-  selectConditions = (conditionIds: string[]): AdditionalConditionsPage => {
-    conditionIds.forEach(id => cy.get(`#${id}`).click())
+  selectCondition = (conditionId: string): AdditionalConditionsPage => {
+    cy.get(`#${conditionId}`).click()
+    this.selectedCondition = conditionId
     return this
   }
 
-  clickContinue = (): BespokeConditionsQuestionPage => {
+  clickContinue = (): AdditionalConditionsInputPage => {
     cy.task('stubPutAdditionalConditions')
+    cy.task('stubGetLicenceWithConditionToComplete', this.selectedCondition)
     cy.get(this.continueButtonId).click()
-    return Page.verifyOnPage(BespokeConditionsQuestionPage)
+    return Page.verifyOnPage(AdditionalConditionsInputPage)
   }
 }
