@@ -28,6 +28,8 @@ export default (on: (string, Record) => void): void => {
     stubPutContactNumber: licence.stubPutContactNumber,
     stubPutBespokeConditions: licence.stubPutBespokeConditions,
     stubPutAdditionalConditions: licence.stubPutAdditionalConditions,
+    stubGetLicenceWithConditionToComplete: licence.stubGetLicenceWithConditionToComplete,
+    stubPutAdditionalConditionData: licence.stubPutAdditionalConditionData,
     stubGetLicencesByStaffIdAndStatus: licence.stubGetLicencesByStaffIdAndStatus,
     stubUpdateLicenceStatus: licence.stubUpdateLicenceStatus,
     stubGetLicencesForApproval: licence.stubGetLicencesForApproval,
