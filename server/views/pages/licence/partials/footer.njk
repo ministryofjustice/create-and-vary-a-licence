@@ -1,0 +1,9 @@
+{% macro footer(nomsId, pnc, cro, bookingNo, id, version, prisonCode) %}
+    <div class="footer" id="footer">
+        <p><span class="footer-left">NOMS No: {{ nomsId or "N/A" }}</span><span class="footer-right">Booking No: {{ bookingNo or "N/A"}}</span></p>
+        <p><span class="footer-left">CRO No: {{ cro or "N/A" }}</span><span class="footer-right">PNCID: {{ pnc or "N/A" }}</span></p>
+    </div>
+    <div class="footer-tiny">
+       <p>{{ id }} / {{ version }} / {{ prisonCode }}</p>
+    </div>
+{% endmacro %}

@@ -1,0 +1,7 @@
+{% macro offender(dateOfBirth, licenceExpiryDate, nomsId) %}
+<div class="offender" id="offender">
+    <img src="{{ licencesUrl }}/prisoner/{{ nomsId or 'placeholder' }}/image" width="150px" class="text-wrap">
+    <p>Date of birth: {{ dateOfBirth | datetimeToDate }}</p>
+    <p>Your licence and sentence expires on {{ licenceExpiryDate | datetimeToDate }}</p>
+</div>
+{% endmacro %}

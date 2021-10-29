@@ -1,0 +1,34 @@
+
+{% macro conditions(standard, additional, bespoke) %}
+    <div class="section" id="conditions">
+        <p>While under supervision you must:</p>
+       {{ standardConditions(standard) }}
+       {{ additionalConditions(additional) }}
+       {{ bespokeConditions(bespoke) }}
+    </div>
+{% endmacro %}
+
+{%  macro standardConditions(standardConditions) %}
+    {% for condition in standardConditions %}
+        <div class="condition" id="standard-{{ loop.index }}">
+          {{ condition.text }}
+        </div>
+    {% endfor %}
+{% endmacro %}
+
+{%  macro additionalConditions(additionalConditions) %}
+    {% for condition in additionalConditions %}
+        <div class="condition" id="additional-{{ loop.index }}">
+            {#  TODO: In the route - or prior to calling - expand the text to include the data inside placeholders #}
+            {{ condition.text }}
+        </div>
+    {% endfor %}
+{% endmacro %}
+
+{%  macro bespokeConditions(bespokeConditions) %}
+    {% for condition in bespokeConditions %}
+        <div class="condition" id="bespoke-{{ loop.index }}">
+            {{ condition.text }}
+        </div>
+    {% endfor %}
+{% endmacro %}

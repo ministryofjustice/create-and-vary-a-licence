@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% block head %}
+  {# TODO: Only include PDF types - separate stylesheet generated for licence documents? #}
+  <!--[if !IE 8]><!-->
+  <link href="{{ licencesUrl }}/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
+  <!--<![endif]-->
+
+  <!--[if lt IE 9]>
+  <link href="{{ licencesUrl }}/assets/stylesheets/application-ie8.css?{{ version }}" rel="stylesheet"/>
+  <script src="{{ licencesUrl }}/assets/js/html5shiv-3.7.3.min.js"></script>
+  <![endif]-->
+{% endblock %}
+
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
+
+{% block header %}
+    <div id="logo" class="print-logo">
+       {#  <img src="{{ licencesUrl }}/assets/images/MOJ_logo1.png" width="90px"> #}
+       <img alt="" src="{{ licencesUrl }}/assets/images/crest.svg"/>
+    </div>
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+</html>

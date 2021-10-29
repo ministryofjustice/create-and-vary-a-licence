@@ -6,6 +6,7 @@ import ViewAndPrintCaseRoutes from './handlers/viewCases'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import ViewAndPrintLicenceRoutes from './handlers/viewLicence'
+import PrintLicenceRoutes from './handlers/printLicence'
 
 export default function Index({ licenceService }: Services): Router {
   const router = Router()
@@ -20,11 +21,18 @@ export default function Index({ licenceService }: Services): Router {
   // These are REAL routes
   const viewCasesHandler = new ViewAndPrintCaseRoutes(licenceService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService)
+  const printHandler = new PrintLicenceRoutes(licenceService)
 
   get('/cases', viewCasesHandler.GET)
   post('/cases', viewCasesHandler.POST)
   get('/id/:licenceId/show', viewLicenceHandler.GET)
   post('/id/:licenceId/show', viewLicenceHandler.POST)
+
+  // To test against only - not used in live operation
+  get('/id/:licenceId/html-print', printHandler.preview)
+
+  // Real PDF print route handler
+  get('/id/:licenceId/pdf-print', printHandler.renderPdf)
 
   // These are SPIKE routes
   const spikeGet = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))

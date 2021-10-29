@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import logger from '../../../../logger'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -15,14 +16,16 @@ export default class ViewAndPrintLicenceRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    /*
-    TODO: Next ticket will act on the Print button - for now, go back to view cases list
     const { username } = res.locals.user
     const { licenceId, result } = req.body
+
+    logger.info(`POST - print a licence ID=${licenceId} result = ${result} username ${username}`)
+
     if (result === 'print') {
-      res.redirect(`/licence/pdf/id/${licenceId}/print`)
+      res.redirect(`/licence/view/id/${licenceId}/html-print`)
+      // res.redirect(`/licence/id/${licenceId}/pdf-print`)
+    } else {
+      res.redirect(`/licence/view/cases`)
     }
-    */
-    res.redirect(`/licence/view/cases`)
   }
 }
