@@ -16,40 +16,30 @@
         </div>
     </div>
 
-    <form method="POST">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        <input type="hidden" name="licenceId" value="{{ licence.id }}">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds-from-desktop">
+            {{ inductionMeetingDetails(licence) }}
+            {{ additionalConditions(licence) }}
+            {{ bespokeConditions(licence) }}
 
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds-from-desktop">
-
-                {{ inductionMeetingDetails(licence) }}
-
-                {{ additionalConditions(licence) }}
-
-                {{ bespokeConditions(licence) }}
-
-                <p class="govuk-body">
-                    {{ govukButton({
-                        text: "Return to case list",
-                        classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
-                        href: '/licence/view/cases',
-                        attributes: { 'data-qa': 'return-to-view-list' }
-                    }) }}
-                </p>
-            </div>
-
-            <div class="govuk-grid-column-one-third-from-desktop">
+            <p class="govuk-body">
                 {{ govukButton({
-                    text: "Print licence",
-                    classes: "govuk-button--primary",
-                    type: "submit",
-                    name: "result",
-                    value: "print",
-                    attributes: { 'data-qa': 'print-licence' }
+                   text: "Return to case list",
+                   classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                   href: '/licence/view/cases',
+                   attributes: { 'data-qa': 'return-to-view-list' }
                 }) }}
-            </div>
-
+            </p>
         </div>
-    </form>
+
+        <div class="govuk-grid-column-one-third-from-desktop">
+            {{ govukButton({
+                text: "Print licence",
+                classes: "govuk-button--primary",
+                href: '/licence/view/id/' + licence.id + '/pdf-print',
+                attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+            }) }}
+        </div>
+    </div>
+
 {% endblock %}

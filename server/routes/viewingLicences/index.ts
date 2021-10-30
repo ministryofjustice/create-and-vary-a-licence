@@ -26,12 +26,7 @@ export default function Index({ licenceService }: Services): Router {
   get('/cases', viewCasesHandler.GET)
   post('/cases', viewCasesHandler.POST)
   get('/id/:licenceId/show', viewLicenceHandler.GET)
-  post('/id/:licenceId/show', viewLicenceHandler.POST)
-
-  // To test against only - not used in live operation
   get('/id/:licenceId/html-print', printHandler.preview)
-
-  // Real PDF print route handler
   get('/id/:licenceId/pdf-print', printHandler.renderPdf)
 
   // These are SPIKE routes

@@ -18,8 +18,10 @@ export default class PrintLicenceRoutes {
     const { licence } = res.locals
     logger.info(`PDF print licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
     const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.lastName}.pdf`
+
     // Specify licencesUrl so that it is used in the NJK template as http://host.docker.internal:3000/assets
     const { licencesUrl } = config.apis.gotenberg
+
     res.renderPDF(`pages/licence/${licence.typeCode}`, { licencesUrl, licence }, { filename })
   }
 }
