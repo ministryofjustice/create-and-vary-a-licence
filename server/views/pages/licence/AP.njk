@@ -19,7 +19,7 @@
 {# TODO: Store the approver's full name at time of approval #}
 {% set approverName = licence.approvedByUsername %}
 
-{% block body %}
+{% block content %}
     {{ title(offenderName) }}
     {{ offender(licence.dateOfBirth, licence.licenceExpiryDate, licence.nomsId) }}
     {{ objectives() }}

@@ -2,20 +2,21 @@
 <html lang="en">
 
 {% block head %}
-  {# TODO: Only include PDF types - separate stylesheet generated for licence documents? #}
-  <!--[if !IE 8]><!-->
-  <link href="{{ licencesUrl }}/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
-  <!--<![endif]-->
-
-  <!--[if lt IE 9]>
-  <link href="{{ licencesUrl }}/assets/stylesheets/application-ie8.css?{{ version }}" rel="stylesheet"/>
-  <script src="{{ licencesUrl }}/assets/js/html5shiv-3.7.3.min.js"></script>
-  <![endif]-->
+  <head>
+    <link href="{{ licencesUrl }}/assets/stylesheets/licence-pdf.css?{{ version }}" rel="stylesheet"/>
+  </head>
 {% endblock %}
 
-{# {% block pageTitle %}{{ pageTitle }}{% endblock %} #}
+{% block bodystart %}
+  <body>
+{% endblock %}
 
-{% block body %}
+{% block content %}
+  {# Overriden by chld pages #}
+{% endblock %}
+
+{% block bodyend %}
+  </body>
 {% endblock %}
 
 </html>

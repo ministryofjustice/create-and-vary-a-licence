@@ -11,16 +11,20 @@
   // Logo at top left
 }
 
+body {
+  counter-reset: sectionCounter conditionCounter;
+  font-family: "GDS Transport",arial,sans-serif;
+  font-size: 12pt;
+  font-weight: normal;
+  line-height: normal;
+}
+
 .text-wrap {
   float: left;
   margin: 10px;
 }
 
 .bullet-point {
-  font-family: "GDS Transport",arial,sans-serif;
-  font-size: 12pt;
-  font-weight: normal;
-  line-height: normal;
   break-inside: avoid;
   page-break-inside: avoid;
 }
@@ -32,17 +36,9 @@
 }
 
 .section {
-  font-family: "GDS Transport",arial,sans-serif;
-  font-size: 12pt;
-  font-weight: normal;
-  line-height: normal;
   clear: left;
   text-align: justify-all;
-}
-
-.section::after {
-  content: "\a";
-  white-space: pre;
+  page-break-inside: avoid;
 }
 
 .condition::before {
@@ -52,10 +48,6 @@
 }
 
 .condition {
-  font-family: "GDS Transport",arial,sans-serif;
-  font-size: 12pt;
-  font-weight: normal;
-  line-height: normal;
   break-inside: avoid;
   page-break-inside: avoid;
   margin-left: 20px;
@@ -68,7 +60,6 @@
 }
 
 .title {
-  font-family: "GDS Transport",arial,sans-serif;
   font-size: 15pt;
   font-weight: bold;
 }
@@ -82,15 +73,12 @@
   clear: left;
 }
 
-body {
-  counter-reset: sectionCounter conditionCounter;
-}
-
 .footer-tiny {
   font-size: 6px;
 }
 
 .boxed {
+  margin-top: 30px;
   border: 1px solid black;
   page-break-inside: avoid;
   break-inside: avoid;
@@ -102,42 +90,47 @@ body {
 }
 
 .signatures {
-  font-family: "GDS Transport",arial,sans-serif;
-  font-size: 12pt;
-  font-weight: normal;
-  line-height: normal;
   break-inside: avoid;
   page-break-inside: avoid;
 }
 
-span .hidden-noms-id {
-  string-set: noms-id content()
+.signatures::after {
+  content: "\a";
+  white-space: pre;
 }
 
-span .hidden-pnc {
-  string-set: pnc content()
+#hidden-data > span {
+  display: none;
 }
 
-span .hidden-cro {
-  string-set: cro content()
+span #hidden-noms-id {
+  string-set: noms-id content();
 }
 
-span .hidden-booking-no {
-  string-set: booking-no content()
+span #hidden-pnc {
+  string-set: pnc content();
 }
 
-span .hidden-licence-id {
-  string-set: licence-id content()
+span #hidden-cro {
+  string-set: cro content();
 }
 
-span .hidden-prison-code {
-  string-set: prison-code content()
+span #hidden-booking-no {
+  string-set: booking-no content();
 }
 
-span .hidden-version {
-  string-set: version content()
+span #hidden-licence-id {
+  string-set: licence-id content();
 }
 
-span .hidden-licence-type {
-  string-set: licence-type content()
+span #hidden-prison-code {
+  string-set: prison-code content();
+}
+
+span #hidden-version {
+  string-set: version content();
+}
+
+span #hidden-licence-type {
+  string-set: licence-type content();
 }
