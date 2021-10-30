@@ -1,14 +1,24 @@
 @page {
   size: A4 portrait;
   margin: 70pt 60pt 70pt;
+  .moj-logo {
+    display: none;
+  }
+}
+
+@page :nth() {
   @bottom-center {
     font-size: 8pt;
     content: "NOMS Id:" string(noms-id)  "Page " counter(page) " of " counter(pages);
   }
 }
 
-@page :first {
-  // Logo at top left
+@page :first{
+  margin: 20pt 60pt 70pt;
+  .moj-logo {
+    display: contents;
+    margin-bottom: 20px;
+  }
 }
 
 body {

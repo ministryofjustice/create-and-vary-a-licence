@@ -4,11 +4,15 @@
 {% block head %}
   <head>
     <link href="{{ licencesUrl }}/assets/stylesheets/licence-pdf.css?{{ version }}" rel="stylesheet"/>
+    <title>{{ pageTitle }}</title>
   </head>
 {% endblock %}
 
 {% block bodystart %}
   <body>
+  <div class="moj-icon">
+    <img alt="" src="{{ licencesUrl }}/assets/images/crest-black.jpg" width="60" height="60">
+  </div>
 {% endblock %}
 
 {% block content %}
