@@ -74,10 +74,6 @@ body {
   font-weight: bold;
 }
 
-.tab-20 {
-  text-indent: 20px;
-}
-
 .title::after {
   content: "\a";
   clear: left;
@@ -102,11 +98,18 @@ body {
 .signatures {
   break-inside: avoid;
   page-break-inside: avoid;
+  margin-left: 20px;
 }
 
 .signatures::after {
   content: "\a";
   white-space: pre;
+}
+
+.signature-box{
+  background-color: lightgray;
+  border: none;
+  opacity: 15%;
 }
 
 #hidden-data > span {

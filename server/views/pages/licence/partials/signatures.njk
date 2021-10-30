@@ -1,28 +1,15 @@
 {% macro signatures(releaseDate, approverName, approvedDate, offenderName) %}
-    <div class="boxed signatures">
-        <div class="tab-20">
-          Signed:  {{ approverName }}<br/><br/>
-        </div>
-        <div class="tab-20">
-          Date: {{ approvedDate | datetimeToDate }}<br/><br/>
-        </div>
-        <div class="tab-20">
-             for the Secretary of State for Justice<br/><br/>
-        </div>
-        <div class="tab-20">
-          This licence has been give to me and its requirements have been explained.<br/><br/>
-        </div>
-        <div class="tab-20">
-          Name: {{ offenderName }}<br/><br/><br/>
-        </div>
-        <div class="tab-20">
-          Signed:
-          <br/>
-          <br/>
-          <br/>
-        </div>
-        <div class="tab-20">
-          Date: {{ releaseDate | datetimeToDate }}<br/><br/>
+    <div class="boxed">
+        <div class="signatures">
+            <p>Signed:  {{ approverName }}  for the Secretary of State for Justice.</p>
+            <p>Date: {{ approvedDate | datetimeToDate }}</p>
+            <p></p>
+            <p>This licence has been give to me and its requirements have been explained.</p>
+            <p></p>
+            <p>Name: {{ offenderName }}</p>
+            <p>Signed:</p>
+            <textarea class="signature-box" rows="4" cols="60" readonly draggable="false"></textarea>
+            <p>Date: {{ releaseDate | datetimeToDate }}</p>
         </div>
     </div>
 {% endmacro %}
