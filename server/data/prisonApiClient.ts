@@ -15,10 +15,19 @@ export default class PrisonApiClient {
     this.restClient = new RestClient('Prison API', config.apis.prisonApi as ApiConfig, token)
   }
 
+  // Streamed - for embedding in HTML pages
   async getPrisonerImage(nomsId: string): Promise<Readable> {
     return this.restClient.stream({
       path: `/api/bookings/offenderNo/${nomsId}/image/data`,
     }) as Promise<Readable>
+  }
+
+  // Data - for pulling the base64 JPEG image for an offender to embed in PDFs
+  async getPrisonerImageData(nomsId: string): Promise<Buffer> {
+    return this.restClient.get({
+      path: `/api/bookings/offenderNo/${nomsId}/image/data`,
+      responseType: 'image/jpeg',
+    }) as Promise<Buffer>
   }
 
   async getPrisonerDetail(nomsId: string): Promise<PrisonApiPrisoner> {

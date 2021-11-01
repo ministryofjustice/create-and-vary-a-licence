@@ -1,5 +1,5 @@
 {% macro supervision(startDate, endDate) %}
     <div class="section" id="supervision">
-        Your supervision commences on {{ startDate | datetimeToDate }} and expires on {{ endDate | datetimeToDate }} unless this licence is previously revoked.
+        Your supervision commences on <span class="bold">{{ startDate | datetimeToDate }}</span> and expires on <span class="bold">{{ endDate | datetimeToDate }}</span> unless this licence is previously revoked.
     </div>
 {% endmacro %}

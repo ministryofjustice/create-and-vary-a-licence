@@ -4,7 +4,7 @@ import express from 'express'
 import path from 'path'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
-import { jsonDtTo12HourTime, jsonDtToDate } from './utils'
+import { jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateWithDay } from './utils'
 import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { getAdditionalConditionByCode } from './conditionsProvider'
 
@@ -114,6 +114,10 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('datetimeToDate', (dt: string) => {
     return jsonDtToDate(dt)
+  })
+
+  njkEnv.addFilter('datetimeToDateWithDay', (dt: string) => {
+    return jsonDtToDateWithDay(dt)
   })
 
   njkEnv.addFilter('datetimeTo12HourTime', (dt: string) => {

@@ -1,20 +1,13 @@
 @page {
   size: A4 portrait;
-  margin: 70pt 60pt 70pt;
+  margin: 30pt 30pt 80pt 30pt;
   .moj-logo {
     display: none;
   }
 }
 
-@page :nth() {
-  @bottom-center {
-    font-size: 8pt;
-    content: "NOMS Id:" string(noms-id)  "Page " counter(page) " of " counter(pages);
-  }
-}
-
 @page :first{
-  margin: 20pt 60pt 70pt;
+  // margin: 30pt 70pt 70pt 30pt;
   .moj-logo {
     display: contents;
     margin-bottom: 20px;
@@ -32,6 +25,18 @@ body {
 .text-wrap {
   float: left;
   margin: 10px;
+}
+
+#offender-image {
+  border: 1px solid #555;
+}
+
+#meeting-details {
+  margin-left: 25px;
+}
+
+.bold {
+  font-weight: bolder;
 }
 
 .bullet-point {
@@ -60,7 +65,7 @@ body {
 .condition {
   break-inside: avoid;
   page-break-inside: avoid;
-  margin-left: 20px;
+  margin-left: 25px;
   text-align: justify-all;
 }
 
@@ -106,7 +111,7 @@ body {
   white-space: pre;
 }
 
-.signature-box{
+.signature-box {
   background-color: lightgray;
   border: none;
   opacity: 15%;
@@ -147,3 +152,8 @@ span #hidden-version {
 span #hidden-licence-type {
   string-set: licence-type content();
 }
+
+//   @bottom-center {
+//    font-size: 8pt;
+//    content: "NOMS Id:" string(noms-id)  "Page " counter(page) " of " counter(pages);
+//  }

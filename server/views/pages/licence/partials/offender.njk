@@ -1,12 +1,17 @@
-{% macro offender(dateOfBirth, licenceExpiryDate, nomsId) %}
+{% macro offender(dateOfBirth, licenceExpiryDate, nomsId, imageData, htmlPrint) %}
 <div class="offender" id="offender">
-    <img src="{{ licencesUrl }}/prisoner/{{ nomsId or 'placeholder' }}/image" width="90px" height="120px" class="text-wrap">
-    <br>
-    <br>
-    Date of birth: {{ dateOfBirth | datetimeToDate }}
+    {% if htmlPrint %}
+      <img id="offender-image" src="/prisoner/{{ nomsId or 'placeholder' }}/image" width="90px" height="120px" class="text-wrap">
+    {% else %}
+      <img id="offender-image" src='data:image/jpeg;charset-utf8;base64,{{ imageData }}' width="90px" height="120px" class="text-wrap">
+    {% endif %}
     <br/>
     <br/>
-    Your licence and sentence expires on {{ licenceExpiryDate | datetimeToDate }}
+    Date of birth: <span class="bold">{{ dateOfBirth | datetimeToDate }}</span>
+    <br/>
+    <br/>
+    Your licence and sentence expires on <span class="bold">{{ licenceExpiryDate | datetimeToDate }}</span>
     <br/>
 </div>
 {% endmacro %}
+s

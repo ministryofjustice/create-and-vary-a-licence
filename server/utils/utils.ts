@@ -95,6 +95,11 @@ const jsonDtToDate = (dt: string): string => {
   return momentDate.isValid() ? momentDate.format('Do MMMM YYYY') : null
 }
 
+const jsonDtToDateWithDay = (dt: string): string => {
+  const momentDate = moment(dt, 'DD/MM/YYYY HH:mm')
+  return momentDate.isValid() ? momentDate.format('dddd Do MMMM YYYY') : null
+}
+
 const jsonDtTo12HourTime = (dt: string): string => {
   const momentTime = moment(dt, 'DD/MM/YYYY HH:mm')
   return momentTime.isValid() ? momentTime.format('hh:mm a') : null
@@ -122,6 +127,7 @@ export {
   addressObjectToString,
   stringToAddressObject,
   jsonDtToDate,
+  jsonDtToDateWithDay,
   jsonDtTo12HourTime,
   convertDateFormat,
   removeDuplicates,

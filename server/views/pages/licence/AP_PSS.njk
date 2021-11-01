@@ -13,6 +13,8 @@
 {% from "pages/licence/partials/signatures.njk" import signatures %}
 {% from "pages/licence/partials/footer.njk" import footer %}
 
+{# Three pieces of data are supplied to this template - licence, imageData (offender image) and htmlPrint (true/false) #}
+
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
 
@@ -21,7 +23,7 @@
 
 {% block content %}
     {{ title(offenderName) }}
-    {{ offender(licence.dateOfBirth, licence.licenceExpiryDate, licence.nomsId) }}
+    {{ offender(licence.dateOfBirth, licence.licenceExpiryDate, licence.nomsId, imageData, htmlPrint) }}
     {{ objectives() }}
     {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}
     {{ induction(licence.appointmentPerson, licence.appointmentAddress, licence.appointmentTime, licence.comTelephone) }}

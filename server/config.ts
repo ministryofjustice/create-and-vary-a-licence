@@ -117,6 +117,13 @@ export default {
     },
     gotenberg: {
       apiUrl: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
+      pdfOptions: {
+        marginTop: '0.8',
+        marginBottom: '0.7',
+        marginLeft: '0.55',
+        marginRight: '0.35',
+      },
+
       /*
        This is specific to the machine type you use locally:
        - For Mac or Docker-for-Windows users,  http://host.docker.internal:3000 finds the docker host

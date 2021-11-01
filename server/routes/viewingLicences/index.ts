@@ -8,7 +8,7 @@ import validationMiddleware from '../../middleware/validationMiddleware'
 import ViewAndPrintLicenceRoutes from './handlers/viewLicence'
 import PrintLicenceRoutes from './handlers/printLicence'
 
-export default function Index({ licenceService }: Services): Router {
+export default function Index({ licenceService, prisonerService }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/view${path}`
 
@@ -21,7 +21,7 @@ export default function Index({ licenceService }: Services): Router {
   // These are REAL routes
   const viewCasesHandler = new ViewAndPrintCaseRoutes(licenceService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService)
-  const printHandler = new PrintLicenceRoutes(licenceService)
+  const printHandler = new PrintLicenceRoutes(prisonerService)
 
   get('/cases', viewCasesHandler.GET)
   post('/cases', viewCasesHandler.POST)
