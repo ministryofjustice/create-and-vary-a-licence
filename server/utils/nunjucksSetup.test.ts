@@ -139,4 +139,48 @@ describe('Nunjucks Filters', () => {
       expect($('div').text()).toBe('default')
     })
   })
+
+  describe('Format addresses', () => {
+    it('should remove blank address lines and return comma-separated string', () => {
+      viewContext = { address: '12, Peel Street, , , Grangemouth, Lancashire, GM12 84L' }
+      const nunjucksString = '{{ address | formatAddress }}'
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+      expect($('body').text()).toBe('12, Peel Street, Grangemouth, Lancashire, GM12 84L')
+    })
+
+    it('should remove blank address lines and return a list of strings (no spaces)', () => {
+      viewContext = { address: '12, Peel Street, , , Grangemouth, Lancashire, GM12 84L' }
+      const nunjucksString = '{{ address | formatAddressAsList }}'
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+      expect($('body').text()).toBe('12,Peel Street,Grangemouth,Lancashire,GM12 84L')
+    })
+  })
+
+  describe('Format dates and times', () => {
+    it('should format a date and time', () => {
+      viewContext = { testDateTime: '23/12/2021 11:15' }
+      const nunjucksString = '{{ testDateTime | datetimeToDate }}'
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+      expect($('body').text()).toBe('23rd December 2021')
+    })
+
+    it('should format a date and time with full day', () => {
+      viewContext = { testDateTime: '23/12/2021 11:15' }
+      const nunjucksString = '{{ testDateTime | datetimeToDateWithDay }}'
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+      expect($('body').text()).toBe('Thursday 23rd December 2021')
+    })
+
+    it('should format a date and time to a 12-hour time', () => {
+      viewContext = { testDateTime: '23/12/2021 21:15' }
+      const nunjucksString = '{{ testDateTime | datetimeTo12HourTime }}'
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+      expect($('body').text()).toBe('09:15 pm')
+    })
+  })
 })

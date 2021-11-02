@@ -11,6 +11,7 @@ import {
   jsonDtToDate,
   removeDuplicates,
   filterCentralCaseload,
+  jsonDtToDateWithDay,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -203,6 +204,21 @@ test.each`
   ${'null'}             | ${'null'}
 `('convert JSON datetime to long date', ({ jsonDateTime, dateFull }) => {
   const dateValue = jsonDtToDate(jsonDateTime)
+  if (isDefined(dateValue)) {
+    expect(dateValue).toEqual(dateFull)
+  } else {
+    expect(dateValue).toBeNull()
+  }
+})
+
+test.each`
+  jsonDateTime          | dateFull
+  ${'12/12/2021 23:15'} | ${'Sunday 12th December 2021'}
+  ${'31/01/2022 12:01'} | ${'Monday 31st January 2022'}
+  ${'31/12/2022 12:00'} | ${'Saturday 31st December 2022'}
+  ${'null'}             | ${'null'}
+`('convert JSON datetime to date with full day', ({ jsonDateTime, dateFull }) => {
+  const dateValue = jsonDtToDateWithDay(jsonDateTime)
   if (isDefined(dateValue)) {
     expect(dateValue).toEqual(dateFull)
   } else {

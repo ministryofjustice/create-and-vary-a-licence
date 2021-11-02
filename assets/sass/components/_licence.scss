@@ -7,7 +7,6 @@
 }
 
 @page :first{
-  // margin: 30pt 70pt 70pt 30pt;
   .moj-logo {
     display: contents;
     margin-bottom: 20px;
@@ -117,6 +116,11 @@ body {
   opacity: 15%;
 }
 
+// The remaining styles are concerned with making the page footer use CSS
+// rather than relying on the Gotenberg footer-html. This is connected to the
+// template footer.njk.  Left in as I will experiment with a pure CSS footer
+// as another ticket.
+
 #hidden-data > span {
   display: none;
 }
@@ -152,8 +156,3 @@ span #hidden-version {
 span #hidden-licence-type {
   string-set: licence-type content();
 }
-
-//   @bottom-center {
-//    font-size: 8pt;
-//    content: "NOMS Id:" string(noms-id)  "Page " counter(page) " of " counter(pages);
-//  }
