@@ -6,6 +6,7 @@ import UnsupervisedContact from '../routes/creatingLicences/types/additionalCond
 import WorkingWithChildren from '../routes/creatingLicences/types/additionalConditionInputs/workingWithChildren'
 import IntimateRelationshipWithGender from '../routes/creatingLicences/types/additionalConditionInputs/intimateRelationshipWithGender'
 import BehaviourProblems from '../routes/creatingLicences/types/additionalConditionInputs/behaviourProblems'
+import AppointmentTimeAndPlace from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlace'
 
 export default {
   version: '1.0',
@@ -139,22 +140,23 @@ export default {
       text: 'Receive home visits from a Mental Health Worker.',
       requiresInput: false,
     },
-    // {
-    //   code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
-    //   category: 'Making or maintaining contact with a person',
-    //   text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
-    //   requiresInput: true,
-    //   inputs: [
-    //     {
-    //       type: 'datePicker',
-    //       name: 'appointmentDate',
-    //     },
-    //     {
-    //       type: 'timePicker',
-    //       name: 'appointmentTime',
-    //     },
-    //   ],
-    // },
+    {
+      code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+      category: 'Making or maintaining contact with a person',
+      text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: 'timePicker',
+          name: 'appointmentTime',
+        },
+        {
+          type: 'datePicker',
+          name: 'appointmentDate',
+        },
+      ],
+      type: AppointmentTimeAndPlace,
+    },
     {
       code: '75a6aac6-02a7-4414-af14-942be6736892',
       category: 'Making or maintaining contact with a person',

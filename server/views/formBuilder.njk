@@ -42,15 +42,6 @@
         }) }}
     {% endif %}
 
-    {% if input.type == 'datePicker' %}
-        {{ datePicker({
-            id: input.name,
-            hint: {
-                text: "For example, 12 11 2022"
-            }
-        }) }}
-    {% endif %}
-
     {% if input.type == 'timePicker' %}
         {{ timePicker({
             id: input.name,
@@ -59,7 +50,21 @@
             },
             hint: {
                 text: "For example, 9:30am or 2:55pm"
-            }
+            },
+            errorMessage: validationErrors | findError(input.name)
+        }) }}
+    {% endif %}
+
+    {% if input.type == 'datePicker' %}
+        {{ datePicker({
+            id: input.name,
+            label: {
+                text: "Date"
+            },
+            hint: {
+                text: "For example, 12 11 2022"
+            },
+            errorMessage: validationErrors | findError(input.name)
         }) }}
     {% endif %}
 

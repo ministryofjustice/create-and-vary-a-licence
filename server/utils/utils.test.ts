@@ -138,13 +138,13 @@ test.each`
 `('convert JSON datetime to simple datetime', ({ jsonDateTime, day, month, year, hour, min, ampm }) => {
   const simpleDateTime = jsonToSimpleDateTime(jsonDateTime)
   if (isDefined(simpleDateTime)) {
-    const { inductionDate, inductionTime } = simpleDateTime
-    expect(inductionDate?.day).toEqual(day)
-    expect(inductionDate?.month).toEqual(month)
-    expect(inductionDate?.year).toEqual(year)
-    expect(inductionTime?.hour).toEqual(hour)
-    expect(inductionTime?.minute).toEqual(min)
-    expect(inductionTime?.ampm).toEqual(ampm)
+    const { date, time } = simpleDateTime
+    expect(date?.day).toEqual(day)
+    expect(date?.month).toEqual(month)
+    expect(date?.year).toEqual(year)
+    expect(time?.hour).toEqual(hour)
+    expect(time?.minute).toEqual(min)
+    expect(time?.ampm).toEqual(ampm)
   } else {
     expect(simpleDateTime).toBeUndefined()
   }
