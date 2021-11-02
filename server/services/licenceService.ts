@@ -159,12 +159,20 @@ export default class LicenceService {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
 
     const requestBody = {
-      data: Object.keys(formData).map((key, index) => {
-        return {
-          field: key,
-          value: formData[key],
-          sequence: index,
+      data: Object.keys(formData).flatMap((key, index) => {
+        const build = (value: string, i?: number) => {
+          return {
+            field: key,
+            value,
+            sequence: i || index,
+          }
         }
+        if (Array.isArray(formData[key])) {
+          return formData[key].map((v: string, i: number) => {
+            return build(v, i)
+          })
+        }
+        return build(formData[key])
       }),
     } as UpdateAdditionalConditionDataRequest
 

@@ -5,6 +5,7 @@ import MedicalAppointmentType from '../routes/creatingLicences/types/additionalC
 import UnsupervisedContact from '../routes/creatingLicences/types/additionalConditionInputs/unsupervisedContact'
 import WorkingWithChildren from '../routes/creatingLicences/types/additionalConditionInputs/workingWithChildren'
 import IntimateRelationshipWithGender from '../routes/creatingLicences/types/additionalConditionInputs/intimateRelationshipWithGender'
+import BehaviourProblems from '../routes/creatingLicences/types/additionalConditionInputs/behaviourProblems'
 
 export default {
   version: '1.0',
@@ -233,12 +234,52 @@ export default {
     //   text: 'Not to associate with any person currently or formerly associated with [NAME OF DESCRIBE SPECIFIC GROUPS OR ORGANISATIONS] without the prior approval of your supervising officer.',
     //   requiresInput: true,
     // },
-    // {
-    //   code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
-    //   category: 'Participation in, or co-operation with, a programme or set of activities',
-    //   text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
+      category: 'Participation in, or co-operation with, a programme or set of activities',
+      text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.CHECK,
+          label: 'Select all that apply',
+          name: 'behaviourProblems',
+          options: [
+            {
+              value: 'alcohol',
+            },
+            {
+              value: 'drug',
+            },
+            {
+              value: 'sexual',
+            },
+            {
+              value: 'violent',
+            },
+            {
+              value: 'gambling',
+            },
+            {
+              value: 'solvent abuse',
+            },
+            {
+              value: 'anger',
+            },
+            {
+              value: 'debt',
+            },
+            {
+              value: 'prolific offending',
+            },
+            {
+              value: 'offending behaviour',
+            },
+          ],
+        },
+      ],
+      type: BehaviourProblems,
+    },
     {
       code: '9da214a3-c6ae-45e1-a465-12e22adf7c87',
       category: 'Participation in, or co-operation with, a programme or set of activities',

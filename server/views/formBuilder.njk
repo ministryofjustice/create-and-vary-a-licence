@@ -1,5 +1,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "partials/datePicker.njk" import datePicker %}
 {% from "partials/timePicker.njk" import timePicker %}
 
@@ -24,7 +25,7 @@
             {% set options = (options.push({
                 text: option.value,
                 value: option.value,
-                checked: additionalCondition.data | getAdditionalConditionDataValue(input.name) === option.value
+                checked: additionalCondition.data | additionalConditionDataContainsValue(input.name, option.value)
             }), options) %}
         {% endfor %}
 
@@ -59,6 +60,28 @@
             hint: {
                 text: "For example, 9:30am or 2:55pm"
             }
+        }) }}
+    {% endif %}
+
+    {% if input.type == 'check' %}
+        {% set options = [] %}
+        {% for option in input.options %}
+            {% set options = (options.push({
+                text: option.value,
+                value: option.value,
+                checked: additionalCondition.data | additionalConditionDataContainsValue(input.name, option.value)
+            }), options) %}
+        {% endfor %}
+
+        {{ govukCheckboxes({
+            name: input.name,
+            fieldset: {
+                legend: {
+                    text: input.label,
+                    isPageHeading: false
+                }
+            },
+            items: options
         }) }}
     {% endif %}
 

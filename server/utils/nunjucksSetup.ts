@@ -102,6 +102,13 @@ export function registerNunjucks(app?: express.Express): Environment {
   )
 
   njkEnv.addFilter(
+    'additionalConditionDataContainsValue',
+    (additionalConditionData: AdditionalConditionData[], fieldName: string, value: string) => {
+      return additionalConditionData.find(data => data.field === fieldName && data.value === value) !== undefined
+    }
+  )
+
+  njkEnv.addFilter(
     'getAdditionalConditionDataValue',
     (additionalConditionData: AdditionalConditionData[], fieldName: string) => {
       return additionalConditionData.find(data => data.field === fieldName)?.value
