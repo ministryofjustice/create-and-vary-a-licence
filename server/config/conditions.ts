@@ -63,7 +63,8 @@ export default {
     ],
   },
 
-  // TODO: CVSL-184: Add form builders for the remaining conditions currently commented out below
+  // TODO: CVSL-184: Still to do - conditional reveal radio buttons and "Add another".
+  // TODO: CVSL-187: Still to do - review validation messages
   additionalConditions: [
     {
       code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
