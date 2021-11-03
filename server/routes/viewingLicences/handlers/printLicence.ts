@@ -20,7 +20,7 @@ export default class PrintLicenceRoutes {
     const { licence } = res.locals
     const htmlPrint = true
     logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
-    res.render(`pages/licence/${licence.typeCode}`, { licence, htmlPrint })
+    res.render(`pages/licence/${licence.typeCode}`, { htmlPrint })
   }
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
@@ -47,7 +47,7 @@ export default class PrintLicenceRoutes {
 
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
-      { licencesUrl, licence, imageData, htmlPrint: false },
+      { licencesUrl, imageData, htmlPrint: false },
       { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
     )
   }
