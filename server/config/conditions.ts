@@ -7,6 +7,14 @@ import WorkingWithChildren from '../routes/creatingLicences/types/additionalCond
 import IntimateRelationshipWithGender from '../routes/creatingLicences/types/additionalConditionInputs/intimateRelationshipWithGender'
 import BehaviourProblems from '../routes/creatingLicences/types/additionalConditionInputs/behaviourProblems'
 import AppointmentTimeAndPlace from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlace'
+import OutOfBoundsRegion from '../routes/creatingLicences/types/additionalConditionInputs/outOfBoundsRegion'
+import OutOfBoundsPremises from '../routes/creatingLicences/types/additionalConditionInputs/outOfBoundsPremises'
+import OutOfBoundsPremisesType from '../routes/creatingLicences/types/additionalConditionInputs/outOfBoundsPremisesType'
+import DrugTestLocation from '../routes/creatingLicences/types/additionalConditionInputs/drugTestLocation'
+import ElectronicMonitoringTypes from '../routes/creatingLicences/types/additionalConditionInputs/electronicMonitoringTypes'
+import ElectronicMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicMonitoringPeriod'
+import ApprovedAddress from '../routes/creatingLicences/types/additionalConditionInputs/approvedAddress'
+import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholMonitoringPeriod'
 
 export default {
   version: '1.0',
@@ -147,15 +155,15 @@ export default {
       requiresInput: true,
       inputs: [
         {
-          type: 'timePicker',
+          type: InputTypes.TIME,
           name: 'appointmentTime',
         },
         {
-          type: 'datePicker',
+          type: InputTypes.DATE,
           name: 'appointmentDate',
         },
         {
-          type: 'address',
+          type: InputTypes.ADDRESS,
           name: 'appointmentAddress',
         },
       ],
@@ -417,24 +425,52 @@ export default {
     //   text: 'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
     //   requiresInput: true,
     // },
-    // {
-    //   code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
-    //   category: 'Freedom of movement',
-    //   text: 'Not to enter the area of [CLEARLY SPECIFIED AREA], as defined by the attached map without the prior approval of your supervising officer.',
-    //   requiresInput: true,
-    // },
-    // {
-    //   code: '42f71b40-84cd-446d-8647-f00bbb6c079c',
-    //   category: 'Freedom of movement',
-    //   text: 'Not to enter [NAME/TYPE OF PREMISES / ADDRESS / ROAD] without the prior approval of your supervising officer.',
-    //   requiresInput: true,
-    // },
-    // {
-    //   code: 'c4a17002-88a3-43b4-b3f7-82ff476cb217',
-    //   category: 'Freedom of movement',
-    //   text: "Not to enter or remain in sight of any [CHILDREN'S PLAY AREA, SWIMMING BATHS, SCHOOL ETC] without the prior approval of your supervising officer.",
-    //   requiresInput: true,
-    // },
+    {
+      code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
+      category: 'Freedom of movement',
+      text: 'Not to enter the area of [CLEARLY SPECIFIED AREA], as defined by the attached map without the prior approval of your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter the name of area shown on the map',
+          name: 'outOfBoundArea',
+        },
+      ],
+      type: OutOfBoundsRegion,
+    },
+    {
+      code: '42f71b40-84cd-446d-8647-f00bbb6c079c',
+      category: 'Freedom of movement',
+      text: 'Not to enter [NAME/TYPE OF PREMISES / ADDRESS / ROAD] without the prior approval of your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name or type of premises',
+          name: 'nameOfPremises',
+        },
+        {
+          type: InputTypes.ADDRESS,
+          name: 'premisesAddress',
+        },
+      ],
+      type: OutOfBoundsPremises,
+    },
+    {
+      code: 'c4a17002-88a3-43b4-b3f7-82ff476cb217',
+      category: 'Freedom of movement',
+      text: "Not to enter or remain in sight of any [CHILDREN'S PLAY AREA, SWIMMING BATHS, SCHOOL ETC] without the prior approval of your supervising officer.",
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter area or type of premises',
+          name: 'typeOfPremises',
+        },
+      ],
+      type: OutOfBoundsPremisesType,
+    },
     {
       code: 'bb401b88-2137-4154-be4a-5e05c168638a',
       category: 'Freedom of movement',
@@ -496,41 +532,106 @@ export default {
       text: 'To comply with any instruction given by your supervising officer requiring you to attend polygraph testing. To participate in polygraph sessions and examinations as instructed by or under the authority of your supervising officer and to comply with any instruction given to you during a polygraph session by the person conducting the polygraph.',
       requiresInput: false,
     },
-    // {
-    //   code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
-    //   category: 'Drug testing',
-    //   text: 'Attend [INSERT NAME AND ADDRESS], as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
+      category: 'Drug testing',
+      text: 'Attend [INSERT NAME AND ADDRESS], as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name',
+          name: 'name',
+        },
+        {
+          type: InputTypes.ADDRESS,
+          name: 'address',
+        },
+      ],
+      type: DrugTestLocation,
+    },
     {
       code: 'b088cc98-0e83-4f70-aab8-270e755a45c9',
       category: 'Drug testing',
       text: 'Not to take any action that could hamper or frustrate the drug testing process.',
       requiresInput: false,
     },
-    // {
-    //   code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
-    //   category: 'Electronic monitoring',
-    //   text: 'Allow person(s) as designated by your supervising officer to install an electronic monitoring tag on you and access to install any associated equipment in your property, and for the purpose of ensuring that equipment is functioning correctly. You must not damage or tamper with these devices and ensure that the tag is charged, and report to your supervising officer and the EM provider immediately if the tag or the associated equipment are not working correctly. This will be for the purpose of monitoring your [INSERT TYPES OF CONDITIONS TO BE ELECTRONICALLY MONITORED HERE] licence condition(s) unless otherwise authorised by your supervising officer.',
-    //   requiresInput: true,
-    // },
-    // {
-    //   code: '524f2fd6-ad53-47dd-8edc-2161d3dd2ed4',
-    //   category: 'Electronic monitoring',
-    //   text: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging, ending on [INSERT END DATE], and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
-    //   requiresInput: true,
-    // },
-    // {
-    //   code: '86e6f2a9-bb60-40f8-9ac4-310ebc72ac2f',
-    //   category: 'Electronic monitoring',
-    //   text: 'You must stay at [APPROVED ADDRESS] between 5pm and midnight every day until your electronic tag is installed unless otherwise authorised by your supervising officer.',
-    //   requiresInput: true,
-    // },
-    // {
-    //   code: '599bdcae-d545-461c-b1a9-02cb3d4ba268',
-    //   category: 'Electronic monitoring',
-    //   text: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitoring for a period of [INSERT TIMEFRAME AND END DATE], and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
-    //   requiresInput: true,
-    // },
+    {
+      code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
+      category: 'Electronic monitoring',
+      text: 'Allow person(s) as designated by your supervising officer to install an electronic monitoring tag on you and access to install any associated equipment in your property, and for the purpose of ensuring that equipment is functioning correctly. You must not damage or tamper with these devices and ensure that the tag is charged, and report to your supervising officer and the EM provider immediately if the tag or the associated equipment are not working correctly. This will be for the purpose of monitoring your [INSERT TYPES OF CONDITIONS TO BE ELECTRONICALLY MONITORED HERE] licence condition(s) unless otherwise authorised by your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.CHECK,
+          label: 'Select all that apply',
+          name: 'electronicMonitoringTypes',
+          options: [
+            {
+              value: 'exclusion zone',
+            },
+            {
+              value: 'curfew',
+            },
+            {
+              value: 'location monitoring',
+            },
+            {
+              value: 'attendance',
+            },
+          ],
+        },
+      ],
+      type: ElectronicMonitoringTypes,
+    },
+    {
+      code: '524f2fd6-ad53-47dd-8edc-2161d3dd2ed4',
+      category: 'Electronic monitoring',
+      text: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging, ending on [INSERT END DATE], and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter the timeframe',
+          name: 'timeframe',
+        },
+        {
+          type: InputTypes.DATE,
+          name: 'endDate',
+        },
+      ],
+      type: ElectronicMonitoringPeriod,
+    },
+    {
+      code: '86e6f2a9-bb60-40f8-9ac4-310ebc72ac2f',
+      category: 'Electronic monitoring',
+      text: 'You must stay at [APPROVED ADDRESS] between 5pm and midnight every day until your electronic tag is installed unless otherwise authorised by your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.ADDRESS,
+          name: 'approvedAddress',
+        },
+      ],
+      type: ApprovedAddress,
+    },
+    {
+      code: '599bdcae-d545-461c-b1a9-02cb3d4ba268',
+      category: 'Electronic monitoring',
+      text: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitoring for a period of [INSERT TIMEFRAME AND END DATE], and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter the timeframe',
+          name: 'timeframe',
+        },
+        {
+          type: InputTypes.DATE,
+          name: 'endDate',
+        },
+      ],
+      type: AlcoholMonitoringPeriod,
+    },
   ],
 }

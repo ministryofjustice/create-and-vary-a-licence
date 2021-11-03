@@ -140,7 +140,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     'getAdditionalConditionAddressValue',
     (additionalConditionData: AdditionalConditionData[], fieldName: string, property: string) => {
       const object = Address.fromString(additionalConditionData.find(data => data.field === fieldName)?.value)
-      return object[property]
+      return object ? object[property] : undefined
     }
   )
 

@@ -28,6 +28,9 @@ class SimpleDate extends Stringable {
   }
 
   static fromString(value: string): SimpleDate {
+    if (!value) {
+      return undefined
+    }
     const date = moment(value, 'dddd Do MMMM YYYY', true)
     return new SimpleDate(date.format('DD'), date.format('MM'), date.format('YYYY'))
   }
