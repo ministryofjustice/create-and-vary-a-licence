@@ -2,19 +2,23 @@ import { Request, Response } from 'express'
 
 import PrintLicenceRoutes from './printLicence'
 import PrisonerService from '../../../services/prisonerService'
+import QrCodeService from '../../../services/qrCodeService'
 import config from '../../../config'
 
 const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
+const qrCodeService = new QrCodeService() as jest.Mocked<QrCodeService>
+
 const username = 'joebloggs'
 
 describe('Route - print a licence', () => {
-  const handler = new PrintLicenceRoutes(prisonerService)
+  const handler = new PrintLicenceRoutes(prisonerService, qrCodeService)
   let req: Request
   let res: Response
 
   beforeEach(() => {
     req = {} as unknown as Request
     prisonerService.getPrisonerImageData = jest.fn()
+    qrCodeService.getQrCode = jest.fn()
   })
 
   describe('GET', () => {
@@ -30,8 +34,14 @@ describe('Route - print a licence', () => {
           },
         },
       } as unknown as Response
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
       await handler.preview(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/licence/AP', { licence: res.locals.licence, htmlPrint: true })
+      expect(res.render).toHaveBeenCalledWith('pages/licence/AP', {
+        licence: res.locals.licence,
+        qrCode: 'a QR code',
+        htmlPrint: true,
+      })
     })
 
     it('should render a HTML view of a PSS licence', async () => {
@@ -46,8 +56,14 @@ describe('Route - print a licence', () => {
           },
         },
       } as unknown as Response
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
       await handler.preview(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', { licence: res.locals.licence, htmlPrint: true })
+      expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', {
+        licence: res.locals.licence,
+        qrCode: 'a QR code',
+        htmlPrint: true,
+      })
     })
 
     it('should render a PDF view of an AP licence', async () => {
@@ -72,27 +88,23 @@ describe('Route - print a licence', () => {
       } as unknown as Response
 
       const { licencesUrl, pdfOptions } = config.apis.gotenberg
-
       const filename = `${res.locals.licence.nomsId}.pdf`
+      const footerHtml = handler.getPdfFooter(res.locals.licence)
 
-      const footerHtml = handler.getPdfFooter(
-        res.locals.licence.nomsId,
-        res.locals.licence.cro,
-        res.locals.licence.bookingNo,
-        res.locals.licence.pnc,
-        res.locals.licence.typeCode,
-        res.locals.licence.id,
-        res.locals.licence.version,
-        res.locals.licence.prisonCode
-      )
-
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
       prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
 
       await handler.renderPdf(req, res)
 
       expect(res.renderPDF).toHaveBeenCalledWith(
         'pages/licence/AP',
-        { licencesUrl, licence: res.locals.licence, imageData: '-- base64 image data --', htmlPrint: false },
+        {
+          licencesUrl,
+          licence: res.locals.licence,
+          imageData: '-- base64 image data --',
+          qrCode: 'a QR code',
+          htmlPrint: false,
+        },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
     })

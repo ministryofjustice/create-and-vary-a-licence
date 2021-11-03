@@ -115,6 +115,7 @@
     "nunjucks": "^3.2.3",
     "passport": "^0.5.0",
     "passport-oauth2": "^1.6.1",
+    "qrcode": "^1.4.4",
     "redis": "^3.1.2",
     "reflect-metadata": "^0.1.13",
     "superagent": "^6.1.0"
@@ -136,6 +137,7 @@
     "@types/nunjucks": "^3.2.0",
     "@types/passport": "^1.0.7",
     "@types/passport-oauth2": "^1.4.11",
+    "@types/qrcode": "^1.4.1",
     "@types/redis": "^2.8.32",
     "@types/superagent": "^4.1.13",
     "@typescript-eslint/eslint-plugin": "^5.0.0",

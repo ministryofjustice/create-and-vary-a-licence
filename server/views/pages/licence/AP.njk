@@ -13,7 +13,7 @@
 {% from "pages/licence/partials/signatures.njk" import signatures %}
 {% from "pages/licence/partials/footer.njk" import footer %}
 
-{# Three pieces of data are supplied to this template - licence, imageData (offender image) and htmlPrint (true/false) #}
+{# Three pieces of data are supplied - licence, imageData (offender image), qrCode (image), and htmlPrint (true/false) #}
 
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
@@ -35,3 +35,4 @@
     {{ signatures(licence.actualReleaseDate, approverName, licence.approvedDate, offenderName) }}
     {{ footer(licence.nomsId, licence.pnc, licence.cro, licence.bookingNo, licence.typeCode, licence.id, licence.version, licence.prisonCode) }}
 {% endblock %}
+
