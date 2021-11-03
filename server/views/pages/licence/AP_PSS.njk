@@ -13,7 +13,7 @@
 {% from "pages/licence/partials/signatures.njk" import signatures %}
 {% from "pages/licence/partials/footer.njk" import footer %}
 
-{# Three pieces of data are supplied to this template - imageData (offender image) and htmlPrint (true/false) #}
+{# Data supplied to this template - imageData(offender image) and htmlPrint(true/false) #}
 {# The licence object is already in context via res.locals.licence, the result of fetchLicenceMiddleware #}
 
 {% set offenderName = licence.forename + " " + licence.surname %}
