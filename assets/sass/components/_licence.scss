@@ -76,6 +76,8 @@ body {
 .title {
   font-size: 15pt;
   font-weight: bold;
+  margin-left: 10px;
+  margin-bottom: 20px;
 }
 
 .title::after {
@@ -85,6 +87,11 @@ body {
 
 .footer-tiny {
   font-size: 6px;
+}
+
+.line-space-after {
+  display: block;
+  margin-bottom: 2px;
 }
 
 .boxed {
@@ -112,6 +119,8 @@ body {
 
 .signature-box {
   background-color: lightgray;
+  width: 450px;
+  height: 90px;
   border: none;
   opacity: 15%;
 }
