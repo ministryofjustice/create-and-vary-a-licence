@@ -9,6 +9,7 @@ import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceA
 import { getAdditionalConditionByCode } from './conditionsProvider'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
+import Address from '../routes/creatingLicences/types/address'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -132,6 +133,14 @@ export function registerNunjucks(app?: express.Express): Environment {
       const object = {}
       object[fieldName] = SimpleDate.fromString(additionalConditionData.find(data => data.field === fieldName)?.value)
       return object
+    }
+  )
+
+  njkEnv.addFilter(
+    'getAdditionalConditionAddressValue',
+    (additionalConditionData: AdditionalConditionData[], fieldName: string, property: string) => {
+      const object = Address.fromString(additionalConditionData.find(data => data.field === fieldName)?.value)
+      return object[property]
     }
   )
 

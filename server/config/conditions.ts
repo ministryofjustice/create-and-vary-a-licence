@@ -154,6 +154,10 @@ export default {
           type: 'datePicker',
           name: 'appointmentDate',
         },
+        {
+          type: 'address',
+          name: 'appointmentAddress',
+        },
       ],
       type: AppointmentTimeAndPlace,
     },
