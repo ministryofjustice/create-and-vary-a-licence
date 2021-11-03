@@ -31,6 +31,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
 import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
+import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 
 export default class LicenceService {
   constructor(
@@ -171,6 +172,9 @@ export default class LicenceService {
           return formData[key].map((v: string, i: number) => {
             return build(v, i)
           })
+        }
+        if (formData[key] instanceof Stringable) {
+          return build(formData[key].stringify())
         }
         return build(formData[key])
       }),

@@ -7,6 +7,8 @@ import config from '../config'
 import { jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateWithDay } from './utils'
 import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { getAdditionalConditionByCode } from './conditionsProvider'
+import SimpleTime from '../routes/creatingLicences/types/time'
+import SimpleDate from '../routes/creatingLicences/types/date'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -112,6 +114,24 @@ export function registerNunjucks(app?: express.Express): Environment {
     'getAdditionalConditionDataValue',
     (additionalConditionData: AdditionalConditionData[], fieldName: string) => {
       return additionalConditionData.find(data => data.field === fieldName)?.value
+    }
+  )
+
+  njkEnv.addFilter(
+    'getAdditionalConditionSimpleTimeValue',
+    (additionalConditionData: AdditionalConditionData[], fieldName: string) => {
+      const object = {}
+      object[fieldName] = SimpleTime.fromString(additionalConditionData.find(data => data.field === fieldName)?.value)
+      return object
+    }
+  )
+
+  njkEnv.addFilter(
+    'getAdditionalConditionSimpleDateValue',
+    (additionalConditionData: AdditionalConditionData[], fieldName: string) => {
+      const object = {}
+      object[fieldName] = SimpleDate.fromString(additionalConditionData.find(data => data.field === fieldName)?.value)
+      return object
     }
   )
 
