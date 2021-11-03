@@ -1,0 +1,37 @@
+{% extends "pages/licence/pdf-layout.njk" %}
+
+{% from "pages/licence/partials/title.njk" import title %}
+{% from "pages/licence/partials/offender.njk" import offender %}
+{% from "pages/licence/partials/objectives.njk" import objectives %}
+{% from "pages/licence/partials/supervision.njk" import supervision %}
+{% from "pages/licence/partials/induction.njk" import induction %}
+{% from "pages/licence/partials/releasedToOther.njk" import releasedToOther %}
+{% from "pages/licence/partials/conditions.njk" import conditions %}
+{% from "pages/licence/partials/cancellation.njk" import cancellation %}
+{% from "pages/licence/partials/recall.njk" import recall %}
+{% from "pages/licence/partials/failureToComply.njk" import failureToComply %}
+{% from "pages/licence/partials/signatures.njk" import signatures %}
+{% from "pages/licence/partials/footer.njk" import footer %}
+
+{# Three pieces of data are supplied to this template - licence, imageData (offender image) and htmlPrint (true/false) #}
+
+{% set offenderName = licence.forename + " " + licence.surname %}
+{% set pageTitle = offenderName %}
+
+{# TODO: Store the approver's full name at time of approval #}
+{% set approverName = licence.approvedByUsername %}
+
+{% block content %}
+    {{ title(offenderName) }}
+    {{ offender(licence.dateOfBirth, licence.licenceExpiryDate, licence.nomsId, imageData, htmlPrint) }}
+    {{ objectives() }}
+    {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}
+    {{ induction(licence.appointmentPerson, licence.appointmentAddress, licence.appointmentTime, licence.comTelephone) }}
+    {{ releasedToOther() }}
+    {{ conditions(licence.standardConditions, licence.additionalConditions, licence.bespokeConditions) }}
+    {{ cancellation() }}
+    {{ recall() }}
+    {{ failureToComply() }}
+    {{ signatures(licence.actualReleaseDate, approverName, licence.approvedDate, offenderName) }}
+    {{ footer(licence.nomsId, licence.pnc, licence.cro, licence.bookingNo, licence.typeCode, licence.id, licence.version, licence.prisonCode) }}
+{% endblock %}

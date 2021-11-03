@@ -155,12 +155,10 @@ export default class RestClient {
             logger.info(`Error caught for get stream ${path}`)
             reject(error)
           } else if (response) {
-            const s = new Readable()
-            // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/no-empty-function
-            s._read = () => {}
-            s.push(response.body)
-            s.push(null)
-            resolve(s)
+            const streamedResponse = Readable.from(response.body)
+            streamedResponse.push(response.body)
+            streamedResponse.push(null)
+            resolve(streamedResponse)
           }
         })
     })

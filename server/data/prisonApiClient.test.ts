@@ -166,4 +166,37 @@ describe('Prison API client tests', () => {
       expect(nock.isDone()).toBe(true)
     })
   })
+
+  describe('Prisoner image', () => {
+    it('Get prisoner image - streamed', async () => {
+      const bodyContent = ['-- a photograph --']
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/api/bookings/offenderNo/AA1234A/image/data').reply(200, bodyContent)
+      const data = await prisonerService.getPrisonerImage('XTEST1', 'AA1234A')
+      const content = data.read(20)
+      expect(content).toEqual(bodyContent)
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+
+    it('Get prisoner image - base64 string', async () => {
+      const bufferResponse = Buffer.from([1, 2, 3] as unknown as Uint8Array)
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/api/bookings/offenderNo/AA1234A/image/data').reply(200, bufferResponse)
+      const data = await prisonerService.getPrisonerImageData('XTEST1', 'AA1234A')
+      expect(data).toEqual(bufferResponse.toString('base64'))
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+
+    it('Get prisoner image - replace with placeholder - base64 string', async () => {
+      const errorResponse = {}
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/api/bookings/offenderNo/AA1234A/image/data').reply(404, errorResponse)
+      const data = await prisonerService.getPrisonerImageData('XTEST1', 'AA1234A')
+      expect(data).toEqual('')
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+  })
 })

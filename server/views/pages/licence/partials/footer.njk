@@ -1,0 +1,12 @@
+{% macro footer(nomsId, pnc, cro, bookingNo, licenceType, id, version, prisonCode) %}
+    <div id="hidden-data">
+        <span id="hidden-noms-id">{{ nomsId or "N/A" }}</span>
+        <span id="hidden-booking-no">{{ bookingNo or "N/A"}}</span>
+        <span id="hidden-cro">{{ cro or "N/A"}}</span>
+        <span id="hidden-pnc">{{ pnc or "N/A"}}</span>
+        <span id="hidden-licence-id">{{ id }}</span>
+        <span id="hidden-licence-type">{{ licenceType }}</span>
+        <span id="hidden-version">{{ version }}</span>
+        <span id="hidden-prison-code">{{ prisonCode }}</span>
+    </div>
+{% endmacro %}

@@ -13,16 +13,4 @@ export default class ViewAndPrintLicenceRoutes {
       res.redirect(`/licence/view/cases`)
     }
   }
-
-  POST = async (req: Request, res: Response): Promise<void> => {
-    /*
-    TODO: Next ticket will act on the Print button - for now, go back to view cases list
-    const { username } = res.locals.user
-    const { licenceId, result } = req.body
-    if (result === 'print') {
-      res.redirect(`/licence/pdf/id/${licenceId}/print`)
-    }
-    */
-    res.redirect(`/licence/view/cases`)
-  }
 }

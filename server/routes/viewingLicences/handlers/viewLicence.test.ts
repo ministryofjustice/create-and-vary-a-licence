@@ -83,21 +83,4 @@ describe('Route - view and approve a licence', () => {
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
     })
   })
-
-  describe('POST', () => {
-    res = {
-      render: jest.fn(),
-      redirect: jest.fn(),
-      locals: { user: { username } },
-    } as unknown as Response
-
-    it('should print a licence', async () => {
-      req = {
-        body: { licenceId: '1', result: 'print' },
-      } as unknown as Request
-
-      await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
-    })
-  })
 })
