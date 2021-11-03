@@ -23,7 +23,7 @@ export default class PrintLicenceRoutes {
     const htmlPrint = true
     const qrCode = await this.qrCodeService.getQrCode(licence)
     logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
-    res.render(`pages/licence/${licence.typeCode}`, { licence, qrCode, htmlPrint })
+    res.render(`pages/licence/${licence.typeCode}`, { qrCode, htmlPrint })
   }
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
@@ -39,7 +39,7 @@ export default class PrintLicenceRoutes {
 
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
-      { licencesUrl, licence, imageData, qrCode, htmlPrint: false },
+      { licencesUrl, imageData, qrCode, htmlPrint: false },
       { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
     )
   }

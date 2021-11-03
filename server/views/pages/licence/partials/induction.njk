@@ -5,9 +5,9 @@
         unless otherwise directed by your supervising officer, you must report without delay to:
         <div id="meeting-details">
             <p>
-                <span class="bold">{{ person or "Duty officer" }}</span><br/>
+                <span class="bold line-space-after">{{ person or "Duty officer" }}</span>
                 {% for a in (address | formatAddressAsList) %}
-                    <span class="bold">{{ a }}</span><br>
+                    <span class="bold line-space-after">{{ a }}</span>
                 {% endfor %}
             </p>
             <p>On <span class="bold">{{ timeOfMeeting | datetimeToDateWithDay }}</span> at <span class="bold">{{ timeOfMeeting | datetimeTo12HourTime }}</span></p>
