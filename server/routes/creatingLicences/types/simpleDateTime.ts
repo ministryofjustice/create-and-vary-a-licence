@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { Expose, Type } from 'class-transformer'
 import { Validate } from 'class-validator'
 import SimpleDate from './date'
@@ -9,20 +8,20 @@ import ValidSimpleTime from '../../../validators/simpleTimeValidator'
 class SimpleDateTime {
   static fromSimpleDateAndTime = (simpleDate: SimpleDate, simpleTime: SimpleTime): SimpleDateTime => {
     const val = new SimpleDateTime()
-    val.inductionDate = simpleDate
-    val.inductionTime = simpleTime
+    val.date = simpleDate
+    val.time = simpleTime
     return val
   }
 
   @Expose()
   @Type(() => SimpleDate)
   @Validate(ValidSimpleDate)
-  inductionDate: SimpleDate
+  date: SimpleDate
 
   @Expose()
   @Type(() => SimpleTime)
   @Validate(ValidSimpleTime)
-  inductionTime: SimpleTime
+  time: SimpleTime
 }
 
 export default SimpleDateTime

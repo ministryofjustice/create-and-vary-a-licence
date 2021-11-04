@@ -126,4 +126,61 @@ describe('View Partials - Form builder', () => {
     expect($('#timePicker1 > div:nth-child(2) > div > label').text().trim()).toBe('Minute')
     expect($('#timePicker1 > div:nth-child(3) > div > label').text().trim()).toBe('am or pm')
   })
+
+  it('should build an address input correctly', () => {
+    viewContext = {
+      formResponses: [],
+      additionalCondition: {
+        data: [],
+      },
+      config: {
+        inputs: [
+          {
+            type: 'address',
+            name: 'address1',
+          },
+        ],
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#addressLine1').length).toBe(1)
+    expect($('#addressLine2').length).toBe(1)
+    expect($('#addressTown').length).toBe(1)
+    expect($('#addressCounty').length).toBe(1)
+    expect($('#addressPostcode').length).toBe(1)
+  })
+
+  it('should build a checkbox input correctly', () => {
+    viewContext = {
+      formResponses: [],
+      additionalCondition: {
+        data: [],
+      },
+      config: {
+        inputs: [
+          {
+            type: 'check',
+            name: 'check',
+            options: [
+              {
+                value: 'option1',
+              },
+              {
+                value: 'option2',
+              },
+            ],
+          },
+        ],
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#check').length).toBe(1)
+    expect($('#check-2').length).toBe(1)
+    expect($('div:nth-child(1) > label').text().trim()).toBe('option1')
+    expect($('div:nth-child(2) > label').text().trim()).toBe('option2')
+  })
 })

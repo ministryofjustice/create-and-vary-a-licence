@@ -111,11 +111,24 @@ export default {
             },
             {
               id: 3,
-              code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
-              category: 'Making or maintaining contact with a person',
+              code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+              category: 'Participation in, or co-operation with, a programme or set of activities',
               sequence: 2,
-              text: 'Receive home visits from a Mental Health Worker.',
-              data: [],
+              text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
+              data: [
+                {
+                  id: 4,
+                  sequence: 0,
+                  field: 'behaviourProblems',
+                  value: 'gambling',
+                },
+                {
+                  id: 5,
+                  sequence: 1,
+                  field: 'behaviourProblems',
+                  value: 'debt',
+                },
+              ],
             },
           ],
           bespokeConditions: [
@@ -252,6 +265,7 @@ export default {
             {
               id: 1,
               code,
+              text: 'Condition text',
               data: [],
             },
           ],

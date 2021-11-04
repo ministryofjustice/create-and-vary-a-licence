@@ -1,5 +1,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "partials/datePicker.njk" import datePicker %}
 {% from "partials/timePicker.njk" import timePicker %}
 
@@ -24,7 +26,7 @@
             {% set options = (options.push({
                 text: option.value,
                 value: option.value,
-                checked: additionalCondition.data | getAdditionalConditionDataValue(input.name) === option.value
+                checked: additionalCondition.data | additionalConditionDataContainsValue(input.name, option.value)
             }), options) %}
         {% endfor %}
 
@@ -44,9 +46,14 @@
     {% if input.type == 'datePicker' %}
         {{ datePicker({
             id: input.name,
+            label: {
+                text: "Date"
+            },
             hint: {
                 text: "For example, 12 11 2022"
-            }
+            },
+            errorMessage: validationErrors | findError(input.name),
+            formResponses: additionalCondition.data | getAdditionalConditionSimpleDateValue(input.name) | fillFormResponse(formResponses)
         }) }}
     {% endif %}
 
@@ -58,7 +65,101 @@
             },
             hint: {
                 text: "For example, 9:30am or 2:55pm"
-            }
+            },
+            errorMessage: validationErrors | findError(input.name),
+            formResponses: additionalCondition.data | getAdditionalConditionSimpleTimeValue(input.name) | fillFormResponse(formResponses)
+        }) }}
+    {% endif %}
+
+    {% if input.type == 'address' %}
+        {% call govukFieldset({
+            legend: {
+                text: "Enter address",
+                classes: "govuk-fieldset__legend--s"
+            },
+            classes: 'govuk-!-margin-top-9'
+        }) %}
+            {{ govukInput({
+                id: 'addressLine1',
+                label: {
+                    html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
+                },
+                name: input.name + "[addressLine1]",
+                autocomplete: "address-line1",
+                classes: 'govuk-!-width-one-half',
+                classes: 'govuk-!-width-one-half',
+                errorMessage: validationErrors | findError('addressLine1'),
+                value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressLine1') | fillFormResponse(formResponses[input.name]['addressLine1'])
+            }) }}
+
+            {{ govukInput({
+                id: 'addressLine2',
+                label: {
+                    html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
+                },
+                name: input.name + "[addressLine2]",
+                autocomplete: "address-line2",
+                classes: 'govuk-!-width-one-half',
+                errorMessage: validationErrors | findError('addressLine2'),
+                value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressLine2') | fillFormResponse(formResponses[input.name]['addressLine2'])
+            }) }}
+
+            {{ govukInput({
+                id: 'addressTown',
+                label: {
+                    text: "Town or city"
+                },
+                name: input.name + "[addressTown]",
+                classes: "govuk-!-width-one-third",
+                autocomplete: "address-level2",
+                errorMessage: validationErrors | findError('addressTown'),
+                value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressTown') | fillFormResponse(formResponses[input.name]['addressTown'])
+            }) }}
+
+            {{ govukInput({
+                id: 'addressCounty',
+                label: {
+                    text: "County"
+                },
+                name: input.name + "[addressCounty]",
+                classes: "govuk-!-width-one-third",
+                errorMessage: validationErrors | findError('addressCounty'),
+                value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressCounty') | fillFormResponse(formResponses[input.name]['addressCounty'])
+            }) }}
+
+            {{ govukInput({
+                id: 'addressPostcode',
+                label: {
+                    text: "Postcode"
+                },
+                name: input.name + "[addressPostcode]",
+                classes: "govuk-input--width-10",
+                autocomplete: "postal-code",
+                errorMessage: validationErrors | findError('addressPostcode'),
+                value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressPostcode') | fillFormResponse(formResponses[input.name]['addressPostcode'])
+            }) }}
+        {% endcall %}
+    {% endif %}
+
+    {% if input.type == 'check' %}
+        {% set options = [] %}
+        {% for option in input.options %}
+            {% set options = (options.push({
+                text: option.value,
+                value: option.value,
+                checked: additionalCondition.data | additionalConditionDataContainsValue(input.name, option.value)
+            }), options) %}
+        {% endfor %}
+
+        {{ govukCheckboxes({
+            name: input.name,
+            fieldset: {
+                legend: {
+                    text: input.label,
+                    isPageHeading: false
+                }
+            },
+            items: options
         }) }}
     {% endif %}
 

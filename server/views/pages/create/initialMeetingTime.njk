@@ -25,23 +25,23 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 {{ datePicker({
-                    id: "inductionDate",
+                    id: "date",
                     hint: {
                         text: "For example, 12 11 2022"
                     },
-                    errorMessage: validationErrors | findError('inductionDate'),
+                    errorMessage: validationErrors | findError('date'),
                     formResponses: formDate | fillFormResponse(formResponses)
                 }) }}
 
                 {{ timePicker({
-                    id: "inductionTime",
+                    id: "time",
                     label: {
                         text: "Time"
                     },
                     hint: {
                         text: "For example, 9:30am or 2:55pm"
                     },
-                    errorMessage: validationErrors | findError('inductionTime'),
+                    errorMessage: validationErrors | findError('time'),
                     formResponses: formDate | fillFormResponse(formResponses)
                 }) }}
 

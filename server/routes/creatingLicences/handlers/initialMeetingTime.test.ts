@@ -14,12 +14,12 @@ describe('Route - create licence - initial meeting date and time', () => {
 
   beforeEach(() => {
     formDate = {
-      inductionDate: {
+      date: {
         day: '21',
         month: '10',
         year: '2022',
       },
-      inductionTime: {
+      time: {
         hour: '02',
         minute: '15',
         ampm: 'pm',
