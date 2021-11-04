@@ -2,7 +2,6 @@ import { Expose, Transform, Type } from 'class-transformer'
 import { IsNotEmpty, Validate, ValidateIf } from 'class-validator'
 import SimpleTime from '../time'
 import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
-import IsSimpleTimeAfter from '../../../../validators/decorators'
 
 class CurfewTerms {
   @Expose()
@@ -13,7 +12,6 @@ class CurfewTerms {
   @Expose()
   @Type(() => SimpleTime)
   @Validate(ValidSimpleTime)
-  @IsSimpleTimeAfter('curfewStart', { message: 'Curfew end time should be after the start time' })
   curfewEnd: SimpleTime
 
   @Expose()
