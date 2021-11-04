@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { Expose, Type } from 'class-transformer'
 import { Validate } from 'class-validator'
 import SimpleDate from './date'
