@@ -3,17 +3,17 @@ import Page from './page'
 import AdditionalConditionsQuestionPage from './additionalConditionsQuestion'
 
 export default class AppointmentTimePage extends Page {
-  private inductionDateDayId = '#inductionDate-day'
+  private inductionDateDayId = '#date-day'
 
-  private inductionDateMonthId = '#inductionDate-month'
+  private inductionDateMonthId = '#date-month'
 
-  private inductionDateYearId = '#inductionDate-year'
+  private inductionDateYearId = '#date-year'
 
-  private inductionTimeHourId = '#inductionTime-hour'
+  private inductionTimeHourId = '#time-hour'
 
-  private inductionTimeMinuteId = '#inductionTime-minute'
+  private inductionTimeMinuteId = '#time-minute'
 
-  private inductionTimeAmpmId = '#inductionTime-ampm'
+  private inductionTimeAmpmId = '#time-ampm'
 
   private continueButtonId = '[data-qa=continue]'
 
