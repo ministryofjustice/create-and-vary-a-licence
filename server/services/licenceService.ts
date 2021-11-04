@@ -161,10 +161,16 @@ export default class LicenceService {
 
     const requestBody = {
       data: Object.keys(formData).flatMap((key, index) => {
-        const build = (value: string, i?: number) => {
+        // The POST request to the API will only accept an array of objects where value is a string.
+        // Therefore, if the type of data entered from the form is an array or an object, we need to convert that to a string type.
+        // For arrays, we can just split it into multiple objects each with a value from each member of that array.
+        // For objects, the objects needs to be converted into a string representation. Types which need to be represented as a string
+        // should extend Stringable and implement the stringify() method
+
+        const build = (value: unknown, i?: number) => {
           return {
             field: key,
-            value,
+            value: value instanceof Stringable ? value.stringify() : value,
             sequence: i || index,
           }
         }
@@ -172,9 +178,6 @@ export default class LicenceService {
           return formData[key].map((v: string, i: number) => {
             return build(v, i)
           })
-        }
-        if (formData[key] instanceof Stringable) {
-          return build(formData[key].stringify())
         }
         return build(formData[key])
       }),

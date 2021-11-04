@@ -443,7 +443,7 @@ export default {
     {
       code: '42f71b40-84cd-446d-8647-f00bbb6c079c',
       category: 'Freedom of movement',
-      text: 'Not to enter [NAME/TYPE OF PREMISES / ADDRESS / ROAD] without the prior approval of your supervising officer.',
+      text: 'Not to enter [NAME / TYPE OF PREMISES / ADDRESS / ROAD] without the prior approval of your supervising officer.',
       requiresInput: true,
       inputs: [
         {
@@ -588,7 +588,7 @@ export default {
     {
       code: '524f2fd6-ad53-47dd-8edc-2161d3dd2ed4',
       category: 'Electronic monitoring',
-      text: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging, ending on [INSERT END DATE], and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
+      text: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging for a period of [INSERT TIMEFRAME] ending on [INSERT END DATE] and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
       requiresInput: true,
       inputs: [
         {
