@@ -43,20 +43,6 @@
         }) }}
     {% endif %}
 
-    {% if input.type == 'timePicker' %}
-        {{ timePicker({
-            id: input.name,
-            label: {
-                text: "Time"
-            },
-            hint: {
-                text: "For example, 9:30am or 2:55pm"
-            },
-            errorMessage: validationErrors | findError(input.name),
-            formResponses: additionalCondition.data | getAdditionalConditionSimpleTimeValue(input.name) | fillFormResponse(formResponses)
-        }) }}
-    {% endif %}
-
     {% if input.type == 'datePicker' %}
         {{ datePicker({
             id: input.name,
@@ -68,6 +54,20 @@
             },
             errorMessage: validationErrors | findError(input.name),
             formResponses: additionalCondition.data | getAdditionalConditionSimpleDateValue(input.name) | fillFormResponse(formResponses)
+        }) }}
+    {% endif %}
+
+    {% if input.type == 'timePicker' %}
+        {{ timePicker({
+            id: input.name,
+            label: {
+                text: "Time"
+            },
+            hint: {
+                text: "For example, 9:30am or 2:55pm"
+            },
+            errorMessage: validationErrors | findError(input.name),
+            formResponses: additionalCondition.data | getAdditionalConditionSimpleTimeValue(input.name) | fillFormResponse(formResponses)
         }) }}
     {% endif %}
 
