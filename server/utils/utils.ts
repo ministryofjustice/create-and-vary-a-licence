@@ -36,15 +36,8 @@ const convertDateFormat = (date: string): string => (date ? moment(date, 'YYYY-M
  * @param dt: SimpleDateTime
  */
 const simpleDateTimeToJson = (dt: SimpleDateTime): string | undefined => {
-  const { inductionDate, inductionTime } = dt
-  const dateTimeString = [
-    inductionDate.year,
-    inductionDate.month,
-    inductionDate.day,
-    inductionTime.hour,
-    inductionTime.minute,
-    inductionTime.ampm,
-  ].join(' ')
+  const { date, time } = dt
+  const dateTimeString = [date.year, date.month, date.day, time.hour, time.minute, time.ampm].join(' ')
   const momentDt = moment(dateTimeString, 'YYYY MM DD hh mm a')
   return momentDt.isValid() ? momentDt.format('DD/MM/YYYY HH:mm') : undefined
 }

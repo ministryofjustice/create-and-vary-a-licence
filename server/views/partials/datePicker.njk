@@ -9,6 +9,11 @@
         id: params.id,
         hint: params.hint,
         errorMessage: params.errorMessage,
+        fieldset: {
+            legend: {
+                text: params.label.text
+            }
+        },
         items: [
             {
                 id: params.id + '-day',

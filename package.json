@@ -41,6 +41,9 @@
       "<rootDir>/server/**/?(*.)(spec|test).{ts,js,jsx,mjs}",
       "<rootDir>/integration_tests/gotenberg/?(*.)(spec|test).{ts,js,jsx,mjs}"
     ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.ts"
+    ],
     "testEnvironment": "node",
     "reporters": [
       "default",
