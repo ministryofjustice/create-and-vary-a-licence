@@ -9,7 +9,7 @@ export default class AdditionalConditionsInputPage extends Page {
   private additionalConditionsToInput = []
 
   constructor() {
-    super('additional-condition-input-page', false)
+    super('additional-condition-input-page')
   }
 
   withContext = (context: Context): AdditionalConditionsInputPage => {
@@ -17,20 +17,30 @@ export default class AdditionalConditionsInputPage extends Page {
     return this
   }
 
-  enterText = (text: string): AdditionalConditionsInputPage => {
-    cy.get('.govuk-form-group > input').type(text)
+  enterText = (text: string, fieldId?: string): AdditionalConditionsInputPage => {
+    if (fieldId) {
+      cy.get(`#${fieldId}`).type(text)
+    } else {
+      cy.get('.govuk-form-group > input').type(text)
+    }
     return this
   }
 
-  selectRadios = (): AdditionalConditionsInputPage => {
-    cy.get('.govuk-radios div:nth-child(1) > input').click({ multiple: true })
+  selectRadios = (radioIndex = 1): AdditionalConditionsInputPage => {
+    cy.get(`.govuk-radios div:nth-child(${radioIndex}) > input`).click({ multiple: true })
     return this
   }
 
-  enterTime = (): AdditionalConditionsInputPage => {
-    cy.get("input[name*='hour']").type('11')
-    cy.get("input[name*='minute']").type('30')
-    cy.get("select[name*='ampm']").select('am')
+  enterTime = (hour = '11', minute = '30', fieldId?: string): AdditionalConditionsInputPage => {
+    if (fieldId) {
+      cy.get(`#${fieldId}-hour`).type(hour)
+      cy.get(`#${fieldId}-minute`).type(minute)
+      cy.get(`#${fieldId}-ampm`).select('am')
+    } else {
+      cy.get("input[name*='hour']").type(hour)
+      cy.get("input[name*='minute']").type(minute)
+      cy.get("select[name*='ampm']").select('am')
+    }
     return this
   }
 
@@ -54,12 +64,14 @@ export default class AdditionalConditionsInputPage extends Page {
     return this
   }
 
-  nextInput = (): AdditionalConditionsInputPage => {
+  nextInput = (runAxe = true): AdditionalConditionsInputPage => {
     cy.task('stubPutAdditionalConditionData')
     cy.task('stubGetLicenceWithConditionToComplete', this.additionalConditionsToInput.shift())
     cy.get(this.continueButtonId).click()
     this.checkOnPage()
-    this.runAxe()
+    if (runAxe) {
+      this.runAxe()
+    }
     return this
   }
 

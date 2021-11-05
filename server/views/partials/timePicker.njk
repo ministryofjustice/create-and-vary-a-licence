@@ -1,9 +1,9 @@
 {% macro timePicker(params) %}
     <div class="govuk-form-group {% if params.errorMessage %}govuk-form-group--error{% endif %}">
         {% if params.label %}
-            <label id="{{ params.id }}-label" class="govuk-label {{ params.label.classes }}">
+            <legend class="govuk-fieldset__legend {{ params.label.classes }}">
                 {{ params.label.text }}
-            </label>
+            </legend>
         {% endif %}
         {% if params.hint %}
             <div id="{{ params.id }}-hint" class="govuk-hint {{ params.hint.classes }}">

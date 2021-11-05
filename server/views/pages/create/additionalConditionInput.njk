@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "formBuilder.njk" import formBuilder %}
 
 {% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
 {% set pageId = "additional-condition-input-page" %}
@@ -18,11 +19,14 @@
         <input type="hidden" name="code" value="{{ config.code }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                <p class="govuk-body govuk-!-font-weight-bold">
-                    {{ additionalCondition.text }}
+                <p class="govuk-body">
+                    {{ config.text }}
                 </p>
+                {% if config.subtext %}
+                    <span class="govuk-hint">{{ config.subtext }}</span>
+                {% endif %}
 
-                {% include "formBuilder.njk" %}
+                {{ formBuilder(config, additionalCondition, validationErrors, formResponses) }}
 
                 {{ govukButton({
                     text: "Continue",
