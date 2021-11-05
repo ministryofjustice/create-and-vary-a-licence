@@ -16,6 +16,7 @@ import ElectronicMonitoringPeriod from '../routes/creatingLicences/types/additio
 import ApprovedAddress from '../routes/creatingLicences/types/additionalConditionInputs/approvedAddress'
 import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholMonitoringPeriod'
 import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInputs/curfewTerms'
+import CurfewAddress from '../routes/creatingLicences/types/additionalConditionInputs/curfewAddress'
 
 export default {
   version: '1.0',
@@ -175,6 +176,7 @@ export default {
         },
         {
           type: InputTypes.ADDRESS,
+          label: 'Enter the address for the appointment',
           name: 'appointmentAddress',
         },
       ],
@@ -478,12 +480,31 @@ export default {
       ],
       type: CurfewTerms,
     },
-    // {
-    //   code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
-    //   category: 'Curfew arrangement',
-    //   text: 'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
-    //   requiresInput: true,
-    // },
+    {
+      code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
+      category: 'Curfew arrangement',
+      text: 'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
+      subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.ADDRESS,
+          label: 'Enter the curfew address',
+          name: 'curfewAddress',
+        },
+        {
+          type: InputTypes.TIME,
+          label: 'Enter the curfew start time',
+          name: 'curfewStart',
+        },
+        {
+          type: InputTypes.TIME,
+          label: 'Enter the curfew end time',
+          name: 'curfewEnd',
+        },
+      ],
+      type: CurfewAddress,
+    },
     {
       code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
       category: 'Freedom of movement',
@@ -513,6 +534,7 @@ export default {
         },
         {
           type: InputTypes.ADDRESS,
+          label: 'Enter the address of the premises',
           name: 'premisesAddress',
         },
       ],
@@ -609,6 +631,7 @@ export default {
         },
         {
           type: InputTypes.ADDRESS,
+          label: 'Enter address',
           name: 'address',
         },
       ],
@@ -679,6 +702,7 @@ export default {
       inputs: [
         {
           type: InputTypes.ADDRESS,
+          label: 'Enter the approved address',
           name: 'approvedAddress',
         },
       ],

@@ -83,10 +83,9 @@
         {% if input.type == 'address' %}
             {% call govukFieldset({
                 legend: {
-                    text: "Enter address",
+                    text: input.label,
                     classes: "govuk-!-font-weight-bold"
-                },
-                classes: 'govuk-!-margin-top-9'
+                }
             }) %}
                 {{ govukInput({
                     id: 'addressLine1',
