@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import Stringable from './abstract/stringable'
 
 export enum AmPm {
@@ -25,7 +25,11 @@ class SimpleTime extends Stringable {
   ampm: AmPm
 
   stringify(): string {
-    return moment([this.hour, this.minute, this.ampm].join('-'), ['hh-mm-a'], true).format('hh:mm a')
+    return this.toMoment().format('hh:mm a')
+  }
+
+  toMoment(): Moment {
+    return moment([this.hour, this.minute, this.ampm].join('-'), ['hh-mm-a'], true)
   }
 
   static fromString(value: string): SimpleTime {

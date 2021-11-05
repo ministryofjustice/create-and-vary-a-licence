@@ -130,6 +130,39 @@ export default {
                 },
               ],
             },
+            {
+              id: 4,
+              code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+              category: 'Participation in, or co-operation with, a programme or set of activities',
+              sequence: 3,
+              text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+              data: [
+                {
+                  id: 6,
+                  sequence: 0,
+                  field: 'curfewStart',
+                  value: '7:30pm',
+                },
+                {
+                  id: 7,
+                  sequence: 1,
+                  field: 'curfewEnd',
+                  value: '7:30am',
+                },
+                {
+                  id: 8,
+                  sequence: 2,
+                  field: 'reviewPeriod',
+                  value: 'Other',
+                },
+                {
+                  id: 9,
+                  sequence: 3,
+                  field: 'alternativeReviewPeriod',
+                  value: 'Annually',
+                },
+              ],
+            },
           ],
           bespokeConditions: [
             {
@@ -265,7 +298,6 @@ export default {
             {
               id: 1,
               code,
-              text: 'Condition text',
               data: [],
             },
           ],
