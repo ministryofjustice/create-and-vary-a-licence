@@ -51,7 +51,6 @@ body {
 
 .bullet-point {
   break-inside: avoid;
-  page-break-inside: avoid;
 }
 
 .section::before {
@@ -63,7 +62,11 @@ body {
 .section {
   clear: left;
   text-align: justify-all;
-  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.section-large {
+  break-inside: auto;
 }
 
 .condition::before {
@@ -74,7 +77,6 @@ body {
 
 .condition {
   break-inside: avoid;
-  page-break-inside: avoid;
   margin-left: 25px;
   text-align: justify-all;
 }
@@ -87,8 +89,9 @@ body {
 .title {
   font-size: 15pt;
   font-weight: bold;
+  padding-top: 15px;
   margin-left: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .title::after {
@@ -108,7 +111,6 @@ body {
 .boxed {
   margin-top: 30px;
   border: 1px solid black;
-  page-break-inside: avoid;
   break-inside: avoid;
 }
 
@@ -118,8 +120,6 @@ body {
 }
 
 .signatures {
-  break-inside: avoid;
-  page-break-inside: avoid;
   margin-left: 20px;
 }
 
@@ -129,6 +129,7 @@ body {
 }
 
 .signature-box {
+  break-inside: avoid;
   background-color: lightgray;
   width: 450px;
   height: 90px;
