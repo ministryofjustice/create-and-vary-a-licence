@@ -15,6 +15,7 @@ import ElectronicMonitoringTypes from '../routes/creatingLicences/types/addition
 import ElectronicMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicMonitoringPeriod'
 import ApprovedAddress from '../routes/creatingLicences/types/additionalConditionInputs/approvedAddress'
 import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholMonitoringPeriod'
+import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInputs/curfewTerms'
 
 export default {
   version: '1.0',
@@ -164,10 +165,12 @@ export default {
       inputs: [
         {
           type: InputTypes.TIME,
+          label: 'Enter time',
           name: 'appointmentTime',
         },
         {
           type: InputTypes.DATE,
+          label: 'Enter date',
           name: 'appointmentDate',
         },
         {
@@ -428,12 +431,51 @@ export default {
       text: 'Provide your supervising officer with the details of any bank accounts to which you are a signatory and of any credit cards you possess. You must also notify your supervising officer when becoming a signatory to any new bank account or credit card, and provide the account/card details. This condition will be reviewed on a monthly basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
       requiresInput: false,
     },
-    // {
-    //   code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
-    //   category: 'Curfew arrangement',
-    //   text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
+      category: 'Curfew arrangement',
+      text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+      subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TIME,
+          label: 'Enter the curfew start time',
+          name: 'curfewStart',
+        },
+        {
+          type: InputTypes.TIME,
+          label: 'Enter the curfew end time',
+          name: 'curfewEnd',
+        },
+        {
+          type: InputTypes.RADIO,
+          label: 'Select a review period',
+          name: 'reviewPeriod',
+          options: [
+            {
+              value: 'Weekly',
+            },
+            {
+              value: 'Monthly',
+            },
+            {
+              value: 'Other',
+              conditional: {
+                inputs: [
+                  {
+                    type: InputTypes.TEXT,
+                    label: 'Enter a review period',
+                    name: 'alternativeReviewPeriod',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+      type: CurfewTerms,
+    },
     // {
     //   code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
     //   category: 'Curfew arrangement',
@@ -620,6 +662,7 @@ export default {
         },
         {
           type: InputTypes.DATE,
+          label: 'Enter end date',
           name: 'endDate',
         },
       ],
@@ -653,6 +696,7 @@ export default {
         },
         {
           type: InputTypes.DATE,
+          label: 'Enter end date',
           name: 'endDate',
         },
       ],

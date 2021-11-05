@@ -21,7 +21,7 @@ describe('View Partials - Time Picker', () => {
     compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#id-label').text().trim()).toBe('Label')
+    expect($('legend').text().trim()).toBe('Label')
   })
 
   it('should not show label when label is not provided in context', () => {
@@ -34,7 +34,7 @@ describe('View Partials - Time Picker', () => {
     compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#id-label').length).toBe(0)
+    expect($('legend').length).toBe(0)
   })
 
   it('should show hint when hint is provided in context', () => {
