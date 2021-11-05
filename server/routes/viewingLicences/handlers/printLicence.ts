@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import logger from '../../../../logger'
 import config from '../../../config'
 import PrisonerService from '../../../services/prisonerService'
+import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
@@ -19,6 +20,9 @@ export default class PrintLicenceRoutes {
     const { username } = res.locals.user
     const { licence } = res.locals
     const htmlPrint = true
+
+    const listOfExpandedConditions = expandAdditionalConditions(licence.additionalConditions)
+
     logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
     res.render(`pages/licence/${licence.typeCode}`, { htmlPrint })
   }

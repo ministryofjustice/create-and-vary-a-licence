@@ -13,8 +13,12 @@
 {% from "pages/licence/partials/signatures.njk" import signatures %}
 {% from "pages/licence/partials/footer.njk" import footer %}
 
-{# Data supplied to this template - imageData(offender image) and htmlPrint(true/false) #}
-{# The licence object is already in context via res.locals.licence, the result of fetchLicenceMiddleware #}
+{# Data supplied to this template
+   - imageData(offender image).
+   - htmlPrint(true/false).
+   - licence - already in context as is in res.locals (from fetchLicenceMiddleware).
+   - additionalConditons - string[] containing additional conditions with placeholders replaced with values.
+#}
 
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
