@@ -10,7 +10,6 @@ import { getAdditionalConditionByCode } from './conditionsProvider'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/creatingLicences/types/address'
-import conditionsConfig from '../config/conditions'
 
 const production = process.env.NODE_ENV === 'production'
 
