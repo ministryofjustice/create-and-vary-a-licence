@@ -2,177 +2,219 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/datePicker.njk" import datePicker %}
 {% from "partials/timePicker.njk" import timePicker %}
 
+{# TODO: Currently, this form builder only supports the "add another" functionality for the text input type. #}
+{# It can be extended in future if the other field types require Add Another functionality #}
+
 {%  macro formBuilder(config, additionalCondition, validationErrors, formResponses) %}
-
     {% for input in config.inputs %}
+        {% set validationError = validationErrors | findError(input.name) %}
+        {% set formValues = getFormResponses(formResponses, input.name) or getValueFromAdditionalCondition(additionalCondition, input.name) %}
 
-        {% if input.type == 'text' %}
-            {{ govukInput({
-                label: {
-                    text: input.label,
-                    classes: "govuk-!-font-weight-bold"
-                },
-                id: input.name,
-                name: input.name,
-                classes: "govuk-!-width-one-half",
-                errorMessage: validationErrors | findError(input.name),
-                value: additionalCondition.data | getAdditionalConditionDataValue(input.name) | fillFormResponse(formResponses[input.name])
-            }) }}
-        {% endif %}
+        <div data-module="moj-add-another">
+            {% if input.type == 'text' %}
+                    {% for item in formValues %}
+                        {{ textInput(input, validationError, item, loop.index0, formValues.length > 1) }}
+                    {% else %}
+                        {{ textInput(input, validationError, "", 0, false) }}
+                    {% endfor %}
+            {% endif %}
 
-        {% if input.type == 'radio' %}
-            {% set options = [] %}
-            {% for option in input.options %}
-                {% set options = (options.push({
-                    text: option.value,
-                    value: option.value,
-                    checked: formResponses | formResponsesContainsValue(input.name, option.value) or additionalCondition.data | additionalConditionDataContainsValue(input.name, option.value),
-                    conditional: {
-                        html: formBuilder(option.conditional, additionalCondition, validationErrors, formResponses)
-                    } if option.conditional
-                }), options) %}
-            {% endfor %}
+            {% if input.type == 'radio' %}
+                {% set options = [] %}
+                {% for option in input.options %}
+                    {% set options = (options.push({
+                        text: option.value,
+                        value: option.value,
+                        checked: option.value in formValues,
+                        conditional: {
+                            html: formBuilder(option.conditional, additionalCondition, validationErrors, formResponses)
+                        } if option.conditional
+                    }), options) %}
+                {% endfor %}
 
-            {{ govukRadios({
-                idPrefix: input.name,
-                name: input.name,
-                fieldset: {
+                {{ govukRadios({
+                    idPrefix: input.name,
+                    name: input.name,
+                    fieldset: {
+                        legend: {
+                            text: input.label,
+                            classes: "govuk-!-font-weight-bold"
+                        }
+                    },
+                    items: options,
+                    errorMessage: validationError
+                }) }}
+            {% endif %}
+
+            {% if input.type == 'datePicker' %}
+                {{ datePicker({
+                    id: input.name,
+                    label: {
+                        text: input.label,
+                        classes: "govuk-!-font-weight-bold"
+                    },
+                    hint: {
+                        text: "For example, 12 11 2022"
+                    },
+                    errorMessage: validationError,
+                    formResponses: formValues | getValuesFromSimpleDates
+                }) }}
+            {% endif %}
+
+            {% if input.type == 'timePicker' %}
+                {{ timePicker({
+                    id: input.name,
+                    label: {
+                        text: input.label,
+                        classes: "govuk-!-font-weight-bold"
+                    },
+                    hint: {
+                        text: "For example, 9:30am or 2:55pm"
+                    },
+                    errorMessage: validationError,
+                    formResponses: formValues | getValuesFromSimpleTimes
+                }) }}
+            {% endif %}
+
+            {% if input.type == 'address' %}
+                {% call govukFieldset({
                     legend: {
                         text: input.label,
                         classes: "govuk-!-font-weight-bold"
                     }
-                },
-                items: options,
-                errorMessage: validationErrors | findError(input.name)
-            }) }}
-        {% endif %}
+                }) %}
+                    {{ govukInput({
+                        id: 'addressLine1',
+                        label: {
+                            html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
+                        },
+                        name: input.name + "[addressLine1]",
+                        autocomplete: "address-line1",
+                        classes: 'govuk-!-width-one-half',
+                        classes: 'govuk-!-width-one-half',
+                        errorMessage: validationErrors | findError('addressLine1'),
+                        value: formValues | getValueFromAddress('addressLine1')
+                    }) }}
 
-        {% if input.type == 'datePicker' %}
-            {{ datePicker({
-                id: input.name,
-                label: {
-                    text: input.label,
-                    classes: "govuk-!-font-weight-bold"
-                },
-                hint: {
-                    text: "For example, 12 11 2022"
-                },
-                errorMessage: validationErrors | findError(input.name),
-                formResponses: additionalCondition.data | getAdditionalConditionSimpleDateValue(input.name) | fillFormResponse(formResponses)
-            }) }}
-        {% endif %}
+                    {{ govukInput({
+                        id: 'addressLine2',
+                        label: {
+                            html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
+                        },
+                        name: input.name + "[addressLine2]",
+                        autocomplete: "address-line2",
+                        classes: 'govuk-!-width-one-half',
+                        errorMessage: validationErrors | findError('addressLine2'),
+                        value: formValues | getValueFromAddress('addressLine2')
+                    }) }}
 
-        {% if input.type == 'timePicker' %}
-            {{ timePicker({
-                id: input.name,
-                label: {
-                    text: input.label,
-                    classes: "govuk-!-font-weight-bold"
-                },
-                hint: {
-                    text: "For example, 9:30am or 2:55pm"
-                },
-                errorMessage: validationErrors | findError(input.name),
-                formResponses: additionalCondition.data | getAdditionalConditionSimpleTimeValue(input.name) | fillFormResponse(formResponses)
-            }) }}
-        {% endif %}
+                    {{ govukInput({
+                        id: 'addressTown',
+                        label: {
+                            text: "Town or city"
+                        },
+                        name: input.name + "[addressTown]",
+                        classes: "govuk-!-width-one-third",
+                        autocomplete: "address-level2",
+                        errorMessage: validationErrors | findError('addressTown'),
+                        value: formValues | getValueFromAddress('addressTown')
+                    }) }}
 
-        {% if input.type == 'address' %}
-            {% call govukFieldset({
-                legend: {
-                    text: input.label,
-                    classes: "govuk-!-font-weight-bold"
-                }
-            }) %}
-                {{ govukInput({
-                    id: 'addressLine1',
-                    label: {
-                        html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
+                    {{ govukInput({
+                        id: 'addressCounty',
+                        label: {
+                            text: "County"
+                        },
+                        name: input.name + "[addressCounty]",
+                        classes: "govuk-!-width-one-third",
+                        errorMessage: validationErrors | findError('addressCounty'),
+                        value: formValues | getValueFromAddress('addressCounty')
+                    }) }}
+
+                    {{ govukInput({
+                        id: 'addressPostcode',
+                        label: {
+                            text: "Postcode"
+                        },
+                        name: input.name + "[addressPostcode]",
+                        classes: "govuk-input--width-10",
+                        autocomplete: "postal-code",
+                        errorMessage: validationErrors | findError('addressPostcode'),
+                        value: formValues | getValueFromAddress('addressPostcode')
+                    }) }}
+                {% endcall %}
+            {% endif %}
+
+            {% if input.type == 'check' %}
+                {% set options = [] %}
+                {% for option in input.options %}
+                    {% set options = (options.push({
+                        text: option.value,
+                        value: option.value,
+                        checked: option.value in formValues,
+                        conditional: {
+                            html: formBuilder(option.conditional, additionalCondition, validationErrors, formResponses)
+                        } if option.conditional
+                    }), options) %}
+                {% endfor %}
+
+                {{ govukCheckboxes({
+                    idPrefix: input.name,
+                    name: input.name,
+                    fieldset: {
+                        legend: {
+                            text: input.label,
+                            classes: "govuk-!-font-weight-bold"
+                        }
                     },
-                    name: input.name + "[addressLine1]",
-                    autocomplete: "address-line1",
-                    classes: 'govuk-!-width-one-half',
-                    classes: 'govuk-!-width-one-half',
-                    errorMessage: validationErrors | findError('addressLine1'),
-                    value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressLine1') | fillFormResponse(formResponses[input.name]['addressLine1'])
+                    errorMessage: validationError,
+                    items: options
                 }) }}
+            {% endif %}
 
-                {{ govukInput({
-                    id: 'addressLine2',
-                    label: {
-                        html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
-                    },
-                    name: input.name + "[addressLine2]",
-                    autocomplete: "address-line2",
-                    classes: 'govuk-!-width-one-half',
-                    errorMessage: validationErrors | findError('addressLine2'),
-                    value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressLine2') | fillFormResponse(formResponses[input.name]['addressLine2'])
-                }) }}
-
-                {{ govukInput({
-                    id: 'addressTown',
-                    label: {
-                        text: "Town or city"
-                    },
-                    name: input.name + "[addressTown]",
-                    classes: "govuk-!-width-one-third",
-                    autocomplete: "address-level2",
-                    errorMessage: validationErrors | findError('addressTown'),
-                    value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressTown') | fillFormResponse(formResponses[input.name]['addressTown'])
-                }) }}
-
-                {{ govukInput({
-                    id: 'addressCounty',
-                    label: {
-                        text: "County"
-                    },
-                    name: input.name + "[addressCounty]",
-                    classes: "govuk-!-width-one-third",
-                    errorMessage: validationErrors | findError('addressCounty'),
-                    value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressCounty') | fillFormResponse(formResponses[input.name]['addressCounty'])
-                }) }}
-
-                {{ govukInput({
-                    id: 'addressPostcode',
-                    label: {
-                        text: "Postcode"
-                    },
-                    name: input.name + "[addressPostcode]",
-                    classes: "govuk-input--width-10",
-                    autocomplete: "postal-code",
-                    errorMessage: validationErrors | findError('addressPostcode'),
-                    value: additionalCondition.data | getAdditionalConditionAddressValue(input.name, 'addressPostcode') | fillFormResponse(formResponses[input.name]['addressPostcode'])
-                }) }}
-            {% endcall %}
-        {% endif %}
-
-        {% if input.type == 'check' %}
-            {% set options = [] %}
-            {% for option in input.options %}
-                {% set options = (options.push({
-                    text: option.value,
-                    value: option.value,
-                    checked: additionalCondition.data | additionalConditionDataContainsValue(input.name, option.value)
-                }), options) %}
-            {% endfor %}
-
-            {{ govukCheckboxes({
-                idPrefix: input.name,
-                name: input.name,
-                fieldset: {
-                    legend: {
-                        text: input.label,
-                        classes: "govuk-!-font-weight-bold"
-                    }
-                },
-                errorMessage: validationErrors | findError(input.name),
-                items: options
-            }) }}
-        {% endif %}
-
+            {% if input.addAnother %}
+                <div class="moj-button-action">
+                    {{ govukButton({
+                        text: input.addAnother.label,
+                        classes: 'govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4'
+                    }) }}
+                </div>
+            {% endif %}
+        </div>
     {% endfor %}
+{% endmacro %}
 
+{% macro textInput(input, validationError, value, index, removeButton) %}
+    {% call govukFieldset({
+        classes: 'moj-add-another__item',
+        legend: {
+            text: input.label,
+            classes: 'moj-add-another__title govuk-visually-hidden',
+            isPageHeading: false
+        }
+    }) %}
+        {{ govukInput({
+            id: input.name,
+            name: input.name if not input.addAnother else input.name + '[' + index + ']',
+            classes: "govuk-!-width-one-half",
+            label: {
+                text: input.label,
+                classes: "govuk-!-font-weight-bold"
+            },
+            attributes: {
+                'data-name': input.name + '[%index%]',
+                'data-id': input.name + '[%index%]'
+            } if input.addAnother,
+            errorMessage: validationError,
+            value: value
+        }) }}
+
+        {% if removeButton %}
+            <button type="button" class="govuk-button govuk-button--secondary moj-add-another__remove-button">Remove</button>
+        {% endif %}
+    {% endcall %}
 {% endmacro %}

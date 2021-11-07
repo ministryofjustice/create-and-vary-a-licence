@@ -25,7 +25,7 @@
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
                            id="{{ params.id }}-hour"
                            name="{{ params.id }}[hour]" type="text" pattern="[0-9]*" inputmode="numeric"
-                           value="{{ params.formResponses[params.id]['hour'] }}">
+                           value="{{ params.formResponses['hour'] }}">
                 </div>
             </div>
             <div class="govuk-date-input__item">
@@ -36,7 +36,7 @@
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
                            id="{{ params.id }}-minute"
                            name="{{ params.id }}[minute]" type="text" pattern="[0-9]*" inputmode="numeric"
-                           value="{{ params.formResponses[params.id]['minute'] }}">
+                           value="{{ params.formResponses['minute'] }}">
                 </div>
             </div>
             <div class="govuk-date-input__item">
@@ -47,10 +47,10 @@
                     <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"
                             id="{{ params.id }}-ampm"
                             name="{{ params.id }}[ampm]">
-                        <option value="am" {% if params.formResponses[params.id]['ampm'] == 'am' %} selected {% endif %}>
+                        <option value="am" {% if params.formResponses['ampm'] == 'am' %} selected {% endif %}>
                             am
                         </option>
-                        <option value="pm" {% if params.formResponses[params.id]['ampm'] == 'pm' %} selected {% endif %}>
+                        <option value="pm" {% if params.formResponses['ampm'] == 'pm' %} selected {% endif %}>
                             pm
                         </option>
                     </select>

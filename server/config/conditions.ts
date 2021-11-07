@@ -17,6 +17,7 @@ import ApprovedAddress from '../routes/creatingLicences/types/additionalConditio
 import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholMonitoringPeriod'
 import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInputs/curfewTerms'
 import CurfewAddress from '../routes/creatingLicences/types/additionalConditionInputs/curfewAddress'
+import NoContactWithVictim from '../routes/creatingLicences/types/additionalConditionInputs/noContactWithVictim'
 
 export default {
   version: '1.0',
@@ -188,12 +189,31 @@ export default {
       text: 'Should you return to the UK and Islands before the expiry date of your licence then your licence conditions will be in force and you must report within two working days to your supervising officer.',
       requiresInput: false,
     },
-    // {
-    //   code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
-    //   category: 'Making or maintaining contact with a person',
-    //   text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
-    //   requiresInput: true,
-    // },
+    {
+      code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
+      category: 'Making or maintaining contact with a person',
+      text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name of victim or family member',
+          name: 'name',
+          addAnother: {
+            label: 'Add another person',
+          },
+        },
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter the social services department',
+          name: 'socialServicesDepartment',
+          addAnother: {
+            label: 'Add another social services department',
+          },
+        },
+      ],
+      type: NoContactWithVictim,
+    },
     {
       code: '4a5fed48-0fb9-4711-8ddf-b46ddfd90246',
       category: 'Making or maintaining contact with a person',
@@ -572,7 +592,7 @@ export default {
     //   code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
     //   category:
     //     'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
-    //   text: 'Report to staff at [NAME OF APPROVED PREMISES / POLICE STATION] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+    //   text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
     //   requiresInput: true,
     // },
     {
