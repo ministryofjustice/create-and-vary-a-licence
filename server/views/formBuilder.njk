@@ -198,7 +198,7 @@
         }
     }) %}
         {{ govukInput({
-            id: input.name,
+            id: input.name if not input.addAnother else input.name + '-' + index,
             name: input.name if not input.addAnother else input.name + '[' + index + ']',
             classes: "govuk-!-width-one-half",
             label: {

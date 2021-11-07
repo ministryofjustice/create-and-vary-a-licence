@@ -32,6 +32,7 @@ describe('Create a Licence Views - Check Answers', () => {
             text: 'Template 1',
             data: [
               {
+                field: 'field1',
                 value: 'Data 1',
               },
             ],
@@ -42,10 +43,16 @@ describe('Create a Licence Views - Check Answers', () => {
             text: 'Template 2',
             data: [
               {
+                field: 'field2',
                 value: 'Data 2A',
               },
               {
+                field: 'field2',
                 value: 'Data 2B',
+              },
+              {
+                field: 'field3',
+                value: 'Data 2C',
               },
             ],
           },
@@ -71,10 +78,10 @@ describe('Create a Licence Views - Check Answers', () => {
     )
     expect(
       $('#additional-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
-    ).toBe('Data 2A')
+    ).toBe('Data 2A | Data 2B')
     expect(
       $('#additional-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
-    ).toBe('Data 2B')
+    ).toBe('Data 2C')
   })
 
   it('should display a table containing the bespoke conditions', () => {
