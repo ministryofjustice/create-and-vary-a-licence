@@ -46,7 +46,7 @@ export function getGroupedAdditionalConditions(): Record<string, unknown>[] {
 export function expandAdditionalConditions(conditions: AdditionalCondition[]): string[] {
   const expandedConditions: string[] = []
 
-  conditions.forEach(condition => {
+  conditions?.forEach(condition => {
     const configCondition = getAdditionalConditionByCode(condition.code)
     if (configCondition?.requiresInput) {
       const placeholders = getPlaceholderNames(configCondition.tpl as string)
@@ -131,7 +131,7 @@ const getPlaceholderNames = (template: string): string[] => {
  * @param value
  */
 const replacePlaceholderWithValue = (ph: string, template: string, value: string): string => {
-  return template.replace(`{${ph}}`, (instance: string): string => {
+  return template.replace(`{${ph}}`, (): string => {
     return value
   })
 }
@@ -142,7 +142,7 @@ const replacePlaceholderWithValue = (ph: string, template: string, value: string
  * @param template
  */
 const removeNamedPlaceholder = (ph: string, template: string): string => {
-  return template.replace(`{${ph}}`, (instance: string): string => {
+  return template.replace(`{${ph}}`, (): string => {
     return ''
   })
 }
@@ -152,7 +152,7 @@ const removeNamedPlaceholder = (ph: string, template: string): string => {
  * @param template
  */
 const removeAllPlaceholders = (template: string): string => {
-  return template.replace(/\{(.*?)}/g, (instance: string): string => {
+  return template.replace(/\{(.*?)}/g, (): string => {
     return ''
   })
 }
