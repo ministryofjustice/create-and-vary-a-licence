@@ -17,7 +17,7 @@
    - imageData(offender image).
    - htmlPrint(true/false).
    - licence - already in context as is in res.locals (from fetchLicenceMiddleware).
-   - additionalConditons - string[] containing additional conditions with placeholders replaced with values.
+   - additionalConditons - string[] containing additional conditions with placeholders expanded with values.
 #}
 
 {% set offenderName = licence.forename + " " + licence.surname %}
@@ -33,7 +33,7 @@
     {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}
     {{ induction(licence.appointmentPerson, licence.appointmentAddress, licence.appointmentTime, licence.comTelephone) }}
     {{ releasedToOther() }}
-    {{ conditions(licence.standardConditions, licence.additionalConditions, licence.bespokeConditions) }}
+    {{ conditions(licence.standardConditions, additionalConditions, licence.bespokeConditions) }}
     {{ cancellation() }}
     {{ recall() }}
     {{ failureToComply() }}

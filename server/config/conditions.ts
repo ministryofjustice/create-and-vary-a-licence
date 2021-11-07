@@ -435,6 +435,7 @@ export default {
       code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
       category: 'Curfew arrangement',
       text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+      tpl: 'Confine yourself to an address approved by your supervising officer between the hours of {curfewStart} and {curfewEnd} daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {reviewPeriod} basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
       subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
       requiresInput: true,
       inputs: [
@@ -452,6 +453,7 @@ export default {
           type: InputTypes.RADIO,
           label: 'Select a review period',
           name: 'reviewPeriod',
+          case: 'lower',
           options: [
             {
               value: 'Weekly',
@@ -685,8 +687,8 @@ export default {
     {
       code: '599bdcae-d545-461c-b1a9-02cb3d4ba268',
       category: 'Electronic monitoring',
-      text: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitoring for a period of [INSERT TIMEFRAME AND END DATE], and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
-      tpl: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitoring for a period of {timeframe} {endDate}, and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
+      text: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitored for a period of [INSERT TIMEFRAME] ending on [END DATE], and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
+      tpl: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitored for a period of {timeframe} ending on {endDate}, and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
       requiresInput: true,
       inputs: [
         {

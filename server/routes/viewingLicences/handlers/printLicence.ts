@@ -20,20 +20,16 @@ export default class PrintLicenceRoutes {
     const { username } = res.locals.user
     const { licence } = res.locals
     const htmlPrint = true
-
-    const listOfExpandedConditions = expandAdditionalConditions(licence.additionalConditions)
-
+    const additionalConditions = expandAdditionalConditions(licence.additionalConditions)
     logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
-    res.render(`pages/licence/${licence.typeCode}`, { htmlPrint })
+    res.render(`pages/licence/${licence.typeCode}`, { additionalConditions, htmlPrint })
   }
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
     const { username } = res.locals.user
     const { licence } = res.locals
-
-    // Specify licencesUrl for assets so that it is used in the NJK template as http://host.docker.internal:3000/assets
     const { licencesUrl, pdfOptions } = config.apis.gotenberg
-
+    const additionalConditions = expandAdditionalConditions(licence.additionalConditions)
     const imageData = await this.prisonerService.getPrisonerImageData(username, licence.nomsId)
     const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.lastName}.pdf`
     const footerHtml = this.getPdfFooter(
@@ -46,12 +42,10 @@ export default class PrintLicenceRoutes {
       licence.version,
       licence.prisonCode
     )
-
     logger.info(`PDF print licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
-
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
-      { licencesUrl, imageData, htmlPrint: false },
+      { licencesUrl, imageData, additionalConditions, htmlPrint: false },
       { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
     )
   }
