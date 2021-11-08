@@ -155,7 +155,7 @@ export function registerNunjucks(app?: express.Express): Environment {
       }
     })
     return Array.from(map, ([fieldName, items]) => ({ fieldName, items })).map(groupedDataItems => {
-      return groupedDataItems.items.map((dataItem: AdditionalConditionData) => dataItem.value).join(' | ')
+      return groupedDataItems.items.map((dataItem: AdditionalConditionData) => dataItem.value).join(', ')
     })
   })
 
