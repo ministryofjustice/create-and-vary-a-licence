@@ -70,6 +70,8 @@ export interface components {
       status: 'IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
       /** The username of the person who is updating this status */
       username: string
+      /** The full name of the person who is updating this status */
+      fullName?: string
     }
     ErrorResponse: {
       status: number
@@ -331,6 +333,8 @@ export interface components {
       approvedDate?: string
       /** The username who approved the licence on behalf of the prison governor */
       approvedByUsername?: string
+      /** The full name of the person who approved the licence on behalf of the prison governor */
+      approvedByName?: string
       /** The date and time that this licence was superseded by a new variant */
       supersededDate?: string
       /** The date and time that this licence was first created */

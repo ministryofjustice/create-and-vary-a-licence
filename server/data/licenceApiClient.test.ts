@@ -247,22 +247,27 @@ describe('Licence API client tests', () => {
 
   describe('Licence status updates', () => {
     describe('Approved', () => {
-      const statusUpdateRequest = { status: LicenceStatus.APPROVED, username } as StatusUpdateRequest
+      const statusUpdateRequest = {
+        status: LicenceStatus.APPROVED,
+        username,
+        fullName: 'Joe Bloggs',
+      } as StatusUpdateRequest
+
       it('Update the licence to APPROVED', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
         fakeApi.put('/licence/id/1/status', statusUpdateRequest).reply(200)
-        await licenceService.updateStatus('1', LicenceStatus.APPROVED, username)
+        await licenceService.updateStatus('1', LicenceStatus.APPROVED, username, 'Joe Bloggs')
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
     })
 
     describe('Rejected', () => {
-      const statusUpdateRequest = { status: LicenceStatus.REJECTED, username } as StatusUpdateRequest
+      const statusUpdateRequest = { status: LicenceStatus.REJECTED, username, fullName: null } as StatusUpdateRequest
       it('Update the licence to REJECTED', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
         fakeApi.put('/licence/id/1/status', statusUpdateRequest).reply(200)
-        await licenceService.updateStatus('1', LicenceStatus.REJECTED, username)
+        await licenceService.updateStatus('1', LicenceStatus.REJECTED, username, null)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
