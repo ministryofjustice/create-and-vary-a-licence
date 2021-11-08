@@ -71,12 +71,14 @@ export default {
       code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
       category: 'Residence at a specific place',
       text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
+      tpl: 'You must reside within {probationRegion} while of no fixed abode, unless otherwise approved by your supervising officer.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.TEXT,
           label: 'What is the probation region?',
           name: 'probationRegion',
+          case: 'capitalised',
         },
       ],
       type: RegionOfResidence,
@@ -85,12 +87,14 @@ export default {
       code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
       category: 'Restriction of residency',
       text: 'Not to reside (not even to stay for one night) in the same household as [ANY / ANY FEMALE / ANY MALE] child under the age of [INSERT AGE] without the prior approval of your supervising officer.',
+      tpl: 'Not to reside (not even to stay for one night) in the same household as {gender} child under the age of {age} without the prior approval of your supervising officer.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.RADIO,
           label: 'Which gender?',
           name: 'gender',
+          case: 'lower',
           options: [
             {
               value: 'Any',
@@ -123,12 +127,14 @@ export default {
       code: 'b72fdbf2-0dc9-4e7f-81e4-c2ccb5d1bc90',
       category: 'Making or maintaining contact with a person',
       text: 'Attend all appointments arranged for you with a [PSYCHIATRIST / PSYCHOLOGIST / MEDICAL PRACTITIONER].',
+      tpl: 'Attend all appointments arranged for you with a {appointmentType}.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.RADIO,
           label: 'Who will the appointments be with?',
           name: 'appointmentType',
+          case: 'lower',
           options: [
             {
               value: 'Psychiatrist',
@@ -154,6 +160,7 @@ export default {
       code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
       category: 'Making or maintaining contact with a person',
       text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+      tpl: 'Attend {appointmentTime} {appointmentDate} {appointmentAddress}, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
       requiresInput: true,
       inputs: [
         {
@@ -189,12 +196,14 @@ export default {
       code: '4a5fed48-0fb9-4711-8ddf-b46ddfd90246',
       category: 'Making or maintaining contact with a person',
       text: 'Not to have unsupervised contact with [ANY / ANY FEMALE / ANY MALE] children under the age of [INSERT AGE] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT] except where that contact is inadvertent and not reasonably avoidable in the course of lawful daily life.',
+      tpl: 'Not to have unsupervised contact with {gender} children under the age of {age} without the prior approval of your supervising officer and / or {socialServicesDepartment} except where that contact is inadvertent and not reasonably avoidable in the course of lawful daily life.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.RADIO,
           label: 'Which gender?',
           name: 'gender',
+          case: 'lower',
           options: [
             {
               value: 'Any',
@@ -224,6 +233,7 @@ export default {
           type: InputTypes.TEXT,
           label: 'What is the social services department?',
           name: 'socialServicesDepartment',
+          case: 'capitalised',
         },
       ],
       type: UnsupervisedContact,
@@ -256,6 +266,7 @@ export default {
       code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
       category: 'Participation in, or co-operation with, a programme or set of activities',
       text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
+      tpl: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your {behaviourProblems} problems.',
       requiresInput: true,
       inputs: [
         {
@@ -302,6 +313,7 @@ export default {
       code: '9da214a3-c6ae-45e1-a465-12e22adf7c87',
       category: 'Participation in, or co-operation with, a programme or set of activities',
       text: 'Not to undertake work or other organised activity which will involve a person under the age of [INSERT AGE], either on a paid or unpaid basis without the prior approval of your supervising officer.',
+      tpl: 'Not to undertake work or other organised activity which will involve a person under the age of {age}, either on a paid or unpaid basis without the prior approval of your supervising officer.',
       requiresInput: true,
       inputs: [
         {
@@ -378,12 +390,14 @@ export default {
       code: 'db2d7e24-b130-4c7e-a1bf-6bb5f3036c02',
       category: 'Disclosure of information',
       text: 'Notify your supervising officer of any developing intimate relationships with [WOMEN / MEN / WOMEN OR MEN].',
+      tpl: 'Notify your supervising officer of any developing intimate relationships with {gender}.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.RADIO,
           label: 'Which gender?',
           name: 'gender',
+          case: 'lower',
           options: [
             {
               value: 'Men',
@@ -421,6 +435,7 @@ export default {
       code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
       category: 'Curfew arrangement',
       text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+      tpl: 'Confine yourself to an address approved by your supervising officer between the hours of {curfewStart} and {curfewEnd} daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {reviewPeriod} basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
       subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
       requiresInput: true,
       inputs: [
@@ -438,6 +453,7 @@ export default {
           type: InputTypes.RADIO,
           label: 'Select a review period',
           name: 'reviewPeriod',
+          case: 'lower',
           options: [
             {
               value: 'Weekly',
@@ -472,6 +488,7 @@ export default {
       code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
       category: 'Freedom of movement',
       text: 'Not to enter the area of [CLEARLY SPECIFIED AREA], as defined by the attached map without the prior approval of your supervising officer.',
+      tpl: 'Not to enter the area of {outOfBoundArea}, as defined by the attached map without the prior approval of your supervising officer.',
       requiresInput: true,
       inputs: [
         {
@@ -486,6 +503,7 @@ export default {
       code: '42f71b40-84cd-446d-8647-f00bbb6c079c',
       category: 'Freedom of movement',
       text: 'Not to enter [NAME / TYPE OF PREMISES / ADDRESS / ROAD] without the prior approval of your supervising officer.',
+      tpl: 'Not to enter {nameOfPremises} {premisesAddress} without the prior approval of your supervising officer.',
       requiresInput: true,
       inputs: [
         {
@@ -504,12 +522,14 @@ export default {
       code: 'c4a17002-88a3-43b4-b3f7-82ff476cb217',
       category: 'Freedom of movement',
       text: "Not to enter or remain in sight of any [CHILDREN'S PLAY AREA, SWIMMING BATHS, SCHOOL ETC] without the prior approval of your supervising officer.",
+      tpl: 'Not to enter or remain in sight of any {typeOfPremises} without the prior approval of your supervising officer.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.TEXT,
           label: 'Enter area or type of premises',
           name: 'typeOfPremises',
+          case: 'lower',
         },
       ],
       type: OutOfBoundsPremisesType,
@@ -579,6 +599,7 @@ export default {
       code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
       category: 'Drug testing',
       text: 'Attend [INSERT NAME AND ADDRESS], as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour.',
+      tpl: 'Attend {name} {address}, as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour.',
       requiresInput: true,
       inputs: [
         {
@@ -603,6 +624,7 @@ export default {
       code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
       category: 'Electronic monitoring',
       text: 'Allow person(s) as designated by your supervising officer to install an electronic monitoring tag on you and access to install any associated equipment in your property, and for the purpose of ensuring that equipment is functioning correctly. You must not damage or tamper with these devices and ensure that the tag is charged, and report to your supervising officer and the EM provider immediately if the tag or the associated equipment are not working correctly. This will be for the purpose of monitoring your [INSERT TYPES OF CONDITIONS TO BE ELECTRONICALLY MONITORED HERE] licence condition(s) unless otherwise authorised by your supervising officer.',
+      tpl: 'Allow person(s) as designated by your supervising officer to install an electronic monitoring tag on you and access to install any associated equipment in your property, and for the purpose of ensuring that equipment is functioning correctly. You must not damage or tamper with these devices and ensure that the tag is charged, and report to your supervising officer and the EM provider immediately if the tag or the associated equipment are not working correctly. This will be for the purpose of monitoring your {electronicMonitoringTypes} licence condition(s) unless otherwise authorised by your supervising officer.',
       requiresInput: true,
       inputs: [
         {
@@ -631,12 +653,14 @@ export default {
       code: '524f2fd6-ad53-47dd-8edc-2161d3dd2ed4',
       category: 'Electronic monitoring',
       text: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging for a period of [INSERT TIMEFRAME] ending on [INSERT END DATE] and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
+      tpl: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging for a period of {timeframe} ending on {endDate} and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.TEXT,
           label: 'Enter the timeframe',
           name: 'timeframe',
+          case: 'lower',
         },
         {
           type: InputTypes.DATE,
@@ -650,6 +674,7 @@ export default {
       code: '86e6f2a9-bb60-40f8-9ac4-310ebc72ac2f',
       category: 'Electronic monitoring',
       text: 'You must stay at [APPROVED ADDRESS] between 5pm and midnight every day until your electronic tag is installed unless otherwise authorised by your supervising officer.',
+      tpl: 'You must stay at {approvedAddress} between 5pm and midnight every day until your electronic tag is installed unless otherwise authorised by your supervising officer.',
       requiresInput: true,
       inputs: [
         {
@@ -662,7 +687,8 @@ export default {
     {
       code: '599bdcae-d545-461c-b1a9-02cb3d4ba268',
       category: 'Electronic monitoring',
-      text: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitoring for a period of [INSERT TIMEFRAME AND END DATE], and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
+      text: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitored for a period of [INSERT TIMEFRAME] ending on [END DATE], and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
+      tpl: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitored for a period of {timeframe} ending on {endDate}, and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
       requiresInput: true,
       inputs: [
         {
