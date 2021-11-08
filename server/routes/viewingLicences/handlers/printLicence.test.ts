@@ -37,7 +37,11 @@ describe('Route - print a licence', () => {
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       await handler.preview(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/licence/AP', { qrCode: 'a QR code', htmlPrint: true })
+      expect(res.render).toHaveBeenCalledWith('pages/licence/AP', {
+        additionalConditions: [],
+        qrCode: 'a QR code',
+        htmlPrint: true,
+      })
     })
 
     it('should render a HTML view of a PSS licence', async () => {
@@ -55,7 +59,11 @@ describe('Route - print a licence', () => {
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       await handler.preview(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', { qrCode: 'a QR code', htmlPrint: true })
+      expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', {
+        additionalConditions: [],
+        qrCode: 'a QR code',
+        htmlPrint: true,
+      })
     })
 
     it('should render a PDF view of an AP licence', async () => {
@@ -90,7 +98,13 @@ describe('Route - print a licence', () => {
 
       expect(res.renderPDF).toHaveBeenCalledWith(
         'pages/licence/AP',
-        { licencesUrl, imageData: '-- base64 image data --', qrCode: 'a QR code', htmlPrint: false },
+        {
+          licencesUrl,
+          imageData: '-- base64 image data --',
+          additionalConditions: [],
+          qrCode: 'a QR code',
+          htmlPrint: false,
+        },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
     })

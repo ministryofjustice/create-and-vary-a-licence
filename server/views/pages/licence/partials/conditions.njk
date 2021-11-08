@@ -18,8 +18,7 @@
 {%  macro additionalConditions(additionalConditions) %}
     {% for condition in additionalConditions %}
         <div class="condition" id="additional-{{ loop.index }}">
-            {#  TODO: In the route - or prior to calling - expand the text to include the data inside placeholders #}
-            {{ condition.text }}
+            {{ condition }}
         </div>
     {% endfor %}
 {% endmacro %}

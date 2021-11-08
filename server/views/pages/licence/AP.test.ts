@@ -36,23 +36,11 @@ describe('Print an AP licence', () => {
           { code: '6', text: 'Standard 6' },
           { code: '7', text: 'Standard 7' },
         ],
-        additionalConditions: [
-          {
-            code: 'condition1',
-            category: 'Category 1',
-            text: 'Template 1',
-            data: [
-              {
-                value: 'Data 1A',
-              },
-              {
-                value: 'Data 1B',
-              },
-            ],
-          },
-        ],
         bespokeConditions: [{ text: 'Bespoke condition 1' }],
       },
+      additionalConditions: [
+        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohold problems.',
+      ],
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -81,7 +69,7 @@ describe('Print an AP licence', () => {
 
     // Should be 7 standard, 1 additional and 1 bespoke conditions = 9 in total
     expect($('#conditions > .condition').length).toBe(9)
-    expect($('#additional-1').text().trim()).toEqual('Template 1')
+    expect($('#additional-1').text().trim()).toContain('drug and alcohol')
     expect($('#bespoke-1').text().trim()).toEqual('Bespoke condition 1')
 
     // Check the cancellation text is present

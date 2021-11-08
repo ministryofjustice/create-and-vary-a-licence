@@ -4,6 +4,7 @@ import config from '../../../config'
 import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
@@ -22,24 +23,25 @@ export default class PrintLicenceRoutes {
     const { licence } = res.locals // fetchLicence middleware populates
     const htmlPrint = true
     const qrCode = await this.qrCodeService.getQrCode(licence)
+    const additionalConditions = expandAdditionalConditions(licence.additionalConditions)
     logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
-    res.render(`pages/licence/${licence.typeCode}`, { qrCode, htmlPrint })
+    res.render(`pages/licence/${licence.typeCode}`, { additionalConditions, qrCode, htmlPrint })
   }
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
     const { username } = res.locals.user
-    const { licence } = res.locals // fetchLicence middleware populates
+    const { licence } = res.locals
     const { licencesUrl, pdfOptions } = config.apis.gotenberg
+    const additionalConditions = expandAdditionalConditions(licence.additionalConditions)
     const imageData = await this.prisonerService.getPrisonerImageData(username, licence.nomsId)
     const qrCode = await this.qrCodeService.getQrCode(licence)
     const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.lastName}.pdf`
     const footerHtml = this.getPdfFooter(licence)
 
     logger.info(`PDF print licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
-
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
-      { licencesUrl, imageData, qrCode, htmlPrint: false },
+      { licencesUrl, imageData, additionalConditions, qrCode, htmlPrint: false },
       { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
     )
   }
