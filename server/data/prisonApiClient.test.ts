@@ -189,12 +189,13 @@ describe('Prison API client tests', () => {
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
     })
 
-    it('Get prisoner image - replace with placeholder - base64 string', async () => {
+    it('Get prisoner image - replace with placeholder file - base64 string', async () => {
       const errorResponse = {}
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
       fakeApi.get('/api/bookings/offenderNo/AA1234A/image/data').reply(404, errorResponse)
       const data = await prisonerService.getPrisonerImageData('XTEST1', 'AA1234A')
-      expect(data).toEqual('')
+      // Matches the first few characters of the encoded missing image placeholder
+      expect(data).toContain('iVBORw0KGgoAAAA')
       expect(nock.isDone()).toBe(true)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
     })
