@@ -163,6 +163,27 @@ export default {
                 },
               ],
             },
+            {
+              id: 5,
+              code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
+              category: 'Possession, ownership, control or inspection of specified items or documents',
+              sequence: 4,
+              text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
+              data: [
+                {
+                  id: 10,
+                  sequence: 0,
+                  field: 'item',
+                  value: 'Knives',
+                },
+                {
+                  id: 11,
+                  sequence: 1,
+                  field: 'item',
+                  value: 'Needles',
+                },
+              ],
+            },
           ],
           bespokeConditions: [
             {

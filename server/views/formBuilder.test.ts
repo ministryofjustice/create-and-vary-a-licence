@@ -38,6 +38,48 @@ describe('View Partials - Form builder', () => {
     expect($('#textbox').length).toBe(1)
   })
 
+  it('should build Add Another fieldsets correctly for text input', () => {
+    viewContext = {
+      additionalCondition: {
+        data: [
+          {
+            field: 'textbox',
+            value: 'Data 1',
+          },
+          {
+            field: 'textbox',
+            value: 'Data 2',
+          },
+          {
+            field: 'textbox',
+            value: 'Data 3',
+          },
+        ],
+      },
+      config: {
+        inputs: [
+          {
+            type: 'text',
+            label: 'label for textbox',
+            name: 'textbox',
+            addAnother: {
+              label: 'Add another textbox',
+            },
+          },
+        ],
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('.govuk-form-group').length).toBe(3)
+    expect($('#textbox\\[0\\]').attr('value')).toBe('Data 1')
+    expect($('#textbox\\[1\\]').attr('value')).toBe('Data 2')
+    expect($('#textbox\\[2\\]').attr('value')).toBe('Data 3')
+    expect($('.moj-add-another__remove-button').length).toBe(3)
+    expect($('.moj-button-action > .moj-add-another__add-button').length).toBe(1)
+  })
+
   it('should build a radio input correctly', () => {
     viewContext = {
       formResponses: [],
@@ -49,7 +91,7 @@ describe('View Partials - Form builder', () => {
           {
             type: 'radio',
             label: 'label for radio',
-            name: 'radio buttons',
+            name: 'radioButton',
             options: [
               {
                 value: 'option1',
@@ -83,7 +125,7 @@ describe('View Partials - Form builder', () => {
           {
             type: 'radio',
             label: 'label for radio',
-            name: 'radio buttons',
+            name: 'radioButton',
             options: [
               {
                 value: 'option1',
@@ -109,11 +151,11 @@ describe('View Partials - Form builder', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('.govuk-form-group').length).toBe(2)
-    expect($('.govuk-fieldset__legend').text().trim()).toBe('label for radio')
+    expect($('.govuk-fieldset__legend').first().text().trim()).toBe('label for radio')
     expect($('.govuk-radios__item').length).toBe(2)
     expect($('.govuk-radios__item:nth-child(1) > label').text().trim()).toBe('option1')
     expect($('.govuk-radios__item:nth-child(2) > label').text().trim()).toBe('option2')
-    expect($('.govuk-radios__conditional > .govuk-form-group > label').text().trim()).toBe('Conditional Textbox')
+    expect($('#conditional-radioButton-2 label').text().trim()).toBe('Conditional Textbox')
   })
 
   it('should build a date picker input correctly', () => {

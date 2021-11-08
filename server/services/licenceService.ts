@@ -159,6 +159,8 @@ export default class LicenceService {
   ): Promise<void> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
 
+    let sequenceNumber = -1
+
     const requestBody = {
       data: Object.keys(formData)
         .filter(key => formData[key])
@@ -176,12 +178,15 @@ export default class LicenceService {
               sequence: i || index,
             }
           }
+
           if (Array.isArray(formData[key])) {
-            return formData[key].map((v: string, i: number) => {
-              return build(v, i + index)
+            return formData[key].map((v: string) => {
+              sequenceNumber += 1
+              return build(v, sequenceNumber)
             })
           }
-          return build(formData[key])
+          sequenceNumber += 1
+          return build(formData[key], sequenceNumber)
         }),
     } as UpdateAdditionalConditionDataRequest
 

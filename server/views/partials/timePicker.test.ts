@@ -121,9 +121,7 @@ describe('View Partials - Time Picker', () => {
       options: {
         id: 'timePicker',
         formResponses: {
-          timePicker: {
-            ampm: 'am',
-          },
+          ampm: 'am',
         },
       },
     }
@@ -140,9 +138,7 @@ describe('View Partials - Time Picker', () => {
       options: {
         id: 'timePicker',
         formResponses: {
-          timePicker: {
-            ampm: 'pm',
-          },
+          ampm: 'pm',
         },
       },
     }
@@ -159,9 +155,7 @@ describe('View Partials - Time Picker', () => {
       options: {
         id: 'timePicker',
         formResponses: {
-          timePicker: {
-            ampm: 'am',
-          },
+          ampm: 'am',
         },
       },
     }

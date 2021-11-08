@@ -1,4 +1,5 @@
 import { Readable } from 'stream'
+import fs from 'fs'
 import type HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
@@ -9,24 +10,25 @@ import logger from '../../logger'
 export default class PrisonerService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
-  // For streaming into templates directly
+  // For streaming into HTML templates directly
   async getPrisonerImage(username: string, nomsId: string): Promise<Readable> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     return new PrisonApiClient(token).getPrisonerImage(nomsId)
   }
 
-  // For embedding into PDF documents as base64 jpeg data
+  // For embedding into PDF documents as base64 jpeg or png data string
   async getPrisonerImageData(username: string, nomsId: string): Promise<string> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    let image = null
+    let base64String
     try {
-      image = await new PrisonApiClient(token).getPrisonerImageData(nomsId)
+      const image = await new PrisonApiClient(token).getPrisonerImageData(nomsId)
+      base64String = image.toString('base64')
     } catch (error) {
-      // TODO: Read the placeholder image here? From assets
       logger.info(`No image data found for ${nomsId} - sending placeholder image`)
-      image = Buffer.from('')
+      const content = await fs.readFileSync('assets/images/image-missing.png')
+      base64String = Buffer.from(content).toString('base64')
     }
-    return image.toString('base64')
+    return base64String
   }
 
   async getPrisonerDetail(username: string, nomsId: string): Promise<PrisonApiPrisoner> {

@@ -48,7 +48,8 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): s
 
   conditions?.forEach(condition => {
     const configCondition = getAdditionalConditionByCode(condition.code)
-    if (configCondition?.requiresInput) {
+    // TODO: Remove configCondition.tpl from here when all conditions which require input have a template
+    if (configCondition?.requiresInput && configCondition.tpl) {
       const placeholders = getPlaceholderNames(configCondition.tpl as string)
       const inputConfig = configCondition.inputs as unknown as Record<string, unknown>[]
       let thisConditionText = configCondition.tpl as string
