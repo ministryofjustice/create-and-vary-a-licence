@@ -6,6 +6,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const username = 'joebloggs'
+const displayName = 'Joe Bloggs'
 
 describe('Route - view and approve a licence', () => {
   const handler = new ApprovalViewRoutes(licenceService)
@@ -28,7 +29,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username },
+          user: { username, displayName },
           licence: {
             id: 1,
             statusCode: LicenceStatus.SUBMITTED,
@@ -49,7 +50,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username },
+          user: { username, displayName },
           licence: {
             id: 1,
             statusCode: LicenceStatus.APPROVED,
@@ -70,7 +71,7 @@ describe('Route - view and approve a licence', () => {
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
-      locals: { user: { username } },
+      locals: { user: { username, displayName } },
     } as unknown as Response
 
     it('should approve a licence', async () => {
@@ -79,7 +80,7 @@ describe('Route - view and approve a licence', () => {
       } as unknown as Request
 
       await handler.POST(req, res)
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.APPROVED, username)
+      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.APPROVED, username, displayName)
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/id/1/confirm-approved')
     })
 
