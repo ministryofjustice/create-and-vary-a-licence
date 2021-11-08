@@ -24,13 +24,14 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
+
                 {{ datePicker({
                     id: "date",
                     hint: {
                         text: "For example, 12 11 2022"
                     },
                     errorMessage: validationErrors | findError('date'),
-                    formResponses: formDate | fillFormResponse(formResponses)
+                    formResponses: formResponses.date or formDate.date
                 }) }}
 
                 {{ timePicker({
@@ -42,7 +43,7 @@
                         text: "For example, 9:30am or 2:55pm"
                     },
                     errorMessage: validationErrors | findError('time'),
-                    formResponses: formDate | fillFormResponse(formResponses)
+                    formResponses: formResponses.time or formDate.time
                 }) }}
 
                 {{ govukButton({

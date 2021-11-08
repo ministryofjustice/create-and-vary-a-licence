@@ -44,7 +44,7 @@ describe('Create a Licence Views - Bespoke Conditions', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('textarea').length).toBe(1)
-    expect($('#condition-0').text()).toBe('bespokeCondition1')
+    expect($('#conditions\\[0\\]').text()).toBe('bespokeCondition1')
   })
 
   it('should not display a remove button if just one condition exists on the licence', () => {
@@ -65,8 +65,8 @@ describe('Create a Licence Views - Bespoke Conditions', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('textarea').length).toBe(2)
-    expect($('#condition-0').text()).toBe('bespokeCondition1')
-    expect($('#condition-1').text()).toBe('bespokeCondition2')
+    expect($('#conditions\\[0\\]').text()).toBe('bespokeCondition1')
+    expect($('#conditions\\[1\\]').text()).toBe('bespokeCondition2')
   })
 
   it('should display two remove buttons if 2 conditions exist on the licence', () => {
