@@ -18,6 +18,10 @@ import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additional
 import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInputs/curfewTerms'
 import CurfewAddress from '../routes/creatingLicences/types/additionalConditionInputs/curfewAddress'
 import NoContactWithVictim from '../routes/creatingLicences/types/additionalConditionInputs/noContactWithVictim'
+import ReportToStaff from '../routes/creatingLicences/types/additionalConditionInputs/reportToStaff'
+import SpecifiedItem from '../routes/creatingLicences/types/additionalConditionInputs/specifiedItem'
+import NamedIndividuals from '../routes/creatingLicences/types/additionalConditionInputs/namedIndividuals'
+import NamedOrganisation from '../routes/creatingLicences/types/additionalConditionInputs/namedOrganisation'
 
 export default {
   version: '1.0',
@@ -260,12 +264,23 @@ export default {
       ],
       type: UnsupervisedContact,
     },
-    // {
-    //   code: '355700a9-6184-40c0-9759-0dfed1994e1e',
-    //   category: 'Making or maintaining contact with a person',
-    //   text: 'Not to contact or associate with [NAMED OFFENDER(S) / NAMED INDIVIDUAL(S)] without the prior approval of your supervising officer.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '355700a9-6184-40c0-9759-0dfed1994e1e',
+      category: 'Making or maintaining contact with a person',
+      text: 'Not to contact or associate with [NAMED OFFENDER(S) / NAMED INDIVIDUAL(S)] without the prior approval of your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name of offender or individual',
+          name: 'nameOfIndividual',
+          addAnother: {
+            label: 'Add another person',
+          },
+        },
+      ],
+      type: NamedIndividuals,
+    },
     {
       code: '0aa669bf-db8a-4b8e-b8ba-ca82fc245b94',
       category: 'Making or maintaining contact with a person',
@@ -278,12 +293,23 @@ export default {
       text: 'Not to contact directly or indirectly any person who is a serving or remand prisoner or detained in State custody, without the prior approval of your supervising officer.',
       requiresInput: false,
     },
-    // {
-    //   code: '18b69f61-800f-46b2-95c4-2019d33e34d6',
-    //   category: 'Making or maintaining contact with a person',
-    //   text: 'Not to associate with any person currently or formerly associated with [NAME OF DESCRIBE SPECIFIC GROUPS OR ORGANISATIONS] without the prior approval of your supervising officer.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '18b69f61-800f-46b2-95c4-2019d33e34d6',
+      category: 'Making or maintaining contact with a person',
+      text: 'Not to associate with any person currently or formerly associated with [NAMES OF SPECIFIC GROUPS OR ORGANISATIONS] without the prior approval of your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter the name of group or organisation',
+          name: 'nameOfOrganisation',
+          addAnother: {
+            label: 'Add another group or organisation',
+          },
+        },
+      ],
+      type: NamedOrganisation,
+    },
     {
       code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
       category: 'Participation in, or co-operation with, a programme or set of activities',
@@ -396,12 +422,23 @@ export default {
       text: 'Not to delete the usage history on any internet enabled device or computer used and to allow such items to be inspected as required by the police or your supervising officer. Such inspection may include removal of the device for inspection and the installation of monitoring software.',
       requiresInput: false,
     },
-    // {
-    //   code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
-    //   category: 'Possession, ownership, control or inspection of specified items or documents',
-    //   text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
+      category: 'Possession, ownership, control or inspection of specified items or documents',
+      text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter the name of the item',
+          name: 'item',
+          addAnother: {
+            label: 'Add another item',
+          },
+        },
+      ],
+      type: SpecifiedItem,
+    },
     {
       code: '2a93b784-b8cb-49ed-95e2-a0df60723cda',
       category: 'Disclosure of information',
@@ -588,13 +625,51 @@ export default {
       text: 'To only attend places of worship which have been previously agreed with your supervising officer.',
       requiresInput: false,
     },
-    // {
-    //   code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
-    //   category:
-    //     'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
-    //   text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+      category:
+        'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
+      text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name of approved premises',
+          name: 'approvedPremises',
+        },
+        {
+          type: InputTypes.TIME,
+          label: 'Enter a reporting time',
+          name: 'reportingTime',
+        },
+        {
+          type: InputTypes.RADIO,
+          label: 'Select a review period',
+          name: 'reviewPeriod',
+          options: [
+            {
+              value: 'Weekly',
+            },
+            {
+              value: 'Monthly',
+            },
+            {
+              value: 'Other',
+              conditional: {
+                inputs: [
+                  {
+                    type: InputTypes.TEXT,
+                    label: 'Enter a review period',
+                    name: 'alternativeReviewPeriod',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+      type: ReportToStaff,
+    },
     {
       code: '7a9ca3bb-922a-433a-9601-1e475c6c0095',
       category: 'Restriction of specified conduct or specified acts',
