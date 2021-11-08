@@ -241,24 +241,6 @@ export default class LicenceService {
     return []
   }
 
-  getLicenceForPdf(): Record<string, unknown> {
-    return {
-      licenceId: 1,
-      licenceType: 'AP',
-      lastName: 'Harrison',
-      firstName: 'Tim',
-      dateOfBirth: '11/02/1970',
-      prisonId: 'MDI',
-      prisonDescription: 'HMP Moorland',
-      roLastName: 'Smith',
-      roFirstName: 'Sarah',
-      roEmail: 'sarah.smith@nps.north.gov.uk',
-      roTelephone: '0161 234 234',
-      nomsId: 'A1234AG',
-      pnc: '2015/1234344',
-    }
-  }
-
   /**
    * Build the list for the staff caseload view.
    * Return the caseload for this staff member, merged with the licences which exist for these people.
