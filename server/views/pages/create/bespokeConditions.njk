@@ -63,7 +63,7 @@
 
 {% macro bespokeCondition(conditionIndex, conditionValue) %}
     {{ govukTextarea({
-        id: 'condition-' + conditionIndex,
+        id: 'conditions[' + conditionIndex + ']',
         name: 'conditions[' + conditionIndex + ']',
         label: {
             html: 'Bespoke condition',
