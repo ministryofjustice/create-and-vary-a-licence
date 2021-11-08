@@ -200,9 +200,9 @@ export default class LicenceService {
     return new LicenceApiClient(token).updateBespokeConditions(id, requestBody)
   }
 
-  async updateStatus(id: string, newStatus: LicenceStatus, username: string): Promise<void> {
+  async updateStatus(id: string, newStatus: LicenceStatus, username: string, fullName: string = null): Promise<void> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    const requestBody = { status: newStatus, username } as StatusUpdateRequest
+    const requestBody = { status: newStatus, username, fullName } as StatusUpdateRequest
     return new LicenceApiClient(token).updateLicenceStatus(id, requestBody)
   }
 

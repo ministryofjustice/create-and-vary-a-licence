@@ -194,12 +194,14 @@ export default {
       code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
       category: 'Making or maintaining contact with a person',
       text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
+      tpl: 'Not to seek to approach or communicate with {name} without the prior approval of your supervising officer and / or {socialServicesDepartment}.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.TEXT,
           label: 'Enter name of victim or family member',
           name: 'name',
+          case: 'capitalise',
           addAnother: {
             label: 'Add another person',
           },
@@ -208,6 +210,7 @@ export default {
           type: InputTypes.TEXT,
           label: 'Enter the social services department',
           name: 'socialServicesDepartment',
+          case: 'capitalise',
           addAnother: {
             label: 'Add another social services department',
           },
@@ -265,12 +268,14 @@ export default {
       code: '355700a9-6184-40c0-9759-0dfed1994e1e',
       category: 'Making or maintaining contact with a person',
       text: 'Not to contact or associate with [NAMED OFFENDER(S) / NAMED INDIVIDUAL(S)] without the prior approval of your supervising officer.',
+      tpl: 'Not to contact or associate with {nameOfIndividual} without the prior approval of your supervising officer.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.TEXT,
           label: 'Enter name of offender or individual',
           name: 'nameOfIndividual',
+          case: 'capitalise',
           addAnother: {
             label: 'Add another person',
           },
@@ -294,6 +299,7 @@ export default {
       code: '18b69f61-800f-46b2-95c4-2019d33e34d6',
       category: 'Making or maintaining contact with a person',
       text: 'Not to associate with any person currently or formerly associated with [NAMES OF SPECIFIC GROUPS OR ORGANISATIONS] without the prior approval of your supervising officer.',
+      tpl: 'Not to associate with any person currently or formerly associated with {nameOfOrganisation} without the prior approval of your supervising officer.',
       requiresInput: true,
       inputs: [
         {
@@ -423,6 +429,7 @@ export default {
       code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
       category: 'Possession, ownership, control or inspection of specified items or documents',
       text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
+      tpl: 'Not to own or possess a {item} without the prior approval of your supervising officer.',
       requiresInput: true,
       inputs: [
         {
@@ -538,6 +545,7 @@ export default {
       code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
       category: 'Curfew arrangement',
       text: 'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
+      tpl: 'Confine yourself to remain at {curfewAddress} initially from {curfewStart} until {curfewEnd} each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
       subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
       requiresInput: true,
       inputs: [
@@ -627,12 +635,14 @@ export default {
       category:
         'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
       text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+      tpl: 'Report to staff at {approvedPremises} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {reviewPeriod} {alternativeReviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.TEXT,
           label: 'Enter name of approved premises',
           name: 'approvedPremises',
+          case: 'capitalised',
         },
         {
           type: InputTypes.TIME,
@@ -643,6 +653,7 @@ export default {
           type: InputTypes.RADIO,
           label: 'Select a review period',
           name: 'reviewPeriod',
+          case: 'lower',
           options: [
             {
               value: 'Weekly',
