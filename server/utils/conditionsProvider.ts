@@ -93,8 +93,7 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): s
 export const produceValueAsFormattedList = (listType = 'AND', matchingDataItems: AdditionalConditionData[]): string => {
   let value = ''
   let valueCounter = 1
-  for (let i = 0; i < matchingDataItems.length; i += 1) {
-    const mdi = matchingDataItems[i]
+  matchingDataItems.forEach(mdi => {
     if (valueCounter < matchingDataItems.length - 1) {
       value = value.concat(`${mdi.value}, `)
     } else if (valueCounter === matchingDataItems.length - 1) {
@@ -103,7 +102,7 @@ export const produceValueAsFormattedList = (listType = 'AND', matchingDataItems:
       value = value.concat(`${mdi.value}`)
     }
     valueCounter += 1
-  }
+  })
   return value
 }
 
