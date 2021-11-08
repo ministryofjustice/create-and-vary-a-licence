@@ -73,9 +73,9 @@ describe('View Partials - Form builder', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('.govuk-form-group').length).toBe(3)
-    expect($('#textbox-0').attr('value')).toBe('Data 1')
-    expect($('#textbox-1').attr('value')).toBe('Data 2')
-    expect($('#textbox-2').attr('value')).toBe('Data 3')
+    expect($('#textbox\\[0\\]').attr('value')).toBe('Data 1')
+    expect($('#textbox\\[1\\]').attr('value')).toBe('Data 2')
+    expect($('#textbox\\[2\\]').attr('value')).toBe('Data 3')
     expect($('.moj-add-another__remove-button').length).toBe(3)
     expect($('.moj-button-action > .moj-add-another__add-button').length).toBe(1)
   })

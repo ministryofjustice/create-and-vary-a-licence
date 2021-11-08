@@ -88,7 +88,7 @@ describe('View and print - single licence view', () => {
     )
     expect(
       $('#additional-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
-    ).toBe('Data 2A | Data 2B')
+    ).toBe('Data 2A, Data 2B')
     expect(
       $('#additional-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
     ).toBe('Data 2C')
