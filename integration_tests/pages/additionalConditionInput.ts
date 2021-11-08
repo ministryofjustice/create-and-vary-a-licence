@@ -17,9 +17,9 @@ export default class AdditionalConditionsInputPage extends Page {
     return this
   }
 
-  enterText = (text: string, fieldId?: string): AdditionalConditionsInputPage => {
-    if (fieldId) {
-      cy.get(`#${fieldId}`).type(text)
+  enterText = (text: string, fieldName?: string): AdditionalConditionsInputPage => {
+    if (fieldName) {
+      cy.get(`input[name="${fieldName}"]`).type(text)
     } else {
       cy.get('.govuk-form-group > input').type(text)
     }
@@ -61,6 +61,11 @@ export default class AdditionalConditionsInputPage extends Page {
 
   checkBoxes = (): AdditionalConditionsInputPage => {
     cy.get('.govuk-checkboxes__input').click({ multiple: true })
+    return this
+  }
+
+  clickAddAnother = (): AdditionalConditionsInputPage => {
+    cy.get('.moj-add-another__add-button ').click()
     return this
   }
 

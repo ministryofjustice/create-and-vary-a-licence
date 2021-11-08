@@ -11,7 +11,6 @@ class UnsupervisedContact {
   age: string
 
   @Expose()
-  @IsNotEmpty({ message: 'Enter a social services department' })
   socialServicesDepartment: string
 }
 

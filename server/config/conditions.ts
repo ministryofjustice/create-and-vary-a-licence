@@ -16,6 +16,12 @@ import ElectronicMonitoringPeriod from '../routes/creatingLicences/types/additio
 import ApprovedAddress from '../routes/creatingLicences/types/additionalConditionInputs/approvedAddress'
 import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholMonitoringPeriod'
 import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInputs/curfewTerms'
+import CurfewAddress from '../routes/creatingLicences/types/additionalConditionInputs/curfewAddress'
+import NoContactWithVictim from '../routes/creatingLicences/types/additionalConditionInputs/noContactWithVictim'
+import ReportToStaff from '../routes/creatingLicences/types/additionalConditionInputs/reportToStaff'
+import SpecifiedItem from '../routes/creatingLicences/types/additionalConditionInputs/specifiedItem'
+import NamedIndividuals from '../routes/creatingLicences/types/additionalConditionInputs/namedIndividuals'
+import NamedOrganisation from '../routes/creatingLicences/types/additionalConditionInputs/namedOrganisation'
 
 export default {
   version: '1.0',
@@ -63,9 +69,6 @@ export default {
       },
     ],
   },
-
-  // TODO: CVSL-184: Still to do - conditional reveal radio buttons and "Add another".
-  // TODO: CVSL-187: Still to do - review validation messages
   additionalConditions: [
     {
       code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
@@ -175,6 +178,7 @@ export default {
         },
         {
           type: InputTypes.ADDRESS,
+          label: 'Enter the address for the appointment',
           name: 'appointmentAddress',
         },
       ],
@@ -186,12 +190,31 @@ export default {
       text: 'Should you return to the UK and Islands before the expiry date of your licence then your licence conditions will be in force and you must report within two working days to your supervising officer.',
       requiresInput: false,
     },
-    // {
-    //   code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
-    //   category: 'Making or maintaining contact with a person',
-    //   text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
-    //   requiresInput: true,
-    // },
+    {
+      code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
+      category: 'Making or maintaining contact with a person',
+      text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name of victim or family member',
+          name: 'name',
+          addAnother: {
+            label: 'Add another person',
+          },
+        },
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter the social services department',
+          name: 'socialServicesDepartment',
+          addAnother: {
+            label: 'Add another social services department',
+          },
+        },
+      ],
+      type: NoContactWithVictim,
+    },
     {
       code: '4a5fed48-0fb9-4711-8ddf-b46ddfd90246',
       category: 'Making or maintaining contact with a person',
@@ -238,12 +261,23 @@ export default {
       ],
       type: UnsupervisedContact,
     },
-    // {
-    //   code: '355700a9-6184-40c0-9759-0dfed1994e1e',
-    //   category: 'Making or maintaining contact with a person',
-    //   text: 'Not to contact or associate with [NAMED OFFENDER(S) / NAMED INDIVIDUAL(S)] without the prior approval of your supervising officer.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '355700a9-6184-40c0-9759-0dfed1994e1e',
+      category: 'Making or maintaining contact with a person',
+      text: 'Not to contact or associate with [NAMED OFFENDER(S) / NAMED INDIVIDUAL(S)] without the prior approval of your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name of offender or individual',
+          name: 'nameOfIndividual',
+          addAnother: {
+            label: 'Add another person',
+          },
+        },
+      ],
+      type: NamedIndividuals,
+    },
     {
       code: '0aa669bf-db8a-4b8e-b8ba-ca82fc245b94',
       category: 'Making or maintaining contact with a person',
@@ -256,12 +290,23 @@ export default {
       text: 'Not to contact directly or indirectly any person who is a serving or remand prisoner or detained in State custody, without the prior approval of your supervising officer.',
       requiresInput: false,
     },
-    // {
-    //   code: '18b69f61-800f-46b2-95c4-2019d33e34d6',
-    //   category: 'Making or maintaining contact with a person',
-    //   text: 'Not to associate with any person currently or formerly associated with [NAME OF DESCRIBE SPECIFIC GROUPS OR ORGANISATIONS] without the prior approval of your supervising officer.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '18b69f61-800f-46b2-95c4-2019d33e34d6',
+      category: 'Making or maintaining contact with a person',
+      text: 'Not to associate with any person currently or formerly associated with [NAMES OF SPECIFIC GROUPS OR ORGANISATIONS] without the prior approval of your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter the name of group or organisation',
+          name: 'nameOfOrganisation',
+          addAnother: {
+            label: 'Add another group or organisation',
+          },
+        },
+      ],
+      type: NamedOrganisation,
+    },
     {
       code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
       category: 'Participation in, or co-operation with, a programme or set of activities',
@@ -374,12 +419,23 @@ export default {
       text: 'Not to delete the usage history on any internet enabled device or computer used and to allow such items to be inspected as required by the police or your supervising officer. Such inspection may include removal of the device for inspection and the installation of monitoring software.',
       requiresInput: false,
     },
-    // {
-    //   code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
-    //   category: 'Possession, ownership, control or inspection of specified items or documents',
-    //   text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
+      category: 'Possession, ownership, control or inspection of specified items or documents',
+      text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter the name of the item',
+          name: 'item',
+          addAnother: {
+            label: 'Add another item',
+          },
+        },
+      ],
+      type: SpecifiedItem,
+    },
     {
       code: '2a93b784-b8cb-49ed-95e2-a0df60723cda',
       category: 'Disclosure of information',
@@ -478,12 +534,31 @@ export default {
       ],
       type: CurfewTerms,
     },
-    // {
-    //   code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
-    //   category: 'Curfew arrangement',
-    //   text: 'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
-    //   requiresInput: true,
-    // },
+    {
+      code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
+      category: 'Curfew arrangement',
+      text: 'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
+      subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.ADDRESS,
+          label: 'Enter the curfew address',
+          name: 'curfewAddress',
+        },
+        {
+          type: InputTypes.TIME,
+          label: 'Enter the curfew start time',
+          name: 'curfewStart',
+        },
+        {
+          type: InputTypes.TIME,
+          label: 'Enter the curfew end time',
+          name: 'curfewEnd',
+        },
+      ],
+      type: CurfewAddress,
+    },
     {
       code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
       category: 'Freedom of movement',
@@ -513,6 +588,7 @@ export default {
         },
         {
           type: InputTypes.ADDRESS,
+          label: 'Enter the address of the premises',
           name: 'premisesAddress',
         },
       ],
@@ -546,13 +622,51 @@ export default {
       text: 'To only attend places of worship which have been previously agreed with your supervising officer.',
       requiresInput: false,
     },
-    // {
-    //   code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
-    //   category:
-    //     'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
-    //   text: 'Report to staff at [NAME OF APPROVED PREMISES / POLICE STATION] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-    //   requiresInput: true,
-    // },
+    {
+      code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+      category:
+        'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
+      text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name of approved premises',
+          name: 'approvedPremises',
+        },
+        {
+          type: InputTypes.TIME,
+          label: 'Enter a reporting time',
+          name: 'reportingTime',
+        },
+        {
+          type: InputTypes.RADIO,
+          label: 'Select a review period',
+          name: 'reviewPeriod',
+          options: [
+            {
+              value: 'Weekly',
+            },
+            {
+              value: 'Monthly',
+            },
+            {
+              value: 'Other',
+              conditional: {
+                inputs: [
+                  {
+                    type: InputTypes.TEXT,
+                    label: 'Enter a review period',
+                    name: 'alternativeReviewPeriod',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+      type: ReportToStaff,
+    },
     {
       code: '7a9ca3bb-922a-433a-9601-1e475c6c0095',
       category: 'Restriction of specified conduct or specified acts',
@@ -609,6 +723,7 @@ export default {
         },
         {
           type: InputTypes.ADDRESS,
+          label: 'Enter address',
           name: 'address',
         },
       ],
@@ -679,6 +794,7 @@ export default {
       inputs: [
         {
           type: InputTypes.ADDRESS,
+          label: 'Enter the approved address',
           name: 'approvedAddress',
         },
       ],
