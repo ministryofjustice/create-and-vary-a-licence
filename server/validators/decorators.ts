@@ -17,6 +17,6 @@ export function IsSimpleTimeAfter(property: string, validationOptions?: Validati
 
 export function IsOptional() {
   return ValidateIf((object, value) => {
-    return hasEmptyFields(value)
+    return !hasEmptyFields(value)
   })
 }

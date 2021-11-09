@@ -80,6 +80,42 @@ describe('View Partials - Form builder', () => {
     expect($('.moj-button-action > .moj-add-another__add-button').length).toBe(1)
   })
 
+  it('should build a dropdown input correctly', () => {
+    viewContext = {
+      additionalCondition: {
+        data: [],
+      },
+      config: {
+        inputs: [
+          {
+            type: 'dropdown',
+            label: 'label for dropdown',
+            name: 'dropdownBox',
+            options: [
+              {
+                value: 'option 1',
+              },
+              {
+                value: 'option 2',
+              },
+            ],
+          },
+        ],
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('.govuk-form-group').length).toBe(1)
+    expect($('.govuk-label').text().trim()).toBe('label for dropdown')
+    expect($('#dropdownBox').length).toBe(1)
+    expect($('#dropdownBox').prop('tagName')).toBe('SELECT')
+    expect($('option').length).toBe(3)
+    expect($('option:nth-child(1)').text().trim()).toBe('-')
+    expect($('option:nth-child(2)').text().trim()).toBe('option 1')
+    expect($('option:nth-child(3)').text().trim()).toBe('option 2')
+  })
+
   it('should build a radio input correctly', () => {
     viewContext = {
       formResponses: [],

@@ -23,6 +23,12 @@ describe('Validators - ValidSimpleTime', () => {
     expect(validator.validate(time)).toBe(true)
   })
 
+  it('should fail validation when time field is undefined', () => {
+    time = undefined
+    expect(validator.validate(time)).toBe(false)
+    expect(validator.defaultMessage()).toBe('Enter a time')
+  })
+
   it('should fail validation when all fields are blank', () => {
     time.hour = ''
     time.minute = ''

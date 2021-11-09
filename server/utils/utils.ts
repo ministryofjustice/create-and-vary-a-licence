@@ -115,14 +115,17 @@ const filterCentralCaseload = (list: string[]): string[] => {
 const hasEmptyFields = (value: unknown) => {
   const objectIsEmpty = (val: unknown): boolean => {
     if (typeof val !== 'object') {
-      return val === null || val === undefined || val === ''
+      return val === undefined || val === ''
     }
-    return Object.values(val)
-      .map(v => objectIsEmpty(v))
-      .some(v => v === true)
+    return (
+      val === null ||
+      Object.values(val)
+        .map(v => objectIsEmpty(v))
+        .some(v => v === true)
+    )
   }
 
-  return !objectIsEmpty(value)
+  return objectIsEmpty(value)
 }
 
 export {
