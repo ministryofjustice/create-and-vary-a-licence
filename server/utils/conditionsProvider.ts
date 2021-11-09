@@ -45,48 +45,37 @@ export function getGroupedAdditionalConditions(): Record<string, unknown>[] {
  */
 export function expandAdditionalConditions(conditions: AdditionalCondition[]): string[] {
   const expandedConditions: string[] = []
-
   conditions?.forEach(condition => {
     const configCondition = getAdditionalConditionByCode(condition.code)
-    // TODO: Remove configCondition.tpl from here when all conditions which require input have a template
-    if (configCondition?.requiresInput && configCondition.tpl) {
+
+    if (configCondition?.requiresInput) {
       const placeholders = getPlaceholderNames(configCondition.tpl as string)
       const inputConfig = configCondition.inputs as unknown as Record<string, unknown>[]
-      let thisConditionText = configCondition.tpl as string
+      let conditionText = configCondition.tpl as string
 
-      for (let i = 0; i < placeholders.length; i += 1) {
-        // Remove the {} from the placeholders
-        const ph = placeholders[i].substr(1, placeholders[i].length - 2)
-
-        // Get the matching condition data by placeholder name === field name
-        const matchingDataItems = getMatchingDataItems(ph.trim(), condition.data)
+      placeholders.forEach(placeholder => {
+        const ph = placeholder.replace(/[{}]/g, '')?.trim()
+        const matchingDataItems = getMatchingDataItems(ph, condition.data)
 
         if (matchingDataItems.length === 0) {
           // Unmatched placeholder
-          thisConditionText = removeNamedPlaceholder(ph, thisConditionText)
+          conditionText = removeNamedPlaceholder(ph, conditionText)
         } else if (matchingDataItems.length === 1) {
           // Single matching value
           const rules = inputConfig.find(item => item.name === ph)
           const { value } = matchingDataItems[0]
-          thisConditionText = replacePlaceholderWithValue(
-            ph,
-            thisConditionText,
-            adjustCase(rules.case as string, value)
-          )
+          conditionText = replacePlaceholderWithValue(ph, conditionText, adjustCase(rules.case as string, value))
         } else {
-          // List of values for this placeholder
+          // List of values for this placeholder (lists of values can have listType 'AND' or 'OR')
           const rules = inputConfig.find(item => item.name === ph)
-          const value = produceValueAsFormattedList(matchingDataItems)
-          thisConditionText = replacePlaceholderWithValue(
-            ph,
-            thisConditionText,
-            adjustCase(rules.case as string, value)
-          )
+          const value = produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
+          conditionText = replacePlaceholderWithValue(ph, conditionText, adjustCase(rules.case as string, value))
         }
-      }
-      // Remove any that remain
-      thisConditionText = removeAllPlaceholders(thisConditionText)
-      expandedConditions.push(thisConditionText)
+      })
+
+      // Remove any unmatched placeholders that remain
+      conditionText = removeAllPlaceholders(conditionText)
+      expandedConditions.push(conditionText)
     } else {
       // No input was required - keep the condition text verbatim to print on the licence
       expandedConditions.push(condition.text)
@@ -97,23 +86,23 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): s
 }
 
 /**
- * Formats a list of data items according to rules (add commas, and)
+ * Formats a list of data items according to rules (add commas, 'and' or 'or')
+ * @param listType - either null, AND or OR - treat null as an AND
  * @param matchingDataItems
  */
-export const produceValueAsFormattedList = (matchingDataItems: AdditionalConditionData[]): string => {
+export const produceValueAsFormattedList = (listType = 'AND', matchingDataItems: AdditionalConditionData[]): string => {
   let value = ''
   let valueCounter = 1
-  for (let i = 0; i < matchingDataItems.length; i += 1) {
-    const mdi = matchingDataItems[i]
+  matchingDataItems.forEach(mdi => {
     if (valueCounter < matchingDataItems.length - 1) {
       value = value.concat(`${mdi.value}, `)
     } else if (valueCounter === matchingDataItems.length - 1) {
-      value = value.concat(`${mdi.value} and `)
+      value = listType && listType === 'OR' ? value.concat(`${mdi.value} or `) : value.concat(`${mdi.value} and `)
     } else {
       value = value.concat(`${mdi.value}`)
     }
     valueCounter += 1
-  }
+  })
   return value
 }
 
@@ -164,10 +153,7 @@ const removeAllPlaceholders = (template: string): string => {
  * @param value
  */
 const adjustCase = (caseRule: string, value: string): string => {
-  if (!caseRule) {
-    return value
-  }
-  switch (caseRule.toLowerCase()) {
+  switch (caseRule?.toLowerCase()) {
     case 'lower':
       return value.toLowerCase()
       break

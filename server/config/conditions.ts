@@ -201,6 +201,7 @@ export default {
           type: InputTypes.TEXT,
           label: 'Enter name of victim or family member',
           name: 'name',
+          listType: 'OR',
           case: 'capitalise',
           addAnother: {
             label: 'Add another person',
@@ -275,6 +276,7 @@ export default {
           type: InputTypes.TEXT,
           label: 'Enter name of offender or individual',
           name: 'nameOfIndividual',
+          listType: 'OR',
           case: 'capitalise',
           addAnother: {
             label: 'Add another person',
@@ -306,6 +308,7 @@ export default {
           type: InputTypes.TEXT,
           label: 'Enter the name of group or organisation',
           name: 'nameOfOrganisation',
+          listType: 'OR',
           addAnother: {
             label: 'Add another group or organisation',
           },
@@ -324,6 +327,7 @@ export default {
           type: InputTypes.CHECK,
           label: 'Select all that apply',
           name: 'behaviourProblems',
+          listType: 'AND',
           options: [
             {
               value: 'alcohol',
@@ -436,6 +440,7 @@ export default {
           type: InputTypes.TEXT,
           label: 'Enter the name of the item',
           name: 'item',
+          listType: 'OR',
           addAnother: {
             label: 'Add another item',
           },
@@ -757,6 +762,7 @@ export default {
           type: InputTypes.CHECK,
           label: 'Select all that apply',
           name: 'electronicMonitoringTypes',
+          listType: 'AND',
           options: [
             {
               value: 'exclusion zone',

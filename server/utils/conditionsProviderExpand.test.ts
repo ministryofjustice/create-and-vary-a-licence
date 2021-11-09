@@ -102,7 +102,7 @@ describe('Conditions Provider - expansions', () => {
       )
     })
 
-    it('Will replace placeholders for a list of 2 values with "and" between', () => {
+    it('Will replace placeholders for a list of 2 values with "and" between them (list type AND)', () => {
       const conditions: AdditionalCondition[] = [
         {
           id: 1,
@@ -123,7 +123,7 @@ describe('Conditions Provider - expansions', () => {
       )
     })
 
-    it('Will replace placeholders for a list of values with "commas" and "and" between', () => {
+    it('Will replace placeholders for a list of values with commas and "and" between (list type AND)', () => {
       const conditions: AdditionalCondition[] = [
         {
           id: 1,
@@ -145,6 +145,51 @@ describe('Conditions Provider - expansions', () => {
       expect(listOfConditions).toHaveLength(1)
       expect(listOfConditions[0]).toEqual(
         'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol, drug, sexual, violent, gambling and anger problems.'
+      )
+    })
+
+    it('Will replace placeholders for a list of 2 values with an "OR" between them (list type OR)', () => {
+      const conditions: AdditionalCondition[] = [
+        {
+          id: 1,
+          code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
+          category: 'Making or maintaining contact with a person',
+          sequence: 1,
+          text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
+          data: [
+            { id: 1, field: 'name', value: 'Jane Doe', sequence: 0 },
+            { id: 2, field: 'name', value: 'John Doe', sequence: 1 },
+            { id: 3, field: 'socialServicesDepartment', value: 'East Hull Social Services', sequence: 2 },
+          ],
+        },
+      ]
+      const listOfConditions = expandAdditionalConditions(conditions)
+      expect(listOfConditions).toHaveLength(1)
+      expect(listOfConditions[0]).toEqual(
+        'Not to seek to approach or communicate with Jane Doe or John Doe without the prior approval of your supervising officer and / or East Hull Social Services.'
+      )
+    })
+
+    it('Will replace placeholders for a list of values with commas and an "OR" between them (list type OR)', () => {
+      const conditions: AdditionalCondition[] = [
+        {
+          id: 1,
+          code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
+          category: 'Making or maintaining contact with a person',
+          sequence: 1,
+          text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
+          data: [
+            { id: 1, field: 'name', value: 'Jane Doe', sequence: 0 },
+            { id: 2, field: 'name', value: 'John Doe', sequence: 1 },
+            { id: 3, field: 'name', value: 'Jack Dont', sequence: 2 },
+            { id: 4, field: 'socialServicesDepartment', value: 'East Hull Social Services', sequence: 3 },
+          ],
+        },
+      ]
+      const listOfConditions = expandAdditionalConditions(conditions)
+      expect(listOfConditions).toHaveLength(1)
+      expect(listOfConditions[0]).toEqual(
+        'Not to seek to approach or communicate with Jane Doe, John Doe or Jack Dont without the prior approval of your supervising officer and / or East Hull Social Services.'
       )
     })
   })
