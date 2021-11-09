@@ -113,13 +113,14 @@ describe('Conditions Provider - expansions', () => {
           data: [
             { id: 1, field: 'behaviourProblems', value: 'alcohol', sequence: 0 },
             { id: 2, field: 'behaviourProblems', value: 'drug', sequence: 1 },
+            { id: 3, field: 'course', value: 'AA meeting', sequence: 2 },
           ],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
       expect(listOfConditions[0]).toEqual(
-        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol and drug problems.'
+        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol and drug problems at AA meeting.'
       )
     })
 
@@ -138,13 +139,14 @@ describe('Conditions Provider - expansions', () => {
             { id: 4, field: 'behaviourProblems', value: 'violent', sequence: 3 },
             { id: 5, field: 'behaviourProblems', value: 'gambling', sequence: 4 },
             { id: 6, field: 'behaviourProblems', value: 'anger', sequence: 5 },
+            { id: 7, field: 'course', value: 'AA meeting', sequence: 6 },
           ],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
       expect(listOfConditions[0]).toEqual(
-        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol, drug, sexual, violent, gambling and anger problems.'
+        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol, drug, sexual, violent, gambling and anger problems at AA meeting.'
       )
     })
 
