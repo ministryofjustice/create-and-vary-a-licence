@@ -355,7 +355,7 @@ export default {
     })
   },
 
-  stubGetLicencesForApproval: (): SuperAgentRequest => {
+  stubGetLicencesForStatus: (status: string): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -376,7 +376,7 @@ export default {
           {
             licenceId: licencePlaceholder.id,
             licenceType: licencePlaceholder.typeCode,
-            licenceStatus: 'SUBMITTED',
+            licenceStatus: status,
             nomisId: licencePlaceholder.nomsId,
             surname: licencePlaceholder.surname,
             forename: licencePlaceholder.forename,

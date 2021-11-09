@@ -173,7 +173,7 @@ export default {
       favicon(),
       redirect(),
       signOut(),
-      token(['ROLE_LICENCE_DM'], 'nomis'),
+      token(['ROLE_LICENCE_DM', 'ROLE_LICENCE_CA'], 'nomis'),
       tokenVerification.stubVerifyToken(),
     ]),
   stubUser: (): Promise<[Response, Response, Response]> =>
