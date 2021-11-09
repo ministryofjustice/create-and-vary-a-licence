@@ -47,6 +47,9 @@
                     <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"
                             id="{{ params.id }}-ampm"
                             name="{{ params.id }}[ampm]">
+                        <option value="">
+                            -
+                        </option>
                         <option value="am" {% if params.formResponses['ampm'] == 'am' %} selected {% endif %}>
                             am
                         </option>

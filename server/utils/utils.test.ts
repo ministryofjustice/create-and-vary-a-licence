@@ -12,7 +12,7 @@ import {
   removeDuplicates,
   filterCentralCaseload,
   jsonDtToDateWithDay,
-  hasEmptyFields,
+  objectIsEmpty,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -253,20 +253,20 @@ describe('Filter central case load', () => {
 
 describe('Check empty object', () => {
   it('should return true if value is undefined', () => {
-    expect(hasEmptyFields(undefined)).toBe(true)
+    expect(objectIsEmpty(undefined)).toBe(true)
   })
 
   it('should return true if value is empty string', () => {
-    expect(hasEmptyFields('')).toBe(true)
+    expect(objectIsEmpty('')).toBe(true)
   })
 
   it('should return true if value is null', () => {
-    expect(hasEmptyFields(null)).toBe(true)
+    expect(objectIsEmpty(null)).toBe(true)
   })
 
   it('should return true if value is object with empty fields', () => {
     expect(
-      hasEmptyFields({
+      objectIsEmpty({
         field1: '',
         field2: null,
         field3: undefined,
@@ -274,10 +274,12 @@ describe('Check empty object', () => {
     ).toBe(true)
   })
 
-  it('should return false if value is object with no empty fields', () => {
+  it('should return false if value is object with non-empty fields', () => {
     expect(
-      hasEmptyFields({
+      objectIsEmpty({
         field1: 'populated',
+        field2: null,
+        field3: undefined,
       })
     ).toBe(false)
   })

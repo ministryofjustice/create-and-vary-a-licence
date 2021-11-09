@@ -1,6 +1,6 @@
 import { registerDecorator, ValidateIf, ValidationOptions } from 'class-validator'
 import isSimpleTimeAfter from './isSimpleTimeAfter'
-import { hasEmptyFields } from '../utils/utils'
+import { objectIsEmpty } from '../utils/utils'
 
 export function IsSimpleTimeAfter(property: string, validationOptions?: ValidationOptions) {
   return (object: unknown, propertyName: string) => {
@@ -17,6 +17,12 @@ export function IsSimpleTimeAfter(property: string, validationOptions?: Validati
 
 export function IsOptional() {
   return ValidateIf((object, value) => {
-    return !hasEmptyFields(value)
+    return !objectIsEmpty(value)
+  })
+}
+
+export function Either(fieldName: string) {
+  return ValidateIf((object, value) => {
+    return !objectIsEmpty(value) || objectIsEmpty(object[fieldName])
   })
 }

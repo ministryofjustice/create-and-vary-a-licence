@@ -19,7 +19,7 @@ export default class ValidSimpleTime implements ValidatorConstraintInterface {
   }
 
   private isBlank(): boolean {
-    return !this.time || [this.time.hour, this.time.minute].join('').length === 0
+    return !this.time || [this.time.hour, this.time.minute, this.time.ampm].join('').length === 0
   }
 
   private isValidHour(): boolean {

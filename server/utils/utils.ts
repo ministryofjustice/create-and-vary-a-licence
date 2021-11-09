@@ -112,20 +112,20 @@ const filterCentralCaseload = (list: string[]): string[] => {
   return filteredCaseload
 }
 
-const hasEmptyFields = (value: unknown) => {
-  const objectIsEmpty = (val: unknown): boolean => {
+const objectIsEmpty = (value: unknown) => {
+  const empty = (val: unknown): boolean => {
     if (typeof val !== 'object') {
       return val === undefined || val === ''
     }
     return (
       val === null ||
       Object.values(val)
-        .map(v => objectIsEmpty(v))
-        .some(v => v === true)
+        .map(v => empty(v))
+        .every(v => v === true)
     )
   }
 
-  return objectIsEmpty(value)
+  return empty(value)
 }
 
 export {
@@ -141,5 +141,5 @@ export {
   convertDateFormat,
   removeDuplicates,
   filterCentralCaseload,
-  hasEmptyFields,
+  objectIsEmpty,
 }
