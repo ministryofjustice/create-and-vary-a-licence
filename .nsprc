@@ -2,9 +2,5 @@
   "1004746": {
     "active": true,
     "notes": "Ignored as there is no fix for moderate issue in class-validator - check back later"
-  },
-  "1004784": {
-    "active": true,
-    "notes": "Ignored as transient dependency from class-validator for which no fix - check back later"
   }
 }
