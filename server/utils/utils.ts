@@ -112,6 +112,19 @@ const filterCentralCaseload = (list: string[]): string[] => {
   return filteredCaseload
 }
 
+const hasEmptyFields = (value: unknown) => {
+  const objectIsEmpty = (val: unknown): boolean => {
+    if (typeof val !== 'object') {
+      return val === null || val === undefined || val === ''
+    }
+    return Object.values(val)
+      .map(v => objectIsEmpty(v))
+      .some(v => v === true)
+  }
+
+  return !objectIsEmpty(value)
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -125,4 +138,5 @@ export {
   convertDateFormat,
   removeDuplicates,
   filterCentralCaseload,
+  hasEmptyFields,
 }

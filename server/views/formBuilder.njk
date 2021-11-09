@@ -1,5 +1,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
@@ -21,6 +22,32 @@
                     {% else %}
                         {{ textInput(input, validationError, "", 0, false) }}
                     {% endfor %}
+            {% endif %}
+
+            {% if input.type == 'dropdown' %}
+                {% set options = [{
+                    value: "",
+                    text: "-"
+                }] %}
+                {% for option in input.options %}
+                    {% set options = (options.push({
+                        text: option.value,
+                        value: option.value,
+                        selected: option.value in formValues
+                    }), options) %}
+                {% endfor %}
+
+                {{ govukSelect({
+                    id: input.name,
+                    name: input.name,
+                    classes: "govuk-!-width-one-half",
+                    label: {
+                        text: input.label,
+                        classes: "govuk-!-font-weight-bold"
+                    },
+                    items: options,
+                    errorMessage: validationError
+                }) }}
             {% endif %}
 
             {% if input.type == 'radio' %}

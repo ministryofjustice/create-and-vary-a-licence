@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator'
 
 class ElectronicMonitoringTypes {
   @Expose()
-  @IsNotEmpty({ message: 'Select the options that apply, like exclusion zone and curfew' })
+  @IsNotEmpty({ message: 'Select the options that apply' })
   electronicMonitoringTypes: string[]
 }
 
