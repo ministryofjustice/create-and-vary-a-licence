@@ -1,5 +1,5 @@
 import { plainToClass } from 'class-transformer'
-import SimpleTime from '../routes/creatingLicences/types/time'
+import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import ValidSimpleTime from './simpleTimeValidator'
 
 describe('Validators - ValidSimpleTime', () => {
@@ -23,9 +23,16 @@ describe('Validators - ValidSimpleTime', () => {
     expect(validator.validate(time)).toBe(true)
   })
 
+  it('should fail validation when time field is undefined', () => {
+    time = undefined
+    expect(validator.validate(time)).toBe(false)
+    expect(validator.defaultMessage()).toBe('Enter a time')
+  })
+
   it('should fail validation when all fields are blank', () => {
     time.hour = ''
     time.minute = ''
+    time.ampm = <AmPm>''
     expect(validator.validate(time)).toBe(false)
     expect(validator.defaultMessage()).toBe('Enter a time')
   })

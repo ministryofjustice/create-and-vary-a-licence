@@ -1,5 +1,6 @@
 enum InputTypes {
   TEXT = 'text',
+  DROPDOWN = 'dropdown',
   RADIO = 'radio',
   CHECK = 'check',
   ADDRESS = 'address',

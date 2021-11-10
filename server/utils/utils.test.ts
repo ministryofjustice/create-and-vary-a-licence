@@ -12,6 +12,7 @@ import {
   removeDuplicates,
   filterCentralCaseload,
   jsonDtToDateWithDay,
+  objectIsEmpty,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -247,5 +248,39 @@ describe('Filter central case load', () => {
   it('should return an empty list', () => {
     const onlyCentralCaseload = ['CADM_I']
     expect(filterCentralCaseload(onlyCentralCaseload)).toHaveLength(0)
+  })
+})
+
+describe('Check empty object', () => {
+  it('should return true if value is undefined', () => {
+    expect(objectIsEmpty(undefined)).toBe(true)
+  })
+
+  it('should return true if value is empty string', () => {
+    expect(objectIsEmpty('')).toBe(true)
+  })
+
+  it('should return true if value is null', () => {
+    expect(objectIsEmpty(null)).toBe(true)
+  })
+
+  it('should return true if value is object with empty fields', () => {
+    expect(
+      objectIsEmpty({
+        field1: '',
+        field2: null,
+        field3: undefined,
+      })
+    ).toBe(true)
+  })
+
+  it('should return false if value is object with non-empty fields', () => {
+    expect(
+      objectIsEmpty({
+        field1: 'populated',
+        field2: null,
+        field3: undefined,
+      })
+    ).toBe(false)
   })
 })

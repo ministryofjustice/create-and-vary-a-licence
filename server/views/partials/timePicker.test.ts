@@ -116,23 +116,6 @@ describe('View Partials - Time Picker', () => {
     expect($('.govuk-error-message').length).toBe(0)
   })
 
-  it('should mark AM time option as selected when AM is in the form response', () => {
-    viewContext = {
-      options: {
-        id: 'timePicker',
-        formResponses: {
-          ampm: 'am',
-        },
-      },
-    }
-    const nunjucksString = '{% from "partials/timePicker.njk" import timePicker %}{{ timePicker(options)}}'
-    compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-    expect($('#timePicker-ampm > option:nth-child(1)').attr('selected')).toBe('selected')
-    expect($('#timePicker-ampm > option:nth-child(2)').attr('selected')).toBeUndefined()
-  })
-
   it('should mark PM time option as selected when AM is in the form response', () => {
     viewContext = {
       options: {
@@ -147,7 +130,8 @@ describe('View Partials - Time Picker', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('#timePicker-ampm > option:nth-child(1)').attr('selected')).toBeUndefined()
-    expect($('#timePicker-ampm > option:nth-child(2)').attr('selected')).toBe('selected')
+    expect($('#timePicker-ampm > option:nth-child(2)').attr('selected')).toBeUndefined()
+    expect($('#timePicker-ampm > option:nth-child(3)').attr('selected')).toBe('selected')
   })
 
   it('should mark AM time option as selected when AM is in the form response', () => {
@@ -163,8 +147,9 @@ describe('View Partials - Time Picker', () => {
     compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#timePicker-ampm > option:nth-child(1)').attr('selected')).toBe('selected')
-    expect($('#timePicker-ampm > option:nth-child(2)').attr('selected')).toBeUndefined()
+    expect($('#timePicker-ampm > option:nth-child(1)').attr('selected')).toBeUndefined()
+    expect($('#timePicker-ampm > option:nth-child(2)').attr('selected')).toBe('selected')
+    expect($('#timePicker-ampm > option:nth-child(3)').attr('selected')).toBeUndefined()
   })
 
   it('should not mark either time option as selected when timePicker is not in the form response', () => {
