@@ -42,7 +42,7 @@ export default {
     AP: [
       {
         code: '9ce9d594-e346-4785-9642-c87e764bee37',
-        text: 'Be of good behaviour and not behave in a way which undermines the purpose of the licence period.',
+        text: 'Be of good behaviour and not do anything which could undermine the purposes of the licence period.',
       },
       {
         code: '3b19fdb0-4ca3-4615-9fdd-61fabc1587af',
@@ -50,11 +50,11 @@ export default {
       },
       {
         code: '3361683a-504a-4357-ae22-6aa01b370b4a',
-        text: 'Keep in touch with the supervising officer in accordance with instructions given by the supervising officer.',
+        text: 'Keep in touch with the supervising officer in accordance with any instructions given by the supervising officer.',
       },
       {
         code: '9fc04065-df29-4bda-9b1d-bced8335c356',
-        text: 'Receive visits from the supervising officer in accordance with instructions given by the supervising officer.',
+        text: 'Receive visits from the supervising officer in accordance with any instructions given by the supervising officer.',
       },
       {
         code: 'e670ac69-eda2-4b04-a0a1-a3c8492fe1e6',
@@ -66,7 +66,41 @@ export default {
       },
       {
         code: '7d416906-0e94-4fde-ae86-8339d339ccb7',
-        text: 'Not travel outside the United Kingdom, the Channel Islands or the Isle of Man except with the prior permission of your supervising officer or for the purposes of immigration deportation or removal.',
+        text: 'Not travel outside the United Kingdom, the Channel Islands or the Isle of Man except with the prior permission of the supervising officer or for the purposes of immigration deportation or removal.',
+      },
+    ],
+    PSS: [
+      {
+        code: 'b3cd4a30-11fd-4715-9ebb-ed89f5386e1f',
+        text: 'Be of good behaviour and not behave in a way that undermines the rehabilitative purpose of the supervision period.',
+      },
+      {
+        code: 'b950407d-2270-45b8-9666-3ad58a17d0be',
+        text: 'Not commit any offence.',
+      },
+      {
+        code: '93413832-9954-4907-a64d-eb8a56e34afb',
+        text: 'Keep in touch with your supervisor in accordance with instructions given by your supervisor.',
+      },
+      {
+        code: '9288e01c-e40e-4040-8b6e-57092361f422',
+        text: 'Receive visits from your supervisor in accordance with instructions given by your supervisor.',
+      },
+      {
+        code: '8e15cf42-f8e0-4408-a33e-d16a3448b7bd',
+        text: 'Reside permanently at an address approved by your supervisor and obtain the prior permission of the supervisor for any stay of one or more nights at a different address.',
+      },
+      {
+        code: '0ed57797-2745-4592-a78b-8e4d712c580e',
+        text: 'Not undertake work, or a particular type of work, unless it is approved by your supervisor and notify your supervisor in advance of any proposal to undertake work or a particular type of work.',
+      },
+      {
+        code: 'c8966621-088a-4b87-9a19-752ff8b900c6',
+        text: 'Not travel outside the United Kingdom, the Channel Islands or the Isle of Man except with the prior permission of your supervisor or in order to comply with a legal obligation (whether or not arising under the law of any part of the United Kingdom and Islands).',
+      },
+      {
+        code: '579060fd-e412-471c-94d7-2fefa06d5052',
+        text: 'Participate in activities in accordance with any instructions given by your supervisor.',
       },
     ],
   },
