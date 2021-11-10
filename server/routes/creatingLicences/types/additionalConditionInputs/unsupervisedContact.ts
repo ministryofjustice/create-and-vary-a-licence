@@ -1,6 +1,5 @@
 import { Expose } from 'class-transformer'
 import { IsNotEmpty } from 'class-validator'
-import RemoveEmptyArrayItems from '../../../../transformers/removeEmptyArrayItems'
 
 class UnsupervisedContact {
   @Expose()
@@ -12,8 +11,7 @@ class UnsupervisedContact {
   age: string
 
   @Expose()
-  @RemoveEmptyArrayItems()
-  socialServicesDepartment: string[]
+  socialServicesDepartment: string
 }
 
 export default UnsupervisedContact
