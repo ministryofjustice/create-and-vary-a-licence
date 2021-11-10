@@ -3,11 +3,11 @@ import { IsNotEmpty } from 'class-validator'
 
 class RestrictionOfResidency {
   @Expose()
-  @IsNotEmpty({ message: 'Select a gender' })
+  @IsNotEmpty({ message: 'Select the relevant gender' })
   gender: string
 
   @Expose()
-  @IsNotEmpty({ message: 'Select an age' })
+  @IsNotEmpty({ message: 'Select the relevant age' })
   age: string
 }
 

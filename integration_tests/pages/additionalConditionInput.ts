@@ -17,6 +17,15 @@ export default class AdditionalConditionsInputPage extends Page {
     return this
   }
 
+  selectOption = (text: string, fieldName?: string): AdditionalConditionsInputPage => {
+    if (fieldName) {
+      cy.get(`select[name="${fieldName}"]`).type(text)
+    } else {
+      cy.get('.govuk-form-group > select').select(text)
+    }
+    return this
+  }
+
   enterText = (text: string, fieldName?: string): AdditionalConditionsInputPage => {
     if (fieldName) {
       cy.get(`input[name="${fieldName}"]`).type(text)

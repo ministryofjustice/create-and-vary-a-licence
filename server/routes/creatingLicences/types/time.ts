@@ -25,11 +25,14 @@ class SimpleTime extends Stringable {
   ampm: AmPm
 
   stringify(): string {
-    return this.toMoment().format('hh:mm a')
+    if (this.hour && this.minute && this.ampm) {
+      return this.toMoment().format('hh:mm a')
+    }
+    return ''
   }
 
   toMoment(): Moment {
-    return moment([this.hour, this.minute, this.ampm].join('-'), ['hh-mm-a'], true)
+    return moment([this.hour, this.minute, this.ampm].join('-'), ['hh-mm-a'])
   }
 
   static fromString(value: string): SimpleTime {

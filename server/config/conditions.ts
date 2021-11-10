@@ -78,10 +78,36 @@ export default {
       requiresInput: true,
       inputs: [
         {
-          type: InputTypes.TEXT,
-          label: 'What is the probation region?',
+          type: InputTypes.DROPDOWN,
+          label: 'Select the probation region',
           name: 'probationRegion',
           case: 'capitalised',
+          options: [
+            {
+              value: 'London',
+            },
+            {
+              value: 'Midlands',
+            },
+            {
+              value: 'North East',
+            },
+            {
+              value: 'North West',
+            },
+            {
+              value: 'South East',
+            },
+            {
+              value: 'South West',
+            },
+            {
+              value: 'South Central',
+            },
+            {
+              value: 'Wales',
+            },
+          ],
         },
       ],
       type: RegionOfResidence,
@@ -95,7 +121,7 @@ export default {
       inputs: [
         {
           type: InputTypes.RADIO,
-          label: 'Which gender?',
+          label: 'Select the relevant text',
           name: 'gender',
           case: 'lower',
           options: [
@@ -112,7 +138,7 @@ export default {
         },
         {
           type: InputTypes.RADIO,
-          label: 'Which age?',
+          label: 'Select the relevant age',
           name: 'age',
           options: [
             {
@@ -134,10 +160,11 @@ export default {
       requiresInput: true,
       inputs: [
         {
-          type: InputTypes.RADIO,
-          label: 'Who will the appointments be with?',
+          type: InputTypes.CHECK,
+          label: 'Select all the relevant options',
           name: 'appointmentType',
           case: 'lower',
+          listType: 'AND',
           options: [
             {
               value: 'Psychiatrist',
@@ -168,12 +195,12 @@ export default {
       inputs: [
         {
           type: InputTypes.TIME,
-          label: 'Enter time',
+          label: 'Enter time (optional)',
           name: 'appointmentTime',
         },
         {
           type: InputTypes.DATE,
-          label: 'Enter date',
+          label: 'Enter date (optional)',
           name: 'appointmentDate',
         },
         {
@@ -209,9 +236,10 @@ export default {
         },
         {
           type: InputTypes.TEXT,
-          label: 'Enter the social services department',
+          label: 'Enter social services department (optional)',
           name: 'socialServicesDepartment',
           case: 'capitalise',
+          listType: 'AND',
           addAnother: {
             label: 'Add another social services department',
           },
@@ -228,7 +256,7 @@ export default {
       inputs: [
         {
           type: InputTypes.RADIO,
-          label: 'Which gender?',
+          label: 'Select the relevant gender',
           name: 'gender',
           case: 'lower',
           options: [
@@ -245,22 +273,26 @@ export default {
         },
         {
           type: InputTypes.RADIO,
-          label: 'Which age?',
+          label: 'Select the relevant age',
           name: 'age',
           options: [
             {
-              value: '16',
+              value: '16 years',
             },
             {
-              value: '18',
+              value: '18 years',
             },
           ],
         },
         {
           type: InputTypes.TEXT,
-          label: 'What is the social services department?',
+          label: 'Enter social services department (optional)',
           name: 'socialServicesDepartment',
-          case: 'capitalised',
+          case: 'capitalise',
+          listType: 'AND',
+          addAnother: {
+            label: 'Add another social services department',
+          },
         },
       ],
       type: UnsupervisedContact,
@@ -319,8 +351,8 @@ export default {
     {
       code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
       category: 'Participation in, or co-operation with, a programme or set of activities',
-      text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
-      tpl: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your {behaviourProblems} problems.',
+      text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific / offending behaviour problems at [NAME OF COURSE / CENTRE].',
+      tpl: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your {behaviourProblems} problems at {course}.',
       requiresInput: true,
       inputs: [
         {
@@ -361,6 +393,11 @@ export default {
             },
           ],
         },
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name of course or centre (optional)',
+          name: 'course',
+        },
       ],
       type: BehaviourProblems,
     },
@@ -373,14 +410,14 @@ export default {
       inputs: [
         {
           type: InputTypes.RADIO,
-          label: 'What is the age?',
+          label: 'Select the relevant age',
           name: 'age',
           options: [
             {
-              value: '16',
+              value: '16 years',
             },
             {
-              value: '18',
+              value: '18 years',
             },
           ],
         },
@@ -463,7 +500,7 @@ export default {
       inputs: [
         {
           type: InputTypes.RADIO,
-          label: 'Which gender?',
+          label: 'Select the relevant text',
           name: 'gender',
           case: 'lower',
           options: [
@@ -774,7 +811,7 @@ export default {
               value: 'location monitoring',
             },
             {
-              value: 'attendance',
+              value: 'attendance at appointments',
             },
           ],
         },
@@ -796,7 +833,7 @@ export default {
         },
         {
           type: InputTypes.DATE,
-          label: 'Enter end date',
+          label: 'Enter the end date',
           name: 'endDate',
         },
       ],
@@ -831,7 +868,7 @@ export default {
         },
         {
           type: InputTypes.DATE,
-          label: 'Enter end date',
+          label: 'Enter the end date',
           name: 'endDate',
         },
       ],
