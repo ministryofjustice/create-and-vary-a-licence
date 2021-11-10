@@ -29,7 +29,7 @@ services:
     image: quay.io/hmpps/create-and-vary-a-licence-api:latest
     networks:
       - hmpps
-    container_name: creare-and-vary-a-licence-api
+    container_name: create-and-vary-a-licence-api
     restart: always
     ports:
       - "8089:8080"
