@@ -11,19 +11,6 @@ services:
     ports:
       - '6379:6379'
 
-  hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:latest
-    networks:
-      - hmpps
-    container_name: hmpps-auth 
-    ports:
-      - "9090:8080"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
-    environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - DELIUS_ENABLED=false
-
   # For the API to seed & interact with - there is no direct connection from the UI service
   licences-db:
     image: postgres
@@ -38,17 +25,19 @@ services:
       - POSTGRES_USER=create-and-vary-a-licence
       - POSTGRES_DB=create-and-vary-a-licence-db
 
-  prison-api:
-    image: quay.io/hmpps/prison-api:latest
+  create-and-vary-a-licence-api:
+    image: quay.io/hmpps/create-and-vary-a-licence-api
     networks:
       - hmpps
-    container_name: prison-api
+    container_name: creare-and-vary-a-licence-api
+    restart: always
     ports:
-      - "8080:8080"
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      - "8089:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=nomis-hsqldb
+      - DB_USER=create-and-vary-a-licence
+      - DB_PASS=create-and-vary-a-licence
+      - HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal/create-and-vary-a-licence-db
 
   gotenberg:
     image: thecodingmachine/gotenberg:6.4.3
@@ -60,6 +49,18 @@ services:
     restart: always
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
+
+  delius-wiremock:
+    image: smcveigh941/delius-wiremock
+    networks:
+      - hmpps
+    container_name: delius-wiremock
+    env_file:
+      - ./.env
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:5000/actuator/health' ]
 
 networks:
   hmpps:
