@@ -1,11 +1,14 @@
 import Page from './page'
 import CaseloadPage from './caseload'
 import ApprovalCasesPage from './approvalCases'
+import ViewCasesPage from './viewCases'
 
 export default class IndexPage extends Page {
   private createLicenceTileId = '#createLicenceCard'
 
   private approveLicenceTileId = '#approveLicenceCard'
+
+  private viewAndPrintTiledId = '#viewLicenceCard'
 
   constructor() {
     super('index-page')
@@ -25,5 +28,10 @@ export default class IndexPage extends Page {
   clickApproveALicence = (): ApprovalCasesPage => {
     cy.get(this.approveLicenceTileId).click()
     return Page.verifyOnPage(ApprovalCasesPage)
+  }
+
+  clickViewAndPrintALicence = (): ViewCasesPage => {
+    cy.get(this.viewAndPrintTiledId).click()
+    return Page.verifyOnPage(ViewCasesPage)
   }
 }

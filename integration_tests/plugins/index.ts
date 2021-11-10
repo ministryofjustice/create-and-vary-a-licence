@@ -32,7 +32,7 @@ export default (on: (string, Record) => void): void => {
     stubPutAdditionalConditionData: licence.stubPutAdditionalConditionData,
     stubGetLicencesByStaffIdAndStatus: licence.stubGetLicencesByStaffIdAndStatus,
     stubUpdateLicenceStatus: licence.stubUpdateLicenceStatus,
-    stubGetLicencesForApproval: licence.stubGetLicencesForApproval,
+    stubGetLicencesForStatus: licence.stubGetLicencesForStatus,
     stubGetCompletedLicence: licence.stubGetCompletedLicence,
 
     stubGetStaffDetails: community.stubGetStaffDetails,
