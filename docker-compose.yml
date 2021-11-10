@@ -26,7 +26,7 @@ services:
       - POSTGRES_DB=create-and-vary-a-licence-db
 
   create-and-vary-a-licence-api:
-    image: quay.io/hmpps/create-and-vary-a-licence-api
+    image: quay.io/hmpps/create-and-vary-a-licence-api:latest
     networks:
       - hmpps
     container_name: creare-and-vary-a-licence-api
