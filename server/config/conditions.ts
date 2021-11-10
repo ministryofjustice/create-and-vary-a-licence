@@ -18,10 +18,11 @@ import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additional
 import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInputs/curfewTerms'
 import CurfewAddress from '../routes/creatingLicences/types/additionalConditionInputs/curfewAddress'
 import NoContactWithVictim from '../routes/creatingLicences/types/additionalConditionInputs/noContactWithVictim'
-import ReportToStaff from '../routes/creatingLicences/types/additionalConditionInputs/reportToStaff'
+import ReportToApprovedPremises from '../routes/creatingLicences/types/additionalConditionInputs/reportToApprovedPremises'
 import SpecifiedItem from '../routes/creatingLicences/types/additionalConditionInputs/specifiedItem'
 import NamedIndividuals from '../routes/creatingLicences/types/additionalConditionInputs/namedIndividuals'
 import NamedOrganisation from '../routes/creatingLicences/types/additionalConditionInputs/namedOrganisation'
+import ReportToPoliceStation from '../routes/creatingLicences/types/additionalConditionInputs/reportToPoliceStation'
 
 export default {
   version: '1.0',
@@ -677,6 +678,10 @@ export default {
           label: 'Enter name of approved premises',
           name: 'approvedPremises',
           case: 'capitalised',
+          listType: 'AND',
+          addAnother: {
+            label: 'Add another approved premises',
+          },
         },
         {
           type: InputTypes.TIME,
@@ -710,7 +715,59 @@ export default {
           ],
         },
       ],
-      type: ReportToStaff,
+      type: ReportToApprovedPremises,
+    },
+    {
+      code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
+      category:
+        'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
+      text: 'Report to staff at [NAME OF POLICE STATION] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+      tpl: 'Report to staff at {policeStation} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {reviewPeriod} {alternativeReviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+      requiresInput: true,
+      inputs: [
+        {
+          type: InputTypes.TEXT,
+          label: 'Enter name of police station',
+          name: 'policeStation',
+          case: 'capitalised',
+          listType: 'AND',
+          addAnother: {
+            label: 'Add another police station',
+          },
+        },
+        {
+          type: InputTypes.TIME,
+          label: 'Enter a reporting time',
+          name: 'reportingTime',
+        },
+        {
+          type: InputTypes.RADIO,
+          label: 'Select a review period',
+          name: 'reviewPeriod',
+          case: 'lower',
+          options: [
+            {
+              value: 'Weekly',
+            },
+            {
+              value: 'Monthly',
+            },
+            {
+              value: 'Other',
+              conditional: {
+                inputs: [
+                  {
+                    type: InputTypes.TEXT,
+                    label: 'Enter a review period',
+                    name: 'alternativeReviewPeriod',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+      type: ReportToPoliceStation,
     },
     {
       code: '7a9ca3bb-922a-433a-9601-1e475c6c0095',
