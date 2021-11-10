@@ -9,8 +9,7 @@ class NoContactWithVictim {
   name: string[]
 
   @Expose()
-  @RemoveEmptyArrayItems()
-  socialServicesDepartment: string[]
+  socialServicesDepartment: string
 }
 
 export default NoContactWithVictim

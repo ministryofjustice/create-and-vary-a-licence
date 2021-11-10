@@ -20,6 +20,7 @@ import {
   convertDateFormat,
   convertToTitleCase,
   filterCentralCaseload,
+  objectIsEmpty,
   simpleDateTimeToJson,
 } from '../utils/utils'
 import PersonName from '../routes/creatingLicences/types/personName'
@@ -163,7 +164,7 @@ export default class LicenceService {
 
     const requestBody = {
       data: Object.keys(formData)
-        .filter(key => formData[key])
+        .filter(key => formData[key] && !objectIsEmpty(formData[key]))
         .flatMap((key, index) => {
           // The POST request to the API will only accept an array of objects where value is a string.
           // Therefore, if the type of data entered from the form is an array or an object, we need to convert that to a string type.

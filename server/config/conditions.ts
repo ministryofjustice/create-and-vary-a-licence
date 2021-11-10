@@ -239,10 +239,6 @@ export default {
           label: 'Enter social services department (optional)',
           name: 'socialServicesDepartment',
           case: 'capitalise',
-          listType: 'AND',
-          addAnother: {
-            label: 'Add another social services department',
-          },
         },
       ],
       type: NoContactWithVictim,
@@ -289,10 +285,6 @@ export default {
           label: 'Enter social services department (optional)',
           name: 'socialServicesDepartment',
           case: 'capitalise',
-          listType: 'AND',
-          addAnother: {
-            label: 'Add another social services department',
-          },
         },
       ],
       type: UnsupervisedContact,
