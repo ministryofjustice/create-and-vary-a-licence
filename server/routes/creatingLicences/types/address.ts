@@ -24,8 +24,7 @@ class Address extends Stringable {
   addressPostcode: string
 
   stringify(): string {
-    if (Object.values(this).join('').length > 0) return Object.values(this).join(', ')
-    return ''
+    return Object.values(this).join(', ')
   }
 
   static fromString(value: string): Address {
