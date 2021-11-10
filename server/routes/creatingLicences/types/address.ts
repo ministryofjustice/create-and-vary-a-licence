@@ -4,7 +4,7 @@ import Stringable from './abstract/stringable'
 
 class Address extends Stringable {
   @Expose()
-  @IsNotEmpty({ message: 'Enter a building name or number' })
+  @IsNotEmpty({ message: 'Enter a building and street' })
   addressLine1: string
 
   @Expose()
@@ -12,11 +12,11 @@ class Address extends Stringable {
   addressLine2: string
 
   @Expose()
-  @IsNotEmpty({ message: 'Enter a town' })
+  @IsNotEmpty({ message: 'Enter a town or city' })
   addressTown: string
 
   @Expose()
-  @IsNotEmpty({ message: 'Enter a county' })
+  @IsOptional()
   addressCounty: string
 
   @Expose()

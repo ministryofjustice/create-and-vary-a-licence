@@ -24,7 +24,10 @@ class SimpleDate extends Stringable {
   }
 
   stringify(): string {
-    return this.toMoment().format('dddd Do MMMM YYYY')
+    if (this.year && this.month && this.day) {
+      return this.toMoment().format('dddd Do MMMM YYYY')
+    }
+    return ''
   }
 
   static fromString(value: string): SimpleDate {
