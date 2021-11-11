@@ -63,13 +63,17 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): s
         } else if (matchingDataItems.length === 1) {
           // Single matching value
           const rules = inputConfig.find(item => item.name === ph)
-          const { value } = matchingDataItems[0]
-          conditionText = replacePlaceholderWithValue(ph, conditionText, adjustCase(rules.case as string, value))
+          let { value } = matchingDataItems[0]
+          value = adjustCase(rules.case as string, value)
+          value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
+          conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         } else {
           // List of values for this placeholder (lists of values can have listType 'AND' or 'OR')
           const rules = inputConfig.find(item => item.name === ph)
-          const value = produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
-          conditionText = replacePlaceholderWithValue(ph, conditionText, adjustCase(rules.case as string, value))
+          let value = produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
+          value = adjustCase(rules.case as string, value)
+          value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
+          conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         }
       })
 

@@ -80,6 +80,43 @@ describe('View Partials - Form builder', () => {
     expect($('.moj-button-action > .moj-add-another__add-button').length).toBe(1)
   })
 
+  it('should only build the first occurring input value if field is not addAnother enabled', () => {
+    viewContext = {
+      additionalCondition: {
+        data: [
+          {
+            field: 'textbox',
+            value: 'Data 1',
+          },
+          {
+            field: 'textbox',
+            value: 'Data 2',
+          },
+          {
+            field: 'textbox',
+            value: 'Data 3',
+          },
+        ],
+      },
+      config: {
+        inputs: [
+          {
+            type: 'text',
+            label: 'label for textbox',
+            name: 'textbox',
+          },
+        ],
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('.govuk-form-group').length).toBe(1)
+    expect($('#textbox').attr('value')).toBe('Data 1')
+    expect($('.moj-add-another__remove-button').length).toBe(0)
+    expect($('.moj-button-action > .moj-add-another__add-button').length).toBe(0)
+  })
+
   it('should build a dropdown input correctly', () => {
     viewContext = {
       additionalCondition: {
