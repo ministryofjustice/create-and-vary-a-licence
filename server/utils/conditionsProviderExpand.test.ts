@@ -39,7 +39,7 @@ describe('Conditions Provider - expansions', () => {
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
       expect(listOfConditions[0]).toEqual(
-        'You must reside within London while of no fixed abode, unless otherwise approved by your supervising officer.'
+        'You must reside within the London probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
       )
     })
 
@@ -58,7 +58,7 @@ describe('Conditions Provider - expansions', () => {
       expect(listOfConditions).toHaveLength(1)
       // The two consecutive spaces are expected here
       expect(listOfConditions[0]).toEqual(
-        'You must reside within  while of no fixed abode, unless otherwise approved by your supervising officer.'
+        'You must reside within the  probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
       )
     })
 
@@ -102,7 +102,7 @@ describe('Conditions Provider - expansions', () => {
       )
     })
 
-    it('Will replace placeholders for a list of 2 values with "and" between them (list type AND)', () => {
+    it('Will replace placeholders for a list with and "and" between them and include optional text for optional values', () => {
       const conditions: AdditionalCondition[] = [
         {
           id: 1,
@@ -113,14 +113,98 @@ describe('Conditions Provider - expansions', () => {
           data: [
             { id: 1, field: 'behaviourProblems', value: 'alcohol', sequence: 0 },
             { id: 2, field: 'behaviourProblems', value: 'drug', sequence: 1 },
-            { id: 3, field: 'course', value: 'AA meeting', sequence: 2 },
+            { id: 3, field: 'course', value: 'Walthamstow Rehabilitation Clinic', sequence: 2 },
           ],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
       expect(listOfConditions[0]).toEqual(
-        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol and drug problems at AA meeting.'
+        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol and drug problems at Walthamstow Rehabilitation Clinic.'
+      )
+    })
+
+    it('Will omit optional text from the sentence when an optional value is not supplied', () => {
+      const conditions: AdditionalCondition[] = [
+        {
+          id: 1,
+          code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
+          category: 'Participation in, or co-operation with, a programme or set of activities',
+          sequence: 1,
+          text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
+          data: [
+            { id: 1, field: 'behaviourProblems', value: 'alcohol', sequence: 0 },
+            { id: 2, field: 'behaviourProblems', value: 'drug', sequence: 1 },
+          ],
+        },
+      ]
+      const listOfConditions = expandAdditionalConditions(conditions)
+      expect(listOfConditions).toHaveLength(1)
+      expect(listOfConditions[0]).toEqual(
+        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol and drug problems.'
+      )
+    })
+
+    it('Will make sense with multiple optional values - none supplied', () => {
+      const conditions: AdditionalCondition[] = [
+        {
+          id: 1,
+          code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+          category: 'Making or maintaining contact with a person',
+          sequence: 1,
+          text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+          data: [
+            { id: 1, field: 'appointmentAddress', value: 'Harlow Clinic, High Street, London, W1 3GV', sequence: 0 },
+          ],
+        },
+      ]
+      const listOfConditions = expandAdditionalConditions(conditions)
+      expect(listOfConditions).toHaveLength(1)
+      expect(listOfConditions[0]).toEqual(
+        'Attend Harlow Clinic, High Street, London, W1 3GV, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
+      )
+    })
+
+    it('Will make sense with multiple optional values - one supplied', () => {
+      const conditions: AdditionalCondition[] = [
+        {
+          id: 1,
+          code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+          category: 'Making or maintaining contact with a person',
+          sequence: 1,
+          text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+          data: [
+            { id: 1, field: 'appointmentAddress', value: 'Harlow Clinic, High Street, London, W1 3GV', sequence: 0 },
+            { id: 2, field: 'appointmentDate', value: '12th February 2022', sequence: 1 },
+          ],
+        },
+      ]
+      const listOfConditions = expandAdditionalConditions(conditions)
+      expect(listOfConditions).toHaveLength(1)
+      expect(listOfConditions[0]).toEqual(
+        'Attend Harlow Clinic, High Street, London, W1 3GV on 12th February 2022, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
+      )
+    })
+
+    it('Will make sense with multiple optional values - two supplied', () => {
+      const conditions: AdditionalCondition[] = [
+        {
+          id: 1,
+          code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+          category: 'Making or maintaining contact with a person',
+          sequence: 1,
+          text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+          data: [
+            { id: 1, field: 'appointmentAddress', value: 'Harlow Clinic, High Street, London, W1 3GV', sequence: 0 },
+            { id: 2, field: 'appointmentDate', value: '12th February 2022', sequence: 1 },
+            { id: 3, field: 'appointmentTime', value: '11:15 am', sequence: 2 },
+          ],
+        },
+      ]
+      const listOfConditions = expandAdditionalConditions(conditions)
+      expect(listOfConditions).toHaveLength(1)
+      expect(listOfConditions[0]).toEqual(
+        'Attend Harlow Clinic, High Street, London, W1 3GV on 12th February 2022 at 11:15 am, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
       )
     })
 

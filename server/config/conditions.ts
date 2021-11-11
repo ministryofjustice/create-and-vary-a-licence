@@ -74,8 +74,8 @@ export default {
     {
       code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
       category: 'Residence at a specific place',
-      text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
-      tpl: 'You must reside within {probationRegion} while of no fixed abode, unless otherwise approved by your supervising officer.',
+      text: 'You must reside within the [INSERT REGION] probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
+      tpl: 'You must reside within the {probationRegion} probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
       requiresInput: true,
       inputs: [
         {
@@ -191,18 +191,20 @@ export default {
       code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
       category: 'Making or maintaining contact with a person',
       text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
-      tpl: 'Attend {appointmentTime} {appointmentDate} {appointmentAddress}, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+      tpl: 'Attend {appointmentAddress}{appointmentDate}{appointmentTime}, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
       requiresInput: true,
       inputs: [
         {
           type: InputTypes.TIME,
           label: 'Enter time (optional)',
           name: 'appointmentTime',
+          includeBefore: ' at ',
         },
         {
           type: InputTypes.DATE,
           label: 'Enter date (optional)',
           name: 'appointmentDate',
+          includeBefore: ' on ',
         },
         {
           type: InputTypes.ADDRESS,
@@ -222,7 +224,7 @@ export default {
       code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
       category: 'Making or maintaining contact with a person',
       text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
-      tpl: 'Not to seek to approach or communicate with {name} without the prior approval of your supervising officer and / or {socialServicesDepartment}.',
+      tpl: 'Not to seek to approach or communicate with {name} without the prior approval of your supervising officer{socialServicesDepartment}.',
       requiresInput: true,
       inputs: [
         {
@@ -239,6 +241,7 @@ export default {
           type: InputTypes.TEXT,
           label: 'Enter social services department (optional)',
           name: 'socialServicesDepartment',
+          includeBefore: ' and / or ',
           case: 'capitalise',
         },
       ],
@@ -248,7 +251,7 @@ export default {
       code: '4a5fed48-0fb9-4711-8ddf-b46ddfd90246',
       category: 'Making or maintaining contact with a person',
       text: 'Not to have unsupervised contact with [ANY / ANY FEMALE / ANY MALE] children under the age of [INSERT AGE] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT] except where that contact is inadvertent and not reasonably avoidable in the course of lawful daily life.',
-      tpl: 'Not to have unsupervised contact with {gender} children under the age of {age} without the prior approval of your supervising officer and / or {socialServicesDepartment} except where that contact is inadvertent and not reasonably avoidable in the course of lawful daily life.',
+      tpl: 'Not to have unsupervised contact with {gender} children under the age of {age} without the prior approval of your supervising officer{socialServicesDepartment} except where that contact is inadvertent and not reasonably avoidable in the course of lawful daily life.',
       requiresInput: true,
       inputs: [
         {
@@ -285,6 +288,7 @@ export default {
           type: InputTypes.TEXT,
           label: 'Enter social services department (optional)',
           name: 'socialServicesDepartment',
+          includeBefore: ' and / or ',
           case: 'capitalise',
         },
       ],
@@ -345,7 +349,7 @@ export default {
       code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
       category: 'Participation in, or co-operation with, a programme or set of activities',
       text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific / offending behaviour problems at [NAME OF COURSE / CENTRE].',
-      tpl: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your {behaviourProblems} problems at {course}.',
+      tpl: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your {behaviourProblems} problems{course}.',
       requiresInput: true,
       inputs: [
         {
@@ -390,6 +394,7 @@ export default {
           type: InputTypes.TEXT,
           label: 'Enter name of course or centre (optional)',
           name: 'course',
+          includeBefore: ' at ',
         },
       ],
       type: BehaviourProblems,
