@@ -181,10 +181,12 @@ export default class LicenceService {
           }
 
           if (Array.isArray(formData[key])) {
-            return formData[key].map((v: string) => {
-              sequenceNumber += 1
-              return build(v, sequenceNumber)
-            })
+            return formData[key]
+              .filter((v: string) => v)
+              .map((v: string) => {
+                sequenceNumber += 1
+                return build(v, sequenceNumber)
+              })
           }
           sequenceNumber += 1
           return build(formData[key], sequenceNumber)

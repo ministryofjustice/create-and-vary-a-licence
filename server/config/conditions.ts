@@ -678,10 +678,6 @@ export default {
           label: 'Enter name of approved premises',
           name: 'approvedPremises',
           case: 'capitalised',
-          listType: 'AND',
-          addAnother: {
-            label: 'Add another approved premises',
-          },
         },
         {
           type: InputTypes.TIME,
@@ -730,10 +726,6 @@ export default {
           label: 'Enter name of police station',
           name: 'policeStation',
           case: 'capitalised',
-          listType: 'AND',
-          addAnother: {
-            label: 'Add another police station',
-          },
         },
         {
           type: InputTypes.TIME,

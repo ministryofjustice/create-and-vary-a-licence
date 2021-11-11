@@ -2,13 +2,11 @@ import { Expose, Transform, Type } from 'class-transformer'
 import { IsNotEmpty, Validate, ValidateIf } from 'class-validator'
 import SimpleTime from '../time'
 import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
-import RemoveEmptyArrayItems from '../../../../transformers/removeEmptyArrayItems'
 
 class ReportToPoliceStation {
   @Expose()
   @IsNotEmpty({ message: 'Enter at least one police station' })
-  @RemoveEmptyArrayItems()
-  policeStation: string[]
+  policeStation: string
 
   @Expose()
   @Type(() => SimpleTime)
