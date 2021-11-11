@@ -74,7 +74,7 @@ export default {
     {
       code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
       category: 'Residence at a specific place',
-      text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
+      text: 'You must reside within the [INSERT REGION] probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
       tpl: 'You must reside within the {probationRegion} probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
       requiresInput: true,
       inputs: [
