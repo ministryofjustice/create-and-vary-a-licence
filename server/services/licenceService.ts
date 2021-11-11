@@ -33,6 +33,8 @@ import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
 import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
 import Stringable from '../routes/creatingLicences/types/abstract/stringable'
+import LicenceType from '../enumeration/licenceType'
+import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 
 export default class LicenceService {
   constructor(
@@ -56,8 +58,10 @@ export default class LicenceService {
 
     const offenderManager = deliusRecord.offenderManagers.find(om => om.active)
 
+    const licenceType = this.getLicenceType(nomisRecord)
+
     const licence = {
-      typeCode: 'AP',
+      typeCode: licenceType,
       version: getVersion(),
       nomsId: prisonerNumber,
       bookingNo: nomisRecord.bookingNo,
@@ -93,7 +97,12 @@ export default class LicenceService {
       crn: deliusRecord.otherIds?.crn,
       pnc: deliusRecord.otherIds?.pncNumber,
       cro: deliusRecord.otherIds?.croNumber,
-      standardConditions: getStandardConditions('AP'),
+      standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licenceType)
+        ? getStandardConditions(LicenceType.AP)
+        : [],
+      standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licenceType)
+        ? getStandardConditions(LicenceType.PSS)
+        : [],
     } as CreateLicenceRequest
 
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
@@ -134,7 +143,12 @@ export default class LicenceService {
     return new LicenceApiClient(token).updateContactNumber(id, requestBody)
   }
 
-  async updateAdditionalConditions(id: string, formData: AdditionalConditions, username: string): Promise<void> {
+  async updateAdditionalConditions(
+    id: string,
+    conditionType: LicenceType,
+    formData: AdditionalConditions,
+    username: string
+  ): Promise<void> {
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
 
     const requestBody = {
@@ -147,6 +161,7 @@ export default class LicenceService {
             text: getAdditionalConditionByCode(conditionCode)?.text,
           }
         }) || [],
+      conditionType,
     } as AdditionalConditionsRequest
 
     return new LicenceApiClient(token).updateAdditionalConditions(id, requestBody)
@@ -242,6 +257,22 @@ export default class LicenceService {
       return new LicenceApiClient(token).matchLicences([], statuses, [staffId])
     }
     return []
+  }
+
+  private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {
+    const tused = nomisRecord.sentenceDetail?.topupSupervisionExpiryDate
+    const led = nomisRecord.sentenceDetail?.licenceExpiryDate
+    const sed = nomisRecord.sentenceDetail?.sentenceExpiryDate
+
+    if (!tused) {
+      return LicenceType.AP
+    }
+
+    if (!led && !sed) {
+      return LicenceType.PSS
+    }
+
+    return LicenceType.AP_PSS
   }
 
   /**

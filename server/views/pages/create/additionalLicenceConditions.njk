@@ -3,14 +3,14 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
-{% set pageId = "additional-conditions-page" %}
+{% set pageTitle = applicationName + " - Create a licence - Additional Licence Conditions" %}
+{% set pageId = "additional-licence-conditions-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Select additional conditions</h1>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Select additional licence conditions</h1>
             <span class="govuk-hint">Select all relevent conditions</span>
         </div>
     </div>
@@ -27,7 +27,7 @@
                             id: condition.code,
                             value: condition.code,
                             text: condition.text,
-                            checked: condition.code | additionalConditionChecked(licence.additionalConditions),
+                            checked: condition.code | additionalConditionChecked(licence.additionalLicenceConditions),
                             label: {
                                 classes: 'govuk-!-padding-top-0'
                             }

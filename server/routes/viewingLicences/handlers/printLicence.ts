@@ -20,7 +20,7 @@ export default class PrintLicenceRoutes {
     const { username } = res.locals.user
     const { licence } = res.locals
     const htmlPrint = true
-    const additionalConditions = expandAdditionalConditions(licence.additionalConditions)
+    const additionalConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
     res.render(`pages/licence/${licence.typeCode}`, { additionalConditions, htmlPrint })
   }
@@ -29,7 +29,7 @@ export default class PrintLicenceRoutes {
     const { username } = res.locals.user
     const { licence } = res.locals
     const { licencesUrl, pdfOptions } = config.apis.gotenberg
-    const additionalConditions = expandAdditionalConditions(licence.additionalConditions)
+    const additionalConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     const imageData = await this.prisonerService.getPrisonerImageData(username, licence.nomsId)
     const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.lastName}.pdf`
     const footerHtml = this.getPdfFooter(

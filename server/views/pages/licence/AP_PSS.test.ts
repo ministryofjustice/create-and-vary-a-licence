@@ -27,7 +27,7 @@ describe('Print an AP_PSS licence', () => {
         appointmentPerson: 'Jack Frost',
         appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
         comTelephone: '07878 234566',
-        standardConditions: [
+        standardLicenceConditions: [
           { code: '1', text: 'Standard 1' },
           { code: '2', text: 'Standard 2' },
           { code: '3', text: 'Standard 3' },

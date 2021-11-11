@@ -8,8 +8,8 @@ import InitialMeetingNameRoutes from './handlers/initialMeetingName'
 import InitialMeetingPlaceRoutes from './handlers/initialMeetingPlace'
 import InitialMeetingContactRoutes from './handlers/initialMeetingContact'
 import InitialMeetingTimeRoutes from './handlers/initialMeetingTime'
-import AdditionalConditionsQuestionRoutes from './handlers/additionalConditionsQuestion'
-import AdditionalConditionsRoutes from './handlers/additionalConditions'
+import AdditionalLicenceConditionsQuestionRoutes from './handlers/additionalLicenceConditionsQuestion'
+import AdditionalLicenceConditionsRoutes from './handlers/additionalLicenceConditions'
 import BespokeConditionsQuestionRoutes from './handlers/bespokeConditionsQuestion'
 import BespokeConditionsRoutes from './handlers/bespokeConditions'
 import BespokeConditions from './types/bespokeConditions'
@@ -46,8 +46,8 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService)
   const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService)
   const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService)
-  const additionalConditionsQuestionHandler = new AdditionalConditionsQuestionRoutes()
-  const additionalConditionsHandler = new AdditionalConditionsRoutes(licenceService)
+  const additionalLicenceConditionsQuestionHandler = new AdditionalLicenceConditionsQuestionRoutes()
+  const additionalLicenceConditionsHandler = new AdditionalLicenceConditionsRoutes(licenceService)
   const additionalConditionsCallbackHandler = new AdditionalConditionsCallbackRoutes()
   const additionalConditionInputHandler = new AdditionalConditionInputRoutes(licenceService)
   const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
@@ -65,10 +65,14 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   post('/id/:licenceId/initial-meeting-contact', initialMeetingContactHandler.POST, Telephone)
   get('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.GET)
   post('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.POST, SimpleDateTime)
-  get('/id/:licenceId/additional-conditions-question', additionalConditionsQuestionHandler.GET)
-  post('/id/:licenceId/additional-conditions-question', additionalConditionsQuestionHandler.POST, YesOrNoQuestion)
-  get('/id/:licenceId/additional-conditions', additionalConditionsHandler.GET)
-  post('/id/:licenceId/additional-conditions', additionalConditionsHandler.POST, AdditionalConditions)
+  get('/id/:licenceId/additional-conditions-question', additionalLicenceConditionsQuestionHandler.GET)
+  post(
+    '/id/:licenceId/additional-conditions-question',
+    additionalLicenceConditionsQuestionHandler.POST,
+    YesOrNoQuestion
+  )
+  get('/id/:licenceId/additional-conditions', additionalLicenceConditionsHandler.GET)
+  post('/id/:licenceId/additional-conditions', additionalLicenceConditionsHandler.POST, AdditionalConditions)
   get('/id/:licenceId/additional-conditions/callback', additionalConditionsCallbackHandler.GET)
   get('/id/:licenceId/additional-conditions/condition/:additionalConditionId', additionalConditionInputHandler.GET)
   post('/id/:licenceId/additional-conditions/condition/:additionalConditionId', additionalConditionInputHandler.POST)

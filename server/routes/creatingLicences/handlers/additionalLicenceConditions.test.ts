@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 
-import AdditionalConditionsRoutes from './additionalConditions'
+import AdditionalLicenceConditionsRoutes from './additionalLicenceConditions'
 import LicenceService from '../../../services/licenceService'
 import * as conditionsProvider from '../../../utils/conditionsProvider'
+import LicenceType from '../../../enumeration/licenceType'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 
@@ -11,7 +12,7 @@ jest
   .mockReturnValue([{ groupName: 'group1', conditions: [{ code: 'condition1' }] }])
 
 describe('Route Handlers - Create Licence - Additional Conditions', () => {
-  const handler = new AdditionalConditionsRoutes(licenceService)
+  const handler = new AdditionalLicenceConditionsRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -36,7 +37,7 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalConditions', {
+      expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditions', {
         additionalConditions: [
           {
             groupName: 'group1',
@@ -54,7 +55,7 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
 
     it('should call licence service to update the list of additional conditions', async () => {
       await handler.POST(req, res)
-      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(1, {}, 'joebloggs')
+      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(1, LicenceType.AP, {}, 'joebloggs')
     })
 
     it('should redirect to the callback function', async () => {

@@ -32,12 +32,12 @@ const licencePlaceholder = {
   probationLduCode: 'LDU1',
   dateCreated: '10/09/2021 10:00:00', // Make dynamic to now?
   createdByUsername: 'X12345',
-  standardConditions: [
+  standardLicenceConditions: [
     { id: 1, code: 'goodBehaviour', sequence: 1, text: 'Be of good behaviour' },
     { id: 2, code: 'notBreakLaw', sequence: 2, text: 'Do not break the law' },
     { id: 3, code: 'attendMeetings', sequence: 3, text: 'Attend arranged meetings' },
   ],
-  additionalConditions: [],
+  additionalLicenceConditions: [],
   bespokeConditions: [],
 }
 
@@ -72,7 +72,7 @@ export default {
           appointmentAddress: 'Down the road, over there',
           comTelephone: '07891245678',
           appointmentTime: '01/12/2021 00:34',
-          additionalConditions: [
+          additionalLicenceConditions: [
             {
               id: 1,
               code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
@@ -315,7 +315,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
-          additionalConditions: [
+          additionalLicenceConditions: [
             {
               id: 1,
               code,

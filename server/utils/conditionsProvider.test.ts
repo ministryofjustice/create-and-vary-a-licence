@@ -17,6 +17,17 @@ jest.mock('../config/conditions', () => ({
         code: 'code3',
       },
     ],
+    PSS: [
+      {
+        code: 'code4',
+      },
+      {
+        code: 'code5',
+      },
+      {
+        code: 'code6',
+      },
+    ],
   },
   additionalConditions: [
     {
@@ -76,10 +87,20 @@ describe('Conditions Provider', () => {
           sequence: 2,
         },
       ])
-    })
-
-    it('should throw exception for an unrecognised licence type', () => {
-      expect(() => getStandardConditions('unknown')).toThrow("No licence type found with code : 'unknown'")
+      expect(getStandardConditions('PSS')).toEqual([
+        {
+          code: 'code4',
+          sequence: 0,
+        },
+        {
+          code: 'code5',
+          sequence: 1,
+        },
+        {
+          code: 'code6',
+          sequence: 2,
+        },
+      ])
     })
   })
 })

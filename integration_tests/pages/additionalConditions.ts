@@ -8,7 +8,7 @@ export default class AdditionalConditionsPage extends Page {
   private context: Context = { additionalConditions: [] }
 
   constructor() {
-    super('additional-conditions-page', false)
+    super('additional-licence-conditions-page')
   }
 
   getContext = () => {

@@ -1,5 +1,4 @@
 import conditionsConfig from '../config/conditions'
-import LicenceType from '../enumeration/licenceType'
 import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { convertToTitleCase } from './utils'
 
@@ -8,17 +7,12 @@ export function getVersion(): string {
 }
 
 export function getStandardConditions(licenceType: string): Record<string, unknown>[] {
-  switch (licenceType) {
-    case LicenceType.AP:
-      return conditionsConfig.standardConditions.AP.map((condition, index) => {
-        return {
-          ...condition,
-          sequence: index,
-        }
-      })
-    default:
-      throw new Error(`No licence type found with code : '${licenceType}'`)
-  }
+  return conditionsConfig.standardConditions[licenceType].map((condition: Record<string, unknown>, index: number) => {
+    return {
+      ...condition,
+      sequence: index,
+    }
+  })
 }
 
 export function getAdditionalConditionByCode(searchCode: string): Record<string, unknown> {

@@ -22,6 +22,7 @@ import { stringToAddressObject } from '../utils/utils'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
 import * as conditionsProvider from '../utils/conditionsProvider'
+import LicenceType from '../enumeration/licenceType'
 
 const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
 const licenceService = new LicenceService(hmppsAuthClient, null, null)
@@ -171,10 +172,13 @@ describe('Licence API client tests', () => {
     describe('Additional conditions', () => {
       it('No additional conditions entered', async () => {
         const formConditions = new AdditionalConditions()
-        const apiRequestConditions = makeApiRequestAdditionalConditions(formConditions.additionalConditions)
+        const apiRequestConditions = makeApiRequestAdditionalConditions(
+          formConditions.additionalConditions,
+          LicenceType.AP
+        )
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
         fakeApi.put('/licence/id/1/additional-conditions', apiRequestConditions).reply(200)
-        await licenceService.updateAdditionalConditions('1', formConditions, username)
+        await licenceService.updateAdditionalConditions('1', LicenceType.AP, formConditions, username)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
@@ -182,10 +186,13 @@ describe('Licence API client tests', () => {
       it('Three additional conditions entered', async () => {
         const formConditions = new AdditionalConditions()
         formConditions.additionalConditions = ['condition1', 'condition2', 'condition3']
-        const apiRequestConditions = makeApiRequestAdditionalConditions(formConditions.additionalConditions)
+        const apiRequestConditions = makeApiRequestAdditionalConditions(
+          formConditions.additionalConditions,
+          LicenceType.AP
+        )
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
         fakeApi.put('/licence/id/1/additional-conditions', apiRequestConditions).reply(200)
-        await licenceService.updateAdditionalConditions('1', formConditions, username)
+        await licenceService.updateAdditionalConditions('1', LicenceType.AP, formConditions, username)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
@@ -371,7 +378,10 @@ const makeApiRequestBespokeConditions = (conditions: string[]): BespokeCondition
   return { conditions } as BespokeConditionsRequest
 }
 
-const makeApiRequestAdditionalConditions = (conditionIds: string[]): AdditionalConditionsRequest => {
+const makeApiRequestAdditionalConditions = (
+  conditionIds: string[],
+  conditionType: string
+): AdditionalConditionsRequest => {
   const expectedConditions =
     conditionIds?.map((conditionCode, index) => {
       return {
@@ -382,5 +392,5 @@ const makeApiRequestAdditionalConditions = (conditionIds: string[]): AdditionalC
       }
     }) || []
 
-  return { additionalConditions: expectedConditions } as AdditionalConditionsRequest
+  return { additionalConditions: expectedConditions, conditionType } as AdditionalConditionsRequest
 }
