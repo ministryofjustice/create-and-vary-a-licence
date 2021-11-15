@@ -17,11 +17,11 @@
 
         <div data-module="moj-add-another">
             {% if input.type == 'text' %}
-                    {% for item in formValues %}
-                        {{ textInput(input, validationError, item, loop.index0, formValues.length > 1) }}
-                    {% else %}
-                        {{ textInput(input, validationError, "", 0, false) }}
-                    {% endfor %}
+                {% for item in formValues %}
+                    {{ textInput(input, validationError, item, loop.index0, formValues.length > 1) }}
+                {% else %}
+                    {{ textInput(input, validationError, "", 0, false) }}
+                {% endfor %}
             {% endif %}
 
             {% if input.type == 'dropdown' %}

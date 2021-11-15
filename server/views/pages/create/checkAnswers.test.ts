@@ -25,7 +25,7 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display a table containing the additional conditions', () => {
     viewContext = {
       licence: {
-        additionalConditions: [
+        additionalLicenceConditions: [
           {
             code: 'condition1',
             category: 'Category 1',

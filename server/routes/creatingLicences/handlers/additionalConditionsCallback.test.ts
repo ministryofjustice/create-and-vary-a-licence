@@ -28,7 +28,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       redirect: jest.fn(),
       locals: {
         licence: {
-          additionalConditions: [],
+          additionalLicenceConditions: [],
         },
       },
     } as unknown as Response
@@ -37,7 +37,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
   describe('GET', () => {
     it('should redirect to the input page for the first additional condition in sequence which requires input but doesnt have any yet', async () => {
       res.locals.licence = {
-        additionalConditions: [
+        additionalLicenceConditions: [
           {
             id: '1',
             code: 'code1',
@@ -83,7 +83,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
     it('should redirect to the input page with fromReview flag set', async () => {
       req.query.fromReview = 'true'
       res.locals.licence = {
-        additionalConditions: [
+        additionalLicenceConditions: [
           {
             id: '1',
             code: 'code1',

@@ -31,7 +31,7 @@ describe('Route Handlers - Create Licence - Additional Condition Input', () => {
       status: jest.fn(),
       locals: {
         licence: {
-          additionalConditions: [],
+          additionalLicenceConditions: [],
         },
       },
     } as unknown as Response
@@ -49,7 +49,7 @@ describe('Route Handlers - Create Licence - Additional Condition Input', () => {
       })
 
       res.locals.licence = {
-        additionalConditions: [
+        additionalLicenceConditions: [
           {
             id: 1,
             code: 'code1',

@@ -3,7 +3,7 @@ import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-const snippet = fs.readFileSync('server/views/pages/create/additionalConditions.njk')
+const snippet = fs.readFileSync('server/views/pages/create/additionalLicenceConditions.njk')
 
 describe('Create a Licence Views - Additional Conditions', () => {
   let compiledTemplate: Template
@@ -74,7 +74,7 @@ describe('Create a Licence Views - Additional Conditions', () => {
   it('should check the checkboxes if they are present on the licence', () => {
     viewContext = {
       licence: {
-        additionalConditions: [
+        additionalLicenceConditions: [
           {
             code: 'condition1',
           },

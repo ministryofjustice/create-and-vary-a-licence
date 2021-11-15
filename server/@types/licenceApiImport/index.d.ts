@@ -135,6 +135,8 @@ export interface components {
     AdditionalConditionsRequest: {
       /** The list of additional conditions */
       additionalConditions: components['schemas']['AdditionalCondition'][]
+      /** The type of additional condition, either licence or post sentence supervision */
+      conditionType: 'AP' | 'PSS'
     }
     /** Request object for updating the list of additional conditions on a licence */
     UpdateAdditionalConditionDataRequest: {
@@ -201,14 +203,16 @@ export interface components {
       probationAreaCode: string
       /** The local delivery unit code where the offender manager works, from probation services */
       probationLduCode: string
-      /** The list of standard conditions from service configuration */
-      standardConditions: components['schemas']['StandardCondition'][]
+      /** The list of standard licence conditions from service configuration */
+      standardLicenceConditions: components['schemas']['StandardCondition'][]
+      /** The list of standard post sentence supervision conditions from service configuration */
+      standardPssConditions: components['schemas']['StandardCondition'][]
     }
     /** Describes a standard condition on this licence */
     StandardCondition: {
       /** The internal ID for this standard condition on this licence */
       id?: number
-      /** The coded value for this standard */
+      /** The unique code for this standard condition */
       code?: string
       /** The sequence of this standard condition */
       sequence?: number
@@ -345,10 +349,14 @@ export interface components {
       dateLastUpdated?: string
       /** The username of the person who last updated this licence */
       updatedByUsername?: string
-      /** The list of standard conditions on this licence */
-      standardConditions: components['schemas']['StandardCondition'][]
-      /** The list of additional conditions on this licence */
-      additionalConditions: components['schemas']['AdditionalCondition'][]
+      /** The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      /** The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
+      /** The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /** The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition'][]
     }
