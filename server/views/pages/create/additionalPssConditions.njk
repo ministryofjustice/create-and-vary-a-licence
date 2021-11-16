@@ -1,0 +1,59 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set pageTitle = applicationName + " - Create a licence - Additional Post Sentence Supervision Requirements" %}
+{% set pageId = "additional-pss-conditions-page" %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Select additional post sentence supervision requirements</h1>
+            <span class="govuk-hint">Select all relevant post sentence supervision requirements</span>
+        </div>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+
+                {% for group in additionalConditions %}
+                    {% set items = [] %}
+                    {% for condition in group.conditions %}
+                        {% set items = (items.push({
+                            id: condition.code,
+                            value: condition.code,
+                            text: condition.text,
+                            checked: condition.code | additionalConditionChecked(licence.additionalPssConditions),
+                            label: {
+                                classes: 'govuk-!-padding-top-0'
+                            }
+                        }), items) %}
+                    {% endfor %}
+
+                    {{ govukCheckboxes({
+                        name: "additionalConditions[]",
+                        fieldset: {
+                            legend: {
+                                text: group.category,
+                                isPageHeading: true,
+                                classes: "govuk-fieldset__legend--l"
+                            }
+                        },
+                        items: items
+                    }) }}
+                {% endfor %}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit",
+                    classes: 'govuk-!-margin-top-6',
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -956,6 +956,54 @@ export default {
         type: AlcoholMonitoringPeriod,
       },
     ],
-    PSS: [],
+    PSS: [
+      {
+        code: '62c83b80-2223-4562-a195-0670f4072088',
+        category: 'Drug appointment',
+        text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+        tpl: 'Attend {appointmentAddress}{appointmentDate}{appointmentTime}, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: InputTypes.TIME,
+            label: 'Enter time (optional)',
+            name: 'appointmentTime',
+            includeBefore: ' at ',
+          },
+          {
+            type: InputTypes.DATE,
+            label: 'Enter date (optional)',
+            name: 'appointmentDate',
+            includeBefore: ' on ',
+          },
+          {
+            type: InputTypes.ADDRESS,
+            label: 'Enter the address for the appointment',
+            name: 'appointmentAddress',
+          },
+        ],
+        type: AppointmentTimeAndPlace,
+      },
+      {
+        code: 'fda24aa9-a2b0-4d49-9c87-23b0a7be4013',
+        category: 'Drug testing',
+        text: 'Attend [INSERT NAME AND ADDRESS], as reasonably required by your supervisor, to give a sample of oral fluid / urine in order to test whether you have any specified Class A or specified Class B drugs in your body, for the purpose of ensuring that you are complying with the requirement of your supervision period requiring you to be of good behaviour.',
+        tpl: 'Attend {name} {address}, as reasonably required by your supervisor, to give a sample of oral fluid / urine in order to test whether you have any specified Class A or specified Class B drugs in your body, for the purpose of ensuring that you are complying with the requirement of your supervision period requiring you to be of good behaviour.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: InputTypes.TEXT,
+            label: 'Enter name',
+            name: 'name',
+          },
+          {
+            type: InputTypes.ADDRESS,
+            label: 'Enter address',
+            name: 'address',
+          },
+        ],
+        type: DrugTestLocation,
+      },
+    ],
   },
 }
