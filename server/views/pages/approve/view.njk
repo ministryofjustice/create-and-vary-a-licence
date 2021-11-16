@@ -2,7 +2,7 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
-{% from "../../partials/additionalConditionsSummary.njk" import additionalConditions %}
+{% from "../../partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "../../partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 
 {% set pageTitle = applicationName + " - Approve a licence" %}
@@ -21,7 +21,7 @@
 
             {{ inductionMeetingDetails(licence) }}
 
-            {{ additionalConditions(licence) }}
+            {{ additionalLicenceConditions(licence) }}
 
             {{ bespokeConditions(licence) }}
 

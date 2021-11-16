@@ -1,14 +1,12 @@
 import { Request, Response } from 'express'
 
 import ViewAndPrintLicenceRoutes from './viewLicence'
-import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const username = 'joebloggs'
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ViewAndPrintLicenceRoutes(licenceService)
+  const handler = new ViewAndPrintLicenceRoutes()
   let req: Request
   let res: Response
 

@@ -7,9 +7,9 @@ export default class AdditionalConditionInputRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { additionalConditions } = res.locals.licence
+    const { additionalLicenceConditions } = res.locals.licence
     const { additionalConditionId } = req.params
-    const additionalCondition = additionalConditions.find(
+    const additionalCondition = additionalLicenceConditions.find(
       (condition: AdditionalCondition) => condition.id === +additionalConditionId
     )
 

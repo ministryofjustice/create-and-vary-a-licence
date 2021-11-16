@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 
-import AdditionalConditionsQuestionRoutes from './additionalConditionsQuestion'
+import AdditionalLicenceConditionsQuestionRoutes from './additionalLicenceConditionsQuestion'
 
 describe('Route Handlers - Create Licence - Additional Conditions Question', () => {
-  const handler = new AdditionalConditionsQuestionRoutes()
+  const handler = new AdditionalLicenceConditionsQuestionRoutes()
   let req: Request
   let res: Response
 
@@ -23,7 +23,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Question', () 
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalConditionsQuestion')
+      expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditionsQuestion')
     })
   })
 
