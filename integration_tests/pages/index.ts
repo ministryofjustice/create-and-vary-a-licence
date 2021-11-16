@@ -21,6 +21,7 @@ export default class IndexPage extends Page {
     cy.task('stubGetPrisonerDetail')
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
+    cy.task('stubGetHdcStatus')
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
