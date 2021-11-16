@@ -7,7 +7,7 @@ export default class AdditionalLicenceConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const additionalConditions = getGroupedAdditionalConditions()
+    const additionalConditions = getGroupedAdditionalConditions(LicenceType.AP)
     return res.render('pages/create/additionalLicenceConditions', { additionalConditions })
   }
 
