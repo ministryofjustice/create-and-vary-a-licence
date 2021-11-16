@@ -1,7 +1,7 @@
 class HdcStatus {
   public constructor(
     bookingId: string,
-    private readonly homeDetentionCurfewEndDate: string,
+    private readonly homeDetentionCurfewEndDate: string = null,
     private readonly checksPassed: boolean = false,
     private readonly approvalStatus: string = ''
   ) {

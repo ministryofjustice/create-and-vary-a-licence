@@ -4,7 +4,6 @@ import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
 import { ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
-import logger from '../../logger'
 
 export default class CaseloadService {
   constructor(
@@ -21,8 +20,6 @@ export default class CaseloadService {
       .filter(offender => offender.nomsNumber)
       .map(offender => offender.nomsNumber)
 
-    logger.info(`Caseload from Delius = ${JSON.stringify(caseloadNomisIds)}`)
-
     /*
      TODO: Maybe this should be checking for existing licences by nomisId rather than staffId? What if the offender
       changes their managing officer after a licence has been created for them?
@@ -33,15 +30,7 @@ export default class CaseloadService {
       LicenceStatus.RECALLED,
     ])
 
-    logger.info(`Existing licences = ${JSON.stringify(existingLicences)}`)
-
-    // Get the matching offenders for these Nomis IDs
     const offenders = await this.prisonerService.searchPrisonersByNomisIds(username, caseloadNomisIds)
-
-    const matchingBull = offenders.find(o => o.prisonerNumber === 'A8082DY')
-    logger.info(`A8082DY = ${JSON.stringify(matchingBull)}`)
-
-    // Get the HDC status for each offender in the caseload list
     const hdcStatuses = await this.prisonerService.getHdcStatuses(username, offenders)
 
     return offenders
@@ -65,7 +54,7 @@ export default class CaseloadService {
       .filter(offender => !offender.releaseDate || moment().isBefore(moment(offender.releaseDate, 'YYYY-MM-DD')))
       .filter(offender => {
         const hdcStatus = hdcStatuses.find(hdc => hdc.bookingId === offender.bookingId)
-        return !hdcStatus.eligibleForHdc
+        return hdcStatus?.eligibleForHdc ? !hdcStatus.eligibleForHdc : true
       })
       .filter(offender => {
         const existingLicence = existingLicences.find(licence => licence.nomisId === offender.nomsNumber)
