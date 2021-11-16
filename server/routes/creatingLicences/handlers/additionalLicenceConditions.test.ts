@@ -31,10 +31,21 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn(),
     } as unknown as Response
   })
 
   describe('GET', () => {
+    it('should throw error if licence type does not support additional conditions', async () => {
+      res.locals = {
+        licence: { typeCode: 'PSS' },
+      }
+
+      await expect(() => handler.GET(req, res)).rejects.toThrow(
+        'Additional condition cannot be added to this type of licence'
+      )
+    })
+
     it('should render view', async () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditions', {
