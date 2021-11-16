@@ -38,18 +38,13 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
   })
 
   describe('GET', () => {
-    it('should throw 404 if the additional condition is not found on the licence', async () => {
-      await expect(handler.GET(req, res)).rejects.toThrow('Additional condition not found')
-      expect(res.status).toHaveBeenCalledWith(404)
-    })
-
     it('should render view with the additional condition and its config', async () => {
       conditionsProviderSpy.mockReturnValue({
         inputs: [],
       })
 
       res.locals.licence = {
-        additionalLicenceConditions: [
+        additionalPssConditions: [
           {
             id: 1,
             code: 'code1',
@@ -59,7 +54,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
       await handler.GET(req, res)
       expect(conditionsProviderSpy).toHaveBeenCalledWith('code1')
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalConditionInput', {
+      expect(res.render).toHaveBeenCalledWith('pages/create/additionalPssConditionInput', {
         additionalCondition: {
           id: 1,
           code: 'code1',
@@ -83,14 +78,14 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
     it('should redirect to the callback function', async () => {
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions/callback')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions/callback')
     })
 
     it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+        '/licence/create/id/1/additional-pss-conditions/callback?fromReview=true'
       )
     })
   })

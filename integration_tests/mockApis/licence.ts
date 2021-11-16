@@ -3,7 +3,7 @@ import { stubFor } from '../wiremock'
 
 const licencePlaceholder = {
   id: 1,
-  typeCode: 'AP',
+  typeCode: 'AP_PSS',
   version: '1.1',
   statusCode: 'IN_PROGRESS',
   nomsId: 'A1234AA',
@@ -37,8 +37,14 @@ const licencePlaceholder = {
     { id: 2, code: 'notBreakLaw', sequence: 2, text: 'Do not break the law' },
     { id: 3, code: 'attendMeetings', sequence: 3, text: 'Attend arranged meetings' },
   ],
+  standardPssConditions: [
+    { id: 1, code: 'goodBehaviour', sequence: 1, text: 'Be of good behaviour' },
+    { id: 2, code: 'notBreakLaw', sequence: 2, text: 'Do not break the law' },
+    { id: 3, code: 'attendMeetings', sequence: 3, text: 'Attend arranged meetings' },
+  ],
   additionalLicenceConditions: [],
   bespokeConditions: [],
+  additionalPssConditions: [],
 }
 
 export default {
@@ -197,6 +203,38 @@ export default {
               text: 'Bespoke condition 2',
             },
           ],
+          additionalPssConditions: [
+            {
+              id: 1,
+              code: '62c83b80-2223-4562-a195-0670f4072088',
+              category: 'Drug appointment',
+              sequence: 0,
+              text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+              data: [
+                {
+                  id: 1,
+                  sequence: 0,
+                  field: 'appointmentAddress',
+                  value: '123 Fake Street, , Fakestown, London, SW2 5XF',
+                },
+              ],
+            },
+            {
+              id: 2,
+              code: 'fda24aa9-a2b0-4d49-9c87-23b0a7be4013',
+              category: 'Drug testing',
+              sequence: 1,
+              text: 'Attend [INSERT NAME AND ADDRESS], as reasonably required by your supervisor, to give a sample of oral fluid / urine in order to test whether you have any specified Class A or specified Class B drugs in your body, for the purpose of ensuring that you are complying with the requirement of your supervision period requiring you to be of good behaviour.',
+              data: [
+                {
+                  id: 1,
+                  sequence: 0,
+                  field: 'address',
+                  value: '123 Fake Street, , Fakestown, London, SW2 5XF',
+                },
+              ],
+            },
+          ],
         },
       },
     })
@@ -316,6 +354,29 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           additionalLicenceConditions: [
+            {
+              id: 1,
+              code,
+              data: [],
+            },
+          ],
+        },
+      },
+    })
+  },
+
+  stubGetLicenceWithPssConditionToComplete: (code: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/id/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          additionalPssConditions: [
             {
               id: 1,
               code,

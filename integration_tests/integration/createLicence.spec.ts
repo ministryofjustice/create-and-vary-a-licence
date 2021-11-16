@@ -68,12 +68,28 @@ context('Create a licence', () => {
 
     const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
 
-    const checkAnswersPage = bespokeConditionsPage
+    const pssConditionsQuestionPage = bespokeConditionsPage
       .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
       .clickAddAnother()
       .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
       .clickAddAnother()
       .enterBespokeCondition(2, 'A third bespoke condition must surely be be a mistake')
+      .clickContinue()
+
+    const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
+
+    const pssConditionsInputPage = pssConditionsPage
+      .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
+      .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
+      .clickContinue()
+
+    const checkAnswersPage = pssConditionsInputPage
+      .withContext(pssConditionsPage.getContext())
+      .enterTime()
+      .enterDate()
+      .enterAddress()
+      .nextInput()
+      .enterAddress()
       .clickContinue()
 
     const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
