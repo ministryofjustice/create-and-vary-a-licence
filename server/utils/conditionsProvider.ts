@@ -58,14 +58,14 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): s
           // Single matching value
           const rules = inputConfig.find(item => item.name === ph)
           let { value } = matchingDataItems[0]
-          value = adjustCase(rules.case as string, value)
+          value = adjustCase(rules?.case as string, value)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
           conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         } else {
           // List of values for this placeholder (lists of values can have listType 'AND' or 'OR')
           const rules = inputConfig.find(item => item.name === ph)
           let value = produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
-          value = adjustCase(rules.case as string, value)
+          value = adjustCase(rules?.case as string, value)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
           conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         }
@@ -151,7 +151,10 @@ const removeAllPlaceholders = (template: string): string => {
  * @param value
  */
 const adjustCase = (caseRule: string, value: string): string => {
-  switch (caseRule?.toLowerCase()) {
+  if (!caseRule) {
+    return value
+  }
+  switch (caseRule.toLowerCase()) {
     case 'lower':
       return value.toLowerCase()
       break
