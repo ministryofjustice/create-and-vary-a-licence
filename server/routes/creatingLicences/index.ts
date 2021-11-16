@@ -27,6 +27,7 @@ import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceC
 import AdditionalPssConditionsQuestionRoutes from './handlers/additionalPssConditionsQuestion'
 import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
 import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
+import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
 
 export default function Index({ licenceService, caseloadService }: Services): Router {
   const router = Router()
@@ -56,6 +57,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   const additionalPssConditionsQuestionHandler = new AdditionalPssConditionsQuestionRoutes()
   const additionalPssConditionsHandler = new AdditionalPssConditionsRoutes(licenceService)
   const additionalPssConditionsCallbackHandler = new AdditionalPssConditionsCallbackRoutes()
+  const additionalPssConditionInputHandler = new AdditionalPssConditionInputRoutes(licenceService)
   const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
   const bespokeConditionsHandler = new BespokeConditionsRoutes(licenceService)
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService)
@@ -94,6 +96,8 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   get('/id/:licenceId/additional-pss-conditions', additionalPssConditionsHandler.GET)
   post('/id/:licenceId/additional-pss-conditions', additionalPssConditionsHandler.POST, AdditionalConditions)
   get('/id/:licenceId/additional-pss-conditions/callback', additionalPssConditionsCallbackHandler.GET)
+  get('/id/:licenceId/additional-pss-conditions/condition/:conditionId', additionalPssConditionInputHandler.GET)
+  post('/id/:licenceId/additional-pss-conditions/condition/:conditionId', additionalPssConditionInputHandler.POST)
   get('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.GET)
   post('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.GET)

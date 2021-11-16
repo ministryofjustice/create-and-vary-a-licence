@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 
-import AdditionalLicenceConditionInputRoutes from './additionalLicenceConditionInput'
 import LicenceService from '../../../services/licenceService'
 import * as conditionsProvider from '../../../utils/conditionsProvider'
+import AdditionalPssConditionInputRoutes from './additionalPssConditionInput'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
 
 describe('Route Handlers - Create Licence - Additional Licence Condition Input', () => {
-  const handler = new AdditionalLicenceConditionInputRoutes(licenceService)
+  const handler = new AdditionalPssConditionInputRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -31,7 +31,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       status: jest.fn(),
       locals: {
         licence: {
-          additionalLicenceConditions: [],
+          additionalPssConditions: [],
         },
       },
     } as unknown as Response
@@ -59,7 +59,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
       await handler.GET(req, res)
       expect(conditionsProviderSpy).toHaveBeenCalledWith('code1')
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditionInput', {
+      expect(res.render).toHaveBeenCalledWith('pages/create/additionalConditionInput', {
         additionalCondition: {
           id: 1,
           code: 'code1',

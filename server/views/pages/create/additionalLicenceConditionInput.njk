@@ -1,0 +1,40 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "formBuilder.njk" import formBuilder %}
+
+{% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
+{% set pageId = "additional-licence-condition-input-page" %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Complete the licence condition</h1>
+        </div>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <input type="hidden" name="code" value="{{ config.code }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <p class="govuk-body">
+                    {{ config.text }}
+                </p>
+                {% if config.subtext %}
+                    <span class="govuk-hint">{{ config.subtext }}</span>
+                {% endif %}
+
+                {{ formBuilder(config, additionalCondition, validationErrors, formResponses) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit",
+                    classes: 'govuk-!-margin-top-6',
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}
