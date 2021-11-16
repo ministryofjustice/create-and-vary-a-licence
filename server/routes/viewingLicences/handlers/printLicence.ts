@@ -23,7 +23,7 @@ export default class PrintLicenceRoutes {
     const { licence } = res.locals // fetchLicence middleware populates
     const htmlPrint = true
     const qrCode = await this.qrCodeService.getQrCode(licence)
-    const additionalConditions = expandAdditionalConditions(licence.additionalConditions)
+    const additionalConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
     res.render(`pages/licence/${licence.typeCode}`, { additionalConditions, qrCode, htmlPrint })
   }
@@ -32,7 +32,7 @@ export default class PrintLicenceRoutes {
     const { username } = res.locals.user
     const { licence } = res.locals
     const { licencesUrl, pdfOptions } = config.apis.gotenberg
-    const additionalConditions = expandAdditionalConditions(licence.additionalConditions)
+    const additionalConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     const imageData = await this.prisonerService.getPrisonerImageData(username, licence.nomsId)
     const qrCode = await this.qrCodeService.getQrCode(licence)
     const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.lastName}.pdf`

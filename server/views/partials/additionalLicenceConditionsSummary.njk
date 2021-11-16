@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalConditions(licence, isEditable) %}
+{% macro additionalLicenceConditions(licence, isEditable) %}
     {% macro additionalConditionHtml(template, data) %}
         <div>
             {{ template }}
@@ -25,10 +25,10 @@
         {% endif %}
     </div>
 
-    {% set additionalConditions = [] %}
+    {% set additionalLicenceConditions = [] %}
 
-    {% for condition in licence.additionalConditions %}
-        {% set additionalConditions = (additionalConditions.push({
+    {% for condition in licence.additionalLicenceConditions %}
+        {% set additionalLicenceConditions = (additionalLicenceConditions.push({
             key: {  text: condition.category },
             value: { html: additionalConditionHtml(condition.text, condition.data) },
             actions: {
@@ -40,16 +40,16 @@
                     }
                 ]
             } if condition | checkConditionRequiresInput and isEditable
-        }), additionalConditions) %}
+        }), additionalLicenceConditions) %}
     {% endfor %}
 
-    {% if additionalConditions.length > 0 %}
+    {% if additionalLicenceConditions.length > 0 %}
     {{ govukSummaryList({
         attributes: { id: 'additional-conditions-details' },
         classes: 'govuk-!-margin-bottom-9',
-        rows: additionalConditions
+        rows: additionalLicenceConditions
     }) }}
     {% else %}
-        <p class="govuk-body govuk-!-margin-bottom-9">No additional conditions have been added to this licence</p>
+        <p class="govuk-body govuk-!-margin-bottom-9">No additional licence conditions have been added to this licence</p>
     {% endif %}
 {% endmacro %}

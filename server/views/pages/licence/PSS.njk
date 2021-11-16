@@ -30,7 +30,7 @@
     {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}
     {{ induction(licence.appointmentPerson, licence.appointmentAddress, licence.appointmentTime, licence.comTelephone) }}
     {{ releasedToOther() }}
-    {{ conditions(licence.standardConditions, additionalConditions, licence.bespokeConditions) }}
+    {{ conditions(licence.standardLicenceConditions, additionalConditions, licence.bespokeConditions) }}
     {{ cancellation() }}
     {{ recall() }}
     {{ failureToComply() }}

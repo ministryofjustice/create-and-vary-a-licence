@@ -30,7 +30,7 @@ describe('View and print - single licence view', () => {
         appointmentPerson: 'Jack Frost',
         appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
         comTelephone: '07878 234566',
-        additionalConditions: [
+        additionalLicenceConditions: [
           {
             code: 'condition1',
             category: 'Category 1',

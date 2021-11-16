@@ -5,9 +5,9 @@ import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 export default class AdditionalConditionsCallbackRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { additionalConditions } = res.locals.licence
+    const { additionalLicenceConditions } = res.locals.licence
 
-    const requiringInput = additionalConditions
+    const requiringInput = additionalLicenceConditions
       .filter((condition: AdditionalCondition) => getAdditionalConditionByCode(condition.code)?.requiresInput)
       .sort((a: AdditionalCondition, b: AdditionalCondition) => (a.sequence > b.sequence ? 1 : -1))
       .find((condition: AdditionalCondition) => condition.data.length === 0)

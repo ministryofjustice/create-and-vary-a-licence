@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import YesOrNo from '../../../enumeration/yesOrNo'
 
-export default class AdditionalConditionsQuestionRoutes {
+export default class AdditionalLicenceConditionsQuestionRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
-    res.render('pages/create/additionalConditionsQuestion')
+    res.render('pages/create/additionalLicenceConditionsQuestion')
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
