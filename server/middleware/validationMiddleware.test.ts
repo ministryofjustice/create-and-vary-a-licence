@@ -38,7 +38,7 @@ describe('validationMiddleware', () => {
       const next = jest.fn()
       const req = {
         params: {
-          additionalConditionId: '1',
+          conditionId: '1',
         },
         flash: jest.fn(),
         body: {

@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalLicenceConditions(licence, isEditable) %}
+{% macro additionalPssConditions(licence, isEditable) %}
     {% macro additionalConditionHtml(template, data) %}
         <div>
             {{ template }}
@@ -16,40 +16,40 @@
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
-            <h2 id="additional-licence-conditions-heading" class="govuk-heading-m">Additional licence conditions details</h2>
+            <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">Additional post sentence requirements details</h2>
         </div>
         {% if isEditable %}
             <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
-                <a href="{{ '/licence/create/id/' + licence.id + '/additional-licence-conditions?fromReview=true'}}" class="govuk-link govuk-!-font-size-19">Change</a>
+                <a href="{{ '/licence/create/id/' + licence.id + '/additional-pss-conditions?fromReview=true'}}" class="govuk-link govuk-!-font-size-19">Change</a>
             </div>
         {% endif %}
     </div>
 
-    {% set additionalLicenceConditions = [] %}
+    {% set additionalPssConditions = [] %}
 
-    {% for condition in licence.additionalLicenceConditions %}
-        {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+    {% for condition in licence.additionalPssConditions %}
+        {% set additionalPssConditions = (additionalPssConditions.push({
             key: {  text: condition.category },
             value: { html: additionalConditionHtml(condition.text, condition.data) },
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id + "?fromReview=true",
+                        href: "/licence/create/id/" + licence.id + "/additional-pss-conditions/condition/" + condition.id + "?fromReview=true",
                         text: "Edit",
                         visuallyHiddenText: "name"
                     }
                 ]
             } if condition | checkConditionRequiresInput and isEditable
-        }), additionalLicenceConditions) %}
+        }), additionalPssConditions) %}
     {% endfor %}
 
-    {% if additionalLicenceConditions.length > 0 %}
+    {% if additionalPssConditions.length > 0 %}
     {{ govukSummaryList({
-        attributes: { id: 'additional-licence-conditions-details' },
+        attributes: { id: 'additional-pss-conditions-details' },
         classes: 'govuk-!-margin-bottom-9',
-        rows: additionalLicenceConditions
+        rows: additionalPssConditions
     }) }}
     {% else %}
-        <p class="govuk-body govuk-!-margin-bottom-9">No additional licence conditions have been added to this licence</p>
+        <p class="govuk-body govuk-!-margin-bottom-9">No additional post sentence requirements have been added to this licence</p>
     {% endif %}
 {% endmacro %}

@@ -58,10 +58,10 @@ describe('Route - create licence - initial meeting date and time', () => {
   })
 
   describe('POST', () => {
-    it('should redirect to the additional conditions question page', async () => {
+    it('should redirect to the additional licence conditions question page', async () => {
       await handler.POST(req, res)
       expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, res.locals.user.username)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions-question')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
     })
 
     it('should redirect to the check your answers page if fromReview flag is set', async () => {

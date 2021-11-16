@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { getAdditionalConditionByCode } from '../../../utils/conditionsProvider'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 
-export default class AdditionalConditionsCallbackRoutes {
+export default class AdditionalLicenceConditionsCallbackRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { additionalLicenceConditions } = res.locals.licence
@@ -14,7 +14,7 @@ export default class AdditionalConditionsCallbackRoutes {
 
     if (requiringInput) {
       return res.redirect(
-        `/licence/create/id/${licenceId}/additional-conditions/condition/${requiringInput.id}${
+        `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${requiringInput.id}${
           req.query?.fromReview ? '?fromReview=true' : ''
         }`
       )

@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 
-import AdditionalConditionInputRoutes from './additionalConditionInput'
+import AdditionalLicenceConditionInputRoutes from './additionalLicenceConditionInput'
 import LicenceService from '../../../services/licenceService'
 import * as conditionsProvider from '../../../utils/conditionsProvider'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
 
-describe('Route Handlers - Create Licence - Additional Condition Input', () => {
-  const handler = new AdditionalConditionInputRoutes(licenceService)
+describe('Route Handlers - Create Licence - Additional Licence Condition Input', () => {
+  const handler = new AdditionalLicenceConditionInputRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -16,7 +16,7 @@ describe('Route Handlers - Create Licence - Additional Condition Input', () => {
     req = {
       params: {
         licenceId: '1',
-        additionalConditionId: '1',
+        conditionId: '1',
       },
       query: {},
       body: {},
@@ -83,13 +83,15 @@ describe('Route Handlers - Create Licence - Additional Condition Input', () => {
 
     it('should redirect to the callback function', async () => {
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions/callback')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions/callback')
     })
 
     it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions/callback?fromReview=true')
+      expect(res.redirect).toHaveBeenCalledWith(
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+      )
     })
   })
 })

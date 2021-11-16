@@ -18,7 +18,9 @@ export default class AdditionalLicenceConditionsRoutes {
     await this.licenceService.updateAdditionalConditions(licenceId, LicenceType.AP, req.body, username)
 
     return res.redirect(
-      `/licence/create/id/${licenceId}/additional-conditions/callback${req.query?.fromReview ? '?fromReview=true' : ''}`
+      `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
+        req.query?.fromReview ? '?fromReview=true' : ''
+      }`
     )
   }
 }

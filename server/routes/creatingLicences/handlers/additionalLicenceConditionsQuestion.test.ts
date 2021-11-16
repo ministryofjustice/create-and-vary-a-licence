@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import AdditionalLicenceConditionsQuestionRoutes from './additionalLicenceConditionsQuestion'
 
-describe('Route Handlers - Create Licence - Additional Conditions Question', () => {
+describe('Route Handlers - Create Licence - Additional Licence Conditions Question', () => {
   const handler = new AdditionalLicenceConditionsQuestionRoutes()
   let req: Request
   let res: Response
@@ -36,7 +36,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Question', () 
         },
       } as unknown as Request
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions')
     })
 
     it('should redirect to the bespoke conditions question page when answer is NO', async () => {

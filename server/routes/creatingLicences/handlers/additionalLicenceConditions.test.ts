@@ -11,7 +11,7 @@ jest
   .spyOn(conditionsProvider, 'getGroupedAdditionalConditions')
   .mockReturnValue([{ groupName: 'group1', conditions: [{ code: 'condition1' }] }])
 
-describe('Route Handlers - Create Licence - Additional Conditions', () => {
+describe('Route Handlers - Create Licence - Additional Licence Conditions', () => {
   const handler = new AdditionalLicenceConditionsRoutes(licenceService)
   let req: Request
   let res: Response
@@ -60,13 +60,15 @@ describe('Route Handlers - Create Licence - Additional Conditions', () => {
 
     it('should redirect to the callback function', async () => {
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions/callback')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions/callback')
     })
 
     it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions/callback?fromReview=true')
+      expect(res.redirect).toHaveBeenCalledWith(
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+      )
     })
   })
 })

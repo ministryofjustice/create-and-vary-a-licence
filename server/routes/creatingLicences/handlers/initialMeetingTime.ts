@@ -19,7 +19,7 @@ export default class InitialMeetingTimeRoutes {
     if (req.query?.fromReview) {
       res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     } else {
-      res.redirect(`/licence/create/id/${licenceId}/additional-conditions-question`)
+      res.redirect(`/licence/create/id/${licenceId}/additional-licence-conditions-question`)
     }
   }
 }

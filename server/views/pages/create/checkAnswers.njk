@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
+{% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
@@ -21,8 +22,16 @@
         <div class="govuk-grid-column-two-thirds-from-desktop">
 
             {{ inductionMeetingDetails(licence, isEditable) }}
-            {{ additionalLicenceConditions(licence, isEditable) }}
+
+            {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
+                {{ additionalLicenceConditions(licence, isEditable) }}
+            {% endif %}
+
             {{ bespokeConditions(licence, isEditable) }}
+
+            {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
+                {{ additionalPssConditions(licence, isEditable) }}
+            {% endif %}
 
             {% if isEditable %}
                 <form method="POST">

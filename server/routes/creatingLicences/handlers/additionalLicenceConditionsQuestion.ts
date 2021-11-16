@@ -10,7 +10,7 @@ export default class AdditionalLicenceConditionsQuestionRoutes {
     const { licenceId } = req.params
     const { answer } = req.body
     if (answer === YesOrNo.YES) {
-      return res.redirect(`/licence/create/id/${licenceId}/additional-conditions`)
+      return res.redirect(`/licence/create/id/${licenceId}/additional-licence-conditions`)
     }
 
     return res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)
