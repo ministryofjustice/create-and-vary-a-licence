@@ -7,11 +7,6 @@ export default class AdditionalLicenceConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    if (res.locals.licence.typeCode !== LicenceType.AP && res.locals.licence.typeCode !== LicenceType.AP_PSS) {
-      res.status(404)
-      throw new Error('Additional condition cannot be added to this type of licence')
-    }
-
     const additionalConditions = getGroupedAdditionalConditions()
     return res.render('pages/create/additionalLicenceConditions', { additionalConditions })
   }

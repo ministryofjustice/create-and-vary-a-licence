@@ -13,7 +13,6 @@ const licenceService = new LicenceService(null, null, null) as jest.Mocked<Licen
 const middleware = fetchLicence(licenceService)
 
 beforeEach(() => {
-  req.method = 'GET'
   req.params = {
     licenceId: '1',
   }
@@ -26,15 +25,6 @@ afterEach(() => {
 })
 
 describe('fetchLicenceMiddleware', () => {
-  it('should not read from licence api if request method is not GET', async () => {
-    req.method = 'POST'
-
-    await middleware(req, res, next)
-    expect(res.locals.licence).toBeUndefined()
-    expect(licenceService.getLicence).toBeCalledTimes(0)
-    expect(next).toBeCalledTimes(1)
-  })
-
   it('should not read from licence api if route params not contains licenceId', async () => {
     req.params = {}
 

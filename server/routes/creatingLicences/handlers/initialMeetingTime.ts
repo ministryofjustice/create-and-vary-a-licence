@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import { jsonToSimpleDateTime } from '../../../utils/utils'
+import LicenceType from '../../../enumeration/licenceType'
 
 export default class InitialMeetingTimeRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -13,13 +14,19 @@ export default class InitialMeetingTimeRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
+    const { licence } = res.locals
     const { username } = res.locals.user
+
     await this.licenceService.updateAppointmentTime(licenceId, req.body, username)
 
     if (req.query?.fromReview) {
-      res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
-    } else {
-      res.redirect(`/licence/create/id/${licenceId}/additional-licence-conditions-question`)
+      return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     }
+
+    if (licence.typeCode === LicenceType.AP || licence.typeCode === LicenceType.AP_PSS) {
+      return res.redirect(`/licence/create/id/${licenceId}/additional-licence-conditions-question`)
+    }
+
+    return res.redirect(`/licence/create/id/${licenceId}/additional-pss-conditions-question`)
   }
 }

@@ -231,6 +231,7 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display a table containing the bespoke conditions', () => {
     viewContext = {
       licence: {
+        typeCode: 'AP',
         bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
       },
     }
