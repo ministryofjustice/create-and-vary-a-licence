@@ -5,7 +5,7 @@ import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
 
 class ReportToPoliceStation {
   @Expose()
-  @IsNotEmpty({ message: 'Enter at least one police station' })
+  @IsNotEmpty({ message: 'Enter name of police station' })
   policeStation: string
 
   @Expose()
