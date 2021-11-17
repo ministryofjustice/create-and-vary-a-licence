@@ -30,7 +30,10 @@ export default class CaseloadService {
       LicenceStatus.RECALLED,
     ])
 
-    return (await this.prisonerService.searchPrisonersByNomisIds(username, caseloadNomisIds))
+    const offenders = await this.prisonerService.searchPrisonersByNomisIds(username, caseloadNomisIds)
+    const hdcStatuses = await this.prisonerService.getHdcStatuses(username, offenders)
+
+    return offenders
       .map(offender => {
         const matchingDeliusCase = managedOffenders.find(
           deliusCase => deliusCase.nomsNumber === offender.prisonerNumber
@@ -49,7 +52,10 @@ export default class CaseloadService {
       .filter(offender => offender.status && offender.status.startsWith('ACTIVE'))
       .filter(offender => !offender.indeterminateSentence && offender.conditionalReleaseDate)
       .filter(offender => !offender.releaseDate || moment().isBefore(moment(offender.releaseDate, 'YYYY-MM-DD')))
-      .filter(offender => !offender.homeDetentionCurfewEndDate)
+      .filter(offender => {
+        const hdcStatus = hdcStatuses.find(hdc => hdc.bookingId === offender.bookingId)
+        return !hdcStatus?.eligibleForHdc
+      })
       .filter(offender => {
         const existingLicence = existingLicences.find(licence => licence.nomisId === offender.nomsNumber)
         return !existingLicence

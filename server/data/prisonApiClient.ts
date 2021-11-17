@@ -6,6 +6,7 @@ import type {
   PrisonApiPrisoner,
   PrisonApiUserDetail,
   PrisonInformation,
+  HomeDetentionCurfew,
 } from '../@types/prisonApiClientTypes'
 
 export default class PrisonApiClient {
@@ -36,6 +37,12 @@ export default class PrisonApiClient {
 
   async getPrisonInformation(prisonId: string): Promise<PrisonInformation> {
     return this.restClient.get({ path: `/api/agencies/prison/${prisonId}` }) as Promise<PrisonInformation>
+  }
+
+  async getLatestHdcStatus(bookingId: string): Promise<HomeDetentionCurfew> {
+    return this.restClient.get({
+      path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,
+    }) as Promise<HomeDetentionCurfew>
   }
 
   // Called with the user's own token

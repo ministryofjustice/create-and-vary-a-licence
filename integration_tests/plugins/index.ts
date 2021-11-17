@@ -44,6 +44,7 @@ export default (on: (string, Record) => void): void => {
     stubGetPrisonUserCaseloads: prison.stubGetUserCaseloads,
     stubGetPrisonerDetail: prison.stubGetPrisonerDetail,
     stubGetPrisonInformation: prison.stubGetPrisonInformation,
+    stubGetHdcStatus: prison.stubGetHdcStatus,
 
     stubGetProbationer: probationSearch.stubGetProbationer,
   })
