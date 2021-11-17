@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 
-import AdditionalConditionsCallbackRoutes from './additionalConditionsCallback'
+import AdditionalLicenceConditionsCallbackRoutes from './additionalLicenceConditionsCallback'
 
 import * as conditionsProvider from '../../../utils/conditionsProvider'
 
 const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
 
 describe('Route Handlers - Create Licence - Additional Conditions Callback', () => {
-  const handler = new AdditionalConditionsCallbackRoutes()
+  const handler = new AdditionalLicenceConditionsCallbackRoutes()
   let req: Request
   let res: Response
 
@@ -77,7 +77,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
 
       await handler.GET(req, res)
 
-      expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/additional-conditions/condition/3`)
+      expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/additional-licence-conditions/condition/3`)
     })
 
     it('should redirect to the input page with fromReview flag set', async () => {
@@ -98,7 +98,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       await handler.GET(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/1/additional-conditions/condition/1?fromReview=true`
+        `/licence/create/id/1/additional-licence-conditions/condition/1?fromReview=true`
       )
     })
 

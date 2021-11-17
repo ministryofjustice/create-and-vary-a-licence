@@ -3,14 +3,14 @@ import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import { getAdditionalConditionByCode } from '../../../utils/conditionsProvider'
 
-export default class AdditionalConditionInputRoutes {
+export default class AdditionalLicenceConditionInputRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { additionalLicenceConditions } = res.locals.licence
-    const { additionalConditionId } = req.params
+    const { conditionId } = req.params
     const additionalCondition = additionalLicenceConditions.find(
-      (condition: AdditionalCondition) => condition.id === +additionalConditionId
+      (condition: AdditionalCondition) => condition.id === +conditionId
     )
 
     if (!additionalCondition) {
@@ -19,18 +19,20 @@ export default class AdditionalConditionInputRoutes {
     }
 
     const config = getAdditionalConditionByCode(additionalCondition.code)
-    return res.render('pages/create/additionalConditionInput', { additionalCondition, config })
+    return res.render('pages/create/additionalLicenceConditionInput', { additionalCondition, config })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { additionalConditionId } = req.params
+    const { conditionId } = req.params
     const { username } = req.user
 
-    await this.licenceService.updateAdditionalConditionData(licenceId, additionalConditionId, req.body, username)
+    await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, username)
 
     return res.redirect(
-      `/licence/create/id/${licenceId}/additional-conditions/callback${req.query?.fromReview ? '?fromReview=true' : ''}`
+      `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
+        req.query?.fromReview ? '?fromReview=true' : ''
+      }`
     )
   }
 }

@@ -1,6 +1,7 @@
 import conditionsConfig from '../config/conditions'
 import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { convertToTitleCase } from './utils'
+import LicenceType from '../enumeration/licenceType'
 
 export function getVersion(): string {
   return conditionsConfig.version
@@ -16,12 +17,14 @@ export function getStandardConditions(licenceType: string): Record<string, unkno
 }
 
 export function getAdditionalConditionByCode(searchCode: string): Record<string, unknown> {
-  return conditionsConfig.additionalConditions.find(({ code }) => code === searchCode)
+  return Object.values(conditionsConfig.additionalConditions)
+    .flat()
+    .find(({ code }) => code === searchCode)
 }
 
-export function getGroupedAdditionalConditions(): Record<string, unknown>[] {
+export function getGroupedAdditionalConditions(licenceType: LicenceType): Record<string, unknown>[] {
   const map = new Map()
-  conditionsConfig.additionalConditions.forEach(condition => {
+  conditionsConfig.additionalConditions[licenceType].forEach((condition: Record<string, unknown>) => {
     const collection = map.get(condition.category)
     if (!collection) {
       map.set(condition.category, [condition])

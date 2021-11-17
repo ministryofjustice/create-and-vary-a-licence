@@ -3,22 +3,22 @@ import { getGroupedAdditionalConditions } from '../../../utils/conditionsProvide
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
 
-export default class AdditionalLicenceConditionsRoutes {
+export default class AdditionalPssConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const additionalConditions = getGroupedAdditionalConditions(LicenceType.AP)
-    return res.render('pages/create/additionalLicenceConditions', { additionalConditions })
+    const additionalConditions = getGroupedAdditionalConditions(LicenceType.PSS)
+    return res.render('pages/create/additionalPssConditions', { additionalConditions })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { username } = req.user
 
-    await this.licenceService.updateAdditionalConditions(licenceId, LicenceType.AP, req.body, username)
+    await this.licenceService.updateAdditionalConditions(licenceId, LicenceType.PSS, req.body, username)
 
     return res.redirect(
-      `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
+      `/licence/create/id/${licenceId}/additional-pss-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
       }`
     )

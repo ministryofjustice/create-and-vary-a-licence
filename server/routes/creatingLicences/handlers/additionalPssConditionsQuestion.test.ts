@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 
-import AdditionalLicenceConditionsQuestionRoutes from './additionalLicenceConditionsQuestion'
+import AdditionalPssConditionsQuestionRoutes from './additionalPssConditionsQuestion'
 
-describe('Route Handlers - Create Licence - Additional Licence Conditions Question', () => {
-  const handler = new AdditionalLicenceConditionsQuestionRoutes()
+describe('Route Handlers - Create Licence - Additional Pss Conditions Question', () => {
+  const handler = new AdditionalPssConditionsQuestionRoutes()
   let req: Request
   let res: Response
 
@@ -23,7 +23,7 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions Questi
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditionsQuestion')
+      expect(res.render).toHaveBeenCalledWith('pages/create/additionalPssConditionsQuestion')
     })
   })
 
@@ -36,7 +36,7 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions Questi
         },
       } as unknown as Request
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions')
     })
 
     it('should redirect to the bespoke conditions question page when answer is NO', async () => {
@@ -47,7 +47,7 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions Questi
         },
       } as unknown as Request
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions-question')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })
 })

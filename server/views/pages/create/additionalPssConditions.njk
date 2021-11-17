@@ -3,15 +3,15 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% set pageTitle = applicationName + " - Create a licence - Additional Licence Conditions" %}
-{% set pageId = "additional-licence-conditions-page" %}
-{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions-question" %}
+{% set pageTitle = applicationName + " - Create a licence - Additional Post Sentence Supervision Requirements" %}
+{% set pageId = "additional-pss-conditions-page" %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Select additional licence conditions</h1>
-            <span class="govuk-hint">Select all relevant conditions</span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Select additional post sentence supervision requirements</h1>
+            <span class="govuk-hint">Select all relevant post sentence supervision requirements</span>
         </div>
     </div>
 
@@ -27,7 +27,7 @@
                             id: condition.code,
                             value: condition.code,
                             text: condition.text,
-                            checked: condition.code | additionalConditionChecked(licence.additionalLicenceConditions),
+                            checked: condition.code | additionalConditionChecked(licence.additionalPssConditions),
                             label: {
                                 classes: 'govuk-!-padding-top-0'
                             }

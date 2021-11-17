@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
+{% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 
 {% set pageTitle = applicationName + " - Print a licence" %}
@@ -19,8 +20,13 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
             {{ inductionMeetingDetails(licence) }}
-            {{ additionalLicenceConditions(licence) }}
-            {{ bespokeConditions(licence) }}
+            {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
+                {{ additionalLicenceConditions(licence) }}
+                {{ bespokeConditions(licence) }}
+            {% endif %}
+            {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
+                {{ additionalPssConditions(licence) }}
+            {% endif %}
 
             <p class="govuk-body">
                 {{ govukButton({

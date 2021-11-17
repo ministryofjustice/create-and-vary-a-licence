@@ -22,8 +22,12 @@ import Telephone from './types/telephone'
 import SimpleDateTime from './types/simpleDateTime'
 import YesOrNoQuestion from './types/yesOrNo'
 import AdditionalConditions from './types/additionalConditions'
-import AdditionalConditionsCallbackRoutes from './handlers/additionalConditionsCallback'
-import AdditionalConditionInputRoutes from './handlers/additionalConditionInput'
+import AdditionalLicenceConditionsCallbackRoutes from './handlers/additionalLicenceConditionsCallback'
+import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceConditionInput'
+import AdditionalPssConditionsQuestionRoutes from './handlers/additionalPssConditionsQuestion'
+import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
+import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
+import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
 
 export default function Index({ licenceService, caseloadService }: Services): Router {
   const router = Router()
@@ -39,7 +43,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   const get = (path: string, handler: RequestHandler) =>
     router.get(routePrefix(path), fetchLicence(licenceService), asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler, type?: new () => unknown) =>
-    router.post(routePrefix(path), validationMiddleware(type), asyncMiddleware(handler))
+    router.post(routePrefix(path), fetchLicence(licenceService), validationMiddleware(type), asyncMiddleware(handler))
 
   const caseloadHandler = new CaseloadRoutes(licenceService, caseloadService)
   const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)
@@ -48,8 +52,12 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService)
   const additionalLicenceConditionsQuestionHandler = new AdditionalLicenceConditionsQuestionRoutes()
   const additionalLicenceConditionsHandler = new AdditionalLicenceConditionsRoutes(licenceService)
-  const additionalConditionsCallbackHandler = new AdditionalConditionsCallbackRoutes()
-  const additionalConditionInputHandler = new AdditionalConditionInputRoutes(licenceService)
+  const additionalLicenceConditionsCallbackHandler = new AdditionalLicenceConditionsCallbackRoutes()
+  const additionalLicenceConditionInputHandler = new AdditionalLicenceConditionInputRoutes(licenceService)
+  const additionalPssConditionsQuestionHandler = new AdditionalPssConditionsQuestionRoutes()
+  const additionalPssConditionsHandler = new AdditionalPssConditionsRoutes(licenceService)
+  const additionalPssConditionsCallbackHandler = new AdditionalPssConditionsCallbackRoutes()
+  const additionalPssConditionInputHandler = new AdditionalPssConditionInputRoutes(licenceService)
   const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
   const bespokeConditionsHandler = new BespokeConditionsRoutes(licenceService)
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService)
@@ -65,17 +73,31 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   post('/id/:licenceId/initial-meeting-contact', initialMeetingContactHandler.POST, Telephone)
   get('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.GET)
   post('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.POST, SimpleDateTime)
-  get('/id/:licenceId/additional-conditions-question', additionalLicenceConditionsQuestionHandler.GET)
+  get('/id/:licenceId/additional-licence-conditions-question', additionalLicenceConditionsQuestionHandler.GET)
   post(
-    '/id/:licenceId/additional-conditions-question',
+    '/id/:licenceId/additional-licence-conditions-question',
     additionalLicenceConditionsQuestionHandler.POST,
     YesOrNoQuestion
   )
-  get('/id/:licenceId/additional-conditions', additionalLicenceConditionsHandler.GET)
-  post('/id/:licenceId/additional-conditions', additionalLicenceConditionsHandler.POST, AdditionalConditions)
-  get('/id/:licenceId/additional-conditions/callback', additionalConditionsCallbackHandler.GET)
-  get('/id/:licenceId/additional-conditions/condition/:additionalConditionId', additionalConditionInputHandler.GET)
-  post('/id/:licenceId/additional-conditions/condition/:additionalConditionId', additionalConditionInputHandler.POST)
+  get('/id/:licenceId/additional-licence-conditions', additionalLicenceConditionsHandler.GET)
+  post('/id/:licenceId/additional-licence-conditions', additionalLicenceConditionsHandler.POST, AdditionalConditions)
+  get('/id/:licenceId/additional-licence-conditions/callback', additionalLicenceConditionsCallbackHandler.GET)
+  get('/id/:licenceId/additional-licence-conditions/condition/:conditionId', additionalLicenceConditionInputHandler.GET)
+  post(
+    '/id/:licenceId/additional-licence-conditions/condition/:conditionId',
+    additionalLicenceConditionInputHandler.POST
+  )
+  get('/id/:licenceId/additional-pss-conditions-question', additionalPssConditionsQuestionHandler.GET)
+  post(
+    '/id/:licenceId/additional-pss-conditions-question',
+    additionalPssConditionsQuestionHandler.POST,
+    YesOrNoQuestion
+  )
+  get('/id/:licenceId/additional-pss-conditions', additionalPssConditionsHandler.GET)
+  post('/id/:licenceId/additional-pss-conditions', additionalPssConditionsHandler.POST, AdditionalConditions)
+  get('/id/:licenceId/additional-pss-conditions/callback', additionalPssConditionsCallbackHandler.GET)
+  get('/id/:licenceId/additional-pss-conditions/condition/:conditionId', additionalPssConditionInputHandler.GET)
+  post('/id/:licenceId/additional-pss-conditions/condition/:conditionId', additionalPssConditionInputHandler.POST)
   get('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.GET)
   post('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.GET)

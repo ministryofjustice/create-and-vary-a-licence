@@ -1,5 +1,5 @@
 import Page from './page'
-import CheckAnswersPage from './checkAnswers'
+import PssConditionsQuestionPage from './pssConditionsQuestion'
 
 export default class BespokeConditionsPage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -21,10 +21,10 @@ export default class BespokeConditionsPage extends Page {
     return this
   }
 
-  clickContinue = (): CheckAnswersPage => {
+  clickContinue = (): PssConditionsQuestionPage => {
     cy.task('stubPutBespokeConditions')
-    cy.task('stubGetCompletedLicence', 'IN_PROGRESS')
+    cy.task('stubGetLicence')
     cy.get(this.continueButtonId).click()
-    return Page.verifyOnPage(CheckAnswersPage)
+    return Page.verifyOnPage(PssConditionsQuestionPage)
   }
 }

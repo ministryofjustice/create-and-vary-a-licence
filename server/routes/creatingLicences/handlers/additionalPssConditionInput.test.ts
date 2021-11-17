@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 
-import AdditionalConditionInputRoutes from './additionalConditionInput'
 import LicenceService from '../../../services/licenceService'
 import * as conditionsProvider from '../../../utils/conditionsProvider'
+import AdditionalPssConditionInputRoutes from './additionalPssConditionInput'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
 
-describe('Route Handlers - Create Licence - Additional Condition Input', () => {
-  const handler = new AdditionalConditionInputRoutes(licenceService)
+describe('Route Handlers - Create Licence - Additional Licence Condition Input', () => {
+  const handler = new AdditionalPssConditionInputRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -16,7 +16,7 @@ describe('Route Handlers - Create Licence - Additional Condition Input', () => {
     req = {
       params: {
         licenceId: '1',
-        additionalConditionId: '1',
+        conditionId: '1',
       },
       query: {},
       body: {},
@@ -31,25 +31,20 @@ describe('Route Handlers - Create Licence - Additional Condition Input', () => {
       status: jest.fn(),
       locals: {
         licence: {
-          additionalLicenceConditions: [],
+          additionalPssConditions: [],
         },
       },
     } as unknown as Response
   })
 
   describe('GET', () => {
-    it('should throw 404 if the additional condition is not found on the licence', async () => {
-      await expect(handler.GET(req, res)).rejects.toThrow('Additional condition not found')
-      expect(res.status).toHaveBeenCalledWith(404)
-    })
-
     it('should render view with the additional condition and its config', async () => {
       conditionsProviderSpy.mockReturnValue({
         inputs: [],
       })
 
       res.locals.licence = {
-        additionalLicenceConditions: [
+        additionalPssConditions: [
           {
             id: 1,
             code: 'code1',
@@ -59,7 +54,7 @@ describe('Route Handlers - Create Licence - Additional Condition Input', () => {
 
       await handler.GET(req, res)
       expect(conditionsProviderSpy).toHaveBeenCalledWith('code1')
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalConditionInput', {
+      expect(res.render).toHaveBeenCalledWith('pages/create/additionalPssConditionInput', {
         additionalCondition: {
           id: 1,
           code: 'code1',
@@ -83,13 +78,15 @@ describe('Route Handlers - Create Licence - Additional Condition Input', () => {
 
     it('should redirect to the callback function', async () => {
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions/callback')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions/callback')
     })
 
     it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-conditions/callback?fromReview=true')
+      expect(res.redirect).toHaveBeenCalledWith(
+        '/licence/create/id/1/additional-pss-conditions/callback?fromReview=true'
+      )
     })
   })
 })

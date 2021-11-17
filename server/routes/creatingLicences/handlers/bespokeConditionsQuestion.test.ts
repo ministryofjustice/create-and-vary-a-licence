@@ -20,6 +20,9 @@ describe('Route Handlers - Create Licence - Bespoke Conditions Question', () => 
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
+      locals: {
+        licence: {},
+      },
     } as unknown as Response
   })
 
@@ -42,7 +45,9 @@ describe('Route Handlers - Create Licence - Bespoke Conditions Question', () => 
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/bespoke-conditions')
     })
 
-    it('should redirect to the check answers page when answer is NO', async () => {
+    it('should redirect to the check answers page when answer is NO and licence type is AP', async () => {
+      res.locals.licence.typeCode = 'AP'
+
       req = {
         ...req,
         body: {
@@ -51,6 +56,32 @@ describe('Route Handlers - Create Licence - Bespoke Conditions Question', () => 
       } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+    })
+
+    it('should redirect to the PSS conditions question page when answer is NO and licence type is PSS', async () => {
+      res.locals.licence.typeCode = 'PSS'
+
+      req = {
+        ...req,
+        body: {
+          answer: 'no',
+        },
+      } as unknown as Request
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
+    })
+
+    it('should redirect to the PSS conditions question page when answer is NO and licence type is AP_PSS', async () => {
+      res.locals.licence.typeCode = 'AP_PSS'
+
+      req = {
+        ...req,
+        body: {
+          answer: 'no',
+        },
+      } as unknown as Request
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
     })
   })
 })
