@@ -24,7 +24,7 @@
 {% set pageTitle = offenderName %}
 
 {% block content %}
-    {{ title(offenderName) }}
+    {{ title(offenderName, licence.typeCode) }}
     {{ offender(licence.dateOfBirth, licence.licenceExpiryDate, licence.nomsId, imageData, htmlPrint) }}
     {{ objectives() }}
     {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}

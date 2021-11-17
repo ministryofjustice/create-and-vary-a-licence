@@ -1,5 +1,13 @@
-{% macro title(offenderName) %}
+{% macro title(offenderName, licenceType) %}
     <div class="title" id="title">
-        Licence for {{ offenderName }}
+        {% if licenceType === 'AP' %}
+            Licence for {{ offenderName }}
+        {% endif %}
+        {% if licenceType === 'PSS' %}
+            Post sentence supervision order for {{ offenderName }}
+        {% endif %}
+        {% if licenceType === 'AP_PSS' %}
+            Licence and post sentence supervision order for {{ offenderName }}
+        {% endif %}
     </div>
 {% endmacro %}
