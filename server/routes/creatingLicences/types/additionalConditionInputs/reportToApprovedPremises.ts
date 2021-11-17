@@ -5,7 +5,7 @@ import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
 
 class ReportToApprovedPremises {
   @Expose()
-  @IsNotEmpty({ message: 'Enter at least one approved premises' })
+  @IsNotEmpty({ message: 'Enter name of approved premises' })
   approvedPremises: string
 
   @Expose()
