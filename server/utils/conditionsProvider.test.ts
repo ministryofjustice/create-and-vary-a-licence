@@ -3,6 +3,7 @@ import {
   getGroupedAdditionalConditions,
   getStandardConditions,
 } from './conditionsProvider'
+import LicenceType from '../enumeration/licenceType'
 
 jest.mock('../config/conditions', () => ({
   standardConditions: {
@@ -29,26 +30,42 @@ jest.mock('../config/conditions', () => ({
       },
     ],
   },
-  additionalConditions: [
-    {
-      code: 'code1',
-      category: 'group1',
-    },
-    {
-      code: 'code2',
-      category: 'group2',
-    },
-    {
-      code: 'code3',
-      category: 'group2',
-    },
-  ],
+  additionalConditions: {
+    AP: [
+      {
+        code: 'code1',
+        category: 'group1',
+      },
+      {
+        code: 'code2',
+        category: 'group2',
+      },
+      {
+        code: 'code3',
+        category: 'group2',
+      },
+    ],
+    PSS: [
+      {
+        code: 'code1',
+        category: 'group1',
+      },
+      {
+        code: 'code2',
+        category: 'group2',
+      },
+      {
+        code: 'code3',
+        category: 'group2',
+      },
+    ],
+  },
 }))
 
 describe('Conditions Provider', () => {
   describe('getGroupedAdditionalConditions', () => {
     it('should return the list of additional conditions grouped by group name', () => {
-      expect(getGroupedAdditionalConditions()).toEqual([
+      expect(getGroupedAdditionalConditions(<LicenceType>'AP')).toEqual([
         { category: 'group1', conditions: [{ category: 'group1', code: 'code1' }] },
         {
           category: 'group2',

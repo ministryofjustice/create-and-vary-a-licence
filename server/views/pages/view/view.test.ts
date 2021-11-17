@@ -25,6 +25,7 @@ describe('View and print - single licence view', () => {
     viewContext = {
       licence: {
         id: 1,
+        typeCode: 'AP_PSS',
         forename: 'John',
         surname: 'Smith',
         appointmentPerson: 'Jack Frost',
@@ -62,6 +63,19 @@ describe('View and print - single licence view', () => {
             ],
           },
         ],
+        additionalPssConditions: [
+          {
+            code: 'condition1',
+            category: 'Category 1',
+            text: 'Template 1',
+            data: [
+              {
+                field: 'field1',
+                value: 'Data 1',
+              },
+            ],
+          },
+        ],
         bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
       },
     }
@@ -73,25 +87,39 @@ describe('View and print - single licence view', () => {
     // Check the initial meeting details are populated
     expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
 
-    // Check the additonal conditions are rendered correctly using the macro for them
-    expect($('#additional-conditions-details > .govuk-summary-list__row').length).toBe(2)
-    expect($('#additional-conditions-details > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
-    expect($('#additional-conditions-details > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe(
+    // Check the additional licence conditions are rendered correctly using the macro for them
+    expect($('#additional-licence-conditions-details > .govuk-summary-list__row').length).toBe(2)
+    expect($('#additional-licence-conditions-details > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
+    expect($('#additional-licence-conditions-details > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe(
       'Template 1'
     )
-    expect($('#additional-conditions-details > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe(
-      'Data 1'
-    )
-    expect($('#additional-conditions-details > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
-    expect($('#additional-conditions-details > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
+    expect(
+      $('#additional-licence-conditions-details > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()
+    ).toBe('Data 1')
+    expect($('#additional-licence-conditions-details > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
+    expect($('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
       'Template 2'
     )
     expect(
-      $('#additional-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
+      $('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)')
+        .text()
+        .trim()
     ).toBe('Data 2A, Data 2B')
     expect(
-      $('#additional-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
+      $('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)')
+        .text()
+        .trim()
     ).toBe('Data 2C')
+
+    // Check the additional pss conditions are rendered correctly using the macro for them
+    expect($('#additional-pss-conditions-details > .govuk-summary-list__row').length).toBe(1)
+    expect($('#additional-pss-conditions-details > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
+    expect($('#additional-pss-conditions-details > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe(
+      'Template 1'
+    )
+    expect(
+      $('#additional-pss-conditions-details > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()
+    ).toBe('Data 1')
 
     // Check the bespoke conditions are rendered correctly using the macro for them
     expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)

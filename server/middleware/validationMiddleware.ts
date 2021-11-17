@@ -10,9 +10,9 @@ export type FieldValidationError = {
 
 function validationMiddleware(type?: new () => unknown): RequestHandler {
   return async (req, res, next) => {
-    const { additionalConditionId } = req.params
+    const { conditionId } = req.params
     let additionalConditionType
-    if (additionalConditionId) {
+    if (conditionId) {
       additionalConditionType = getAdditionalConditionByCode(req.body.code)?.type as ClassConstructor<unknown>
     }
 

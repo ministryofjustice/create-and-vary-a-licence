@@ -15,7 +15,7 @@ export default function Index({ licenceService, prisonerService, qrCodeService }
     router.get(routePrefix(path), fetchLicence(licenceService), asyncMiddleware(handler))
 
   const post = (path: string, handler: RequestHandler, type?: new () => unknown) =>
-    router.post(routePrefix(path), validationMiddleware(type), asyncMiddleware(handler))
+    router.post(routePrefix(path), fetchLicence(licenceService), validationMiddleware(type), asyncMiddleware(handler))
 
   const viewCasesHandler = new ViewAndPrintCaseRoutes(licenceService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes()
