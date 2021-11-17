@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { Licence } from '../../../@types/licenceApiClientTypes'
 
 jest.mock('../../../services/licenceService')
 
