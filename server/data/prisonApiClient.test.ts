@@ -3,6 +3,7 @@ import config from '../config'
 import PrisonerService from '../services/prisonerService'
 import HmppsAuthClient from './hmppsAuthClient'
 import {
+  HomeDetentionCurfew,
   PrisonApiCaseload,
   PrisonApiPrisoner,
   PrisonApiSentenceDetail,
@@ -12,6 +13,7 @@ import {
 import PrisonApiClient from './prisonApiClient'
 import UserService from '../services/userService'
 import CommunityService from '../services/communityService'
+import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 
 jest.mock('./hmppsAuthClient')
 jest.mock('../services/communityService')
@@ -196,6 +198,48 @@ describe('Prison API client tests', () => {
       const data = await prisonerService.getPrisonerImageData('XTEST1', 'AA1234A')
       // Matches the first few characters of the encoded missing image placeholder
       expect(data).toContain('iVBORw0KGgoAAAA')
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+  })
+
+  describe('HDC status checks', () => {
+    const okResponse = {
+      approvalStatus: 'APPROVED',
+      approvalStatusDate: '12/12/2022',
+      checksPassedDate: '12/12/2022',
+      passed: true,
+    } as HomeDetentionCurfew
+
+    const offenderList = [{ bookingId: '1', homeDetentionCurfewEndDate: '2023-06-12' }] as Prisoner[]
+
+    it('Check for HDC eligible', async () => {
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/api/offender-sentences/booking/1/home-detention-curfews/latest').reply(200, okResponse)
+      const result = await prisonerService.getHdcStatuses('XTEST1', offenderList)
+      expect(result).toHaveLength(1)
+      expect(result[0].eligibleForHdc).toBe(true)
+      expect(nock.isDone()).toBe(true)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+    })
+
+    it('Check for HDC status not found - 404', async () => {
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      fakeApi.get('/api/offender-sentences/booking/1/home-detention-curfews/latest').reply(404, {})
+      const result = await prisonerService.getHdcStatuses('XTEST1', offenderList)
+      expect(result).toHaveLength(1)
+      expect(result[0].eligibleForHdc).toBe(false)
+      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
+      expect(nock.isDone()).toBe(true)
+    })
+
+    it('Check for HDC status found but REJECTED', async () => {
+      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
+      const rejectResponse = { ...okResponse, approvalStatus: 'REJECTED' }
+      fakeApi.get('/api/offender-sentences/booking/1/home-detention-curfews/latest').reply(200, rejectResponse)
+      const result = await prisonerService.getHdcStatuses('XTEST1', offenderList)
+      expect(result).toHaveLength(1)
+      expect(result[0].eligibleForHdc).toBe(false)
       expect(nock.isDone()).toBe(true)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
     })

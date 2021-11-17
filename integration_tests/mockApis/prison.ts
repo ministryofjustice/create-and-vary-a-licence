@@ -70,6 +70,25 @@ export default {
     })
   },
 
+  stubGetHdcStatus: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/offender-sentences/booking/(\\d*)/home-detention-curfews/latest`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          approvalStatus: 'REJECTED',
+          approvalStatusDate: '12/12/2022',
+          checksPassedDate: '12/12/2022',
+          passed: true,
+        },
+      },
+    })
+  },
+
   stubGetUserCaseloads: (): SuperAgentRequest => {
     return stubFor({
       request: {

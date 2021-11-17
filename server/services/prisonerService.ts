@@ -6,6 +6,7 @@ import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
+import HdcStatus from '../@types/HdcStatus'
 
 export default class PrisonerService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -55,5 +56,24 @@ export default class PrisonerService {
       prisonerNumbers: nomisIds,
     }
     return new PrisonerSearchApiClient(token).searchPrisonersByNomsIds(prisonerSearchCriteria)
+  }
+
+  async getHdcStatuses(username: string, offenders: Prisoner[]): Promise<HdcStatus[]> {
+    const listOfHdcStatus: HdcStatus[] = []
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+    const client = new PrisonApiClient(token)
+    await Promise.all(
+      offenders.map(async o => {
+        try {
+          const hdc = await client.getLatestHdcStatus(o.bookingId)
+          listOfHdcStatus.push(
+            new HdcStatus(o.bookingId, o.homeDetentionCurfewEndDate, hdc?.passed, hdc?.approvalStatus)
+          )
+        } catch (error) {
+          listOfHdcStatus.push(new HdcStatus(o.bookingId, o.homeDetentionCurfewEndDate))
+        }
+      })
+    )
+    return listOfHdcStatus
   }
 }
