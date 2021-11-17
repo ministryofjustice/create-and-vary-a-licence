@@ -17,8 +17,8 @@ export default class CheckAnswersRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { username } = req.user
+    const { licence } = res.locals
 
-    const licence = await this.licenceService.getLicence(licenceId, username)
     const errors = await this.validateLicence(licence)
     if (errors.length > 0) {
       req.flash('validationErrors', JSON.stringify(errors))

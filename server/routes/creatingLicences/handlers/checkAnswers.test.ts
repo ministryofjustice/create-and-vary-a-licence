@@ -28,6 +28,14 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
+      locals: {
+        licence: {
+          appointmentPerson: 'Isaac Newton',
+          appointmentAddress: 'Down the road, over there',
+          comTelephone: '07891245678',
+          appointmentTime: '01/12/2021 00:34',
+        },
+      },
     } as unknown as Response
   })
 
@@ -39,22 +47,13 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   })
 
   describe('POST', () => {
-    beforeEach(() => {
-      licenceService.getLicence.mockResolvedValue({
-        appointmentPerson: 'Isaac Newton',
-        appointmentAddress: 'Down the road, over there',
-        comTelephone: '07891245678',
-        appointmentTime: '01/12/2021 00:34',
-      } as Licence)
-    })
-
     it('should redirect back with error messages in flash if licence fields are empty', async () => {
-      licenceService.getLicence.mockResolvedValue({
+      res.locals.licence = {
         appointmentPerson: '',
         appointmentAddress: '',
         comTelephone: '',
         appointmentTime: '',
-      } as Licence)
+      }
 
       await handler.POST(req, res)
 
