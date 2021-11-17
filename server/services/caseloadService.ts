@@ -54,7 +54,7 @@ export default class CaseloadService {
       .filter(offender => !offender.releaseDate || moment().isBefore(moment(offender.releaseDate, 'YYYY-MM-DD')))
       .filter(offender => {
         const hdcStatus = hdcStatuses.find(hdc => hdc.bookingId === offender.bookingId)
-        return hdcStatus?.eligibleForHdc ? !hdcStatus.eligibleForHdc : true
+        return !hdcStatus?.eligibleForHdc
       })
       .filter(offender => {
         const existingLicence = existingLicences.find(licence => licence.nomisId === offender.nomsNumber)
