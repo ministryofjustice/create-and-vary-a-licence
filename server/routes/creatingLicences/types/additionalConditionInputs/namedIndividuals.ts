@@ -1,9 +1,9 @@
 import { Expose } from 'class-transformer'
-import { ArrayNotEmpty } from 'class-validator'
+import { HasAtLeastOne } from '../../../../validators/decorators'
 
 class NamedIndividuals {
   @Expose()
-  @ArrayNotEmpty({ message: 'Add at least one offender or individual' })
+  @HasAtLeastOne({ message: 'Add at least one offender or individual' })
   nameOfIndividual: string[]
 }
 
