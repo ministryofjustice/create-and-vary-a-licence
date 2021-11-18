@@ -3,5 +3,9 @@ window.GOVUKFrontend.initAll()
 // Initiate the back links
 $('[class$=js-backlink]').click(e => {
   e.preventDefault()
-  window.history.go(-1)
+  if ($('ul.govuk-error-summary__list').length > 0) {
+    window.history.go(-2)
+  } else {
+    window.history.go(-1)
+  }
 })
