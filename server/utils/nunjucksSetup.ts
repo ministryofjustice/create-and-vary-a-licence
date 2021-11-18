@@ -58,7 +58,8 @@ export function registerNunjucks(app?: express.Express): Environment {
     analytics: { tagManagerContainerId },
   } = config
 
-  njkEnv.addGlobal('tagManagerContainerId', tagManagerContainerId)
+  // Needs to trim - in case of newline in value
+  njkEnv.addGlobal('tagManagerContainerId', tagManagerContainerId?.trim())
 
   njkEnv.addFilter('initialiseName', (fullName: string) => {
     // this check is for the authError page
