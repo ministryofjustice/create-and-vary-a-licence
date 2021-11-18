@@ -82,6 +82,8 @@ export default class LicenceService {
         convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseOverrideDate) ||
         convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseDate),
       licenceExpiryDate: convertDateFormat(nomisRecord.sentenceDetail?.licenceExpiryDate),
+      topupSupervisionStartDate: convertDateFormat(nomisRecord.sentenceDetail?.topupSupervisionStartDate),
+      topupSupervisionExpiryDate: convertDateFormat(nomisRecord.sentenceDetail?.topupSupervisionExpiryDate),
       prisonDescription: prisonInformation.formattedDescription || 'Not known',
       prisonTelephone: [
         prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
