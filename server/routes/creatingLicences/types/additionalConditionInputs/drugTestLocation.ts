@@ -5,7 +5,7 @@ import { Either } from '../../../../validators/decorators'
 
 class DrugTestLocation {
   @Expose()
-  @IsNotEmpty({ message: 'Enter the name of the meeting' })
+  @IsNotEmpty({ message: 'Enter a name' })
   @Either('address')
   name: string
 
