@@ -56,6 +56,7 @@ describe('Views - Home', () => {
     expect($('#approveLicenceCard').length).toBe(0)
   })
 
+  /*
   it('should display my caseload card when flag is true in context', () => {
     viewContext = {
       shouldShowMyCaseloadCard: true,
@@ -65,6 +66,7 @@ describe('Views - Home', () => {
 
     expect($('#myCaseloadCard').length).toBe(1)
   })
+  */
 
   it('should hide my caseload card when flag is false in context', () => {
     viewContext = {
