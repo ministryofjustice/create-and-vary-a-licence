@@ -21,13 +21,16 @@ body {
   line-height: normal;
 }
 
-.text-wrap {
-  float: left;
-  margin: 10px;
-}
+.offender {
+  display: flex;
 
-#offender-image {
-  border: 1px solid #555;
+  img {
+    border: 1px solid #555;
+  }
+
+  div {
+    padding: 0 10px;
+  }
 }
 
 #meeting-details {
@@ -79,7 +82,6 @@ body {
   font-size: 15pt;
   font-weight: bold;
   padding-top: 15px;
-  margin-left: 10px;
   margin-bottom: 15px;
 }
 

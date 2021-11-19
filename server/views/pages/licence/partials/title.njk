@@ -1,13 +1,11 @@
-{% macro title(offenderName, licenceType) %}
-    <div class="title" id="title">
-        {% if licenceType === 'AP' %}
-            Licence for {{ offenderName }}
-        {% endif %}
-        {% if licenceType === 'PSS' %}
-            Post sentence supervision order for {{ offenderName }}
-        {% endif %}
-        {% if licenceType === 'AP_PSS' %}
-            Licence and post sentence supervision order for {{ offenderName }}
-        {% endif %}
-    </div>
-{% endmacro %}
+<div class="title" id="title">
+    {% if licence.typeCode === 'AP' %}
+        Licence for {{ offenderName }}
+    {% endif %}
+    {% if licence.typeCode === 'PSS' %}
+        Post sentence supervision order for {{ offenderName }}
+    {% endif %}
+    {% if licence.typeCode === 'AP_PSS' %}
+        Licence and post sentence supervision order for {{ offenderName }}
+    {% endif %}
+</div>

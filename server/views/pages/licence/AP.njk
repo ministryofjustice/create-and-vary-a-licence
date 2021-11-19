@@ -1,7 +1,5 @@
 {% extends "pages/licence/pdf-layout.njk" %}
 
-{% from "pages/licence/partials/title.njk" import title %}
-{% from "pages/licence/partials/offender.njk" import offender %}
 {% from "pages/licence/partials/objectives.njk" import objectives %}
 {% from "pages/licence/partials/supervision.njk" import supervision %}
 {% from "pages/licence/partials/induction.njk" import induction %}
@@ -24,8 +22,8 @@
 {% set pageTitle = offenderName %}
 
 {% block content %}
-    {{ title(offenderName, licence.typeCode) }}
-    {{ offender(licence.dateOfBirth, licence.licenceExpiryDate, licence.nomsId, imageData, htmlPrint) }}
+    {% include "pages/licence/partials/title.njk" %}
+    {% include "pages/licence/partials/offender.njk" %}
     {{ objectives() }}
     {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}
     {{ induction(licence.appointmentPerson, licence.appointmentAddress, licence.appointmentTime, licence.comTelephone) }}

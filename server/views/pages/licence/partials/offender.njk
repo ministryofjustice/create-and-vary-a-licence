@@ -1,17 +1,23 @@
-{% macro offender(dateOfBirth, licenceExpiryDate, nomsId, imageData, htmlPrint) %}
-<div class="offender" id="offender">
+<div id="offender" class="offender">
     {% if htmlPrint %}
-      <img id="offender-image" src="/prisoner/{{ nomsId or 'placeholder' }}/image" width="90px" height="120px" class="text-wrap">
+        <img src="/prisoner/{{ licence.nomsId or 'placeholder' }}/image" width="90px" height="120px" alt="offender headshot">
     {% else %}
-      <img id="offender-image" src='data:image/jpeg;charset-utf8;base64,{{ imageData }}' width="90px" height="120px" class="text-wrap">
+        <img src='data:image/jpeg;charset-utf8;base64,{{ imageData }}' width="90px" height="120px" alt="offender headshot">
     {% endif %}
-    <br/>
-    <br/>
-    Date of birth: <span class="bold">{{ dateOfBirth | datetimeToDate }}</span>
-    <br/>
-    <br/>
-    Your licence and sentence expires on <span class="bold">{{ licenceExpiryDate | datetimeToDate }}</span>
-    <br/>
+    <div>
+        <p>
+            Date of birth: <span class="bold">{{ licence.dateOfBirth | datetimeToDate }}</span>
+        </p>
+        {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
+            <p>
+                Your licence and sentence expires on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
+            </p>
+        {% endif %}
+        {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
+            <p>
+                Your post sentence supervision period expires on <span class="bold">{{ licence.topupSupervisionExpiryDate | datetimeToDate }}</span>
+            </p>
+        {% endif %}
+    </div>
 </div>
-{% endmacro %}
 
