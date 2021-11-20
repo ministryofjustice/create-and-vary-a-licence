@@ -17,6 +17,13 @@
         </div>
     </div>
 
+    {{ govukButton({
+        text: "Print licence",
+        classes: "govuk-button--primary",
+        href: '/licence/view/id/' + licence.id + '/pdf-print',
+        attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+    }) }}
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
             {{ inductionMeetingDetails(licence) }}
@@ -28,23 +35,20 @@
                 {{ additionalPssConditions(licence) }}
             {% endif %}
 
-            <p class="govuk-body">
+            <div class="govuk-body">
+                {{ govukButton({
+                    text: "Print licence",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    href: '/licence/view/id/' + licence.id + '/pdf-print',
+                    attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+                }) }}
                 {{ govukButton({
                    text: "Return to case list",
-                   classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                   classes: "govuk-button--secondary govuk-!-margin-bottom-0",
                    href: '/licence/view/cases',
                    attributes: { 'data-qa': 'return-to-view-list' }
                 }) }}
-            </p>
-        </div>
-
-        <div class="govuk-grid-column-one-third-from-desktop">
-            {{ govukButton({
-                text: "Print licence",
-                classes: "govuk-button--primary",
-                href: '/licence/view/id/' + licence.id + '/pdf-print',
-                attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
-            }) }}
+            </div>
         </div>
     </div>
 
