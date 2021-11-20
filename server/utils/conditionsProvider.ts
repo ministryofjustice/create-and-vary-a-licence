@@ -1,7 +1,8 @@
 import conditionsConfig from '../config/conditions'
 import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
-import { convertToTitleCase } from './utils'
+import { convertToTitleCase, formatAddress } from './utils'
 import LicenceType from '../enumeration/licenceType'
+import InputTypes from '../enumeration/inputTypes'
 
 export function getVersion(): string {
   return conditionsConfig.version
@@ -40,8 +41,8 @@ export function getGroupedAdditionalConditions(licenceType: LicenceType): Record
  * placeholders with their matching data to produce a list of formatted additional conditions.
  * @param conditions
  */
-export function expandAdditionalConditions(conditions: AdditionalCondition[]): string[] {
-  const expandedConditions: string[] = []
+export function expandAdditionalConditions(conditions: AdditionalCondition[]): AdditionalCondition[] {
+  const expandedConditions: AdditionalCondition[] = []
   conditions?.forEach(condition => {
     const configCondition = getAdditionalConditionByCode(condition.code)
 
@@ -63,6 +64,7 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): s
           let { value } = matchingDataItems[0]
           value = adjustCase(rules?.case as string, value)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
+          value = rules?.type === InputTypes.ADDRESS ? formatAddress(value) : value
           conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         } else {
           // List of values for this placeholder (lists of values can have listType 'AND' or 'OR')
@@ -76,10 +78,10 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): s
 
       // Remove any unmatched placeholders that remain
       conditionText = removeAllPlaceholders(conditionText)
-      expandedConditions.push(conditionText)
+      expandedConditions.push({ text: conditionText } as AdditionalCondition)
     } else {
-      // No input was required - keep the condition text verbatim to print on the licence
-      expandedConditions.push(condition.text)
+      // No input was required - keep the condition verbatim to print on the licence
+      expandedConditions.push(condition)
     }
   })
 

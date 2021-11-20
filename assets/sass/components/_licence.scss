@@ -45,7 +45,7 @@ body {
   break-inside: avoid;
 }
 
-.section::before {
+.section > p:first-child:before {
   counter-increment: sectionCounter;
   content: "\a" counter(sectionCounter) ". ";
   white-space: pre;

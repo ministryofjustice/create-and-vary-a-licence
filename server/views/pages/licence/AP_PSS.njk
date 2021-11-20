@@ -1,6 +1,5 @@
 {% extends "pages/licence/pdf-layout.njk" %}
 
-{% from "pages/licence/partials/objectives.njk" import objectives %}
 {% from "pages/licence/partials/supervision.njk" import supervision %}
 {% from "pages/licence/partials/induction.njk" import induction %}
 {% from "pages/licence/partials/releasedToOther.njk" import releasedToOther %}
@@ -15,16 +14,24 @@
    - imageData(offender image).
    - htmlPrint(true/false).
    - licence - already in context as is in res.locals (from fetchLicenceMiddleware).
-   - additionalConditons - string[] containing additional conditions with placeholders expanded with values.
+   - additionalLicenceConditons - string[] containing additional licence conditions with placeholders expanded with values.
+   - additionalPssConditons - string[] containing additional PSS conditions with placeholders expanded with values.
 #}
 
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
 
 {% block content %}
-    {% include "pages/licence/partials/title.njk" %}
+    <div class="title" id="title">Licence and post sentence supervision order for {{ offenderName }}</div>
     {% include "pages/licence/partials/offender.njk" %}
-    {{ objectives() }}
+    <div class="section">
+        <p>
+            Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on licence followed by a post sentence supervision period.
+        </p>
+        <p>
+            The relevant purposes of each type of supervision are explained in the sections below.
+        </p>
+    </div>
     {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}
     {{ induction(licence.appointmentPerson, licence.appointmentAddress, licence.appointmentTime, licence.comTelephone) }}
     {{ releasedToOther() }}

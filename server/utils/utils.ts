@@ -128,6 +128,15 @@ const objectIsEmpty = (value: unknown) => {
   return empty(value)
 }
 
+const formatAddress = (address?: string) => {
+  return address
+    ? address
+        .split(', ')
+        .filter(line => line.trim().length > 0)
+        .join(', ')
+    : undefined
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -142,4 +151,5 @@ export {
   removeDuplicates,
   filterCentralCaseload,
   objectIsEmpty,
+  formatAddress,
 }

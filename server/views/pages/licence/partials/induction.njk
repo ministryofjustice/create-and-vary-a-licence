@@ -1,17 +1,17 @@
-{% macro induction(person, address, timeOfMeeting, contactNumber) %}
-    <div class="section" id="induction">
+<div class="section">
+    <p>
         On release from prison (including, if applicable, any release from from detention under the Immigration Act 1971
         during the currency of your licence, whether or not leave has been granted for you to remain in the United Kingdom),
         unless otherwise directed by your supervising officer, you must report without delay to:
-        <div id="meeting-details">
-            <p>
-                <span class="bold line-space-after">{{ person or "Duty officer" }}</span>
-                {% for a in (address | formatAddressAsList) %}
-                    <span class="bold line-space-after">{{ a }}</span>
-                {% endfor %}
-            </p>
-            <p>On <span class="bold">{{ timeOfMeeting | datetimeToDateWithDay }}</span> at <span class="bold">{{ timeOfMeeting | datetimeTo12HourTime }}</span></p>
-            <p>Contact telephone number: <span class="bold">{{ contactNumber }}</span></p>
-        </div>
+    </p>
+    <div id="meeting-details">
+        <p>
+            <span class="bold line-space-after">{{ licence.appointmentPerson or "Duty officer" }}</span>
+            {% for a in (licence.appointmentAddress | formatAddressAsList) %}
+                <span class="bold line-space-after">{{ a }}</span>
+            {% endfor %}
+        </p>
+        <p>On <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}</span> at <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime }}</span></p>
+        <p>Contact telephone number: <span class="bold">{{ licence.comTelephone }}</span></p>
     </div>
-{% endmacro %}
+</div>
