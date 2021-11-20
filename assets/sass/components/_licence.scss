@@ -23,6 +23,7 @@ body {
 
 .offender {
   display: flex;
+  margin-bottom: 50px;
 
   img {
     border: 1px solid #555;
@@ -45,16 +46,19 @@ body {
   break-inside: avoid;
 }
 
-.section > p:first-child:before {
+.section:before {
   counter-increment: sectionCounter;
   content: "\a" counter(sectionCounter) ". ";
-  white-space: pre;
+  position: absolute;
+  margin-left: -20px;
 }
 
 .section {
-  clear: left;
-  text-align: justify-all;
+  text-align: justify;
+  text-justify: inter-word;
   break-inside: avoid;
+  padding-left: 20px;
+  margin: 30px 0;
 }
 
 .section-large {
