@@ -12,9 +12,9 @@
 {% set pageTitle = offenderName %}
 
 {% block content %}
-    <div class="title">Licence and post sentence supervision order for {{ offenderName }}</div>
+    <div id="title" class="title">Licence and post sentence supervision order for {{ offenderName }}</div>
 
-    <div class="offender">
+    <div id="offender" class="offender">
         {% include "pages/licence/partials/headshot.njk" %}
         <div>
             <p>
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div class="section">
+    <div id="purposes" class="section">
         <p>
             Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on licence followed by a post
             sentence supervision period.
@@ -65,7 +65,7 @@
     {% include "pages/licence/partials/cancellation.njk" %}
     {% include "pages/licence/partials/recall.njk" %}
 
-    <div class="section">
+    <div id="failure-to-comply-ap" class="section">
         <p>
             If you fail to comply with any requirement of your licence period (set out in paragraphs 5 and 6 above) or if
             you otherwise pose a risk to the public, you will be liable to have this licence revoked and be recalled to custody
@@ -85,7 +85,7 @@
     {% include "pages/licence/partials/pssConditions.njk" %}
     {% include "pages/licence/partials/cancellation.njk" %}
 
-    <div class="section">
+    <div id="failure-to-comply-pss" class="section">
         <p>
             If you fail to comply with any requirement of your supervision (set out in paragraphs 10 and 11 above) under section
             256AB, 256D and 256E of the Criminal Justice Act 2003 you will be liable to be summoned to appear before a court.
