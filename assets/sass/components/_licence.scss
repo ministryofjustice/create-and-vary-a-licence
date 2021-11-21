@@ -67,6 +67,10 @@ body {
     position: absolute;
     margin-left: -30px;
   }
+
+  &--large {
+    break-inside: auto;
+  }
 }
 
 .condition {
