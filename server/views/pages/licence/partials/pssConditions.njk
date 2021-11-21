@@ -1,0 +1,7 @@
+{% from "pages/licence/partials/conditions.njk" import conditions %}
+
+<div class="section">
+    <span>During your post sentence supervision period you must:</span>
+    {{ conditions(licence.standardPssConditions) }}
+    {{ conditions(additionalPssConditions) }}
+</div>

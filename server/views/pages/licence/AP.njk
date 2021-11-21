@@ -1,15 +1,5 @@
 {% extends "pages/licence/pdf-layout.njk" %}
 
-{% from "pages/licence/partials/supervision.njk" import supervision %}
-{% from "pages/licence/partials/induction.njk" import induction %}
-{% from "pages/licence/partials/releasedToOther.njk" import releasedToOther %}
-{% from "pages/licence/partials/conditions.njk" import conditions %}
-{% from "pages/licence/partials/cancellation.njk" import cancellation %}
-{% from "pages/licence/partials/recall.njk" import recall %}
-{% from "pages/licence/partials/failureToComply.njk" import failureToComply %}
-{% from "pages/licence/partials/signatures.njk" import signatures %}
-{% from "pages/licence/partials/footer.njk" import footer %}
-
 {# Data supplied to this template
    - imageData(offender image).
    - htmlPrint(true/false).
@@ -22,7 +12,19 @@
 
 {% block content %}
     <div class="title">Licence for {{ offenderName }}</div>
-    {% include "pages/licence/partials/offender.njk" %}
+
+    <div class="offender">
+        {% include "pages/licence/partials/headshot.njk" %}
+        <div>
+            <p>
+                Date of birth: <span class="bold">{{ licence.dateOfBirth | datetimeToDate }}</span>
+            </p>
+            <p>
+                Your licence and sentence expire on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
+            </p>
+        </div>
+    </div>
+
     <div class="section">
         <p>
             Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on licence.
@@ -41,13 +43,35 @@
             <li>help you to resettle into the community</li>
         </ul>
     </div>
-    {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}
-    {{ induction(licence.appointmentPerson, licence.appointmentAddress, licence.appointmentTime, licence.comTelephone) }}
-    {{ releasedToOther() }}
-    {{ conditions(licence.standardLicenceConditions, additionalConditions, licence.bespokeConditions) }}
-    {{ cancellation() }}
-    {{ recall() }}
-    {{ failureToComply() }}
-    {{ signatures(licence.approvedByName, licence.approvedDate, offenderName) }}
-    {{ footer(licence.nomsId, licence.pnc, licence.cro, licence.bookingNo, licence.typeCode, licence.id, licence.version, licence.prisonCode) }}
+
+    {% include "pages/licence/partials/apDates.njk" %}
+    {% include "pages/licence/partials/induction.njk" %}
+
+    <div class="section">
+        <p>
+            If on the date of this licence, you are released to hospital of other suitable care on compassionate grounds under
+            Section 248 of the Criminal Justice Act 2003 or if you are detained under mental health and/or immigration provisions
+            or are subsequently so detained before your licence expires, your supervising officer will keep in touch with you.
+            Otherwise, you must place yourself under the supervision of whichever officer is nominated for this purpose from time to time.
+        </p>
+    </div>
+
+    {% include "pages/licence/partials/apConditions.njk" %}
+    {% include "pages/licence/partials/cancellation.njk" %}
+    {% include "pages/licence/partials/recall.njk" %}
+
+    <div class="section">
+        <p>
+            If you fail to comply with any requirement of your licence period (set out in paragraphs 3, 4 and 5 above) or if
+            you otherwise pose a risk to the public, you will be liable to have this licence revoked and be recalled to custody
+            until the date on which your licence would have otherwise ended.
+        </p>
+        <p>
+            If you are sent back to prison and are re-released before the end of your licence, you will still be subject
+            to licence conditions until the end of your sentence.
+        </p>
+    </div>
+
+    {% include "pages/licence/partials/signatures.njk" %}
+    {% include "pages/licence/partials/footer.njk" %}
 {% endblock %}

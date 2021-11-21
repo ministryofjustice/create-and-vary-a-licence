@@ -1,15 +1,5 @@
 {% extends "pages/licence/pdf-layout.njk" %}
 
-{% from "pages/licence/partials/supervision.njk" import supervision %}
-{% from "pages/licence/partials/induction.njk" import induction %}
-{% from "pages/licence/partials/releasedToOther.njk" import releasedToOther %}
-{% from "pages/licence/partials/conditions.njk" import conditions %}
-{% from "pages/licence/partials/cancellation.njk" import cancellation %}
-{% from "pages/licence/partials/recall.njk" import recall %}
-{% from "pages/licence/partials/failureToComply.njk" import failureToComply %}
-{% from "pages/licence/partials/signatures.njk" import signatures %}
-{% from "pages/licence/partials/footer.njk" import footer %}
-
 {# Data supplied to this template
    - imageData(offender image).
    - htmlPrint(true/false).
@@ -22,23 +12,90 @@
 {% set pageTitle = offenderName %}
 
 {% block content %}
-    <div class="title" id="title">Licence and post sentence supervision order for {{ offenderName }}</div>
-    {% include "pages/licence/partials/offender.njk" %}
+    <div class="title">Licence and post sentence supervision order for {{ offenderName }}</div>
+
+    <div class="offender">
+        {% include "pages/licence/partials/headshot.njk" %}
+        <div>
+            <p>
+                Date of birth: <span class="bold">{{ licence.dateOfBirth | datetimeToDate }}</span>
+            </p>
+            <p>
+                Your licence and sentence expire on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
+            </p>
+            <p>
+                Your post sentence supervision period expires on <span class="bold">{{ licence.topupSupervisionExpiryDate | datetimeToDate }}</span>
+            </p>
+        </div>
+    </div>
+
     <div class="section">
         <p>
-            Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on licence followed by a post sentence supervision period.
+            Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on licence followed by a post
+            sentence supervision period.
         </p>
         <p>
             The relevant purposes of each type of supervision are explained in the sections below.
         </p>
     </div>
-    {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}
-    {{ induction(licence.appointmentPerson, licence.appointmentAddress, licence.appointmentTime, licence.comTelephone) }}
-    {{ releasedToOther() }}
-    {{ conditions(licence.standardLicenceConditions, additionalConditions, licence.bespokeConditions) }}
-    {{ cancellation() }}
-    {{ recall() }}
-    {{ failureToComply() }}
-    {{ signatures(licence.approvedByName, licence.approvedDate, offenderName) }}
-    {{ footer(licence.nomsId, licence.pnc, licence.cro, licence.bookingNo, licence.typeCode, licence.id, licence.version, licence.prisonCode) }}
+
+    {% include "pages/licence/partials/apDates.njk" %}
+    {% include "pages/licence/partials/pssDates.njk" %}
+    {% include "pages/licence/partials/induction.njk" %}
+
+    <div class="section-with-heading">
+        <span class="heading">Licence Period</span>
+        <div class="section">
+            <p>
+                The objectives of this licence period are to:
+            </p>
+            <ul class="bullet-point">
+                <li>protect the public</li>
+                <li>prevent re-offending</li>
+                <li>help you to resettle into the community</li>
+            </ul>
+            <p>
+                You must place yourself under the supervision of whichever supervising officer or social worker
+                is nominated for this purpose from time to time.
+            </p>
+        </div>
+    </div>
+
+    {% include "pages/licence/partials/apConditions.njk" %}
+    {% include "pages/licence/partials/cancellation.njk" %}
+    {% include "pages/licence/partials/recall.njk" %}
+
+    <div class="section">
+        <p>
+            If you fail to comply with any requirement of your licence period (set out in paragraphs 5 and 6 above) or if
+            you otherwise pose a risk to the public, you will be liable to have this licence revoked and be recalled to custody
+            until the date on which your licence would have otherwise ended.
+        </p>
+        <p>
+            If you are sent back to prison and are re-released before the end of your licence, you will still be subject
+            to licence conditions until the end of your sentence.
+        </p>
+    </div>
+
+    <div class="section-with-heading">
+        <div class="heading">Post sentence supervision</div>
+        {% include "pages/licence/partials/pssObjective.njk" %}
+    </div>
+
+    {% include "pages/licence/partials/pssConditions.njk" %}
+    {% include "pages/licence/partials/cancellation.njk" %}
+
+    <div class="section">
+        <p>
+            If you fail to comply with any requirement of your supervision (set out in paragraphs 10 and 11 above) under section
+            256AB, 256D and 256E of the Criminal Justice Act 2003 you will be liable to be summoned to appear before a court.
+        </p>
+        <p>
+            The court may order you to be detained for up to 14 days, or impose further sanctions such as unpaid work or electronic
+            location monitoring.
+        </p>
+    </div>
+
+    {% include "pages/licence/partials/signatures.njk" %}
+    {% include "pages/licence/partials/footer.njk" %}
 {% endblock %}

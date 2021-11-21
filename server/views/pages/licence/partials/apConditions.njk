@@ -1,0 +1,8 @@
+{% from "pages/licence/partials/conditions.njk" import conditions %}
+
+<div class="section">
+    <span>During your licence period you must:</span>
+    {{ conditions(licence.standardLicenceConditions) }}
+    {{ conditions(additionalLicenceConditions) }}
+    {{ conditions(licence.bespokeConditions) }}
+</div>

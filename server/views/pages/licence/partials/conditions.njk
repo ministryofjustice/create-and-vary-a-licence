@@ -1,7 +1,7 @@
 {% macro conditions(conditions) %}
     {% for condition in conditions %}
         <div class="condition">
-            {{ condition.text }}
+            <span>{{ condition.text }}</span>
         </div>
     {% endfor %}
 {% endmacro %}

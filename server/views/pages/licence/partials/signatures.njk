@@ -1,15 +1,11 @@
-{% macro signatures(approverName, approvedDate, offenderName) %}
-    <div class="boxed">
-        <div class="signatures">
-            <p>Approved by:  {{ approverName }}  for the Secretary of State for Justice.</p>
-            <p>Date: {{ approvedDate | datetimeToDate }}</p>
-            <p></p>
-            <p>This licence has been give to me and its requirements have been explained.</p>
-            <p></p>
-            <p>Name: <span class="bold">{{ offenderName }}</span></p>
-            <p>Signed:</p>
-            <div class="signature-box"></div>
-            <p>Date: </p>
-        </div>
+<div class="boxed">
+    <div class="signatures">
+        <p>Approved by:  {{ licence.approvedByName }}  for the Secretary of State for Justice.</p>
+        <p>Date: {{ licence.approvedDate | datetimeToDate }}</p>
+        <p>This licence has been given to me and its requirements have been explained.</p>
+        <p>Name: <span class="bold">{{ offenderName }}</span></p>
+        <p>Signed:</p>
+        <div class="signature-box"></div>
+        <p>Date: </p>
     </div>
-{% endmacro %}
+</div>
