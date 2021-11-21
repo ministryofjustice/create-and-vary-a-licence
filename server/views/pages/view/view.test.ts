@@ -127,7 +127,7 @@ describe('View and print - single licence view', () => {
     expect($('#bespoke-conditions-details > div:nth-child(2) > dd').text().trim()).toBe('Bespoke condition 2')
 
     // Check the existence of the print and return to case list buttons
-    expect($('[data-qa="print-licence"]').length).toBe(1)
+    expect($('[data-qa="print-licence"]').length).toBe(2)
     expect($('[data-qa="return-to-view-list"]').length).toBe(1)
   })
 })

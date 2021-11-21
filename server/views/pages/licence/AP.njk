@@ -11,9 +11,9 @@
 {% set pageTitle = offenderName %}
 
 {% block content %}
-    <div class="title">Licence for {{ offenderName }}</div>
+    <div id="title" class="title">Licence for {{ offenderName }}</div>
 
-    <div class="offender">
+    <div id="offender" class="offender">
         {% include "pages/licence/partials/headshot.njk" %}
         <div>
             <p>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="section">
+    <div id="objectives" class="section">
         <p>
             Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on licence.
         </p>
@@ -47,7 +47,7 @@
     {% include "pages/licence/partials/apDates.njk" %}
     {% include "pages/licence/partials/induction.njk" %}
 
-    <div class="section">
+    <div id="released-to-other" class="section">
         <p>
             If on the date of this licence, you are released to hospital of other suitable care on compassionate grounds under
             Section 248 of the Criminal Justice Act 2003 or if you are detained under mental health and/or immigration provisions
@@ -60,7 +60,7 @@
     {% include "pages/licence/partials/cancellation.njk" %}
     {% include "pages/licence/partials/recall.njk" %}
 
-    <div class="section">
+    <div id="failure-to-comply" class="section">
         <p>
             If you fail to comply with any requirement of your licence period (set out in paragraphs 3, 4 and 5 above) or if
             you otherwise pose a risk to the public, you will be liable to have this licence revoked and be recalled to custody

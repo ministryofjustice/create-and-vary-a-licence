@@ -78,7 +78,7 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): A
 
       // Remove any unmatched placeholders that remain
       conditionText = removeAllPlaceholders(conditionText)
-      expandedConditions.push({ text: conditionText } as AdditionalCondition)
+      expandedConditions.push({ ...condition, text: conditionText })
     } else {
       // No input was required - keep the condition verbatim to print on the licence
       expandedConditions.push(condition)
