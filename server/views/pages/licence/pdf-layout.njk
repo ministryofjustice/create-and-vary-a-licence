@@ -9,14 +9,14 @@
 {% endblock %}
 
 {% block bodystart %}
-  <body>
+  <body class="{% if watermark %}watermark{% endif %}">
   <div class="moj-icon">
-    <img alt="" src="{{ licencesUrl }}/assets/images/HMPPS_BLK_AW.jpg" width="156" height="70">
+    <img alt="HMPPS logo" src="{{ licencesUrl }}/assets/images/HMPPS_BLK_AW.jpg" width="156" height="70">
   </div>
 {% endblock %}
 
 {% block content %}
-  {# Overriden by chld pages #}
+  {# Overriden by child pages #}
 {% endblock %}
 
 {% block bodyend %}

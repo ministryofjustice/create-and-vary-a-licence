@@ -29,7 +29,7 @@ export default class PrintLicenceRoutes {
   renderPdf = async (req: Request, res: Response): Promise<void> => {
     const { username } = res.locals.user
     const { licence } = res.locals
-    const { licencesUrl, pdfOptions } = config.apis.gotenberg
+    const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
     const additionalLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     const additionalPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
     const imageData = await this.prisonerService.getPrisonerImageData(username, licence.nomsId)
@@ -47,7 +47,7 @@ export default class PrintLicenceRoutes {
     logger.info(`PDF print licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
-      { licencesUrl, imageData, additionalLicenceConditions, additionalPssConditions, htmlPrint: false },
+      { licencesUrl, imageData, additionalLicenceConditions, additionalPssConditions, htmlPrint: false, watermark },
       { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
     )
   }

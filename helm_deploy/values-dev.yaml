@@ -30,6 +30,8 @@ generic-service:
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: "http://create-and-vary-a-licence"
 
+    LICENCE_WATERMARK: true
+
   # Switches off the allow list in the DEV env only.
   allowlist: null
 
