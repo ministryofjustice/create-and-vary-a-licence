@@ -1,39 +1,65 @@
 {% extends "pages/licence/pdf-layout.njk" %}
 
-{% from "pages/licence/partials/title.njk" import title %}
-{% from "pages/licence/partials/offender.njk" import offender %}
-{% from "pages/licence/partials/objectives.njk" import objectives %}
-{% from "pages/licence/partials/supervision.njk" import supervision %}
-{% from "pages/licence/partials/induction.njk" import induction %}
-{% from "pages/licence/partials/releasedToOther.njk" import releasedToOther %}
-{% from "pages/licence/partials/conditions.njk" import conditions %}
-{% from "pages/licence/partials/cancellation.njk" import cancellation %}
-{% from "pages/licence/partials/recall.njk" import recall %}
-{% from "pages/licence/partials/failureToComply.njk" import failureToComply %}
-{% from "pages/licence/partials/signatures.njk" import signatures %}
-{% from "pages/licence/partials/footer.njk" import footer %}
-
 {# Data supplied to this template
    - imageData(offender image).
    - htmlPrint(true/false).
    - licence - already in context as is in res.locals (from fetchLicenceMiddleware).
-   - additionalConditons - string[] containing additional conditions with placeholders expanded with values.
+   - additionalPssConditons - string[] containing additional PSS conditions with placeholders expanded with values.
 #}
 
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
 
 {% block content %}
-    {{ title(offenderName) }}
-    {{ offender(licence.dateOfBirth, licence.licenceExpiryDate, licence.nomsId, imageData, htmlPrint) }}
-    {{ objectives() }}
-    {{ supervision(licence.licenceStartDate, licence.licenceExpiryDate) }}
-    {{ induction(licence.appointmentPerson, licence.appointmentAddress, licence.appointmentTime, licence.comTelephone) }}
-    {{ releasedToOther() }}
-    {{ conditions(licence.standardLicenceConditions, additionalConditions, licence.bespokeConditions) }}
-    {{ cancellation() }}
-    {{ recall() }}
-    {{ failureToComply() }}
-    {{ signatures(licence.approvedByName, licence.approvedDate, offenderName) }}
-    {{ footer(licence.nomsId, licence.pnc, licence.cro, licence.bookingNo, licence.typeCode, licence.id, licence.version, licence.prisonCode) }}
+    <div class="title">Post sentence supervision order for {{ offenderName }}</div>
+
+    <div class="offender">
+        {% include "pages/licence/partials/headshot.njk" %}
+        <div>
+            <p>
+                Date of birth: <span class="bold">{{ licence.dateOfBirth | datetimeToDate }}</span>
+            </p>
+            <p>
+                Your post sentence supervision period expires on <span class="bold">{{ licence.topupSupervisionExpiryDate | datetimeToDate }}</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="section">
+        <p>
+            Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released directly onto a post sentence
+            supervision period as your licence period has already expired.
+        </p>
+    </div>
+
+    {% include "pages/licence/partials/pssDates.njk" %}
+    {% include "pages/licence/partials/induction.njk" %}
+    {% include "pages/licence/partials/pssObjective.njk" %}
+    {% include "pages/licence/partials/pssConditions.njk" %}
+    {% include "pages/licence/partials/cancellation.njk" %}
+
+    <div class="section">
+        <p>
+            If you fail to comply with any requirement of your supervision under section 256AB, 256D and 256E of the Criminal Justice Act
+            2003 you will be liable to be summoned to appear before a court.
+        </p>
+        <p>
+            The court may order you to be detained for up to 14 days, or impose further sanctions such as unpaid work or electronic
+            location monitoring.
+        </p>
+    </div>
+
+    <div class="boxed">
+        <div class="signatures">
+            <p>Approved by:  {{ licence.approvedByName }}  for the Secretary of State for Justice.</p>
+            <p>Date: {{ licence.approvedDate | datetimeToDate }}</p>
+            <p>This notice of supervision has been given to me and its requirements have been explained.</p>
+            <p>Name: <span class="bold">{{ offenderName }}</span></p>
+            <p>Signed:</p>
+            <div class="signature-box"></div>
+            <p>Date: </p>
+        </div>
+    </div>
+
+    {% include "pages/licence/partials/footer.njk" %}
 {% endblock %}

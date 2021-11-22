@@ -22,7 +22,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(conditions[0].text)
+      expect(listOfConditions[0]).toEqual(conditions[0])
     })
 
     it('Will replace single placeholder with a single value', () => {
@@ -38,7 +38,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'You must reside within the London probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
       )
     })
@@ -57,7 +57,7 @@ describe('Conditions Provider - expansions', () => {
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
       // The two consecutive spaces are expected here
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'You must reside within the  probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
       )
     })
@@ -76,7 +76,7 @@ describe('Conditions Provider - expansions', () => {
 
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'Not to undertake work or other organised activity which will involve a person under the age of 18, either on a paid or unpaid basis without the prior approval of your supervising officer.'
       )
     })
@@ -97,7 +97,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'Not to reside (not even to stay for one night) in the same household as any child under the age of 18 without the prior approval of your supervising officer.'
       )
     })
@@ -119,7 +119,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol and drug problems at Walthamstow Rehabilitation Clinic.'
       )
     })
@@ -140,7 +140,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol and drug problems.'
       )
     })
@@ -160,7 +160,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'Attend Harlow Clinic, High Street, London, W1 3GV, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
       )
     })
@@ -181,7 +181,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'Attend Harlow Clinic, High Street, London, W1 3GV on 12th February 2022, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
       )
     })
@@ -203,7 +203,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'Attend Harlow Clinic, High Street, London, W1 3GV on 12th February 2022 at 11:15 am, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
       )
     })
@@ -229,7 +229,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol, drug, sexual, violent, gambling and anger problems at AA meeting.'
       )
     })
@@ -251,7 +251,7 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'Not to seek to approach or communicate with Jane Doe or John Doe without the prior approval of your supervising officer and / or East Hull Social Services.'
       )
     })
@@ -274,8 +274,26 @@ describe('Conditions Provider - expansions', () => {
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
-      expect(listOfConditions[0]).toEqual(
+      expect(listOfConditions[0].text).toEqual(
         'Not to seek to approach or communicate with Jane Doe, John Doe or Jack Dont without the prior approval of your supervising officer and / or East Hull Social Services.'
+      )
+    })
+
+    it('Will correctly format an address', () => {
+      const conditions: AdditionalCondition[] = [
+        {
+          id: 1,
+          code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+          category: 'Residence at a specific place',
+          sequence: 1,
+          text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+          data: [{ id: 1, field: 'appointmentAddress', value: '123 Fake Street, , Fakestown, , LN123TO', sequence: 0 }],
+        },
+      ]
+      const listOfConditions = expandAdditionalConditions(conditions)
+      expect(listOfConditions).toHaveLength(1)
+      expect(listOfConditions[0].text).toEqual(
+        'Attend 123 Fake Street, Fakestown, LN123TO, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
       )
     })
   })

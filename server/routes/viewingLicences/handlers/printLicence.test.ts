@@ -31,7 +31,11 @@ describe('Route - print a licence', () => {
         },
       } as unknown as Response
       await handler.preview(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/licence/AP', { additionalConditions: [], htmlPrint: true })
+      expect(res.render).toHaveBeenCalledWith('pages/licence/AP', {
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
+        htmlPrint: true,
+      })
     })
 
     it('should render a HTML view of a PSS licence', async () => {
@@ -47,7 +51,11 @@ describe('Route - print a licence', () => {
         },
       } as unknown as Response
       await handler.preview(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', { additionalConditions: [], htmlPrint: true })
+      expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', {
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
+        htmlPrint: true,
+      })
     })
 
     it('should render a PDF view of an AP licence', async () => {
@@ -92,7 +100,13 @@ describe('Route - print a licence', () => {
 
       expect(res.renderPDF).toHaveBeenCalledWith(
         'pages/licence/AP',
-        { licencesUrl, imageData: '-- base64 image data --', additionalConditions: [], htmlPrint: false },
+        {
+          licencesUrl,
+          imageData: '-- base64 image data --',
+          additionalLicenceConditions: [],
+          additionalPssConditions: [],
+          htmlPrint: false,
+        },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
     })

@@ -187,6 +187,10 @@ export interface components {
       licenceStartDate?: string
       /** The licence end date, from prison services */
       licenceExpiryDate?: string
+      /** The date when the post sentence supervision period starts, from prison services */
+      topupSupervisionStartDate?: string
+      /** The date when the post sentence supervision period ends, from prison services */
+      topupSupervisionExpiryDate?: string
       /** The forename of the offender manager, from probation services */
       comFirstName?: string
       /** The surname of the offender manager, from probation services */
@@ -311,6 +315,10 @@ export interface components {
       licenceStartDate?: string
       /** The date that the licence will expire */
       licenceExpiryDate?: string
+      /** The date when the post sentence supervision period starts, from prison services */
+      topupSupervisionStartDate?: string
+      /** The date when the post sentence supervision period ends, from prison services */
+      topupSupervisionExpiryDate?: string
       /** The first name of the supervising probation officer */
       comFirstName?: string
       /** The last name of the supervising probation officer */
