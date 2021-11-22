@@ -79,7 +79,7 @@ describe('Route - print a licence', () => {
         },
       } as unknown as Response
 
-      const { licencesUrl, pdfOptions } = config.apis.gotenberg
+      const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
 
       const filename = `${res.locals.licence.nomsId}.pdf`
 
@@ -106,6 +106,7 @@ describe('Route - print a licence', () => {
           additionalLicenceConditions: [],
           additionalPssConditions: [],
           htmlPrint: false,
+          watermark,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
