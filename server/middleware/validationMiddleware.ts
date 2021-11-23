@@ -8,27 +8,18 @@ export type FieldValidationError = {
   message: string
 }
 
-function validationMiddleware(type?: new () => unknown): RequestHandler {
+function validationMiddleware(type?: new () => object): RequestHandler {
   return async (req, res, next) => {
-    const { conditionId } = req.params
-    let additionalConditionType
-    if (conditionId) {
-      additionalConditionType = getAdditionalConditionByCode(req.body.code)?.type as ClassConstructor<unknown>
-    }
+    const { licence } = res.locals
 
-    const bodyAsClass = plainToClass(
-      additionalConditionType || type,
-      { ...req.body, licence: res.locals?.licence },
-      { excludeExtraneousValues: false }
-    )
+    const classType = (getAdditionalConditionByCode(req.body.code)?.type as ClassConstructor<object>) || type
 
-    const errors: ValidationError[] = await validate(
-      // eslint-disable-next-line @typescript-eslint/ban-types
-      bodyAsClass as object
-    )
+    const validationScope = plainToClass(classType, { ...req.body, licence }, { excludeExtraneousValues: false })
+
+    const errors: ValidationError[] = await validate(validationScope)
 
     if (errors.length === 0) {
-      req.body = plainToClass(additionalConditionType || type, req.body, { excludeExtraneousValues: true })
+      req.body = plainToClass(classType, req.body, { excludeExtraneousValues: true })
       return next()
     }
 
