@@ -1,38 +1,57 @@
-import hasAtLeastOne from './hasAtLeastOne'
+import { validate, ValidationError } from 'class-validator'
+import { plainToClass } from 'class-transformer'
+import HasAtLeastOne from './hasAtLeastOne'
+
+class TestClass {
+  @HasAtLeastOne({ message: 'Must have at least one' })
+  value: string[]
+}
 
 describe('hasAtLeastOne', () => {
-  it('should return false if the field being validated is an empty array', () => {
-    const value: string[] = []
-    const result = hasAtLeastOne(value)
+  it('should fail validation if the field being validated is an empty array', async () => {
+    const value = plainToClass(TestClass, { value: [] })
+    const errors: ValidationError[] = await validate(value)
 
-    expect(result).toBe(false)
+    expect(errors.length).toBe(1)
+    expect(errors[0].constraints).toEqual({
+      hasAtLeastOne: 'Must have at least one',
+    })
   })
 
-  it('should return false if the field being validated is null', () => {
-    const value: string[] = null
-    const result = hasAtLeastOne(value)
+  it('should fail validation if the field being validated is null', async () => {
+    const value = plainToClass(TestClass, { value: null })
+    const errors: ValidationError[] = await validate(value)
 
-    expect(result).toBe(false)
+    expect(errors.length).toBe(1)
+    expect(errors[0].constraints).toEqual({
+      hasAtLeastOne: 'Must have at least one',
+    })
   })
 
-  it('should return false if the field being validated is an array of nulls', () => {
-    const value: string[] = [null, null]
-    const result = hasAtLeastOne(value)
+  it('should fail validation if the field being validated is an array of nulls', async () => {
+    const value = plainToClass(TestClass, { value: [null, null] })
+    const errors: ValidationError[] = await validate(value)
 
-    expect(result).toBe(false)
+    expect(errors.length).toBe(1)
+    expect(errors[0].constraints).toEqual({
+      hasAtLeastOne: 'Must have at least one',
+    })
   })
 
-  it('should return false if the field being validated is an array of empty strings', () => {
-    const value: string[] = ['', '']
-    const result = hasAtLeastOne(value)
+  it('should fail validation if the field being validated is an array of empty strings', async () => {
+    const value = plainToClass(TestClass, { value: ['', ''] })
+    const errors: ValidationError[] = await validate(value)
 
-    expect(result).toBe(false)
+    expect(errors.length).toBe(1)
+    expect(errors[0].constraints).toEqual({
+      hasAtLeastOne: 'Must have at least one',
+    })
   })
 
-  it('should return true if the field being validated is an array with at least one non empty string', () => {
-    const value: string[] = ['', 'test']
-    const result = hasAtLeastOne(value)
+  it('should pass validation if the field being validated is an array with at least one non empty string', async () => {
+    const value = plainToClass(TestClass, { value: ['', 'test'] })
+    const errors: ValidationError[] = await validate(value)
 
-    expect(result).toBe(true)
+    expect(errors.length).toBe(0)
   })
 })
