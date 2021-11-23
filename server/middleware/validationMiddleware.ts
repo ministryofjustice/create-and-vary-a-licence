@@ -16,7 +16,11 @@ function validationMiddleware(type?: new () => unknown): RequestHandler {
       additionalConditionType = getAdditionalConditionByCode(req.body.code)?.type as ClassConstructor<unknown>
     }
 
-    const bodyAsClass = plainToClass(additionalConditionType || type, req.body, { excludeExtraneousValues: true })
+    const bodyAsClass = plainToClass(
+      additionalConditionType || type,
+      { ...req.body, licence: res.locals?.licence },
+      { excludeExtraneousValues: false }
+    )
 
     const errors: ValidationError[] = await validate(
       // eslint-disable-next-line @typescript-eslint/ban-types
@@ -24,7 +28,7 @@ function validationMiddleware(type?: new () => unknown): RequestHandler {
     )
 
     if (errors.length === 0) {
-      req.body = bodyAsClass
+      req.body = plainToClass(additionalConditionType || type, req.body, { excludeExtraneousValues: true })
       return next()
     }
 

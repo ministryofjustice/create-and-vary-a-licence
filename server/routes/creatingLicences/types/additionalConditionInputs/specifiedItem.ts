@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer'
-import { HasAtLeastOne } from '../../../../validators/decorators'
+import HasAtLeastOne from '../../../../validators/hasAtLeastOne'
 
 class SpecifiedItem {
   @Expose()

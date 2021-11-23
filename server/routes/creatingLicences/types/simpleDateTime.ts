@@ -4,6 +4,8 @@ import SimpleDate from './date'
 import ValidSimpleDate from '../../../validators/simpleDateValidator'
 import SimpleTime from './time'
 import ValidSimpleTime from '../../../validators/simpleTimeValidator'
+import DateIsAfter from '../../../validators/dateIsAfter'
+import DateIsBefore from '../../../validators/dateIsBefore'
 
 class SimpleDateTime {
   static fromSimpleDateAndTime = (simpleDate: SimpleDate, simpleTime: SimpleTime): SimpleDateTime => {
@@ -16,6 +18,12 @@ class SimpleDateTime {
   @Expose()
   @Type(() => SimpleDate)
   @Validate(ValidSimpleDate)
+  @DateIsBefore('licence.licenceExpiryDate', {
+    message: 'Appointment date must be before the end of the licence date',
+  })
+  @DateIsAfter('licence.conditionalReleaseDate', {
+    message: 'Appointment date must be after the conditional release date',
+  })
   date: SimpleDate
 
   @Expose()
