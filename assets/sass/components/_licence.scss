@@ -4,12 +4,24 @@
   .moj-logo {
     display: none;
   }
+
+  :first {
+    .moj-logo {
+      display: contents;
+      margin-bottom: 20px;
+    }
+  }
 }
 
-@page :first{
-  .moj-logo {
-    display: contents;
-    margin-bottom: 20px;
+@media print {
+  .watermark:before {
+    content: "PROTOTYPE";
+    font-size: 120pt;
+    position: fixed;
+    transform: rotate(-60deg);
+    opacity: 10%;
+    top: 40%;
+    left: -20%;
   }
 }
 
