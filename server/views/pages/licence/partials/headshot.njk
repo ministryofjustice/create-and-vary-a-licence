@@ -1,0 +1,5 @@
+{% if htmlPrint %}
+    <img id="offender-image" src="/prisoner/{{ licence.nomsId or 'placeholder' }}/image" width="90px" height="120px" alt="offender headshot">
+{% else %}
+    <img id="offender-image" src='data:image/jpeg;charset-utf8;base64,{{ imageData }}' width="90px" height="120px" alt="offender headshot">
+{% endif %}

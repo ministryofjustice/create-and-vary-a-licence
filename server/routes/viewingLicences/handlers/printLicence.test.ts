@@ -38,7 +38,8 @@ describe('Route - print a licence', () => {
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       await handler.preview(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/licence/AP', {
-        additionalConditions: [],
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
         qrCode: 'a QR code',
         htmlPrint: true,
       })
@@ -60,7 +61,8 @@ describe('Route - print a licence', () => {
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       await handler.preview(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', {
-        additionalConditions: [],
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
         qrCode: 'a QR code',
         htmlPrint: true,
       })
@@ -87,7 +89,8 @@ describe('Route - print a licence', () => {
         },
       } as unknown as Response
 
-      const { licencesUrl, pdfOptions } = config.apis.gotenberg
+      const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+
       const filename = `${res.locals.licence.nomsId}.pdf`
       const footerHtml = handler.getPdfFooter(res.locals.licence)
 
@@ -101,9 +104,11 @@ describe('Route - print a licence', () => {
         {
           licencesUrl,
           imageData: '-- base64 image data --',
-          additionalConditions: [],
+          additionalLicenceConditions: [],
+          additionalPssConditions: [],
           qrCode: 'a QR code',
           htmlPrint: false,
+          watermark,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )

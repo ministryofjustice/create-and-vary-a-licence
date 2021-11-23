@@ -1,32 +1,7 @@
-
-{% macro conditions(standard, additional, bespoke) %}
-    <div class="section section-large" id="conditions">While under supervision you must:<br/>
-       {{ standardConditions(standard) }}
-       {{ additionalConditions(additional) }}
-       {{ bespokeConditions(bespoke) }}
-    </div>
-{% endmacro %}
-
-{%  macro standardConditions(standardConditions) %}
-    {% for condition in standardConditions %}
-        <div class="condition" id="standard-{{ loop.index }}">
-            {{ condition.text }}
-        </div>
-    {% endfor %}
-{% endmacro %}
-
-{%  macro additionalConditions(additionalConditions) %}
-    {% for condition in additionalConditions %}
-        <div class="condition" id="additional-{{ loop.index }}">
-            {{ condition }}
-        </div>
-    {% endfor %}
-{% endmacro %}
-
-{%  macro bespokeConditions(bespokeConditions) %}
-    {% for condition in bespokeConditions %}
-        <div class="condition" id="bespoke-{{ loop.index }}">
-            {{ condition.text }}
+{% macro conditions(conditions) %}
+    {% for condition in conditions %}
+        <div class="condition">
+            <span>{{ condition.text }}</span>
         </div>
     {% endfor %}
 {% endmacro %}

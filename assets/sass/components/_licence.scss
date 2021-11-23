@@ -4,13 +4,24 @@
   .images {
     display: none;
   }
+
+  :first {
+    .moj-logo {
+      display: contents;
+      margin-bottom: 20px;
+    }
+  }
 }
 
-@page :first{
-  .images {
-    display: contents;
-    margin-top: 0;
-    margin-bottom: 40px;
+@media print {
+  .watermark:before {
+    content: "PROTOTYPE";
+    font-size: 120pt;
+    position: fixed;
+    transform: rotate(-60deg);
+    opacity: 10%;
+    top: 40%;
+    left: -20%;
   }
 }
 
@@ -32,13 +43,17 @@ body {
   line-height: normal;
 }
 
-.text-wrap {
-  float: left;
-  margin: 10px;
-}
+.offender {
+  display: flex;
+  margin-bottom: 50px;
 
-#offender-image {
-  border: 1px solid #555;
+  img {
+    border: 1px solid #555;
+  }
+
+  div {
+    padding: 0 10px;
+  }
 }
 
 #meeting-details {
@@ -53,50 +68,51 @@ body {
   break-inside: avoid;
 }
 
-.section::before {
-  counter-increment: sectionCounter;
-  content: "\a" counter(sectionCounter) ". ";
-  white-space: pre;
+.section-with-heading {
+  break-inside: avoid;
+
+  .heading {
+    font-weight: bolder;
+  }
 }
 
 .section {
-  clear: left;
-  text-align: justify-all;
+  text-align: justify;
   break-inside: avoid;
-}
+  padding-left: 30px;
+  margin: 30px 0;
+  counter-reset: conditionCounter;
 
-.section-large {
-  break-inside: auto;
-}
+  &:before {
+    counter-increment: sectionCounter;
+    content: "\a" counter(sectionCounter) ". ";
+    position: absolute;
+    margin-left: -30px;
+  }
 
-.condition::before {
-  counter-increment: conditionCounter;
-  content: "\a" counter(sectionCounter) "." counter(conditionCounter) ". ";
-  white-space: pre;
+  &--large {
+    break-inside: auto;
+  }
 }
 
 .condition {
   break-inside: avoid;
-  margin-left: 25px;
-  text-align: justify-all;
-}
+  text-align: justify;
+  padding-left: 30px;
+  margin: 20px 0 20px 30px;
 
-.condition::after {
-  content: "\a";
-  white-space: pre;
+  &:before {
+    counter-increment: conditionCounter;
+    content: "\a" counter(sectionCounter) "." counter(conditionCounter) ". ";
+    position: absolute;
+    margin-left: -50px;
+  }
 }
 
 .title {
   font-size: 15pt;
-  font-weight: bold;
-  padding-top: 15px;
-  margin-left: 10px;
-  margin-bottom: 15px;
-}
-
-.title::after {
-  content: "\a";
-  clear: left;
+  font-weight: bolder;
+  margin: 30px 0;
 }
 
 .footer-tiny {
@@ -114,27 +130,17 @@ body {
   break-inside: avoid;
 }
 
-.signatures::before {
-  content: "\a";
-  white-space: pre;
-}
-
 .signatures {
   margin-left: 20px;
-}
 
-.signatures::after {
-  content: "\a";
-  white-space: pre;
-}
-
-.signature-box {
-  break-inside: avoid;
-  background-color: lightgray;
-  width: 450px;
-  height: 90px;
-  border: none;
-  opacity: 15%;
+  .signature-box {
+    break-inside: avoid;
+    background-color: lightgray;
+    width: 450px;
+    height: 90px;
+    border: none;
+    opacity: 15%;
+  }
 }
 
 // The remaining styles are concerned with making the page footer use CSS

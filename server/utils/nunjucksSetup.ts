@@ -4,7 +4,7 @@ import express from 'express'
 import path from 'path'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
-import { jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateWithDay } from './utils'
+import { formatAddress, jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateWithDay } from './utils'
 import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { getAdditionalConditionByCode } from './conditionsProvider'
 import SimpleTime from '../routes/creatingLicences/types/time'
@@ -139,14 +139,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     return jsonDtTo12HourTime(dt)
   })
 
-  njkEnv.addFilter('formatAddress', (address?: string) => {
-    return address
-      ? address
-          .split(', ')
-          .filter(line => line.trim().length > 0)
-          .join(', ')
-      : undefined
-  })
+  njkEnv.addFilter('formatAddress', formatAddress)
 
   njkEnv.addFilter('formatAddressAsList', (address?: string) => {
     return address ? address.split(', ').filter(line => line.trim().length > 0) : undefined

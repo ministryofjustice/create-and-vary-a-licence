@@ -38,7 +38,7 @@ describe('Print an AP licence', () => {
         ],
         bespokeConditions: [{ text: 'Bespoke condition 1' }],
       },
-      additionalConditions: [
+      additionalLicenceConditions: [
         'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohold problems.',
       ],
     }
@@ -54,12 +54,12 @@ describe('Print an AP licence', () => {
     // Check the offender image is present
     expect($('#offender > #offender-image').length).toBe(1)
 
-    // Check the objectives section is present - 2 paragraphs, 1 bullet-point list
-    expect($('#objectives > p').length).toBe(2)
+    // Check the objectives section is present - 3 paragraphs, 1 bullet-point list
+    expect($('#objectives > p').length).toBe(3)
     expect($('#objectives > .bullet-point').length).toBe(1)
 
     // Check the supervision section is present with 2 bold dates
-    expect($('#supervision > .bold').length).toBe(2)
+    expect($('#ap-dates > p > .bold').length).toBe(2)
 
     // Check the induction appointment is present with 3 paragraphs
     expect($('#induction > #meeting-details > p').length).toBe(3)
@@ -68,9 +68,7 @@ describe('Print an AP licence', () => {
     expect($('#released-to-other').text()).toContain('Criminal Justice Act 2003')
 
     // Should be 7 standard, 1 additional and 1 bespoke conditions = 9 in total
-    expect($('#conditions > .condition').length).toBe(9)
-    expect($('#additional-1').text().trim()).toContain('drug and alcohol')
-    expect($('#bespoke-1').text().trim()).toEqual('Bespoke condition 1')
+    expect($('#ap-conditions > .condition').length).toBe(9)
 
     // Check the cancellation text is present
     expect($('#cancellation').text()).toContain('Criminal Justice Act 2003')
@@ -82,6 +80,6 @@ describe('Print an AP licence', () => {
     expect($('#failure-to-comply').text()).toContain('licence revoked')
 
     // Check the signature box and content are present
-    expect($('.boxed > .signatures > p').length).toBe(8)
+    expect($('.boxed > .signatures > p').length).toBe(6)
   })
 })

@@ -902,16 +902,10 @@ export default {
       {
         code: '524f2fd6-ad53-47dd-8edc-2161d3dd2ed4',
         category: 'Electronic monitoring',
-        text: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging for a period of [INSERT TIMEFRAME] ending on [INSERT END DATE] and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
-        tpl: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging for a period of {timeframe} ending on {endDate} and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
+        text: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging, ending on [INSERT END DATE], and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
+        tpl: 'You will be subject to trail monitoring. Your whereabouts will be electronically monitored by GPS Satellite Tagging, ending on {endDate}, and you must cooperate with the monitoring as directed by your supervising officer unless otherwise authorised by your supervising officer.',
         requiresInput: true,
         inputs: [
-          {
-            type: InputTypes.TEXT,
-            label: 'Enter the timeframe',
-            name: 'timeframe',
-            case: 'lower',
-          },
           {
             type: InputTypes.DATE,
             label: 'Enter the end date',
