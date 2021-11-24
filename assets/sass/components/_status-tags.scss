@@ -1,44 +1,9 @@
 .status-badge {
-  font-size: 20px;
+  font-size: 14px;
   padding: 3px 5px;
   font-weight: 700;
-  background-color: #dddddd;
   display: inline-block;
   white-space: nowrap;
-  color: govuk-colour("dark-grey");
   text-align: center;
-
-  &.green {
-    color: #00512B;
-    background-color: #9fdf9f;
-  }
-
-  &.blue {
-    color: #144E81;
-    background-color: #b3ccff;
-  }
-
-  &.red {
-    color: #4d0026;
-    background-color: #ffb3b3;
-  }
-
-  &.amber {
-    color: #4d3300;
-    background-color: #ffd480;
-  }
-
-  &.grey {
-    color: #333A3D;
-    background-color: #EBECED;
-  }
-
-  &.yellow {
-    color: yellow;
-    background-color: #EBECED;
-  }
-
-  &.small {
-    font-size: 14px;
-  }
+  min-width: 7em;
 }

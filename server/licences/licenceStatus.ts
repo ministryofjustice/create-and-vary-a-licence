@@ -3,24 +3,24 @@ import LicenceStatus from '../enumeration/licenceStatus'
 type LicenceStatusConfig = {
   label: string
   description: string
-  colour: 'green' | 'blue' | 'red' | 'amber' | 'grey' | 'yellow' | 'cyan' | 'purple'
+  colour: 'green' | 'blue' | 'red' | 'pink' | 'turquoise' | 'grey' | 'yellow' | 'cyan' | 'purple'
 }
 
 const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   IN_PROGRESS: {
     label: 'IN PROGRESS',
     description: 'Created and being worked on',
-    colour: 'amber',
+    colour: 'blue',
   },
   SUBMITTED: {
     label: 'SUBMITTED',
     description: 'Submitted to the prison for approval',
-    colour: 'blue',
+    colour: 'pink',
   },
   ACTIVE: {
     label: 'ACTIVE',
     description: 'Approved by the prison and is now the currently active licence',
-    colour: 'green',
+    colour: 'turquoise',
   },
   REJECTED: {
     label: 'REJECTED',
@@ -40,7 +40,7 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   APPROVED: {
     label: 'APPROVED',
     description: 'Approved by prison',
-    colour: 'green',
+    colour: 'purple',
   },
   NOT_STARTED: {
     label: 'NOT STARTED',
