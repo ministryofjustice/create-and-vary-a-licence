@@ -22,7 +22,7 @@ const licencePlaceholder = {
   sentenceStartDate: '10/01/2019',
   sentenceEndDate: '26/04/2022',
   licenceStartDate: '01/04/2021',
-  licenceExpiryDate: '26/04/2022',
+  licenceExpiryDate: '26/04/2060',
   topupSupervisionStartDate: '26/04/2022',
   topupSupervisionExpiryDate: '26/06/2022',
   comFirstName: 'Stephen',

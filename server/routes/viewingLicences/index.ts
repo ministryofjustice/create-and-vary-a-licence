@@ -14,7 +14,7 @@ export default function Index({ licenceService, prisonerService }: Services): Ro
   const get = (path: string, handler: RequestHandler) =>
     router.get(routePrefix(path), fetchLicence(licenceService), asyncMiddleware(handler))
 
-  const post = (path: string, handler: RequestHandler, type?: new () => unknown) =>
+  const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(routePrefix(path), fetchLicence(licenceService), validationMiddleware(type), asyncMiddleware(handler))
 
   const viewCasesHandler = new ViewAndPrintCaseRoutes(licenceService)

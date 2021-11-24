@@ -10,6 +10,9 @@ const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalCondi
 
 describe('validationMiddleware', () => {
   describe('middleware', () => {
+    const res = { redirect: jest.fn(), locals: {} } as unknown as Response
+    let req = {} as Request
+
     const notEmptyMessage = 'not empty'
     const notValidMessage = 'not a valid selection'
 
@@ -31,12 +34,16 @@ describe('validationMiddleware', () => {
       child: DummyChild
     }
 
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
     it('should validate against a type from config if the form is an additional condition input', async () => {
       const additionalCondition = { code: 'condition1', inputRequired: true, type: DummyChild }
       conditionsProviderSpy.mockReturnValue(additionalCondition)
 
       const next = jest.fn()
-      const req = {
+      req = {
         params: {
           conditionId: '1',
         },
@@ -46,7 +53,6 @@ describe('validationMiddleware', () => {
           name: 'not valid',
         },
       } as unknown as Request
-      const res = { redirect: jest.fn() } as unknown as Response
       await validationMiddleware()(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
@@ -59,14 +65,13 @@ describe('validationMiddleware', () => {
 
     it('should call next when there are no validation errors', async () => {
       const next = jest.fn()
-      const req = {
+      req = {
         params: {},
         body: {
           id: 'abc',
           child: { name: 'valid' },
         },
       } as Request
-      const res = { redirect: jest.fn() } as unknown as Response
       await validationMiddleware(DummyForm)(req, res, next)
 
       expect(next).toHaveBeenCalledTimes(1)
@@ -74,7 +79,7 @@ describe('validationMiddleware', () => {
 
     it('should return flash responses', async () => {
       const next = jest.fn()
-      const req = {
+      req = {
         params: {},
         flash: jest.fn(),
         body: {
@@ -82,7 +87,6 @@ describe('validationMiddleware', () => {
           child: { name: 'valid' },
         },
       } as unknown as Request
-      const res = { redirect: jest.fn() } as unknown as Response
       await validationMiddleware(DummyForm)(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
@@ -95,7 +99,7 @@ describe('validationMiddleware', () => {
 
     it('should return the bottom level property on the error messages', async () => {
       const next = jest.fn()
-      const req = {
+      req = {
         params: {},
         flash: jest.fn(),
         body: {
@@ -103,7 +107,6 @@ describe('validationMiddleware', () => {
           child: { name: '' },
         },
       } as unknown as Request
-      const res = { redirect: jest.fn() } as unknown as Response
       await validationMiddleware(DummyForm)(req, res, next)
 
       expect(next).not.toHaveBeenCalled()

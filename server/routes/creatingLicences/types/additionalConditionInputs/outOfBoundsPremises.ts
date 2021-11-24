@@ -1,7 +1,7 @@
 import { Expose, Type } from 'class-transformer'
 import { IsNotEmpty, ValidateNested } from 'class-validator'
 import Address from '../address'
-import { Either } from '../../../../validators/decorators'
+import Either from '../../../../validators/either'
 
 class OutOfBoundsPremises {
   @Expose()
