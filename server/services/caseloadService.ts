@@ -5,7 +5,6 @@ import LicenceService from './licenceService'
 import { CaseTypeAndStatus, ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
-import logger from '../../logger'
 
 export default class CaseloadService {
   constructor(
