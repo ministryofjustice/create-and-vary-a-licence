@@ -40,7 +40,7 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   APPROVED: {
     label: 'APPROVED',
     description: 'Approved by prison',
-    colour: 'purple',
+    colour: 'green',
   },
   NOT_STARTED: {
     label: 'NOT STARTED',

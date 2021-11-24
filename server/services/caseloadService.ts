@@ -5,6 +5,7 @@ import LicenceService from './licenceService'
 import { CaseTypeAndStatus, ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
+import logger from '../../logger'
 
 export default class CaseloadService {
   constructor(
@@ -14,7 +15,6 @@ export default class CaseloadService {
   ) {}
 
   async getStaffCaseload(username: string, staffIdentifier: number): Promise<CaseTypeAndStatus[]> {
-    // TODO: We could cache the entire caseload here?
     const managedOffenders = await this.communityService.getManagedOffenders(staffIdentifier)
     const caseloadNomisIds = managedOffenders
       .filter(offender => offender.currentOm)
@@ -25,6 +25,7 @@ export default class CaseloadService {
      TODO: Maybe this should be checking for existing licences by nomisId rather than staffId? What if the offender
       changes their managing officer after a licence has been created for them?
      */
+
     const existingLicences = await this.licenceService.getLicencesByStaffIdAndStatus(staffIdentifier, username, [
       LicenceStatus.ACTIVE,
       LicenceStatus.RECALLED,
@@ -34,24 +35,23 @@ export default class CaseloadService {
       LicenceStatus.REJECTED,
     ])
 
+    // Get the full offender records from prisoner search
     const offenders = await this.prisonerService.searchPrisonersByNomisIds(username, caseloadNomisIds)
 
-    // TODO: Change to the POST endpoint for a list of bookingIds
+    // Get the HDC status for all bookings in the prisoner list
     const hdcStatuses = await this.prisonerService.getHdcStatuses(username, offenders)
 
+    // Filter the cases by the case list rules
     return offenders
       .map(offender => {
         const matchingDeliusCase = managedOffenders.find(
           deliusCase => deliusCase.nomsNumber === offender.prisonerNumber
         )
-        // TODO: The nomisId in Delius does not match a prison record - filter now, but will revisit to add a NO_RECORD
+        // TODO: If the nomisId in Delius does not match a prison record - filter for now, will revisit to add a NO_RECORD
         if (!matchingDeliusCase) {
           return null
         }
-        return {
-          ...matchingDeliusCase,
-          ...offender,
-        } as ManagedCase
+        return { ...matchingDeliusCase, ...offender } as ManagedCase
       })
       .filter(managedCase => managedCase)
       .filter(managedCase => !managedCase.paroleEligibilityDate)
@@ -68,14 +68,16 @@ export default class CaseloadService {
       .map(managedCase => {
         const existingLicence = existingLicences.find(licence => licence.nomisId === managedCase.nomsNumber)
         if (existingLicence) {
-          // Filter people with an ACTIVE, INACTIVE or RECALLED licence
           if (
             existingLicence.licenceStatus === LicenceStatus.ACTIVE ||
             existingLicence.licenceStatus === LicenceStatus.INACTIVE ||
             existingLicence.licenceStatus === LicenceStatus.RECALLED
           ) {
+            // Filter cases in the list if their status is ACTIVE, INACTIVE or RECALLED (these are vary candidates)
             return null
           }
+
+          // Return a case in the list for the existing licence
           return {
             ...managedCase,
             licenceStatus: existingLicence.licenceStatus,
@@ -83,18 +85,15 @@ export default class CaseloadService {
           } as CaseTypeAndStatus
         }
 
-        // No current licence so work out the licence type from the prisoner search record
+        // Work out the licence type from the prisoner search record
         const licenceType = this.getLicenceType(
           managedCase.topupSupervisionExpiryDate,
           managedCase.licenceExpiryDate,
           managedCase.sentenceExpiryDate
         )
 
-        return {
-          ...managedCase,
-          licenceStatus: LicenceStatus.NOT_STARTED,
-          licenceType,
-        } as CaseTypeAndStatus
+        // Create a case in the list in status NOT_STARTED
+        return { ...managedCase, licenceStatus: LicenceStatus.NOT_STARTED, licenceType } as CaseTypeAndStatus
       })
       .filter(managedCase => managedCase)
       .sort((a, b) => {
