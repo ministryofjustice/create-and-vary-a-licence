@@ -1,0 +1,12 @@
+{% macro licenceDescription(typeCode) %}
+    {% if typeCode === 'AP' %}
+      All purpose
+    {% elseif typeCode === 'AP_PSS' %}
+      All purpose<br/>
+      Post sentence supervision
+    {% elseif typeCode === 'PSS' %}
+      Post sentence supervision
+    {% else %}
+      {{ typeCode }}
+    {% endif %}
+{% endmacro %}
