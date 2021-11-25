@@ -59,9 +59,12 @@ export default class PrisonerService {
   }
 
   async getHdcStatuses(username: string, offenders: Prisoner[]): Promise<HdcStatus[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
     logger.info(`getHdcStatus for bookingIds = ${JSON.stringify(bookingIds)}`)
+    if (bookingIds.length === 0) {
+      return []
+    }
+    const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const hdcList = await new PrisonApiClient(token).getLatestHdcStatusBatch(bookingIds)
     return hdcList.map(h => {
       const hdcEligibilityDate = offenders.find(
