@@ -59,21 +59,18 @@ export default class PrisonerService {
   }
 
   async getHdcStatuses(username: string, offenders: Prisoner[]): Promise<HdcStatus[]> {
-    const listOfHdcStatus: HdcStatus[] = []
+    const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
+    logger.info(`getHdcStatus for bookingIds = ${JSON.stringify(bookingIds)}`)
+    if (bookingIds.length === 0) {
+      return []
+    }
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    const client = new PrisonApiClient(token)
-    await Promise.all(
-      offenders.map(async o => {
-        try {
-          const hdc = await client.getLatestHdcStatus(o.bookingId)
-          listOfHdcStatus.push(
-            new HdcStatus(o.bookingId, o.homeDetentionCurfewEndDate, hdc?.passed, hdc?.approvalStatus)
-          )
-        } catch (error) {
-          listOfHdcStatus.push(new HdcStatus(o.bookingId, o.homeDetentionCurfewEndDate))
-        }
-      })
-    )
-    return listOfHdcStatus
+    const hdcList = await new PrisonApiClient(token).getLatestHdcStatusBatch(bookingIds)
+    return hdcList.map(h => {
+      const hdcEligibilityDate = offenders.find(
+        o => parseInt(o?.bookingId, 10) === h?.bookingId
+      )?.homeDetentionCurfewEligibilityDate
+      return new HdcStatus(`${h?.bookingId}`, hdcEligibilityDate, h?.passed, h?.approvalStatus)
+    })
   }
 }

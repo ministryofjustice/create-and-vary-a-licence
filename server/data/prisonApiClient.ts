@@ -39,10 +39,18 @@ export default class PrisonApiClient {
     return this.restClient.get({ path: `/api/agencies/prison/${prisonId}` }) as Promise<PrisonInformation>
   }
 
+  // TODO: No longer used - leave as might use in future check
   async getLatestHdcStatus(bookingId: string): Promise<HomeDetentionCurfew> {
     return this.restClient.get({
       path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,
     }) as Promise<HomeDetentionCurfew>
+  }
+
+  async getLatestHdcStatusBatch(bookingIds: number[]): Promise<HomeDetentionCurfew[]> {
+    return this.restClient.post({
+      path: `/api/offender-sentences/home-detention-curfews/latest`,
+      data: bookingIds,
+    }) as Promise<HomeDetentionCurfew[]>
   }
 
   // Called with the user's own token

@@ -8,6 +8,7 @@ import LicenceService from './licenceService'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import HdcStatus from '../@types/HdcStatus'
+import LicenceType from '../enumeration/licenceType'
 
 jest.mock('./prisonerService')
 jest.mock('./communityService')
@@ -82,6 +83,8 @@ describe('Caseload Service', () => {
           currentOm: true,
           status: 'ACTIVE',
           conditionalReleaseDate: '2023-05-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
         },
       ])
     })
@@ -133,6 +136,8 @@ describe('Caseload Service', () => {
           status: 'ACTIVE',
           indeterminateSentence: false,
           conditionalReleaseDate: '2023-05-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
         },
       ])
     })
@@ -179,6 +184,8 @@ describe('Caseload Service', () => {
           status: 'ACTIVE',
           indeterminateSentence: false,
           conditionalReleaseDate: '2023-05-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
         },
       ])
     })
@@ -227,6 +234,8 @@ describe('Caseload Service', () => {
           indeterminateSentence: false,
           legalStatus: 'REMAND',
           conditionalReleaseDate: '2023-05-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
         },
       ])
     })
@@ -266,6 +275,8 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           indeterminateSentence: false,
           conditionalReleaseDate: '2023-05-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
         },
       ])
     })
@@ -312,6 +323,8 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           indeterminateSentence: false,
           conditionalReleaseDate: '2023-05-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
         },
       ])
     })
@@ -359,6 +372,8 @@ describe('Caseload Service', () => {
           status: 'ACTIVE',
           indeterminateSentence: false,
           conditionalReleaseDate: '2023-05-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
         },
       ])
     })
@@ -407,6 +422,8 @@ describe('Caseload Service', () => {
           releaseDate: moment().add(1, 'day').format('yyyy-MM-DD'),
           status: 'ACTIVE',
           conditionalReleaseDate: '2023-05-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
         },
         {
           nomsNumber: '2',
@@ -416,6 +433,8 @@ describe('Caseload Service', () => {
           status: 'ACTIVE',
           indeterminateSentence: false,
           conditionalReleaseDate: '2023-05-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
         },
       ])
     })
@@ -466,6 +485,8 @@ describe('Caseload Service', () => {
         indeterminateSentence: false,
         conditionalReleaseDate: '2023-05-12',
         homeDetentionCurfewEndDate: '2021-10-07',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
     ])
   })
@@ -516,6 +537,8 @@ describe('Caseload Service', () => {
         status: 'ACTIVE',
         indeterminateSentence: false,
         conditionalReleaseDate: '2023-04-12',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
       {
         nomsNumber: '2',
@@ -526,6 +549,8 @@ describe('Caseload Service', () => {
         indeterminateSentence: false,
         conditionalReleaseDate: '2023-05-12',
         homeDetentionCurfewEndDate: '2021-10-07',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
     ])
   })
@@ -573,6 +598,8 @@ describe('Caseload Service', () => {
         status: 'ACTIVE',
         indeterminateSentence: false,
         conditionalReleaseDate: '2023-04-12',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
       {
         nomsNumber: '2',
@@ -583,11 +610,13 @@ describe('Caseload Service', () => {
         indeterminateSentence: false,
         conditionalReleaseDate: '2023-05-12',
         homeDetentionCurfewEndDate: '2021-10-07',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
     ])
   })
 
-  it('should filter out offenders who have a licence already', async () => {
+  it('should filter existing ACTIVE and INACTIVE licences, but include other active statuses', async () => {
     communityService.getManagedOffenders.mockResolvedValue([
       {
         nomsNumber: '1',
@@ -595,6 +624,22 @@ describe('Caseload Service', () => {
       },
       {
         nomsNumber: '2',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '3',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '4',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '5',
+        currentOm: true,
+      },
+      {
+        nomsNumber: '6',
         currentOm: true,
       },
     ] as CommunityApiManagedOffender[])
@@ -605,24 +650,76 @@ describe('Caseload Service', () => {
         bookingId: '1',
         status: 'ACTIVE',
         indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-12',
+        conditionalReleaseDate: '2023-05-01',
       },
       {
         prisonerNumber: '2',
         bookingId: '2',
         status: 'ACTIVE',
         indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-12',
+        conditionalReleaseDate: '2023-05-02',
+      },
+      {
+        prisonerNumber: '3',
+        bookingId: '3',
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-03',
+      },
+      {
+        prisonerNumber: '4',
+        bookingId: '4',
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-04',
+      },
+      {
+        prisonerNumber: '5',
+        bookingId: '5',
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-05',
+      },
+      {
+        prisonerNumber: '6',
+        bookingId: '6',
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-06',
       },
     ] as Prisoner[])
 
-    prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2')])
+    prisonerService.getHdcStatuses.mockResolvedValue([
+      new HdcStatus('1'),
+      new HdcStatus('2'),
+      new HdcStatus('3'),
+      new HdcStatus('4'),
+      new HdcStatus('5'),
+      new HdcStatus('6'),
+    ])
 
-    licenceService.getLicencesByStaffIdAndStatus.mockResolvedValue([{ nomisId: '1' }] as LicenceSummary[])
+    licenceService.getLicencesByStaffIdAndStatus.mockResolvedValue([
+      { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
+      { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
+      { nomisId: '3', licenceType: LicenceType.PSS, licenceStatus: LicenceStatus.APPROVED },
+      { nomisId: '4', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.REJECTED },
+      { nomisId: '6', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.INACTIVE },
+    ] as LicenceSummary[])
 
     const caseload = await caseloadService.getStaffCaseload('USER1', staffIdentifier)
 
     expect(caseload).toEqual([
+      {
+        nomsNumber: '1',
+        bookingId: '1',
+        prisonerNumber: '1',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-01',
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        licenceType: LicenceType.AP,
+      },
       {
         nomsNumber: '2',
         bookingId: '2',
@@ -630,13 +727,51 @@ describe('Caseload Service', () => {
         currentOm: true,
         status: 'ACTIVE',
         indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-12',
+        conditionalReleaseDate: '2023-05-02',
+        licenceStatus: LicenceStatus.SUBMITTED,
+        licenceType: LicenceType.AP_PSS,
+      },
+      {
+        nomsNumber: '3',
+        bookingId: '3',
+        prisonerNumber: '3',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-03',
+        licenceStatus: LicenceStatus.APPROVED,
+        licenceType: LicenceType.PSS,
+      },
+      {
+        nomsNumber: '4',
+        bookingId: '4',
+        prisonerNumber: '4',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-04',
+        licenceStatus: LicenceStatus.REJECTED,
+        licenceType: LicenceType.AP,
+      },
+      {
+        nomsNumber: '5',
+        bookingId: '5',
+        prisonerNumber: '5',
+        currentOm: true,
+        status: 'ACTIVE',
+        indeterminateSentence: false,
+        conditionalReleaseDate: '2023-05-05',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
     ])
     expect(licenceService.getLicencesByStaffIdAndStatus).toHaveBeenCalledWith(2000, 'USER1', [
       LicenceStatus.ACTIVE,
-      LicenceStatus.INACTIVE,
       LicenceStatus.RECALLED,
+      LicenceStatus.IN_PROGRESS,
+      LicenceStatus.SUBMITTED,
+      LicenceStatus.APPROVED,
+      LicenceStatus.REJECTED,
     ])
   })
 
@@ -708,6 +843,8 @@ describe('Caseload Service', () => {
         status: 'ACTIVE',
         indeterminateSentence: false,
         conditionalReleaseDate: '2021-04-30',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
       {
         nomsNumber: '1',
@@ -717,6 +854,8 @@ describe('Caseload Service', () => {
         status: 'ACTIVE',
         indeterminateSentence: false,
         conditionalReleaseDate: '2022-04-30',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
       {
         nomsNumber: '4',
@@ -726,6 +865,8 @@ describe('Caseload Service', () => {
         status: 'ACTIVE',
         indeterminateSentence: false,
         conditionalReleaseDate: '2023-04-30',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
       {
         nomsNumber: '2',
@@ -735,6 +876,8 @@ describe('Caseload Service', () => {
         status: 'ACTIVE',
         indeterminateSentence: false,
         conditionalReleaseDate: '2024-04-30',
+        licenceStatus: LicenceStatus.NOT_STARTED,
+        licenceType: LicenceType.AP,
       },
     ])
   })

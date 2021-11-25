@@ -6,6 +6,7 @@ enum LicenceStatus {
   INACTIVE = 'INACTIVE',
   RECALLED = 'RECALLED',
   APPROVED = 'APPROVED',
+  NOT_STARTED = 'NOT_STARTED',
 }
 
 export default LicenceStatus

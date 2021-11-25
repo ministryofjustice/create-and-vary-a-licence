@@ -3,6 +3,7 @@ import moment from 'moment'
 import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
+import statusConfig from '../../../licences/licenceStatus'
 
 export default class CaseloadRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly caseloadService: CaseloadService) {}
@@ -16,9 +17,11 @@ export default class CaseloadRoutes {
         crnNumber: offender.crnNumber,
         prisonerNumber: offender.prisonerNumber,
         conditionalReleaseDate: moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').format('Do MMMM YYYY'),
+        licenceStatus: offender.licenceStatus,
+        licenceType: offender.licenceType,
       }
     })
-    res.render('pages/create/caseload', { caseload: caseloadViewModel })
+    res.render('pages/create/caseload', { caseload: caseloadViewModel, statusConfig })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

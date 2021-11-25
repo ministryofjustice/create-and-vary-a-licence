@@ -3,8 +3,11 @@ import { Request, Response } from 'express'
 import CaseloadRoutes from './caseload'
 import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
-import { ManagedCase } from '../../../@types/managedCase'
+import { CaseTypeAndStatus } from '../../../@types/managedCase'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import statusConfig from '../../../licences/licenceStatus'
+import LicenceStatus from '../../../enumeration/licenceStatus'
+import LicenceType from '../../../enumeration/licenceType'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
@@ -25,8 +28,10 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         lastName: 'Rogan',
         conditionalReleaseDate: '2022-10-12',
         prisonerNumber: '123',
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        licenceType: LicenceType.AP,
       },
-    ] as unknown as ManagedCase[])
+    ] as unknown as CaseTypeAndStatus[])
   })
 
   describe('GET', () => {
@@ -53,8 +58,11 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             conditionalReleaseDate: '12th October 2022',
             prisonerNumber: '123',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
           },
         ],
+        statusConfig,
       })
       expect(caseloadService.getStaffCaseload).toHaveBeenCalledWith('USER1', 2000)
     })
