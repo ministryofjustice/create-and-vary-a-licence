@@ -48,19 +48,29 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): A
 
     if (configCondition?.requiresInput) {
       const placeholders = getPlaceholderNames(configCondition.tpl as string)
-      const inputConfig = configCondition.inputs as unknown as Record<string, unknown>[]
+      const inputConfig = getConditionInputs(configCondition)
       let conditionText = configCondition.tpl as string
 
       placeholders.forEach(placeholder => {
         const ph = placeholder.replace(/[{}]/g, '')?.trim()
-        const matchingDataItems = getMatchingDataItems(ph, condition.data)
+
+        // Double pipe notation is used to indicate that either value can be used in this placeholder.
+        // The field names are in priority order (i.e. the second field name will be used only if the first field has no data)
+
+        const fieldName =
+          ph
+            .split('||')
+            .map(p => p.trim())
+            .find(p => getMatchingDataItems(p, condition.data).length > 0) || ph
+
+        const matchingDataItems = getMatchingDataItems(fieldName, condition.data)
 
         if (matchingDataItems.length === 0) {
           // Unmatched placeholder
           conditionText = removeNamedPlaceholder(ph, conditionText)
         } else if (matchingDataItems.length === 1) {
           // Single matching value
-          const rules = inputConfig.find(item => item.name === ph)
+          const rules = inputConfig.find(item => item.name === fieldName)
           let { value } = matchingDataItems[0]
           value = adjustCase(rules?.case as string, value)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
@@ -68,7 +78,7 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): A
           conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         } else {
           // List of values for this placeholder (lists of values can have listType 'AND' or 'OR')
-          const rules = inputConfig.find(item => item.name === ph)
+          const rules = inputConfig.find(item => item.name === fieldName)
           let value = produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
           value = adjustCase(rules?.case as string, value)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
@@ -162,7 +172,6 @@ const adjustCase = (caseRule: string, value: string): string => {
   switch (caseRule.toLowerCase()) {
     case 'lower':
       return value.toLowerCase()
-      break
     case 'upper':
       return value.toUpperCase()
     case 'capitalised':
@@ -182,4 +191,25 @@ const getMatchingDataItems = (
   conditionData: AdditionalConditionData[]
 ): AdditionalConditionData[] => {
   return conditionData.filter((cd: AdditionalConditionData) => cd.field === placeholder) || []
+}
+
+const getConditionInputs = (conditionConfig: Record<string, unknown>): Record<string, unknown>[] => {
+  if (!conditionConfig) {
+    return []
+  }
+
+  // Since inputs can be within inputs (i.e. radio button which reveals another textbox underneath), we have to
+  // recursively build a list of inputs by going deep into the layers
+
+  const topLevelInputs = conditionConfig.inputs as unknown as Record<string, unknown>[]
+  const inputOptions = topLevelInputs.flatMap(input => input.options) as unknown as Record<string, unknown>[]
+  const deeperLevelInputs =
+    inputOptions
+      .filter(option => option && option.conditional)
+      ?.map(opt => {
+        return opt.conditional as unknown as Record<string, unknown>
+      })
+      .flatMap(config => getConditionInputs(config)) || []
+
+  return [...topLevelInputs, ...deeperLevelInputs]
 }
