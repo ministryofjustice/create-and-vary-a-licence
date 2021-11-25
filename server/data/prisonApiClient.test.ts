@@ -209,13 +209,14 @@ describe('Prison API client tests', () => {
       approvalStatusDate: '12/12/2022',
       checksPassedDate: '12/12/2022',
       passed: true,
+      bookingId: 1,
     } as HomeDetentionCurfew
 
-    const offenderList = [{ bookingId: '1', homeDetentionCurfewEndDate: '2023-06-12' }] as Prisoner[]
+    const offenderList = [{ bookingId: '1', homeDetentionCurfewEligibilityDate: '2023-06-12' }] as Prisoner[]
 
     it('Check for HDC eligible', async () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get('/api/offender-sentences/booking/1/home-detention-curfews/latest').reply(200, okResponse)
+      fakeApi.post('/api/offender-sentences/home-detention-curfews/latest').reply(200, [okResponse])
       const result = await prisonerService.getHdcStatuses('XTEST1', offenderList)
       expect(result).toHaveLength(1)
       expect(result[0].eligibleForHdc).toBe(true)
@@ -223,12 +224,11 @@ describe('Prison API client tests', () => {
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
     })
 
-    it('Check for HDC status not found - 404', async () => {
+    it('Check for HDC status returning empty list', async () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get('/api/offender-sentences/booking/1/home-detention-curfews/latest').reply(404, {})
+      fakeApi.post('/api/offender-sentences/home-detention-curfews/latest').reply(200, [])
       const result = await prisonerService.getHdcStatuses('XTEST1', offenderList)
-      expect(result).toHaveLength(1)
-      expect(result[0].eligibleForHdc).toBe(false)
+      expect(result).toHaveLength(0)
       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       expect(nock.isDone()).toBe(true)
     })
@@ -236,7 +236,7 @@ describe('Prison API client tests', () => {
     it('Check for HDC status found but REJECTED', async () => {
       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
       const rejectResponse = { ...okResponse, approvalStatus: 'REJECTED' }
-      fakeApi.get('/api/offender-sentences/booking/1/home-detention-curfews/latest').reply(200, rejectResponse)
+      fakeApi.post('/api/offender-sentences/home-detention-curfews/latest').reply(200, [rejectResponse])
       const result = await prisonerService.getHdcStatuses('XTEST1', offenderList)
       expect(result).toHaveLength(1)
       expect(result[0].eligibleForHdc).toBe(false)
