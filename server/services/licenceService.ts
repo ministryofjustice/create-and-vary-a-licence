@@ -242,13 +242,18 @@ export default class LicenceService {
     return new LicenceApiClient(token).matchLicences(filteredPrisons, statuses)
   }
 
-  async getLicencesForPrinting(
+  async getLicencesForCaseAdmin(
     username: string,
     authSource: string,
     prisons: string[] = [],
     staffId: number = null
   ): Promise<LicenceSummary[]> {
-    const statuses = [LicenceStatus.ACTIVE.valueOf(), LicenceStatus.APPROVED.valueOf()]
+    const statuses = [
+      LicenceStatus.ACTIVE.valueOf(),
+      LicenceStatus.APPROVED.valueOf(),
+      LicenceStatus.REJECTED.valueOf(),
+      LicenceStatus.SUBMITTED.valueOf(),
+    ]
     if (authSource === 'nomis') {
       const token = await this.hmppsAuthClient.getSystemClientToken(username)
       const filteredPrisons = filterCentralCaseload(prisons)

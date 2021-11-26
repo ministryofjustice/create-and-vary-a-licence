@@ -4,6 +4,7 @@ import ViewAndPrintCaseRoutes from './viewCases'
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import statusConfig from '../../../licences/licenceStatus'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const username = 'joebloggs'
@@ -32,7 +33,7 @@ describe('Route handlers - View and print case list', () => {
       },
     } as unknown as Request
 
-    licenceService.getLicencesForPrinting = jest.fn()
+    licenceService.getLicencesForCaseAdmin = jest.fn()
   })
 
   describe('GET', () => {
@@ -49,11 +50,11 @@ describe('Route handlers - View and print case list', () => {
         },
       } as unknown as Response
 
-      licenceService.getLicencesForPrinting.mockResolvedValue(fakeSummaryList)
+      licenceService.getLicencesForCaseAdmin.mockResolvedValue(fakeSummaryList)
       await handler.GET(req, res)
       const { authSource, prisonCaseload, deliusStaffIdentifier: staffId } = res.locals.user
-      expect(licenceService.getLicencesForPrinting).toHaveBeenCalledWith(username, authSource, prisonCaseload, staffId)
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', { cases: fakeSummaryList })
+      expect(licenceService.getLicencesForCaseAdmin).toHaveBeenCalledWith(username, authSource, prisonCaseload, staffId)
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', { cases: fakeSummaryList, statusConfig })
     })
 
     it('should render list of licences for a probation user', async () => {
@@ -70,11 +71,11 @@ describe('Route handlers - View and print case list', () => {
         },
       } as unknown as Response
 
-      licenceService.getLicencesForPrinting.mockResolvedValue(fakeSummaryList)
+      licenceService.getLicencesForCaseAdmin.mockResolvedValue(fakeSummaryList)
       await handler.GET(req, res)
       const { authSource, prisonCaseload, deliusStaffIdentifier: staffId } = res.locals.user
-      expect(licenceService.getLicencesForPrinting).toHaveBeenCalledWith(username, authSource, prisonCaseload, staffId)
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', { cases: fakeSummaryList })
+      expect(licenceService.getLicencesForCaseAdmin).toHaveBeenCalledWith(username, authSource, prisonCaseload, staffId)
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', { cases: fakeSummaryList, statusConfig })
     })
 
     it('should render an empty list for an auth user', async () => {
@@ -90,11 +91,11 @@ describe('Route handlers - View and print case list', () => {
         },
       } as unknown as Response
 
-      licenceService.getLicencesForPrinting.mockResolvedValue([])
+      licenceService.getLicencesForCaseAdmin.mockResolvedValue([])
       await handler.GET(req, res)
       const { authSource, prisonCaseload, deliusStaffIdentifier: staffId } = res.locals.user
-      expect(licenceService.getLicencesForPrinting).toHaveBeenCalledWith(username, authSource, prisonCaseload, staffId)
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', { cases: [] })
+      expect(licenceService.getLicencesForCaseAdmin).toHaveBeenCalledWith(username, authSource, prisonCaseload, staffId)
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', { cases: [], statusConfig })
     })
   })
 

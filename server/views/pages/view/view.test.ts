@@ -25,6 +25,7 @@ describe('View and print - single licence view', () => {
     viewContext = {
       licence: {
         id: 1,
+        statusCode: 'APPROVED',
         typeCode: 'AP_PSS',
         forename: 'John',
         surname: 'Smith',
@@ -129,5 +130,70 @@ describe('View and print - single licence view', () => {
     // Check the existence of the print and return to case list buttons
     expect($('[data-qa="print-licence"]').length).toBe(2)
     expect($('[data-qa="return-to-view-list"]').length).toBe(1)
+  })
+
+  it('Print buttons are not visible when licence is not approved or active', () => {
+    viewContext = {
+      licence: {
+        id: 1,
+        statusCode: 'SUBMITTED',
+        typeCode: 'AP_PSS',
+        forename: 'John',
+        surname: 'Smith',
+        appointmentPerson: 'Jack Frost',
+        appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
+        comTelephone: '07878 234566',
+        additionalLicenceConditions: [
+          {
+            code: 'condition1',
+            category: 'Category 1',
+            text: 'Template 1',
+            data: [
+              {
+                field: 'field1',
+                value: 'Data 1',
+              },
+            ],
+          },
+          {
+            code: 'condition2',
+            category: 'Category 2',
+            text: 'Template 2',
+            data: [
+              {
+                field: 'field2',
+                value: 'Data 2A',
+              },
+              {
+                field: 'field2',
+                value: 'Data 2B',
+              },
+              {
+                field: 'field3',
+                value: 'Data 2C',
+              },
+            ],
+          },
+        ],
+        additionalPssConditions: [
+          {
+            code: 'condition1',
+            category: 'Category 1',
+            text: 'Template 1',
+            data: [
+              {
+                field: 'field1',
+                value: 'Data 1',
+              },
+            ],
+          },
+        ],
+        bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('[data-qa="print-licence"]').length).toBe(0)
   })
 })
