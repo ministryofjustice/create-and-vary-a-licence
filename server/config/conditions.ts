@@ -573,7 +573,7 @@ export default {
         code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
         category: 'Curfew arrangement',
         text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
-        tpl: 'Confine yourself to an address approved by your supervising officer between the hours of {curfewStart} and {curfewEnd} daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {reviewPeriod} basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+        tpl: 'Confine yourself to an address approved by your supervising officer between the hours of {curfewStart} and {curfewEnd} daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
         subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
         requiresInput: true,
         inputs: [
@@ -607,6 +607,7 @@ export default {
                       type: InputTypes.TEXT,
                       label: 'Enter a review period',
                       name: 'alternativeReviewPeriod',
+                      case: 'lower',
                     },
                   ],
                 },
@@ -710,7 +711,7 @@ export default {
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
         text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-        tpl: 'Report to staff at {approvedPremises} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {reviewPeriod} {alternativeReviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+        tpl: 'Report to staff at {approvedPremises} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         requiresInput: true,
         inputs: [
           {
@@ -744,6 +745,7 @@ export default {
                       type: InputTypes.TEXT,
                       label: 'Enter a review period',
                       name: 'alternativeReviewPeriod',
+                      case: 'lower',
                     },
                   ],
                 },
@@ -758,7 +760,7 @@ export default {
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
         text: 'Report to staff at [NAME OF POLICE STATION] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-        tpl: 'Report to staff at {policeStation} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {reviewPeriod} {alternativeReviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+        tpl: 'Report to staff at {policeStation} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         requiresInput: true,
         inputs: [
           {
@@ -792,6 +794,7 @@ export default {
                       type: InputTypes.TEXT,
                       label: 'Enter a review period',
                       name: 'alternativeReviewPeriod',
+                      case: 'lower',
                     },
                   ],
                 },
