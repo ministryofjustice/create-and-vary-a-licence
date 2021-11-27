@@ -61,7 +61,7 @@ describe('Route - view and approve a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/view')
     })
 
-    it('should not print unless status is ACTIVE or APPROVED', async () => {
+    it('should not render view when status is IN_PROGRESS', async () => {
       res = {
         render: jest.fn(),
         redirect: jest.fn(),
@@ -69,7 +69,7 @@ describe('Route - view and approve a licence', () => {
           user: { username },
           licence: {
             id: 1,
-            statusCode: LicenceStatus.SUBMITTED,
+            statusCode: LicenceStatus.IN_PROGRESS,
             surname: 'Bobson',
             forename: 'Bob',
             appointmentTime: '12/12/2022 14:16',

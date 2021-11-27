@@ -322,8 +322,10 @@ describe('Licence API client tests', () => {
       const authSource = 'nomis'
       it('Get licences in prison caseload', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-        fakeApi.get('/licence/match?prison=LEI&prison=MDI&status=ACTIVE&status=APPROVED').reply(200)
-        await licenceService.getLicencesForPrinting(username, authSource, prisons)
+        fakeApi
+          .get('/licence/match?prison=LEI&prison=MDI&status=ACTIVE&status=APPROVED&status=REJECTED&status=SUBMITTED')
+          .reply(200)
+        await licenceService.getLicencesForCaseAdmin(username, authSource, prisons)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
@@ -334,8 +336,8 @@ describe('Licence API client tests', () => {
       const authSource = 'nomis'
       it('Get licences with central caseload', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-        fakeApi.get('/licence/match?status=ACTIVE&status=APPROVED').reply(200)
-        await licenceService.getLicencesForPrinting(username, authSource, prisons)
+        fakeApi.get('/licence/match?status=ACTIVE&status=APPROVED&status=REJECTED&status=SUBMITTED').reply(200)
+        await licenceService.getLicencesForCaseAdmin(username, authSource, prisons)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
@@ -347,8 +349,10 @@ describe('Licence API client tests', () => {
       const staffId = 123
       it('Get licences by probation staff id', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-        fakeApi.get('/licence/match?staffId=123&status=ACTIVE&status=APPROVED').reply(200)
-        await licenceService.getLicencesForPrinting(username, authSource, prisons, staffId)
+        fakeApi
+          .get('/licence/match?staffId=123&status=ACTIVE&status=APPROVED&status=REJECTED&status=SUBMITTED')
+          .reply(200)
+        await licenceService.getLicencesForCaseAdmin(username, authSource, prisons, staffId)
         expect(nock.isDone()).toBe(true)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
       })
@@ -359,8 +363,8 @@ describe('Licence API client tests', () => {
       const authSource = 'auth'
       it('Get licences - does not call out so returns an empty list', async () => {
         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-        fakeApi.get('/licence/match?status=ACTIVE&status=APPROVED').reply(200)
-        await licenceService.getLicencesForPrinting(username, authSource, prisons)
+        fakeApi.get('/licence/match?status=ACTIVE&status=APPROVED&status=REJECTED&status=SUBMITTED').reply(200)
+        await licenceService.getLicencesForCaseAdmin(username, authSource, prisons)
         expect(nock.isDone()).toBe(false)
         expect(hmppsAuthClient.getSystemClientToken).toBeCalledTimes(0)
       })

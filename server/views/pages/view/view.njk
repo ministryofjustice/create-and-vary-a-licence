@@ -17,12 +17,14 @@
         </div>
     </div>
 
-    {{ govukButton({
-        text: "Print licence",
-        classes: "govuk-button--primary",
-        href: '/licence/view/id/' + licence.id + '/pdf-print',
-        attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
-    }) }}
+    {% if licence.statusCode == 'APPROVED' or licence.statusCode == 'ACTIVE' %}
+        {{ govukButton({
+            text: "Print licence",
+            classes: "govuk-button--primary",
+            href: '/licence/view/id/' + licence.id + '/pdf-print',
+            attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+        }) }}
+    {% endif %}
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
@@ -36,12 +38,14 @@
             {% endif %}
 
             <div class="govuk-body">
-                {{ govukButton({
-                    text: "Print licence",
-                    classes: "govuk-button--primary govuk-!-margin-right-1",
-                    href: '/licence/view/id/' + licence.id + '/pdf-print',
-                    attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
-                }) }}
+                {% if licence.statusCode == 'APPROVED' or licence.statusCode == 'ACTIVE' %}
+                    {{ govukButton({
+                        text: "Print licence",
+                        classes: "govuk-button--primary govuk-!-margin-right-1",
+                        href: '/licence/view/id/' + licence.id + '/pdf-print',
+                        attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+                    }) }}
+                {% endif %}
                 {{ govukButton({
                    text: "Return to case list",
                    classes: "govuk-button--secondary govuk-!-margin-bottom-0",
