@@ -1,16 +1,14 @@
-import superagent from 'superagent'
-import querystring from 'querystring'
 import moment from 'moment'
 import { initialiseAppInsights, buildAppInsightsClient, flush } from '../server/utils/azureAppInsights'
 import logger from '../logger'
 
-import generateOauthClientToken from '../server/authentication/clientCredentials'
-import config from '../server/config'
 import { LicenceSummary } from '../server/@types/licenceApiClientTypes'
 import LicenceStatus from '../server/enumeration/licenceStatus'
 import LicenceApiClient from '../server/data/licenceApiClient'
 import PrisonerSearchApiClient from '../server/data/prisonerSearchApiClient'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
+import HmppsAuthClient from '../server/data/hmppsAuthClient'
+import TokenStore from '../server/data/tokenStore'
 
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-activate-licences-job')
@@ -31,27 +29,13 @@ const pollLicencesToActivate = async (): Promise<LicenceSummary[]> => {
   return approvedLicences.filter(licence => releasedPrisonerNumbers.includes(licence.nomisId))
 }
 
-const getSystemClientTokenFromHmppsAuth = (): Promise<superagent.Response> => {
-  const clientToken = generateOauthClientToken(
-    config.apis.hmppsAuth.systemClientId,
-    config.apis.hmppsAuth.systemClientSecret
-  )
-
-  const authRequest = querystring.stringify({ grant_type: 'client_credentials' })
-
-  logger.info(`HMPPS Auth request '${authRequest}' for client id '${config.apis.hmppsAuth.systemClientId}'`)
-
-  return superagent
-    .post(`${config.apis.hmppsAuth.url}/oauth/token`)
-    .set('Authorization', clientToken)
-    .set('content-type', 'application/x-www-form-urlencoded')
-    .send(authRequest)
-    .timeout(config.apis.hmppsAuth.timeout)
+const getSystemClientTokenFromHmppsAuth = (): Promise<string> => {
+  return new HmppsAuthClient(new TokenStore()).getSystemClientToken()
 }
 
 const getApprovedLicences = async (): Promise<LicenceSummary[]> => {
-  const authResponse = await getSystemClientTokenFromHmppsAuth()
-  return new LicenceApiClient(authResponse.body.access_token).matchLicences([LicenceStatus.APPROVED])
+  const token = await getSystemClientTokenFromHmppsAuth()
+  return new LicenceApiClient(token).matchLicences([LicenceStatus.APPROVED])
 }
 
 const getPrisoners = async (nomisIds: string[]): Promise<Prisoner[]> => {
@@ -59,17 +43,17 @@ const getPrisoners = async (nomisIds: string[]): Promise<Prisoner[]> => {
     return []
   }
 
-  const authResponse = await getSystemClientTokenFromHmppsAuth()
+  const token = await getSystemClientTokenFromHmppsAuth()
   const prisonerSearchCriteria = {
     prisonerNumbers: nomisIds,
   }
-  return new PrisonerSearchApiClient(authResponse.body.access_token).searchPrisonersByNomsIds(prisonerSearchCriteria)
+  return new PrisonerSearchApiClient(token).searchPrisonersByNomsIds(prisonerSearchCriteria)
 }
 
 const batchActivateLicences = async (licenceIds: number[]): Promise<void> => {
   if (licenceIds.length > 0) {
-    const authResponse = await getSystemClientTokenFromHmppsAuth()
-    await new LicenceApiClient(authResponse.body.access_token).batchActivateLicences(licenceIds)
+    const token = await getSystemClientTokenFromHmppsAuth()
+    await new LicenceApiClient(token).batchActivateLicences(licenceIds)
   }
 }
 
