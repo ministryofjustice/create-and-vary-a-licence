@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: activate-licences
+spec:
+  schedule: "0 19 * * *"
+  concurrencyPolicy: Replace
+  failedJobsHistoryLimit: 5
+  startingDeadlineSeconds: 43200
+  successfulJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: create-and-vary-a-licence
+            image: {{ index .Values "generic-service" "image.repository" }}
+            args:
+            - node
+            - dist/jobs/activateLicences
+            env: {{ index .Values "generic-service" "env" }}
+          restartPolicy: Never
+          activeDeadlineSeconds: 3600

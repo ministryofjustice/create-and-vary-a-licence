@@ -91,8 +91,8 @@ export default class LicenceApiClient {
   }
 
   async matchLicences(
-    prisons: string[] = [],
     statuses: string[] = [],
+    prisons: string[] = [],
     staffIds: number[] = [],
     nomisIds: string[] = []
   ): Promise<LicenceSummary[]> {
@@ -113,5 +113,12 @@ export default class LicenceApiClient {
     return (await this.restClient.get({
       path: `/licence/match${queryParameters.length > 0 ? `?${queryParameters.join('&')}` : ''}`,
     })) as LicenceSummary[]
+  }
+
+  async batchActivateLicences(licenceIds: number[]): Promise<void> {
+    await this.restClient.post({
+      path: `/licence/activate-licences`,
+      data: licenceIds,
+    })
   }
 }

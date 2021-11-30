@@ -1,5 +1,6 @@
 import { config } from 'dotenv'
-import { setup, defaultClient, TelemetryClient, DistributedTracingModes } from 'applicationinsights'
+import appInsights, { setup, defaultClient, TelemetryClient, DistributedTracingModes } from 'applicationinsights'
+import FlushOptions from 'applicationinsights/out/Library/FlushOptions'
 import applicationVersion from '../applicationVersion'
 
 function defaultName(): string {
@@ -32,4 +33,12 @@ export function buildAppInsightsClient(name = defaultName()): TelemetryClient {
     return defaultClient
   }
   return null
+}
+
+export function flush(options: FlushOptions, exitMessage: string): void {
+  if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
+    appInsights.defaultClient.flush(options)
+  } else if (options.callback) {
+    options.callback(exitMessage)
+  }
 }
