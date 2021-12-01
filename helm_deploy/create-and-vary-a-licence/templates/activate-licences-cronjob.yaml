@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: activate-licences
 spec:
-  schedule: "0 19 * * *"
+  schedule: "*/10 * * * *"
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200
