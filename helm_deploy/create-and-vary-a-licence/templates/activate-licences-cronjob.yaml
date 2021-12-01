@@ -14,10 +14,10 @@ spec:
         spec:
           containers:
           - name: create-and-vary-a-licence
-            image: {{ index .Values "generic-service" "image.repository" }}
+            image: {{ with index .Values "generic-service" }}{{ .image.repository }}:{{ .image.tag }}{{ end }}
             args:
             - node
             - dist/jobs/activateLicences
-            env: {{ index .Values "generic-service" "env" }}
+{{- include "deployment.envs" (index .Values "generic-service") | nindent 12 }}
           restartPolicy: Never
           activeDeadlineSeconds: 3600
