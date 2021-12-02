@@ -241,7 +241,7 @@ export default class LicenceService {
     const statuses = [LicenceStatus.SUBMITTED.valueOf()]
     const token = await this.hmppsAuthClient.getSystemClientToken(username)
     const filteredPrisons = filterCentralCaseload(prisons)
-    return new LicenceApiClient(token).matchLicences(filteredPrisons, statuses)
+    return new LicenceApiClient(token).matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate')
   }
 
   async getLicencesForCaseAdmin(
@@ -259,11 +259,11 @@ export default class LicenceService {
     if (authSource === 'nomis') {
       const token = await this.hmppsAuthClient.getSystemClientToken(username)
       const filteredPrisons = filterCentralCaseload(prisons)
-      return new LicenceApiClient(token).matchLicences(filteredPrisons, statuses)
+      return new LicenceApiClient(token).matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate')
     }
     if (authSource === 'delius') {
       const token = await this.hmppsAuthClient.getSystemClientToken(username)
-      return new LicenceApiClient(token).matchLicences([], statuses, [staffId])
+      return new LicenceApiClient(token).matchLicences(statuses, [], [staffId], [], 'conditionalReleaseDate')
     }
     return []
   }

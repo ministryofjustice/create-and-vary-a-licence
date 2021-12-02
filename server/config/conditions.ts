@@ -23,6 +23,7 @@ import SpecifiedItem from '../routes/creatingLicences/types/additionalConditionI
 import NamedIndividuals from '../routes/creatingLicences/types/additionalConditionInputs/namedIndividuals'
 import NamedOrganisation from '../routes/creatingLicences/types/additionalConditionInputs/namedOrganisation'
 import ReportToPoliceStation from '../routes/creatingLicences/types/additionalConditionInputs/reportToPoliceStation'
+import AppointmentTimeAndPlaceDuringPss from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlaceDuringPss'
 
 export default {
   version: '1.0',
@@ -1014,7 +1015,7 @@ export default {
             name: 'appointmentAddress',
           },
         ],
-        type: AppointmentTimeAndPlace,
+        type: AppointmentTimeAndPlaceDuringPss,
       },
       {
         code: 'fda24aa9-a2b0-4d49-9c87-23b0a7be4013',

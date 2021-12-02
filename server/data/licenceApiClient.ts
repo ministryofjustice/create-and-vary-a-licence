@@ -91,10 +91,12 @@ export default class LicenceApiClient {
   }
 
   async matchLicences(
-    prisons: string[] = [],
     statuses: string[] = [],
+    prisons: string[] = [],
     staffIds: number[] = [],
-    nomisIds: string[] = []
+    nomisIds: string[] = [],
+    sortBy?: string,
+    sortOrder?: string
   ): Promise<LicenceSummary[]> {
     const queryParameters: string[] = []
     prisons.forEach(prison => {
@@ -109,9 +111,22 @@ export default class LicenceApiClient {
     nomisIds.forEach(nomisId => {
       queryParameters.push(`nomisId=${nomisId}`)
     })
+    if (sortBy) {
+      queryParameters.push(`sortBy=${sortBy}`)
+    }
+    if (sortOrder) {
+      queryParameters.push(`sortOrder=${sortOrder}`)
+    }
 
     return (await this.restClient.get({
       path: `/licence/match${queryParameters.length > 0 ? `?${queryParameters.join('&')}` : ''}`,
     })) as LicenceSummary[]
+  }
+
+  async batchActivateLicences(licenceIds: number[]): Promise<void> {
+    await this.restClient.post({
+      path: `/licence/activate-licences`,
+      data: licenceIds,
+    })
   }
 }
