@@ -9,8 +9,8 @@
 
     {% set bespokeConditions = [] %}
 
-    {# Add select bespoke conditions and count of existing bespoke conditions #}
     {% set conditionWord = "condition" if licence.bespokeConditions.length === 1 else "conditions" %}
+
     {% set bespokeConditions = (bespokeConditions.push({
         key: {  text: "Select bespoke conditions" },
         value: { text: "" + licence.bespokeConditions.length + " " + conditionWord + " selected" },
@@ -19,7 +19,7 @@
                 {
                     href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
                     text: "Change",
-                    visuallyHiddenText: "name"
+                    visuallyHiddenText: "Change bespoke conditions"
                 }
             ]
         } if isEditable
@@ -28,15 +28,24 @@
     {% for condition in licence.bespokeConditions %}
         {% set bespokeConditions = (bespokeConditions.push({
             key: { text: 'Bespoke condition' },
-            value: { text: condition.text }
+            value: { text: condition.text },
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
+                        text: "Change",
+                        visuallyHiddenText: "Change bespoke conditions"
+                    }
+                ]
+            } if isEditable
         }), bespokeConditions) %}
     {% endfor %}
 
-    {% if bespokeConditions.length > 0 %}
-        {{ govukSummaryList({
-            attributes: { id: 'bespoke-conditions-details' },
-            classes: 'govuk-!-margin-bottom-9',
-            rows: bespokeConditions
-        }) }}
-    {% endif %}
+
+    {{ govukSummaryList({
+        attributes: { id: 'bespoke-conditions-details' },
+        classes: 'govuk-!-margin-bottom-9',
+        rows: bespokeConditions
+    }) }}
+
 {% endmacro %}

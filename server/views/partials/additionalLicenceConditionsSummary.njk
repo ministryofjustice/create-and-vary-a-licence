@@ -22,8 +22,8 @@
 
     {% set additionalLicenceConditions = [] %}
 
-    {# Add select additional conditions and count of existing conditions #}
     {% set conditionWord = "condition" if expandedLicenceConditions.length === 1 else "conditions" %}
+
     {% set additionalLicenceConditions = (additionalLicenceConditions.push({
         key: {  text: "Select additional conditions" },
         value: { text: "" + expandedLicenceConditions.length + " " + conditionWord + " selected" },
@@ -32,13 +32,12 @@
                 {
                     href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
                     text: "Change",
-                    visuallyHiddenText: "name"
+                    visuallyHiddenText: "Add or remove conditions"
                 }
             ]
         } if isEditable
     }), additionalLicenceConditions) %}
 
-    {# Show the entered additional conditions in the remainder of this summary list #}
     {% for condition in expandedLicenceConditions %}
         {% set additionalLicenceConditions = (additionalLicenceConditions.push({
             key: {  text: condition.category },
@@ -48,18 +47,18 @@
                     {
                         href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id + "?fromReview=true",
                         text: "Change",
-                        visuallyHiddenText: "name"
+                        visuallyHiddenText: "Change condition"
                     }
                 ]
             } if condition | checkConditionRequiresInput and isEditable
         }), additionalLicenceConditions) %}
     {% endfor %}
 
-    {% if additionalLicenceConditions.length > 0 %}
-      {{ govukSummaryList({
+
+    {{ govukSummaryList({
         attributes: { id: 'additional-licence-conditions-details' },
         classes: 'govuk-!-margin-bottom-9',
         rows: additionalLicenceConditions
-      }) }}
-    {% endif %}
+    }) }}
+
 {% endmacro %}

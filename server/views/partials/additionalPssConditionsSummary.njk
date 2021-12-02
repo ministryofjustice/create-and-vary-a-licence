@@ -32,7 +32,7 @@
                 {
                     href: "/licence/create/id/" + licence.id + "/additional-pss-conditions?fromReview=true",
                     text: "Change",
-                    visuallyHiddenText: "name"
+                    visuallyHiddenText: "Add or remove requirements"
                 }
             ]
         } if isEditable
@@ -47,7 +47,7 @@
                     {
                         href: "/licence/create/id/" + licence.id + "/additional-pss-conditions/condition/" + condition.id + "?fromReview=true",
                         text: "Change",
-                        visuallyHiddenText: "name"
+                        visuallyHiddenText: "Change requirement"
                     }
                 ]
             } if condition | checkConditionRequiresInput and isEditable
