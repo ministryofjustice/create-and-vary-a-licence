@@ -4,6 +4,7 @@ import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
 import * as conditionsProvider from '../../../utils/conditionsProvider'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const additionalCondition = { code: 'condition1', inputRequired: true }
 jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode').mockReturnValue(additionalCondition)
@@ -21,111 +22,141 @@ describe('View and print - single licence view', () => {
     viewContext = {}
   })
 
-  it('should display a single licence to print', () => {
-    viewContext = {
-      licence: {
-        id: 1,
-        statusCode: 'APPROVED',
-        typeCode: 'AP_PSS',
-        forename: 'John',
-        surname: 'Smith',
-        appointmentPerson: 'Jack Frost',
-        appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
-        comTelephone: '07878 234566',
-        additionalLicenceConditions: [
+  const licence = {
+    id: 1,
+    statusCode: 'APPROVED',
+    typeCode: 'AP_PSS',
+    forename: 'John',
+    surname: 'Smith',
+    appointmentPerson: 'Jack Frost',
+    appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
+    comTelephone: '07878 234566',
+    additionalLicenceConditions: [
+      {
+        code: 'condition1',
+        category: 'Category 1',
+        text: 'Template 1',
+        data: [
           {
-            code: 'condition1',
-            category: 'Category 1',
-            text: 'Template 1',
-            data: [
-              {
-                field: 'field1',
-                value: 'Data 1',
-              },
-            ],
-          },
-          {
-            code: 'condition2',
-            category: 'Category 2',
-            text: 'Template 2',
-            data: [
-              {
-                field: 'field2',
-                value: 'Data 2A',
-              },
-              {
-                field: 'field2',
-                value: 'Data 2B',
-              },
-              {
-                field: 'field3',
-                value: 'Data 2C',
-              },
-            ],
+            field: 'field1',
+            value: 'Data 1',
           },
         ],
-        additionalPssConditions: [
-          {
-            code: 'condition1',
-            category: 'Category 1',
-            text: 'Template 1',
-            data: [
-              {
-                field: 'field1',
-                value: 'Data 1',
-              },
-            ],
-          },
-        ],
-        bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
       },
-    }
+      {
+        code: 'condition2',
+        category: 'Category 2',
+        text: 'Template 2',
+        data: [
+          {
+            field: 'field2',
+            value: 'Data 2A',
+          },
+          {
+            field: 'field2',
+            value: 'Data 2B',
+          },
+          {
+            field: 'field3',
+            value: 'Data 2C',
+          },
+        ],
+      },
+    ],
+    additionalPssConditions: [
+      {
+        code: 'condition1',
+        category: 'Category 1',
+        text: 'Template 1',
+        data: [
+          {
+            field: 'field1',
+            value: 'Data 1',
+          },
+        ],
+      },
+    ],
+    bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
+  } as Licence
+
+  // Not really expanded - but don't need to be for this test
+  const expandedLicenceConditions = licence.additionalLicenceConditions
+  const expandedPssConditions = licence.additionalPssConditions
+
+  it('should display a single licence to print', () => {
+    viewContext = { licence, expandedLicenceConditions, expandedPssConditions }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('h1').text()).toContain('John Smith')
+    // Check the appropriate title is used
+    expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
 
     // Check the initial meeting details are populated
     expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
 
-    // Check the additional licence conditions are rendered correctly using the macro for them
-    expect($('#additional-licence-conditions-details > .govuk-summary-list__row').length).toBe(2)
-    expect($('#additional-licence-conditions-details > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
-    expect($('#additional-licence-conditions-details > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe(
+    // Check the additional conditions count (including the always-present counter
+    expect($('#additional-licence-conditions-details > .govuk-summary-list__row').length).toBe(3)
+
+    // Check the additional licence conditions count - always the first item
+    expect($('#additional-licence-conditions-details > div:nth-child(1) > dt').text().trim()).toBe(
+      'Select additional conditions'
+    )
+    expect($('#additional-licence-conditions-details > div:nth-child(1) > dd').text().trim()).toBe(
+      '2 conditions selected'
+    )
+
+    // Check the actual conditions
+    expect($('#additional-licence-conditions-details > div:nth-child(2) > dt').text().trim()).toBe('Category 1')
+    expect($('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
       'Template 1'
     )
     expect(
-      $('#additional-licence-conditions-details > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()
+      $('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()
     ).toBe('Data 1')
-    expect($('#additional-licence-conditions-details > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
-    expect($('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
+
+    expect($('#additional-licence-conditions-details > div:nth-child(3) > dt').text().trim()).toBe('Category 2')
+    expect($('#additional-licence-conditions-details > div:nth-child(3) > dd > div:nth-child(1)').text().trim()).toBe(
       'Template 2'
     )
     expect(
-      $('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)')
+      $('#additional-licence-conditions-details > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(1)')
         .text()
         .trim()
     ).toBe('Data 2A, Data 2B')
     expect(
-      $('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)')
+      $('#additional-licence-conditions-details > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(2)')
         .text()
         .trim()
     ).toBe('Data 2C')
 
-    // Check the additional pss conditions are rendered correctly using the macro for them
-    expect($('#additional-pss-conditions-details > .govuk-summary-list__row').length).toBe(1)
-    expect($('#additional-pss-conditions-details > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
-    expect($('#additional-pss-conditions-details > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe(
+    // Check the additional pss conditions are rendered correctly
+    expect($('#additional-pss-conditions-details > .govuk-summary-list__row').length).toBe(2)
+
+    // Check the additional PSS count - always the first item
+    expect($('#additional-pss-conditions-details > div:nth-child(1) > dt').text().trim()).toBe(
+      'Select additional requirements'
+    )
+    expect($('#additional-pss-conditions-details > div:nth-child(1) > dd').text().trim()).toBe('1 requirement selected')
+
+    // Check the actual PSS requirement
+    expect($('#additional-pss-conditions-details > div:nth-child(2) > dt').text().trim()).toBe('Category 1')
+    expect($('#additional-pss-conditions-details > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
       'Template 1'
     )
     expect(
-      $('#additional-pss-conditions-details > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()
+      $('#additional-pss-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()
     ).toBe('Data 1')
 
     // Check the bespoke conditions are rendered correctly using the macro for them
-    expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)
-    expect($('#bespoke-conditions-details > div:nth-child(1) > dd').text().trim()).toBe('Bespoke condition 1')
-    expect($('#bespoke-conditions-details > div:nth-child(2) > dd').text().trim()).toBe('Bespoke condition 2')
+    expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(3)
+
+    // Check the bespoke condition count - always the first item
+    expect($('#bespoke-conditions-details > div:nth-child(1) > dt').text().trim()).toBe('Select bespoke conditions')
+    expect($('#bespoke-conditions-details > div:nth-child(1) > dd').text().trim()).toBe('2 conditions selected')
+
+    // Check the actual bespoke conditions
+    expect($('#bespoke-conditions-details > div:nth-child(2) > dd').text().trim()).toBe('Bespoke condition 1')
+    expect($('#bespoke-conditions-details > div:nth-child(3) > dd').text().trim()).toBe('Bespoke condition 2')
 
     // Check the existence of the print and return to case list buttons
     expect($('[data-qa="print-licence"]').length).toBe(2)
@@ -133,67 +164,30 @@ describe('View and print - single licence view', () => {
   })
 
   it('Print buttons are not visible when licence is not approved or active', () => {
-    viewContext = {
-      licence: {
-        id: 1,
-        statusCode: 'SUBMITTED',
-        typeCode: 'AP_PSS',
-        forename: 'John',
-        surname: 'Smith',
-        appointmentPerson: 'Jack Frost',
-        appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
-        comTelephone: '07878 234566',
-        additionalLicenceConditions: [
-          {
-            code: 'condition1',
-            category: 'Category 1',
-            text: 'Template 1',
-            data: [
-              {
-                field: 'field1',
-                value: 'Data 1',
-              },
-            ],
-          },
-          {
-            code: 'condition2',
-            category: 'Category 2',
-            text: 'Template 2',
-            data: [
-              {
-                field: 'field2',
-                value: 'Data 2A',
-              },
-              {
-                field: 'field2',
-                value: 'Data 2B',
-              },
-              {
-                field: 'field3',
-                value: 'Data 2C',
-              },
-            ],
-          },
-        ],
-        additionalPssConditions: [
-          {
-            code: 'condition1',
-            category: 'Category 1',
-            text: 'Template 1',
-            data: [
-              {
-                field: 'field1',
-                value: 'Data 1',
-              },
-            ],
-          },
-        ],
-        bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
-      },
-    }
+    viewContext = { licence: { ...licence, statusCode: 'SUBMITTED' }, expandedLicenceConditions, expandedPssConditions }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('[data-qa="print-licence"]').length).toBe(0)
+  })
+
+  it('Title changes to view when licence is not printable', () => {
+    viewContext = { licence: { ...licence, statusCode: 'SUBMITTED' }, expandedLicenceConditions, expandedPssConditions }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('h1').text()).toContain('View licence and post sentence supervision order for John Smith')
+  })
+
+  it('Title changes depending on licence type', () => {
+    viewContext = {
+      licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'PSS' },
+      expandedLicenceConditions,
+      expandedPssConditions,
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('h1').text()).toContain('Print post sentence supervision order for John Smith')
   })
 })

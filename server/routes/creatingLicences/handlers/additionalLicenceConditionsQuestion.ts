@@ -12,7 +12,6 @@ export default class AdditionalLicenceConditionsQuestionRoutes {
     if (answer === YesOrNo.YES) {
       return res.redirect(`/licence/create/id/${licenceId}/additional-licence-conditions`)
     }
-
     return res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)
   }
 }
