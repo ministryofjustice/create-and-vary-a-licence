@@ -1,9 +1,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalPssConditions(licence, isEditable) %}
-    {% macro additionalConditionHtml(template, data) %}
+{% macro additionalPssConditions(licence, expandedPssConditions, isEditable) %}
+    {% macro additionalConditionHtml(expandedConditionText, data) %}
         <div>
-            {{ template }}
+            {{ expandedConditionText }}
         </div>
         {% if data.length %}
             <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
@@ -16,18 +16,29 @@
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
-            <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">Additional post sentence requirements details</h2>
+            <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">Additional post-sentence requirements details</h2>
         </div>
-        {% if isEditable %}
-            <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
-                <a href="{{ '/licence/create/id/' + licence.id + '/additional-pss-conditions?fromReview=true'}}" class="govuk-link govuk-!-font-size-19">Change</a>
-            </div>
-        {% endif %}
     </div>
 
     {% set additionalPssConditions = [] %}
 
-    {% for condition in licence.additionalPssConditions %}
+    {# Add select additional PSS requirements + count of existing requirements #}
+    {% set conditionWord = "requirement" if expandedPssConditions.length === 1 else "requirements" %}
+    {% set additionalPssConditions = (additionalPssConditions.push({
+        key: {  text: "Select additional requirements" },
+        value: { text: "" + expandedPssConditions.length + " " + conditionWord + " selected" },
+        actions: {
+            items: [
+                {
+                    href: "/licence/create/id/" + licence.id + "/additional-pss-conditions?fromReview=true",
+                    text: "Change",
+                    visuallyHiddenText: "Add or remove requirements"
+                }
+            ]
+        } if isEditable
+    }), additionalPssConditions) %}
+
+    {% for condition in expandedPssConditions %}
         {% set additionalPssConditions = (additionalPssConditions.push({
             key: {  text: condition.category },
             value: { html: additionalConditionHtml(condition.text, condition.data) },
@@ -35,8 +46,8 @@
                 items: [
                     {
                         href: "/licence/create/id/" + licence.id + "/additional-pss-conditions/condition/" + condition.id + "?fromReview=true",
-                        text: "Edit",
-                        visuallyHiddenText: "name"
+                        text: "Change",
+                        visuallyHiddenText: "Change requirement"
                     }
                 ]
             } if condition | checkConditionRequiresInput and isEditable
@@ -44,12 +55,10 @@
     {% endfor %}
 
     {% if additionalPssConditions.length > 0 %}
-    {{ govukSummaryList({
+      {{ govukSummaryList({
         attributes: { id: 'additional-pss-conditions-details' },
         classes: 'govuk-!-margin-bottom-9',
         rows: additionalPssConditions
-    }) }}
-    {% else %}
-        <p class="govuk-body govuk-!-margin-bottom-9">No additional post sentence requirements have been added to this licence</p>
+      }) }}
     {% endif %}
 {% endmacro %}

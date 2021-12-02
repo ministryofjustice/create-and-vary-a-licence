@@ -110,8 +110,8 @@ export default {
       {
         code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
         category: 'Residence at a specific place',
-        text: 'You must reside within the [INSERT REGION] probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
-        tpl: 'You must reside within the {probationRegion} probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
+        text: 'You must reside within the [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
+        tpl: 'You must reside within the {probationRegion} while of no fixed abode, unless otherwise approved by your supervising officer.',
         requiresInput: true,
         inputs: [
           {
@@ -121,28 +121,40 @@ export default {
             case: 'capitalised',
             options: [
               {
-                value: 'London',
+                value: 'North East Probation Region',
               },
               {
-                value: 'Midlands',
+                value: 'North West Probation Region',
               },
               {
-                value: 'North East',
+                value: 'Greater Manchester Probation Region',
               },
               {
-                value: 'North West',
+                value: 'Yorkshire and Humberside Probation Region',
               },
               {
-                value: 'South East',
+                value: 'East Midlands Probation Region',
               },
               {
-                value: 'South West',
+                value: 'West Midlands Probation Region',
               },
               {
-                value: 'South Central',
+                value: 'East of England Probation Region',
               },
               {
-                value: 'Wales',
+                value: 'South West Probation Region',
+              },
+              {
+                value: 'South Central Probation Region',
+              },
+              {
+                value: 'London Probation Region',
+              },
+              {
+                value: 'Kent, Surrey and Sussex Probation Region',
+              },
+              {
+                value: 'Wales Probation Region',
               },
             ],
           },
@@ -192,6 +204,7 @@ export default {
       {
         code: 'b72fdbf2-0dc9-4e7f-81e4-c2ccb5d1bc90',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Attend all appointments arranged for you with a [PSYCHIATRIST / PSYCHOLOGIST / MEDICAL PRACTITIONER].',
         tpl: 'Attend all appointments arranged for you with a {appointmentType}.',
         requiresInput: true,
@@ -220,12 +233,14 @@ export default {
       {
         code: '9ae2a336-3491-4667-aaed-dd852b09b4b9',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Receive home visits from a Mental Health Worker.',
         requiresInput: false,
       },
       {
         code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
         tpl: 'Attend {appointmentAddress}{appointmentDate}{appointmentTime}, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
         requiresInput: true,
@@ -253,12 +268,14 @@ export default {
       {
         code: '75a6aac6-02a7-4414-af14-942be6736892',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Should you return to the UK and Islands before the expiry date of your licence then your licence conditions will be in force and you must report within two working days to your supervising officer.',
         requiresInput: false,
       },
       {
         code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
         tpl: 'Not to seek to approach or communicate with {name} without the prior approval of your supervising officer{socialServicesDepartment}.',
         requiresInput: true,
@@ -286,6 +303,7 @@ export default {
       {
         code: '4a5fed48-0fb9-4711-8ddf-b46ddfd90246',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Not to have unsupervised contact with [ANY / ANY FEMALE / ANY MALE] children under the age of [INSERT AGE] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT] except where that contact is inadvertent and not reasonably avoidable in the course of lawful daily life.',
         tpl: 'Not to have unsupervised contact with {gender} children under the age of {age} without the prior approval of your supervising officer{socialServicesDepartment} except where that contact is inadvertent and not reasonably avoidable in the course of lawful daily life.',
         requiresInput: true,
@@ -333,6 +351,7 @@ export default {
       {
         code: '355700a9-6184-40c0-9759-0dfed1994e1e',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Not to contact or associate with [NAMED OFFENDER(S) / NAMED INDIVIDUAL(S)] without the prior approval of your supervising officer.',
         tpl: 'Not to contact or associate with {nameOfIndividual} without the prior approval of your supervising officer.',
         requiresInput: true,
@@ -353,18 +372,21 @@ export default {
       {
         code: '0aa669bf-db8a-4b8e-b8ba-ca82fc245b94',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Not to contact or associate with a known sex offender other than when compelled by attendance at a Treatment Programme or when residing at Approved Premises without the prior approval of your supervising officer.',
         requiresInput: false,
       },
       {
         code: 'cc80d02b-0b62-4940-bac6-0bcd374c725e',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Not to contact directly or indirectly any person who is a serving or remand prisoner or detained in State custody, without the prior approval of your supervising officer.',
         requiresInput: false,
       },
       {
         code: '18b69f61-800f-46b2-95c4-2019d33e34d6',
         category: 'Making or maintaining contact with a person',
+        categoryShort: 'Contact with a person',
         text: 'Not to associate with any person currently or formerly associated with [NAMES OF SPECIFIC GROUPS OR ORGANISATIONS] without the prior approval of your supervising officer.',
         tpl: 'Not to associate with any person currently or formerly associated with {nameOfOrganisation} without the prior approval of your supervising officer.',
         requiresInput: true,
@@ -384,6 +406,7 @@ export default {
       {
         code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
         category: 'Participation in, or co-operation with, a programme or set of activities',
+        categoryShort: 'Programmes or activities',
         text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific / offending behaviour problems at [NAME OF COURSE / CENTRE].',
         tpl: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your {behaviourProblems} problems{course}.',
         requiresInput: true,
@@ -438,6 +461,7 @@ export default {
       {
         code: '9da214a3-c6ae-45e1-a465-12e22adf7c87',
         category: 'Participation in, or co-operation with, a programme or set of activities',
+        categoryShort: 'Programmes or activities',
         text: 'Not to undertake work or other organised activity which will involve a person under the age of [INSERT AGE], either on a paid or unpaid basis without the prior approval of your supervising officer.',
         tpl: 'Not to undertake work or other organised activity which will involve a person under the age of {age}, either on a paid or unpaid basis without the prior approval of your supervising officer.',
         requiresInput: true,
@@ -461,48 +485,56 @@ export default {
       {
         code: '8e52e16e-1abf-4251-baca-2fabfcb243d0',
         category: 'Possession, ownership, control or inspection of specified items or documents',
+        categoryShort: 'Items and documents',
         text: 'Not to own or possess more than one mobile phone or SIM card without the prior approval of your supervising officer and to provide your supervising officer with details of that mobile telephone or one you have regular use of, including the IMEI number and the SIM card that you possess.',
         requiresInput: false,
       },
       {
         code: '72d281c3-b194-43ab-812d-fea0683ada65',
         category: 'Possession, ownership, control or inspection of specified items or documents',
+        categoryShort: 'Items and documents',
         text: 'Not to own or possess a mobile phone with a photographic function without the prior approval of your supervising officer.',
         requiresInput: false,
       },
       {
         code: 'ed607a91-fe3a-4816-8eb9-b447c945935c',
         category: 'Possession, ownership, control or inspection of specified items or documents',
+        categoryShort: 'Items and documents',
         text: 'Not to own or use a camera without the prior approval of your supervising officer.',
         requiresInput: false,
       },
       {
         code: '680b3b27-43cc-46c6-9ba6-b10d4aba6531',
         category: 'Possession, ownership, control or inspection of specified items or documents',
+        categoryShort: 'Items and documents',
         text: 'To make any device capable of making or storing digital images (including a camera and a mobile phone with a camera function) available for inspection on request by your supervising officer and/or a police officer.',
         requiresInput: false,
       },
       {
         code: '5fa04bbf-6b7c-4b65-9388-a0115cd365a6',
         category: 'Possession, ownership, control or inspection of specified items or documents',
+        categoryShort: 'Items and documents',
         text: 'To surrender your passport(s) to your supervising officer and to notify your supervising officer of any intention to apply for a new passport.',
         requiresInput: false,
       },
       {
         code: 'bfbc693c-ab65-4042-920e-ddb085bc7aba',
         category: 'Possession, ownership, control or inspection of specified items or documents',
+        categoryShort: 'Items and documents',
         text: 'Not to use or access any computer or device which is internet enabled without the prior approval of your supervising officer; and only for the purpose, and only at a specific location, as specified by that officer.',
         requiresInput: false,
       },
       {
         code: '2d67f68a-8adf-47a9-a68d-a6fc9f2c4556',
         category: 'Possession, ownership, control or inspection of specified items or documents',
+        categoryShort: 'Items and documents',
         text: 'Not to delete the usage history on any internet enabled device or computer used and to allow such items to be inspected as required by the police or your supervising officer. Such inspection may include removal of the device for inspection and the installation of monitoring software.',
         requiresInput: false,
       },
       {
         code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
         category: 'Possession, ownership, control or inspection of specified items or documents',
+        categoryShort: 'Items and documents',
         text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
         tpl: 'Not to own or possess a {item} without the prior approval of your supervising officer.',
         requiresInput: true,
@@ -711,6 +743,7 @@ export default {
         code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
+        categoryShort: 'Supervision in the community',
         text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         tpl: 'Report to staff at {approvedPremises} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         requiresInput: true,
@@ -760,6 +793,7 @@ export default {
         code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
+        categoryShort: 'Supervision in the community',
         text: 'Report to staff at [NAME OF POLICE STATION] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         tpl: 'Report to staff at {policeStation} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         requiresInput: true,
@@ -808,6 +842,7 @@ export default {
       {
         code: '7a9ca3bb-922a-433a-9601-1e475c6c0095',
         category: 'Restriction of specified conduct or specified acts',
+        categoryShort: 'Restriction of conduct or acts',
         text: 'Not to participate directly or indirectly in organising and/or contributing to any demonstration, meeting, gathering or website without the prior approval of your supervising officer. This condition will be reviewed on a monthly basis and may be amended or removed if your risk is assessed as having changed.',
         requiresInput: false,
       },

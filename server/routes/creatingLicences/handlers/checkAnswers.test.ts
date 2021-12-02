@@ -33,6 +33,9 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           appointmentAddress: 'Down the road, over there',
           comTelephone: '07891245678',
           appointmentTime: '01/12/2021 00:34',
+          additionalLicenceConditions: [],
+          additionalPssConditions: [],
+          bespokeConditions: [],
         },
       },
     } as unknown as Response
@@ -41,7 +44,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers')
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
+        expandedPssConditions: res.locals.licence.additionalPssConditions,
+      })
     })
   })
 

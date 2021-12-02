@@ -1,9 +1,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalLicenceConditions(licence, isEditable) %}
-    {% macro additionalConditionHtml(template, data) %}
+{% macro additionalLicenceConditions(licence, expandedLicenceConditions, isEditable) %}
+    {% macro additionalConditionHtml(expandedConditionText, data) %}
         <div>
-            {{ template }}
+            {{ expandedConditionText }}
         </div>
         {% if data.length %}
             <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
@@ -16,18 +16,29 @@
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
-            <h2 id="additional-licence-conditions-heading" class="govuk-heading-m">Additional licence conditions details</h2>
+            <h2 id="additional-licence-conditions-heading" class="govuk-heading-m">Additional conditions details</h2>
         </div>
-        {% if isEditable %}
-            <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
-                <a href="{{ '/licence/create/id/' + licence.id + '/additional-licence-conditions?fromReview=true'}}" class="govuk-link govuk-!-font-size-19">Change</a>
-            </div>
-        {% endif %}
     </div>
 
     {% set additionalLicenceConditions = [] %}
 
-    {% for condition in licence.additionalLicenceConditions %}
+    {% set conditionWord = "condition" if expandedLicenceConditions.length === 1 else "conditions" %}
+
+    {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+        key: {  text: "Select additional conditions" },
+        value: { text: "" + expandedLicenceConditions.length + " " + conditionWord + " selected" },
+        actions: {
+            items: [
+                {
+                    href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
+                    text: "Change",
+                    visuallyHiddenText: "Add or remove conditions"
+                }
+            ]
+        } if isEditable
+    }), additionalLicenceConditions) %}
+
+    {% for condition in expandedLicenceConditions %}
         {% set additionalLicenceConditions = (additionalLicenceConditions.push({
             key: {  text: condition.category },
             value: { html: additionalConditionHtml(condition.text, condition.data) },
@@ -35,21 +46,19 @@
                 items: [
                     {
                         href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id + "?fromReview=true",
-                        text: "Edit",
-                        visuallyHiddenText: "name"
+                        text: "Change",
+                        visuallyHiddenText: "Change condition"
                     }
                 ]
             } if condition | checkConditionRequiresInput and isEditable
         }), additionalLicenceConditions) %}
     {% endfor %}
 
-    {% if additionalLicenceConditions.length > 0 %}
+
     {{ govukSummaryList({
         attributes: { id: 'additional-licence-conditions-details' },
         classes: 'govuk-!-margin-bottom-9',
         rows: additionalLicenceConditions
     }) }}
-    {% else %}
-        <p class="govuk-body govuk-!-margin-bottom-9">No additional licence conditions have been added to this licence</p>
-    {% endif %}
+
 {% endmacro %}

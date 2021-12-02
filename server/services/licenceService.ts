@@ -159,7 +159,9 @@ export default class LicenceService {
           return {
             code: conditionCode,
             sequence: index,
-            category: getAdditionalConditionByCode(conditionCode)?.category,
+            category:
+              getAdditionalConditionByCode(conditionCode)?.categoryShort ||
+              getAdditionalConditionByCode(conditionCode)?.category,
             text: getAdditionalConditionByCode(conditionCode)?.text,
           }
         }) || [],

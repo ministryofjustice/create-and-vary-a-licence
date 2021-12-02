@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 
 export default class ApprovalViewRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -10,7 +11,9 @@ export default class ApprovalViewRoutes {
 
     // Check whether this licence is still in a SUBMITTED state - back button pressed - avoid re-approval
     if (licence?.statusCode === LicenceStatus.SUBMITTED) {
-      res.render('pages/approve/view')
+      const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
+      const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
+      res.render('pages/approve/view', { expandedLicenceConditions, expandedPssConditions })
     } else {
       res.redirect(`/licence/approve/cases`)
     }

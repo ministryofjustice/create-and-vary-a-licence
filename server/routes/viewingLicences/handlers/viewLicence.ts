@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 
 export default class ViewAndPrintLicenceRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -10,7 +11,9 @@ export default class ViewAndPrintLicenceRoutes {
       licence?.statusCode === LicenceStatus.SUBMITTED ||
       licence?.statusCode === LicenceStatus.REJECTED
     ) {
-      res.render('pages/view/view')
+      const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
+      const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
+      res.render('pages/view/view', { expandedLicenceConditions, expandedPssConditions })
     } else {
       res.redirect(`/licence/view/cases`)
     }
