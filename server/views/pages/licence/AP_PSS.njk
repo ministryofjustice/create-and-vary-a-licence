@@ -1,12 +1,12 @@
 {% extends "pages/licence/pdf-layout.njk" %}
 
 {# Data supplied to this template
-    -    licence (implicit from res.locals
+    -    licence (implicit from res.locals)
+    -    qrCodesEnabled (implicit from res.locals)
     -    licencesUrl - URL back to this service
     -    imageData - prisoner image data
     -    additionalLicenceConditions
     -    additionalPssConditions
-    -    qrCodesEnabled - true or false
     -    qrCode - QR code data (ready to show) or null
     -    htmlPrint - true or false
     -    watermark - true or false

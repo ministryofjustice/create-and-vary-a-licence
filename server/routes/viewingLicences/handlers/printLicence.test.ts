@@ -43,7 +43,6 @@ describe('Route - print a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/licence/AP', {
         additionalLicenceConditions: [],
         additionalPssConditions: [],
-        qrCodesEnabled: false,
         qrCode: null,
         htmlPrint: true,
       })
@@ -72,7 +71,6 @@ describe('Route - print a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', {
         additionalLicenceConditions: [],
         additionalPssConditions: [],
-        qrCodesEnabled: false,
         qrCode: null,
         htmlPrint: true,
       })
@@ -119,7 +117,6 @@ describe('Route - print a licence', () => {
           imageData: '-- base64 image data --',
           additionalLicenceConditions: [],
           additionalPssConditions: [],
-          qrCodesEnabled: false,
           qrCode: null,
           htmlPrint: false,
           watermark,
@@ -169,7 +166,6 @@ describe('Route - print a licence', () => {
           imageData: '-- base64 image data --',
           additionalLicenceConditions: [],
           additionalPssConditions: [],
-          qrCodesEnabled: true,
           qrCode: 'a QR code',
           htmlPrint: false,
           watermark,

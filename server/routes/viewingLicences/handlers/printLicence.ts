@@ -33,7 +33,6 @@ export default class PrintLicenceRoutes {
     res.render(`pages/licence/${licence.typeCode}`, {
       additionalLicenceConditions,
       additionalPssConditions,
-      qrCodesEnabled,
       qrCode,
       htmlPrint,
     })
@@ -62,7 +61,6 @@ export default class PrintLicenceRoutes {
         imageData,
         additionalLicenceConditions,
         additionalPssConditions,
-        qrCodesEnabled,
         qrCode,
         htmlPrint: false,
         watermark,
