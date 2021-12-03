@@ -21,15 +21,20 @@ export default class PrintLicenceRoutes {
   preview = async (req: Request, res: Response): Promise<void> => {
     const { username } = res.locals.user
     const { licence } = res.locals // fetchLicence middleware populates
+    const { qrCodesEnabled } = res.locals
     const htmlPrint = true
-    const qrCode = await this.qrCodeService.getQrCode(licence)
+
+    const qrCode = qrCodesEnabled ? await this.qrCodeService.getQrCode(licence) : null
     const additionalLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     const additionalPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
+
     logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
+
     res.render(`pages/licence/${licence.typeCode}`, {
       additionalLicenceConditions,
-      qrCode,
       additionalPssConditions,
+      qrCodesEnabled,
+      qrCode,
       htmlPrint,
     })
     logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
@@ -38,8 +43,10 @@ export default class PrintLicenceRoutes {
   renderPdf = async (req: Request, res: Response): Promise<void> => {
     const { username } = res.locals.user
     const { licence } = res.locals
+    const { qrCodesEnabled } = res.locals
     const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
-    const qrCode = await this.qrCodeService.getQrCode(licence)
+
+    const qrCode = qrCodesEnabled ? await this.qrCodeService.getQrCode(licence) : null
     const additionalLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     const additionalPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
     const imageData = await this.prisonerService.getPrisonerImageData(username, licence.nomsId)
@@ -47,6 +54,7 @@ export default class PrintLicenceRoutes {
     const footerHtml = this.getPdfFooter(licence)
 
     logger.info(`PDF print licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
+
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
       {
@@ -54,6 +62,7 @@ export default class PrintLicenceRoutes {
         imageData,
         additionalLicenceConditions,
         additionalPssConditions,
+        qrCodesEnabled,
         qrCode,
         htmlPrint: false,
         watermark,

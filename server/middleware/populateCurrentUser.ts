@@ -3,6 +3,7 @@ import logger from '../../logger'
 import UserService from '../services/userService'
 import { convertToTitleCase, removeDuplicates } from '../utils/utils'
 import CvlUserDetails from '../@types/CvlUserDetails'
+import config from '../config'
 
 /**
  * This middleware checks whether a token is present and if user information is populated in the session.
@@ -77,6 +78,10 @@ export default function populateCurrentUser(userService: UserService): RequestHa
             }
           }
 
+          // Configure whether to use QR codes on licences produced
+          res.locals.qrCodesEnabled = config.qrCodesEnabled
+
+          // Setup the user's session and res.locals
           req.session.currentUser = cvlUser
           res.locals.user = { ...res.locals.user, ...cvlUser }
         } else {

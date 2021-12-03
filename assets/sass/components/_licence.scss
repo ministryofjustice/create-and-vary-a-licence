@@ -1,7 +1,7 @@
 @page {
   size: A4 portrait;
   margin: 30pt 30pt 80pt 30pt;
-  .images {
+  .moj-logo {
     display: none;
   }
 
@@ -23,16 +23,6 @@
     top: 40%;
     left: -20%;
   }
-}
-
-#logo {
-  float: left;
-  margin-right: 15px;
-  margin-bottom: 15px;
-}
-
-#qr {
-  float: right;
 }
 
 body {
