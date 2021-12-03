@@ -6,6 +6,7 @@
 {% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
 {% set pageId = "additional-condition-input-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+{% set fromReview = "?fromReview=true" if fromReview %}
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
@@ -36,5 +37,15 @@
                 }) }}
             </div>
         </div>
+    </form>
+
+    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview }}" method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        {{ govukButton({
+            text: "Delete this condition",
+            type: "submit",
+            classes: 'govuk-button--secondary',
+            attributes: { 'data-qa': 'delete' }
+        }) }}
     </form>
 {% endblock %}

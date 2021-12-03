@@ -89,4 +89,48 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       )
     })
   })
+
+  describe('DELETE', () => {
+    beforeEach(() => {
+      licenceService.updateAdditionalConditions = jest.fn()
+      res.locals.licence = {
+        id: 1,
+        additionalPssConditions: [
+          {
+            id: 1,
+            code: 'code1',
+          },
+          {
+            id: 2,
+            code: 'code2',
+          },
+        ],
+      }
+    })
+
+    it('should call licence service to update the additional conditions with the condition removed', async () => {
+      await handler.DELETE(req, res)
+      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
+        1,
+        'PSS',
+        {
+          additionalConditions: ['code2'],
+        },
+        'joebloggs'
+      )
+    })
+
+    it('should redirect to the callback function', async () => {
+      await handler.DELETE(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions/callback')
+    })
+
+    it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
+      req.query.fromReview = 'true'
+      await handler.DELETE(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(
+        '/licence/create/id/1/additional-pss-conditions/callback?fromReview=true'
+      )
+    })
+  })
 })

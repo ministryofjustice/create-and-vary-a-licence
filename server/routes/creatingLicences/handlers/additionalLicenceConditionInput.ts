@@ -2,11 +2,13 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import { getAdditionalConditionByCode } from '../../../utils/conditionsProvider'
+import LicenceType from '../../../enumeration/licenceType'
 
 export default class AdditionalLicenceConditionInputRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
+    const { licenceId } = req.params
     const { additionalLicenceConditions } = res.locals.licence
     const { conditionId } = req.params
     const additionalCondition = additionalLicenceConditions.find(
@@ -14,8 +16,11 @@ export default class AdditionalLicenceConditionInputRoutes {
     )
 
     if (!additionalCondition) {
-      res.status(404)
-      throw new Error('Additional condition not found')
+      return res.redirect(
+        `/licence/create/id/${licenceId}/additional-licence-conditions${
+          req.query?.fromReview ? '?fromReview=true' : ''
+        }`
+      )
     }
 
     const config = getAdditionalConditionByCode(additionalCondition.code)
@@ -31,6 +36,29 @@ export default class AdditionalLicenceConditionInputRoutes {
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
+        req.query?.fromReview ? '?fromReview=true' : ''
+      }`
+    )
+  }
+
+  DELETE = async (req: Request, res: Response): Promise<void> => {
+    const { licence } = res.locals
+    const { conditionId } = req.params
+    const { username } = req.user
+
+    const additionalConditionCodes = licence.additionalLicenceConditions
+      .filter((condition: AdditionalCondition) => condition.id !== parseInt(conditionId, 10))
+      .map((condition: AdditionalCondition) => condition.code)
+
+    await this.licenceService.updateAdditionalConditions(
+      licence.id,
+      LicenceType.AP,
+      { additionalConditions: additionalConditionCodes },
+      username
+    )
+
+    return res.redirect(
+      `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
       }`
     )
