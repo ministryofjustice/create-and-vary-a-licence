@@ -87,6 +87,10 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
     '/id/:licenceId/additional-licence-conditions/condition/:conditionId',
     additionalLicenceConditionInputHandler.POST
   )
+  post(
+    '/id/:licenceId/additional-licence-conditions/condition/:conditionId/delete',
+    additionalLicenceConditionInputHandler.DELETE
+  )
   get('/id/:licenceId/additional-pss-conditions-question', additionalPssConditionsQuestionHandler.GET)
   post(
     '/id/:licenceId/additional-pss-conditions-question',

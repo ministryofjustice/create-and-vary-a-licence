@@ -38,15 +38,23 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
   })
 
   describe('GET', () => {
-    it('should throw 404 if the additional condition is not found on the licence', async () => {
-      await expect(handler.GET(req, res)).rejects.toThrow('Additional condition not found')
-      expect(res.status).toHaveBeenCalledWith(404)
+    it('should redirect to additional conditions list page if the additional condition is not found on the licence', async () => {
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions')
+    })
+
+    it('should redirect to additional conditions list page with fromReviewFlag if the additional condition is not found on the licence', async () => {
+      req.query.fromReview = 'true'
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions?fromReview=true')
     })
 
     it('should render view with the additional condition and its config', async () => {
       conditionsProviderSpy.mockReturnValue({
         inputs: [],
       })
+
+      req.query.fromReview = 'true'
 
       res.locals.licence = {
         additionalLicenceConditions: [
@@ -74,6 +82,14 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
   describe('POST', () => {
     beforeEach(() => {
       licenceService.updateAdditionalConditionData = jest.fn()
+      res.locals.licence = {
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: 'code1',
+          },
+        ],
+      }
     })
 
     it('should call licence service to update the additional condition data', async () => {
@@ -89,6 +105,50 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
     it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+      )
+    })
+  })
+
+  describe('DELETE', () => {
+    beforeEach(() => {
+      licenceService.updateAdditionalConditions = jest.fn()
+      res.locals.licence = {
+        id: 1,
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: 'code1',
+          },
+          {
+            id: 2,
+            code: 'code2',
+          },
+        ],
+      }
+    })
+
+    it('should call licence service to update the additional conditions with the condition removed', async () => {
+      await handler.DELETE(req, res)
+      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
+        1,
+        'AP',
+        {
+          additionalConditions: ['code2'],
+        },
+        'joebloggs'
+      )
+    })
+
+    it('should redirect to the callback function', async () => {
+      await handler.DELETE(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions/callback')
+    })
+
+    it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
+      req.query.fromReview = 'true'
+      await handler.DELETE(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
         '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
       )
