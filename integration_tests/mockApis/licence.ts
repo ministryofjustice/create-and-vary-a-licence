@@ -120,7 +120,7 @@ export default {
             {
               id: 3,
               code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
-              category: 'Participation in, or co-operation with, a programme or set of activities',
+              category: 'Programmes or activities',
               sequence: 2,
               text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
               data: [
@@ -141,7 +141,7 @@ export default {
             {
               id: 4,
               code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
-              category: 'Participation in, or co-operation with, a programme or set of activities',
+              category: 'Programmes or activities',
               sequence: 3,
               text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
               data: [
@@ -174,7 +174,7 @@ export default {
             {
               id: 5,
               code: '3932e5c9-4d21-4251-a747-ce6dc52dc9c0',
-              category: 'Possession, ownership, control or inspection of specified items or documents',
+              category: 'Items and documents',
               sequence: 4,
               text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
               data: [

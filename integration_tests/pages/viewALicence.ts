@@ -8,7 +8,7 @@ export default class ViewALicencePage extends Page {
 
   printALicence = (): PrintLicenceHtmlPage => {
     // This checks the print button and overrides its attributes to reference a html page rather than a PDF
-    cy.contains('a', 'Print licence')
+    cy.contains('a', 'Print')
       .should($a => {
         expect($a.attr('href'), 'href').to.equal('/licence/view/id/1/pdf-print')
         expect($a.attr('target'), 'target').to.equal('_blank')

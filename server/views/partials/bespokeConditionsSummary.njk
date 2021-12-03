@@ -3,31 +3,49 @@
 {%  macro bespokeConditions(licence, isEditable) %}
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
-            <h2 class="govuk-heading-m">Bespoke licence conditions details</h2>
+            <h2 class="govuk-heading-m">Bespoke licence condition details</h2>
         </div>
-        {% if isEditable %}
-            <div class="govuk-grid-column-one-quarter check-answers-header__change-link">
-                <a href="{{ '/licence/create/id/' + licence.id + '/bespoke-conditions?fromReview=true'}}" class="govuk-link govuk-!-font-size-19">Change</a>
-            </div>
-        {% endif %}
     </div>
 
     {% set bespokeConditions = [] %}
 
+    {% set conditionWord = "condition" if licence.bespokeConditions.length === 1 else "conditions" %}
+
+    {% set bespokeConditions = (bespokeConditions.push({
+        key: {  text: "Select bespoke conditions" },
+        value: { text: "" + licence.bespokeConditions.length + " " + conditionWord + " selected" },
+        actions: {
+            items: [
+                {
+                    href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
+                    text: "Change",
+                    visuallyHiddenText: "Change bespoke conditions"
+                }
+            ]
+        } if isEditable
+    }), bespokeConditions) %}
+
     {% for condition in licence.bespokeConditions %}
         {% set bespokeConditions = (bespokeConditions.push({
             key: { text: 'Bespoke condition' },
-            value: { text: condition.text }
+            value: { text: condition.text },
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
+                        text: "Change",
+                        visuallyHiddenText: "Change bespoke conditions"
+                    }
+                ]
+            } if isEditable
         }), bespokeConditions) %}
     {% endfor %}
 
-    {% if bespokeConditions.length > 0 %}
-        {{ govukSummaryList({
-            attributes: { id: 'bespoke-conditions-details' },
-            classes: 'govuk-!-margin-bottom-9',
-            rows: bespokeConditions
-        }) }}
-    {% else %}
-        <p class="govuk-body govuk-!-margin-bottom-9">No bespoke conditions have been added to this licence</p>
-    {% endif %}
+
+    {{ govukSummaryList({
+        attributes: { id: 'bespoke-conditions-details' },
+        classes: 'govuk-!-margin-bottom-9',
+        rows: bespokeConditions
+    }) }}
+
 {% endmacro %}

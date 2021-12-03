@@ -36,13 +36,19 @@ describe('Route - view and approve a licence', () => {
             surname: 'Bobson',
             forename: 'Bob',
             appointmentTime: '12/12/2022 14:16',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            bespokeConditions: [],
           },
         },
       } as unknown as Response
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/approve/view')
+      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
+        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
+        expandedPssConditions: res.locals.licence.additionalPssConditions,
+      })
     })
 
     it('should check status is SUBMITTED else redirect to case list', async () => {
@@ -57,6 +63,9 @@ describe('Route - view and approve a licence', () => {
             surname: 'Bobson',
             forename: 'Bob',
             appointmentTime: '12/12/2022 14:16',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            bespokeConditions: [],
           },
         },
       } as unknown as Response

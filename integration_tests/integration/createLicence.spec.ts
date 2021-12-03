@@ -46,7 +46,7 @@ context('Create a licence', () => {
 
     const bespokeConditionsQuestionPage = additionalConditionsInputPage
       .withContext(additionalConditionsPage.getContext())
-      .selectOption('London')
+      .selectOption('London Probation Region')
       .nextInput()
       .selectRadios()
       .nextInput()

@@ -14,8 +14,15 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <span class="govuk-caption-m">{{ licence.forename + " " + licence.surname }}</span>
-            <h1 class="govuk-heading-l">Check your answers</h1>
+            {% if licence.typeCode === 'AP' %}
+                <h1 class="govuk-heading-l">Check licence details for {{ licence.forename }} {{ licence.surname }}</h1>
+            {% elseif licence.typeCode === 'AP_PSS' %}
+                <h1 class="govuk-heading-l">Check licence and post sentence supervision order details for {{ licence.forename }} {{ licence.surname }}</h1>
+            {% elseif licence.typeCode === 'PSS' %}
+                <h1 class="govuk-heading-l">Check post sentence supervision order details for {{ licence.forename }} {{ licence.surname }}</h1>
+            {% else %}
+                <h1 class="govuk-heading-l">Check licence type {{ licence.typeCode }} for {{ licence.forename }} {{ licence.surname }}</h1>
+            {% endif %}
         </div>
     </div>
     <div class="govuk-grid-row">
@@ -24,12 +31,12 @@
             {{ inductionMeetingDetails(licence, isEditable) }}
 
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalLicenceConditions(licence, isEditable) }}
+                {{ additionalLicenceConditions(licence, expandedLicenceConditions, isEditable) }}
                 {{ bespokeConditions(licence, isEditable) }}
             {% endif %}
 
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, isEditable) }}
+                {{ additionalPssConditions(licence, expandedPssConditions, isEditable) }}
             {% endif %}
 
             {% if isEditable %}

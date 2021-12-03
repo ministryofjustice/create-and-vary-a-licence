@@ -17,7 +17,8 @@ export default class ApprovalViewPage extends Page {
   }
 
   clickReject = (): ConfirmRejectPage => {
-    cy.get(this.rejectLicenceButtonId).click()
+    // Force: true will click even if a hidden element
+    cy.get(this.rejectLicenceButtonId).click({ force: true })
     return Page.verifyOnPage(ConfirmRejectPage)
   }
 }
