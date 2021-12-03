@@ -1,18 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% macro additionalLicenceConditions(licence, expandedLicenceConditions, isEditable) %}
-    {% macro additionalConditionHtml(expandedConditionText, data) %}
-        <div>
-            {{ expandedConditionText }}
-        </div>
-        {% if data.length %}
-            <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
-                {% for entry in data | separatedDataByFieldName %}
-                    <span class="govuk-!-display-block govuk-!-margin-top-2">{{ entry | formatAddress }}</span>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endmacro %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
@@ -39,21 +27,27 @@
     }), additionalLicenceConditions) %}
 
     {% for condition in expandedLicenceConditions %}
+
+        {% if condition | checkConditionRequiresInput %}
+          {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
+        {% else %}
+          {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+        {% endif %}
+
         {% set additionalLicenceConditions = (additionalLicenceConditions.push({
             key: {  text: condition.category },
             value: { html: additionalConditionHtml(condition.text, condition.data) },
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id + "?fromReview=true",
+                        href: actionLink + "?fromReview=true",
                         text: "Change",
                         visuallyHiddenText: "Change condition"
                     }
                 ]
-            } if condition | checkConditionRequiresInput and isEditable
+            } if isEditable
         }), additionalLicenceConditions) %}
     {% endfor %}
-
 
     {{ govukSummaryList({
         attributes: { id: 'additional-licence-conditions-details' },
@@ -61,4 +55,17 @@
         rows: additionalLicenceConditions
     }) }}
 
+{% endmacro %}
+
+{% macro additionalConditionHtml(expandedConditionText, data) %}
+    <div>
+        {{ expandedConditionText }}
+    </div>
+    {% if data.length %}
+        <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
+            {% for entry in data | separatedDataByFieldName %}
+                <span class="govuk-!-display-block govuk-!-margin-top-2">{{ entry | formatAddress }}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endmacro %}
