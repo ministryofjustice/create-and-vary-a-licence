@@ -7,7 +7,7 @@ import ViewAndPrintCaseRoutes from './handlers/viewCases'
 import ViewAndPrintLicenceRoutes from './handlers/viewLicence'
 import PrintLicenceRoutes from './handlers/printLicence'
 
-export default function Index({ licenceService, prisonerService }: Services): Router {
+export default function Index({ licenceService, prisonerService, qrCodeService }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/view${path}`
 
@@ -19,7 +19,7 @@ export default function Index({ licenceService, prisonerService }: Services): Ro
 
   const viewCasesHandler = new ViewAndPrintCaseRoutes(licenceService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes()
-  const printHandler = new PrintLicenceRoutes(prisonerService)
+  const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService)
 
   get('/cases', viewCasesHandler.GET)
   post('/cases', viewCasesHandler.POST)

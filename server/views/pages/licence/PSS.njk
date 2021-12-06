@@ -1,10 +1,15 @@
 {% extends "pages/licence/pdf-layout.njk" %}
 
 {# Data supplied to this template
-   - imageData(offender image).
-   - htmlPrint(true/false).
-   - licence - already in context as is in res.locals (from fetchLicenceMiddleware).
-   - additionalPssConditons - string[] containing additional PSS conditions with placeholders expanded with values.
+    -    licence (implicit from res.locals)
+    -    qrCodesEnabled (implicit from res.locals)
+    -    licencesUrl - URL back to this service
+    -    imageData - prisoner image data
+    -    additionalLicenceConditions
+    -    additionalPssConditions
+    -    qrCode - QR code data (ready to show) or null
+    -    htmlPrint - true or false
+    -    watermark - true or false
 #}
 
 {% set offenderName = licence.forename + " " + licence.surname %}
