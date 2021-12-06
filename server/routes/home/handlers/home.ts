@@ -9,7 +9,8 @@ export default class HomeRoutes {
       shouldShowApproveLicenceCard: hasRole(req.user, AuthRole.DECISION_MAKER),
       shouldShowViewOrPrintCard:
         hasRole(req.user, AuthRole.CASE_ADMIN) ||
-        hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) ||
+        // Temporarily removed for COM - UR request - will be reinstated later
+        // hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) ||
         hasRole(req.user, AuthRole.READONLY),
       shouldShowMyCaseloadCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER),
     }
