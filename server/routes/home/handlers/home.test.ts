@@ -32,7 +32,7 @@ describe('Route Handlers - Home', () => {
         shouldShowCreateLicenceCard: true,
         shouldShowApproveLicenceCard: false,
         shouldShowMyCaseloadCard: true,
-        shouldShowViewOrPrintCard: true,
+        shouldShowViewOrPrintCard: false,
       })
     })
 
