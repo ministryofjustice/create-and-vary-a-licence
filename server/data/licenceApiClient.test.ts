@@ -13,7 +13,6 @@ import {
   AppointmentTimeRequest,
   BespokeConditionsRequest,
   ContactNumberRequest,
-  LicenceApiTestData,
   StatusUpdateRequest,
 } from '../@types/licenceApiClientTypes'
 import PersonName from '../routes/creatingLicences/types/personName'
@@ -43,40 +42,6 @@ describe('Licence API client tests', () => {
   afterEach(() => {
     nock.cleanAll()
     jest.clearAllMocks()
-  })
-
-  describe('Test data', () => {
-    const stubbedTestData: LicenceApiTestData[] = [{ key: 'X', value: 'Y' } as LicenceApiTestData]
-
-    it('Get test data', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get('/test/data', '').reply(200, stubbedTestData)
-      const data = await licenceService.getTestData(username)
-      expect(data).toEqual(stubbedTestData)
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-    })
-
-    it('No client token', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('')
-      fakeApi.get('/test/data', '').reply(401)
-      try {
-        await licenceService.getTestData(username)
-      } catch (e) {
-        expect(e.message).toContain('Unauthorized')
-      }
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-    })
-
-    it('Empty data', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get('/test/data', '').reply(200, [])
-      const data = await licenceService.getTestData(username)
-      expect(data).toEqual([])
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-    })
   })
 
   describe('Licence creation stages', () => {

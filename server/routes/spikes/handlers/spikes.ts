@@ -14,12 +14,6 @@ export default class SpikeRoutes {
     private readonly prisonerService: PrisonerService
   ) {}
 
-  public listTestData: RequestHandler = async (req, res): Promise<void> => {
-    const { username } = res.locals.user
-    const testData = await this.licenceService.getTestData(username)
-    res.render('pages/testData', { testData })
-  }
-
   public getStaffDetail: RequestHandler = async (req, res): Promise<void> => {
     const deliusUsername = req.params.username
     const staffDetail = await this.communityService.getStaffDetail(deliusUsername)

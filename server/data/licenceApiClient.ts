@@ -4,7 +4,6 @@ import type {
   CreateLicenceRequest,
   LicenceSummary,
   Licence,
-  LicenceApiTestData,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   AppointmentAddressRequest,
@@ -21,10 +20,6 @@ export default class LicenceApiClient {
 
   constructor(token: string) {
     this.restClient = new RestClient('Licence API', config.apis.licenceApi as ApiConfig, token)
-  }
-
-  async getTestData(): Promise<LicenceApiTestData[]> {
-    return (await this.restClient.get({ path: `/test/data` })) as Promise<LicenceApiTestData[]>
   }
 
   async createLicence(licence: CreateLicenceRequest): Promise<LicenceSummary> {

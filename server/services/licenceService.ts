@@ -8,7 +8,6 @@ import {
   ContactNumberRequest,
   CreateLicenceRequest,
   Licence,
-  LicenceApiTestData,
   LicenceSummary,
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
@@ -42,11 +41,6 @@ export default class LicenceService {
     private readonly prisonerService: PrisonerService,
     private readonly communityService: CommunityService
   ) {}
-
-  async getTestData(username: string): Promise<LicenceApiTestData[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return new LicenceApiClient(token).getTestData()
-  }
 
   async createLicence(prisonerNumber: string, username: string): Promise<LicenceSummary> {
     const nomisRecord = await this.prisonerService.getPrisonerDetail(username, prisonerNumber)
