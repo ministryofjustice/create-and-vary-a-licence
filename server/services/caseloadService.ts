@@ -25,14 +25,18 @@ export default class CaseloadService {
       changes their managing officer after a licence has been created for them?
      */
 
-    const existingLicences = await this.licenceService.getLicencesByStaffIdAndStatus(staffIdentifier, username, [
-      LicenceStatus.ACTIVE,
-      LicenceStatus.RECALLED,
-      LicenceStatus.IN_PROGRESS,
-      LicenceStatus.SUBMITTED,
-      LicenceStatus.APPROVED,
-      LicenceStatus.REJECTED,
-    ])
+    const existingLicences = await this.licenceService.getLicencesByStaffIdAndStatus(
+      staffIdentifier,
+      [
+        LicenceStatus.ACTIVE,
+        LicenceStatus.RECALLED,
+        LicenceStatus.IN_PROGRESS,
+        LicenceStatus.SUBMITTED,
+        LicenceStatus.APPROVED,
+        LicenceStatus.REJECTED,
+      ],
+      username
+    )
 
     // Get the full offender records from prisoner search
     const offenders = await this.prisonerService.searchPrisonersByNomisIds(username, caseloadNomisIds)

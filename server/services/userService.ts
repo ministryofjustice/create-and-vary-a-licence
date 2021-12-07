@@ -11,27 +11,22 @@ export default class UserService {
     private readonly communityService: CommunityService
   ) {}
 
-  // Users own token
-  async getAuthUser(token: string): Promise<AuthUserDetails> {
-    return this.hmppsAuthClient.getUser(token)
+  async getAuthUser(username: string): Promise<AuthUserDetails> {
+    return this.hmppsAuthClient.getUser(username)
   }
 
-  // Users own token
-  async getAuthUserEmail(token: string): Promise<AuthUserEmail> {
-    return this.hmppsAuthClient.getUserEmail(token)
+  async getAuthUserEmail(username: string): Promise<AuthUserEmail> {
+    return this.hmppsAuthClient.getUserEmail(username)
   }
 
-  // Users own token
-  async getPrisonUser(token: string): Promise<PrisonApiUserDetail> {
-    return this.prisonApiClient.getUser(token)
+  async getPrisonUser(username: string): Promise<PrisonApiUserDetail> {
+    return this.prisonApiClient.getUser(username)
   }
 
-  // Users own token
-  async getPrisonUserCaseloads(token: string): Promise<PrisonApiCaseload[]> {
-    return this.prisonApiClient.getUserCaseloads(token)
+  async getPrisonUserCaseloads(username: string): Promise<PrisonApiCaseload[]> {
+    return this.prisonApiClient.getUserCaseloads(username)
   }
 
-  // Will use an admin token generated in the communityService
   async getProbationUser(deliusUsername: string): Promise<CommunityApiStaffDetails> {
     return this.communityService.getStaffDetail(deliusUsername)
   }

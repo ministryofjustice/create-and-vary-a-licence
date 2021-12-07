@@ -26,7 +26,7 @@ export default function populateCurrentUser(userService: UserService): RequestHa
     try {
       // Populate the currentUser details in the session if there is a token present and no user details
       if (res.locals.user?.token) {
-        const { token, username, authSource } = res.locals.user
+        const { username, authSource } = res.locals.user
         if (!req.session?.currentUser) {
           logger.info(`populateCurrentUser - populating ${authSource} user in session`)
           const cvlUser = new CvlUserDetails()
@@ -34,8 +34,8 @@ export default function populateCurrentUser(userService: UserService): RequestHa
           if (authSource === 'nomis') {
             // Assemble user information from Nomis via prison API
             const [prisonUser, prisonUserCaseload] = await Promise.all([
-              userService.getPrisonUser(token),
-              userService.getPrisonUserCaseloads(token),
+              userService.getPrisonUser(username),
+              userService.getPrisonUserCaseloads(username),
             ])
             cvlUser.name = `${prisonUser.firstName} ${prisonUser.lastName}`
             cvlUser.displayName = convertToTitleCase(cvlUser.name)
@@ -60,7 +60,7 @@ export default function populateCurrentUser(userService: UserService): RequestHa
             // TODO: Flesh out the need for teams, LDUs, PDUs - if needed later
           } else {
             // Assemble basic user information from hmpps-auth
-            const authUser = await userService.getAuthUser(token)
+            const authUser = await userService.getAuthUser(username)
             if (authUser) {
               cvlUser.name = authUser?.name
               cvlUser.displayName = convertToTitleCase(cvlUser.name)
@@ -71,7 +71,7 @@ export default function populateCurrentUser(userService: UserService): RequestHa
           if (!cvlUser?.emailAddress) {
             try {
               // Get the user's email, which may fail (unverified returns a 204) - catch and swallow the error
-              const authEmail = await userService.getAuthUserEmail(token)
+              const authEmail = await userService.getAuthUserEmail(username)
               cvlUser.emailAddress = authEmail ? authEmail.email : null
             } catch (error) {
               logger.info(`Email unverified in auth? - status ${error?.statusCode} for ${cvlUser.displayName}`)

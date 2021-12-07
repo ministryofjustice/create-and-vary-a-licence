@@ -1,26 +1,21 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import { CommunityApiStaffDetails, CommunityApiManagedOffender } from '../@types/communityClientTypes'
-import logger from '../../logger'
 
-export default class CommunityApiClient {
-  restClient: RestClient
-
-  constructor(token: string) {
-    this.restClient = new RestClient('Community API', config.apis.communityApi as ApiConfig, token)
+export default class CommunityApiClient extends RestClient {
+  constructor() {
+    super('Community API', config.apis.communityApi as ApiConfig)
   }
 
-  async getStaffDetailByUsername(deliusUsername: string): Promise<CommunityApiStaffDetails> {
-    logger.info(`communityClient: getStaffDetailByUsername(${deliusUsername}`)
-    return this.restClient.get({
-      path: `/secure/staff/username/${deliusUsername}`,
-    }) as Promise<CommunityApiStaffDetails>
+  async getStaffDetailByUsername(username: string): Promise<CommunityApiStaffDetails> {
+    return (await this.get({
+      path: `/secure/staff/username/${username}`,
+    })) as Promise<CommunityApiStaffDetails>
   }
 
   async getStaffCaseload(staffId: number): Promise<CommunityApiManagedOffender[]> {
-    logger.info(`communityClient: getStaffCaseload(${staffId}`)
-    return this.restClient.get({
+    return (await this.get({
       path: `/secure/staff/staffIdentifier/${staffId}/managedOffenders`,
-    }) as Promise<CommunityApiManagedOffender[]>
+    })) as Promise<CommunityApiManagedOffender[]>
   }
 }

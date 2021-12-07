@@ -7,8 +7,6 @@ import LicenceStatus from '../server/enumeration/licenceStatus'
 import LicenceApiClient from '../server/data/licenceApiClient'
 import PrisonerSearchApiClient from '../server/data/prisonerSearchApiClient'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
-import HmppsAuthClient from '../server/data/hmppsAuthClient'
-import TokenStore from '../server/data/tokenStore'
 
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-activate-licences-job')
@@ -29,13 +27,8 @@ const pollLicencesToActivate = async (): Promise<LicenceSummary[]> => {
   return approvedLicences.filter(licence => releasedPrisonerNumbers.includes(licence.nomisId))
 }
 
-const getSystemClientTokenFromHmppsAuth = (): Promise<string> => {
-  return new HmppsAuthClient(new TokenStore()).getSystemClientToken()
-}
-
 const getApprovedLicences = async (): Promise<LicenceSummary[]> => {
-  const token = await getSystemClientTokenFromHmppsAuth()
-  return new LicenceApiClient(token).matchLicences([LicenceStatus.APPROVED])
+  return new LicenceApiClient().matchLicences([LicenceStatus.APPROVED])
 }
 
 const getPrisoners = async (nomisIds: string[]): Promise<Prisoner[]> => {
@@ -43,17 +36,15 @@ const getPrisoners = async (nomisIds: string[]): Promise<Prisoner[]> => {
     return []
   }
 
-  const token = await getSystemClientTokenFromHmppsAuth()
   const prisonerSearchCriteria = {
     prisonerNumbers: nomisIds,
   }
-  return new PrisonerSearchApiClient(token).searchPrisonersByNomsIds(prisonerSearchCriteria)
+  return new PrisonerSearchApiClient().searchPrisonersByNomsIds(prisonerSearchCriteria)
 }
 
 const batchActivateLicences = async (licenceIds: number[]): Promise<void> => {
   if (licenceIds.length > 0) {
-    const token = await getSystemClientTokenFromHmppsAuth()
-    await new LicenceApiClient(token).batchActivateLicences(licenceIds)
+    await new LicenceApiClient().batchActivateLicences(licenceIds)
   }
 }
 

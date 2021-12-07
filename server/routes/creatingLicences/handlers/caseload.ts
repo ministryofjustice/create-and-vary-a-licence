@@ -29,7 +29,7 @@ export default class CaseloadRoutes {
     const { prisonerNumber } = req.body
 
     // TODO: This block is temporary, remove this when we have a design for editing existing licences
-    const comLicenses = await this.licenceService.getLicencesByStaffIdAndStatus(deliusStaffIdentifier, username, [])
+    const comLicenses = await this.licenceService.getLicencesByStaffIdAndStatus(deliusStaffIdentifier, [], username)
     const existingLicense = comLicenses.find(licence => licence.nomisId === prisonerNumber)
     if (existingLicense) {
       return res.redirect(`/licence/create/id/${existingLicense.licenceId}/check-your-answers`)
