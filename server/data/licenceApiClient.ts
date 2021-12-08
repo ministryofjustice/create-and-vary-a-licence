@@ -1,4 +1,4 @@
-import RestClient from './restClient'
+import RestClient from './hmppsRestClient'
 import type {
   ContactNumberRequest,
   CreateLicenceRequest,

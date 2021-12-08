@@ -7,22 +7,20 @@ import logger from '../../logger'
 import config from '../config'
 import generateOauthClientToken from '../authentication/clientCredentials'
 
-const createRedisClient = () => {
-  return redis.createClient({
-    port: config.redis.port,
-    password: config.redis.password,
-    host: config.redis.host,
-    tls: config.redis.tls_enabled === 'true' ? {} : false,
-    prefix: 'systemToken:',
-  })
-}
-
 export default class TokenStore {
   private readonly getRedisAsync: (key: string) => Promise<string>
 
   private readonly setRedisAsync: (key: string, value: string, mode: string, durationSeconds: number) => Promise<void>
 
-  constructor(redisClient: redis.RedisClient = createRedisClient()) {
+  constructor() {
+    const redisClient = redis.createClient({
+      port: config.redis.port,
+      password: config.redis.password,
+      host: config.redis.host,
+      tls: config.redis.tls_enabled === 'true' ? {} : false,
+      prefix: 'systemToken:',
+    })
+
     redisClient.on('error', error => {
       logger.error(error, `Redis error`)
     })
@@ -31,7 +29,7 @@ export default class TokenStore {
     this.setRedisAsync = promisify(redisClient.set).bind(redisClient)
   }
 
-  public getAuthToken = async (username: string): Promise<string> => {
+  public getAuthToken = async (username?: string): Promise<string> => {
     const key = username || '%ANONYMOUS%'
     const token = await this.getToken(key)
     if (token) {

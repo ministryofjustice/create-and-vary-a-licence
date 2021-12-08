@@ -1,5 +1,5 @@
 import config, { ApiConfig } from '../config'
-import RestClient from './restClient'
+import RestClient from './hmppsRestClient'
 import { CommunityApiStaffDetails, CommunityApiManagedOffender } from '../@types/communityClientTypes'
 
 export default class CommunityApiClient extends RestClient {

@@ -1,5 +1,5 @@
 import config, { ApiConfig } from '../config'
-import RestClient from './restClient'
+import RestClient from './hmppsRestClient'
 import type { PrisonDto } from '../@types/prisonRegisterTypes'
 
 export default class PrisonRegisterApiClient extends RestClient {

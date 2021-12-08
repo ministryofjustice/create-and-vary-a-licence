@@ -1,7 +1,7 @@
 import config, { ApiConfig } from '../config'
 import type { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import { PrisonerSearchByNomisIds } from '../@types/prisonerSearchApiClientTypes'
-import RestClient from './restClient'
+import RestClient from './hmppsRestClient'
 
 export default class PrisonerSearchApiClient extends RestClient {
   constructor() {

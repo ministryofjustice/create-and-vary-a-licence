@@ -1,102 +1,50 @@
-// import nock from 'nock'
-// import config from '../config'
-// import PrisonerService from '../services/prisonerService'
-// import HmppsAuthClient from './hmppsAuthClient'
-// import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
-//
-// jest.mock('./hmppsAuthClient')
-//
-// const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-// const prisonerService = new PrisonerService(hmppsAuthClient)
-//
-// const stubbedSearchResult = [
-//   { firstName: 'Bob', lastName: 'Smith', prisonerNumber: 'A1234AA' },
-//   { firstName: 'Bob', lastName: 'Jones', prisonerNumber: 'A1234AB' },
-// ] as Prisoner[]
-//
-// describe('Prisoner search API client tests', () => {
-//   let fakeApi: nock.Scope
-//
-//   beforeEach(() => {
-//     config.apis.prisonerSearchApi.url = 'http://localhost:8100'
-//     fakeApi = nock(config.apis.prisonerSearchApi.url)
-//   })
-//
-//   afterEach(() => {
-//     nock.cleanAll()
-//   })
-//
-//   describe('Search for  prisoner', () => {
-//     const searchCriteria = {
-//       firstName: 'Bob',
-//       includeAliases: false,
-//       includeRestrictivePatients: false,
-//     } as PrisonerSearchCriteria
-//
-//     it('Get search results', async () => {
-//       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//       fakeApi.post('/prisoner-search/match-prisoners', searchCriteria).reply(200, stubbedSearchResult)
-//       const data = await prisonerService.searchPrisoners('user1', searchCriteria)
-//       expect(data).toEqual(stubbedSearchResult)
-//       expect(nock.isDone()).toBe(true)
-//       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//     })
-//
-//     it('Search - with no client token', async () => {
-//       hmppsAuthClient.getSystemClientToken.mockResolvedValue('')
-//       fakeApi.post('/prisoner-search/match-prisoners', searchCriteria).reply(401)
-//       try {
-//         await prisonerService.searchPrisoners('user1', searchCriteria)
-//       } catch (e) {
-//         expect(e.message).toContain('Unauthorized')
-//       }
-//       expect(nock.isDone()).toBe(true)
-//       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//     })
-//
-//     it('Search - no matches', async () => {
-//       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//       fakeApi.post('/prisoner-search/match-prisoners', searchCriteria).reply(200, [])
-//       const data = await prisonerService.searchPrisoners('user1', searchCriteria)
-//       expect(data).toEqual([])
-//       expect(nock.isDone()).toBe(true)
-//       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//     })
-//   })
-//
-//   describe('Search prisoners by list of nomisIds', () => {
-//     const searchCriteria = ['A1234AA', 'A1234AB']
-//
-//     it('Get search results', async () => {
-//       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//       fakeApi
-//         .post('/prisoner-search/prisoner-numbers', { prisonerNumbers: searchCriteria })
-//         .reply(200, stubbedSearchResult)
-//       const data = await prisonerService.searchPrisonersByNomisIds('user1', searchCriteria)
-//       expect(data).toEqual(stubbedSearchResult)
-//       expect(nock.isDone()).toBe(true)
-//       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//     })
-//
-//     it('Search - with no client token', async () => {
-//       hmppsAuthClient.getSystemClientToken.mockResolvedValue('')
-//       fakeApi.post('/prisoner-search/prisoner-numbers', { prisonerNumbers: searchCriteria }).reply(401)
-//       try {
-//         await prisonerService.searchPrisonersByNomisIds('user1', searchCriteria)
-//       } catch (e) {
-//         expect(e.message).toContain('Unauthorized')
-//       }
-//       expect(nock.isDone()).toBe(true)
-//       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//     })
-//
-//     it('Search - no matches', async () => {
-//       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//       fakeApi.post('/prisoner-search/prisoner-numbers', { prisonerNumbers: searchCriteria }).reply(200, [])
-//       const data = await prisonerService.searchPrisonersByNomisIds('user1', searchCriteria)
-//       expect(data).toEqual([])
-//       expect(nock.isDone()).toBe(true)
-//       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//     })
-//   })
-// })
+import HmppsRestClient from './hmppsRestClient'
+import PrisonerSearchApiClient from './prisonerSearchApiClient'
+import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
+
+jest.mock('./tokenStore', () => {
+  return jest.fn().mockImplementation(() => {
+    return { TokenStore: () => '', getAuthToken: () => '' }
+  })
+})
+
+const prisonerSearchApiClient = new PrisonerSearchApiClient()
+
+describe('Prisoner Search Api client tests', () => {
+  const post = jest.spyOn(HmppsRestClient.prototype, 'post')
+
+  beforeEach(() => {
+    post.mockResolvedValue(true)
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('Search Prisoner', async () => {
+    post.mockResolvedValue([{ firstName: 'Joe', lastName: 'Bloggs' } as Prisoner])
+
+    const result = await prisonerSearchApiClient.searchPrisoners(
+      { lastName: 'Bloggs' } as PrisonerSearchCriteria,
+      'joebloggs'
+    )
+
+    expect(post).toHaveBeenCalledWith(
+      { path: '/prisoner-search/match-prisoners', data: { lastName: 'Bloggs' } },
+      'joebloggs'
+    )
+    expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
+  })
+
+  it('Search Prisoner by nomis ids', async () => {
+    post.mockResolvedValue([{ firstName: 'Joe', lastName: 'Bloggs' } as Prisoner])
+
+    const result = await prisonerSearchApiClient.searchPrisonersByNomsIds({ prisonerNumbers: ['ABC1234'] }, 'joebloggs')
+
+    expect(post).toHaveBeenCalledWith(
+      { path: '/prisoner-search/prisoner-numbers', data: { prisonerNumbers: ['ABC1234'] } },
+      'joebloggs'
+    )
+    expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
+  })
+})

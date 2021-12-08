@@ -1,5 +1,5 @@
 import config, { ApiConfig } from '../config'
-import RestClient from './restClient'
+import RestClient from './hmppsRestClient'
 
 export type AuthUserDetails = {
   name: string
@@ -27,11 +27,5 @@ export default class HmppsAuthClient extends RestClient {
 
   async getUserEmail(username: string): Promise<AuthUserEmail> {
     return (await this.get({ path: '/api/me/email' }, username)) as Promise<AuthUserEmail>
-  }
-
-  async getUserRoles(username: string): Promise<string[]> {
-    return this.get({ path: '/api/user/me/roles' }, username).then(roles =>
-      (<AuthUserRole[]>roles).map(role => role.roleCode)
-    ) as Promise<string[]>
   }
 }

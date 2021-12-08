@@ -1,377 +1,200 @@
-// import nock from 'nock'
-// import config from '../config'
-// import LicenceService from '../services/licenceService'
-// import HmppsAuthClient from './hmppsAuthClient'
-// import BespokeCondition from '../routes/creatingLicences/types/bespokeConditions'
-// import SimpleDate from '../routes/creatingLicences/types/date'
-// import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
-// import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
-// import {
-//   AdditionalConditionsRequest,
-//   AppointmentAddressRequest,
-//   AppointmentPersonRequest,
-//   AppointmentTimeRequest,
-//   BespokeConditionsRequest,
-//   ContactNumberRequest,
-//   StatusUpdateRequest,
-// } from '../@types/licenceApiClientTypes'
-// import PersonName from '../routes/creatingLicences/types/personName'
-// import Telephone from '../routes/creatingLicences/types/telephone'
-// import { stringToAddressObject } from '../utils/utils'
-// import LicenceStatus from '../enumeration/licenceStatus'
-// import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
-// import * as conditionsProvider from '../utils/conditionsProvider'
-// import LicenceType from '../enumeration/licenceType'
-//
-// const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-// const licenceService = new LicenceService(hmppsAuthClient, null, null)
-// const additionalCondition = { code: 'condition1', text: 'text', category: 'category' }
-//
-// jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode').mockReturnValue(additionalCondition)
-// jest.mock('./hmppsAuthClient')
-//
-// describe('Licence API client tests', () => {
-//   let fakeApi: nock.Scope
-//   const username = 'joebloggs'
-//
-//   beforeEach(() => {
-//     config.apis.licenceApi.url = 'http://localhost:8100'
-//     fakeApi = nock(config.apis.licenceApi.url)
-//   })
-//
-//   afterEach(() => {
-//     nock.cleanAll()
-//     jest.clearAllMocks()
-//   })
-//
-//   describe('Licence creation stages', () => {
-//     describe('Who to meet', () => {
-//       const person = { contactName: 'Fred' } as PersonName
-//       const appointmentPersonRequest = { appointmentPerson: person.contactName } as AppointmentPersonRequest
-//
-//       it('Update the person to meet', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/appointmentPerson', appointmentPersonRequest).reply(200)
-//         await licenceService.updateAppointmentPerson('1', person, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('When to meet', () => {
-//       const appointmentTimeRequest = { appointmentTime: '12/12/2022 11:15' } as AppointmentTimeRequest
-//       const simpleDate = new SimpleDate('12', '12', '2022')
-//       const simpleTime = new SimpleTime('11', '15', AmPm.AM)
-//       const simpleDateTime = SimpleDateTime.fromSimpleDateAndTime(simpleDate, simpleTime)
-//
-//       it('Update the date and time of the appointment', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/appointmentTime', appointmentTimeRequest).reply(200)
-//         await licenceService.updateAppointmentTime('1', simpleDateTime, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('Where to meet', () => {
-//       const appointmentAddressRequest = {
-//         appointmentAddress: 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
-//       } as AppointmentAddressRequest
-//       const address = stringToAddressObject(appointmentAddressRequest.appointmentAddress)
-//
-//       it('Update the date and time of the appointment', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/appointment-address', appointmentAddressRequest).reply(200)
-//         await licenceService.updateAppointmentAddress('1', address, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('Officer contact number', () => {
-//       const contactNumberRequest = { comTelephone: '0114 2556556' } as ContactNumberRequest
-//       const telephoneContact = new Telephone()
-//       telephoneContact.telephone = '0114 2556556'
-//
-//       it('Update the officer contact telephone number', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/contact-number', contactNumberRequest).reply(200)
-//         await licenceService.updateContactNumber('1', telephoneContact, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('Bespoke conditions', () => {
-//       it('No bespoke conditions entered', async () => {
-//         const formConditions = makeFormBespokeConditions([])
-//         const apiRequestConditions = makeApiRequestBespokeConditions([])
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/bespoke-conditions', apiRequestConditions).reply(200)
-//         await licenceService.updateBespokeConditions('1', formConditions, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//
-//       it('Three bespoke conditions entered', async () => {
-//         const formConditions = makeFormBespokeConditions(['C1', 'C2', 'C3'])
-//         const apiRequestConditions = makeApiRequestBespokeConditions(formConditions.conditions)
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/bespoke-conditions', apiRequestConditions).reply(200)
-//         await licenceService.updateBespokeConditions('1', formConditions, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//
-//       it('Remove empty bespoke conditions', async () => {
-//         const formConditions = makeFormBespokeConditions(['C1', '', '', 'C4'])
-//         const apiRequestConditions = makeApiRequestBespokeConditions(['C1', 'C4'])
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/bespoke-conditions', apiRequestConditions).reply(200)
-//         await licenceService.updateBespokeConditions('1', formConditions, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('Additional conditions', () => {
-//       it('No additional conditions entered', async () => {
-//         const formConditions = new AdditionalConditions()
-//         const apiRequestConditions = makeApiRequestAdditionalConditions(
-//           formConditions.additionalConditions,
-//           LicenceType.AP
-//         )
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/additional-conditions', apiRequestConditions).reply(200)
-//         await licenceService.updateAdditionalConditions('1', LicenceType.AP, formConditions, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//
-//       it('Three additional conditions entered', async () => {
-//         const formConditions = new AdditionalConditions()
-//         formConditions.additionalConditions = ['condition1', 'condition2', 'condition3']
-//         const apiRequestConditions = makeApiRequestAdditionalConditions(
-//           formConditions.additionalConditions,
-//           LicenceType.AP
-//         )
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/additional-conditions', apiRequestConditions).reply(200)
-//         await licenceService.updateAdditionalConditions('1', LicenceType.AP, formConditions, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//
-//       it('Update additional condition data from object', async () => {
-//         const form = {
-//           input1: 'testData1',
-//           input2: 'testData2',
-//         }
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi
-//           .put('/licence/id/1/additional-conditions/condition/1', {
-//             data: [
-//               {
-//                 field: 'input1',
-//                 value: 'testData1',
-//                 sequence: 0,
-//               },
-//               {
-//                 field: 'input2',
-//                 value: 'testData2',
-//                 sequence: 1,
-//               },
-//             ],
-//           })
-//           .reply(200)
-//         await licenceService.updateAdditionalConditionData('1', '1', form, username)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//   })
-//
-//   describe('Caseload information', () => {
-//     it('should make request to get licences by staff ID for any status', async () => {
-//       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//       fakeApi.get('/licence/staffId/2000').reply(200)
-//       await licenceService.getLicencesByStaffIdAndStatus(2000, username, [])
-//       expect(nock.isDone()).toBe(true)
-//       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//     })
-//
-//     it('should make request to get licences by staff ID for a single status', async () => {
-//       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//       fakeApi.get('/licence/staffId/2000?status=ACTIVE').reply(200)
-//       await licenceService.getLicencesByStaffIdAndStatus(2000, username, [LicenceStatus.ACTIVE])
-//       expect(nock.isDone()).toBe(true)
-//       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//     })
-//
-//     it('should make request to get licences by staff ID for multiple statuses', async () => {
-//       hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//       fakeApi.get('/licence/staffId/2000?status=ACTIVE&status=INACTIVE').reply(200)
-//       await licenceService.getLicencesByStaffIdAndStatus(2000, username, [LicenceStatus.ACTIVE, LicenceStatus.INACTIVE])
-//       expect(nock.isDone()).toBe(true)
-//       expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//     })
-//   })
-//
-//   describe('Licence status updates', () => {
-//     describe('Approved', () => {
-//       const statusUpdateRequest = {
-//         status: LicenceStatus.APPROVED,
-//         username,
-//         fullName: 'Joe Bloggs',
-//       } as StatusUpdateRequest
-//
-//       it('Update the licence to APPROVED', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/status', statusUpdateRequest).reply(200)
-//         await licenceService.updateStatus('1', LicenceStatus.APPROVED, username, 'Joe Bloggs')
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('Rejected', () => {
-//       const statusUpdateRequest = { status: LicenceStatus.REJECTED, username, fullName: null } as StatusUpdateRequest
-//       it('Update the licence to REJECTED', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.put('/licence/id/1/status', statusUpdateRequest).reply(200)
-//         await licenceService.updateStatus('1', LicenceStatus.REJECTED, username, null)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//   })
-//
-//   describe('Get licences for approval', () => {
-//     describe('Licences for approval in my prison caseload', () => {
-//       const prisonCaseload = ['LEI', 'MDI']
-//       it('Get approval cases in my prison caseload', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.get('/licence/match?prison=LEI&prison=MDI&status=SUBMITTED&sortBy=conditionalReleaseDate').reply(200)
-//         await licenceService.getLicencesForApproval(username, prisonCaseload)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('Licences for approval with a CADM_I (central admin) caseload only', () => {
-//       const prisonCaseload = ['CADM_I']
-//       it('Get approval cases in my prison caseload', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.get('/licence/match?status=SUBMITTED&sortBy=conditionalReleaseDate').reply(200)
-//         await licenceService.getLicencesForApproval(username, prisonCaseload)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('List licences for approval with a CADM_I and others in caseload', () => {
-//       const prisonCaseload = ['MDI', 'CADM_I']
-//       it('Get approval cases in my prison caseload', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi.get('/licence/match?prison=MDI&status=SUBMITTED&sortBy=conditionalReleaseDate').reply(200)
-//         await licenceService.getLicencesForApproval(username, prisonCaseload)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//   })
-//
-//   describe('Get licences for view and print', () => {
-//     describe('Prison user caseload', () => {
-//       const prisons = ['LEI', 'MDI']
-//       const authSource = 'nomis'
-//       it('Get licences in prison caseload', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi
-//           .get(
-//             '/licence/match?prison=LEI&prison=MDI&status=ACTIVE&status=APPROVED&status=REJECTED&status=SUBMITTED&sortBy=conditionalReleaseDate'
-//           )
-//           .reply(200)
-//         await licenceService.getLicencesForCaseAdmin(username, authSource, prisons)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('Prison user with CADM_I (central admin) caseload', () => {
-//       const prisons = ['CADM_I']
-//       const authSource = 'nomis'
-//       it('Get licences with central caseload', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi
-//           .get(
-//             '/licence/match?status=ACTIVE&status=APPROVED&status=REJECTED&status=SUBMITTED&sortBy=conditionalReleaseDate'
-//           )
-//           .reply(200)
-//         await licenceService.getLicencesForCaseAdmin(username, authSource, prisons)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('Probation user - filters by staffId', () => {
-//       const prisons: string[] = []
-//       const authSource = 'delius'
-//       const staffId = 123
-//       it('Get licences by probation staff id', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi
-//           .get(
-//             '/licence/match?staffId=123&status=ACTIVE&status=APPROVED&status=REJECTED&status=SUBMITTED&sortBy=conditionalReleaseDate'
-//           )
-//           .reply(200)
-//         await licenceService.getLicencesForCaseAdmin(username, authSource, prisons, staffId)
-//         expect(nock.isDone()).toBe(true)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-//       })
-//     })
-//
-//     describe('Auth user - always empty for now', () => {
-//       const prisons: string[] = []
-//       const authSource = 'auth'
-//       it('Get licences - does not call out so returns an empty list', async () => {
-//         hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-//         fakeApi
-//           .get(
-//             '/licence/match?status=ACTIVE&status=APPROVED&status=REJECTED&status=SUBMITTED&sortBy=conditionalReleaseDate'
-//           )
-//           .reply(200)
-//         await licenceService.getLicencesForCaseAdmin(username, authSource, prisons)
-//         expect(nock.isDone()).toBe(false)
-//         expect(hmppsAuthClient.getSystemClientToken).toBeCalledTimes(0)
-//       })
-//     })
-//   })
-// })
-//
-// const makeFormBespokeConditions = (conditions: string[]): BespokeCondition => {
-//   const formConditions = new BespokeCondition()
-//   formConditions.conditions = conditions
-//   return formConditions
-// }
-//
-// const makeApiRequestBespokeConditions = (conditions: string[]): BespokeConditionsRequest => {
-//   return { conditions } as BespokeConditionsRequest
-// }
-//
-// const makeApiRequestAdditionalConditions = (
-//   conditionIds: string[],
-//   conditionType: string
-// ): AdditionalConditionsRequest => {
-//   const expectedConditions =
-//     conditionIds?.map((conditionCode, index) => {
-//       return {
-//         code: conditionCode,
-//         sequence: index,
-//         category: additionalCondition.category,
-//         text: additionalCondition.text,
-//       }
-//     }) || []
-//
-//   return { additionalConditions: expectedConditions, conditionType } as AdditionalConditionsRequest
-// }
+import LicenceApiClient from './licenceApiClient'
+import {
+  AdditionalConditionsRequest,
+  AppointmentAddressRequest,
+  AppointmentPersonRequest,
+  AppointmentTimeRequest,
+  BespokeConditionsRequest,
+  ContactNumberRequest,
+  CreateLicenceRequest,
+  Licence,
+  LicenceSummary,
+  StatusUpdateRequest,
+  UpdateAdditionalConditionDataRequest,
+} from '../@types/licenceApiClientTypes'
+import HmppsRestClient from './hmppsRestClient'
+import LicenceStatus from '../enumeration/licenceStatus'
+
+jest.mock('./tokenStore', () => {
+  return jest.fn().mockImplementation(() => {
+    return { TokenStore: () => '', getAuthToken: () => '' }
+  })
+})
+
+const licenceApiClient = new LicenceApiClient()
+
+describe('Licence API client tests', () => {
+  const get = jest.spyOn(HmppsRestClient.prototype, 'get')
+  const post = jest.spyOn(HmppsRestClient.prototype, 'post')
+  const put = jest.spyOn(HmppsRestClient.prototype, 'put')
+
+  beforeEach(() => {
+    get.mockResolvedValue(true)
+    post.mockResolvedValue(true)
+    put.mockResolvedValue(true)
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('Create licence request', async () => {
+    post.mockResolvedValue({ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary)
+
+    const result = await licenceApiClient.createLicence({} as CreateLicenceRequest, 'joebloggs')
+
+    expect(post).toHaveBeenCalledWith({ path: '/licence/create', data: {} }, 'joebloggs')
+    expect(result).toEqual({ licenceId: 1, prisonCode: 'MDI' })
+  })
+
+  it('Get licence by Id', async () => {
+    get.mockResolvedValue({ id: 1, prisonCode: 'MDI' } as Licence)
+
+    const result = await licenceApiClient.getLicenceById('1', 'joebloggs')
+
+    expect(get).toHaveBeenCalledWith({ path: '/licence/id/1' }, 'joebloggs')
+    expect(result).toEqual({ id: 1, prisonCode: 'MDI' })
+  })
+
+  it('Update appointment person', async () => {
+    await licenceApiClient.updateAppointmentPerson(
+      '1',
+      { appointmentPerson: 'Joe Bloggs' } as AppointmentPersonRequest,
+      'joebloggs'
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/appointmentPerson', data: { appointmentPerson: 'Joe Bloggs' } },
+      'joebloggs'
+    )
+  })
+
+  it('Update appointment time', async () => {
+    await licenceApiClient.updateAppointmentTime(
+      '1',
+      { appointmentTime: '12:30pm' } as AppointmentTimeRequest,
+      'joebloggs'
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/appointmentTime', data: { appointmentTime: '12:30pm' } },
+      'joebloggs'
+    )
+  })
+
+  it('Update appointment address', async () => {
+    await licenceApiClient.updateAppointmentAddress(
+      '1',
+      { appointmentAddress: '123 Fake Street' } as AppointmentAddressRequest,
+      'joebloggs'
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/appointment-address', data: { appointmentAddress: '123 Fake Street' } },
+      'joebloggs'
+    )
+  })
+
+  it('Update contact number', async () => {
+    await licenceApiClient.updateContactNumber('1', { comTelephone: '0112877368' } as ContactNumberRequest, 'joebloggs')
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/contact-number', data: { comTelephone: '0112877368' } },
+      'joebloggs'
+    )
+  })
+
+  it('Update bespoke conditions', async () => {
+    await licenceApiClient.updateBespokeConditions(
+      '1',
+      { conditions: ['Not to enter any shopping centres'] } as BespokeConditionsRequest,
+      'joebloggs'
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/bespoke-conditions', data: { conditions: ['Not to enter any shopping centres'] } },
+      'joebloggs'
+    )
+  })
+
+  it('Update additional conditions', async () => {
+    await licenceApiClient.updateAdditionalConditions(
+      '1',
+      { additionalConditions: [{ code: 'condition1' }] } as AdditionalConditionsRequest,
+      'joebloggs'
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/additional-conditions', data: { additionalConditions: [{ code: 'condition1' }] } },
+      'joebloggs'
+    )
+  })
+
+  it('Update additional condition data', async () => {
+    await licenceApiClient.updateAdditionalConditionData(
+      '1',
+      '2',
+      { data: [{ value: 'condition1' }] } as UpdateAdditionalConditionDataRequest,
+      'joebloggs'
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/additional-conditions/condition/2', data: { data: [{ value: 'condition1' }] } },
+      'joebloggs'
+    )
+  })
+
+  it('Update licence status', async () => {
+    await licenceApiClient.updateLicenceStatus('1', { status: 'IN_PROGRESS' } as StatusUpdateRequest, 'joebloggs')
+
+    expect(put).toHaveBeenCalledWith({ path: '/licence/id/1/status', data: { status: 'IN_PROGRESS' } }, 'joebloggs')
+  })
+
+  it('Get licences by staff id and status', async () => {
+    get.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+
+    const result = await licenceApiClient.getLicencesByStaffIdAndStatus(1, [LicenceStatus.IN_PROGRESS], 'joebloggs')
+
+    expect(get).toHaveBeenCalledWith(
+      { path: '/licence/staffId/1', query: { status: [LicenceStatus.IN_PROGRESS] } },
+      'joebloggs'
+    )
+    expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
+  })
+
+  it('Match Licences', async () => {
+    get.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+
+    const result = await licenceApiClient.matchLicences(
+      [LicenceStatus.IN_PROGRESS],
+      ['MDI'],
+      [1],
+      ['ABC1234'],
+      'conditionalReleaseDate',
+      'DESC',
+      'joebloggs'
+    )
+
+    expect(get).toHaveBeenCalledWith(
+      {
+        path: '/licence/match',
+        query: {
+          prison: ['MDI'],
+          status: [LicenceStatus.IN_PROGRESS],
+          staffId: [1],
+          nomisId: ['ABC1234'],
+          sortBy: 'conditionalReleaseDate',
+          sortOrder: 'DESC',
+        },
+      },
+      'joebloggs'
+    )
+    expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
+  })
+
+  it('Batch activate licences', async () => {
+    await licenceApiClient.batchActivateLicences([123, 321])
+
+    expect(post).toHaveBeenCalledWith({ path: '/licence/activate-licences', data: [123, 321] })
+  })
+})
