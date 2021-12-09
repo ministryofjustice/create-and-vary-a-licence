@@ -2,6 +2,7 @@ import { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
+import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
 import ApprovalCaseRoutes from './handlers/approvalCases'
 import ApprovalViewRoutes from './handlers/approvalView'
@@ -15,10 +16,21 @@ export default function Index({ licenceService }: Services): Router {
   const routePrefix = (path: string) => `/licence/approve${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), fetchLicence(licenceService), asyncMiddleware(handler))
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_DM']),
+      fetchLicence(licenceService),
+      asyncMiddleware(handler)
+    )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(routePrefix(path), fetchLicence(licenceService), validationMiddleware(type), asyncMiddleware(handler))
+    router.post(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_DM']),
+      fetchLicence(licenceService),
+      validationMiddleware(type),
+      asyncMiddleware(handler)
+    )
 
   const approvalCasesHandler = new ApprovalCaseRoutes(licenceService)
   const approvalViewHandler = new ApprovalViewRoutes(licenceService)

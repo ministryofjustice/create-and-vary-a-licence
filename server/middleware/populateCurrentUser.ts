@@ -57,7 +57,8 @@ export default function populateCurrentUser(userService: UserService): RequestHa
             cvlUser.telephoneNumber = probationUser?.telephoneNumber
             cvlUser.probationArea = probationUser?.probationArea?.code
             cvlUser.probationAreaDescription = probationUser?.probationArea?.description
-            // TODO: Flesh out the need for teams, LDUs, PDUs - if needed later
+            cvlUser.probationTeams = probationUser?.teams?.map(team => team.code)
+            cvlUser.probationLduCodes = probationUser?.teams?.map(team => team.localDeliveryUnit.code)
           } else {
             // Assemble basic user information from hmpps-auth
             const authUser = await userService.getAuthUser(token)
@@ -78,7 +79,7 @@ export default function populateCurrentUser(userService: UserService): RequestHa
             }
           }
 
-          // Configure whether to use QR codes on licences produced
+          // Configure whether to use QR codes on licences produced by this user
           res.locals.qrCodesEnabled = config.qrCodesEnabled
 
           // Setup the user's session and res.locals

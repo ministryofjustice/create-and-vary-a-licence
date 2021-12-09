@@ -2,6 +2,7 @@ import { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
+import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
 import CaseloadRoutes from './handlers/caseload'
 import InitialMeetingNameRoutes from './handlers/initialMeetingName'
@@ -41,9 +42,21 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
    * to explicitly inject the licence data into their individual view contexts.
    */
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), fetchLicence(licenceService), asyncMiddleware(handler))
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      fetchLicence(licenceService),
+      asyncMiddleware(handler)
+    )
+
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(routePrefix(path), fetchLicence(licenceService), validationMiddleware(type), asyncMiddleware(handler))
+    router.post(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      fetchLicence(licenceService),
+      validationMiddleware(type),
+      asyncMiddleware(handler)
+    )
 
   const caseloadHandler = new CaseloadRoutes(licenceService, caseloadService)
   const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)

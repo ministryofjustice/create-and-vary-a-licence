@@ -19,6 +19,10 @@ export default function setUpAuth(): Router {
     return res.render('pages/autherror')
   })
 
+  router.get('/access-denied', (req, res) => {
+    return res.render('pages/accessDenied')
+  })
+
   router.get('/login', passport.authenticate('oauth2'))
 
   router.get('/login/callback', (req, res, next) =>
