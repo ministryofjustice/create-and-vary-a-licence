@@ -27,7 +27,7 @@ describe('Token Store', () => {
   it('Token for user is returned from redis is exists', async () => {
     redisClient.set('joebloggs', 'saved token')
 
-    const token = await tokenStore.getAuthToken('joebloggs')
+    const token = await tokenStore.getSystemToken('joebloggs')
 
     expect(token).toEqual('saved token')
   })
@@ -42,7 +42,7 @@ describe('Token Store', () => {
         expires_in: 2000,
       })
 
-    const token = await tokenStore.getAuthToken('joebloggs')
+    const token = await tokenStore.getSystemToken('joebloggs')
 
     expect(token).toEqual('generated user token')
     expect(nock.isDone()).toBe(true)
@@ -58,7 +58,7 @@ describe('Token Store', () => {
         expires_in: 2000,
       })
 
-    const token = await tokenStore.getAuthToken()
+    const token = await tokenStore.getSystemToken()
 
     expect(token).toEqual('generated system token')
     expect(nock.isDone()).toBe(true)

@@ -5,8 +5,8 @@ export default class ApprovalCaseRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { username, prisonCaseload } = res.locals.user
-    const cases = await this.licenceService.getLicencesForApproval(username, prisonCaseload)
+    const { user } = res.locals
+    const cases = await this.licenceService.getLicencesForApproval(user)
     res.render('pages/approve/cases', { cases })
   }
 

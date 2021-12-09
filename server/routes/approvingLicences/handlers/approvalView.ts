@@ -20,16 +20,16 @@ export default class ApprovalViewRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const { username, displayName } = res.locals.user
+    const { user } = res.locals
     const { licenceId, result } = req.body
     switch (result) {
       case 'reject': {
-        await this.licenceService.updateStatus(licenceId, LicenceStatus.REJECTED, username)
+        await this.licenceService.updateStatus(licenceId, LicenceStatus.REJECTED, user)
         res.redirect(`/licence/approve/id/${licenceId}/confirm-rejected`)
         break
       }
       case 'approve': {
-        await this.licenceService.updateStatus(licenceId, LicenceStatus.APPROVED, username, displayName)
+        await this.licenceService.updateStatus(licenceId, LicenceStatus.APPROVED, user)
         res.redirect(`/licence/approve/id/${licenceId}/confirm-approved`)
         break
       }

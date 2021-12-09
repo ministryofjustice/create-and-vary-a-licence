@@ -40,6 +40,11 @@ interface StreamRequest {
   errorLogger?: (e: UnsanitisedError) => void
 }
 
+interface SignedWithMethod {
+  token?: string
+  username?: string
+}
+
 export default class HmppsRestClient {
   private agent: Agent
 
@@ -52,9 +57,9 @@ export default class HmppsRestClient {
 
   async get(
     { path = null, query = {}, headers = {}, responseType = '', raw = false }: GetRequest,
-    username?: string
+    signedWithMethod?: SignedWithMethod
   ): Promise<unknown> {
-    const token = await this.tokenStore.getAuthToken(username)
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
     logger.info(`Get using admin client credentials: calling ${this.name}: ${path}?${querystring.stringify(query)}`)
     try {
@@ -66,7 +71,7 @@ export default class HmppsRestClient {
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .query(query)
-        .auth(token, { type: 'bearer' })
+        .auth(signedWith, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
         .timeout(this.apiConfig.timeout)
@@ -81,9 +86,9 @@ export default class HmppsRestClient {
 
   async post(
     { path = null, headers = {}, responseType = '', data = {}, raw = false }: PostRequest,
-    username?: string
+    signedWithMethod?: SignedWithMethod
   ): Promise<unknown> {
-    const token = await this.tokenStore.getAuthToken(username)
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
     logger.info(`Post using admin client credentials: calling ${this.name}: ${path}`)
     try {
@@ -95,7 +100,7 @@ export default class HmppsRestClient {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .auth(token, { type: 'bearer' })
+        .auth(signedWith, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
         .timeout(this.apiConfig.timeout)
@@ -110,9 +115,9 @@ export default class HmppsRestClient {
 
   async put(
     { path = null, headers = {}, responseType = '', data = {}, raw = false }: PutRequest,
-    username?: string
+    signedWithMethod?: SignedWithMethod
   ): Promise<unknown> {
-    const token = await this.tokenStore.getAuthToken(username)
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
     logger.info(`Put using admin client credentials: calling ${this.name}: ${path}`)
     try {
@@ -124,7 +129,7 @@ export default class HmppsRestClient {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .auth(token, { type: 'bearer' })
+        .auth(signedWith, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
         .timeout(this.apiConfig.timeout)
@@ -137,15 +142,15 @@ export default class HmppsRestClient {
     }
   }
 
-  async stream({ path = null, headers = {} }: StreamRequest, username?: string): Promise<unknown> {
-    const token = await this.tokenStore.getAuthToken(username)
+  async stream({ path = null, headers = {} }: StreamRequest, signedWithMethod?: SignedWithMethod): Promise<unknown> {
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
     logger.info(`Get using admin client credentials: calling ${this.name}: ${path}`)
     return new Promise((resolve, reject) => {
       superagent
         .get(`${this.apiConfig.url}${path}`)
         .agent(this.agent)
-        .auth(token, { type: 'bearer' })
+        .auth(signedWith, { type: 'bearer' })
         .retry(2, (err, res) => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic

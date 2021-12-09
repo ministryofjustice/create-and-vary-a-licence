@@ -18,9 +18,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       params: {
         licenceId: '1',
       },
-      user: {
-        username: 'joebloggs',
-      },
       flash: jest.fn(),
     } as unknown as Request
 
@@ -28,6 +25,9 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       render: jest.fn(),
       redirect: jest.fn(),
       locals: {
+        user: {
+          username: 'joebloggs',
+        },
         licence: {
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
@@ -76,7 +76,9 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
     it('should call the licence API to update the status of the licence', async () => {
       await handler.POST(req, res)
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.SUBMITTED, 'joebloggs')
+      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.SUBMITTED, {
+        username: 'joebloggs',
+      })
     })
 
     it('should redirect to the confirmation page', async () => {

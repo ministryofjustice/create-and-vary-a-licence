@@ -8,6 +8,7 @@ import type {
   PrisonInformation,
   HomeDetentionCurfew,
 } from '../@types/prisonApiClientTypes'
+import { User } from '../@types/CvlUserDetails'
 
 export default class PrisonApiClient extends RestClient {
   constructor() {
@@ -15,69 +16,75 @@ export default class PrisonApiClient extends RestClient {
   }
 
   // Streamed - for embedding in HTML pages
-  async getPrisonerImage(nomsId: string, username: string): Promise<Readable> {
+  async getPrisonerImage(nomsId: string, user: User): Promise<Readable> {
     return (await this.stream(
       {
         path: `/api/bookings/offenderNo/${nomsId}/image/data`,
       },
-      username
+      { username: user.username }
     )) as Promise<Readable>
   }
 
   // Data - for pulling the base64 JPEG image for an offender to embed in PDFs
-  async getPrisonerImageData(nomsId: string, username: string): Promise<Buffer> {
+  async getPrisonerImageData(nomsId: string, user: User): Promise<Buffer> {
     return (await this.get(
       {
         path: `/api/bookings/offenderNo/${nomsId}/image/data`,
         responseType: 'image/jpeg',
       },
-      username
+      { username: user.username }
     )) as Promise<Buffer>
   }
 
-  async getPrisonerDetail(nomsId: string, username: string): Promise<PrisonApiPrisoner> {
-    return (await this.get({ path: `/api/offenders/${nomsId}` }, username)) as Promise<PrisonApiPrisoner>
+  async getPrisonerDetail(nomsId: string, user: User): Promise<PrisonApiPrisoner> {
+    return (await this.get(
+      { path: `/api/offenders/${nomsId}` },
+      { username: user.username }
+    )) as Promise<PrisonApiPrisoner>
   }
 
-  async getPrisonInformation(prisonId: string, username: string): Promise<PrisonInformation> {
-    return (await this.get({ path: `/api/agencies/prison/${prisonId}` }, username)) as Promise<PrisonInformation>
+  async getPrisonInformation(prisonId: string, user: User): Promise<PrisonInformation> {
+    return (await this.get(
+      { path: `/api/agencies/prison/${prisonId}` },
+      { username: user.username }
+    )) as Promise<PrisonInformation>
   }
 
   // TODO: No longer used - leave as might use in future check
-  async getLatestHdcStatus(bookingId: string, username: string): Promise<HomeDetentionCurfew> {
+  async getLatestHdcStatus(bookingId: string, user: User): Promise<HomeDetentionCurfew> {
     return (await this.get(
       {
         path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,
       },
-      username
+      { username: user.username }
     )) as Promise<HomeDetentionCurfew>
   }
 
-  async getLatestHdcStatusBatch(bookingIds: number[], username: string): Promise<HomeDetentionCurfew[]> {
+  async getLatestHdcStatusBatch(bookingIds: number[], user: User): Promise<HomeDetentionCurfew[]> {
     return (await this.post(
       {
         path: `/api/offender-sentences/home-detention-curfews/latest`,
         data: bookingIds,
       },
-      username
+      { username: user.username }
     )) as Promise<HomeDetentionCurfew[]>
   }
 
-  async getUser(username: string): Promise<PrisonApiUserDetail> {
+  async getUser(user: User): Promise<PrisonApiUserDetail> {
     return (await this.get(
       {
         path: '/api/users/me',
       },
-      username
+      { token: user.token }
     )) as Promise<PrisonApiUserDetail>
   }
 
-  async getUserCaseloads(username: string): Promise<PrisonApiCaseload[]> {
+  async getUserCaseloads(user: User): Promise<PrisonApiCaseload[]> {
     return (await this.get(
       {
         path: '/api/users/me/caseLoads',
       },
-      username
+      { token: user.token }
     )) as Promise<PrisonApiCaseload[]>
   }
 }

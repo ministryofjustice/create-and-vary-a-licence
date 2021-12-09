@@ -29,7 +29,7 @@ export default class TokenStore {
     this.setRedisAsync = promisify(redisClient.set).bind(redisClient)
   }
 
-  public getAuthToken = async (username?: string): Promise<string> => {
+  public getSystemToken = async (username?: string): Promise<string> => {
     const key = username || '%ANONYMOUS%'
     const token = await this.getToken(key)
     if (token) {

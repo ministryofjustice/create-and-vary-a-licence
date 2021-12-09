@@ -1,14 +1,15 @@
 import PrisonRegisterApiClient from '../data/prisonRegisterApiClient'
 import { PrisonDto } from '../@types/prisonRegisterTypes'
+import { User } from '../@types/CvlUserDetails'
 
 export default class PrisonRegisterService {
   constructor(private readonly prisonRegisterApiClient: PrisonRegisterApiClient) {}
 
-  async getPrisonDescription(username: string, agencyId: string): Promise<PrisonDto> {
-    return this.prisonRegisterApiClient.getPrisonDescription(agencyId, username)
+  async getPrisonDescription(agencyId: string, user: User): Promise<PrisonDto> {
+    return this.prisonRegisterApiClient.getPrisonDescription(agencyId, user)
   }
 
-  async getPrisonOmuContactEmail(username: string, agencyId: string): Promise<string> {
-    return this.prisonRegisterApiClient.getPrisonOmuContactEmail(agencyId, username)
+  async getPrisonOmuContactEmail(agencyId: string, user: User): Promise<string> {
+    return this.prisonRegisterApiClient.getPrisonOmuContactEmail(agencyId, user)
   }
 }

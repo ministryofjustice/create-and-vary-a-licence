@@ -14,97 +14,108 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import LicenceStatus from '../enumeration/licenceStatus'
+import { User } from '../@types/CvlUserDetails'
 
 export default class LicenceApiClient extends RestClient {
   constructor() {
     super('Licence API', config.apis.licenceApi as ApiConfig)
   }
 
-  async createLicence(licence: CreateLicenceRequest, username: string): Promise<LicenceSummary> {
+  async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceSummary> {
     return (await this.post(
       {
         path: `/licence/create`,
         data: licence,
       },
-      username
+      { username: user.username }
     )) as Promise<LicenceSummary>
   }
 
-  async getLicenceById(licenceId: string, username: string): Promise<Licence> {
-    return (await this.get({ path: `/licence/id/${licenceId}` }, username)) as Promise<Licence>
+  async getLicenceById(licenceId: string, user: User): Promise<Licence> {
+    return (await this.get({ path: `/licence/id/${licenceId}` }, { username: user.username })) as Promise<Licence>
   }
 
   async updateAppointmentPerson(
     licenceId: string,
     appointmentPerson: AppointmentPersonRequest,
-    username: string
+    user: User
   ): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/appointmentPerson`, data: appointmentPerson }, username)
+    await this.put(
+      { path: `/licence/id/${licenceId}/appointmentPerson`, data: appointmentPerson },
+      { username: user.username }
+    )
   }
 
-  async updateAppointmentTime(
-    licenceId: string,
-    appointmentTime: AppointmentTimeRequest,
-    username: string
-  ): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/appointmentTime`, data: appointmentTime }, username)
+  async updateAppointmentTime(licenceId: string, appointmentTime: AppointmentTimeRequest, user: User): Promise<void> {
+    await this.put(
+      { path: `/licence/id/${licenceId}/appointmentTime`, data: appointmentTime },
+      { username: user.username }
+    )
   }
 
   async updateAppointmentAddress(
     licenceId: string,
     appointmentAddress: AppointmentAddressRequest,
-    username: string
+    user: User
   ): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/appointment-address`, data: appointmentAddress }, username)
+    await this.put(
+      { path: `/licence/id/${licenceId}/appointment-address`, data: appointmentAddress },
+      { username: user.username }
+    )
   }
 
-  async updateContactNumber(licenceId: string, contactNumber: ContactNumberRequest, username: string): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/contact-number`, data: contactNumber }, username)
+  async updateContactNumber(licenceId: string, contactNumber: ContactNumberRequest, user: User): Promise<void> {
+    await this.put(
+      { path: `/licence/id/${licenceId}/contact-number`, data: contactNumber },
+      { username: user.username }
+    )
   }
 
   async updateBespokeConditions(
     licenceId: string,
     bespokeConditions: BespokeConditionsRequest,
-    username: string
+    user: User
   ): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/bespoke-conditions`, data: bespokeConditions }, username)
+    await this.put(
+      { path: `/licence/id/${licenceId}/bespoke-conditions`, data: bespokeConditions },
+      { username: user.username }
+    )
   }
 
   async updateAdditionalConditions(
     licenceId: string,
     additionalConditions: AdditionalConditionsRequest,
-    username: string
+    user: User
   ): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/additional-conditions`, data: additionalConditions }, username)
+    await this.put(
+      { path: `/licence/id/${licenceId}/additional-conditions`, data: additionalConditions },
+      { username: user.username }
+    )
   }
 
   async updateAdditionalConditionData(
     licenceId: string,
     additionalConditionId: string,
     additionalConditionData: UpdateAdditionalConditionDataRequest,
-    username: string
+    user: User
   ): Promise<void> {
     await this.put(
       {
         path: `/licence/id/${licenceId}/additional-conditions/condition/${additionalConditionId}`,
         data: additionalConditionData,
       },
-      username
+      { username: user.username }
     )
   }
 
-  async updateLicenceStatus(licenceId: string, statusRequest: StatusUpdateRequest, username: string): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest }, username)
+  async updateLicenceStatus(licenceId: string, statusRequest: StatusUpdateRequest, user: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest }, { username: user.username })
   }
 
-  async getLicencesByStaffIdAndStatus(
-    staffId: number,
-    statuses: LicenceStatus[],
-    username: string
-  ): Promise<LicenceSummary[]> {
+  async getLicencesByStaffIdAndStatus(statuses: LicenceStatus[], user: User): Promise<LicenceSummary[]> {
     return (await this.get(
-      { path: `/licence/staffId/${staffId}`, query: { status: statuses } },
-      username
+      { path: `/licence/staffId/${user.deliusStaffIdentifier}`, query: { status: statuses } },
+      { username: user.username }
     )) as LicenceSummary[]
   }
 
@@ -115,7 +126,7 @@ export default class LicenceApiClient extends RestClient {
     nomisIds: string[] = [],
     sortBy?: string,
     sortOrder?: string,
-    username?: string
+    user?: User
   ): Promise<LicenceSummary[]> {
     return (await this.get(
       {
@@ -129,7 +140,7 @@ export default class LicenceApiClient extends RestClient {
           sortOrder: sortOrder || undefined,
         },
       },
-      username
+      { username: user?.username }
     )) as LicenceSummary[]
   }
 

@@ -3,6 +3,7 @@ import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
 import CommunityService from './communityService'
 import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
+import { User } from '../@types/CvlUserDetails'
 
 export default class UserService {
   constructor(
@@ -11,23 +12,23 @@ export default class UserService {
     private readonly communityService: CommunityService
   ) {}
 
-  async getAuthUser(username: string): Promise<AuthUserDetails> {
-    return this.hmppsAuthClient.getUser(username)
+  async getAuthUser(user: User): Promise<AuthUserDetails> {
+    return this.hmppsAuthClient.getUser(user)
   }
 
-  async getAuthUserEmail(username: string): Promise<AuthUserEmail> {
-    return this.hmppsAuthClient.getUserEmail(username)
+  async getAuthUserEmail(user: User): Promise<AuthUserEmail> {
+    return this.hmppsAuthClient.getUserEmail(user)
   }
 
-  async getPrisonUser(username: string): Promise<PrisonApiUserDetail> {
-    return this.prisonApiClient.getUser(username)
+  async getPrisonUser(user: User): Promise<PrisonApiUserDetail> {
+    return this.prisonApiClient.getUser(user)
   }
 
-  async getPrisonUserCaseloads(username: string): Promise<PrisonApiCaseload[]> {
-    return this.prisonApiClient.getUserCaseloads(username)
+  async getPrisonUserCaseloads(user: User): Promise<PrisonApiCaseload[]> {
+    return this.prisonApiClient.getUserCaseloads(user)
   }
 
-  async getProbationUser(deliusUsername: string): Promise<CommunityApiStaffDetails> {
-    return this.communityService.getStaffDetail(deliusUsername)
+  async getProbationUser(user: User): Promise<CommunityApiStaffDetails> {
+    return this.communityService.getStaffDetail(user)
   }
 }

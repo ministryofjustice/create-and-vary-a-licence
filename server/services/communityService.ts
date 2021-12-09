@@ -2,6 +2,7 @@ import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
 import { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
 import { CommunityApiManagedOffender, CommunityApiStaffDetails } from '../@types/communityClientTypes'
+import { User } from '../@types/CvlUserDetails'
 
 export default class CommunityService {
   constructor(
@@ -9,8 +10,8 @@ export default class CommunityService {
     private readonly probationSearchApiClient: ProbationSearchApiClient
   ) {}
 
-  async getStaffDetail(deliusUsername: string): Promise<CommunityApiStaffDetails> {
-    return this.communityApiClient.getStaffDetailByUsername(deliusUsername)
+  async getStaffDetail(user: User): Promise<CommunityApiStaffDetails> {
+    return this.communityApiClient.getStaffDetailByUsername(user)
   }
 
   async getManagedOffenders(staffIdentifier: number): Promise<CommunityApiManagedOffender[]> {

@@ -2,9 +2,8 @@ import { Request, Response } from 'express'
 
 import EditQuestionRoutes from './editQuestion'
 import LicenceService from '../../../services/licenceService'
-import Mocked = jest.Mocked
 
-const licenceService = new LicenceService(null, null, null) as Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Edit Licence Question', () => {
   const handler = new EditQuestionRoutes(licenceService)
@@ -59,7 +58,10 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
         },
       } as unknown as Request
       await handler.POST(req, res)
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', 'IN_PROGRESS', 'joebloggs', 'Joe Bloggs')
+      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', 'IN_PROGRESS', {
+        username: 'joebloggs',
+        displayName: 'Joe Bloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
 

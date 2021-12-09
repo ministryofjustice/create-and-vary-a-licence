@@ -4,7 +4,7 @@ import { ApiConfig } from '../config'
 
 jest.mock('./tokenStore', () => {
   return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getAuthToken: () => 'token' }
+    return { TokenStore: () => '', getSystemToken: () => 'token' }
   })
 })
 
@@ -46,6 +46,26 @@ describe('Hmpps Rest Client tests', () => {
         query: { query1: 'value1' },
         headers: { header1: 'headerValue1' },
       })
+
+      expect(nock.isDone()).toBe(true)
+      expect(result).toEqual({ success: true })
+    })
+
+    it('Should use the supplied token as signature', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer user token', header1: 'headerValue1' },
+      })
+        .get('/test?query1=value1')
+        .reply(200, { success: true })
+
+      const result = await restClient.get(
+        {
+          path: '/test',
+          query: { query1: 'value1' },
+          headers: { header1: 'headerValue1' },
+        },
+        { token: 'user token', username: 'joebloggs' }
+      )
 
       expect(nock.isDone()).toBe(true)
       expect(result).toEqual({ success: true })
@@ -118,6 +138,28 @@ describe('Hmpps Rest Client tests', () => {
       expect(result).toEqual({ success: true })
     })
 
+    it('Should the supplied token as signature', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer user token', header1: 'headerValue1' },
+      })
+        .post('/test', { testData1: 'testValue1' })
+        .reply(200, { success: true })
+
+      const result = await restClient.post(
+        {
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+          data: {
+            testData1: 'testValue1',
+          },
+        },
+        { token: 'user token', username: 'joebloggs' }
+      )
+
+      expect(nock.isDone()).toBe(true)
+      expect(result).toEqual({ success: true })
+    })
+
     it('Should throw error when bad response', async () => {
       nock('http://localhost:8080', {
         reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
@@ -182,6 +224,28 @@ describe('Hmpps Rest Client tests', () => {
           testData1: 'testValue1',
         },
       })
+
+      expect(nock.isDone()).toBe(true)
+      expect(result).toEqual({ success: true })
+    })
+
+    it('Should return response body data only', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer user token', header1: 'headerValue1' },
+      })
+        .put('/test', { testData1: 'testValue1' })
+        .reply(200, { success: true })
+
+      const result = await restClient.put(
+        {
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+          data: {
+            testData1: 'testValue1',
+          },
+        },
+        { token: 'user token', username: 'joebloggs' }
+      )
 
       expect(nock.isDone()).toBe(true)
       expect(result).toEqual({ success: true })

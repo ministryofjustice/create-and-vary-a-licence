@@ -1,5 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
+import { User } from '../@types/CvlUserDetails'
 
 export type AuthUserDetails = {
   name: string
@@ -21,11 +22,11 @@ export default class HmppsAuthClient extends RestClient {
     super('HMPPS Auth Client', config.apis.hmppsAuth as ApiConfig)
   }
 
-  async getUser(username: string): Promise<AuthUserDetails> {
-    return (await this.get({ path: '/api/user/me' }, username)) as Promise<AuthUserDetails>
+  async getUser(user: User): Promise<AuthUserDetails> {
+    return (await this.get({ path: '/api/user/me' }, { token: user.token })) as Promise<AuthUserDetails>
   }
 
-  async getUserEmail(username: string): Promise<AuthUserEmail> {
-    return (await this.get({ path: '/api/me/email' }, username)) as Promise<AuthUserEmail>
+  async getUserEmail(user: User): Promise<AuthUserEmail> {
+    return (await this.get({ path: '/api/me/email' }, { token: user.token })) as Promise<AuthUserEmail>
   }
 }

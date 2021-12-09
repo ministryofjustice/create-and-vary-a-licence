@@ -1,6 +1,7 @@
 import HmppsRestClient from './hmppsRestClient'
 import PrisonerSearchApiClient from './prisonerSearchApiClient'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
+import { User } from '../@types/CvlUserDetails'
 
 jest.mock('./tokenStore', () => {
   return jest.fn().mockImplementation(() => {
@@ -26,12 +27,12 @@ describe('Prisoner Search Api client tests', () => {
 
     const result = await prisonerSearchApiClient.searchPrisoners(
       { lastName: 'Bloggs' } as PrisonerSearchCriteria,
-      'joebloggs'
+      { username: 'joebloggs' } as User
     )
 
     expect(post).toHaveBeenCalledWith(
       { path: '/prisoner-search/match-prisoners', data: { lastName: 'Bloggs' } },
-      'joebloggs'
+      { username: 'joebloggs' }
     )
     expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
   })
@@ -39,11 +40,13 @@ describe('Prisoner Search Api client tests', () => {
   it('Search Prisoner by nomis ids', async () => {
     post.mockResolvedValue([{ firstName: 'Joe', lastName: 'Bloggs' } as Prisoner])
 
-    const result = await prisonerSearchApiClient.searchPrisonersByNomsIds({ prisonerNumbers: ['ABC1234'] }, 'joebloggs')
+    const result = await prisonerSearchApiClient.searchPrisonersByNomsIds({ prisonerNumbers: ['ABC1234'] }, {
+      username: 'joebloggs',
+    } as User)
 
     expect(post).toHaveBeenCalledWith(
       { path: '/prisoner-search/prisoner-numbers', data: { prisonerNumbers: ['ABC1234'] } },
-      'joebloggs'
+      { username: 'joebloggs' }
     )
     expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
   })

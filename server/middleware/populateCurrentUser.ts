@@ -26,25 +26,25 @@ export default function populateCurrentUser(userService: UserService): RequestHa
     try {
       // Populate the currentUser details in the session if there is a token present and no user details
       if (res.locals.user?.token) {
-        const { username, authSource } = res.locals.user
+        const { user } = res.locals
         if (!req.session?.currentUser) {
-          logger.info(`populateCurrentUser - populating ${authSource} user in session`)
+          logger.info(`populateCurrentUser - populating ${user.authSource} user in session`)
           const cvlUser = new CvlUserDetails()
 
-          if (authSource === 'nomis') {
+          if (user.authSource === 'nomis') {
             // Assemble user information from Nomis via prison API
             const [prisonUser, prisonUserCaseload] = await Promise.all([
-              userService.getPrisonUser(username),
-              userService.getPrisonUserCaseloads(username),
+              userService.getPrisonUser(user),
+              userService.getPrisonUserCaseloads(user),
             ])
             cvlUser.name = `${prisonUser.firstName} ${prisonUser.lastName}`
             cvlUser.displayName = convertToTitleCase(cvlUser.name)
             cvlUser.activeCaseload = prisonUser.activeCaseLoadId
             cvlUser.nomisStaffId = prisonUser.staffId
             cvlUser.prisonCaseload = removeDuplicates(prisonUserCaseload.map(cs => cs.caseLoadId))
-          } else if (authSource === 'delius') {
+          } else if (user.authSource === 'delius') {
             // Assemble user information from Delius via community API
-            const probationUser = await userService.getProbationUser(username)
+            const probationUser = await userService.getProbationUser(user)
 
             // TODO: Left in for now - to confirm operation in DEV against delius-wiremock and community API
             logger.info(`Probation user = ${JSON.stringify(probationUser)}`)
@@ -60,7 +60,7 @@ export default function populateCurrentUser(userService: UserService): RequestHa
             // TODO: Flesh out the need for teams, LDUs, PDUs - if needed later
           } else {
             // Assemble basic user information from hmpps-auth
-            const authUser = await userService.getAuthUser(username)
+            const authUser = await userService.getAuthUser(user)
             if (authUser) {
               cvlUser.name = authUser?.name
               cvlUser.displayName = convertToTitleCase(cvlUser.name)
@@ -71,7 +71,7 @@ export default function populateCurrentUser(userService: UserService): RequestHa
           if (!cvlUser?.emailAddress) {
             try {
               // Get the user's email, which may fail (unverified returns a 204) - catch and swallow the error
-              const authEmail = await userService.getAuthUserEmail(username)
+              const authEmail = await userService.getAuthUserEmail(user)
               cvlUser.emailAddress = authEmail ? authEmail.email : null
             } catch (error) {
               logger.info(`Email unverified in auth? - status ${error?.statusCode} for ${cvlUser.displayName}`)

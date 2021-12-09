@@ -20,8 +20,7 @@ export default class CheckAnswersRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { username } = req.user
-    const { licence } = res.locals
+    const { licence, user } = res.locals
 
     const errors = await this.validateLicence(licence)
     if (errors.length > 0) {
@@ -29,7 +28,7 @@ export default class CheckAnswersRoutes {
       return res.redirect('back')
     }
 
-    await this.licenceService.updateStatus(licenceId, LicenceStatus.SUBMITTED, username)
+    await this.licenceService.updateStatus(licenceId, LicenceStatus.SUBMITTED, user)
     return res.redirect(`/licence/create/id/${licenceId}/confirmation`)
   }
 

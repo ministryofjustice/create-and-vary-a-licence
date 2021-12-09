@@ -6,6 +6,7 @@ import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientT
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
 import HdcStatus from '../@types/HdcStatus'
+import { User } from '../@types/CvlUserDetails'
 
 export default class PrisonerService {
   constructor(
@@ -14,15 +15,15 @@ export default class PrisonerService {
   ) {}
 
   // For streaming into HTML templates directly
-  async getPrisonerImage(username: string, nomsId: string): Promise<Readable> {
-    return this.prisonApiClient.getPrisonerImage(nomsId, username)
+  async getPrisonerImage(nomsId: string, user: User): Promise<Readable> {
+    return this.prisonApiClient.getPrisonerImage(nomsId, user)
   }
 
   // For embedding into PDF documents as base64 jpeg or png data string
-  async getPrisonerImageData(username: string, nomsId: string): Promise<string> {
+  async getPrisonerImageData(nomsId: string, user: User): Promise<string> {
     let base64String
     try {
-      const image = await this.prisonApiClient.getPrisonerImageData(nomsId, username)
+      const image = await this.prisonApiClient.getPrisonerImageData(nomsId, user)
       base64String = image.toString('base64')
     } catch (error) {
       logger.info(`No image data found for ${nomsId} - sending placeholder image`)
@@ -32,35 +33,35 @@ export default class PrisonerService {
     return base64String
   }
 
-  async getPrisonerDetail(username: string, nomsId: string): Promise<PrisonApiPrisoner> {
-    return this.prisonApiClient.getPrisonerDetail(nomsId, username)
+  async getPrisonerDetail(nomsId: string, user: User): Promise<PrisonApiPrisoner> {
+    return this.prisonApiClient.getPrisonerDetail(nomsId, user)
   }
 
-  async getPrisonInformation(username: string, prisonId: string): Promise<PrisonInformation> {
-    return this.prisonApiClient.getPrisonInformation(prisonId, username)
+  async getPrisonInformation(prisonId: string, user: User): Promise<PrisonInformation> {
+    return this.prisonApiClient.getPrisonInformation(prisonId, user)
   }
 
-  async searchPrisoners(username: string, prisonerSearchCriteria: PrisonerSearchCriteria): Promise<Prisoner[]> {
-    return this.prisonerSearchApiClient.searchPrisoners(prisonerSearchCriteria, username)
+  async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria, user: User): Promise<Prisoner[]> {
+    return this.prisonerSearchApiClient.searchPrisoners(prisonerSearchCriteria, user)
   }
 
-  async searchPrisonersByNomisIds(username: string, nomisIds: string[]): Promise<Prisoner[]> {
+  async searchPrisonersByNomisIds(nomisIds: string[], user: User): Promise<Prisoner[]> {
     if (nomisIds.length < 1) {
       return []
     }
     const prisonerSearchCriteria = {
       prisonerNumbers: nomisIds,
     }
-    return this.prisonerSearchApiClient.searchPrisonersByNomsIds(prisonerSearchCriteria, username)
+    return this.prisonerSearchApiClient.searchPrisonersByNomsIds(prisonerSearchCriteria, user)
   }
 
-  async getHdcStatuses(username: string, offenders: Prisoner[]): Promise<HdcStatus[]> {
+  async getHdcStatuses(offenders: Prisoner[], user: User): Promise<HdcStatus[]> {
     const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
     logger.info(`getHdcStatus for bookingIds = ${JSON.stringify(bookingIds)}`)
     if (bookingIds.length === 0) {
       return []
     }
-    const hdcList = await this.prisonApiClient.getLatestHdcStatusBatch(bookingIds, username)
+    const hdcList = await this.prisonApiClient.getLatestHdcStatusBatch(bookingIds, user)
     return hdcList.map(h => {
       const hdcEligibilityDate = offenders.find(
         o => parseInt(o?.bookingId, 10) === h?.bookingId

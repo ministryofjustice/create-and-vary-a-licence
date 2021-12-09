@@ -58,11 +58,9 @@ describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
     it('should redirect to the check answers page if fromReview flag is set', async () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
-      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(
-        1,
-        formBespokeConditions,
-        res.locals.user.username
-      )
+      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(1, formBespokeConditions, {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
 
@@ -70,11 +68,9 @@ describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
       res.locals.licence.typeCode = 'PSS'
 
       await handler.POST(req, res)
-      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(
-        1,
-        formBespokeConditions,
-        res.locals.user.username
-      )
+      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(1, formBespokeConditions, {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
     })
 
@@ -82,11 +78,9 @@ describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
       res.locals.licence.typeCode = 'AP_PSS'
 
       await handler.POST(req, res)
-      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(
-        1,
-        formBespokeConditions,
-        res.locals.user.username
-      )
+      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(1, formBespokeConditions, {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
     })
 
@@ -94,11 +88,9 @@ describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
       res.locals.licence.typeCode = 'AP'
 
       await handler.POST(req, res)
-      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(
-        1,
-        formBespokeConditions,
-        res.locals.user.username
-      )
+      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(1, formBespokeConditions, {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })

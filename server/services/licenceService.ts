@@ -33,6 +33,7 @@ import AdditionalConditions from '../routes/creatingLicences/types/additionalCon
 import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 import LicenceType from '../enumeration/licenceType'
 import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
+import { User } from '../@types/CvlUserDetails'
 
 export default class LicenceService {
   constructor(
@@ -41,12 +42,12 @@ export default class LicenceService {
     private readonly communityService: CommunityService
   ) {}
 
-  async createLicence(prisonerNumber: string, username: string): Promise<LicenceSummary> {
-    const nomisRecord = await this.prisonerService.getPrisonerDetail(username, prisonerNumber)
+  async createLicence(prisonerNumber: string, user: User): Promise<LicenceSummary> {
+    const nomisRecord = await this.prisonerService.getPrisonerDetail(prisonerNumber, user)
     const [staffDetail, deliusRecord, prisonInformation] = await Promise.all([
-      this.communityService.getStaffDetail(username),
+      this.communityService.getStaffDetail(user),
       this.communityService.getProbationer(prisonerNumber),
-      this.prisonerService.getPrisonInformation(username, nomisRecord.agencyId),
+      this.prisonerService.getPrisonInformation(nomisRecord.agencyId, user),
     ])
 
     const offenderManager = deliusRecord.offenderManagers.find(om => om.active)
@@ -100,43 +101,43 @@ export default class LicenceService {
         : [],
     } as CreateLicenceRequest
 
-    return this.licenceApiClient.createLicence(licence, username)
+    return this.licenceApiClient.createLicence(licence, user)
   }
 
-  async getLicence(id: string, username: string): Promise<Licence> {
-    return this.licenceApiClient.getLicenceById(id, username)
+  async getLicence(id: string, user: User): Promise<Licence> {
+    return this.licenceApiClient.getLicenceById(id, user)
   }
 
-  async updateAppointmentPerson(id: string, formData: PersonName, username: string): Promise<void> {
+  async updateAppointmentPerson(id: string, formData: PersonName, user: User): Promise<void> {
     const requestBody = {
       appointmentPerson: formData.contactName,
     } as AppointmentPersonRequest
 
-    return this.licenceApiClient.updateAppointmentPerson(id, requestBody, username)
+    return this.licenceApiClient.updateAppointmentPerson(id, requestBody, user)
   }
 
-  async updateAppointmentTime(id: string, formData: SimpleDateTime, username: string): Promise<void> {
+  async updateAppointmentTime(id: string, formData: SimpleDateTime, user: User): Promise<void> {
     const appointmentTime = simpleDateTimeToJson(formData)
     const requestBody = { appointmentTime } as AppointmentTimeRequest
-    return this.licenceApiClient.updateAppointmentTime(id, requestBody, username)
+    return this.licenceApiClient.updateAppointmentTime(id, requestBody, user)
   }
 
-  async updateAppointmentAddress(id: string, formData: Address, username: string): Promise<void> {
+  async updateAppointmentAddress(id: string, formData: Address, user: User): Promise<void> {
     const appointmentAddress = addressObjectToString(formData)
     const requestBody = { appointmentAddress } as AppointmentAddressRequest
-    return this.licenceApiClient.updateAppointmentAddress(id, requestBody, username)
+    return this.licenceApiClient.updateAppointmentAddress(id, requestBody, user)
   }
 
-  async updateContactNumber(id: string, formData: Telephone, username: string): Promise<void> {
+  async updateContactNumber(id: string, formData: Telephone, user: User): Promise<void> {
     const requestBody = { comTelephone: formData.telephone } as ContactNumberRequest
-    return this.licenceApiClient.updateContactNumber(id, requestBody, username)
+    return this.licenceApiClient.updateContactNumber(id, requestBody, user)
   }
 
   async updateAdditionalConditions(
     id: string,
     conditionType: LicenceType,
     formData: AdditionalConditions,
-    username: string
+    user: User
   ): Promise<void> {
     const requestBody = {
       additionalConditions:
@@ -153,14 +154,14 @@ export default class LicenceService {
       conditionType,
     } as AdditionalConditionsRequest
 
-    return this.licenceApiClient.updateAdditionalConditions(id, requestBody, username)
+    return this.licenceApiClient.updateAdditionalConditions(id, requestBody, user)
   }
 
   async updateAdditionalConditionData(
     licenceId: string,
     additionalConditionId: string,
     formData: unknown,
-    username: string
+    user: User
   ): Promise<void> {
     let sequenceNumber = -1
 
@@ -195,56 +196,43 @@ export default class LicenceService {
         }),
     } as UpdateAdditionalConditionDataRequest
 
-    return this.licenceApiClient.updateAdditionalConditionData(licenceId, additionalConditionId, requestBody, username)
+    return this.licenceApiClient.updateAdditionalConditionData(licenceId, additionalConditionId, requestBody, user)
   }
 
-  async updateBespokeConditions(id: string, formData: BespokeConditions, username: string): Promise<void> {
+  async updateBespokeConditions(id: string, formData: BespokeConditions, user: User): Promise<void> {
     const sanitised = formData.conditions.filter((c: string) => c !== null && c.length > 0)
     const requestBody = { conditions: sanitised } as BespokeConditionsRequest
-    return this.licenceApiClient.updateBespokeConditions(id, requestBody, username)
+    return this.licenceApiClient.updateBespokeConditions(id, requestBody, user)
   }
 
-  async updateStatus(id: string, newStatus: LicenceStatus, username: string, fullName: string = null): Promise<void> {
-    const requestBody = { status: newStatus, username, fullName } as StatusUpdateRequest
-    return this.licenceApiClient.updateLicenceStatus(id, requestBody, username)
+  async updateStatus(id: string, newStatus: LicenceStatus, user: User): Promise<void> {
+    const requestBody = {
+      status: newStatus,
+      username: user.username,
+      fullName: user.displayName,
+    } as StatusUpdateRequest
+    return this.licenceApiClient.updateLicenceStatus(id, requestBody, user)
   }
 
-  async getLicencesByStaffIdAndStatus(
-    staffId: number,
-    statuses: LicenceStatus[],
-    username: string
-  ): Promise<LicenceSummary[]> {
-    return this.licenceApiClient.getLicencesByStaffIdAndStatus(staffId, statuses, username)
+  async getLicencesByStaffIdAndStatus(statuses: LicenceStatus[], user: User): Promise<LicenceSummary[]> {
+    return this.licenceApiClient.getLicencesByStaffIdAndStatus(statuses, user)
   }
 
-  async getLicencesForApproval(username: string, prisons: string[]): Promise<LicenceSummary[]> {
+  async getLicencesForApproval(user: User): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.SUBMITTED.valueOf()]
-    const filteredPrisons = filterCentralCaseload(prisons)
-    return this.licenceApiClient.matchLicences(
-      statuses,
-      filteredPrisons,
-      [],
-      [],
-      'conditionalReleaseDate',
-      null,
-      username
-    )
+    const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
+    return this.licenceApiClient.matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate', null, user)
   }
 
-  async getLicencesForCaseAdmin(
-    username: string,
-    authSource: string,
-    prisons: string[] = [],
-    staffId: number = null
-  ): Promise<LicenceSummary[]> {
+  async getLicencesForCaseAdmin(user: User): Promise<LicenceSummary[]> {
     const statuses = [
       LicenceStatus.ACTIVE.valueOf(),
       LicenceStatus.APPROVED.valueOf(),
       LicenceStatus.REJECTED.valueOf(),
       LicenceStatus.SUBMITTED.valueOf(),
     ]
-    if (authSource === 'nomis') {
-      const filteredPrisons = filterCentralCaseload(prisons)
+    if (user.authSource === 'nomis') {
+      const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
       return this.licenceApiClient.matchLicences(
         statuses,
         filteredPrisons,
@@ -252,11 +240,19 @@ export default class LicenceService {
         [],
         'conditionalReleaseDate',
         null,
-        username
+        user
       )
     }
-    if (authSource === 'delius') {
-      return this.licenceApiClient.matchLicences(statuses, [], [staffId], [], 'conditionalReleaseDate', null, username)
+    if (user.authSource === 'delius') {
+      return this.licenceApiClient.matchLicences(
+        statuses,
+        [],
+        [user.deliusStaffIdentifier],
+        [],
+        'conditionalReleaseDate',
+        null,
+        user
+      )
     }
     return []
   }

@@ -4,12 +4,13 @@ import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
 import CommunityService from './communityService'
 import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
+import { User } from '../@types/CvlUserDetails'
 
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../data/prisonApiClient')
 jest.mock('./communityService')
 
-const token = 'some token'
+const user = { token: 'some token' } as User
 
 describe('User service', () => {
   let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
@@ -27,7 +28,7 @@ describe('User service', () => {
   describe('getAuthUser', () => {
     it('Retrieves user name and active caseload', async () => {
       hmppsAuthClient.getUser.mockResolvedValue({ name: 'john smith', activeCaseLoadId: 'MDI' } as AuthUserDetails)
-      const result = await userService.getAuthUser(token)
+      const result = await userService.getAuthUser(user)
       expect(result.name).toEqual('john smith')
       expect(result.activeCaseLoadId).toEqual('MDI')
       expect(hmppsAuthClient.getUser).toBeCalled()
@@ -35,7 +36,7 @@ describe('User service', () => {
 
     it('Propagates any errors', async () => {
       hmppsAuthClient.getUser.mockRejectedValue(new Error('some error'))
-      await expect(() => userService.getAuthUser(token)).rejects.toThrow('some error')
+      await expect(() => userService.getAuthUser(user)).rejects.toThrow('some error')
       expect(hmppsAuthClient.getUser).toBeCalled()
     })
   })
@@ -47,14 +48,14 @@ describe('User service', () => {
         email: 'js@prison.com',
         verified: true,
       } as AuthUserEmail)
-      const result = await userService.getAuthUserEmail(token)
+      const result = await userService.getAuthUserEmail(user)
       expect(result.email).toEqual('js@prison.com')
       expect(hmppsAuthClient.getUserEmail).toBeCalled()
     })
 
     it('Propagates any errors', async () => {
       hmppsAuthClient.getUserEmail.mockRejectedValue(new Error('some error'))
-      await expect(() => userService.getAuthUserEmail(token)).rejects.toThrow('some error')
+      await expect(() => userService.getAuthUserEmail(user)).rejects.toThrow('some error')
       expect(hmppsAuthClient.getUserEmail).toBeCalled()
     })
   })
@@ -72,7 +73,7 @@ describe('User service', () => {
         staffId: 123,
         username: 'RCHARLES',
       } as PrisonApiUserDetail)
-      const result = await userService.getPrisonUser(token)
+      const result = await userService.getPrisonUser(user)
       expect(result.firstName).toEqual('Robert')
       expect(result.lastName).toEqual('Charles')
       expect(result.staffId).toEqual(123)
@@ -82,7 +83,7 @@ describe('User service', () => {
 
     it('Propagates any errors', async () => {
       prisonApiClient.getUser.mockRejectedValue(new Error('some error'))
-      await expect(() => userService.getPrisonUser(token)).rejects.toThrow('some error')
+      await expect(() => userService.getPrisonUser(user)).rejects.toThrow('some error')
     })
   })
 
@@ -113,7 +114,7 @@ describe('User service', () => {
 
     it('Retrieves prison user caseload details', async () => {
       prisonApiClient.getUserCaseloads.mockResolvedValue(stubbedPrisonCaseloadData)
-      const result = await userService.getPrisonUserCaseloads(token)
+      const result = await userService.getPrisonUserCaseloads(user)
       const activeCaseload = result.map(cs => cs.caseLoadId)
       expect(activeCaseload).toHaveLength(3)
       expect(activeCaseload[0]).toEqual('MDI')
@@ -124,7 +125,7 @@ describe('User service', () => {
 
     it('Propagates any errors', async () => {
       prisonApiClient.getUserCaseloads.mockRejectedValue(new Error('some error'))
-      await expect(() => userService.getPrisonUserCaseloads(token)).rejects.toThrow('some error')
+      await expect(() => userService.getPrisonUserCaseloads(user)).rejects.toThrow('some error')
     })
   })
 
@@ -139,7 +140,7 @@ describe('User service', () => {
         username: 'TestUserNPS',
       } as CommunityApiStaffDetails)
 
-      const result = await userService.getProbationUser('DELIUS_USER')
+      const result = await userService.getProbationUser(user)
 
       expect(result.email).toEqual('test@test.com')
       expect(result.staff.forenames).toEqual('Test test')
@@ -151,7 +152,7 @@ describe('User service', () => {
 
     it('Propagates any errors', async () => {
       communityService.getStaffDetail.mockRejectedValue(new Error('some error'))
-      await expect(() => userService.getProbationUser('DELIUS_USER')).rejects.toThrow('some error')
+      await expect(() => userService.getProbationUser(user)).rejects.toThrow('some error')
     })
   })
 })

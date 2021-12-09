@@ -52,8 +52,11 @@ describe('Route handlers - View and print case list', () => {
 
       licenceService.getLicencesForCaseAdmin.mockResolvedValue(fakeSummaryList)
       await handler.GET(req, res)
-      const { authSource, prisonCaseload, deliusStaffIdentifier: staffId } = res.locals.user
-      expect(licenceService.getLicencesForCaseAdmin).toHaveBeenCalledWith(username, authSource, prisonCaseload, staffId)
+      expect(licenceService.getLicencesForCaseAdmin).toHaveBeenCalledWith({
+        authSource: 'nomis',
+        prisonCaseload: ['MDI', 'LEI', 'BMI'],
+        username: 'joebloggs',
+      })
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', { cases: fakeSummaryList, statusConfig })
     })
 
@@ -73,8 +76,12 @@ describe('Route handlers - View and print case list', () => {
 
       licenceService.getLicencesForCaseAdmin.mockResolvedValue(fakeSummaryList)
       await handler.GET(req, res)
-      const { authSource, prisonCaseload, deliusStaffIdentifier: staffId } = res.locals.user
-      expect(licenceService.getLicencesForCaseAdmin).toHaveBeenCalledWith(username, authSource, prisonCaseload, staffId)
+      expect(licenceService.getLicencesForCaseAdmin).toHaveBeenCalledWith({
+        authSource: 'delius',
+        deliusStaffIdentifier: 123,
+        prisonCaseload: [],
+        username: 'joebloggs',
+      })
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', { cases: fakeSummaryList, statusConfig })
     })
 
@@ -93,8 +100,11 @@ describe('Route handlers - View and print case list', () => {
 
       licenceService.getLicencesForCaseAdmin.mockResolvedValue([])
       await handler.GET(req, res)
-      const { authSource, prisonCaseload, deliusStaffIdentifier: staffId } = res.locals.user
-      expect(licenceService.getLicencesForCaseAdmin).toHaveBeenCalledWith(username, authSource, prisonCaseload, staffId)
+      expect(licenceService.getLicencesForCaseAdmin).toHaveBeenCalledWith({
+        authSource: 'auth',
+        prisonCaseload: [],
+        username: 'joebloggs',
+      })
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', { cases: [], statusConfig })
     })
   })

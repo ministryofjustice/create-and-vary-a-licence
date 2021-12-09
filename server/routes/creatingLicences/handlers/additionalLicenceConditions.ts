@@ -13,10 +13,10 @@ export default class AdditionalLicenceConditionsRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { username } = req.user
+    const { user } = res.locals
 
     // The LicenceType.AP is specified to differentiate the conditions from PSS conditions (ok for AP or AP_PSS)
-    await this.licenceService.updateAdditionalConditions(licenceId, LicenceType.AP, req.body, username)
+    await this.licenceService.updateAdditionalConditions(licenceId, LicenceType.AP, req.body, user)
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
