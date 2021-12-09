@@ -162,34 +162,64 @@ describe('Licence API client tests', () => {
     expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
   })
 
-  it('Match Licences', async () => {
-    get.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+  describe('Match Licences', () => {
+    it('Should pass parameters to sort the matched licences', async () => {
+      get.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
 
-    const result = await licenceApiClient.matchLicences(
-      [LicenceStatus.IN_PROGRESS],
-      ['MDI'],
-      [1],
-      ['ABC1234'],
-      'conditionalReleaseDate',
-      'DESC',
-      'joebloggs'
-    )
+      const result = await licenceApiClient.matchLicences(
+        [LicenceStatus.IN_PROGRESS],
+        ['MDI'],
+        [1],
+        ['ABC1234'],
+        'conditionalReleaseDate',
+        'DESC',
+        'joebloggs'
+      )
 
-    expect(get).toHaveBeenCalledWith(
-      {
-        path: '/licence/match',
-        query: {
-          prison: ['MDI'],
-          status: [LicenceStatus.IN_PROGRESS],
-          staffId: [1],
-          nomisId: ['ABC1234'],
-          sortBy: 'conditionalReleaseDate',
-          sortOrder: 'DESC',
+      expect(get).toHaveBeenCalledWith(
+        {
+          path: '/licence/match',
+          query: {
+            prison: ['MDI'],
+            status: [LicenceStatus.IN_PROGRESS],
+            staffId: [1],
+            nomisId: ['ABC1234'],
+            sortBy: 'conditionalReleaseDate',
+            sortOrder: 'DESC',
+          },
         },
-      },
-      'joebloggs'
-    )
-    expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
+        'joebloggs'
+      )
+      expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
+    })
+
+    it('Should call the endpoint without the sort query params', async () => {
+      get.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+
+      const result = await licenceApiClient.matchLicences(
+        [LicenceStatus.IN_PROGRESS],
+        ['MDI'],
+        [1],
+        ['ABC1234'],
+        null,
+        null,
+        'joebloggs'
+      )
+
+      expect(get).toHaveBeenCalledWith(
+        {
+          path: '/licence/match',
+          query: {
+            prison: ['MDI'],
+            status: [LicenceStatus.IN_PROGRESS],
+            staffId: [1],
+            nomisId: ['ABC1234'],
+          },
+        },
+        'joebloggs'
+      )
+      expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
+    })
   })
 
   it('Batch activate licences', async () => {

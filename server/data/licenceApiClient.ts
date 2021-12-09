@@ -125,8 +125,8 @@ export default class LicenceApiClient extends RestClient {
           status: statuses,
           staffId: staffIds,
           nomisId: nomisIds,
-          sortBy,
-          sortOrder,
+          sortBy: sortBy || undefined,
+          sortOrder: sortOrder || undefined,
         },
       },
       username
