@@ -248,6 +248,61 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 
+  it('should hide edit licence button when status is IN_PROGRESS', () => {
+    viewContext = {
+      licence: { ...licence, statusCode: 'IN_PROGRESS' },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#edit-licence-button').length).toBe(0)
+    expect($('#edit-licence-button-2').length).toBe(0)
+  })
+
+  it('should hide edit licence button when status is ACTIVE', () => {
+    viewContext = {
+      licence: { ...licence, statusCode: 'ACTIVE' },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#edit-licence-button').length).toBe(0)
+    expect($('#edit-licence-button-2').length).toBe(0)
+  })
+
+  it('should show edit licence button when status is APPROVED', () => {
+    viewContext = {
+      licence: { ...licence, statusCode: 'APPROVED' },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#edit-licence-button').length).toBe(1)
+    expect($('#edit-licence-button-2').length).toBe(1)
+  })
+
+  it('should show edit licence button when status is SUBMITTED', () => {
+    viewContext = {
+      licence: { ...licence, statusCode: 'SUBMITTED' },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#edit-licence-button').length).toBe(1)
+    expect($('#edit-licence-button-2').length).toBe(1)
+  })
+
+  it('should show edit licence button when status is REJECTED', () => {
+    viewContext = {
+      licence: { ...licence, statusCode: 'REJECTED' },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#edit-licence-button').length).toBe(1)
+    expect($('#edit-licence-button-2').length).toBe(1)
+  })
+
   it('should hide change links and submit button when licence status is not IN_PROGRESS', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'SUBMITTED' },

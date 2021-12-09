@@ -28,6 +28,7 @@ import AdditionalPssConditionsQuestionRoutes from './handlers/additionalPssCondi
 import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
 import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
+import EditQuestionRoutes from './handlers/editQuestion'
 
 export default function Index({ licenceService, caseloadService }: Services): Router {
   const router = Router()
@@ -61,6 +62,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
   const bespokeConditionsHandler = new BespokeConditionsRoutes(licenceService)
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService)
+  const editQuestionHandler = new EditQuestionRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
 
   get('/caseload', caseloadHandler.GET)
@@ -112,6 +114,8 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   post('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.POST, BespokeConditions)
   get('/id/:licenceId/check-your-answers', checkAnswersHandler.GET)
   post('/id/:licenceId/check-your-answers', checkAnswersHandler.POST)
+  get('/id/:licenceId/edit', editQuestionHandler.GET)
+  post('/id/:licenceId/edit', editQuestionHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/confirmation', confirmationHandler.GET)
 
   return router

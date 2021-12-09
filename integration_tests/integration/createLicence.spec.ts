@@ -15,7 +15,7 @@ context('Create a licence', () => {
   it('should click through the create a licence journey', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicence()
-    const appointmentPersonPage = caseloadPage.clickCreateLicence()
+    const appointmentPersonPage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
 
