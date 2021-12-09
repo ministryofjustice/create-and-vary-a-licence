@@ -9,7 +9,8 @@
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
 
-{% set isEditable = licence.statusCode == 'IN_PROGRESS' %}
+{% set isInProgress = licence.statusCode == 'IN_PROGRESS' %}
+{% set canChooseToEdit = licence.statusCode == 'APPROVED' or licence.statusCode == 'SUBMITTED' or licence.statusCode == 'REJECTED' %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -25,31 +26,41 @@
             {% endif %}
         </div>
     </div>
+
+    {% if canChooseToEdit %}
+        <a id="edit-licence-button" href="{{'/licence/create/id/' + licence.id + '/edit'}}" class="govuk-button">Edit licence</a>
+    {% endif %}
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds-from-desktop">
 
-            {{ inductionMeetingDetails(licence, isEditable) }}
+            {{ inductionMeetingDetails(licence, isInProgress) }}
 
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalLicenceConditions(licence, expandedLicenceConditions, isEditable) }}
-                {{ bespokeConditions(licence, isEditable) }}
+                {{ additionalLicenceConditions(licence, expandedLicenceConditions, isInProgress) }}
+                {{ bespokeConditions(licence, isInProgress) }}
             {% endif %}
 
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, expandedPssConditions, isEditable) }}
+                {{ additionalPssConditions(licence, expandedPssConditions, isInProgress) }}
             {% endif %}
 
-            {% if isEditable %}
-                <form method="POST">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                    <input type="hidden" name="answers-checked" value="true">
-                    {{ govukButton({
-                        text: "Send licence conditions to prison",
-                        attributes: { 'data-qa': 'send-licence-conditions' }
-                    }) }}
-                </form>
-            {% endif %}
-            <a href="/licence/create/caseload" class="govuk-link govuk-!-font-size-19">Return to caseload</a>
+            <form method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <input type="hidden" name="answers-checked" value="true">
+                <div class="govuk-button-group">
+                    {% if isInProgress %}
+                        {{ govukButton({
+                            text: "Send licence conditions to prison",
+                            attributes: { 'data-qa': 'send-licence-conditions' }
+                        }) }}
+                    {% endif %}
+                    {% if canChooseToEdit %}
+                        <a id="edit-licence-button-2" href="{{'/licence/create/id/' + licence.id + '/edit'}}" class="govuk-button">Edit licence</a>
+                    {% endif %}
+                    <a href="/licence/create/caseload" class="govuk-link govuk-!-font-size-19">Return to caseload</a>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}
