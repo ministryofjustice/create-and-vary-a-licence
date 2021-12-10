@@ -1,17 +1,15 @@
-import type HmppsAuthClient from '../data/hmppsAuthClient'
 import PrisonRegisterApiClient from '../data/prisonRegisterApiClient'
 import { PrisonDto } from '../@types/prisonRegisterTypes'
+import { User } from '../@types/CvlUserDetails'
 
 export default class PrisonRegisterService {
-  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+  constructor(private readonly prisonRegisterApiClient: PrisonRegisterApiClient) {}
 
-  async getPrisonDescription(username: string, agencyId: string): Promise<PrisonDto> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return new PrisonRegisterApiClient(token).getPrisonDescription(agencyId)
+  async getPrisonDescription(agencyId: string, user: User): Promise<PrisonDto> {
+    return this.prisonRegisterApiClient.getPrisonDescription(agencyId, user)
   }
 
-  async getPrisonOmuContactEmail(username: string, agencyId: string): Promise<string> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return new PrisonRegisterApiClient(token).getPrisonOmuContactEmail(agencyId)
+  async getPrisonOmuContactEmail(agencyId: string, user: User): Promise<string> {
+    return this.prisonRegisterApiClient.getPrisonOmuContactEmail(agencyId, user)
   }
 }

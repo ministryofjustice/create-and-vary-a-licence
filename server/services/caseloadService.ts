@@ -5,6 +5,7 @@ import LicenceService from './licenceService'
 import { CaseTypeAndStatus, ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
+import { User } from '../@types/CvlUserDetails'
 
 export default class CaseloadService {
   constructor(
@@ -13,8 +14,9 @@ export default class CaseloadService {
     private readonly licenceService: LicenceService
   ) {}
 
-  async getStaffCaseload(username: string, staffIdentifier: number): Promise<CaseTypeAndStatus[]> {
-    const managedOffenders = await this.communityService.getManagedOffenders(staffIdentifier)
+  async getStaffCaseload(user: User): Promise<CaseTypeAndStatus[]> {
+    const { deliusStaffIdentifier } = user
+    const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
     const caseloadNomisIds = managedOffenders
       .filter(offender => offender.currentOm)
       .filter(offender => offender.nomsNumber)
@@ -25,20 +27,23 @@ export default class CaseloadService {
       changes their managing officer after a licence has been created for them?
      */
 
-    const existingLicences = await this.licenceService.getLicencesByStaffIdAndStatus(staffIdentifier, username, [
-      LicenceStatus.ACTIVE,
-      LicenceStatus.RECALLED,
-      LicenceStatus.IN_PROGRESS,
-      LicenceStatus.SUBMITTED,
-      LicenceStatus.APPROVED,
-      LicenceStatus.REJECTED,
-    ])
+    const existingLicences = await this.licenceService.getLicencesByStaffIdAndStatus(
+      [
+        LicenceStatus.ACTIVE,
+        LicenceStatus.RECALLED,
+        LicenceStatus.IN_PROGRESS,
+        LicenceStatus.SUBMITTED,
+        LicenceStatus.APPROVED,
+        LicenceStatus.REJECTED,
+      ],
+      user
+    )
 
     // Get the full offender records from prisoner search
-    const offenders = await this.prisonerService.searchPrisonersByNomisIds(username, caseloadNomisIds)
+    const offenders = await this.prisonerService.searchPrisonersByNomisIds(caseloadNomisIds, user)
 
     // Get the HDC status for all bookings in the prisoner list
-    const hdcStatuses = await this.prisonerService.getHdcStatuses(username, offenders)
+    const hdcStatuses = await this.prisonerService.getHdcStatuses(offenders, user)
 
     // Filter the cases by the case list rules
     return offenders

@@ -14,22 +14,16 @@ export default class SpikeRoutes {
     private readonly prisonerService: PrisonerService
   ) {}
 
-  public listTestData: RequestHandler = async (req, res): Promise<void> => {
-    const { username } = res.locals.user
-    const testData = await this.licenceService.getTestData(username)
-    res.render('pages/testData', { testData })
-  }
-
   public getStaffDetail: RequestHandler = async (req, res): Promise<void> => {
-    const deliusUsername = req.params.username
-    const staffDetail = await this.communityService.getStaffDetail(deliusUsername)
+    const { user } = res.locals
+    const staffDetail = await this.communityService.getStaffDetail(user)
     res.render('pages/staffDetail', { staffDetail })
   }
 
   public getPrisonerDetail: RequestHandler = async (req, res): Promise<void> => {
-    const { username } = res.locals.user
+    const { user } = res.locals
     const { nomsId } = req.params
-    const prisonerDetail = await this.prisonerService.getPrisonerDetail(username, nomsId)
+    const prisonerDetail = await this.prisonerService.getPrisonerDetail(nomsId, user)
     res.render('pages/prisonerDetail', { prisonerDetail })
   }
 
@@ -41,12 +35,12 @@ export default class SpikeRoutes {
   }
 
   public getPrisonerImage: RequestHandler = async (req, res): Promise<void> => {
-    const { username } = res.locals.user
+    const { user } = res.locals
     const { nomsId } = req.params
     const placeHolder = path.join(process.cwd(), 'assets/images/image-missing.png')
     if (nomsId !== 'placeholder') {
       this.prisonerService
-        .getPrisonerImage(username, nomsId)
+        .getPrisonerImage(nomsId, user)
         .then(data => {
           res.type('image/jpeg')
           data.pipe(res)
@@ -69,20 +63,23 @@ export default class SpikeRoutes {
 
   public searchPrison: RequestHandler = async (req, res): Promise<void> => {
     const { firstName, lastName, prisonerIdentifier } = req.query as Record<string, string>
-    const { username } = res.locals.user
+    const { user } = res.locals
     const searchValues = { firstName, lastName, prisonerIdentifier }
 
     if (!(prisonerIdentifier || firstName || lastName)) {
       return res.render('pages/prisoners')
     }
 
-    const prisoners = await this.prisonerService.searchPrisoners(username, {
-      firstName,
-      lastName,
-      prisonerIdentifier: prisonerIdentifier || null,
-      // prisonIds - for prison user caseloads
-      includeAliases: false,
-    } as PrisonerSearchCriteria)
+    const prisoners = await this.prisonerService.searchPrisoners(
+      {
+        firstName,
+        lastName,
+        prisonerIdentifier: prisonerIdentifier || null,
+        // prisonIds - for prison user caseloads
+        includeAliases: false,
+      } as PrisonerSearchCriteria,
+      user
+    )
 
     return res.render('pages/prisoners', { prisoners, searchValues })
   }

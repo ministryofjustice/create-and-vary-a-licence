@@ -1,108 +1,41 @@
-import nock from 'nock'
+import HmppsRestClient from './hmppsRestClient'
+import HmppsAuthClient, { AuthUserDetails, AuthUserEmail } from './hmppsAuthClient'
+import { User } from '../@types/CvlUserDetails'
 
-import config from '../config'
-import HmppsAuthClient from './hmppsAuthClient'
-import TokenStore from './tokenStore'
+jest.mock('./tokenStore', () => {
+  return jest.fn().mockImplementation(() => {
+    return { TokenStore: () => '', getAuthToken: () => '' }
+  })
+})
 
-jest.mock('./tokenStore')
+const authClient = new HmppsAuthClient()
 
-const tokenStore = new TokenStore(null) as jest.Mocked<TokenStore>
-
-const username = 'Bob'
-const token = { access_token: 'token-1', expires_in: 300 }
-
-describe('hmppsAuthClient', () => {
-  let fakeHmppsAuthApi: nock.Scope
-  let hmppsAuthClient: HmppsAuthClient
+describe('Auth Api client tests', () => {
+  const get = jest.spyOn(HmppsRestClient.prototype, 'get')
 
   beforeEach(() => {
-    fakeHmppsAuthApi = nock(config.apis.hmppsAuth.url)
-    hmppsAuthClient = new HmppsAuthClient(tokenStore)
+    get.mockResolvedValue(true)
   })
 
   afterEach(() => {
     jest.resetAllMocks()
-    nock.cleanAll()
   })
 
-  describe('getUser', () => {
-    it('should return data from api', async () => {
-      const response = { data: 'data' }
+  it('Get user', async () => {
+    get.mockResolvedValue({ name: 'Joe Bloggs' } as AuthUserDetails)
 
-      fakeHmppsAuthApi
-        .get('/api/user/me')
-        .matchHeader('authorization', `Bearer ${token.access_token}`)
-        .reply(200, response)
+    const result = await authClient.getUser({ token: 'token' } as User)
 
-      const output = await hmppsAuthClient.getUser(token.access_token)
-      expect(output).toEqual(response)
-    })
+    expect(get).toHaveBeenCalledWith({ path: '/api/user/me' }, { token: 'token' })
+    expect(result).toEqual({ name: 'Joe Bloggs' })
   })
 
-  describe('getUserEmail', () => {
-    it('should return email address', async () => {
-      const response = { data: 'data' }
-      fakeHmppsAuthApi
-        .get('/api/me/email')
-        .matchHeader('authorization', `Bearer ${token.access_token}`)
-        .reply(200, response)
-      const output = await hmppsAuthClient.getUserEmail(token.access_token)
-      expect(output).toEqual(response)
-    })
-  })
+  it('Get user email', async () => {
+    get.mockResolvedValue({ email: 'jbloggs@justice.gov.uk' } as AuthUserEmail)
 
-  describe('getUserRoles', () => {
-    it('should return data from api', async () => {
-      fakeHmppsAuthApi
-        .get('/api/user/me/roles')
-        .matchHeader('authorization', `Bearer ${token.access_token}`)
-        .reply(200, [{ roleCode: 'role1' }, { roleCode: 'role2' }])
+    const result = await authClient.getUserEmail({ token: 'token' } as User)
 
-      const output = await hmppsAuthClient.getUserRoles(token.access_token)
-      expect(output).toEqual(['role1', 'role2'])
-    })
-  })
-
-  describe('getSystemClientToken', () => {
-    it('should instantiate the redis client', async () => {
-      tokenStore.getToken.mockResolvedValue(token.access_token)
-      await hmppsAuthClient.getSystemClientToken(username)
-    })
-
-    it('should return token from redis if one exists', async () => {
-      tokenStore.getToken.mockResolvedValue(token.access_token)
-      const output = await hmppsAuthClient.getSystemClientToken(username)
-      expect(output).toEqual(token.access_token)
-    })
-
-    it('should return token from HMPPS Auth with username', async () => {
-      tokenStore.getToken.mockResolvedValue(null)
-
-      fakeHmppsAuthApi
-        .post(`/oauth/token`, 'grant_type=client_credentials&username=Bob')
-        .basicAuth({ user: config.apis.hmppsAuth.systemClientId, pass: config.apis.hmppsAuth.systemClientSecret })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, token)
-
-      const output = await hmppsAuthClient.getSystemClientToken(username)
-
-      expect(output).toEqual(token.access_token)
-      expect(tokenStore.setToken).toBeCalledWith('Bob', token.access_token, 240)
-    })
-
-    it('should return token from HMPPS Auth without username', async () => {
-      tokenStore.getToken.mockResolvedValue(null)
-
-      fakeHmppsAuthApi
-        .post(`/oauth/token`, 'grant_type=client_credentials')
-        .basicAuth({ user: config.apis.hmppsAuth.systemClientId, pass: config.apis.hmppsAuth.systemClientSecret })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, token)
-
-      const output = await hmppsAuthClient.getSystemClientToken()
-
-      expect(output).toEqual(token.access_token)
-      expect(tokenStore.setToken).toBeCalledWith('%ANONYMOUS%', token.access_token, 240)
-    })
+    expect(get).toHaveBeenCalledWith({ path: '/api/me/email' }, { token: 'token' })
+    expect(result).toEqual({ email: 'jbloggs@justice.gov.uk' })
   })
 })

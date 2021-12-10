@@ -6,8 +6,8 @@ export default class ViewAndPrintCaseRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { username, prisonCaseload, deliusStaffIdentifier: staffId, authSource } = res.locals.user
-    const cases = await this.licenceService.getLicencesForCaseAdmin(username, authSource, prisonCaseload, staffId)
+    const { user } = res.locals
+    const cases = await this.licenceService.getLicencesForCaseAdmin(user)
     res.render('pages/view/cases', { cases, statusConfig })
   }
 

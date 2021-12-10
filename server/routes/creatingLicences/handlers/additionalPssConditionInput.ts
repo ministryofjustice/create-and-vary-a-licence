@@ -21,9 +21,9 @@ export default class AdditionalPssConditionInputRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { conditionId } = req.params
-    const { username } = req.user
+    const { user } = res.locals
 
-    await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, username)
+    await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, user)
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-pss-conditions/callback${
@@ -35,7 +35,7 @@ export default class AdditionalPssConditionInputRoutes {
   DELETE = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
     const { conditionId } = req.params
-    const { username } = req.user
+    const { user } = res.locals
 
     const additionalConditionCodes = licence.additionalPssConditions
       .filter((condition: AdditionalCondition) => condition.id !== parseInt(conditionId, 10))
@@ -45,7 +45,7 @@ export default class AdditionalPssConditionInputRoutes {
       licence.id,
       LicenceType.PSS,
       { additionalConditions: additionalConditionCodes },
-      username
+      user
     )
 
     return res.redirect(

@@ -89,7 +89,7 @@ describe('Route - view and approve a licence', () => {
       } as unknown as Request
 
       await handler.POST(req, res)
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.APPROVED, username, displayName)
+      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.APPROVED, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/id/1/confirm-approved')
     })
 
@@ -99,7 +99,7 @@ describe('Route - view and approve a licence', () => {
       } as unknown as Request
 
       await handler.POST(req, res)
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.REJECTED, username)
+      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.REJECTED, res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/id/1/confirm-rejected')
     })
   })

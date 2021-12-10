@@ -1,24 +1,29 @@
 import config, { ApiConfig } from '../config'
-import RestClient from './restClient'
+import RestClient from './hmppsRestClient'
 import type { PrisonDto } from '../@types/prisonRegisterTypes'
+import { User } from '../@types/CvlUserDetails'
 
-export default class PrisonRegisterApiClient {
-  restClient: RestClient
-
-  constructor(token: string) {
-    this.restClient = new RestClient('Prison register API', config.apis.prisonRegisterApi as ApiConfig, token)
+export default class PrisonRegisterApiClient extends RestClient {
+  constructor() {
+    super('Prison register API', config.apis.prisonRegisterApi as ApiConfig)
   }
 
-  async getPrisonDescription(agencyId: string): Promise<PrisonDto> {
-    return this.restClient.get({
-      path: `/prisons/id/${agencyId}`,
-    }) as Promise<PrisonDto>
+  async getPrisonDescription(agencyId: string, user: User): Promise<PrisonDto> {
+    return (await this.get(
+      {
+        path: `/prisons/id/${agencyId}`,
+      },
+      { username: user.username }
+    )) as Promise<PrisonDto>
   }
 
-  async getPrisonOmuContactEmail(agencyId: string): Promise<string> {
-    return this.restClient.get({
-      path: `/secure/prisons/id/${agencyId}/offender-management-unit/email-address`,
-      responseType: 'text',
-    }) as Promise<string>
+  async getPrisonOmuContactEmail(agencyId: string, user: User): Promise<string> {
+    return (await this.get(
+      {
+        path: `/secure/prisons/id/${agencyId}/offender-management-unit/email-address`,
+        responseType: 'text',
+      },
+      { username: user.username }
+    )) as Promise<string>
   }
 }

@@ -23,15 +23,17 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
       },
       query: {},
       body: {},
-      user: {
-        username: 'joebloggs',
-      },
     } as unknown as Request
 
     res = {
       render: jest.fn(),
       redirect: jest.fn(),
       status: jest.fn(),
+      locals: {
+        user: {
+          username: 'joebloggs',
+        },
+      },
     } as unknown as Response
   })
 
@@ -56,7 +58,12 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
 
     it('should call licence service to update the list of additional conditions', async () => {
       await handler.POST(req, res)
-      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(1, LicenceType.AP, {}, 'joebloggs')
+      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
+        1,
+        LicenceType.AP,
+        {},
+        { username: 'joebloggs' }
+      )
     })
 
     it('should redirect to the callback function', async () => {

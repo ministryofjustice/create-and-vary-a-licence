@@ -62,7 +62,7 @@ describe('Route - create licence - initial meeting date and time', () => {
       res.locals.licence.typeCode = 'AP'
 
       await handler.POST(req, res)
-      expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, res.locals.user.username)
+      expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
     })
 
@@ -70,7 +70,7 @@ describe('Route - create licence - initial meeting date and time', () => {
       res.locals.licence.typeCode = 'AP_PSS'
 
       await handler.POST(req, res)
-      expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, res.locals.user.username)
+      expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
     })
 
@@ -78,7 +78,7 @@ describe('Route - create licence - initial meeting date and time', () => {
       res.locals.licence.typeCode = 'PSS'
 
       await handler.POST(req, res)
-      expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, res.locals.user.username)
+      expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
     })
 

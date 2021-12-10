@@ -13,8 +13,8 @@ export default class InitialMeetingPlaceRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { username } = res.locals.user
-    await this.licenceService.updateAppointmentAddress(licenceId, req.body, username)
+    const { user } = res.locals
+    await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
 
     if (req.query?.fromReview) {
       res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)

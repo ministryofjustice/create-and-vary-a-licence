@@ -1,6 +1,6 @@
 import { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
-import RestClient from './restClient'
+import RestClient from './hmppsRestClient'
 import type {
   PrisonApiCaseload,
   PrisonApiPrisoner,
@@ -8,64 +8,83 @@ import type {
   PrisonInformation,
   HomeDetentionCurfew,
 } from '../@types/prisonApiClientTypes'
+import { User } from '../@types/CvlUserDetails'
 
-export default class PrisonApiClient {
-  restClient: RestClient
-
-  constructor(token = '') {
-    this.restClient = new RestClient('Prison API', config.apis.prisonApi as ApiConfig, token)
+export default class PrisonApiClient extends RestClient {
+  constructor() {
+    super('Prison API', config.apis.prisonApi as ApiConfig)
   }
 
   // Streamed - for embedding in HTML pages
-  async getPrisonerImage(nomsId: string): Promise<Readable> {
-    return this.restClient.stream({
-      path: `/api/bookings/offenderNo/${nomsId}/image/data`,
-    }) as Promise<Readable>
+  async getPrisonerImage(nomsId: string, user: User): Promise<Readable> {
+    return (await this.stream(
+      {
+        path: `/api/bookings/offenderNo/${nomsId}/image/data`,
+      },
+      { username: user.username }
+    )) as Promise<Readable>
   }
 
   // Data - for pulling the base64 JPEG image for an offender to embed in PDFs
-  async getPrisonerImageData(nomsId: string): Promise<Buffer> {
-    return this.restClient.get({
-      path: `/api/bookings/offenderNo/${nomsId}/image/data`,
-      responseType: 'image/jpeg',
-    }) as Promise<Buffer>
+  async getPrisonerImageData(nomsId: string, user: User): Promise<Buffer> {
+    return (await this.get(
+      {
+        path: `/api/bookings/offenderNo/${nomsId}/image/data`,
+        responseType: 'image/jpeg',
+      },
+      { username: user.username }
+    )) as Promise<Buffer>
   }
 
-  async getPrisonerDetail(nomsId: string): Promise<PrisonApiPrisoner> {
-    return this.restClient.get({ path: `/api/offenders/${nomsId}` }) as Promise<PrisonApiPrisoner>
+  async getPrisonerDetail(nomsId: string, user: User): Promise<PrisonApiPrisoner> {
+    return (await this.get(
+      { path: `/api/offenders/${nomsId}` },
+      { username: user.username }
+    )) as Promise<PrisonApiPrisoner>
   }
 
-  async getPrisonInformation(prisonId: string): Promise<PrisonInformation> {
-    return this.restClient.get({ path: `/api/agencies/prison/${prisonId}` }) as Promise<PrisonInformation>
+  async getPrisonInformation(prisonId: string, user: User): Promise<PrisonInformation> {
+    return (await this.get(
+      { path: `/api/agencies/prison/${prisonId}` },
+      { username: user.username }
+    )) as Promise<PrisonInformation>
   }
 
   // TODO: No longer used - leave as might use in future check
-  async getLatestHdcStatus(bookingId: string): Promise<HomeDetentionCurfew> {
-    return this.restClient.get({
-      path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,
-    }) as Promise<HomeDetentionCurfew>
+  async getLatestHdcStatus(bookingId: string, user: User): Promise<HomeDetentionCurfew> {
+    return (await this.get(
+      {
+        path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,
+      },
+      { username: user.username }
+    )) as Promise<HomeDetentionCurfew>
   }
 
-  async getLatestHdcStatusBatch(bookingIds: number[]): Promise<HomeDetentionCurfew[]> {
-    return this.restClient.post({
-      path: `/api/offender-sentences/home-detention-curfews/latest`,
-      data: bookingIds,
-    }) as Promise<HomeDetentionCurfew[]>
+  async getLatestHdcStatusBatch(bookingIds: number[], user: User): Promise<HomeDetentionCurfew[]> {
+    return (await this.post(
+      {
+        path: `/api/offender-sentences/home-detention-curfews/latest`,
+        data: bookingIds,
+      },
+      { username: user.username }
+    )) as Promise<HomeDetentionCurfew[]>
   }
 
-  // Called with the user's own token
-  async getUser(userToken: string): Promise<PrisonApiUserDetail> {
-    return this.restClient.getWithUserToken({
-      userToken,
-      path: '/api/users/me',
-    }) as Promise<PrisonApiUserDetail>
+  async getUser(user: User): Promise<PrisonApiUserDetail> {
+    return (await this.get(
+      {
+        path: '/api/users/me',
+      },
+      { token: user.token }
+    )) as Promise<PrisonApiUserDetail>
   }
 
-  // Called with the user's own token
-  async getUserCaseloads(userToken: string): Promise<PrisonApiCaseload[]> {
-    return this.restClient.getWithUserToken({
-      userToken,
-      path: '/api/users/me/caseLoads',
-    }) as Promise<PrisonApiCaseload[]>
+  async getUserCaseloads(user: User): Promise<PrisonApiCaseload[]> {
+    return (await this.get(
+      {
+        path: '/api/users/me/caseLoads',
+      },
+      { token: user.token }
+    )) as Promise<PrisonApiCaseload[]>
   }
 }

@@ -3,6 +3,7 @@ import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
 import CommunityService from './communityService'
 import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
+import { User } from '../@types/CvlUserDetails'
 
 export default class UserService {
   constructor(
@@ -11,28 +12,23 @@ export default class UserService {
     private readonly communityService: CommunityService
   ) {}
 
-  // Users own token
-  async getAuthUser(token: string): Promise<AuthUserDetails> {
-    return this.hmppsAuthClient.getUser(token)
+  async getAuthUser(user: User): Promise<AuthUserDetails> {
+    return this.hmppsAuthClient.getUser(user)
   }
 
-  // Users own token
-  async getAuthUserEmail(token: string): Promise<AuthUserEmail> {
-    return this.hmppsAuthClient.getUserEmail(token)
+  async getAuthUserEmail(user: User): Promise<AuthUserEmail> {
+    return this.hmppsAuthClient.getUserEmail(user)
   }
 
-  // Users own token
-  async getPrisonUser(token: string): Promise<PrisonApiUserDetail> {
-    return this.prisonApiClient.getUser(token)
+  async getPrisonUser(user: User): Promise<PrisonApiUserDetail> {
+    return this.prisonApiClient.getUser(user)
   }
 
-  // Users own token
-  async getPrisonUserCaseloads(token: string): Promise<PrisonApiCaseload[]> {
-    return this.prisonApiClient.getUserCaseloads(token)
+  async getPrisonUserCaseloads(user: User): Promise<PrisonApiCaseload[]> {
+    return this.prisonApiClient.getUserCaseloads(user)
   }
 
-  // Will use an admin token generated in the communityService
-  async getProbationUser(deliusUsername: string): Promise<CommunityApiStaffDetails> {
-    return this.communityService.getStaffDetail(deliusUsername)
+  async getProbationUser(user: User): Promise<CommunityApiStaffDetails> {
+    return this.communityService.getStaffDetail(user)
   }
 }

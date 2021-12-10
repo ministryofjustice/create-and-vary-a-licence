@@ -5,7 +5,7 @@ import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
 import config from '../../../config'
 
-const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
+const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const qrCodeService = new QrCodeService() as jest.Mocked<QrCodeService>
 
 const username = 'joebloggs'

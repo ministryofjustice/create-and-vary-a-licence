@@ -102,7 +102,7 @@ const removeDuplicates = (list: string[]): string[] => {
   return [...new Set(list)]
 }
 
-const filterCentralCaseload = (list: string[]): string[] => {
+const filterCentralCaseload = (list: string[] = []): string[] => {
   const filteredCaseload: string[] = []
   list
     .filter(cl => !cl.includes('CADM'))

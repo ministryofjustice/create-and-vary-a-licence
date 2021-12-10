@@ -1,94 +1,45 @@
-import nock from 'nock'
-import config from '../config'
-import PrisonRegisterService from '../services/prisonRegisterService'
-import HmppsAuthClient from './hmppsAuthClient'
-import type { PrisonDto } from '../@types/prisonRegisterTypes'
+import HmppsRestClient from './hmppsRestClient'
+import PrisonRegisterApiClient from './prisonRegisterApiClient'
+import { PrisonDto } from '../@types/prisonRegisterTypes'
+import { User } from '../@types/CvlUserDetails'
 
-jest.mock('./hmppsAuthClient')
+jest.mock('./tokenStore', () => {
+  return jest.fn().mockImplementation(() => {
+    return { TokenStore: () => '', getAuthToken: () => '' }
+  })
+})
 
-const hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+const prisonRegisterApiClient = new PrisonRegisterApiClient()
 
-const prisonRegisterService = new PrisonRegisterService(hmppsAuthClient)
-
-const prisonDto = {
-  prisonId: 'LEI',
-  prisonName: 'Leeds HMP',
-  active: true,
-} as PrisonDto
-
-describe('Prison register client', () => {
-  let fakeApi: nock.Scope
-  const username = 'joebloggs'
-  const prisonCode = 'LEI'
+describe('Prison Register Api client tests', () => {
+  const get = jest.spyOn(HmppsRestClient.prototype, 'get')
 
   beforeEach(() => {
-    config.apis.prisonRegisterApi.url = 'http://localhost:8100'
-    fakeApi = nock(config.apis.prisonRegisterApi.url)
+    get.mockResolvedValue(true)
   })
 
   afterEach(() => {
-    nock.cleanAll()
+    jest.resetAllMocks()
   })
 
-  describe('Get prison description', () => {
-    it('Valid request - with or without a token (insecure endpoint)', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get(`/prisons/id/${prisonCode}`).reply(200, prisonDto)
-      const data = await prisonRegisterService.getPrisonDescription(username, prisonCode)
-      expect(data).toEqual(prisonDto)
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-    })
+  it('Get prison description', async () => {
+    get.mockResolvedValue({ prisonName: 'Moorland (HMP)' } as PrisonDto)
 
-    it('Invalid prison code', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get(`/prisons/id/${prisonCode}`).reply(404)
-      try {
-        await prisonRegisterService.getPrisonDescription(username, prisonCode)
-      } catch (e) {
-        expect(e.message).toContain('Not Found')
-      }
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-    })
+    const result = await prisonRegisterApiClient.getPrisonDescription('MDI', { username: 'joebloggs' } as User)
+
+    expect(get).toHaveBeenCalledWith({ path: '/prisons/id/MDI' }, { username: 'joebloggs' })
+    expect(result).toEqual({ prisonName: 'Moorland (HMP)' })
   })
 
-  describe('Get OMU contact email', () => {
-    it('Valid request', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi
-        .get(`/secure/prisons/id/${prisonCode}/offender-management-unit/email-address`)
-        .reply(200, 'omu-email@address.com')
-      const data = await prisonRegisterService.getPrisonOmuContactEmail(username, prisonCode)
+  it('Get prison OMU contact email', async () => {
+    get.mockResolvedValue('prisonOmuEmail@justice.gov.uk')
 
-      // Needs to call toString() on the response type to get the string value of the buffer returned.
-      expect(data.toString()).toEqual('omu-email@address.com')
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-    })
+    const result = await prisonRegisterApiClient.getPrisonOmuContactEmail('MDI', { username: 'joebloggs' } as User)
 
-    it('No client token - secure endpoint should fail', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('')
-      fakeApi.get(`/secure/prisons/id/${prisonCode}/offender-management-unit/email-address`).reply(401)
-      try {
-        await prisonRegisterService.getPrisonOmuContactEmail(username, prisonCode)
-      } catch (e) {
-        expect(e.message).toContain('Unauthorized')
-      }
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-    })
-
-    it('Invalid prison code', async () => {
-      hmppsAuthClient.getSystemClientToken.mockResolvedValue('a token')
-      fakeApi.get(`/secure/prisons/id/${prisonCode}/offender-management-unit/email-address`).reply(404)
-      try {
-        await prisonRegisterService.getPrisonOmuContactEmail(username, prisonCode)
-      } catch (e) {
-        expect(e.message).toContain('Not Found')
-      }
-      expect(nock.isDone()).toBe(true)
-      expect(hmppsAuthClient.getSystemClientToken).toBeCalled()
-    })
+    expect(get).toHaveBeenCalledWith(
+      { path: '/secure/prisons/id/MDI/offender-management-unit/email-address', responseType: 'text' },
+      { username: 'joebloggs' }
+    )
+    expect(result).toEqual('prisonOmuEmail@justice.gov.uk')
   })
 })
