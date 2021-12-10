@@ -26,7 +26,7 @@ export default function fetchLicence(licenceService: LicenceService): RequestHan
       }
 
       // Is the URL requested allowed for a licence in this status?
-      if (licence && !getUrlAccessByStatus(req.path, licence.id, licence.statusCode, username)) {
+      if (licence && !getUrlAccessByStatus(req.path, licence.id, licence.statusCode, user.username)) {
         return res.redirect('/access-denied')
       }
 
