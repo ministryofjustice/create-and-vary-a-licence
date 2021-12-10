@@ -260,6 +260,25 @@ export default {
     })
   },
 
+  stubExistingLicences: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/licence/staffId/2000`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: 1,
+            nomisId: 'G9786GC',
+          },
+        ],
+      },
+    })
+  },
+
   stubPutAppointmentPerson: (): SuperAgentRequest => {
     return stubFor({
       request: {
