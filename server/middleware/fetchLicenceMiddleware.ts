@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express'
+import getUrlAccessByStatus from '../utils/urlAccessByStatus'
 import LicenceService from '../services/licenceService'
 import logger from '../../logger'
 
@@ -8,31 +9,26 @@ export default function fetchLicence(licenceService: LicenceService): RequestHan
       const { username } = res.locals.user
       const licence = await licenceService.getLicence(req.params.licenceId, username)
 
-      if (res.locals.user?.nomisStaffId) {
-        // Identifies a prison user
-        logger.info(`Licence prison ${licence.prisonCode}, user caseload ${res.locals.user.prisonCaseload}`)
-        if (res.locals.user.prisonCaseload.includes(licence.prisonCode)) {
-          logger.info(`Caseload allows access`)
-        } else {
-          logger.info(`Caseload denies access`)
+      // Does this prison user have a caseload which allows access this licence?
+      if (licence && res.locals.user?.nomisStaffId) {
+        if (!res.locals.user.prisonCaseload.includes(licence.prisonCode)) {
+          logger.info(`Caseload denies access to licence ID ${licence.id}`)
           return res.redirect('/access-denied')
         }
       }
 
-      if (res.locals.user?.deliusStaffIdentifier) {
-        // Identifies a probation user
-        logger.info(`Licence LDU ${licence.probationLduCode}, user LDU ${res.locals.user.probationLduCodes}`)
-        if (res.locals.user.probationLduCodes?.includes(licence.probationLduCode)) {
-          logger.info(`Probation LDU allows access`)
-        } else {
-          logger.info(`Probation LDU denies access`)
+      // Does this probation user belong to an LDU which manages the person on licence?
+      if (licence && res.locals.user?.deliusStaffIdentifier) {
+        if (!res.locals.user.probationLduCodes?.includes(licence.probationLduCode)) {
+          logger.info(`Probation LDU denies access to licence ID ${licence.id}`)
           return res.redirect('/access-denied')
         }
       }
 
-      // TODO: Is the licence status compatible with the URL requested?
-      logger.info(`The licence status is ${licence.statusCode}`)
-      logger.info(`The URL requested is ${req.url}`)
+      // Is the URL requested allowed for a licence in this status?
+      if (licence && !getUrlAccessByStatus(req.path, licence.id, licence.statusCode, username)) {
+        return res.redirect('/access-denied')
+      }
 
       if (licence) {
         res.locals.licence = licence

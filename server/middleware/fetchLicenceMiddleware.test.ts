@@ -6,7 +6,9 @@ import { Licence } from '../@types/licenceApiClientTypes'
 jest.mock('../services/licenceService')
 
 let res = {} as unknown as Response
-const req = {} as Request
+const req = {
+  path: '/licence/create/id/1/check-your-answers',
+} as Request
 const next = jest.fn()
 
 const prisonRes = {

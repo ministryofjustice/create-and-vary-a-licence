@@ -57,8 +57,8 @@ export default function populateCurrentUser(userService: UserService): RequestHa
             cvlUser.telephoneNumber = probationUser?.telephoneNumber
             cvlUser.probationArea = probationUser?.probationArea?.code
             cvlUser.probationAreaDescription = probationUser?.probationArea?.description
-            cvlUser.probationTeams = probationUser?.teams?.map(team => team.code)
-            cvlUser.probationLduCodes = probationUser?.teams?.map(team => team.localDeliveryUnit.code)
+            cvlUser.probationTeams = probationUser?.teams?.map(team => team?.code)
+            cvlUser.probationLduCodes = probationUser?.teams?.map(team => team?.localDeliveryUnit?.code)
           } else {
             // Assemble basic user information from hmpps-auth
             const authUser = await userService.getAuthUser(token)
