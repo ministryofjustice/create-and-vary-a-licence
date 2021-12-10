@@ -35,8 +35,12 @@ export default class AdditionalConditionsInputPage extends Page {
     return this
   }
 
-  selectRadios = (radioIndex = 1): AdditionalConditionsInputPage => {
-    cy.get(`.govuk-radios div:nth-child(${radioIndex}) > input`).click({ multiple: true })
+  selectRadio = (value?: string): AdditionalConditionsInputPage => {
+    if (value) {
+      cy.get(`input[value="${value}"]`).click()
+    } else {
+      cy.get(`.govuk-radios div:nth-child(1) > input`).click({ multiple: true })
+    }
     return this
   }
 

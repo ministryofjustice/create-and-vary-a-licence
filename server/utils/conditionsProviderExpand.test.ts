@@ -33,13 +33,13 @@ describe('Conditions Provider - expansions', () => {
           category: 'Residence at a specific place',
           sequence: 0,
           text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
-          data: [{ id: 1, field: 'probationRegion', value: 'london probation region', sequence: 0 }],
+          data: [{ id: 1, field: 'probationRegion', value: 'London', sequence: 0 }],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
       expect(listOfConditions[0].text).toEqual(
-        'You must reside within the London Probation Region while of no fixed abode, unless otherwise approved by your supervising officer.'
+        'You must reside within the London probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
       )
     })
 
@@ -51,14 +51,14 @@ describe('Conditions Provider - expansions', () => {
           category: 'Residence at a specific place',
           sequence: 0,
           text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
-          data: [{ id: 1, field: 'wrongName', value: 'london', sequence: 0 }],
+          data: [{ id: 1, field: 'wrongName', value: 'London', sequence: 0 }],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
       // The two consecutive spaces are expected here
       expect(listOfConditions[0].text).toEqual(
-        'You must reside within the  while of no fixed abode, unless otherwise approved by your supervising officer.'
+        'You must reside within the  probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
       )
     })
 

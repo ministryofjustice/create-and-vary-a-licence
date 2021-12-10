@@ -111,50 +111,49 @@ export default {
         code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
         category: 'Residence at a specific place',
         text: 'You must reside within the [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
-        tpl: 'You must reside within the {probationRegion} while of no fixed abode, unless otherwise approved by your supervising officer.',
+        tpl: 'You must reside within the {probationRegion} probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
         requiresInput: true,
         inputs: [
           {
-            type: InputTypes.DROPDOWN,
+            type: InputTypes.RADIO,
             label: 'Select the probation region',
             name: 'probationRegion',
-            case: 'capitalised',
             options: [
               {
-                value: 'North East Probation Region',
+                value: 'North East',
               },
               {
-                value: 'North West Probation Region',
+                value: 'North West',
               },
               {
-                value: 'Greater Manchester Probation Region',
+                value: 'Greater Manchester',
               },
               {
-                value: 'Yorkshire and Humberside Probation Region',
+                value: 'Yorkshire and Humberside',
               },
               {
-                value: 'East Midlands Probation Region',
+                value: 'East Midlands',
               },
               {
-                value: 'West Midlands Probation Region',
+                value: 'West Midlands',
               },
               {
-                value: 'East of England Probation Region',
+                value: 'East of England',
               },
               {
-                value: 'South West Probation Region',
+                value: 'South West',
               },
               {
-                value: 'South Central Probation Region',
+                value: 'South Central',
               },
               {
-                value: 'London Probation Region',
+                value: 'London',
               },
               {
-                value: 'Kent, Surrey and Sussex Probation Region',
+                value: 'Kent, Surrey and Sussex',
               },
               {
-                value: 'Wales Probation Region',
+                value: 'Wales',
               },
             ],
           },

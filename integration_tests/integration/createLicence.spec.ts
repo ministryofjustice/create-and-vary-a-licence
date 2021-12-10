@@ -46,9 +46,9 @@ context('Create a licence', () => {
 
     const bespokeConditionsQuestionPage = additionalConditionsInputPage
       .withContext(additionalConditionsPage.getContext())
-      .selectOption('London Probation Region')
+      .selectRadio('London')
       .nextInput()
-      .selectRadios()
+      .selectRadio()
       .nextInput()
       .enterTime()
       .enterDate()
@@ -58,7 +58,7 @@ context('Create a licence', () => {
       .nextInput(false) // aria-expanded attribute causes issues with Axe
       .enterTime('10', '30', 'curfewStart')
       .enterTime('11', '30', 'curfewEnd')
-      .selectRadios(3)
+      .selectRadio('Other')
       .enterText('Annually', 'alternativeReviewPeriod')
       .nextInput()
       .enterText('Knives', 'item[0]')
