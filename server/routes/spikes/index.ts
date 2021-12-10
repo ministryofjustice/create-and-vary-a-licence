@@ -10,7 +10,6 @@ export default function Index({ licenceService, communityService, prisonerServic
 
   const spikeHandlers = new SpikeRoutes(licenceService, communityService, prisonerService)
 
-  get('/test/data', spikeHandlers.listTestData)
   get('/staff/:username/detail', spikeHandlers.getStaffDetail)
   get('/staff/:staffId/caseload', spikeHandlers.getStaffCaseload)
   get('/prisoner/:nomsId/detail', spikeHandlers.getPrisonerDetail)

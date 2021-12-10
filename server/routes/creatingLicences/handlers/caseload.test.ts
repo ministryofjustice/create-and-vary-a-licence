@@ -64,7 +64,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         ],
         statusConfig,
       })
-      expect(caseloadService.getStaffCaseload).toHaveBeenCalledWith('USER1', 2000)
+      expect(caseloadService.getStaffCaseload).toHaveBeenCalledWith(res.locals.user)
     })
   })
 
@@ -92,7 +92,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
 
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-name')
-      expect(licenceService.createLicence).toHaveBeenCalledWith('123', 'USER1')
+      expect(licenceService.createLicence).toHaveBeenCalledWith('123', res.locals.user)
     })
   })
 })

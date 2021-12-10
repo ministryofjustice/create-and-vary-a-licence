@@ -2,15 +2,17 @@ import superagent from 'superagent'
 import Agent, { HttpsAgent } from 'agentkeepalive'
 import { Readable } from 'stream'
 
+import querystring, { ParsedUrlQueryInput } from 'querystring'
 import logger from '../../logger'
 import sanitiseError from '../sanitisedError'
 import { ApiConfig } from '../config'
 import type { UnsanitisedError } from '../sanitisedError'
+import TokenStore from './tokenStore'
 
 interface GetRequest {
   userToken?: string
   path?: string
-  query?: string
+  query?: ParsedUrlQueryInput
   headers?: Record<string, string>
   responseType?: string
   raw?: boolean
@@ -38,36 +40,41 @@ interface StreamRequest {
   errorLogger?: (e: UnsanitisedError) => void
 }
 
-export default class RestClient {
-  agent: Agent
+interface SignedWithMethod {
+  token?: string
+  username?: string
+}
 
-  constructor(private readonly name: string, private readonly config: ApiConfig, private readonly token: string) {
-    this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new Agent(config.agent)
+export default class HmppsRestClient {
+  private agent: Agent
+
+  private tokenStore: TokenStore
+
+  constructor(private readonly name: string, private readonly apiConfig: ApiConfig) {
+    this.agent = apiConfig.url.startsWith('https') ? new HttpsAgent(apiConfig.agent) : new Agent(apiConfig.agent)
+    this.tokenStore = new TokenStore()
   }
 
-  private apiUrl() {
-    return this.config.url
-  }
+  async get(
+    { path = null, query = {}, headers = {}, responseType = '', raw = false }: GetRequest,
+    signedWithMethod?: SignedWithMethod
+  ): Promise<unknown> {
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
-  private timeoutConfig() {
-    return this.config.timeout
-  }
-
-  async get({ path = null, query = '', headers = {}, responseType = '', raw = false }: GetRequest): Promise<unknown> {
-    logger.info(`Get using admin client credentials: calling ${this.name}: ${path} ${query}`)
+    logger.info(`Get using admin client credentials: calling ${this.name}: ${path}?${querystring.stringify(query)}`)
     try {
       const result = await superagent
-        .get(`${this.apiUrl()}${path}`)
+        .get(`${this.apiConfig.url}${path}`)
         .agent(this.agent)
         .retry(2, (err, res) => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
         .query(query)
-        .auth(this.token, { type: 'bearer' })
+        .auth(signedWith, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
-        .timeout(this.timeoutConfig())
+        .timeout(this.apiConfig.timeout)
 
       return raw ? result : result.body
     } catch (error) {
@@ -77,27 +84,26 @@ export default class RestClient {
     }
   }
 
-  async post({
-    path = null,
-    headers = {},
-    responseType = '',
-    data = {},
-    raw = false,
-  }: PostRequest = {}): Promise<unknown> {
+  async post(
+    { path = null, headers = {}, responseType = '', data = {}, raw = false }: PostRequest,
+    signedWithMethod?: SignedWithMethod
+  ): Promise<unknown> {
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
+
     logger.info(`Post using admin client credentials: calling ${this.name}: ${path}`)
     try {
       const result = await superagent
-        .post(`${this.apiUrl()}${path}`)
+        .post(`${this.apiConfig.url}${path}`)
         .send(data)
         .agent(this.agent)
         .retry(2, (err, res) => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .auth(this.token, { type: 'bearer' })
+        .auth(signedWith, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
-        .timeout(this.timeoutConfig())
+        .timeout(this.apiConfig.timeout)
 
       return raw ? result : result.body
     } catch (error) {
@@ -107,27 +113,26 @@ export default class RestClient {
     }
   }
 
-  async put({
-    path = null,
-    headers = {},
-    responseType = '',
-    data = {},
-    raw = false,
-  }: PutRequest = {}): Promise<unknown> {
+  async put(
+    { path = null, headers = {}, responseType = '', data = {}, raw = false }: PutRequest,
+    signedWithMethod?: SignedWithMethod
+  ): Promise<unknown> {
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
+
     logger.info(`Put using admin client credentials: calling ${this.name}: ${path}`)
     try {
       const result = await superagent
-        .put(`${this.apiUrl()}${path}`)
+        .put(`${this.apiConfig.url}${path}`)
         .send(data)
         .agent(this.agent)
         .retry(2, (err, res) => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .auth(this.token, { type: 'bearer' })
+        .auth(signedWith, { type: 'bearer' })
         .set(headers)
         .responseType(responseType)
-        .timeout(this.timeoutConfig())
+        .timeout(this.apiConfig.timeout)
 
       return raw ? result : result.body
     } catch (error) {
@@ -137,18 +142,20 @@ export default class RestClient {
     }
   }
 
-  async stream({ path = null, headers = {} }: StreamRequest = {}): Promise<unknown> {
+  async stream({ path = null, headers = {} }: StreamRequest, signedWithMethod?: SignedWithMethod): Promise<unknown> {
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
+
     logger.info(`Get using admin client credentials: calling ${this.name}: ${path}`)
     return new Promise((resolve, reject) => {
       superagent
-        .get(`${this.apiUrl()}${path}`)
+        .get(`${this.apiConfig.url}${path}`)
         .agent(this.agent)
-        .auth(this.token, { type: 'bearer' })
+        .auth(signedWith, { type: 'bearer' })
         .retry(2, (err, res) => {
           if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
           return undefined // retry handler only for logging retries, not to influence retry logic
         })
-        .timeout(this.timeoutConfig())
+        .timeout(this.apiConfig.timeout)
         .set(headers)
         .end((error, response) => {
           if (error) {
@@ -162,36 +169,5 @@ export default class RestClient {
           }
         })
     })
-  }
-
-  async getWithUserToken({
-    userToken = null,
-    path = null,
-    query = '',
-    headers = {},
-    responseType = '',
-    raw = false,
-  }: GetRequest): Promise<unknown> {
-    logger.info(`Get using user token: calling ${this.name}: ${path} ${query}`)
-    try {
-      const result = await superagent
-        .get(`${this.apiUrl()}${path}`)
-        .agent(this.agent)
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
-        .query(query)
-        .auth(userToken, { type: 'bearer' })
-        .set(headers)
-        .responseType(responseType)
-        .timeout(this.timeoutConfig())
-
-      return raw ? result : result.body
-    } catch (error) {
-      const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
-      throw sanitisedError
-    }
   }
 }

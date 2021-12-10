@@ -1,34 +1,66 @@
-import { RedisClient } from 'redis'
+import nock from 'nock'
+import redis, { RedisClient } from 'redis-mock'
 import TokenStore from './tokenStore'
+import config from '../config'
 
-const redisClient = {
-  on: jest.fn(),
-  get: jest.fn(),
-  set: jest.fn(),
-}
+let tokenStore: TokenStore
+let redisClient: RedisClient
 
-describe('tokenStore', () => {
-  let tokenStore: TokenStore
+jest.mock('redis', () => redis)
 
-  beforeEach(() => {
-    tokenStore = new TokenStore(redisClient as unknown as RedisClient)
+jest.mock('../authentication/clientCredentials', () => {
+  return jest.fn().mockImplementation(() => 'Basic clientId:secret')
+})
+
+beforeEach(() => {
+  redisClient = redis.createClient()
+  tokenStore = new TokenStore()
+})
+
+afterEach(done => {
+  redisClient.flushall(done)
+  jest.clearAllMocks()
+  nock.cleanAll()
+})
+
+describe('Token Store', () => {
+  it('Token for user is returned from redis is exists', async () => {
+    redisClient.set('joebloggs', 'saved token')
+
+    const token = await tokenStore.getSystemToken('joebloggs')
+
+    expect(token).toEqual('saved token')
   })
 
-  afterEach(() => {
-    jest.resetAllMocks()
+  it('Auth is called to get and save a token for user if one is not saved', async () => {
+    nock(config.apis.hmppsAuth.url, {
+      reqheaders: { Authorization: 'Basic clientId:secret', 'content-type': 'application/x-www-form-urlencoded' },
+    })
+      .post('/oauth/token', { grant_type: 'client_credentials', username: 'joebloggs' })
+      .reply(200, {
+        access_token: 'generated user token',
+        expires_in: 2000,
+      })
+
+    const token = await tokenStore.getSystemToken('joebloggs')
+
+    expect(token).toEqual('generated user token')
+    expect(nock.isDone()).toBe(true)
   })
 
-  it('Can retrieve token', async () => {
-    redisClient.get.mockImplementation((key, callback) => callback(null, 'token-1'))
+  it('Auth is called to get and save a token for system if one is not saved', async () => {
+    nock(config.apis.hmppsAuth.url, {
+      reqheaders: { Authorization: 'Basic clientId:secret', 'content-type': 'application/x-www-form-urlencoded' },
+    })
+      .post('/oauth/token', { grant_type: 'client_credentials' })
+      .reply(200, {
+        access_token: 'generated system token',
+        expires_in: 2000,
+      })
 
-    await expect(tokenStore.getToken('user-1')).resolves.toBe('token-1')
+    const token = await tokenStore.getSystemToken()
 
-    expect(redisClient.get).toHaveBeenCalledWith('user-1', expect.any(Function))
-  })
-
-  it('Can set token', async () => {
-    await tokenStore.setToken('user-1', 'token-1', 10)
-
-    expect(redisClient.set).toHaveBeenCalledWith('user-1', 'token-1', 'EX', 10, expect.any(Function))
+    expect(token).toEqual('generated system token')
+    expect(nock.isDone()).toBe(true)
   })
 })

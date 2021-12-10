@@ -1,4 +1,3 @@
-import type HmppsAuthClient from '../data/hmppsAuthClient'
 import {
   AdditionalConditionsRequest,
   AppointmentAddressRequest,
@@ -8,7 +7,6 @@ import {
   ContactNumberRequest,
   CreateLicenceRequest,
   Licence,
-  LicenceApiTestData,
   LicenceSummary,
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
@@ -35,25 +33,21 @@ import AdditionalConditions from '../routes/creatingLicences/types/additionalCon
 import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 import LicenceType from '../enumeration/licenceType'
 import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
+import { User } from '../@types/CvlUserDetails'
 
 export default class LicenceService {
   constructor(
-    private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly licenceApiClient: LicenceApiClient,
     private readonly prisonerService: PrisonerService,
     private readonly communityService: CommunityService
   ) {}
 
-  async getTestData(username: string): Promise<LicenceApiTestData[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return new LicenceApiClient(token).getTestData()
-  }
-
-  async createLicence(prisonerNumber: string, username: string): Promise<LicenceSummary> {
-    const nomisRecord = await this.prisonerService.getPrisonerDetail(username, prisonerNumber)
+  async createLicence(prisonerNumber: string, user: User): Promise<LicenceSummary> {
+    const nomisRecord = await this.prisonerService.getPrisonerDetail(prisonerNumber, user)
     const [staffDetail, deliusRecord, prisonInformation] = await Promise.all([
-      this.communityService.getStaffDetail(username),
+      this.communityService.getStaffDetail(user),
       this.communityService.getProbationer(prisonerNumber),
-      this.prisonerService.getPrisonInformation(username, nomisRecord.agencyId),
+      this.prisonerService.getPrisonInformation(nomisRecord.agencyId, user),
     ])
 
     const offenderManager = deliusRecord.offenderManagers.find(om => om.active)
@@ -107,52 +101,44 @@ export default class LicenceService {
         : [],
     } as CreateLicenceRequest
 
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return new LicenceApiClient(token).createLicence(licence)
+    return this.licenceApiClient.createLicence(licence, user)
   }
 
-  async getLicence(id: string, username: string): Promise<Licence> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return new LicenceApiClient(token).getLicenceById(id)
+  async getLicence(id: string, user: User): Promise<Licence> {
+    return this.licenceApiClient.getLicenceById(id, user)
   }
 
-  async updateAppointmentPerson(id: string, formData: PersonName, username: string): Promise<void> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+  async updateAppointmentPerson(id: string, formData: PersonName, user: User): Promise<void> {
     const requestBody = {
       appointmentPerson: formData.contactName,
     } as AppointmentPersonRequest
 
-    return new LicenceApiClient(token).updateAppointmentPerson(id, requestBody)
+    return this.licenceApiClient.updateAppointmentPerson(id, requestBody, user)
   }
 
-  async updateAppointmentTime(id: string, formData: SimpleDateTime, username: string): Promise<void> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+  async updateAppointmentTime(id: string, formData: SimpleDateTime, user: User): Promise<void> {
     const appointmentTime = simpleDateTimeToJson(formData)
     const requestBody = { appointmentTime } as AppointmentTimeRequest
-    return new LicenceApiClient(token).updateAppointmentTime(id, requestBody)
+    return this.licenceApiClient.updateAppointmentTime(id, requestBody, user)
   }
 
-  async updateAppointmentAddress(id: string, formData: Address, username: string): Promise<void> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+  async updateAppointmentAddress(id: string, formData: Address, user: User): Promise<void> {
     const appointmentAddress = addressObjectToString(formData)
     const requestBody = { appointmentAddress } as AppointmentAddressRequest
-    return new LicenceApiClient(token).updateAppointmentAddress(id, requestBody)
+    return this.licenceApiClient.updateAppointmentAddress(id, requestBody, user)
   }
 
-  async updateContactNumber(id: string, formData: Telephone, username: string): Promise<void> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+  async updateContactNumber(id: string, formData: Telephone, user: User): Promise<void> {
     const requestBody = { comTelephone: formData.telephone } as ContactNumberRequest
-    return new LicenceApiClient(token).updateContactNumber(id, requestBody)
+    return this.licenceApiClient.updateContactNumber(id, requestBody, user)
   }
 
   async updateAdditionalConditions(
     id: string,
     conditionType: LicenceType,
     formData: AdditionalConditions,
-    username: string
+    user: User
   ): Promise<void> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-
     const requestBody = {
       additionalConditions:
         formData.additionalConditions?.map((conditionCode, index) => {
@@ -168,17 +154,15 @@ export default class LicenceService {
       conditionType,
     } as AdditionalConditionsRequest
 
-    return new LicenceApiClient(token).updateAdditionalConditions(id, requestBody)
+    return this.licenceApiClient.updateAdditionalConditions(id, requestBody, user)
   }
 
   async updateAdditionalConditionData(
     licenceId: string,
     additionalConditionId: string,
     formData: unknown,
-    username: string
+    user: User
   ): Promise<void> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-
     let sequenceNumber = -1
 
     const requestBody = {
@@ -212,58 +196,63 @@ export default class LicenceService {
         }),
     } as UpdateAdditionalConditionDataRequest
 
-    return new LicenceApiClient(token).updateAdditionalConditionData(licenceId, additionalConditionId, requestBody)
+    return this.licenceApiClient.updateAdditionalConditionData(licenceId, additionalConditionId, requestBody, user)
   }
 
-  async updateBespokeConditions(id: string, formData: BespokeConditions, username: string): Promise<void> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
+  async updateBespokeConditions(id: string, formData: BespokeConditions, user: User): Promise<void> {
     const sanitised = formData.conditions.filter((c: string) => c !== null && c.length > 0)
     const requestBody = { conditions: sanitised } as BespokeConditionsRequest
-    return new LicenceApiClient(token).updateBespokeConditions(id, requestBody)
+    return this.licenceApiClient.updateBespokeConditions(id, requestBody, user)
   }
 
-  async updateStatus(id: string, newStatus: LicenceStatus, username: string, fullName: string = null): Promise<void> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    const requestBody = { status: newStatus, username, fullName } as StatusUpdateRequest
-    return new LicenceApiClient(token).updateLicenceStatus(id, requestBody)
+  async updateStatus(id: string, newStatus: LicenceStatus, user: User): Promise<void> {
+    const requestBody = {
+      status: newStatus,
+      username: user.username,
+      fullName: user.displayName,
+    } as StatusUpdateRequest
+    return this.licenceApiClient.updateLicenceStatus(id, requestBody, user)
   }
 
-  async getLicencesByStaffIdAndStatus(
-    staffId: number,
-    username: string,
-    statuses: LicenceStatus[]
-  ): Promise<LicenceSummary[]> {
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    return new LicenceApiClient(token).getLicencesByStaffIdAndStatus(staffId, statuses)
+  async getLicencesByStaffIdAndStatus(statuses: LicenceStatus[], user: User): Promise<LicenceSummary[]> {
+    return this.licenceApiClient.getLicencesByStaffIdAndStatus(statuses, user)
   }
 
-  async getLicencesForApproval(username: string, prisons: string[]): Promise<LicenceSummary[]> {
+  async getLicencesForApproval(user: User): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.SUBMITTED.valueOf()]
-    const token = await this.hmppsAuthClient.getSystemClientToken(username)
-    const filteredPrisons = filterCentralCaseload(prisons)
-    return new LicenceApiClient(token).matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate')
+    const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
+    return this.licenceApiClient.matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate', null, user)
   }
 
-  async getLicencesForCaseAdmin(
-    username: string,
-    authSource: string,
-    prisons: string[] = [],
-    staffId: number = null
-  ): Promise<LicenceSummary[]> {
+  async getLicencesForCaseAdmin(user: User): Promise<LicenceSummary[]> {
     const statuses = [
       LicenceStatus.ACTIVE.valueOf(),
       LicenceStatus.APPROVED.valueOf(),
       LicenceStatus.REJECTED.valueOf(),
       LicenceStatus.SUBMITTED.valueOf(),
     ]
-    if (authSource === 'nomis') {
-      const token = await this.hmppsAuthClient.getSystemClientToken(username)
-      const filteredPrisons = filterCentralCaseload(prisons)
-      return new LicenceApiClient(token).matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate')
+    if (user.authSource === 'nomis') {
+      const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
+      return this.licenceApiClient.matchLicences(
+        statuses,
+        filteredPrisons,
+        [],
+        [],
+        'conditionalReleaseDate',
+        null,
+        user
+      )
     }
-    if (authSource === 'delius') {
-      const token = await this.hmppsAuthClient.getSystemClientToken(username)
-      return new LicenceApiClient(token).matchLicences(statuses, [], [staffId], [], 'conditionalReleaseDate')
+    if (user.authSource === 'delius') {
+      return this.licenceApiClient.matchLicences(
+        statuses,
+        [],
+        [user.deliusStaffIdentifier],
+        [],
+        'conditionalReleaseDate',
+        null,
+        user
+      )
     }
     return []
   }

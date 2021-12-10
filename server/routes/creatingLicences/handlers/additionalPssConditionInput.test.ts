@@ -20,9 +20,6 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       },
       query: {},
       body: {},
-      user: {
-        username: 'joebloggs',
-      },
     } as unknown as Request
 
     res = {
@@ -32,6 +29,9 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       locals: {
         licence: {
           additionalPssConditions: [],
+        },
+        user: {
+          username: 'joebloggs',
         },
       },
     } as unknown as Response
@@ -73,7 +73,14 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
     it('should call licence service to update the additional condition data', async () => {
       await handler.POST(req, res)
-      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith('1', '1', {}, 'joebloggs')
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
+        '1',
+        '1',
+        {},
+        {
+          username: 'joebloggs',
+        }
+      )
     })
 
     it('should redirect to the callback function', async () => {
@@ -116,7 +123,9 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         {
           additionalConditions: ['code2'],
         },
-        'joebloggs'
+        {
+          username: 'joebloggs',
+        }
       )
     })
 

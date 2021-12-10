@@ -48,7 +48,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
   describe('POST', () => {
     it('should redirect to the meeting time page', async () => {
       await handler.POST(req, res)
-      expect(licenceService.updateContactNumber).toHaveBeenCalledWith(1, contactNumber, res.locals.user.username)
+      expect(licenceService.updateContactNumber).toHaveBeenCalledWith(
+        1,
+        { telephone: '0114 2556556' },
+        { username: 'joebloggs' }
+      )
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-time')
     })
 

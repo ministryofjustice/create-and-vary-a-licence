@@ -50,7 +50,7 @@ describe('Route Handlers - Approval - case list', () => {
     it('should render list of licences for approval', async () => {
       licenceService.getLicencesForApproval.mockResolvedValue(fakeSummaryList)
       await handler.GET(req, res)
-      expect(licenceService.getLicencesForApproval).toHaveBeenCalledWith(username, res.locals.user.prisonCaseload)
+      expect(licenceService.getLicencesForApproval).toHaveBeenCalledWith(res.locals.user)
       expect(res.render).toHaveBeenCalledWith('pages/approve/cases', { cases: fakeSummaryList })
     })
   })

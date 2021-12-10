@@ -15,9 +15,9 @@ export default class BespokeConditionsRoutes {
     // TODO: Some work to do here to redirect to the same page if "Add another" or "Remove" is selected and javascript is off
     const { licenceId } = req.params
     const { licence } = res.locals
-    const { username } = res.locals.user
+    const { user } = res.locals
 
-    await this.licenceService.updateBespokeConditions(licenceId, req.body, username)
+    await this.licenceService.updateBespokeConditions(licenceId, req.body, user)
 
     if (req.query?.fromReview) {
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)

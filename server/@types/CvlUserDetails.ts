@@ -1,4 +1,4 @@
-class CvlUserDetails {
+export default class CvlUserDetails {
   // e.g. john smith
   name?: string
 
@@ -39,4 +39,4 @@ class CvlUserDetails {
   probationLduCodes?: string[]
 }
 
-export = CvlUserDetails
+export type User = Express.User & CvlUserDetails

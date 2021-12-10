@@ -6,8 +6,8 @@ import logger from '../../logger'
 export default function fetchLicence(licenceService: LicenceService): RequestHandler {
   return async (req, res, next) => {
     if (req.params.licenceId) {
-      const { username } = res.locals.user
-      const licence = await licenceService.getLicence(req.params.licenceId, username)
+      const { user } = res.locals
+      const licence = await licenceService.getLicence(req.params.licenceId, user)
 
       // Does this prison user have a caseload which allows access this licence?
       if (licence && res.locals.user?.nomisStaffId) {
