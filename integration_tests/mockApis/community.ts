@@ -19,8 +19,22 @@ export default {
             surname: 'smith',
           },
           teams: [
-            { code: 'A', description: 'Team A' },
-            { code: 'B', description: 'Team B' },
+            {
+              code: 'A',
+              description: 'Team A',
+              localDeliveryUnit: {
+                code: 'LDU1',
+                description: 'LDU one',
+              },
+            },
+            {
+              code: 'B',
+              description: 'Team B',
+              localDeliveryUnit: {
+                code: 'LDU1',
+                description: 'LDU two',
+              },
+            },
           ],
           telephoneNumber: '07786 989777',
           email: 'jsmith@probation.com',
