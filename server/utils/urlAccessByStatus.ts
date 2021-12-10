@@ -68,7 +68,7 @@ export default function getUrlAccessByStatus(
   }
 
   if (!result) {
-    logger.warn(`${username} access to ${path} was denied for licence ID ${licenceId} - ${licenceStatus}`)
+    logger.warn(`Denied access for ${username} to ${path} licence ID ${licenceId}, status ${licenceStatus}`)
   }
 
   return result

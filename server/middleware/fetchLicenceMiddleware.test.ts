@@ -38,7 +38,7 @@ const probationRes = {
 } as unknown as Response
 
 const licence = {
-  licenceId: '1',
+  id: '1',
   statusCode: 'IN_PROGRESS',
   prisonCode: 'LEI',
   probationLduCode: 'N55AAA',

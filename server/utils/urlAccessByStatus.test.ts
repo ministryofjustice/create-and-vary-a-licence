@@ -1,6 +1,6 @@
 import getUrlAccessByStatus from './urlAccessByStatus'
 
-const username = 'XXX'
+const username = 'USER1'
 let path = ''
 
 describe('URL access checks for licence statuses', () => {
