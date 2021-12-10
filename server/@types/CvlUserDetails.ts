@@ -34,6 +34,9 @@ export default class CvlUserDetails {
 
   // Email address - from Nomis, Delius or Auth depending on source
   emailAddress?: string
+
+  // LDU code(s)
+  probationLduCodes?: string[]
 }
 
 export type User = Express.User & CvlUserDetails

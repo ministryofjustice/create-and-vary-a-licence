@@ -1,0 +1,33 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - access denied" %}
+{% set pageId = "access-denied-page" %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-body">
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukWarningText({
+                text: "Access is denied",
+                iconFallbackText: "Warning"
+            }) }}
+
+            <h2 class="govuk-heading-s">Why am I seeing this page?</h2>
+            <p>
+                You have attempted to access an area of the service which your permissions do not allow.
+                This may be because the person or licence accessed is no longer within your prison or probation case view.
+            </p>
+
+            <p class="govuk-body">
+                {{ govukButton({
+                    text: "Home page",
+                    classes: "govuk-button--primary govuk-!-margin-bottom-0 govuk-body",
+                    href: '/',
+                    attributes: { 'data-qa': 'return-to-home-page' }
+                }) }}
+            </p>
+        </div>
+    </div>
+{% endblock %}
