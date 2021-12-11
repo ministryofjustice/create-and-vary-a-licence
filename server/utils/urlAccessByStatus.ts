@@ -10,6 +10,7 @@ const allowedPaths = [
     allowed: [
       '/licence/create/id/(\\d)*/check-your-answers.*',
       '/licence/create/id/(\\d)*/edit.*',
+      '/licence/create/id/(\\d)/confirmation.*',
       '/licence/view/id/(\\d)*/.*',
       '/licence/approve/id/(\\d)*/.*',
     ],

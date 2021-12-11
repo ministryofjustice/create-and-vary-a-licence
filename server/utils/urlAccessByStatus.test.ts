@@ -27,6 +27,11 @@ describe('URL access checks for licence statuses', () => {
       expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
     })
 
+    it('should allow access to confirmation page after submitting', () => {
+      path = '/licence/create/id/1/confirmation'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
+    })
+
     it('should allow access to approval flow', () => {
       path = '/licence/approve/id/1/view'
       expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
