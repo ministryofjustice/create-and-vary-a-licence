@@ -27,8 +27,8 @@ export default class PrisonerService {
       base64String = image.toString('base64')
     } catch (error) {
       logger.info(`No image data found for ${nomsId} - sending placeholder image`)
-      const content = await fs.readFileSync('assets/images/image-missing.png')
-      base64String = Buffer.from(content).toString('base64')
+      const content = fs.readFileSync('assets/images/image-missing.png')
+      base64String = content.toString('base64')
     }
     return base64String
   }
