@@ -42,7 +42,7 @@
     <form action="{{ "/licence/create/id/" + licence.id + "/additional-pss-conditions/condition/" + additionalCondition.id + "/delete" + fromReview }}" method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         {{ govukButton({
-            text: "Delete this condition",
+            text: "Delete this requirement",
             type: "submit",
             classes: 'govuk-button--secondary',
             attributes: { 'data-qa': 'delete' }
