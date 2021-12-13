@@ -1,4 +1,3 @@
-import exp from 'constants'
 import CommunityService from './communityService'
 import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
