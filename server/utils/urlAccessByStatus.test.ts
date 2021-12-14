@@ -54,6 +54,11 @@ describe('URL access checks for licence statuses', () => {
       expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(false)
     })
 
+    it('should allow access to approval confirmation', () => {
+      path = '/licence/approve/id/1/confirm-approved'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
     it('should allow access to licence viewing', () => {
       path = '/licence/view/id/1/show'
       expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
@@ -79,6 +84,11 @@ describe('URL access checks for licence statuses', () => {
     it('should deny access to approval flow', () => {
       path = '/licence/approve/id/1/view'
       expect(getUrlAccessByStatus(path, 1, 'REJECTED', username)).toEqual(false)
+    })
+
+    it('should allow access to rejection confirmation', () => {
+      path = '/licence/approve/id/1/confirm-rejected'
+      expect(getUrlAccessByStatus(path, 1, 'REJECTED', username)).toEqual(true)
     })
   })
 
