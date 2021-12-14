@@ -82,7 +82,9 @@ export default class LicenceService {
       prisonTelephone: [
         prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
         prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
-      ].join(' '),
+      ]
+        .filter(n => n)
+        .join(' '),
       comUsername: staffDetail.username,
       comStaffId: staffDetail.staffIdentifier,
       comEmail: staffDetail.email,
@@ -142,13 +144,12 @@ export default class LicenceService {
     const requestBody = {
       additionalConditions:
         formData.additionalConditions?.map((conditionCode, index) => {
+          const additionalConditionConfig = getAdditionalConditionByCode(conditionCode)
           return {
             code: conditionCode,
             sequence: index,
-            category:
-              getAdditionalConditionByCode(conditionCode)?.categoryShort ||
-              getAdditionalConditionByCode(conditionCode)?.category,
-            text: getAdditionalConditionByCode(conditionCode)?.text,
+            category: additionalConditionConfig?.categoryShort || additionalConditionConfig?.category,
+            text: additionalConditionConfig?.text,
           }
         }) || [],
       conditionType,
@@ -200,7 +201,7 @@ export default class LicenceService {
   }
 
   async updateBespokeConditions(id: string, formData: BespokeConditions, user: User): Promise<void> {
-    const sanitised = formData.conditions.filter((c: string) => c !== null && c.length > 0)
+    const sanitised = formData.conditions.filter((c: string) => c && c.length > 0)
     const requestBody = { conditions: sanitised } as BespokeConditionsRequest
     return this.licenceApiClient.updateBespokeConditions(id, requestBody, user)
   }
