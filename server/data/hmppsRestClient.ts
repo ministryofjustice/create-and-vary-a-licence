@@ -62,26 +62,26 @@ export default class HmppsRestClient {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
     logger.info(`Get using admin client credentials: calling ${this.name}: ${path}?${querystring.stringify(query)}`)
-    try {
-      const result = await superagent
-        .get(`${this.apiConfig.url}${path}`)
-        .agent(this.agent)
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
-        .query(query)
-        .auth(signedWith, { type: 'bearer' })
-        .set(headers)
-        .responseType(responseType)
-        .timeout(this.apiConfig.timeout)
-
-      return raw ? result : result.body
-    } catch (error) {
-      const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
-      throw sanitisedError
-    }
+    return superagent
+      .get(`${this.apiConfig.url}${path}`)
+      .agent(this.agent)
+      .retry(2, (err, res) => {
+        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+        return undefined // retry handler only for logging retries, not to influence retry logic
+      })
+      .query(query)
+      .auth(signedWith, { type: 'bearer' })
+      .set(headers)
+      .responseType(responseType)
+      .timeout(this.apiConfig.timeout)
+      .then(response => {
+        return raw ? response : response.body
+      })
+      .catch(error => {
+        const sanitisedError = sanitiseError(error)
+        logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
+        throw sanitisedError
+      })
   }
 
   async post(
@@ -91,26 +91,26 @@ export default class HmppsRestClient {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
     logger.info(`Post using admin client credentials: calling ${this.name}: ${path}`)
-    try {
-      const result = await superagent
-        .post(`${this.apiConfig.url}${path}`)
-        .send(data)
-        .agent(this.agent)
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
-        .auth(signedWith, { type: 'bearer' })
-        .set(headers)
-        .responseType(responseType)
-        .timeout(this.apiConfig.timeout)
-
-      return raw ? result : result.body
-    } catch (error) {
-      const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
-      throw sanitisedError
-    }
+    return superagent
+      .post(`${this.apiConfig.url}${path}`)
+      .send(data)
+      .agent(this.agent)
+      .retry(2, (err, res) => {
+        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+        return undefined // retry handler only for logging retries, not to influence retry logic
+      })
+      .auth(signedWith, { type: 'bearer' })
+      .set(headers)
+      .responseType(responseType)
+      .timeout(this.apiConfig.timeout)
+      .then(response => {
+        return raw ? response : response.body
+      })
+      .catch(error => {
+        const sanitisedError = sanitiseError(error)
+        logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
+        throw sanitisedError
+      })
   }
 
   async put(
@@ -120,54 +120,52 @@ export default class HmppsRestClient {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
     logger.info(`Put using admin client credentials: calling ${this.name}: ${path}`)
-    try {
-      const result = await superagent
-        .put(`${this.apiConfig.url}${path}`)
-        .send(data)
-        .agent(this.agent)
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
-        .auth(signedWith, { type: 'bearer' })
-        .set(headers)
-        .responseType(responseType)
-        .timeout(this.apiConfig.timeout)
-
-      return raw ? result : result.body
-    } catch (error) {
-      const sanitisedError = sanitiseError(error)
-      logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'PUT'`)
-      throw sanitisedError
-    }
+    return superagent
+      .put(`${this.apiConfig.url}${path}`)
+      .send(data)
+      .agent(this.agent)
+      .retry(2, (err, res) => {
+        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+        return undefined // retry handler only for logging retries, not to influence retry logic
+      })
+      .auth(signedWith, { type: 'bearer' })
+      .set(headers)
+      .responseType(responseType)
+      .timeout(this.apiConfig.timeout)
+      .then(response => {
+        return raw ? response : response.body
+      })
+      .catch(error => {
+        const sanitisedError = sanitiseError(error)
+        logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'PUT'`)
+        throw sanitisedError
+      })
   }
 
   async stream({ path = null, headers = {} }: StreamRequest, signedWithMethod?: SignedWithMethod): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
     logger.info(`Get using admin client credentials: calling ${this.name}: ${path}`)
-    return new Promise((resolve, reject) => {
-      superagent
-        .get(`${this.apiConfig.url}${path}`)
-        .agent(this.agent)
-        .auth(signedWith, { type: 'bearer' })
-        .retry(2, (err, res) => {
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
-        .timeout(this.apiConfig.timeout)
-        .set(headers)
-        .end((error, response) => {
-          if (error) {
-            logger.info(`Error caught for get stream ${path}`)
-            reject(error)
-          } else if (response) {
-            const streamedResponse = Readable.from(response.body)
-            streamedResponse.push(response.body)
-            streamedResponse.push(null)
-            resolve(streamedResponse)
-          }
-        })
-    })
+    return superagent
+      .get(`${this.apiConfig.url}${path}`)
+      .agent(this.agent)
+      .auth(signedWith, { type: 'bearer' })
+      .retry(2, (err, res) => {
+        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+        return undefined // retry handler only for logging retries, not to influence retry logic
+      })
+      .timeout(this.apiConfig.timeout)
+      .set(headers)
+      .then(response => {
+        const streamedResponse = Readable.from(response.body)
+        streamedResponse.push(response.body)
+        streamedResponse.push(null)
+        return streamedResponse
+      })
+      .catch(error => {
+        const sanitisedError = sanitiseError(error)
+        logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET (streamed)'`)
+        throw sanitisedError
+      })
   }
 }

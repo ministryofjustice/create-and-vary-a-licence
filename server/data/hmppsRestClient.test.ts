@@ -1,4 +1,5 @@
 import nock from 'nock'
+import { Readable } from 'stream'
 import HmppsRestClient from './hmppsRestClient'
 import { ApiConfig } from '../config'
 
@@ -266,6 +267,61 @@ describe('Hmpps Rest Client tests', () => {
           data: {
             testData1: 'testValue1',
           },
+        })
+      } catch (e) {
+        error = e
+      }
+
+      expect(error.message).toBe('Not Found')
+      expect(nock.isDone()).toBe(true)
+    })
+  })
+
+  describe('STREAM', () => {
+    it('Should return response body as a stream', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+      })
+        .get('/test')
+        .reply(200, [1, 2, 3])
+
+      const result = (await restClient.stream({ path: '/test', headers: { header1: 'headerValue1' } })) as Readable
+
+      expect(nock.isDone()).toBe(true)
+      expect(result.read()).toEqual([1, 2, 3])
+    })
+
+    it('Should use the supplied token as signature', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer user token', header1: 'headerValue1' },
+      })
+        .get('/test')
+        .reply(200, [1, 2, 3])
+
+      const result = (await restClient.stream(
+        {
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+        },
+        { token: 'user token', username: 'joebloggs' }
+      )) as Readable
+
+      expect(nock.isDone()).toBe(true)
+      expect(result.read()).toEqual([1, 2, 3])
+    })
+
+    it('Should throw error when bad response', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+      })
+        .get('/test')
+        .reply(404, { success: false })
+
+      let error
+      try {
+        await restClient.stream({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
         })
       } catch (e) {
         error = e

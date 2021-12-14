@@ -75,6 +75,13 @@ describe('fetchLicenceMiddleware', () => {
     expect(next).toBeCalledTimes(1)
   })
 
+  it('should handle error from licence service', async () => {
+    licenceService.getLicence.mockRejectedValue('Error')
+
+    await middleware(req, res, next)
+    expect(next).toBeCalledWith('Error')
+  })
+
   it('should allow access for a prison user based on caseload', async () => {
     await middleware(req, res, next)
     expect(res.locals.licence).toEqual(licence)
