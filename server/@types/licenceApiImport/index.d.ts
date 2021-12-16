@@ -40,6 +40,10 @@ export interface paths {
     /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createLicence']
   }
+  '/licence/activate-licences': {
+    /** Set licence statuses to ACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['activateLicences']
+  }
   '/test/data': {
     /** Just a test API to verify that the full stack of components are working together */
     get: operations['getTestData']
@@ -55,10 +59,6 @@ export interface paths {
   '/licence/id/{licenceId}': {
     /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getLicenceById']
-  }
-  '/licence/approval-candidates': {
-    /** Get the licences awaiting approval within a specified (or all) prison caseloads. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-    get: operations['getLicencesForApprovalByPrisonCaseload']
   }
 }
 
@@ -82,8 +82,8 @@ export interface components {
     }
     /** Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
-      /** The UK telephone number to contact the responsible officer for a licence */
-      comTelephone: string
+      /** The UK telephone number to contact the person the offender should meet for their initial meeting */
+      telephone: string
     }
     /** A list of bespoke conditions to add to a licence */
     BespokeConditionRequest: {
@@ -729,6 +729,36 @@ export interface operations {
       }
     }
   }
+  /** Set licence statuses to ACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  activateLicences: {
+    responses: {
+      /** Licences activated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': number[]
+      }
+    }
+  }
   /** Just a test API to verify that the full stack of components are working together */
   getTestData: {
     responses: {
@@ -791,6 +821,8 @@ export interface operations {
         status?: ('IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED')[]
         staffId?: number[]
         nomsId?: string[]
+        sortBy?: string
+        sortOrder?: string
       }
     }
     responses: {
@@ -842,34 +874,6 @@ export interface operations {
       }
       /** The licence for this ID was not found. */
       404: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /** Get the licences awaiting approval within a specified (or all) prison caseloads. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-  getLicencesForApprovalByPrisonCaseload: {
-    parameters: {
-      query: {
-        prison?: string[]
-      }
-    }
-    responses: {
-      /** Licence summary details returned - could be empty. */
-      200: {
-        content: {
-          'application/json': components['schemas']['LicenceSummary'][]
-        }
-      }
-      /** Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** Forbidden, requires an appropriate role */
-      403: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }

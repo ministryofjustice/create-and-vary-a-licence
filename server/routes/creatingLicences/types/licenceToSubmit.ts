@@ -12,7 +12,7 @@ class LicenceToSubmit {
 
   @Expose()
   @IsNotEmpty({ message: 'The telephone number for the induction meeting must be entered' })
-  comTelephone: string
+  appointmentContact: string
 
   @Expose()
   @IsNotEmpty({ message: 'The date and time of the induction meeting must be entered' })

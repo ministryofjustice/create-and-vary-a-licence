@@ -99,12 +99,12 @@ describe('Licence API client tests', () => {
   it('Update contact number', async () => {
     await licenceApiClient.updateContactNumber(
       '1',
-      { comTelephone: '0112877368' } as ContactNumberRequest,
+      { telephone: '0112877368' } as ContactNumberRequest,
       { username: 'joebloggs' } as User
     )
 
     expect(put).toHaveBeenCalledWith(
-      { path: '/licence/id/1/contact-number', data: { comTelephone: '0112877368' } },
+      { path: '/licence/id/1/contact-number', data: { telephone: '0112877368' } },
       { username: 'joebloggs' }
     )
   })
