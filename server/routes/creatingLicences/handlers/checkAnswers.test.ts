@@ -31,7 +31,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         licence: {
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
-          comTelephone: '07891245678',
+          appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
           additionalLicenceConditions: [],
           additionalPssConditions: [],
@@ -56,7 +56,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       res.locals.licence = {
         appointmentPerson: '',
         appointmentAddress: '',
-        comTelephone: '',
+        appointmentContact: '',
         appointmentTime: '',
       }
 
@@ -67,7 +67,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         JSON.stringify([
           { field: 'appointmentPerson', message: 'The person to meet at the induction meeting must be entered' },
           { field: 'appointmentAddress', message: 'The address of the induction meeting must be entered' },
-          { field: 'comTelephone', message: 'The telephone number for the induction meeting must be entered' },
+          { field: 'appointmentContact', message: 'The telephone number for the induction meeting must be entered' },
           { field: 'appointmentTime', message: 'The date and time of the induction meeting must be entered' },
         ])
       )
