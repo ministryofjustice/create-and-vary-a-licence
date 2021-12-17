@@ -7,6 +7,7 @@
 {% set pageId = "additional-condition-input-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
 {% set fromReview = "?fromReview=true" if fromReview %}
+{% set fromReviewAppend = "&fromReview=true" if fromReview %}
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
@@ -15,9 +16,24 @@
         </div>
     </div>
 
-    <form method="POST">
+    {# Check for any fileUpload type in the inputs for this condition and alter the form encoding #}
+    {% set fileUpload = false %}
+    {% for input in config.inputs %}
+       {% if input.type === 'fileUpload' %}
+           {% set fileUpload = true %}
+       {% endif %}
+    {% endfor %}
+
+    {# Alter the form encoding to multi-part formdata and supply csrf token in query params for file upload conditions #}
+    <form method="POST"
+        {% if fileUpload %}
+            encType="multipart/form-data"
+            action="?_csrf={{ csrfToken }}{{ fromReviewAppend }}"
+        {% endif %}>
+
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <input type="hidden" name="code" value="{{ config.code }}">
+
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
                 <p class="govuk-body">

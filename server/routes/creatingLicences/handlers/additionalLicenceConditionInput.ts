@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import { getAdditionalConditionByCode } from '../../../utils/conditionsProvider'
 import LicenceType from '../../../enumeration/licenceType'
+import logger from '../../../../logger'
 
 export default class AdditionalLicenceConditionInputRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -11,6 +12,7 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { licenceId } = req.params
     const { additionalLicenceConditions } = res.locals.licence
     const { conditionId } = req.params
+
     const additionalCondition = additionalLicenceConditions.find(
       (condition: AdditionalCondition) => condition.id === +conditionId
     )
@@ -33,6 +35,20 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { user } = res.locals
 
     await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, user)
+
+    if (req.file) {
+      // Check if there was a file upload - there is only one (so far) - the exclusion zone map (outOfBoundFilename)
+      if (req.file.fieldname === 'outOfBoundFilename') {
+        logger.info(`File upload request ${JSON.stringify(req.file)} licenceId ${licenceId}, condId ${conditionId}`)
+        await this.licenceService.uploadConditionFile(licenceId, conditionId, req.file, user)
+      } else {
+        logger.warn(
+          `Attempted file upload by ${user.displayName} - ${JSON.stringify(
+            req.file
+          )} for licenceId ${licenceId}, condId ${conditionId}`
+        )
+      }
+    }
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-licence-conditions/callback${

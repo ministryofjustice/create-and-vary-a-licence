@@ -26,6 +26,13 @@ interface PostRequest {
   raw?: boolean
 }
 
+interface PostMultiPartRequest {
+  path?: string
+  headers?: Record<string, string>
+  responseType?: string
+  fileToUpload: Express.Multer.File
+}
+
 interface PutRequest {
   path?: string
   headers?: Record<string, string>
@@ -165,6 +172,37 @@ export default class HmppsRestClient {
       .catch(error => {
         const sanitisedError = sanitiseError(error)
         logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET (streamed)'`)
+        throw sanitisedError
+      })
+  }
+
+  async postMultiPart(
+    { path = null, headers = {}, responseType = '', fileToUpload }: PostMultiPartRequest,
+    signedWithMethod?: SignedWithMethod
+  ): Promise<unknown> {
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
+    logger.info(`PostMultiPartRequest using admin client credentials: calling ${this.name}: ${path}`)
+    return superagent
+      .post(`${this.apiConfig.url}${path}`)
+      .attach('file', fileToUpload.buffer)
+      .field('filename', fileToUpload.originalname)
+      .field('filesize', `${fileToUpload.size}`)
+      .field('filetype', fileToUpload.mimetype)
+      .agent(this.agent)
+      .retry(2, (err, res) => {
+        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+        return undefined // retry handler only for logging retries, not to influence retry logic
+      })
+      .auth(signedWith, { type: 'bearer' })
+      .set(headers)
+      .responseType(responseType)
+      .timeout(this.apiConfig.timeout)
+      .then(response => {
+        return response.body
+      })
+      .catch(error => {
+        const sanitisedError = sanitiseError(error)
+        logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
         throw sanitisedError
       })
   }

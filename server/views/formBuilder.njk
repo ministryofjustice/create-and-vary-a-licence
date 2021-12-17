@@ -4,6 +4,7 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "partials/datePicker.njk" import datePicker %}
 {% from "partials/timePicker.njk" import timePicker %}
 
@@ -203,6 +204,24 @@
                 }) }}
             {% endif %}
 
+            {% if input.type === 'fileUpload' %}
+                {% for item in formValues %}
+                    {# When submitting an empty form formValues is an array containing one empty string #}
+                    {# This is to cater for other input types which are part of the Add-Another pattern #}
+                    {% if item.length > 1 %}
+                        {# There was a value for the uploaded file name - so show thumbnail and a delete link #}
+                        <input type="hidden" name="{{ input.name }}" value="{{ item }}">
+                        {{ item }} - show delete link here
+                    {% else %}
+                        {# Form values were present but empty, so show the file selector #}
+                        {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors) }}
+                    {% endif %}
+                {% else %}
+                    {# No form values were present, so show the file selector #}
+                    {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors) }}
+                {% endfor %}
+            {% endif %}
+
             {% if input.addAnother %}
                 <div class="moj-button-action">
                     {{ govukButton({
@@ -214,6 +233,22 @@
         </div>
     {% endfor %}
 {% endmacro %}
+
+
+{% macro fileTypeInput(name, acceptTypes, label, validationErrors) %}
+    {{ govukFileUpload({
+        id: name,
+        name: name,
+        attributes: {
+           accept: acceptTypes
+        },
+        label: {
+           text: label
+        },
+        errorMessage: validationErrors | findError(name)
+    }) }}
+{% endmacro %}
+
 
 {% macro textInput(input, validationError, value, index, removeButton) %}
     {% if index == 0 or (index > 0 and input.addAnother) %}

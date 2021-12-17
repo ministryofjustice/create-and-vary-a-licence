@@ -34,6 +34,7 @@ import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 import LicenceType from '../enumeration/licenceType'
 import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
+import logger from '../../logger'
 
 export default class LicenceService {
   constructor(
@@ -198,6 +199,16 @@ export default class LicenceService {
     } as UpdateAdditionalConditionDataRequest
 
     return this.licenceApiClient.updateAdditionalConditionData(licenceId, additionalConditionId, requestBody, user)
+  }
+
+  async uploadConditionFile(
+    licenceId: string,
+    additionalConditionId: string,
+    fileToUpload: Express.Multer.File,
+    user: User
+  ): Promise<void> {
+    logger.info(`Called uploadConditionFile -name ${fileToUpload.originalname} Path ${fileToUpload.path}`)
+    return this.licenceApiClient.uploadConditionFile(licenceId, additionalConditionId, user, fileToUpload)
   }
 
   async updateBespokeConditions(id: string, formData: BespokeConditions, user: User): Promise<void> {

@@ -1,4 +1,5 @@
 import { RequestHandler, Router } from 'express'
+import multer from 'multer'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
@@ -31,6 +32,8 @@ import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssCondi
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
 import EditQuestionRoutes from './handlers/editQuestion'
 
+const upload = multer({ dest: 'uploads/' })
+
 export default function Index({ licenceService, caseloadService }: Services): Router {
   const router = Router()
 
@@ -55,6 +58,16 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
+      validationMiddleware(type),
+      asyncMiddleware(handler)
+    )
+
+  const postWithFileUpload = (path: string, handler: RequestHandler, type?: new () => object) =>
+    router.post(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      fetchLicence(licenceService),
+      upload.single('outOfBoundFilename'),
       validationMiddleware(type),
       asyncMiddleware(handler)
     )
@@ -98,10 +111,13 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   post('/id/:licenceId/additional-licence-conditions', additionalLicenceConditionsHandler.POST, AdditionalConditions)
   get('/id/:licenceId/additional-licence-conditions/callback', additionalLicenceConditionsCallbackHandler.GET)
   get('/id/:licenceId/additional-licence-conditions/condition/:conditionId', additionalLicenceConditionInputHandler.GET)
-  post(
+
+  // Additional condition forms can include file uploads which uses `multer` middleware on these routes
+  postWithFileUpload(
     '/id/:licenceId/additional-licence-conditions/condition/:conditionId',
     additionalLicenceConditionInputHandler.POST
   )
+
   post(
     '/id/:licenceId/additional-licence-conditions/condition/:conditionId/delete',
     additionalLicenceConditionInputHandler.DELETE

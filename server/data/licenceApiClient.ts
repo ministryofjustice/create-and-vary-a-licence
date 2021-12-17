@@ -147,4 +147,19 @@ export default class LicenceApiClient extends RestClient {
   async batchActivateLicences(licenceIds: number[]): Promise<void> {
     await this.post({ path: `/licence/activate-licences`, data: licenceIds })
   }
+
+  async uploadConditionFile(
+    licenceId: string,
+    conditionId: string,
+    user: User,
+    file: Express.Multer.File
+  ): Promise<void> {
+    return (await this.postMultiPart(
+      {
+        path: `/licence/id/${licenceId}/condition/id/${conditionId}/upload-file`,
+        fileToUpload: file,
+      },
+      { username: user?.username }
+    )) as void
+  }
 }
