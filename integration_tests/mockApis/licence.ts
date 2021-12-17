@@ -260,11 +260,16 @@ export default {
     })
   },
 
-  stubExistingLicences: (): SuperAgentRequest => {
+  stubGetExistingLicenceForOffenderWithResult: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/licence/staffId/2000`,
+        urlPathPattern: `/licence/match`,
+        queryParameters: {
+          nomsId: {
+            matches: '.*',
+          },
+        },
       },
       response: {
         status: 200,
@@ -423,11 +428,38 @@ export default {
     })
   },
 
-  stubGetLicencesByStaffIdAndStatus: (): SuperAgentRequest => {
+  stubGetExistingLicencesForOffenders: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/licence/staffId/2000`,
+        urlPathPattern: `/licence/match`,
+        queryParameters: {
+          nomsId: {
+            matches: '.*',
+          },
+          status: {
+            matches: '.*',
+          },
+        },
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [],
+      },
+    })
+  },
+
+  stubGetExistingLicenceForOffenderNoResult: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/licence/match`,
+        queryParameters: {
+          nomsId: {
+            matches: '.*',
+          },
+        },
       },
       response: {
         status: 200,
@@ -470,6 +502,20 @@ export default {
             dateOfBirth: licencePlaceholder.dateOfBirth,
           },
         ],
+      },
+    })
+  },
+
+  stubSubmitStatus: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d*)/submit`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     })
   },

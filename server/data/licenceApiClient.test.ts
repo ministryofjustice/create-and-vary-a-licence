@@ -10,6 +10,7 @@ import {
   Licence,
   LicenceSummary,
   StatusUpdateRequest,
+  SubmitLicenceRequest,
   UpdateAdditionalConditionDataRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
@@ -162,19 +163,32 @@ describe('Licence API client tests', () => {
     )
   })
 
-  it('Get licences by staff id and status', async () => {
-    get.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+  it('Submit licence', async () => {
+    await licenceApiClient.submitLicence(
+      '1',
+      {
+        username: 'joebloggs',
+        staffIdentifier: 2000,
+        firstName: 'Joe',
+        surname: 'Bloggs',
+        email: 'jbloggs@probation.gov.uk',
+      } as SubmitLicenceRequest,
+      { username: 'joebloggs' } as User
+    )
 
-    const result = await licenceApiClient.getLicencesByStaffIdAndStatus([LicenceStatus.IN_PROGRESS], {
-      username: 'joebloggs',
-      deliusStaffIdentifier: 1,
-    } as User)
-
-    expect(get).toHaveBeenCalledWith(
-      { path: '/licence/staffId/1', query: { status: [LicenceStatus.IN_PROGRESS] } },
+    expect(put).toHaveBeenCalledWith(
+      {
+        path: '/licence/id/1/submit',
+        data: {
+          username: 'joebloggs',
+          staffIdentifier: 2000,
+          firstName: 'Joe',
+          surname: 'Bloggs',
+          email: 'jbloggs@probation.gov.uk',
+        },
+      },
       { username: 'joebloggs' }
     )
-    expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
   })
 
   describe('Match Licences', () => {
@@ -198,7 +212,7 @@ describe('Licence API client tests', () => {
             prison: ['MDI'],
             status: [LicenceStatus.IN_PROGRESS],
             staffId: [1],
-            nomisId: ['ABC1234'],
+            nomsId: ['ABC1234'],
             sortBy: 'conditionalReleaseDate',
             sortOrder: 'DESC',
           },
@@ -228,7 +242,7 @@ describe('Licence API client tests', () => {
             prison: ['MDI'],
             status: [LicenceStatus.IN_PROGRESS],
             staffId: [1],
-            nomisId: ['ABC1234'],
+            nomsId: ['ABC1234'],
           },
         },
         { username: 'joebloggs' }

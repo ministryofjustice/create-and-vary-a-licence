@@ -4,6 +4,10 @@
  */
 
 export interface paths {
+  '/licence/id/{licenceId}/submit': {
+    /** Update the status of a licence to SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['submitLicence']
+  }
   '/licence/id/{licenceId}/status': {
     /** Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateLicenceStatus']
@@ -48,10 +52,6 @@ export interface paths {
     /** Just a test API to verify that the full stack of components are working together */
     get: operations['getTestData']
   }
-  '/licence/staffId/{staffId}': {
-    /** Find licences associated with a supervising probation officer. Can be filtered by licence status. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-    get: operations['getLicencesByStaffIdAndStatuses']
-  }
   '/licence/match': {
     /** Get the licences matching the supplied lists of status, prison, staffId and nomsId. Requires ROLE_CVL_ADMIN. */
     get: operations['getLicencesMatchingCriteria']
@@ -64,6 +64,26 @@ export interface paths {
 
 export interface components {
   schemas: {
+    /** Request object for submitting a licence */
+    SubmitLicenceRequest: {
+      /** The username of the person who is updating this status */
+      username: string
+      /** The DELIUS staff identifier of the person who is submitting status */
+      staffIdentifier: number
+      /** The first name of the person who is submitting the licence */
+      firstName: string
+      /** The last name of the person who is submitting the licence */
+      surname: string
+      /** The email address of the person who is submitting the licence */
+      email: string
+    }
+    ErrorResponse: {
+      status: number
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     /** Request object for updating the status of a licence */
     StatusUpdateRequest: {
       /** The new status for this licence */
@@ -72,13 +92,6 @@ export interface components {
       username: string
       /** The full name of the person who is updating this status */
       fullName?: string
-    }
-    ErrorResponse: {
-      status: number
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
@@ -145,6 +158,8 @@ export interface components {
     }
     /** Request object for creating a new licence */
     CreateLicenceRequest: {
+      /** The username of the person who is creating the licence */
+      username: string
       /** Type of licence requested - one of AP, PSS or AP_PSS */
       typeCode: 'AP' | 'AP_PSS' | 'PSS'
       /** The version of licence conditions currently active as a string value */
@@ -191,16 +206,6 @@ export interface components {
       topupSupervisionStartDate?: string
       /** The date when the post sentence supervision period ends, from prison services */
       topupSupervisionExpiryDate?: string
-      /** The forename of the offender manager, from probation services */
-      comFirstName?: string
-      /** The surname of the offender manager, from probation services */
-      comLastName?: string
-      /** The username used in login for the person creating this licence */
-      comUsername: string
-      /** The staff identifier of the offender manager, from probation services */
-      comStaffId: number
-      /** The email address of the offender manager, from probation services */
-      comEmail?: string
       /** The telephone contact number for the offender manager, from probation services */
       comTelephone?: string
       /** The probation area code where the offender manager is based, from probation services */
@@ -249,6 +254,10 @@ export interface components {
       crn?: string
       /** The offender's date of birth, from either prison or probation services */
       dateOfBirth?: string
+      /** The first name of the responsible probation officer */
+      comFirstName?: string
+      /** The first name of the responsible probation officer */
+      comLastName?: string
     }
     /** Describes a test data object */
     TestData: {
@@ -341,6 +350,8 @@ export interface components {
       appointmentTime?: string
       /** The address of initial appointment */
       appointmentAddress?: string
+      /** The UK telephone number to contact the person the offender should meet for their initial meeting */
+      appointmentContact?: string
       /** The date and time that this prison approved this licence */
       approvedDate?: string
       /** The username who approved the licence on behalf of the prison governor */
@@ -372,6 +383,47 @@ export interface components {
 }
 
 export interface operations {
+  /** Update the status of a licence to SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  submitLicence: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Licence submitted for approval */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SubmitLicenceRequest']
+      }
+    }
+  }
   /** Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   updateLicenceStatus: {
     parameters: {
@@ -766,37 +818,6 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['TestDataResponse']
-        }
-      }
-      /** Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /** Find licences associated with a supervising probation officer. Can be filtered by licence status. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-  getLicencesByStaffIdAndStatuses: {
-    parameters: {
-      path: {
-        staffId: number
-      }
-      query: {
-        status?: ('IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED')[]
-      }
-    }
-    responses: {
-      /** Licence details returned */
-      200: {
-        content: {
-          'application/json': components['schemas']['LicenceSummary'][]
         }
       }
       /** Unauthorised, requires a valid Oauth2 token */

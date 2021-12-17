@@ -22,12 +22,8 @@ export default class CaseloadService {
       .filter(offender => offender.nomsNumber)
       .map(offender => offender.nomsNumber)
 
-    /*
-     TODO: Maybe this should be checking for existing licences by nomisId rather than staffId? What if the offender
-      changes their managing officer after a licence has been created for them?
-     */
-
-    const existingLicences = await this.licenceService.getLicencesByStaffIdAndStatus(
+    const existingLicences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+      caseloadNomisIds,
       [
         LicenceStatus.ACTIVE,
         LicenceStatus.RECALLED,

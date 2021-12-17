@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 
 jest.mock('../../../services/licenceService')
 
@@ -74,11 +73,9 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.redirect).toHaveBeenCalledWith('back')
     })
 
-    it('should call the licence API to update the status of the licence', async () => {
+    it('should call the licence API to submit the licence for approval', async () => {
       await handler.POST(req, res)
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.SUBMITTED, {
-        username: 'joebloggs',
-      })
+      expect(licenceService.submitLicence).toHaveBeenCalledWith('1', { username: 'joebloggs' })
     })
 
     it('should redirect to the confirmation page', async () => {
