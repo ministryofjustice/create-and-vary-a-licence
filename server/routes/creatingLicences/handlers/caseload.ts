@@ -30,9 +30,9 @@ export default class CaseloadRoutes {
     const { prisonerNumber } = req.body
 
     // TODO: Which statuses should be considered "existing"? Should INACTIVE and RECALLED be included?
-    const existingLicense = _.head(await this.licenceService.getLicencesByNomisIdsAndStatus([prisonerNumber], [], user))
-    if (existingLicense) {
-      return res.redirect(`/licence/create/id/${existingLicense.licenceId}/check-your-answers`)
+    const existingLicence = _.head(await this.licenceService.getLicencesByNomisIdsAndStatus([prisonerNumber], [], user))
+    if (existingLicence) {
+      return res.redirect(`/licence/create/id/${existingLicence.licenceId}/check-your-answers`)
     }
 
     const { licenceId } = await this.licenceService.createLicence(prisonerNumber, user)
