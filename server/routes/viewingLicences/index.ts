@@ -8,6 +8,7 @@ import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import ViewAndPrintCaseRoutes from './handlers/viewCases'
 import ViewAndPrintLicenceRoutes from './handlers/viewLicence'
 import PrintLicenceRoutes from './handlers/printLicence'
+import ComDetailsRoutes from './handlers/comDetails'
 
 export default function Index({ licenceService, prisonerService, qrCodeService }: Services): Router {
   const router = Router()
@@ -33,12 +34,14 @@ export default function Index({ licenceService, prisonerService, qrCodeService }
   const viewCasesHandler = new ViewAndPrintCaseRoutes(licenceService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes()
   const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService)
+  const comDetailsHandler = new ComDetailsRoutes()
 
   get('/cases', viewCasesHandler.GET)
   post('/cases', viewCasesHandler.POST)
   get('/id/:licenceId/show', viewLicenceHandler.GET)
   get('/id/:licenceId/html-print', printHandler.preview)
   get('/id/:licenceId/pdf-print', printHandler.renderPdf)
+  get('/id/:licenceId/com-details', comDetailsHandler.GET)
 
   return router
 }
