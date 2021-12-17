@@ -78,7 +78,7 @@ export default {
           statusCode, // Overrides licencePlaceHolder status
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
-          comTelephone: '07891245678',
+          appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
           additionalLicenceConditions: [
             {

@@ -25,7 +25,7 @@
                     name: "telephone",
                     classes: "govuk-input--width-20",
                     errorMessage: validationErrors | findError('telephone'),
-                    value: licence.comTelephone | fillFormResponse(formResponses.telephone)
+                    value: licence.appointmentContact | fillFormResponse(formResponses.telephone)
                 }) }}
 
                 {{ govukButton({

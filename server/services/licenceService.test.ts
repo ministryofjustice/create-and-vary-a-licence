@@ -337,7 +337,7 @@ describe('Licence Service', () => {
 
   it('Update contact number', async () => {
     await licenceService.updateContactNumber('1', { telephone: '07624726976' }, user)
-    expect(licenceApiClient.updateContactNumber).toBeCalledWith('1', { comTelephone: '07624726976' }, user)
+    expect(licenceApiClient.updateContactNumber).toBeCalledWith('1', { telephone: '07624726976' }, user)
   })
 
   describe('Update additional conditions', () => {
