@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 import { plainToClass } from 'class-transformer'
 import LicenceService from '../../../services/licenceService'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
@@ -28,7 +27,8 @@ export default class CheckAnswersRoutes {
       return res.redirect('back')
     }
 
-    await this.licenceService.updateStatus(licenceId, LicenceStatus.SUBMITTED, user)
+    await this.licenceService.submitLicence(licenceId, user)
+
     return res.redirect(`/licence/create/id/${licenceId}/confirmation`)
   }
 

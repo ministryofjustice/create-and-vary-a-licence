@@ -37,8 +37,9 @@ export default function populateCurrentUser(userService: UserService): RequestHa
               userService.getPrisonUser(user),
               userService.getPrisonUserCaseloads(user),
             ])
-            cvlUser.name = `${prisonUser.firstName} ${prisonUser.lastName}`
-            cvlUser.displayName = convertToTitleCase(cvlUser.name)
+            cvlUser.firstName = prisonUser.firstName
+            cvlUser.lastName = prisonUser.lastName
+            cvlUser.displayName = convertToTitleCase(`${prisonUser.firstName} ${prisonUser.lastName}`)
             cvlUser.activeCaseload = prisonUser.activeCaseLoadId
             cvlUser.nomisStaffId = prisonUser.staffId
             cvlUser.prisonCaseload = removeDuplicates(prisonUserCaseload.map(cs => cs.caseLoadId))
@@ -49,8 +50,11 @@ export default function populateCurrentUser(userService: UserService): RequestHa
             // TODO: Left in for now - to confirm operation in DEV against delius-wiremock and community API
             logger.info(`Probation user = ${JSON.stringify(probationUser)}`)
 
-            cvlUser.name = `${probationUser?.staff?.forenames} ${probationUser?.staff?.surname}`
-            cvlUser.displayName = convertToTitleCase(cvlUser.name)
+            cvlUser.firstName = probationUser?.staff?.forenames
+            cvlUser.lastName = probationUser?.staff?.surname
+            cvlUser.displayName = convertToTitleCase(
+              `${probationUser?.staff?.forenames} ${probationUser?.staff?.surname}`
+            )
             cvlUser.deliusStaffIdentifier = probationUser?.staffIdentifier
             cvlUser.deliusStaffCode = probationUser?.staffCode
             cvlUser.emailAddress = probationUser?.email
@@ -63,8 +67,7 @@ export default function populateCurrentUser(userService: UserService): RequestHa
             // Assemble basic user information from hmpps-auth
             const authUser = await userService.getAuthUser(user)
             if (authUser) {
-              cvlUser.name = authUser?.name
-              cvlUser.displayName = convertToTitleCase(cvlUser.name)
+              cvlUser.displayName = convertToTitleCase(authUser?.name)
             }
           }
 

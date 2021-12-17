@@ -84,7 +84,20 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           },
         },
       } as unknown as Response
-      licenceService.getLicencesByStaffIdAndStatus.mockResolvedValue([])
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
+    })
+
+    it('should redirect to check your answers page if the selected person already has a licence', async () => {
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { licenceId: 1 },
+        { licenceId: 2 },
+      ] as LicenceSummary[])
+
+      await handler.POST(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+      expect(licenceService.createLicence).not.toBeCalled()
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(['123'], [], res.locals.user)
     })
 
     it('should create a licence and redirect to the initial meeting screen', async () => {
