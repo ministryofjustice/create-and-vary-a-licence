@@ -25,6 +25,10 @@
             text: case.nomisId
         },
         {
+            attributes: { id: 'com-' + loop.index },
+            html: '<a class="govuk-link" href="/licence/view/id/' + case.licenceId + '/com-details">' + case.comFirstName + " " + case.comLastName + '</a>'
+        },
+        {
             attributes: { id: 'conditional-release-date-' + loop.index },
             text: case.conditionalReleaseDate | datetimeToDate
         },
@@ -53,6 +57,7 @@
             head: [
                 { text: "Name" },
                 { text: "Prison number" },
+                { text: "Community offender manager" },
                 { text: "Conditional release date" },
                 { text: "Status" }
             ],

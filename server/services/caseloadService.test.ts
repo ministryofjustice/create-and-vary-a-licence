@@ -26,7 +26,7 @@ describe('Caseload Service', () => {
     communityService.getManagedOffenders.mockResolvedValue([])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([])
     prisonerService.getHdcStatuses.mockResolvedValue([])
-    licenceService.getLicencesByStaffIdAndStatus.mockResolvedValue([])
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
   })
 
   afterEach(() => {
@@ -699,7 +699,7 @@ describe('Caseload Service', () => {
       new HdcStatus('6'),
     ])
 
-    licenceService.getLicencesByStaffIdAndStatus.mockResolvedValue([
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
       { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
       { nomisId: '3', licenceType: LicenceType.PSS, licenceStatus: LicenceStatus.APPROVED },
@@ -766,7 +766,8 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP,
       },
     ])
-    expect(licenceService.getLicencesByStaffIdAndStatus).toHaveBeenCalledWith(
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
+      ['1', '2', '3', '4', '5', '6'],
       [
         LicenceStatus.ACTIVE,
         LicenceStatus.RECALLED,

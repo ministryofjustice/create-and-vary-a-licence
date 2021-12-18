@@ -30,6 +30,7 @@ const licencePlaceholder = {
   comUsername: 'X12345',
   comStaffId: '12345',
   comEmail: 'stephen.mills@nps.gov.uk',
+  comTelephone: '08002345557',
   probationAreaCode: 'N01',
   probationLduCode: 'LDU1',
   dateCreated: '10/09/2021 10:00:00', // Make dynamic to now?
@@ -260,11 +261,16 @@ export default {
     })
   },
 
-  stubExistingLicences: (): SuperAgentRequest => {
+  stubGetExistingLicenceForOffenderWithResult: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/licence/staffId/2000`,
+        urlPathPattern: `/licence/match`,
+        queryParameters: {
+          nomsId: {
+            matches: '.*',
+          },
+        },
       },
       response: {
         status: 200,
@@ -423,11 +429,38 @@ export default {
     })
   },
 
-  stubGetLicencesByStaffIdAndStatus: (): SuperAgentRequest => {
+  stubGetExistingLicencesForOffenders: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/licence/staffId/2000`,
+        urlPathPattern: `/licence/match`,
+        queryParameters: {
+          nomsId: {
+            matches: '.*',
+          },
+          status: {
+            matches: '.*',
+          },
+        },
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [],
+      },
+    })
+  },
+
+  stubGetExistingLicenceForOffenderNoResult: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/licence/match`,
+        queryParameters: {
+          nomsId: {
+            matches: '.*',
+          },
+        },
       },
       response: {
         status: 200,
@@ -468,8 +501,24 @@ export default {
             actualReleaseDate: licencePlaceholder.actualReleaseDate,
             crn: licencePlaceholder.crn,
             dateOfBirth: licencePlaceholder.dateOfBirth,
+            comFirstName: licencePlaceholder.comFirstName,
+            comLastName: licencePlaceholder.comLastName,
           },
         ],
+      },
+    })
+  },
+
+  stubSubmitStatus: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d*)/submit`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     })
   },

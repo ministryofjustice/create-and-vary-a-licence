@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
+import _ from 'lodash'
 import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
@@ -28,11 +29,10 @@ export default class CaseloadRoutes {
     const { user } = res.locals
     const { prisonerNumber } = req.body
 
-    // TODO: This block is temporary, remove this when we have a design for editing existing licences
-    const comLicenses = await this.licenceService.getLicencesByStaffIdAndStatus([], user)
-    const existingLicense = comLicenses.find(licence => licence.nomisId === prisonerNumber)
-    if (existingLicense) {
-      return res.redirect(`/licence/create/id/${existingLicense.licenceId}/check-your-answers`)
+    // TODO: Which statuses should be considered "existing"? Should INACTIVE and RECALLED be included?
+    const existingLicence = _.head(await this.licenceService.getLicencesByNomisIdsAndStatus([prisonerNumber], [], user))
+    if (existingLicence) {
+      return res.redirect(`/licence/create/id/${existingLicence.licenceId}/check-your-answers`)
     }
 
     const { licenceId } = await this.licenceService.createLicence(prisonerNumber, user)

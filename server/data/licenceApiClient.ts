@@ -11,9 +11,9 @@ import type {
   StatusUpdateRequest,
   AdditionalConditionsRequest,
   UpdateAdditionalConditionDataRequest,
+  SubmitLicenceRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
-import LicenceStatus from '../enumeration/licenceStatus'
 import { User } from '../@types/CvlUserDetails'
 
 export default class LicenceApiClient extends RestClient {
@@ -112,11 +112,8 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest }, { username: user.username })
   }
 
-  async getLicencesByStaffIdAndStatus(statuses: LicenceStatus[], user: User): Promise<LicenceSummary[]> {
-    return (await this.get(
-      { path: `/licence/staffId/${user.deliusStaffIdentifier}`, query: { status: statuses } },
-      { username: user.username }
-    )) as LicenceSummary[]
+  async submitLicence(licenceId: string, request: SubmitLicenceRequest, user: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/submit`, data: request }, { username: user.username })
   }
 
   async matchLicences(
@@ -135,7 +132,7 @@ export default class LicenceApiClient extends RestClient {
           prison: prisons,
           status: statuses,
           staffId: staffIds,
-          nomisId: nomisIds,
+          nomsId: nomisIds,
           sortBy: sortBy || undefined,
           sortOrder: sortOrder || undefined,
         },

@@ -6,7 +6,6 @@ import CommunityService from './communityService'
 import * as conditionsProvider from '../utils/conditionsProvider'
 import * as utils from '../utils/utils'
 import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
-import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/creatingLicences/types/address'
@@ -32,7 +31,14 @@ describe('Licence Service', () => {
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService)
 
-  const user = { username: 'joebloggs', displayName: 'Joe Bloggs', deliusStaffIdentifier: 2000 } as User
+  const user = {
+    username: 'joebloggs',
+    displayName: 'Joe Bloggs',
+    deliusStaffIdentifier: 2000,
+    firstName: 'Joe',
+    lastName: 'Bloggs',
+    emailAddress: 'jbloggs@probation.gov.uk',
+  } as User
 
   afterEach(() => {
     jest.clearAllMocks()
@@ -41,7 +47,6 @@ describe('Licence Service', () => {
   describe('Create Licence', () => {
     beforeEach(() => {
       prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
-      communityService.getStaffDetail.mockResolvedValue({} as CommunityApiStaffDetails)
       communityService.getProbationer.mockResolvedValue({ offenderManagers: [] } as OffenderDetail)
       prisonerService.getPrisonInformation.mockResolvedValue({ phones: [] } as PrisonInformation)
     })
@@ -488,9 +493,24 @@ describe('Licence Service', () => {
     )
   })
 
-  it('Get licences by staff id and statuses', async () => {
-    await licenceService.getLicencesByStaffIdAndStatus([LicenceStatus.APPROVED], user)
-    expect(licenceApiClient.getLicencesByStaffIdAndStatus).toBeCalledWith(['APPROVED'], user)
+  it('Submit licence', async () => {
+    await licenceService.submitLicence('1', user)
+    expect(licenceApiClient.submitLicence).toBeCalledWith(
+      '1',
+      {
+        username: 'joebloggs',
+        staffIdentifier: 2000,
+        firstName: 'Joe',
+        surname: 'Bloggs',
+        email: 'jbloggs@probation.gov.uk',
+      },
+      user
+    )
+  })
+
+  it('Get licences by nomis ids and statuses', async () => {
+    await licenceService.getLicencesByNomisIdsAndStatus(['ABC1234'], [LicenceStatus.APPROVED], user)
+    expect(licenceApiClient.matchLicences).toBeCalledWith(['APPROVED'], [], [], ['ABC1234'], null, null, user)
   })
 
   it('Get licences for approval', async () => {
