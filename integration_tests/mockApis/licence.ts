@@ -30,6 +30,7 @@ const licencePlaceholder = {
   comUsername: 'X12345',
   comStaffId: '12345',
   comEmail: 'stephen.mills@nps.gov.uk',
+  comTelephone: '08002345557',
   probationAreaCode: 'N01',
   probationLduCode: 'LDU1',
   dateCreated: '10/09/2021 10:00:00', // Make dynamic to now?
@@ -500,6 +501,8 @@ export default {
             actualReleaseDate: licencePlaceholder.actualReleaseDate,
             crn: licencePlaceholder.crn,
             dateOfBirth: licencePlaceholder.dateOfBirth,
+            comFirstName: licencePlaceholder.comFirstName,
+            comLastName: licencePlaceholder.comLastName,
           },
         ],
       },

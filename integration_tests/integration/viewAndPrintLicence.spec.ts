@@ -15,7 +15,9 @@ context('View and print licence', () => {
 
   it('should click through the view and print a licence journey', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    let viewCasesList = indexPage.clickViewAndPrintALicence()
+    const comDetails = viewCasesList.clickComDetails()
+    viewCasesList = comDetails.clickReturn()
     const viewLicencePage = viewCasesList.clickALicence()
     const printALicencePage = viewLicencePage.printALicence()
     printALicencePage.checkPrintTemplate()
