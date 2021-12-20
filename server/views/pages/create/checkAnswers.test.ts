@@ -244,7 +244,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('.govuk-summary-list__actions').length).toBe(14)
+    expect($('.govuk-summary-list__actions').length).toBe(12)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 
