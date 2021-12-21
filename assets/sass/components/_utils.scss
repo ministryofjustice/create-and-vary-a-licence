@@ -1,3 +1,5 @@
+@import "../constants/colours";
+
 .text-align-right {
   text-align: right
 }
@@ -63,12 +65,12 @@ table.last-col-right {
   &-top:before {
     content: "";
     display: block;
-    border-top: 1px solid #b1b4b6;
+    border-top: 1px solid $grey;
   }
 
   &-bottom:after {
     content: "";
     display: block;
-    border-bottom: 1px solid #b1b4b6;
+    border-bottom: 1px solid $grey;
   }
 }
