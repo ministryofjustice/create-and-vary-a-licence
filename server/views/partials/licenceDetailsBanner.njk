@@ -1,0 +1,17 @@
+{% if licence %}
+    <div class="govuk-grid-row govuk-!-margin-top-3">
+        <div class="govuk-grid-column-full border-bottom">
+            <div class="govuk-caption-m">
+                {% if user.authSource == 'delius' %}
+                    <span class="pipe-separated__item">CRN: {{ licence.crn }}</span>
+                {% endif %}
+                {% if user.authSource == 'nomis' %}
+                    <span class="pipe-separated__item">Prison number: {{ licence.nomsId }}</span>
+                {% endif %}
+                <span class="pipe-separated__item">CRD: {{ licence.conditionalReleaseDate }}</span>
+                <span class="pipe-separated__item">Date of birth: {{ licence.dateOfBirth }}</span>
+            </div>
+            <span class="govuk-heading-m">{{ licence.forename }} {{ licence.surname }}</span>
+        </div>
+    </div>
+{% endif %}

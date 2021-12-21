@@ -50,3 +50,25 @@ table.last-col-right {
 .fixed-width {
   min-width: 7em;
 }
+
+.pipe-separated {
+  &__item:not(:last-child) {
+    &:after {
+      content: " | ";
+    }
+  }
+}
+
+.border {
+  &-top:before {
+    content: "";
+    display: block;
+    border-top: 1px solid #b1b4b6;
+  }
+
+  &-bottom:after {
+    content: "";
+    display: block;
+    border-bottom: 1px solid #b1b4b6;
+  }
+}
