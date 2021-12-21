@@ -17,6 +17,24 @@ describe('View Partials - Licence details banner', () => {
     expect($('body').text().length).toBe(0)
   })
 
+  it('should not render anything if hideLicenceBanner is true', () => {
+    viewContext = {
+      licence: {
+        crn: '123',
+        nomsId: 'ABC',
+      },
+      hideLicenceBanner: true,
+      user: {
+        authSource: 'delius',
+      },
+    }
+    const nunjucksString = '{% include "partials/licenceDetailsBanner.njk" %}'
+    compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('body').text().length).toBe(0)
+  })
+
   it('should render CRN instead of nomisId if user is delius user', () => {
     viewContext = {
       licence: {
