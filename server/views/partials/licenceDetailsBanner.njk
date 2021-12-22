@@ -8,8 +8,8 @@
                 {% if user.authSource == 'nomis' %}
                     <span class="pipe-separated__item">Prison number: {{ licence.nomsId }}</span>
                 {% endif %}
-                <span class="pipe-separated__item">CRD: {{ licence.conditionalReleaseDate }}</span>
-                <span class="pipe-separated__item">Date of birth: {{ licence.dateOfBirth }}</span>
+                <span class="pipe-separated__item">CRD: {{ licence.conditionalReleaseDate | datetimeToDate }}</span>
+                <span class="pipe-separated__item">Date of birth: {{ licence.dateOfBirth | datetimeToDate }}</span>
             </div>
             <span class="govuk-heading-m">{{ licence.forename }} {{ licence.surname }}</span>
         </div>
