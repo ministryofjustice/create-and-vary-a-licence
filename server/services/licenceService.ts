@@ -205,8 +205,13 @@ export default class LicenceService {
     fileToUpload: Express.Multer.File,
     user: User
   ): Promise<void> {
-    logger.info(`Called uploadConditionFile -name ${fileToUpload.originalname} Path ${fileToUpload.path}`)
+    logger.info(`Called uploadConditionFile - name ${fileToUpload.originalname} path ${fileToUpload.path}`)
     return this.licenceApiClient.uploadConditionFile(licenceId, additionalConditionId, user, fileToUpload)
+  }
+
+  async removeConditionFile(licenceId: string, conditionId: string, user: User): Promise<void> {
+    logger.info(`removeConditionFile - licenceId ${licenceId}, conditionId  ${conditionId}`)
+    return this.licenceApiClient.removeConditionFile(licenceId, conditionId, user)
   }
 
   async updateBespokeConditions(id: string, formData: BespokeConditions, user: User): Promise<void> {

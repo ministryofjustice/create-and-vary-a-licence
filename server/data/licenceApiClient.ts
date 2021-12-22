@@ -153,8 +153,17 @@ export default class LicenceApiClient extends RestClient {
   ): Promise<void> {
     return (await this.postMultiPart(
       {
-        path: `/licence/id/${licenceId}/condition/id/${conditionId}/upload-file`,
+        path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/file-upload`,
         fileToUpload: file,
+      },
+      { username: user?.username }
+    )) as void
+  }
+
+  async removeConditionFile(licenceId: string, conditionId: string, user: User): Promise<void> {
+    return (await this.put(
+      {
+        path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/remove-upload`,
       },
       { username: user?.username }
     )) as void

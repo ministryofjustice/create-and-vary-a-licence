@@ -185,9 +185,6 @@ export default class HmppsRestClient {
     return superagent
       .post(`${this.apiConfig.url}${path}`)
       .attach('file', fileToUpload.buffer)
-      .field('filename', fileToUpload.originalname)
-      .field('filesize', `${fileToUpload.size}`)
-      .field('filetype', fileToUpload.mimetype)
       .agent(this.agent)
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
