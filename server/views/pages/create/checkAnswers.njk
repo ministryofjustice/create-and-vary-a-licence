@@ -16,13 +16,13 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             {% if licence.typeCode === 'AP' %}
-                <h1 class="govuk-heading-l">Check licence details for {{ licence.forename }} {{ licence.surname }}</h1>
+                <h1 class="govuk-heading-l">Check licence details</h1>
             {% elseif licence.typeCode === 'AP_PSS' %}
-                <h1 class="govuk-heading-l">Check licence and post sentence supervision order details for {{ licence.forename }} {{ licence.surname }}</h1>
+                <h1 class="govuk-heading-l">Check licence and post sentence supervision order details</h1>
             {% elseif licence.typeCode === 'PSS' %}
-                <h1 class="govuk-heading-l">Check post sentence supervision order details for {{ licence.forename }} {{ licence.surname }}</h1>
+                <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
             {% else %}
-                <h1 class="govuk-heading-l">Check licence type {{ licence.typeCode }} for {{ licence.forename }} {{ licence.surname }}</h1>
+                <h1 class="govuk-heading-l">Check licence type {{ licence.typeCode }}</h1>
             {% endif %}
         </div>
     </div>
