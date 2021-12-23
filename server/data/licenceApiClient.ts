@@ -1,3 +1,4 @@
+import { Readable } from 'stream'
 import RestClient from './hmppsRestClient'
 import type {
   ContactNumberRequest,
@@ -145,7 +146,7 @@ export default class LicenceApiClient extends RestClient {
     await this.post({ path: `/licence/activate-licences`, data: licenceIds })
   }
 
-  async uploadConditionFile(
+  async uploadExclusionZoneFile(
     licenceId: string,
     conditionId: string,
     user: User,
@@ -160,12 +161,33 @@ export default class LicenceApiClient extends RestClient {
     )) as void
   }
 
-  async removeConditionFile(licenceId: string, conditionId: string, user: User): Promise<void> {
+  async removeExclusionZoneFile(licenceId: string, conditionId: string, user: User): Promise<void> {
     return (await this.put(
       {
         path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/remove-upload`,
       },
       { username: user?.username }
     )) as void
+  }
+
+  // A readable stream for embedding directly in HTML templates
+  async getExclusionZoneImage(licenceId: string, conditionId: string, user: User): Promise<Readable> {
+    return (await this.get(
+      {
+        path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/full-size-image`,
+      },
+      { username: user?.username }
+    )) as Promise<Readable>
+  }
+
+  // Raw image data to pass to Gotenberg to render in PDF documents
+  async getExclusionZoneImageData(licenceId: string, conditionId: string, user: User): Promise<Buffer> {
+    return (await this.get(
+      {
+        path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/full-size-image`,
+        responseType: 'image/jpeg',
+      },
+      { username: user?.username }
+    )) as Promise<Buffer>
   }
 }

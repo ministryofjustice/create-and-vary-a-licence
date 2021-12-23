@@ -184,7 +184,7 @@ export default class HmppsRestClient {
     logger.info(`PostMultiPartRequest using admin client credentials: calling ${this.name}: ${path}`)
     return superagent
       .post(`${this.apiConfig.url}${path}`)
-      .attach('file', fileToUpload.buffer)
+      .attach('file', fileToUpload.path, { filename: fileToUpload.originalname, contentType: fileToUpload.mimetype })
       .agent(this.agent)
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)

@@ -8,7 +8,7 @@ describe('View Partials - Form builder', () => {
 
   const njkEnv = registerNunjucks()
   const nunjucksString =
-    '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder(config, additionalCondition, validationErrors, formResponses)}}'
+    '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses)}}'
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)

@@ -40,6 +40,10 @@ export interface paths {
     /** Update the user entered data to accompany an additional condition template. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateAdditionalConditionData']
   }
+  '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/remove-upload': {
+    /** Removes a previously uploaded exclusion zone file. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['removeExclusionZoneFile']
+  }
   '/licence/create': {
     /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createLicence']
@@ -47,6 +51,10 @@ export interface paths {
   '/licence/activate-licences': {
     /** Set licence statuses to ACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['activateLicences']
+  }
+  '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/file-upload': {
+    /** Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['uploadExclusionZoneFile']
   }
   '/test/data': {
     /** Just a test API to verify that the full stack of components are working together */
@@ -59,6 +67,10 @@ export interface paths {
   '/licence/id/{licenceId}': {
     /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getLicenceById']
+  }
+  '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/full-size-image': {
+    /** Get the exclusion zone map image. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getExclusionZoneImage']
   }
 }
 
@@ -132,6 +144,8 @@ export interface components {
       text?: string
       /** The list of data items entered for this additional condition */
       data: components['schemas']['AdditionalConditionData'][]
+      /** The list of file upload summary for this additional condition */
+      uploadSummary: components['schemas']['AdditionalConditionUploadSummary'][]
     }
     /** Describes the data entered for an additional condition */
     AdditionalConditionData: {
@@ -143,6 +157,25 @@ export interface components {
       value?: string
       /** The sequence of this data item, for this condition on this licence */
       sequence: number
+    }
+    /** Describes the files uploaded for an additional condition */
+    AdditionalConditionUploadSummary: {
+      /** The internal ID of this upload for this condition on this licence */
+      id: number
+      /** The original file name uploaded for this condition on this licence */
+      filename?: string
+      /** The file type uploaded for this condition on this licence */
+      fileType?: string
+      /** The original file size in bytes */
+      fileSize: number
+      /** The date and time this file was uploaded */
+      uploadedTime: string
+      /** The description provided in this document */
+      description?: string
+      /** The thumbnail image for the image map contained in this document */
+      thumbnailImage?: string
+      /** The id which references the original file data and full size image */
+      uploadDetailId: number
     }
     /** Request object for updating the list of additional conditions on a licence */
     AdditionalConditionsRequest: {
@@ -753,6 +786,37 @@ export interface operations {
       }
     }
   }
+  /** Removes a previously uploaded exclusion zone file. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  removeExclusionZoneFile: {
+    parameters: {
+      path: {
+        licenceId: number
+        conditionId: number
+      }
+    }
+    responses: {
+      /** The exclusion zone file was removed */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   createLicence: {
     responses: {
@@ -808,6 +872,44 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': number[]
+      }
+    }
+  }
+  /** Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  uploadExclusionZoneFile: {
+    parameters: {
+      path: {
+        licenceId: number
+        conditionId: number
+      }
+    }
+    responses: {
+      /** The exclusion zone file was uploaded */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'multipart/form-data': {
+          file: string
+        }
       }
     }
   }
@@ -894,6 +996,41 @@ export interface operations {
         }
       }
       /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Get the exclusion zone map image. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getExclusionZoneImage: {
+    parameters: {
+      path: {
+        licenceId: number
+        conditionId: number
+      }
+    }
+    responses: {
+      /** Image returned */
+      200: {
+        content: {
+          'image/jpeg': unknown
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** No image was found. */
       404: {
         content: {
           'application/json': components['schemas']['ErrorResponse']

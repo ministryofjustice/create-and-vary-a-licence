@@ -36,7 +36,7 @@
 
         {% set additionalLicenceConditions = (additionalLicenceConditions.push({
             key: {  text: condition.category },
-            value: { html: additionalConditionHtml(condition.text, condition.data) },
+            value: { html: additionalConditionHtml(condition) },
             actions: {
                 items: [
                     {
@@ -57,15 +57,31 @@
 
 {% endmacro %}
 
-{% macro additionalConditionHtml(expandedConditionText, data) %}
+{% macro additionalConditionHtml(condition) %}
     <div>
-        {{ expandedConditionText }}
+        {{ condition.text }}
     </div>
-    {% if data.length %}
+    {% if condition.data.length %}
         <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">
-            {% for entry in data | separatedDataByFieldName %}
+            {% for entry in condition.data | separatedDataByFieldName %}
                 <span class="govuk-!-display-block govuk-!-margin-top-2">{{ entry | formatAddress }}</span>
             {% endfor %}
         </div>
     {% endif %}
+
+    {% if condition.uploadSummary.length %}
+       {{ includeExclusionZoneImage(condition) }}
+    {% endif %}
+
+{% endmacro %}
+
+{% macro includeExclusionZoneImage(condition) %}
+    <div id="exclusion-zone" class="govuk-body upload-container">
+        <div class="upload-thumbnail">
+            <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"  alt="Exclusion zone map"/>
+        </div>
+    </div>
+    <div class="govuk-body">
+        {{ condition.uploadSummary[0].description }}
+    </div>
 {% endmacro %}
