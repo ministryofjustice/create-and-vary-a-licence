@@ -36,8 +36,6 @@ export default class AdditionalLicenceConditionInputRoutes {
 
     await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, user)
 
-    // TODO: What if the condition update succeeds but the file upload fails?
-
     if (req.file) {
       // Check if there was a file upload in this POST request - only one allowed - the exclusion zone(outOfBoundFilename)
       if (req.file.fieldname === 'outOfBoundFilename') {

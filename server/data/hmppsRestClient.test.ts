@@ -1,3 +1,4 @@
+import fs from 'fs'
 import nock from 'nock'
 import { Readable } from 'stream'
 import HmppsRestClient from './hmppsRestClient'
@@ -329,6 +330,33 @@ describe('Hmpps Rest Client tests', () => {
 
       expect(error.message).toBe('Not Found')
       expect(nock.isDone()).toBe(true)
+    })
+  })
+
+  describe('POST MULTIPART', () => {
+    it('Should accept a file upload', async () => {
+      fs.writeFileSync('./test-file.txt', 'a test file')
+      const multiPartFile = {
+        path: './test-file.txt',
+        originalname: 'test',
+        mimetype: 'application/text',
+      } as Express.Multer.File
+
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+      })
+        .post('/test')
+        .reply(200, { success: true })
+
+      const result = await restClient.postMultiPart({
+        path: '/test',
+        headers: { header1: 'headerValue1' },
+        fileToUpload: multiPartFile,
+      })
+
+      fs.unlinkSync('./test-file.txt')
+      expect(nock.isDone()).toBe(true)
+      expect(result).toEqual({ success: true })
     })
   })
 })

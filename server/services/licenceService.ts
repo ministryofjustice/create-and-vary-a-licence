@@ -1,4 +1,5 @@
 import { Readable } from 'stream'
+import fs from 'fs'
 import {
   AdditionalConditionsRequest,
   AppointmentAddressRequest,
@@ -204,10 +205,15 @@ export default class LicenceService {
     licenceId: string,
     additionalConditionId: string,
     fileToUpload: Express.Multer.File,
-    user: User
+    user: User,
+    testMode = false
   ): Promise<void> {
     logger.info(`Called uploadExclusionZoneFile - name ${fileToUpload.originalname} path ${fileToUpload.path}`)
-    return this.licenceApiClient.uploadExclusionZoneFile(licenceId, additionalConditionId, user, fileToUpload)
+    await this.licenceApiClient.uploadExclusionZoneFile(licenceId, additionalConditionId, user, fileToUpload)
+    if (!testMode) {
+      logger.info(`Removing file ${fileToUpload.path} after uploading content to API`)
+      fs.unlinkSync(fileToUpload.path)
+    }
   }
 
   async removeExclusionZoneFile(licenceId: string, conditionId: string, user: User): Promise<void> {

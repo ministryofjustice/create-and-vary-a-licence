@@ -33,7 +33,7 @@ export default function Index({ licenceService, prisonerService, qrCodeService }
 
   const viewCasesHandler = new ViewAndPrintCaseRoutes(licenceService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes()
-  const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService)
+  const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService)
   const comDetailsHandler = new ComDetailsRoutes()
 
   get('/cases', viewCasesHandler.GET)

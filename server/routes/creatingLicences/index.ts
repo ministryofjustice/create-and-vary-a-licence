@@ -31,6 +31,7 @@ import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
 import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
 import EditQuestionRoutes from './handlers/editQuestion'
+import AdditionalLicenceConditionRemoveUploadRoutes from './handlers/additionalLicenceConditionRemoveUpload'
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -81,6 +82,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   const additionalLicenceConditionsHandler = new AdditionalLicenceConditionsRoutes(licenceService)
   const additionalLicenceConditionsCallbackHandler = new AdditionalLicenceConditionsCallbackRoutes()
   const additionalLicenceConditionInputHandler = new AdditionalLicenceConditionInputRoutes(licenceService)
+  const additionalLicenceConditionRemoveUploadHandler = new AdditionalLicenceConditionRemoveUploadRoutes(licenceService)
   const additionalPssConditionsQuestionHandler = new AdditionalPssConditionsQuestionRoutes()
   const additionalPssConditionsHandler = new AdditionalPssConditionsRoutes(licenceService)
   const additionalPssConditionsCallbackHandler = new AdditionalPssConditionsCallbackRoutes()
@@ -117,6 +119,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
     '/id/:licenceId/additional-licence-conditions/condition/:conditionId',
     additionalLicenceConditionInputHandler.POST
   )
+  get('/id/:licenceId/condition/id/:conditionId/remove-upload', additionalLicenceConditionRemoveUploadHandler.GET)
 
   post(
     '/id/:licenceId/additional-licence-conditions/condition/:conditionId/delete',

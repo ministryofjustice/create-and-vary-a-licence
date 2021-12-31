@@ -111,6 +111,53 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
     })
   })
 
+  describe('POST with file upload', () => {
+    beforeEach(() => {
+      const uploadFile = {
+        path: 'test-file',
+        originalname: 'test',
+        fieldname: 'outOfBoundFilename',
+        mimetype: 'application/pdf',
+        size: 100,
+      } as Express.Multer.File
+
+      req = {
+        params: {
+          licenceId: '1',
+          conditionId: '1',
+        },
+        file: uploadFile,
+        query: {},
+        body: {},
+      } as unknown as Request
+
+      licenceService.uploadExclusionZoneFile = jest.fn()
+      licenceService.updateAdditionalConditionData = jest.fn()
+
+      res.locals.licence = {
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: 'outOfBoundsRegion',
+          },
+        ],
+      }
+    })
+
+    it('should recognise a file upload', async () => {
+      await handler.POST(req, res)
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith('1', '1', {}, { username: 'joebloggs' })
+      expect(licenceService.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', req.file, { username: 'joebloggs' })
+    })
+
+    it('should ignore file uploads with for conditions other than out of bounds', async () => {
+      req.file = { ...req.file, fieldname: 'WRONG' }
+      await handler.POST(req, res)
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith('1', '1', {}, { username: 'joebloggs' })
+      expect(licenceService.uploadExclusionZoneFile).not.toHaveBeenCalled()
+    })
+  })
+
   describe('DELETE', () => {
     beforeEach(() => {
       licenceService.updateAdditionalConditions = jest.fn()

@@ -1,3 +1,5 @@
+import { Readable } from 'stream'
+import { Buffer } from 'buffer'
 import LicenceApiClient from './licenceApiClient'
 import {
   AdditionalConditionsRequest,
@@ -29,11 +31,14 @@ describe('Licence API client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')
   const post = jest.spyOn(HmppsRestClient.prototype, 'post')
   const put = jest.spyOn(HmppsRestClient.prototype, 'put')
+  const stream = jest.spyOn(HmppsRestClient.prototype, 'stream')
+  const postMultiPart = jest.spyOn(HmppsRestClient.prototype, 'postMultiPart')
 
   beforeEach(() => {
     get.mockResolvedValue(true)
     post.mockResolvedValue(true)
     put.mockResolvedValue(true)
+    postMultiPart.mockResolvedValue(true)
   })
 
   afterEach(() => {
@@ -255,5 +260,44 @@ describe('Licence API client tests', () => {
     await licenceApiClient.batchActivateLicences([123, 321])
 
     expect(post).toHaveBeenCalledWith({ path: '/licence/activate-licences', data: [123, 321] })
+  })
+
+  describe('Exclusion zone file', () => {
+    it('Upload an exclusion zone PDF file', async () => {
+      const myUpload = { path: 'test-file' } as Express.Multer.File
+      await licenceApiClient.uploadExclusionZoneFile('1', '1', { username: 'joebloggs' } as User, myUpload)
+      expect(postMultiPart).toHaveBeenCalledWith(
+        { path: '/exclusion-zone/id/1/condition/id/1/file-upload', fileToUpload: myUpload },
+        { username: 'joebloggs' }
+      )
+    })
+
+    it('Remove a previously uploaded exclusion zone PDF file', async () => {
+      await licenceApiClient.removeExclusionZoneFile('1', '1', { username: 'joebloggs' } as User)
+      expect(put).toHaveBeenCalledWith(
+        { path: `/exclusion-zone/id/1/condition/id/1/remove-upload` },
+        { username: 'joebloggs' }
+      )
+    })
+
+    it('Get the exclusion zone image as a stream', async () => {
+      stream.mockResolvedValue(Readable.from('image'))
+      const result = await licenceApiClient.getExclusionZoneImage('1', '1', { username: 'joebloggs' } as User)
+      expect(stream).toHaveBeenCalledWith(
+        { path: '/exclusion-zone/id/1/condition/id/1/full-size-image' },
+        { username: 'joebloggs' }
+      )
+      expect(result.read()).toEqual('image')
+    })
+
+    it('Get the exclusion zone image as JPEG data', async () => {
+      get.mockResolvedValue(Buffer.from('image'))
+      const result = await licenceApiClient.getExclusionZoneImageData('1', '1', { username: 'joebloggs' } as User)
+      expect(get).toHaveBeenCalledWith(
+        { path: '/exclusion-zone/id/1/condition/id/1/full-size-image', responseType: 'image/jpeg' },
+        { username: 'joebloggs' }
+      )
+      expect(result.toString()).toEqual('image')
+    })
   })
 })

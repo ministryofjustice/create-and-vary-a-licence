@@ -172,7 +172,7 @@ export default class LicenceApiClient extends RestClient {
 
   // A readable stream for embedding directly in HTML templates
   async getExclusionZoneImage(licenceId: string, conditionId: string, user: User): Promise<Readable> {
-    return (await this.get(
+    return (await this.stream(
       {
         path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/full-size-image`,
       },

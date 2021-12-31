@@ -250,7 +250,7 @@
                 Size: <strong>{{ condition.uploadSummary[0].fileSize }} bytes</strong>
             </div>
             <div class="upload-detail govuk-link govuk-!-font-size-16">
-                {% set removeFileUploadLink = "/licence/id/"+ licenceId +"/condition/id/" + condition.id + "/remove-upload" %}
+                {% set removeFileUploadLink = "/licence/create/id/"+ licenceId +"/condition/id/" + condition.id + "/remove-upload" %}
                 <a href="{{ removeFileUploadLink }}">Delete this file</a>
             </div>
         </div>

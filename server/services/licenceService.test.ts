@@ -573,4 +573,30 @@ describe('Licence Service', () => {
       expect(licenceApiClient.matchLicences).not.toBeCalled()
     })
   })
+
+  describe('Exclusion zone file', () => {
+    const myUploadFile = {
+      path: 'test-file.txt',
+      originalname: 'test',
+      mimetype: 'application/pdf',
+      size: 2020,
+    } as Express.Multer.File
+
+    it('Upload an exclusion zone file', async () => {
+      await licenceService.uploadExclusionZoneFile('1', '1', myUploadFile, user, true)
+      expect(licenceApiClient.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', user, myUploadFile)
+    })
+
+    it('Remove an uploaded exclusion file', async () => {
+      await licenceService.removeExclusionZoneFile('1', '1', user)
+      expect(licenceApiClient.removeExclusionZoneFile).toHaveBeenCalledWith('1', '1', user)
+    })
+
+    it('Get the exclusion zone map image as base64 JPEG', async () => {
+      licenceApiClient.getExclusionZoneImageData.mockResolvedValue(Buffer.from('image'))
+      const result = await licenceService.getExclusionZoneImageData('1', '1', user)
+      expect(result).toEqual(Buffer.from('image').toString('base64'))
+      expect(licenceApiClient.getExclusionZoneImageData).toHaveBeenCalledWith('1', '1', user)
+    })
+  })
 })
