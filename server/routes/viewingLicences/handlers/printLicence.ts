@@ -111,7 +111,7 @@ export default class PrintLicenceRoutes {
   getConditionWithUpload = (additionalConditions: AdditionalCondition[]): number => {
     let conditionId = 0
     additionalConditions.forEach(condition => {
-      if (condition.uploadSummary.length > 0) {
+      if (condition?.uploadSummary?.length > 0) {
         conditionId = condition.id
       }
     })
@@ -121,7 +121,7 @@ export default class PrintLicenceRoutes {
   getExclusionZoneDescription = (additionalConditions: AdditionalCondition[]): string => {
     let description = ''
     additionalConditions.forEach(condition => {
-      if (condition.uploadSummary.length > 0) {
+      if (condition?.uploadSummary?.length > 0) {
         description = condition.uploadSummary[0]?.description
       }
     })

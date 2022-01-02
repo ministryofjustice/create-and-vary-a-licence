@@ -2,5 +2,7 @@
     <p><strong>Appendices</strong></p>
     <p>You are subject to the exclusion zone which is described and shown below.</p>
     <img alt="Exclusion zone" src="data:image/jpeg;charset-utf8;base64,{{ exclusionZoneMapData }}" width="585px" height="780px"/>
-    <p>{{ exclusionZoneDescription }}</p>
+    <p>
+    {{ exclusionZoneDescription | striptags(false) | trim | escape }}
+    </p>
 </div>

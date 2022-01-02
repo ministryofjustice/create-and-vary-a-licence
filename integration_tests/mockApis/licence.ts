@@ -96,6 +96,7 @@ export default {
                   value: 'London',
                 },
               ],
+              uploadSummary: [],
             },
             {
               id: 2,
@@ -117,6 +118,7 @@ export default {
                   value: '16',
                 },
               ],
+              uploadSummary: [],
             },
             {
               id: 3,
@@ -138,6 +140,7 @@ export default {
                   value: 'debt',
                 },
               ],
+              uploadSummary: [],
             },
             {
               id: 4,
@@ -171,6 +174,7 @@ export default {
                   value: 'Annually',
                 },
               ],
+              uploadSummary: [],
             },
             {
               id: 5,
@@ -192,6 +196,7 @@ export default {
                   value: 'Needles',
                 },
               ],
+              uploadSummary: [],
             },
           ],
           bespokeConditions: [
