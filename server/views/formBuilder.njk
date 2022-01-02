@@ -185,7 +185,7 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(option.conditional, additionalCondition, validationErrors, formResponses)
+                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses)
                         } if option.conditional
                     }), options) %}
                 {% endfor %}
