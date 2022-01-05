@@ -34,21 +34,13 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
-    await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, user)
-
-    if (req.file) {
-      // Check if there was a file upload in this POST request - only one allowed - the exclusion zone(outOfBoundFilename)
-      if (req.file.fieldname === 'outOfBoundFilename') {
-        logger.info(`File upload request ${JSON.stringify(req.file)} licenceId ${licenceId}, condId ${conditionId}`)
-        await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
-      } else {
-        logger.warn(
-          `Attempted file upload by ${user.displayName} - ${JSON.stringify(
-            req.file
-          )} for licenceId ${licenceId}, condId ${conditionId}`
-        )
-      }
+    if (req.file && req.file.fieldname === 'outOfBoundFilename') {
+      logger.info(`File upload is ${JSON.stringify(req.file)} for licenceId ${licenceId}, condId ${conditionId}`)
+      await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
+      req.body = { ...req.body, outOfBoundFilename: req.file.originalname }
     }
+
+    await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, user)
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-licence-conditions/callback${

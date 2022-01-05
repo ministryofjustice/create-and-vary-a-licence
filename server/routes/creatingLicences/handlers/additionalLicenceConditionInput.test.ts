@@ -146,8 +146,13 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
     it('should recognise a file upload', async () => {
       await handler.POST(req, res)
-      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith('1', '1', {}, { username: 'joebloggs' })
       expect(licenceService.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', req.file, { username: 'joebloggs' })
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
+        '1',
+        '1',
+        { outOfBoundFilename: 'test' },
+        { username: 'joebloggs' }
+      )
     })
 
     it('should ignore file uploads with for conditions other than out of bounds', async () => {

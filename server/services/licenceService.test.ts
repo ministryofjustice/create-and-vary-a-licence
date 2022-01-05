@@ -1,3 +1,4 @@
+import { Readable } from 'stream'
 import { User } from '../@types/CvlUserDetails'
 import LicenceApiClient from '../data/licenceApiClient'
 import LicenceService from './licenceService'
@@ -597,6 +598,13 @@ describe('Licence Service', () => {
       const result = await licenceService.getExclusionZoneImageData('1', '1', user)
       expect(result).toEqual(Buffer.from('image').toString('base64'))
       expect(licenceApiClient.getExclusionZoneImageData).toHaveBeenCalledWith('1', '1', user)
+    })
+
+    it('Get the exclusion zone map image as JPEG stream', async () => {
+      licenceApiClient.getExclusionZoneImage.mockResolvedValue(Readable.from('image'))
+      const result = await licenceService.getExclusionZoneImage('1', '1', user)
+      expect(result.read()).toEqual('image')
+      expect(licenceApiClient.getExclusionZoneImage).toHaveBeenCalledWith('1', '1', user)
     })
   })
 })
