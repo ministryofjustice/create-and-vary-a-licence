@@ -3,7 +3,6 @@ import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import { getAdditionalConditionByCode } from '../../../utils/conditionsProvider'
 import LicenceType from '../../../enumeration/licenceType'
-import logger from '../../../../logger'
 
 export default class AdditionalLicenceConditionInputRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -34,10 +33,9 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
+    // Check for file uploads on specific forms
     if (req.file && req.file.fieldname === 'outOfBoundFilename') {
-      logger.info(`File upload is ${JSON.stringify(req.file)} for licenceId ${licenceId}, condId ${conditionId}`)
       await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
-      req.body = { ...req.body, outOfBoundFilename: req.file.originalname }
     }
 
     await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, user)

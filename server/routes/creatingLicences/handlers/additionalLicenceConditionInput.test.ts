@@ -115,7 +115,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
     beforeEach(() => {
       const uploadFile = {
         path: 'test-file',
-        originalname: 'test',
+        originalname: 'test.txt',
         fieldname: 'outOfBoundFilename',
         mimetype: 'application/pdf',
         size: 100,
@@ -128,7 +128,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         },
         file: uploadFile,
         query: {},
-        body: {},
+        body: { outOfBoundFilename: 'test.txt' },
       } as unknown as Request
 
       licenceService.uploadExclusionZoneFile = jest.fn()
@@ -150,7 +150,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
         '1',
-        { outOfBoundFilename: 'test' },
+        { outOfBoundFilename: 'test.txt' },
         { username: 'joebloggs' }
       )
     })
@@ -158,7 +158,12 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
     it('should ignore file uploads with for conditions other than out of bounds', async () => {
       req.file = { ...req.file, fieldname: 'WRONG' }
       await handler.POST(req, res)
-      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith('1', '1', {}, { username: 'joebloggs' })
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
+        '1',
+        '1',
+        { outOfBoundFilename: 'test.txt' },
+        { username: 'joebloggs' }
+      )
       expect(licenceService.uploadExclusionZoneFile).not.toHaveBeenCalled()
     })
   })

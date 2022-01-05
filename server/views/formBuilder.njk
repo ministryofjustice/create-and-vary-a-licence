@@ -214,10 +214,10 @@
                         {{ includeExclusionZoneImage(licenceId, additionalCondition, item) }}
                     {% else %}
                         {# Form values were present but empty, so show the file selector #}
-                        {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors) }}
+                        {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors, item) }}
                     {% endif %}
                 {% else %}
-                    {# No form values were present, so show the file selector #}
+                    {# No form values were present, so show the file selector with no default value #}
                     {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors) }}
                 {% endfor %}
             {% endif %}
@@ -260,10 +260,11 @@
     </div>
 {% endmacro %}
 
-{% macro fileTypeInput(name, acceptTypes, label, validationErrors) %}
+{% macro fileTypeInput(name, acceptTypes, label, validationErrors, formValue) %}
     {{ govukFileUpload({
         id: name,
         name: name,
+        value: formValue,
         attributes: {
            accept: acceptTypes
         },

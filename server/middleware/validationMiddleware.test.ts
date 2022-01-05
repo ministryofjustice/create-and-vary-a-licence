@@ -41,11 +41,8 @@ describe('validationMiddleware', () => {
       outOfBoundArea: string
 
       @Expose()
-      outOfBoundFilename: string
-
-      @Expose()
       @IsValidExclusionZoneFile()
-      uploadFile: Express.Multer.File
+      outOfBoundFilename: string
     }
 
     afterEach(() => {
@@ -135,7 +132,7 @@ describe('validationMiddleware', () => {
 
       const uploadFile = {
         path: 'test-file',
-        originalname: 'test',
+        originalname: 'test.txt',
         size: 10,
         fieldname: 'outOfBoundFilename',
         mimetype: 'application/pdf',
@@ -145,10 +142,7 @@ describe('validationMiddleware', () => {
         params: {},
         flash: jest.fn(),
         file: uploadFile,
-        body: {
-          outOfBoundArea: 'Anywhere',
-          outOfBoundFilename: null,
-        },
+        body: { outOfBoundArea: 'Anywhere' },
       } as unknown as Request
 
       await validationMiddleware(DummyFileUpload)(req, res, next)

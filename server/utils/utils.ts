@@ -140,6 +140,7 @@ const formatAddress = (address?: string) => {
 export {
   convertToTitleCase,
   hasRole,
+  isBlank,
   simpleDateTimeToJson,
   jsonToSimpleDateTime,
   addressObjectToString,

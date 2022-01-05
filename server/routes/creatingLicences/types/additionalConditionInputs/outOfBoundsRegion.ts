@@ -8,8 +8,6 @@ export default class OutOfBoundsRegion {
   outOfBoundArea: string
 
   @Expose()
-  outOfBoundFilename: string
-
   @IsValidExclusionZoneFile({ message: 'Select a PDF Map Maker file to continue' })
-  uploadFile: Express.Multer.File
+  outOfBoundFilename: string
 }

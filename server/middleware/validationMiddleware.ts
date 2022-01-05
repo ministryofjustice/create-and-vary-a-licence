@@ -14,10 +14,17 @@ function validationMiddleware(type?: new () => object): RequestHandler {
 
     const classType = (getAdditionalConditionByCode(req.body.code)?.type as ClassConstructor<object>) || type
 
-    // If there is a file upload present in the request make this available in the validation scope
-    const validationScope = req.file
-      ? plainToClass(classType, { ...req.body, licence, uploadFile: req.file }, { excludeExtraneousValues: false })
-      : plainToClass(classType, { ...req.body, licence }, { excludeExtraneousValues: false })
+    // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
+    if (req.file && req.file.fieldname === 'outOfBoundFilename') {
+      req.body = { ...req.body, outOfBoundFilename: req.file.originalname }
+    }
+
+    // Build an object which is used by validators to check things against
+    const validationScope = plainToClass(
+      classType,
+      { ...req.body, licence, uploadFile: req.file },
+      { excludeExtraneousValues: false }
+    )
 
     const errors: ValidationError[] = await validate(validationScope)
 
