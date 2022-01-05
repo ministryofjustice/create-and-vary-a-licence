@@ -8,9 +8,11 @@ import { initialiseAppInsights, buildAppInsightsClient } from './server/utils/az
 initialiseAppInsights()
 buildAppInsightsClient()
 
-import app from './server/index'
+import { app, sqsPrisonEventsListener, sqsProbationEventsListener } from './server/index'
 import logger from './logger'
 
 app.listen(app.get('port'), () => {
   logger.info(`Server listening on port ${app.get('port')}`)
 })
+sqsPrisonEventsListener.app.start()
+sqsProbationEventsListener.app.start()

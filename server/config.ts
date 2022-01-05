@@ -44,6 +44,18 @@ export default {
     secret: get('SESSION_SECRET', 'app-insecure-default-session', requiredInProduction),
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
   },
+  sqs: {
+    prisonEvents: {
+      accessKeyId: get('SQS_PRISON_EVENTS_ACCESS_KEY_ID', '', requiredInProduction),
+      secretAccessKey: get('SQS_PRISON_EVENTS_SECRET_ACCESS_KEY', '', requiredInProduction),
+      queueUrl: get('SQS_PRISON_EVENTS_QUEUE_URL', '', requiredInProduction),
+    },
+    probationEvents: {
+      accessKeyId: get('SQS_PROBATION_EVENTS_ACCESS_KEY_ID', '', requiredInProduction),
+      secretAccessKey: get('SQS_PROBATION_EVENTS_SECRET_ACCESS_KEY', '', requiredInProduction),
+      queueUrl: get('SQS_PROBATION_EVENTS_QUEUE_URL', '', requiredInProduction),
+    },
+  },
   apis: {
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
