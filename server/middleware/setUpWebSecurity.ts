@@ -33,6 +33,7 @@ export default function setUpWebSecurity(): Router {
             'https://www.googletagmanager.com',
             'https://www.google-analytics.com',
             'https://code.jquery.com',
+            'data:',
           ],
           connectSrc: ["'self'", 'https://www.googletagmanager.com', 'https://www.google-analytics.com'],
           styleSrc: ["'self'", 'code.jquery.com'],

@@ -5,6 +5,7 @@ import { Expose, Type } from 'class-transformer'
 import validationMiddleware from './validationMiddleware'
 
 import * as conditionsProvider from '../utils/conditionsProvider'
+import IsValidExclusionZoneFile from '../validators/isValidExclusionZoneFile'
 
 const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
 
@@ -32,6 +33,16 @@ describe('validationMiddleware', () => {
       @ValidateNested()
       @Type(() => DummyChild)
       child: DummyChild
+    }
+
+    class DummyFileUpload {
+      @Expose()
+      @IsNotEmpty({ message: notEmptyMessage })
+      outOfBoundArea: string
+
+      @Expose()
+      @IsValidExclusionZoneFile()
+      outOfBoundFilename: string
     }
 
     afterEach(() => {
@@ -114,6 +125,29 @@ describe('validationMiddleware', () => {
         'validationErrors',
         JSON.stringify([{ field: 'name', message: notEmptyMessage }])
       )
+    })
+
+    it('should validate a file upload', async () => {
+      const next = jest.fn()
+
+      const uploadFile = {
+        path: 'test-file',
+        originalname: 'test.txt',
+        size: 10,
+        fieldname: 'outOfBoundFilename',
+        mimetype: 'application/pdf',
+      } as Express.Multer.File
+
+      req = {
+        params: {},
+        flash: jest.fn(),
+        file: uploadFile,
+        body: { outOfBoundArea: 'Anywhere' },
+      } as unknown as Request
+
+      await validationMiddleware(DummyFileUpload)(req, res, next)
+
+      expect(next).toHaveBeenCalled()
     })
   })
 })

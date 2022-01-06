@@ -4,13 +4,14 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "partials/datePicker.njk" import datePicker %}
 {% from "partials/timePicker.njk" import timePicker %}
 
 {# TODO: Currently, this form builder only supports the "add another" functionality for the text input type. #}
 {# It can be extended in future if the other field types require Add Another functionality #}
 
-{%  macro formBuilder(config, additionalCondition, validationErrors, formResponses) %}
+{%  macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses) %}
     {% for input in config.inputs %}
         {% set validationError = validationErrors | findError(input.name) %}
         {% set formValues = getFormResponses(formResponses, input.name) or getValueFromAdditionalCondition(additionalCondition, input.name) %}
@@ -58,7 +59,7 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(option.conditional, additionalCondition, validationErrors, formResponses)
+                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses)
                         } if option.conditional
                     }), options) %}
                 {% endfor %}
@@ -184,7 +185,7 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(option.conditional, additionalCondition, validationErrors, formResponses)
+                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses)
                         } if option.conditional
                     }), options) %}
                 {% endfor %}
@@ -203,6 +204,24 @@
                 }) }}
             {% endif %}
 
+            {% if input.type === 'fileUpload' %}
+                {% for item in formValues %}
+                    {# When submitting an empty form, the formValues is an array containing an empty string #}
+                    {# This is to cater for other input types which are part of the Add-Another pattern #}
+                    {% if item.length > 1 %}
+                        {# There was a value for the uploaded file name - show the thumbnail image and a delete link #}
+                        <input type="hidden" name="{{ input.name }}" value="{{ item }}" />
+                        {{ includeExclusionZoneImage(licenceId, additionalCondition, item) }}
+                    {% else %}
+                        {# Form values were present but empty, so show the file selector #}
+                        {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors, item) }}
+                    {% endif %}
+                {% else %}
+                    {# No form values were present, so show the file selector with no default value #}
+                    {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors) }}
+                {% endfor %}
+            {% endif %}
+
             {% if input.addAnother %}
                 <div class="moj-button-action">
                     {{ govukButton({
@@ -214,6 +233,48 @@
         </div>
     {% endfor %}
 {% endmacro %}
+
+{% macro includeExclusionZoneImage(licenceId, condition, item) %}
+    <div id="exclusion-zone" class="govuk-body upload-container">
+        <div class="upload-thumbnail">
+            <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"  alt="{{ item }}"/>
+        </div>
+        <div class="upload-detail-container">
+            <div class="upload-detail govuk-body">
+                Name: <strong>{{ condition.uploadSummary[0].filename }}</strong>
+            </div>
+            <div class="upload-detail govuk-body">
+                Type: <strong>{{ condition.uploadSummary[0].fileType }}</strong>
+            </div>
+            <div class="upload-detail govuk-body">
+                Size: <strong>{{ condition.uploadSummary[0].fileSize }} bytes</strong>
+            </div>
+            <div class="upload-detail govuk-link govuk-!-font-size-16">
+                {% set removeFileUploadLink = "/licence/create/id/"+ licenceId +"/condition/id/" + condition.id + "/remove-upload" %}
+                <a href="{{ removeFileUploadLink }}">Delete this file</a>
+            </div>
+        </div>
+    </div>
+    <div class="govuk-body">
+        {{ condition.uploadSummary[0].description }}
+    </div>
+{% endmacro %}
+
+{% macro fileTypeInput(name, acceptTypes, label, validationErrors, formValue) %}
+    {{ govukFileUpload({
+        id: name,
+        name: name,
+        value: formValue,
+        attributes: {
+           accept: acceptTypes
+        },
+        label: {
+           text: label
+        },
+        errorMessage: validationErrors | findError(name)
+    }) }}
+{% endmacro %}
+
 
 {% macro textInput(input, validationError, value, index, removeButton) %}
     {% if index == 0 or (index > 0 and input.addAnother) %}

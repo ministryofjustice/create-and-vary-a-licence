@@ -1,3 +1,4 @@
+import fs from 'fs'
 import nock from 'nock'
 import { Readable } from 'stream'
 import HmppsRestClient from './hmppsRestClient'
@@ -12,6 +13,12 @@ jest.mock('./tokenStore', () => {
 const restClient = new HmppsRestClient('Rest Client', { url: 'http://localhost:8080' } as ApiConfig)
 
 describe('Hmpps Rest Client tests', () => {
+  afterEach(() => {
+    jest.resetAllMocks()
+    nock.abortPendingRequests()
+    nock.cleanAll()
+  })
+
   describe('GET', () => {
     it('Should return raw response body', async () => {
       nock('http://localhost:8080', {
@@ -327,6 +334,83 @@ describe('Hmpps Rest Client tests', () => {
         error = e
       }
 
+      expect(error.message).toBe('Not Found')
+      expect(nock.isDone()).toBe(true)
+    })
+  })
+
+  describe('POST MULTIPART', () => {
+    const multiPartFile = {
+      path: 'test-file.txt',
+      originalname: 'test',
+      mimetype: 'application/text',
+    } as Express.Multer.File
+
+    it('Should accept a file upload', async () => {
+      await fs.writeFileSync('test-file.txt', 'a test file')
+
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+      })
+        .post('/test')
+        .reply(200, { success: true })
+
+      const result = await restClient.postMultiPart({
+        path: '/test',
+        headers: { header1: 'headerValue1' },
+        fileToUpload: multiPartFile,
+      })
+
+      await fs.unlinkSync('test-file.txt')
+      expect(nock.isDone()).toBe(true)
+      expect(result).toEqual({ success: true })
+    })
+
+    it('Should throw error when no file provided', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+      })
+        .post('/test')
+        .reply(200, { success: true })
+
+      let error
+      try {
+        await restClient.postMultiPart({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+          fileToUpload: null,
+        })
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeDefined()
+      expect(error.message).toBe("Cannot read property 'path' of null")
+      expect(nock.isDone()).toBe(false)
+    })
+
+    it('Should throw error when endpoint not found', async () => {
+      await fs.writeFileSync('test-file.txt', 'a test file')
+
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+      })
+        .post('/test')
+        .reply(404, { success: false })
+
+      let error
+      try {
+        await restClient.postMultiPart({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+          fileToUpload: multiPartFile,
+        })
+      } catch (e) {
+        error = e
+      }
+
+      await fs.unlinkSync('test-file.txt')
+      expect(error).toBeDefined()
       expect(error.message).toBe('Not Found')
       expect(nock.isDone()).toBe(true)
     })

@@ -8,7 +8,7 @@ describe('View Partials - Form builder', () => {
 
   const njkEnv = registerNunjucks()
   const nunjucksString =
-    '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder(config, additionalCondition, validationErrors, formResponses)}}'
+    '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses)}}'
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
@@ -342,5 +342,29 @@ describe('View Partials - Form builder', () => {
     expect($('#check-2').length).toBe(1)
     expect($('div:nth-child(1) > label').text().trim()).toBe('option1')
     expect($('div:nth-child(2) > label').text().trim()).toBe('option2')
+  })
+
+  it('should build a file upload type correctly', () => {
+    viewContext = {
+      formResponses: [],
+      additionalCondition: {
+        data: [],
+      },
+      config: {
+        inputs: [
+          {
+            type: 'fileUpload',
+            label: 'label for file upload',
+            name: 'file',
+          },
+        ],
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('.govuk-form-group').length).toBe(1)
+    expect($('.govuk-label').text().trim()).toBe('label for file upload')
+    expect($('.govuk-file-upload').length).toBe(1)
   })
 })

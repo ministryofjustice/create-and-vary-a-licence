@@ -11,6 +11,7 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { licenceId } = req.params
     const { additionalLicenceConditions } = res.locals.licence
     const { conditionId } = req.params
+
     const additionalCondition = additionalLicenceConditions.find(
       (condition: AdditionalCondition) => condition.id === +conditionId
     )
@@ -31,6 +32,11 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { licenceId } = req.params
     const { conditionId } = req.params
     const { user } = res.locals
+
+    // Check for file uploads on specific forms
+    if (req.file && req.file.fieldname === 'outOfBoundFilename') {
+      await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
+    }
 
     await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, user)
 

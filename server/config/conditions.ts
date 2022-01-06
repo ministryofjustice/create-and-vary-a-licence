@@ -687,6 +687,11 @@ export default {
             label: 'Enter the name of area shown on the map',
             name: 'outOfBoundArea',
           },
+          {
+            type: InputTypes.FILE_UPLOAD,
+            label: 'Select the map maker PDF file to include on the licence',
+            name: 'outOfBoundFilename',
+          },
         ],
         type: OutOfBoundsRegion,
       },

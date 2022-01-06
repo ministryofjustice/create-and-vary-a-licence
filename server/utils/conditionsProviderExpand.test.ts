@@ -18,6 +18,7 @@ describe('Conditions Provider - expansions', () => {
           sequence: 1,
           text: 'Not to own or use a camera without the prior approval of your supervising officer.',
           data: [],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -34,6 +35,7 @@ describe('Conditions Provider - expansions', () => {
           sequence: 0,
           text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
           data: [{ id: 1, field: 'probationRegion', value: 'London', sequence: 0 }],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -52,6 +54,7 @@ describe('Conditions Provider - expansions', () => {
           sequence: 0,
           text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
           data: [{ id: 1, field: 'wrongName', value: 'London', sequence: 0 }],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -71,6 +74,7 @@ describe('Conditions Provider - expansions', () => {
           sequence: 1,
           text: 'Not to undertake work or other organised activity which will involve a person under the age of [INSERT AGE], either on a paid or unpaid basis without the prior approval of your supervising officer.',
           data: [{ id: 1, field: 'age', value: '18', sequence: 0 }],
+          uploadSummary: [],
         },
       ]
 
@@ -93,6 +97,7 @@ describe('Conditions Provider - expansions', () => {
             { id: 1, field: 'gender', value: 'Any', sequence: 0 },
             { id: 2, field: 'age', value: '18', sequence: 1 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -115,6 +120,7 @@ describe('Conditions Provider - expansions', () => {
             { id: 2, field: 'behaviourProblems', value: 'drug', sequence: 1 },
             { id: 3, field: 'course', value: 'Walthamstow Rehabilitation Clinic', sequence: 2 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -136,6 +142,7 @@ describe('Conditions Provider - expansions', () => {
             { id: 1, field: 'behaviourProblems', value: 'alcohol', sequence: 0 },
             { id: 2, field: 'behaviourProblems', value: 'drug', sequence: 1 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -156,6 +163,7 @@ describe('Conditions Provider - expansions', () => {
           data: [
             { id: 1, field: 'appointmentAddress', value: 'Harlow Clinic, High Street, London, W1 3GV', sequence: 0 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -177,6 +185,7 @@ describe('Conditions Provider - expansions', () => {
             { id: 1, field: 'appointmentAddress', value: 'Harlow Clinic, High Street, London, W1 3GV', sequence: 0 },
             { id: 2, field: 'appointmentDate', value: '12th February 2022', sequence: 1 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -199,6 +208,7 @@ describe('Conditions Provider - expansions', () => {
             { id: 2, field: 'appointmentDate', value: '12th February 2022', sequence: 1 },
             { id: 3, field: 'appointmentTime', value: '11:15 am', sequence: 2 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -225,6 +235,7 @@ describe('Conditions Provider - expansions', () => {
             { id: 6, field: 'behaviourProblems', value: 'anger', sequence: 5 },
             { id: 7, field: 'course', value: 'AA meeting', sequence: 6 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -247,6 +258,7 @@ describe('Conditions Provider - expansions', () => {
             { id: 2, field: 'name', value: 'John Doe', sequence: 1 },
             { id: 3, field: 'socialServicesDepartment', value: 'East Hull Social Services', sequence: 2 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -270,6 +282,7 @@ describe('Conditions Provider - expansions', () => {
             { id: 3, field: 'name', value: 'Jack Dont', sequence: 2 },
             { id: 4, field: 'socialServicesDepartment', value: 'East Hull Social Services', sequence: 3 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -288,6 +301,7 @@ describe('Conditions Provider - expansions', () => {
           sequence: 1,
           text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
           data: [{ id: 1, field: 'appointmentAddress', value: '123 Fake Street, , Fakestown, , LN123TO', sequence: 0 }],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)
@@ -312,6 +326,7 @@ describe('Conditions Provider - expansions', () => {
             { id: 3, field: 'reviewPeriod', value: 'Weekly', sequence: 2 },
             { id: 4, field: 'alternativeReviewPeriod', value: 'Fortnightly', sequence: 3 },
           ],
+          uploadSummary: [],
         },
       ]
       const listOfConditions = expandAdditionalConditions(conditions)

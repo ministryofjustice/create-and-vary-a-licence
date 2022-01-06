@@ -90,8 +90,8 @@ export default {
     licenceApi: {
       url: get('LICENCE_API_URL', 'http://localhost:8089', requiredInProduction),
       timeout: {
-        response: get('LICENCE_API_TIMEOUT_RESPONSE', 10000),
-        deadline: get('LICENCE_API_TIMEOUT_DEADLINE', 10000),
+        response: get('LICENCE_API_TIMEOUT_RESPONSE', 30000),
+        deadline: get('LICENCE_API_TIMEOUT_DEADLINE', 30000),
       },
       agent: new AgentConfig(),
     },
