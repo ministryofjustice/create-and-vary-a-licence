@@ -59,6 +59,9 @@ COPY --from=build --chown=appuser:appgroup \
 COPY --from=build --chown=appuser:appgroup \
         /app/node_modules ./node_modules
 
+# Create a directory to be used for temporary file uploads (ephemeral)
+RUN mkdir uploads && chown appuser:appgroup uploads && chmod 775 uploads
+
 EXPOSE 3000
 ENV NODE_ENV='production'
 USER 2000
