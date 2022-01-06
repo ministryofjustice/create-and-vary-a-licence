@@ -6,7 +6,7 @@ function get<T>(name: string, fallback: T, options = { requireInProduction: fals
   if (process.env[name]) {
     return process.env[name]
   }
-  if (fallback !== undefined && (!production || !options.requireInProduction)) {
+  if (fallback !== undefined && !(production && options.requireInProduction)) {
     return fallback
   }
   throw new Error(`Missing env var ${name}`)
@@ -43,6 +43,26 @@ export default {
   session: {
     secret: get('SESSION_SECRET', 'app-insecure-default-session', requiredInProduction),
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
+  },
+  sqs: {
+    prisonEvents: {
+      accessKeyId: get('SQS_PRISON_EVENTS_ACCESS_KEY_ID', '', requiredInProduction),
+      secretAccessKey: get('SQS_PRISON_EVENTS_SECRET_ACCESS_KEY', '', requiredInProduction),
+      queueUrl: get(
+        'SQS_PRISON_EVENTS_QUEUE_URL',
+        'http://localhost:4576/queue/create_and_vary_a_licence_prison_events_queue',
+        requiredInProduction
+      ),
+    },
+    probationEvents: {
+      accessKeyId: get('SQS_PROBATION_EVENTS_ACCESS_KEY_ID', '', requiredInProduction),
+      secretAccessKey: get('SQS_PROBATION_EVENTS_SECRET_ACCESS_KEY', '', requiredInProduction),
+      queueUrl: get(
+        'SQS_PROBATION_EVENTS_QUEUE_URL',
+        'http://localhost:4576/queue/create_and_vary_a_licence_probation_events_queue',
+        requiredInProduction
+      ),
+    },
   },
   apis: {
     hmppsAuth: {

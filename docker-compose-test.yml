@@ -37,5 +37,26 @@ services:
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
 
+  localstack:
+    image: localstack/localstack:0.11.2
+    networks:
+      - hmpps_int
+    container_name: localstack
+    ports:
+      - "4566-4597:4566-4597"
+      - 8999:8080
+    environment:
+      - SERVICES=${SERVICES-sqs}
+      - DEBUG=${DEBUG- }
+      - DATA_DIR=${DATA_DIR- }
+      - PORT_WEB_UI=${PORT_WEB_UI-8088}
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+      - AWS_EXECUTION_ENV=True
+      - DEFAULT_REGION=eu-west-2
+      - HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL-localstack}
+    volumes:
+      - './.localstack:/tmp/localstack'
+      - $PWD/localstack:/docker-entrypoint-initaws.d
+
 networks:
   hmpps_int:

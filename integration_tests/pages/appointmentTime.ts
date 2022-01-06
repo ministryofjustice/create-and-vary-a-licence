@@ -23,7 +23,7 @@ export default class AppointmentTimePage extends Page {
 
   enterDate = (moment: Moment): AppointmentTimePage => {
     cy.get(this.inductionDateDayId).type(moment.date().toString())
-    cy.get(this.inductionDateMonthId).type(moment.month().toString())
+    cy.get(this.inductionDateMonthId).type((moment.month() + 1).toString())
     cy.get(this.inductionDateYearId).type(moment.year().toString())
     return this
   }

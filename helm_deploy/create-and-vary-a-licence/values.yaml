@@ -45,6 +45,14 @@ generic-service:
     elasticache-redis:
       REDIS_HOST: "primary_endpoint_address"
       REDIS_AUTH_TOKEN: "auth_token"
+    create-and-vary-a-licence-prison-events-sqs-instance-output:
+      SQS_PRISON_EVENTS_ACCESS_KEY_ID: "access_key_id"
+      SQS_PRISON_EVENTS_SECRET_ACCESS_KEY: "secret_access_key"
+      SQS_PRISON_EVENTS_QUEUE_URL: "sqs_id"
+    create-and-vary-a-licence-probation-events-sqs-instance-output:
+      SQS_PROBATION_EVENTS_ACCESS_KEY_ID: "access_key_id"
+      SQS_PROBATION_EVENTS_SECRET_ACCESS_KEY: "secret_access_key"
+      SQS_PROBATION_EVENTS_QUEUE_URL: "sqs_id"
 
   allowlist:
     office: "217.33.148.210/32"
