@@ -3,14 +3,14 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set pageTitle = applicationName + " - Create a licence - Induction meeting" %}
+{% set pageTitle = applicationName + " - Create a licence - Initial meeting" %}
 {% set pageId = "appointment-contact-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-place" %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">What is the contact phone number for the induction appointment?</h1>
+            <h1 class="govuk-heading-l">What is the contact phone number for the initial appointment?</h1>
         </div>
     </div>
     <form method="POST">

@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator'
 
 class PersonName {
   @Expose()
-  @IsNotEmpty({ message: 'Enter the name of a person' })
+  @IsNotEmpty({ message: 'Enter a name or job title' })
   contactName: string
 }
 
