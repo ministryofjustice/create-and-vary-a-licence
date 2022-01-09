@@ -3,7 +3,7 @@
 {% macro additionalLicenceConditions(licence, expandedLicenceConditions, isEditable) %}
 
     <div class="govuk-grid-row check-answers-header">
-        <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-column-full">
             <h2 id="additional-licence-conditions-heading" class="govuk-heading-m">Additional conditions details</h2>
         </div>
     </div>
@@ -76,12 +76,12 @@
 {% endmacro %}
 
 {% macro includeExclusionZoneImage(condition) %}
-    <div id="exclusion-zone" class="govuk-body upload-container">
+    <div id="exclusion-zone" class="upload-container">
         <div class="upload-thumbnail">
             <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"  alt="Exclusion zone map"/>
         </div>
-    </div>
-    <div class="govuk-body">
-        {{ condition.uploadSummary[0].description }}
+        <div class="upload-detail">
+            {{ condition.uploadSummary[0].description }}
+        </div>
     </div>
 {% endmacro %}

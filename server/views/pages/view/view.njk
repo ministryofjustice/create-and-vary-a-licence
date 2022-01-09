@@ -20,7 +20,7 @@
 
 {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-column-full">
             {% if licence.typeCode === 'AP' %}
                <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ licence.forename }} {{ licence.surname }}</h1>
             {% elseif licence.typeCode === 'AP_PSS' %}
@@ -43,7 +43,7 @@
     {% endif %}
 
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds-from-desktop">
+        <div class="govuk-grid-column-full">
             {{ inductionMeetingDetails(licence) }}
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalLicenceConditions(licence, expandedLicenceConditions) }}

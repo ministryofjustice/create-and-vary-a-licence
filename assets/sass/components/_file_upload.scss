@@ -21,6 +21,7 @@ $thumbnail-border-color: $govuk-border-colour;
   margin-bottom: govuk-spacing(3);
   margin-left: govuk-spacing(3);
   padding: 2px;
+  overflow-wrap: break-word;
 }
 
 .upload-thumbnail {
