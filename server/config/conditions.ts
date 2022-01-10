@@ -406,7 +406,7 @@ export default {
         code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
         category: 'Participation in, or co-operation with, a programme or set of activities',
         categoryShort: 'Programmes or activities',
-        text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific / offending behaviour problems at [NAME OF COURSE / CENTRE].',
+        text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific / offending behaviour problems at the [NAME OF COURSE / CENTRE].',
         tpl: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your {behaviourProblems} problems{course}.',
         requiresInput: true,
         inputs: [
@@ -441,7 +441,7 @@ export default {
                 value: 'debt',
               },
               {
-                value: 'prolific offending',
+                value: 'prolific offending behaviour',
               },
               {
                 value: 'offending behaviour',
@@ -452,7 +452,7 @@ export default {
             type: InputTypes.TEXT,
             label: 'Enter name of course or centre (optional)',
             name: 'course',
-            includeBefore: ' at ',
+            includeBefore: ' at the ',
           },
         ],
         type: BehaviourProblems,
