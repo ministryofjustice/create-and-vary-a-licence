@@ -126,7 +126,7 @@ describe('Conditions Provider - expansions', () => {
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
       expect(listOfConditions[0].text).toEqual(
-        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol and drug problems at Walthamstow Rehabilitation Clinic.'
+        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol and drug problems at the Walthamstow Rehabilitation Clinic.'
       )
     })
 
@@ -241,7 +241,7 @@ describe('Conditions Provider - expansions', () => {
       const listOfConditions = expandAdditionalConditions(conditions)
       expect(listOfConditions).toHaveLength(1)
       expect(listOfConditions[0].text).toEqual(
-        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol, drug, sexual, violent, gambling and anger problems at AA meeting.'
+        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol, drug, sexual, violent, gambling and anger problems at the AA meeting.'
       )
     })
 
