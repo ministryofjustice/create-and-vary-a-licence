@@ -145,8 +145,11 @@ export function registerNunjucks(app?: express.Express): Environment {
     return address ? address.split(', ').filter(line => line.trim().length > 0) : undefined
   })
 
-  njkEnv.addFilter('formatListAsString', (list?: string[]) => {
-    return `[${list.map(i => `'${i}'`).join(',')}]`
+  njkEnv.addFilter('formatListAsString', (list?: string[]): string => {
+    if (list) {
+      return `[${list.map(i => `'${i}'`).join(',')}]`
+    }
+    return '[]'
   })
 
   njkEnv.addFilter('separatedDataByFieldName', (data: AdditionalConditionData[]) => {
