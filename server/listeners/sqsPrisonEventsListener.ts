@@ -2,7 +2,6 @@ import AWS from 'aws-sdk'
 import { Consumer } from 'sqs-consumer'
 import config from '../config'
 import logger from '../../logger'
-import { Services } from '../services'
 import buildEventHandler from './eventHandlers/prisonEvents'
 
 const sqs = new AWS.SQS({
@@ -11,10 +10,10 @@ const sqs = new AWS.SQS({
   secretAccessKey: config.sqs.prisonEvents.secretAccessKey,
 })
 
-export default function createSqsListener(services: Services) {
+export default function createSqsListener() {
   const app = Consumer.create({
     queueUrl: config.sqs.prisonEvents.queueUrl,
-    handleMessageBatch: buildEventHandler(services),
+    handleMessageBatch: buildEventHandler(),
     sqs,
     pollingWaitTimeMs: 5000,
     batchSize: 10,
