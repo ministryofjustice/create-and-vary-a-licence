@@ -14,14 +14,14 @@
     {% if user %}
       <script nonce="{{ cspNonce }}">window.dataLayer.push({
           'user': {
-            'authSource': {{  user.authSource }},
-            'roles': {{ user.userRoles }},
-            'username': {{ user.username }},
-            'displayName': {{ user.displayName }},
-            'prisons': {{  user.prisonCaseload or [] }},
-            'probationAreaCode': {{ user.probationArea or null }},
-            'probationAreaDesc': {{ user.probationAreaDescription or null }},
-            'probationTeams': {{ user.probationTeams or [] }},
+            'authSource': '{{ user.authSource }}',
+            'roles': {{ user.userRoles | formatListAsString | safe }},
+            'username': '{{ user.username }}',
+            'displayName': '{{ user.displayName }}',
+            'prisons': {{ user.prisonCaseload | formatListAsString | safe }},
+            'probationAreaCode': '{{ user.probationArea }}',
+            'probationAreaDesc': '{{ user.probationAreaDescription }}',
+            'probationTeams': {{ user.probationTeams | formatListAsString | safe }},
           },
         })</script>
     {% endif %}
