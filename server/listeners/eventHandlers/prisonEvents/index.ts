@@ -1,11 +1,12 @@
 import { SQSMessage } from 'sqs-consumer'
 import logger from '../../../../logger'
+import { PrisonEvent } from '../../../@types/prisonApiClientTypes'
 
-export default async function handlePrisonEvents(messages: SQSMessage[]) {
-  messages.forEach(message => {
-    const nomisEvent = message.Body
-    logger.info(`Nomis Event : ${nomisEvent}`)
-
-    // TODO: Check event type here and call out to an event handler based on event type
-  })
+export default function buildEventHandler() {
+  return async (messages: SQSMessage[]) => {
+    messages.forEach(message => {
+      const nomisEvent = JSON.parse(JSON.parse(message.Body).Message) as PrisonEvent
+      logger.info(`Nomis Event : ${JSON.stringify(nomisEvent)}`)
+    })
+  }
 }

@@ -63,6 +63,15 @@ export default {
         requiredInProduction
       ),
     },
+    domainEvents: {
+      accessKeyId: get('SQS_DOMAIN_EVENTS_ACCESS_KEY_ID', '', requiredInProduction),
+      secretAccessKey: get('SQS_DOMAIN_EVENTS_SECRET_ACCESS_KEY', '', requiredInProduction),
+      queueUrl: get(
+        'SQS_DOMAIN_EVENTS_QUEUE_URL',
+        'http://localhost:4576/queue/create_and_vary_a_licence_domain_events_queue',
+        requiredInProduction
+      ),
+    },
   },
   apis: {
     hmppsAuth: {
