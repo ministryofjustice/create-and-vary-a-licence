@@ -240,11 +240,11 @@ export default class LicenceService {
     return this.licenceApiClient.updateBespokeConditions(id, requestBody, user)
   }
 
-  async updateStatus(id: string, newStatus: LicenceStatus, user: User): Promise<void> {
+  async updateStatus(id: string, newStatus: LicenceStatus, user?: User): Promise<void> {
     const requestBody = {
       status: newStatus,
-      username: user.username,
-      fullName: user.displayName,
+      username: user?.username || 'SYSTEM',
+      fullName: user?.displayName || 'SYSTEM',
     } as StatusUpdateRequest
     return this.licenceApiClient.updateLicenceStatus(id, requestBody, user)
   }
@@ -263,7 +263,7 @@ export default class LicenceService {
   async getLicencesByNomisIdsAndStatus(
     nomisIds: string[],
     statuses: LicenceStatus[],
-    user: User
+    user?: User
   ): Promise<LicenceSummary[]> {
     return this.licenceApiClient.matchLicences(statuses, [], [], nomisIds, null, null, user)
   }

@@ -109,8 +109,8 @@ export default class LicenceApiClient extends RestClient {
     )
   }
 
-  async updateLicenceStatus(licenceId: string, statusRequest: StatusUpdateRequest, user: User): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest }, { username: user.username })
+  async updateLicenceStatus(licenceId: string, statusRequest: StatusUpdateRequest, user?: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest }, { username: user?.username })
   }
 
   async submitLicence(licenceId: string, request: SubmitLicenceRequest, user: User): Promise<void> {
