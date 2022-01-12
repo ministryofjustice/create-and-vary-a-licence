@@ -136,6 +136,8 @@ jobs:
           name: Create localstack queues
           command: |
             export AWS_DEFAULT_REGION=eu-west-2
+            export AWS_ACCESS_KEY_ID=foo
+            export AWS_SECRET_ACCESS_KEY=bar
 
             aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue
             aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue_dl
