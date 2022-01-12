@@ -146,15 +146,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('formatListAsString', (list?: string[]) => {
-    if (list && list.length > 0) {
-      let val = '['
-      list.forEach(item => {
-        val = val.concat(`'${item}',`)
-      })
-      val = val.replace(/(,$)/g, ']')
-      return val
-    }
-    return '[]'
+    return `[${list.map(i => `'${i}'`).join(',')}]`
   })
 
   njkEnv.addFilter('separatedDataByFieldName', (data: AdditionalConditionData[]) => {
