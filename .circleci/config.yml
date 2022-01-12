@@ -133,19 +133,19 @@ jobs:
           command: sudo apt-get install libxss1
       - hmpps/wait_till_ready # Wait for localstack to start before creating resources
       - run:
-        name: Create localstack queues
-        command: |
-          aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue
-          aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue_dl
-          aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "http://localhost:4576/queue/create_and_vary_a_licence_prison_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_prison_events_queue_dl\"}"}'
+          name: Create localstack queues
+          command: |
+            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue
+            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue_dl
+            aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "http://localhost:4576/queue/create_and_vary_a_licence_prison_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_prison_events_queue_dl\"}"}'
 
-          aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue
-          aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue_dl
-          aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "http://localhost:4576/queue/create_and_vary_a_licence_probation_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_probation_events_queue_dl\"}"}'
+            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue
+            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue_dl
+            aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "http://localhost:4576/queue/create_and_vary_a_licence_probation_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_probation_events_queue_dl\"}"}'
 
-          aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue
-          aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue_dl
-          aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "http://localhost:4576/queue/create_and_vary_a_licence_domain_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_domain_events_queue_dl\"}"}'
+            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue
+            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue_dl
+            aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "http://localhost:4576/queue/create_and_vary_a_licence_domain_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_domain_events_queue_dl\"}"}'
       - run:
           name: Get wiremock
           command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.1/wiremock-standalone-2.27.1.jar
