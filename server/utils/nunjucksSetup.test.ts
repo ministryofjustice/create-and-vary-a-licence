@@ -158,6 +158,32 @@ describe('Nunjucks Filters', () => {
     })
   })
 
+  describe('Format list as string', () => {
+    it('should render a list as a string', () => {
+      viewContext = { roleList: ['ROLE_A', 'ROLE_B', 'ROLE_C'] }
+      const nunjucksString = '{{ roleList | formatListAsString | safe }}'
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+      expect($('body').text()).toBe("['ROLE_A','ROLE_B','ROLE_C']")
+    })
+
+    it('should render an empty list as a string', () => {
+      viewContext = { roleList: [] }
+      const nunjucksString = '{{ roleList | formatListAsString | safe }}'
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+      expect($('body').text()).toBe('[]')
+    })
+
+    it('should render a null list as a string', () => {
+      viewContext = { roleList: null }
+      const nunjucksString = '{{ roleList | formatListAsString | safe }}'
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+      expect($('body').text()).toBe('[]')
+    })
+  })
+
   describe('Format dates and times', () => {
     it('should format a date and time', () => {
       viewContext = { testDateTime: '23/12/2021 11:15' }
