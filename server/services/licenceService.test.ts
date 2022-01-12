@@ -485,13 +485,24 @@ describe('Licence Service', () => {
     expect(licenceApiClient.updateBespokeConditions).toBeCalledWith('1', { conditions: ['condition1'] }, user)
   })
 
-  it('Update status', async () => {
-    await licenceService.updateStatus('1', LicenceStatus.APPROVED, user)
-    expect(licenceApiClient.updateLicenceStatus).toBeCalledWith(
-      '1',
-      { status: 'APPROVED', username: 'joebloggs', fullName: 'Joe Bloggs' },
-      user
-    )
+  describe('Update status', () => {
+    it('should update status successfully with user details', async () => {
+      await licenceService.updateStatus('1', LicenceStatus.APPROVED, user)
+      expect(licenceApiClient.updateLicenceStatus).toBeCalledWith(
+        '1',
+        { status: 'APPROVED', username: 'joebloggs', fullName: 'Joe Bloggs' },
+        user
+      )
+    })
+
+    it('should send SYSTEM as user if user is not defined', async () => {
+      await licenceService.updateStatus('1', LicenceStatus.APPROVED)
+      expect(licenceApiClient.updateLicenceStatus).toBeCalledWith(
+        '1',
+        { status: 'APPROVED', username: 'SYSTEM', fullName: 'SYSTEM' },
+        undefined
+      )
+    })
   })
 
   it('Submit licence', async () => {

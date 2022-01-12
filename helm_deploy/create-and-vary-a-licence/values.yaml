@@ -53,6 +53,10 @@ generic-service:
       SQS_PROBATION_EVENTS_ACCESS_KEY_ID: "access_key_id"
       SQS_PROBATION_EVENTS_SECRET_ACCESS_KEY: "secret_access_key"
       SQS_PROBATION_EVENTS_QUEUE_URL: "sqs_id"
+    create-and-vary-a-licence-domain-events-sqs-instance-output:
+      SQS_DOMAIN_EVENTS_ACCESS_KEY_ID: "access_key_id"
+      SQS_DOMAIN_EVENTS_SECRET_ACCESS_KEY: "secret_access_key"
+      SQS_DOMAIN_EVENTS_QUEUE_URL: "sqs_id"
 
   allowlist:
     office: "217.33.148.210/32"

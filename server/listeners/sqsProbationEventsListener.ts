@@ -2,7 +2,7 @@ import AWS from 'aws-sdk'
 import { Consumer } from 'sqs-consumer'
 import config from '../config'
 import logger from '../../logger'
-import handleMessageBatch from './eventHandlers/probationEvents'
+import buildEventHandler from './eventHandlers/probationEvents'
 
 const sqs = new AWS.SQS({
   region: 'eu-west-2',
@@ -13,7 +13,7 @@ const sqs = new AWS.SQS({
 export default function createSqsListener() {
   const app = Consumer.create({
     queueUrl: config.sqs.probationEvents.queueUrl,
-    handleMessageBatch,
+    handleMessageBatch: buildEventHandler(),
     sqs,
     pollingWaitTimeMs: 5000,
     batchSize: 10,
