@@ -7,6 +7,7 @@ import community from '../mockApis/community'
 import prisonerSearch from '../mockApis/prisonerSearch'
 import prison from '../mockApis/prison'
 import probationSearch from '../mockApis/probationSearch'
+import events from '../support/events'
 
 export default (on: (string, Record) => void): void => {
   on('task', {
@@ -17,12 +18,14 @@ export default (on: (string, Record) => void): void => {
     stubProbationSignIn: auth.stubProbationSignIn,
     stubAuthUser: auth.stubUser,
     stubAuthPing: auth.stubPing,
+    stubSystemToken: auth.systemToken,
 
     stubTokenVerificationPing: tokenVerification.stubPing,
 
     stubGetLicence: licence.stubGetLicence,
     stubPostLicence: licence.stubPostLicence,
     stubGetExistingLicenceForOffenderWithResult: licence.stubGetExistingLicenceForOffenderWithResult,
+    stubGetLicencesForOffender: licence.stubGetLicencesForOffender,
     stubPutAppointmentPerson: licence.stubPutAppointmentPerson,
     stubPutAppointmentTime: licence.stubPutAppointmentTime,
     stubPutAppointmentAddress: licence.stubPutAppointmentAddress,
@@ -51,5 +54,9 @@ export default (on: (string, Record) => void): void => {
     stubGetHdcStatus: prison.stubGetHdcStatus,
 
     stubGetProbationer: probationSearch.stubGetProbationer,
+
+    sendDomainEvent: events.sendDomainEvent,
+    sendPrisonEvent: events.sendPrisonEvent,
+    sendProbationEvent: events.sendProbationEvent,
   })
 }

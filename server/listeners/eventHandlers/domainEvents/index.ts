@@ -14,7 +14,7 @@ export default function buildEventHandler({ licenceService }: Services) {
 
       switch (domainEvent.eventType) {
         case 'prison-offender-events.prisoner.released':
-          releaseEventHandler.handle(domainEvent)
+          releaseEventHandler.handle(domainEvent).catch(error => logger.error(error))
       }
     })
   }
