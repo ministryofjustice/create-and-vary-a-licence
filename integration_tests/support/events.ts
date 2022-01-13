@@ -1,7 +1,11 @@
 import AWS from 'aws-sdk'
 import { SendMessageRequest } from 'aws-sdk/clients/sqs'
 
-const sqs = new AWS.SQS({ region: 'eu-west-2' })
+const sqs = new AWS.SQS({
+  region: 'eu-west-2',
+  accessKeyId: 'foo',
+  secretAccessKey: 'bar',
+})
 
 const sendMessage = (message: SendMessageRequest): void => {
   sqs.sendMessage(message, (err, data) => {
