@@ -1,4 +1,4 @@
-import { resetStubs } from '../wiremock'
+import { resetStubs, verifyEndpointCalled } from '../wiremock'
 
 import auth from '../mockApis/auth'
 import tokenVerification from '../mockApis/tokenVerification'
@@ -12,6 +12,7 @@ import events from '../support/events'
 export default (on: (string, Record) => void): void => {
   on('task', {
     reset: resetStubs,
+    verifyEndpointCalled,
 
     getSignInUrl: auth.getSignInUrl,
     stubPrisonSignIn: auth.stubPrisonSignIn,
