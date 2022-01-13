@@ -1,6 +1,7 @@
 context('Event handlers', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('purgeQueues')
     cy.task('stubSystemToken')
   })
 
@@ -16,8 +17,8 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 }).then(result => {
-        if (!result) throw new Error(`Endpoint called an unexpected number of times`)
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 }).then(success => {
+        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
       })
     })
   })

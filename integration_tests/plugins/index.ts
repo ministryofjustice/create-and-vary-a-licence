@@ -59,5 +59,6 @@ export default (on: (string, Record) => void): void => {
     sendDomainEvent: events.sendDomainEvent,
     sendPrisonEvent: events.sendPrisonEvent,
     sendProbationEvent: events.sendProbationEvent,
+    purgeQueues: events.purgeQueues,
   })
 }

@@ -11,8 +11,6 @@ const resetStubs = (): Promise<Array<Response>> =>
   Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
 
 const verifyEndpointCalled = async (options: { verb: string; path: string; times: number }): Promise<boolean> => {
-  // wait for wiremock to update the request counts
-  await new Promise(resolve => setTimeout(resolve, 5000))
   return superagent
     .post('http://localhost:9091/__admin/requests/count')
     .send({
