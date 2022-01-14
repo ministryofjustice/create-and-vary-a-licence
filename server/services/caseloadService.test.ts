@@ -439,451 +439,484 @@ describe('Caseload Service', () => {
         },
       ])
     })
+
+    it('should filter out offenders who are eligible for HDC and checks have passed)', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([
+        {
+          nomsNumber: '1',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '2',
+          currentOm: true,
+        },
+      ] as CommunityApiManagedOffender[])
+
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: '1',
+          bookingId: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          homeDetentionCurfewEndDate: '2021-10-07',
+          conditionalReleaseDate: '2023-05-12',
+        },
+        {
+          prisonerNumber: '2',
+          bookingId: '2',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          homeDetentionCurfewEndDate: '2021-10-07',
+          conditionalReleaseDate: '2023-05-12',
+        },
+      ] as Prisoner[])
+
+      prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1', '2021-10-07', true), new HdcStatus('2')])
+
+      const caseload = await caseloadService.getStaffCaseload(user)
+
+      expect(caseload).toEqual([
+        {
+          nomsNumber: '2',
+          bookingId: '2',
+          prisonerNumber: '2',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
+          homeDetentionCurfewEndDate: '2021-10-07',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+      ])
+    })
+
+    it('should NOT filter out offenders who are eligible for HDC but then REJECTED', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([
+        {
+          nomsNumber: '1',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '2',
+          currentOm: true,
+        },
+      ] as CommunityApiManagedOffender[])
+
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: '1',
+          bookingId: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-04-12',
+        },
+        {
+          prisonerNumber: '2',
+          bookingId: '2',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          homeDetentionCurfewEndDate: '2021-10-07',
+          conditionalReleaseDate: '2023-05-12',
+        },
+      ] as Prisoner[])
+
+      prisonerService.getHdcStatuses.mockResolvedValue([
+        new HdcStatus('1'),
+        new HdcStatus('2', '2021-10-07', true, 'REJECTED'),
+      ])
+
+      const caseload = await caseloadService.getStaffCaseload(user)
+
+      expect(caseload).toEqual([
+        {
+          nomsNumber: '1',
+          bookingId: '1',
+          prisonerNumber: '1',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-04-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+        {
+          nomsNumber: '2',
+          bookingId: '2',
+          prisonerNumber: '2',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
+          homeDetentionCurfewEndDate: '2021-10-07',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+      ])
+    })
+
+    it('should NOT filter out offenders who are eligible for HDC but failed checks', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([
+        {
+          nomsNumber: '1',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '2',
+          currentOm: true,
+        },
+      ] as CommunityApiManagedOffender[])
+
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: '1',
+          bookingId: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-04-12',
+        },
+        {
+          prisonerNumber: '2',
+          bookingId: '2',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          homeDetentionCurfewEndDate: '2021-10-07',
+          conditionalReleaseDate: '2023-05-12',
+        },
+      ] as Prisoner[])
+
+      prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2', '2021-10-07', false)])
+
+      const caseload = await caseloadService.getStaffCaseload(user)
+
+      expect(caseload).toEqual([
+        {
+          nomsNumber: '1',
+          bookingId: '1',
+          prisonerNumber: '1',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-04-12',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+        {
+          nomsNumber: '2',
+          bookingId: '2',
+          prisonerNumber: '2',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
+          homeDetentionCurfewEndDate: '2021-10-07',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+      ])
+    })
+
+    it('should filter existing ACTIVE and INACTIVE licences, but include other active statuses', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([
+        {
+          nomsNumber: '1',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '2',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '3',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '4',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '5',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '6',
+          currentOm: true,
+        },
+      ] as CommunityApiManagedOffender[])
+
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: '1',
+          bookingId: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-01',
+        },
+        {
+          prisonerNumber: '2',
+          bookingId: '2',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-02',
+        },
+        {
+          prisonerNumber: '3',
+          bookingId: '3',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-03',
+        },
+        {
+          prisonerNumber: '4',
+          bookingId: '4',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-04',
+        },
+        {
+          prisonerNumber: '5',
+          bookingId: '5',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-05',
+        },
+        {
+          prisonerNumber: '6',
+          bookingId: '6',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-06',
+        },
+      ] as Prisoner[])
+
+      prisonerService.getHdcStatuses.mockResolvedValue([
+        new HdcStatus('1'),
+        new HdcStatus('2'),
+        new HdcStatus('3'),
+        new HdcStatus('4'),
+        new HdcStatus('5'),
+        new HdcStatus('6'),
+      ])
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
+        { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
+        { nomisId: '3', licenceType: LicenceType.PSS, licenceStatus: LicenceStatus.APPROVED },
+        { nomisId: '4', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.REJECTED },
+        { nomisId: '6', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.INACTIVE },
+      ] as LicenceSummary[])
+
+      const caseload = await caseloadService.getStaffCaseload(user)
+
+      expect(caseload).toEqual([
+        {
+          nomsNumber: '1',
+          bookingId: '1',
+          prisonerNumber: '1',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-01',
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          licenceType: LicenceType.AP,
+        },
+        {
+          nomsNumber: '2',
+          bookingId: '2',
+          prisonerNumber: '2',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-02',
+          licenceStatus: LicenceStatus.SUBMITTED,
+          licenceType: LicenceType.AP_PSS,
+        },
+        {
+          nomsNumber: '3',
+          bookingId: '3',
+          prisonerNumber: '3',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-03',
+          licenceStatus: LicenceStatus.APPROVED,
+          licenceType: LicenceType.PSS,
+        },
+        {
+          nomsNumber: '4',
+          bookingId: '4',
+          prisonerNumber: '4',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-04',
+          licenceStatus: LicenceStatus.REJECTED,
+          licenceType: LicenceType.AP,
+        },
+        {
+          nomsNumber: '5',
+          bookingId: '5',
+          prisonerNumber: '5',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-05',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+      ])
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
+        ['1', '2', '3', '4', '5', '6'],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.RECALLED,
+          LicenceStatus.IN_PROGRESS,
+          LicenceStatus.SUBMITTED,
+          LicenceStatus.APPROVED,
+          LicenceStatus.REJECTED,
+        ],
+        user
+      )
+    })
+
+    it('should sort offenders by conditional release date ascending', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([
+        {
+          nomsNumber: '1',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '2',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '3',
+          currentOm: true,
+        },
+        {
+          nomsNumber: '4',
+          currentOm: true,
+        },
+      ] as CommunityApiManagedOffender[])
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: '1',
+          bookingId: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2022-04-30',
+        },
+        {
+          prisonerNumber: '2',
+          bookingId: '2',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2024-04-30',
+        },
+        {
+          prisonerNumber: '3',
+          bookingId: '3',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2021-04-30',
+        },
+        {
+          prisonerNumber: '4',
+          bookingId: '4',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-04-30',
+        },
+      ] as Prisoner[])
+
+      prisonerService.getHdcStatuses.mockResolvedValue([
+        new HdcStatus('1'),
+        new HdcStatus('2'),
+        new HdcStatus('3'),
+        new HdcStatus('4'),
+      ])
+
+      const caseload = await caseloadService.getStaffCaseload(user)
+
+      expect(caseload).toStrictEqual([
+        {
+          nomsNumber: '3',
+          bookingId: '3',
+          prisonerNumber: '3',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2021-04-30',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+        {
+          nomsNumber: '1',
+          bookingId: '1',
+          prisonerNumber: '1',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2022-04-30',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+        {
+          nomsNumber: '4',
+          bookingId: '4',
+          prisonerNumber: '4',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-04-30',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+        {
+          nomsNumber: '2',
+          bookingId: '2',
+          prisonerNumber: '2',
+          currentOm: true,
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2024-04-30',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+      ])
+    })
   })
 
-  it('should filter out offenders who are eligible for HDC and checks have passed)', async () => {
-    communityService.getManagedOffenders.mockResolvedValue([
-      {
-        nomsNumber: '1',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '2',
-        currentOm: true,
-      },
-    ] as CommunityApiManagedOffender[])
+  describe('getVaryCaseload', () => {
+    it('should get managed offenders by the staffIdentifier for this user', async () => {
+      await caseloadService.getVaryCaseload(user)
+      expect(communityService.getManagedOffenders).toBeCalledTimes(1)
+      expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
+    })
 
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      {
-        prisonerNumber: '1',
-        bookingId: '1',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        homeDetentionCurfewEndDate: '2021-10-07',
-        conditionalReleaseDate: '2023-05-12',
-      },
-      {
-        prisonerNumber: '2',
-        bookingId: '2',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        homeDetentionCurfewEndDate: '2021-10-07',
-        conditionalReleaseDate: '2023-05-12',
-      },
-    ] as Prisoner[])
+    it('should return active licences of offenders who are managed by the current user', async () => {
+      const expectedResult = [
+        {
+          licenceId: 1,
+        },
+      ] as LicenceSummary[]
 
-    prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1', '2021-10-07', true), new HdcStatus('2')])
+      communityService.getManagedOffenders.mockResolvedValue([
+        {
+          nomsNumber: '1',
+          currentOm: false,
+        },
+        {
+          nomsNumber: '2',
+          currentOm: true,
+        },
+      ] as CommunityApiManagedOffender[])
 
-    const caseload = await caseloadService.getStaffCaseload(user)
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(expectedResult)
 
-    expect(caseload).toEqual([
-      {
-        nomsNumber: '2',
-        bookingId: '2',
-        prisonerNumber: '2',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-12',
-        homeDetentionCurfewEndDate: '2021-10-07',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-    ])
-  })
-
-  it('should NOT filter out offenders who are eligible for HDC but then REJECTED', async () => {
-    communityService.getManagedOffenders.mockResolvedValue([
-      {
-        nomsNumber: '1',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '2',
-        currentOm: true,
-      },
-    ] as CommunityApiManagedOffender[])
-
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      {
-        prisonerNumber: '1',
-        bookingId: '1',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-04-12',
-      },
-      {
-        prisonerNumber: '2',
-        bookingId: '2',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        homeDetentionCurfewEndDate: '2021-10-07',
-        conditionalReleaseDate: '2023-05-12',
-      },
-    ] as Prisoner[])
-
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      new HdcStatus('1'),
-      new HdcStatus('2', '2021-10-07', true, 'REJECTED'),
-    ])
-
-    const caseload = await caseloadService.getStaffCaseload(user)
-
-    expect(caseload).toEqual([
-      {
-        nomsNumber: '1',
-        bookingId: '1',
-        prisonerNumber: '1',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-04-12',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-      {
-        nomsNumber: '2',
-        bookingId: '2',
-        prisonerNumber: '2',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-12',
-        homeDetentionCurfewEndDate: '2021-10-07',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-    ])
-  })
-
-  it('should NOT filter out offenders who are eligible for HDC but failed checks', async () => {
-    communityService.getManagedOffenders.mockResolvedValue([
-      {
-        nomsNumber: '1',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '2',
-        currentOm: true,
-      },
-    ] as CommunityApiManagedOffender[])
-
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      {
-        prisonerNumber: '1',
-        bookingId: '1',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-04-12',
-      },
-      {
-        prisonerNumber: '2',
-        bookingId: '2',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        homeDetentionCurfewEndDate: '2021-10-07',
-        conditionalReleaseDate: '2023-05-12',
-      },
-    ] as Prisoner[])
-
-    prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2', '2021-10-07', false)])
-
-    const caseload = await caseloadService.getStaffCaseload(user)
-
-    expect(caseload).toEqual([
-      {
-        nomsNumber: '1',
-        bookingId: '1',
-        prisonerNumber: '1',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-04-12',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-      {
-        nomsNumber: '2',
-        bookingId: '2',
-        prisonerNumber: '2',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-12',
-        homeDetentionCurfewEndDate: '2021-10-07',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-    ])
-  })
-
-  it('should filter existing ACTIVE and INACTIVE licences, but include other active statuses', async () => {
-    communityService.getManagedOffenders.mockResolvedValue([
-      {
-        nomsNumber: '1',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '2',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '3',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '4',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '5',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '6',
-        currentOm: true,
-      },
-    ] as CommunityApiManagedOffender[])
-
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      {
-        prisonerNumber: '1',
-        bookingId: '1',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-01',
-      },
-      {
-        prisonerNumber: '2',
-        bookingId: '2',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-02',
-      },
-      {
-        prisonerNumber: '3',
-        bookingId: '3',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-03',
-      },
-      {
-        prisonerNumber: '4',
-        bookingId: '4',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-04',
-      },
-      {
-        prisonerNumber: '5',
-        bookingId: '5',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-05',
-      },
-      {
-        prisonerNumber: '6',
-        bookingId: '6',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-06',
-      },
-    ] as Prisoner[])
-
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      new HdcStatus('1'),
-      new HdcStatus('2'),
-      new HdcStatus('3'),
-      new HdcStatus('4'),
-      new HdcStatus('5'),
-      new HdcStatus('6'),
-    ])
-
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
-      { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
-      { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
-      { nomisId: '3', licenceType: LicenceType.PSS, licenceStatus: LicenceStatus.APPROVED },
-      { nomisId: '4', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.REJECTED },
-      { nomisId: '6', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.INACTIVE },
-    ] as LicenceSummary[])
-
-    const caseload = await caseloadService.getStaffCaseload(user)
-
-    expect(caseload).toEqual([
-      {
-        nomsNumber: '1',
-        bookingId: '1',
-        prisonerNumber: '1',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-01',
-        licenceStatus: LicenceStatus.IN_PROGRESS,
-        licenceType: LicenceType.AP,
-      },
-      {
-        nomsNumber: '2',
-        bookingId: '2',
-        prisonerNumber: '2',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-02',
-        licenceStatus: LicenceStatus.SUBMITTED,
-        licenceType: LicenceType.AP_PSS,
-      },
-      {
-        nomsNumber: '3',
-        bookingId: '3',
-        prisonerNumber: '3',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-03',
-        licenceStatus: LicenceStatus.APPROVED,
-        licenceType: LicenceType.PSS,
-      },
-      {
-        nomsNumber: '4',
-        bookingId: '4',
-        prisonerNumber: '4',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-04',
-        licenceStatus: LicenceStatus.REJECTED,
-        licenceType: LicenceType.AP,
-      },
-      {
-        nomsNumber: '5',
-        bookingId: '5',
-        prisonerNumber: '5',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-05-05',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-    ])
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
-      ['1', '2', '3', '4', '5', '6'],
-      [
-        LicenceStatus.ACTIVE,
-        LicenceStatus.RECALLED,
-        LicenceStatus.IN_PROGRESS,
-        LicenceStatus.SUBMITTED,
-        LicenceStatus.APPROVED,
-        LicenceStatus.REJECTED,
-      ],
-      user
-    )
-  })
-
-  it('should sort offenders by conditional release date ascending', async () => {
-    communityService.getManagedOffenders.mockResolvedValue([
-      {
-        nomsNumber: '1',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '2',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '3',
-        currentOm: true,
-      },
-      {
-        nomsNumber: '4',
-        currentOm: true,
-      },
-    ] as CommunityApiManagedOffender[])
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      {
-        prisonerNumber: '1',
-        bookingId: '1',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2022-04-30',
-      },
-      {
-        prisonerNumber: '2',
-        bookingId: '2',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2024-04-30',
-      },
-      {
-        prisonerNumber: '3',
-        bookingId: '3',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2021-04-30',
-      },
-      {
-        prisonerNumber: '4',
-        bookingId: '4',
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-04-30',
-      },
-    ] as Prisoner[])
-
-    prisonerService.getHdcStatuses.mockResolvedValue([
-      new HdcStatus('1'),
-      new HdcStatus('2'),
-      new HdcStatus('3'),
-      new HdcStatus('4'),
-    ])
-
-    const caseload = await caseloadService.getStaffCaseload(user)
-
-    expect(caseload).toStrictEqual([
-      {
-        nomsNumber: '3',
-        bookingId: '3',
-        prisonerNumber: '3',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2021-04-30',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-      {
-        nomsNumber: '1',
-        bookingId: '1',
-        prisonerNumber: '1',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2022-04-30',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-      {
-        nomsNumber: '4',
-        bookingId: '4',
-        prisonerNumber: '4',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2023-04-30',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-      {
-        nomsNumber: '2',
-        bookingId: '2',
-        prisonerNumber: '2',
-        currentOm: true,
-        status: 'ACTIVE',
-        indeterminateSentence: false,
-        conditionalReleaseDate: '2024-04-30',
-        licenceStatus: LicenceStatus.NOT_STARTED,
-        licenceType: LicenceType.AP,
-      },
-    ])
+      const result = await caseloadService.getVaryCaseload(user)
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(['2'], ['ACTIVE'], user)
+      expect(result).toEqual(expectedResult)
+    })
   })
 })

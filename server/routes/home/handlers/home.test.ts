@@ -19,6 +19,7 @@ describe('Route Handlers - Home', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
         shouldShowCreateLicenceCard: false,
+        shouldShowVaryLicenceCard: false,
         shouldShowApproveLicenceCard: false,
         shouldShowMyCaseloadCard: false,
         shouldShowViewOrPrintCard: true,
@@ -30,6 +31,7 @@ describe('Route Handlers - Home', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
         shouldShowCreateLicenceCard: true,
+        shouldShowVaryLicenceCard: true,
         shouldShowApproveLicenceCard: false,
         shouldShowMyCaseloadCard: true,
         shouldShowViewOrPrintCard: false,
@@ -41,6 +43,7 @@ describe('Route Handlers - Home', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
         shouldShowCreateLicenceCard: false,
+        shouldShowVaryLicenceCard: false,
         shouldShowApproveLicenceCard: false,
         shouldShowMyCaseloadCard: false,
         shouldShowViewOrPrintCard: true,
@@ -52,6 +55,7 @@ describe('Route Handlers - Home', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
         shouldShowCreateLicenceCard: false,
+        shouldShowVaryLicenceCard: false,
         shouldShowApproveLicenceCard: true,
         shouldShowMyCaseloadCard: false,
         shouldShowViewOrPrintCard: false,

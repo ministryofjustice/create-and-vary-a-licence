@@ -1,0 +1,78 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/statusBadge.njk" import statusBadge %}
+{% from "partials/licenceDescription.njk" import licenceDescription %}
+
+{% set pageTitle = applicationName + " - Vary a licence - Caseload" %}
+{% set pageId = "vary-cases-page" %}
+{% set backLinkHref = "/" %}
+{% set noJsBackLink = true %}
+
+{% set licences = [] %}
+
+{% for licence in caseload %}
+    {% set licences = (licences.push([
+        {
+            attributes: { id: 'name-' + loop.index },
+            html: '<a href="/licence/vary/id/'+ licence.licenceId +'/view" class="govuk-link govuk-heading-s">' + licence.name + '</a>'
+        },
+        {
+            attributes: {
+                id: 'crn-' + loop.index
+            },
+            text: licence.crnNumber
+        },
+        {
+            attributes: {
+                id: 'licence-type-' + loop.index
+            },
+            html: licenceDescription(licence.licenceType)
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index
+            },
+            text: licence.releaseDate
+        },
+        {
+            attributes: {
+                id: 'licence-status-' + loop.index
+            },
+            html: statusBadge({ status: licence.licenceStatus, size: 'small' }, statusConfig)
+        }
+    ]), licences) %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl">Select a person to vary licences and supervision orders</h1>
+        </div>
+    </div>
+
+    {{ govukTable({
+        caption: "Caseload",
+        captionClasses: "govuk-visually-hidden",
+        head: [
+            {
+                text: "Name"
+            },
+            {
+                text: "CRN"
+            },
+            {
+                text: "Licence type"
+            },
+            {
+                text: "Release date"
+            },
+            {
+                text: "Status"
+            }
+        ],
+        rows: licences
+    }) }}
+
+{% endblock %}

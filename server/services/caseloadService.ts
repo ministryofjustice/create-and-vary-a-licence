@@ -6,6 +6,7 @@ import { CaseTypeAndStatus, ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
+import { LicenceSummary } from '../@types/licenceApiClientTypes'
 
 export default class CaseloadService {
   constructor(
@@ -101,6 +102,17 @@ export default class CaseloadService {
         const crd2 = moment(b.conditionalReleaseDate, 'YYYY-MM-DD').unix()
         return crd1 - crd2
       })
+  }
+
+  async getVaryCaseload(user: User): Promise<LicenceSummary[]> {
+    const { deliusStaffIdentifier } = user
+    const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
+    const caseloadNomisIds = managedOffenders
+      .filter(offender => offender.currentOm)
+      .filter(offender => offender.nomsNumber)
+      .map(offender => offender.nomsNumber)
+
+    return this.licenceService.getLicencesByNomisIdsAndStatus(caseloadNomisIds, [LicenceStatus.ACTIVE], user)
   }
 
   private getLicenceType = (tused: string, led: string, sed: string): LicenceType => {
