@@ -16,7 +16,20 @@
                             "href": "/licence/create/caseload",
                             "clickable": "true",
                             "heading": "Create a licence",
-                            "description": "Create all purpose licences and post sentence supervision orders.",
+                            "description": "Create and edit all purpose licences and post sentence supervision orders for a person leaving custody.",
+                            "data-qa": "create-licence-link"
+                        }) }}
+                    </div>
+                {% endif %}
+
+                {% if shouldShowVaryLicenceCard %}
+                    <div class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "id": "varyLicenceCard",
+                            "href": "/licence/vary/caseload",
+                            "clickable": "true",
+                            "heading": "Vary a licence",
+                            "description": "View and vary licences and post sentence supervision orders for a person on licence in the community.",
                             "data-qa": "create-licence-link"
                         }) }}
                     </div>

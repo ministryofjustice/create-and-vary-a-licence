@@ -6,6 +6,7 @@ export default class HomeRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const viewContext = {
       shouldShowCreateLicenceCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER),
+      shouldShowVaryLicenceCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER),
       shouldShowApproveLicenceCard: hasRole(req.user, AuthRole.DECISION_MAKER),
       shouldShowViewOrPrintCard:
         hasRole(req.user, AuthRole.CASE_ADMIN) ||
