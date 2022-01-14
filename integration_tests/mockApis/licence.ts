@@ -290,6 +290,34 @@ export default {
     })
   },
 
+  stubGetLicencesForOffender: (options: { nomisId: string; status: string }): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/licence/match`,
+        queryParameters: {
+          nomsId: {
+            matches: options.nomisId,
+          },
+          status: {
+            matches: '.*',
+          },
+        },
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: 1,
+            nomisId: options.nomisId,
+            licenceStatus: options.status,
+          },
+        ],
+      },
+    })
+  },
+
   stubPutAppointmentPerson: (): SuperAgentRequest => {
     return stubFor({
       request: {
