@@ -168,6 +168,7 @@ export default {
       token(['ROLE_LICENCE_RO'], 'delius'),
       tokenVerification.stubVerifyToken(),
     ]),
+  systemToken: () => token(null, 'auth'),
   stubPrisonSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
