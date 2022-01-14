@@ -2,9 +2,12 @@ import Page from './page'
 import CaseloadPage from './caseload'
 import ApprovalCasesPage from './approvalCases'
 import ViewCasesPage from './viewCases'
+import VaryCasesPage from './varyCases'
 
 export default class IndexPage extends Page {
   private createLicenceTileId = '#createLicenceCard'
+
+  private varyLicenceTileId = '#varyLicenceCard'
 
   private approveLicenceTileId = '#approveLicenceCard'
 
@@ -24,6 +27,11 @@ export default class IndexPage extends Page {
     cy.task('stubGetHdcStatus')
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
+  }
+
+  clickVaryALicence = (): VaryCasesPage => {
+    cy.get(this.varyLicenceTileId).click()
+    return Page.verifyOnPage(VaryCasesPage)
   }
 
   clickApproveALicence = (): ApprovalCasesPage => {

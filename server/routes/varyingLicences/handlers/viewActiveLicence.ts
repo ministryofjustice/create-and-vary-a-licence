@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 
 export default class ViewActiveLicenceRoutes {
