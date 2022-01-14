@@ -36,6 +36,26 @@ describe('Views - Home', () => {
     expect($('#createLicenceCard').length).toBe(0)
   })
 
+  it('should display vary licence card when flag is true in context', () => {
+    viewContext = {
+      shouldShowVaryLicenceCard: true,
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#varyLicenceCard').length).toBe(1)
+  })
+
+  it('should hide vary licence card when flag is false in context', () => {
+    viewContext = {
+      shouldShowVaryLicenceCard: false,
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#varyLicenceCard').length).toBe(0)
+  })
+
   it('should display approve licence card when flag is true in context', () => {
     viewContext = {
       shouldShowApproveLicenceCard: true,
