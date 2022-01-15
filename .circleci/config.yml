@@ -131,7 +131,9 @@ jobs:
       - run:
           name: Install missing OS dependency
           command: sudo apt-get install libxss1
-      - hmpps/wait_till_ready # Wait for localstack to start before creating resources
+      - run:
+          name: Wait for localstack to start before creating resources
+          command: sleep 10
       - run:
           name: Create localstack queues
           command: |
