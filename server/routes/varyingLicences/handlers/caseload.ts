@@ -16,7 +16,7 @@ export default class CaseloadRoutes {
         name: convertToTitleCase([licence.forename, licence.surname].join(' ')),
         crnNumber: licence.crn,
         licenceType: licence.licenceType,
-        releaseDate: moment(licence.actualReleaseDate, 'YYYY-MM-DD').format('Do MMMM YYYY'),
+        releaseDate: moment(licence.actualReleaseDate, 'DD/MM/YYYY').format('Do MMMM YYYY'),
         licenceStatus: licence.licenceStatus,
       }
     })

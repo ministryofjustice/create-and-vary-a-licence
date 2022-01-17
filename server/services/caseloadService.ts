@@ -60,7 +60,8 @@ export default class CaseloadService {
       .filter(managedCase => managedCase.status && managedCase.status.startsWith('ACTIVE'))
       .filter(managedCase => !managedCase.indeterminateSentence && managedCase.conditionalReleaseDate)
       .filter(
-        managedCase => !managedCase.releaseDate || moment().isBefore(moment(managedCase.releaseDate, 'YYYY-MM-DD'))
+        managedCase =>
+          !managedCase.releaseDate || moment().isSameOrBefore(moment(managedCase.releaseDate, 'YYYY-MM-DD'))
       )
       .filter(managedCase => {
         const hdcStatus = hdcStatuses.find(hdc => hdc.bookingId === managedCase.bookingId)
