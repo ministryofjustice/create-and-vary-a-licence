@@ -24,7 +24,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         surname: 'Rogan',
         crn: 'X381306',
         licenceType: LicenceType.AP_PSS,
-        actualReleaseDate: '2021-03-23',
+        actualReleaseDate: '23/03/2021',
         licenceStatus: LicenceStatus.ACTIVE,
       },
     ] as LicenceSummary[])
