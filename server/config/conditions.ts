@@ -889,8 +889,8 @@ export default {
       {
         code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
         category: 'Drug testing',
-        text: 'Attend [INSERT NAME AND ADDRESS], as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour.',
-        tpl: 'Attend {name} {address}, as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour.',
+        text: 'Attend [INSERT NAME AND ADDRESS], as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour. Not to take any action that could hamper or frustrate the drug testing process.',
+        tpl: 'Attend {name} {address}, as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour. Not to take any action that could hamper or frustrate the drug testing process.',
         requiresInput: true,
         inputs: [
           {
@@ -905,12 +905,6 @@ export default {
           },
         ],
         type: DrugTestLocation,
-      },
-      {
-        code: 'b088cc98-0e83-4f70-aab8-270e755a45c9',
-        category: 'Drug testing',
-        text: 'Not to take any action that could hamper or frustrate the drug testing process.',
-        requiresInput: false,
       },
       {
         code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
