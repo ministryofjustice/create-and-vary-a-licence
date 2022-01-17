@@ -40,7 +40,7 @@
                     {{ config.text }}
                 </p>
                 {% if config.subtext %}
-                    <span class="govuk-hint">{{ config.subtext }}</span>
+                    <div class="govuk-hint">{{ config.subtext }}</div>
                 {% endif %}
 
                 {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses) }}
