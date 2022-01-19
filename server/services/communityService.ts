@@ -18,6 +18,10 @@ export default class CommunityService {
     return this.communityApiClient.getStaffCaseload(staffIdentifier)
   }
 
+  async getManagedOffendersByTeam(teamCodes: string[]): Promise<CommunityApiManagedOffender[]> {
+    return this.communityApiClient.getTeamCaseload(teamCodes)
+  }
+
   async searchProbationers(searchCriteria: SearchDto): Promise<OffenderDetail[]> {
     return this.probationSearchApiClient.searchProbationer(searchCriteria)
   }
