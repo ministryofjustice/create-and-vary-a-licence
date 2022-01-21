@@ -1019,6 +1019,14 @@ export interface definitions {
     staffCode: string
     staffIdentifier: number
   }
+  TeamManagedCase: {
+    nomsNumber: string
+    crnNumber: string
+    allocated: boolean
+    staffIdentifier: number
+    staffForename: string
+    staffSurname: string
+  }
   /** MAPPA Details */
   MappaDetails: {
     /** MAPPA Category (0 = unknown) */

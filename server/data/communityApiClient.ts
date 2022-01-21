@@ -1,6 +1,10 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
-import { CommunityApiStaffDetails, CommunityApiManagedOffender } from '../@types/communityClientTypes'
+import {
+  CommunityApiStaffDetails,
+  CommunityApiManagedOffender,
+  CommunityApiTeamManagedCase,
+} from '../@types/communityClientTypes'
 import { User } from '../@types/CvlUserDetails'
 
 export default class CommunityApiClient extends RestClient {
@@ -21,10 +25,10 @@ export default class CommunityApiClient extends RestClient {
     })) as Promise<CommunityApiManagedOffender[]>
   }
 
-  async getTeamCaseload(teamCodes: string[]): Promise<CommunityApiManagedOffender[]> {
+  async getTeamCaseload(teamCodes: string[]): Promise<CommunityApiTeamManagedCase[]> {
     return (await this.get({
       path: `/secure/teams/managedOffenders`,
       query: { teamCode: teamCodes, current: true },
-    })) as Promise<CommunityApiManagedOffender[]>
+    })) as Promise<CommunityApiTeamManagedCase[]>
   }
 }
