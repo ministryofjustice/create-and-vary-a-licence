@@ -12,7 +12,7 @@ export default class CommunityApiClient extends RestClient {
     super('Community API', config.apis.communityApi as ApiConfig)
   }
 
-  async getStaffDetailByUsername(user: User): Promise<CommunityApiStaffDetails> {
+  async getStaffDetail(user: User): Promise<CommunityApiStaffDetails> {
     return (await this.get({
       path: `/secure/staff/username/${user.username}`,
     })) as Promise<CommunityApiStaffDetails>
