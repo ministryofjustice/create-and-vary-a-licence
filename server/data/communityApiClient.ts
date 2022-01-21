@@ -23,8 +23,7 @@ export default class CommunityApiClient extends RestClient {
 
   async getTeamCaseload(teamCodes: string[]): Promise<CommunityApiManagedOffender[]> {
     return (await this.get({
-      // path: `/secure/teams/managedOffenders`,
-      path: `/secure/staff/staffIdentifier/2000/managedOffenders`,
+      path: `/secure/teams/managedOffenders`,
       query: { teamCode: teamCodes, current: true },
     })) as Promise<CommunityApiManagedOffender[]>
   }
