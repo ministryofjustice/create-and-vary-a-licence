@@ -53,7 +53,6 @@ export default class CaseloadService {
     const { deliusStaffIdentifier } = user
     const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
     const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.currentOm)
       .filter(offender => offender.nomsNumber)
       .map(offender => offender.nomsNumber)
 
