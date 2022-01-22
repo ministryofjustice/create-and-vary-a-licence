@@ -2,7 +2,7 @@ import CommunityService from './communityService'
 import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
 import { User } from '../@types/CvlUserDetails'
-import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
+import { CommunityApiManagedOffender, CommunityApiTeamManagedCase } from '../@types/communityClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 
 jest.mock('../data/communityApiClient')
@@ -21,12 +21,12 @@ describe('Community Service', () => {
       email: 'joebloggs@probation.gov.uk',
     }
 
-    communityApiClient.getStaffDetailByUsername.mockResolvedValue(expectedResponse)
+    communityApiClient.getStaffDetail.mockResolvedValue(expectedResponse)
 
     const actualResult = await communityService.getStaffDetail(user)
 
     expect(actualResult).toEqual(expectedResponse)
-    expect(communityApiClient.getStaffDetailByUsername).toHaveBeenCalledWith(user)
+    expect(communityApiClient.getStaffDetail).toHaveBeenCalledWith(user)
   })
 
   it('Get Managed Offenders', async () => {
@@ -43,6 +43,22 @@ describe('Community Service', () => {
 
     expect(actualResult).toEqual(expectedResponse)
     expect(communityApiClient.getStaffCaseload).toHaveBeenCalledWith(2000)
+  })
+
+  it('Get Managed Offenders By Team', async () => {
+    const expectedResponse = [
+      {
+        staffIdentifier: 2000,
+        nomsNumber: 'ABC123',
+      },
+    ] as CommunityApiTeamManagedCase[]
+
+    communityApiClient.getTeamCaseload.mockResolvedValue(expectedResponse)
+
+    const actualResult = await communityService.getManagedOffendersByTeam(['teamA'])
+
+    expect(actualResult).toEqual(expectedResponse)
+    expect(communityApiClient.getTeamCaseload).toHaveBeenCalledWith(['teamA'])
   })
 
   it('Search probationers', async () => {

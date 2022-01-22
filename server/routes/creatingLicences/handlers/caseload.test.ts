@@ -32,11 +32,29 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         licenceType: LicenceType.AP,
       },
     ] as unknown as CaseTypeAndStatus[])
+
+    caseloadService.getTeamCaseload.mockResolvedValue([
+      {
+        crnNumber: 'X381306',
+        firstName: 'Joe',
+        lastName: 'Rogan',
+        conditionalReleaseDate: '2022-10-12',
+        prisonerNumber: '123',
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        licenceType: LicenceType.AP,
+      },
+    ] as unknown as CaseTypeAndStatus[])
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
   })
 
   describe('GET', () => {
     beforeEach(() => {
-      req = {} as Request
+      req = {
+        query: {},
+      } as Request
 
       res = {
         render: jest.fn(),
@@ -49,7 +67,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       } as unknown as Response
     })
 
-    it('should render view', async () => {
+    it('should render view with My Cases tab selected', async () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
@@ -63,8 +81,32 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           },
         ],
         statusConfig,
+        teamView: false,
       })
       expect(caseloadService.getStaffCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamCaseload).not.toHaveBeenCalled()
+    })
+
+    it('should render view with Team Cases tab selected', async () => {
+      req.query = { view: 'team' }
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Joe Rogan',
+            crnNumber: 'X381306',
+            conditionalReleaseDate: '12th October 2022',
+            prisonerNumber: '123',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
+          },
+        ],
+        statusConfig,
+        teamView: true,
+      })
+      expect(caseloadService.getTeamCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCaseload).not.toHaveBeenCalled()
     })
   })
 

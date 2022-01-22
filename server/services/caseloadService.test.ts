@@ -2,7 +2,7 @@ import moment from 'moment'
 import CaseloadService from './caseloadService'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
-import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
+import { CommunityApiManagedOffender, CommunityApiTeamManagedCase } from '../@types/communityClientTypes'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import LicenceService from './licenceService'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
@@ -20,7 +20,7 @@ describe('Caseload Service', () => {
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
   const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
-  const user = { deliusStaffIdentifier: 2000 } as User
+  const user = { deliusStaffIdentifier: 2000, probationTeams: ['teamA', 'teamB'] } as User
 
   beforeEach(() => {
     communityService.getManagedOffenders.mockResolvedValue([])
@@ -39,22 +39,6 @@ describe('Caseload Service', () => {
       expect(communityService.getManagedOffenders).toBeCalledTimes(1)
       expect(prisonerService.getHdcStatuses).toBeCalledTimes(1)
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
-    })
-
-    it('should filter out offenders who are not managed by the current user', async () => {
-      communityService.getManagedOffenders.mockResolvedValue([
-        {
-          nomsNumber: '1',
-          currentOm: false,
-        },
-        {
-          nomsNumber: '2',
-          currentOm: true,
-        },
-      ] as CommunityApiManagedOffender[])
-
-      await caseloadService.getStaffCaseload(user)
-      expect(prisonerService.searchPrisonersByNomisIds).toHaveBeenCalledWith(['2'], user)
     })
 
     it('should filter out offenders who are not found by nomisId in NOMIS', async () => {
@@ -885,38 +869,244 @@ describe('Caseload Service', () => {
         },
       ])
     })
+
+    it('should calculate licence types correctly', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([
+        {
+          nomsNumber: '1',
+        },
+        {
+          nomsNumber: '2',
+        },
+        {
+          nomsNumber: '3',
+        },
+        {
+          nomsNumber: '4',
+        },
+        {
+          nomsNumber: '5',
+        },
+      ] as CommunityApiManagedOffender[])
+
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: '1',
+          bookingId: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2021-04-30',
+        },
+        {
+          prisonerNumber: '2',
+          bookingId: '2',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2022-04-30',
+          topupSupervisionExpiryDate: '2024-04-30',
+        },
+        {
+          prisonerNumber: '3',
+          bookingId: '3',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-04-30',
+          topupSupervisionExpiryDate: '2025-04-30',
+          licenceExpiryDate: '2025-04-30',
+        },
+        {
+          prisonerNumber: '4',
+          bookingId: '4',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2024-04-30',
+          topupSupervisionExpiryDate: '2026-04-30',
+          sentenceExpiryDate: '2026-04-30',
+        },
+        {
+          prisonerNumber: '5',
+          bookingId: '5',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2025-04-30',
+          topupSupervisionExpiryDate: '2027-04-30',
+          sentenceExpiryDate: '2027-04-30',
+          licenceExpiryDate: '2027-04-30',
+        },
+      ] as Prisoner[])
+
+      prisonerService.getHdcStatuses.mockResolvedValue([
+        new HdcStatus('1'),
+        new HdcStatus('2'),
+        new HdcStatus('3'),
+        new HdcStatus('4'),
+        new HdcStatus('5'),
+      ])
+
+      const caseload = await caseloadService.getStaffCaseload(user)
+
+      expect(caseload).toStrictEqual([
+        {
+          nomsNumber: '1',
+          bookingId: '1',
+          prisonerNumber: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2021-04-30',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP,
+        },
+        {
+          nomsNumber: '2',
+          bookingId: '2',
+          prisonerNumber: '2',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2022-04-30',
+          topupSupervisionExpiryDate: '2024-04-30',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.PSS,
+        },
+        {
+          nomsNumber: '3',
+          bookingId: '3',
+          prisonerNumber: '3',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-04-30',
+          licenceExpiryDate: '2025-04-30',
+          topupSupervisionExpiryDate: '2025-04-30',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP_PSS,
+        },
+        {
+          nomsNumber: '4',
+          bookingId: '4',
+          prisonerNumber: '4',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2024-04-30',
+          sentenceExpiryDate: '2026-04-30',
+          topupSupervisionExpiryDate: '2026-04-30',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP_PSS,
+        },
+        {
+          nomsNumber: '5',
+          bookingId: '5',
+          prisonerNumber: '5',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2025-04-30',
+          licenceExpiryDate: '2027-04-30',
+          sentenceExpiryDate: '2027-04-30',
+          topupSupervisionExpiryDate: '2027-04-30',
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          licenceType: LicenceType.AP_PSS,
+        },
+      ])
+    })
   })
 
   describe('getVaryCaseload', () => {
     it('should get managed offenders by the staffIdentifier for this user', async () => {
-      await caseloadService.getVaryCaseload(user)
-      expect(communityService.getManagedOffenders).toBeCalledTimes(1)
-      expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
-    })
-
-    it('should return active licences of offenders who are managed by the current user', async () => {
-      const expectedResult = [
-        {
-          licenceId: 1,
-        },
-      ] as LicenceSummary[]
-
       communityService.getManagedOffenders.mockResolvedValue([
-        {
-          nomsNumber: '1',
-          currentOm: false,
-        },
-        {
-          nomsNumber: '2',
-          currentOm: true,
-        },
+        { nomsNumber: '1' },
+        { nomsNumber: '2' },
       ] as CommunityApiManagedOffender[])
 
-      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(expectedResult)
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
+        { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
+      ] as LicenceSummary[])
 
-      const result = await caseloadService.getVaryCaseload(user)
-      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(['2'], ['ACTIVE'], user)
-      expect(result).toEqual(expectedResult)
+      const licences = await caseloadService.getVaryCaseload(user)
+
+      expect(licences).toEqual(licences)
+      expect(communityService.getManagedOffenders).toBeCalledTimes(1)
+      expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
+        ['1', '2'],
+        [LicenceStatus.ACTIVE],
+        user
+      )
+    })
+
+    it('should filter managed offenders returned from community API without a nomis ID', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([
+        { nomsNumber: '1' },
+        { nomsNumber: null },
+      ] as CommunityApiManagedOffender[])
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
+      ] as LicenceSummary[])
+
+      const licences = await caseloadService.getVaryCaseload(user)
+
+      expect(licences).toEqual(licences)
+      expect(communityService.getManagedOffenders).toBeCalledTimes(1)
+      expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(['1'], [LicenceStatus.ACTIVE], user)
+    })
+  })
+
+  describe('getTeamCaseload', () => {
+    it('should get managed offenders by the staffIdentifier for this user', async () => {
+      communityService.getManagedOffendersByTeam.mockResolvedValue([
+        { nomsNumber: '1' },
+        { nomsNumber: '2' },
+      ] as CommunityApiTeamManagedCase[])
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
+        { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
+      ] as LicenceSummary[])
+
+      const licences = await caseloadService.getTeamCaseload(user)
+
+      expect(licences).toEqual(licences)
+      expect(communityService.getManagedOffendersByTeam).toBeCalledTimes(1)
+      expect(communityService.getManagedOffendersByTeam).toHaveBeenCalledWith(['teamA', 'teamB'])
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
+        ['1', '2'],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.RECALLED,
+          LicenceStatus.IN_PROGRESS,
+          LicenceStatus.SUBMITTED,
+          LicenceStatus.APPROVED,
+          LicenceStatus.REJECTED,
+        ],
+        user
+      )
+    })
+
+    it('should filter managed offenders returned from community API without a nomis ID', async () => {
+      communityService.getManagedOffendersByTeam.mockResolvedValue([
+        { nomsNumber: '1' },
+        { nomsNumber: null },
+      ] as CommunityApiTeamManagedCase[])
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
+      ] as LicenceSummary[])
+
+      const licences = await caseloadService.getTeamCaseload(user)
+
+      expect(licences).toEqual(licences)
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
+        ['1'],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.RECALLED,
+          LicenceStatus.IN_PROGRESS,
+          LicenceStatus.SUBMITTED,
+          LicenceStatus.APPROVED,
+          LicenceStatus.REJECTED,
+        ],
+        user
+      )
     })
   })
 })

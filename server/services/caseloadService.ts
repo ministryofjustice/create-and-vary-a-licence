@@ -2,7 +2,7 @@ import moment from 'moment'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
-import { CaseTypeAndStatus, ManagedCase } from '../@types/managedCase'
+import { CaseTypeAndStatus } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
@@ -17,58 +17,59 @@ export default class CaseloadService {
 
   async getStaffCaseload(user: User): Promise<CaseTypeAndStatus[]> {
     const { deliusStaffIdentifier } = user
+
     const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
+
     const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.currentOm)
       .filter(offender => offender.nomsNumber)
       .map(offender => offender.nomsNumber)
 
-    const existingLicences = await this.licenceService.getLicencesByNomisIdsAndStatus(
-      caseloadNomisIds,
-      [
-        LicenceStatus.ACTIVE,
-        LicenceStatus.RECALLED,
-        LicenceStatus.IN_PROGRESS,
-        LicenceStatus.SUBMITTED,
-        LicenceStatus.APPROVED,
-        LicenceStatus.REJECTED,
-      ],
-      user
-    )
+    const offendersLicences = await this.mapOffendersToLicences(caseloadNomisIds, user)
 
-    // Get the full offender records from prisoner search
-    const offenders = await this.prisonerService.searchPrisonersByNomisIds(caseloadNomisIds, user)
+    // Combine nomis + licence record with matching delius record by nomisId
+    return offendersLicences.map(offender => {
+      return { ...offender, ...managedOffenders.find(o => o.nomsNumber === offender.prisonerNumber) }
+    })
+  }
 
-    // Get the HDC status for all bookings in the prisoner list
-    const hdcStatuses = await this.prisonerService.getHdcStatuses(offenders, user)
+  async getTeamCaseload(user: User): Promise<CaseTypeAndStatus[]> {
+    const { probationTeams } = user
 
-    // Filter the cases by the case list rules
+    const managedOffenders = await this.communityService.getManagedOffendersByTeam(probationTeams)
+
+    const caseloadNomisIds = managedOffenders
+      .filter(offender => offender.nomsNumber)
+      .map(offender => offender.nomsNumber)
+
+    const offendersLicences = await this.mapOffendersToLicences(caseloadNomisIds, user)
+
+    // Combine nomis + licence record with matching delius record by nomisId
+    return offendersLicences.map(offender => {
+      return { ...offender, ...managedOffenders.find(o => o.nomsNumber === offender.prisonerNumber) }
+    })
+  }
+
+  async getVaryCaseload(user: User): Promise<LicenceSummary[]> {
+    const { deliusStaffIdentifier } = user
+    const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
+    const caseloadNomisIds = managedOffenders
+      .filter(offender => offender.nomsNumber)
+      .map(offender => offender.nomsNumber)
+
+    return this.licenceService.getLicencesByNomisIdsAndStatus(caseloadNomisIds, [LicenceStatus.ACTIVE], user)
+  }
+
+  private mapOffendersToLicences = async (caseloadNomisIds: string[], user: User): Promise<CaseTypeAndStatus[]> => {
+    const [offenders, existingLicences] = await Promise.all([
+      this.getOffendersEligibleForLicenceByNomisId(caseloadNomisIds, user),
+      this.getExistingLicences(caseloadNomisIds, user),
+    ])
+
+    // TODO: If the length(offenders) !== length(managedOffenders), it means a managed offender in delius was not found in nomis and a NO_RECORD should be raised
+
     return offenders
       .map(offender => {
-        const matchingDeliusCase = managedOffenders.find(
-          deliusCase => deliusCase.nomsNumber === offender.prisonerNumber
-        )
-        // TODO: If the nomisId in Delius does not match a prison record - filter for now, will revisit to add a NO_RECORD
-        if (!matchingDeliusCase) {
-          return null
-        }
-        return { ...matchingDeliusCase, ...offender } as ManagedCase
-      })
-      .filter(managedCase => managedCase)
-      .filter(managedCase => !managedCase.paroleEligibilityDate)
-      .filter(managedCase => managedCase.legalStatus !== 'DEAD')
-      .filter(managedCase => managedCase.status && managedCase.status.startsWith('ACTIVE'))
-      .filter(managedCase => !managedCase.indeterminateSentence && managedCase.conditionalReleaseDate)
-      .filter(
-        managedCase =>
-          !managedCase.releaseDate || moment().isSameOrBefore(moment(managedCase.releaseDate, 'YYYY-MM-DD'))
-      )
-      .filter(managedCase => {
-        const hdcStatus = hdcStatuses.find(hdc => hdc.bookingId === managedCase.bookingId)
-        return !hdcStatus?.eligibleForHdc
-      })
-      .map(managedCase => {
-        const existingLicence = existingLicences.find(licence => licence.nomisId === managedCase.nomsNumber)
+        const existingLicence = existingLicences.find(licence => licence.nomisId === offender.prisonerNumber)
         if (existingLicence) {
           if (
             existingLicence.licenceStatus === LicenceStatus.ACTIVE ||
@@ -81,7 +82,7 @@ export default class CaseloadService {
 
           // Return a case in the list for the existing licence
           return {
-            ...managedCase,
+            ...offender,
             licenceStatus: existingLicence.licenceStatus,
             licenceType: existingLicence.licenceType,
           } as CaseTypeAndStatus
@@ -89,31 +90,56 @@ export default class CaseloadService {
 
         // Work out the licence type from the prisoner search record
         const licenceType = this.getLicenceType(
-          managedCase.topupSupervisionExpiryDate,
-          managedCase.licenceExpiryDate,
-          managedCase.sentenceExpiryDate
+          offender.topupSupervisionExpiryDate,
+          offender.licenceExpiryDate,
+          offender.sentenceExpiryDate
         )
 
         // Create a case in the list in status NOT_STARTED
-        return { ...managedCase, licenceStatus: LicenceStatus.NOT_STARTED, licenceType } as CaseTypeAndStatus
+        return { ...offender, licenceStatus: LicenceStatus.NOT_STARTED, licenceType } as CaseTypeAndStatus
       })
       .filter(managedCase => managedCase)
+  }
+
+  private getExistingLicences = async (nomisIds: string[], user: User) => {
+    return this.licenceService.getLicencesByNomisIdsAndStatus(
+      nomisIds,
+      [
+        LicenceStatus.ACTIVE,
+        LicenceStatus.RECALLED,
+        LicenceStatus.IN_PROGRESS,
+        LicenceStatus.SUBMITTED,
+        LicenceStatus.APPROVED,
+        LicenceStatus.REJECTED,
+      ],
+      user
+    )
+  }
+
+  private getOffendersEligibleForLicenceByNomisId = async (nomisIds: string[], user: User) => {
+    let offenders = await this.prisonerService.searchPrisonersByNomisIds(nomisIds, user)
+    offenders = offenders
+      .filter(managedCase => !managedCase.paroleEligibilityDate)
+      .filter(managedCase => managedCase.legalStatus !== 'DEAD')
+      .filter(managedCase => managedCase.status && managedCase.status.startsWith('ACTIVE'))
+      .filter(managedCase => !managedCase.indeterminateSentence && managedCase.conditionalReleaseDate)
+      .filter(
+        managedCase =>
+          !managedCase.releaseDate || moment().isSameOrBefore(moment(managedCase.releaseDate, 'YYYY-MM-DD'))
+      )
+
+    const hdcStatuses = await this.prisonerService.getHdcStatuses(offenders, user)
+
+    return offenders
+      .filter(offender => {
+        const hdcStatus = hdcStatuses.find(hdc => hdc.bookingId === offender.bookingId)
+        return !hdcStatus?.eligibleForHdc
+      })
       .sort((a, b) => {
         const crd1 = moment(a.conditionalReleaseDate, 'YYYY-MM-DD').unix()
         const crd2 = moment(b.conditionalReleaseDate, 'YYYY-MM-DD').unix()
         return crd1 - crd2
       })
-  }
-
-  async getVaryCaseload(user: User): Promise<LicenceSummary[]> {
-    const { deliusStaffIdentifier } = user
-    const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
-    const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.currentOm)
-      .filter(offender => offender.nomsNumber)
-      .map(offender => offender.nomsNumber)
-
-    return this.licenceService.getLicencesByNomisIdsAndStatus(caseloadNomisIds, [LicenceStatus.ACTIVE], user)
   }
 
   private getLicenceType = (tused: string, led: string, sed: string): LicenceType => {

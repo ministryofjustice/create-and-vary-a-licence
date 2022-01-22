@@ -10,8 +10,14 @@ export default class CaseloadRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly caseloadService: CaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
+    const teamView = req.query.view === 'team'
+
     const { user } = res.locals
-    const caseload = await this.caseloadService.getStaffCaseload(user)
+
+    const caseload = teamView
+      ? await this.caseloadService.getTeamCaseload(user)
+      : await this.caseloadService.getStaffCaseload(user)
+
     const caseloadViewModel = caseload.map(offender => {
       return {
         name: convertToTitleCase([offender.firstName, offender.lastName].join(' ')),
@@ -22,7 +28,7 @@ export default class CaseloadRoutes {
         licenceType: offender.licenceType,
       }
     })
-    res.render('pages/create/caseload', { caseload: caseloadViewModel, statusConfig })
+    res.render('pages/create/caseload', { caseload: caseloadViewModel, statusConfig, teamView })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

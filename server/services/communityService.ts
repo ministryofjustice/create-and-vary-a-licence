@@ -1,7 +1,11 @@
 import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
 import { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
-import { CommunityApiManagedOffender, CommunityApiStaffDetails } from '../@types/communityClientTypes'
+import {
+  CommunityApiManagedOffender,
+  CommunityApiStaffDetails,
+  CommunityApiTeamManagedCase,
+} from '../@types/communityClientTypes'
 import { User } from '../@types/CvlUserDetails'
 
 export default class CommunityService {
@@ -11,11 +15,15 @@ export default class CommunityService {
   ) {}
 
   async getStaffDetail(user: User): Promise<CommunityApiStaffDetails> {
-    return this.communityApiClient.getStaffDetailByUsername(user)
+    return this.communityApiClient.getStaffDetail(user)
   }
 
   async getManagedOffenders(staffIdentifier: number): Promise<CommunityApiManagedOffender[]> {
     return this.communityApiClient.getStaffCaseload(staffIdentifier)
+  }
+
+  async getManagedOffendersByTeam(teamCodes: string[]): Promise<CommunityApiTeamManagedCase[]> {
+    return this.communityApiClient.getTeamCaseload(teamCodes)
   }
 
   async searchProbationers(searchCriteria: SearchDto): Promise<OffenderDetail[]> {

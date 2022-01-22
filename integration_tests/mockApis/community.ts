@@ -47,7 +47,12 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/secure/staff/staffIdentifier/2000/managedOffenders`,
+        urlPathPattern: `/secure/staff/staffIdentifier/2000/managedOffenders`,
+        queryParameters: {
+          current: {
+            matches: 'true',
+          },
+        },
       },
       response: {
         status: 200,
