@@ -43,7 +43,7 @@ export default {
     AP: [
       {
         code: '9ce9d594-e346-4785-9642-c87e764bee37',
-        text: 'Be of good behaviour and not do anything which could undermine the purposes of the licence period.',
+        text: 'Be of good behaviour and not behave in a way which undermines the purpose of the licence period.',
       },
       {
         code: '3b19fdb0-4ca3-4615-9fdd-61fabc1587af',
@@ -51,7 +51,7 @@ export default {
       },
       {
         code: '3361683a-504a-4357-ae22-6aa01b370b4a',
-        text: 'Keep in touch with the supervising officer in accordance with any instructions given by the supervising officer.',
+        text: 'Keep in touch with the supervising officer in accordance with instructions given by the supervising officer.',
       },
       {
         code: '9fc04065-df29-4bda-9b1d-bced8335c356',
