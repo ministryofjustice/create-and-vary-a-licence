@@ -1109,4 +1109,74 @@ describe('Caseload Service', () => {
       )
     })
   })
+
+  describe('getOmuCaseload', () => {
+    beforeEach(() => {
+      licenceService.getLicencesForOmu.mockResolvedValue([
+        {
+          licenceId: 1,
+          comUsername: 'JBLOGGS',
+        },
+        {
+          licenceId: 2,
+          comUsername: 'JSMITH',
+        },
+        {
+          licenceId: 3,
+          comUsername: 'SMILLS',
+        },
+      ] as LicenceSummary[])
+
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+        {
+          username: 'smills',
+          staff: {
+            forenames: 'Stephen',
+            surname: 'Mills',
+          },
+        },
+        {
+          username: 'jbloggs',
+          staff: {
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        {
+          username: 'jsmith',
+          staff: {
+            forenames: 'John',
+            surname: 'Smith',
+          },
+        },
+      ])
+    })
+
+    it('should map licences to responsible COM for OMU caseload', async () => {
+      const omuCaseload = await caseloadService.getOmuCaseload(user)
+
+      expect(licenceService.getLicencesForOmu).toHaveBeenCalledWith(user)
+      expect(communityService.getStaffDetailsByUsernameList).toHaveBeenCalledWith(['JBLOGGS', 'JSMITH', 'SMILLS'])
+      expect(omuCaseload).toEqual([
+        {
+          licenceId: 1,
+          comUsername: 'JBLOGGS',
+          comFirstName: 'Joe',
+          comLastName: 'Bloggs',
+        },
+        {
+          licenceId: 2,
+          comUsername: 'JSMITH',
+          comFirstName: 'John',
+          comLastName: 'Smith',
+        },
+        {
+          licenceId: 3,
+          comUsername: 'SMILLS',
+          comFirstName: 'Stephen',
+          comLastName: 'Mills',
+        },
+      ])
+    })
+  })
 })
