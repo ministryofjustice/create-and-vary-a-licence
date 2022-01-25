@@ -5,7 +5,6 @@ import {
   CommunityApiManagedOffender,
   CommunityApiTeamManagedCase,
 } from '../@types/communityClientTypes'
-import { User } from '../@types/CvlUserDetails'
 
 export default class CommunityApiClient extends RestClient {
   constructor() {

@@ -5,7 +5,6 @@ import {
   CommunityApiStaffDetails,
   CommunityApiTeamManagedCase,
 } from '../@types/communityClientTypes'
-import { User } from '../@types/CvlUserDetails'
 
 jest.mock('./tokenStore', () => {
   return jest.fn().mockImplementation(() => {
