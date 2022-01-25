@@ -6,7 +6,6 @@ import {
   CommunityApiStaffDetails,
   CommunityApiTeamManagedCase,
 } from '../@types/communityClientTypes'
-import { User } from '../@types/CvlUserDetails'
 
 export default class CommunityService {
   constructor(
@@ -14,8 +13,12 @@ export default class CommunityService {
     private readonly probationSearchApiClient: ProbationSearchApiClient
   ) {}
 
-  async getStaffDetail(user: User): Promise<CommunityApiStaffDetails> {
-    return this.communityApiClient.getStaffDetail(user)
+  async getStaffDetailByUsername(username: string): Promise<CommunityApiStaffDetails> {
+    return this.communityApiClient.getStaffDetailByUsername(username)
+  }
+
+  async getStaffDetailsByUsernameList(usernames: string[]): Promise<CommunityApiStaffDetails[]> {
+    return this.communityApiClient.getStaffDetailsByUsernameList(usernames)
   }
 
   async getManagedOffenders(staffIdentifier: number): Promise<CommunityApiManagedOffender[]> {

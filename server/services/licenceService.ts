@@ -274,37 +274,15 @@ export default class LicenceService {
     return this.licenceApiClient.matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate', null, user)
   }
 
-  async getLicencesForCaseAdmin(user: User): Promise<LicenceSummary[]> {
+  async getLicencesForOmu(user: User): Promise<LicenceSummary[]> {
     const statuses = [
       LicenceStatus.ACTIVE.valueOf(),
       LicenceStatus.APPROVED.valueOf(),
       LicenceStatus.REJECTED.valueOf(),
       LicenceStatus.SUBMITTED.valueOf(),
     ]
-    if (user.authSource === 'nomis') {
-      const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
-      return this.licenceApiClient.matchLicences(
-        statuses,
-        filteredPrisons,
-        [],
-        [],
-        'conditionalReleaseDate',
-        null,
-        user
-      )
-    }
-    if (user.authSource === 'delius') {
-      return this.licenceApiClient.matchLicences(
-        statuses,
-        [],
-        [user.deliusStaffIdentifier],
-        [],
-        'conditionalReleaseDate',
-        null,
-        user
-      )
-    }
-    return []
+    const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
+    return this.licenceApiClient.matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate', null, user)
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {

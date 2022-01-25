@@ -2,7 +2,6 @@ import { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import { Services } from '../../services'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
-import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
 import ViewAndPrintCaseRoutes from './handlers/viewCases'
@@ -10,7 +9,13 @@ import ViewAndPrintLicenceRoutes from './handlers/viewLicence'
 import PrintLicenceRoutes from './handlers/printLicence'
 import ComDetailsRoutes from './handlers/comDetails'
 
-export default function Index({ licenceService, prisonerService, qrCodeService }: Services): Router {
+export default function Index({
+  licenceService,
+  prisonerService,
+  communityService,
+  caseloadService,
+  qrCodeService,
+}: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/view${path}`
 
@@ -22,26 +27,16 @@ export default function Index({ licenceService, prisonerService, qrCodeService }
       asyncMiddleware(handler)
     )
 
-  const post = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
-      fetchLicence(licenceService),
-      validationMiddleware(type),
-      asyncMiddleware(handler)
-    )
-
-  const viewCasesHandler = new ViewAndPrintCaseRoutes(licenceService)
+  const viewCasesHandler = new ViewAndPrintCaseRoutes(caseloadService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes()
   const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService)
-  const comDetailsHandler = new ComDetailsRoutes()
+  const comDetailsHandler = new ComDetailsRoutes(communityService)
 
   get('/cases', viewCasesHandler.GET)
-  post('/cases', viewCasesHandler.POST)
   get('/id/:licenceId/show', viewLicenceHandler.GET)
   get('/id/:licenceId/html-print', printHandler.preview)
   get('/id/:licenceId/pdf-print', printHandler.renderPdf)
-  get('/id/:licenceId/com-details', comDetailsHandler.GET)
+  get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
 
   return router
 }

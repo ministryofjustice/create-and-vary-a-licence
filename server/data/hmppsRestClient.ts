@@ -22,7 +22,7 @@ interface PostRequest {
   path?: string
   headers?: Record<string, string>
   responseType?: string
-  data?: Record<string, unknown> | number[]
+  data?: Record<string, unknown> | number[] | string[]
   raw?: boolean
 }
 

@@ -29,6 +29,6 @@ export default class UserService {
   }
 
   async getProbationUser(user: User): Promise<CommunityApiStaffDetails> {
-    return this.communityService.getStaffDetail(user)
+    return this.communityService.getStaffDetailByUsername(user.username)
   }
 }

@@ -29,7 +29,7 @@ describe('Community Api client tests', () => {
   it('Get staff detail', async () => {
     get.mockResolvedValue({ staffIdentifier: 2000 } as CommunityApiStaffDetails)
 
-    const result = await communityApiClient.getStaffDetail({ username: 'joebloggs' } as User)
+    const result = await communityApiClient.getStaffDetailByUsername('joebloggs')
 
     expect(get).toHaveBeenCalledWith({ path: '/secure/staff/username/joebloggs' })
     expect(result).toEqual({ staffIdentifier: 2000 })

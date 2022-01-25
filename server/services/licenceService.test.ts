@@ -540,13 +540,12 @@ describe('Licence Service', () => {
     )
   })
 
-  describe('Get licences for case admin', () => {
-    it('Approval caseload for NOMIS user', async () => {
-      user.authSource = 'nomis'
+  describe('Get licences for OMU', () => {
+    it('should get licences created within an OMU users prison', async () => {
       jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
       licenceApiClient.matchLicences.mockResolvedValue([{ licenceId: 1 } as LicenceSummary])
 
-      const result = await licenceService.getLicencesForCaseAdmin(user)
+      const result = await licenceService.getLicencesForOmu(user)
       expect(licenceApiClient.matchLicences).toBeCalledWith(
         ['ACTIVE', 'APPROVED', 'REJECTED', 'SUBMITTED'],
         ['MDI'],
@@ -557,32 +556,6 @@ describe('Licence Service', () => {
         user
       )
       expect(result).toEqual([{ licenceId: 1 }])
-    })
-
-    it('Approval caseload for DELIUS user', async () => {
-      user.authSource = 'delius'
-      licenceApiClient.matchLicences.mockResolvedValue([{ licenceId: 1 } as LicenceSummary])
-
-      const result = await licenceService.getLicencesForCaseAdmin(user)
-      expect(licenceApiClient.matchLicences).toBeCalledWith(
-        ['ACTIVE', 'APPROVED', 'REJECTED', 'SUBMITTED'],
-        [],
-        [2000],
-        [],
-        'conditionalReleaseDate',
-        null,
-        user
-      )
-      expect(result).toEqual([{ licenceId: 1 }])
-    })
-
-    it('Approval caseload for non-nomis and non-delius', async () => {
-      user.authSource = 'auth'
-
-      const result = await licenceService.getLicencesForCaseAdmin(user)
-
-      expect(result).toEqual([])
-      expect(licenceApiClient.matchLicences).not.toBeCalled()
     })
   })
 

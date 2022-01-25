@@ -13,20 +13,18 @@ describe('Community Service', () => {
   const probationSearchApiClient = new ProbationSearchApiClient() as jest.Mocked<ProbationSearchApiClient>
   const communityService = new CommunityService(communityApiClient, probationSearchApiClient)
 
-  const user = { username: 'joebloggs' } as User
-
   it('Get Staff Detail', async () => {
     const expectedResponse = {
       staffIdentifier: 2000,
       email: 'joebloggs@probation.gov.uk',
     }
 
-    communityApiClient.getStaffDetail.mockResolvedValue(expectedResponse)
+    communityApiClient.getStaffDetailByUsername.mockResolvedValue(expectedResponse)
 
-    const actualResult = await communityService.getStaffDetail(user)
+    const actualResult = await communityService.getStaffDetailByUsername('joebloggs')
 
     expect(actualResult).toEqual(expectedResponse)
-    expect(communityApiClient.getStaffDetail).toHaveBeenCalledWith(user)
+    expect(communityApiClient.getStaffDetailByUsername).toHaveBeenCalledWith('joebloggs')
   })
 
   it('Get Managed Offenders', async () => {
