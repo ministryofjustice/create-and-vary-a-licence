@@ -17,6 +17,12 @@ export default class CommunityApiClient extends RestClient {
     })) as Promise<CommunityApiStaffDetails>
   }
 
+  async getStaffDetailByStaffIdentifier(staffIdentifier: number): Promise<CommunityApiStaffDetails> {
+    return (await this.get({
+      path: `/secure/staff/staffIdentifier/${staffIdentifier}`,
+    })) as Promise<CommunityApiStaffDetails>
+  }
+
   async getStaffDetailsByUsernameList(usernames: string[]): Promise<CommunityApiStaffDetails[]> {
     return (await this.post({
       path: `/secure/staff/list`,

@@ -1,6 +1,7 @@
 import Page from './page'
 import AppointmentPersonPage from './appointmentPerson'
 import CheckAnswersPage from './checkAnswers'
+import ComDetailsPage from './comDetails'
 
 export default class CaseloadPage extends Page {
   private createLicenceButtonId = '#name-1'
@@ -21,5 +22,11 @@ export default class CaseloadPage extends Page {
     cy.task('stubGetCompletedLicence', 'APPROVED')
     cy.get(this.createLicenceButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
+  }
+
+  clickComName = (): ComDetailsPage => {
+    cy.task('stubGetStaffDetailsByStaffId')
+    cy.contains('td a', 'John Smith').click()
+    return Page.verifyOnPage(ComDetailsPage)
   }
 }

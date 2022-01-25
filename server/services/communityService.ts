@@ -17,6 +17,10 @@ export default class CommunityService {
     return this.communityApiClient.getStaffDetailByUsername(username)
   }
 
+  async getStaffDetailByStaffIdentifier(staffIdentifier: number): Promise<CommunityApiStaffDetails> {
+    return this.communityApiClient.getStaffDetailByStaffIdentifier(staffIdentifier)
+  }
+
   async getStaffDetailsByUsernameList(usernames: string[]): Promise<CommunityApiStaffDetails[]> {
     return this.communityApiClient.getStaffDetailsByUsernameList(usernames)
   }

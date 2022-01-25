@@ -43,6 +43,47 @@ export default {
     })
   },
 
+  stubGetStaffDetailsByStaffId: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/secure/staff/staffIdentifier/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          staffIdentifier: 2000,
+          staffCode: 'X12345',
+          staff: {
+            forenames: 'John',
+            surname: 'Smith',
+          },
+          teams: [
+            {
+              code: 'A',
+              description: 'Team A',
+              localDeliveryUnit: {
+                code: 'LDU1',
+                description: 'LDU one',
+              },
+            },
+            {
+              code: 'B',
+              description: 'Team B',
+              localDeliveryUnit: {
+                code: 'LDU1',
+                description: 'LDU two',
+              },
+            },
+          ],
+          telephoneNumber: '07786 989777',
+          email: 'jsmith@probation.com',
+        },
+      },
+    })
+  },
+
   stubGetStaffDetailsByList: (): SuperAgentRequest => {
     return stubFor({
       request: {
