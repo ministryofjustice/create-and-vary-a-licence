@@ -40,4 +40,36 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#crn-2').text()).toBe('X123456')
     expect($('#release-date-2').text()).toBe('01 September 2022')
   })
+
+  it('should display probation practitioner in the table or unallocated', () => {
+    viewContext = {
+      caseload: [
+        {
+          name: 'Adam Balasaravika',
+          crnNumber: 'X381306',
+          conditionalReleaseDate: '03 August 2022',
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffId: 2000,
+          },
+        },
+        {
+          name: 'John Smith',
+          crnNumber: 'X123456',
+          conditionalReleaseDate: '01 September 2022',
+          probationPractitioner: null,
+        },
+      ],
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    expect($('tbody .govuk-table__row').length).toBe(2)
+    expect($('#name-1').text()).toBe('Adam Balasaravika')
+    expect($('#probation-practitioner-1').text()).toBe('Joe Bloggs')
+    expect($('#probation-practitioner-1 > a').attr('href')).toBe('/licence/create/probation-practitioner/staffId/2000')
+
+    expect($('#name-2').text()).toBe('John Smith')
+    expect($('#release-date-2').text()).toBe('01 September 2022')
+    expect($('#probation-practitioner-2').text()).toBe('Unallocated')
+  })
 })

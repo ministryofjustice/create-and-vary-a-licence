@@ -14,6 +14,13 @@
 {% set offenders = [] %}
 
 {% for offender in caseload %}
+
+    {% if offender.probationPractitioner %}
+        {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffId/' + offender.probationPractitioner.staffId + '">' + offender.probationPractitioner.name + '</a>' %}
+    {% else %}
+        {% set comDetailsHtml = 'Unallocated' %}
+    {% endif %}
+
     {% set offenders = (offenders.push([
         {
             attributes: { id: 'name-' + loop.index },
@@ -31,6 +38,12 @@
                 id: 'licence-type-' + loop.index
             },
             html: licenceDescription(offender.licenceType)
+        },
+        {
+            attributes: {
+                id: 'probation-practitioner-' + loop.index
+            },
+            html: comDetailsHtml
         },
         {
             attributes: {
@@ -81,6 +94,9 @@
                 },
                 {
                     text: "Licence type"
+                },
+                {
+                    text: "Probation Practitioner"
                 },
                 {
                     text: "Release date"
