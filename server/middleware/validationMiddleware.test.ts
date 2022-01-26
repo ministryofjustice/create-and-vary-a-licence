@@ -1,6 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
 import { Request, Response } from 'express'
-import { IsAlphanumeric, IsIn, IsNotEmpty, ValidateNested } from 'class-validator'
+import { IsIn, IsNotEmpty, ValidateNested } from 'class-validator'
 import { Expose, Type } from 'class-transformer'
 import validationMiddleware from './validationMiddleware'
 
