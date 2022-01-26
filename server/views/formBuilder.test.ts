@@ -8,7 +8,7 @@ describe('View Partials - Form builder', () => {
 
   const njkEnv = registerNunjucks()
   const nunjucksString =
-    '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses)}}'
+    '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken)}}'
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
@@ -29,6 +29,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -68,6 +69,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -107,6 +109,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -139,6 +142,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -176,6 +180,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -219,6 +224,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -246,6 +252,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -274,6 +281,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -301,6 +309,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -334,6 +343,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -359,6 +369,7 @@ describe('View Partials - Form builder', () => {
           },
         ],
       },
+      csrfToken: 'not-real',
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))

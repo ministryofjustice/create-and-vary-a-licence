@@ -11,7 +11,7 @@
 {# TODO: Currently, this form builder only supports the "add another" functionality for the text input type. #}
 {# It can be extended in future if the other field types require Add Another functionality #}
 
-{%  macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses) %}
+{%  macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken) %}
     {% for input in config.inputs %}
         {% set validationError = validationErrors | findError(input.name) %}
         {% set formValues = getFormResponses(formResponses, input.name) or getValueFromAdditionalCondition(additionalCondition, input.name) %}
@@ -59,7 +59,7 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses)
+                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken)
                         } if option.conditional
                     }), options) %}
                 {% endfor %}
@@ -185,7 +185,7 @@
                         value: option.value,
                         checked: option.value in formValues,
                         conditional: {
-                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses)
+                            html: formBuilder(licenceId, option.conditional, additionalCondition, validationErrors, formResponses, csrfToken)
                         } if option.conditional
                     }), options) %}
                 {% endfor %}
@@ -211,7 +211,7 @@
                     {% if item.length > 1 %}
                         {# There was a value for the uploaded file name - show the thumbnail image and a delete link #}
                         <input type="hidden" name="{{ input.name }}" value="{{ item }}" />
-                        {{ includeExclusionZoneImage(licenceId, additionalCondition, item) }}
+                        {{ includeExclusionZoneImage(licenceId, additionalCondition, item, csrfToken) }}
                     {% else %}
                         {# Form values were present but empty, so show the file selector #}
                         {{ fileTypeInput(input.name, '.pdf,.PDF,application/pdf' , input.label, validationErrors, item) }}
@@ -234,7 +234,7 @@
     {% endfor %}
 {% endmacro %}
 
-{% macro includeExclusionZoneImage(licenceId, condition, item) %}
+{% macro includeExclusionZoneImage(licenceId, condition, item, csrfToken) %}
     <div id="exclusion-zone" class="govuk-body upload-container">
         <div class="upload-thumbnail">
             <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"  alt="{{ item }}"/>
@@ -250,7 +250,7 @@
                 Size: <strong>{{ condition.uploadSummary[0].fileSize }} bytes</strong>
             </div>
             <div class="upload-detail govuk-link govuk-!-font-size-16">
-                {% set removeFileUploadLink = "/licence/create/id/"+ licenceId +"/condition/id/" + condition.id + "/remove-upload" %}
+                {% set removeFileUploadLink = "/licence/create/id/"+ licenceId +"/condition/id/" + condition.id + "/remove-upload?_csrf=" + csrfToken %}
                 <a href="{{ removeFileUploadLink }}">Delete this file</a>
             </div>
         </div>

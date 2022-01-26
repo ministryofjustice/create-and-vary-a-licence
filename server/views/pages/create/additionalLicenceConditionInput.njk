@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    {# Check for any fileUpload type in the inputs for this condition - it changes tohe form submission #}
+    {# Check for any fileUpload type in the inputs for this condition - it changes the form submission #}
     {% set fileUpload = false %}
     {% for input in config.inputs %}
        {% if input.type === 'fileUpload' %}
@@ -43,7 +43,7 @@
                     <div class="govuk-hint">{{ config.subtext }}</div>
                 {% endif %}
 
-                {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses) }}
+                {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
 
                 {{ govukButton({
                     text: "Continue",
