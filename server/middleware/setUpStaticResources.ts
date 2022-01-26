@@ -31,6 +31,12 @@ export default function setUpStaticResources(): Router {
   ;['/node_modules/jquery/dist/jquery.min.js'].forEach(dir => {
     router.use('/assets/js/jquery.min.js', express.static(path.join(process.cwd(), dir), cacheControl))
   })
+  ;['/node_modules/jquery-ui-dist/jquery-ui.min.js'].forEach(dir => {
+    router.use('/assets/js/jquery-ui.min.js', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
+  ;['/node_modules/jquery-ui-dist/jquery-ui.min.css'].forEach(dir => {
+    router.use('/assets/stylesheets/jquery-ui.min.css', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
 
   // Don't cache dynamic resources
   router.use(noCache())
