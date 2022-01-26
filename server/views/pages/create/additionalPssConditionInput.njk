@@ -27,7 +27,7 @@
                     <div class="govuk-hint">{{ config.subtext }}</div>
                 {% endif %}
 
-                {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses) }}
+                {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
 
                 {{ govukButton({
                     text: "Continue",
