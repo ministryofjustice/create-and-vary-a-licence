@@ -1,7 +1,7 @@
 import _ from 'lodash'
 
 import LicenceService from '../../../services/licenceService'
-import { DomainEvent } from '../../../@types/domainEvent'
+import { DomainEvent } from '../../../@types/events'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class ReleaseEventHandler {

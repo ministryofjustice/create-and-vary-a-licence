@@ -1,7 +1,7 @@
 import { SQSMessage } from 'sqs-consumer'
 import logger from '../../../../logger'
 import { Services } from '../../../services'
-import { DomainEvent } from '../../../@types/domainEvent'
+import { DomainEvent } from '../../../@types/events'
 import ReleaseEventHandler from './releaseEventHandler'
 
 export default function buildEventHandler({ licenceService }: Services) {

@@ -5,3 +5,7 @@ export type DomainEvent = {
     reason: string
   }
 }
+export type ProbationEvent = {
+  eventType: string
+  crn: string
+}

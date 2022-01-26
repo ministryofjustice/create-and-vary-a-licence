@@ -108,7 +108,7 @@ describe('Community Service', () => {
     it('should throw error when no delius records are found', async () => {
       probationSearchApiClient.searchProbationer.mockResolvedValue([])
 
-      await expect(communityService.getProbationer('ABC1234')).rejects.toThrow(
+      await expect(communityService.getProbationer({ nomsNumber: 'ABC1234' })).rejects.toThrow(
         'No delius record found for nomis ID ABC1234'
       )
       expect(probationSearchApiClient.searchProbationer).toHaveBeenCalledWith({ nomsNumber: 'ABC1234' })
@@ -126,7 +126,7 @@ describe('Community Service', () => {
         },
       ] as OffenderDetail[])
 
-      const actualResult = await communityService.getProbationer('ABC1234')
+      const actualResult = await communityService.getProbationer({ nomsNumber: 'ABC1234' })
 
       expect(actualResult).toEqual({ firstName: 'Joe', surname: 'Bloggs' })
       expect(probationSearchApiClient.searchProbationer).toHaveBeenCalledWith({ nomsNumber: 'ABC1234' })

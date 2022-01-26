@@ -4,6 +4,7 @@ import {
   CommunityApiStaffDetails,
   CommunityApiManagedOffender,
   CommunityApiTeamManagedCase,
+  CommunityApiOffenderManager,
 } from '../@types/communityClientTypes'
 
 export default class CommunityApiClient extends RestClient {
@@ -42,5 +43,11 @@ export default class CommunityApiClient extends RestClient {
       path: `/secure/teams/managedOffenders`,
       query: { teamCode: teamCodes, current: true },
     })) as Promise<CommunityApiTeamManagedCase[]>
+  }
+
+  async getAnOffendersManagers(crn: string): Promise<CommunityApiOffenderManager[]> {
+    return (await this.get({
+      path: `/secure/offenders/crn/${crn}/allOffenderManagers`,
+    })) as Promise<CommunityApiOffenderManager[]>
   }
 }
