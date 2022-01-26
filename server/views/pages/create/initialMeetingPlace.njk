@@ -45,6 +45,7 @@
                         name: "addressLine2",
                         autocomplete: "address-line2",
                         classes: 'govuk-!-width-one-third',
+                        errorMessage: validationErrors | findError('addressLine2'),
                         value: formAddress.addressLine2 | fillFormResponse(formResponses.addressLine2)
                     }) }}
 
