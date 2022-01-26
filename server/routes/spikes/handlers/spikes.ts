@@ -16,7 +16,7 @@ export default class SpikeRoutes {
 
   public getStaffDetail: RequestHandler = async (req, res): Promise<void> => {
     const { user } = res.locals
-    const staffDetail = await this.communityService.getStaffDetail(user)
+    const staffDetail = await this.communityService.getStaffDetailByUsername(user.username)
     res.render('pages/staffDetail', { staffDetail })
   }
 

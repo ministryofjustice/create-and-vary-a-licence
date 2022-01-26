@@ -76,340 +76,738 @@ export interface paths {
 
 export interface components {
   schemas: {
-    /** Request object for submitting a licence */
+    /** @description Request object for submitting a licence */
     SubmitLicenceRequest: {
-      /** The username of the person who is updating this status */
+      /**
+       * @description The username of the person who is updating this status
+       * @example ssmyth
+       */
       username: string
-      /** The DELIUS staff identifier of the person who is submitting status */
+      /**
+       * Format: int64
+       * @description The DELIUS staff identifier of the person who is submitting status
+       * @example 3000
+       */
       staffIdentifier: number
-      /** The first name of the person who is submitting the licence */
+      /**
+       * @description The first name of the person who is submitting the licence
+       * @example John
+       */
       firstName: string
-      /** The last name of the person who is submitting the licence */
+      /**
+       * @description The last name of the person who is submitting the licence
+       * @example Smythe
+       */
       surname: string
-      /** The email address of the person who is submitting the licence */
+      /**
+       * @description The email address of the person who is submitting the licence
+       * @example s.smyth@probation.gov.uk
+       */
       email: string
     }
     ErrorResponse: {
+      /** Format: int32 */
       status: number
+      /** Format: int32 */
       errorCode?: number
       userMessage?: string
       developerMessage?: string
       moreInfo?: string
     }
-    /** Request object for updating the status of a licence */
+    /** @description Request object for updating the status of a licence */
     StatusUpdateRequest: {
-      /** The new status for this licence */
+      /**
+       * @description The new status for this licence
+       * @example APPROVED
+       * @enum {string}
+       */
       status: 'IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
-      /** The username of the person who is updating this status */
+      /**
+       * @description The username of the person who is updating this status
+       * @example X12333
+       */
       username: string
-      /** The full name of the person who is updating this status */
+      /**
+       * @description The full name of the person who is updating this status
+       * @example John Smythe
+       */
       fullName?: string
     }
-    /** Request object for updating the contact number of the officer on a licence */
+    /** @description Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
-      /** The UK telephone number to contact the person the offender should meet for their initial meeting */
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
       telephone: string
     }
-    /** A list of bespoke conditions to add to a licence */
+    /** @description A list of bespoke conditions to add to a licence */
     BespokeConditionRequest: {
-      /** A list of bespoke conditions to add to a licence */
+      /**
+       * @description A list of bespoke conditions to add to a licence
+       * @example ['cond1', 'cond2']
+       */
       conditions: string[]
     }
-    /** Request object for updating the date and time of the initial appointment */
+    /** @description Request object for updating the date and time of the initial appointment */
     AppointmentTimeRequest: {
-      /** The date and time of the initial appointment */
+      /**
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       */
       appointmentTime: string
     }
-    /** Request object for updating the person the person on probation will meet at the initial appointment */
+    /** @description Request object for updating the person the person on probation will meet at the initial appointment */
     AppointmentPersonRequest: {
-      /** The name of the person the person on probation will meet at the initial appointment */
+      /**
+       * @description The name of the person the person on probation will meet at the initial appointment
+       * @example John Smith
+       */
       appointmentPerson: string
     }
-    /** Request object for updating the address of the initial appointment */
+    /** @description Request object for updating the address of the initial appointment */
     AppointmentAddressRequest: {
-      /** The address of initial appointment */
+      /**
+       * @description The address of initial appointment
+       * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
+       */
       appointmentAddress: string
     }
-    /** Describes an additional condition */
+    /** @description Describes an additional condition */
     AdditionalCondition: {
-      /** The internal ID for this additional condition for this licence */
+      /**
+       * Format: int64
+       * @description The internal ID for this additional condition for this licence
+       * @example 98989
+       */
       id?: number
-      /** Coded value for the additional condition */
+      /**
+       * @description Coded value for the additional condition
+       * @example meetingAddress
+       */
       code?: string
-      /** The category of the additional condition */
+      /**
+       * @description The category of the additional condition
+       * @example Freedom of movement
+       */
       category?: string
-      /** Sequence of this additional condition within the additional conditions */
+      /**
+       * Format: int32
+       * @description Sequence of this additional condition within the additional conditions
+       * @example 1
+       */
       sequence?: number
-      /** The textual value for this additional condition */
+      /**
+       * @description The textual value for this additional condition
+       * @example You must not enter the location [DESCRIPTION]
+       */
       text?: string
-      /** The list of data items entered for this additional condition */
+      /** @description The list of data items entered for this additional condition */
       data: components['schemas']['AdditionalConditionData'][]
-      /** The list of file upload summary for this additional condition */
+      /** @description The list of file upload summary for this additional condition */
       uploadSummary: components['schemas']['AdditionalConditionUploadSummary'][]
     }
-    /** Describes the data entered for an additional condition */
+    /** @description Describes the data entered for an additional condition */
     AdditionalConditionData: {
-      /** The internal ID of this data item, for this condition on this licence */
+      /**
+       * Format: int64
+       * @description The internal ID of this data item, for this condition on this licence
+       * @example 98989
+       */
       id: number
-      /** The field name of this data item for this condition on this licence */
+      /**
+       * @description The field name of this data item for this condition on this licence
+       * @example location
+       */
       field?: string
-      /** The value of this data item */
+      /**
+       * @description The value of this data item
+       * @example Norfolk
+       */
       value?: string
-      /** The sequence of this data item, for this condition on this licence */
+      /**
+       * Format: int32
+       * @description The sequence of this data item, for this condition on this licence
+       * @example 1
+       */
       sequence: number
     }
-    /** Describes the files uploaded for an additional condition */
+    /** @description Describes the files uploaded for an additional condition */
     AdditionalConditionUploadSummary: {
-      /** The internal ID of this upload for this condition on this licence */
+      /**
+       * Format: int64
+       * @description The internal ID of this upload for this condition on this licence
+       * @example 98989
+       */
       id: number
-      /** The original file name uploaded for this condition on this licence */
+      /**
+       * @description The original file name uploaded for this condition on this licence
+       * @example exclusion-zone.pdf
+       */
       filename?: string
-      /** The file type uploaded for this condition on this licence */
+      /**
+       * @description The file type uploaded for this condition on this licence
+       * @example application/pdf
+       */
       fileType?: string
-      /** The original file size in bytes */
+      /**
+       * Format: int32
+       * @description The original file size in bytes
+       * @example 27566
+       */
       fileSize: number
-      /** The date and time this file was uploaded */
+      /**
+       * Format: date-time
+       * @description The date and time this file was uploaded
+       */
       uploadedTime: string
-      /** The description provided in this document */
+      /**
+       * @description The description provided in this document
+       * @example A description of the exclusion zone boundaries
+       */
       description?: string
-      /** The thumbnail image for the image map contained in this document */
+      /**
+       * @description The thumbnail for the  exclusion zone map as a base64-encoded JPEG image
+       * @example Base64 string
+       */
       thumbnailImage?: string
-      /** The id which references the original file data and full size image */
+      /**
+       * Format: int64
+       * @description The id which references the original file data and full size image
+       * @example 9999
+       */
       uploadDetailId: number
     }
-    /** Request object for updating the list of additional conditions on a licence */
+    /** @description Request object for updating the list of additional conditions on a licence */
     AdditionalConditionsRequest: {
-      /** The list of additional conditions */
+      /** @description The list of additional conditions */
       additionalConditions: components['schemas']['AdditionalCondition'][]
-      /** The type of additional condition, either licence or post sentence supervision */
+      /**
+       * @description The type of additional condition, either licence or post sentence supervision
+       * @enum {string}
+       */
       conditionType: 'AP' | 'PSS'
     }
-    /** Request object for updating the list of additional conditions on a licence */
+    /** @description Request object for updating the list of additional conditions on a licence */
     UpdateAdditionalConditionDataRequest: {
-      /** The list of data inputs associated with this additional condition */
+      /** @description The list of data inputs associated with this additional condition */
       data: components['schemas']['AdditionalConditionData'][]
     }
-    /** Request object for creating a new licence */
+    /** @description Request object for creating a new licence */
     CreateLicenceRequest: {
-      /** The username of the person who is creating the licence */
+      /**
+       * @description The username of the person who is creating the licence
+       * @example joebloggs
+       */
       username: string
-      /** Type of licence requested - one of AP, PSS or AP_PSS */
+      /**
+       * @description Type of licence requested - one of AP, PSS or AP_PSS
+       * @example AP
+       * @enum {string}
+       */
       typeCode: 'AP' | 'AP_PSS' | 'PSS'
-      /** The version of licence conditions currently active as a string value */
+      /**
+       * @description The version of licence conditions currently active as a string value
+       * @example 1.0
+       */
       version: string
-      /** The prison nomis identifier for this offender */
+      /**
+       * @description The prison nomis identifier for this offender
+       * @example A1234AA
+       */
       nomsId: string
-      /** The prison booking number for the current sentence for this offender */
+      /**
+       * @description The prison booking number for the current sentence for this offender
+       * @example 12334
+       */
       bookingNo: string
-      /** The prison booking id for the current sentence for this offender */
+      /**
+       * Format: int64
+       * @description The prison booking id for the current sentence for this offender
+       * @example 87666
+       */
       bookingId: number
-      /** The case reference number (CRN) of this person, from either prison or probation service */
+      /**
+       * @description The case reference number (CRN) of this person, from either prison or probation service
+       * @example X12344
+       */
       crn: string
-      /** The police national computer number (PNC) of this person, from either prison or probation service */
+      /**
+       * @description The police national computer number (PNC) of this person, from either prison or probation service
+       * @example 2014/12344A
+       */
       pnc?: string
-      /** The criminal records office (CRO) identifier police of this person, from either prison or probation service */
+      /**
+       * @description The criminal records office (CRO) identifier police of this person, from either prison or probation service
+       * @example 2014/12344A
+       */
       cro?: string
-      /** The prison location code where this person is currently resident - leave null if not in prison */
+      /**
+       * @description The prison location code where this person is currently resident - leave null if not in prison
+       * @example MDI
+       */
       prisonCode: string
-      /** The prison description - leave null if not in prison */
+      /**
+       * @description The prison description - leave null if not in prison
+       * @example Leeds (HMP)
+       */
       prisonDescription: string
-      /** The prison telephone number - leave null if not in prison */
+      /**
+       * @description The prison telephone number - leave null if not in prison
+       * @example +44 276 54545
+       */
       prisonTelephone?: string
-      /** The offender forename */
+      /**
+       * @description The offender forename
+       * @example Steven
+       */
       forename: string
-      /** The offender middle names */
+      /**
+       * @description The offender middle names
+       * @example Jason Kyle
+       */
       middleNames?: string
-      /** The offender surname */
+      /**
+       * @description The offender surname
+       * @example Smith
+       */
       surname: string
-      /** The offender's date of birth, from either prison or probation services */
+      /**
+       * Format: date
+       * @description The offender's date of birth, from either prison or probation services
+       */
       dateOfBirth: string
-      /** The conditional release date, from prison services */
+      /**
+       * Format: date
+       * @description The conditional release date, from prison services
+       */
       conditionalReleaseDate?: string
-      /** The actual release date, from prison services */
+      /**
+       * Format: date
+       * @description The actual release date, from prison services
+       */
       actualReleaseDate?: string
-      /** The sentence start date, from prison services */
+      /**
+       * Format: date
+       * @description The sentence start date, from prison services
+       */
       sentenceStartDate?: string
-      /** The sentence end date, from prison services */
+      /**
+       * Format: date
+       * @description The sentence end date, from prison services
+       */
       sentenceEndDate?: string
-      /** The licence start date, from prison services */
+      /**
+       * Format: date
+       * @description The licence start date, from prison services
+       */
       licenceStartDate?: string
-      /** The licence end date, from prison services */
+      /**
+       * Format: date
+       * @description The licence end date, from prison services
+       */
       licenceExpiryDate?: string
-      /** The date when the post sentence supervision period starts, from prison services */
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       */
       topupSupervisionStartDate?: string
-      /** The date when the post sentence supervision period ends, from prison services */
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       */
       topupSupervisionExpiryDate?: string
-      /** The telephone contact number for the offender manager, from probation services */
+      /**
+       * @description The telephone contact number for the offender manager, from probation services
+       * @example 07876 443554
+       */
       comTelephone?: string
-      /** The probation area code where the offender manager is based, from probation services */
+      /**
+       * @description The probation area code where the offender manager is based, from probation services
+       * @example N01
+       */
       probationAreaCode: string
-      /** The local delivery unit code where the offender manager works, from probation services */
+      /**
+       * @description The local delivery unit code where the offender manager works, from probation services
+       * @example LDU1332
+       */
       probationLduCode: string
-      /** The list of standard licence conditions from service configuration */
+      /** @description The list of standard licence conditions from service configuration */
       standardLicenceConditions: components['schemas']['StandardCondition'][]
-      /** The list of standard post sentence supervision conditions from service configuration */
+      /** @description The list of standard post sentence supervision conditions from service configuration */
       standardPssConditions: components['schemas']['StandardCondition'][]
     }
-    /** Describes a standard condition on this licence */
+    /** @description Describes a standard condition on this licence */
     StandardCondition: {
-      /** The internal ID for this standard condition on this licence */
+      /**
+       * Format: int64
+       * @description The internal ID for this standard condition on this licence
+       * @example 98987
+       */
       id?: number
-      /** The unique code for this standard condition */
+      /**
+       * @description The unique code for this standard condition
+       * @example 9ce9d594-e346-4785-9642-c87e764bee37
+       */
       code?: string
-      /** The sequence of this standard condition */
+      /**
+       * Format: int32
+       * @description The sequence of this standard condition
+       * @example 1
+       */
       sequence?: number
-      /** The text of this standard condition */
+      /**
+       * @description The text of this standard condition
+       * @example Be of generally good behaviour
+       */
       text?: string
     }
-    /** Response object which summarises a licence */
+    /** @description Response object which summarises a licence */
     LicenceSummary: {
-      /** Internal identifier for this licence generated within this service */
+      /**
+       * Format: int64
+       * @description Internal identifier for this licence generated within this service
+       * @example 123344
+       */
       licenceId: number
-      /** Licence type code */
+      /**
+       * @description Licence type code
+       * @example AP
+       * @enum {string}
+       */
       licenceType: 'AP' | 'AP_PSS' | 'PSS'
-      /** The status of this licence */
+      /**
+       * @description The status of this licence
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
       licenceStatus: 'IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
-      /** The prison nomis identifier for this offender */
+      /**
+       * @description The prison nomis identifier for this offender
+       * @example A1234AA
+       */
       nomisId?: string
-      /** The offender surname */
+      /**
+       * @description The offender surname
+       * @example Smith
+       */
       surname?: string
-      /** The offender forename */
+      /**
+       * @description The offender forename
+       * @example Brian
+       */
       forename?: string
-      /** The prison code where this offender resides or was released from */
+      /**
+       * @description The prison code where this offender resides or was released from
+       * @example MDI
+       */
       prisonCode?: string
-      /** The prison where this offender resides or was released from */
+      /**
+       * @description The prison where this offender resides or was released from
+       * @example Moorland (HMP)
+       */
       prisonDescription?: string
-      /** The conditional release date on the licence */
+      /**
+       * Format: date
+       * @description The conditional release date on the licence
+       */
       conditionalReleaseDate?: string
-      /** The actual release date on the licence */
+      /**
+       * Format: date
+       * @description The actual release date on the licence
+       */
       actualReleaseDate?: string
-      /** The case reference number (CRN) of this person, from either prison or probation service */
+      /**
+       * @description The case reference number (CRN) of this person, from either prison or probation service
+       * @example X12344
+       */
       crn?: string
-      /** The offender's date of birth, from either prison or probation services */
+      /**
+       * Format: date
+       * @description The offender's date of birth, from either prison or probation services
+       */
       dateOfBirth?: string
-      /** The first name of the responsible probation officer */
-      comFirstName?: string
-      /** The first name of the responsible probation officer */
-      comLastName?: string
+      /**
+       * @description The username of the responsible probation officer
+       * @example jsmith
+       */
+      comUsername?: string
     }
-    /** Describes a test data object */
+    /** @description Describes a test data object */
     TestData: {
-      /** The key */
+      /**
+       * @description The key
+       * @example A
+       */
       key: string
-      /** The value */
+      /**
+       * @description The value
+       * @example AAAAA
+       */
       value: string
     }
     TestDataResponse: components['schemas']['TestData'][]
-    /** Describes a bespoke condition on a licence */
+    /** @description Describes a bespoke condition on a licence */
     BespokeCondition: {
-      /** The internal ID for this condition on this licence */
+      /**
+       * Format: int64
+       * @description The internal ID for this condition on this licence
+       * @example 98989
+       */
       id: number
-      /** The sequence of this bespoke condition on this licence */
+      /**
+       * Format: int32
+       * @description The sequence of this bespoke condition on this licence
+       * @example 1
+       */
       sequence?: number
-      /** The text of this bespoke condition */
+      /**
+       * @description The text of this bespoke condition
+       * @example You should not visit any music venues
+       */
       text?: string
     }
-    /** Describes a licence document within this service */
+    /** @description Describes a licence document within this service */
     Licence: {
-      /** Unique identifier for this licence within the service */
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
       id: number
-      /** The licence type code */
+      /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
       typeCode: 'AP' | 'AP_PSS' | 'PSS'
-      /** The version number used for standard and additional conditions */
+      /**
+       * @description The version number used for standard and additional conditions
+       * @example 1.4
+       */
       version?: string
-      /** The current status code for this licence */
+      /**
+       * @description The current status code for this licence
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
       statusCode?: 'IN_PROGRESS' | 'SUBMITTED' | 'APPROVED' | 'ACTIVE' | 'REJECTED' | 'INACTIVE' | 'RECALLED'
-      /** The prison identifier for the person on this licence */
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
       nomsId?: string
-      /** The prison booking number for the person on this licence */
+      /**
+       * @description The prison booking number for the person on this licence
+       * @example F12333
+       */
       bookingNo?: string
-      /** The prison internal booking ID for the person on this licence */
+      /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
       bookingId?: number
-      /** The case reference number (CRN) for the person on this licence */
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
       crn?: string
-      /** The police national computer number (PNC) for the person on this licence */
+      /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
       pnc?: string
-      /** The criminal records office number (CRO) for the person on this licence */
+      /**
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
+       */
       cro?: string
-      /** The agency code of the detaining prison */
+      /**
+       * @description The agency code of the detaining prison
+       * @example LEI
+       */
       prisonCode?: string
-      /** The agency description of the detaining prison */
+      /**
+       * @description The agency description of the detaining prison
+       * @example Leeds (HMP)
+       */
       prisonDescription?: string
-      /** The telephone number to contact the prison */
+      /**
+       * @description The telephone number to contact the prison
+       * @example 0161 234 4747
+       */
       prisonTelephone?: string
-      /** The first name of the person on licence */
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
       forename?: string
-      /** The middle names of the person on licence */
+      /**
+       * @description The middle names of the person on licence
+       * @example John Peter
+       */
       middleNames?: string
-      /** The family name of the person on licence */
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
       surname?: string
-      /** The date of birth of the person on licence */
+      /**
+       * Format: date
+       * @description The date of birth of the person on licence
+       */
       dateOfBirth?: string
-      /** The earliest conditional release date of the person on licence */
+      /**
+       * Format: date
+       * @description The earliest conditional release date of the person on licence
+       */
       conditionalReleaseDate?: string
-      /** The actual release date (if set) */
+      /**
+       * Format: date
+       * @description The actual release date (if set)
+       */
       actualReleaseDate?: string
-      /** The sentence start date */
+      /**
+       * Format: date
+       * @description The sentence start date
+       */
       sentenceStartDate?: string
-      /** The sentence end date */
+      /**
+       * Format: date
+       * @description The sentence end date
+       */
       sentenceEndDate?: string
-      /** The date that the licence will start */
+      /**
+       * Format: date
+       * @description The date that the licence will start
+       */
       licenceStartDate?: string
-      /** The date that the licence will expire */
+      /**
+       * Format: date
+       * @description The date that the licence will expire
+       */
       licenceExpiryDate?: string
-      /** The date when the post sentence supervision period starts, from prison services */
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       */
       topupSupervisionStartDate?: string
-      /** The date when the post sentence supervision period ends, from prison services */
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       */
       topupSupervisionExpiryDate?: string
-      /** The first name of the supervising probation officer */
+      /**
+       * @description The first name of the supervising probation officer
+       * @example Jane
+       */
       comFirstName?: string
-      /** The last name of the supervising probation officer */
+      /**
+       * @description The last name of the supervising probation officer
+       * @example Jones
+       */
       comLastName?: string
-      /** The nDELIUS user name for the supervising probation officer */
+      /**
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
+       */
       comUsername?: string
-      /** The nDELIUS staff identifier for the supervising probation officer */
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
       comStaffId?: number
-      /** The email address for the supervising probation officer */
+      /**
+       * @description The email address for the supervising probation officer
+       * @example jane.jones@nps.gov.uk
+       */
       comEmail?: string
-      /** The contact telephone number for the supervising probation officer */
+      /**
+       * @description The contact telephone number for the supervising probation officer
+       * @example 0161222333
+       */
       comTelephone?: string
-      /** The code for the probation area where the supervising officer is located */
+      /**
+       * @description The code for the probation area where the supervising officer is located
+       * @example N01
+       */
       probationAreaCode?: string
-      /** The local delivery unit (LDU) code who supervises this licence */
+      /**
+       * @description The local delivery unit (LDU) code who supervises this licence
+       * @example LDU01
+       */
       probationLduCode?: string
-      /** Who the person will meet at their initial appointment */
+      /**
+       * @description Who the person will meet at their initial appointment
+       * @example Duty officer
+       */
       appointmentPerson?: string
-      /** The date and time of the initial appointment */
+      /**
+       * Format: date-time
+       * @description The date and time of the initial appointment
+       */
       appointmentTime?: string
-      /** The address of initial appointment */
+      /**
+       * @description The address of initial appointment
+       * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
+       */
       appointmentAddress?: string
-      /** The UK telephone number to contact the person the offender should meet for their initial meeting */
+      /**
+       * @description The UK telephone number to contact the person the offender should meet for their initial meeting
+       * @example 0114 2557665
+       */
       appointmentContact?: string
-      /** The date and time that this prison approved this licence */
+      /**
+       * Format: date-time
+       * @description The date and time that this prison approved this licence
+       */
       approvedDate?: string
-      /** The username who approved the licence on behalf of the prison governor */
+      /**
+       * @description The username who approved the licence on behalf of the prison governor
+       * @example X33221
+       */
       approvedByUsername?: string
-      /** The full name of the person who approved the licence on behalf of the prison governor */
+      /**
+       * @description The full name of the person who approved the licence on behalf of the prison governor
+       * @example John Smith
+       */
       approvedByName?: string
-      /** The date and time that this licence was superseded by a new variant */
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
+       */
       supersededDate?: string
-      /** The date and time that this licence was first created */
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       */
       dateCreated?: string
-      /** The username which created this licence */
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
       createdByUsername?: string
-      /** The date and time that this licence was last updated */
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       */
       dateLastUpdated?: string
-      /** The username of the person who last updated this licence */
+      /**
+       * @description The username of the person who last updated this licence
+       * @example X34433
+       */
       updatedByUsername?: string
-      /** The list of standard licence conditions on this licence */
+      /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
-      /** The list of standard post sentence supervision conditions on this licence */
+      /** @description The list of standard post sentence supervision conditions on this licence */
       standardPssConditions?: components['schemas']['StandardCondition'][]
-      /** The list of additional licence conditions on this licence */
+      /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** The list of additional post sentence supervision conditions on this licence */
+      /** @description The list of additional post sentence supervision conditions on this licence */
       additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /** The list of bespoke conditions on this licence */
+      /** @description The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition'][]
     }
   }
@@ -908,6 +1306,7 @@ export interface operations {
     requestBody: {
       content: {
         'multipart/form-data': {
+          /** Format: binary */
           file: string
         }
       }

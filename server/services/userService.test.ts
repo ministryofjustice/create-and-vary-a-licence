@@ -131,7 +131,7 @@ describe('User service', () => {
 
   describe('getProbationUser', () => {
     it('Retrieves probation user details', async () => {
-      communityService.getStaffDetail.mockResolvedValue({
+      communityService.getStaffDetailByUsername.mockResolvedValue({
         email: 'test@test.com',
         staff: { forenames: 'Test test', surname: 'Test' },
         staffCode: 'X400',
@@ -147,11 +147,11 @@ describe('User service', () => {
       expect(result.staff.surname).toEqual('Test')
       expect(result.staffIdentifier).toEqual(1234)
       expect(result.username).toEqual('TestUserNPS')
-      expect(communityService.getStaffDetail).toBeCalled()
+      expect(communityService.getStaffDetailByUsername).toBeCalled()
     })
 
     it('Propagates any errors', async () => {
-      communityService.getStaffDetail.mockRejectedValue(new Error('some error'))
+      communityService.getStaffDetailByUsername.mockRejectedValue(new Error('some error'))
       await expect(() => userService.getProbationUser(user)).rejects.toThrow('some error')
     })
   })

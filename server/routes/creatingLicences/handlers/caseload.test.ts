@@ -42,6 +42,20 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         prisonerNumber: '123',
         licenceStatus: LicenceStatus.IN_PROGRESS,
         licenceType: LicenceType.AP,
+        allocated: true,
+        staffIdentifier: 3000,
+        staffForename: 'Sherlock',
+        staffSurname: 'Holmes',
+      },
+      {
+        crnNumber: 'X381307',
+        firstName: 'Dr',
+        lastName: 'Who',
+        conditionalReleaseDate: '2023-10-12',
+        prisonerNumber: '124',
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        licenceType: LicenceType.AP_PSS,
+        allocated: false,
       },
     ] as unknown as CaseTypeAndStatus[])
   })
@@ -60,6 +74,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         render: jest.fn(),
         locals: {
           user: {
+            firstName: 'Joe',
+            lastName: 'Bloggs',
             username: 'USER1',
             deliusStaffIdentifier: 2000,
           },
@@ -78,6 +94,10 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             prisonerNumber: '123',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Joe Bloggs',
+              staffId: 2000,
+            },
           },
         ],
         statusConfig,
@@ -100,6 +120,19 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             prisonerNumber: '123',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+              staffId: 3000,
+            },
+          },
+          {
+            name: 'Dr Who',
+            crnNumber: 'X381307',
+            conditionalReleaseDate: '12th October 2023',
+            prisonerNumber: '124',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP_PSS,
+            probationPractitioner: null,
           },
         ],
         statusConfig,

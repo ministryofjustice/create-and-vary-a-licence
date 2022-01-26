@@ -32,10 +32,11 @@ import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssCondi
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
 import EditQuestionRoutes from './handlers/editQuestion'
 import AdditionalLicenceConditionRemoveUploadRoutes from './handlers/additionalLicenceConditionRemoveUpload'
+import ComDetailsRoutes from './handlers/comDetails'
 
 const upload = multer({ dest: 'uploads/' })
 
-export default function Index({ licenceService, caseloadService }: Services): Router {
+export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create${path}`
@@ -74,6 +75,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
     )
 
   const caseloadHandler = new CaseloadRoutes(licenceService, caseloadService)
+  const comDetailsHandler = new ComDetailsRoutes(communityService)
   const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService)
   const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService)
@@ -95,6 +97,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
 
   get('/caseload', caseloadHandler.GET)
   post('/caseload', caseloadHandler.POST)
+  get('/probation-practitioner/staffId/:staffId', comDetailsHandler.GET)
   get('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.GET)
   post('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.POST, PersonName)
   get('/id/:licenceId/initial-meeting-place', initialMeetingPlaceHandler.GET)

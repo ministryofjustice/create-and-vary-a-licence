@@ -1,7 +1,6 @@
 import CommunityService from './communityService'
 import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
-import { User } from '../@types/CvlUserDetails'
 import { CommunityApiManagedOffender, CommunityApiTeamManagedCase } from '../@types/communityClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 
@@ -13,20 +12,48 @@ describe('Community Service', () => {
   const probationSearchApiClient = new ProbationSearchApiClient() as jest.Mocked<ProbationSearchApiClient>
   const communityService = new CommunityService(communityApiClient, probationSearchApiClient)
 
-  const user = { username: 'joebloggs' } as User
-
   it('Get Staff Detail', async () => {
     const expectedResponse = {
       staffIdentifier: 2000,
       email: 'joebloggs@probation.gov.uk',
     }
 
-    communityApiClient.getStaffDetail.mockResolvedValue(expectedResponse)
+    communityApiClient.getStaffDetailByUsername.mockResolvedValue(expectedResponse)
 
-    const actualResult = await communityService.getStaffDetail(user)
+    const actualResult = await communityService.getStaffDetailByUsername('joebloggs')
 
     expect(actualResult).toEqual(expectedResponse)
-    expect(communityApiClient.getStaffDetail).toHaveBeenCalledWith(user)
+    expect(communityApiClient.getStaffDetailByUsername).toHaveBeenCalledWith('joebloggs')
+  })
+
+  it('Get Staff Detail By Staff Identifier', async () => {
+    const expectedResponse = {
+      staffIdentifier: 2000,
+      email: 'joebloggs@probation.gov.uk',
+    }
+
+    communityApiClient.getStaffDetailByStaffIdentifier.mockResolvedValue(expectedResponse)
+
+    const actualResult = await communityService.getStaffDetailByStaffIdentifier(2000)
+
+    expect(actualResult).toEqual(expectedResponse)
+    expect(communityApiClient.getStaffDetailByStaffIdentifier).toHaveBeenCalledWith(2000)
+  })
+
+  it('Get Staff Detail by Username List', async () => {
+    const expectedResponse = [
+      {
+        staffIdentifier: 2000,
+        email: 'joebloggs@probation.gov.uk',
+      },
+    ]
+
+    communityApiClient.getStaffDetailsByUsernameList.mockResolvedValue(expectedResponse)
+
+    const actualResult = await communityService.getStaffDetailsByUsernameList(['joebloggs'])
+
+    expect(actualResult).toEqual(expectedResponse)
+    expect(communityApiClient.getStaffDetailsByUsernameList).toHaveBeenCalledWith(['joebloggs'])
   })
 
   it('Get Managed Offenders', async () => {

@@ -5,7 +5,7 @@
 
 {% set pageTitle = applicationName + " - view COM details" %}
 {% set pageId = "com-details-page" %}
-{% set backLinkHref = "/licence/view/cases" %}
+{% set backLinkHref = returnLink %}
 {% set hideLicenceBanner = true %}
 
 
@@ -25,7 +25,7 @@
                             text: "Name"
                         },
                         value: {
-                            text: licence.comFirstName + " " + licence.comLastName
+                            text: name
                         }
                     },
                     {
@@ -33,7 +33,7 @@
                             text: "Office phone number"
                         },
                         value: {
-                            text: licence.comTelephone
+                            text: telephone
                         }
                     },
                     {
@@ -41,7 +41,7 @@
                             text: "Email"
                         },
                         value: {
-                            text: licence.comEmail
+                            text: email
                         }
                     }
                 ]
@@ -49,8 +49,8 @@
 
             {{ govukButton({
                 text: 'Return to case list',
-                href: '/licence/view/cases',
-                classes: 'govuk-!-margin-top-6',
+                href: returnLink,
+                classes: 'govuk-!-margin-top-6 js-backlink',
                 attributes: { 'data-qa': 'return' }
             }) }}
         </div>

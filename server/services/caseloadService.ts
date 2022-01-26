@@ -2,7 +2,7 @@ import moment from 'moment'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
-import { CaseTypeAndStatus } from '../@types/managedCase'
+import { CaseTypeAndStatus, LicenceAndResponsibleCom } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
@@ -57,6 +57,11 @@ export default class CaseloadService {
       .map(offender => offender.nomsNumber)
 
     return this.licenceService.getLicencesByNomisIdsAndStatus(caseloadNomisIds, [LicenceStatus.ACTIVE], user)
+  }
+
+  async getOmuCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
+    const licences = await this.licenceService.getLicencesForOmu(user)
+    return this.mapLicencesAndResponsibleComs(licences)
   }
 
   private mapOffendersToLicences = async (caseloadNomisIds: string[], user: User): Promise<CaseTypeAndStatus[]> => {
@@ -140,6 +145,21 @@ export default class CaseloadService {
         const crd2 = moment(b.conditionalReleaseDate, 'YYYY-MM-DD').unix()
         return crd1 - crd2
       })
+  }
+
+  private async mapLicencesAndResponsibleComs(licences: LicenceSummary[]): Promise<LicenceAndResponsibleCom[]> {
+    const comUsernames = licences.map(licence => licence.comUsername)
+    const coms = await this.communityService.getStaffDetailsByUsernameList(comUsernames)
+
+    return licences.map(licence => {
+      const responsibleCom = coms.find(com => com.username?.toLowerCase() === licence.comUsername?.toLowerCase())
+
+      return {
+        ...licence,
+        comFirstName: responsibleCom?.staff?.forenames,
+        comLastName: responsibleCom?.staff?.surname,
+      }
+    })
   }
 
   private getLicenceType = (tused: string, led: string, sed: string): LicenceType => {

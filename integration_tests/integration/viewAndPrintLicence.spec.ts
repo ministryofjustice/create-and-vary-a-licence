@@ -10,6 +10,8 @@ context('View and print licence', () => {
     cy.task('stubGetPrisonUserCaseloads')
     cy.task('stubGetCompletedLicence', 'APPROVED')
     cy.task('stubGetLicencesForStatus', 'APPROVED')
+    cy.task('stubGetStaffDetailsByList')
+    cy.task('stubGetStaffDetails')
     cy.signIn()
   })
 

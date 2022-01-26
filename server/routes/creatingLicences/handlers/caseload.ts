@@ -19,6 +19,22 @@ export default class CaseloadRoutes {
       : await this.caseloadService.getStaffCaseload(user)
 
     const caseloadViewModel = caseload.map(offender => {
+      let probationPractitioner
+
+      if (teamView) {
+        probationPractitioner = offender.allocated
+          ? {
+              name: `${offender.staffForename} ${offender.staffSurname}`.trim(),
+              staffId: offender.staffIdentifier,
+            }
+          : null
+      } else {
+        probationPractitioner = {
+          name: `${user.firstName} ${user.lastName}`.trim(),
+          staffId: user.deliusStaffIdentifier,
+        }
+      }
+
       return {
         name: convertToTitleCase([offender.firstName, offender.lastName].join(' ')),
         crnNumber: offender.crnNumber,
@@ -26,6 +42,7 @@ export default class CaseloadRoutes {
         conditionalReleaseDate: moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').format('Do MMMM YYYY'),
         licenceStatus: offender.licenceStatus,
         licenceType: offender.licenceType,
+        probationPractitioner,
       }
     })
     res.render('pages/create/caseload', { caseload: caseloadViewModel, statusConfig, teamView })

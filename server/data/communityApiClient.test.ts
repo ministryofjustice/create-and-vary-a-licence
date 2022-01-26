@@ -5,7 +5,6 @@ import {
   CommunityApiStaffDetails,
   CommunityApiTeamManagedCase,
 } from '../@types/communityClientTypes'
-import { User } from '../@types/CvlUserDetails'
 
 jest.mock('./tokenStore', () => {
   return jest.fn().mockImplementation(() => {
@@ -17,8 +16,10 @@ const communityApiClient = new CommunityApiClient()
 
 describe('Community Api client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')
+  const post = jest.spyOn(HmppsRestClient.prototype, 'post')
 
   beforeEach(() => {
+    get.mockResolvedValue(true)
     get.mockResolvedValue(true)
   })
 
@@ -29,10 +30,28 @@ describe('Community Api client tests', () => {
   it('Get staff detail', async () => {
     get.mockResolvedValue({ staffIdentifier: 2000 } as CommunityApiStaffDetails)
 
-    const result = await communityApiClient.getStaffDetail({ username: 'joebloggs' } as User)
+    const result = await communityApiClient.getStaffDetailByUsername('joebloggs')
 
     expect(get).toHaveBeenCalledWith({ path: '/secure/staff/username/joebloggs' })
     expect(result).toEqual({ staffIdentifier: 2000 })
+  })
+
+  it('Get staff detail', async () => {
+    get.mockResolvedValue({ staffIdentifier: 2000 } as CommunityApiStaffDetails)
+
+    const result = await communityApiClient.getStaffDetailByStaffIdentifier(2000)
+
+    expect(get).toHaveBeenCalledWith({ path: '/secure/staff/staffIdentifier/2000' })
+    expect(result).toEqual({ staffIdentifier: 2000 })
+  })
+
+  it('Get staff detail by list of usernames', async () => {
+    post.mockResolvedValue([{ staffIdentifier: 2000 }] as CommunityApiStaffDetails[])
+
+    const result = await communityApiClient.getStaffDetailsByUsernameList(['joebloggs'])
+
+    expect(post).toHaveBeenCalledWith({ path: '/secure/staff/list', data: ['joebloggs'] })
+    expect(result).toEqual([{ staffIdentifier: 2000 }])
   })
 
   it('Get staff caseload', async () => {

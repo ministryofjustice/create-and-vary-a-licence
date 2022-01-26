@@ -8,12 +8,12 @@ export default class ViewCasesPage extends Page {
   }
 
   clickALicence = (): ViewALicencePage => {
-    cy.contains('td button', 'Bob Zimmer').click()
+    cy.contains('td a', 'Bob Zimmer').click()
     return Page.verifyOnPage(ViewALicencePage)
   }
 
   clickComDetails = (): ComDetailsPage => {
-    cy.contains('td a', 'Stephen Mills').click()
+    cy.contains('td a', 'John Smith').click()
     return Page.verifyOnPage(ComDetailsPage)
   }
 }
