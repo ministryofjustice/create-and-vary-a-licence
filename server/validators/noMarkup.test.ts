@@ -1,10 +1,10 @@
 import { validate, ValidationError } from 'class-validator'
 import { Expose, plainToClass } from 'class-transformer'
-import DoesNotContainMarkup from './doesNotContainMarkup'
+import NoMarkup from './noMarkup'
 
 class TestClass {
   @Expose()
-  @DoesNotContainMarkup({ message: 'Markup disallowed' })
+  @NoMarkup({ message: 'Markup disallowed' })
   addressLine: string
 }
 
@@ -20,7 +20,7 @@ describe('Disallow markup validation', () => {
     const errors: ValidationError[] = await validate(value)
     expect(errors.length).toBe(1)
     expect(errors[0].constraints).toEqual({
-      doesNotContainMarkup: 'Markup disallowed',
+      noMarkup: 'Markup disallowed',
     })
   })
 })

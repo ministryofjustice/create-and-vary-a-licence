@@ -6,7 +6,7 @@ import validationMiddleware from './validationMiddleware'
 
 import * as conditionsProvider from '../utils/conditionsProvider'
 import IsValidExclusionZoneFile from '../validators/isValidExclusionZoneFile'
-import DoesNotContainMarkup from '../validators/doesNotContainMarkup'
+import NoMarkup from '../validators/noMarkup'
 
 const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
 
@@ -48,7 +48,7 @@ describe('validationMiddleware', () => {
 
     class DummyAddress {
       @Expose()
-      @DoesNotContainMarkup({ message: 'Markup disallowed' })
+      @NoMarkup({ message: 'Markup disallowed' })
       addressLine: string
     }
 
