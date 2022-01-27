@@ -6,6 +6,7 @@ import validationMiddleware from './validationMiddleware'
 
 import * as conditionsProvider from '../utils/conditionsProvider'
 import IsValidExclusionZoneFile from '../validators/isValidExclusionZoneFile'
+import NoMarkup from '../validators/noMarkup'
 
 const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
 
@@ -45,6 +46,12 @@ describe('validationMiddleware', () => {
       outOfBoundFilename: string
     }
 
+    class DummyAddress {
+      @Expose()
+      @NoMarkup({ message: 'Markup disallowed' })
+      addressLine: string
+    }
+
     afterEach(() => {
       jest.resetAllMocks()
     })
@@ -64,6 +71,7 @@ describe('validationMiddleware', () => {
           name: 'not valid',
         },
       } as unknown as Request
+
       await validationMiddleware()(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
@@ -83,6 +91,7 @@ describe('validationMiddleware', () => {
           child: { name: 'valid' },
         },
       } as Request
+
       await validationMiddleware(DummyForm)(req, res, next)
 
       expect(next).toHaveBeenCalledTimes(1)
@@ -98,6 +107,7 @@ describe('validationMiddleware', () => {
           child: { name: 'valid' },
         },
       } as unknown as Request
+
       await validationMiddleware(DummyForm)(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
@@ -118,6 +128,7 @@ describe('validationMiddleware', () => {
           child: { name: '' },
         },
       } as unknown as Request
+
       await validationMiddleware(DummyForm)(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
@@ -146,6 +157,20 @@ describe('validationMiddleware', () => {
       } as unknown as Request
 
       await validationMiddleware(DummyFileUpload)(req, res, next)
+
+      expect(next).toHaveBeenCalled()
+    })
+
+    it('should validate that a field contains no markup', async () => {
+      const next = jest.fn()
+
+      req = {
+        params: {},
+        flash: jest.fn(),
+        body: { addressLine: 'valid' },
+      } as unknown as Request
+
+      await validationMiddleware(DummyAddress)(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
