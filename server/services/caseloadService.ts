@@ -130,7 +130,7 @@ export default class CaseloadService {
       .filter(managedCase => !managedCase.indeterminateSentence && managedCase.conditionalReleaseDate)
       .filter(
         managedCase =>
-          !managedCase.releaseDate || moment().isSameOrBefore(moment(managedCase.releaseDate, 'YYYY-MM-DD'))
+          !managedCase.releaseDate || moment().isSameOrBefore(moment(managedCase.releaseDate, 'YYYY-MM-DD'), 'day')
       )
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(offenders, user)

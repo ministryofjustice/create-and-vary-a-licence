@@ -38,6 +38,7 @@ services:
       - DB_PASS=create-and-vary-a-licence
       - HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
       - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal/create-and-vary-a-licence-db
+      - NOTIFY_ENABLED=false
 
   gotenberg:
     image: thecodingmachine/gotenberg:6.4.3
