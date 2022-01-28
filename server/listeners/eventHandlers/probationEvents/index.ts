@@ -1,13 +1,21 @@
 import { SQSMessage } from 'sqs-consumer'
 import logger from '../../../../logger'
+import { ProbationEvent } from '../../../@types/events'
+import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHandler'
+import { Services } from '../../../services'
 
-export default function buildEventHandler() {
+export default function buildEventHandler({ communityService, licenceService }: Services) {
+  const offenderManagerChangedHandler = new OffenderManagerChangedEventHandler(communityService, licenceService)
+
   return async (messages: SQSMessage[]) => {
     messages.forEach(message => {
-      logger.info(`Delius Event : ${message.Body}`)
+      const probationEvent = JSON.parse(JSON.parse(message.Body).Message) as ProbationEvent
+      logger.info(`Probation Event : ${JSON.stringify(probationEvent)}`)
 
-      // TODO: Handle OFFENDER_CHANGED event here. Offender may have changed in a few ways
-      //  (i.e. offender manager may have changed, or just something small like CRN has changed)
+      switch (probationEvent.eventType) {
+        case 'OFFENDER_MANAGER_CHANGED':
+          offenderManagerChangedHandler.handle(probationEvent).catch(error => logger.error(error))
+      }
     })
   }
 }

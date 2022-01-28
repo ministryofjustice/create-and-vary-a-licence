@@ -4,6 +4,10 @@
  */
 
 export interface paths {
+  'offender/crn/{crn}/responsible-com': {
+    /** Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateResponsibleCom']
+  }
   '/licence/id/{licenceId}/submit': {
     /** Update the status of a licence to SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['submitLicence']
@@ -56,10 +60,6 @@ export interface paths {
     /** Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['uploadExclusionZoneFile']
   }
-  '/test/data': {
-    /** Just a test API to verify that the full stack of components are working together */
-    get: operations['getTestData']
-  }
   '/licence/match': {
     /** Get the licences matching the supplied lists of status, prison, staffId and nomsId. Requires ROLE_CVL_ADMIN. */
     get: operations['getLicencesMatchingCriteria']
@@ -76,6 +76,34 @@ export interface paths {
 
 export interface components {
   schemas: {
+    /** @description Request object for updating the COM responsible for an offender */
+    UpdateResponsibleComRequest: {
+      /**
+       * Format: int64
+       * @description The unique identifier of the responsible COM, retrieved from Delius
+       * @example 22003829
+       */
+      staffIdentifier: number
+      /**
+       * @description The Delius username for the responsible COM
+       * @example jbloggs
+       */
+      staffUsername: string
+      /**
+       * @description The email address of the responsible COM
+       * @example jbloggs@probation.gov.uk
+       */
+      staffEmail: string
+    }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     /** @description Request object for submitting a licence */
     SubmitLicenceRequest: {
       /**
@@ -104,15 +132,6 @@ export interface components {
        * @example s.smyth@probation.gov.uk
        */
       email: string
-    }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** @description Request object for updating the status of a licence */
     StatusUpdateRequest: {
@@ -533,20 +552,6 @@ export interface components {
        */
       comUsername?: string
     }
-    /** @description Describes a test data object */
-    TestData: {
-      /**
-       * @description The key
-       * @example A
-       */
-      key: string
-      /**
-       * @description The value
-       * @example AAAAA
-       */
-      value: string
-    }
-    TestDataResponse: components['schemas']['TestData'][]
     /** @description Describes a bespoke condition on a licence */
     BespokeCondition: {
       /**
@@ -814,6 +819,41 @@ export interface components {
 }
 
 export interface operations {
+  /** Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateResponsibleCom: {
+    parameters: {
+      path: {
+        crn: string
+      }
+    }
+    responses: {
+      /** The responsible COM was updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateResponsibleComRequest']
+      }
+    }
+  }
   /** Update the status of a licence to SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   submitLicence: {
     parameters: {
@@ -1308,29 +1348,6 @@ export interface operations {
         'multipart/form-data': {
           /** Format: binary */
           file: string
-        }
-      }
-    }
-  }
-  /** Just a test API to verify that the full stack of components are working together */
-  getTestData: {
-    responses: {
-      /** Test data found */
-      200: {
-        content: {
-          'application/json': components['schemas']['TestDataResponse']
-        }
-      }
-      /** Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }

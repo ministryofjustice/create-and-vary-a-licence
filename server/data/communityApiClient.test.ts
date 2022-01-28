@@ -2,6 +2,7 @@ import HmppsRestClient from './hmppsRestClient'
 import CommunityApiClient from './communityApiClient'
 import {
   CommunityApiManagedOffender,
+  CommunityApiOffenderManager,
   CommunityApiStaffDetails,
   CommunityApiTeamManagedCase,
 } from '../@types/communityClientTypes'
@@ -76,5 +77,16 @@ describe('Community Api client tests', () => {
       query: { current: true, teamCode: ['teamA', 'teamB'] },
     })
     expect(result).toEqual({ nomsNumber: 'ABC1234' })
+  })
+
+  it("Get a list of an offender's managers", async () => {
+    get.mockResolvedValue([{ staffId: 2000 }] as CommunityApiOffenderManager[])
+
+    const result = await communityApiClient.getAnOffendersManagers('X1234')
+
+    expect(get).toHaveBeenCalledWith({
+      path: '/secure/offenders/crn/X1234/allOffenderManagers',
+    })
+    expect(result).toEqual([{ staffId: 2000 }])
   })
 })

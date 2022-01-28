@@ -79,6 +79,7 @@ export default {
           ],
           telephoneNumber: '07786 989777',
           email: 'jsmith@probation.com',
+          username: 'jsmith',
         },
       },
     })
@@ -153,6 +154,25 @@ export default {
             currentRo: false,
             currentOm: true,
             currentPom: false,
+          },
+        ],
+      },
+    })
+  },
+
+  stubGetAnOffendersManagers: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/secure/offenders/crn/(.)*/allOffenderManagers`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            isResponsibleOfficer: true,
+            staffId: 2000,
           },
         ],
       },

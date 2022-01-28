@@ -16,6 +16,7 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
+import { UpdateResponsibleComRequest } from '../@types/licenceApiClientTypes'
 
 export default class LicenceApiClient extends RestClient {
   constructor() {
@@ -189,5 +190,16 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username }
     )) as Promise<Buffer>
+  }
+
+  async updateResponsibleCom(
+    crn: string,
+    updateResponsibleComRequest: UpdateResponsibleComRequest,
+    user?: User
+  ): Promise<void> {
+    await this.put(
+      { path: `/offender/crn/${crn}/responsible-com`, data: updateResponsibleComRequest },
+      { username: user?.username }
+    )
   }
 }
