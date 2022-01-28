@@ -88,6 +88,11 @@ describe('Community Service', () => {
     expect(communityApiClient.getTeamCaseload).toHaveBeenCalledWith(['teamA'])
   })
 
+  it('should get an offenders managers', async () => {
+    await communityService.getAnOffendersManagers('X1234')
+    expect(communityApiClient.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
+  })
+
   it('Search probationers', async () => {
     const expectedResponse = [
       {

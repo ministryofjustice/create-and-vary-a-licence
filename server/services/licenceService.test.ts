@@ -15,7 +15,7 @@ import AdditionalConditions from '../routes/creatingLicences/types/additionalCon
 import SimpleDate from '../routes/creatingLicences/types/date'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
-import { LicenceSummary } from '../@types/licenceApiClientTypes'
+import { LicenceSummary, UpdateResponsibleComRequest } from '../@types/licenceApiClientTypes'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -540,22 +540,34 @@ describe('Licence Service', () => {
     )
   })
 
-  describe('Get licences for OMU', () => {
-    it('should get licences created within an OMU users prison', async () => {
-      jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
-      licenceApiClient.matchLicences.mockResolvedValue([{ licenceId: 1 } as LicenceSummary])
+  it('should get licences created within an OMU users prison', async () => {
+    jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
+    licenceApiClient.matchLicences.mockResolvedValue([{ licenceId: 1 } as LicenceSummary])
 
-      const result = await licenceService.getLicencesForOmu(user)
-      expect(licenceApiClient.matchLicences).toBeCalledWith(
-        ['ACTIVE', 'APPROVED', 'REJECTED', 'SUBMITTED'],
-        ['MDI'],
-        [],
-        [],
-        'conditionalReleaseDate',
-        null,
-        user
-      )
-      expect(result).toEqual([{ licenceId: 1 }])
+    const result = await licenceService.getLicencesForOmu(user)
+    expect(licenceApiClient.matchLicences).toBeCalledWith(
+      ['ACTIVE', 'APPROVED', 'REJECTED', 'SUBMITTED'],
+      ['MDI'],
+      [],
+      [],
+      'conditionalReleaseDate',
+      null,
+      user
+    )
+    expect(result).toEqual([{ licenceId: 1 }])
+  })
+
+  it('should update COM responsible for an offender', async () => {
+    await licenceService.updateResponsibleCom('X1234', {
+      staffIdentifier: 2000,
+      staffUsername: 'joebloggs',
+      staffEmail: 'joebloggs@probation.gov.uk',
+    } as UpdateResponsibleComRequest)
+
+    expect(licenceApiClient.updateResponsibleCom).toBeCalledWith('X1234', {
+      staffIdentifier: 2000,
+      staffUsername: 'joebloggs',
+      staffEmail: 'joebloggs@probation.gov.uk',
     })
   })
 

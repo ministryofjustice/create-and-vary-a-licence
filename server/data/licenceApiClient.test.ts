@@ -14,6 +14,7 @@ import {
   StatusUpdateRequest,
   SubmitLicenceRequest,
   UpdateAdditionalConditionDataRequest,
+  UpdateResponsibleComRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -260,6 +261,30 @@ describe('Licence API client tests', () => {
     await licenceApiClient.batchActivateLicences([123, 321])
 
     expect(post).toHaveBeenCalledWith({ path: '/licence/activate-licences', data: [123, 321] })
+  })
+
+  it('should update responsible COM for an offender', async () => {
+    await licenceApiClient.updateResponsibleCom(
+      'X1234',
+      {
+        staffIdentifier: 2000,
+        staffUsername: 'joebloggs',
+        staffEmail: 'joebloggs@probation.gov.uk',
+      } as UpdateResponsibleComRequest,
+      { username: 'joebloggs' } as User
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      {
+        path: '/offender/crn/X1234/responsible-com',
+        data: {
+          staffIdentifier: 2000,
+          staffUsername: 'joebloggs',
+          staffEmail: 'joebloggs@probation.gov.uk',
+        },
+      },
+      { username: 'joebloggs' }
+    )
   })
 
   describe('Exclusion zone file', () => {

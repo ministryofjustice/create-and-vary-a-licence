@@ -1,11 +1,11 @@
 import { SQSMessage } from 'sqs-consumer'
 import logger from '../../../../logger'
 import { ProbationEvent } from '../../../@types/events'
-import OffenderManagerChangedHandler from './offenderManagerChangedHandler'
+import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHandler'
 import { Services } from '../../../services'
 
 export default function buildEventHandler({ communityService, licenceService }: Services) {
-  const offenderManagerChangedHandler = new OffenderManagerChangedHandler(communityService, licenceService)
+  const offenderManagerChangedHandler = new OffenderManagerChangedEventHandler(communityService, licenceService)
 
   return async (messages: SQSMessage[]) => {
     messages.forEach(message => {
