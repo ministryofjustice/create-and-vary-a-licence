@@ -174,13 +174,13 @@ export default {
             case: 'lower',
             options: [
               {
-                value: 'Any',
+                value: 'any',
               },
               {
-                value: 'Any female',
+                value: 'any female',
               },
               {
-                value: 'Any male',
+                value: 'any male',
               },
             ],
           },
@@ -314,13 +314,13 @@ export default {
             case: 'lower',
             options: [
               {
-                value: 'Any',
+                value: 'any',
               },
               {
-                value: 'Any female',
+                value: 'any female',
               },
               {
-                value: 'Any male',
+                value: 'any male',
               },
             ],
           },
@@ -535,7 +535,7 @@ export default {
         category: 'Possession, ownership, control or inspection of specified items or documents',
         categoryShort: 'Items and documents',
         text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
-        tpl: 'Not to own or possess a {item} without the prior approval of your supervising officer.',
+        tpl: 'Not to own or possess {item} without the prior approval of your supervising officer.',
         requiresInput: true,
         inputs: [
           {
@@ -543,6 +543,8 @@ export default {
             label: 'Enter the name of the item',
             name: 'item',
             listType: 'OR',
+            beforeVowel: 'an ',
+            beforeConsonant: 'a ',
             addAnother: {
               label: 'Add another item',
             },
@@ -570,13 +572,13 @@ export default {
             case: 'lower',
             options: [
               {
-                value: 'Men',
+                value: 'men',
               },
               {
-                value: 'Women',
+                value: 'women',
               },
               {
-                value: 'Women or men',
+                value: 'women or men',
               },
             ],
           },
@@ -605,7 +607,7 @@ export default {
         code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
         category: 'Curfew arrangement',
         text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
-        tpl: 'Confine yourself to an address approved by your supervising officer between the hours of {curfewStart} and {curfewEnd} daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+        tpl: 'Confine yourself to an address approved by your supervising officer between the hours of {curfewStart} and {curfewEnd} daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
         subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
         requiresInput: true,
         inputs: [
@@ -624,6 +626,8 @@ export default {
             label: 'Select a review period',
             name: 'reviewPeriod',
             case: 'lower',
+            beforeVowel: 'an ',
+            beforeConsonant: 'a ',
             options: [
               {
                 value: 'Weekly',
@@ -640,6 +644,8 @@ export default {
                       label: 'Enter a review period',
                       name: 'alternativeReviewPeriod',
                       case: 'lower',
+                      beforeVowel: 'an ',
+                      beforeConsonant: 'a ',
                     },
                   ],
                 },
@@ -749,7 +755,7 @@ export default {
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
         categoryShort: 'Supervision in the community',
         text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-        tpl: 'Report to staff at {approvedPremises} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+        tpl: 'Report to staff at {approvedPremises} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         requiresInput: true,
         inputs: [
           {
@@ -768,6 +774,8 @@ export default {
             label: 'Select a review period',
             name: 'reviewPeriod',
             case: 'lower',
+            beforeVowel: 'an ',
+            beforeConsonant: 'a ',
             options: [
               {
                 value: 'Weekly',
@@ -784,6 +792,8 @@ export default {
                       label: 'Enter a review period',
                       name: 'alternativeReviewPeriod',
                       case: 'lower',
+                      beforeVowel: 'an ',
+                      beforeConsonant: 'a ',
                     },
                   ],
                 },
@@ -799,7 +809,7 @@ export default {
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
         categoryShort: 'Supervision in the community',
         text: 'Report to staff at [NAME OF POLICE STATION] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-        tpl: 'Report to staff at {policeStation} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+        tpl: 'Report to staff at {policeStation} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         requiresInput: true,
         inputs: [
           {
@@ -818,6 +828,8 @@ export default {
             label: 'Select a review period',
             name: 'reviewPeriod',
             case: 'lower',
+            beforeVowel: 'an ',
+            beforeConsonant: 'a ',
             options: [
               {
                 value: 'Weekly',
@@ -834,6 +846,8 @@ export default {
                       label: 'Enter a review period',
                       name: 'alternativeReviewPeriod',
                       case: 'lower',
+                      beforeVowel: 'an ',
+                      beforeConsonant: 'a ',
                     },
                   ],
                 },
@@ -895,7 +909,7 @@ export default {
         inputs: [
           {
             type: InputTypes.TEXT,
-            label: 'Enter name',
+            label: 'Enter name of organisation',
             name: 'name',
           },
           {
