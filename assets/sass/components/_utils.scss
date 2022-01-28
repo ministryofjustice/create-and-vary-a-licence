@@ -4,6 +4,16 @@
   text-align: right
 }
 
+.max-width {
+  overflow: hidden;
+  &-200 {
+    max-width: 200px;
+  }
+  &-220 {
+    max-width: 220px;
+  }
+}
+
 .greyed-text {
   color: $govuk-secondary-text-colour;
 }

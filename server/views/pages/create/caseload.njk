@@ -11,6 +11,13 @@
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
 
+{% macro offenderName(offenderName, crn, prisonerNumber) %}
+    <div class="caseload-offender-name">
+        <button type="submit" name="prisonerNumber" value='{{ prisonerNumber }}' class="link-button govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</button>
+        <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
+    </div>
+{% endmacro %}
+
 {% set offenders = [] %}
 
 {% for offender in caseload %}
@@ -23,15 +30,12 @@
 
     {% set offenders = (offenders.push([
         {
-            attributes: { id: 'name-' + loop.index },
-            html: '<button type="submit" name="prisonerNumber" value=' + offender.prisonerNumber +
-                  ' class="link-button govuk-heading-s">' + offender.name + '</button>'
-        },
-        {
             attributes: {
-                id: 'crn-' + loop.index
+                id: 'name-' + loop.index,
+                "data-sort-value": offender.name
             },
-            text: offender.crnNumber
+            classes: "max-width max-width-220",
+            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber)
         },
         {
             attributes: {
@@ -41,19 +45,23 @@
         },
         {
             attributes: {
-                id: 'probation-practitioner-' + loop.index
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": offender.probationPractitioner.name
             },
+            classes: "max-width max-width-200",
             html: comDetailsHtml
         },
         {
             attributes: {
-                id: 'release-date-' + loop.index
+                id: 'release-date-' + loop.index,
+                "data-sort-value": offender.conditionalReleaseDate | dateToUnix
             },
             text: offender.conditionalReleaseDate
         },
         {
             attributes: {
-                id: 'licence-status-' + loop.index
+                id: 'licence-status-' + loop.index,
+                "data-sort-value": offender.licenceStatus | getStatusOrder
             },
             html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig)
         }
@@ -83,26 +91,38 @@
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
             caption: "Caseload",
             captionClasses: "govuk-visually-hidden",
             head: [
                 {
-                    text: "Name"
-                },
-                {
-                    text: "CRN"
+                    text: "Name",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
                 },
                 {
                     text: "Licence type"
                 },
                 {
-                    text: "Probation Practitioner"
+                    text: "Probation practitioner",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
                 },
                 {
-                    text: "Release date"
+                    text: "Release date",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
                 },
                 {
-                    text: "Status"
+                    text: "Status",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
                 }
             ],
             rows: offenders
