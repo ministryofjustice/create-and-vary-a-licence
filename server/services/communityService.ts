@@ -3,6 +3,7 @@ import ProbationSearchApiClient from '../data/probationSearchApiClient'
 import { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
 import {
   CommunityApiManagedOffender,
+  CommunityApiOffenderManager,
   CommunityApiStaffDetails,
   CommunityApiTeamManagedCase,
 } from '../@types/communityClientTypes'
@@ -33,14 +34,18 @@ export default class CommunityService {
     return this.communityApiClient.getTeamCaseload(teamCodes)
   }
 
+  async getAnOffendersManagers(crn: string): Promise<CommunityApiOffenderManager[]> {
+    return this.communityApiClient.getAnOffendersManagers(crn)
+  }
+
   async searchProbationers(searchCriteria: SearchDto): Promise<OffenderDetail[]> {
     return this.probationSearchApiClient.searchProbationer(searchCriteria)
   }
 
-  async getProbationer(nomisId: string): Promise<OffenderDetail> {
-    const deliusRecords = await this.probationSearchApiClient.searchProbationer({ nomsNumber: nomisId })
+  async getProbationer(searchDto: SearchDto): Promise<OffenderDetail> {
+    const deliusRecords = await this.probationSearchApiClient.searchProbationer(searchDto)
     if (deliusRecords.length < 1) {
-      throw new Error(`No delius record found for nomis ID ${nomisId}`)
+      throw new Error(`No delius record found`)
     }
     return deliusRecords[0]
   }

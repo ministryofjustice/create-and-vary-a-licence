@@ -1,6 +1,6 @@
 import LicenceService from '../../../services/licenceService'
 import ReleaseEventHandler from './releaseEventHandler'
-import { DomainEvent } from '../../../@types/domainEvent'
+import { DomainEvent } from '../../../@types/events'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 

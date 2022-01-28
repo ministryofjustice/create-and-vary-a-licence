@@ -13,6 +13,7 @@ import {
   StatusUpdateRequest,
   SubmitLicenceRequest,
   UpdateAdditionalConditionDataRequest,
+  UpdateResponsibleComRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getAdditionalConditionByCode, getStandardConditions, getVersion } from '../utils/conditionsProvider'
@@ -49,7 +50,7 @@ export default class LicenceService {
   async createLicence(prisonerNumber: string, user: User): Promise<LicenceSummary> {
     const [nomisRecord, deliusRecord] = await Promise.all([
       this.prisonerService.getPrisonerDetail(prisonerNumber, user),
-      this.communityService.getProbationer(prisonerNumber),
+      this.communityService.getProbationer({ nomsNumber: prisonerNumber }),
     ])
 
     const prisonInformation = await this.prisonerService.getPrisonInformation(nomisRecord.agencyId, user)
@@ -283,6 +284,10 @@ export default class LicenceService {
     ]
     const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
     return this.licenceApiClient.matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate', null, user)
+  }
+
+  async updateResponsibleCom(crn: string, newCom: UpdateResponsibleComRequest): Promise<void> {
+    return this.licenceApiClient.updateResponsibleCom(crn, newCom)
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {
