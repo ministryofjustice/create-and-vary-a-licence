@@ -47,6 +47,7 @@ export default (on: (string, Record) => void): void => {
     stubGetStaffDetailsByStaffId: community.stubGetStaffDetailsByStaffId,
     stubGetStaffDetailsByList: community.stubGetStaffDetailsByList,
     stubGetManagedOffenders: community.stubGetManagedOffenders,
+    stubGetAnOffendersManagers: community.stubGetAnOffendersManagers,
 
     searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
 

@@ -22,4 +22,24 @@ context('Event handlers', () => {
       })
     })
   })
+
+  describe('Probation events', () => {
+    it('should listen to the offender manager changed event and call endpoint to update responsible COM', () => {
+      cy.task('stubGetAnOffendersManagers')
+      cy.task('stubGetStaffDetailsByStaffId')
+
+      cy.task(
+        'sendProbationEvent',
+        `{
+            "Message" :  "{\\"eventType\\":\\"OFFENDER_MANAGER_CHANGED\\",\\"crn\\":\\"X1234\\"}"
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X1234/responsible-com', times: 1 }).then(
+        success => {
+          if (!success) throw new Error(`Endpoint called an unexpected number of times`)
+        }
+      )
+    })
+  })
 })
