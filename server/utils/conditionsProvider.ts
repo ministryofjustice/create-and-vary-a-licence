@@ -75,8 +75,8 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): A
           value = adjustCase(rules?.case as string, value)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
           value = rules?.type === InputTypes.ADDRESS ? formatAddress(value) : value
-          if (rules?.beforeVowel) {
-            value = startsWithAVowel(value) ? `${rules.beforeVowel}${value}` : `${rules.beforeConsonant}${value}`
+          if (rules?.handleIndefiniteArticle) {
+            value = startsWithAVowel(value) ? `an ${value}` : `a ${value}`
           }
           conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         } else {
@@ -85,8 +85,8 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): A
           let value = produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
           value = adjustCase(rules?.case as string, value)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
-          if (rules?.beforeVowel) {
-            value = startsWithAVowel(value) ? `${rules.beforeVowel}${value}` : `${rules.beforeConsonant}${value}`
+          if (rules?.handleIndefiniteArticle) {
+            value = startsWithAVowel(value) ? `an ${value}` : `a ${value}`
           }
           conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         }

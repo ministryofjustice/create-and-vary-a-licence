@@ -543,8 +543,7 @@ export default {
             label: 'Enter the name of the item',
             name: 'item',
             listType: 'OR',
-            beforeVowel: 'an ',
-            beforeConsonant: 'a ',
+            handleIndefiniteArticle: true,
             addAnother: {
               label: 'Add another item',
             },
@@ -626,8 +625,7 @@ export default {
             label: 'Select a review period',
             name: 'reviewPeriod',
             case: 'lower',
-            beforeVowel: 'an ',
-            beforeConsonant: 'a ',
+            handleIndefiniteArticle: true,
             options: [
               {
                 value: 'Weekly',
@@ -644,8 +642,7 @@ export default {
                       label: 'Enter a review period',
                       name: 'alternativeReviewPeriod',
                       case: 'lower',
-                      beforeVowel: 'an ',
-                      beforeConsonant: 'a ',
+                      handleIndefiniteArticle: true,
                     },
                   ],
                 },
@@ -774,8 +771,7 @@ export default {
             label: 'Select a review period',
             name: 'reviewPeriod',
             case: 'lower',
-            beforeVowel: 'an ',
-            beforeConsonant: 'a ',
+            handleIndefiniteArticle: true,
             options: [
               {
                 value: 'Weekly',
@@ -792,8 +788,7 @@ export default {
                       label: 'Enter a review period',
                       name: 'alternativeReviewPeriod',
                       case: 'lower',
-                      beforeVowel: 'an ',
-                      beforeConsonant: 'a ',
+                      handleIndefiniteArticle: true,
                     },
                   ],
                 },
@@ -828,8 +823,7 @@ export default {
             label: 'Select a review period',
             name: 'reviewPeriod',
             case: 'lower',
-            beforeVowel: 'an ',
-            beforeConsonant: 'a ',
+            handleIndefiniteArticle: true,
             options: [
               {
                 value: 'Weekly',
@@ -846,8 +840,7 @@ export default {
                       label: 'Enter a review period',
                       name: 'alternativeReviewPeriod',
                       case: 'lower',
-                      beforeVowel: 'an ',
-                      beforeConsonant: 'a ',
+                      handleIndefiniteArticle: true,
                     },
                   ],
                 },
