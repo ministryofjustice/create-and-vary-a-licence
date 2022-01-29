@@ -75,6 +75,9 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): A
           value = adjustCase(rules?.case as string, value)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
           value = rules?.type === InputTypes.ADDRESS ? formatAddress(value) : value
+          if (rules?.handleIndefiniteArticle) {
+            value = startsWithAVowel(value) ? `an ${value}` : `a ${value}`
+          }
           conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         } else {
           // List of values for this placeholder (lists of values can have listType 'AND' or 'OR')
@@ -82,6 +85,9 @@ export function expandAdditionalConditions(conditions: AdditionalCondition[]): A
           let value = produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
           value = adjustCase(rules?.case as string, value)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
+          if (rules?.handleIndefiniteArticle) {
+            value = startsWithAVowel(value) ? `an ${value}` : `a ${value}`
+          }
           conditionText = replacePlaceholderWithValue(ph, conditionText, value)
         }
       })
@@ -117,6 +123,15 @@ export const produceValueAsFormattedList = (listType = 'AND', matchingDataItems:
     valueCounter += 1
   })
   return value
+}
+
+/**
+ * Checks whether the first letter of a string value starts with a vowel.
+ * @param value
+ */
+const startsWithAVowel = (value: string): boolean => {
+  const regex = new RegExp('^[aeiou].*', 'i')
+  return value && regex.test(value.trim())
 }
 
 /**

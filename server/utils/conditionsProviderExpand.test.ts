@@ -323,7 +323,7 @@ describe('Conditions Provider - expansions', () => {
           data: [
             { id: 1, field: 'approvedPremises', value: 'the police station', sequence: 0 },
             { id: 2, field: 'reportingTime', value: '2pm', sequence: 1 },
-            { id: 3, field: 'reviewPeriod', value: 'Weekly', sequence: 2 },
+            { id: 3, field: 'reviewPeriod', value: 'Other', sequence: 2 },
             { id: 4, field: 'alternativeReviewPeriod', value: 'Fortnightly', sequence: 3 },
           ],
           uploadSummary: [],
@@ -333,6 +333,31 @@ describe('Conditions Provider - expansions', () => {
       expect(listOfConditions).toHaveLength(1)
       expect(listOfConditions[0].text).toEqual(
         'Report to staff at The Police Station at 2pm, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a fortnightly basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.'
+      )
+    })
+
+    it('Will replace adjust wording where values start with vowel', () => {
+      const conditions: AdditionalCondition[] = [
+        {
+          id: 1,
+          code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+          category:
+            'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
+          sequence: 1,
+          text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+          data: [
+            { id: 1, field: 'approvedPremises', value: 'the police station', sequence: 0 },
+            { id: 2, field: 'reportingTime', value: '2pm', sequence: 1 },
+            { id: 3, field: 'reviewPeriod', value: 'Other', sequence: 2 },
+            { id: 4, field: 'alternativeReviewPeriod', value: 'ongoing', sequence: 3 },
+          ],
+          uploadSummary: [],
+        },
+      ]
+      const listOfConditions = expandAdditionalConditions(conditions)
+      expect(listOfConditions).toHaveLength(1)
+      expect(listOfConditions[0].text).toEqual(
+        'Report to staff at The Police Station at 2pm, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on an ongoing basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.'
       )
     })
   })
