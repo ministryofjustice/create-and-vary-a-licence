@@ -90,7 +90,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             name: 'Joe Rogan',
             crnNumber: 'X381306',
-            conditionalReleaseDate: '12th October 2022',
+            conditionalReleaseDate: '12 Oct 2022',
             prisonerNumber: '123',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
@@ -116,7 +116,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             name: 'Joe Rogan',
             crnNumber: 'X381306',
-            conditionalReleaseDate: '12th October 2022',
+            conditionalReleaseDate: '12 Oct 2022',
             prisonerNumber: '123',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
@@ -128,7 +128,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             name: 'Dr Who',
             crnNumber: 'X381307',
-            conditionalReleaseDate: '12th October 2023',
+            conditionalReleaseDate: '12 Oct 2023',
             prisonerNumber: '124',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
