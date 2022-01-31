@@ -2,7 +2,6 @@
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "partials/statusBadge.njk" import statusBadge %}
 {% from "partials/licenceDescription.njk" import licenceDescription %}
 
@@ -75,18 +74,32 @@
         </div>
     </div>
 
-    {{ mojSubNavigation({
-        label: 'Sub navigation',
-        items: [{
-            text: 'My cases',
-            href: '?view=me',
-            active: not teamView
-        }, {
-            text: 'Team cases',
-            href: '?view=team',
-            active: teamView
-        }]
-    }) }}
+    <nav class="moj-sub-navigation" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+            <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" {% if not teamView %}aria-current="page"{% endif %} href="?view=me">My cases</a>
+            </li>
+            <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" {% if teamView %}aria-current="page"{% endif %} href="?view=team">Team cases</a>
+            </li>
+            <li class="moj-sub-navigation__item govuk-!-margin-right-0 govuk-!-width-one-half float-right">
+                <div class="moj-search">
+                    <form method="GET">
+                        <input type="hidden" name="view" value="{% if teamView %}team{% else %}me{% endif %}">
+                        <div class="govuk-form-group">
+                            <label class="govuk-visually-hidden" for="search">
+                                Search for a case
+                            </label>
+                            <input class="govuk-input moj-search__input govuk-!-font-size-14" id="search" name="search" type="search" placeholder="You can search by name, CRN or probation practitioner" value="{{ search }}">
+                        </div>
+                        <button class="govuk-button moj-search__button" data-module="govuk-button">
+                            Search
+                        </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </nav>
 
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">

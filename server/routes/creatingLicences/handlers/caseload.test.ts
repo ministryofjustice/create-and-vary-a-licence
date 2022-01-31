@@ -141,6 +141,84 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(caseloadService.getTeamCaseload).toHaveBeenCalledWith(res.locals.user)
       expect(caseloadService.getStaffCaseload).not.toHaveBeenCalled()
     })
+
+    it('should successfully search by CRN', async () => {
+      req.query = { view: 'team', search: 'x381307' }
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Dr Who',
+            crnNumber: 'X381307',
+            conditionalReleaseDate: '12 Oct 2023',
+            prisonerNumber: '124',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP_PSS,
+            probationPractitioner: null,
+          },
+        ],
+        statusConfig,
+        teamView: true,
+        search: 'x381307',
+      })
+      expect(caseloadService.getTeamCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCaseload).not.toHaveBeenCalled()
+    })
+
+    it('should successfully search by probation practitioner', async () => {
+      req.query = { view: 'team', search: 'holmes' }
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Joe Rogan',
+            crnNumber: 'X381306',
+            conditionalReleaseDate: '12 Oct 2022',
+            prisonerNumber: '123',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+              staffId: 3000,
+            },
+          },
+        ],
+        statusConfig,
+        teamView: true,
+        search: 'holmes',
+      })
+      expect(caseloadService.getTeamCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCaseload).not.toHaveBeenCalled()
+    })
+
+    it('should successfully search by offender name', async () => {
+      req.query = { view: 'team', search: 'rogan' }
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Joe Rogan',
+            crnNumber: 'X381306',
+            conditionalReleaseDate: '12 Oct 2022',
+            prisonerNumber: '123',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+              staffId: 3000,
+            },
+          },
+        ],
+        statusConfig,
+        teamView: true,
+        search: 'rogan',
+      })
+      expect(caseloadService.getTeamCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCaseload).not.toHaveBeenCalled()
+    })
   })
 
   describe('POST', () => {
