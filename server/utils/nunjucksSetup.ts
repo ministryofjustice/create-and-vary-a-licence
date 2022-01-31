@@ -2,6 +2,7 @@
 import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
 import path from 'path'
+import moment from 'moment'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
 import { formatAddress, jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateWithDay } from './utils'
@@ -10,6 +11,7 @@ import { getAdditionalConditionByCode } from './conditionsProvider'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/creatingLicences/types/address'
+import LicenceStatus from '../enumeration/licenceStatus'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -165,6 +167,22 @@ export function registerNunjucks(app?: express.Express): Environment {
     return Array.from(map, ([fieldName, items]) => ({ fieldName, items })).map(groupedDataItems => {
       return groupedDataItems.items.map((dataItem: AdditionalConditionData) => dataItem.value).join(', ')
     })
+  })
+
+  njkEnv.addFilter('dateToUnix', (date: string) => {
+    return moment(date, 'DD MMM YYYY').unix()
+  })
+
+  njkEnv.addFilter('getStatusOrder', (licenceStatus: LicenceStatus) => {
+    const licenceStatusOrderMap = new Map()
+
+    licenceStatusOrderMap.set(LicenceStatus.NOT_STARTED, 0)
+    licenceStatusOrderMap.set(LicenceStatus.IN_PROGRESS, 1)
+    licenceStatusOrderMap.set(LicenceStatus.SUBMITTED, 2)
+    licenceStatusOrderMap.set(LicenceStatus.APPROVED, 3)
+    licenceStatusOrderMap.set(LicenceStatus.ACTIVE, 4)
+
+    return licenceStatusOrderMap.get(licenceStatus)
   })
 
   njkEnv.addGlobal('getFormResponses', (formResponses: unknown, inputName: string) => {

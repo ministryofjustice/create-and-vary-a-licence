@@ -39,7 +39,7 @@ export default class CaseloadRoutes {
         name: convertToTitleCase([offender.firstName, offender.lastName].join(' ')),
         crnNumber: offender.crnNumber,
         prisonerNumber: offender.prisonerNumber,
-        conditionalReleaseDate: moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').format('Do MMMM YYYY'),
+        conditionalReleaseDate: moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
         licenceStatus: offender.licenceStatus,
         licenceType: offender.licenceType,
         probationPractitioner,
