@@ -20,15 +20,6 @@ export default class CaseloadRoutes {
       : await this.caseloadService.getStaffCaseload(user)
 
     const caseloadViewModel = caseload
-      .filter(offender => {
-        const searchString = search?.toLowerCase().trim()
-        if (!searchString) return true
-        return (
-          offender.crnNumber?.toLowerCase().includes(searchString) ||
-          `${offender.staffForename} ${offender.staffSurname}`.trim().toLowerCase().includes(searchString) ||
-          `${offender.firstName} ${offender.lastName}`.trim().toLowerCase().includes(searchString)
-        )
-      })
       .map(offender => {
         let probationPractitioner
 
@@ -55,6 +46,15 @@ export default class CaseloadRoutes {
           licenceType: offender.licenceType,
           probationPractitioner,
         }
+      })
+      .filter(offender => {
+        const searchString = search?.toLowerCase().trim()
+        if (!searchString) return true
+        return (
+          offender.crnNumber?.toLowerCase().includes(searchString) ||
+          offender.name.toLowerCase().includes(searchString) ||
+          offender.probationPractitioner?.name.toLowerCase().includes(searchString)
+        )
       })
     res.render('pages/create/caseload', { caseload: caseloadViewModel, statusConfig, teamView, search })
   }
