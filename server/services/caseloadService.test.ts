@@ -33,9 +33,9 @@ describe('Caseload Service', () => {
     jest.resetAllMocks()
   })
 
-  describe('getStaffCaseload', () => {
+  describe('getStaffCreateCaseload', () => {
     it('should get managed offenders by the staffIdentifier for this user', async () => {
-      await caseloadService.getStaffCaseload(user)
+      await caseloadService.getStaffCreateCaseload(user)
       expect(communityService.getManagedOffenders).toBeCalledTimes(1)
       expect(prisonerService.getHdcStatuses).toBeCalledTimes(1)
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
@@ -58,7 +58,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1')])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -110,7 +110,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2'), new HdcStatus('3')])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -158,7 +158,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2')])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -207,7 +207,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2')])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -249,7 +249,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2')])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -297,7 +297,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2')])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -346,7 +346,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2')])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -395,7 +395,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2')])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -457,7 +457,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1', '2021-10-07', true), new HdcStatus('2')])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -510,7 +510,7 @@ describe('Caseload Service', () => {
         new HdcStatus('2', '2021-10-07', true, 'REJECTED'),
       ])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -571,7 +571,7 @@ describe('Caseload Service', () => {
 
       prisonerService.getHdcStatuses.mockResolvedValue([new HdcStatus('1'), new HdcStatus('2', '2021-10-07', false)])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -690,7 +690,7 @@ describe('Caseload Service', () => {
         { nomisId: '6', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.INACTIVE },
       ] as LicenceSummary[])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toEqual([
         {
@@ -820,7 +820,7 @@ describe('Caseload Service', () => {
         new HdcStatus('4'),
       ])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toStrictEqual([
         {
@@ -943,7 +943,7 @@ describe('Caseload Service', () => {
         new HdcStatus('5'),
       ])
 
-      const caseload = await caseloadService.getStaffCaseload(user)
+      const caseload = await caseloadService.getStaffCreateCaseload(user)
 
       expect(caseload).toStrictEqual([
         {
@@ -1008,7 +1008,33 @@ describe('Caseload Service', () => {
     })
   })
 
-  describe('getVaryCaseload', () => {
+  describe('getStaffVaryCaseload', () => {
+    beforeEach(() => {
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+        {
+          username: 'smills',
+          staff: {
+            forenames: 'Stephen',
+            surname: 'Mills',
+          },
+        },
+        {
+          username: 'jbloggs',
+          staff: {
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        {
+          username: 'jsmith',
+          staff: {
+            forenames: 'John',
+            surname: 'Smith',
+          },
+        },
+      ])
+    })
+
     it('should get managed offenders by the staffIdentifier for this user', async () => {
       communityService.getManagedOffenders.mockResolvedValue([
         { nomsNumber: '1' },
@@ -1020,7 +1046,7 @@ describe('Caseload Service', () => {
         { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
       ] as LicenceSummary[])
 
-      const licences = await caseloadService.getVaryCaseload(user)
+      const licences = await caseloadService.getStaffVaryCaseload(user)
 
       expect(licences).toEqual(licences)
       expect(communityService.getManagedOffenders).toBeCalledTimes(1)
@@ -1042,7 +1068,7 @@ describe('Caseload Service', () => {
         { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
       ] as LicenceSummary[])
 
-      const licences = await caseloadService.getVaryCaseload(user)
+      const licences = await caseloadService.getStaffVaryCaseload(user)
 
       expect(licences).toEqual(licences)
       expect(communityService.getManagedOffenders).toBeCalledTimes(1)
@@ -1051,7 +1077,7 @@ describe('Caseload Service', () => {
     })
   })
 
-  describe('getTeamCaseload', () => {
+  describe('getTeamCreateCaseload', () => {
     it('should get managed offenders by the staffIdentifier for this user', async () => {
       communityService.getManagedOffendersByTeam.mockResolvedValue([
         { nomsNumber: '1' },
@@ -1063,7 +1089,7 @@ describe('Caseload Service', () => {
         { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
       ] as LicenceSummary[])
 
-      const licences = await caseloadService.getTeamCaseload(user)
+      const licences = await caseloadService.getTeamCreateCaseload(user)
 
       expect(licences).toEqual(licences)
       expect(communityService.getManagedOffendersByTeam).toBeCalledTimes(1)
@@ -1092,7 +1118,7 @@ describe('Caseload Service', () => {
         { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
       ] as LicenceSummary[])
 
-      const licences = await caseloadService.getTeamCaseload(user)
+      const licences = await caseloadService.getTeamCreateCaseload(user)
 
       expect(licences).toEqual(licences)
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(

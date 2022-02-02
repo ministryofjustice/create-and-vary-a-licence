@@ -21,7 +21,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
   let res: Response
 
   beforeEach(() => {
-    caseloadService.getStaffCaseload.mockResolvedValue([
+    caseloadService.getStaffCreateCaseload.mockResolvedValue([
       {
         crnNumber: 'X381306',
         firstName: 'Joe',
@@ -33,7 +33,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       },
     ] as unknown as CaseTypeAndStatus[])
 
-    caseloadService.getTeamCaseload.mockResolvedValue([
+    caseloadService.getTeamCreateCaseload.mockResolvedValue([
       {
         crnNumber: 'X381306',
         firstName: 'Joe',
@@ -103,8 +103,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         statusConfig,
         teamView: false,
       })
-      expect(caseloadService.getStaffCaseload).toHaveBeenCalledWith(res.locals.user)
-      expect(caseloadService.getTeamCaseload).not.toHaveBeenCalled()
+      expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
     })
 
     it('should render view with Team Cases tab selected', async () => {
@@ -138,8 +138,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         statusConfig,
         teamView: true,
       })
-      expect(caseloadService.getTeamCaseload).toHaveBeenCalledWith(res.locals.user)
-      expect(caseloadService.getStaffCaseload).not.toHaveBeenCalled()
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
     it('should successfully search by CRN', async () => {
@@ -162,8 +162,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: true,
         search: 'x381307',
       })
-      expect(caseloadService.getTeamCaseload).toHaveBeenCalledWith(res.locals.user)
-      expect(caseloadService.getStaffCaseload).not.toHaveBeenCalled()
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
     it('should successfully search by probation practitioner', async () => {
@@ -189,8 +189,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: true,
         search: 'holmes',
       })
-      expect(caseloadService.getTeamCaseload).toHaveBeenCalledWith(res.locals.user)
-      expect(caseloadService.getStaffCaseload).not.toHaveBeenCalled()
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
     it('should successfully search by offender name', async () => {
@@ -216,8 +216,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: true,
         search: 'rogan',
       })
-      expect(caseloadService.getTeamCaseload).toHaveBeenCalledWith(res.locals.user)
-      expect(caseloadService.getStaffCaseload).not.toHaveBeenCalled()
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
   })
 

@@ -6,8 +6,9 @@ import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import CaseloadRoutes from './handlers/caseload'
 import { Services } from '../../services'
 import ViewActiveLicenceRoutes from './handlers/viewActiveLicence'
+import ComDetailsRoutes from './handlers/comDetails'
 
-export default function Index({ licenceService, caseloadService }: Services): Router {
+export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/vary${path}`
@@ -27,9 +28,11 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
     )
 
   const caseloadHandler = new CaseloadRoutes(caseloadService)
+  const comDetailsHandler = new ComDetailsRoutes(communityService)
   const viewLicenceHandler = new ViewActiveLicenceRoutes()
 
   get('/caseload', caseloadHandler.GET)
+  get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
   get('/id/:licenceId/view', viewLicenceHandler.GET)
 
   return router

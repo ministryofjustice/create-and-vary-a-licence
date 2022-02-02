@@ -16,8 +16,8 @@ export default class CaseloadRoutes {
     const { user } = res.locals
 
     const caseload = teamView
-      ? await this.caseloadService.getTeamCaseload(user)
-      : await this.caseloadService.getStaffCaseload(user)
+      ? await this.caseloadService.getTeamCreateCaseload(user)
+      : await this.caseloadService.getStaffCreateCaseload(user)
 
     const caseloadViewModel = caseload
       .map(offender => {
