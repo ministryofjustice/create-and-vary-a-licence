@@ -64,6 +64,11 @@ export default class CaseloadService {
     return this.mapLicencesAndResponsibleComs(licences)
   }
 
+  async getApproverCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
+    const licences = await this.licenceService.getLicencesForApproval(user)
+    return this.mapLicencesAndResponsibleComs(licences)
+  }
+
   private mapOffendersToLicences = async (caseloadNomisIds: string[], user: User): Promise<CaseTypeAndStatus[]> => {
     const [offenders, existingLicences] = await Promise.all([
       this.getOffendersEligibleForLicenceByNomisId(caseloadNomisIds, user),
