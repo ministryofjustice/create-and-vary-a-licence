@@ -1046,9 +1046,8 @@ describe('Caseload Service', () => {
         { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
       ] as LicenceSummary[])
 
-      const licences = await caseloadService.getStaffVaryCaseload(user)
+      await caseloadService.getStaffVaryCaseload(user)
 
-      expect(licences).toEqual(licences)
       expect(communityService.getManagedOffenders).toBeCalledTimes(1)
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
@@ -1068,11 +1067,75 @@ describe('Caseload Service', () => {
         { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
       ] as LicenceSummary[])
 
-      const licences = await caseloadService.getStaffVaryCaseload(user)
+      await caseloadService.getStaffVaryCaseload(user)
 
-      expect(licences).toEqual(licences)
       expect(communityService.getManagedOffenders).toBeCalledTimes(1)
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(['1'], [LicenceStatus.ACTIVE], user)
+    })
+  })
+
+  describe('getTeamVaryCaseload', () => {
+    beforeEach(() => {
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+        {
+          username: 'smills',
+          staff: {
+            forenames: 'Stephen',
+            surname: 'Mills',
+          },
+        },
+        {
+          username: 'jbloggs',
+          staff: {
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        {
+          username: 'jsmith',
+          staff: {
+            forenames: 'John',
+            surname: 'Smith',
+          },
+        },
+      ])
+    })
+
+    it('should get managed offenders by the users team code', async () => {
+      communityService.getManagedOffendersByTeam.mockResolvedValue([
+        { nomsNumber: '1' },
+        { nomsNumber: '2' },
+      ] as CommunityApiTeamManagedCase[])
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
+        { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
+      ] as LicenceSummary[])
+
+      await caseloadService.getTeamVaryCaseload(user)
+
+      expect(communityService.getManagedOffendersByTeam).toBeCalledTimes(1)
+      expect(communityService.getManagedOffendersByTeam).toHaveBeenCalledWith(['teamA', 'teamB'])
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
+        ['1', '2'],
+        [LicenceStatus.ACTIVE],
+        user
+      )
+    })
+
+    it('should filter managed offenders returned from community API without a nomis ID', async () => {
+      communityService.getManagedOffendersByTeam.mockResolvedValue([
+        { nomsNumber: '1' },
+        { nomsNumber: null },
+      ] as CommunityApiTeamManagedCase[])
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
+      ] as LicenceSummary[])
+
+      await caseloadService.getTeamVaryCaseload(user)
+
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(['1'], [LicenceStatus.ACTIVE], user)
     })
   })
@@ -1089,9 +1152,8 @@ describe('Caseload Service', () => {
         { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
       ] as LicenceSummary[])
 
-      const licences = await caseloadService.getTeamCreateCaseload(user)
+      await caseloadService.getTeamCreateCaseload(user)
 
-      expect(licences).toEqual(licences)
       expect(communityService.getManagedOffendersByTeam).toBeCalledTimes(1)
       expect(communityService.getManagedOffendersByTeam).toHaveBeenCalledWith(['teamA', 'teamB'])
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
@@ -1118,9 +1180,8 @@ describe('Caseload Service', () => {
         { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
       ] as LicenceSummary[])
 
-      const licences = await caseloadService.getTeamCreateCaseload(user)
+      await caseloadService.getTeamCreateCaseload(user)
 
-      expect(licences).toEqual(licences)
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1'],
         [
@@ -1184,6 +1245,76 @@ describe('Caseload Service', () => {
       expect(licenceService.getLicencesForOmu).toHaveBeenCalledWith(user)
       expect(communityService.getStaffDetailsByUsernameList).toHaveBeenCalledWith(['JBLOGGS', 'JSMITH', 'SMILLS'])
       expect(omuCaseload).toEqual([
+        {
+          licenceId: 1,
+          comUsername: 'JBLOGGS',
+          comFirstName: 'Joe',
+          comLastName: 'Bloggs',
+        },
+        {
+          licenceId: 2,
+          comUsername: 'JSMITH',
+          comFirstName: 'John',
+          comLastName: 'Smith',
+        },
+        {
+          licenceId: 3,
+          comUsername: 'SMILLS',
+          comFirstName: 'Stephen',
+          comLastName: 'Mills',
+        },
+      ])
+    })
+  })
+
+  describe('getApproverCaseload', () => {
+    beforeEach(() => {
+      licenceService.getLicencesForApproval.mockResolvedValue([
+        {
+          licenceId: 1,
+          comUsername: 'JBLOGGS',
+        },
+        {
+          licenceId: 2,
+          comUsername: 'JSMITH',
+        },
+        {
+          licenceId: 3,
+          comUsername: 'SMILLS',
+        },
+      ] as LicenceSummary[])
+
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+        {
+          username: 'smills',
+          staff: {
+            forenames: 'Stephen',
+            surname: 'Mills',
+          },
+        },
+        {
+          username: 'jbloggs',
+          staff: {
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        {
+          username: 'jsmith',
+          staff: {
+            forenames: 'John',
+            surname: 'Smith',
+          },
+        },
+      ])
+    })
+
+    it('should map licences to responsible COM for approver caseload', async () => {
+      const approverCaseload = await caseloadService.getApproverCaseload(user)
+
+      expect(licenceService.getLicencesForApproval).toHaveBeenCalledWith(user)
+      expect(communityService.getStaffDetailsByUsernameList).toHaveBeenCalledWith(['JBLOGGS', 'JSMITH', 'SMILLS'])
+      expect(approverCaseload).toEqual([
         {
           licenceId: 1,
           comUsername: 'JBLOGGS',
