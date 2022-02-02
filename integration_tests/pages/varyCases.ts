@@ -2,7 +2,7 @@ import Page from './page'
 import VaryViewActive from './varyViewActive'
 
 export default class VaryCasesPage extends Page {
-  private varyLicenceLinkId = '#name-1'
+  private varyLicenceLinkId = '#name-link-1'
 
   constructor() {
     super('vary-cases-page')

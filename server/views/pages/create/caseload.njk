@@ -10,9 +10,9 @@
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
 
-{% macro offenderName(offenderName, crn, prisonerNumber) %}
+{% macro offenderName(offenderName, crn, prisonerNumber, index) %}
     <div class="caseload-offender-name">
-        <button type="submit" name="prisonerNumber" value='{{ prisonerNumber }}' class="link-button govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</button>
+        <button id="name-button-{{ index }}" type="submit" name="prisonerNumber" value='{{ prisonerNumber }}' class="link-button govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</button>
         <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
     </div>
 {% endmacro %}
@@ -34,7 +34,7 @@
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber)
+            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, loop.index)
         },
         {
             attributes: {
