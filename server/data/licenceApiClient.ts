@@ -8,6 +8,8 @@ import type {
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   AppointmentAddressRequest,
+  AuditEvent,
+  AuditRequest,
   BespokeConditionsRequest,
   StatusUpdateRequest,
   AdditionalConditionsRequest,
@@ -201,5 +203,19 @@ export default class LicenceApiClient extends RestClient {
       { path: `/offender/crn/${crn}/responsible-com`, data: updateResponsibleComRequest },
       { username: user?.username }
     )
+  }
+
+  async recordAuditEvent(auditEvent: AuditEvent, user?: User): Promise<void> {
+    await this.put({ path: `/audit/save`, data: auditEvent }, { username: user?.username })
+  }
+
+  async getAuditEvents(auditRequest: AuditRequest, user?: User): Promise<AuditEvent[]> {
+    return (await this.post(
+      {
+        path: '/audit/retrieve',
+        data: auditRequest,
+      },
+      { username: user?.username }
+    )) as Promise<AuditEvent[]>
   }
 }

@@ -6,6 +6,8 @@ import {
   AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
+  AuditEvent,
+  AuditRequest,
   BespokeConditionsRequest,
   ContactNumberRequest,
   CreateLicenceRequest,
@@ -323,6 +325,35 @@ describe('Licence API client tests', () => {
         { username: 'joebloggs' }
       )
       expect(result.toString()).toEqual('image')
+    })
+  })
+
+  describe('Audit events', () => {
+    const anEvent = {
+      licenceId: 1,
+      eventTime: '20/01/2022 14:56:13',
+      username: 'USER',
+      fullName: 'Test User',
+      eventType: 'USER_EVENT',
+      summary: 'Summary',
+      detail: 'Detail',
+    } as AuditEvent
+
+    const aRequest = {
+      licenceId: 1,
+      username: 'USER',
+      startTime: '20/01/2022 14:56:13',
+      endTime: '20/02/2022 14:56:13',
+    } as AuditRequest
+
+    it('Record an audit event', async () => {
+      await licenceApiClient.recordAuditEvent(anEvent, { username: 'USER' } as User)
+      expect(put).toHaveBeenCalledWith({ path: '/audit/save', data: anEvent }, { username: 'USER' })
+    })
+
+    it('Get audit events for a user and licence', async () => {
+      await licenceApiClient.getAuditEvents(aRequest, { username: 'USER' } as User)
+      expect(post).toHaveBeenCalledWith({ path: '/audit/retrieve', data: aRequest }, { username: 'USER' })
     })
   })
 })

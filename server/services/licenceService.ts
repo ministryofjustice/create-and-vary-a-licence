@@ -1,10 +1,13 @@
 import { Readable } from 'stream'
 import fs from 'fs'
+import moment from 'moment'
 import {
   AdditionalConditionsRequest,
   AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
+  AuditEvent,
+  AuditRequest,
   BespokeConditionsRequest,
   ContactNumberRequest,
   CreateLicenceRequest,
@@ -288,6 +291,43 @@ export default class LicenceService {
 
   async updateResponsibleCom(crn: string, newCom: UpdateResponsibleComRequest): Promise<void> {
     return this.licenceApiClient.updateResponsibleCom(crn, newCom)
+  }
+
+  async recordAuditEvent(
+    summary: string,
+    detail: string,
+    licenceId: number = null,
+    eventTime: Date,
+    user: User = null
+  ): Promise<void> {
+    const requestBody = {
+      username: user.username,
+      eventTime: moment(eventTime).format('DD/MM/YYYY hh:mm:ss'),
+      eventType: user ? 'USER_EVENT' : 'SYSTEM_EVENT',
+      licenceId,
+      fullName: `${user.firstName} ${user.lastName}`,
+      summary,
+      detail,
+    } as AuditEvent
+
+    return this.licenceApiClient.recordAuditEvent(requestBody, user)
+  }
+
+  async getAuditEvents(
+    forLicenceId: number = null,
+    forUsername: string = null,
+    startTime: Date,
+    endTime: Date,
+    user: User
+  ): Promise<AuditEvent[]> {
+    const requestBody = {
+      username: forUsername || null,
+      licenceId: forLicenceId || null,
+      startTime: moment(startTime).format('DD/MM/YYYY hh:mm:ss'),
+      endTime: moment(endTime).format('DD/MM/YYYY hh:mm:ss'),
+    } as AuditRequest
+
+    return this.licenceApiClient.getAuditEvents(requestBody, user)
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {
