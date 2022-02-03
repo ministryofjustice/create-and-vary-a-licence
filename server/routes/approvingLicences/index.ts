@@ -10,8 +10,9 @@ import ConfirmApprovedRoutes from './handlers/confirmApproved'
 import ConfirmRejectedRoutes from './handlers/confirmRejected'
 
 import { Services } from '../../services'
+import ComDetailsRoutes from './handlers/comDetails'
 
-export default function Index({ licenceService }: Services): Router {
+export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/approve${path}`
 
@@ -32,13 +33,14 @@ export default function Index({ licenceService }: Services): Router {
       asyncMiddleware(handler)
     )
 
-  const approvalCasesHandler = new ApprovalCaseRoutes(licenceService)
+  const comDetailsHandler = new ComDetailsRoutes(communityService)
+  const approvalCasesHandler = new ApprovalCaseRoutes(caseloadService)
   const approvalViewHandler = new ApprovalViewRoutes(licenceService)
   const approvalConfirmedHandler = new ConfirmApprovedRoutes()
   const approvalRejectedHandler = new ConfirmRejectedRoutes()
 
   get('/cases', approvalCasesHandler.GET)
-  post('/cases', approvalCasesHandler.POST)
+  get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
   get('/id/:licenceId/view', approvalViewHandler.GET)
   post('/id/:licenceId/view', approvalViewHandler.POST)
   get('/id/:licenceId/confirm-approved', approvalConfirmedHandler.GET)

@@ -4,7 +4,7 @@ import CheckAnswersPage from './checkAnswers'
 import ComDetailsPage from './comDetails'
 
 export default class CaseloadPage extends Page {
-  private createLicenceButtonId = '#name-1'
+  private createLicenceButtonId = '#name-button-1'
 
   constructor() {
     super('caseload-page')

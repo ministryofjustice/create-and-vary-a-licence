@@ -11,6 +11,7 @@ context('Reject a licence', () => {
     cy.task('stubGetCompletedLicence', 'SUBMITTED')
     cy.task('stubGetLicencesForStatus', 'SUBMITTED')
     cy.task('stubUpdateLicenceStatus', 1)
+    cy.task('stubGetStaffDetailsByList')
     cy.signIn()
   })
 

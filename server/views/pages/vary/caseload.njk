@@ -10,37 +10,52 @@
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
 
+{% macro offenderName(offenderName, crn, licenceId, index) %}
+    <div class="caseload-offender-name">
+        <a href="/licence/vary/id/{{ licenceId }}/view" id="name-link-{{ index }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+        <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
+    </div>
+{% endmacro %}
+
 {% set licences = [] %}
 
-{% for licence in caseload %}
+{% for offender in caseload %}
     {% set licences = (licences.push([
         {
-            attributes: { id: 'name-' + loop.index },
-            html: '<a href="/licence/vary/id/'+ licence.licenceId +'/view" class="govuk-link govuk-heading-s">' + licence.name + '</a>'
-        },
-        {
             attributes: {
-                id: 'crn-' + loop.index
+                id: 'name-' + loop.index,
+                "data-sort-value": offender.name
             },
-            text: licence.crnNumber
+            classes: "max-width max-width-220",
+            html: offenderName(offender.name, offender.crnNumber, offender.licenceId, loop.index)
         },
         {
             attributes: {
                 id: 'licence-type-' + loop.index
             },
-            html: licenceDescription(licence.licenceType)
+            html: licenceDescription(offender.licenceType)
         },
         {
             attributes: {
-                id: 'release-date-' + loop.index
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": offender.probationPractitioner.name
             },
-            text: licence.releaseDate
+            classes: "max-width max-width-200",
+            html: '<a class="govuk-link" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner + '</a>'
         },
         {
             attributes: {
-                id: 'licence-status-' + loop.index
+                id: 'release-date-' + loop.index,
+                "data-sort-value": offender.releaseDate | dateToUnix
             },
-            html: statusBadge({ status: licence.licenceStatus, size: 'small' }, statusConfig)
+            text: offender.releaseDate
+        },
+        {
+            attributes: {
+                id: 'licence-status-' + loop.index,
+                "data-sort-value": offender.licenceStatus | getStatusOrder
+            },
+            html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig)
         }
     ]), licences) %}
 {% endfor %}
@@ -52,27 +67,77 @@
         </div>
     </div>
 
-    {{ govukTable({
-        caption: "Caseload",
-        captionClasses: "govuk-visually-hidden",
-        head: [
-            {
-                text: "Name"
+    <nav class="moj-sub-navigation" aria-label="Sub navigation">
+        <ul class="moj-sub-navigation__list">
+            <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" {% if not teamView %}aria-current="page"{% endif %} href="?view=me">My cases</a>
+            </li>
+            <li class="moj-sub-navigation__item">
+                <a class="moj-sub-navigation__link" {% if teamView %}aria-current="page"{% endif %} href="?view=team">Team cases</a>
+            </li>
+            <li class="moj-sub-navigation__item govuk-!-margin-right-0 govuk-!-width-one-half float-right">
+                <div class="moj-search">
+                    <form method="GET">
+                        <input type="hidden" name="view" value="{% if teamView %}team{% else %}me{% endif %}">
+                        <div class="govuk-form-group">
+                            <label class="govuk-visually-hidden" for="search">
+                                Search for a case
+                            </label>
+                            <input class="govuk-input moj-search__input govuk-!-font-size-14" id="search" name="search" placeholder="You can search by name, CRN or probation practitioner" value="{{ search }}">
+                        </div>
+                        <button class="govuk-button moj-search__button" data-module="govuk-button">
+                            Search
+                        </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    {% if caseload.length > 0 %}
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
             },
-            {
-                text: "CRN"
-            },
-            {
-                text: "Licence type"
-            },
-            {
-                text: "Release date"
-            },
-            {
-                text: "Status"
-            }
-        ],
-        rows: licences
-    }) }}
+            caption: "Caseload",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "Name",
+                    attributes: {
+                    "aria-sort": "none"
+                }
+                },
+                {
+                    text: "Licence type"
+                },
+                {
+                    text: "Probation practitioner",
+                    attributes: {
+                    "aria-sort": "none"
+                }
+                },
+                {
+                    text: "Release date",
+                    attributes: {
+                    "aria-sort": "ascending"
+                }
+                },
+                {
+                    text: "Status",
+                    attributes: {
+                    "aria-sort": "none"
+                }
+                }
+            ],
+            rows: licences
+        }) }}
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h3 class="govuk-heading-s">There are no offenders in your caseload who match the search criteria.</h3>
+            </div>
+        </div>
+    {% endif %}
 
 {% endblock %}

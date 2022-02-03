@@ -20,16 +20,14 @@ describe('View and print a licence - case list', () => {
     viewContext = {
       cases: [
         {
-          forename: 'Adam',
-          surname: 'Balasaravika',
-          nomisId: 'A1234AA',
-          conditionalReleaseDate: '03/08/2022',
+          name: 'Adam Balasaravika',
+          prisonNumber: 'A1234AA',
+          releaseDate: '3 Aug 2022',
         },
         {
-          forename: 'John',
-          surname: 'Smith',
-          nomisId: 'A1234AB',
-          conditionalReleaseDate: '01/09/2022',
+          name: 'John Smith',
+          prisonNumber: 'A1234AB',
+          releaseDate: '1 Sep 2022',
         },
       ],
     }
@@ -37,9 +35,9 @@ describe('View and print a licence - case list', () => {
     expect($('tbody .govuk-table__row').length).toBe(2)
     expect($('#name-1').text()).toBe('Adam Balasaravika')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
-    expect($('#conditional-release-date-1').text()).toBe('3rd August 2022')
+    expect($('#release-date-1').text()).toBe('3 Aug 2022')
     expect($('#name-2').text()).toBe('John Smith')
     expect($('#nomis-id-2').text()).toBe('A1234AB')
-    expect($('#conditional-release-date-2').text()).toBe('1st September 2022')
+    expect($('#release-date-2').text()).toBe('1 Sep 2022')
   })
 })
