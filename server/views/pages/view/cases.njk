@@ -14,24 +14,39 @@
 {% for case in cases %}
     {% set licences = (licences.push([
         {
-            attributes: { id: 'name-' + loop.index },
-            html: '<a href="/licence/view/id/' + case.licenceId + '/show" class="govuk-link govuk-heading-s">' + case.forename + ' ' + case.surname + '</a>'
-        },
-        {
-            attributes: { id: 'nomis-id-' + loop.index },
-            text: case.nomisId
-        },
-        {
-            attributes: { id: 'com-' + loop.index },
-            html: '<a class="govuk-link" href="/licence/view/id/' + case.licenceId + '/probation-practitioner">' + case.comFirstName + " " + case.comLastName + '</a>'
-        },
-        {
-            attributes: { id: 'conditional-release-date-' + loop.index },
-            text: case.conditionalReleaseDate | datetimeToDate
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": case.name
+            },
+            html: '<a href="/licence/view/id/' + case.licenceId + '/show" class="govuk-link govuk-heading-s">' + case.name + '</a>',
+            classes: "max-width max-width-220"
         },
         {
             attributes: {
-                id: 'licence-status-' + loop.index
+                id: 'nomis-id-' + loop.index,
+                "data-sort-value": case.prisonNumber
+            },
+            text: case.prisonNumber
+        },
+        {
+            attributes: {
+                id: 'com-' + loop.index,
+                "data-sort-value": case.probationPractitioner
+            },
+            html: '<a href="/licence/view/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner + '</a>',
+            classes: "max-width max-width-200"
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": case.releaseDate | dateToUnix
+            },
+            text: case.releaseDate
+        },
+        {
+            attributes: {
+                id: 'licence-status-' + loop.index,
+                "data-sort-value": case.licenceStatus | getStatusOrder
             },
             html: statusBadge({ status: case.licenceStatus, size: 'small' }, statusConfig)
         }
@@ -41,27 +56,69 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">Print an approved licence</h1>
+            <h1 class="govuk-heading-xl">Select a person to view or print licences and supervision orders</h1>
         </div>
     </div>
 
-    {{ govukTable({
-        caption: "Print an approved licence",
-        captionClasses: "govuk-visually-hidden",
-        head: [
-            { text: "Name" },
-            { text: "Prison number" },
-            { text: "Community offender manager" },
-            { text: "Conditional release date" },
-            { text: "Status" }
-        ],
-        rows: licences
-    }) }}
+    <div class="moj-search govuk-!-margin-bottom-6">
+        <form method="GET">
+            <div class="govuk-form-group">
+                <label class="govuk-visually-hidden" for="search">
+                    Search for a case
+                </label>
+                <input class="govuk-input moj-search__input govuk-!-font-size-14" id="search" name="search" placeholder="You can search by name, prison number or probation practitioner" value="{{ search }}">
+            </div>
+            <button class="govuk-button moj-search__button" data-module="govuk-button">
+                Search
+            </button>
+        </form>
+    </div>
 
-    {% if licences.length === 0 %}
+    {% if cases.length > 0 %}
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Print an approved licence",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "Name",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Prison number",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Probation practitioner",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Release date",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                },
+                {
+                    text: "Status",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                }
+            ],
+            rows: licences
+        }) }}
+    {% else %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                <h3 class="govuk-heading-s">There are no licences to print</h3>
+                <h3 class="govuk-heading-s">There are no licences to print which match the search criteria.</h3>
             </div>
         </div>
     {% endif %}

@@ -15,7 +15,7 @@ export default class CaseloadService {
     private readonly licenceService: LicenceService
   ) {}
 
-  async getStaffCaseload(user: User): Promise<CaseTypeAndStatus[]> {
+  async getStaffCreateCaseload(user: User): Promise<CaseTypeAndStatus[]> {
     const { deliusStaffIdentifier } = user
 
     const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
@@ -32,7 +32,7 @@ export default class CaseloadService {
     })
   }
 
-  async getTeamCaseload(user: User): Promise<CaseTypeAndStatus[]> {
+  async getTeamCreateCaseload(user: User): Promise<CaseTypeAndStatus[]> {
     const { probationTeams } = user
 
     const managedOffenders = await this.communityService.getManagedOffendersByTeam(probationTeams)
@@ -49,18 +49,45 @@ export default class CaseloadService {
     })
   }
 
-  async getVaryCaseload(user: User): Promise<LicenceSummary[]> {
+  async getStaffVaryCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
     const { deliusStaffIdentifier } = user
     const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
     const caseloadNomisIds = managedOffenders
       .filter(offender => offender.nomsNumber)
       .map(offender => offender.nomsNumber)
 
-    return this.licenceService.getLicencesByNomisIdsAndStatus(caseloadNomisIds, [LicenceStatus.ACTIVE], user)
+    const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+      caseloadNomisIds,
+      [LicenceStatus.ACTIVE],
+      user
+    )
+
+    return this.mapLicencesAndResponsibleComs(licences)
+  }
+
+  async getTeamVaryCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
+    const { probationTeams } = user
+    const managedOffenders = await this.communityService.getManagedOffendersByTeam(probationTeams)
+    const caseloadNomisIds = managedOffenders
+      .filter(offender => offender.nomsNumber)
+      .map(offender => offender.nomsNumber)
+
+    const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+      caseloadNomisIds,
+      [LicenceStatus.ACTIVE],
+      user
+    )
+
+    return this.mapLicencesAndResponsibleComs(licences)
   }
 
   async getOmuCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
     const licences = await this.licenceService.getLicencesForOmu(user)
+    return this.mapLicencesAndResponsibleComs(licences)
+  }
+
+  async getApproverCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
+    const licences = await this.licenceService.getLicencesForApproval(user)
     return this.mapLicencesAndResponsibleComs(licences)
   }
 
