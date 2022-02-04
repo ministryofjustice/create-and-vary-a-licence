@@ -41,7 +41,6 @@ import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 import LicenceType from '../enumeration/licenceType'
 import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
-import logger from '../../logger'
 
 export default class LicenceService {
   constructor(
@@ -108,7 +107,17 @@ export default class LicenceService {
         : [],
     } as CreateLicenceRequest
 
-    return this.licenceApiClient.createLicence(licence, user)
+    const licenceSummary = await this.licenceApiClient.createLicence(licence, user)
+
+    await this.recordAuditEvent(
+      `Created a licence for ${licence.forename} ${licence.surname}`,
+      `Create a licence type ${licence.typeCode} version ${licence.version}`,
+      licenceSummary?.licenceId || null,
+      new Date(),
+      user
+    )
+
+    return licenceSummary
   }
 
   async getLicence(id: string, user: User): Promise<Licence> {
@@ -212,28 +221,23 @@ export default class LicenceService {
     user: User,
     testMode = false
   ): Promise<void> {
-    logger.info(`Called uploadExclusionZoneFile - name ${fileToUpload.originalname} path ${fileToUpload.path}`)
     await this.licenceApiClient.uploadExclusionZoneFile(licenceId, additionalConditionId, user, fileToUpload)
     if (!testMode) {
-      logger.info(`Removing file ${fileToUpload.path} after uploading content to API`)
       fs.unlinkSync(fileToUpload.path)
     }
   }
 
   async removeExclusionZoneFile(licenceId: string, conditionId: string, user: User): Promise<void> {
-    logger.info(`removeExclusionZoneFile - licenceId ${licenceId}, conditionId  ${conditionId}`)
     return this.licenceApiClient.removeExclusionZoneFile(licenceId, conditionId, user)
   }
 
   // Get the streamed image data for rendering in HTML templates
   async getExclusionZoneImage(licenceId: string, conditionId: string, user: User): Promise<Readable> {
-    logger.info(`getExclusionZoneImage - licenceId ${licenceId}, conditionId  ${conditionId}`)
     return this.licenceApiClient.getExclusionZoneImage(licenceId, conditionId, user)
   }
 
   // Get base64 image data to be passed into Gotenberg for rendering in into PDFs
   async getExclusionZoneImageData(licenceId: string, conditionId: string, user: User): Promise<string> {
-    logger.info(`getExclusionZoneImageData - licenceId ${licenceId}, conditionId  ${conditionId}`)
     const image = await this.licenceApiClient.getExclusionZoneImageData(licenceId, conditionId, user)
     return image.toString('base64')
   }

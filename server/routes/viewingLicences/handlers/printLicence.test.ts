@@ -22,6 +22,7 @@ describe('Route - print a licence', () => {
     prisonerService.getPrisonerImageData = jest.fn()
     qrCodeService.getQrCode = jest.fn()
     licenceService.getExclusionZoneImageData = jest.fn()
+    licenceService.recordAuditEvent = jest.fn()
   })
 
   describe('GET', () => {
@@ -51,7 +52,7 @@ describe('Route - print a licence', () => {
         exclusionZoneDescription: null,
         exclusionZoneMapData: null,
       })
-
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
@@ -81,7 +82,7 @@ describe('Route - print a licence', () => {
         exclusionZoneDescription: null,
         exclusionZoneMapData: null,
       })
-
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
@@ -133,6 +134,7 @@ describe('Route - print a licence', () => {
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
 
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
@@ -194,6 +196,7 @@ describe('Route - print a licence', () => {
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
 
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
@@ -245,6 +248,7 @@ describe('Route - print a licence', () => {
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
 
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).toHaveBeenCalled()
     })
   })
