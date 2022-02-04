@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import logger from '../../../../logger'
 import config from '../../../config'
 import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
@@ -24,7 +23,6 @@ export default class PrintLicenceRoutes {
   ) {}
 
   preview = async (req: Request, res: Response): Promise<void> => {
-    const { username } = res.locals.user
     const { licence, user } = res.locals // fetchLicence middleware populates
     const { qrCodesEnabled } = res.locals
     const htmlPrint = true
@@ -39,7 +37,13 @@ export default class PrintLicenceRoutes {
     const exclusionZoneDescription =
       conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(additionalLicenceConditions) : null
 
-    logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
+    await this.licenceService.recordAuditEvent(
+      `Printed licence for ${licence.forename} ${licence.surname}`,
+      `Printed HTML licence document ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
+      licence.id,
+      new Date(),
+      user
+    )
 
     res.render(`pages/licence/${licence.typeCode}`, {
       additionalLicenceConditions,
@@ -49,11 +53,9 @@ export default class PrintLicenceRoutes {
       exclusionZoneDescription,
       exclusionZoneMapData,
     })
-    logger.info(`HTML preview licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
   }
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
-    const { username } = res.locals.user
     const { licence, user } = res.locals
     const { qrCodesEnabled } = res.locals
     const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
@@ -71,7 +73,13 @@ export default class PrintLicenceRoutes {
     const exclusionZoneDescription =
       conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(additionalLicenceConditions) : null
 
-    logger.info(`PDF print licence ID [${licence.id}] type [${licence.typeCode}] by user [${username}]`)
+    await this.licenceService.recordAuditEvent(
+      `Printed licence for ${licence.forename} ${licence.surname}`,
+      `Printed PDF licence document ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
+      licence.id,
+      new Date(),
+      user
+    )
 
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,

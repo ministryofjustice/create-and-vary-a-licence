@@ -17,10 +17,17 @@ export default class EditQuestionRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
     const { answer } = req.body
     if (answer === YesOrNo.YES) {
       await this.licenceService.updateStatus(licenceId, LicenceStatus.IN_PROGRESS, user)
+      await this.licenceService.recordAuditEvent(
+        `Edited the licence for ${licence.forename} ${licence.surname}`,
+        `Edited licence ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
+        licence.id,
+        new Date(),
+        user
+      )
     }
     return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
   }

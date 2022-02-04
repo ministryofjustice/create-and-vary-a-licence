@@ -1,4 +1,5 @@
 import { Readable } from 'stream'
+import moment from 'moment'
 import { User } from '../@types/CvlUserDetails'
 import LicenceApiClient from '../data/licenceApiClient'
 import LicenceService from './licenceService'
@@ -59,6 +60,7 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
 
       it('Should create a PSS licence when LED and SED is not set but TUSED is set', async () => {
@@ -69,6 +71,7 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
 
       it('Should create a AP_PSS licence when LED is not set but TUSED and SED is set', async () => {
@@ -81,6 +84,7 @@ describe('Licence Service', () => {
         const expectedLicence = expect.objectContaining({ typeCode: 'AP_PSS' })
 
         await licenceService.createLicence('ABC1234', user)
+        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
 
@@ -95,6 +99,7 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
 
       it('Should create a AP_PSS licence when SLED and TUSED are set', async () => {
@@ -109,6 +114,7 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
     })
 
@@ -124,6 +130,7 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
 
       it('Should set CRD when override date does not exist', async () => {
@@ -601,6 +608,54 @@ describe('Licence Service', () => {
       const result = await licenceService.getExclusionZoneImage('1', '1', user)
       expect(result.read()).toEqual('image')
       expect(licenceApiClient.getExclusionZoneImage).toHaveBeenCalledWith('1', '1', user)
+    })
+  })
+
+  describe('Audit events', () => {
+    const eventTime = moment('13/01/2022 11:00:00', 'DD/MM/YYYY hh:mm:ss').toDate()
+    const eventStart = moment('12/01/2022 10:45:00', 'DD/MM/YYYY hh:mm:ss').toDate()
+    const eventEnd = moment('13/01/2022 10:45:00', 'DD/MM/YYYY hh:mm:ss').toDate()
+
+    it('will record a new audit event', async () => {
+      await licenceService.recordAuditEvent('Summary', 'Detail', 1, eventTime, user)
+      expect(licenceApiClient.recordAuditEvent).toHaveBeenCalledWith(
+        {
+          username: user.username,
+          eventTime: moment(eventTime).format('DD/MM/YYYY hh:mm:ss'),
+          eventType: 'USER_EVENT',
+          licenceId: 1,
+          fullName: `${user.firstName} ${user.lastName}`,
+          summary: 'Summary',
+          detail: 'Detail',
+        },
+        user
+      )
+    })
+
+    it('will get a list of events for a user', async () => {
+      await licenceService.getAuditEvents(null, 'username', eventStart, eventEnd, user)
+      expect(licenceApiClient.getAuditEvents).toHaveBeenCalledWith(
+        {
+          username: 'username',
+          licenceId: null,
+          startTime: moment(eventStart).format('DD/MM/YYYY hh:mm:ss'),
+          endTime: moment(eventEnd).format('DD/MM/YYYY hh:mm:ss'),
+        },
+        user
+      )
+    })
+
+    it('will get a list of events for licence', async () => {
+      await licenceService.getAuditEvents(1, null, eventStart, eventEnd, user)
+      expect(licenceApiClient.getAuditEvents).toHaveBeenCalledWith(
+        {
+          username: null,
+          licenceId: 1,
+          startTime: moment(eventStart).format('DD/MM/YYYY hh:mm:ss'),
+          endTime: moment(eventEnd).format('DD/MM/YYYY hh:mm:ss'),
+        },
+        user
+      )
     })
   })
 })

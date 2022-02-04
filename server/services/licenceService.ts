@@ -1,10 +1,13 @@
 import { Readable } from 'stream'
 import fs from 'fs'
+import moment from 'moment'
 import {
   AdditionalConditionsRequest,
   AppointmentAddressRequest,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
+  AuditEvent,
+  AuditRequest,
   BespokeConditionsRequest,
   ContactNumberRequest,
   CreateLicenceRequest,
@@ -38,7 +41,6 @@ import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 import LicenceType from '../enumeration/licenceType'
 import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
-import logger from '../../logger'
 
 export default class LicenceService {
   constructor(
@@ -105,7 +107,17 @@ export default class LicenceService {
         : [],
     } as CreateLicenceRequest
 
-    return this.licenceApiClient.createLicence(licence, user)
+    const licenceSummary = await this.licenceApiClient.createLicence(licence, user)
+
+    await this.recordAuditEvent(
+      `Created a licence for ${licence.forename} ${licence.surname}`,
+      `Create a licence type ${licence.typeCode} version ${licence.version}`,
+      licenceSummary?.licenceId || null,
+      new Date(),
+      user
+    )
+
+    return licenceSummary
   }
 
   async getLicence(id: string, user: User): Promise<Licence> {
@@ -209,28 +221,23 @@ export default class LicenceService {
     user: User,
     testMode = false
   ): Promise<void> {
-    logger.info(`Called uploadExclusionZoneFile - name ${fileToUpload.originalname} path ${fileToUpload.path}`)
     await this.licenceApiClient.uploadExclusionZoneFile(licenceId, additionalConditionId, user, fileToUpload)
     if (!testMode) {
-      logger.info(`Removing file ${fileToUpload.path} after uploading content to API`)
       fs.unlinkSync(fileToUpload.path)
     }
   }
 
   async removeExclusionZoneFile(licenceId: string, conditionId: string, user: User): Promise<void> {
-    logger.info(`removeExclusionZoneFile - licenceId ${licenceId}, conditionId  ${conditionId}`)
     return this.licenceApiClient.removeExclusionZoneFile(licenceId, conditionId, user)
   }
 
   // Get the streamed image data for rendering in HTML templates
   async getExclusionZoneImage(licenceId: string, conditionId: string, user: User): Promise<Readable> {
-    logger.info(`getExclusionZoneImage - licenceId ${licenceId}, conditionId  ${conditionId}`)
     return this.licenceApiClient.getExclusionZoneImage(licenceId, conditionId, user)
   }
 
   // Get base64 image data to be passed into Gotenberg for rendering in into PDFs
   async getExclusionZoneImageData(licenceId: string, conditionId: string, user: User): Promise<string> {
-    logger.info(`getExclusionZoneImageData - licenceId ${licenceId}, conditionId  ${conditionId}`)
     const image = await this.licenceApiClient.getExclusionZoneImageData(licenceId, conditionId, user)
     return image.toString('base64')
   }
@@ -288,6 +295,43 @@ export default class LicenceService {
 
   async updateResponsibleCom(crn: string, newCom: UpdateResponsibleComRequest): Promise<void> {
     return this.licenceApiClient.updateResponsibleCom(crn, newCom)
+  }
+
+  async recordAuditEvent(
+    summary: string,
+    detail: string,
+    licenceId: number = null,
+    eventTime: Date,
+    user: User = null
+  ): Promise<void> {
+    const requestBody = {
+      username: user.username,
+      eventTime: moment(eventTime).format('DD/MM/YYYY hh:mm:ss'),
+      eventType: user ? 'USER_EVENT' : 'SYSTEM_EVENT',
+      licenceId,
+      fullName: `${user.firstName} ${user.lastName}`,
+      summary,
+      detail,
+    } as AuditEvent
+
+    return this.licenceApiClient.recordAuditEvent(requestBody, user)
+  }
+
+  async getAuditEvents(
+    forLicenceId: number = null,
+    forUsername: string = null,
+    startTime: Date,
+    endTime: Date,
+    user: User
+  ): Promise<AuditEvent[]> {
+    const requestBody = {
+      username: forUsername || null,
+      licenceId: forLicenceId || null,
+      startTime: moment(startTime).format('DD/MM/YYYY hh:mm:ss'),
+      endTime: moment(endTime).format('DD/MM/YYYY hh:mm:ss'),
+    } as AuditRequest
+
+    return this.licenceApiClient.getAuditEvents(requestBody, user)
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {

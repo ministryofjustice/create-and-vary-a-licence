@@ -10,6 +10,7 @@ context('Vary a licence', () => {
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
     cy.task('stubGetCompletedLicence', 'ACTIVE')
     cy.task('stubGetStaffDetailsByList')
+    cy.task('stubRecordAuditEvent')
     cy.signIn()
   })
 

@@ -9,6 +9,7 @@ context('Create a licence', () => {
     cy.task('stubGetStaffDetails')
     cy.task('stubAuthUser')
     cy.task('stubGetLicence')
+    cy.task('stubRecordAuditEvent')
     cy.signIn()
   })
 

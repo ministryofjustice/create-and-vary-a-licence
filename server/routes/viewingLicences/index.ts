@@ -28,7 +28,7 @@ export default function Index({
     )
 
   const viewCasesHandler = new ViewAndPrintCaseRoutes(caseloadService)
-  const viewLicenceHandler = new ViewAndPrintLicenceRoutes()
+  const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService)
   const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
 

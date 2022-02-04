@@ -12,6 +12,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   let req: Request
   let res: Response
 
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   beforeEach(() => {
     req = {
       params: {
@@ -47,6 +51,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
         expandedPssConditions: res.locals.licence.additionalPssConditions,
       })
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
   })
 
@@ -71,11 +76,13 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         ])
       )
       expect(res.redirect).toHaveBeenCalledWith('back')
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
 
     it('should call the licence API to submit the licence for approval', async () => {
       await handler.POST(req, res)
       expect(licenceService.submitLicence).toHaveBeenCalledWith('1', { username: 'joebloggs' })
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
 
     it('should redirect to the confirmation page', async () => {

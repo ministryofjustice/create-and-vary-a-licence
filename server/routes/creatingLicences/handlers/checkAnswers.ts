@@ -11,7 +11,14 @@ export default class CheckAnswersRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { licence } = res.locals
+    const { licence, user } = res.locals
+    await this.licenceService.recordAuditEvent(
+      `Viewed licence for ${licence.forename} ${licence.surname}`,
+      `View licence ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
+      licence.id,
+      new Date(),
+      user
+    )
     const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
     res.render('pages/create/checkAnswers', { expandedLicenceConditions, expandedPssConditions })
@@ -28,6 +35,14 @@ export default class CheckAnswersRoutes {
     }
 
     await this.licenceService.submitLicence(licenceId, user)
+
+    await this.licenceService.recordAuditEvent(
+      `Submitted licence for approval ${licence.forename} ${licence.surname}`,
+      `Submitted licence ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
+      licence.id,
+      new Date(),
+      user
+    )
 
     return res.redirect(`/licence/create/id/${licenceId}/confirmation`)
   }
