@@ -61,6 +61,19 @@
                     </div>
                 {% endif %}
 
+                {% if shouldShowVaryApprovalCard %}
+                    <div class="govuk-grid-column-one-third card-group__item">
+                        {{ card({
+                            "id": "approveVariationCard",
+                            "href": "#",
+                            "clickable": "true",
+                            "heading": "Approve licence variations",
+                            "description": "Approve variations to all purpose licences and post sentence supervision orders.",
+                            "data-qa": "approve-variation-link"
+                        }) }}
+                    </div>
+                {% endif %}
+
 {#
                 {% if shouldShowMyCaseloadCard %}
                     <div class="govuk-grid-column-one-third card-group__item">

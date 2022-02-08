@@ -23,6 +23,7 @@ describe('Route Handlers - Home', () => {
         shouldShowApproveLicenceCard: false,
         shouldShowMyCaseloadCard: false,
         shouldShowViewOrPrintCard: true,
+        shouldShowVaryApprovalCard: false,
       })
     })
 
@@ -35,6 +36,7 @@ describe('Route Handlers - Home', () => {
         shouldShowApproveLicenceCard: false,
         shouldShowMyCaseloadCard: true,
         shouldShowViewOrPrintCard: false,
+        shouldShowVaryApprovalCard: false,
       })
     })
 
@@ -47,6 +49,7 @@ describe('Route Handlers - Home', () => {
         shouldShowApproveLicenceCard: false,
         shouldShowMyCaseloadCard: false,
         shouldShowViewOrPrintCard: true,
+        shouldShowVaryApprovalCard: false,
       })
     })
 
@@ -59,6 +62,20 @@ describe('Route Handlers - Home', () => {
         shouldShowApproveLicenceCard: true,
         shouldShowMyCaseloadCard: false,
         shouldShowViewOrPrintCard: false,
+        shouldShowVaryApprovalCard: false,
+      })
+    })
+
+    it('For assistant chief officer role', async () => {
+      req = getReqWithRoles(['ROLE_LICENCE_ACO'])
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/index', {
+        shouldShowCreateLicenceCard: false,
+        shouldShowVaryLicenceCard: false,
+        shouldShowApproveLicenceCard: false,
+        shouldShowMyCaseloadCard: false,
+        shouldShowViewOrPrintCard: false,
+        shouldShowVaryApprovalCard: true,
       })
     })
   })

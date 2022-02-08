@@ -14,6 +14,7 @@ export default class HomeRoutes {
         // hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) ||
         hasRole(req.user, AuthRole.READONLY),
       shouldShowMyCaseloadCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER),
+      shouldShowVaryApprovalCard: hasRole(req.user, AuthRole.ASSISTANT_CHIEF),
     }
     res.render('pages/index', viewContext)
   }

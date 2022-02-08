@@ -40,6 +40,9 @@ export default class CvlUserDetails {
 
   // LDU code(s)
   probationLduCodes?: string[]
+
+  // PDU code(s)
+  probationPduCodes?: string[]
 }
 
 export type User = Express.User & CvlUserDetails

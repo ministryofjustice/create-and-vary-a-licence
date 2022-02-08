@@ -17,9 +17,7 @@ describe('Views - Home', () => {
   })
 
   it('should display create licence card when flag is true in context', () => {
-    viewContext = {
-      shouldShowCreateLicenceCard: true,
-    }
+    viewContext = { shouldShowCreateLicenceCard: true }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -27,9 +25,7 @@ describe('Views - Home', () => {
   })
 
   it('should hide create licence card when flag is false in context', () => {
-    viewContext = {
-      shouldShowCreateLicenceCard: false,
-    }
+    viewContext = { shouldShowCreateLicenceCard: false }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -37,9 +33,7 @@ describe('Views - Home', () => {
   })
 
   it('should display vary licence card when flag is true in context', () => {
-    viewContext = {
-      shouldShowVaryLicenceCard: true,
-    }
+    viewContext = { shouldShowVaryLicenceCard: true }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -47,9 +41,7 @@ describe('Views - Home', () => {
   })
 
   it('should hide vary licence card when flag is false in context', () => {
-    viewContext = {
-      shouldShowVaryLicenceCard: false,
-    }
+    viewContext = { shouldShowVaryLicenceCard: false }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -57,9 +49,7 @@ describe('Views - Home', () => {
   })
 
   it('should display approve licence card when flag is true in context', () => {
-    viewContext = {
-      shouldShowApproveLicenceCard: true,
-    }
+    viewContext = { shouldShowApproveLicenceCard: true }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -67,9 +57,7 @@ describe('Views - Home', () => {
   })
 
   it('should hide approve licence card when flag is false in context', () => {
-    viewContext = {
-      shouldShowApproveLicenceCard: false,
-    }
+    viewContext = { shouldShowApproveLicenceCard: false }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -89,13 +77,27 @@ describe('Views - Home', () => {
   */
 
   it('should hide my caseload card when flag is false in context', () => {
-    viewContext = {
-      shouldShowMyCaseloadCard: false,
-    }
+    viewContext = { shouldShowMyCaseloadCard: false }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('#myCaseloadCard').length).toBe(0)
+  })
+
+  it('should display approve variations card when flag is true in context', () => {
+    viewContext = { shouldShowVaryApprovalCard: true }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#approveVariationCard').length).toBe(1)
+  })
+
+  it('should hide approve variations card when flag is false in context', () => {
+    viewContext = { shouldShowVaryApprovalCard: false }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#approveLicenceCard').length).toBe(0)
   })
 
   it('should show only view and print card for readonly users', () => {
@@ -104,6 +106,7 @@ describe('Views - Home', () => {
       shouldShowMyCaseloadCard: false,
       shouldShowApproveLicenceCard: false,
       shouldShowCreateLicenceCard: false,
+      shouldShowVaryApprovalCard: false,
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -112,5 +115,6 @@ describe('Views - Home', () => {
     expect($('#myCaseloadCard').length).toBe(0)
     expect($('#approveLicenceCard').length).toBe(0)
     expect($('#createLicenceCard').length).toBe(0)
+    expect($('#approveVariationCard').length).toBe(0)
   })
 })
