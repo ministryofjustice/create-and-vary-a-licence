@@ -79,6 +79,7 @@ describe('populateCurrentUser', () => {
       activeCaseLoadId: '1',
       staffId: 3000,
     } as PrisonApiUserDetail)
+
     userServiceMock.getPrisonUserCaseloads.mockResolvedValue([
       {
         caseLoadId: 'MDI',
@@ -87,6 +88,7 @@ describe('populateCurrentUser', () => {
         caseLoadId: 'BMI',
       },
     ] as unknown as PrisonApiCaseload[])
+
     userServiceMock.getAuthUserEmail.mockResolvedValue({
       email: 'jbloggs@prison.gov.uk',
     } as AuthUserEmail)
@@ -116,6 +118,9 @@ describe('populateCurrentUser', () => {
           localDeliveryUnit: {
             code: 'lduCode',
           },
+          borough: {
+            code: 'pduCode',
+          },
         },
       ],
     } as CommunityApiStaffDetails)
@@ -126,6 +131,7 @@ describe('populateCurrentUser', () => {
       emailAddress: 'jbloggs@probation.gov.uk',
       probationTeams: ['teamCode'],
       probationLduCodes: ['lduCode'],
+      probationPduCodes: ['pduCode'],
     })
     expect(userServiceMock.getAuthUserEmail).not.toHaveBeenCalled()
     expect(next).toBeCalled()

@@ -23,6 +23,7 @@ describe('authorisationMiddleware', () => {
     return {
       locals: {
         user: {
+          username: 'TEST',
           token: createToken(authorities),
         },
       },
@@ -46,6 +47,12 @@ describe('authorisationMiddleware', () => {
 
   it('should return next when user has authorised role', () => {
     const res = createResWithToken({ authorities: ['ROLE_LICENCE_RO'] })
+    const authorisationResponse = authorisationMiddleware(req, res, next)
+    expect(authorisationResponse).toEqual(next())
+  })
+
+  it('should return next when user has the ACO role', () => {
+    const res = createResWithToken({ authorities: ['ROLE_LICENCE_ACO'] })
     const authorisationResponse = authorisationMiddleware(req, res, next)
     expect(authorisationResponse).toEqual(next())
   })
