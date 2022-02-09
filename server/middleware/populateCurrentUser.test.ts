@@ -5,16 +5,19 @@ import UserService from '../services/userService'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
 import { AuthUserDetails, AuthUserEmail } from '../data/hmppsAuthClient'
 import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
+import LicenceService from '../services/licenceService'
 
 jest.mock('../services/userService')
+jest.mock('../services/licenceService')
 
 let res = {} as unknown as Response
 let req = {} as Request
 const next = jest.fn()
 
 const userServiceMock = new UserService(null, null, null) as jest.Mocked<UserService>
+const licenceServiceMock = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 
-const middleware = populateCurrentUser(userServiceMock)
+const middleware = populateCurrentUser(userServiceMock, licenceServiceMock)
 
 beforeEach(() => {
   jest.resetAllMocks()
@@ -24,6 +27,7 @@ beforeEach(() => {
     locals: {
       user: {
         token: 'token',
+        username: 'joebloggs',
       },
     },
   } as unknown as Response
@@ -47,6 +51,7 @@ describe('populateCurrentUser', () => {
     expect(res.locals.user).toEqual({
       token: 'token',
       displayName: 'Joe Bloggs',
+      username: 'joebloggs',
     })
     expect(next).toBeCalled()
   })
@@ -111,6 +116,7 @@ describe('populateCurrentUser', () => {
     res.locals.user.authSource = 'delius'
 
     userServiceMock.getProbationUser.mockResolvedValue({
+      staffIdentifier: 2000,
       email: 'jbloggs@probation.gov.uk',
       teams: [
         {
@@ -132,6 +138,11 @@ describe('populateCurrentUser', () => {
       probationTeams: ['teamCode'],
       probationLduCodes: ['lduCode'],
       probationPduCodes: ['pduCode'],
+    })
+    expect(licenceServiceMock.updateComDetails).toHaveBeenCalledWith({
+      staffIdentifier: 2000,
+      staffUsername: 'joebloggs',
+      staffEmail: 'jbloggs@probation.gov.uk',
     })
     expect(userServiceMock.getAuthUserEmail).not.toHaveBeenCalled()
     expect(next).toBeCalled()

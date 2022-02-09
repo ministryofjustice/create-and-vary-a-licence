@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { Response } from 'superagent'
 
 import { stubFor, getRequests } from '../wiremock'
+import licence from './licence'
 import tokenVerification from './tokenVerification'
 
 const createToken = (authorities: string[], authSource: string) => {
@@ -160,13 +161,14 @@ const stubUserRoles = (role: string) =>
 export default {
   getSignInUrl,
   stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubPing()]),
-  stubProbationSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
+  stubProbationSignIn: (): Promise<[Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
       redirect(),
       signOut(),
       token(['ROLE_LICENCE_RO'], 'delius'),
       tokenVerification.stubVerifyToken(),
+      licence.updateComDetails(),
     ]),
   systemToken: () => token(null, 'auth'),
   stubPrisonSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>

@@ -51,6 +51,19 @@ const licencePlaceholder = {
 }
 
 export default {
+  updateComDetails: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/com/update`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      },
+    })
+  },
+
   stubGetLicence: (): SuperAgentRequest => {
     return stubFor({
       request: {

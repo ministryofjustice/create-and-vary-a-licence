@@ -17,7 +17,7 @@ export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
 
   router.use(auth.authenticationMiddleware(tokenVerifier))
-  router.use(populateCurrentUser(services.userService))
+  router.use(populateCurrentUser(services.userService, services.licenceService))
   router.use(csrf())
   router.use(flashMessages())
   router.use(fromReviewMiddleware())
