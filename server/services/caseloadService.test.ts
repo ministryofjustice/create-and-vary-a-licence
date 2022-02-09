@@ -1052,7 +1052,7 @@ describe('Caseload Service', () => {
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1', '2'],
-        [LicenceStatus.ACTIVE],
+        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
         user
       )
     })
@@ -1071,7 +1071,11 @@ describe('Caseload Service', () => {
 
       expect(communityService.getManagedOffenders).toBeCalledTimes(1)
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
-      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(['1'], [LicenceStatus.ACTIVE], user)
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
+        ['1'],
+        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        user
+      )
     })
   })
 
@@ -1119,7 +1123,7 @@ describe('Caseload Service', () => {
       expect(communityService.getManagedOffendersByTeam).toHaveBeenCalledWith(['teamA', 'teamB'])
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1', '2'],
-        [LicenceStatus.ACTIVE],
+        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
         user
       )
     })
@@ -1136,7 +1140,11 @@ describe('Caseload Service', () => {
 
       await caseloadService.getTeamVaryCaseload(user)
 
-      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(['1'], [LicenceStatus.ACTIVE], user)
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
+        ['1'],
+        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        user
+      )
     })
   })
 
