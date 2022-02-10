@@ -58,7 +58,7 @@ export default class CaseloadService {
 
     const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
       caseloadNomisIds,
-      [LicenceStatus.ACTIVE],
+      [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
       user
     )
 
@@ -74,7 +74,7 @@ export default class CaseloadService {
 
     const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
       caseloadNomisIds,
-      [LicenceStatus.ACTIVE],
+      [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
       user
     )
 
