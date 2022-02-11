@@ -14,9 +14,8 @@ import {
   Licence,
   LicenceSummary,
   StatusUpdateRequest,
-  SubmitLicenceRequest,
   UpdateAdditionalConditionDataRequest,
-  UpdateResponsibleComRequest,
+  UpdateComRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getAdditionalConditionByCode, getStandardConditions, getVersion } from '../utils/conditionsProvider'
@@ -54,15 +53,16 @@ export default class LicenceService {
       this.prisonerService.getPrisonerDetail(prisonerNumber, user),
       this.communityService.getProbationer({ nomsNumber: prisonerNumber }),
     ])
+    const [prisonInformation, offenderManagers] = await Promise.all([
+      this.prisonerService.getPrisonInformation(nomisRecord.agencyId, user),
+      this.communityService.getAnOffendersManagers(deliusRecord.otherIds?.crn),
+    ])
 
-    const prisonInformation = await this.prisonerService.getPrisonInformation(nomisRecord.agencyId, user)
-
-    const offenderManager = deliusRecord.offenderManagers.find(om => om.active)
+    const responsibleOfficer = offenderManagers.find(om => om.isResponsibleOfficer)
 
     const licenceType = this.getLicenceType(nomisRecord)
 
     const licence = {
-      username: user.username,
       typeCode: licenceType,
       version: getVersion(),
       nomsId: prisonerNumber,
@@ -93,9 +93,8 @@ export default class LicenceService {
       ]
         .filter(n => n)
         .join(' '),
-      probationAreaCode: offenderManager?.probationArea?.code,
-      probationLduCode: offenderManager?.team?.localDeliveryUnit?.code,
-      comTelephone: offenderManager?.team?.telephone,
+      probationAreaCode: responsibleOfficer.probationArea?.code,
+      probationLduCode: responsibleOfficer.team?.localDeliveryUnit?.code,
       crn: deliusRecord.otherIds?.crn,
       pnc: deliusRecord.otherIds?.pncNumber,
       cro: deliusRecord.otherIds?.croNumber,
@@ -105,7 +104,18 @@ export default class LicenceService {
       standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licenceType)
         ? getStandardConditions(LicenceType.PSS)
         : [],
+      responsibleComStaffId: responsibleOfficer.staffId,
     } as CreateLicenceRequest
+
+    // TODO: This section can be removed after having been live in production for som time. This is only needed initially because some
+    //  COM records will not be saved in our database initially. Over time, the OFFENDER_MANAGER_CHANGED event, and logins will have populated
+    //  staff details into the database, and this call will have become redundant
+    const comDetails = await this.communityService.getStaffDetailByStaffIdentifier(responsibleOfficer.staffId)
+    await this.updateComDetails({
+      staffIdentifier: comDetails?.staffIdentifier,
+      staffUsername: comDetails?.username,
+      staffEmail: comDetails?.email,
+    })
 
     const licenceSummary = await this.licenceApiClient.createLicence(licence, user)
 
@@ -258,14 +268,7 @@ export default class LicenceService {
   }
 
   async submitLicence(id: string, user: User): Promise<void> {
-    const requestBody = {
-      username: user.username,
-      staffIdentifier: user.deliusStaffIdentifier,
-      firstName: user.firstName,
-      surname: user.lastName,
-      email: user.emailAddress,
-    } as SubmitLicenceRequest
-    return this.licenceApiClient.submitLicence(id, requestBody, user)
+    return this.licenceApiClient.submitLicence(id, user)
   }
 
   async getLicencesByNomisIdsAndStatus(
@@ -293,8 +296,12 @@ export default class LicenceService {
     return this.licenceApiClient.matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate', null, user)
   }
 
-  async updateResponsibleCom(crn: string, newCom: UpdateResponsibleComRequest): Promise<void> {
+  async updateResponsibleCom(crn: string, newCom: UpdateComRequest): Promise<void> {
     return this.licenceApiClient.updateResponsibleCom(crn, newCom)
+  }
+
+  async updateComDetails(comDetails: UpdateComRequest): Promise<void> {
+    return this.licenceApiClient.updateComDetails(comDetails)
   }
 
   async recordAuditEvent(

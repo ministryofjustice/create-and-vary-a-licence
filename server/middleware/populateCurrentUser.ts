@@ -1,9 +1,10 @@
 import { RequestHandler } from 'express'
 import logger from '../../logger'
-import UserService from '../services/userService'
 import { convertToTitleCase, removeDuplicates } from '../utils/utils'
 import CvlUserDetails from '../@types/CvlUserDetails'
 import config from '../config'
+import LicenceService from '../services/licenceService'
+import UserService from '../services/userService'
 
 /**
  * This middleware checks whether a token is present and if user information is populated in the session.
@@ -19,9 +20,10 @@ import config from '../config'
  * req.user and res.locals.user.
  *
  * @param userService
+ * @param licenceService
  */
 
-export default function populateCurrentUser(userService: UserService): RequestHandler {
+export default function populateCurrentUser(userService: UserService, licenceService: LicenceService): RequestHandler {
   return async (req, res, next) => {
     try {
       // Populate the currentUser details in the session if there is a token present and no user details
@@ -64,6 +66,12 @@ export default function populateCurrentUser(userService: UserService): RequestHa
             cvlUser.probationTeams = probationUser?.teams?.map(team => team?.code)
             cvlUser.probationLduCodes = probationUser?.teams?.map(team => team?.localDeliveryUnit?.code)
             cvlUser.probationPduCodes = probationUser?.teams?.map(team => team?.borough?.code)
+
+            await licenceService.updateComDetails({
+              staffIdentifier: probationUser?.staffIdentifier,
+              staffUsername: user.username,
+              staffEmail: probationUser?.email,
+            })
           } else {
             // Assemble basic user information from hmpps-auth
             const authUser = await userService.getAuthUser(user)

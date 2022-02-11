@@ -14,11 +14,10 @@ import type {
   StatusUpdateRequest,
   AdditionalConditionsRequest,
   UpdateAdditionalConditionDataRequest,
-  SubmitLicenceRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-import { UpdateResponsibleComRequest } from '../@types/licenceApiClientTypes'
+import { UpdateComRequest } from '../@types/licenceApiClientTypes'
 
 export default class LicenceApiClient extends RestClient {
   constructor() {
@@ -116,8 +115,8 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest }, { username: user?.username })
   }
 
-  async submitLicence(licenceId: string, request: SubmitLicenceRequest, user: User): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/submit`, data: request }, { username: user.username })
+  async submitLicence(licenceId: string, user: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/submit` }, { username: user.username })
   }
 
   async matchLicences(
@@ -194,15 +193,12 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<Buffer>
   }
 
-  async updateResponsibleCom(
-    crn: string,
-    updateResponsibleComRequest: UpdateResponsibleComRequest,
-    user?: User
-  ): Promise<void> {
-    await this.put(
-      { path: `/offender/crn/${crn}/responsible-com`, data: updateResponsibleComRequest },
-      { username: user?.username }
-    )
+  async updateResponsibleCom(crn: string, updateResponsibleComRequest: UpdateComRequest): Promise<void> {
+    await this.put({ path: `/offender/crn/${crn}/responsible-com`, data: updateResponsibleComRequest })
+  }
+
+  async updateComDetails(updateComRequest: UpdateComRequest): Promise<void> {
+    await this.put({ path: `/com/update`, data: updateComRequest })
   }
 
   async recordAuditEvent(auditEvent: AuditEvent, user?: User): Promise<void> {
