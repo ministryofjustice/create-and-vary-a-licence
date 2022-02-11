@@ -4,47 +4,41 @@
 {% set pageId = 'rollout-status-page' %}
 
 {% block content %}
-    <h1 class="govuk-heading-l">Rollout status</h1>
 
-    <div class="grid-row govuk-body">
+    <div class="grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <p>
-                You will see this page if accessing the Create and vary a licence service but your
-                account indicates that the service is not currently active for your region or establishments.
-            </p>
+            <h1 class="govuk-heading-l">Rollout status</h1>
+        </div>
+    </div>
 
+    <div class="grid-row govuk-body govuk-!-margin-bottom-4">
+        <div class="govuk-grid-column-three-quarters">
+            Sorry, your region is not one of the pilot areas for the service, as shown on the map below.
             {% if authSource === 'delius' %}
-
-                <p>The service is currently available to probation officers in the following region:</p>
-
-                <ul>
-                    <li>NPS Wales</li>
-                </ul>
-
-
+                We are currently running a pilot for probation officers in the <strong>NPS Wales</strong> region.
             {% else %}
-                <p>The service is currently available only in the following prison establishments:</p>
-
+                The service is currently available for the following prisons:
                 <ul>
-                    <li>Berwyn</li>
                     <li>Usk/Prescoed</li>
                     <li>Swansea</li>
                     <li>Parc</li>
                     <li>Cardiff</li>
                 </ul>
-
+                We are in the process of rolling out to more regions and establishments and will be in touch shortly.
             {% endif %}
-
-            <img id="rollout-status-map" alt="Map of pilot regions" src="/assets/images/rollout-status.png"/>
-
-            <p>
-                We are in the process of enabling this service for all regions and establishments and
-                thank you for your patience.
-            </p>
-
         </div>
     </div>
 
-    <a id="return-to-home" href="{{ homeUrl }}" class="govuk-button">HMPPS services home page</a>
+    <div class="govuk-grid-row govuk-!-margin-bottom-4">
+        <div class="govuk-grid-column-three-quarters govuk-!-margin-left-2 govuk-!-margin-top-2">
+            <img id="rollout-status-map" alt="Map of pilot regions" src="/assets/images/rollout-status.png"/>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters govuk-!-margin-left-2">
+            <a id="return-to-home" href="{{ homeUrl }}" class="govuk-button">HMPPS services home page</a>
+        </div>
+    </div>
 
 {% endblock %}
