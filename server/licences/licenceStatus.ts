@@ -57,6 +57,16 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     description: 'Variation submitted for approval',
     colour: 'pink',
   },
+  VARIATION_APPROVED: {
+    label: 'Variation submitted',
+    description: 'Variation submitted for approval',
+    colour: 'yellow',
+  },
+  VARIATION_REJECTED: {
+    label: 'Referred by aco',
+    description: 'Variation submitted for approval',
+    colour: 'pink',
+  },
 }
 
 export default statusConfig

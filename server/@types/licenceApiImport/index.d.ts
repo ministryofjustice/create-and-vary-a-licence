@@ -133,6 +133,8 @@ export interface components {
         | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
       /**
        * @description The username of the person who is updating this status
        * @example X12333
@@ -544,6 +546,8 @@ export interface components {
         | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
       /**
        * @description The prison nomis identifier for this offender
        * @example A1234AA
@@ -673,6 +677,8 @@ export interface components {
         | 'RECALLED'
         | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
@@ -1517,6 +1523,8 @@ export interface operations {
           | 'RECALLED'
           | 'VARIATION_IN_PROGRESS'
           | 'VARIATION_SUBMITTED'
+          | 'VARIATION_REJECTED'
+          | 'VARIATION_APPROVED'
         )[]
         staffId?: number[]
         nomsId?: string[]
