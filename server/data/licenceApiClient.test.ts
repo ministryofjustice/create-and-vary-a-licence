@@ -14,9 +14,8 @@ import {
   Licence,
   LicenceSummary,
   StatusUpdateRequest,
-  SubmitLicenceRequest,
   UpdateAdditionalConditionDataRequest,
-  UpdateResponsibleComRequest,
+  UpdateComRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -172,28 +171,11 @@ describe('Licence API client tests', () => {
   })
 
   it('Submit licence', async () => {
-    await licenceApiClient.submitLicence(
-      '1',
-      {
-        username: 'joebloggs',
-        staffIdentifier: 2000,
-        firstName: 'Joe',
-        surname: 'Bloggs',
-        email: 'jbloggs@probation.gov.uk',
-      } as SubmitLicenceRequest,
-      { username: 'joebloggs' } as User
-    )
+    await licenceApiClient.submitLicence('1', { username: 'joebloggs' } as User)
 
     expect(put).toHaveBeenCalledWith(
       {
         path: '/licence/id/1/submit',
-        data: {
-          username: 'joebloggs',
-          staffIdentifier: 2000,
-          firstName: 'Joe',
-          surname: 'Bloggs',
-          email: 'jbloggs@probation.gov.uk',
-        },
       },
       { username: 'joebloggs' }
     )
@@ -261,32 +243,41 @@ describe('Licence API client tests', () => {
 
   it('Batch activate licences', async () => {
     await licenceApiClient.batchActivateLicences([123, 321])
-
     expect(post).toHaveBeenCalledWith({ path: '/licence/activate-licences', data: [123, 321] })
   })
 
   it('should update responsible COM for an offender', async () => {
-    await licenceApiClient.updateResponsibleCom(
-      'X1234',
-      {
+    await licenceApiClient.updateResponsibleCom('X1234', {
+      staffIdentifier: 2000,
+      staffUsername: 'joebloggs',
+      staffEmail: 'joebloggs@probation.gov.uk',
+    } as UpdateComRequest)
+
+    expect(put).toHaveBeenCalledWith({
+      path: '/offender/crn/X1234/responsible-com',
+      data: {
         staffIdentifier: 2000,
         staffUsername: 'joebloggs',
         staffEmail: 'joebloggs@probation.gov.uk',
-      } as UpdateResponsibleComRequest,
-      { username: 'joebloggs' } as User
-    )
-
-    expect(put).toHaveBeenCalledWith(
-      {
-        path: '/offender/crn/X1234/responsible-com',
-        data: {
-          staffIdentifier: 2000,
-          staffUsername: 'joebloggs',
-          staffEmail: 'joebloggs@probation.gov.uk',
-        },
       },
-      { username: 'joebloggs' }
-    )
+    })
+  })
+
+  it('should update COM details', async () => {
+    await licenceApiClient.updateComDetails({
+      staffIdentifier: 2000,
+      staffUsername: 'joebloggs',
+      staffEmail: 'joebloggs@probation.gov.uk',
+    } as UpdateComRequest)
+
+    expect(put).toHaveBeenCalledWith({
+      path: '/com/update',
+      data: {
+        staffIdentifier: 2000,
+        staffUsername: 'joebloggs',
+        staffEmail: 'joebloggs@probation.gov.uk',
+      },
+    })
   })
 
   describe('Exclusion zone file', () => {

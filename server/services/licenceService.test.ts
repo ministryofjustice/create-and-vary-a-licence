@@ -16,7 +16,8 @@ import AdditionalConditions from '../routes/creatingLicences/types/additionalCon
 import SimpleDate from '../routes/creatingLicences/types/date'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
-import { LicenceSummary, UpdateResponsibleComRequest } from '../@types/licenceApiClientTypes'
+import { LicenceSummary, UpdateComRequest } from '../@types/licenceApiClientTypes'
+import { CommunityApiOffenderManager } from '../@types/communityClientTypes'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -51,6 +52,9 @@ describe('Licence Service', () => {
       prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
       communityService.getProbationer.mockResolvedValue({ offenderManagers: [] } as OffenderDetail)
       prisonerService.getPrisonInformation.mockResolvedValue({ phones: [] } as PrisonInformation)
+      communityService.getAnOffendersManagers.mockResolvedValue([
+        { isResponsibleOfficer: true, staffId: 2000 } as CommunityApiOffenderManager,
+      ])
     })
 
     describe('Licence Types', () => {
@@ -514,17 +518,7 @@ describe('Licence Service', () => {
 
   it('Submit licence', async () => {
     await licenceService.submitLicence('1', user)
-    expect(licenceApiClient.submitLicence).toBeCalledWith(
-      '1',
-      {
-        username: 'joebloggs',
-        staffIdentifier: 2000,
-        firstName: 'Joe',
-        surname: 'Bloggs',
-        email: 'jbloggs@probation.gov.uk',
-      },
-      user
-    )
+    expect(licenceApiClient.submitLicence).toBeCalledWith('1', user)
   })
 
   it('Get licences by nomis ids and statuses', async () => {
@@ -569,7 +563,7 @@ describe('Licence Service', () => {
       staffIdentifier: 2000,
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
-    } as UpdateResponsibleComRequest)
+    } as UpdateComRequest)
 
     expect(licenceApiClient.updateResponsibleCom).toBeCalledWith('X1234', {
       staffIdentifier: 2000,

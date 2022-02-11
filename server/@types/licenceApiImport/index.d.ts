@@ -48,6 +48,10 @@ export interface paths {
     /** Removes a previously uploaded exclusion zone file. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['removeExclusionZoneFile']
   }
+  '/com/update': {
+    /** Updates the details of a community offender manager (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateComDetails']
+  }
   '/audit/save': {
     /** Records an auditable event related to an action taken by a user or an automated in-service process. Requires ROLE_CVL_ADMIN. */
     put: operations['recordAuditEvent']
@@ -85,20 +89,20 @@ export interface paths {
 export interface components {
   schemas: {
     /** @description Request object for updating the COM responsible for an offender */
-    UpdateResponsibleComRequest: {
+    UpdateComRequest: {
       /**
        * Format: int64
-       * @description The unique identifier of the responsible COM, retrieved from Delius
+       * @description The unique identifier of the COM, retrieved from Delius
        * @example 22003829
        */
       staffIdentifier: number
       /**
-       * @description The Delius username for the responsible COM
+       * @description The Delius username for the COM
        * @example jbloggs
        */
       staffUsername: string
       /**
-       * @description The email address of the responsible COM
+       * @description The email address of the COM
        * @example jbloggs@probation.gov.uk
        */
       staffEmail: string
@@ -111,35 +115,6 @@ export interface components {
       userMessage?: string
       developerMessage?: string
       moreInfo?: string
-    }
-    /** @description Request object for submitting a licence */
-    SubmitLicenceRequest: {
-      /**
-       * @description The username of the person who is updating this status
-       * @example ssmyth
-       */
-      username: string
-      /**
-       * Format: int64
-       * @description The DELIUS staff identifier of the person who is submitting status
-       * @example 3000
-       */
-      staffIdentifier: number
-      /**
-       * @description The first name of the person who is submitting the licence
-       * @example John
-       */
-      firstName: string
-      /**
-       * @description The last name of the person who is submitting the licence
-       * @example Smythe
-       */
-      surname: string
-      /**
-       * @description The email address of the person who is submitting the licence
-       * @example s.smyth@probation.gov.uk
-       */
-      email: string
     }
     /** @description Request object for updating the status of a licence */
     StatusUpdateRequest: {
@@ -378,11 +353,6 @@ export interface components {
     /** @description Request object for creating a new licence */
     CreateLicenceRequest: {
       /**
-       * @description The username of the person who is creating the licence
-       * @example joebloggs
-       */
-      username: string
-      /**
        * @description Type of licence requested - one of AP, PSS or AP_PSS
        * @example AP
        * @enum {string}
@@ -500,11 +470,6 @@ export interface components {
        */
       topupSupervisionExpiryDate?: string
       /**
-       * @description The telephone contact number for the offender manager, from probation services
-       * @example 07876 443554
-       */
-      comTelephone?: string
-      /**
        * @description The probation area code where the offender manager is based, from probation services
        * @example N01
        */
@@ -518,6 +483,12 @@ export interface components {
       standardLicenceConditions: components['schemas']['StandardCondition'][]
       /** @description The list of standard post sentence supervision conditions from service configuration */
       standardPssConditions: components['schemas']['StandardCondition'][]
+      /**
+       * Format: int64
+       * @description The community offender manager who is responsible for this case
+       * @example 1231332
+       */
+      responsibleComStaffId: number
     }
     /** @description Describes a standard condition on this licence */
     StandardCondition: {
@@ -809,16 +780,6 @@ export interface components {
        */
       topupSupervisionExpiryDate?: string
       /**
-       * @description The first name of the supervising probation officer
-       * @example Jane
-       */
-      comFirstName?: string
-      /**
-       * @description The last name of the supervising probation officer
-       * @example Jones
-       */
-      comLastName?: string
-      /**
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
        */
@@ -834,11 +795,6 @@ export interface components {
        * @example jane.jones@nps.gov.uk
        */
       comEmail?: string
-      /**
-       * @description The contact telephone number for the supervising probation officer
-       * @example 0161222333
-       */
-      comTelephone?: string
       /**
        * @description The code for the probation area where the supervising officer is located
        * @example N01
@@ -955,7 +911,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateResponsibleComRequest']
+        'application/json': components['schemas']['UpdateComRequest']
       }
     }
   }
@@ -992,11 +948,6 @@ export interface operations {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
-      }
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SubmitLicenceRequest']
       }
     }
   }
@@ -1357,6 +1308,36 @@ export interface operations {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
+      }
+    }
+  }
+  /** Updates the details of a community offender manager (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateComDetails: {
+    responses: {
+      /** The COM was updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateComRequest']
       }
     }
   }

@@ -13,17 +13,17 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
+            otherIds: {
+              crn: 'X2345',
+              pncNumber: '1234/12345',
+              croNumber: '1/12345',
+            },
             offenderManagers: [
               {
                 active: true,
                 staff: {
                   forenames: 'Joe',
                   surname: 'Bloggs',
-                },
-                otherIds: {
-                  crn: 'X2345',
-                  pncNumber: '1234/12345',
-                  croNumber: '1/12345',
                 },
               },
             ],
