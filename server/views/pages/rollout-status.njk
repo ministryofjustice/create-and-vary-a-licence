@@ -1,0 +1,50 @@
+{% extends "layout.njk" %}
+
+{% set pageTitle = applicationName + " - Rollout status" %}
+{% set pageId = 'rollout-status-page' %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">Rollout status</h1>
+
+    <div class="grid-row govuk-body">
+        <div class="govuk-grid-column-three-quarters">
+            <p>
+                You will see this page if accessing the Create and vary a licence service but your
+                account indicates that the service is not currently active for your region or establishments.
+            </p>
+
+            {% if authSource === 'delius' %}
+
+                <p>The service is currently available to probation officers in the following region:</p>
+
+                <ul>
+                    <li>NPS Wales</li>
+                </ul>
+
+
+            {% else %}
+                <p>The service is currently available only in the following prison establishments:</p>
+
+                <ul>
+                    <li>Berwyn</li>
+                    <li>Usk/Prescoed</li>
+                    <li>Swansea</li>
+                    <li>Parc</li>
+                    <li>Cardiff</li>
+                </ul>
+
+            {% endif %}
+
+            <img id="rollout-status-map" alt="Map of pilot regions" src="/assets/images/rollout-status.png"/>
+
+            <p>
+                We are in the process of enabling this service for all regions and establishments and
+                thank you for your patience.
+            </p>
+
+        </div>
+    </div>
+
+    <a id="return-to-home" href="{{ homeUrl }}" class="govuk-button">HMPPS services home page</a>
+
+{% endblock %}
