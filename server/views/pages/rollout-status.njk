@@ -1,0 +1,44 @@
+{% extends "layout.njk" %}
+
+{% set pageTitle = applicationName + " - Rollout status" %}
+{% set pageId = 'rollout-status-page' %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Rollout status</h1>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-4">
+        <div class="govuk-grid-column-three-quarters">
+            <p class="govuk-body">Sorry, your region is not one of the pilot areas for the service, as shown on the map below.</p>
+           {% if authSource === 'delius' %}
+                <p class="govuk-body">We are currently running a pilot for probation officers in the <span class="govuk-!-font-weight-bold">NPS Wales</span> region.</p>
+            {% else %}
+                <p class="govuk-body">The service is currently available for the following prisons:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>Usk/Prescoed</li>
+                    <li>Swansea</li>
+                    <li>Parc</li>
+                    <li>Cardiff</li>
+                </ul>
+               <p class="govuk-body">We are in the process of rolling out to more regions and establishments and will be in touch shortly.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="govuk-grid-row govuk-!-margin-bottom-4">
+        <div class="govuk-grid-column-three-quarters govuk-!-margin-left-2 govuk-!-margin-top-2">
+            <img id="rollout-status-map" alt="Map of pilot regions" src="/assets/images/rollout-status.png"/>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters govuk-!-margin-left-2">
+            <a id="return-to-home" href="{{ homeUrl }}" class="govuk-button">HMPPS services home page</a>
+        </div>
+    </div>
+
+{% endblock %}

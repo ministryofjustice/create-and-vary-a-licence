@@ -174,4 +174,9 @@ export default {
   analytics: {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
   },
+  rollout: {
+    restricted: get('RESTRICT_ROLLOUT', false),
+    probationAreas: ['N55'],
+    prisons: ['MDI', 'LEI'],
+  },
 }
