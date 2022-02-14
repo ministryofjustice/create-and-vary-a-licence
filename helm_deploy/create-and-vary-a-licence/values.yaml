@@ -62,6 +62,7 @@ generic-service:
     office: "217.33.148.210/32"
     petty_france_wifi: "213.121.161.112/28"
     mojvpn: "81.134.202.29/32"
+    global-protect: "35.176.93.186/32"
     quantum1: "62.25.109.197/32"
     quantum2: "212.137.36.230/32"
     quantum3: "195.92.38.16/28"
