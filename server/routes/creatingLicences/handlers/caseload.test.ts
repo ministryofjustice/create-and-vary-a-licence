@@ -6,6 +6,7 @@ import CaseloadService from '../../../services/caseloadService'
 import { CaseTypeAndStatus } from '../../../@types/managedCase'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
+import config from '../../../config'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 
@@ -28,6 +29,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         lastName: 'Rogan',
         conditionalReleaseDate: '2022-10-12',
         prisonerNumber: '123',
+        prisonId: 'MDI',
         licenceStatus: LicenceStatus.IN_PROGRESS,
         licenceType: LicenceType.AP,
       },
@@ -40,6 +42,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         lastName: 'Rogan',
         conditionalReleaseDate: '2022-10-12',
         prisonerNumber: '123',
+        prisonId: 'MDI',
         licenceStatus: LicenceStatus.IN_PROGRESS,
         licenceType: LicenceType.AP,
         allocated: true,
@@ -53,6 +56,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         lastName: 'Who',
         conditionalReleaseDate: '2023-10-12',
         prisonerNumber: '124',
+        prisonId: 'LEI',
         licenceStatus: LicenceStatus.IN_PROGRESS,
         licenceType: LicenceType.AP_PSS,
         allocated: false,
@@ -98,6 +102,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Joe Bloggs',
               staffId: 2000,
             },
+            insidePilot: true,
           },
         ],
         statusConfig,
@@ -124,6 +129,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Sherlock Holmes',
               staffId: 3000,
             },
+            insidePilot: true,
           },
           {
             name: 'Dr Who',
@@ -133,6 +139,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
             probationPractitioner: null,
+            insidePilot: true,
           },
         ],
         statusConfig,
@@ -156,6 +163,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
             probationPractitioner: null,
+            insidePilot: true,
           },
         ],
         statusConfig,
@@ -183,6 +191,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Sherlock Holmes',
               staffId: 3000,
             },
+            insidePilot: true,
           },
         ],
         statusConfig,
@@ -210,11 +219,81 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Sherlock Holmes',
               staffId: 3000,
             },
+            insidePilot: true,
           },
         ],
         statusConfig,
         teamView: true,
         search: 'rogan',
+      })
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
+    })
+
+    it('should identify offenders outside the pilot areas for the single officer view', async () => {
+      config.rollout.restricted = true
+      config.rollout.prisons = ['LEI']
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Joe Rogan',
+            crnNumber: 'X381306',
+            conditionalReleaseDate: '12 Oct 2022',
+            prisonerNumber: '123',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Joe Bloggs',
+              staffId: 2000,
+            },
+            insidePilot: false,
+          },
+        ],
+        statusConfig,
+        teamView: false,
+      })
+      expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
+    })
+
+    it('should identify offenders outside the rollout pilot for the team view', async () => {
+      req.query = { view: 'team' }
+      config.rollout.restricted = true
+      config.rollout.prisons = ['MDI']
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Joe Rogan',
+            crnNumber: 'X381306',
+            conditionalReleaseDate: '12 Oct 2022',
+            prisonerNumber: '123',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+              staffId: 3000,
+            },
+            insidePilot: true,
+          },
+          {
+            name: 'Dr Who',
+            crnNumber: 'X381307',
+            conditionalReleaseDate: '12 Oct 2023',
+            prisonerNumber: '124',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP_PSS,
+            probationPractitioner: null,
+            insidePilot: false,
+          },
+        ],
+        statusConfig,
+        teamView: true,
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()

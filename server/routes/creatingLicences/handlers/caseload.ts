@@ -4,6 +4,7 @@ import _ from 'lodash'
 import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
+import { prisonInRollout } from '../../../utils/rolloutUtils'
 import statusConfig from '../../../licences/licenceStatus'
 
 export default class CaseloadRoutes {
@@ -45,6 +46,7 @@ export default class CaseloadRoutes {
           licenceStatus: offender.licenceStatus,
           licenceType: offender.licenceType,
           probationPractitioner,
+          insidePilot: prisonInRollout(offender?.prisonId),
         }
       })
       .filter(offender => {

@@ -7,6 +7,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
+import { prisonInRollout } from '../utils/rolloutUtils'
 
 export default class CaseloadService {
   constructor(
@@ -128,7 +129,11 @@ export default class CaseloadService {
         )
 
         // Create a case in the list in status NOT_STARTED
-        return { ...offender, licenceStatus: LicenceStatus.NOT_STARTED, licenceType } as CaseTypeAndStatus
+        return {
+          ...offender,
+          licenceStatus: prisonInRollout(offender?.prisonId) ? LicenceStatus.NOT_STARTED : LicenceStatus.NOT_IN_PILOT,
+          licenceType,
+        } as CaseTypeAndStatus
       })
       .filter(managedCase => managedCase)
   }

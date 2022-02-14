@@ -10,6 +10,8 @@ const middleware = rolloutMiddleware()
 beforeEach(() => {
   jest.resetAllMocks()
   config.rollout.restricted = true
+  config.rollout.prisons = ['LEI', 'MDI']
+  config.rollout.probationAreas = ['N55']
   req.url = '/'
 })
 
