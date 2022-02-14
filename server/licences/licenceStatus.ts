@@ -67,6 +67,11 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     description: 'Variation submitted for approval',
     colour: 'pink',
   },
+  NOT_IN_PILOT: {
+    label: 'Outside pilot',
+    description: 'Outside pilot area',
+    colour: 'grey',
+  },
 }
 
 export default statusConfig

@@ -5,6 +5,8 @@ describe('Rollout utils', () => {
   describe('Prisons in rollout', () => {
     beforeEach(() => {
       config.rollout.restricted = true
+      config.rollout.prisons = ['LEI', 'MDI']
+      config.rollout.probationAreas = ['N55']
     })
 
     it('should return true if prisons intersect with rollout prisons', () => {
@@ -57,10 +59,8 @@ describe('Rollout utils', () => {
   describe('Rollout unrestricted', () => {
     beforeEach(() => {
       config.rollout.restricted = false
-    })
-
-    it('should return true as prison rollout is unrestricted', () => {
-      expect(prisonInRollout('FAKE')).toBe(true)
+      config.rollout.prisons = ['LEI', 'MDI']
+      config.rollout.probationAreas = ['N55']
     })
 
     it('should return true as probation rollout is unrestricted', () => {
@@ -73,6 +73,10 @@ describe('Rollout utils', () => {
 
     it('should return true as probation rollout is unrestricted', () => {
       expect(anyProbationAreaInRollout(['FAKE'])).toBe(true)
+    })
+
+    it('should return true as prison rollout is unrestricted', () => {
+      expect(prisonInRollout('FAKE')).toBe(true)
     })
 
     it('should return true as prison rollout is unrestricted', () => {
