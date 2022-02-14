@@ -11,9 +11,21 @@
         </div>
     </div>
 
-    <div class="grid-row govuk-body govuk-!-margin-bottom-4">
+    <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-4">
         <div class="govuk-grid-column-three-quarters">
-            Sorry, your region is not one of the pilot areas for the service, as shown on the map below.
+            <p class="govuk-body">Sorry, your region is not one of the pilot areas for the service, as shown on the map below.</p>
+           {% if authSource === 'delius' %}
+                <p class="govuk-body">We are currently running a pilot for probation officers in the <span class="govuk-!-font-weight-bold">NPS Wales</span> region.</p>
+            {% else %}
+                <p class="govuk-body">The service is currently available for the following prisons:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>Usk/Prescoed</li>
+                    <li>Swansea</li>
+                    <li>Parc</li>
+                    <li>Cardiff</li>
+                </ul>
+               <p class="govuk-body">We are in the process of rolling out to more regions and establishments and will be in touch shortly.</p>
+            {% endif %}
             {% if authSource === 'delius' %}
                 We are currently running a pilot for probation officers in the <span class="govuk-!-font-weight-bold">NPS Wales</span> region.
             {% else %}
