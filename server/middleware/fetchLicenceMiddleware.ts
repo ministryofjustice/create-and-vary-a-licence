@@ -20,11 +20,11 @@ export default function fetchLicence(licenceService: LicenceService): RequestHan
           }
         }
 
-        // Does this probation user belong to an LDU which manages the person on licence?
+        // Does this probation user belong to the team which manages the person on licence?
         if (licence && user?.deliusStaffIdentifier) {
-          if (!user.probationLduCodes?.includes(licence.probationLduCode)) {
+          if (!user.probationTeamCodes?.includes(licence.probationTeamCode)) {
             logger.info(
-              `Probation LDUs ${user?.probationLduCodes} denies access to licence ID ${licence.id} ${licence.probationLduCode}`
+              `Probation teams ${user?.probationTeamCodes} denies access to licence ID ${licence.id} ${licence.probationTeamCode}`
             )
             return res.redirect('/access-denied')
           }
@@ -32,6 +32,7 @@ export default function fetchLicence(licenceService: LicenceService): RequestHan
 
         // Is the URL requested allowed for a licence in this status?
         if (licence && !getUrlAccessByStatus(req.path, licence.id, licence.statusCode, user.username)) {
+          logger.info(`URL access denied to licence ID ${licence.statusCode} ${licence.id} ${req.path}`)
           return res.redirect('/access-denied')
         }
 

@@ -28,9 +28,8 @@ const probationRes = {
     user: {
       username: 'YY',
       deliusStaffIdentifier: 123,
-      probationArea: 'N55',
-      probationTeams: ['N55A'],
-      probationLduCodes: ['N55AAA', 'N55BBB'],
+      probationAreaCode: 'N55',
+      probationTeamCodes: ['N55A'],
     },
     licence: undefined,
   },
@@ -41,7 +40,8 @@ const licence = {
   id: '1',
   statusCode: 'IN_PROGRESS',
   prisonCode: 'LEI',
-  probationLduCode: 'N55AAA',
+  probationAreaCode: 'N55',
+  probationTeamCode: 'N55A',
 } as unknown as Licence
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
@@ -98,7 +98,7 @@ describe('fetchLicenceMiddleware', () => {
     expect(next).not.toBeCalled()
   })
 
-  it('should allow access for a probation user based on LDU', async () => {
+  it('should allow access for a probation user based on teams', async () => {
     res = probationRes
     res.locals.licence = undefined
     await middleware(req, res, next)
@@ -107,10 +107,10 @@ describe('fetchLicenceMiddleware', () => {
     expect(next).toBeCalledTimes(1)
   })
 
-  it('should deny access for a probation user based on LDU', async () => {
+  it('should deny access for a probation user based on teams', async () => {
     res = probationRes
     res.locals.licence = undefined
-    res.locals.user.probationLduCodes = ['WRONG', 'WRONG-AGAIN']
+    res.locals.user.probationTeamCodes = ['WRONG', 'WRONG-AGAIN']
     await middleware(req, res, next)
     expect(res.locals.licence).toBeUndefined()
     expect(licenceService.getLicence).toBeCalledTimes(1)

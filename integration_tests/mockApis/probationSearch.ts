@@ -25,6 +25,22 @@ export default {
                   forenames: 'Joe',
                   surname: 'Bloggs',
                 },
+                probationArea: {
+                  code: 'N01',
+                  description: 'Area N01',
+                },
+                team: {
+                  code: 'A',
+                  description: 'Team A',
+                  borough: {
+                    code: 'PDU1',
+                    description: 'PDU one',
+                  },
+                  district: {
+                    code: 'LAU1',
+                    description: 'LAU one',
+                  },
+                },
               },
             ],
           },

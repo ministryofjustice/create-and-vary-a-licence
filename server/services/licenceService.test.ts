@@ -53,7 +53,26 @@ describe('Licence Service', () => {
       communityService.getProbationer.mockResolvedValue({ offenderManagers: [] } as OffenderDetail)
       prisonerService.getPrisonInformation.mockResolvedValue({ phones: [] } as PrisonInformation)
       communityService.getAnOffendersManagers.mockResolvedValue([
-        { isResponsibleOfficer: true, staffId: 2000 } as CommunityApiOffenderManager,
+        {
+          isResponsibleOfficer: true,
+          staffId: 2000,
+          probationArea: {
+            code: 'Area',
+            description: 'AreaDesc',
+          },
+          team: {
+            code: 'Team',
+            description: 'TeamDesc',
+            borough: {
+              code: 'PDU',
+              description: 'PDUDesc',
+            },
+            district: {
+              code: 'LAU',
+              description: 'LAUDesc',
+            },
+          },
+        } as CommunityApiOffenderManager,
       ])
     })
 
@@ -209,6 +228,28 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+    })
+
+    describe('Probation locations are populated', () => {
+      it('Should populate probation locations from DELIUS', async () => {
+        prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
+        const expectedLicence = expect.objectContaining({
+          typeCode: 'AP',
+          probationAreaCode: 'Area',
+          probationAreaDescription: 'AreaDesc',
+          probationPduCode: 'PDU',
+          probationPduDescription: 'PDUDesc',
+          probationLauCode: 'LAU',
+          probationLauDescription: 'LAUDesc',
+          probationTeamCode: 'Team',
+          probationTeamDescription: 'TeamDesc',
+        })
+
+        await licenceService.createLicence('ABC1234', user)
+
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
     })
 
