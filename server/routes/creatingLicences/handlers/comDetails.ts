@@ -11,7 +11,7 @@ export default class ComDetailsRoutes {
     const staffDetails = await this.communityService.getStaffDetailByStaffIdentifier(staffId as unknown as number)
 
     const isInCurrentUsersTeam =
-      staffDetails.teams?.find(team => user.probationTeams?.includes(team.code)) !== undefined
+      staffDetails.teams?.find(team => user.probationTeamCodes?.includes(team.code)) !== undefined
 
     if (!isInCurrentUsersTeam) {
       return res.redirect('/access-denied')
