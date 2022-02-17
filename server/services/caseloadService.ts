@@ -34,9 +34,9 @@ export default class CaseloadService {
   }
 
   async getTeamCreateCaseload(user: User): Promise<CaseTypeAndStatus[]> {
-    const { probationTeams } = user
+    const { probationTeamCodes } = user
 
-    const managedOffenders = await this.communityService.getManagedOffendersByTeam(probationTeams)
+    const managedOffenders = await this.communityService.getManagedOffendersByTeam(probationTeamCodes)
 
     const caseloadNomisIds = managedOffenders
       .filter(offender => offender.nomsNumber)
@@ -67,8 +67,8 @@ export default class CaseloadService {
   }
 
   async getTeamVaryCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
-    const { probationTeams } = user
-    const managedOffenders = await this.communityService.getManagedOffendersByTeam(probationTeams)
+    const { probationTeamCodes } = user
+    const managedOffenders = await this.communityService.getManagedOffendersByTeam(probationTeamCodes)
     const caseloadNomisIds = managedOffenders
       .filter(offender => offender.nomsNumber)
       .map(offender => offender.nomsNumber)

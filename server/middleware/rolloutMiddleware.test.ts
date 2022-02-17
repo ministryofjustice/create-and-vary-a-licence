@@ -85,7 +85,7 @@ const getProbationRes = (probationArea: string): Response => {
       user: {
         username: 'TEST',
         authSource: 'delius',
-        probationArea,
+        probationAreaCode: probationArea,
       },
     },
     redirect: jest.fn(),

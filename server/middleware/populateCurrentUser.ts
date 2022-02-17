@@ -61,11 +61,11 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             cvlUser.deliusStaffCode = probationUser?.staffCode
             cvlUser.emailAddress = probationUser?.email
             cvlUser.telephoneNumber = probationUser?.telephoneNumber
-            cvlUser.probationArea = probationUser?.probationArea?.code
+            cvlUser.probationAreaCode = probationUser?.probationArea?.code
             cvlUser.probationAreaDescription = probationUser?.probationArea?.description
-            cvlUser.probationTeams = probationUser?.teams?.map(team => team?.code)
-            cvlUser.probationLduCodes = probationUser?.teams?.map(team => team?.localDeliveryUnit?.code)
             cvlUser.probationPduCodes = probationUser?.teams?.map(team => team?.borough?.code)
+            cvlUser.probationLauCodes = probationUser?.teams?.map(team => team?.district?.code)
+            cvlUser.probationTeamCodes = probationUser?.teams?.map(team => team?.code)
 
             await licenceService.updateComDetails({
               staffIdentifier: probationUser?.staffIdentifier,

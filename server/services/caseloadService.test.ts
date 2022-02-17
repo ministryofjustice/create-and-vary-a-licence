@@ -20,7 +20,7 @@ describe('Caseload Service', () => {
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
   const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
-  const user = { deliusStaffIdentifier: 2000, probationTeams: ['teamA', 'teamB'] } as User
+  const user = { deliusStaffIdentifier: 2000, probationTeamCodes: ['teamA', 'teamB'] } as User
 
   beforeEach(() => {
     communityService.getManagedOffenders.mockResolvedValue([])

@@ -118,11 +118,15 @@ describe('populateCurrentUser', () => {
     userServiceMock.getProbationUser.mockResolvedValue({
       staffIdentifier: 2000,
       email: 'jbloggs@probation.gov.uk',
+      probationArea: {
+        code: 'areaCode',
+        description: 'areaDesc',
+      },
       teams: [
         {
           code: 'teamCode',
-          localDeliveryUnit: {
-            code: 'lduCode',
+          district: {
+            code: 'lauCode',
           },
           borough: {
             code: 'pduCode',
@@ -135,9 +139,11 @@ describe('populateCurrentUser', () => {
 
     expect(req.session.currentUser).toMatchObject({
       emailAddress: 'jbloggs@probation.gov.uk',
-      probationTeams: ['teamCode'],
-      probationLduCodes: ['lduCode'],
+      probationAreaCode: 'areaCode',
+      probationAreaDescription: 'areaDesc',
       probationPduCodes: ['pduCode'],
+      probationLauCodes: ['lauCode'],
+      probationTeamCodes: ['teamCode'],
     })
     expect(licenceServiceMock.updateComDetails).toHaveBeenCalledWith({
       staffIdentifier: 2000,

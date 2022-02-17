@@ -32,7 +32,13 @@ const licencePlaceholder = {
   comEmail: 'john.smith@nps.gov.uk',
   comTelephone: '08002345557',
   probationAreaCode: 'N01',
-  probationLduCode: 'LDU1',
+  probationAreaDescription: 'Wales',
+  probationPduCode: 'PDU1',
+  probationPduDescription: 'Cardiff',
+  probationLauCode: 'LAU1',
+  probationLauDescription: 'Cardiff South',
+  probationTeamCode: 'A',
+  probationTeamDescription: 'Cardiff South Team A',
   dateCreated: '10/09/2021 10:00:00', // Make dynamic to now?
   createdByUsername: 'X12345',
   standardLicenceConditions: [

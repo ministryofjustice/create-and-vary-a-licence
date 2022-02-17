@@ -24,7 +24,7 @@ describe('Route Handlers - Create Licence - Com Details', () => {
         render: jest.fn(),
         locals: {
           user: {
-            probationTeams: ['teamA'],
+            probationTeamCodes: ['teamA'],
           },
         },
       } as unknown as Response

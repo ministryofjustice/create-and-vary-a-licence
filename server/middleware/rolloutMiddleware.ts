@@ -14,7 +14,7 @@ export default function rolloutMiddleware(): RequestHandler {
       return next()
     }
 
-    if (user?.authSource === 'delius' && probationAreaInRollout(user?.probationArea)) {
+    if (user?.authSource === 'delius' && probationAreaInRollout(user?.probationAreaCode)) {
       return next()
     }
 

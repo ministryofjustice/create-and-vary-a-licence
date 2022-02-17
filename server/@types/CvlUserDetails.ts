@@ -26,23 +26,23 @@ export default class CvlUserDetails {
   // Probation staffCode in nDelius e.g. X345H
   deliusStaffCode?: string
 
-  // Probation team codes that this user is a member of
-  probationTeams?: string[]
-
-  // probation area code
-  probationArea?: string
+  // Probation area code
+  probationAreaCode?: string
 
   // Probation area description
   probationAreaDescription?: string
 
-  // Email address - from Nomis, Delius or Auth depending on source
-  emailAddress?: string
-
-  // LDU code(s)
-  probationLduCodes?: string[]
-
   // PDU code(s)
   probationPduCodes?: string[]
+
+  // LAU code(s)
+  probationLauCodes?: string[]
+
+  // Probation team codes
+  probationTeamCodes?: string[]
+
+  // Email address - from Nomis, Delius or Auth depending on source
+  emailAddress?: string
 }
 
 export type User = Express.User & CvlUserDetails

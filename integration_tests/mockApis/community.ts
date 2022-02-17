@@ -18,21 +18,33 @@ export default {
             forenames: 'John',
             surname: 'Smith',
           },
+          probationArea: {
+            code: 'N01',
+            description: 'Area N01',
+          },
           teams: [
             {
               code: 'A',
               description: 'Team A',
-              localDeliveryUnit: {
-                code: 'LDU1',
-                description: 'LDU one',
+              borough: {
+                code: 'PDU1',
+                description: 'PDU one',
+              },
+              district: {
+                code: 'LAU1',
+                description: 'LAU one',
               },
             },
             {
               code: 'B',
               description: 'Team B',
-              localDeliveryUnit: {
-                code: 'LDU1',
-                description: 'LDU two',
+              borough: {
+                code: 'PDU1',
+                description: 'PDU one',
+              },
+              district: {
+                code: 'LAU1',
+                description: 'LAU one',
               },
             },
           ],
@@ -59,21 +71,33 @@ export default {
             forenames: 'John',
             surname: 'Smith',
           },
+          probationArea: {
+            code: 'N01',
+            description: 'Area N01',
+          },
           teams: [
             {
               code: 'A',
               description: 'Team A',
-              localDeliveryUnit: {
-                code: 'LDU1',
-                description: 'LDU one',
+              borough: {
+                code: 'PDU1',
+                description: 'PDU one',
+              },
+              district: {
+                code: 'LAU1',
+                description: 'LAU one',
               },
             },
             {
               code: 'B',
               description: 'Team B',
-              localDeliveryUnit: {
-                code: 'LDU1',
-                description: 'LDU two',
+              borough: {
+                code: 'PDU1',
+                description: 'PDU one',
+              },
+              district: {
+                code: 'LAU1',
+                description: 'LAU one',
               },
             },
           ],
@@ -102,21 +126,33 @@ export default {
               forenames: 'John',
               surname: 'Smith',
             },
+            probationArea: {
+              code: 'N01',
+              description: 'Area N01',
+            },
             teams: [
               {
                 code: 'A',
                 description: 'Team A',
-                localDeliveryUnit: {
-                  code: 'LDU1',
-                  description: 'LDU one',
+                borough: {
+                  code: 'PDU1',
+                  description: 'PDU one',
+                },
+                district: {
+                  code: 'LAU1',
+                  description: 'LAU one',
                 },
               },
               {
                 code: 'B',
                 description: 'Team B',
-                localDeliveryUnit: {
-                  code: 'LDU1',
-                  description: 'LDU two',
+                borough: {
+                  code: 'PDU1',
+                  description: 'PDU one',
+                },
+                district: {
+                  code: 'LAU1',
+                  description: 'LAU one',
                 },
               },
             ],
@@ -173,6 +209,22 @@ export default {
           {
             isResponsibleOfficer: true,
             staffId: 2000,
+            probationArea: {
+              code: 'N01',
+              description: 'Area N01',
+            },
+            team: {
+              code: 'A',
+              description: 'Team A',
+              borough: {
+                code: 'PDU1',
+                description: 'PDU one',
+              },
+              district: {
+                code: 'LAU1',
+                description: 'LAU one',
+              },
+            },
           },
         ],
       },
