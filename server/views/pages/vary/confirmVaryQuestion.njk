@@ -3,14 +3,14 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set pageTitle = applicationName + " - Create a licence - Additional Post Sentence Supervision Conditions" %}
-{% set pageId = "additional-pss-conditions-question-page" %}
-{% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-time" %}
+{% set pageTitle = applicationName + " - Vary a licence - Are you sure?" %}
+{% set pageId = "confirm-vary-question-page" %}
+{% set backLinkHref = "/licence/vary/id/" + licence.id + "/view" %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">Do they need additional post sentence supervision requirements?</h1>
+            <h1 class="govuk-heading-l">Are you sure you want to vary this licence?</h1>
         </div>
     </div>
     <form method="POST">
@@ -26,7 +26,7 @@
                             id: 'answer'
                         },
                         legend: {
-                            text: "Additional conditions question",
+                            text: "Are you sure you want to vary this licence?",
                             classes: "govuk-visually-hidden"
                         }
                     },

@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 
-import ViewActiveLicenceRoutes from './viewActiveLicence'
+import ViewVariationRoutes from './viewVariation'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const username = 'joebloggs'
 
-describe('Route - Vary - View active licence', () => {
-  const handler = new ViewActiveLicenceRoutes()
+describe('Route - Vary - View variation', () => {
+  const handler = new ViewVariationRoutes()
   let req: Request
   let res: Response
 

@@ -14,6 +14,9 @@ import type {
   StatusUpdateRequest,
   AdditionalConditionsRequest,
   UpdateAdditionalConditionDataRequest,
+  UpdateSpoDiscussionRequest,
+  UpdateVloDiscussionRequest,
+  UpdateReasonForVariationRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -199,6 +202,36 @@ export default class LicenceApiClient extends RestClient {
 
   async updateComDetails(updateComRequest: UpdateComRequest): Promise<void> {
     await this.put({ path: `/com/update`, data: updateComRequest })
+  }
+
+  async createVariation(licenceId: string, user: User): Promise<LicenceSummary> {
+    return (await this.post(
+      { path: `/licence/id/${licenceId}/create-variation` },
+      { username: user?.username }
+    )) as Promise<LicenceSummary>
+  }
+
+  async updateSpoDiscussion(licenceId: string, request: UpdateSpoDiscussionRequest, user: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/spo-discussion`, data: request }, { username: user?.username })
+  }
+
+  async updateVloDiscussion(licenceId: string, request: UpdateVloDiscussionRequest, user: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/vlo-discussion`, data: request }, { username: user?.username })
+  }
+
+  async updateReasonForVariation(
+    licenceId: string,
+    request: UpdateReasonForVariationRequest,
+    user: User
+  ): Promise<void> {
+    await this.put(
+      { path: `/licence/id/${licenceId}/reason-for-variation`, data: request },
+      { username: user?.username }
+    )
+  }
+
+  async discard(licenceId: string, user: User): Promise<void> {
+    await this.delete({ path: `/licence/id/${licenceId}/discard` }, { username: user?.username })
   }
 
   async recordAuditEvent(auditEvent: AuditEvent, user?: User): Promise<void> {

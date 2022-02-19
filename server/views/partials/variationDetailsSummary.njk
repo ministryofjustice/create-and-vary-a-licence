@@ -1,0 +1,42 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro variationDetails(licence, isEditable) %}
+    <div class="govuk-grid-row check-answers-header">
+        <div class="govuk-grid-column-three-quarters">
+            <h2 class="govuk-heading-m">Variation details</h2>
+        </div>
+    </div>
+
+    {{ govukSummaryList({
+        attributes: { id: 'variation-details' },
+        classes: 'govuk-!-margin-bottom-9',
+        rows: [
+            {
+                key: { text: "Have you have discussed this variation request with your SPO?" },
+                value: { text: licence.spoDiscussion },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/vary/id/" + licence.id + "/spo-discussion?fromReview=true",
+                            text: "Change",
+                            visuallyHiddenText: "Have you have discussed this variation request with your SPO?"
+                        }
+                    ]
+                } if isEditable
+            },
+            {
+                key: { text: "Have you consulted with the victim liaison officer (VLO) for this case?" },
+                value: { text: licence.vloDiscussion },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/vary/id/" + licence.id + "/vlo-discussion?fromReview=true",
+                            text: "Change",
+                            visuallyHiddenText: "Have you consulted with the victim liaison officer (VLO) for this case?"
+                        }
+                    ]
+                } if isEditable
+            }
+        ]
+    }) }}
+{% endmacro %}

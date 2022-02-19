@@ -5,24 +5,34 @@
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
+{% from "partials/variationDetailsSummary.njk" import variationDetails %}
+
 
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
 
-{% set isInProgress = licence.statusCode == 'IN_PROGRESS' %}
-{% set canChooseToEdit = licence.statusCode == 'APPROVED' or licence.statusCode == 'SUBMITTED' or licence.statusCode == 'REJECTED' %}
+{% set isInProgress = licence.statusCode == 'IN_PROGRESS' or licence.statusCode == 'VARIATION_IN_PROGRESS' %}
+{% set canChooseToEdit = licence.statusCode == 'APPROVED' or licence.statusCode == 'SUBMITTED' %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if licence.typeCode === 'AP' %}
-                <h1 class="govuk-heading-l">Check licence details</h1>
-            {% elseif licence.typeCode === 'AP_PSS' %}
-                <h1 class="govuk-heading-l">Check licence and post sentence supervision order details</h1>
-            {% elseif licence.typeCode === 'PSS' %}
-                <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
+            {% if licence.isVariation %}
+                {% if licence.typeCode === 'AP' %}
+                    <h1 class="govuk-heading-l">Vary licence details</h1>
+                {% elseif licence.typeCode === 'AP_PSS' %}
+                    <h1 class="govuk-heading-l">Vary licence and post sentence supervision order details</h1>
+                {% elseif licence.typeCode === 'PSS' %}
+                    <h1 class="govuk-heading-l">Vary post sentence supervision order details</h1>
+                {% endif %}
             {% else %}
-                <h1 class="govuk-heading-l">Check licence type {{ licence.typeCode }}</h1>
+                {% if licence.typeCode === 'AP' %}
+                    <h1 class="govuk-heading-l">Check licence details</h1>
+                {% elseif licence.typeCode === 'AP_PSS' %}
+                    <h1 class="govuk-heading-l">Check licence and post sentence supervision order details</h1>
+                {% elseif licence.typeCode === 'PSS' %}
+                    <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
+                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -33,8 +43,11 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-
-            {{ inductionMeetingDetails(licence, isInProgress) }}
+            {% if not licence.isVariation %}
+                {{ inductionMeetingDetails(licence, isInProgress) }}
+            {% else %}
+                {{ variationDetails(licence, isInProgress) }}
+            {% endif %}
 
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalLicenceConditions(licence, expandedLicenceConditions, isInProgress) }}
@@ -45,22 +58,43 @@
                 {{ additionalPssConditions(licence, expandedPssConditions, isInProgress) }}
             {% endif %}
 
+            {% if isInProgress and licence.isVariation %}
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: "View summary and add notes",
+                        attributes: { 'data-qa': 'send-licence-conditions' },
+                        href: '/licence/vary/id/' + licence.id + '/reason-for-variation'
+                    }) }}
+                    {{ govukButton({
+                        text: "Discard changes",
+                        classes: "govuk-button--secondary",
+                        attributes: { 'data-qa': 'send-licence-conditions' },
+                        href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
+                    }) }}
+                </div>
+            {% endif %}
+
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                <input type="hidden" name="answers-checked" value="true">
                 <div class="govuk-button-group">
-                    {% if isInProgress %}
+                    {% if isInProgress and not licence.isVariation %}
                         {{ govukButton({
                             text: "Send licence conditions to prison",
                             attributes: { 'data-qa': 'send-licence-conditions' }
                         }) }}
                     {% endif %}
+
                     {% if canChooseToEdit %}
                         <a id="edit-licence-button-2" href="{{'/licence/create/id/' + licence.id + '/edit'}}" class="govuk-button">Edit licence</a>
                     {% endif %}
-                    <a href="/licence/create/caseload" class="govuk-link govuk-!-font-size-19">Return to caseload</a>
                 </div>
             </form>
+
+            {% if licence.isVariation %}
+                <a href="/licence/vary/caseload" class="govuk-link govuk-!-font-size-19">Return to caseload</a>
+            {% else %}
+                <a href="/licence/create/caseload" class="govuk-link govuk-!-font-size-19">Return to caseload</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

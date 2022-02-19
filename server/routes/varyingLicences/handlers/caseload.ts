@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import CaseloadService from '../../../services/caseloadService'
-import { convertToTitleCase } from '../../../utils/utils'
 import statusConfig from '../../../licences/licenceStatus'
 
 export default class CaseloadRoutes {
@@ -20,12 +19,12 @@ export default class CaseloadRoutes {
       .map(licence => {
         return {
           licenceId: licence.licenceId,
-          name: convertToTitleCase([licence.forename, licence.surname].join(' ')),
+          name: [licence.forename, licence.surname].join(' '),
           crnNumber: licence.crn,
           licenceType: licence.licenceType,
           releaseDate: moment(licence.actualReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY'),
           licenceStatus: licence.licenceStatus,
-          probationPractitioner: convertToTitleCase([licence.comFirstName, licence.comLastName].join(' ')),
+          probationPractitioner: [licence.comFirstName, licence.comLastName].join(' '),
         }
       })
       .filter(offender => {

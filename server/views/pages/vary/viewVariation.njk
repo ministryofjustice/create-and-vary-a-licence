@@ -10,6 +10,41 @@
 {% set pageId = "vary-view-active-page" %}
 {% set backLinkHref = "/licence/vary/caseload" %}
 
+{% macro cta(callToActions, licence) %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {% if callToActions.shouldShowVaryButton %}
+                {{ govukButton({
+                    text: "Vary licence",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    href: '/licence/vary/id/' + licence.id + '/confirm-vary-action',
+                    attributes: { 'data-qa': 'vary-licence' }
+                }) }}
+            {% endif %}
+            {% if callToActions.shouldShowPrintButton %}
+                {{ govukButton({
+                    text: "Print",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    href: '#'
+                }) }}
+            {% endif %}
+            {% if callToActions.shouldShowEditAndDiscardButton %}
+                {% set class = "govuk-button--secondary" if callToActions.shouldShowPrintButton else "govuk-button--primary" %}
+                {{ govukButton({
+                    text: "Edit variation",
+                    classes: class + " govuk-!-margin-right-1",
+                    href: '/licence/vary/id/' + licence.id + '/confirm-amend-variation'
+                }) }}
+                {{ govukButton({
+                    text: "Discard variation",
+                    classes: "govuk-button--secondary",
+                    href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
+                }) }}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
@@ -23,25 +58,10 @@
         </div>
     </div>
 
-    <div class="govuk-body">
-        {{ govukButton({
-            text: "Vary licence",
-            classes: "govuk-button--primary govuk-!-margin-right-1",
-            href: '#',
-            attributes: { 'data-qa': 'vary-licence' }
-        }) }}
-
-        {{ govukButton({
-            text: "Print",
-            classes: "govuk-button--secondary",
-            href: '/licence/view/id/' + licence.id + '/pdf-print',
-            attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
-        }) }}
-    </div>
+    {{ cta(callToActions, licence) }}
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {{ inductionMeetingDetails(licence) }}
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalLicenceConditions(licence, expandedLicenceConditions) }}
                 {{ bespokeConditions(licence) }}
@@ -49,22 +69,8 @@
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence, expandedPssConditions) }}
             {% endif %}
-
-            <div class="govuk-body">
-                {{ govukButton({
-                    text: "Vary licence",
-                    classes: "govuk-button--primary govuk-!-margin-right-1",
-                    href: '#',
-                    attributes: { 'data-qa': 'vary-licence' }
-                }) }}
-
-                {{ govukButton({
-                    text: "Print",
-                    classes: "govuk-button--secondary",
-                    href: '/licence/view/id/' + licence.id + '/pdf-print',
-                    attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
-                }) }}
-            </div>
         </div>
     </div>
+
+    {{ cta(callToActions, licence) }}
 {% endblock %}

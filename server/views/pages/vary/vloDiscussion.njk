@@ -3,14 +3,14 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set pageTitle = applicationName + " - Create a licence - Additional Post Sentence Supervision Conditions" %}
-{% set pageId = "additional-pss-conditions-question-page" %}
-{% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-time" %}
+{% set pageTitle = applicationName + " - Vary a licence - Have you consulted with the victim liaison officer (VLO) for this case?" %}
+{% set pageId = "confirm-vary-question-page" %}
+{% set backLinkHref = "/licence/vary/id/" + licence.id + "/spo-discussion" %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">Do they need additional post sentence supervision requirements?</h1>
+            <h1 class="govuk-heading-l">Have you consulted with the victim liaison officer (VLO) for this case?</h1>
         </div>
     </div>
     <form method="POST">
@@ -26,7 +26,7 @@
                             id: 'answer'
                         },
                         legend: {
-                            text: "Additional conditions question",
+                            text: "Have you consulted with the victim liaison officer (VLO) for this case?",
                             classes: "govuk-visually-hidden"
                         }
                     },
@@ -34,11 +34,13 @@
                     items: [
                         {
                             value: "Yes",
-                            text: "Yes"
+                            text: "Yes",
+                            checked: licence.vloDiscussion == 'Yes'
                         },
                         {
-                            value: "No",
-                            text: "No"
+                            value: "Not applicable",
+                            text: "Not applicable",
+                            checked: licence.vloDiscussion == 'Not applicable'
                         }
                     ]
                 }) }}

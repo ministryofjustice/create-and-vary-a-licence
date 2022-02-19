@@ -57,11 +57,18 @@ export default class CaseloadService {
       .filter(offender => offender.nomsNumber)
       .map(offender => offender.nomsNumber)
 
-    const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+    let licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
       caseloadNomisIds,
-      [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+      [
+        LicenceStatus.ACTIVE,
+        LicenceStatus.VARIATION_IN_PROGRESS,
+        LicenceStatus.VARIATION_SUBMITTED,
+        LicenceStatus.VARIATION_APPROVED,
+      ],
       user
     )
+
+    licences = this.filterActiveLicencesIfVariationExists(licences)
 
     return this.mapLicencesAndResponsibleComs(licences)
   }
@@ -73,11 +80,18 @@ export default class CaseloadService {
       .filter(offender => offender.nomsNumber)
       .map(offender => offender.nomsNumber)
 
-    const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+    let licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
       caseloadNomisIds,
-      [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+      [
+        LicenceStatus.ACTIVE,
+        LicenceStatus.VARIATION_IN_PROGRESS,
+        LicenceStatus.VARIATION_SUBMITTED,
+        LicenceStatus.VARIATION_APPROVED,
+      ],
       user
     )
+
+    licences = this.filterActiveLicencesIfVariationExists(licences)
 
     return this.mapLicencesAndResponsibleComs(licences)
   }
@@ -202,5 +216,15 @@ export default class CaseloadService {
       return LicenceType.PSS
     }
     return LicenceType.AP_PSS
+  }
+
+  private filterActiveLicencesIfVariationExists = (licences: LicenceSummary[]): LicenceSummary[] => {
+    return licences.filter(licence => {
+      if (licence.licenceStatus !== LicenceStatus.ACTIVE) {
+        return true
+      }
+
+      return licences.filter(l => l.nomisId === licence.nomisId).length === 1
+    })
   }
 }
