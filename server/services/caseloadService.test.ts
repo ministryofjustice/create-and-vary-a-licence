@@ -1052,7 +1052,12 @@ describe('Caseload Service', () => {
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1', '2'],
-        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
         user
       )
     })
@@ -1073,7 +1078,12 @@ describe('Caseload Service', () => {
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1'],
-        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
         user
       )
     })
@@ -1123,7 +1133,12 @@ describe('Caseload Service', () => {
       expect(communityService.getManagedOffendersByTeam).toHaveBeenCalledWith(['teamA', 'teamB'])
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1', '2'],
-        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
         user
       )
     })
@@ -1142,7 +1157,12 @@ describe('Caseload Service', () => {
 
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1'],
-        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
         user
       )
     })

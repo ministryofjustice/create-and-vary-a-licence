@@ -292,17 +292,6 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#edit-licence-button-2').length).toBe(1)
   })
 
-  it('should show edit licence button when status is REJECTED', () => {
-    viewContext = {
-      licence: { ...licence, statusCode: 'REJECTED' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
-
-    expect($('#edit-licence-button').length).toBe(1)
-    expect($('#edit-licence-button-2').length).toBe(1)
-  })
-
   it('should hide change links and submit button when licence status is not IN_PROGRESS', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'SUBMITTED' },

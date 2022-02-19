@@ -43,7 +43,12 @@ describe('Route - Vary - View variation', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
+      expect(res.render).toHaveBeenCalledWith('pages/vary/viewVariation', {
+        callToActions: {
+          shouldShowEditAndDiscardButton: false,
+          shouldShowPrintButton: false,
+          shouldShowVaryButton: true,
+        },
         expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
         expandedPssConditions: res.locals.licence.additionalPssConditions,
       })
