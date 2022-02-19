@@ -37,9 +37,10 @@ export default class PrintLicenceRoutes {
     const exclusionZoneDescription =
       conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(additionalLicenceConditions) : null
 
+    // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
-      `Printed licence for ${licence.forename} ${licence.surname}`,
-      `Printed HTML licence document ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
+      `Licence printed for ${licence?.forename} ${licence?.surname} (HTML)`,
+      `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
       licence.id,
       new Date(),
       user
@@ -73,9 +74,10 @@ export default class PrintLicenceRoutes {
     const exclusionZoneDescription =
       conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(additionalLicenceConditions) : null
 
+    // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
-      `Printed licence for ${licence.forename} ${licence.surname}`,
-      `Printed PDF licence document ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
+      `Licence printed for ${licence?.forename} ${licence?.surname} (PDF)`,
+      `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
       licence.id,
       new Date(),
       user

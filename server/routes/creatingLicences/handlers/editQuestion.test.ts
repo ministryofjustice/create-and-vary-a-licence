@@ -33,7 +33,6 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
     } as unknown as Response
 
     licenceService.updateStatus = jest.fn()
-    licenceService.recordAuditEvent = jest.fn()
   })
 
   describe('GET', () => {
@@ -63,7 +62,6 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
         username: 'joebloggs',
         displayName: 'Joe Bloggs',
       })
-      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
 
@@ -76,7 +74,6 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
       } as unknown as Request
       await handler.POST(req, res)
       expect(licenceService.updateStatus).not.toBeCalled()
-      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })

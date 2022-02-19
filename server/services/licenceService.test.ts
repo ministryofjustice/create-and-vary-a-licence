@@ -83,7 +83,6 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
 
       it('Should create a PSS licence when LED and SED is not set but TUSED is set', async () => {
@@ -94,7 +93,6 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
 
       it('Should create a AP_PSS licence when LED is not set but TUSED and SED is set', async () => {
@@ -107,7 +105,6 @@ describe('Licence Service', () => {
         const expectedLicence = expect.objectContaining({ typeCode: 'AP_PSS' })
 
         await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
 
@@ -122,7 +119,6 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
 
       it('Should create a AP_PSS licence when SLED and TUSED are set', async () => {
@@ -137,7 +133,6 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
     })
 
@@ -153,7 +148,6 @@ describe('Licence Service', () => {
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
 
       it('Should set CRD when override date does not exist', async () => {
@@ -249,7 +243,6 @@ describe('Licence Service', () => {
         await licenceService.createLicence('ABC1234', user)
 
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-        expect(licenceApiClient.recordAuditEvent).toHaveBeenCalled()
       })
     })
 
@@ -604,12 +597,16 @@ describe('Licence Service', () => {
       staffIdentifier: 2000,
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
+      firstName: 'Joseph',
+      lastName: 'Bloggs',
     } as UpdateComRequest)
 
     expect(licenceApiClient.updateResponsibleCom).toBeCalledWith('X1234', {
       staffIdentifier: 2000,
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
+      firstName: 'Joseph',
+      lastName: 'Bloggs',
     })
   })
 

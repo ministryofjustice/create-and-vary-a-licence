@@ -22,6 +22,7 @@ describe('Route - view and approve a licence', () => {
     additionalLicenceConditions: [],
     additionalPssConditions: [],
     bespokeConditions: [],
+    comStaffId: 123,
   } as Licence
 
   beforeEach(() => {
@@ -39,7 +40,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username },
+          user: { username, deliusStaffIdentifier: 123 },
           licence,
         },
       } as unknown as Response
@@ -50,7 +51,7 @@ describe('Route - view and approve a licence', () => {
         expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
         expandedPssConditions: res.locals.licence.additionalPssConditions,
       })
-      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
 
     it('should render a single licence view for printing when APPROVED', async () => {
@@ -58,7 +59,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username },
+          user: { username, deliusStaffIdentifier: 999 },
           licence: { ...licence, statusCode: LicenceStatus.APPROVED },
         },
       } as unknown as Response
@@ -77,7 +78,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username },
+          user: { username, deliusStaffIdentifier: 999 },
           licence: { ...licence, statusCode: LicenceStatus.IN_PROGRESS },
         },
       } as unknown as Response

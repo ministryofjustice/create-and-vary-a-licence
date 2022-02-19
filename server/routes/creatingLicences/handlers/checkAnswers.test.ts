@@ -30,8 +30,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       locals: {
         user: {
           username: 'joebloggs',
+          deliusStaffIdentifier: 123,
         },
         licence: {
+          id: 1,
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
@@ -39,14 +41,38 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           additionalLicenceConditions: [],
           additionalPssConditions: [],
           bespokeConditions: [],
+          comStaffId: 123,
+          forename: 'Jim',
+          surname: 'Jones',
         },
       },
     } as unknown as Response
   })
 
   describe('GET', () => {
-    it('should render view', async () => {
+    it('should render view and not record audit event (owner)', async () => {
       await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
+        expandedPssConditions: res.locals.licence.additionalPssConditions,
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
+
+    it('should render view and record audit event (not owner)', async () => {
+      res = {
+        ...res,
+        locals: {
+          ...res.locals,
+          user: {
+            username: 'joebloggs',
+            deliusStaffIdentifier: 999,
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
         expandedPssConditions: res.locals.licence.additionalPssConditions,
@@ -76,13 +102,14 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         ])
       )
       expect(res.redirect).toHaveBeenCalledWith('back')
-      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
 
     it('should call the licence API to submit the licence for approval', async () => {
       await handler.POST(req, res)
-      expect(licenceService.submitLicence).toHaveBeenCalledWith('1', { username: 'joebloggs' })
-      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(licenceService.submitLicence).toHaveBeenCalledWith('1', {
+        username: 'joebloggs',
+        deliusStaffIdentifier: 123,
+      })
     })
 
     it('should redirect to the confirmation page', async () => {
