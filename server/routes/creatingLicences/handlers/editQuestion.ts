@@ -17,7 +17,7 @@ export default class EditQuestionRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user, licence } = res.locals
+    const { user } = res.locals
     const { answer } = req.body
     if (answer === YesOrNo.YES) {
       await this.licenceService.updateStatus(licenceId, LicenceStatus.IN_PROGRESS, user)
