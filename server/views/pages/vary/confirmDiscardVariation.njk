@@ -17,6 +17,8 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
+                <div class="govuk-hint govuk-!-margin-bottom-3">Selecting Yes will cancel all changes made and return to the caseview.</div>
+
                 {{ govukRadios({
                     classes: "govuk-radios--inline",
                     idPrefix: "radio-option",
