@@ -415,4 +415,83 @@ describe('Hmpps Rest Client tests', () => {
       expect(nock.isDone()).toBe(true)
     })
   })
+
+  describe('DELETE', () => {
+    it('Should return raw response body', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+      })
+        .delete('/test')
+        .reply(200, { success: true })
+
+      const result = await restClient.delete({
+        path: '/test',
+        headers: { header1: 'headerValue1' },
+        raw: true,
+      })
+
+      expect(nock.isDone()).toBe(true)
+      expect(result).toMatchObject({
+        req: { method: 'DELETE' },
+        status: 200,
+        text: '{"success":true}',
+      })
+    })
+
+    it('Should return response body data only', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+      })
+        .delete('/test')
+        .reply(200, { success: true })
+
+      const result = await restClient.delete({
+        path: '/test',
+        headers: { header1: 'headerValue1' },
+      })
+
+      expect(nock.isDone()).toBe(true)
+      expect(result).toEqual({ success: true })
+    })
+
+    it('Should the supplied token as signature', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer user token', header1: 'headerValue1' },
+      })
+        .delete('/test')
+        .reply(200, { success: true })
+
+      const result = await restClient.delete(
+        {
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+        },
+        { token: 'user token', username: 'joebloggs' }
+      )
+
+      expect(nock.isDone()).toBe(true)
+      expect(result).toEqual({ success: true })
+    })
+
+    it('Should throw error when bad response', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+      })
+        .delete('/test')
+        .reply(404, { success: true })
+
+      let error
+      try {
+        await restClient.delete({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+        })
+      } catch (e) {
+        error = e
+      }
+
+      expect(error.message).toBe('Not Found')
+      expect(nock.isDone()).toBe(true)
+    })
+  })
 })

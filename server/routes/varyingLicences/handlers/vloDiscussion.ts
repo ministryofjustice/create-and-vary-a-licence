@@ -15,10 +15,6 @@ export default class VloDiscussionRoutes {
 
     await this.licenceService.updateVloDiscussion(licenceId, { vloDiscussion: answer }, user)
 
-    if (req.query?.fromReview) {
-      return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
-    }
-
     return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
   }
 }

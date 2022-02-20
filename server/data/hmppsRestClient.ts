@@ -41,6 +41,13 @@ interface PutRequest {
   raw?: boolean
 }
 
+interface DeleteRequest {
+  path?: string
+  headers?: Record<string, string>
+  responseType?: string
+  raw?: boolean
+}
+
 interface StreamRequest {
   path?: string
   headers?: Record<string, string>
@@ -205,7 +212,7 @@ export default class HmppsRestClient {
   }
 
   async delete(
-    { path = null, headers = {}, responseType = '', raw = false }: PutRequest,
+    { path = null, headers = {}, responseType = '', raw = false }: DeleteRequest,
     signedWithMethod?: SignedWithMethod
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))

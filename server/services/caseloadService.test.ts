@@ -1087,6 +1087,21 @@ describe('Caseload Service', () => {
         user
       )
     })
+
+    it('should filter active licences if multiple licences exist for a nomis id', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([{ nomsNumber: '1' }] as CommunityApiManagedOffender[])
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.ACTIVE },
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS },
+      ] as LicenceSummary[])
+
+      const licences = await caseloadService.getStaffVaryCaseload(user)
+
+      expect(licences).toEqual([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS },
+      ])
+    })
   })
 
   describe('getTeamVaryCaseload', () => {
