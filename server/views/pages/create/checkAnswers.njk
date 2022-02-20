@@ -62,13 +62,13 @@
                 <div class="govuk-button-group">
                     {{ govukButton({
                         text: "View summary and add notes",
-                        attributes: { 'data-qa': 'send-licence-conditions' },
+                        attributes: { 'data-qa': 'add-notes' },
                         href: '/licence/vary/id/' + licence.id + '/reason-for-variation'
                     }) }}
                     {{ govukButton({
                         text: "Discard changes",
                         classes: "govuk-button--secondary",
-                        attributes: { 'data-qa': 'send-licence-conditions' },
+                        attributes: { 'data-qa': 'discard' },
                         href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
                     }) }}
                 </div>

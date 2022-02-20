@@ -18,7 +18,30 @@ context('Vary a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const varyCasesPage = indexPage.clickVaryALicence()
     const varyViewPage = varyCasesPage.selectCase()
+    const confirmVaryPage = varyViewPage.selectVary()
+    const spoDiscussionPage = confirmVaryPage.selectYes().clickContinue()
+    const vloDiscussionPage = spoDiscussionPage.selectYes().clickContinue()
+    const checkAnswersPage = vloDiscussionPage.selectYes().clickContinue()
+    const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
+    const variationSummaryPage = reasonForVariationPage
+      .enterReason('In December Mr Zimmer failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
+      .clickContinue()
+    const confirmationPage = variationSummaryPage.clickSendForApproval()
 
-    varyViewPage.signOut().click()
+    confirmationPage.signOut().click()
+  })
+
+  it('should discard a licence variation', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const varyCasesPage = indexPage.clickVaryALicence()
+    const varyViewPage = varyCasesPage.selectCase()
+    const confirmVaryPage = varyViewPage.selectVary()
+    const spoDiscussionPage = confirmVaryPage.selectYes().clickContinue()
+    const vloDiscussionPage = spoDiscussionPage.selectYes().clickContinue()
+    const checkAnswersPage = vloDiscussionPage.selectYes().clickContinue()
+    const discardPage = checkAnswersPage.clickDiscard()
+    const caseloadPage = discardPage.selectYes().clickContinue()
+
+    caseloadPage.signOut().click()
   })
 })

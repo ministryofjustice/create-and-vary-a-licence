@@ -44,12 +44,12 @@
                 <div class="govuk-button-group">
                     {{ govukButton({
                         text: "Continue",
-                        attributes: { 'data-qa': 'send-licence-conditions' }
+                        attributes: { 'data-qa': 'continue' }
                     }) }}
                     {{ govukButton({
                         text: "Discard changes",
                         classes: "govuk-button--secondary",
-                        attributes: { 'data-qa': 'send-licence-conditions' },
+                        attributes: { 'data-qa': 'discard' },
                         href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
                     }) }}
                 </div>
