@@ -2,7 +2,7 @@ import Page from './page'
 import CheckAnswersPage from './checkAnswers'
 
 export default class EditLicenceQuestionPage extends Page {
-  private yesRadioButtonId = '[value=yes]'
+  private yesRadioButtonId = '[value=Yes]'
 
   private continueButtonId = '[data-qa=continue]'
 

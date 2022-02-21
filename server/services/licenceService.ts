@@ -16,6 +16,9 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
+  UpdateReasonForVariationRequest,
+  UpdateSpoDiscussionRequest,
+  UpdateVloDiscussionRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { getAdditionalConditionByCode, getStandardConditions, getVersion } from '../utils/conditionsProvider'
@@ -295,7 +298,6 @@ export default class LicenceService {
     const statuses = [
       LicenceStatus.ACTIVE.valueOf(),
       LicenceStatus.APPROVED.valueOf(),
-      LicenceStatus.REJECTED.valueOf(),
       LicenceStatus.SUBMITTED.valueOf(),
     ]
     const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
@@ -308,6 +310,30 @@ export default class LicenceService {
 
   async updateComDetails(comDetails: UpdateComRequest): Promise<void> {
     return this.licenceApiClient.updateComDetails(comDetails)
+  }
+
+  async createVariation(licenceId: string, user: User): Promise<LicenceSummary> {
+    return this.licenceApiClient.createVariation(licenceId, user)
+  }
+
+  async updateSpoDiscussion(licenceId: string, spoDiscussion: UpdateSpoDiscussionRequest, user: User): Promise<void> {
+    return this.licenceApiClient.updateSpoDiscussion(licenceId, spoDiscussion, user)
+  }
+
+  async updateVloDiscussion(licenceId: string, vloDiscussion: UpdateVloDiscussionRequest, user: User): Promise<void> {
+    return this.licenceApiClient.updateVloDiscussion(licenceId, vloDiscussion, user)
+  }
+
+  async updateReasonForVariation(
+    licenceId: string,
+    reasonForVariation: UpdateReasonForVariationRequest,
+    user: User
+  ): Promise<void> {
+    return this.licenceApiClient.updateReasonForVariation(licenceId, reasonForVariation, user)
+  }
+
+  async discard(licenceId: string, user: User): Promise<void> {
+    return this.licenceApiClient.discard(licenceId, user)
   }
 
   async recordAuditEvent(

@@ -1052,7 +1052,12 @@ describe('Caseload Service', () => {
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1', '2'],
-        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
         user
       )
     })
@@ -1073,9 +1078,29 @@ describe('Caseload Service', () => {
       expect(communityService.getManagedOffenders).toHaveBeenCalledWith(2000)
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1'],
-        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
         user
       )
+    })
+
+    it('should filter active licences if multiple licences exist for a nomis id', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([{ nomsNumber: '1' }] as CommunityApiManagedOffender[])
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.ACTIVE },
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS },
+      ] as LicenceSummary[])
+
+      const licences = await caseloadService.getStaffVaryCaseload(user)
+
+      expect(licences).toEqual([
+        { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS },
+      ])
     })
   })
 
@@ -1123,7 +1148,12 @@ describe('Caseload Service', () => {
       expect(communityService.getManagedOffendersByTeam).toHaveBeenCalledWith(['teamA', 'teamB'])
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1', '2'],
-        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
         user
       )
     })
@@ -1142,7 +1172,12 @@ describe('Caseload Service', () => {
 
       expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
         ['1'],
-        [LicenceStatus.ACTIVE, LicenceStatus.VARIATION_IN_PROGRESS, LicenceStatus.VARIATION_SUBMITTED],
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
         user
       )
     })

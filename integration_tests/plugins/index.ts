@@ -43,6 +43,12 @@ export default (on: (string, Record) => void): void => {
     stubGetLicencesForStatus: licence.stubGetLicencesForStatus,
     stubGetCompletedLicence: licence.stubGetCompletedLicence,
     stubRecordAuditEvent: licence.stubRecordAuditEvent,
+    stubCreateVariation: licence.stubCreateVariation,
+    stubUpdateSpoDiscussion: licence.stubUpdateSpoDiscussion,
+    stubUpdateVloDiscussion: licence.stubUpdateVloDiscussion,
+    stubUpdateReasonForVariation: licence.stubUpdateReasonForVariation,
+    stubGetLicenceVariationInProgress: licence.stubGetLicenceVariationInProgress,
+    stubDiscardLicence: licence.stubDiscardLicence,
 
     stubGetStaffDetails: community.stubGetStaffDetails,
     stubGetStaffDetailsByStaffId: community.stubGetStaffDetailsByStaffId,

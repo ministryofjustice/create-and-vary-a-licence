@@ -1,6 +1,7 @@
 enum YesOrNo {
-  YES = 'yes',
-  NO = 'no',
+  YES = 'Yes',
+  NO = 'No',
+  NOT_APPLICABLE = 'Not applicable',
 }
 
 export default YesOrNo

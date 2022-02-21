@@ -32,7 +32,7 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions Question',
       req = {
         ...req,
         body: {
-          answer: 'yes',
+          answer: 'Yes',
         },
       } as unknown as Request
       await handler.POST(req, res)
@@ -43,7 +43,7 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions Question',
       req = {
         ...req,
         body: {
-          answer: 'no',
+          answer: 'No',
         },
       } as unknown as Request
       await handler.POST(req, res)

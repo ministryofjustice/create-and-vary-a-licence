@@ -1,5 +1,5 @@
 import Page from './page'
-import VaryViewActive from './varyViewActive'
+import ViewVariationPage from './viewVariationPage'
 
 export default class VaryCasesPage extends Page {
   private varyLicenceLinkId = '#name-link-1'
@@ -8,8 +8,8 @@ export default class VaryCasesPage extends Page {
     super('vary-cases-page')
   }
 
-  selectCase = (): VaryViewActive => {
+  selectCase = (): ViewVariationPage => {
     cy.get(this.varyLicenceLinkId).click()
-    return Page.verifyOnPage(VaryViewActive)
+    return Page.verifyOnPage(ViewVariationPage)
   }
 }

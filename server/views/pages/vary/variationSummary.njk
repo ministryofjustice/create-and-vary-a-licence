@@ -1,0 +1,35 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Vary a licence - Variation summary" %}
+{% set pageId = "variation-summary-page" %}
+{% set backLinkHref = "/licence/vary/id/" + licence.id + "/view" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Licence variation summary</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: "Send for approval",
+                        attributes: { 'data-qa': 'send-for-approval' }
+                    }) }}
+                    {{ govukButton({
+                        text: "Discard changes",
+                        classes: "govuk-button--secondary",
+                        attributes: { 'data-qa': 'discard' },
+                        href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
+                    }) }}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
