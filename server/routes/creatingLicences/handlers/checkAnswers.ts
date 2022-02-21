@@ -12,15 +12,22 @@ export default class CheckAnswersRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
-    await this.licenceService.recordAuditEvent(
-      `Viewed licence for ${licence.forename} ${licence.surname}`,
-      `View licence ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
-      licence.id,
-      new Date(),
-      user
-    )
+
+    // Record the view event only when an officer views a licence which is not their own
+    if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
+      // Recorded here as we do not know the reason for fetchLicence in the API
+      await this.licenceService.recordAuditEvent(
+        `Licence viewed for ${licence?.forename} ${licence?.surname}`,
+        `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
+        licence.id,
+        new Date(),
+        user
+      )
+    }
+
     const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
+
     res.render('pages/create/checkAnswers', { expandedLicenceConditions, expandedPssConditions })
   }
 
@@ -35,14 +42,6 @@ export default class CheckAnswersRoutes {
     }
 
     await this.licenceService.submitLicence(licenceId, user)
-
-    await this.licenceService.recordAuditEvent(
-      `Submitted licence for approval ${licence.forename} ${licence.surname}`,
-      `Submitted licence ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
-      licence.id,
-      new Date(),
-      user
-    )
 
     return res.redirect(`/licence/create/id/${licenceId}/confirmation`)
   }

@@ -122,6 +122,10 @@ describe('populateCurrentUser', () => {
         code: 'areaCode',
         description: 'areaDesc',
       },
+      staff: {
+        forenames: 'Joseph',
+        surname: 'Bloggs',
+      },
       teams: [
         {
           code: 'teamCode',
@@ -149,6 +153,8 @@ describe('populateCurrentUser', () => {
       staffIdentifier: 2000,
       staffUsername: 'joebloggs',
       staffEmail: 'jbloggs@probation.gov.uk',
+      firstName: 'Joseph',
+      lastName: 'Bloggs',
     })
     expect(userServiceMock.getAuthUserEmail).not.toHaveBeenCalled()
     expect(next).toBeCalled()

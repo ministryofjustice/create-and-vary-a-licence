@@ -17,13 +17,16 @@ export default class ViewAndPrintLicenceRoutes {
       const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
       const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
 
-      await this.licenceService.recordAuditEvent(
-        `Viewed licence for ${licence.forename} ${licence.surname}`,
-        `Viewed licence ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
-        licence.id,
-        new Date(),
-        user
-      )
+      if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
+        // Recorded here as we do not know the reason for fetchLicence in the API
+        await this.licenceService.recordAuditEvent(
+          `Licence viewed for ${licence.forename} ${licence.surname}`,
+          `ID ${licence.id} type ${licence.typeCode} status ${licence.statusCode} version ${licence.version}`,
+          licence.id,
+          new Date(),
+          user
+        )
+      }
 
       res.render('pages/view/view', { expandedLicenceConditions, expandedPssConditions })
     } else {

@@ -18,6 +18,7 @@ describe('Route - print a licence', () => {
   let res: Response
 
   beforeEach(() => {
+    jest.resetAllMocks()
     req = {} as unknown as Request
     prisonerService.getPrisonerImageData = jest.fn()
     qrCodeService.getQrCode = jest.fn()

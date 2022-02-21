@@ -126,6 +126,16 @@ export interface components {
        * @example jbloggs@probation.gov.uk
        */
       staffEmail: string
+      /**
+       * @description The first name of the COM
+       * @example Joseph
+       */
+      firstName: string
+      /**
+       * @description The last name of the COM
+       * @example Bloggs
+       */
+      lastName: string
     }
     ErrorResponse: {
       /** Format: int32 */

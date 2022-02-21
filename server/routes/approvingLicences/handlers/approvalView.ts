@@ -13,9 +13,11 @@ export default class ApprovalViewRoutes {
     if (licence?.statusCode === LicenceStatus.SUBMITTED) {
       const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
       const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
+
+      // Recorded here as we do not know the reason for the fetchLicence in the API
       await this.licenceService.recordAuditEvent(
-        `Viewed licence for ${licence.forename} ${licence.surname} for approval`,
-        `Viewed licence ID ${licence.id} type ${licence.typeCode} version ${licence.version} for approval`,
+        `Licence viewed for approval for ${licence?.forename} ${licence?.surname}`,
+        `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
         licence.id,
         new Date(),
         user
@@ -27,30 +29,16 @@ export default class ApprovalViewRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const { user, licence } = res.locals
+    const { user } = res.locals
     const { licenceId, result } = req.body
     switch (result) {
       case 'reject': {
         await this.licenceService.updateStatus(licenceId, LicenceStatus.REJECTED, user)
-        await this.licenceService.recordAuditEvent(
-          `Rejected licence for ${licence.forename} ${licence.surname}`,
-          `Rejected licence ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
-          licence.id,
-          new Date(),
-          user
-        )
         res.redirect(`/licence/approve/id/${licenceId}/confirm-rejected`)
         break
       }
       case 'approve': {
         await this.licenceService.updateStatus(licenceId, LicenceStatus.APPROVED, user)
-        await this.licenceService.recordAuditEvent(
-          `Approved licence for ${licence.forename} ${licence.surname}`,
-          `Approved licence ID ${licence.id} type ${licence.typeCode} version ${licence.version}`,
-          licence.id,
-          new Date(),
-          user
-        )
         res.redirect(`/licence/approve/id/${licenceId}/confirm-approved`)
         break
       }

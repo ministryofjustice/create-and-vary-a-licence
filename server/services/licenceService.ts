@@ -116,7 +116,7 @@ export default class LicenceService {
       responsibleComStaffId: responsibleOfficer.staffId,
     } as CreateLicenceRequest
 
-    // TODO: This section can be removed after having been live in production for som time. This is only needed initially because some
+    // TODO: This section can be removed after having been live in production for some time. This is only needed initially because some
     //  COM records will not be saved in our database initially. Over time, the OFFENDER_MANAGER_CHANGED event, and logins will have populated
     //  staff details into the database, and this call will have become redundant
     const comDetails = await this.communityService.getStaffDetailByStaffIdentifier(responsibleOfficer.staffId)
@@ -124,19 +124,11 @@ export default class LicenceService {
       staffIdentifier: comDetails?.staffIdentifier,
       staffUsername: comDetails?.username,
       staffEmail: comDetails?.email,
+      firstName: comDetails?.staff?.forenames,
+      lastName: comDetails?.staff?.surname,
     })
 
-    const licenceSummary = await this.licenceApiClient.createLicence(licence, user)
-
-    await this.recordAuditEvent(
-      `Created a licence for ${licence.forename} ${licence.surname}`,
-      `Create a licence type ${licence.typeCode} version ${licence.version}`,
-      licenceSummary?.licenceId || null,
-      new Date(),
-      user
-    )
-
-    return licenceSummary
+    return this.licenceApiClient.createLicence(licence, user)
   }
 
   async getLicence(id: string, user: User): Promise<Licence> {

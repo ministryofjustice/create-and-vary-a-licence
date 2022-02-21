@@ -93,7 +93,6 @@ describe('Route - view and approve a licence', () => {
 
       await handler.POST(req, res)
       expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.APPROVED, res.locals.user)
-      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/id/1/confirm-approved')
     })
 
@@ -104,7 +103,6 @@ describe('Route - view and approve a licence', () => {
 
       await handler.POST(req, res)
       expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.REJECTED, res.locals.user)
-      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/id/1/confirm-rejected')
     })
   })

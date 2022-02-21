@@ -71,6 +71,8 @@ export default function populateCurrentUser(userService: UserService, licenceSer
               staffIdentifier: probationUser?.staffIdentifier,
               staffUsername: user.username,
               staffEmail: probationUser?.email,
+              firstName: probationUser?.staff?.forenames,
+              lastName: probationUser?.staff?.surname,
             })
           } else {
             // Assemble basic user information from hmpps-auth
