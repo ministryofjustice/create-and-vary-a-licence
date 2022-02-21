@@ -49,6 +49,18 @@ const allowedPaths = [
     status: 'RECALLED',
     allowed: ['/licence/create/id/(\\d)*/check-your-answers.*', '/licence/view/id/(\\d)*/.*'],
   },
+  {
+    status: 'VARIATION_IN_PROGRESS',
+    allowed: ['/licence/create/.*', '/licence/vary/.*'],
+  },
+  {
+    status: 'VARIATION_SUBMITTED',
+    allowed: ['/licence/vary/.*'],
+  },
+  {
+    status: 'VARIATION_APPROVED',
+    allowed: ['/licence/vary/.*'],
+  },
 ]
 
 /*

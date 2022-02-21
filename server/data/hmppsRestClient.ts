@@ -41,6 +41,13 @@ interface PutRequest {
   raw?: boolean
 }
 
+interface DeleteRequest {
+  path?: string
+  headers?: Record<string, string>
+  responseType?: string
+  raw?: boolean
+}
+
 interface StreamRequest {
   path?: string
   headers?: Record<string, string>
@@ -200,6 +207,34 @@ export default class HmppsRestClient {
       .catch(error => {
         const sanitisedError = sanitiseError(error)
         logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
+        throw sanitisedError
+      })
+  }
+
+  async delete(
+    { path = null, headers = {}, responseType = '', raw = false }: DeleteRequest,
+    signedWithMethod?: SignedWithMethod
+  ): Promise<unknown> {
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
+
+    logger.info(`Delete using admin client credentials: calling ${this.name}: ${path}`)
+    return superagent
+      .delete(`${this.apiConfig.url}${path}`)
+      .agent(this.agent)
+      .retry(2, (err, res) => {
+        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+        return undefined // retry handler only for logging retries, not to influence retry logic
+      })
+      .auth(signedWith, { type: 'bearer' })
+      .set(headers)
+      .responseType(responseType)
+      .timeout(this.apiConfig.timeout)
+      .then(response => {
+        return raw ? response : response.body
+      })
+      .catch(error => {
+        const sanitisedError = sanitiseError(error)
+        logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'DELETE'`)
         throw sanitisedError
       })
   }

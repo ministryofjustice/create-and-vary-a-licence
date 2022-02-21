@@ -581,7 +581,7 @@ describe('Licence Service', () => {
 
     const result = await licenceService.getLicencesForOmu(user)
     expect(licenceApiClient.matchLicences).toBeCalledWith(
-      ['ACTIVE', 'APPROVED', 'REJECTED', 'SUBMITTED'],
+      ['ACTIVE', 'APPROVED', 'SUBMITTED'],
       ['MDI'],
       [],
       [],
@@ -608,6 +608,31 @@ describe('Licence Service', () => {
       firstName: 'Joseph',
       lastName: 'Bloggs',
     })
+  })
+
+  it('should create licence variation', async () => {
+    await licenceService.createVariation('1', user)
+    expect(licenceApiClient.createVariation).toBeCalledWith('1', user)
+  })
+
+  it('should update spo discussion', async () => {
+    await licenceService.updateSpoDiscussion('1', { spoDiscussion: 'Yes' }, user)
+    expect(licenceApiClient.updateSpoDiscussion).toBeCalledWith('1', { spoDiscussion: 'Yes' }, user)
+  })
+
+  it('should update vlo discussion', async () => {
+    await licenceService.updateVloDiscussion('1', { vloDiscussion: 'Yes' }, user)
+    expect(licenceApiClient.updateVloDiscussion).toBeCalledWith('1', { vloDiscussion: 'Yes' }, user)
+  })
+
+  it('should update reason for variation', async () => {
+    await licenceService.updateReasonForVariation('1', { reasonForVariation: 'Reason' }, user)
+    expect(licenceApiClient.updateReasonForVariation).toBeCalledWith('1', { reasonForVariation: 'Reason' }, user)
+  })
+
+  it('should discard licence', async () => {
+    await licenceService.discard('1', user)
+    expect(licenceApiClient.discard).toBeCalledWith('1', user)
   })
 
   describe('Exclusion zone file', () => {

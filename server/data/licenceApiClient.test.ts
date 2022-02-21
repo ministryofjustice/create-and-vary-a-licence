@@ -16,6 +16,9 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
+  UpdateReasonForVariationRequest,
+  UpdateSpoDiscussionRequest,
+  UpdateVloDiscussionRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -35,12 +38,14 @@ describe('Licence API client tests', () => {
   const put = jest.spyOn(HmppsRestClient.prototype, 'put')
   const stream = jest.spyOn(HmppsRestClient.prototype, 'stream')
   const postMultiPart = jest.spyOn(HmppsRestClient.prototype, 'postMultiPart')
+  const del = jest.spyOn(HmppsRestClient.prototype, 'delete')
 
   beforeEach(() => {
     get.mockResolvedValue(true)
     post.mockResolvedValue(true)
     put.mockResolvedValue(true)
     postMultiPart.mockResolvedValue(true)
+    del.mockResolvedValue(true)
   })
 
   afterEach(() => {
@@ -278,6 +283,60 @@ describe('Licence API client tests', () => {
         staffEmail: 'joebloggs@probation.gov.uk',
       },
     })
+  })
+
+  it('Create variation', async () => {
+    post.mockResolvedValue({ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary)
+
+    const result = await licenceApiClient.createVariation('1', { username: 'joebloggs' } as User)
+
+    expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/create-variation' }, { username: 'joebloggs' })
+    expect(result).toEqual({ licenceId: 1, prisonCode: 'MDI' })
+  })
+
+  it('Update spo discussion', async () => {
+    await licenceApiClient.updateSpoDiscussion(
+      '1',
+      { spoDiscussion: 'Yes' } as UpdateSpoDiscussionRequest,
+      { username: 'joebloggs' } as User
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/spo-discussion', data: { spoDiscussion: 'Yes' } },
+      { username: 'joebloggs' }
+    )
+  })
+
+  it('Update vlo discussion', async () => {
+    await licenceApiClient.updateVloDiscussion(
+      '1',
+      { vloDiscussion: 'Yes' } as UpdateVloDiscussionRequest,
+      { username: 'joebloggs' } as User
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/vlo-discussion', data: { vloDiscussion: 'Yes' } },
+      { username: 'joebloggs' }
+    )
+  })
+
+  it('Update reason for variation', async () => {
+    await licenceApiClient.updateReasonForVariation(
+      '1',
+      { reasonForVariation: 'Reason' } as UpdateReasonForVariationRequest,
+      { username: 'joebloggs' } as User
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      { path: '/licence/id/1/reason-for-variation', data: { reasonForVariation: 'Reason' } },
+      { username: 'joebloggs' }
+    )
+  })
+
+  it('Discard licence', async () => {
+    await licenceApiClient.discard('1', { username: 'joebloggs' } as User)
+
+    expect(del).toHaveBeenCalledWith({ path: '/licence/id/1/discard' }, { username: 'joebloggs' })
   })
 
   describe('Exclusion zone file', () => {

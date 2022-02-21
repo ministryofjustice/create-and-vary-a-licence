@@ -8,13 +8,25 @@ export interface paths {
     /** Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateResponsibleCom']
   }
+  '/licence/id/{licenceId}/vlo-discussion': {
+    /** Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateVloDiscussion']
+  }
   '/licence/id/{licenceId}/submit': {
-    /** Update the status of a licence to SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    /** Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['submitLicence']
   }
   '/licence/id/{licenceId}/status': {
     /** Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateLicenceStatus']
+  }
+  '/licence/id/{licenceId}/spo-discussion': {
+    /** Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateSpoDiscussion']
+  }
+  '/licence/id/{licenceId}/reason-for-variation': {
+    /** Updates the reason for the licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateReasonForVariation']
   }
   '/licence/id/{licenceId}/contact-number': {
     /** Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -56,6 +68,10 @@ export interface paths {
     /** Records an auditable event related to an action taken by a user or an automated in-service process. Requires ROLE_CVL_ADMIN. */
     put: operations['recordAuditEvent']
   }
+  '/licence/id/{licenceId}/create-variation': {
+    /** Create a variation of this licence. The new licence will have a new ID and have a statius VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['createVariation']
+  }
   '/licence/create': {
     /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createLicence']
@@ -83,6 +99,10 @@ export interface paths {
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/full-size-image': {
     /** Get the exclusion zone map image. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getExclusionZoneImage']
+  }
+  '/licence/id/{licenceId}/discard': {
+    /** Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    delete: operations['discard']
   }
 }
 
@@ -126,6 +146,14 @@ export interface components {
       developerMessage?: string
       moreInfo?: string
     }
+    /** @description Request object for updating the VLO discussion */
+    UpdateVloDiscussionRequest: {
+      /**
+       * @description Whether or not the licence variation has been discussed with a VLO
+       * @example Yes
+       */
+      vloDiscussion: string
+    }
     /** @description Request object for updating the status of a licence */
     StatusUpdateRequest: {
       /**
@@ -155,6 +183,19 @@ export interface components {
        * @example John Smythe
        */
       fullName?: string
+    }
+    /** @description Request object for updating the SPO discussion */
+    UpdateSpoDiscussionRequest: {
+      /**
+       * @description Whether or not the licence variation has been discussed with an SPO
+       * @example Yes
+       */
+      spoDiscussion: string
+    }
+    /** @description Request object for updating the reason for variation */
+    UpdateReasonForVariationRequest: {
+      /** @description A large string containing rich text markup. A reason for varying the licence. */
+      reasonForVariation: string
     }
     /** @description Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
@@ -362,6 +403,128 @@ export interface components {
        */
       detail?: string
     }
+    /** @description Response object which summarises a licence */
+    LicenceSummary: {
+      /**
+       * Format: int64
+       * @description Internal identifier for this licence generated within this service
+       * @example 123344
+       */
+      licenceId: number
+      /**
+       * @description Licence type code
+       * @example AP
+       * @enum {string}
+       */
+      licenceType: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * @description The status of this licence
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      licenceStatus:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+      /**
+       * @description The prison nomis identifier for this offender
+       * @example A1234AA
+       */
+      nomisId?: string
+      /**
+       * @description The offender surname
+       * @example Smith
+       */
+      surname?: string
+      /**
+       * @description The offender forename
+       * @example Brian
+       */
+      forename?: string
+      /**
+       * @description The prison code where this offender resides or was released from
+       * @example MDI
+       */
+      prisonCode?: string
+      /**
+       * @description The prison where this offender resides or was released from
+       * @example Moorland (HMP)
+       */
+      prisonDescription?: string
+      /**
+       * @description The probation area code where the licence is supervised
+       * @example N01
+       */
+      probationAreaCode?: string
+      /**
+       * @description The probation area description
+       * @example Wales
+       */
+      probationAreaDescription?: string
+      /**
+       * @description The probation delivery unit (PDU or borough) where the licence is supervised
+       * @example N01CA
+       */
+      probationPduCode?: string
+      /**
+       * @description The description for the PDU
+       * @example North Wales
+       */
+      probationPduDescription?: string
+      /**
+       * @description The local administrative unit (LAU or district) where the licence is supervised
+       * @example NA01CA-02
+       */
+      probationLauCode?: string
+      /**
+       * @description The LAU description
+       * @example North Wales
+       */
+      probationLauDescription?: string
+      /**
+       * @description The probation team code which supervises the licence
+       * @example NA01CA-02-A
+       */
+      probationTeamCode?: string
+      /**
+       * @description The team description
+       * @example Cardiff South
+       */
+      probationTeamDescription?: string
+      /**
+       * Format: date
+       * @description The conditional release date on the licence
+       */
+      conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The actual release date on the licence
+       */
+      actualReleaseDate?: string
+      /**
+       * @description The case reference number (CRN) of this person, from either prison or probation service
+       * @example X12344
+       */
+      crn?: string
+      /**
+       * Format: date
+       * @description The offender's date of birth, from either prison or probation services
+       */
+      dateOfBirth?: string
+      /**
+       * @description The username of the responsible probation officer
+       * @example jsmith
+       */
+      comUsername?: string
+    }
     /** @description Request object for creating a new licence */
     CreateLicenceRequest: {
       /**
@@ -556,128 +719,6 @@ export interface components {
        * @example Be of generally good behaviour
        */
       text?: string
-    }
-    /** @description Response object which summarises a licence */
-    LicenceSummary: {
-      /**
-       * Format: int64
-       * @description Internal identifier for this licence generated within this service
-       * @example 123344
-       */
-      licenceId: number
-      /**
-       * @description Licence type code
-       * @example AP
-       * @enum {string}
-       */
-      licenceType: 'AP' | 'AP_PSS' | 'PSS'
-      /**
-       * @description The status of this licence
-       * @example IN_PROGRESS
-       * @enum {string}
-       */
-      licenceStatus:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-      /**
-       * @description The prison nomis identifier for this offender
-       * @example A1234AA
-       */
-      nomisId?: string
-      /**
-       * @description The offender surname
-       * @example Smith
-       */
-      surname?: string
-      /**
-       * @description The offender forename
-       * @example Brian
-       */
-      forename?: string
-      /**
-       * @description The prison code where this offender resides or was released from
-       * @example MDI
-       */
-      prisonCode?: string
-      /**
-       * @description The prison where this offender resides or was released from
-       * @example Moorland (HMP)
-       */
-      prisonDescription?: string
-      /**
-       * @description The probation area code where the licence is supervised
-       * @example N01
-       */
-      probationAreaCode?: string
-      /**
-       * @description The probation area description
-       * @example Wales
-       */
-      probationAreaDescription?: string
-      /**
-       * @description The probation delivery unit (PDU or borough) where the licence is supervised
-       * @example N01CA
-       */
-      probationPduCode?: string
-      /**
-       * @description The description for the PDU
-       * @example North Wales
-       */
-      probationPduDescription?: string
-      /**
-       * @description The local administrative unit (LAU or district) where the licence is supervised
-       * @example NA01CA-02
-       */
-      probationLauCode?: string
-      /**
-       * @description The LAU description
-       * @example North Wales
-       */
-      probationLauDescription?: string
-      /**
-       * @description The probation team code which supervises the licence
-       * @example NA01CA-02-A
-       */
-      probationTeamCode?: string
-      /**
-       * @description The team description
-       * @example Cardiff South
-       */
-      probationTeamDescription?: string
-      /**
-       * Format: date
-       * @description The conditional release date on the licence
-       */
-      conditionalReleaseDate?: string
-      /**
-       * Format: date
-       * @description The actual release date on the licence
-       */
-      actualReleaseDate?: string
-      /**
-       * @description The case reference number (CRN) of this person, from either prison or probation service
-       * @example X12344
-       */
-      crn?: string
-      /**
-       * Format: date
-       * @description The offender's date of birth, from either prison or probation services
-       */
-      dateOfBirth?: string
-      /**
-       * @description The username of the responsible probation officer
-       * @example jsmith
-       */
-      comUsername?: string
     }
     /** @description Describes an audit event request */
     AuditRequest: {
@@ -942,6 +983,18 @@ export interface components {
        */
       appointmentContact?: string
       /**
+       * @description Have you have discussed this variation request with your SPO?
+       * @example Yes
+       */
+      spoDiscussion?: string
+      /**
+       * @description Have you consulted with the victim liaison officer (VLO) for this case?
+       * @example Yes
+       */
+      vloDiscussion?: string
+      /** @description The reason for the variation, in rich-text. */
+      reasonForVariation?: string
+      /**
        * Format: date-time
        * @description The date and time that this prison approved this licence
        */
@@ -991,6 +1044,13 @@ export interface components {
       additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /** @description The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition'][]
+      /** @description Is this licence a variation of another licence? */
+      isVariation: boolean
+      /**
+       * Format: int64
+       * @description The licence Id which this licence is a variation of
+       */
+      variationOf?: number
     }
   }
 }
@@ -1031,7 +1091,48 @@ export interface operations {
       }
     }
   }
-  /** Update the status of a licence to SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  /** Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateVloDiscussion: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** VLO discussion updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateVloDiscussionRequest']
+      }
+    }
+  }
+  /** Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   submitLicence: {
     parameters: {
       path: {
@@ -1105,6 +1206,88 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['StatusUpdateRequest']
+      }
+    }
+  }
+  /** Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateSpoDiscussion: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** SPO discussion updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateSpoDiscussionRequest']
+      }
+    }
+  }
+  /** Updates the reason for the licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateReasonForVariation: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Reason for variation updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateReasonForVariationRequest']
       }
     }
   }
@@ -1487,6 +1670,46 @@ export interface operations {
       }
     }
   }
+  /** Create a variation of this licence. The new licence will have a new ID and have a statius VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  createVariation: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Licence variation created */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary']
+        }
+      }
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   createLicence: {
     responses: {
@@ -1725,6 +1948,42 @@ export interface operations {
         }
       }
       /** No image was found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  discard: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Licence discarded */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
       404: {
         content: {
           'application/json': components['schemas']['ErrorResponse']

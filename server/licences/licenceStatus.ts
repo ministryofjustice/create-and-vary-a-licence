@@ -58,7 +58,7 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     colour: 'pink',
   },
   VARIATION_APPROVED: {
-    label: 'Variation submitted',
+    label: 'Variation approved',
     description: 'Variation submitted for approval',
     colour: 'yellow',
   },

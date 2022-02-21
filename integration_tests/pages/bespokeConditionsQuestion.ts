@@ -2,7 +2,7 @@ import Page from './page'
 import BespokeConditionsPage from './bespokeConditions'
 
 export default class BespokeConditionsQuestionPage extends Page {
-  private yesRadioButtonId = '[value=yes]'
+  private yesRadioButtonId = '[value=Yes]'
 
   private continueButtonId = '[data-qa=continue]'
 

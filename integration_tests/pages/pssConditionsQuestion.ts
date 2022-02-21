@@ -2,7 +2,7 @@ import Page from './page'
 import PssConditionsPage from './pssConditions'
 
 export default class PssConditionsQuestionPage extends Page {
-  private yesRadioButtonId = '[value=yes]'
+  private yesRadioButtonId = '[value=Yes]'
 
   private continueButtonId = '[data-qa=continue]'
 
