@@ -1,11 +1,10 @@
 import { Request, Response } from 'express'
 import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
-import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class ViewVariationRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
-    const licence = res.locals.licence as Licence
+    const { licence } = res.locals
 
     if (licence.statusCode === LicenceStatus.VARIATION_IN_PROGRESS) {
       return res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)

@@ -43,10 +43,10 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if not licence.isVariation %}
-                {{ inductionMeetingDetails(licence, isInProgress) }}
-            {% else %}
+            {% if licence.isVariation %}
                 {{ variationDetails(licence, isInProgress) }}
+            {% else %}
+                {{ inductionMeetingDetails(licence, isInProgress) }}
             {% endif %}
 
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}

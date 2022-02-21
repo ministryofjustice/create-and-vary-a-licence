@@ -18,8 +18,9 @@ import ReasonForVariationRoutes from './handlers/reasonForVariation'
 import VariationSummaryRoutes from './handlers/variationSummary'
 import ConfirmationRoutes from './handlers/confirmation'
 import ReasonForVariation from '../creatingLicences/types/reasonForVariation'
+import ComDetailsRoutes from './handlers/comDetails'
 
-export default function Index({ licenceService, caseloadService }: Services): Router {
+export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/vary${path}`
@@ -48,6 +49,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
     )
 
   const caseloadHandler = new CaseloadRoutes(caseloadService)
+  const comDetailsHandler = new ComDetailsRoutes(communityService)
   const viewLicenceHandler = new ViewVariationRoutes()
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)
   const spoDiscussionHandler = new SpoDiscussionRoutes(licenceService)
@@ -59,6 +61,7 @@ export default function Index({ licenceService, caseloadService }: Services): Ro
   const confirmationHandler = new ConfirmationRoutes()
 
   get('/caseload', caseloadHandler.GET)
+  get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
   get('/id/:licenceId/view', viewLicenceHandler.GET)
   get('/id/:licenceId/confirm-vary-action', confirmVaryActionHandler.GET)
   post('/id/:licenceId/confirm-vary-action', confirmVaryActionHandler.POST, YesOrNoQuestion)

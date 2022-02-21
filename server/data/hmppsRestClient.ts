@@ -217,7 +217,7 @@ export default class HmppsRestClient {
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
-    logger.info(`Put using admin client credentials: calling ${this.name}: ${path}`)
+    logger.info(`Delete using admin client credentials: calling ${this.name}: ${path}`)
     return superagent
       .delete(`${this.apiConfig.url}${path}`)
       .agent(this.agent)

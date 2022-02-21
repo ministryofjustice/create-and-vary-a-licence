@@ -146,7 +146,7 @@ describe('Hmpps Rest Client tests', () => {
       expect(result).toEqual({ success: true })
     })
 
-    it('Should the supplied token as signature', async () => {
+    it('Should accept the supplied token as signature', async () => {
       nock('http://localhost:8080', {
         reqheaders: { authorization: 'Bearer user token', header1: 'headerValue1' },
       })
@@ -454,7 +454,7 @@ describe('Hmpps Rest Client tests', () => {
       expect(result).toEqual({ success: true })
     })
 
-    it('Should the supplied token as signature', async () => {
+    it('Should accept the supplied token as signature', async () => {
       nock('http://localhost:8080', {
         reqheaders: { authorization: 'Bearer user token', header1: 'headerValue1' },
       })
