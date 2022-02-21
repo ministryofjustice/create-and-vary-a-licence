@@ -109,6 +109,7 @@ export default class PrintLicenceRoutes {
             <td style="text-align: center;">Booking No: <span style="font-weight: bold;">${licence.bookingNo}</span></td>
             <td style="text-align: center;">CRO No: <span style="font-weight: bold;">${licence.cro}</span></td>
             <td style="text-align: center;">PNC ID: <span style="font-weight: bold;">${licence.pnc}</span></td>
+            <td style="text-align: center;">Prison: <span style="font-weight: bold;">${licence.prisonDescription}</span></td>
           </tr>
         </table>
         <p>
