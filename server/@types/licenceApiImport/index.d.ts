@@ -24,6 +24,10 @@ export interface paths {
     /** Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateSpoDiscussion']
   }
+  '/licence/id/{licenceId}/sentence-dates': {
+    /** Updates the sentence dates. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateSentenceDates']
+  }
   '/licence/id/{licenceId}/reason-for-variation': {
     /** Updates the reason for the licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateReasonForVariation']
@@ -195,6 +199,49 @@ export interface components {
        * @example Yes
        */
       spoDiscussion: string
+    }
+    /** @description Request object for updating sentence dates */
+    UpdateSentenceDatesRequest: {
+      /**
+       * Format: date
+       * @description The conditional release date, from prison services
+       */
+      conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The actual release date, from prison services
+       */
+      actualReleaseDate?: string
+      /**
+       * Format: date
+       * @description The sentence start date, from prison services
+       */
+      sentenceStartDate?: string
+      /**
+       * Format: date
+       * @description The sentence end date, from prison services
+       */
+      sentenceEndDate?: string
+      /**
+       * Format: date
+       * @description The licence start date, from prison services
+       */
+      licenceStartDate?: string
+      /**
+       * Format: date
+       * @description The licence end date, from prison services
+       */
+      licenceExpiryDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period starts, from prison services
+       */
+      topupSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description The date when the post sentence supervision period ends, from prison services
+       */
+      topupSupervisionExpiryDate?: string
     }
     /** @description Request object for updating the reason for variation */
     UpdateReasonForVariationRequest: {
@@ -1269,6 +1316,47 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['UpdateSpoDiscussionRequest']
+      }
+    }
+  }
+  /** Updates the sentence dates. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateSentenceDates: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Sentence dates updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateSentenceDatesRequest']
       }
     }
   }

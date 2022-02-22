@@ -5,7 +5,7 @@ import createProbationEventSqsListener from './listeners/sqsProbationEventsListe
 import createDomainEventSqsListener from './listeners/sqsDomainEventsListener'
 
 const app = createApp(services)
-const sqsPrisonEventsListener = createPrisonEventSqsListener()
+const sqsPrisonEventsListener = createPrisonEventSqsListener(services)
 const sqsProbationEventsListener = createProbationEventSqsListener(services)
 const sqsDomainEventsListener = createDomainEventSqsListener(services)
 

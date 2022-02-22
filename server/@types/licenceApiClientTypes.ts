@@ -20,3 +20,4 @@ export type UpdateSpoDiscussionRequest = components['schemas']['UpdateSpoDiscuss
 export type UpdateVloDiscussionRequest = components['schemas']['UpdateVloDiscussionRequest']
 export type UpdateReasonForVariationRequest = components['schemas']['UpdateReasonForVariationRequest']
 export type UpdatePrisonInformationRequest = components['schemas']['UpdatePrisonInformationRequest']
+export type UpdateSentenceDatesRequest = components['schemas']['UpdateSentenceDatesRequest']

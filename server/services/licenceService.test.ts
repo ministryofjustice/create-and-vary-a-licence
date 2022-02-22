@@ -16,7 +16,12 @@ import AdditionalConditions from '../routes/creatingLicences/types/additionalCon
 import SimpleDate from '../routes/creatingLicences/types/date'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
-import { LicenceSummary, UpdateComRequest, UpdatePrisonInformationRequest } from '../@types/licenceApiClientTypes'
+import {
+  LicenceSummary,
+  UpdateComRequest,
+  UpdatePrisonInformationRequest,
+  UpdateSentenceDatesRequest,
+} from '../@types/licenceApiClientTypes'
 import { CommunityApiOffenderManager } from '../@types/communityClientTypes'
 
 jest.mock('../data/licenceApiClient')
@@ -652,6 +657,37 @@ describe('Licence Service', () => {
         prisonDescription: 'Pentonville (HMP)',
         prisonTelephone: '+44 276 54545',
       } as UpdatePrisonInformationRequest,
+      user
+    )
+  })
+
+  it('should update sentence dates', async () => {
+    await licenceService.updateSentenceDates(
+      '1',
+      {
+        conditionalReleaseDate: '09/09/2022',
+        actualReleaseDate: '09/09/2022',
+        sentenceStartDate: '09/09/2021',
+        sentenceEndDate: '09/09/2023',
+        licenceStartDate: '09/09/2022',
+        licenceExpiryDate: '09/09/2023',
+        topupSupervisionStartDate: '09/09/2023',
+        topupSupervisionExpiryDate: '09/09/2024',
+      },
+      user
+    )
+    expect(licenceApiClient.updateSentenceDates).toBeCalledWith(
+      '1',
+      {
+        conditionalReleaseDate: '09/09/2022',
+        actualReleaseDate: '09/09/2022',
+        sentenceStartDate: '09/09/2021',
+        sentenceEndDate: '09/09/2023',
+        licenceStartDate: '09/09/2022',
+        licenceExpiryDate: '09/09/2023',
+        topupSupervisionStartDate: '09/09/2023',
+        topupSupervisionExpiryDate: '09/09/2024',
+      } as UpdateSentenceDatesRequest,
       user
     )
   })
