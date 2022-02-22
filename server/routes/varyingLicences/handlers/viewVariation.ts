@@ -14,7 +14,7 @@ export default class ViewVariationRoutes {
     const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
 
     const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
-    const shouldShowPrintButton = [LicenceStatus.VARIATION_APPROVED].includes(<LicenceStatus>licence.statusCode)
+    const shouldShowActivateButton = [LicenceStatus.VARIATION_APPROVED].includes(<LicenceStatus>licence.statusCode)
     const shouldShowEditAndDiscardButton = [
       LicenceStatus.VARIATION_SUBMITTED,
       LicenceStatus.VARIATION_APPROVED,
@@ -24,7 +24,7 @@ export default class ViewVariationRoutes {
     return res.render('pages/vary/viewVariation', {
       expandedLicenceConditions,
       expandedPssConditions,
-      callToActions: { shouldShowVaryButton, shouldShowPrintButton, shouldShowEditAndDiscardButton },
+      callToActions: { shouldShowVaryButton, shouldShowActivateButton, shouldShowEditAndDiscardButton },
     })
   }
 }

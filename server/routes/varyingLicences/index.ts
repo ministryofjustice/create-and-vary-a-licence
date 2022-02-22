@@ -19,6 +19,8 @@ import VariationSummaryRoutes from './handlers/variationSummary'
 import ConfirmationRoutes from './handlers/confirmation'
 import ReasonForVariation from '../creatingLicences/types/reasonForVariation'
 import ComDetailsRoutes from './handlers/comDetails'
+import ConfirmActivationRoutes from './handlers/confirmActivation'
+import ActivationConfirmationRoutes from './handlers/activationConfirmation'
 
 export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
   const router = Router()
@@ -59,6 +61,8 @@ export default function Index({ licenceService, caseloadService, communityServic
   const reasonForVariationHandler = new ReasonForVariationRoutes(licenceService)
   const variationSummaryHandler = new VariationSummaryRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
+  const confirmActivationHandler = new ConfirmActivationRoutes(licenceService)
+  const activationConfirmationHandler = new ActivationConfirmationRoutes()
 
   get('/caseload', caseloadHandler.GET)
   get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
@@ -78,6 +82,9 @@ export default function Index({ licenceService, caseloadService, communityServic
   get('/id/:licenceId/summary', variationSummaryHandler.GET)
   post('/id/:licenceId/summary', variationSummaryHandler.POST)
   get('/id/:licenceId/confirmation', confirmationHandler.GET)
+  get('/id/:licenceId/confirm-activation', confirmActivationHandler.GET)
+  post('/id/:licenceId/confirm-activation', confirmActivationHandler.POST, YesOrNoQuestion)
+  get('/id/:licenceId/activation-confirmation', activationConfirmationHandler.GET)
 
   return router
 }

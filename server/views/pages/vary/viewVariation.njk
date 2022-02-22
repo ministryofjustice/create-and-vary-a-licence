@@ -21,15 +21,15 @@
                     attributes: { 'data-qa': 'vary-licence' }
                 }) }}
             {% endif %}
-            {% if callToActions.shouldShowPrintButton %}
+            {% if callToActions.shouldShowActivateButton %}
                 {{ govukButton({
-                    text: "Print",
+                    text: "Activate licence variation",
                     classes: "govuk-button--primary govuk-!-margin-right-1",
-                    href: '#'
+                    href: '/licence/vary/id/' + licence.id + '/confirm-activation'
                 }) }}
             {% endif %}
             {% if callToActions.shouldShowEditAndDiscardButton %}
-                {% set class = "govuk-button--secondary" if callToActions.shouldShowPrintButton else "govuk-button--primary" %}
+                {% set class = "govuk-button--secondary" if callToActions.shouldShowActivateButton else "govuk-button--primary" %}
                 {{ govukButton({
                     text: "Edit variation",
                     classes: class + " govuk-!-margin-right-1",
