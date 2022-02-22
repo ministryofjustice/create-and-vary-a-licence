@@ -21,6 +21,29 @@ context('Event handlers', () => {
         if (!success) throw new Error(`Endpoint called an unexpected number of times`)
       })
     })
+
+    it('should listen to the transferred event and call endpoint to update prison information and update licence status', () => {
+      cy.task('stubGetLicencesForOffender', { nomisId: 'A7774DY', status: 'APPROVED' })
+      cy.task('stubGetPrisonInformation')
+      cy.task('stubUpdateLicenceStatus')
+      cy.task('stubUpdatePrisonInformation')
+
+      cy.task(
+        'sendDomainEvent',
+        `{
+            "Message" :  "{\\"eventType\\":\\"prison-offender-events.prisoner.received\\",\\"additionalInformation\\":{\\"nomsNumber\\":\\"A7774DY\\",\\"reason\\":\\"TRANSFERRED\\",\\"details\\":\\"Movement reason code CR\\",\\"currentLocation\\":\\"IN_PRISON\\",\\"prisonId\\":\\"PVI\\"},\\"version\\":1,\\"occurredAt\\":\\"2022-01-12T14:56:51.662128Z\\",\\"publishedAt\\":\\"2022-01-12T14:58:25.021008001Z\\",\\"description\\":\\"A prisoner has been received into prison\\"}"
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 }).then(success => {
+        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
+      })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/prison-information', times: 1 }).then(
+        success => {
+          if (!success) throw new Error(`Endpoint called an unexpected number of times`)
+        }
+      )
+    })
   })
 
   describe('Probation events', () => {

@@ -28,6 +28,10 @@ export interface paths {
     /** Updates the reason for the licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateReasonForVariation']
   }
+  '/licence/id/{licenceId}/prison-information': {
+    /** Updates the prison information. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updatePrisonInformation']
+  }
   '/licence/id/{licenceId}/contact-number': {
     /** Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateContactNumber']
@@ -196,6 +200,24 @@ export interface components {
     UpdateReasonForVariationRequest: {
       /** @description A large string containing rich text markup. A reason for varying the licence. */
       reasonForVariation: string
+    }
+    /** @description Request object for updating the prison information on a licence */
+    UpdatePrisonInformationRequest: {
+      /**
+       * @description The identifier of the prison
+       * @example PVI
+       */
+      prisonCode: string
+      /**
+       * @description The detailed name of the prison
+       * @example Pentonville (HMP)
+       */
+      prisonDescription: string
+      /**
+       * @description The prison telephone number
+       * @example +44 276 54545
+       */
+      prisonTelephone?: string
     }
     /** @description Request object for updating the contact number of the officer on a licence */
     ContactNumberRequest: {
@@ -1288,6 +1310,47 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['UpdateReasonForVariationRequest']
+      }
+    }
+  }
+  /** Updates the prison information. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updatePrisonInformation: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Prison information updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdatePrisonInformationRequest']
       }
     }
   }
