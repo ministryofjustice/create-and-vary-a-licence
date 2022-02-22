@@ -16,6 +16,7 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
+  UpdatePrisonInformationRequest,
   UpdateReasonForVariationRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
@@ -337,6 +338,30 @@ describe('Licence API client tests', () => {
     await licenceApiClient.discard('1', { username: 'joebloggs' } as User)
 
     expect(del).toHaveBeenCalledWith({ path: '/licence/id/1/discard' }, { username: 'joebloggs' })
+  })
+
+  it('Update prison information', async () => {
+    await licenceApiClient.updatePrisonInformation(
+      '1',
+      {
+        prisonCode: 'PVI',
+        prisonDescription: 'Pentonville (HMP)',
+        prisonTelephone: '+44 276 54545',
+      } as UpdatePrisonInformationRequest,
+      { username: 'joebloggs' } as User
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      {
+        path: '/licence/id/1/prison-information',
+        data: {
+          prisonCode: 'PVI',
+          prisonDescription: 'Pentonville (HMP)',
+          prisonTelephone: '+44 276 54545',
+        },
+      },
+      { username: 'joebloggs' }
+    )
   })
 
   describe('Exclusion zone file', () => {

@@ -33,11 +33,11 @@ export default class PrisonerService {
     return base64String
   }
 
-  async getPrisonerDetail(nomsId: string, user: User): Promise<PrisonApiPrisoner> {
+  async getPrisonerDetail(nomsId: string, user?: User): Promise<PrisonApiPrisoner> {
     return this.prisonApiClient.getPrisonerDetail(nomsId, user)
   }
 
-  async getPrisonInformation(prisonId: string, user: User): Promise<PrisonInformation> {
+  async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {
     return this.prisonApiClient.getPrisonInformation(prisonId, user)
   }
 

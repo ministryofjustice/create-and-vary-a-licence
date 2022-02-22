@@ -16,7 +16,7 @@ import AdditionalConditions from '../routes/creatingLicences/types/additionalCon
 import SimpleDate from '../routes/creatingLicences/types/date'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
-import { LicenceSummary, UpdateComRequest } from '../@types/licenceApiClientTypes'
+import { LicenceSummary, UpdateComRequest, UpdatePrisonInformationRequest } from '../@types/licenceApiClientTypes'
 import { CommunityApiOffenderManager } from '../@types/communityClientTypes'
 
 jest.mock('../data/licenceApiClient')
@@ -633,6 +633,27 @@ describe('Licence Service', () => {
   it('should discard licence', async () => {
     await licenceService.discard('1', user)
     expect(licenceApiClient.discard).toBeCalledWith('1', user)
+  })
+
+  it('should update prison information', async () => {
+    await licenceService.updatePrisonInformation(
+      '1',
+      {
+        prisonCode: 'PVI',
+        prisonDescription: 'Pentonville (HMP)',
+        prisonTelephone: '+44 276 54545',
+      },
+      user
+    )
+    expect(licenceApiClient.updatePrisonInformation).toBeCalledWith(
+      '1',
+      {
+        prisonCode: 'PVI',
+        prisonDescription: 'Pentonville (HMP)',
+        prisonTelephone: '+44 276 54545',
+      } as UpdatePrisonInformationRequest,
+      user
+    )
   })
 
   describe('Exclusion zone file', () => {
