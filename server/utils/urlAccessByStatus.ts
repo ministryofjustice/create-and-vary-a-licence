@@ -39,6 +39,7 @@ const allowedPaths = [
       '/licence/create/id/(\\d)*/check-your-answers.*',
       '/licence/view/id/(\\d)*/.*',
       '/licence/vary/id/(\\d)*/.*',
+      '/licence/vary-approve/id/(\\d)*/approve',
     ],
   },
   {
@@ -55,11 +56,15 @@ const allowedPaths = [
   },
   {
     status: 'VARIATION_SUBMITTED',
-    allowed: ['/licence/vary/.*'],
+    allowed: ['/licence/vary/.*', '/licence/vary-approve/.*'],
   },
   {
     status: 'VARIATION_APPROVED',
-    allowed: ['/licence/vary/.*'],
+    allowed: ['/licence/vary/.*', '/licence/vary-approve/.*'],
+  },
+  {
+    status: 'VARIATION_REJECTED',
+    allowed: ['/licence/vary/.*', '/licence/vary-approve/.*'],
   },
 ]
 

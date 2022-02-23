@@ -63,7 +63,7 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     colour: 'yellow',
   },
   VARIATION_REJECTED: {
-    label: 'Referred by aco',
+    label: 'Attention needed',
     description: 'Variation submitted for approval',
     colour: 'pink',
   },

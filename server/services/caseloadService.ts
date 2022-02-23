@@ -64,6 +64,7 @@ export default class CaseloadService {
         LicenceStatus.VARIATION_IN_PROGRESS,
         LicenceStatus.VARIATION_SUBMITTED,
         LicenceStatus.VARIATION_APPROVED,
+        LicenceStatus.VARIATION_REJECTED,
       ],
       user
     )
@@ -87,6 +88,7 @@ export default class CaseloadService {
         LicenceStatus.VARIATION_IN_PROGRESS,
         LicenceStatus.VARIATION_SUBMITTED,
         LicenceStatus.VARIATION_APPROVED,
+        LicenceStatus.VARIATION_REJECTED,
       ],
       user
     )

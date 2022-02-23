@@ -1131,6 +1131,7 @@ describe('Caseload Service', () => {
           LicenceStatus.VARIATION_IN_PROGRESS,
           LicenceStatus.VARIATION_SUBMITTED,
           LicenceStatus.VARIATION_APPROVED,
+          LicenceStatus.VARIATION_REJECTED,
         ],
         user
       )
@@ -1157,6 +1158,7 @@ describe('Caseload Service', () => {
           LicenceStatus.VARIATION_IN_PROGRESS,
           LicenceStatus.VARIATION_SUBMITTED,
           LicenceStatus.VARIATION_APPROVED,
+          LicenceStatus.VARIATION_REJECTED,
         ],
         user
       )
@@ -1227,6 +1229,7 @@ describe('Caseload Service', () => {
           LicenceStatus.VARIATION_IN_PROGRESS,
           LicenceStatus.VARIATION_SUBMITTED,
           LicenceStatus.VARIATION_APPROVED,
+          LicenceStatus.VARIATION_REJECTED,
         ],
         user
       )
@@ -1251,6 +1254,7 @@ describe('Caseload Service', () => {
           LicenceStatus.VARIATION_IN_PROGRESS,
           LicenceStatus.VARIATION_SUBMITTED,
           LicenceStatus.VARIATION_APPROVED,
+          LicenceStatus.VARIATION_REJECTED,
         ],
         user
       )

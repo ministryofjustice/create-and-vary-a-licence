@@ -30,10 +30,13 @@ export default class VaryApproveViewRoutes {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
+    const { user, licence } = res.locals
     const { licenceId } = req.params
 
-    await this.licenceService.updateStatus(licenceId, LicenceStatus.VARIATION_APPROVED, user)
+    // TODO: Awaiting a combined API endpoint to change statuses in a transactional method
+    // Also clear any referral comments?
+    await this.licenceService.updateStatus(`${licence.variationOf}`, LicenceStatus.INACTIVE, user)
+    await this.licenceService.updateStatus(licenceId, LicenceStatus.ACTIVE, user)
 
     res.redirect(`/licence/vary-approve/id/${licenceId}/approve`)
   }
