@@ -7,6 +7,7 @@ import approveLicenceRoutes from './approvingLicences'
 import homeRoutes from './home'
 import rolloutRoutes from './rollout'
 import viewLicenceRoutes from './viewingLicences'
+import approveVariationsLicenceRoutes from './approvingVariations'
 import spikeRoutes from './spikes'
 import auth from '../authentication/auth'
 import tokenVerifier from '../data/tokenVerification'
@@ -31,6 +32,7 @@ export default function Index(services: Services): Router {
   router.use(varyLicenceRoutes(services))
   router.use(approveLicenceRoutes(services))
   router.use(viewLicenceRoutes(services))
+  router.use(approveVariationsLicenceRoutes(services))
   router.use(spikeRoutes(services))
 
   return router

@@ -296,6 +296,12 @@ export default class LicenceService {
     return this.licenceApiClient.matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate', null, user)
   }
 
+  async getLicencesForVariationApproval(user: User): Promise<LicenceSummary[]> {
+    const statuses = [LicenceStatus.VARIATION_SUBMITTED.valueOf()]
+    // TODO: Add more filters - show licences matching the current user's PDUs and teams
+    return this.licenceApiClient.matchLicences(statuses, [], [], [], 'conditionalReleaseDate', null, user)
+  }
+
   async updateResponsibleCom(crn: string, newCom: UpdateComRequest): Promise<void> {
     return this.licenceApiClient.updateResponsibleCom(crn, newCom)
   }

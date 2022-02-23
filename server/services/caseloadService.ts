@@ -106,6 +106,11 @@ export default class CaseloadService {
     return this.mapLicencesAndResponsibleComs(licences)
   }
 
+  async getVaryApproverCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
+    const licences = await this.licenceService.getLicencesForVariationApproval(user)
+    return this.mapLicencesAndResponsibleComs(licences)
+  }
+
   private mapOffendersToLicences = async (caseloadNomisIds: string[], user: User): Promise<CaseTypeAndStatus[]> => {
     const [offenders, existingLicences] = await Promise.all([
       this.getOffendersEligibleForLicenceByNomisId(caseloadNomisIds, user),
