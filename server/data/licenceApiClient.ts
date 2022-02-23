@@ -17,6 +17,8 @@ import type {
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
   UpdateReasonForVariationRequest,
+  UpdatePrisonInformationRequest,
+  UpdateSentenceDatesRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -246,5 +248,17 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username }
     )) as Promise<AuditEvent[]>
+  }
+
+  async updatePrisonInformation(
+    licenceId: string,
+    request: UpdatePrisonInformationRequest,
+    user?: User
+  ): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/prison-information`, data: request }, { username: user?.username })
+  }
+
+  async updateSentenceDates(licenceId: string, request: UpdateSentenceDatesRequest, user?: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/sentence-dates`, data: request }, { username: user?.username })
   }
 }

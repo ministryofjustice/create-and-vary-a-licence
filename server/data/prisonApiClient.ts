@@ -36,17 +36,17 @@ export default class PrisonApiClient extends RestClient {
     )) as Promise<Buffer>
   }
 
-  async getPrisonerDetail(nomsId: string, user: User): Promise<PrisonApiPrisoner> {
+  async getPrisonerDetail(nomsId: string, user?: User): Promise<PrisonApiPrisoner> {
     return (await this.get(
       { path: `/api/offenders/${nomsId}` },
-      { username: user.username }
+      { username: user?.username }
     )) as Promise<PrisonApiPrisoner>
   }
 
-  async getPrisonInformation(prisonId: string, user: User): Promise<PrisonInformation> {
+  async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {
     return (await this.get(
       { path: `/api/agencies/prison/${prisonId}` },
-      { username: user.username }
+      { username: user?.username }
     )) as Promise<PrisonInformation>
   }
 

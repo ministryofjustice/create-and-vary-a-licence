@@ -179,6 +179,13 @@ export default class CaseloadService {
       .filter(managedCase => managedCase.legalStatus !== 'DEAD')
       .filter(managedCase => managedCase.status && managedCase.status.startsWith('ACTIVE'))
       .filter(managedCase => !managedCase.indeterminateSentence && managedCase.conditionalReleaseDate)
+      // TODO: Following filter rule can be removed after 4th April 2022
+      .filter(managedCase =>
+        moment(managedCase.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
+          moment('2022-04-04', 'YYYY-MM-DD'),
+          'day'
+        )
+      )
       .filter(
         managedCase =>
           !managedCase.releaseDate || moment().isSameOrBefore(moment(managedCase.releaseDate, 'YYYY-MM-DD'), 'day')

@@ -53,7 +53,7 @@ export default {
             receptionDate: '2021-01-08',
             locationDescription: 'Moorland (HMP & YOI)',
             restrictedPatient: false,
-            conditionalReleaseDate: '09/09/2022',
+            conditionalReleaseDate: '2022-09-09',
           },
         ],
       },

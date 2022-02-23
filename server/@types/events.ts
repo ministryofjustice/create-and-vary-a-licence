@@ -3,6 +3,7 @@ export type DomainEvent = {
   additionalInformation: {
     nomsNumber: string
     reason: string
+    prisonId: string
   }
 }
 export type ProbationEvent = {

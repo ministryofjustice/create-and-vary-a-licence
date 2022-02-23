@@ -16,7 +16,9 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
+  UpdatePrisonInformationRequest,
   UpdateReasonForVariationRequest,
+  UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
 } from '../@types/licenceApiClientTypes'
@@ -337,6 +339,64 @@ describe('Licence API client tests', () => {
     await licenceApiClient.discard('1', { username: 'joebloggs' } as User)
 
     expect(del).toHaveBeenCalledWith({ path: '/licence/id/1/discard' }, { username: 'joebloggs' })
+  })
+
+  it('Update prison information', async () => {
+    await licenceApiClient.updatePrisonInformation(
+      '1',
+      {
+        prisonCode: 'PVI',
+        prisonDescription: 'Pentonville (HMP)',
+        prisonTelephone: '+44 276 54545',
+      } as UpdatePrisonInformationRequest,
+      { username: 'joebloggs' } as User
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      {
+        path: '/licence/id/1/prison-information',
+        data: {
+          prisonCode: 'PVI',
+          prisonDescription: 'Pentonville (HMP)',
+          prisonTelephone: '+44 276 54545',
+        },
+      },
+      { username: 'joebloggs' }
+    )
+  })
+
+  it('Update sentence dates', async () => {
+    await licenceApiClient.updateSentenceDates(
+      '1',
+      {
+        conditionalReleaseDate: '09/09/2022',
+        actualReleaseDate: '09/09/2022',
+        sentenceStartDate: '09/09/2021',
+        sentenceEndDate: '09/09/2023',
+        licenceStartDate: '09/09/2022',
+        licenceExpiryDate: '09/09/2023',
+        topupSupervisionStartDate: '09/09/2023',
+        topupSupervisionExpiryDate: '09/09/2024',
+      } as UpdateSentenceDatesRequest,
+      { username: 'joebloggs' } as User
+    )
+
+    expect(put).toHaveBeenCalledWith(
+      {
+        path: '/licence/id/1/sentence-dates',
+        data: {
+          conditionalReleaseDate: '09/09/2022',
+          actualReleaseDate: '09/09/2022',
+          sentenceStartDate: '09/09/2021',
+          sentenceEndDate: '09/09/2023',
+          licenceStartDate: '09/09/2022',
+          licenceExpiryDate: '09/09/2023',
+          topupSupervisionStartDate: '09/09/2023',
+          topupSupervisionExpiryDate: '09/09/2024',
+        },
+      },
+      { username: 'joebloggs' }
+    )
   })
 
   describe('Exclusion zone file', () => {

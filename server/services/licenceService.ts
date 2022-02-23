@@ -16,7 +16,9 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
+  UpdatePrisonInformationRequest,
   UpdateReasonForVariationRequest,
+  UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
 } from '../@types/licenceApiClientTypes'
@@ -369,6 +371,18 @@ export default class LicenceService {
     } as AuditRequest
 
     return this.licenceApiClient.getAuditEvents(requestBody, user)
+  }
+
+  async updatePrisonInformation(
+    licenceId: string,
+    prisonInformation: UpdatePrisonInformationRequest,
+    user?: User
+  ): Promise<void> {
+    return this.licenceApiClient.updatePrisonInformation(licenceId, prisonInformation, user)
+  }
+
+  async updateSentenceDates(licenceId: string, sentenceDates: UpdateSentenceDatesRequest, user?: User): Promise<void> {
+    return this.licenceApiClient.updateSentenceDates(licenceId, sentenceDates, user)
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {
