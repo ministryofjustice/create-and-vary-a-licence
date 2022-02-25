@@ -17,11 +17,8 @@ export default class VaryReferRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId } = req.params
-    // const { reasonForReferral } = req.body
-
-    // TODO: Call single-shot API endpoint to update status and store the rejected reason
-    await this.licenceService.updateStatus(licenceId, LicenceStatus.VARIATION_REJECTED, user)
-
+    const { reasonForReferral } = req.body
+    await this.licenceService.referVariation(licenceId, { reasonForReferral }, user)
     res.redirect(`/licence/vary-approve/id/${licenceId}/refer-confirm`)
   }
 }

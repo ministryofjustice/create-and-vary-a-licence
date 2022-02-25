@@ -1457,4 +1457,57 @@ describe('Caseload Service', () => {
       ])
     })
   })
+
+  describe('getVaryApproverCaseload', () => {
+    beforeEach(() => {
+      licenceService.getLicencesForVariationApproval.mockResolvedValue([
+        {
+          licenceId: 1,
+          comUsername: 'JBLOGGS',
+        },
+        {
+          licenceId: 2,
+          comUsername: 'JSMITH',
+        },
+      ] as LicenceSummary[])
+
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+        {
+          username: 'jbloggs',
+          staff: {
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        {
+          username: 'jsmith',
+          staff: {
+            forenames: 'John',
+            surname: 'Smith',
+          },
+        },
+      ])
+    })
+
+    it('should map licences to responsible COM for vary approver caseload', async () => {
+      const varyApproverCaseload = await caseloadService.getVaryApproverCaseload(user)
+
+      expect(licenceService.getLicencesForVariationApproval).toHaveBeenCalledWith(user)
+      expect(communityService.getStaffDetailsByUsernameList).toHaveBeenCalledWith(['JBLOGGS', 'JSMITH'])
+      expect(varyApproverCaseload).toEqual([
+        {
+          licenceId: 1,
+          comUsername: 'JBLOGGS',
+          comFirstName: 'Joe',
+          comLastName: 'Bloggs',
+        },
+        {
+          licenceId: 2,
+          comUsername: 'JSMITH',
+          comFirstName: 'John',
+          comLastName: 'Smith',
+        },
+      ])
+    })
+  })
 })

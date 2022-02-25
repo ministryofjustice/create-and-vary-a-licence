@@ -13,6 +13,7 @@ import {
   CreateLicenceRequest,
   Licence,
   LicenceSummary,
+  ReferVariationRequest,
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
@@ -279,13 +280,22 @@ export default class LicenceService {
     statuses: LicenceStatus[],
     user?: User
   ): Promise<LicenceSummary[]> {
-    return this.licenceApiClient.matchLicences(statuses, [], [], nomisIds, null, null, user)
+    return this.licenceApiClient.matchLicences(statuses, [], [], nomisIds, [], null, null, user)
   }
 
   async getLicencesForApproval(user: User): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.SUBMITTED.valueOf()]
     const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
-    return this.licenceApiClient.matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate', null, user)
+    return this.licenceApiClient.matchLicences(
+      statuses,
+      filteredPrisons,
+      [],
+      [],
+      [],
+      'conditionalReleaseDate',
+      null,
+      user
+    )
   }
 
   async getLicencesForOmu(user: User): Promise<LicenceSummary[]> {
@@ -295,13 +305,30 @@ export default class LicenceService {
       LicenceStatus.SUBMITTED.valueOf(),
     ]
     const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
-    return this.licenceApiClient.matchLicences(statuses, filteredPrisons, [], [], 'conditionalReleaseDate', null, user)
+    return this.licenceApiClient.matchLicences(
+      statuses,
+      filteredPrisons,
+      [],
+      [],
+      [],
+      'conditionalReleaseDate',
+      null,
+      user
+    )
   }
 
   async getLicencesForVariationApproval(user: User): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.VARIATION_SUBMITTED.valueOf()]
-    // TODO: Add more filters - show licences matching the current user's PDUs and teams
-    return this.licenceApiClient.matchLicences(statuses, [], [], [], 'conditionalReleaseDate', null, user)
+    return this.licenceApiClient.matchLicences(
+      statuses,
+      [],
+      [],
+      [],
+      user?.probationPduCodes || [],
+      'conditionalReleaseDate',
+      null,
+      user
+    )
   }
 
   async updateResponsibleCom(crn: string, newCom: UpdateComRequest): Promise<void> {
@@ -383,6 +410,14 @@ export default class LicenceService {
 
   async updateSentenceDates(licenceId: string, sentenceDates: UpdateSentenceDatesRequest, user?: User): Promise<void> {
     return this.licenceApiClient.updateSentenceDates(licenceId, sentenceDates, user)
+  }
+
+  async approveVariation(licenceId: string, user?: User): Promise<void> {
+    return this.licenceApiClient.approveVariation(licenceId, user)
+  }
+
+  async referVariation(licenceId: string, referVariationRequest: ReferVariationRequest, user?: User): Promise<void> {
+    return this.licenceApiClient.referVariation(licenceId, referVariationRequest, user)
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {

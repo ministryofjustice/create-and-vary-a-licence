@@ -19,6 +19,7 @@ import type {
   UpdateReasonForVariationRequest,
   UpdatePrisonInformationRequest,
   UpdateSentenceDatesRequest,
+  ReferVariationRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -129,6 +130,7 @@ export default class LicenceApiClient extends RestClient {
     prisons: string[] = [],
     staffIds: number[] = [],
     nomisIds: string[] = [],
+    pdus: string[] = [],
     sortBy?: string,
     sortOrder?: string,
     user?: User
@@ -141,6 +143,7 @@ export default class LicenceApiClient extends RestClient {
           status: statuses,
           staffId: staffIds,
           nomsId: nomisIds,
+          pdu: pdus,
           sortBy: sortBy || undefined,
           sortOrder: sortOrder || undefined,
         },
@@ -260,5 +263,13 @@ export default class LicenceApiClient extends RestClient {
 
   async updateSentenceDates(licenceId: string, request: UpdateSentenceDatesRequest, user?: User): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/sentence-dates`, data: request }, { username: user?.username })
+  }
+
+  async approveVariation(licenceId: string, user?: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/approve-variation` }, { username: user?.username })
+  }
+
+  async referVariation(licenceId: string, request: ReferVariationRequest, user?: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/refer-variation`, data: request }, { username: user?.username })
   }
 }

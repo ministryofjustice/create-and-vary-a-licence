@@ -562,7 +562,7 @@ describe('Licence Service', () => {
 
   it('Get licences by nomis ids and statuses', async () => {
     await licenceService.getLicencesByNomisIdsAndStatus(['ABC1234'], [LicenceStatus.APPROVED], user)
-    expect(licenceApiClient.matchLicences).toBeCalledWith(['APPROVED'], [], [], ['ABC1234'], null, null, user)
+    expect(licenceApiClient.matchLicences).toBeCalledWith(['APPROVED'], [], [], ['ABC1234'], [], null, null, user)
   })
 
   it('Get licences for approval', async () => {
@@ -574,9 +574,25 @@ describe('Licence Service', () => {
       ['MDI'],
       [],
       [],
+      [],
       'conditionalReleaseDate',
       null,
       user
+    )
+  })
+
+  it('Get licences for variation approval', async () => {
+    const approver = { ...user, probationPduCodes: ['A'] }
+    await licenceService.getLicencesForVariationApproval(approver)
+    expect(licenceApiClient.matchLicences).toBeCalledWith(
+      ['VARIATION_SUBMITTED'],
+      [],
+      [],
+      [],
+      ['A'],
+      'conditionalReleaseDate',
+      null,
+      approver
     )
   })
 
@@ -588,6 +604,7 @@ describe('Licence Service', () => {
     expect(licenceApiClient.matchLicences).toBeCalledWith(
       ['ACTIVE', 'APPROVED', 'SUBMITTED'],
       ['MDI'],
+      [],
       [],
       [],
       'conditionalReleaseDate',
@@ -690,6 +707,16 @@ describe('Licence Service', () => {
       } as UpdateSentenceDatesRequest,
       user
     )
+  })
+
+  it('should approve a licence variation', async () => {
+    await licenceService.approveVariation('1', user)
+    expect(licenceApiClient.approveVariation).toBeCalledWith('1', user)
+  })
+
+  it('should refer a licence variation', async () => {
+    await licenceService.referVariation('1', { reasonForReferral: 'Reason' }, user)
+    expect(licenceApiClient.referVariation).toBeCalledWith('1', { reasonForReferral: 'Reason' }, user)
   })
 
   describe('Exclusion zone file', () => {
