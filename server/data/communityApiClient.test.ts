@@ -4,7 +4,6 @@ import {
   CommunityApiManagedOffender,
   CommunityApiOffenderManager,
   CommunityApiStaffDetails,
-  CommunityApiTeamManagedCase,
 } from '../@types/communityClientTypes'
 
 jest.mock('./tokenStore', () => {
@@ -61,22 +60,20 @@ describe('Community Api client tests', () => {
     const result = await communityApiClient.getStaffCaseload(2000)
 
     expect(get).toHaveBeenCalledWith({
-      path: '/secure/staff/staffIdentifier/2000/managedOffenders',
-      query: { current: true },
+      path: '/secure/staff/staffIdentifier/2000/caseload/managedOffenders',
     })
     expect(result).toEqual({ nomsNumber: 'ABC1234' })
   })
 
   it('Get team caseload', async () => {
-    get.mockResolvedValue({ nomsNumber: 'ABC1234' } as CommunityApiTeamManagedCase)
+    get.mockResolvedValue({ offenderCrn: 'ABC1234' } as CommunityApiManagedOffender)
 
-    const result = await communityApiClient.getTeamCaseload(['teamA', 'teamB'])
+    const result = await communityApiClient.getTeamCaseload('teamA')
 
     expect(get).toHaveBeenCalledWith({
-      path: '/secure/teams/managedOffenders',
-      query: { current: true, teamCode: ['teamA', 'teamB'] },
+      path: '/secure/team/teamA/caseload/managedOffenders',
     })
-    expect(result).toEqual({ nomsNumber: 'ABC1234' })
+    expect(result).toEqual({ offenderCrn: 'ABC1234' })
   })
 
   it("Get a list of an offender's managers", async () => {

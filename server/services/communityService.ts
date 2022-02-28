@@ -5,7 +5,6 @@ import {
   CommunityApiManagedOffender,
   CommunityApiOffenderManager,
   CommunityApiStaffDetails,
-  CommunityApiTeamManagedCase,
 } from '../@types/communityClientTypes'
 
 export default class CommunityService {
@@ -30,8 +29,8 @@ export default class CommunityService {
     return this.communityApiClient.getStaffCaseload(staffIdentifier)
   }
 
-  async getManagedOffendersByTeam(teamCodes: string[]): Promise<CommunityApiTeamManagedCase[]> {
-    return this.communityApiClient.getTeamCaseload(teamCodes)
+  async getManagedOffendersByTeam(teamCode: string): Promise<CommunityApiManagedOffender[]> {
+    return this.communityApiClient.getTeamCaseload(teamCode)
   }
 
   async getAnOffendersManagers(crn: string): Promise<CommunityApiOffenderManager[]> {
@@ -48,5 +47,9 @@ export default class CommunityService {
       throw new Error(`No delius record found`)
     }
     return deliusRecords[0]
+  }
+
+  async getOffendersByCrn(crns: string[]): Promise<OffenderDetail[]> {
+    return this.probationSearchApiClient.getOffendersByCrn(crns)
   }
 }

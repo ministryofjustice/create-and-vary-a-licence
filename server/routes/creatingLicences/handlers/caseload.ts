@@ -25,12 +25,13 @@ export default class CaseloadRoutes {
         let probationPractitioner
 
         if (teamView) {
-          probationPractitioner = offender.allocated
-            ? {
-                name: `${offender.staffForename} ${offender.staffSurname}`.trim(),
-                staffId: offender.staffIdentifier,
-              }
-            : null
+          probationPractitioner =
+            !offender.deliusRecord.staff || offender.deliusRecord.staff?.unallocated
+              ? null
+              : {
+                  name: `${offender.deliusRecord.staff?.forenames} ${offender.deliusRecord.staff?.surname}`.trim(),
+                  staffId: offender.deliusRecord.staffIdentifier,
+                }
         } else {
           probationPractitioner = {
             name: `${user.firstName} ${user.lastName}`.trim(),
@@ -39,14 +40,16 @@ export default class CaseloadRoutes {
         }
 
         return {
-          name: convertToTitleCase([offender.firstName, offender.lastName].join(' ')),
-          crnNumber: offender.crnNumber,
-          prisonerNumber: offender.prisonerNumber,
-          conditionalReleaseDate: moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
+          name: convertToTitleCase([offender.nomisRecord.firstName, offender.nomisRecord.lastName].join(' ')),
+          crnNumber: offender.deliusRecord.offenderCrn,
+          prisonerNumber: offender.nomisRecord.prisonerNumber,
+          conditionalReleaseDate: moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').format(
+            'DD MMM YYYY'
+          ),
           licenceStatus: offender.licenceStatus,
           licenceType: offender.licenceType,
           probationPractitioner,
-          insidePilot: prisonInRollout(offender?.prisonId),
+          insidePilot: prisonInRollout(offender.nomisRecord.prisonId),
         }
       })
       .filter(offender => {

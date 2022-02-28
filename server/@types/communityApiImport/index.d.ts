@@ -25,6 +25,9 @@ export interface paths {
   '/secure/contact-types': {
     get: operations['getContactTypesUsingGET']
   }
+  '/secure/contact-types/{contactTypeCode}/outcome-types': {
+    get: operations['getContactTypeOutcomesUsingGET']
+  }
   '/secure/courtAppearances': {
     get: operations['getCourtAppearancesUsingGET']
   }
@@ -81,6 +84,9 @@ export interface paths {
   '/secure/offenders/crn/{crn}/contact-summary': {
     get: operations['getOffenderContactSummariesByCrnUsingGET']
   }
+  '/secure/offenders/crn/{crn}/contact-summary/inductions': {
+    get: operations['getOffenderInitialAppointmentsByCrnUsingGET']
+  }
   '/secure/offenders/crn/{crn}/contacts/{contactId}': {
     get: operations['getOffenderContactSummaryByCrnUsingGET']
   }
@@ -107,6 +113,9 @@ export interface paths {
   }
   '/secure/offenders/crn/{crn}/convictions/{convictionId}/courtReports': {
     get: operations['getOffenderCourtReportsByCrnAndConvictionIdUsingGET']
+  }
+  '/secure/offenders/crn/{crn}/convictions/{convictionId}/document': {
+    post: operations['createUPWDocumentInDeliusUsingPOST']
   }
   '/secure/offenders/crn/{crn}/convictions/{convictionId}/licenceConditions': {
     get: operations['getLicenceConditionsByConvictionIdUsingGET']
@@ -390,9 +399,29 @@ export interface paths {
     /** staff details for supplied usernames */
     post: operations['getStaffDetailsList']
   }
+  '/secure/staff/staffCode/{staffCode}/caseload': {
+    /** Currently, this endpoint is restricted to offender managers and order supervisors. Additional management types (e.g. requirements, reports) may be added later. */
+    get: operations['getCaseloadForStaffUsingGET_1']
+  }
+  '/secure/staff/staffCode/{staffCode}/caseload/managedOffenders': {
+    get: operations['getCaseloadOffendersForStaffUsingGET_1']
+  }
+  '/secure/staff/staffCode/{staffCode}/caseload/supervisedOrders': {
+    get: operations['getCaseloadOrdersForStaffUsingGET_1']
+  }
   '/secure/staff/staffIdentifier/{staffIdentifier}': {
     /** Accepts a Delius staff officer identifier */
     get: operations['getStaffDetailsForStaffIdentifierUsingGET']
+  }
+  '/secure/staff/staffIdentifier/{staffIdentifier}/caseload': {
+    /** Currently, this endpoint is restricted to offender managers and order supervisors. Additional management types (e.g. requirements, reports) may be added later. */
+    get: operations['getCaseloadForStaffUsingGET']
+  }
+  '/secure/staff/staffIdentifier/{staffIdentifier}/caseload/managedOffenders': {
+    get: operations['getCaseloadOffendersForStaffUsingGET']
+  }
+  '/secure/staff/staffIdentifier/{staffIdentifier}/caseload/supervisedOrders': {
+    get: operations['getCaseloadOrdersForStaffUsingGET']
   }
   '/secure/staff/staffIdentifier/{staffIdentifier}/managedOffenders': {
     /** Accepts a Delius staff officer identifier */
@@ -405,6 +434,16 @@ export interface paths {
   '/secure/staff/username/{username}/manage-supervisions-eligible-offenders': {
     /** Accepts a Delius Username. No backward compatibility guaranteed - intended for the use of the Manage a Supervision service, behaviour or responses may be modified in the future. */
     get: operations['getManageSupervisionsEligibleOffendersUsingGET']
+  }
+  '/secure/team/{teamCode}/caseload': {
+    /** Currently, this endpoint is restricted to offender managers and order supervisors. Additional management types (e.g. requirements, reports) may be added later. */
+    get: operations['getCaseloadForTeamUsingGET']
+  }
+  '/secure/team/{teamCode}/caseload/managedOffenders': {
+    get: operations['getCaseloadOffendersForTeamUsingGET']
+  }
+  '/secure/team/{teamCode}/caseload/supervisedOrders': {
+    get: operations['getCaseloadOrdersForTeamUsingGET']
   }
   '/secure/teams/prisonOffenderManagers/create': {
     post: operations['createMissingPrisonOffenderManagerTeamsUsingPOST']
@@ -427,34 +466,52 @@ export interface paths {
 }
 
 export interface definitions {
+  /** AccessLimitation */
   AccessLimitation: {
     exclusionMessage?: string
     restrictionMessage?: string
     userExcluded: boolean
     userRestricted: boolean
   }
+  /** ActivityLogEntry */
   ActivityLogEntry: {
+    /** Format: int64 */
     contactId: number
+    /** Format: int64 */
     convictionId?: number
+    /** @example 13:00:00+01:00 */
     endTime?: string
     enforcement?: definitions['Enforcement']
     lastUpdatedByUser?: definitions['Human']
+    /**
+     * Format: date-time
+     * @example 2021-05-25T10:00:00+01:00
+     */
     lastUpdatedDateTime?: string
     notes?: string
     outcome?: definitions['AppointmentOutcome']
     rarActivity?: definitions['ContactRarActivity']
+    /** @example true */
     sensitive?: boolean
     staff: definitions['StaffHuman']
+    /** @example 12:00:00+01:00 */
     startTime?: string
     type: definitions['ContactType']
   }
+  /** ActivityLogGroup */
   ActivityLogGroup: {
+    /**
+     * Format: date
+     * @example 2021-05-25
+     */
     date?: string
     entries?: definitions['ActivityLogEntry'][]
+    /** @example true */
     rarDay?: boolean
   }
   /**
-   * Additional Identifier.
+   * AdditionalIdentifier
+   * @description Additional Identifier.
    * Current active values for the type are
    *  LIFN	Lifer Number
    * OTHR	Other Personal Identifier
@@ -470,53 +527,113 @@ export interface definitions {
    * DOFF	Duplicate Offender CRN
    * NINO	National Insurance Number
    * DNOMS	Duplicate NOMIS Number
-   * Full list can be found calling '/secure/referenceData/set/ADDITIONAL IDENTIFIER TYPE'
+   * Full list can be found calling "/secure/referenceData/set/ADDITIONAL IDENTIFIER TYPE"
    */
   AdditionalIdentifier: {
-    /** unique id of identifier */
+    /**
+     * Format: int64
+     * @description unique id of identifier
+     * @example 23456789
+     */
     additionalIdentifierId?: number
-    /** identifier name and description */
+    /** @description identifier name and description */
     type?: definitions['KeyValue']
-    /** value of identifier */
+    /**
+     * @description value of identifier
+     * @example X1234
+     */
     value?: string
   }
+  /** AdditionalSentence */
   AdditionalSentence: {
+    /**
+     * Format: int64
+     * @example 2500000001
+     */
     additionalSentenceId?: number
+    /** @example 100 */
     amount?: number
+    /**
+     * Format: int64
+     * @example 14
+     */
     length?: number
+    /** @example Some additional sentence notes */
     notes?: string
     type?: definitions['KeyValue']
   }
+  /** Address */
   Address: {
+    /** @example 32 */
     addressNumber?: string
+    /** @example HMPPS Digital Studio */
     buildingName?: string
+    /** @example South Yorkshire */
     county?: string
+    /**
+     * Format: date-time
+     * @example 2021-06-11T13:00:00
+     */
     createdDatetime?: string
+    /** @example Sheffield City Centre */
     district?: string
+    /**
+     * Format: date
+     * @example 2021-06-10
+     */
     from: string
+    /**
+     * Format: date-time
+     * @example 2021-06-11T14:00:00
+     */
     lastUpdatedDatetime?: string
+    /**
+     * Format: date-time
+     * @example 2021-06-11T12:00:00
+     */
     latestAssessmentDate?: string
+    /** @example true */
     noFixedAbode?: boolean
+    /** @example Some address notes */
     notes?: string
+    /** @example S3 7BS */
     postcode?: string
     status?: definitions['KeyValue']
+    /** @example Scotland Street */
     streetName?: string
+    /** @example 0123456789 */
     telephoneNumber?: string
+    /**
+     * Format: date
+     * @example 2021-07-10
+     */
     to?: string
+    /** @example Sheffield */
     town?: string
     type?: definitions['KeyValue']
+    /** @example true */
     typeVerified?: boolean
   }
+  /** AddressSummary */
   AddressSummary: {
+    /** @example 32 */
     addressNumber?: string
+    /** @example HMPPS Digital Studio */
     buildingName?: string
+    /** @example South Yorkshire */
     county?: string
+    /** @example Sheffield City Centre */
     district?: string
+    /** @example S3 7BS */
     postcode?: string
+    /** @example Scotland Street */
     streetName?: string
+    /** @example 0123456789 */
     telephoneNumber?: string
+    /** @example Sheffield */
     town?: string
   }
+  /** AllTeam */
   AllTeam: {
     borough?: definitions['KeyValue']
     code?: string
@@ -526,154 +643,299 @@ export interface definitions {
     isPrivate?: boolean
     localDeliveryUnit?: definitions['KeyValue']
     name?: string
+    /** Format: int64 */
     providerTeamId: number
     scProvider?: definitions['KeyValue']
+    /** Format: int64 */
     teamId: number
   }
+  /** AppointmentCreateRequest */
   AppointmentCreateRequest: {
+    /** Format: date-time */
     appointmentEnd: string
+    /** Format: date-time */
     appointmentStart: string
     contactType: string
+    enforcement?: string
     notes: string
+    /** Format: int64 */
     nsiId?: number
     officeLocationCode: string
+    outcome?: string
     providerCode: string
     rarActivity?: boolean
+    /** Format: int64 */
     requirementId?: number
     sensitive?: boolean
     staffCode: string
     teamCode: string
   }
+  /** AppointmentCreateResponse */
   AppointmentCreateResponse: {
+    /** Format: date-time */
     appointmentEnd: string
+    /** Format: int64 */
     appointmentId: number
+    /** Format: date-time */
     appointmentStart: string
     sensitive?: boolean
     type: string
     typeDescription: string
   }
+  /** AppointmentDetail */
   AppointmentDetail: {
+    /**
+     * Format: date-time
+     * @example 2021-05-25T11:00:00+01:00
+     */
     appointmentEnd?: string
+    /**
+     * Format: int64
+     * @example 1
+     */
     appointmentId?: number
+    /**
+     * Format: date-time
+     * @example 2021-05-25T10:00:00+01:00
+     */
     appointmentStart?: string
+    /** @example Some interesting notes about the appointment. */
     notes?: string
     officeLocation: definitions['OfficeLocation']
     outcome?: definitions['AppointmentOutcome']
     provider?: definitions['KeyValue']
+    /** @example true */
     rarActivity?: boolean
     requirement?: definitions['AppointmentRequirementDetail']
+    /** @example true */
     sensitive?: boolean
     staff?: definitions['StaffHuman']
     team?: definitions['KeyValue']
     type: definitions['AppointmentType']
   }
+  /** AppointmentOutcome */
   AppointmentOutcome: {
+    /** @example true */
     attended?: boolean
+    /** @example ABC123 */
     code?: string
+    /** @example true */
     complied?: boolean
+    /** @example Some appointment outcome */
     description?: string
+    /**
+     * Format: double
+     * @example 1.5
+     */
     hoursCredited?: number
   }
+  /** AppointmentRelocateRequest */
   AppointmentRelocateRequest: {
     officeLocationCode: string
   }
+  /** AppointmentRelocateResponse */
   AppointmentRelocateResponse: {
+    /** Format: int64 */
     appointmentId: number
   }
+  /** AppointmentRequirementDetail */
   AppointmentRequirementDetail: {
+    /** @example true */
     isActive?: boolean
+    /** @example true */
     isRar?: boolean
+    /**
+     * Format: int64
+     * @example 25000000
+     */
     requirementId?: number
   }
+  /** AppointmentRescheduleResponse */
   AppointmentRescheduleResponse: {
+    /** Format: int64 */
     appointmentId: number
   }
+  /** AppointmentType */
   AppointmentType: {
+    /** @example CHVS */
     contactType?: string
+    /** @example Home Visit to Case (NS) */
     description?: string
     nationalStandard?: boolean
     offenderLevel?: boolean
+    /** @example LEGACY,CJA */
     orderTypes?: ('CJA' | 'LEGACY')[]
     requirementTypeMainCategories?: definitions['KeyValue'][]
+    /**
+     * @example REQUIRED
+     * @enum {string}
+     */
     requiresLocation?: 'NOT_REQUIRED' | 'OPTIONAL' | 'REQUIRED'
     wholeOrderLevel?: boolean
   }
+  /** AppointmentUpdateResponse */
   AppointmentUpdateResponse: {
+    /** Format: int64 */
     appointmentId: number
   }
+  /** Appointments */
   Appointments: {
-    /** Number of appointments recorded to date as not attended and compliant - i.e. with an acceptable reason for absence */
+    /**
+     * Format: int64
+     * @description Number of appointments recorded to date as not attended and compliant - i.e. with an acceptable reason for absence
+     */
     acceptableAbsences?: number
-    /** Number of appointments recorded to date as attended */
+    /**
+     * Format: int64
+     * @description Number of appointments recorded to date as attended
+     */
     attended?: number
-    /** Number of appointments to date where no attendance or compliance information has been recorded */
+    /**
+     * Format: int64
+     * @description Number of appointments to date where no attendance or compliance information has been recorded
+     */
     noOutcomeRecorded?: number
-    /** Total number of appointments to date */
+    /**
+     * Format: int64
+     * @description Total number of appointments to date
+     */
     total?: number
-    /** Number of appointments recorded to date as not attended and uncompliant - i.e. without an acceptable reason for absence */
+    /**
+     * Format: int64
+     * @description Number of appointments recorded to date as not attended and uncompliant - i.e. without an acceptable reason for absence
+     */
     unacceptableAbsences?: number
   }
+  /** Attendance */
   Attendance: {
+    /** Format: date */
     attendanceDate: string
     attended: boolean
     complied: boolean
+    /** Format: int64 */
     contactId: number
     contactType?: definitions['ContactTypeDetail']
     outcome?: string
   }
-  /** Attendance Wrapper */
+  /**
+   * Attendances
+   * @description Attendance Wrapper
+   */
   Attendances: {
-    /** List of Attendances */
+    /** @description List of Attendances */
     attendances?: definitions['Attendance'][]
   }
-  /** Password Credentials */
+  /**
+   * AuthPassword
+   * @description Password Credentials
+   */
   AuthPassword: {
-    /** LDAP password */
+    /**
+     * @description LDAP password
+     * @example password123456
+     */
     password: string
   }
-  /** Authentication Details */
+  /**
+   * AuthUser
+   * @description Authentication Details
+   */
   AuthUser: {
-    /** LDAP password */
+    /**
+     * @description LDAP password
+     * @example password123456
+     */
     password: string
-    /** LDAP username */
+    /**
+     * @description LDAP username
+     * @example TEST_USER_NPS
+     */
     username: string
   }
+  /** AvailableContactOutcomeTypes */
+  AvailableContactOutcomeTypes: {
+    /** @enum {string} */
+    outcomeRequired: 'NOT_REQUIRED' | 'OPTIONAL' | 'REQUIRED'
+    outcomeTypes: definitions['ContactOutcomeTypeDetail'][]
+  }
+  /**
+   * Caseload
+   * @description A set of managed entities in Delius
+   */
+  Caseload: {
+    /** @description Managed offender CRNs */
+    managedOffenders?: definitions['ManagedOffenderCrn'][]
+    /** @description Managed order/event/conviction identifiers */
+    supervisedOrders?: definitions['ManagedEventId'][]
+  }
+  /** CommunityOrPrisonOffenderManager */
   CommunityOrPrisonOffenderManager: {
-    /** Date since the offender manager was assigned */
+    /**
+     * Format: date
+     * @description Date since the offender manager was assigned
+     * @example 2019-12-04
+     */
     fromDate?: string
-    /** True if this offender manager is the prison OM else False */
+    /** @description Grade details for this offender manager */
+    grade?: definitions['KeyValue']
+    /**
+     * @description True if this offender manager is the prison OM else False
+     * @example true
+     */
     isPrisonOffenderManager?: boolean
-    /** True if this offender manager is the current responsible officer */
+    /**
+     * @description True if this offender manager is the current responsible officer
+     * @example true
+     */
     isResponsibleOfficer?: boolean
-    /** True if no real offender manager has been allocated and this is just a placeholder */
+    /**
+     * @description True if no real offender manager has been allocated and this is just a placeholder
+     * @example true
+     */
     isUnallocated?: boolean
-    /** Probation area / prison institution for this OM */
+    /** @description Probation area / prison institution for this OM */
     probationArea?: definitions['ProbationArea']
-    /** staff name and contact details */
+    /** @description staff name and contact details */
     staff?: definitions['ContactableHuman']
-    /** Staff code */
+    /**
+     * @description Staff code
+     * @example CHSE755
+     */
     staffCode?: string
-    /** Staff id */
+    /**
+     * Format: int64
+     * @description Staff id
+     * @example 123455
+     */
     staffId?: number
-    /** Team details for this offender manager */
+    /** @description Team details for this offender manager */
     team?: definitions['Team']
   }
+  /** Contact */
   Contact: {
     alertActive?: boolean
     attended?: boolean
     complied?: boolean
+    /** @example 13:00:00 */
     contactEndTime?: { [key: string]: unknown }
+    /** Format: int64 */
     contactId: number
     contactOutcomeType?: definitions['KeyValue']
+    /** @example 12:00:00 */
     contactStartTime?: { [key: string]: unknown }
     contactType: definitions['ContactType']
+    /** Format: date-time */
     createdDateTime?: string
     documentLinked?: boolean
+    /** Format: int64 */
     eventId?: number
     explanation?: definitions['KeyValue']
+    /** Format: double */
     hoursCredited?: number
+    /** Format: date-time */
     lastUpdatedDateTime?: string
     licenceCondition?: definitions['LicenceCondition']
+    /** Format: int64 */
     linkedContactId?: number
     notes?: string
     nsi?: definitions['Nsi']
@@ -689,41 +951,73 @@ export interface definitions {
     uploadLinked?: boolean
     visorContact?: boolean
   }
+  /** ContactDetails */
   ContactDetails: {
     addresses?: definitions['Address'][]
     allowSMS?: boolean
     emailAddresses?: string[]
     phoneNumbers?: definitions['PhoneNumber'][]
   }
+  /** ContactDetailsSummary */
   ContactDetailsSummary: {
     allowSMS?: boolean
     emailAddresses?: string[]
     phoneNumbers?: definitions['PhoneNumber'][]
   }
+  /** ContactOutcomeTypeDetail */
+  ContactOutcomeTypeDetail: {
+    actionRequired: boolean
+    attendance?: boolean
+    code: string
+    compliantAcceptable?: boolean
+    description: string
+    enforceable?: boolean
+    enforcements: definitions['EnforcementAction'][]
+  }
+  /** ContactRarActivity */
   ContactRarActivity: {
+    /** Format: int64 */
     nsiId?: number
+    /** Format: int64 */
     requirementId?: number
     subtype?: definitions['KeyValue']
     type?: definitions['KeyValue']
   }
+  /** ContactSummary */
   ContactSummary: {
+    /**
+     * Format: date-time
+     * @example 2021-05-25T11:00:00+01:00
+     */
     contactEnd?: string
+    /** Format: int64 */
     contactId: number
+    /**
+     * Format: date-time
+     * @example 2021-05-25T10:00:00+01:00
+     */
     contactStart?: string
     enforcement?: definitions['Enforcement']
     lastUpdatedByUser?: definitions['Human']
+    /**
+     * Format: date-time
+     * @example 2021-05-25T10:00:00+01:00
+     */
     lastUpdatedDateTime?: string
     notes?: string
     officeLocation?: definitions['OfficeLocation']
     outcome?: definitions['AppointmentOutcome']
     provider: definitions['KeyValue']
+    /** @example true */
     rarActivity?: boolean
     rarActivityDetail?: definitions['ContactRarActivity']
+    /** @example true */
     sensitive?: boolean
     staff: definitions['StaffHuman']
     team: definitions['KeyValue']
     type: definitions['ContactType']
   }
+  /** ContactType */
   ContactType: {
     appointment?: boolean
     categories?: definitions['KeyValue'][]
@@ -733,396 +1027,766 @@ export interface definitions {
     shortDescription?: string
     systemGenerated?: boolean
   }
+  /** ContactTypeDetail */
   ContactTypeDetail: {
     code: string
     description: string
   }
+  /** ContactableHuman */
   ContactableHuman: {
-    /** Email address */
+    /**
+     * @description Email address
+     * @example officer@gov.uk
+     */
     email?: string
-    /** Given names */
+    /**
+     * @description Given names
+     * @example Sheila Linda
+     */
     forenames?: string
-    /** Phone number */
+    /**
+     * @description Phone number
+     * @example 0123411278
+     */
     phoneNumber?: string
-    /** Family name */
+    /**
+     * @description Family name
+     * @example Hancock
+     */
     surname?: string
   }
+  /** ContextlessAppointmentCreateRequest */
   ContextlessAppointmentCreateRequest: {
+    /** Format: date-time */
     appointmentEnd: string
+    /** Format: date-time */
     appointmentStart: string
+    attended?: string
     contractType: string
     countsTowardsRarDays: boolean
     notes: string
+    notifyPPOfAttendanceBehaviour?: boolean
     officeLocationCode?: string
+    /** Format: uuid */
     referralId?: string
+    /** Format: date-time */
     referralStart: string
   }
+  /** ContextlessAppointmentOutcomeRequest */
   ContextlessAppointmentOutcomeRequest: {
     attended: string
     notes: string
     notifyPPOfAttendanceBehaviour: boolean
   }
+  /** ContextlessAppointmentRescheduleRequest */
   ContextlessAppointmentRescheduleRequest: {
     initiatedByServiceProvider: boolean
     officeLocationCode?: string
+    /** Format: date-time */
     updatedAppointmentEnd: string
+    /** Format: date-time */
     updatedAppointmentStart: string
   }
+  /** ContextlessNotificationCreateRequest */
   ContextlessNotificationCreateRequest: {
+    /** Format: date-time */
     contactDateTime: string
     contractType: string
     notes: string
+    /** Format: uuid */
     referralId?: string
+    /** Format: date-time */
     referralStart: string
   }
+  /** ContextlessReferralEndRequest */
   ContextlessReferralEndRequest: {
-    /** Denotes a group of services delivered through a referral to a service user, e.g. Personal Well Being */
+    /**
+     * @description Denotes a group of services delivered through a referral to a service user, e.g. Personal Well Being
+     * @example PWB
+     */
     contractType: string
     endType: string
+    /** Format: date-time */
     endedAt: string
     notes: string
+    /** Format: uuid */
     referralId?: string
+    /** Format: int64 */
     sentenceId: number
+    /** Format: date-time */
     startedAt: string
   }
+  /** ContextlessReferralStartRequest */
   ContextlessReferralStartRequest: {
-    /** Denotes a group of services delivered through a referral to a service user, e.g. Personal Well Being */
+    /**
+     * @description Denotes a group of services delivered through a referral to a service user, e.g. Personal Well Being
+     * @example PWB
+     */
     contractType: string
     notes: string
+    /** Format: uuid */
     referralId?: string
+    /** Format: int64 */
     sentenceId: number
+    /** Format: date-time */
     startedAt: string
   }
+  /** Conviction */
   Conviction: {
+    /** @example true */
     active?: boolean
+    /** @example true */
     awaitingPsr?: boolean
+    /**
+     * Format: date
+     * @example 2021-05-13
+     */
     breachEnd?: string
+    /**
+     * Format: date
+     * @example 2021-06-10
+     */
     convictionDate?: string
+    /**
+     * Format: int64
+     * @example 2500000001
+     */
     convictionId?: number
     courtAppearance?: definitions['CourtAppearanceBasic']
     custody?: definitions['Custody']
+    /**
+     * Format: int64
+     * @example 3
+     */
     failureToComplyCount?: number
+    /** @example true */
     inBreach?: boolean
+    /** @example 1 */
     index?: string
     latestCourtAppearanceOutcome?: definitions['KeyValue']
     offences?: definitions['Offence'][]
+    orderManagers?: definitions['OrderManager'][]
+    /**
+     * Format: date
+     * @example 2021-06-10
+     */
     referralDate?: string
     responsibleCourt?: definitions['Court']
     sentence?: definitions['Sentence']
   }
+  /** ConvictionDocuments */
   ConvictionDocuments: {
     convictionId?: string
     documents?: definitions['OffenderDocumentDetail'][]
   }
+  /** ConvictionRequirements */
   ConvictionRequirements: {
-    /** List of requirements associated with this conviction */
+    /** @description List of requirements associated with this conviction */
     requirements?: definitions['Requirement'][]
   }
+  /** Court */
   Court: {
+    /** @example Sheffield Magistrates Court */
     buildingName?: string
+    /** @example SHEFMC */
     code?: string
+    /** @example England */
     country?: string
+    /** @example South Yorkshire */
     county?: string
+    /**
+     * Format: int64
+     * @example 2500000001
+     */
     courtId?: number
+    /** @example Sheffield Magistrates Court */
     courtName?: string
     courtType?: definitions['KeyValue']
+    /**
+     * Format: int64
+     * @example 310
+     */
     courtTypeId?: number
+    /**
+     * Format: date-time
+     * @example 2014-05-29T21:50:16
+     */
     createdDatetime?: string
+    /** @example 0114 2756 373 */
     fax?: string
+    /**
+     * Format: date-time
+     * @example 2014-05-29T21:50:16
+     */
     lastUpdatedDatetime?: string
+    /** @example Sheffield City Centre */
     locality?: string
+    /** @example S3 8LU */
     postcode?: string
     probationArea?: definitions['KeyValue']
+    /**
+     * Format: int64
+     * @example 1500001001
+     */
     probationAreaId?: number
+    /** @example example@example.com */
     secureEmailAddress?: string
+    /** @example true */
     selectable?: boolean
+    /** @example Castle Street */
     street?: string
+    /** @example 0300 047 0777 */
     telephoneNumber?: string
+    /** @example Sheffield */
     town?: string
   }
+  /** CourtAppearanceBasic */
   CourtAppearanceBasic: {
+    /**
+     * Format: date-time
+     * @example 2019-09-04T00:00:00
+     */
     appearanceDate?: string
     appearanceType?: definitions['KeyValue']
+    /**
+     * Format: int64
+     * @example 2500000001
+     */
     courtAppearanceId?: number
+    /** @example SHEFMC */
     courtCode?: string
+    /** @example Sheffield Magistrates Court */
     courtName?: string
     crn?: string
   }
-  /** Court appearance list Wrapper */
+  /**
+   * CourtAppearanceBasicWrapper
+   * @description Court appearance list Wrapper
+   */
   CourtAppearanceBasicWrapper: {
-    /** List of court appearances */
+    /** @description List of court appearances */
     courtAppearances?: definitions['CourtAppearanceBasic'][]
   }
+  /** CourtAppearanceMinimal */
   CourtAppearanceMinimal: {
+    /** Format: date-time */
     appearanceDate?: string
     appearanceType?: definitions['KeyValue']
+    /** Format: int64 */
     courtAppearanceId?: number
     courtCode?: string
     courtName?: string
+    /** Format: int64 */
     offenderId?: number
   }
-  /** Court appearance list Wrapper */
+  /**
+   * CourtAppearanceMinimalWrapper
+   * @description Court appearance list Wrapper
+   */
   CourtAppearanceMinimalWrapper: {
-    /** List of court appearances */
+    /** @description List of court appearances */
     courtAppearances?: definitions['CourtAppearanceMinimal'][]
   }
+  /** CourtReportMinimal */
   CourtReportMinimal: {
+    /** Format: date-time */
     allocationDate?: string
+    /** Format: date-time */
     completedDate?: string
+    /** Format: int64 */
     courtReportId?: number
     courtReportType?: definitions['KeyValue']
+    /** Format: int64 */
     offenderId?: number
+    /** Format: date-time */
     receivedByCourtDate?: string
     reportManagers?: definitions['ReportManager'][]
+    /** Format: date-time */
     requestedDate?: string
+    /** Format: date-time */
     requiredDate?: string
+    /** Format: date-time */
     sentToCourtDate?: string
   }
+  /** CreateCustodyKeyDate */
   CreateCustodyKeyDate: {
+    /** Format: date */
     date?: string
   }
-  /** Request body for assigning an offender manager to an offender. Must pass exactly one of officer / officerCode (not both) */
+  /**
+   * CreatePrisonOffenderManager
+   * @description Request body for assigning an offender manager to an offender. Must pass exactly one of officer / officerCode (not both)
+   */
   CreatePrisonOffenderManager: {
-    /** Prison institution code in NOMIS */
+    /**
+     * @description Prison institution code in NOMIS
+     * @example MDI
+     */
     nomsPrisonInstitutionCode: string
-    /** Name and contact details of offender manager. If passed then must contain both forename(s) and surname */
+    /**
+     * @description Name and contact details of offender manager. If passed then must contain both forename(s) and surname
+     * @example officer: {"forenames": "John", "surname": "Smith" }
+     */
     officer?: definitions['ContactableHuman']
-    /** Officer staff ID. If not present officer will be used to lookup staff member */
+    /**
+     * Format: int64
+     * @description Officer staff ID. If not present officer will be used to lookup staff member
+     * @example 1234567
+     */
     staffId?: number
   }
+  /** Custody */
   Custody: {
-    /** Human readable id of the prison booking, AKA book number */
+    /**
+     * @description Human readable id of the prison booking, AKA book number
+     * @example V74111
+     */
     bookingNumber?: string
-    /** Institution where the offender currently resides */
+    /** @description Institution where the offender currently resides */
     institution?: definitions['Institution']
-    /** Key sentence dates of particular interest to custody */
+    /** @description Key sentence dates of particular interest to custody */
     keyDates?: definitions['CustodyRelatedKeyDates']
-    /** Date when related sentence started */
+    /**
+     * Format: date
+     * @description Date when related sentence started
+     */
     sentenceStartDate?: string
-    /** Custodial status */
+    /** @description Custodial status */
     status?: definitions['KeyValue']
   }
+  /** CustodyKeyDate */
   CustodyKeyDate: {
+    /** Format: date */
     date?: string
     type?: definitions['KeyValue']
   }
-  /** Key sentence dates that are related to their time in custody */
+  /**
+   * CustodyRelatedKeyDates
+   * @description Key sentence dates that are related to their time in custody
+   */
   CustodyRelatedKeyDates: {
-    /** Conditional release date */
+    /**
+     * Format: date
+     * @description Conditional release date
+     * @example 2020-06-23
+     */
     conditionalReleaseDate?: string
-    /** Expected actual handover date from prison offender manager to community offender manager */
+    /**
+     * Format: date
+     * @description Expected actual handover date from prison offender manager to community offender manager
+     * @example 2020-06-23
+     */
     expectedPrisonOffenderManagerHandoverDate?: string
-    /** Expected start date of the handover process from prison offender manager to community offender manager */
+    /**
+     * Format: date
+     * @description Expected start date of the handover process from prison offender manager to community offender manager
+     * @example 2020-06-23
+     */
     expectedPrisonOffenderManagerHandoverStartDate?: string
-    /** Expected release date */
+    /**
+     * Format: date
+     * @description Expected release date
+     * @example 2020-06-23
+     */
     expectedReleaseDate?: string
-    /** Home detention curfew eligibility date */
+    /**
+     * Format: date
+     * @description Home detention curfew eligibility date
+     * @example 2020-06-23
+     */
     hdcEligibilityDate?: string
-    /** Licence expiry date */
+    /**
+     * Format: date
+     * @description Licence expiry date
+     * @example 2020-06-23
+     */
     licenceExpiryDate?: string
-    /** Parole eligibility date */
+    /**
+     * Format: date
+     * @description Parole eligibility date
+     * @example 2020-06-23
+     */
     paroleEligibilityDate?: string
-    /** Post sentence Supervision end date. AKA Top-up supervision end date */
+    /**
+     * Format: date
+     * @description Post sentence Supervision end date. AKA Top-up supervision end date
+     * @example 2020-06-23
+     */
     postSentenceSupervisionEndDate?: string
-    /** Sentence expiry date */
+    /**
+     * Format: date
+     * @description Sentence expiry date
+     * @example 2020-06-23
+     */
     sentenceExpiryDate?: string
   }
+  /** Disability */
   Disability: {
+    /** Format: int64 */
     disabilityId?: number
     disabilityType?: definitions['KeyValue']
+    /** Format: date */
     endDate?: string
+    /**
+     * @description The active status of this disability, if the start date is before or on today and the end date is after today or null
+     * @example true
+     */
+    isActive?: boolean
+    /**
+     * Format: date-time
+     * @example 2020-09-20T11:00:00+01:00
+     */
     lastUpdatedDateTime?: string
     notes?: string
     provisions?: definitions['Provision'][]
+    /** Format: date */
     startDate?: string
   }
+  /** Enforcement */
   Enforcement: {
     enforcementAction: definitions['KeyValue']
   }
+  /** EnforcementAction */
+  EnforcementAction: {
+    code: string
+    description: string
+    /** @description Contact will be added to the enforcement diary */
+    outstandingContactAction?: boolean
+    /**
+     * Format: int64
+     * @description Enforcement response date on the contact will be populated as this many days from the outcome date
+     */
+    responseByPeriod?: number
+  }
+  /** ErrorResponse */
   ErrorResponse: {
-    /** Reason for error */
+    /**
+     * @description Reason for error
+     * @example Surname required
+     */
     developerMessage?: string
-    /** Http status code */
+    /**
+     * Format: int32
+     * @description Http status code
+     * @example 400
+     */
     status: number
   }
+  /** Human */
   Human: {
-    /** Given names */
+    /**
+     * @description Given names
+     * @example Sheila Linda
+     */
     forenames?: string
-    /** Family name */
+    /**
+     * @description Family name
+     * @example Hancock
+     */
     surname?: string
   }
+  /** IDs */
   IDs: {
-    /** case reference number */
+    /**
+     * @description case reference number
+     * @example 12345C
+     */
     crn: string
-    /** Number from the crime records office */
+    /**
+     * @description Number from the crime records office
+     * @example 123456/04A
+     */
     croNumber?: string
-    /** Immigration number */
+    /**
+     * @description Immigration number
+     * @example A1234567
+     */
     immigrationNumber?: string
-    /** Book number of latest booking from NOMIS */
+    /**
+     * @description Book number of latest booking from NOMIS
+     * @example G12345
+     */
     mostRecentPrisonerNumber?: string
-    /** National insurance number from HMRC */
+    /**
+     * @description National insurance number from HMRC
+     * @example AA112233B
+     */
     niNumber?: string
-    /** Offender number from NOMIS */
+    /**
+     * @description Offender number from NOMIS
+     * @example A1234CR
+     */
     nomsNumber?: string
-    /** Number from the police national computer */
+    /**
+     * @description Number from the police national computer
+     * @example 2004/0712343H
+     */
     pncNumber?: string
   }
+  /** InputStream */
   InputStream: { [key: string]: unknown }
+  /** Institution */
   Institution: {
     code?: string
     description?: string
     establishmentType?: definitions['KeyValue']
+    /** Format: int64 */
     institutionId: number
     institutionName?: string
     isEstablishment?: boolean
     isPrivate?: boolean
-    /** Prison institution code in NOMIS */
+    /** @description Prison institution code in NOMIS */
     nomsPrisonInstitutionCode?: string
   }
+  /** KeyValue */
   KeyValue: {
+    /** @example ABC123 */
     code?: string
+    /** @example Some description */
     description?: string
   }
+  /** LicenceCondition */
   LicenceCondition: {
     active?: boolean
+    /** Format: date */
     commencementDate?: string
     commencementNotes?: string
+    /** Format: date-time */
     createdDateTime?: string
     licenceConditionNotes?: string
     licenceConditionTypeMainCat?: definitions['KeyValue']
     licenceConditionTypeSubCat?: definitions['KeyValue']
+    /** Format: date */
     startDate?: string
+    /** Format: date */
     terminationDate?: string
     terminationNotes?: string
   }
+  /** LicenceConditions */
   LicenceConditions: {
-    /** List of licenceConditions associated with this conviction */
+    /** @description List of licenceConditions associated with this conviction */
     licenceConditions?: definitions['LicenceCondition'][]
   }
+  /** LocalDeliveryUnit */
   LocalDeliveryUnit: {
-    /** LDU code */
+    /**
+     * @description LDU code
+     * @example N01KSCT
+     */
     code?: string
-    /** description */
+    /**
+     * @description description
+     * @example NPS Manchester City South
+     */
     description?: string
+    /** Format: int64 */
     localDeliveryUnitId: number
   }
+  /** ManagedEventId */
+  ManagedEventId: {
+    /** Format: date */
+    allocationDate?: string
+    /** Format: int64 */
+    eventId?: number
+    staff?: definitions['StaffHuman']
+    /** Format: int64 */
+    staffIdentifier?: number
+    team?: definitions['Team']
+    /** Format: int64 */
+    teamIdentifier?: number
+  }
+  /** ManagedOffender */
   ManagedOffender: {
     crnNumber: string
     currentOm?: boolean
     currentPom?: boolean
     currentRo?: boolean
     nomsNumber: string
+    /** Format: int64 */
     offenderId: number
     offenderSurname: string
+    /** Format: date */
     omEndDate: string
+    /** Format: date */
     omStartDate: string
     staffCode: string
+    /** Format: int64 */
     staffIdentifier: number
   }
-  TeamManagedCase: {
-    nomsNumber: string
-    crnNumber: string
-    allocated: boolean
-    staffIdentifier: number
-    staffForename: string
-    staffSurname: string
+  /** ManagedOffenderCrn */
+  ManagedOffenderCrn: {
+    /** Format: date */
+    allocationDate?: string
+    offenderCrn?: string
+    staff?: definitions['StaffHuman']
+    /** Format: int64 */
+    staffIdentifier?: number
+    team?: definitions['Team']
+    /** Format: int64 */
+    teamIdentifier?: number
   }
-  /** MAPPA Details */
+  /**
+   * MappaDetails
+   * @description MAPPA Details
+   */
   MappaDetails: {
-    /** MAPPA Category (0 = unknown) */
+    /**
+     * Format: int32
+     * @description MAPPA Category (0 = unknown)
+     * @example 3
+     * @enum {integer}
+     */
     category?: 0 | 1 | 2 | 3
-    /** MAPPA Category Description */
+    /**
+     * @description MAPPA Category Description
+     * @example MAPPA Cat 1
+     */
     categoryDescription?: string
-    /** MAPPA Level (0=unknown) */
+    /**
+     * Format: int32
+     * @description MAPPA Level (0=unknown)
+     * @example 1
+     * @enum {integer}
+     */
     level?: 0 | 1 | 2 | 3
-    /** MAPPA Level Description */
+    /**
+     * @description MAPPA Level Description
+     * @example MAPPA Level 1
+     */
     levelDescription?: string
-    /** Notes */
+    /** @description Notes */
     notes?: string
-    /** Officer */
+    /** @description Officer */
     officer?: definitions['StaffHuman']
-    /** Probation area */
+    /** @description Probation area */
     probationArea?: definitions['KeyValue']
-    /** Next review date */
+    /**
+     * Format: date
+     * @description Next review date
+     * @example 2021-04-27
+     */
     reviewDate?: string
-    /** Start date */
+    /**
+     * Format: date
+     * @description Start date
+     * @example 2021-01-27
+     */
     startDate?: string
-    /** Team */
+    /** @description Team */
     team?: definitions['KeyValue']
   }
-  /** Court details for a new court */
+  /**
+   * NewCourtDto
+   * @description Court details for a new court
+   */
   NewCourtDto: {
-    /** true when this court is open */
+    /** @description true when this court is open */
     active?: boolean
     buildingName?: string
-    /** unique code for this court */
+    /**
+     * @description unique code for this court
+     * @example SALEMC
+     */
     code?: string
+    /** @example England */
     country?: string
+    /** @example South Yorkshire */
     county?: string
     courtName: string
-    /** type code from standard reference data */
+    /**
+     * @description type code from standard reference data
+     * @example MAG
+     */
     courtTypeCode?: string
     fax?: string
     locality?: string
     postcode?: string
-    /** probation area code from probation areas */
+    /**
+     * @description probation area code from probation areas
+     * @example N51
+     */
     probationAreaCode?: string
     street?: string
     telephoneNumber?: string
     town?: string
   }
+  /** NotificationResponse */
   NotificationResponse: {
+    /** Format: int64 */
     contactId: number
   }
+  /** Nsi */
   Nsi: {
     active?: boolean
+    /** Format: date */
     actualEndDate?: string
+    /** Format: date */
     actualStartDate?: string
+    /** Format: date */
     expectedEndDate?: string
+    /** Format: date */
     expectedStartDate?: string
     intendedProvider?: definitions['ProbationArea']
+    /** Format: int64 */
     length?: number
     lengthUnit?: string
     notes?: string
+    /** Format: int64 */
     nsiId?: number
     nsiManagers?: definitions['NsiManager'][]
     nsiOutcome?: definitions['KeyValue']
     nsiStatus?: definitions['KeyValue']
     nsiSubType?: definitions['KeyValue']
     nsiType?: definitions['KeyValue']
-    /** present only for recalls, convenience property indicating this resulted in a recall */
+    /** @description present only for recalls, convenience property indicating this resulted in a recall */
     outcomeRecall?: boolean
-    /** present only for recalls, convenience property indicating the recall was never accepted */
+    /** @description present only for recalls, convenience property indicating the recall was never accepted */
     recallRejectedOrWithdrawn?: boolean
+    /** Format: date */
     referralDate?: string
     requirement?: definitions['Requirement']
     softDeleted?: boolean
+    /** Format: date-time */
     statusDateTime?: string
   }
+  /** NsiManager */
   NsiManager: {
+    /** Format: date */
     endDate?: string
     probationArea?: definitions['ProbationArea']
     staff?: definitions['StaffDetails']
+    /** Format: date */
     startDate?: string
     team?: definitions['Team']
   }
-  /** NSI Wrapper */
+  /**
+   * NsiWrapper
+   * @description NSI Wrapper
+   */
   NsiWrapper: {
-    /** List of NSIs */
+    /** @description List of NSIs */
     nsis?: definitions['Nsi'][]
   }
+  /** Offence */
   Offence: {
+    /** Format: date-time */
     createdDatetime?: string
     detail?: definitions['OffenceDetail']
+    /** Format: date-time */
     lastUpdatedDatetime?: string
     mainOffence?: boolean
+    /** Format: int64 */
     offenceCount?: number
+    /** Format: date-time */
     offenceDate?: string
     offenceId?: string
+    /** Format: int64 */
     offenderId?: number
+    /** Format: int64 */
     tics?: number
     verdict?: string
   }
+  /** OffenceDetail */
   OffenceDetail: {
     abbreviation?: string
     cjitCode?: string
@@ -1137,7 +1801,9 @@ export interface definitions {
     subCategoryCode?: string
     subCategoryDescription?: string
   }
+  /** OffenderAlias */
   OffenderAlias: {
+    /** Format: date */
     dateOfBirth?: string
     firstName?: string
     gender?: string
@@ -1145,118 +1811,189 @@ export interface definitions {
     middleNames?: string[]
     surname?: string
   }
+  /** OffenderAssessments */
   OffenderAssessments: {
-    /** Offender Group Reconviction Scale */
+    /**
+     * Format: int32
+     * @description Offender Group Reconviction Scale
+     */
     ogrsScore?: number
-    /** Risk of Serious Recidivism */
+    /**
+     * Format: double
+     * @description Risk of Serious Recidivism
+     */
     rsrScore?: number
   }
+  /** OffenderDelta */
   OffenderDelta: {
-    /** Type of delta */
+    /**
+     * @description Type of delta
+     * @example UPSERT
+     * @enum {string}
+     */
     action?: 'DELETE' | 'UPSERT'
-    /** The datetime the change occurred */
+    /**
+     * Format: date-time
+     * @description The datetime the change occurred
+     * @example 2019-11-27T15:12:43.000Z
+     */
     dateChanged?: string
-    /** Offender ID */
+    /**
+     * Format: int64
+     * @description Offender ID
+     * @example 232423
+     */
     offenderId?: number
   }
+  /** OffenderDetail */
   OffenderDetail: {
-    /** identifies if this person is on an active sentence of interest to probation */
+    /** @description identifies if this person is on an active sentence of interest to probation */
     activeProbationManagedSentence?: boolean
     contactDetails?: definitions['ContactDetails']
-    /** deprecated, use activeProbationManagedSentence */
+    /**
+     * @description deprecated, use activeProbationManagedSentence
+     * @example 1
+     */
     currentDisposal?: string
-    /** When true this record can not be viewed by specific probation staff */
+    /** @description When true this record can not be viewed by specific probation staff */
     currentExclusion?: boolean
-    /** When true this record can only be viewed by specific probation staff */
+    /** @description When true this record can only be viewed by specific probation staff */
     currentRestriction?: boolean
-    /** current tier */
+    /**
+     * @description current tier
+     * @example D2
+     */
     currentTier?: string
+    /**
+     * Format: date
+     * @example 1982-10-24
+     */
     dateOfBirth?: string
-    /** Message to show staff who have been excluded from viewing this record */
+    /** @description Message to show staff who have been excluded from viewing this record */
     exclusionMessage?: string
+    /** @example John */
     firstName?: string
+    /** @example Male */
     gender?: string
     middleNames?: string[]
     offenderAliases?: definitions['OffenderAlias'][]
+    /** Format: int64 */
     offenderId: number
     offenderManagers?: definitions['OffenderManager'][]
     offenderProfile?: definitions['OffenderProfile']
     otherIds?: definitions['IDs']
+    /** @example National Data */
     partitionArea?: string
+    /** @example Bob */
     preferredName?: string
+    /** @example Davis */
     previousSurname?: string
-    /** Message to show staff who have not been included to view this record */
+    /** @description Message to show staff who have not been included to view this record */
     restrictionMessage?: string
-    /** When true this record has been deleted */
+    /** @description When true this record has been deleted */
     softDeleted?: boolean
+    /** @example Smith */
     surname?: string
+    /** @example Mr */
     title?: string
   }
+  /** OffenderDetailSummary */
   OffenderDetailSummary: {
-    /** identifies if this person is on an active sentence of interest to probation */
+    /** @description identifies if this person is on an active sentence of interest to probation */
     activeProbationManagedSentence?: boolean
     contactDetails?: definitions['ContactDetailsSummary']
-    /** deprecated, use activeProbationManagedSentence */
+    /**
+     * @description deprecated, use activeProbationManagedSentence
+     * @example 1
+     */
     currentDisposal?: string
-    /** When true this record can not be viewed by specific probation staff */
+    /** @description When true this record can not be viewed by specific probation staff */
     currentExclusion?: boolean
-    /** When true this record can only be viewed by specific probation staff */
+    /** @description When true this record can only be viewed by specific probation staff */
     currentRestriction?: boolean
+    /**
+     * Format: date
+     * @example 1982-10-24
+     */
     dateOfBirth?: string
+    /** @example John */
     firstName?: string
+    /** @example Male */
     gender?: string
     middleNames?: string[]
+    /** Format: int64 */
     offenderId: number
     offenderProfile?: definitions['OffenderProfile']
     otherIds?: definitions['IDs']
+    /** @example National Data */
     partitionArea?: string
+    /** @example Bob */
     preferredName?: string
+    /** @example Davis */
     previousSurname?: string
-    /** When true this record has been deleted */
+    /** @description When true this record has been deleted */
     softDeleted?: boolean
+    /** @example Smith */
     surname?: string
+    /** @example Mr */
     title?: string
   }
+  /** OffenderDocumentDetail */
   OffenderDocumentDetail: {
     author?: string
+    /** Format: date-time */
     createdAt?: string
     documentName?: string
     extendedDescription?: string
     id?: string
+    /** Format: date-time */
     lastModifiedAt?: string
+    /** Format: int64 */
     parentPrimaryKeyId?: number
     reportDocumentDates?: definitions['ReportDocumentDates']
     subType?: definitions['KeyValue']
     type?: definitions['KeyValue']
   }
+  /** OffenderDocuments */
   OffenderDocuments: {
     convictions?: definitions['ConvictionDocuments'][]
     documents?: definitions['OffenderDocumentDetail'][]
   }
-  /** Offender Identifiers */
+  /**
+   * OffenderIdentifiers
+   * @description Offender Identifiers
+   */
   OffenderIdentifiers: {
-    /** Additional identifiers */
+    /** @description Additional identifiers */
     additionalIdentifiers?: definitions['AdditionalIdentifier'][]
-    /** unique identifier for this offender */
+    /**
+     * Format: int64
+     * @description unique identifier for this offender
+     * @example 1234567
+     */
     offenderId?: number
-    /** Primary identifiers */
+    /** @description Primary identifiers */
     primaryIdentifiers?: definitions['IDs']
   }
+  /** OffenderLanguages */
   OffenderLanguages: {
     languageConcerns?: string
     otherLanguages?: string[]
     primaryLanguage?: string
     requiresInterpreter?: boolean
   }
+  /** OffenderLatestRecall */
   OffenderLatestRecall: {
-    /** Last recall */
+    /** @description Last recall */
     lastRecall?: definitions['OffenderRecall']
-    /** Last release */
+    /** @description Last release */
     lastRelease?: definitions['OffenderRelease']
   }
+  /** OffenderManager */
   OffenderManager: {
     active?: boolean
     allocationReason?: definitions['KeyValue']
+    /** Format: date */
     fromDate?: string
     partitionArea?: string
     probationArea?: definitions['ProbationArea']
@@ -1264,12 +2001,15 @@ export interface definitions {
     softDeleted?: boolean
     staff?: definitions['StaffHuman']
     team?: definitions['Team']
+    /** Format: date */
     toDate?: string
     trustOfficer?: definitions['Human']
   }
+  /** OffenderProfile */
   OffenderProfile: {
     disabilities?: definitions['Disability'][]
     ethnicity?: string
+    /** @example Prefer to self-describe */
     genderIdentity?: string
     immigrationStatus?: string
     nationality?: string
@@ -1281,398 +2021,737 @@ export interface definitions {
     remandStatus?: string
     riskColour?: string
     secondaryNationality?: string
+    /** @example Jedi */
     selfDescribedGender?: string
     sexualOrientation?: string
   }
+  /** OffenderRecall */
   OffenderRecall: {
-    /** The date the recall occurred */
+    /**
+     * Format: date
+     * @description The date the recall occurred
+     * @example 2019-11-27
+     */
     date?: string
-    /** Some notes */
+    /** @description Some notes */
     notes?: string
-    /** The reason for the recall */
+    /** @description The reason for the recall */
     reason?: definitions['KeyValue']
   }
+  /** OffenderRecalledNotification */
   OffenderRecalledNotification: {
-    /** The Prison institution code in NOMIS the offender was recalled to */
+    /**
+     * @description The Prison institution code in NOMIS the offender was recalled to
+     * @example MDI
+     */
     nomsPrisonInstitutionCode: string
-    /** The date the offender was returned to custody */
+    /**
+     * Format: date
+     * @description The date the offender was returned to custody
+     * @example 2020-10-25
+     */
     recallDate: string
   }
+  /** OffenderRelease */
   OffenderRelease: {
-    /** The date the release occurred */
+    /**
+     * Format: date
+     * @description The date the release occurred
+     * @example 2019-11-26
+     */
     date?: string
-    /** The institution the offender was released from */
+    /** @description The institution the offender was released from */
     institution?: definitions['Institution']
-    /** Some notes */
+    /** @description Some notes */
     notes?: string
-    /** The reason for the release */
+    /** @description The reason for the release */
     reason?: definitions['KeyValue']
   }
+  /** OffenderReleasedNotification */
   OffenderReleasedNotification: {
-    /** The Prison institution code in NOMIS the offender was released from */
+    /**
+     * @description The Prison institution code in NOMIS the offender was released from
+     * @example MDI
+     */
     nomsPrisonInstitutionCode: string
-    /** The date the offender was released from custody */
+    /**
+     * Format: date
+     * @description The date the offender was released from custody
+     * @example 2020-10-25
+     */
     releaseDate?: string
   }
+  /** OffenderUpdate */
   OffenderUpdate: {
-    /** Type of delta */
+    /**
+     * @description Type of delta
+     * @example UPSERT
+     * @enum {string}
+     */
     action?: 'DELETE' | 'UPSERT'
-    /** The datetime the change occurred */
+    /**
+     * Format: date-time
+     * @description The datetime the change occurred
+     * @example 2019-11-27T15:12:43.000Z
+     */
     dateChanged?: string
-    /** A previously failed update */
+    /** @description A previously failed update */
     failedUpdate?: boolean
-    /** Offender Delta ID */
+    /**
+     * Format: int64
+     * @description Offender Delta ID
+     * @example 341256
+     */
     offenderDeltaId?: number
-    /** Offender ID */
+    /**
+     * Format: int64
+     * @description Offender ID
+     * @example 232423
+     */
     offenderId?: number
-    /** Record number from source table */
+    /**
+     * Format: int64
+     * @description Record number from source table
+     * @example 13256
+     */
     sourceRecordId?: number
-    /** Source table */
+    /**
+     * @description Source table
+     * @example OFFENDER
+     */
     sourceTable?: string
-    /** Status */
+    /**
+     * @description Status
+     * @example CREATED
+     */
     status?: string
   }
+  /** OfficeLocation */
   OfficeLocation: {
+    /** @example Ashley House */
     buildingName?: string
+    /** @example 14 */
     buildingNumber?: string
+    /** @example ASP_ASH */
     code?: string
+    /** @example Somerset */
     county?: string
+    /** @example Ashley House Approved Premises */
     description?: string
+    /** @example BS2 8NB */
     postcode?: string
+    /** @example Somerset Street */
     streetName?: string
+    /** @example Bristol */
     townCity?: string
   }
+  /** OrderManager */
+  OrderManager: {
+    /** Format: date */
+    dateEndOfAllocation?: string
+    /** Format: date */
+    dateStartOfAllocation?: string
+    gradeCode?: string
+    name?: string
+    /** Format: int64 */
+    officerId?: number
+    /** Format: int64 */
+    probationAreaId?: number
+    staffCode?: string
+    /** Format: int64 */
+    teamId?: number
+  }
+  /** PageOfActivityLogGroup */
   PageOfActivityLogGroup: {
     content?: definitions['ActivityLogGroup'][]
     empty?: boolean
     first?: boolean
     last?: boolean
+    /** Format: int32 */
     number?: number
+    /** Format: int32 */
     numberOfElements?: number
     pageable?: definitions['Pageable']
+    /** Format: int32 */
     size?: number
     sort?: definitions['Sort']
+    /** Format: int64 */
     totalElements?: number
+    /** Format: int32 */
     totalPages?: number
   }
+  /** PageOfContactSummary */
   PageOfContactSummary: {
     content?: definitions['ContactSummary'][]
     empty?: boolean
     first?: boolean
     last?: boolean
+    /** Format: int32 */
     number?: number
+    /** Format: int32 */
     numberOfElements?: number
     pageable?: definitions['Pageable']
+    /** Format: int32 */
     size?: number
     sort?: definitions['Sort']
+    /** Format: int64 */
     totalElements?: number
+    /** Format: int32 */
     totalPages?: number
   }
+  /** PageOfKeyValue */
   PageOfKeyValue: {
     content?: definitions['KeyValue'][]
     empty?: boolean
     first?: boolean
     last?: boolean
+    /** Format: int32 */
     number?: number
+    /** Format: int32 */
     numberOfElements?: number
     pageable?: definitions['Pageable']
+    /** Format: int32 */
     size?: number
     sort?: definitions['Sort']
+    /** Format: int64 */
     totalElements?: number
+    /** Format: int32 */
     totalPages?: number
   }
+  /** PageOfPrimaryIdentifiers */
   PageOfPrimaryIdentifiers: {
     content?: definitions['PrimaryIdentifiers'][]
     empty?: boolean
     first?: boolean
     last?: boolean
+    /** Format: int32 */
     number?: number
+    /** Format: int32 */
     numberOfElements?: number
     pageable?: definitions['Pageable']
+    /** Format: int32 */
     size?: number
     sort?: definitions['Sort']
+    /** Format: int64 */
     totalElements?: number
+    /** Format: int32 */
     totalPages?: number
   }
+  /** PageOfStaffCaseloadEntry */
   PageOfStaffCaseloadEntry: {
     content?: definitions['StaffCaseloadEntry'][]
     empty?: boolean
     first?: boolean
     last?: boolean
+    /** Format: int32 */
     number?: number
+    /** Format: int32 */
     numberOfElements?: number
     pageable?: definitions['Pageable']
+    /** Format: int32 */
     size?: number
     sort?: definitions['Sort']
+    /** Format: int64 */
     totalElements?: number
+    /** Format: int32 */
     totalPages?: number
   }
+  /** Pageable */
   Pageable: {
+    /** Format: int64 */
     offset?: number
+    /** Format: int32 */
     pageNumber?: number
+    /** Format: int32 */
     pageSize?: number
     paged?: boolean
     sort?: definitions['Sort']
     unpaged?: boolean
   }
+  /** PersonalCircumstance */
   PersonalCircumstance: {
+    /**
+     * Format: date-time
+     * @example 2021-06-11T13:00:00
+     */
     createdDatetime?: string
-    /** When the offender ended this circumstance */
+    /**
+     * Format: date
+     * @description When the offender ended this circumstance
+     * @example 2019-09-11
+     */
     endDate?: string
-    /** true if evidence was supplied for this circumstance */
+    /**
+     * @description true if evidence was supplied for this circumstance
+     * @example true
+     */
     evidenced?: boolean
+    /**
+     * @description The active status of this personal circumstance, if the start date is before or on today and the end date is after today or null
+     * @example true
+     */
+    isActive?: boolean
+    /**
+     * Format: date-time
+     * @example 2021-06-11T14:00:00
+     */
     lastUpdatedDatetime?: string
-    /** Additional notes */
+    /** @description Additional notes */
     notes?: string
-    /** Unique id of this offender */
+    /**
+     * Format: int64
+     * @description Unique id of this offender
+     * @example 2500343964
+     */
     offenderId?: number
-    /** Unique id of this personal circumstance */
+    /**
+     * Format: int64
+     * @description Unique id of this personal circumstance
+     * @example 2500064995
+     */
     personalCircumstanceId?: number
-    /** The type of sub personal circumstance */
+    /** @description The type of sub personal circumstance */
     personalCircumstanceSubType?: definitions['KeyValue']
-    /** The type of personal circumstance */
+    /** @description The type of personal circumstance */
     personalCircumstanceType?: definitions['KeyValue']
-    /** The probation area that added this circumstance */
+    /** @description The probation area that added this circumstance */
     probationArea?: definitions['KeyValue']
-    /** When the offender started this circumstance */
+    /**
+     * Format: date
+     * @description When the offender started this circumstance
+     * @example 2019-09-11
+     */
     startDate?: string
   }
-  /** Personal circumstances Wrapper */
+  /**
+   * PersonalCircumstances
+   * @description Personal circumstances Wrapper
+   */
   PersonalCircumstances: {
-    /** List of personal circumstances */
+    /** @description List of personal circumstances */
     personalCircumstances?: definitions['PersonalCircumstance'][]
   }
+  /** PersonalContact */
   PersonalContact: {
     address?: definitions['AddressSummary']
+    /**
+     * Format: date-time
+     * @example 2021-06-10T12:00:00Z
+     */
     createdDatetime?: string
+    /** @example example@example.com */
     emailAddress?: string
+    /**
+     * Format: date-time
+     * @example 2021-07-10T00:00:00Z
+     */
     endDate?: string
+    /** @example Brian */
     firstName?: string
+    /** @example Male */
     gender?: string
+    /**
+     * @description The active status of this record, if the start date is before or on today and the end date is after today or null
+     * @example true
+     */
+    isActive?: boolean
+    /**
+     * Format: date-time
+     * @example 2021-06-10T14:00:00Z
+     */
     lastUpdatedDatetime?: string
+    /** @example 0123456789 */
     mobileNumber?: string
+    /** @example Some notes about this personal contact */
     notes?: string
+    /** @example Danger */
     otherNames?: string
+    /**
+     * Format: int64
+     * @example 1
+     */
     personalContactId?: number
+    /** @example Haggis */
     previousSurname?: string
+    /** @example Father */
     relationship?: string
     relationshipType?: definitions['KeyValue']
+    /**
+     * Format: date-time
+     * @example 2021-06-10T00:00:00Z
+     */
     startDate?: string
+    /** @example Cheese */
     surname?: string
+    /** @example Mr */
     title?: string
   }
+  /** PhoneNumber */
   PhoneNumber: {
     number?: string
+    /** @enum {string} */
     type?: 'MOBILE' | 'TELEPHONE'
   }
+  /** PreviousConviction */
   PreviousConviction: {
+    /** Format: date */
     convictionDate?: string
     detail?: { [key: string]: string }
   }
-  /** Offender primary identifiers */
+  /**
+   * PrimaryIdentifiers
+   * @description Offender primary identifiers
+   */
   PrimaryIdentifiers: {
-    /** case reference number */
+    /**
+     * @description case reference number
+     * @example 12345C
+     */
     crn: string
-    /** unique identifier for this offender */
+    /**
+     * Format: int64
+     * @description unique identifier for this offender
+     * @example 1234567
+     */
     offenderId?: number
   }
+  /** ProbationArea */
   ProbationArea: {
-    /** area code */
+    /**
+     * @description area code
+     * @example N01
+     */
     code?: string
-    /** description */
+    /**
+     * @description description
+     * @example NPS North West
+     */
     description?: string
     institution?: definitions['Institution']
-    /** True if NPS else CRC */
+    /**
+     * @description True if NPS else CRC
+     * @example true
+     */
     nps?: boolean
     organisation?: definitions['KeyValue']
+    /** Format: int64 */
     probationAreaId: number
     teams?: definitions['AllTeam'][]
   }
+  /** ProbationAreaWithLocalDeliveryUnits */
   ProbationAreaWithLocalDeliveryUnits: {
-    /** area code */
+    /**
+     * @description area code
+     * @example N01
+     */
     code?: string
-    /** description */
+    /**
+     * @description description
+     * @example NPS North West
+     */
     description?: string
     localDeliveryUnits?: definitions['LocalDeliveryUnit'][]
   }
+  /** ProbationStatusDetail */
   ProbationStatusDetail: {
-    /** True if the offender has a event with no sentence which has been adjourned for a pre-sentence report */
+    /** @description True if the offender has a event with no sentence which has been adjourned for a pre-sentence report */
     awaitingPsr?: boolean
-    /** True if the offender is in breach of a current sentence */
+    /** @description True if the offender is in breach of a current sentence */
     inBreach?: boolean
-    /** True if the offender has a conviction with no sentence */
+    /** @description True if the offender has a conviction with no sentence */
     preSentenceActivity?: boolean
-    /** The termination date of the most recently terminated sentence */
+    /**
+     * Format: date
+     * @description The termination date of the most recently terminated sentence
+     */
     previouslyKnownTerminationDate?: string
+    /** @enum {string} */
     status?: 'CURRENT' | 'NOT_SENTENCED' | 'PREVIOUSLY_KNOWN'
   }
+  /** Provision */
   Provision: {
+    /** Format: date */
     finishDate?: string
     notes?: string
+    /** Format: int64 */
     provisionId?: number
     provisionType?: definitions['KeyValue']
+    /** Format: date */
     startDate?: string
   }
+  /** PssRequirement */
   PssRequirement: {
-    /** Is the requirement currently active */
+    /** @description Is the requirement currently active */
     active?: boolean
     subType?: definitions['KeyValue']
     type?: definitions['KeyValue']
   }
+  /** PssRequirements */
   PssRequirements: {
-    /** List of pssRequirements associated with this conviction */
+    /** @description List of pssRequirements associated with this conviction */
     pssRequirements?: definitions['PssRequirement'][]
   }
+  /** ReferenceData */
   ReferenceData: {
-    /** true if this item is currently selectable in Delius */
+    /** @description true if this item is currently selectable in Delius */
     active?: boolean
-    /** code of reference data */
+    /**
+     * @description code of reference data
+     * @example VISO
+     */
     code?: string
-    /** description of reference data */
+    /**
+     * @description description of reference data
+     * @example ViSOR Number
+     */
     description?: string
   }
-  /** Reference data list */
+  /**
+   * ReferenceDataList
+   * @description Reference data list
+   */
   ReferenceDataList: {
-    /** List of reference data items */
+    /** @description List of reference data items */
     referenceData?: definitions['ReferenceData'][]
   }
-  /** Reference data sets */
+  /**
+   * ReferenceDataSets
+   * @description Reference data sets
+   */
   ReferenceDataSets: {
     /**
-     * List of reference data sets, for example
+     * @description List of reference data sets, for example
      * {
-     *             'code': 'ADDITIONAL SENTENCE',
-     *             'description': 'Additional Sentence'
+     *             "code": "ADDITIONAL SENTENCE",
+     *             "description": "Additional Sentence"
      *         }
      */
     referenceDataSets?: definitions['KeyValue'][]
   }
+  /** ReferralEndResponse */
   ReferralEndResponse: {
+    /** Format: int64 */
     nsiId?: number
   }
+  /** ReferralStartResponse */
   ReferralStartResponse: {
+    /** Format: int64 */
     nsiId?: number
   }
+  /** Registration */
   Registration: {
-    /** true if active */
+    /** @description true if active */
     active?: boolean
-    /** Latest Additional notes about the de-registration */
+    /** @description Latest Additional notes about the de-registration */
     deregisteringNotes?: string
-    /** Latest Probation officer who removed the offender from the register */
+    /** @description Latest Probation officer who removed the offender from the register */
     deregisteringOfficer?: definitions['StaffHuman']
-    /** Latest Probation area that removed the offender from the register */
+    /** @description Latest Probation area that removed the offender from the register */
     deregisteringProbationArea?: definitions['KeyValue']
-    /** Latest Probation team that removed the offender from the register */
+    /** @description Latest Probation team that removed the offender from the register */
     deregisteringTeam?: definitions['KeyValue']
-    /** Latest Date removed from register */
+    /**
+     * Format: date
+     * @description Latest Date removed from register
+     * @example 2021-01-30
+     */
     endDate?: string
-    /** Date probation should review if the offender should still be on still register */
+    /**
+     * Format: date
+     * @description Date probation should review if the offender should still be on still register
+     * @example 2021-01-30
+     */
     nextReviewDate?: string
-    /** Additional notes */
+    /** @description Additional notes */
     notes?: string
-    /** Count of number times this was de-registered */
+    /**
+     * Format: int32
+     * @description Count of number times this was de-registered
+     */
     numberOfPreviousDeregistrations?: number
-    /** Unique id of this offender */
+    /**
+     * Format: int64
+     * @description Unique id of this offender
+     * @example 2500343964
+     */
     offenderId?: number
-    /** Register this offender has been added to. For example RoSH */
+    /** @description Register this offender has been added to. For example RoSH */
     register?: definitions['KeyValue']
-    /** Category of register. Only used for certain registers for example Hate Crime category */
+    /** @description Category of register. Only used for certain registers for example Hate Crime category */
     registerCategory?: definitions['KeyValue']
-    /** Level of register. Only used for certain registers for example Lifer - Supervised */
+    /** @description Level of register. Only used for certain registers for example Lifer - Supervised */
     registerLevel?: definitions['KeyValue']
-    /** Probation officer who added the offender to the register */
+    /** @description Probation officer who added the offender to the register */
     registeringOfficer?: definitions['StaffHuman']
-    /** Probation area that added the offender to the register */
+    /** @description Probation area that added the offender to the register */
     registeringProbationArea?: definitions['KeyValue']
-    /** Probation team that added the offender to the register */
+    /** @description Probation team that added the offender to the register */
     registeringTeam?: definitions['KeyValue']
-    /** Unique id of this registration */
+    /**
+     * Format: int64
+     * @description Unique id of this registration
+     * @example 2500064995
+     */
     registrationId?: number
     registrationReviews?: definitions['RegistrationReview'][]
-    /** Number of months a review should take place */
+    /**
+     * Format: int64
+     * @description Number of months a review should take place
+     * @example 6
+     */
     reviewPeriodMonths?: number
-    /** Literal visual colour this register represents */
+    /**
+     * @description Literal visual colour this register represents
+     * @example Amber
+     */
     riskColour?: string
-    /** Date added to register */
+    /**
+     * Format: date
+     * @description Date added to register
+     * @example 2021-01-30
+     */
     startDate?: string
-    /** Type of register. For example Low RoSH */
+    /** @description Type of register. For example Low RoSH */
     type?: definitions['KeyValue']
-    /** true if the register is serious enough to warn the probation officer of risk to themselves */
+    /** @description true if the register is serious enough to warn the probation officer of risk to themselves */
     warnUser?: boolean
   }
+  /** RegistrationReview */
   RegistrationReview: {
-    /** If the review has been completed */
+    /** @description If the review has been completed */
     completed?: boolean
-    /** Notes attached to the registration review */
+    /** @description Notes attached to the registration review */
     notes?: string
-    /** Date the registration was reviewed */
+    /**
+     * Format: date
+     * @description Date the registration was reviewed
+     */
     reviewDate?: string
-    /** Date the next registration review is due */
+    /**
+     * Format: date
+     * @description Date the next registration review is due
+     */
     reviewDateDue?: string
-    /** Probation office that reviewed the registration */
+    /** @description Probation office that reviewed the registration */
     reviewingOfficer?: definitions['StaffHuman']
-    /** Probation team that reviewed the registration */
+    /** @description Probation team that reviewed the registration */
     reviewingTeam?: definitions['KeyValue']
   }
-  /** Registration Wrapper */
+  /**
+   * Registrations
+   * @description Registration Wrapper
+   */
   Registrations: {
-    /** List of registrations */
+    /** @description List of registrations */
     registrations?: definitions['Registration'][]
   }
-  /** Any dates not supplied will be removed from the associated conviction */
+  /**
+   * ReplaceCustodyKeyDates
+   * @description Any dates not supplied will be removed from the associated conviction
+   */
   ReplaceCustodyKeyDates: {
-    /** Conditional release date */
+    /**
+     * Format: date
+     * @description Conditional release date
+     * @example 2020-06-23
+     */
     conditionalReleaseDate?: string
-    /** Expected release date */
+    /**
+     * Format: date
+     * @description Expected release date
+     * @example 2020-06-23
+     */
     expectedReleaseDate?: string
-    /** Home detention curfew eligibility date */
+    /**
+     * Format: date
+     * @description Home detention curfew eligibility date
+     * @example 2020-06-23
+     */
     hdcEligibilityDate?: string
-    /** Licence expiry date */
+    /**
+     * Format: date
+     * @description Licence expiry date
+     * @example 2020-06-23
+     */
     licenceExpiryDate?: string
-    /** Parole eligibility date */
+    /**
+     * Format: date
+     * @description Parole eligibility date
+     * @example 2020-06-23
+     */
     paroleEligibilityDate?: string
-    /** Post sentence Supervision end date. AKA Top-up supervision end data */
+    /**
+     * Format: date
+     * @description Post sentence Supervision end date. AKA Top-up supervision end data
+     * @example 2020-06-23
+     */
     postSentenceSupervisionEndDate?: string
-    /** Sentence expiry date */
+    /**
+     * Format: date
+     * @description Sentence expiry date
+     * @example 2020-06-23
+     */
     sentenceExpiryDate?: string
   }
+  /** ReportDocumentDates */
   ReportDocumentDates: {
+    /** Format: date-time */
     completedDate?: string
+    /** Format: date */
     requestedDate?: string
+    /** Format: date */
     requiredDate?: string
   }
+  /** ReportManager */
   ReportManager: {
     active?: boolean
     staff?: definitions['StaffHuman']
   }
+  /** Requirement */
   Requirement: {
-    /** Is the requirement currently active */
+    /** @description Is the requirement currently active */
     active?: boolean
     adRequirementTypeMainCategory?: definitions['KeyValue']
     adRequirementTypeSubCategory?: definitions['KeyValue']
+    /** Format: date */
     commencementDate?: string
+    /** Format: date-time */
     createdDatetime?: string
+    /** Format: date */
     expectedEndDate?: string
+    /** Format: date */
     expectedStartDate?: string
-    /** The number of temporal units to complete the requirement (see lengthUnit field for unit) */
+    /**
+     * Format: int64
+     * @description The number of temporal units to complete the requirement (see lengthUnit field for unit)
+     */
     length?: number
-    /** The temporal unit corresponding to the length field */
+    /** @description The temporal unit corresponding to the length field */
     lengthUnit?: string
-    /** Total RAR days completed */
+    /**
+     * Format: int64
+     * @description Total RAR days completed
+     */
     rarCount?: number
-    /** Unique identifier for the requirement */
+    /**
+     * Format: int64
+     * @description Unique identifier for the requirement
+     */
     requirementId: number
-    /** Notes added by probation relating to the requirement */
+    /** @description Notes added by probation relating to the requirement */
     requirementNotes?: string
     requirementTypeMainCategory?: definitions['KeyValue']
     requirementTypeSubCategory?: definitions['KeyValue']
-    /** Is the main category restrictive */
+    /** @description Is the main category restrictive */
     restrictive?: boolean
     softDeleted?: boolean
+    /** Format: date */
     startDate?: string
+    /** Format: date */
     terminationDate?: string
     terminationReason?: definitions['KeyValue']
   }
+  /** Resource */
   Resource: {
     description?: string
     file?: unknown
@@ -1680,18 +2759,34 @@ export interface definitions {
     inputStream?: definitions['InputStream']
     open?: boolean
     readable?: boolean
+    /** Format: uri */
     uri?: string
+    /** Format: url */
     url?: string
   }
-  /** Risk Resourcing Details */
+  /**
+   * ResourcingDecision
+   * @description Risk Resourcing Details
+   */
   ResourcingDecision: {
-    /** The decision code */
+    /**
+     * @description The decision code
+     * @example R
+     */
     code?: string
-    /** Date decision was made */
+    /**
+     * Format: date
+     * @description Date decision was made
+     * @example 2021-04-27
+     */
     date?: string
-    /** The decision description */
+    /**
+     * @description The decision description
+     * @example Retained
+     */
     description?: string
   }
+  /** ResponsibleOfficer */
   ResponsibleOfficer: {
     currentOm?: boolean
     currentPom?: boolean
@@ -1700,76 +2795,121 @@ export interface definitions {
     lduCode?: string
     lduDescription?: string
     nomsNumber: string
+    /** Format: int64 */
     offenderManagerId?: number
+    /** Format: date */
     omEndDate: string
+    /** Format: date */
     omStartDate: string
+    /** Format: int64 */
     prisonOffenderManagerId?: number
     probationAreaCode?: string
     probationAreaDescription?: string
     providerTeamCode?: string
     providerTeamDescription?: string
+    /** Format: int64 */
     responsibleOfficerId?: number
     staffCode: string
     surname: string
   }
-  /** Request body for switching the responsible officer */
+  /**
+   * ResponsibleOfficerSwitch
+   * @description Request body for switching the responsible officer
+   */
   ResponsibleOfficerSwitch: {
-    /** true if the RO should be set the the current community offender manager */
+    /**
+     * @description true if the RO should be set the the current community offender manager
+     * @example true
+     */
     switchToCommunityOffenderManager?: boolean
-    /** true if the RO should be set the the current prison offender manager */
+    /** @description true if the RO should be set the the current prison offender manager */
     switchToPrisonOffenderManager?: boolean
   }
-  /** Risk Resourcing Details */
+  /**
+   * RiskResourcingDetails
+   * @description Risk Resourcing Details
+   */
   RiskResourcingDetails: {
-    /** decision */
+    /** @description decision */
     decision?: definitions['ResourcingDecision']
-    /** This is equivalent to indicating if the person is retained by NPS when there was a NPS/CRC split. true = requires enhanced resourcing as if they were allocated to the NPS */
+    /**
+     * @description This is equivalent to indicating if the person is retained by NPS when there was a NPS/CRC split. true = requires enhanced resourcing as if they were allocated to the NPS
+     * @example true
+     */
     enhancedResourcing?: boolean
-    /** id of the conviction that lead to the decision */
+    /**
+     * Format: int64
+     * @description id of the conviction that lead to the decision
+     * @example 1219491
+     */
     relatedConvictionId?: number
   }
+  /** Sentence */
   Sentence: {
     additionalSentences?: definitions['AdditionalSentence'][]
     cja2003Order?: boolean
+    /** Format: int64 */
     defaultLength?: number
     description?: string
+    /** Format: int64 */
     effectiveLength?: number
-    /** The expected end date of the sentence */
+    /**
+     * Format: date
+     * @description The expected end date of the sentence
+     */
     expectedSentenceEndDate?: string
+    /** Format: int64 */
     failureToComplyLimit?: number
     legacyOrder?: boolean
+    /** Format: int64 */
     lengthInDays?: number
+    /** Format: int64 */
     originalLength?: number
     originalLengthUnits?: string
+    /** Format: int64 */
     secondLength?: number
     secondLengthUnits?: string
+    /** Format: int64 */
     sentenceId?: number
-    /** Sentence type and description */
+    /** @description Sentence type and description */
     sentenceType?: definitions['KeyValue']
-    /** Date sentence started */
+    /**
+     * Format: date
+     * @description Date sentence started
+     */
     startDate?: string
+    /** Format: date */
     terminationDate?: string
     terminationReason?: string
-    /** Unpaid Work to date associated with this sentence */
+    /** @description Unpaid Work to date associated with this sentence */
     unpaidWork?: definitions['UnpaidWork']
   }
+  /** SentenceStatus */
   SentenceStatus: {
+    /** Format: date */
     actualReleaseDate?: string
     custodialType?: definitions['KeyValue']
+    /** Format: int64 */
     length?: number
     lengthUnit?: string
+    /** Format: date */
     licenceExpiryDate?: string
     mainOffence?: definitions['KeyValue']
+    /** Format: date */
     pssEndDate?: string
     sentence?: definitions['KeyValue']
+    /** Format: date */
     sentenceDate?: string
+    /** Format: int64 */
     sentenceId?: number
   }
+  /** Sort */
   Sort: {
     empty?: boolean
     sorted?: boolean
     unsorted?: boolean
   }
+  /** StaffCaseloadEntry */
   StaffCaseloadEntry: {
     crn?: string
     firstName?: string
@@ -1777,80 +2917,142 @@ export interface definitions {
     preferredName?: string
     surname?: string
   }
+  /** StaffDetails */
   StaffDetails: {
-    /** the optional email address of this staff member, will be absent if the staff member is not a user of Delius */
+    /**
+     * @description the optional email address of this staff member, will be absent if the staff member is not a user of Delius
+     * @example sheila.hancock@test.justice.gov.uk
+     */
     email?: string
-    /** provider this staff member is associated with */
+    /** @description provider this staff member is associated with */
     probationArea?: definitions['ProbationArea']
-    /** staff name details */
+    /** @description staff name details */
     staff?: definitions['Human']
-    /** staff code AKA officer code */
+    /**
+     * @description staff code AKA officer code
+     * @example SH00001
+     */
     staffCode?: string
-    /** staff identifier */
+    /**
+     * Format: int64
+     * @description staff identifier
+     * @example 123456
+     */
     staffIdentifier?: number
-    /** all teams related to this staff member */
+    /** @description all teams related to this staff member */
     teams?: definitions['Team'][]
-    /** the optional telephone number of this staff member, will be absent if the staff member is not a user of Delius */
+    /**
+     * @description the optional telephone number of this staff member, will be absent if the staff member is not a user of Delius
+     * @example 020 1111 2222
+     */
     telephoneNumber?: string
-    /** the optional username of this staff member, will be absent if the staff member is not a user of Delius */
+    /**
+     * @description the optional username of this staff member, will be absent if the staff member is not a user of Delius
+     * @example SheilaHancockNPS
+     */
     username?: string
   }
+  /** StaffHuman */
   StaffHuman: {
-    /** Staff code */
+    /**
+     * @description Staff code
+     * @example AN001A
+     */
     code?: string
-    /** Given names */
+    /**
+     * @description Given names
+     * @example Sheila Linda
+     */
     forenames?: string
-    /** Family name */
+    /**
+     * @description Family name
+     * @example Hancock
+     */
     surname?: string
     unallocated?: boolean
   }
+  /** Team */
   Team: {
-    /** Team's borough */
+    /** @description Team's borough */
     borough?: definitions['KeyValue']
-    /** Team code */
+    /**
+     * @description Team code
+     * @example C01T04
+     */
     code?: string
-    /** Team description */
+    /**
+     * @description Team description
+     * @example OMU A
+     */
     description?: string
-    /** Team's district */
+    /** @description Team's district */
     district?: definitions['KeyValue']
-    /** Team email address */
+    /**
+     * @description Team email address
+     * @example first.last@digital.justice.gov.uk
+     */
     emailAddress?: string
-    /** Team's end date */
+    /**
+     * Format: date
+     * @description Team's end date
+     */
     endDate?: string
-    /** Local Delivery Unit - provides a geographic grouping of teams */
+    /** @description Local Delivery Unit - provides a geographic grouping of teams */
     localDeliveryUnit?: definitions['KeyValue']
-    /** Team's start date */
+    /**
+     * Format: date
+     * @description Team's start date
+     */
     startDate?: string
-    /** Team Type - provides a logical, not necessarily geographic, grouping of teams */
+    /** @description Team Type - provides a logical, not necessarily geographic, grouping of teams */
     teamType?: definitions['KeyValue']
-    /** Team telephone, often not populated */
+    /**
+     * @description Team telephone, often not populated
+     * @example OMU A
+     */
     telephone?: string
   }
+  /** TeamCreationResult */
   TeamCreationResult: {
-    /** List of teams created */
+    /** @description List of teams created */
     teams?: definitions['Team'][]
-    /** List of unallocated staff created */
+    /** @description List of unallocated staff created */
     unallocatedStaff?: definitions['StaffHuman'][]
   }
+  /** UnpaidWork */
   UnpaidWork: {
-    /** Details of appointment history to date */
+    /** @description Details of appointment history to date */
     appointments?: definitions['Appointments']
-    /** Minutes of unpaid work credited to the service user to date */
+    /**
+     * Format: int64
+     * @description Minutes of unpaid work credited to the service user to date
+     */
     minutesCompleted?: number
-    /** Minutes of unpaid work ordered for this sentence */
+    /**
+     * Format: int64
+     * @description Minutes of unpaid work ordered for this sentence
+     */
     minutesOrdered?: number
-    /** Status description */
+    /** @description Status description */
     status?: string
   }
-  /** Court details for updating an exiting court */
+  /**
+   * UpdateCourtDto
+   * @description Court details for updating an exiting court
+   */
   UpdateCourtDto: {
-    /** true when this court is open */
+    /** @description true when this court is open */
     active?: boolean
     buildingName?: string
+    /** @example England */
     country?: string
+    /** @example South Yorkshire */
     county?: string
     courtName: string
-    /** type code from standard reference data */
+    /**
+     * @description type code from standard reference data
+     * @example MAG
+     */
     courtTypeCode?: string
     fax?: string
     locality?: string
@@ -1859,44 +3061,100 @@ export interface definitions {
     telephoneNumber?: string
     town?: string
   }
+  /** UpdateCustody */
   UpdateCustody: {
-    /** Prison institution code in NOMIS */
+    /**
+     * @description Prison institution code in NOMIS
+     * @example MDI
+     */
     nomsPrisonInstitutionCode?: string
   }
+  /** UpdateCustodyBookingNumber */
   UpdateCustodyBookingNumber: {
-    /** Prison Booking number to be set on the conviction. AKA bookNo, prison number */
+    /**
+     * @description Prison Booking number to be set on the conviction. AKA bookNo, prison number
+     * @example 38339A
+     */
     bookingNumber?: string
-    /** Sentence start date from prison used to match with probation conviction */
+    /**
+     * Format: date
+     * @description Sentence start date from prison used to match with probation conviction
+     * @example 2020-02-28
+     */
     sentenceStartDate?: string
   }
+  /** UpdateOffenderDetails */
   UpdateOffenderDetails: {
+    /** @example John */
     firstName?: string
+    /** @example Smith */
     surname?: string
   }
+  /** UpdateOffenderNomsNumber */
   UpdateOffenderNomsNumber: {
-    /** NOMS number to be set on the offender. AKA offenderNo */
+    /**
+     * @description NOMS number to be set on the offender. AKA offenderNo
+     * @example G5555TT
+     */
     nomsNumber?: string
   }
-  /** User Details */
+  /** UploadedDocumentCreateResponse */
+  UploadedDocumentCreateResponse: {
+    /** Format: date-time */
+    creationDate?: string
+    crn?: string
+    /** Format: date-time */
+    dateLastModified?: string
+    documentName?: string
+    /** Format: int64 */
+    id?: number
+    lastModifiedUser?: string
+  }
+  /**
+   * UserDetails
+   * @description User Details
+   */
   UserDetails: {
-    /** Email address of the user */
+    /**
+     * @description Email address of the user
+     * @example test@digital.justice.gov.uk
+     */
     email?: string
-    /** Account is enabled if true */
+    /** @description Account is enabled if true */
     enabled: boolean
-    /** First name of the user */
+    /**
+     * @description First name of the user
+     * @example John
+     */
     firstName: string
-    /** Roles For this User */
+    /** @description Roles For this User */
     roles?: definitions['UserRole'][]
-    /** Surname of the user */
+    /**
+     * @description Surname of the user
+     * @example Smith
+     */
     surname: string
-    /** User ID of the user */
+    /**
+     * Format: int64
+     * @description User ID of the user
+     * @example 12345
+     */
     userId: number
-    /** The username of the user */
+    /**
+     * @description The username of the user
+     * @example test.user
+     */
     username?: string
   }
-  /** User Roles */
+  /**
+   * UserRole
+   * @description User Roles
+   */
   UserRole: {
-    /** Code/Name of the Role */
+    /**
+     * @description Code/Name of the Role
+     * @example TEST_ROLE
+     */
     name: string
   }
 }
@@ -2026,6 +3284,30 @@ export interface operations {
       401: unknown
       /** Requires role ROLE_COMMUNITY */
       403: unknown
+      /** Unrecoverable error whilst processing request. */
+      500: {
+        schema: definitions['ErrorResponse']
+      }
+    }
+  }
+  getContactTypeOutcomesUsingGET: {
+    parameters: {
+      path: {
+        /** contact type code */
+        contactTypeCode: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['AvailableContactOutcomeTypes']
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
+      /** The contact type does not exit */
+      404: unknown
       /** Unrecoverable error whilst processing request. */
       500: {
         schema: definitions['ErrorResponse']
@@ -2645,6 +3927,38 @@ export interface operations {
       }
     }
   }
+  getOffenderInitialAppointmentsByCrnUsingGET: {
+    parameters: {
+      query: {
+        /** Show contacts from this date */
+        contactDateFrom?: string
+      }
+      path: {
+        /** CRN of the offender */
+        crn: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['ContactSummary'][]
+      }
+      /** Invalid request */
+      400: {
+        schema: definitions['ErrorResponse']
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
+      /** Offender does not exist */
+      404: unknown
+      /** Unrecoverable error whilst processing request. */
+      500: {
+        schema: definitions['ErrorResponse']
+      }
+    }
+  }
   getOffenderContactSummaryByCrnUsingGET: {
     parameters: {
       path: {
@@ -2919,6 +4233,41 @@ export interface operations {
       /** Forbidden, the offender may have exclusions or restrictions in place preventing some users from viewing. Adopting the client scopes SCOPE_IGNORE_DELIUS_INCLUSIONS_ALWAYS and SCOPE_IGNORE_DELIUS_EXCLUSIONS_ALWAYS can bypass these restrictions. */
       403: unknown
       /** The offender or conviction ID is not found */
+      404: {
+        schema: definitions['ErrorResponse']
+      }
+      /** Unrecoverable error whilst processing request. */
+      500: {
+        schema: definitions['ErrorResponse']
+      }
+    }
+  }
+  createUPWDocumentInDeliusUsingPOST: {
+    parameters: {
+      formData: {
+        fileData?: unknown
+      }
+      path: {
+        /** convictionId */
+        convictionId: number
+        /** crn */
+        crn: string
+      }
+    }
+    responses: {
+      /** Created */
+      201: {
+        schema: string
+      }
+      /** Invalid request */
+      400: {
+        schema: definitions['ErrorResponse']
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_PROBATION */
+      403: unknown
+      /** Active Offender Manager could not be found */
       404: {
         schema: definitions['ErrorResponse']
       }
@@ -5384,6 +6733,61 @@ export interface operations {
       }
     }
   }
+  /** Currently, this endpoint is restricted to offender managers and order supervisors. Additional management types (e.g. requirements, reports) may be added later. */
+  getCaseloadForStaffUsingGET_1: {
+    parameters: {
+      path: {
+        /** Delius staff/officer code */
+        staffCode: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['Caseload']
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
+    }
+  }
+  getCaseloadOffendersForStaffUsingGET_1: {
+    parameters: {
+      path: {
+        /** Delius staff/officer code */
+        staffCode: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['ManagedOffenderCrn'][]
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
+    }
+  }
+  getCaseloadOrdersForStaffUsingGET_1: {
+    parameters: {
+      path: {
+        /** Delius staff/officer code */
+        staffCode: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['ManagedEventId'][]
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
+    }
+  }
   /** Accepts a Delius staff officer identifier */
   getStaffDetailsForStaffIdentifierUsingGET: {
     parameters: {
@@ -5413,6 +6817,61 @@ export interface operations {
       500: {
         schema: definitions['ErrorResponse']
       }
+    }
+  }
+  /** Currently, this endpoint is restricted to offender managers and order supervisors. Additional management types (e.g. requirements, reports) may be added later. */
+  getCaseloadForStaffUsingGET: {
+    parameters: {
+      path: {
+        /** Delius staff/officer identifier */
+        staffIdentifier: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['Caseload']
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
+    }
+  }
+  getCaseloadOffendersForStaffUsingGET: {
+    parameters: {
+      path: {
+        /** Delius staff/officer identifier */
+        staffIdentifier: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['ManagedOffenderCrn'][]
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
+    }
+  }
+  getCaseloadOrdersForStaffUsingGET: {
+    parameters: {
+      path: {
+        /** Delius staff/officer identifier */
+        staffIdentifier: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['ManagedEventId'][]
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
     }
   }
   /** Accepts a Delius staff officer identifier */
@@ -5519,6 +6978,61 @@ export interface operations {
       500: {
         schema: definitions['ErrorResponse']
       }
+    }
+  }
+  /** Currently, this endpoint is restricted to offender managers and order supervisors. Additional management types (e.g. requirements, reports) may be added later. */
+  getCaseloadForTeamUsingGET: {
+    parameters: {
+      path: {
+        /** teamCode */
+        teamCode: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['Caseload']
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
+    }
+  }
+  getCaseloadOffendersForTeamUsingGET: {
+    parameters: {
+      path: {
+        /** teamCode */
+        teamCode: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['ManagedOffenderCrn'][]
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
+    }
+  }
+  getCaseloadOrdersForTeamUsingGET: {
+    parameters: {
+      path: {
+        /** teamCode */
+        teamCode: string
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        schema: definitions['ManagedEventId'][]
+      }
+      /** JWT supplied invalid or absent */
+      401: unknown
+      /** Requires role ROLE_COMMUNITY */
+      403: unknown
     }
   }
   createMissingPrisonOffenderManagerTeamsUsingPOST: {

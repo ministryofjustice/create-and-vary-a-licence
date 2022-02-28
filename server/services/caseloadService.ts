@@ -2,12 +2,13 @@ import moment from 'moment'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
-import { CaseTypeAndStatus, LicenceAndResponsibleCom } from '../@types/managedCase'
+import { CaseTypeAndStatus, DeliusRecord, LicenceAndResponsibleCom } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
 import { prisonInRollout } from '../utils/rolloutUtils'
+import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
 
 export default class CaseloadService {
   constructor(
@@ -19,83 +20,44 @@ export default class CaseloadService {
   async getStaffCreateCaseload(user: User): Promise<CaseTypeAndStatus[]> {
     const { deliusStaffIdentifier } = user
 
-    const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
+    const managedOffenders = await this.communityService
+      .getManagedOffenders(deliusStaffIdentifier)
+      .then(caseload => this.mapManagedOffenderRecordToOffenderDetail(caseload))
 
-    const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.nomsNumber)
-      .map(offender => offender.nomsNumber)
-
-    const offendersLicences = await this.mapOffendersToLicences(caseloadNomisIds, user)
-
-    // Combine nomis + licence record with matching delius record by nomisId
-    return offendersLicences.map(offender => {
-      return { ...offender, ...managedOffenders.find(o => o.nomsNumber === offender.prisonerNumber) }
-    })
+    return this.buildCreateCaseload(managedOffenders, user)
   }
 
   async getTeamCreateCaseload(user: User): Promise<CaseTypeAndStatus[]> {
     const { probationTeamCodes } = user
 
-    const managedOffenders = await this.communityService.getManagedOffendersByTeam(probationTeamCodes)
+    const managedOffenders = await Promise.all(
+      probationTeamCodes.map(teamCode => this.communityService.getManagedOffendersByTeam(teamCode))
+    )
+      .then(caseload => caseload.flat())
+      .then(caseload => this.mapManagedOffenderRecordToOffenderDetail(caseload))
 
-    const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.nomsNumber)
-      .map(offender => offender.nomsNumber)
-
-    const offendersLicences = await this.mapOffendersToLicences(caseloadNomisIds, user)
-
-    // Combine nomis + licence record with matching delius record by nomisId
-    return offendersLicences.map(offender => {
-      return { ...offender, ...managedOffenders.find(o => o.nomsNumber === offender.prisonerNumber) }
-    })
+    return this.buildCreateCaseload(managedOffenders, user)
   }
 
   async getStaffVaryCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
     const { deliusStaffIdentifier } = user
-    const managedOffenders = await this.communityService.getManagedOffenders(deliusStaffIdentifier)
-    const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.nomsNumber)
-      .map(offender => offender.nomsNumber)
+    const managedOffenders = await this.communityService
+      .getManagedOffenders(deliusStaffIdentifier)
+      .then(caseload => this.mapManagedOffenderRecordToOffenderDetail(caseload))
 
-    let licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
-      caseloadNomisIds,
-      [
-        LicenceStatus.ACTIVE,
-        LicenceStatus.VARIATION_IN_PROGRESS,
-        LicenceStatus.VARIATION_SUBMITTED,
-        LicenceStatus.VARIATION_APPROVED,
-        LicenceStatus.VARIATION_REJECTED,
-      ],
-      user
-    )
-
-    licences = this.filterActiveLicencesIfVariationExists(licences)
-
-    return this.mapLicencesAndResponsibleComs(licences)
+    return this.buildVaryCaseload(managedOffenders, user)
   }
 
   async getTeamVaryCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
     const { probationTeamCodes } = user
-    const managedOffenders = await this.communityService.getManagedOffendersByTeam(probationTeamCodes)
-    const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.nomsNumber)
-      .map(offender => offender.nomsNumber)
 
-    let licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
-      caseloadNomisIds,
-      [
-        LicenceStatus.ACTIVE,
-        LicenceStatus.VARIATION_IN_PROGRESS,
-        LicenceStatus.VARIATION_SUBMITTED,
-        LicenceStatus.VARIATION_APPROVED,
-        LicenceStatus.VARIATION_REJECTED,
-      ],
-      user
+    const managedOffenders = await Promise.all(
+      probationTeamCodes.map(teamCode => this.communityService.getManagedOffendersByTeam(teamCode))
     )
+      .then(caseload => caseload.flat())
+      .then(caseload => this.mapManagedOffenderRecordToOffenderDetail(caseload))
 
-    licences = this.filterActiveLicencesIfVariationExists(licences)
-
-    return this.mapLicencesAndResponsibleComs(licences)
+    return this.buildVaryCaseload(managedOffenders, user)
   }
 
   async getOmuCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
@@ -110,6 +72,47 @@ export default class CaseloadService {
 
   async getVaryApproverCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
     const licences = await this.licenceService.getLicencesForVariationApproval(user)
+    return this.mapLicencesAndResponsibleComs(licences)
+  }
+
+  private buildCreateCaseload = async (managedOffenders: DeliusRecord[], user: User): Promise<CaseTypeAndStatus[]> => {
+    const caseloadNomisIds = managedOffenders
+      .filter(offender => offender.otherIds?.nomsNumber)
+      .map(offender => offender.otherIds?.nomsNumber)
+
+    const offendersLicences = await this.mapOffendersToLicences(caseloadNomisIds, user)
+
+    // Combine nomis + licence record with matching delius record by nomisId
+    return offendersLicences.map(offender => {
+      return {
+        ...offender,
+        deliusRecord: managedOffenders.find(c => c.otherIds.nomsNumber === offender.nomisRecord.prisonerNumber),
+      }
+    })
+  }
+
+  private buildVaryCaseload = async (
+    managedOffenders: DeliusRecord[],
+    user: User
+  ): Promise<LicenceAndResponsibleCom[]> => {
+    const caseloadNomisIds = managedOffenders
+      .filter(offender => offender.otherIds?.nomsNumber)
+      .map(offender => offender.otherIds?.nomsNumber)
+
+    let licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+      caseloadNomisIds,
+      [
+        LicenceStatus.ACTIVE,
+        LicenceStatus.VARIATION_IN_PROGRESS,
+        LicenceStatus.VARIATION_SUBMITTED,
+        LicenceStatus.VARIATION_APPROVED,
+        LicenceStatus.VARIATION_REJECTED,
+      ],
+      user
+    )
+
+    licences = this.filterActiveLicencesIfVariationExists(licences)
+
     return this.mapLicencesAndResponsibleComs(licences)
   }
 
@@ -136,7 +139,7 @@ export default class CaseloadService {
 
           // Return a case in the list for the existing licence
           return {
-            ...offender,
+            nomisRecord: offender,
             licenceStatus: existingLicence.licenceStatus,
             licenceType: existingLicence.licenceType,
           } as CaseTypeAndStatus
@@ -151,7 +154,7 @@ export default class CaseloadService {
 
         // Create a case in the list in status NOT_STARTED
         return {
-          ...offender,
+          nomisRecord: offender,
           licenceStatus: prisonInRollout(offender?.prisonId) ? LicenceStatus.NOT_STARTED : LicenceStatus.NOT_IN_PILOT,
           licenceType,
         } as CaseTypeAndStatus
@@ -239,6 +242,19 @@ export default class CaseloadService {
       }
 
       return licences.filter(l => l.nomisId === licence.nomisId).length === 1
+    })
+  }
+
+  private mapManagedOffenderRecordToOffenderDetail = async (
+    caseload: CommunityApiManagedOffender[]
+  ): Promise<DeliusRecord[]> => {
+    const crns = caseload.map(c => c.offenderCrn)
+    const offenders = await this.communityService.getOffendersByCrn(crns)
+    return offenders.map(o => {
+      return {
+        ...o,
+        ...caseload.find(c => c.offenderCrn === o.otherIds?.crn),
+      }
     })
   }
 }
