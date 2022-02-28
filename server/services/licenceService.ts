@@ -412,11 +412,11 @@ export default class LicenceService {
     return this.licenceApiClient.updateSentenceDates(licenceId, sentenceDates, user)
   }
 
-  async approveVariation(licenceId: string, user?: User): Promise<void> {
+  async approveVariation(licenceId: string, user: User): Promise<void> {
     return this.licenceApiClient.approveVariation(licenceId, user)
   }
 
-  async referVariation(licenceId: string, referVariationRequest: ReferVariationRequest, user?: User): Promise<void> {
+  async referVariation(licenceId: string, referVariationRequest: ReferVariationRequest, user: User): Promise<void> {
     return this.licenceApiClient.referVariation(licenceId, referVariationRequest, user)
   }
 
