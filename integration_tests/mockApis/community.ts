@@ -169,27 +169,16 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/secure/staff/staffIdentifier/2000/managedOffenders`,
-        queryParameters: {
-          current: {
-            matches: 'true',
-          },
-        },
+        urlPathPattern: `/secure/staff/staffIdentifier/2000/caseload/managedOffenders`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            staffCode: 'NHIALLU',
+            offenderCrn: 'X344165',
             staffIdentifier: 2500012436,
-            offenderId: 2500368308,
-            nomsNumber: 'G9786GC',
             crnNumber: 'X344165',
-            offenderSurname: 'MCGUIRE',
-            currentRo: false,
-            currentOm: true,
-            currentPom: false,
           },
         ],
       },

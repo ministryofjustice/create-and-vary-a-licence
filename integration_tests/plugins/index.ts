@@ -67,6 +67,7 @@ export default (on: (string, Record) => void): void => {
     stubGetHdcStatus: prison.stubGetHdcStatus,
 
     stubGetProbationer: probationSearch.stubGetProbationer,
+    stubGetOffendersByCrn: probationSearch.stubGetOffendersByCrn,
 
     sendDomainEvent: events.sendDomainEvent,
     sendPrisonEvent: events.sendPrisonEvent,
