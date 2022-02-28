@@ -7,14 +7,14 @@ export default class HomeRoutes {
     const viewContext = {
       shouldShowCreateLicenceCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) && hasAuthSource(req.user, 'delius'),
       shouldShowVaryLicenceCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) && hasAuthSource(req.user, 'delius'),
-      shouldShowApproveLicenceCard: hasRole(req.user, AuthRole.DECISION_MAKER),
+      shouldShowApproveLicenceCard: hasRole(req.user, AuthRole.DECISION_MAKER) && hasAuthSource(req.user, 'nomis'),
       shouldShowViewOrPrintCard:
-        hasRole(req.user, AuthRole.CASE_ADMIN) ||
+        (hasRole(req.user, AuthRole.CASE_ADMIN) && hasAuthSource(req.user, 'nomis')) ||
         // Temporarily removed for COM - UR request - will be reinstated later
         // hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) ||
         hasRole(req.user, AuthRole.READONLY),
-      shouldShowMyCaseloadCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER),
-      shouldShowVaryApprovalCard: hasRole(req.user, AuthRole.ASSISTANT_CHIEF),
+      shouldShowMyCaseloadCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER), // TODO: Probably remove this?
+      shouldShowVaryApprovalCard: hasRole(req.user, AuthRole.ASSISTANT_CHIEF) && hasAuthSource(req.user, 'delius'),
     }
     res.render('pages/index', viewContext)
   }

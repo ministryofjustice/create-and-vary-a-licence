@@ -14,42 +14,59 @@ describe('Route Handlers - Home', () => {
   })
 
   describe('GET', () => {
-    it('For case admin', async () => {
-      req = getReqWithRolesAndSource(['ROLE_LICENCE_CA'], 'nomis')
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/index', {
-        shouldShowCreateLicenceCard: false,
-        shouldShowVaryLicenceCard: false,
-        shouldShowApproveLicenceCard: false,
-        shouldShowMyCaseloadCard: false,
-        shouldShowViewOrPrintCard: true,
-        shouldShowVaryApprovalCard: false,
+    describe('For case admin role', () => {
+      it('With correct auth source', async () => {
+        req = getReqWithRolesAndSource(['ROLE_LICENCE_CA'], 'nomis')
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: false,
+          shouldShowViewOrPrintCard: true,
+          shouldShowVaryApprovalCard: false,
+        })
+      })
+
+      it('With wrong auth source', async () => {
+        req = getReqWithRolesAndSource(['ROLE_LICENCE_CA'], 'delius')
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: false,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: false,
+        })
       })
     })
 
-    it('For responsible officer', async () => {
-      req = getReqWithRolesAndSource(['ROLE_LICENCE_RO'], 'delius')
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/index', {
-        shouldShowCreateLicenceCard: true,
-        shouldShowVaryLicenceCard: true,
-        shouldShowApproveLicenceCard: false,
-        shouldShowMyCaseloadCard: true,
-        shouldShowViewOrPrintCard: false,
-        shouldShowVaryApprovalCard: false,
+    describe('For responsible officer', () => {
+      it('With correct auth source', async () => {
+        req = getReqWithRolesAndSource(['ROLE_LICENCE_RO'], 'delius')
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: true,
+          shouldShowVaryLicenceCard: true,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: true,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: false,
+        })
       })
-    })
 
-    it('For non-delius users with RO role', async () => {
-      req = getReqWithRolesAndSource(['ROLE_LICENCE_RO'], 'nomis')
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/index', {
-        shouldShowCreateLicenceCard: false,
-        shouldShowVaryLicenceCard: false,
-        shouldShowApproveLicenceCard: false,
-        shouldShowMyCaseloadCard: true,
-        shouldShowViewOrPrintCard: false,
-        shouldShowVaryApprovalCard: false,
+      it('With wrong auth source', async () => {
+        req = getReqWithRolesAndSource(['ROLE_LICENCE_RO'], 'nomis')
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: true,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: false,
+        })
       })
     })
 
@@ -66,29 +83,59 @@ describe('Route Handlers - Home', () => {
       })
     })
 
-    it('For decision maker role', async () => {
-      req = getReqWithRolesAndSource(['ROLE_LICENCE_DM'], 'nomis')
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/index', {
-        shouldShowCreateLicenceCard: false,
-        shouldShowVaryLicenceCard: false,
-        shouldShowApproveLicenceCard: true,
-        shouldShowMyCaseloadCard: false,
-        shouldShowViewOrPrintCard: false,
-        shouldShowVaryApprovalCard: false,
+    describe('For decision maker role', () => {
+      it('With correct auth source', async () => {
+        req = getReqWithRolesAndSource(['ROLE_LICENCE_DM'], 'nomis')
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: true,
+          shouldShowMyCaseloadCard: false,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: false,
+        })
+      })
+
+      it('With wrong auth source', async () => {
+        req = getReqWithRolesAndSource(['ROLE_LICENCE_DM'], 'delius')
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: false,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: false,
+        })
       })
     })
 
-    it('For assistant chief officer role', async () => {
-      req = getReqWithRolesAndSource(['ROLE_LICENCE_ACO'], 'nomis')
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/index', {
-        shouldShowCreateLicenceCard: false,
-        shouldShowVaryLicenceCard: false,
-        shouldShowApproveLicenceCard: false,
-        shouldShowMyCaseloadCard: false,
-        shouldShowViewOrPrintCard: false,
-        shouldShowVaryApprovalCard: true,
+    describe('For assistant chief officer role', () => {
+      it('With correct auth source', async () => {
+        req = getReqWithRolesAndSource(['ROLE_LICENCE_ACO'], 'delius')
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: false,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: true,
+        })
+      })
+
+      it('With wrong auth source', async () => {
+        req = getReqWithRolesAndSource(['ROLE_LICENCE_ACO'], 'nomis')
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/index', {
+          shouldShowCreateLicenceCard: false,
+          shouldShowVaryLicenceCard: false,
+          shouldShowApproveLicenceCard: false,
+          shouldShowMyCaseloadCard: false,
+          shouldShowViewOrPrintCard: false,
+          shouldShowVaryApprovalCard: false,
+        })
       })
     })
   })

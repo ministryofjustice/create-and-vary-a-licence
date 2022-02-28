@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { use } from 'passport'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
