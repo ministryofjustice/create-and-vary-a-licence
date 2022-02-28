@@ -29,4 +29,13 @@ describe('Probation Search Api client tests', () => {
     expect(post).toHaveBeenCalledWith({ path: '/search', data: { surname: 'Bloggs' } })
     expect(result).toEqual([{ firstName: 'Joe', surname: 'Bloggs' }])
   })
+
+  it('get offenders by crn', async () => {
+    post.mockResolvedValue([{ firstName: 'Joe', surname: 'Bloggs' } as OffenderDetail])
+
+    const result = await probationSearchApiClient.getOffendersByCrn(['X1234'])
+
+    expect(post).toHaveBeenCalledWith({ path: '/crns', data: ['X1234'] })
+    expect(result).toEqual([{ firstName: 'Joe', surname: 'Bloggs' }])
+  })
 })

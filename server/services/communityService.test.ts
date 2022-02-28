@@ -135,4 +135,33 @@ describe('Community Service', () => {
       expect(probationSearchApiClient.searchProbationer).toHaveBeenCalledWith({ nomsNumber: 'ABC1234' })
     })
   })
+
+  describe('Get offenders by crn', () => {
+    it('should call api client to search by crn', async () => {
+      probationSearchApiClient.getOffendersByCrn.mockResolvedValue([
+        {
+          firstName: 'Joe',
+          surname: 'Bloggs',
+        },
+        {
+          firstName: 'John',
+          surname: 'Smith',
+        },
+      ] as OffenderDetail[])
+
+      const actualResult = await communityService.getOffendersByCrn(['X1234', 'X4321'])
+
+      expect(actualResult).toEqual([
+        {
+          firstName: 'Joe',
+          surname: 'Bloggs',
+        },
+        {
+          firstName: 'John',
+          surname: 'Smith',
+        },
+      ])
+      expect(probationSearchApiClient.getOffendersByCrn).toHaveBeenCalledWith(['X1234', 'X4321'])
+    })
+  })
 })
