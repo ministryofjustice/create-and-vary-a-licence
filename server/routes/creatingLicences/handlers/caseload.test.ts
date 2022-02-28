@@ -24,12 +24,16 @@ describe('Route Handlers - Create Licence - Caseload', () => {
   beforeEach(() => {
     caseloadService.getStaffCreateCaseload.mockResolvedValue([
       {
-        crnNumber: 'X381306',
-        firstName: 'Joe',
-        lastName: 'Rogan',
-        conditionalReleaseDate: '2022-10-12',
-        prisonerNumber: '123',
-        prisonId: 'MDI',
+        deliusRecord: {
+          offenderCrn: 'X381306',
+        },
+        nomisRecord: {
+          firstName: 'Joe',
+          lastName: 'Rogan',
+          conditionalReleaseDate: '2022-10-12',
+          prisonerNumber: '123',
+          prisonId: 'MDI',
+        },
         licenceStatus: LicenceStatus.IN_PROGRESS,
         licenceType: LicenceType.AP,
       },
@@ -37,29 +41,40 @@ describe('Route Handlers - Create Licence - Caseload', () => {
 
     caseloadService.getTeamCreateCaseload.mockResolvedValue([
       {
-        crnNumber: 'X381306',
-        firstName: 'Joe',
-        lastName: 'Rogan',
-        conditionalReleaseDate: '2022-10-12',
-        prisonerNumber: '123',
-        prisonId: 'MDI',
+        deliusRecord: {
+          offenderCrn: 'X381306',
+          staff: {
+            forenames: 'Sherlock',
+            surname: 'Holmes',
+          },
+          staffIdentifier: 3000,
+        },
+        nomisRecord: {
+          firstName: 'Joe',
+          lastName: 'Rogan',
+          conditionalReleaseDate: '2022-10-12',
+          prisonerNumber: '123',
+          prisonId: 'MDI',
+        },
         licenceStatus: LicenceStatus.IN_PROGRESS,
         licenceType: LicenceType.AP,
-        allocated: true,
-        staffIdentifier: 3000,
-        staffForename: 'Sherlock',
-        staffSurname: 'Holmes',
       },
       {
-        crnNumber: 'X381307',
-        firstName: 'Dr',
-        lastName: 'Who',
-        conditionalReleaseDate: '2023-10-12',
-        prisonerNumber: '124',
-        prisonId: 'LEI',
+        deliusRecord: {
+          offenderCrn: 'X381307',
+          staff: {
+            unallocated: true,
+          },
+        },
+        nomisRecord: {
+          firstName: 'Dr',
+          lastName: 'Who',
+          conditionalReleaseDate: '2023-10-12',
+          prisonerNumber: '124',
+          prisonId: 'LEI',
+        },
         licenceStatus: LicenceStatus.IN_PROGRESS,
         licenceType: LicenceType.AP_PSS,
-        allocated: false,
       },
     ] as unknown as CaseTypeAndStatus[])
   })
