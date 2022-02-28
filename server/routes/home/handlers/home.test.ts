@@ -15,7 +15,7 @@ describe('Route Handlers - Home', () => {
 
   describe('GET', () => {
     it('For case admin', async () => {
-      req = getReqWithRoles(['ROLE_LICENCE_CA'])
+      req = getReqWithRolesAndSource(['ROLE_LICENCE_CA'], 'nomis')
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
         shouldShowCreateLicenceCard: false,
@@ -28,7 +28,7 @@ describe('Route Handlers - Home', () => {
     })
 
     it('For responsible officer', async () => {
-      req = getReqWithRoles(['ROLE_LICENCE_RO'])
+      req = getReqWithRolesAndSource(['ROLE_LICENCE_RO'], 'delius')
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
         shouldShowCreateLicenceCard: true,
@@ -40,8 +40,21 @@ describe('Route Handlers - Home', () => {
       })
     })
 
+    it('For non-delius users with RO role', async () => {
+      req = getReqWithRolesAndSource(['ROLE_LICENCE_RO'], 'nomis')
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/index', {
+        shouldShowCreateLicenceCard: false,
+        shouldShowVaryLicenceCard: false,
+        shouldShowApproveLicenceCard: false,
+        shouldShowMyCaseloadCard: true,
+        shouldShowViewOrPrintCard: false,
+        shouldShowVaryApprovalCard: false,
+      })
+    })
+
     it('For readonly role', async () => {
-      req = getReqWithRoles(['ROLE_LICENCE_READONLY'])
+      req = getReqWithRolesAndSource(['ROLE_LICENCE_READONLY'], 'nomis')
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
         shouldShowCreateLicenceCard: false,
@@ -54,7 +67,7 @@ describe('Route Handlers - Home', () => {
     })
 
     it('For decision maker role', async () => {
-      req = getReqWithRoles(['ROLE_LICENCE_DM'])
+      req = getReqWithRolesAndSource(['ROLE_LICENCE_DM'], 'nomis')
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
         shouldShowCreateLicenceCard: false,
@@ -67,7 +80,7 @@ describe('Route Handlers - Home', () => {
     })
 
     it('For assistant chief officer role', async () => {
-      req = getReqWithRoles(['ROLE_LICENCE_ACO'])
+      req = getReqWithRolesAndSource(['ROLE_LICENCE_ACO'], 'nomis')
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
         shouldShowCreateLicenceCard: false,
@@ -81,10 +94,11 @@ describe('Route Handlers - Home', () => {
   })
 })
 
-const getReqWithRoles = (roles: string[]): Request => {
+const getReqWithRolesAndSource = (roles: string[], authSource: string): Request => {
   return {
     user: {
       userRoles: roles,
+      authSource,
     },
   } as unknown as Request
 }

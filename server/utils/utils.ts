@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { use } from 'passport'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -22,6 +23,8 @@ const convertToTitleCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
 const hasRole = (user: Express.User, role: AuthRole): boolean => user?.userRoles.includes(role) || false
+
+const hasAuthSource = (user: Express.User, source: string): boolean => user?.authSource === source
 
 /**
  * Converts a date returned from nomis in the format YYYY-MM-DD to a format which is accepted by
@@ -140,6 +143,7 @@ const formatAddress = (address?: string) => {
 export {
   convertToTitleCase,
   hasRole,
+  hasAuthSource,
   isBlank,
   simpleDateTimeToJson,
   jsonToSimpleDateTime,
