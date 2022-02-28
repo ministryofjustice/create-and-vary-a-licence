@@ -21,3 +21,4 @@ export type UpdateVloDiscussionRequest = components['schemas']['UpdateVloDiscuss
 export type UpdateReasonForVariationRequest = components['schemas']['UpdateReasonForVariationRequest']
 export type UpdatePrisonInformationRequest = components['schemas']['UpdatePrisonInformationRequest']
 export type UpdateSentenceDatesRequest = components['schemas']['UpdateSentenceDatesRequest']
+export type ReferVariationRequest = components['schemas']['ReferVariationRequest']

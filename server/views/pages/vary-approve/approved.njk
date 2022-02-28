@@ -1,0 +1,40 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components//button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% set pageTitle = applicationName + " - confirm variation approved" %}
+{% set pageId = "confirm-variation-approved-page" %}
+{% set hideLicenceBanner = true %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukPanel({
+                titleText: "The licence variation for " + licence.forename + " " + licence.surname + " has been approved."
+            }) }}
+
+            <h2 class="govuk-heading-m">What happens next</h2>
+            <p class="govuk-body" id="sent-to">
+                The licence variation for {{ licence.forename }} {{ licence.surname }} been approved.
+            </p>
+            <p class="govuk-body" id="notified-to">
+                The probation team will be notified of the approval.
+            </p>
+
+            <p class="govuk-body">
+                {{ govukButton({
+                    text: "Return to approvals case list",
+                    classes: "govuk-button--primary govuk-!-margin-bottom-0 govuk-body",
+                    href: '/licence/vary-approve/list',
+                    attributes: { 'data-qa': 'return-to-vary-approve-cases' }
+                }) }}
+            </p>
+
+            <h2 class="govuk-heading-m">Give us your feedback</h2>
+            <p class="govuk-body">
+                <a href="{{ exitSurveyLink }}" rel="noreferrer noopener" target="_blank" id="exit-survey" class="govuk-link">What did you think of this service?</a> (takes 30 seconds)
+            </p>
+        </div>
+    </div>
+{% endblock %}

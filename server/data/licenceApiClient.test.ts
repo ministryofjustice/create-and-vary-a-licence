@@ -13,6 +13,7 @@ import {
   CreateLicenceRequest,
   Licence,
   LicenceSummary,
+  ReferVariationRequest,
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
@@ -197,6 +198,7 @@ describe('Licence API client tests', () => {
         ['MDI'],
         [1],
         ['ABC1234'],
+        [],
         'conditionalReleaseDate',
         'DESC',
         { username: 'joebloggs' } as User
@@ -210,6 +212,7 @@ describe('Licence API client tests', () => {
             status: [LicenceStatus.IN_PROGRESS],
             staffId: [1],
             nomsId: ['ABC1234'],
+            pdu: [],
             sortBy: 'conditionalReleaseDate',
             sortOrder: 'DESC',
           },
@@ -227,6 +230,7 @@ describe('Licence API client tests', () => {
         ['MDI'],
         [1],
         ['ABC1234'],
+        [],
         null,
         null,
         { username: 'joebloggs' } as User
@@ -240,6 +244,7 @@ describe('Licence API client tests', () => {
             status: [LicenceStatus.IN_PROGRESS],
             staffId: [1],
             nomsId: ['ABC1234'],
+            pdu: [],
           },
         },
         { username: 'joebloggs' }
@@ -394,6 +399,26 @@ describe('Licence API client tests', () => {
           topupSupervisionStartDate: '09/09/2023',
           topupSupervisionExpiryDate: '09/09/2024',
         },
+      },
+      { username: 'joebloggs' }
+    )
+  })
+
+  it('Approve a licence variation', async () => {
+    await licenceApiClient.approveVariation('1', { username: 'joebloggs' } as User)
+    expect(put).toHaveBeenCalledWith({ path: '/licence/id/1/approve-variation' }, { username: 'joebloggs' })
+  })
+
+  it('Refer a licence variation', async () => {
+    await licenceApiClient.referVariation(
+      '1',
+      { reasonForReferral: 'reason' } as ReferVariationRequest,
+      { username: 'joebloggs' } as User
+    )
+    expect(put).toHaveBeenCalledWith(
+      {
+        path: '/licence/id/1/refer-variation',
+        data: { reasonForReferral: 'reason' },
       },
       { username: 'joebloggs' }
     )

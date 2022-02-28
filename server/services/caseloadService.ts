@@ -64,6 +64,7 @@ export default class CaseloadService {
         LicenceStatus.VARIATION_IN_PROGRESS,
         LicenceStatus.VARIATION_SUBMITTED,
         LicenceStatus.VARIATION_APPROVED,
+        LicenceStatus.VARIATION_REJECTED,
       ],
       user
     )
@@ -87,6 +88,7 @@ export default class CaseloadService {
         LicenceStatus.VARIATION_IN_PROGRESS,
         LicenceStatus.VARIATION_SUBMITTED,
         LicenceStatus.VARIATION_APPROVED,
+        LicenceStatus.VARIATION_REJECTED,
       ],
       user
     )
@@ -103,6 +105,11 @@ export default class CaseloadService {
 
   async getApproverCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
     const licences = await this.licenceService.getLicencesForApproval(user)
+    return this.mapLicencesAndResponsibleComs(licences)
+  }
+
+  async getVaryApproverCaseload(user: User): Promise<LicenceAndResponsibleCom[]> {
+    const licences = await this.licenceService.getLicencesForVariationApproval(user)
     return this.mapLicencesAndResponsibleComs(licences)
   }
 

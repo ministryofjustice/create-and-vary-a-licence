@@ -1,0 +1,54 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% set pageTitle = applicationName + " - reasons for referral" %}
+{% set pageId = "reason-for-referral-page" %}
+{% set backLinkHref = "/licence/vary-approve/id/" + licence.id + "/view" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Add reasons for requesting amendments to the licence variation</h1>
+        </div>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+
+                <div class="govuk-hint">Add a short explanation for why it's necessary for amendments to be made to the licence variation.</div>
+
+                {{ govukDetails({
+                    summaryText: "View the varied licence conditions",
+                    html: ""
+                }) }}
+
+                {{ govukTextarea({
+                    id: 'reasonForReferral',
+                    name: 'reasonForReferral',
+                    attributes: {
+                        'data-module': 'moj-rich-text-editor',
+                        'data-moj-rich-text-editor-toolbar': 'bold,italic,underline,bullets,numbers'
+                    },
+                    label: {
+                        text: 'Reason for referral',
+                        classes: 'govuk-visually-hidden'
+                    },
+                    errorMessage: validationErrors | findError('reasonForReferral'),
+                    value: licence.reasonForReferral | fillFormResponse(formResponses.reasonForReferral)
+                }) }}
+
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: "Submit and request amendments",
+                        attributes: { 'data-qa': 'request-amendments' }
+                    }) }}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
