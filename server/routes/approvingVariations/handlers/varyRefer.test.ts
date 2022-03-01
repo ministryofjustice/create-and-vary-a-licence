@@ -3,10 +3,13 @@ import { Request, Response } from 'express'
 import VaryReferRoutes from './varyRefer'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { VariedConditions } from '../../../utils/licenceComparator'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
+
+jest.mock('../../../services/licenceService')
 
 describe('Route - refer a licence variation', () => {
   const handler = new VaryReferRoutes(licenceService)
@@ -19,8 +22,10 @@ describe('Route - refer a licence variation', () => {
         licenceId: '1',
       },
     } as unknown as Request
+  })
 
-    licenceService.referVariation = jest.fn()
+  afterEach(() => {
+    jest.resetAllMocks()
   })
 
   describe('GET', () => {
@@ -36,10 +41,21 @@ describe('Route - refer a licence variation', () => {
           },
         },
       } as unknown as Response
+      licenceService.compareVariationToOriginal.mockResolvedValue({
+        licenceConditionsAdded: [],
+      } as VariedConditions)
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/vary-approve/request-changes')
+      expect(licenceService.compareVariationToOriginal).toHaveBeenCalledWith(
+        { id: 1, statusCode: LicenceStatus.VARIATION_SUBMITTED },
+        { username, displayName }
+      )
+      expect(res.render).toHaveBeenCalledWith('pages/vary-approve/request-changes', {
+        conditionComparison: {
+          licenceConditionsAdded: [],
+        },
+      })
     })
 
     it('should redirect to the variation approvals list if not in status VARIATION_SUBMITTED', async () => {

@@ -6,9 +6,12 @@ export default class VaryReferRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { licence } = res.locals
+    const { licence, user } = res.locals
     if (licence?.statusCode === LicenceStatus.VARIATION_SUBMITTED) {
-      res.render('pages/vary-approve/request-changes')
+      const conditionComparison = await this.licenceService.compareVariationToOriginal(licence, user)
+      res.render('pages/vary-approve/request-changes', {
+        conditionComparison,
+      })
     } else {
       res.redirect(`/licence/vary-approve/list`)
     }

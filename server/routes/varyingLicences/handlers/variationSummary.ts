@@ -5,15 +5,13 @@ export default class VariationSummaryRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    // const { licence, user } = res.locals
-    //
-    // const conditionComparison = await this.licenceService.compareVariationToOriginal(licence, user)
-    //
-    // res.render('pages/vary/variationSummary', {
-    //   conditionComparison,
-    // })
+    const { licence, user } = res.locals
 
-    res.render('pages/vary/variationSummary')
+    const conditionComparison = await this.licenceService.compareVariationToOriginal(licence, user)
+
+    res.render('pages/vary/variationSummary', {
+      conditionComparison,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

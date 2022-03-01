@@ -1,0 +1,48 @@
+{% from "customComponents/summaryCard/macro.njk" import summaryCard %}
+
+{% macro variationDetails(licence) %}
+    {{ summaryCard({
+        classes: "govuk-!-margin-bottom-6",
+        titleText: "Variation details",
+        rows: [
+            {
+                key: {
+                    text: "Reasons for the variation"
+                },
+                value: {
+                    html: licence.reasonForVariation
+                }
+            },
+            {
+                key: {
+                    text: "SPO Communications"
+                },
+                value: {
+                    text: "Have you communicated and agreed this change with your SPO?"
+                },
+                extraDetail: {
+                    items: [
+                        {
+                            text: licence.spoDiscussion
+                        }
+                    ]
+                }
+            },
+            {
+                key: {
+                    text: "VLO Communications"
+                },
+                value: {
+                    text: "	Have you consulted with the victim liaison officer (VLO) for this case?"
+                },
+                extraDetail: {
+                    items: [
+                        {
+                            text: licence.vloDiscussion
+                        }
+                    ]
+                }
+            }
+        ]
+    }) }}
+{% endmacro %}
