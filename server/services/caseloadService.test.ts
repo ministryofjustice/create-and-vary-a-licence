@@ -467,7 +467,7 @@ describe('Caseload Service', () => {
             conditionalReleaseDate: '2023-05-12',
             indeterminateSentence: false,
             prisonerNumber: '1',
-            releaseDate: '2022-03-01',
+            releaseDate: moment().add(1, 'day').format('yyyy-MM-DD'),
             status: 'ACTIVE',
           },
         },
