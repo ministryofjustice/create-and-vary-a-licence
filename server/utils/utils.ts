@@ -23,6 +23,8 @@ const convertToTitleCase = (sentence: string): string =>
 
 const hasRole = (user: Express.User, role: AuthRole): boolean => user?.userRoles.includes(role) || false
 
+const hasAuthSource = (user: Express.User, source: string): boolean => user?.authSource === source
+
 /**
  * Converts a date returned from nomis in the format YYYY-MM-DD to a format which is accepted by
  * create-and-vary-a-licence-api (i.e. DD/MM/YYYY)
@@ -140,6 +142,7 @@ const formatAddress = (address?: string) => {
 export {
   convertToTitleCase,
   hasRole,
+  hasAuthSource,
   isBlank,
   simpleDateTimeToJson,
   jsonToSimpleDateTime,
