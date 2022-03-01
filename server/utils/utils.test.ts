@@ -13,6 +13,7 @@ import {
   filterCentralCaseload,
   jsonDtToDateWithDay,
   objectIsEmpty,
+  hasAuthSource,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -60,9 +61,25 @@ describe("Check user's role", () => {
     expect(hasRole(user, AuthRole.CASE_ADMIN)).toBe(true)
   })
 
-  it('should false true if user does not have role', () => {
+  it('should false if user does not have role', () => {
     const user = { userRoles: [] } as Express.User
     expect(hasRole(user, AuthRole.CASE_ADMIN)).toBe(false)
+  })
+})
+
+describe("Check user's auth source", () => {
+  it('should return false if user is null', () => {
+    expect(hasAuthSource(null, 'delius')).toBe(false)
+  })
+
+  it('should return true if user has correct auth source', () => {
+    const user = { authSource: 'delius' } as Express.User
+    expect(hasAuthSource(user, 'delius')).toBe(true)
+  })
+
+  it('should false if user does not have the correct auth source', () => {
+    const user = { authSource: 'nomis' } as Express.User
+    expect(hasAuthSource(user, 'delius')).toBe(false)
   })
 })
 
