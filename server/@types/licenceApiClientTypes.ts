@@ -6,6 +6,7 @@ export type AppointmentPersonRequest = components['schemas']['AppointmentPersonR
 export type AppointmentTimeRequest = components['schemas']['AppointmentTimeRequest']
 export type AuditEvent = components['schemas']['AuditEvent']
 export type AuditRequest = components['schemas']['AuditRequest']
+export type BespokeCondition = components['schemas']['BespokeCondition']
 export type BespokeConditionsRequest = components['schemas']['BespokeConditionRequest']
 export type AdditionalConditionsRequest = components['schemas']['AdditionalConditionsRequest']
 export type UpdateAdditionalConditionDataRequest = components['schemas']['UpdateAdditionalConditionDataRequest']

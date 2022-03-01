@@ -46,6 +46,7 @@ import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 import LicenceType from '../enumeration/licenceType'
 import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
+import compareLicenceConditions, { VariedConditions } from '../utils/licenceComparator'
 
 export default class LicenceService {
   constructor(
@@ -418,6 +419,11 @@ export default class LicenceService {
 
   async referVariation(licenceId: string, referVariationRequest: ReferVariationRequest, user: User): Promise<void> {
     return this.licenceApiClient.referVariation(licenceId, referVariationRequest, user)
+  }
+
+  async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
+    const originalLicence = await this.getLicence(variation.variationOf.toString(), user)
+    return compareLicenceConditions(originalLicence, variation)
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {

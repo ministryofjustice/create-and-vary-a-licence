@@ -7,6 +7,7 @@ import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
 import * as conditionsProvider from '../utils/conditionsProvider'
 import * as utils from '../utils/utils'
+import * as licenceComparator from '../utils/licenceComparator'
 import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
@@ -17,12 +18,14 @@ import SimpleDate from '../routes/creatingLicences/types/date'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import {
+  Licence,
   LicenceSummary,
   UpdateComRequest,
   UpdatePrisonInformationRequest,
   UpdateSentenceDatesRequest,
 } from '../@types/licenceApiClientTypes'
 import { CommunityApiOffenderManager } from '../@types/communityClientTypes'
+import { VariedConditions } from '../utils/licenceComparator'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -717,6 +720,22 @@ describe('Licence Service', () => {
   it('should refer a licence variation', async () => {
     await licenceService.referVariation('1', { reasonForReferral: 'Reason' }, user)
     expect(licenceApiClient.referVariation).toBeCalledWith('1', { reasonForReferral: 'Reason' }, user)
+  })
+
+  it('should compare variation with its original licence', async () => {
+    const licenceCompatatorSpy = jest.spyOn(licenceComparator, 'default').mockReturnValue({} as VariedConditions)
+    licenceApiClient.getLicenceById.mockResolvedValue({
+      id: 1,
+    } as Licence)
+
+    await licenceService.compareVariationToOriginal({ id: 2, variationOf: 1 } as Licence, user)
+
+    expect(licenceCompatatorSpy).toBeCalledWith(
+      {
+        id: 1,
+      },
+      { id: 2, variationOf: 1 }
+    )
   })
 
   describe('Exclusion zone file', () => {
