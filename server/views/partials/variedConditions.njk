@@ -1,0 +1,38 @@
+{% from "customComponents/summaryCard/macro.njk" import summaryCard %}
+
+{% macro variedConditions(conditionComparison) %}
+    {% macro buildConditionsSummaryCard(title, conditions) %}
+        {% set rows = [] %}
+        {% for condition in conditions %}
+            {% set rows = (rows.push({
+                key: {  text: condition.category },
+                value: { text: condition.condition }
+            }), rows) %}
+        {% endfor %}
+
+        {{ summaryCard({
+            classes: "govuk-!-margin-bottom-6",
+            titleText: title,
+            rows: rows
+        }) }}
+    {% endmacro %}
+
+    {% if conditionComparison.licenceConditionsAdded.length > 0 %}
+        {{ buildConditionsSummaryCard('Licence conditions added', conditionComparison.licenceConditionsAdded) }}
+    {% endif %}
+    {% if conditionComparison.licenceConditionsRemoved.length > 0 %}
+        {{ buildConditionsSummaryCard('Licence conditions removed', conditionComparison.licenceConditionsRemoved) }}
+    {% endif %}
+    {% if conditionComparison.licenceConditionsAmended.length > 0 %}
+        {{ buildConditionsSummaryCard('Licence conditions amended', conditionComparison.licenceConditionsAmended) }}
+    {% endif %}
+    {% if conditionComparison.pssConditionsAdded.length > 0 %}
+        {{ buildConditionsSummaryCard('Post sentence requirements added', conditionComparison.pssConditionsAdded) }}
+    {% endif %}
+    {% if conditionComparison.pssConditionsRemoved.length > 0 %}
+        {{ buildConditionsSummaryCard('Post sentence requirements removed', conditionComparison.pssConditionsRemoved) }}
+    {% endif %}
+    {% if conditionComparison.pssConditionsAmended.length > 0 %}
+        {{ buildConditionsSummaryCard('Post sentence requirements amended', conditionComparison.pssConditionsAmended) }}
+    {% endif %}
+{% endmacro %}

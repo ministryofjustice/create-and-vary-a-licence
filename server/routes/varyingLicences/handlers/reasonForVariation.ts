@@ -5,7 +5,13 @@ export default class ReasonForVariationRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    res.render('pages/vary/reasonForVariation')
+    const { licence, user } = res.locals
+
+    const conditionComparison = await this.licenceService.compareVariationToOriginal(licence, user)
+
+    res.render('pages/vary/reasonForVariation', {
+      conditionComparison,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

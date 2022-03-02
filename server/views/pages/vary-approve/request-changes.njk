@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "partials/variedConditions.njk" import variedConditions %}
 
 {% set pageTitle = applicationName + " - reasons for referral" %}
 {% set pageId = "reason-for-referral-page" %}
@@ -24,7 +25,7 @@
 
                 {{ govukDetails({
                     summaryText: "View the varied licence conditions",
-                    html: ""
+                    html: variedConditions(conditionComparison)
                 }) }}
 
                 {{ govukTextarea({
