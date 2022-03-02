@@ -24,9 +24,18 @@
             <p>
                 Date of birth: <span class="bold">{{ licence.dateOfBirth | datetimeToDate }}</span>
             </p>
-            <p>
-                Your licence and sentence expire on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
-            </p>
+            {% if licence.licenceExpiryDate == licence.sentenceEndDate %}
+                <p>
+                    Your licence and sentence expire on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
+                </p>
+            {% else %}
+                <p>
+                    Your licence expires on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
+                </p>
+                <p>
+                    Your sentence expires on <span class="bold">{{ licence.sentenceEndDate | datetimeToDate }}</span>
+                </p>
+            {% endif %}
         </div>
     </div>
 
