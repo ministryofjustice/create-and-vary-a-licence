@@ -21,8 +21,8 @@ export default class SentenceDatesChangedEventHandler {
       const prisoner = await this.prisonerService.getPrisonerDetail(nomisId)
 
       await Promise.all([
-        await this.licenceService.updateStatus(licence.licenceId.toString(), LicenceStatus.IN_PROGRESS),
-        await this.licenceService.updateSentenceDates(licence.licenceId.toString(), {
+        this.licenceService.updateStatus(licence.licenceId.toString(), LicenceStatus.IN_PROGRESS),
+        this.licenceService.updateSentenceDates(licence.licenceId.toString(), {
           conditionalReleaseDate:
             convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
             convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseDate),
