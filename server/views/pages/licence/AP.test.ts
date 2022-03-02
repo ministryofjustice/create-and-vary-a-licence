@@ -94,7 +94,6 @@ describe('Print an AP licence', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    // Check the offender image is present
     expect($('#offender > div > p:nth-child(2)').text().trim()).toBe(
       'Your licence and sentence expire on 9th February 2022'
     )
@@ -110,7 +109,6 @@ describe('Print an AP licence', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    // Check the offender image is present
     expect($('#offender > div > p:nth-child(2)').text().trim()).toBe('Your licence expires on 8th February 2022')
     expect($('#offender > div > p:nth-child(3)').text().trim()).toBe('Your sentence expires on 9th February 2022')
   })
