@@ -83,4 +83,33 @@ describe('Print an AP licence', () => {
     // Check the signature box and content are present
     expect($('.boxed > .signatures > p').length).toBe(6)
   })
+
+  it('SED and LED render together on one line if they are the same', () => {
+    viewContext = {
+      licence: {
+        licenceExpiryDate: '09/02/2022',
+        sentenceEndDate: '09/02/2022',
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#offender > div > p:nth-child(2)').text().trim()).toBe(
+      'Your licence and sentence expire on 9th February 2022'
+    )
+  })
+
+  it('SED and LED render separately on different lines if they are different', () => {
+    viewContext = {
+      licence: {
+        licenceExpiryDate: '08/02/2022',
+        sentenceEndDate: '09/02/2022',
+      },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#offender > div > p:nth-child(2)').text().trim()).toBe('Your licence expires on 8th February 2022')
+    expect($('#offender > div > p:nth-child(3)').text().trim()).toBe('Your sentence expires on 9th February 2022')
+  })
 })
