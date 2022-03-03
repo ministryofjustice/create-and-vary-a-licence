@@ -2,7 +2,7 @@ import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
-import { PrisonApiPrisoner, PrisonEvent } from '../../../@types/prisonApiClientTypes'
+import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import SentenceDatesChangedEventHandler from './sentenceDatesChangedEventHandler'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
@@ -36,7 +36,7 @@ describe('Sentence dates changed event handler', () => {
   it('should not update sentence dates if the offender does not have a licence', async () => {
     const event = {
       offenderIdDisplay: 'ABC123',
-    } as PrisonEvent
+    } as PrisonEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
 
     await handler.handle(event)
@@ -51,7 +51,7 @@ describe('Sentence dates changed event handler', () => {
   it('should update the licence to IN_PROGRESS', async () => {
     const event = {
       offenderIdDisplay: 'ABC123',
-    } as PrisonEvent
+    } as PrisonEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -67,7 +67,7 @@ describe('Sentence dates changed event handler', () => {
   it('should update the sentence dates on the licence', async () => {
     const event = {
       offenderIdDisplay: 'ABC123',
-    } as PrisonEvent
+    } as PrisonEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -100,7 +100,7 @@ describe('Sentence dates changed event handler', () => {
 
     const event = {
       offenderIdDisplay: 'ABC123',
-    } as PrisonEvent
+    } as PrisonEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -133,7 +133,7 @@ describe('Sentence dates changed event handler', () => {
 
     const event = {
       offenderIdDisplay: 'ABC123',
-    } as PrisonEvent
+    } as PrisonEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,

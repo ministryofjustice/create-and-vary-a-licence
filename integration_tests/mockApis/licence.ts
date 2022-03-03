@@ -70,6 +70,19 @@ export default {
     })
   },
 
+  stubUpdateResponsibleCom: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/offender/crn/.*/responsible-com`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      },
+    })
+  },
+
   stubGetLicence: (): SuperAgentRequest => {
     return stubFor({
       request: {

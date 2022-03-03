@@ -1,13 +1,13 @@
 import _ from 'lodash'
 
 import LicenceService from '../../../services/licenceService'
-import { DomainEvent } from '../../../@types/events'
+import { DomainEventMessage } from '../../../@types/events'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class ReleaseEventHandler {
   constructor(private readonly licenceService: LicenceService) {}
 
-  handle = async (event: DomainEvent): Promise<void> => {
+  handle = async (event: DomainEventMessage): Promise<void> => {
     if (event.additionalInformation?.reason === 'RELEASED') {
       const nomisId = event.additionalInformation.nomsNumber
       const licence = _.head(

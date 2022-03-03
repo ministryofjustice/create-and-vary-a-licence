@@ -1,5 +1,5 @@
 import LicenceService from '../../../services/licenceService'
-import { DomainEvent } from '../../../@types/events'
+import { DomainEventMessage } from '../../../@types/events'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import TransferredEventHandler from './transferredEventHandler'
@@ -37,7 +37,7 @@ describe('Transferred event handler', () => {
       additionalInformation: {
         reason: 'ADMISSION',
       },
-    } as DomainEvent
+    } as DomainEventMessage
 
     await handler.handle(event)
 
@@ -50,7 +50,7 @@ describe('Transferred event handler', () => {
         reason: 'TRANSFERRED',
         nomsNumber: 'ABC1234',
       },
-    } as DomainEvent
+    } as DomainEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
 
     await handler.handle(event)
@@ -69,7 +69,7 @@ describe('Transferred event handler', () => {
         nomsNumber: 'ABC1234',
         prisonId: 'PVI',
       },
-    } as DomainEvent
+    } as DomainEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -89,7 +89,7 @@ describe('Transferred event handler', () => {
         nomsNumber: 'ABC1234',
         prisonId: 'PVI',
       },
-    } as DomainEvent
+    } as DomainEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -109,7 +109,7 @@ describe('Transferred event handler', () => {
         nomsNumber: 'ABC1234',
         prisonId: 'PVI',
       },
-    } as DomainEvent
+    } as DomainEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,

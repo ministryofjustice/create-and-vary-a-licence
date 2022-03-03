@@ -1,5 +1,5 @@
 import LicenceService from '../../../services/licenceService'
-import { ProbationEvent } from '../../../@types/events'
+import { ProbationEventMessage } from '../../../@types/events'
 import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHandler'
 import CommunityService from '../../../services/communityService'
 
@@ -21,7 +21,7 @@ describe('Offender manager changed event handler', () => {
 
     const event = {
       crn: 'X1234',
-    } as ProbationEvent
+    } as ProbationEventMessage
 
     await handler.handle(event)
 
@@ -49,7 +49,7 @@ describe('Offender manager changed event handler', () => {
 
     const event = {
       crn: 'X1234',
-    } as ProbationEvent
+    } as ProbationEventMessage
 
     await handler.handle(event)
 

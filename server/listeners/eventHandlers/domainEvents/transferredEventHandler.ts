@@ -1,14 +1,14 @@
 import _ from 'lodash'
 
 import LicenceService from '../../../services/licenceService'
-import { DomainEvent } from '../../../@types/events'
+import { DomainEventMessage } from '../../../@types/events'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 
 export default class TransferredEventHandler {
   constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
 
-  handle = async (event: DomainEvent): Promise<void> => {
+  handle = async (event: DomainEventMessage): Promise<void> => {
     if (event.additionalInformation?.reason === 'TRANSFERRED') {
       const nomisId = event.additionalInformation.nomsNumber
       const licence = _.head(

@@ -1,7 +1,7 @@
 import { SQSMessage } from 'sqs-consumer'
 import logger from '../../../../logger'
 import { Services } from '../../../services'
-import { DomainEvent } from '../../../@types/events'
+import { DomainEventMessage } from '../../../@types/events'
 import ReleaseEventHandler from './releaseEventHandler'
 import TransferredEventHandler from './transferredEventHandler'
 
@@ -11,15 +11,19 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
 
   return async (messages: SQSMessage[]) => {
     messages.forEach(message => {
-      const domainEvent = JSON.parse(JSON.parse(message.Body).Message) as DomainEvent
-      logger.info(`Domain Event : ${JSON.stringify(domainEvent)}`)
+      const prisonEvent = JSON.parse(message.Body)
 
-      switch (domainEvent.eventType) {
+      const eventType = prisonEvent.MessageAttributes.eventType.Value
+      const eventMessage = JSON.parse(prisonEvent.Message) as DomainEventMessage
+
+      logger.info(`Domain Event (${eventType}) : ${JSON.stringify(eventMessage)}`)
+
+      switch (eventType) {
         case 'prison-offender-events.prisoner.released':
-          releaseEventHandler.handle(domainEvent).catch(error => logger.error(error))
+          releaseEventHandler.handle(eventMessage).catch(error => logger.error(error))
           break
         case 'prison-offender-events.prisoner.received':
-          transferredEventHandler.handle(domainEvent).catch(error => logger.error(error))
+          transferredEventHandler.handle(eventMessage).catch(error => logger.error(error))
           break
       }
     })

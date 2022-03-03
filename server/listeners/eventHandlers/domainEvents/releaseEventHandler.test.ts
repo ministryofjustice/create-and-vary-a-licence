@@ -1,6 +1,6 @@
 import LicenceService from '../../../services/licenceService'
 import ReleaseEventHandler from './releaseEventHandler'
-import { DomainEvent } from '../../../@types/events'
+import { DomainEventMessage } from '../../../@types/events'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
@@ -18,7 +18,7 @@ describe('Release event handler', () => {
       additionalInformation: {
         reason: 'HOSPITAL',
       },
-    } as DomainEvent
+    } as DomainEventMessage
 
     await handler.handle(event)
 
@@ -31,7 +31,7 @@ describe('Release event handler', () => {
         reason: 'RELEASED',
         nomsNumber: 'ABC1234',
       },
-    } as DomainEvent
+    } as DomainEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
 
     await handler.handle(event)
@@ -49,7 +49,7 @@ describe('Release event handler', () => {
         reason: 'RELEASED',
         nomsNumber: 'ABC1234',
       },
-    } as DomainEvent
+    } as DomainEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -72,7 +72,7 @@ describe('Release event handler', () => {
         reason: 'RELEASED',
         nomsNumber: 'ABC1234',
       },
-    } as DomainEvent
+    } as DomainEventMessage
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,

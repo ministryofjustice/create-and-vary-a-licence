@@ -1,14 +1,14 @@
 import _ from 'lodash'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
-import { PrisonEvent } from '../../../@types/prisonApiClientTypes'
+import { PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { convertDateFormat } from '../../../utils/utils'
 
 export default class SentenceDatesChangedEventHandler {
   constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
 
-  handle = async (event: PrisonEvent): Promise<void> => {
+  handle = async (event: PrisonEventMessage): Promise<void> => {
     const nomisId = event.offenderIdDisplay
     const licence = _.head(
       await this.licenceService.getLicencesByNomisIdsAndStatus(
