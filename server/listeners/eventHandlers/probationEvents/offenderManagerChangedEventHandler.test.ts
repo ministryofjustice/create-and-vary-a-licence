@@ -61,4 +61,31 @@ describe('Offender manager changed event handler', () => {
       staffEmail: 'joebloggs@probation.gov.uk',
     })
   })
+
+  it('should not update the responsible COM if the COM does not have a username', async () => {
+    communityService.getAnOffendersManagers.mockResolvedValue([
+      {
+        staffId: 2000,
+        isResponsibleOfficer: false,
+      },
+      {
+        staffId: 3000,
+        isResponsibleOfficer: true,
+      },
+    ])
+    communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({
+      staffIdentifier: 3000,
+      email: 'joebloggs@probation.gov.uk',
+    })
+
+    const event = {
+      crn: 'X1234',
+    } as ProbationEventMessage
+
+    await handler.handle(event)
+
+    expect(communityService.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
+    expect(communityService.getStaffDetailByStaffIdentifier).toHaveBeenCalledWith(3000)
+    expect(licenceService.updateResponsibleCom).not.toHaveBeenCalled()
+  })
 })
