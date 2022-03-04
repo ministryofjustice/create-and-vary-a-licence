@@ -11,13 +11,17 @@ export default class OffenderManagerChangedEventHandler {
     const newCom = offenderManagers.find(om => om.isResponsibleOfficer)
     if (newCom) {
       const comDetails = await this.communityService.getStaffDetailByStaffIdentifier(newCom.staffId)
-      await this.licenceService.updateResponsibleCom(crn, {
-        staffIdentifier: comDetails?.staffIdentifier,
-        staffUsername: comDetails?.username,
-        staffEmail: comDetails?.email,
-        firstName: comDetails?.staff?.forenames,
-        lastName: comDetails?.staff?.surname,
-      })
+
+      // If the COM does not have a username, they are assumed to be ineligible for use of this service. (e.g. the "unallocated" staff members)
+      if (comDetails?.username) {
+        await this.licenceService.updateResponsibleCom(crn, {
+          staffIdentifier: comDetails?.staffIdentifier,
+          staffUsername: comDetails?.username,
+          staffEmail: comDetails?.email,
+          firstName: comDetails?.staff?.forenames,
+          lastName: comDetails?.staff?.surname,
+        })
+      }
     }
   }
 }
