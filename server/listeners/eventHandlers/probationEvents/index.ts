@@ -1,6 +1,6 @@
 import { SQSMessage } from 'sqs-consumer'
 import logger from '../../../../logger'
-import { ProbationEvent } from '../../../@types/events'
+import { ProbationEventMessage } from '../../../@types/events'
 import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHandler'
 import { Services } from '../../../services'
 
@@ -9,12 +9,16 @@ export default function buildEventHandler({ communityService, licenceService }: 
 
   return async (messages: SQSMessage[]) => {
     messages.forEach(message => {
-      const probationEvent = JSON.parse(JSON.parse(message.Body).Message) as ProbationEvent
-      logger.info(`Probation Event : ${JSON.stringify(probationEvent)}`)
+      const probationEvent = JSON.parse(message.Body)
 
-      switch (probationEvent.eventType) {
+      const eventType = probationEvent.MessageAttributes.eventType.Value
+      const eventMessage = JSON.parse(probationEvent.Message) as ProbationEventMessage
+
+      logger.info(`Probation Event (${eventType}) : ${JSON.stringify(eventMessage)}`)
+
+      switch (eventType) {
         case 'OFFENDER_MANAGER_CHANGED':
-          offenderManagerChangedHandler.handle(probationEvent).catch(error => logger.error(error))
+          offenderManagerChangedHandler.handle(eventMessage).catch(error => logger.error(error))
       }
     })
   }

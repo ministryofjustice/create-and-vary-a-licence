@@ -13,7 +13,13 @@ context('Event handlers', () => {
       cy.task(
         'sendDomainEvent',
         `{
-            "Message" :  "{\\"eventType\\":\\"prison-offender-events.prisoner.released\\",\\"additionalInformation\\":{\\"nomsNumber\\":\\"A7774DY\\",\\"reason\\":\\"RELEASED\\",\\"details\\":\\"Movement reason code CR\\",\\"currentLocation\\":\\"OUTSIDE_PRISON\\",\\"prisonId\\":\\"MDI\\",\\"currentPrisonStatus\\":\\"NOT_UNDER_PRISON_CARE\\"},\\"version\\":1,\\"occurredAt\\":\\"2022-01-12T14:56:51.662128Z\\",\\"publishedAt\\":\\"2022-01-12T14:58:25.021008001Z\\",\\"description\\":\\"A prisoner has been released from prison\\"}"
+            "Message": "{\\"additionalInformation\\":{\\"nomsNumber\\":\\"A7774DY\\",\\"reason\\":\\"RELEASED\\",\\"details\\":\\"Movement reason code CR\\",\\"currentLocation\\":\\"OUTSIDE_PRISON\\",\\"prisonId\\":\\"MDI\\",\\"currentPrisonStatus\\":\\"NOT_UNDER_PRISON_CARE\\"},\\"version\\":1,\\"occurredAt\\":\\"2022-01-12T14:56:51.662128Z\\",\\"publishedAt\\":\\"2022-01-12T14:58:25.021008001Z\\",\\"description\\":\\"A prisoner has been released from prison\\"}",
+            "MessageAttributes": {
+              "eventType": {
+                "Type": "String",
+                "Value": "prison-offender-events.prisoner.released"
+              }
+            }
          }`
       )
 
@@ -31,7 +37,13 @@ context('Event handlers', () => {
       cy.task(
         'sendDomainEvent',
         `{
-            "Message" :  "{\\"eventType\\":\\"prison-offender-events.prisoner.received\\",\\"additionalInformation\\":{\\"nomsNumber\\":\\"A7774DY\\",\\"reason\\":\\"TRANSFERRED\\",\\"details\\":\\"Movement reason code CR\\",\\"currentLocation\\":\\"IN_PRISON\\",\\"prisonId\\":\\"PVI\\"},\\"version\\":1,\\"occurredAt\\":\\"2022-01-12T14:56:51.662128Z\\",\\"publishedAt\\":\\"2022-01-12T14:58:25.021008001Z\\",\\"description\\":\\"A prisoner has been received into prison\\"}"
+          "Message": "{\\"additionalInformation\\":{\\"nomsNumber\\":\\"A7774DY\\",\\"reason\\":\\"TRANSFERRED\\",\\"details\\":\\"Movement reason code CR\\",\\"currentLocation\\":\\"IN_PRISON\\",\\"prisonId\\":\\"PVI\\"},\\"version\\":1,\\"occurredAt\\":\\"2022-01-12T14:56:51.662128Z\\",\\"publishedAt\\":\\"2022-01-12T14:58:25.021008001Z\\",\\"description\\":\\"A prisoner has been received into prison\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "prison-offender-events.prisoner.received"
+            }
+          }
          }`
       )
 
@@ -50,11 +62,18 @@ context('Event handlers', () => {
     it('should listen to the offender manager changed event and call endpoint to update responsible COM', () => {
       cy.task('stubGetAnOffendersManagers')
       cy.task('stubGetStaffDetailsByStaffId')
+      cy.task('stubUpdateResponsibleCom')
 
       cy.task(
         'sendProbationEvent',
         `{
-            "Message" :  "{\\"eventType\\":\\"OFFENDER_MANAGER_CHANGED\\",\\"crn\\":\\"X1234\\"}"
+          "Message": "{\\"crn\\":\\"X1234\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "OFFENDER_MANAGER_CHANGED"
+            }
+          }
          }`
       )
 
@@ -76,7 +95,13 @@ context('Event handlers', () => {
       cy.task(
         'sendPrisonEvent',
         `{
-            "Message" :  "{\\"eventType\\":\\"SENTENCE_DATES-CHANGED\\",\\"offenderIdDisplay\\":\\"G9786GC\\"}"
+          "Message": "{\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "SENTENCE_DATES-CHANGED"
+            }
+          }
          }`
       )
 

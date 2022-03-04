@@ -23,6 +23,7 @@ export default (on: (string, Record) => void): void => {
 
     stubTokenVerificationPing: tokenVerification.stubPing,
 
+    stubUpdateResponsibleCom: licence.stubUpdateResponsibleCom,
     stubGetLicence: licence.stubGetLicence,
     stubPostLicence: licence.stubPostLicence,
     stubGetExistingLicenceForOffenderWithResult: licence.stubGetExistingLicenceForOffenderWithResult,

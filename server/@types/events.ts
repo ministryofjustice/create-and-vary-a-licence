@@ -1,12 +1,10 @@
-export type DomainEvent = {
-  eventType: string
+export type DomainEventMessage = {
   additionalInformation: {
     nomsNumber: string
     reason: string
     prisonId: string
   }
 }
-export type ProbationEvent = {
-  eventType: string
+export type ProbationEventMessage = {
   crn: string
 }
