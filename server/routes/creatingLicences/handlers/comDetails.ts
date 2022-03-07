@@ -20,8 +20,8 @@ export default class ComDetailsRoutes {
     return res.render('pages/comDetails', {
       returnLink: '/licence/create/caseload',
       name: `${staffDetails.staff?.forenames} ${staffDetails.staff?.surname}`.trim(),
-      telephone: `${staffDetails.telephoneNumber}`,
-      email: `${staffDetails.email}`,
+      telephone: staffDetails.telephoneNumber,
+      email: staffDetails.email,
     })
   }
 }
