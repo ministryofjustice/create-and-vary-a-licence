@@ -172,11 +172,11 @@ jobs:
           name: integration tests
           command: npm run int-test
       - store_test_results:
-          path: test_results
+          path: ~/app/test_results
       - store_artifacts:
-          path: integration-tests/videos
+          path: ~/app/integration_tests/videos
       - store_artifacts:
-          path: integration-tests/screenshots
+          path: ~/app/integration_tests/screenshots
 
 workflows:
   version: 2
