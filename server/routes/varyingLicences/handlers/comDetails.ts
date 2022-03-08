@@ -12,8 +12,8 @@ export default class ComDetailsRoutes {
     res.render('pages/comDetails', {
       returnLink: '/licence/view/cases',
       name: `${staffDetails.staff?.forenames} ${staffDetails.staff?.surname}`.trim(),
-      telephone: `${staffDetails.telephoneNumber}`,
-      email: `${staffDetails.email}`,
+      telephone: staffDetails.telephoneNumber,
+      email: staffDetails.email,
     })
   }
 }
