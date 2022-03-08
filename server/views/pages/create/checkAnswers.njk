@@ -5,8 +5,7 @@
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
-{% from "partials/variationDetailsSummary.njk" import variationDetails %}
-
+{% from "partials/variationSummary.njk" import variationSummary %}
 
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
@@ -44,7 +43,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if licence.isVariation %}
-                {{ variationDetails(licence, isInProgress) }}
+                {{ variationSummary(licence, isInProgress) }}
             {% else %}
                 {{ inductionMeetingDetails(licence, isInProgress) }}
             {% endif %}

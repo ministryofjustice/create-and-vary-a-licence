@@ -41,6 +41,7 @@ describe('Route - refer a licence variation', () => {
           },
         },
       } as unknown as Response
+
       licenceService.compareVariationToOriginal.mockResolvedValue({
         licenceConditionsAdded: [],
       } as VariedConditions)
@@ -51,6 +52,7 @@ describe('Route - refer a licence variation', () => {
         { id: 1, statusCode: LicenceStatus.VARIATION_SUBMITTED },
         { username, displayName }
       )
+
       expect(res.render).toHaveBeenCalledWith('pages/vary-approve/request-changes', {
         conditionComparison: {
           licenceConditionsAdded: [],

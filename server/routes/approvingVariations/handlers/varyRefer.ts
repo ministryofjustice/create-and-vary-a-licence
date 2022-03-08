@@ -8,8 +8,13 @@ export default class VaryReferRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     if (licence?.statusCode === LicenceStatus.VARIATION_SUBMITTED) {
-      const conditionComparison = await this.licenceService.compareVariationToOriginal(licence, user)
+      const [conversation, conditionComparison] = await Promise.all([
+        this.licenceService.getApprovalConversation(licence, user),
+        this.licenceService.compareVariationToOriginal(licence, user),
+      ])
+
       res.render('pages/vary-approve/request-changes', {
+        conversation,
         conditionComparison,
       })
     } else {

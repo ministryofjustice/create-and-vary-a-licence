@@ -4,6 +4,7 @@ import LicenceService from '../../../services/licenceService'
 import VariationSummaryRoutes from './variationSummary'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { VariedConditions } from '../../../utils/licenceComparator'
+import ApprovalComment from '../../../@types/ApprovalComment'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
@@ -42,13 +43,28 @@ describe('Route Handlers - Vary Licence - Variation summary', () => {
         licenceConditionsAdded: [],
       } as VariedConditions)
 
+      licenceService.getApprovalConversation.mockResolvedValue([
+        { who: 'X', when: '12/02/2022 11:05:00', comment: 'Reason', role: 'COM' },
+        { who: 'Y', when: '13/02/2022 10:00:00', comment: 'Reason', role: 'APPROVER' },
+      ] as ApprovalComment[])
+
       await handler.GET(req, res)
 
       expect(licenceService.compareVariationToOriginal).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_IN_PROGRESS },
         { username: 'joebloggs' }
       )
+
+      expect(licenceService.getApprovalConversation).toHaveBeenCalledWith(
+        { id: 1, statusCode: LicenceStatus.VARIATION_IN_PROGRESS },
+        { username: 'joebloggs' }
+      )
+
       expect(res.render).toHaveBeenCalledWith('pages/vary/variationSummary', {
+        conversation: [
+          { who: 'X', when: '12/02/2022 11:05:00', comment: 'Reason', role: 'COM' },
+          { who: 'Y', when: '13/02/2022 10:00:00', comment: 'Reason', role: 'APPROVER' },
+        ],
         conditionComparison: {
           licenceConditionsAdded: [],
         },
