@@ -119,7 +119,7 @@ jobs:
       - store_test_results:
           path: test_results
       - store_artifacts:
-          path: test-results/unit-test-reports.html
+          path: test_results/unit-test-reports.html
 
   integration_test:
     executor: integration-tests
@@ -172,11 +172,11 @@ jobs:
           name: integration tests
           command: npm run int-test
       - store_test_results:
-          path: ~/app/test_results
+          path: test_results
       - store_artifacts:
-          path: ~/app/integration_tests/videos
+          path: integration_tests/videos
       - store_artifacts:
-          path: ~/app/integration_tests/screenshots
+          path: integration_tests/screenshots
 
 workflows:
   version: 2
