@@ -97,7 +97,7 @@ export default {
       },
       {
         code: 'c8966621-088a-4b87-9a19-752ff8b900c6',
-        text: 'Not travel outside the United Kingdom, the Channel Islands or the Isle of Man except with the prior permission of your supervisor or in order to comply with a legal obligation (whether or not arising under the law of any part of the United Kingdom and Islands).',
+        text: 'Not travel outside the United Kingdom, the Channel Islands or the Isle of Man except with the prior permission of your supervisor or in order to comply with a legal obligation (whether or not arising under the law of any part of the United Kingdom, the Channel Islands or the Isle of Man).',
       },
       {
         code: '579060fd-e412-471c-94d7-2fefa06d5052',
