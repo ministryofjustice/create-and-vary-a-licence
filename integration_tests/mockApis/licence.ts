@@ -742,4 +742,53 @@ export default {
       },
     })
   },
+
+  stubMatchLicenceEvents: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/events/match`,
+        queryParameters: {
+          licenceId: {
+            matches: '.*',
+          },
+          eventType: {
+            matches: '.*',
+          },
+          sortBy: {
+            matches: '.*',
+          },
+          sortOrder: {
+            matches: '.*',
+          },
+        },
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            id: 1,
+            licenceId: 2,
+            eventType: 'VARIATION_SUBMITTED_REASON',
+            username: 'smills',
+            forenames: 'Stephen',
+            surname: 'Mills',
+            eventDescription: 'Reason varied',
+            eventTime: '12/06/2021 10:46:40',
+          },
+          {
+            id: 2,
+            licenceId: 2,
+            eventType: 'VARIATION_REJECTED',
+            username: 'smills',
+            forenames: 'Stephen',
+            surname: 'Mills',
+            eventDescription: 'Reason rejected',
+            eventTime: '12/06/2021 10:47:40',
+          },
+        ],
+      },
+    })
+  },
 }
