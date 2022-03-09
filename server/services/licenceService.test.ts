@@ -26,6 +26,7 @@ import {
 } from '../@types/licenceApiClientTypes'
 import { CommunityApiOffenderManager } from '../@types/communityClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
+import LicenceEventType from '../enumeration/licenceEventType'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -735,6 +736,17 @@ describe('Licence Service', () => {
         id: 1,
       },
       { id: 2, variationOf: 1 }
+    )
+  })
+
+  it('should get variation approval conversation', async () => {
+    await licenceService.getApprovalConversation({ id: 1 } as Licence, user)
+    expect(licenceApiClient.matchLicenceEvents).toBeCalledWith(
+      '1',
+      [LicenceEventType.VARIATION_SUBMITTED_REASON.valueOf(), LicenceEventType.VARIATION_REFERRED.valueOf()],
+      'eventTime',
+      'DESC',
+      user
     )
   })
 

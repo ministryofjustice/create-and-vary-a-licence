@@ -4,6 +4,7 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "partials/variedConditions.njk" import variedConditions %}
+{% from "partials/variationDetails.njk" import variationDetails %}
 
 {% set pageTitle = applicationName + " - Vary a licence - Reason for variation" %}
 {% set pageId = "reason-for-variation-page" %}
@@ -19,6 +20,8 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
+
+                {{ variationDetails(licence, conversation) }}
 
                 <div class="govuk-hint">Add a short explanation for each licence condition you want to vary. Include what led to your decision, why it’s necessary to manage any change in risk and what the management plan is.</div>
 
@@ -39,7 +42,7 @@
                         classes: 'govuk-visually-hidden'
                     },
                     errorMessage: validationErrors | findError('reasonForVariation'),
-                    value: licence.reasonForVariation | fillFormResponse(formResponses.reasonForVariation)
+                    value: formResponses.reasonForVariation
                 }) }}
 
                 <div class="govuk-button-group">

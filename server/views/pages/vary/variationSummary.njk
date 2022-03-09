@@ -20,7 +20,8 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
 
-                {{ variationDetails(licence) }}
+                {{ variationDetails(licence, conversation) }}
+
                 {{ variedConditions(conditionComparison) }}
 
                 <div class="govuk-button-group">
@@ -28,6 +29,7 @@
                         text: "Send for approval",
                         attributes: { 'data-qa': 'send-for-approval' }
                     }) }}
+
                     {{ govukButton({
                         text: "Discard changes",
                         classes: "govuk-button--secondary",

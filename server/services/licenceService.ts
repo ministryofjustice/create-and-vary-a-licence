@@ -47,6 +47,8 @@ import LicenceType from '../enumeration/licenceType'
 import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
 import compareLicenceConditions, { VariedConditions } from '../utils/licenceComparator'
+import ApprovalComment from '../@types/ApprovalComment'
+import LicenceEventType from '../enumeration/licenceEventType'
 
 export default class LicenceService {
   constructor(
@@ -424,6 +426,32 @@ export default class LicenceService {
   async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
     const originalLicence = await this.getLicence(variation.variationOf.toString(), user)
     return compareLicenceConditions(originalLicence, variation)
+  }
+
+  async getApprovalConversation(variation: Licence, user: User): Promise<ApprovalComment[]> {
+    const conversationEventTypes = [
+      LicenceEventType.VARIATION_SUBMITTED_REASON.valueOf(),
+      LicenceEventType.VARIATION_REFERRED.valueOf(),
+    ]
+
+    const licenceEvents = await this.licenceApiClient.matchLicenceEvents(
+      `${variation.id}`,
+      conversationEventTypes,
+      'eventTime',
+      'DESC',
+      user
+    )
+
+    const conversation = licenceEvents?.map(event => {
+      return {
+        who: `${event.forenames} ${event.surname}`,
+        when: event.eventTime,
+        comment: event.eventDescription,
+        role: event.eventType === LicenceEventType.VARIATION_SUBMITTED_REASON ? 'COM' : 'APPROVER',
+      } as ApprovalComment
+    })
+
+    return conversation || []
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {

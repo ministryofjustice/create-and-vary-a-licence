@@ -12,6 +12,7 @@ context('Vary a licence', () => {
     cy.task('stubGetCompletedLicence', 'ACTIVE')
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubRecordAuditEvent')
+    cy.task('stubMatchLicenceEvents')
     cy.signIn()
   })
 

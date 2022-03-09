@@ -26,6 +26,7 @@ import {
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { User } from '../@types/CvlUserDetails'
+import LicenceEventType from '../enumeration/licenceEventType'
 
 jest.mock('./tokenStore', () => {
   return jest.fn().mockImplementation(() => {
@@ -489,6 +490,44 @@ describe('Licence API client tests', () => {
     it('Get audit events for a user and licence', async () => {
       await licenceApiClient.getAuditEvents(aRequest, { username: 'USER' } as User)
       expect(post).toHaveBeenCalledWith({ path: '/audit/retrieve', data: aRequest }, { username: 'USER' })
+    })
+  })
+
+  describe('Licence events', () => {
+    it('Match licence events licence', async () => {
+      await licenceApiClient.matchLicenceEvents('1', [], undefined, undefined, { username: 'USER' } as User)
+      expect(get).toHaveBeenCalledWith(
+        {
+          path: '/events/match',
+          query: {
+            licenceId: '1',
+            eventType: [],
+            sortBy: undefined,
+            sortOrder: undefined,
+          },
+        },
+        { username: 'USER' }
+      )
+    })
+
+    it('Match licence events by licence and list of event types', async () => {
+      const eventTypes = [
+        LicenceEventType.VARIATION_SUBMITTED_REASON.valueOf(),
+        LicenceEventType.VARIATION_REFERRED.valueOf(),
+      ]
+      await licenceApiClient.matchLicenceEvents('1', eventTypes, 'eventTime', 'DESC', { username: 'USER' } as User)
+      expect(get).toHaveBeenCalledWith(
+        {
+          path: '/events/match',
+          query: {
+            licenceId: '1',
+            eventType: eventTypes,
+            sortBy: 'eventTime',
+            sortOrder: 'DESC',
+          },
+        },
+        { username: 'USER' }
+      )
     })
   })
 })

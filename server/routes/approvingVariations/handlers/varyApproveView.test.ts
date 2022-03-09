@@ -3,8 +3,11 @@ import { Request, Response } from 'express'
 import VaryApproveViewRoutes from './varyApproveView'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { VariedConditions } from '../../../utils/licenceComparator'
+import ApprovalComment from '../../../@types/ApprovalComment'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
 
@@ -22,6 +25,8 @@ describe('Route - view and approve a licence variation', () => {
 
     licenceService.approveVariation = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
+    licenceService.getApprovalConversation = jest.fn()
+    licenceService.compareVariationToOriginal = jest.fn()
   })
 
   describe('GET', () => {
@@ -44,12 +49,27 @@ describe('Route - view and approve a licence variation', () => {
         },
       } as unknown as Response
 
+      licenceService.compareVariationToOriginal.mockResolvedValue({
+        licenceConditionsAdded: [],
+      } as VariedConditions)
+
+      licenceService.getApprovalConversation.mockResolvedValue([
+        { who: 'X', when: '12/02/2022 11:05:00', comment: 'Reason', role: 'COM' },
+        { who: 'Y', when: '13/02/2022 10:00:00', comment: 'Reason', role: 'APPROVER' },
+      ] as ApprovalComment[])
+
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/vary-approve/view', {
-        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
-        expandedPssConditions: res.locals.licence.additionalPssConditions,
+        conversation: [
+          { who: 'X', when: '12/02/2022 11:05:00', comment: 'Reason', role: 'COM' },
+          { who: 'Y', when: '13/02/2022 10:00:00', comment: 'Reason', role: 'APPROVER' },
+        ],
+        conditionComparison: {
+          licenceConditionsAdded: [],
+        },
       })
+
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
 
@@ -76,6 +96,8 @@ describe('Route - view and approve a licence variation', () => {
       await handler.GET(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary-approve/list')
+      expect(licenceService.getApprovalConversation).not.toHaveBeenCalled()
+      expect(licenceService.compareVariationToOriginal).not.toHaveBeenCalled()
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
   })
@@ -93,6 +115,7 @@ describe('Route - view and approve a licence variation', () => {
       } as unknown as Request
 
       await handler.POST(req, res)
+
       expect(licenceService.approveVariation).toHaveBeenCalledWith('1', res.locals.user)
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary-approve/id/1/approve')
     })

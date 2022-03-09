@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 
 export default class VaryApproveViewRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -11,19 +10,24 @@ export default class VaryApproveViewRoutes {
 
     // Check whether this licence variation is still in a VARIATION_SUBMITTED state - e.g. if the back button is pressed
     if (licence?.statusCode === LicenceStatus.VARIATION_SUBMITTED) {
-      const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
-      const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
-
-      // Recorded here as we do not know the reason for the fetchLicence in the API
       await this.licenceService.recordAuditEvent(
         `Licence variation approval viewed for ${licence?.forename} ${licence?.surname}`,
         `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
-        licence.id,
+        licence?.id,
         new Date(),
         user
       )
 
-      res.render('pages/vary-approve/view', { expandedLicenceConditions, expandedPssConditions })
+      // Get the COM/ACO conversation so far and the differences from the original licence
+      const [conversation, conditionComparison] = await Promise.all([
+        this.licenceService.getApprovalConversation(licence, user),
+        this.licenceService.compareVariationToOriginal(licence, user),
+      ])
+
+      res.render('pages/vary-approve/view', {
+        conversation,
+        conditionComparison,
+      })
     } else {
       res.redirect(`/licence/vary-approve/list`)
     }

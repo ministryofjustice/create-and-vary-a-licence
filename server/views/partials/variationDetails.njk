@@ -1,48 +1,36 @@
 {% from "customComponents/summaryCard/macro.njk" import summaryCard %}
 
-{% macro variationDetails(licence) %}
+{% macro variationDetails(licence, conversation) %}
+    {% set comments = [] %}
+
+    {% for comment in conversation %}
+        {% set comments = (comments.push({
+            key: { text: "Reasons for the variaton" if comment.role === "COM" else "Feedback from approver" },
+            value: { html: comment.comment },
+            extraDetail: {
+                items: [
+                    { text: "By " + comment.who | title },
+                    { text: comment.when | datetimeToDate }
+                ]
+            }
+        }), comments) %}
+    {% endfor %}
+
+    {% set comments = (comments.push({
+        key: { text: "SPO awareness" },
+        value: { text: "Have you communicated and agreed this change with your SPO?" },
+        extraDetail: { items: [{ text: licence.spoDiscussion }] }
+    }), comments) %}
+
+    {% set comments = (comments.push({
+        key: { text: "VLO Communications" },
+        value: { text: "Have you consulted with the victim liaison officer (VLO) for this case?" },
+        extraDetail: { items: [{ text: licence.vloDiscussion }] }
+    }), comments) %}
+
     {{ summaryCard({
         classes: "govuk-!-margin-bottom-6",
         titleText: "Variation details",
-        rows: [
-            {
-                key: {
-                    text: "Reasons for the variation"
-                },
-                value: {
-                    html: licence.reasonForVariation
-                }
-            },
-            {
-                key: {
-                    text: "SPO Communications"
-                },
-                value: {
-                    text: "Have you communicated and agreed this change with your SPO?"
-                },
-                extraDetail: {
-                    items: [
-                        {
-                            text: licence.spoDiscussion
-                        }
-                    ]
-                }
-            },
-            {
-                key: {
-                    text: "VLO Communications"
-                },
-                value: {
-                    text: "	Have you consulted with the victim liaison officer (VLO) for this case?"
-                },
-                extraDetail: {
-                    items: [
-                        {
-                            text: licence.vloDiscussion
-                        }
-                    ]
-                }
-            }
-        ]
+        rows: comments
     }) }}
 {% endmacro %}

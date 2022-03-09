@@ -5,6 +5,7 @@ import type {
   CreateLicenceRequest,
   LicenceSummary,
   Licence,
+  LicenceEvent,
   AppointmentPersonRequest,
   AppointmentTimeRequest,
   AppointmentAddressRequest,
@@ -271,5 +272,26 @@ export default class LicenceApiClient extends RestClient {
 
   async referVariation(licenceId: string, request: ReferVariationRequest, user: User): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/refer-variation`, data: request }, { username: user?.username })
+  }
+
+  async matchLicenceEvents(
+    licenceId: string,
+    eventTypes: string[] = [],
+    sortBy?: string,
+    sortOrder?: string,
+    user?: User
+  ): Promise<LicenceEvent[]> {
+    return (await this.get(
+      {
+        path: `/events/match`,
+        query: {
+          licenceId,
+          eventType: eventTypes,
+          sortBy: sortBy || undefined,
+          sortOrder: sortOrder || undefined,
+        },
+      },
+      { username: user?.username }
+    )) as LicenceEvent[]
   }
 }

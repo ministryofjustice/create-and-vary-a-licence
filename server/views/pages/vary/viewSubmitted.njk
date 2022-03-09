@@ -1,0 +1,31 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "partials/variationDetails.njk" import variationDetails %}
+{% from "partials/variedConditions.njk" import variedConditions %}
+{% from "partials/varyCallToActions.njk" import cta %}
+
+{% set pageTitle = applicationName + " - Vary a licence - Variation request status" %}
+{% set pageId = "variation-request-status-page" %}
+{% set backLinkHref = "/licence/vary/caseload" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Licence variation request status</h1>
+        </div>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ cta(callToActions, licence) }}
+                {{ variationDetails(licence, conversation) }}
+                {{ variedConditions(conditionComparison) }}
+                {{ cta(callToActions, licence) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

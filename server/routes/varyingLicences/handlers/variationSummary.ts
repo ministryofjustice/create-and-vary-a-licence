@@ -7,9 +7,13 @@ export default class VariationSummaryRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
 
-    const conditionComparison = await this.licenceService.compareVariationToOriginal(licence, user)
+    const [conversation, conditionComparison] = await Promise.all([
+      this.licenceService.getApprovalConversation(licence, user),
+      this.licenceService.compareVariationToOriginal(licence, user),
+    ])
 
     res.render('pages/vary/variationSummary', {
+      conversation,
       conditionComparison,
     })
   }

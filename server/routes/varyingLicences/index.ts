@@ -50,7 +50,7 @@ export default function Index({ licenceService, caseloadService, communityServic
 
   const caseloadHandler = new CaseloadRoutes(caseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
-  const viewLicenceHandler = new ViewVariationRoutes()
+  const viewLicenceHandler = new ViewVariationRoutes(licenceService)
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)
   const spoDiscussionHandler = new SpoDiscussionRoutes(licenceService)
   const vloDiscussionHandler = new VloDiscussionRoutes(licenceService)

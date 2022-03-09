@@ -6,6 +6,8 @@
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
+{% from "partials/variedConditions.njk" import variedConditions %}
+{% from "partials/variationDetails.njk" import variationDetails %}
 
 {% set pageTitle = applicationName + " - variation summary" %}
 {% set pageId = "variation-summary-page" %}
@@ -20,13 +22,8 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalLicenceConditions(licence, expandedLicenceConditions) }}
-                {{ bespokeConditions(licence) }}
-            {% endif %}
-            {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, expandedPssConditions) }}
-            {% endif %}
+            {{ variationDetails(licence, conversation) }}
+            {{ variedConditions(conditionComparison) }}
         </div>
     </div>
 

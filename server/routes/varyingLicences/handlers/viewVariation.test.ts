@@ -3,11 +3,17 @@ import { Request, Response } from 'express'
 import ViewVariationRoutes from './viewVariation'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import LicenceService from '../../../services/licenceService'
+import { VariedConditions } from '../../../utils/licenceComparator'
+import ApprovalComment from '../../../@types/ApprovalComment'
 
 const username = 'joebloggs'
 
+const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+jest.mock('../../../services/licenceService')
+
 describe('Route - Vary - View variation', () => {
-  const handler = new ViewVariationRoutes()
+  const handler = new ViewVariationRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -21,12 +27,21 @@ describe('Route - Vary - View variation', () => {
     bespokeConditions: [],
   } as Licence
 
+  const conversation = [] as ApprovalComment[]
+
+  const conditionComparison = {
+    licenceConditionsAdded: [],
+  } as VariedConditions
+
   beforeEach(() => {
     req = {
       body: {
         licenceId: '1',
       },
     } as unknown as Request
+
+    licenceService.getApprovalConversation.mockResolvedValue(conversation)
+    licenceService.compareVariationToOriginal.mockResolvedValue(conditionComparison)
   })
 
   describe('GET', () => {
@@ -71,14 +86,14 @@ describe('Route - Vary - View variation', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/vary/viewVariation', {
+      expect(res.render).toHaveBeenCalledWith('pages/vary/viewSubmitted', {
+        conversation,
+        conditionComparison,
         callToActions: {
           shouldShowEditAndDiscardButton: true,
           shouldShowPrintButton: false,
           shouldShowVaryButton: false,
         },
-        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
-        expandedPssConditions: res.locals.licence.additionalPssConditions,
       })
     })
 
@@ -97,14 +112,14 @@ describe('Route - Vary - View variation', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/vary/viewVariation', {
+      expect(res.render).toHaveBeenCalledWith('pages/vary/viewSubmitted', {
+        conversation,
+        conditionComparison,
         callToActions: {
           shouldShowEditAndDiscardButton: true,
           shouldShowPrintButton: false,
           shouldShowVaryButton: false,
         },
-        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
-        expandedPssConditions: res.locals.licence.additionalPssConditions,
       })
     })
 
@@ -123,14 +138,14 @@ describe('Route - Vary - View variation', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/vary/viewVariation', {
+      expect(res.render).toHaveBeenCalledWith('pages/vary/viewSubmitted', {
+        conversation,
+        conditionComparison,
         callToActions: {
           shouldShowEditAndDiscardButton: true,
           shouldShowPrintButton: true,
           shouldShowVaryButton: false,
         },
-        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
-        expandedPssConditions: res.locals.licence.additionalPssConditions,
       })
     })
 
