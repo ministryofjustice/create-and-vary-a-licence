@@ -55,7 +55,7 @@ export default class PrisonerService {
     return this.prisonerSearchApiClient.searchPrisonersByNomsIds(prisonerSearchCriteria, user)
   }
 
-  async getHdcStatuses(offenders: Prisoner[], user: User): Promise<HdcStatus[]> {
+  async getHdcStatuses(offenders: Prisoner[], user?: User): Promise<HdcStatus[]> {
     const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
     logger.info(`getHdcStatus for bookingIds = ${JSON.stringify(bookingIds)}`)
     if (bookingIds.length === 0) {
@@ -68,5 +68,9 @@ export default class PrisonerService {
       )?.homeDetentionCurfewEligibilityDate
       return new HdcStatus(`${h?.bookingId}`, hdcEligibilityDate, h?.passed, h?.approvalStatus)
     })
+  }
+
+  async searchPrisonersByPrison(prisonCode: string, user?: User): Promise<Prisoner[]> {
+    return this.prisonerSearchApiClient.searchPrisonersByPrison(prisonCode, user).then(pageable => pageable.content)
   }
 }

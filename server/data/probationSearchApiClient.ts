@@ -14,4 +14,8 @@ export default class ProbationSearchApiClient extends RestClient {
   async getOffendersByCrn(crns: string[]): Promise<OffenderDetail[]> {
     return (await this.post({ path: '/crns', data: crns })) as Promise<OffenderDetail[]>
   }
+
+  async getOffendersByNomsNumbers(nomsNumbers: string[]): Promise<OffenderDetail[]> {
+    return (await this.post({ path: '/nomsNumbers', data: nomsNumbers })) as Promise<OffenderDetail[]>
+  }
 }

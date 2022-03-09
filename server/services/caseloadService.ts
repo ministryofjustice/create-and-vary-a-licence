@@ -9,6 +9,7 @@ import { User } from '../@types/CvlUserDetails'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
 import { prisonInRollout } from '../utils/rolloutUtils'
 import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
+import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 
 export default class CaseloadService {
   constructor(
@@ -80,7 +81,8 @@ export default class CaseloadService {
       .filter(offender => offender.otherIds?.nomsNumber)
       .map(offender => offender.otherIds?.nomsNumber)
 
-    const offendersLicences = await this.mapOffendersToLicences(caseloadNomisIds, user)
+    const offenders = await this.prisonerService.searchPrisonersByNomisIds(caseloadNomisIds, user)
+    const offendersLicences = await this.mapOffendersToLicences(offenders, user)
 
     // Combine nomis + licence record with matching delius record by nomisId
     return offendersLicences.map(offender => {
@@ -116,15 +118,16 @@ export default class CaseloadService {
     return this.mapLicencesAndResponsibleComs(licences)
   }
 
-  private mapOffendersToLicences = async (caseloadNomisIds: string[], user: User): Promise<CaseTypeAndStatus[]> => {
-    const [offenders, existingLicences] = await Promise.all([
-      this.getOffendersEligibleForLicenceByNomisId(caseloadNomisIds, user),
-      this.getExistingLicences(caseloadNomisIds, user),
+  public mapOffendersToLicences = async (offenders: Prisoner[], user?: User): Promise<CaseTypeAndStatus[]> => {
+    const nomisIds = offenders.map(offender => offender.prisonerNumber)
+    const [eligibleOffenders, existingLicences] = await Promise.all([
+      this.filterOffendersEligibleForLicence(offenders, user),
+      this.getExistingLicences(nomisIds, user),
     ])
 
     // TODO: If the length(offenders) !== length(managedOffenders), it means a managed offender in delius was not found in nomis and a NO_RECORD should be raised
 
-    return offenders
+    return eligibleOffenders
       .map(offender => {
         const existingLicence = existingLicences.find(licence => licence.nomisId === offender.prisonerNumber)
         if (existingLicence) {
@@ -162,7 +165,7 @@ export default class CaseloadService {
       .filter(managedCase => managedCase)
   }
 
-  private getExistingLicences = async (nomisIds: string[], user: User) => {
+  private getExistingLicences = async (nomisIds: string[], user?: User) => {
     return this.licenceService.getLicencesByNomisIdsAndStatus(
       nomisIds,
       [
@@ -177,28 +180,23 @@ export default class CaseloadService {
     )
   }
 
-  private getOffendersEligibleForLicenceByNomisId = async (nomisIds: string[], user: User) => {
-    let offenders = await this.prisonerService.searchPrisonersByNomisIds(nomisIds, user)
-    offenders = offenders
-      .filter(managedCase => !managedCase.paroleEligibilityDate)
-      .filter(managedCase => managedCase.legalStatus !== 'DEAD')
-      .filter(managedCase => managedCase.status && managedCase.status.startsWith('ACTIVE'))
-      .filter(managedCase => !managedCase.indeterminateSentence && managedCase.conditionalReleaseDate)
+  private filterOffendersEligibleForLicence = async (offenders: Prisoner[], user?: User) => {
+    const eligibleOffenders = offenders
+      .filter(offender => !offender.paroleEligibilityDate)
+      .filter(offender => offender.legalStatus !== 'DEAD')
+      .filter(offender => offender.status && offender.status.startsWith('ACTIVE'))
+      .filter(offender => !offender.indeterminateSentence && offender.conditionalReleaseDate)
       // TODO: Following filter rule can be removed after 4th April 2022
-      .filter(managedCase =>
-        moment(managedCase.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
-          moment('2022-04-04', 'YYYY-MM-DD'),
-          'day'
-        )
+      .filter(offender =>
+        moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(moment('2022-04-04', 'YYYY-MM-DD'), 'day')
       )
       .filter(
-        managedCase =>
-          !managedCase.releaseDate || moment().isSameOrBefore(moment(managedCase.releaseDate, 'YYYY-MM-DD'), 'day')
+        offender => !offender.releaseDate || moment().isSameOrBefore(moment(offender.releaseDate, 'YYYY-MM-DD'), 'day')
       )
 
-    const hdcStatuses = await this.prisonerService.getHdcStatuses(offenders, user)
+    const hdcStatuses = await this.prisonerService.getHdcStatuses(eligibleOffenders, user)
 
-    return offenders
+    return eligibleOffenders
       .filter(offender => {
         const hdcStatus = hdcStatuses.find(hdc => hdc.bookingId === offender.bookingId)
         return !hdcStatus?.eligibleForHdc
