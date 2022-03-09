@@ -88,8 +88,8 @@ const matchPrisonAndProbationRecords = async (prisoners: Prisoner[]): Promise<Ma
 }
 
 const buildEmailGroups = async (managedCases: ManagedCase[]): Promise<EmailContact[]> => {
-  const staffCodes = managedCases.map(
-    prisoner => prisoner.deliusRecord.offenderManagers.find(manager => manager.active)?.staff.code
+  const staffCodes = _.uniq(
+    managedCases.map(prisoner => prisoner.deliusRecord.offenderManagers.find(manager => manager.active)?.staff.code)
   )
 
   const staff = await communityService.getStaffDetailByStaffCodeList(staffCodes)
@@ -120,7 +120,7 @@ const buildEmailGroups = async (managedCases: ManagedCase[]): Promise<EmailConta
 
 const notifyComOfUpcomingReleases = (emailGroups: EmailContact[]) => {
   // TODO use GOV notify to email COM about upcoming releases. Should this be a separate email for each release or one single email?
-  return true
+  logger.info(JSON.stringify(emailGroups))
 }
 
 pollPrisonersDueForLicence()
