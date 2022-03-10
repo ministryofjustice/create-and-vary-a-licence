@@ -25,6 +25,7 @@ generic-service:
     GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: "http://create-and-vary-a-licence"
+    RESTRICT_ROLLOUT: "true"
 
 gotenberg:
   replicaCount: 2

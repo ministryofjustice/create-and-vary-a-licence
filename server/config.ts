@@ -176,7 +176,7 @@ export default {
   },
   rollout: {
     restricted: get('RESTRICT_ROLLOUT', false),
-    probationAreas: ['N55'],
-    prisons: ['MDI', 'LEI'],
+    probationAreas: ['N03'],
+    prisons: ['CFI', 'SWI', 'UKI', 'UPI', 'PRI'],
   },
 }
