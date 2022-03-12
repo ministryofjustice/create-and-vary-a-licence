@@ -23,7 +23,7 @@ executors:
     docker:
       - image: 'cimg/node:<<parameters.node_tag>>'
       - image: 'circleci/redis:<<parameters.redis_tag>>'
-      - image: 'localstack/localstack:0.11.2'
+      - image: 'localstack/localstack:0.13.2'
         environment:
           SERVICES: sqs
           DATA_DIR: /tmp/localstack/data
@@ -141,17 +141,17 @@ jobs:
             export AWS_ACCESS_KEY_ID=foo
             export AWS_SECRET_ACCESS_KEY=bar
 
-            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue
-            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue_dl
-            aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "http://localhost:4576/queue/create_and_vary_a_licence_prison_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_prison_events_queue_dl\"}"}'
+            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue
+            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_prison_events_queue_dl
+            aws --endpoint-url=http://localhost:4566 sqs set-queue-attributes --queue-url "http://localhost:4566/queue/create_and_vary_a_licence_prison_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_prison_events_queue_dl\"}"}'
 
-            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue
-            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue_dl
-            aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "http://localhost:4576/queue/create_and_vary_a_licence_probation_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_probation_events_queue_dl\"}"}'
+            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue
+            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_probation_events_queue_dl
+            aws --endpoint-url=http://localhost:4566 sqs set-queue-attributes --queue-url "http://localhost:4566/queue/create_and_vary_a_licence_probation_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_probation_events_queue_dl\"}"}'
 
-            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue
-            aws --endpoint-url=http://localhost:4576 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue_dl
-            aws --endpoint-url=http://localhost:4576 sqs set-queue-attributes --queue-url "http://localhost:4576/queue/create_and_vary_a_licence_domain_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_domain_events_queue_dl\"}"}'
+            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue
+            aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name create_and_vary_a_licence_domain_events_queue_dl
+            aws --endpoint-url=http://localhost:4566 sqs set-queue-attributes --queue-url "http://localhost:4566/queue/create_and_vary_a_licence_domain_events_queue" --attributes '{"RedrivePolicy":"{\"maxReceiveCount\":\"3\", \"deadLetterTargetArn\":\"arn:aws:sqs:eu-west-2:000000000000:create_and_vary_a_licence_domain_events_queue_dl\"}"}'
       - run:
           name: Get wiremock
           command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.1/wiremock-standalone-2.27.1.jar

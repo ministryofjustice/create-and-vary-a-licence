@@ -19,8 +19,8 @@ describe('Gotenberg client tests', () => {
   const htmlString = '<html><head><title>A title</title></head><body><p>A document</p></body>'
 
   describe('Render HTML as PDF', () => {
-    it('POST /convert/html', async () => {
-      fakeApi.post('/convert/html').reply(200, pdfStream)
+    it('POST /forms/chromium/convert/html', async () => {
+      fakeApi.post('/forms/chromium/convert/html').reply(200, pdfStream)
       const data = await client.renderPdfFromHtml(htmlString)
       expect(data).toEqual(Buffer.from(pdfStream))
       expect(nock.isDone()).toBe(true)

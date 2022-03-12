@@ -96,7 +96,7 @@ gotenberg:
 
   image:
     repository: thecodingmachine/gotenberg
-    tag: 6.3.0
+    tag: 7.5.0
     port: 3000
 
   ingress:
