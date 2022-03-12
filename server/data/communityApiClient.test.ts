@@ -54,6 +54,15 @@ describe('Community Api client tests', () => {
     expect(result).toEqual([{ staffIdentifier: 2000 }])
   })
 
+  it('Get staff detail by list of usernames', async () => {
+    post.mockResolvedValue([{ staffIdentifier: 2000 }] as CommunityApiStaffDetails[])
+
+    const result = await communityApiClient.getStaffDetailByStaffCodeList(['X1234'])
+
+    expect(post).toHaveBeenCalledWith({ path: '/secure/staff/list/staffCodes', data: ['X1234'] })
+    expect(result).toEqual([{ staffIdentifier: 2000 }])
+  })
+
   it('Get staff caseload', async () => {
     get.mockResolvedValue({ nomsNumber: 'ABC1234' } as CommunityApiManagedOffender)
 

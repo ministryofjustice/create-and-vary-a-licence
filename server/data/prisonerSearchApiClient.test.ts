@@ -13,6 +13,7 @@ const prisonerSearchApiClient = new PrisonerSearchApiClient()
 
 describe('Prisoner Search Api client tests', () => {
   const post = jest.spyOn(HmppsRestClient.prototype, 'post')
+  const get = jest.spyOn(HmppsRestClient.prototype, 'get')
 
   beforeEach(() => {
     post.mockResolvedValue(true)
@@ -49,5 +50,24 @@ describe('Prisoner Search Api client tests', () => {
       { username: 'joebloggs' }
     )
     expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
+  })
+
+  it('Search Prisoner by prison', async () => {
+    get.mockResolvedValue({ content: [{ firstName: 'Joe', lastName: 'Bloggs' }] })
+
+    const result = await prisonerSearchApiClient.searchPrisonersByPrison('MDI', {
+      username: 'joebloggs',
+    } as User)
+
+    expect(get).toHaveBeenCalledWith(
+      {
+        path: '/prisoner-search/prison/MDI',
+        query: {
+          size: 2000,
+        },
+      },
+      { username: 'joebloggs' }
+    )
+    expect(result).toEqual({ content: [{ firstName: 'Joe', lastName: 'Bloggs' }] })
   })
 })

@@ -275,7 +275,7 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/refer-variation`, data: request }, { username: user?.username })
   }
 
-  async notifyComToPromptEmailCreation(request: EmailContact[]): Promise<void> {
+  async notifyComsToPromptEmailCreation(request: EmailContact[]): Promise<void> {
     await this.post({ path: `/com/prompt-licence-creation`, data: request })
   }
 

@@ -456,7 +456,7 @@ export default class LicenceService {
   }
 
   async notifyComsToPromptLicenceCreation(emailGroups: EmailContact[]): Promise<void> {
-    return this.licenceApiClient.notifyComToPromptEmailCreation(emailGroups)
+    return this.licenceApiClient.notifyComsToPromptEmailCreation(emailGroups)
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {

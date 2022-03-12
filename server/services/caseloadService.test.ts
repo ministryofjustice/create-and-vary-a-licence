@@ -1485,6 +1485,23 @@ describe('Caseload Service', () => {
         },
       ] as OffenderDetail[])
 
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: '1',
+          bookingId: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
+        },
+        {
+          prisonerNumber: '2',
+          bookingId: '2',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
+        },
+      ] as Prisoner[])
+
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
         { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },
         { nomisId: '2', licenceType: LicenceType.AP_PSS, licenceStatus: LicenceStatus.SUBMITTED },
@@ -1517,6 +1534,16 @@ describe('Caseload Service', () => {
           },
         },
       ] as OffenderDetail[])
+
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: '1',
+          bookingId: '1',
+          status: 'ACTIVE',
+          indeterminateSentence: false,
+          conditionalReleaseDate: '2023-05-12',
+        },
+      ] as Prisoner[])
 
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
         { nomisId: '1', licenceType: LicenceType.AP, licenceStatus: LicenceStatus.IN_PROGRESS },

@@ -5,7 +5,7 @@ import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import PrisonerService from './prisonerService'
 import { HomeDetentionCurfew, PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
-import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
+import { PagePrisoner, Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 
 jest.mock('fs')
 jest.mock('../data/prisonApiClient')
@@ -147,5 +147,18 @@ describe('Prisoner Service', () => {
       ])
       expect(prisonApiClient.getLatestHdcStatusBatch).toBeCalledWith([123], user)
     })
+  })
+
+  it('Search prisoners by prison', async () => {
+    const expectedResult = [{ firstName: 'Joe', lastName: 'Bloggs' }]
+
+    prisonerSearchApiClient.searchPrisonersByPrison.mockResolvedValue({
+      content: [{ firstName: 'Joe', lastName: 'Bloggs' }],
+    } as PagePrisoner)
+
+    const actualResult = await prisonerService.searchPrisonersByPrison('MDI', user)
+
+    expect(actualResult).toEqual(expectedResult)
+    expect(prisonerSearchApiClient.searchPrisonersByPrison).toHaveBeenCalledWith('MDI', user)
   })
 })

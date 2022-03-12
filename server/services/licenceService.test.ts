@@ -18,6 +18,7 @@ import SimpleDate from '../routes/creatingLicences/types/date'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import {
+  EmailContact,
   Licence,
   LicenceSummary,
   UpdateComRequest,
@@ -829,5 +830,13 @@ describe('Licence Service', () => {
         user
       )
     })
+  })
+
+  it('should nofity com with prompt to create licence', async () => {
+    const expectedRequest = [
+      { email: 'joe.bloggs@probation.gov.uk', comName: 'Joe Bloggs', initialPromptCases: [], urgentPromptCases: [] },
+    ] as EmailContact[]
+    await licenceService.notifyComsToPromptLicenceCreation(expectedRequest)
+    expect(licenceApiClient.notifyComsToPromptEmailCreation).toBeCalledWith(expectedRequest)
   })
 })

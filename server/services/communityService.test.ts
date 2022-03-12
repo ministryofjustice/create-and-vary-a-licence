@@ -56,6 +56,22 @@ describe('Community Service', () => {
     expect(communityApiClient.getStaffDetailsByUsernameList).toHaveBeenCalledWith(['joebloggs'])
   })
 
+  it('Get Staff Detail by Staff Code List', async () => {
+    const expectedResponse = [
+      {
+        staffIdentifier: 2000,
+        email: 'joebloggs@probation.gov.uk',
+      },
+    ]
+
+    communityApiClient.getStaffDetailByStaffCodeList.mockResolvedValue(expectedResponse)
+
+    const actualResult = await communityService.getStaffDetailByStaffCodeList(['X1234'])
+
+    expect(actualResult).toEqual(expectedResponse)
+    expect(communityApiClient.getStaffDetailByStaffCodeList).toHaveBeenCalledWith(['X1234'])
+  })
+
   it('Get Managed Offenders', async () => {
     const expectedResponse = [
       {
@@ -136,32 +152,57 @@ describe('Community Service', () => {
     })
   })
 
-  describe('Get offenders by crn', () => {
-    it('should call api client to search by crn', async () => {
-      probationSearchApiClient.getOffendersByCrn.mockResolvedValue([
-        {
-          firstName: 'Joe',
-          surname: 'Bloggs',
-        },
-        {
-          firstName: 'John',
-          surname: 'Smith',
-        },
-      ] as OffenderDetail[])
+  it('should call api client to search by crns', async () => {
+    probationSearchApiClient.getOffendersByCrn.mockResolvedValue([
+      {
+        firstName: 'Joe',
+        surname: 'Bloggs',
+      },
+      {
+        firstName: 'John',
+        surname: 'Smith',
+      },
+    ] as OffenderDetail[])
 
-      const actualResult = await communityService.getOffendersByCrn(['X1234', 'X4321'])
+    const actualResult = await communityService.getOffendersByCrn(['X1234', 'X4321'])
 
-      expect(actualResult).toEqual([
-        {
-          firstName: 'Joe',
-          surname: 'Bloggs',
-        },
-        {
-          firstName: 'John',
-          surname: 'Smith',
-        },
-      ])
-      expect(probationSearchApiClient.getOffendersByCrn).toHaveBeenCalledWith(['X1234', 'X4321'])
-    })
+    expect(actualResult).toEqual([
+      {
+        firstName: 'Joe',
+        surname: 'Bloggs',
+      },
+      {
+        firstName: 'John',
+        surname: 'Smith',
+      },
+    ])
+    expect(probationSearchApiClient.getOffendersByCrn).toHaveBeenCalledWith(['X1234', 'X4321'])
+  })
+
+  it('should call api client to search by nomsNumbers', async () => {
+    probationSearchApiClient.getOffendersByNomsNumbers.mockResolvedValue([
+      {
+        firstName: 'Joe',
+        surname: 'Bloggs',
+      },
+      {
+        firstName: 'John',
+        surname: 'Smith',
+      },
+    ] as OffenderDetail[])
+
+    const actualResult = await communityService.getOffendersByNomsNumbers(['B123445', 'C123535'])
+
+    expect(actualResult).toEqual([
+      {
+        firstName: 'Joe',
+        surname: 'Bloggs',
+      },
+      {
+        firstName: 'John',
+        surname: 'Smith',
+      },
+    ])
+    expect(probationSearchApiClient.getOffendersByNomsNumbers).toHaveBeenCalledWith(['B123445', 'C123535'])
   })
 })
