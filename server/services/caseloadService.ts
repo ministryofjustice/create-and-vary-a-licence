@@ -119,11 +119,11 @@ export default class CaseloadService {
   }
 
   public mapOffendersToLicences = async (offenders: Prisoner[], user?: User): Promise<CaseTypeAndStatus[]> => {
-    const nomisIds = offenders.map(offender => offender.prisonerNumber)
-    const [eligibleOffenders, existingLicences] = await Promise.all([
-      this.filterOffendersEligibleForLicence(offenders, user),
-      this.getExistingLicences(nomisIds, user),
-    ])
+    const eligibleOffenders = await this.filterOffendersEligibleForLicence(offenders, user)
+    const existingLicences = await this.getExistingLicences(
+      eligibleOffenders.map(offender => offender.prisonerNumber),
+      user
+    )
 
     // TODO: If the length(offenders) !== length(managedOffenders), it means a managed offender in delius was not found in nomis and a NO_RECORD should be raised
 
@@ -166,6 +166,9 @@ export default class CaseloadService {
   }
 
   private getExistingLicences = async (nomisIds: string[], user?: User) => {
+    if (nomisIds.length === 0) {
+      return []
+    }
     return this.licenceService.getLicencesByNomisIdsAndStatus(
       nomisIds,
       [

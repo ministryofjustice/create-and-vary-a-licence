@@ -57,7 +57,6 @@ export default class PrisonerService {
 
   async getHdcStatuses(offenders: Prisoner[], user?: User): Promise<HdcStatus[]> {
     const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
-    logger.info(`getHdcStatus for bookingIds = ${JSON.stringify(bookingIds)}`)
     if (bookingIds.length === 0) {
       return []
     }
