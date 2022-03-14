@@ -11,6 +11,7 @@ import {
   BespokeConditionsRequest,
   ContactNumberRequest,
   CreateLicenceRequest,
+  EmailContact,
   Licence,
   LicenceSummary,
   ReferVariationRequest,
@@ -452,6 +453,10 @@ export default class LicenceService {
     })
 
     return conversation || []
+  }
+
+  async notifyComsToPromptLicenceCreation(emailGroups: EmailContact[]): Promise<void> {
+    return this.licenceApiClient.notifyComsToPromptEmailCreation(emailGroups)
   }
 
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {

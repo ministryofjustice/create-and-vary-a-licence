@@ -60,13 +60,13 @@ export default class PrisonApiClient extends RestClient {
     )) as Promise<HomeDetentionCurfew>
   }
 
-  async getLatestHdcStatusBatch(bookingIds: number[], user: User): Promise<HomeDetentionCurfew[]> {
+  async getLatestHdcStatusBatch(bookingIds: number[], user?: User): Promise<HomeDetentionCurfew[]> {
     return (await this.post(
       {
         path: `/api/offender-sentences/home-detention-curfews/latest`,
         data: bookingIds,
       },
-      { username: user.username }
+      { username: user?.username }
     )) as Promise<HomeDetentionCurfew[]>
   }
 

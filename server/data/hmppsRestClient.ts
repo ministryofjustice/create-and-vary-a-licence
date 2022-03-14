@@ -22,7 +22,7 @@ interface PostRequest {
   path?: string
   headers?: Record<string, string>
   responseType?: string
-  data?: Record<string, unknown> | number[] | string[]
+  data?: Record<string, unknown> | number[] | string[] | Record<string, unknown>[]
   raw?: boolean
 }
 
@@ -79,6 +79,7 @@ export default class HmppsRestClient {
     return superagent
       .get(`${this.apiConfig.url}${path}`)
       .agent(this.agent)
+      .set('Content-Type', 'application/json')
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
@@ -108,6 +109,7 @@ export default class HmppsRestClient {
     return superagent
       .post(`${this.apiConfig.url}${path}`)
       .send(data)
+      .set('Content-Type', 'application/json')
       .agent(this.agent)
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
@@ -137,6 +139,7 @@ export default class HmppsRestClient {
     return superagent
       .put(`${this.apiConfig.url}${path}`)
       .send(data)
+      .set('Content-Type', 'application/json')
       .agent(this.agent)
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
@@ -163,6 +166,7 @@ export default class HmppsRestClient {
     return superagent
       .get(`${this.apiConfig.url}${path}`)
       .agent(this.agent)
+      .set('Content-Type', 'application/json')
       .auth(signedWith, { type: 'bearer' })
       .retry(2, (err, res) => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)

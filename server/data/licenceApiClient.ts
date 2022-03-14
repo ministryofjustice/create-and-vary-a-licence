@@ -21,6 +21,7 @@ import type {
   UpdatePrisonInformationRequest,
   UpdateSentenceDatesRequest,
   ReferVariationRequest,
+  EmailContact,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -272,6 +273,10 @@ export default class LicenceApiClient extends RestClient {
 
   async referVariation(licenceId: string, request: ReferVariationRequest, user: User): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/refer-variation`, data: request }, { username: user?.username })
+  }
+
+  async notifyComsToPromptEmailCreation(request: EmailContact[]): Promise<void> {
+    await this.post({ path: `/com/prompt-licence-creation`, data: request })
   }
 
   async matchLicenceEvents(

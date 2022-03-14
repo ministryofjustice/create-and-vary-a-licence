@@ -17,6 +17,10 @@ export default class CommunityService {
     return this.communityApiClient.getStaffDetailByUsername(username)
   }
 
+  async getStaffDetailByStaffCodeList(staffCodes: string[]): Promise<CommunityApiStaffDetails[]> {
+    return this.communityApiClient.getStaffDetailByStaffCodeList(staffCodes)
+  }
+
   async getStaffDetailByStaffIdentifier(staffIdentifier: number): Promise<CommunityApiStaffDetails> {
     return this.communityApiClient.getStaffDetailByStaffIdentifier(staffIdentifier)
   }
@@ -51,5 +55,9 @@ export default class CommunityService {
 
   async getOffendersByCrn(crns: string[]): Promise<OffenderDetail[]> {
     return this.probationSearchApiClient.getOffendersByCrn(crns)
+  }
+
+  async getOffendersByNomsNumbers(nomsNumbers: string[]): Promise<OffenderDetail[]> {
+    return this.probationSearchApiClient.getOffendersByNomsNumbers(nomsNumbers)
   }
 }

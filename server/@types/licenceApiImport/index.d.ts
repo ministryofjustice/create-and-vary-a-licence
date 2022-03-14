@@ -100,6 +100,10 @@ export interface paths {
     /** Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['uploadExclusionZoneFile']
   }
+  '/com/prompt-licence-creation': {
+    /** Notifies the COM of upcoming releases which they need to create a licence for. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['notifyOfUpcomingReleasesRequiringLicence']
+  }
   '/audit/retrieve': {
     /** Retrieves a list of auditable events matching the criteria provided. Requires ROLE_CVL_ADMIN. */
     post: operations['requestAuditEvents']
@@ -806,6 +810,36 @@ export interface components {
        */
       text?: string
     }
+    /** @description Describes a prisoner due for release */
+    PrisonerForRelease: {
+      /**
+       * @description The full name of the prisoner
+       * @example John Smith
+       */
+      name: string
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       */
+      releaseDate: string
+    }
+    /** @description Describes a COM's contact details and the upcoming releases that they must consider for licence creation */
+    PromptLicenceCreationRequest: {
+      /**
+       * @description The email address of the COM
+       * @example jbloggs@probation.gov.uk
+       */
+      email: string
+      /**
+       * @description The full name of the COM
+       * @example Joseph Bloggs
+       */
+      comName: string
+      /** @description The list of prisoners for whom the COM should be notified of needing a licence */
+      initialPromptCases: components['schemas']['PrisonerForRelease'][]
+      /** @description The list of prisoners for whom the COM should be notified of needing a licence urgently */
+      urgentPromptCases: components['schemas']['PrisonerForRelease'][]
+    }
     /** @description Describes an audit event request */
     AuditRequest: {
       /**
@@ -1190,7 +1224,7 @@ export interface components {
        * Format: date-time
        * @description The date and time of the event
        */
-      eventTime: string
+      eventTime?: string
     }
   }
 }
@@ -2103,6 +2137,36 @@ export interface operations {
           /** Format: binary */
           file: string
         }
+      }
+    }
+  }
+  /** Notifies the COM of upcoming releases which they need to create a licence for. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  notifyOfUpcomingReleasesRequiringLicence: {
+    responses: {
+      /** The COM was notified */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PromptLicenceCreationRequest'][]
       }
     }
   }
