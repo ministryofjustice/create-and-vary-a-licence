@@ -104,7 +104,7 @@ gotenberg:
 
   livenessProbe:
     httpGet:
-      path: /ping
+      path: /health
     periodSeconds: 30
     initialDelaySeconds: 60
     timeoutSeconds: 20
@@ -112,7 +112,7 @@ gotenberg:
 
   readinessProbe:
     httpGet:
-      path: /ping
+      path: /health
     periodSeconds: 20
     initialDelaySeconds: 60
     timeoutSeconds: 30
