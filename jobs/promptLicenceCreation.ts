@@ -103,16 +103,22 @@ const buildEmailGroups = async (managedCases: ManagedCase[]): Promise<EmailConta
 
   const staff = await communityService.getStaffDetailByStaffCodeList(staffCodes)
 
-  const prisonersWithCom = managedCases.map(prisoner => {
-    const responsibleComStaffCode = prisoner.deliusRecord.offenderManagers.find(manager => manager.active)?.staff.code
-    const responsibleCom = staff.find(com => com.staffCode && com.staffCode === responsibleComStaffCode)
+  const prisonersWithCom = managedCases
+    .map(prisoner => {
+      const responsibleComStaffCode = prisoner.deliusRecord.offenderManagers.find(manager => manager.active)?.staff.code
+      const responsibleCom = staff.find(com => com.staffCode && com.staffCode === responsibleComStaffCode)
 
-    return {
-      prisoner: prisoner.nomisRecord,
-      email: responsibleCom.email,
-      comName: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`,
-    }
-  })
+      if (!config.rollout.probationAreas.includes(responsibleCom.probationArea.code)) {
+        return null
+      }
+
+      return {
+        prisoner: prisoner.nomisRecord,
+        email: responsibleCom.email,
+        comName: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`,
+      }
+    })
+    .filter(prisoner => prisoner)
 
   return _.chain(prisonersWithCom)
     .groupBy('email')
