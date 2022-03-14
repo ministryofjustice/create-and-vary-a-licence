@@ -96,7 +96,7 @@ gotenberg:
 
   image:
     repository: thecodingmachine/gotenberg
-    tag: 6.3.0
+    tag: 7.5.0
     port: 3000
 
   ingress:
@@ -104,7 +104,7 @@ gotenberg:
 
   livenessProbe:
     httpGet:
-      path: /ping
+      path: /health
     periodSeconds: 30
     initialDelaySeconds: 60
     timeoutSeconds: 20
@@ -112,7 +112,7 @@ gotenberg:
 
   readinessProbe:
     httpGet:
-      path: /ping
+      path: /health
     periodSeconds: 20
     initialDelaySeconds: 60
     timeoutSeconds: 30
