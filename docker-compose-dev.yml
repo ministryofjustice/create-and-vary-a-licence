@@ -2,7 +2,7 @@ version: '3.1'
 services:
 
   redis:
-    image: 'bitnami/redis:5.0'
+    image: 'redis:5.0'
     networks:
       - hmpps
     container_name: redis 
@@ -24,7 +24,7 @@ services:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:5000/actuator/health' ]
 
   gotenberg:
-    image: thecodingmachine/gotenberg:6.4.3
+    image: thecodingmachine/gotenberg:7.5.0
     networks:
       - hmpps
     container_name: gotenberg
