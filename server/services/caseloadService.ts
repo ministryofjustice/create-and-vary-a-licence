@@ -189,9 +189,9 @@ export default class CaseloadService {
       .filter(offender => offender.legalStatus !== 'DEAD')
       .filter(offender => offender.status && offender.status.startsWith('ACTIVE'))
       .filter(offender => !offender.indeterminateSentence && offender.conditionalReleaseDate)
-      // TODO: Following filter rule can be removed after 4th April 2022
+      // TODO: Following filter rule can be removed after 18th April 2022
       .filter(offender =>
-        moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(moment('2022-04-04', 'YYYY-MM-DD'), 'day')
+        moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(moment('2022-04-18', 'YYYY-MM-DD'), 'day')
       )
       .filter(
         offender => !offender.releaseDate || moment().isSameOrBefore(moment(offender.releaseDate, 'YYYY-MM-DD'), 'day')
