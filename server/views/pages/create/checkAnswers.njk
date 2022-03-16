@@ -37,7 +37,24 @@
     </div>
 
     {% if canChooseToEdit %}
-        <a id="edit-licence-button" href="{{'/licence/create/id/' + licence.id + '/edit'}}" class="govuk-button">Edit licence</a>
+        <div class="govuk-button-group">
+            {{ govukButton({
+                text: "Edit licence",
+                href: '/licence/create/id/' + licence.id + '/edit',
+                attributes: {
+                    id: 'edit-licence-button'
+                }
+            }) }}
+
+            {{ govukButton({
+                text: "View and print licence PDF",
+                href: '/licence/view/id/' + licence.id + '/pdf-print',
+                classes: "govuk-button--secondary",
+                attributes: {
+                    target: "_blank"
+                }
+            }) }}
+        </div>
     {% endif %}
 
     <div class="govuk-grid-row">
