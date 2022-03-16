@@ -155,7 +155,7 @@
                     {{ govukInput({
                         id: 'addressCounty',
                         label: {
-                            text: "County"
+                            text: "County (optional)"
                         },
                         name: input.name + "[addressCounty]",
                         classes: "govuk-!-width-one-third",
@@ -269,7 +269,8 @@
            accept: acceptTypes
         },
         label: {
-           text: label
+           html: label,
+           classes: "govuk-!-font-weight-bold"
         },
         errorMessage: validationErrors | findError(name)
     }) }}

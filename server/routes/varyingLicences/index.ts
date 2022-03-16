@@ -8,8 +8,6 @@ import { Services } from '../../services'
 import ViewVariationRoutes from './handlers/viewVariation'
 import ConfirmVaryActionRoutes from './handlers/confirmVaryAction'
 import validationMiddleware from '../../middleware/validationMiddleware'
-import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
-import YesOrNotApplicable from '../creatingLicences/types/yesOrNotApplicable'
 import SpoDiscussionRoutes from './handlers/spoDiscussion'
 import VloDiscussionRoutes from './handlers/vloDiscussion'
 import ConfirmDiscardVariationRoutes from './handlers/confirmDiscardVariation'
@@ -19,6 +17,8 @@ import VariationSummaryRoutes from './handlers/variationSummary'
 import ConfirmationRoutes from './handlers/confirmation'
 import ReasonForVariation from '../creatingLicences/types/reasonForVariation'
 import ComDetailsRoutes from './handlers/comDetails'
+import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
+import YesOrNotApplicable from '../creatingLicences/types/additionalConditionsYesOrNo'
 
 export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
   const router = Router()
