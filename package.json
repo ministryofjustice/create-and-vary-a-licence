@@ -25,6 +25,7 @@
     "integrationTest": "jest --runInBand --testPathPattern=/integration_tests/.*",
     "security_audit": "better-npm-audit audit",
     "assign-com-roles": "node $NODE_OPTIONS -r dotenv/config dist/jobs/assignComRoles.js | bunyan -o short",
+    "assign-aco-roles": "node $NODE_OPTIONS -r dotenv/config dist/jobs/assignAcoRoles.js | bunyan -o short",
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open",
     "clean": "rm -rf dist build node_modules stylesheets coverage"

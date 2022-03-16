@@ -6,7 +6,7 @@ import logger from '../logger'
 import { services } from '../server/services'
 
 // A type which reflects the input CSV file columns
-type ComDetail = {
+type AcoDetail = {
   username: string
   forename: string
   surname: string
@@ -18,36 +18,30 @@ type ComDetail = {
 const { communityService } = services
 
 initialiseAppInsights()
-buildAppInsightsClient('create-and-vary-a-licence-assign-com-roles-job')
+buildAppInsightsClient('create-and-vary-a-licence-assign-aco-roles-job')
 
 // Rules to determine who should be allocated the role
-const processCom = async (com: ComDetail): Promise<void> => {
+const processAco = async (aco: AcoDetail): Promise<void> => {
   try {
-    const staffDetails = await communityService.getUserDetailsByUsername(com.username.trim().toUpperCase())
+    const staffDetails = await communityService.getUserDetailsByUsername(aco.username.trim().toUpperCase())
     if (staffDetails.enabled) {
-      const roleExists = staffDetails.roles.find(role => role.name === 'LHDCBT002')
+      const roleExists = staffDetails.roles.find(role => role.name === 'CVLBT001')
       if (roleExists === undefined) {
-        const userDetails = await communityService.getStaffDetailByUsername(com.username.trim().toUpperCase())
-        const caseload = await communityService.getManagedOffenders(userDetails.staffIdentifier)
-        if (caseload?.length > 0) {
-          await communityService.assignDeliusRole(com.username.trim().toUpperCase(), 'LHDCBT002')
-          logger.info(`${com.forename} ${com.surname} was assigned the role LDHCBT002`)
-        } else {
-          logger.info(`${com.forename} ${com.surname} has an empty caseload}`)
-        }
+        await communityService.assignDeliusRole(aco.username.trim().toUpperCase(), 'CVLBT001')
+        logger.info(`${aco.forename} ${aco.surname} was assigned the role CVLBT001`)
       } else {
-        logger.info(`${com.forename} ${com.surname} already has role LHDCBT002`)
+        logger.info(`${aco.forename} ${aco.surname} already has role CVLBT001`)
       }
     } else {
-      logger.info(`${com.forename} ${com.surname} is not enabled in nDelius`)
+      logger.info(`${aco.forename} ${aco.surname} is not enabled in nDelius`)
     }
   } catch (err) {
-    logger.info(`${com.forename} ${com.surname} ${com.username} error from Community API - ${JSON.stringify(err)}`)
+    logger.info(`${aco.forename} ${aco.surname} ${aco.username} error from Community API - ${JSON.stringify(err)}`)
   }
 }
 
-// Populates a ComDetail object from each line of the input file
-const populateComDetail = (fieldValues: string[]): ComDetail => {
+// Populates an AcoDetail object from each line of the input file
+const populateAcoDetail = (fieldValues: string[]): AcoDetail => {
   return {
     username: fieldValues[0],
     forename: fieldValues[1],
@@ -55,7 +49,7 @@ const populateComDetail = (fieldValues: string[]): ComDetail => {
     email: fieldValues[3],
     staffCode: fieldValues[4],
     staffGrade: fieldValues[5],
-  } as ComDetail
+  } as AcoDetail
 }
 
 // Shows which environment is being used.
@@ -70,7 +64,7 @@ const lines = fs.readFileSync(csvFilePath, 'utf-8').split(/\r?\n/)
     const strings = lines[i].split(',')
     if (strings.length === 6) {
       // eslint-disable-next-line no-await-in-loop
-      await processCom(populateComDetail(strings))
+      await processAco(populateAcoDetail(strings))
     }
   }
 })().then(() => flush({ callback: () => process.exit() }, 'success'))
