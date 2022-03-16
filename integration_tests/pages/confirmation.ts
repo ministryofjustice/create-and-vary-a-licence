@@ -1,15 +1,15 @@
 import Page from './page'
-import IndexPage from './index'
+import CaseloadPage from './caseload'
 
 export default class ConfirmationPage extends Page {
-  private returnHomeButtonId = '[data-qa=return-to-home-page]'
+  private returnButtonId = '[data-qa=return-to-caselist]'
 
   constructor() {
     super('confirmation-page')
   }
 
-  clickReturnHome = (): IndexPage => {
-    cy.get(this.returnHomeButtonId).click()
-    return Page.verifyOnPage(IndexPage)
+  clickReturn = (): CaseloadPage => {
+    cy.get(this.returnButtonId).click()
+    return Page.verifyOnPage(CaseloadPage)
   }
 }

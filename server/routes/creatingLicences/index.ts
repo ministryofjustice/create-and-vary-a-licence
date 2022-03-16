@@ -22,7 +22,6 @@ import PersonName from './types/personName'
 import Address from './types/address'
 import Telephone from './types/telephone'
 import SimpleDateTime from './types/simpleDateTime'
-import YesOrNoQuestion from './types/yesOrNo'
 import AdditionalConditions from './types/additionalConditions'
 import AdditionalLicenceConditionsCallbackRoutes from './handlers/additionalLicenceConditionsCallback'
 import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceConditionInput'
@@ -33,6 +32,10 @@ import AdditionalPssConditionInputRoutes from './handlers/additionalPssCondition
 import EditQuestionRoutes from './handlers/editQuestion'
 import AdditionalLicenceConditionRemoveUploadRoutes from './handlers/additionalLicenceConditionRemoveUpload'
 import ComDetailsRoutes from './handlers/comDetails'
+import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
+import PssConditionsYesOrNo from './types/pssConditionsYesOrNo'
+import YesOrNo from './types/yesOrNo'
+import AdditionalConditionsYesOrNo from './types/additionalConditionsYesOrNo'
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -110,7 +113,7 @@ export default function Index({ licenceService, caseloadService, communityServic
   post(
     '/id/:licenceId/additional-licence-conditions-question',
     additionalLicenceConditionsQuestionHandler.POST,
-    YesOrNoQuestion
+    AdditionalConditionsYesOrNo
   )
   get('/id/:licenceId/additional-licence-conditions', additionalLicenceConditionsHandler.GET)
   post('/id/:licenceId/additional-licence-conditions', additionalLicenceConditionsHandler.POST, AdditionalConditions)
@@ -132,7 +135,7 @@ export default function Index({ licenceService, caseloadService, communityServic
   post(
     '/id/:licenceId/additional-pss-conditions-question',
     additionalPssConditionsQuestionHandler.POST,
-    YesOrNoQuestion
+    PssConditionsYesOrNo
   )
   get('/id/:licenceId/additional-pss-conditions', additionalPssConditionsHandler.GET)
   post('/id/:licenceId/additional-pss-conditions', additionalPssConditionsHandler.POST, AdditionalConditions)
@@ -144,13 +147,13 @@ export default function Index({ licenceService, caseloadService, communityServic
     additionalPssConditionInputHandler.DELETE
   )
   get('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.GET)
-  post('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, YesOrNoQuestion)
+  post('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, BespokeConditionsYesOrNo)
   get('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.GET)
   post('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.POST, BespokeConditions)
   get('/id/:licenceId/check-your-answers', checkAnswersHandler.GET)
   post('/id/:licenceId/check-your-answers', checkAnswersHandler.POST)
   get('/id/:licenceId/edit', editQuestionHandler.GET)
-  post('/id/:licenceId/edit', editQuestionHandler.POST, YesOrNoQuestion)
+  post('/id/:licenceId/edit', editQuestionHandler.POST, YesOrNo)
   get('/id/:licenceId/confirmation', confirmationHandler.GET)
 
   return router

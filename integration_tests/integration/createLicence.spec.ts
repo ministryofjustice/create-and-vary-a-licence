@@ -96,7 +96,7 @@ context('Create a licence', () => {
       .clickContinue()
 
     const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
-    const indexPageExit = confirmationPage.clickReturnHome()
-    indexPageExit.signOut().click()
+    const caseloadPageExit = confirmationPage.clickReturn()
+    caseloadPageExit.signOut().click()
   })
 })

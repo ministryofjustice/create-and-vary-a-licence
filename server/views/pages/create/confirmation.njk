@@ -19,7 +19,12 @@
                 {{ confirmationMessage }}
             </p>
             <p class="govuk-body">
-                They will contact you if there is a problem.
+                They will contact you if they need more information.
+            </p>
+
+            <h2 class="govuk-heading-m">If you need to make any changes</h2>
+            <p class="govuk-body">
+                You can return to the service to edit this licence after it has been sent or approved.
             </p>
 
             <h2 class="govuk-heading-m">Give us your feedback</h2>
@@ -29,10 +34,10 @@
 
             <p class="govuk-body">
             {{ govukButton({
-                text: "Return to home page",
+                text: "Return to caselist",
                 classes: "govuk-button--primary govuk-!-margin-bottom-0 govuk-body",
-                href: '/',
-                attributes: { 'data-qa': 'return-to-home-page' }
+                href: '/licence/create/caseload',
+                attributes: { 'data-qa': 'return-to-caselist' }
             }) }}
             </p>
         </div>

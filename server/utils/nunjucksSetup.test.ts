@@ -193,6 +193,14 @@ describe('Nunjucks Filters', () => {
       expect($('body').text()).toBe('23rd December 2021')
     })
 
+    it('should format a date and time with short GOVUK format', () => {
+      viewContext = { testDateTime: '23/12/2021 11:15' }
+      const nunjucksString = '{{ testDateTime | datetimeToDateShort }}'
+      compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
+      const $ = cheerio.load(compiledTemplate.render(viewContext))
+      expect($('body').text()).toBe('23 Dec 2021')
+    })
+
     it('should format a date and time with full day', () => {
       viewContext = { testDateTime: '23/12/2021 11:15' }
       const nunjucksString = '{{ testDateTime | datetimeToDateWithDay }}'

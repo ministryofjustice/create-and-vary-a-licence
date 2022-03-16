@@ -5,7 +5,7 @@ import path from 'path'
 import moment from 'moment'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
-import { formatAddress, jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateWithDay } from './utils'
+import { formatAddress, jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateShort, jsonDtToDateWithDay } from './utils'
 import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { getAdditionalConditionByCode } from './conditionsProvider'
 import SimpleTime from '../routes/creatingLicences/types/time'
@@ -131,6 +131,10 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('datetimeToDate', (dt: string) => {
     return jsonDtToDate(dt)
+  })
+
+  njkEnv.addFilter('datetimeToDateShort', (dt: string) => {
+    return jsonDtToDateShort(dt)
   })
 
   njkEnv.addFilter('datetimeToDateWithDay', (dt: string) => {

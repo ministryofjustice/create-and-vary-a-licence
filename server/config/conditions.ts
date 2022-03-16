@@ -692,7 +692,8 @@ export default {
           },
           {
             type: InputTypes.FILE_UPLOAD,
-            label: 'Select the map maker PDF file to include on the licence',
+            label:
+              'Find and select the <a class="govuk-link" href="https://mapmaker.field-dynamics.co.uk/moj/map/default" rel="noreferrer noopener" target="_blank">Mapmaker PDF map</a> to include on the licence',
             name: 'outOfBoundFilename',
           },
         ],
@@ -1001,6 +1002,7 @@ export default {
         text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
         tpl: 'Attend {appointmentAddress}{appointmentDate}{appointmentTime}, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
         requiresInput: true,
+        pssDates: true,
         inputs: [
           {
             type: InputTypes.TIME,
