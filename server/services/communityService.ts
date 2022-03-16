@@ -5,6 +5,7 @@ import {
   CommunityApiManagedOffender,
   CommunityApiOffenderManager,
   CommunityApiStaffDetails,
+  CommunityApiUserDetails,
 } from '../@types/communityClientTypes'
 
 export default class CommunityService {
@@ -39,6 +40,14 @@ export default class CommunityService {
 
   async getAnOffendersManagers(crn: string): Promise<CommunityApiOffenderManager[]> {
     return this.communityApiClient.getAnOffendersManagers(crn)
+  }
+
+  async getUserDetailsByUsername(deliusUsername: string): Promise<CommunityApiUserDetails> {
+    return this.communityApiClient.getUserDetailsByUsername(deliusUsername)
+  }
+
+  async assignDeliusRole(deliusUsername: string, deliusRoleId: string): Promise<void> {
+    return this.communityApiClient.assignDeliusRole(deliusUsername, deliusRoleId)
   }
 
   async searchProbationers(searchCriteria: SearchDto): Promise<OffenderDetail[]> {

@@ -4,6 +4,7 @@ import {
   CommunityApiStaffDetails,
   CommunityApiOffenderManager,
   CommunityApiManagedOffender,
+  CommunityApiUserDetails,
 } from '../@types/communityClientTypes'
 
 export default class CommunityApiClient extends RestClient {
@@ -53,5 +54,17 @@ export default class CommunityApiClient extends RestClient {
     return (await this.get({
       path: `/secure/offenders/crn/${crn}/allOffenderManagers`,
     })) as Promise<CommunityApiOffenderManager[]>
+  }
+
+  async getUserDetailsByUsername(deliusUsername: string): Promise<CommunityApiUserDetails> {
+    return (await this.get({
+      path: `/secure/users/${deliusUsername}/details`,
+    })) as Promise<CommunityApiUserDetails>
+  }
+
+  async assignDeliusRole(deliusUsername: string, deliusRoleId: string): Promise<void> {
+    await this.put({
+      path: `/secure/users/${deliusUsername}/roles/${deliusRoleId}`,
+    })
   }
 }
