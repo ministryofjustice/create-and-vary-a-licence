@@ -11,12 +11,23 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
-                titleText: "Licence approved for " + licence.forename + " " + licence.surname
+                titleText: titleText
             }) }}
 
             <h2 class="govuk-heading-m">What happens next</h2>
-            <p class="govuk-body" id="sent-to">
-                We have sent a notification to probation that this licence has been approved.
+            <p class="govuk-body">
+                {{ confirmationMessage }}
+            </p>
+            <p class="govuk-body">
+                A prison administrator can now print the licence
+            </p>
+
+            <h2 class="govuk-heading-m">If a COM makes any changes</h2>
+            <p class="govuk-body">
+                A community offender manager may edit and re-submit this licence for approval if they need to make a change.
+            </p>
+            <p class="govuk-body">
+                The licence will appear again in your approvals case list
             </p>
 
             <h2 class="govuk-heading-m">Give us your feedback</h2>

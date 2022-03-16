@@ -4,10 +4,10 @@ import IsValidExclusionZoneFile from '../../../../validators/isValidExclusionZon
 
 export default class OutOfBoundsRegion {
   @Expose()
-  @IsNotEmpty({ message: 'Enter the name of the area shown in the attached map' })
+  @IsNotEmpty({ message: 'Enter the name of the area on the map' })
   outOfBoundArea: string
 
   @Expose()
-  @IsValidExclusionZoneFile({ message: 'Select a PDF Map Maker file to continue' })
+  @IsValidExclusionZoneFile({ message: 'Select a Map Maker PDF file from your computer' })
   outOfBoundFilename: string
 }

@@ -78,7 +78,7 @@
                 <div class="govuk-button-group">
                     {% if isInProgress and not licence.isVariation %}
                         {{ govukButton({
-                            text: "Send licence conditions to prison",
+                            text: "Send to prison for approval",
                             attributes: { 'data-qa': 'send-licence-conditions' }
                         }) }}
                     {% endif %}
@@ -90,9 +90,9 @@
             </form>
 
             {% if licence.isVariation %}
-                <a href="/licence/vary/caseload" class="govuk-link govuk-!-font-size-19">Return to caseload</a>
+                <a href="/licence/vary/caseload" class="govuk-link govuk-!-font-size-19">Return to caselist</a>
             {% else %}
-                <a href="/licence/create/caseload" class="govuk-link govuk-!-font-size-19">Return to caseload</a>
+                <a href="/licence/create/caseload" class="govuk-link govuk-!-font-size-19">Return to caselist</a>
             {% endif %}
         </div>
     </div>

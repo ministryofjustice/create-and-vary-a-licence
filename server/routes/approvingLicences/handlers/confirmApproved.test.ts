@@ -16,13 +16,42 @@ describe('Route - approve licence', () => {
 
     res = {
       render: jest.fn(),
+      locals: {
+        licence: {
+          forename: 'Joe',
+          surname: 'Bloggs',
+          typeCode: 'PSS',
+        },
+      },
     } as unknown as Response
   })
 
   describe('GET', () => {
-    it('should render confirmation page', async () => {
+    it('should render confirmation page for AP', async () => {
+      res.locals.licence.typeCode = 'AP'
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/approve/approved')
+      expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
+        titleText: 'Licence conditions for Joe Bloggs approved',
+        confirmationMessage: 'You have approved the licence conditions for Joe Bloggs.',
+      })
+    })
+
+    it('should render confirmation page for AP_PSS', async () => {
+      res.locals.licence.typeCode = 'AP_PSS'
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
+        titleText: 'Licence and post sentence supervision order for Joe Bloggs approved',
+        confirmationMessage: 'You have approved the licence and post sentence supervision order for Joe Bloggs.',
+      })
+    })
+
+    it('should render confirmation page for PSS', async () => {
+      res.locals.licence.typeCode = 'PSS'
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
+        titleText: 'Post sentence supervision order for Joe Bloggs approved',
+        confirmationMessage: 'You have approved the post sentence supervision order for Joe Bloggs.',
+      })
     })
   })
 })
