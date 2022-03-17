@@ -124,6 +124,10 @@ export interface paths {
     /** Get a list of licence events that match the supplied criteria. Requires ROLE_CVL_ADMIN. */
     get: operations['getEventsMatchingCriteria']
   }
+  '/config/pdu-contacts': {
+    /** Retrieves a list of PDU contacts configured in this environment. Requires ROLE_CVL_ADMIN. */
+    get: operations['pduContacts']
+  }
   '/licence/id/{licenceId}/discard': {
     /** Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     delete: operations['discard']
@@ -2345,6 +2349,35 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['LicenceEvent'][]
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Retrieves a list of PDU contacts configured in this environment. Requires ROLE_CVL_ADMIN. */
+  pduContacts: {
+    responses: {
+      /** The configured list of PDU contacts. */
+      200: {
+        content: {
+          'application/json': string
+        }
+      }
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** Unauthorised, requires a valid Oauth2 token */

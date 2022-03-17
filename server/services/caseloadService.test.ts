@@ -1051,21 +1051,21 @@ describe('Caseload Service', () => {
           bookingId: '1',
           status: 'ACTIVE',
           indeterminateSentence: false,
-          conditionalReleaseDate: '2022-04-03',
+          conditionalReleaseDate: '2022-04-17',
         },
         {
           prisonerNumber: '2',
           bookingId: '2',
           status: 'ACTIVE',
           indeterminateSentence: false,
-          conditionalReleaseDate: '2022-04-04',
+          conditionalReleaseDate: '2022-04-18',
         },
         {
           prisonerNumber: '3',
           bookingId: '3',
           status: 'ACTIVE',
           indeterminateSentence: false,
-          conditionalReleaseDate: '2022-04-05',
+          conditionalReleaseDate: '2022-04-19',
         },
       ] as Prisoner[])
 
@@ -1089,7 +1089,7 @@ describe('Caseload Service', () => {
           licenceType: 'AP',
           nomisRecord: {
             bookingId: '2',
-            conditionalReleaseDate: '2022-04-04',
+            conditionalReleaseDate: '2022-04-18',
             indeterminateSentence: false,
             prisonerNumber: '2',
             status: 'ACTIVE',
@@ -1105,7 +1105,7 @@ describe('Caseload Service', () => {
           licenceType: 'AP',
           nomisRecord: {
             bookingId: '3',
-            conditionalReleaseDate: '2022-04-05',
+            conditionalReleaseDate: '2022-04-19',
             indeterminateSentence: false,
             prisonerNumber: '3',
             status: 'ACTIVE',
