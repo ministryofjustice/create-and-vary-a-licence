@@ -130,7 +130,7 @@ describe('Community Service', () => {
 
   it('should assign a Delius role', async () => {
     await communityService.assignDeliusRole('X1234', 'ROLE_ID')
-    expect(communityApiClient.getAnOffendersManagers).toHaveBeenCalledWith('X1234', 'ROLE_ID')
+    expect(communityApiClient.assignDeliusRole).toHaveBeenCalledWith('X1234', 'ROLE_ID')
   })
 
   it('Search probationers', async () => {
