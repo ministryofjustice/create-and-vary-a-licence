@@ -1,7 +1,7 @@
 import CommunityService from './communityService'
 import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
-import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
+import { CommunityApiManagedOffender, CommunityApiUserDetails } from '../@types/communityClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 
 jest.mock('../data/communityApiClient')
@@ -107,6 +107,30 @@ describe('Community Service', () => {
   it('should get an offenders managers', async () => {
     await communityService.getAnOffendersManagers('X1234')
     expect(communityApiClient.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
+  })
+
+  it('should get Delius user details', async () => {
+    const expectedResponse = {
+      username: 'X1234',
+      email: 'x.y@mail.com',
+      enabled: true,
+      firstName: 'Bob',
+      surname: 'Adams',
+      userId: 1,
+      roles: [{ name: 'ROLE_NAME' }],
+    } as CommunityApiUserDetails
+
+    communityApiClient.getUserDetailsByUsername.mockResolvedValue(expectedResponse)
+
+    const response = await communityService.getUserDetailsByUsername('X1234')
+
+    expect(communityApiClient.getUserDetailsByUsername).toHaveBeenCalledWith('X1234')
+    expect(response).toEqual(expectedResponse)
+  })
+
+  it('should assign a Delius role', async () => {
+    await communityService.assignDeliusRole('X1234', 'ROLE_ID')
+    expect(communityApiClient.assignDeliusRole).toHaveBeenCalledWith('X1234', 'ROLE_ID')
   })
 
   it('Search probationers', async () => {
