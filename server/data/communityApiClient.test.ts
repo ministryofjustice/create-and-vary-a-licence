@@ -4,6 +4,7 @@ import {
   CommunityApiManagedOffender,
   CommunityApiOffenderManager,
   CommunityApiStaffDetails,
+  CommunityApiUserDetails,
 } from '../@types/communityClientTypes'
 
 jest.mock('./tokenStore', () => {
@@ -17,10 +18,12 @@ const communityApiClient = new CommunityApiClient()
 describe('Community Api client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')
   const post = jest.spyOn(HmppsRestClient.prototype, 'post')
+  const put = jest.spyOn(HmppsRestClient.prototype, 'put')
 
   beforeEach(() => {
     get.mockResolvedValue(true)
     get.mockResolvedValue(true)
+    put.mockResolvedValue(true)
   })
 
   afterEach(() => {
@@ -85,7 +88,7 @@ describe('Community Api client tests', () => {
     expect(result).toEqual({ offenderCrn: 'ABC1234' })
   })
 
-  it("Get a list of an offender's managers", async () => {
+  it(`Get a list of an offender's managers`, async () => {
     get.mockResolvedValue([{ staffId: 2000 }] as CommunityApiOffenderManager[])
 
     const result = await communityApiClient.getAnOffendersManagers('X1234')
@@ -94,5 +97,30 @@ describe('Community Api client tests', () => {
       path: '/secure/offenders/crn/X1234/allOffenderManagers',
     })
     expect(result).toEqual([{ staffId: 2000 }])
+  })
+
+  it(`Get user details by username`, async () => {
+    get.mockResolvedValue({
+      enabled: true,
+      firstName: 'X',
+      surname: 'Y',
+      userId: 1,
+      roles: [{ name: 'ROLENAME' }],
+    } as CommunityApiUserDetails)
+
+    const result = await communityApiClient.getUserDetailsByUsername('deliusUsername')
+
+    expect(get).toHaveBeenCalledWith({
+      path: '/secure/users/deliusUsername/details',
+    })
+    expect(result).toEqual({ enabled: true, firstName: 'X', surname: 'Y', userId: 1, roles: [{ name: 'ROLENAME' }] })
+  })
+
+  it(`Assign delius role`, async () => {
+    await communityApiClient.assignDeliusRole('deliusUsername', 'SOMEROLE')
+
+    expect(put).toHaveBeenCalledWith({
+      path: '/secure/users/deliusUsername/roles/SOMEROLE',
+    })
   })
 })

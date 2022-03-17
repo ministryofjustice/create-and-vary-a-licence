@@ -61,7 +61,9 @@ const populateComDetail = (fieldValues: string[]): ComDetail => {
 // Shows which environment is being used.
 logger.info(`COMMUNITY_API_URL = ${process.env.COMMUNITY_API_URL}`)
 
+// Change file name to suit
 const csvFilePath = path.resolve(__dirname, 'wales-dev.csv')
+
 const lines = fs.readFileSync(csvFilePath, 'utf-8').split(/\r?\n/)
 
 // Force this processing to run in sequence, line by line, awaiting each line being processed.

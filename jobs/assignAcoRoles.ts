@@ -55,6 +55,7 @@ const populateAcoDetail = (fieldValues: string[]): AcoDetail => {
 // Shows which environment is being used.
 logger.info(`COMMUNITY_API_URL = ${process.env.COMMUNITY_API_URL}`)
 
+// Change this filename to suit
 const csvFilePath = path.resolve(__dirname, 'wales-dev.csv')
 const lines = fs.readFileSync(csvFilePath, 'utf-8').split(/\r?\n/)
 

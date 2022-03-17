@@ -21,6 +21,8 @@ TestUserNPS2,Tony,Test,tony.test@justice.gov.uk,N44004,PSO
 * Do not include the headers
 * Compile the service code `npm run build`
 * Copy the CSV file containing user details into ./dist/jobs
+* Start a local redis in docker (perhaps with `docker-compose -f docker-compose-dev.yaml up -d`)
+* Redis is required as the API clients need a local redis to cache tokens for clients. 
 * Run the job wth `npm run assign-com-roles`
 
 ## AssignAcoRoles
@@ -33,6 +35,8 @@ To run the job
 
 * Compile the service code `npm run build`
 * Copy the CSV file containing ACO user details into ./dist/jobs
+* Start a local redis in docker (perhaps with `docker-compose -f docker-compose-dev.yaml up -d`)
+* Redis is required as the API clients need a local redis to cache tokens for clients.
 * Run the job wth `npm run assign-aco-roles`
 
 
