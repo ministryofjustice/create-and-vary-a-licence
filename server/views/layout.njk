@@ -91,6 +91,25 @@
   <span class="govuk-visually-hidden" id="{{ pageId }}"></span>
 {% endblock %}
 
+{% block footer %}
+  {{ govukFooter({
+    meta: {
+      items: [
+        {
+          href: "/about",
+          text: "About",
+          attributes: { 'target': '_blank' }
+        },
+        {
+          href: "/contact",
+          text: "Contact",
+          attributes: { 'target': '_blank' }
+        }
+      ]
+    }
+  }) }}
+{% endblock %}
+
 {% block bodyEnd %}
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
   <script src="/assets/govuk/all.js"></script>

@@ -38,7 +38,7 @@ services:
       - DEFAULT_WAIT_TIMEOUT=30
     restart: always
     healthcheck:
-      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/ping' ]
+      test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
   localstack:
     image: localstack/localstack:0.11.2
