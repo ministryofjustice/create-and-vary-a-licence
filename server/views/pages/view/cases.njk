@@ -9,31 +9,48 @@
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
 
+{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, index) %}
+    <div class="caseload-offender-name">
+        {% if isClickable %}
+            <a href="/licence/view/id/{{ licenceId }}/show" class="govuk-link govuk-heading-s">{{ offenderName }}</a>
+        {% else %}
+            <span id="name-button-{{ index }}" class="govuk-heading-s">{{ offenderName }}</span>
+        {% endif %}
+    </div>
+{% endmacro %}
+
 {% set licences = [] %}
 
 {% for case in cases %}
+
+    {% if case.probationPractitioner %}
+        {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
+    {% else %}
+        {% set comDetailsHtml = 'Unallocated' %}
+    {% endif %}
+
     {% set licences = (licences.push([
         {
             attributes: {
                 id: 'name-' + loop.index,
                 "data-sort-value": case.name
             },
-            html: '<a href="/licence/view/id/' + case.licenceId + '/show" class="govuk-link govuk-heading-s">' + case.name + '</a>',
+            html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, loop.index),
             classes: "max-width max-width-220"
         },
         {
             attributes: {
                 id: 'nomis-id-' + loop.index,
-                "data-sort-value": case.prisonNumber
+                "data-sort-value": case.prisonerNumber
             },
-            text: case.prisonNumber
+            text: case.prisonerNumber
         },
         {
             attributes: {
                 id: 'com-' + loop.index,
                 "data-sort-value": case.probationPractitioner
             },
-            html: '<a href="/licence/view/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner + '</a>',
+            html: comDetailsHtml,
             classes: "max-width max-width-200"
         },
         {
@@ -89,7 +106,7 @@
                     }
                 },
                 {
-                    text: "Prison number",
+                    text: "Prisoner number",
                     attributes: {
                         "aria-sort": "none"
                     }

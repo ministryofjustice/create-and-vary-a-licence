@@ -1,23 +1,27 @@
 import { Prisoner } from './prisonerSearchApiClientTypes'
-import LicenceStatus from '../enumeration/licenceStatus'
-import LicenceType from '../enumeration/licenceType'
-import { LicenceSummary } from './licenceApiClientTypes'
 import { OffenderDetail } from './probationSearchApiClientTypes'
 import { CommunityApiManagedOffender } from './communityClientTypes'
+import LicenceStatus from '../enumeration/licenceStatus'
+import LicenceType from '../enumeration/licenceType'
 
 export type DeliusRecord = OffenderDetail & CommunityApiManagedOffender
 
+export type ProbationPractitioner = {
+  staffCode?: string
+  staffIdentifier?: number
+  name: string
+}
+
+export type Licence = {
+  id?: number
+  status: LicenceStatus
+  type: LicenceType
+  comUsername?: string
+}
+
 export type ManagedCase = {
-  deliusRecord: DeliusRecord
-  nomisRecord: Prisoner
-}
-
-export interface CaseTypeAndStatus extends ManagedCase {
-  licenceStatus: LicenceStatus
-  licenceType: LicenceType
-}
-
-export interface LicenceAndResponsibleCom extends LicenceSummary {
-  comFirstName: string
-  comLastName: string
+  deliusRecord?: DeliusRecord
+  nomisRecord?: Prisoner
+  licences?: Licence[]
+  probationPractitioner?: ProbationPractitioner
 }

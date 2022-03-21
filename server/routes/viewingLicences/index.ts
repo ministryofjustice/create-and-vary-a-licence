@@ -33,10 +33,10 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(communityService)
 
   get('/cases', viewCasesHandler.GET)
+  get('/probation-practitioner/staffCode/:staffCode', comDetailsHandler.GET)
   get('/id/:licenceId/show', viewLicenceHandler.GET)
   get('/id/:licenceId/html-print', printHandler.preview)
   get('/id/:licenceId/pdf-print', printHandler.renderPdf)
-  get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
 
   return router
 }

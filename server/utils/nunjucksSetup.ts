@@ -174,7 +174,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('dateToUnix', (date: string) => {
-    return moment(date, 'DD MMM YYYY').unix()
+    return moment(date, 'D MMM YYYY').unix()
   })
 
   njkEnv.addFilter('getStatusOrder', (licenceStatus: LicenceStatus) => {

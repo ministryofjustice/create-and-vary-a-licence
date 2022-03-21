@@ -22,16 +22,16 @@
         {
             attributes: {
                 id: 'nomis-id-' + loop.index,
-                "data-sort-value": case.prisonNumber
+                "data-sort-value": case.prisonerNumber
             },
-            text: case.prisonNumber
+            text: case.prisonerNumber
         },
         {
             attributes: {
                 id: 'com-' + loop.index,
                 "data-sort-value": case.probationPractitioner
             },
-            html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner + '</a>'
+            html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner.name + '</a>'
         },
         {
             attributes: {
@@ -79,7 +79,7 @@
                     }
                 },
                 {
-                    text: "Prison number",
+                    text: "Prisoner number",
                     attributes: {
                         "aria-sort": "none"
                     }
