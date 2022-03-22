@@ -1,14 +1,11 @@
 import { Request, Response } from 'express'
 
-import _ from 'lodash'
-import moment from 'moment'
 import ViewAndPrintCaseRoutes from './viewCases'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
 import LicenceType from '../../../enumeration/licenceType'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import { convertToTitleCase } from '../../../utils/utils'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
