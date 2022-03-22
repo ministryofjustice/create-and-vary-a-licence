@@ -58,7 +58,7 @@ describe('Create a Licence Views - Caseload', () => {
           conditionalReleaseDate: '03 August 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffIdentifier: 2000,
           },
           insidePilot: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
@@ -67,7 +67,6 @@ describe('Create a Licence Views - Caseload', () => {
           name: 'John Smith',
           crnNumber: 'X123456',
           conditionalReleaseDate: '01 September 2022',
-          probationPractitioner: null,
           insidePilot: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
         },

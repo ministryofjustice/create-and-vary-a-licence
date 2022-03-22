@@ -12,7 +12,7 @@
 {% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, index) %}
     <div class="caseload-offender-name">
         {% if isClickable %}
-            <a href="/licence/view/id/{{ licenceId }}/show" class="govuk-link govuk-heading-s">{{ offenderName }}</a>
+            <a id="name-button-{{ index }}" href="/licence/view/id/{{ licenceId }}/show" class="govuk-link govuk-heading-s">{{ offenderName }}</a>
         {% else %}
             <span id="name-button-{{ index }}" class="govuk-heading-s">{{ offenderName }}</span>
         {% endif %}
