@@ -4,6 +4,7 @@ import _ from 'lodash'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import { convertToTitleCase } from '../../../utils/utils'
+import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class CaseloadRoutes {
   constructor(private readonly caseloadService: CaseloadService) {}
@@ -19,13 +20,16 @@ export default class CaseloadRoutes {
 
     const caseloadViewModel = cases
       .map(c => {
+        const licence =
+          c.licences.length > 1 ? c.licences.find(l => l.status !== LicenceStatus.ACTIVE) : _.head(c.licences)
+
         return {
-          licenceId: _.head(c.licences).id,
+          licenceId: licence.id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           crnNumber: c.deliusRecord.otherIds.crn,
-          licenceType: _.head(c.licences).type,
+          licenceType: licence.type,
           releaseDate: moment(c.nomisRecord.releaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
-          licenceStatus: _.head(c.licences).status,
+          licenceStatus: licence.status,
           probationPractitioner: c.probationPractitioner,
         }
       })
