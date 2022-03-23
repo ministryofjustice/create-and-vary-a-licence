@@ -17,6 +17,7 @@ import VariationSummaryRoutes from './handlers/variationSummary'
 import ConfirmationRoutes from './handlers/confirmation'
 import ReasonForVariation from '../creatingLicences/types/reasonForVariation'
 import ComDetailsRoutes from './handlers/comDetails'
+import TimelineRoutes from './handlers/timeline'
 import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
 import YesOrNotApplicable from '../creatingLicences/types/additionalConditionsYesOrNo'
 
@@ -50,6 +51,7 @@ export default function Index({ licenceService, caseloadService, communityServic
 
   const caseloadHandler = new CaseloadRoutes(caseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
+  const timelineHandler = new TimelineRoutes(licenceService)
   const viewLicenceHandler = new ViewVariationRoutes(licenceService)
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)
   const spoDiscussionHandler = new SpoDiscussionRoutes(licenceService)
@@ -62,6 +64,8 @@ export default function Index({ licenceService, caseloadService, communityServic
 
   get('/caseload', caseloadHandler.GET)
   get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
+  get('/id/:licenceId/timeline', timelineHandler.GET)
+  post('/id/:licenceId/timeline', timelineHandler.POST)
   get('/id/:licenceId/view', viewLicenceHandler.GET)
   get('/id/:licenceId/confirm-vary-action', confirmVaryActionHandler.GET)
   post('/id/:licenceId/confirm-vary-action', confirmVaryActionHandler.POST, YesOrNoQuestion)
