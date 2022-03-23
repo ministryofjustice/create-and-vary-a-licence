@@ -9,6 +9,8 @@ export default class ConfirmationPage extends Page {
   }
 
   clickReturn = (): CaseloadPage => {
+    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'SUBMITTED' })
+    cy.task('stubGetStaffDetailsByList')
     cy.get(this.returnButtonId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
