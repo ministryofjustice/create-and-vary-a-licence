@@ -452,13 +452,15 @@ describe('Caseload Service', () => {
   })
 
   it('builds the omu caseload', async () => {
+    const crd = moment().add(4, 'weeks').format('YYYY-MM-DD')
+
     prisonerService.searchPrisonersByPrison.mockResolvedValueOnce([
       { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
     ])
     prisonerService.searchPrisonersByPrison.mockResolvedValueOnce([
       {
         prisonerNumber: 'AB1234F',
-        conditionalReleaseDate: moment().add(4, 'weeks').format('YYYY-MM-DD'),
+        conditionalReleaseDate: crd,
         status: 'ACTIVE IN',
       } as Prisoner,
     ])
@@ -514,7 +516,7 @@ describe('Caseload Service', () => {
       {
         nomisRecord: {
           prisonerNumber: 'AB1234F',
-          conditionalReleaseDate: '2022-04-19',
+          conditionalReleaseDate: crd,
         },
         deliusRecord: {
           otherIds: {
