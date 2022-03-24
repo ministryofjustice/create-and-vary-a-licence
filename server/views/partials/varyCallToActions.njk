@@ -11,6 +11,13 @@
                     attributes: { 'data-qa': 'vary-licence' }
                 }) }}
             {% endif %}
+            {% if callToActions.shouldShowPrintToActivateButton %}
+                {{ govukButton({
+                    text: "View and print licence PDF",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    href: '#'
+                }) }}
+            {% endif %}
             {% if callToActions.shouldShowPrintButton %}
                 {{ govukButton({
                     text: "Print",

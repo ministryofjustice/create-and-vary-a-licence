@@ -54,9 +54,9 @@
                     {% set viewLink = '/licence/vary/id/' + event.licenceId + '/view' %}
                     {% set printLink = '/licence/view/id/' + event.licenceId + '/pdf-print' %}
 
-                    {# Show content and links specific to each status/event type #}
+                    {# Show content specific to each status/event type #}
                     {% if event.statusCode === 'VARIATION_APPROVED' %}
-                        {{ variationApproved(event, viewLink, printLink) }}
+                        {{ variationApproved(event, viewLink) }}
                     {% elseif (event.statusCode === 'ACTIVE'or event.statusCode == 'INACTIVE') and event.eventType === 'VARIATION' %}
                         {{ variationComplete(event, viewLink, printLink) }}
                     {% elseif (event.statusCode === 'ACTIVE' or event.statusCode === 'INACTIVE') and event.eventType === 'CREATION' %}
@@ -75,12 +75,8 @@
 {% endmacro %}
 
 {% macro variationApproved(event, viewLink, printLink) %}
-    <div class="govuk-!-margin-left-5 govuk-!-margin-bottom-3">
-      <a class="govuk-link govuk-!-font-size-16" href="{{ viewLink }}">View variation details</a>
-    </div>
     <div class="govuk-!-margin-left-5">
-      <a class="govuk-link govuk-!-font-size-16" href="{{ printLink }}" target="_blank">Print licence</a>
-      {# Question this print - needs to be the button print in order to set licence to ACTIVE too #}
+      <a class="govuk-link govuk-!-font-size-16" href="{{ viewLink }}">View variation details</a>
     </div>
 {% endmacro %}
 
@@ -92,6 +88,7 @@
         <li class="moj-timeline__document-item">
             <a class="moj-timeline__document-link govuk-!-font-size-16" href="{{ printLink }}" target="_blank">View or print this version of the licence PDF</a>
         </li>
+
     </ul>
 {% endmacro %}
 
