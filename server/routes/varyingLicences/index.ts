@@ -18,7 +18,7 @@ import ConfirmationRoutes from './handlers/confirmation'
 import ReasonForVariation from '../creatingLicences/types/reasonForVariation'
 import ComDetailsRoutes from './handlers/comDetails'
 import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
-import YesOrNotApplicable from '../creatingLicences/types/additionalConditionsYesOrNo'
+import YesOrNotApplicable from '../creatingLicences/types/yesOrNotApplicable'
 
 export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
   const router = Router()
