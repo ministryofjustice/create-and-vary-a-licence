@@ -23,6 +23,7 @@ interface PostRequest {
   headers?: Record<string, string>
   responseType?: string
   data?: Record<string, unknown> | number[] | string[] | Record<string, unknown>[]
+  query?: ParsedUrlQueryInput
   raw?: boolean
 }
 
@@ -100,12 +101,12 @@ export default class HmppsRestClient {
   }
 
   async post(
-    { path = null, headers = {}, responseType = '', data = {}, raw = false }: PostRequest,
+    { path = null, headers = {}, responseType = '', data = {}, query = {}, raw = false }: PostRequest,
     signedWithMethod?: SignedWithMethod
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
-    logger.info(`Post using admin client credentials: calling ${this.name}: ${path}`)
+    logger.info(`Post using admin client credentials: calling ${this.name}: ${path}?${querystring.stringify(query)}`)
     return superagent
       .post(`${this.apiConfig.url}${path}`)
       .send(data)

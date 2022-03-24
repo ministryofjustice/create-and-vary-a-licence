@@ -301,13 +301,8 @@ export default {
   stubGetExistingLicenceForOffenderWithResult: (): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'GET',
+        method: 'POST',
         urlPathPattern: `/licence/match`,
-        queryParameters: {
-          nomsId: {
-            matches: '.*',
-          },
-        },
       },
       response: {
         status: 200,
@@ -325,16 +320,8 @@ export default {
   stubGetLicencesForOffender: (options: { nomisId: string; status: string }): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'GET',
+        method: 'POST',
         urlPathPattern: `/licence/match`,
-        queryParameters: {
-          nomsId: {
-            matches: options.nomisId,
-          },
-          status: {
-            matches: '.*',
-          },
-        },
       },
       response: {
         status: 200,
@@ -503,16 +490,8 @@ export default {
   stubGetExistingLicencesForOffenders: (): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'GET',
+        method: 'POST',
         urlPathPattern: `/licence/match`,
-        queryParameters: {
-          nomsId: {
-            matches: '.*',
-          },
-          status: {
-            matches: '.*',
-          },
-        },
       },
       response: {
         status: 200,
@@ -525,13 +504,8 @@ export default {
   stubGetExistingLicenceForOffenderNoResult: (): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'GET',
+        method: 'POST',
         urlPathPattern: `/licence/match`,
-        queryParameters: {
-          nomsId: {
-            matches: '.*',
-          },
-        },
       },
       response: {
         status: 200,
@@ -544,16 +518,8 @@ export default {
   stubGetLicencesForStatus: (status: string): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'GET',
+        method: 'POST',
         urlPathPattern: `/licence/match`,
-        queryParameters: {
-          prison: {
-            matches: '.*',
-          },
-          status: {
-            matches: '.*',
-          },
-        },
       },
       response: {
         status: 200,

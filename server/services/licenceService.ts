@@ -284,7 +284,7 @@ export default class LicenceService {
     statuses: LicenceStatus[],
     user?: User
   ): Promise<LicenceSummary[]> {
-    return this.licenceApiClient.matchLicences(statuses, [], [], nomisIds, [], null, null, user)
+    return this.licenceApiClient.matchLicences(statuses, null, null, nomisIds, null, null, null, user)
   }
 
   async getLicencesForApproval(user: User): Promise<LicenceSummary[]> {
@@ -293,9 +293,9 @@ export default class LicenceService {
     return this.licenceApiClient.matchLicences(
       statuses,
       filteredPrisons,
-      [],
-      [],
-      [],
+      null,
+      null,
+      null,
       'conditionalReleaseDate',
       null,
       user
@@ -312,9 +312,9 @@ export default class LicenceService {
     return this.licenceApiClient.matchLicences(
       statuses,
       filteredPrisons,
-      [],
-      [],
-      [],
+      null,
+      null,
+      null,
       'conditionalReleaseDate',
       null,
       user
@@ -325,10 +325,10 @@ export default class LicenceService {
     const statuses = [LicenceStatus.VARIATION_SUBMITTED.valueOf()]
     return this.licenceApiClient.matchLicences(
       statuses,
-      [],
-      [],
-      [],
-      user?.probationPduCodes || [],
+      null,
+      null,
+      null,
+      user?.probationPduCodes,
       'conditionalReleaseDate',
       null,
       user

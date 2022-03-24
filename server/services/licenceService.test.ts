@@ -567,7 +567,7 @@ describe('Licence Service', () => {
 
   it('Get licences by nomis ids and statuses', async () => {
     await licenceService.getLicencesByNomisIdsAndStatus(['ABC1234'], [LicenceStatus.APPROVED], user)
-    expect(licenceApiClient.matchLicences).toBeCalledWith(['APPROVED'], [], [], ['ABC1234'], [], null, null, user)
+    expect(licenceApiClient.matchLicences).toBeCalledWith(['APPROVED'], null, null, ['ABC1234'], null, null, null, user)
   })
 
   it('Get licences for approval', async () => {
@@ -577,9 +577,9 @@ describe('Licence Service', () => {
     expect(licenceApiClient.matchLicences).toBeCalledWith(
       ['SUBMITTED'],
       ['MDI'],
-      [],
-      [],
-      [],
+      null,
+      null,
+      null,
       'conditionalReleaseDate',
       null,
       user
@@ -591,9 +591,9 @@ describe('Licence Service', () => {
     await licenceService.getLicencesForVariationApproval(approver)
     expect(licenceApiClient.matchLicences).toBeCalledWith(
       ['VARIATION_SUBMITTED'],
-      [],
-      [],
-      [],
+      null,
+      null,
+      null,
       ['A'],
       'conditionalReleaseDate',
       null,
@@ -609,9 +609,9 @@ describe('Licence Service', () => {
     expect(licenceApiClient.matchLicences).toBeCalledWith(
       ['ACTIVE', 'APPROVED', 'SUBMITTED'],
       ['MDI'],
-      [],
-      [],
-      [],
+      null,
+      null,
+      null,
       'conditionalReleaseDate',
       null,
       user
