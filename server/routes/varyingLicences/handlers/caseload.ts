@@ -1,7 +1,10 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
+import _ from 'lodash'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
+import { convertToTitleCase } from '../../../utils/utils'
+import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class CaseloadRoutes {
   constructor(private readonly caseloadService: CaseloadService) {}
@@ -11,29 +14,32 @@ export default class CaseloadRoutes {
     const search = req.query.search as string
     const { user } = res.locals
 
-    const licences = teamView
+    const cases = teamView
       ? await this.caseloadService.getTeamVaryCaseload(user)
       : await this.caseloadService.getStaffVaryCaseload(user)
 
-    const caseloadViewModel = licences
-      .map(licence => {
+    const caseloadViewModel = cases
+      .map(c => {
+        const licence =
+          c.licences.length > 1 ? c.licences.find(l => l.status !== LicenceStatus.ACTIVE) : _.head(c.licences)
+
         return {
-          licenceId: licence.licenceId,
-          name: [licence.forename, licence.surname].join(' '),
-          crnNumber: licence.crn,
-          licenceType: licence.licenceType,
-          releaseDate: moment(licence.actualReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY'),
-          licenceStatus: licence.licenceStatus,
-          probationPractitioner: [licence.comFirstName, licence.comLastName].join(' '),
+          licenceId: licence.id,
+          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+          crnNumber: c.deliusRecord.otherIds.crn,
+          licenceType: licence.type,
+          releaseDate: moment(c.nomisRecord.releaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
+          licenceStatus: licence.status,
+          probationPractitioner: c.probationPractitioner,
         }
       })
-      .filter(offender => {
+      .filter(c => {
         const searchString = search?.toLowerCase().trim()
         if (!searchString) return true
         return (
-          offender.crnNumber?.toLowerCase().includes(searchString) ||
-          offender.name.toLowerCase().includes(searchString) ||
-          offender.probationPractitioner.toLowerCase().includes(searchString)
+          c.crnNumber?.toLowerCase().includes(searchString) ||
+          c.name.toLowerCase().includes(searchString) ||
+          c.probationPractitioner?.name.toLowerCase().includes(searchString)
         )
       })
     res.render('pages/vary/caseload', { caseload: caseloadViewModel, statusConfig, search, teamView })

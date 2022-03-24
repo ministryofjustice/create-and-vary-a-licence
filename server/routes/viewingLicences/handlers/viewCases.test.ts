@@ -4,9 +4,10 @@ import ViewAndPrintCaseRoutes from './viewCases'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
+import LicenceType from '../../../enumeration/licenceType'
+import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
-
 jest.mock('../../../services/caseloadService')
 
 describe('Route handlers - View and print case list', () => {
@@ -16,9 +17,6 @@ describe('Route handlers - View and print case list', () => {
 
   beforeEach(() => {
     req = {
-      body: {
-        licenceId: '1',
-      },
       query: {},
     } as unknown as Request
 
@@ -33,28 +31,56 @@ describe('Route handlers - View and print case list', () => {
 
     caseloadService.getOmuCaseload.mockResolvedValue([
       {
-        licenceId: 1,
-        licenceType: 'AP',
-        surname: 'Smith',
-        forename: 'Bob',
-        nomisId: 'A1234AA',
-        licenceStatus: LicenceStatus.SUBMITTED,
-        prisonDescription: 'Moorland (HMP)',
-        conditionalReleaseDate: '01/05/2022',
-        comFirstName: 'Joe',
-        comLastName: 'Rogan',
+        licences: [
+          {
+            id: 1,
+            type: LicenceType.AP,
+            status: LicenceStatus.SUBMITTED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Bob',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AA',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Sherlock Holmes',
+        },
       },
       {
-        licenceId: 2,
-        licenceType: 'AP',
-        surname: 'Baker',
-        forename: 'Matthew',
-        nomisId: 'A1234AB',
-        licenceStatus: LicenceStatus.SUBMITTED,
-        prisonDescription: 'Moorland (HMP)',
-        conditionalReleaseDate: '01/05/2022',
-        comFirstName: 'Stephen',
-        comLastName: 'Hawking',
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.NOT_STARTED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Joe',
+          lastName: 'Bloggs',
+          prisonerNumber: 'A1234AB',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Thor',
+        },
+      },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.NOT_IN_PILOT,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Harvey',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AC',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
       },
     ])
   })
@@ -73,18 +99,33 @@ describe('Route handlers - View and print case list', () => {
           {
             licenceId: 1,
             name: 'Bob Smith',
-            prisonNumber: 'A1234AA',
-            licenceStatus: LicenceStatus.SUBMITTED,
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
             releaseDate: '01 May 2022',
-            probationPractitioner: 'Joe Rogan',
+            licenceStatus: LicenceStatus.SUBMITTED,
+            isClickable: true,
           },
           {
-            licenceId: 2,
-            name: 'Matthew Baker',
-            prisonNumber: 'A1234AB',
-            licenceStatus: LicenceStatus.SUBMITTED,
+            name: 'Joe Bloggs',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Thor',
+            },
             releaseDate: '01 May 2022',
-            probationPractitioner: 'Stephen Hawking',
+            licenceStatus: LicenceStatus.NOT_STARTED,
+            isClickable: false,
+          },
+          {
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.NOT_IN_PILOT,
+            isClickable: false,
           },
         ],
         statusConfig,
@@ -101,10 +142,13 @@ describe('Route handlers - View and print case list', () => {
           {
             licenceId: 1,
             name: 'Bob Smith',
-            prisonNumber: 'A1234AA',
-            licenceStatus: LicenceStatus.SUBMITTED,
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
             releaseDate: '01 May 2022',
-            probationPractitioner: 'Joe Rogan',
+            licenceStatus: LicenceStatus.SUBMITTED,
+            isClickable: true,
           },
         ],
         search: 'bob',
@@ -122,10 +166,13 @@ describe('Route handlers - View and print case list', () => {
           {
             licenceId: 1,
             name: 'Bob Smith',
-            prisonNumber: 'A1234AA',
-            licenceStatus: LicenceStatus.SUBMITTED,
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
             releaseDate: '01 May 2022',
-            probationPractitioner: 'Joe Rogan',
+            licenceStatus: LicenceStatus.SUBMITTED,
+            isClickable: true,
           },
         ],
         search: 'A1234AA',
@@ -134,7 +181,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should successfully search by probation practitioner', async () => {
-      req.query.search = 'rogan'
+      req.query.search = 'holmes'
 
       await handler.GET(req, res)
 
@@ -143,13 +190,16 @@ describe('Route handlers - View and print case list', () => {
           {
             licenceId: 1,
             name: 'Bob Smith',
-            prisonNumber: 'A1234AA',
-            licenceStatus: LicenceStatus.SUBMITTED,
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
             releaseDate: '01 May 2022',
-            probationPractitioner: 'Joe Rogan',
+            licenceStatus: LicenceStatus.SUBMITTED,
+            isClickable: true,
           },
         ],
-        search: 'rogan',
+        search: 'holmes',
         statusConfig,
       })
     })

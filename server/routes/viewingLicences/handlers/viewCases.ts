@@ -1,7 +1,10 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
+import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
+import { convertToTitleCase } from '../../../utils/utils'
+import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService) {}
@@ -14,12 +17,15 @@ export default class ViewAndPrintCaseRoutes {
     const caseloadViewModel = cases
       .map(c => {
         return {
-          licenceId: c.licenceId,
-          name: `${c.forename} ${c.surname}`.trim(),
-          prisonNumber: c.nomisId,
-          probationPractitioner: `${c.comFirstName} ${c.comLastName}`.trim(),
-          releaseDate: moment(c.conditionalReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY'),
-          licenceStatus: c.licenceStatus,
+          licenceId: _.head(c.licences).id,
+          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+          prisonerNumber: c.nomisRecord.prisonerNumber,
+          probationPractitioner: c.probationPractitioner,
+          releaseDate: moment(c.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
+          licenceStatus: _.head(c.licences).status,
+          isClickable:
+            _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&
+            _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT,
         }
       })
       .filter(c => {
@@ -27,8 +33,8 @@ export default class ViewAndPrintCaseRoutes {
         if (!searchString) return true
         return (
           c.name.toLowerCase().includes(searchString) ||
-          c.prisonNumber?.toLowerCase().includes(searchString) ||
-          c.probationPractitioner.toLowerCase().includes(searchString)
+          c.prisonerNumber?.toLowerCase().includes(searchString) ||
+          c.probationPractitioner?.name.toLowerCase().includes(searchString)
         )
       })
     res.render('pages/view/cases', { cases: caseloadViewModel, statusConfig, search })

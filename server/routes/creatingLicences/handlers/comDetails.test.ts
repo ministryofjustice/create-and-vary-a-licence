@@ -15,7 +15,7 @@ describe('Route Handlers - Create Licence - Com Details', () => {
     beforeEach(() => {
       req = {
         params: {
-          staffId: 2000,
+          staffCode: 'X12345',
         },
       } as unknown as Request
 
@@ -31,7 +31,7 @@ describe('Route Handlers - Create Licence - Com Details', () => {
     })
 
     it('should deny page load if requested staff is not in same team as user', async () => {
-      communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({
+      communityService.getStaffDetailByStaffCode.mockResolvedValue({
         teams: [
           {
             code: 'teamB',
@@ -45,7 +45,7 @@ describe('Route Handlers - Create Licence - Com Details', () => {
     })
 
     it('should load page and display staff details of requested staff member', async () => {
-      communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({
+      communityService.getStaffDetailByStaffCode.mockResolvedValue({
         teams: [
           {
             code: 'teamA',

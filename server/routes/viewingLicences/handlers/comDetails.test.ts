@@ -4,6 +4,7 @@ import ComDetailsRoutes from './comDetails'
 import CommunityService from '../../../services/communityService'
 
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+jest.mock('../../../services/communityService')
 
 describe('Route Handlers - COM Details', () => {
   const handler = new ComDetailsRoutes(communityService)
@@ -11,36 +12,35 @@ describe('Route Handlers - COM Details', () => {
   let res: Response
 
   beforeEach(() => {
+    req = {
+      params: {
+        staffCode: 'X12345',
+      },
+    } as unknown as Request
     res = {
       render: jest.fn(),
-      locals: {
-        licence: {
-          comUsername: 'jrogan',
-        },
-      },
+      locals: {},
     } as unknown as Response
-
-    communityService.getStaffDetailByUsername = jest.fn()
   })
 
   describe('GET', () => {
     it('should render com details view', async () => {
-      communityService.getStaffDetailByUsername.mockResolvedValue({
+      communityService.getStaffDetailByStaffCode.mockResolvedValue({
         staff: {
           forenames: 'Joe',
-          surname: 'Rogan',
+          surname: 'Bloggs',
         },
         telephoneNumber: '07892387162',
-        email: 'jrogan@probation.gov.uk',
+        email: 'joebloggs@probation.gov.uk',
       })
 
       await handler.GET(req, res)
-      expect(communityService.getStaffDetailByUsername).toHaveBeenCalledWith('jrogan')
+      expect(communityService.getStaffDetailByStaffCode).toHaveBeenCalledWith('X12345')
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
         returnLink: '/licence/view/cases',
-        name: 'Joe Rogan',
+        name: 'Joe Bloggs',
         telephone: '07892387162',
-        email: 'jrogan@probation.gov.uk',
+        email: 'joebloggs@probation.gov.uk',
       })
     })
   })

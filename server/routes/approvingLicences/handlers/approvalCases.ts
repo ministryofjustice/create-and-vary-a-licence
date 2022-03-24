@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
+import _ from 'lodash'
 import CaseloadService from '../../../services/caseloadService'
+import { convertToTitleCase } from '../../../utils/utils'
 
 export default class ApprovalCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService) {}
@@ -13,11 +15,11 @@ export default class ApprovalCaseRoutes {
     const caseloadViewModel = cases
       .map(c => {
         return {
-          licenceId: c.licenceId,
-          name: `${c.forename} ${c.surname}`.trim(),
-          prisonNumber: c.nomisId,
-          probationPractitioner: `${c.comFirstName} ${c.comLastName}`.trim(),
-          releaseDate: moment(c.conditionalReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY'),
+          licenceId: _.head(c.licences).id,
+          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+          prisonerNumber: c.nomisRecord.prisonerNumber,
+          probationPractitioner: c.probationPractitioner,
+          releaseDate: moment(c.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
         }
       })
       .filter(c => {
@@ -25,8 +27,8 @@ export default class ApprovalCaseRoutes {
         if (!searchString) return true
         return (
           c.name.toLowerCase().includes(searchString) ||
-          c.prisonNumber?.toLowerCase().includes(searchString) ||
-          c.probationPractitioner.toLowerCase().includes(searchString)
+          c.prisonerNumber?.toLowerCase().includes(searchString) ||
+          c.probationPractitioner?.name.toLowerCase().includes(searchString)
         )
       })
     res.render('pages/approve/cases', { cases: caseloadViewModel, search })

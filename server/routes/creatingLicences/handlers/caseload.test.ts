@@ -3,12 +3,12 @@ import { Request, Response } from 'express'
 import CaseloadRoutes from './caseload'
 import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
-import { CaseTypeAndStatus } from '../../../@types/managedCase'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
 import config from '../../../config'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
+import { ManagedCase } from '../../../@types/managedCase'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
@@ -34,20 +34,23 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           prisonerNumber: '123',
           prisonId: 'MDI',
         },
-        licenceStatus: LicenceStatus.IN_PROGRESS,
-        licenceType: LicenceType.AP,
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.IN_PROGRESS,
+          },
+        ],
+        probationPractitioner: {
+          name: 'Joe Bloggs',
+          staffIdentifier: 2000,
+        },
       },
-    ] as unknown as CaseTypeAndStatus[])
+    ] as unknown as ManagedCase[])
 
     caseloadService.getTeamCreateCaseload.mockResolvedValue([
       {
         deliusRecord: {
           offenderCrn: 'X381306',
-          staff: {
-            forenames: 'Sherlock',
-            surname: 'Holmes',
-          },
-          staffIdentifier: 3000,
         },
         nomisRecord: {
           firstName: 'Joe',
@@ -56,15 +59,20 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           prisonerNumber: '123',
           prisonId: 'MDI',
         },
-        licenceStatus: LicenceStatus.IN_PROGRESS,
-        licenceType: LicenceType.AP,
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.IN_PROGRESS,
+          },
+        ],
+        probationPractitioner: {
+          name: 'Sherlock Holmes',
+          staffIdentifier: 3000,
+        },
       },
       {
         deliusRecord: {
           offenderCrn: 'X381307',
-          staff: {
-            unallocated: true,
-          },
         },
         nomisRecord: {
           firstName: 'Dr',
@@ -73,10 +81,14 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           prisonerNumber: '124',
           prisonId: 'LEI',
         },
-        licenceStatus: LicenceStatus.IN_PROGRESS,
-        licenceType: LicenceType.AP_PSS,
+        licences: [
+          {
+            type: LicenceType.AP_PSS,
+            status: LicenceStatus.IN_PROGRESS,
+          },
+        ],
       },
-    ] as unknown as CaseTypeAndStatus[])
+    ] as unknown as ManagedCase[])
   })
 
   afterEach(() => {
@@ -93,10 +105,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         render: jest.fn(),
         locals: {
           user: {
-            firstName: 'Joe',
-            lastName: 'Bloggs',
             username: 'USER1',
-            deliusStaffIdentifier: 2000,
           },
         },
       } as unknown as Response
@@ -115,7 +124,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Joe Bloggs',
-              staffId: 2000,
+              staffIdentifier: 2000,
             },
             insidePilot: true,
           },
@@ -142,7 +151,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Sherlock Holmes',
-              staffId: 3000,
+              staffIdentifier: 3000,
             },
             insidePilot: true,
           },
@@ -153,7 +162,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             prisonerNumber: '124',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
-            probationPractitioner: null,
             insidePilot: true,
           },
         ],
@@ -177,7 +185,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             prisonerNumber: '124',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
-            probationPractitioner: null,
             insidePilot: true,
           },
         ],
@@ -204,7 +211,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Sherlock Holmes',
-              staffId: 3000,
+              staffIdentifier: 3000,
             },
             insidePilot: true,
           },
@@ -232,7 +239,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Sherlock Holmes',
-              staffId: 3000,
+              staffIdentifier: 3000,
             },
             insidePilot: true,
           },
@@ -262,7 +269,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Joe Bloggs',
-              staffId: 2000,
+              staffIdentifier: 2000,
             },
             insidePilot: false,
           },
@@ -292,7 +299,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Sherlock Holmes',
-              staffId: 3000,
+              staffIdentifier: 3000,
             },
             insidePilot: true,
           },
@@ -303,7 +310,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             prisonerNumber: '124',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
-            probationPractitioner: null,
             insidePilot: false,
           },
         ],

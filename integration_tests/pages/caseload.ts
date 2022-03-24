@@ -11,6 +11,7 @@ export default class CaseloadPage extends Page {
   }
 
   clickNameToCreateLicence = (): AppointmentPersonPage => {
+    cy.task('stubGetStaffDetailsByStaffId')
     cy.task('stubGetExistingLicenceForOffenderNoResult')
     cy.task('stubPostLicence')
     cy.get(this.createLicenceButtonId).click()
@@ -25,7 +26,7 @@ export default class CaseloadPage extends Page {
   }
 
   clickComName = (): ComDetailsPage => {
-    cy.task('stubGetStaffDetailsByStaffId')
+    cy.task('stubGetStaffDetailsByStaffCode')
     cy.contains('td a', 'John Smith').click()
     return Page.verifyOnPage(ComDetailsPage)
   }

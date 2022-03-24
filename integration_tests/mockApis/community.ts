@@ -109,6 +109,60 @@ export default {
     })
   },
 
+  stubGetStaffDetailsByStaffCode: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/secure/staff/staffCode/(.)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          staffIdentifier: 2000,
+          staffCode: 'X12345',
+          staff: {
+            forenames: 'John',
+            surname: 'Smith',
+          },
+          probationArea: {
+            code: 'N01',
+            description: 'Area N01',
+          },
+          teams: [
+            {
+              code: 'A',
+              description: 'Team A',
+              borough: {
+                code: 'PDU1',
+                description: 'PDU one',
+              },
+              district: {
+                code: 'LAU1',
+                description: 'LAU one',
+              },
+            },
+            {
+              code: 'B',
+              description: 'Team B',
+              borough: {
+                code: 'PDU1',
+                description: 'PDU one',
+              },
+              district: {
+                code: 'LAU1',
+                description: 'LAU one',
+              },
+            },
+          ],
+          telephoneNumber: '07786 989777',
+          email: 'jsmith@probation.com',
+          username: 'jsmith',
+        },
+      },
+    })
+  },
+
   stubGetStaffDetailsByList: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -179,6 +233,11 @@ export default {
             offenderCrn: 'X344165',
             staffIdentifier: 2500012436,
             crnNumber: 'X344165',
+            staff: {
+              code: 'X12345',
+              forenames: 'John',
+              surname: 'Smith',
+            },
           },
         ],
       },

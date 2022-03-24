@@ -58,7 +58,7 @@ describe('Create a Licence Views - Caseload', () => {
           conditionalReleaseDate: '03 August 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
-            staffId: 2000,
+            staffCode: 'X12345',
           },
           insidePilot: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
@@ -67,7 +67,6 @@ describe('Create a Licence Views - Caseload', () => {
           name: 'John Smith',
           crnNumber: 'X123456',
           conditionalReleaseDate: '01 September 2022',
-          probationPractitioner: null,
           insidePilot: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
@@ -79,7 +78,9 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('tbody .govuk-table__row').length).toBe(2)
     expect($('#name-1 > .caseload-offender-name > button').text()).toBe('Adam Balasaravika')
     expect($('#probation-practitioner-1').text()).toBe('Joe Bloggs')
-    expect($('#probation-practitioner-1 > a').attr('href')).toBe('/licence/create/probation-practitioner/staffId/2000')
+    expect($('#probation-practitioner-1 > a').attr('href')).toBe(
+      '/licence/create/probation-practitioner/staffCode/X12345'
+    )
 
     expect($('#name-2 > .caseload-offender-name > span').text()).toBe('John Smith')
     expect($('#release-date-2').text()).toBe('01 September 2022')
