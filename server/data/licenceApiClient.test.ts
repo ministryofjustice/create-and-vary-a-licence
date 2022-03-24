@@ -193,7 +193,7 @@ describe('Licence API client tests', () => {
 
   describe('Match Licences', () => {
     it('Should pass parameters to sort the matched licences', async () => {
-      get.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
 
       const result = await licenceApiClient.matchLicences(
         [LicenceStatus.IN_PROGRESS],
@@ -206,15 +206,17 @@ describe('Licence API client tests', () => {
         { username: 'joebloggs' } as User
       )
 
-      expect(get).toHaveBeenCalledWith(
+      expect(post).toHaveBeenCalledWith(
         {
           path: '/licence/match',
-          query: {
+          data: {
             prison: ['MDI'],
             status: [LicenceStatus.IN_PROGRESS],
             staffId: [1],
             nomsId: ['ABC1234'],
             pdu: [],
+          },
+          query: {
             sortBy: 'conditionalReleaseDate',
             sortOrder: 'DESC',
           },
@@ -225,7 +227,7 @@ describe('Licence API client tests', () => {
     })
 
     it('Should call the endpoint without the sort query params', async () => {
-      get.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
+      post.mockResolvedValue([{ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary])
 
       const result = await licenceApiClient.matchLicences(
         [LicenceStatus.IN_PROGRESS],
@@ -238,16 +240,17 @@ describe('Licence API client tests', () => {
         { username: 'joebloggs' } as User
       )
 
-      expect(get).toHaveBeenCalledWith(
+      expect(post).toHaveBeenCalledWith(
         {
           path: '/licence/match',
-          query: {
+          data: {
             prison: ['MDI'],
             status: [LicenceStatus.IN_PROGRESS],
             staffId: [1],
             nomsId: ['ABC1234'],
             pdu: [],
           },
+          query: {},
         },
         { username: 'joebloggs' }
       )
