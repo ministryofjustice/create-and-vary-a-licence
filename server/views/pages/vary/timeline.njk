@@ -47,7 +47,7 @@
         {% for event in events %}
             <div class="moj-timeline__item">
                 <h2 class="moj-timeline__title">{{ event.title }}</h2>
-                <p class="moj-timeline__byline">by {{ event.createdBy }}</p>
+                <p class="moj-timeline__byline">by {{ event.createdBy | title }}</p>
                 <p class="moj-timeline__date">last update: {{ event.lastUpdate | datetimeToDate }} at {{ event.lastUpdate | datetimeTo12HourTime }}</p>
                 <div class="moj-timeline__description">
                     {# Set up the links associated with this event #}
@@ -57,8 +57,8 @@
                     {# Show content and links specific to each status/event type #}
                     {% if event.statusCode === 'VARIATION_APPROVED' %}
                         {{ variationApproved(event, viewLink, printLink) }}
-                    {% elseif event.statusCode === 'ACTIVE' and event.eventType === 'VARIATION' %}
-                        {{ variationActive(event, viewLink, printLink) }}
+                    {% elseif (event.statusCode === 'ACTIVE'or event.statusCode == 'INACTIVE') and event.eventType === 'VARIATION' %}
+                        {{ variationComplete(event, viewLink, printLink) }}
                     {% elseif (event.statusCode === 'ACTIVE' or event.statusCode === 'INACTIVE') and event.eventType === 'CREATION' %}
                        {{ originalLicence(event, printLink) }}
                     {% elseif event.statusCode === 'VARIATION_REJECTED' %}
@@ -75,20 +75,22 @@
 {% endmacro %}
 
 {% macro variationApproved(event, viewLink, printLink) %}
+    <div class="govuk-!-margin-left-5 govuk-!-margin-bottom-3">
+      <a class="govuk-link govuk-!-font-size-16" href="{{ viewLink }}">View variation details</a>
+    </div>
     <div class="govuk-!-margin-left-5">
-      <a class="govuk-link" href="{{ viewLink }}">View variation details</a>
-      <a class="govuk-link" href="{{ printLink }}" target="_blank">Print licence</a>
+      <a class="govuk-link govuk-!-font-size-16" href="{{ printLink }}" target="_blank">Print licence</a>
       {# Question this print - needs to be the button print in order to set licence to ACTIVE too #}
     </div>
 {% endmacro %}
 
-{% macro variationActive(event, viewLink, printLink) %}
+{% macro variationComplete(event, viewLink, printLink) %}
     <div class="govuk-!-margin-left-5">
-        <a class="govuk-link" href="{{ viewLink }}">View variation details</a>
+        <a class="govuk-link govuk-!-font-size-16" href="{{ viewLink }}">View variation details</a>
     </div>
     <ul class="moj-timeline__documents">
         <li class="moj-timeline__document-item">
-            <a class="moj-timeline__document-link" href="{{ printLink }}" target="_blank">View or print this version of the licence PDF</a>
+            <a class="moj-timeline__document-link govuk-!-font-size-16" href="{{ printLink }}" target="_blank">View or print this version of the licence PDF</a>
         </li>
     </ul>
 {% endmacro %}
@@ -96,25 +98,25 @@
 {% macro originalLicence(event, printLink) %}
     <ul class="moj-timeline__documents">
         <li class="moj-timeline__document-item">
-            <a class="moj-timeline__document-link" href="{{ printLink }}" target="_blank">View or print this version of the licence PDF</a>
+            <a class="moj-timeline__document-link govuk-!-font-size-16" href="{{ printLink }}" target="_blank">View or print this version of the licence PDF</a>
         </li>
     </ul>
 {% endmacro %}
 
 {% macro variationRejected(event, viewLink) %}
     <div class="govuk-!-margin-left-5">
-        <a class="govuk-link" href="{{ viewLink }}">Attention needed: view variation details</a>
+        <a class="govuk-link govuk-!-font-size-16" href="{{ viewLink }}">Attention needed: view variation details</a>
     </div>
 {% endmacro %}
 
 {% macro variationSubmitted(event, viewLink) %}
     <div class="govuk-!-margin-left-5">
-      <a class="govuk-link" href="{{ viewLink }}">View or edit submitted variation details</a>
+      <a class="govuk-link govuk-!-font-size-16" href="{{ viewLink }}">View or edit submitted variation details</a>
     </div>
 {% endmacro %}
 
 {% macro variationInProgress(event, viewLink) %}
     <div class="govuk-!-margin-left-5">
-        <a class="govuk-link" href="{{ viewLink }}">View or edit variation details</a>
+        <a class="govuk-link govuk-!-font-size-16" href="{{ viewLink }}">View or edit variation details</a>
     </div>
 {% endmacro %}

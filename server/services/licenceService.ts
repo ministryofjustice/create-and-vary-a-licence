@@ -490,7 +490,7 @@ export default class LicenceService {
         eventType,
         title,
         licence.statusCode,
-        licence.createdByUsername, // TODO: Change API to return COM's full name from createdBy and populate here
+        licence.createdByFullName,
         licence.id,
         licence.dateLastUpdated
       )
