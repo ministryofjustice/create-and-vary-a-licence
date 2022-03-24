@@ -22,10 +22,12 @@ RUN apt-get update && \
 
 # Stage: build assets
 FROM base as build
-ARG BUILD_NUMBER
-ARG GIT_REF
 
-RUN apt-get install -y make python g++
+ARG BUILD_NUMBER=1_0_0
+ARG GIT_REF=not-available
+
+RUN apt-get update && \
+    apt-get install -y make python g++
 
 COPY package*.json ./
 RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
