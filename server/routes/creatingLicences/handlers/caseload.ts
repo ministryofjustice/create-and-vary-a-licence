@@ -21,44 +21,25 @@ export default class CaseloadRoutes {
       : await this.caseloadService.getStaffCreateCaseload(user)
 
     const caseloadViewModel = caseload
-      .map(offender => {
-        let probationPractitioner
-
-        if (teamView) {
-          probationPractitioner =
-            !offender.deliusRecord.staff || offender.deliusRecord.staff?.unallocated
-              ? null
-              : {
-                  name: `${offender.deliusRecord.staff?.forenames} ${offender.deliusRecord.staff?.surname}`.trim(),
-                  staffId: offender.deliusRecord.staffIdentifier,
-                }
-        } else {
-          probationPractitioner = {
-            name: `${user.firstName} ${user.lastName}`.trim(),
-            staffId: user.deliusStaffIdentifier,
-          }
-        }
-
+      .map(c => {
         return {
-          name: convertToTitleCase([offender.nomisRecord.firstName, offender.nomisRecord.lastName].join(' ')),
-          crnNumber: offender.deliusRecord.offenderCrn,
-          prisonerNumber: offender.nomisRecord.prisonerNumber,
-          conditionalReleaseDate: moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').format(
-            'DD MMM YYYY'
-          ),
-          licenceStatus: offender.licenceStatus,
-          licenceType: offender.licenceType,
-          probationPractitioner,
-          insidePilot: prisonInRollout(offender.nomisRecord.prisonId),
+          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+          crnNumber: c.deliusRecord.offenderCrn,
+          prisonerNumber: c.nomisRecord.prisonerNumber,
+          conditionalReleaseDate: moment(c.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
+          licenceStatus: _.head(c.licences).status,
+          licenceType: _.head(c.licences).type,
+          probationPractitioner: c.probationPractitioner,
+          insidePilot: prisonInRollout(c.nomisRecord.prisonId),
         }
       })
-      .filter(offender => {
+      .filter(c => {
         const searchString = search?.toLowerCase().trim()
         if (!searchString) return true
         return (
-          offender.crnNumber?.toLowerCase().includes(searchString) ||
-          offender.name.toLowerCase().includes(searchString) ||
-          offender.probationPractitioner?.name.toLowerCase().includes(searchString)
+          c.crnNumber?.toLowerCase().includes(searchString) ||
+          c.name.toLowerCase().includes(searchString) ||
+          c.probationPractitioner?.name.toLowerCase().includes(searchString)
         )
       })
     res.render('pages/create/caseload', { caseload: caseloadViewModel, statusConfig, teamView, search })

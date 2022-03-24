@@ -5,7 +5,8 @@ import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
-import { LicenceAndResponsibleCom } from '../../../@types/managedCase'
+import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
+import { DeliusRecord } from '../../../@types/managedCase'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
@@ -19,42 +20,78 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
   beforeEach(() => {
     caseloadService.getStaffVaryCaseload.mockResolvedValue([
       {
-        licenceId: 1,
-        forename: 'Joe',
-        surname: 'Rogan',
-        crn: 'X381306',
-        licenceType: LicenceType.AP_PSS,
-        actualReleaseDate: '23/03/2021',
-        licenceStatus: LicenceStatus.ACTIVE,
-        comFirstName: 'Stephen',
-        comLastName: 'Hawking',
+        licences: [
+          {
+            id: 1,
+            type: LicenceType.AP,
+            status: LicenceStatus.ACTIVE,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Bob',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AA',
+          releaseDate: '2022-05-01',
+        } as Prisoner,
+        deliusRecord: {
+          otherIds: {
+            crn: 'X12345',
+          },
+        } as DeliusRecord,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
       },
-    ] as LicenceAndResponsibleCom[])
+    ])
 
     caseloadService.getTeamVaryCaseload.mockResolvedValue([
       {
-        licenceId: 1,
-        crn: 'X381306',
-        forename: 'Joe',
-        surname: 'Rogan',
-        actualReleaseDate: '23/03/2021',
-        licenceStatus: LicenceStatus.ACTIVE,
-        licenceType: LicenceType.AP,
-        comFirstName: 'Stephen',
-        comLastName: 'Hawking',
+        licences: [
+          {
+            id: 1,
+            type: LicenceType.AP,
+            status: LicenceStatus.ACTIVE,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Bob',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AA',
+          releaseDate: '2022-05-01',
+        } as Prisoner,
+        deliusRecord: {
+          otherIds: {
+            crn: 'X12345',
+          },
+        } as DeliusRecord,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
       },
       {
-        licenceId: 2,
-        crn: 'X381307',
-        forename: 'Dr',
-        surname: 'Who',
-        actualReleaseDate: '23/03/2021',
-        licenceStatus: LicenceStatus.ACTIVE,
-        licenceType: LicenceType.AP_PSS,
-        comFirstName: 'Sherlock',
-        comLastName: 'Holmes',
+        licences: [
+          {
+            id: 2,
+            type: LicenceType.AP,
+            status: LicenceStatus.ACTIVE,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Dr',
+          lastName: 'Who',
+          prisonerNumber: 'A1234AB',
+          releaseDate: '2022-05-01',
+        } as Prisoner,
+        deliusRecord: {
+          otherIds: {
+            crn: 'X12346',
+          },
+        } as DeliusRecord,
+        probationPractitioner: {
+          name: 'Sherlock Holmes',
+        },
       },
-    ] as LicenceAndResponsibleCom[])
+    ])
   })
 
   describe('GET', () => {
@@ -80,12 +117,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         caseload: [
           {
             licenceId: 1,
-            name: 'Joe Rogan',
-            crnNumber: 'X381306',
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
-            licenceType: LicenceType.AP_PSS,
-            probationPractitioner: 'Stephen Hawking',
-            releaseDate: '23 Mar 2021',
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
           },
         ],
         statusConfig,
@@ -101,21 +140,25 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         caseload: [
           {
             licenceId: 1,
-            name: 'Joe Rogan',
-            crnNumber: 'X381306',
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
-            probationPractitioner: 'Stephen Hawking',
-            releaseDate: '23 Mar 2021',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
           },
           {
             licenceId: 2,
             name: 'Dr Who',
-            crnNumber: 'X381307',
-            licenceStatus: 'ACTIVE',
-            licenceType: 'AP_PSS',
-            probationPractitioner: 'Sherlock Holmes',
-            releaseDate: '23 Mar 2021',
+            crnNumber: 'X12346',
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.ACTIVE,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
           },
         ],
         statusConfig,
@@ -124,74 +167,133 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
 
-    it('should successfully search by name', async () => {
-      req.query.view = 'team'
-      req.query.search = 'rogan'
+    it('should render the non-active licence if 2 exist', async () => {
+      caseloadService.getStaffVaryCaseload.mockResolvedValue([
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.VARIATION_IN_PROGRESS,
+            },
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.ACTIVE,
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: '2022-05-01',
+          } as Prisoner,
+          deliusRecord: {
+            otherIds: {
+              crn: 'X12345',
+            },
+          } as DeliusRecord,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+      ])
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
           {
             licenceId: 1,
-            name: 'Joe Rogan',
-            crnNumber: 'X381306',
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+        ],
+        statusConfig,
+        teamView: false,
+      })
+      expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+    })
+
+    it('should successfully search by name', async () => {
+      req.query.view = 'team'
+      req.query.search = 'smith'
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
+        caseload: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
-            probationPractitioner: 'Stephen Hawking',
-            releaseDate: '23 Mar 2021',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
           },
         ],
         statusConfig,
         teamView: true,
-        search: 'rogan',
+        search: 'smith',
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
 
     it('should successfully search by probation practitioner', async () => {
       req.query.view = 'team'
-      req.query.search = 'hawking'
+      req.query.search = 'white'
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
           {
             licenceId: 1,
-            name: 'Joe Rogan',
-            crnNumber: 'X381306',
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
-            probationPractitioner: 'Stephen Hawking',
-            releaseDate: '23 Mar 2021',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
           },
         ],
         statusConfig,
         teamView: true,
-        search: 'hawking',
+        search: 'white',
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
 
     it('should successfully search by crn', async () => {
       req.query.view = 'team'
-      req.query.search = 'x381306'
+      req.query.search = 'x12345'
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
           {
             licenceId: 1,
-            name: 'Joe Rogan',
-            crnNumber: 'X381306',
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
-            probationPractitioner: 'Stephen Hawking',
-            releaseDate: '23 Mar 2021',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
           },
         ],
         statusConfig,
         teamView: true,
-        search: 'x381306',
+        search: 'x12345',
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })

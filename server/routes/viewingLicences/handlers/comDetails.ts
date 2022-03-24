@@ -5,9 +5,8 @@ export default class ComDetailsRoutes {
   constructor(private readonly communityService: CommunityService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { comUsername } = res.locals.licence
-
-    const staffDetails = await this.communityService.getStaffDetailByUsername(comUsername)
+    const { staffCode } = req.params
+    const staffDetails = await this.communityService.getStaffDetailByStaffCode(staffCode)
 
     res.render('pages/comDetails', {
       returnLink: '/licence/view/cases',

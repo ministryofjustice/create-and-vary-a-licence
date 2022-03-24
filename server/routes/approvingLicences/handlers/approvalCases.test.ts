@@ -3,11 +3,11 @@ import { Request, Response } from 'express'
 import ApprovalCaseRoutes from './approvalCases'
 import CaseloadService from '../../../services/caseloadService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import LicenceType from '../../../enumeration/licenceType'
+import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
-
-const username = 'joebloggs'
 
 describe('Route Handlers - Approval - case list', () => {
   const handler = new ApprovalCaseRoutes(caseloadService)
@@ -16,47 +16,36 @@ describe('Route Handlers - Approval - case list', () => {
 
   beforeEach(() => {
     req = {
-      body: {
-        licenceId: '1',
-      },
       query: {},
     } as unknown as Request
 
     res = {
       render: jest.fn(),
-      redirect: jest.fn(),
       locals: {
         user: {
-          username,
-          prisonCaseload: ['MDI', 'LEI', 'BMI'],
+          username: 'joebloggs',
         },
       },
     } as unknown as Response
 
     caseloadService.getApproverCaseload.mockResolvedValue([
       {
-        licenceId: 1,
-        licenceType: 'AP',
-        surname: 'Smith',
-        forename: 'Bob',
-        nomisId: 'A1234AA',
-        licenceStatus: LicenceStatus.SUBMITTED,
-        prisonDescription: 'Moorland (HMP)',
-        conditionalReleaseDate: '01/05/2022',
-        comFirstName: 'Joe',
-        comLastName: 'Rogan',
-      },
-      {
-        licenceId: 2,
-        licenceType: 'AP',
-        surname: 'Baker',
-        forename: 'Matthew',
-        nomisId: 'A1234AB',
-        licenceStatus: LicenceStatus.SUBMITTED,
-        prisonDescription: 'Moorland (HMP)',
-        conditionalReleaseDate: '01/05/2022',
-        comFirstName: 'Stephen',
-        comLastName: 'Hawking',
+        licences: [
+          {
+            id: 1,
+            type: LicenceType.AP,
+            status: LicenceStatus.SUBMITTED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Bob',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AA',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
       },
     ])
   })
@@ -74,16 +63,11 @@ describe('Route Handlers - Approval - case list', () => {
           {
             licenceId: 1,
             name: 'Bob Smith',
-            prisonNumber: 'A1234AA',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
-            probationPractitioner: 'Joe Rogan',
-          },
-          {
-            licenceId: 2,
-            name: 'Matthew Baker',
-            prisonNumber: 'A1234AB',
-            releaseDate: '01 May 2022',
-            probationPractitioner: 'Stephen Hawking',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
           },
         ],
       })
@@ -99,9 +83,11 @@ describe('Route Handlers - Approval - case list', () => {
           {
             licenceId: 1,
             name: 'Bob Smith',
-            prisonNumber: 'A1234AA',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
-            probationPractitioner: 'Joe Rogan',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
           },
         ],
         search: 'bob',
@@ -118,9 +104,11 @@ describe('Route Handlers - Approval - case list', () => {
           {
             licenceId: 1,
             name: 'Bob Smith',
-            prisonNumber: 'A1234AA',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
-            probationPractitioner: 'Joe Rogan',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
           },
         ],
         search: 'A1234AA',
@@ -128,7 +116,7 @@ describe('Route Handlers - Approval - case list', () => {
     })
 
     it('should successfully search by probation practitioner', async () => {
-      req.query.search = 'rogan'
+      req.query.search = 'white'
 
       await handler.GET(req, res)
 
@@ -137,12 +125,25 @@ describe('Route Handlers - Approval - case list', () => {
           {
             licenceId: 1,
             name: 'Bob Smith',
-            prisonNumber: 'A1234AA',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
-            probationPractitioner: 'Joe Rogan',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
           },
         ],
-        search: 'rogan',
+        search: 'white',
+      })
+    })
+
+    it('should return empty caseload if search does not match', async () => {
+      req.query.search = 'XXX'
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
+        cases: [],
+        search: 'XXX',
       })
     })
   })

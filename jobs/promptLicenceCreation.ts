@@ -16,8 +16,8 @@ buildAppInsightsClient('create-and-vary-a-licence-prompt-licence-create-job')
 
 const { caseloadService, prisonerService, communityService, licenceService } = services
 
-const pollPrisonersDueForLicence = async (): Promise<Prisoner[]> => {
-  const getEligiblePrisoners = async (prisonCode: string): Promise<Prisoner[]> => {
+const pollPrisonersDueForLicence = async (): Promise<ManagedCase[]> => {
+  const getEligiblePrisoners = async (prisonCode: string): Promise<ManagedCase[]> => {
     const filterPrisonersReleasedWithinNoticePeriod = (prisoners: Prisoner[]): Prisoner[] => {
       const initialPromptPeriod = filterPrisonersForReleaseWithWeekRange(prisoners, 13, 14)
       const regularPromptPeriod = filterPrisonersForReleaseWithWeekRange(prisoners, 0, 5)
@@ -26,22 +26,24 @@ const pollPrisonersDueForLicence = async (): Promise<Prisoner[]> => {
 
     return prisonerService
       .searchPrisonersByPrison(prisonCode)
+      .then(prisoners => prisoners.filter(offender => offender.status && offender.status.startsWith('ACTIVE')))
       .then(prisoners => filterPrisonersReleasedWithinNoticePeriod(prisoners))
+      .then(caseload => caseloadService.pairNomisRecordsWithDelius(caseload))
+      .then(caseload => caseload.filter(c => c.deliusRecord.offenderManagers.find(om => om.active)))
+      .then(caseload => caseloadService.filterOffendersEligibleForLicence(caseload))
       .then(prisoners => caseloadService.mapOffendersToLicences(prisoners))
       .then(prisoners =>
-        prisoners
-          .filter(
-            prisoner =>
-              prisoner.licenceStatus === LicenceStatus.NOT_STARTED ||
-              prisoner.licenceStatus === LicenceStatus.IN_PROGRESS
+        prisoners.filter(offender =>
+          [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS].some(status =>
+            offender.licences.find(l => l.status === status)
           )
-          .map(prisoner => prisoner.nomisRecord)
+        )
       )
   }
 
   const prisonCodes = config.rollout.prisons
 
-  let prisoners = [] as Prisoner[]
+  let prisoners = [] as ManagedCase[]
 
   for (let i = 0; i < prisonCodes.length; i += 1) {
     // TODO: This will be replaced by a single call to elastic search to find all prisoners due for release
@@ -74,19 +76,6 @@ const filterPrisonersForReleaseWithWeekRange = (
       const crd2 = moment(b.conditionalReleaseDate, 'YYYY-MM-DD').unix()
       return crd1 - crd2
     })
-}
-
-const matchPrisonAndProbationRecords = async (prisoners: Prisoner[]): Promise<ManagedCase[]> => {
-  const nomsNumbers = prisoners.map(prisoner => prisoner.prisonerNumber).filter(nomsNumber => nomsNumber)
-  const probationers = await communityService.getOffendersByNomsNumbers(nomsNumbers)
-  return prisoners
-    .map(prisoner => {
-      return {
-        nomisRecord: prisoner,
-        deliusRecord: probationers.find(probationer => probationer.otherIds.nomsNumber === prisoner.prisonerNumber),
-      }
-    })
-    .filter(managedCase => managedCase.nomisRecord && managedCase.deliusRecord)
 }
 
 const buildEmailGroups = async (managedCases: ManagedCase[]): Promise<EmailContact[]> => {
@@ -145,7 +134,6 @@ const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
 }
 
 pollPrisonersDueForLicence()
-  .then(prisoners => (prisoners.length > 0 ? matchPrisonAndProbationRecords(prisoners) : []))
   .then(prisoners => (prisoners.length > 0 ? buildEmailGroups(prisoners) : []))
   .then(emailGroups => (emailGroups.length > 0 ? notifyComOfUpcomingReleases(emailGroups) : null))
   .then(() => {

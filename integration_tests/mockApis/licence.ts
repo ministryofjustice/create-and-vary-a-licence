@@ -6,7 +6,7 @@ const licencePlaceholder = {
   typeCode: 'AP_PSS',
   version: '1.1',
   statusCode: 'IN_PROGRESS',
-  nomsId: 'A1234AA',
+  nomsId: 'G9786GC',
   bookingNo: '123456',
   bookingId: '54321',
   crn: 'X12345',

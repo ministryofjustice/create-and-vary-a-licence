@@ -100,7 +100,7 @@ export default function Index({ licenceService, caseloadService, communityServic
 
   get('/caseload', caseloadHandler.GET)
   post('/caseload', caseloadHandler.POST)
-  get('/probation-practitioner/staffId/:staffId', comDetailsHandler.GET)
+  get('/probation-practitioner/staffCode/:staffCode', comDetailsHandler.GET)
   get('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.GET)
   post('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.POST, PersonName)
   get('/id/:licenceId/initial-meeting-place', initialMeetingPlaceHandler.GET)

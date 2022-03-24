@@ -56,11 +56,13 @@ export default (on: (string, Record) => void): void => {
 
     stubGetStaffDetails: community.stubGetStaffDetails,
     stubGetStaffDetailsByStaffId: community.stubGetStaffDetailsByStaffId,
+    stubGetStaffDetailsByStaffCode: community.stubGetStaffDetailsByStaffCode,
     stubGetStaffDetailsByList: community.stubGetStaffDetailsByList,
     stubGetManagedOffenders: community.stubGetManagedOffenders,
     stubGetAnOffendersManagers: community.stubGetAnOffendersManagers,
 
     searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
+    searchPrisonersByPrison: prisonerSearch.searchPrisonersByPrison,
 
     stubGetPrisonUserDetails: prison.stubGetUserDetails,
     stubGetPrisonUserCaseloads: prison.stubGetUserCaseloads,
@@ -70,6 +72,7 @@ export default (on: (string, Record) => void): void => {
 
     stubGetProbationer: probationSearch.stubGetProbationer,
     stubGetOffendersByCrn: probationSearch.stubGetOffendersByCrn,
+    stubGetOffendersByNomsNumber: probationSearch.stubGetOffendersByNomsNumber,
 
     sendDomainEvent: events.sendDomainEvent,
     sendPrisonEvent: events.sendPrisonEvent,

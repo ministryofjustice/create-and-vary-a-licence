@@ -5,10 +5,10 @@ export default class ComDetailsRoutes {
   constructor(private readonly communityService: CommunityService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { staffId } = req.params
+    const { staffCode } = req.params
     const { user } = res.locals
 
-    const staffDetails = await this.communityService.getStaffDetailByStaffIdentifier(staffId as unknown as number)
+    const staffDetails = await this.communityService.getStaffDetailByStaffCode(staffCode)
 
     const isInCurrentUsersTeam =
       staffDetails.teams?.find(team => user.probationTeamCodes?.includes(team.code)) !== undefined

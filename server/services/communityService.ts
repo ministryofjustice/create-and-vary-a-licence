@@ -18,6 +18,10 @@ export default class CommunityService {
     return this.communityApiClient.getStaffDetailByUsername(username)
   }
 
+  async getStaffDetailByStaffCode(staffCode: string): Promise<CommunityApiStaffDetails> {
+    return this.communityApiClient.getStaffDetailByStaffCode(staffCode)
+  }
+
   async getStaffDetailByStaffCodeList(staffCodes: string[]): Promise<CommunityApiStaffDetails[]> {
     return this.communityApiClient.getStaffDetailByStaffCodeList(staffCodes)
   }
@@ -27,6 +31,9 @@ export default class CommunityService {
   }
 
   async getStaffDetailsByUsernameList(usernames: string[]): Promise<CommunityApiStaffDetails[]> {
+    if (usernames.length === 0) {
+      return []
+    }
     return this.communityApiClient.getStaffDetailsByUsernameList(usernames)
   }
 

@@ -40,6 +40,20 @@ describe('Community Service', () => {
     expect(communityApiClient.getStaffDetailByStaffIdentifier).toHaveBeenCalledWith(2000)
   })
 
+  it('Get Staff Detail By Staff Code', async () => {
+    const expectedResponse = {
+      staffIdentifier: 2000,
+      email: 'joebloggs@probation.gov.uk',
+    }
+
+    communityApiClient.getStaffDetailByStaffCode.mockResolvedValue(expectedResponse)
+
+    const actualResult = await communityService.getStaffDetailByStaffCode('X12345')
+
+    expect(actualResult).toEqual(expectedResponse)
+    expect(communityApiClient.getStaffDetailByStaffCode).toHaveBeenCalledWith('X12345')
+  })
+
   it('Get Staff Detail by Username List', async () => {
     const expectedResponse = [
       {

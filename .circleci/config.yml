@@ -76,6 +76,7 @@ jobs:
           root: .
           paths:
             - node_modules
+            - assets/stylesheets
             - build-info.json
             - build
             - dist
