@@ -25,7 +25,8 @@ export default class ViewAndPrintCaseRoutes {
           licenceStatus: _.head(c.licences).status,
           isClickable:
             _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&
-            _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT,
+            _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
+            _.head(c.licences).status !== LicenceStatus.IN_PROGRESS,
         }
       })
       .filter(c => {
