@@ -18,7 +18,6 @@
     </div>
 
     {%- set currentLicenceHtml  %}
-        <h2 class="govuk-heading-l">Current licence</h2>
         <form method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             {{ cta(callToActions, licence) }}

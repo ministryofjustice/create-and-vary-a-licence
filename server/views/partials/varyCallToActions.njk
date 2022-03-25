@@ -13,10 +13,10 @@
             {% endif %}
             {% if callToActions.shouldShowPrintToActivateButton %}
                 {{ govukButton({
-                    text: "Set to active",
+                    text: "View and print licence PDF",
                     classes: "govuk-button--primary govuk-!-margin-right-1",
                     type: "submit",
-                    attributes: { 'data-qa': 'set-to-active' }
+                    attributes: { 'data-qa': 'view-and-print' }
                 }) }}
             {% endif %}
             {% if callToActions.shouldShowPrintButton %}
@@ -24,6 +24,22 @@
                     text: "Print",
                     classes: "govuk-button--primary govuk-!-margin-right-1",
                     href: '#'
+                }) }}
+            {% endif %}
+            {% if callToActions.shouldShowViewOrVaryButton %}
+                {{ govukButton({
+                    text: "View or vary licence",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    href: '/licence/vary/id/' + licence.id + '/view-active',
+                    attributes: { 'data-qa': 'view-or-vary-licence' }
+                }) }}
+            {% endif %}
+            {% if callToActions.shouldShowEditButton %}
+                {{ govukButton({
+                    text: "Edit variation",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    href: '/licence/vary/id/' + licence.id + '/view',
+                    attributes: { 'data-qa': 'edit-licence' }
                 }) }}
             {% endif %}
             {% if callToActions.shouldShowEditAndDiscardButton %}

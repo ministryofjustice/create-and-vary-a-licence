@@ -74,9 +74,9 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToActions: {
-          shouldShowVaryButton: false,
+          shouldShowViewOrVaryButton: false,
           shouldShowPrintToActivateButton: false,
-          shouldShowEditAndDiscardButton: true,
+          shouldShowEditButton: true,
         },
       })
     })
@@ -124,9 +124,9 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToActions: {
-          shouldShowVaryButton: false,
+          shouldShowViewOrVaryButton: false,
           shouldShowPrintToActivateButton: true,
-          shouldShowEditAndDiscardButton: false,
+          shouldShowEditButton: false,
         },
       })
     })
@@ -174,9 +174,9 @@ describe('Route Handlers - Timeline', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
         timelineEvents,
         callToActions: {
-          shouldShowVaryButton: false,
+          shouldShowViewOrVaryButton: false,
           shouldShowPrintToActivateButton: false,
-          shouldShowEditAndDiscardButton: true,
+          shouldShowEditButton: true,
         },
       })
     })

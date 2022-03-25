@@ -12,8 +12,10 @@ export default class TimelineRoutes {
     const shouldShowPrintToActivateButton = [LicenceStatus.VARIATION_APPROVED].includes(
       <LicenceStatus>licence.statusCode
     )
-    const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
-    const shouldShowEditAndDiscardButton = [
+
+    const shouldShowViewOrVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
+
+    const shouldShowEditButton = [
       LicenceStatus.VARIATION_IN_PROGRESS,
       LicenceStatus.VARIATION_SUBMITTED,
       LicenceStatus.VARIATION_REJECTED,
@@ -23,7 +25,7 @@ export default class TimelineRoutes {
 
     return res.render(`pages/vary/timeline`, {
       timelineEvents,
-      callToActions: { shouldShowVaryButton, shouldShowPrintToActivateButton, shouldShowEditAndDiscardButton },
+      callToActions: { shouldShowViewOrVaryButton, shouldShowPrintToActivateButton, shouldShowEditButton },
     })
   }
 

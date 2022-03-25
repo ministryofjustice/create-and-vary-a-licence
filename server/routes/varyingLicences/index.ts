@@ -6,6 +6,7 @@ import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import CaseloadRoutes from './handlers/caseload'
 import { Services } from '../../services'
 import ViewVariationRoutes from './handlers/viewVariation'
+import ViewActiveLicenceRoutes from './handlers/viewActiveLicence'
 import ConfirmVaryActionRoutes from './handlers/confirmVaryAction'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import SpoDiscussionRoutes from './handlers/spoDiscussion'
@@ -53,6 +54,7 @@ export default function Index({ licenceService, caseloadService, communityServic
   const comDetailsHandler = new ComDetailsRoutes(communityService)
   const timelineHandler = new TimelineRoutes(licenceService)
   const viewLicenceHandler = new ViewVariationRoutes(licenceService)
+  const viewActiveLicenceHandler = new ViewActiveLicenceRoutes()
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)
   const spoDiscussionHandler = new SpoDiscussionRoutes(licenceService)
   const vloDiscussionHandler = new VloDiscussionRoutes(licenceService)
@@ -67,6 +69,7 @@ export default function Index({ licenceService, caseloadService, communityServic
   get('/id/:licenceId/timeline', timelineHandler.GET)
   post('/id/:licenceId/timeline', timelineHandler.POST)
   get('/id/:licenceId/view', viewLicenceHandler.GET)
+  get('/id/:licenceId/view-active', viewActiveLicenceHandler.GET)
   get('/id/:licenceId/confirm-vary-action', confirmVaryActionHandler.GET)
   post('/id/:licenceId/confirm-vary-action', confirmVaryActionHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/spo-discussion', spoDiscussionHandler.GET)
