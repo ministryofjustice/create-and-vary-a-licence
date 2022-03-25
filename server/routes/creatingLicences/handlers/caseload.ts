@@ -6,6 +6,7 @@ import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
 import { prisonInRollout } from '../../../utils/rolloutUtils'
 import statusConfig from '../../../licences/licenceStatus'
+import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class CaseloadRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly caseloadService: CaseloadService) {}
@@ -49,8 +50,13 @@ export default class CaseloadRoutes {
     const { user } = res.locals
     const { prisonerNumber } = req.body
 
-    // TODO: Which statuses should be considered "existing"? Should INACTIVE and RECALLED be included?
-    const existingLicence = _.head(await this.licenceService.getLicencesByNomisIdsAndStatus([prisonerNumber], [], user))
+    const existingLicence = _.head(
+      await this.licenceService.getLicencesByNomisIdsAndStatus(
+        [prisonerNumber],
+        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.APPROVED],
+        user
+      )
+    )
     if (existingLicence) {
       return res.redirect(`/licence/create/id/${existingLicence.licenceId}/check-your-answers`)
     }

@@ -350,7 +350,11 @@ describe('Route Handlers - Create Licence - Caseload', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
       expect(licenceService.createLicence).not.toBeCalled()
-      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(['123'], [], res.locals.user)
+      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
+        ['123'],
+        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.APPROVED],
+        res.locals.user
+      )
     })
 
     it('should create a licence and redirect to the initial meeting screen', async () => {
