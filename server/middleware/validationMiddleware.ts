@@ -1,4 +1,4 @@
-import { ClassConstructor, plainToClass } from 'class-transformer'
+import { ClassConstructor, plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
 import { getAdditionalConditionByCode } from '../utils/conditionsProvider'
@@ -20,7 +20,7 @@ function validationMiddleware(type?: new () => object): RequestHandler {
     }
 
     // Build an object which is used by validators to check things against
-    const validationScope = plainToClass(
+    const validationScope = plainToInstance(
       classType,
       { ...req.body, licence, uploadFile: req.file },
       { excludeExtraneousValues: false }
@@ -29,7 +29,7 @@ function validationMiddleware(type?: new () => object): RequestHandler {
     const errors: ValidationError[] = await validate(validationScope)
 
     if (errors.length === 0) {
-      req.body = plainToClass(classType, req.body, { excludeExtraneousValues: true })
+      req.body = plainToInstance(classType, req.body, { excludeExtraneousValues: true })
       return next()
     }
 

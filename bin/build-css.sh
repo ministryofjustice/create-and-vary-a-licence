@@ -5,6 +5,7 @@
 
 # Build the application stylesheet
 ./node_modules/.bin/sass $@ \
+     --load-path=. \
      --load-path=node_modules/govuk-frontend \
      --load-path=node_modules/@ministryofjustice/frontend \
      ./assets/sass/application.sass:./assets/stylesheets/application.css \
