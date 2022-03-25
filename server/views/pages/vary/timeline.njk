@@ -19,9 +19,11 @@
 
     {%- set currentLicenceHtml  %}
         <h2 class="govuk-heading-l">Current licence</h2>
-        {# TODO: Change to use timelineCta macro #}
-        {{ cta(callToActions, licence) }}
-        {{ currentLicenceEvents(timelineEvents) }}
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ cta(callToActions, licence) }}
+            {{ currentLicenceEvents(timelineEvents) }}
+        </form>
     {% endset -%}
 
     <div class="govuk-grid-row">

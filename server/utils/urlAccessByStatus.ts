@@ -44,7 +44,11 @@ const allowedPaths = [
   },
   {
     status: 'INACTIVE',
-    allowed: ['/licence/create/id/(\\d)*/check-your-answers.*', '/licence/view/id/(\\d)*/.*'],
+    allowed: [
+      '/licence/create/id/(\\d)*/check-your-answers.*',
+      '/licence/view/id/(\\d)*/.*',
+      '/licence/vary/id/(\\d)*/.*',
+    ],
   },
   {
     status: 'RECALLED',

@@ -9,8 +9,10 @@ export default class TimelineRoutes {
     const { user, licence } = res.locals
 
     // Set up call to action buttons based on current licence status
+    const shouldShowPrintToActivateButton = [LicenceStatus.VARIATION_APPROVED].includes(
+      <LicenceStatus>licence.statusCode
+    )
     const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
-    const shouldShowPrintButton = [LicenceStatus.VARIATION_APPROVED].includes(<LicenceStatus>licence.statusCode)
     const shouldShowEditAndDiscardButton = [
       LicenceStatus.VARIATION_IN_PROGRESS,
       LicenceStatus.VARIATION_SUBMITTED,
@@ -21,15 +23,18 @@ export default class TimelineRoutes {
 
     return res.render(`pages/vary/timeline`, {
       timelineEvents,
-      callToActions: { shouldShowVaryButton, shouldShowPrintButton, shouldShowEditAndDiscardButton },
+      callToActions: { shouldShowVaryButton, shouldShowPrintToActivateButton, shouldShowEditAndDiscardButton },
     })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
 
-    // TODO: Set a licence which is VARIATION_APPROVED to ACTIVE if the print button is selected.
+    // Post from this form is the activation trigger for approved variations to set them to ACTIVE
+    if (licence.statusCode === LicenceStatus.VARIATION_APPROVED) {
+      await this.licenceService.updateStatus(licence.id, LicenceStatus.ACTIVE, user)
+    }
 
     return res.redirect(`/licence/vary/id/${licenceId}/timeline`)
   }
