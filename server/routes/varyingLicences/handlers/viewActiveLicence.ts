@@ -6,14 +6,12 @@ export default class ViewActiveLicenceRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user, licence } = res.locals
 
-    // If not still ACTIVE then redirect to vary timeline
+    // If not still ACTIVE then redirect back to the vary timeline
     if (licence.statusCode !== LicenceStatus.ACTIVE) {
       return res.redirect(`/licence/vary/id/${licence.id}/timeline`)
     }
 
     const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
-
-    // Get expanded licence conditions to show
     const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
     const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
 
