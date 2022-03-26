@@ -4,7 +4,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class ViewActiveLicenceRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { user, licence } = res.locals
+    const { licence } = res.locals
 
     // If not still ACTIVE then redirect back to the vary timeline
     if (licence.statusCode !== LicenceStatus.ACTIVE) {
