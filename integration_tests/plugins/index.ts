@@ -17,6 +17,7 @@ export default (on: (string, Record) => void): void => {
     getSignInUrl: auth.getSignInUrl,
     stubPrisonSignIn: auth.stubPrisonSignIn,
     stubProbationSignIn: auth.stubProbationSignIn,
+    stubProbationAcoSignIn: auth.stubProbationAcoSignIn,
     stubAuthUser: auth.stubUser,
     stubAuthPing: auth.stubPing,
     stubSystemToken: auth.systemToken,
@@ -53,6 +54,8 @@ export default (on: (string, Record) => void): void => {
     stubUpdatePrisonInformation: licence.stubUpdatePrisonInformation,
     stubUpdateSentenceDates: licence.stubUpdateSentenceDates,
     stubMatchLicenceEvents: licence.stubMatchLicenceEvents,
+    stubApproveVariation: licence.stubApproveVariation,
+    stubReferVariation: licence.stubReferVariation,
 
     stubGetStaffDetails: community.stubGetStaffDetails,
     stubGetStaffDetailsByStaffId: community.stubGetStaffDetailsByStaffId,

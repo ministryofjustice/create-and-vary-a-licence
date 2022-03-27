@@ -428,8 +428,11 @@ export default class LicenceService {
   }
 
   async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
-    const originalLicence = await this.getLicence(variation.variationOf.toString(), user)
-    return compareLicenceConditions(originalLicence, variation)
+    if (variation?.variationOf) {
+      const originalLicence = await this.getLicence(variation.variationOf.toString(), user)
+      return compareLicenceConditions(originalLicence, variation)
+    }
+    return {} as VariedConditions
   }
 
   async getApprovalConversation(variation: Licence, user: User): Promise<ApprovalComment[]> {

@@ -541,6 +541,7 @@ export default {
             crn: licencePlaceholder.crn,
             dateOfBirth: licencePlaceholder.dateOfBirth,
             comUsername: licencePlaceholder.comUsername,
+            variationOf: status === 'VARIATION_SUBMITTED' ? 2 : null,
           },
         ],
       },
@@ -756,6 +757,34 @@ export default {
             eventTime: '12/06/2021 10:47:40',
           },
         ],
+      },
+    })
+  },
+
+  stubApproveVariation: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d*)/approve-variation`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubReferVariation: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d*)/refer-variation`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     })
   },
