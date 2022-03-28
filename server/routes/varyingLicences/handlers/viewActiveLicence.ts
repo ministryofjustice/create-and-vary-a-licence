@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class ViewActiveLicenceRoutes {
@@ -12,12 +11,8 @@ export default class ViewActiveLicenceRoutes {
     }
 
     const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
-    const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
-    const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
 
     return res.render('pages/vary/viewActive', {
-      expandedLicenceConditions,
-      expandedPssConditions,
       callToActions: { shouldShowVaryButton },
     })
   }

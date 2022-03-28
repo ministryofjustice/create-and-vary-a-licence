@@ -1,9 +1,6 @@
 import _ from 'lodash'
 import compareLicenceConditions from './licenceComparator'
-import * as conditionsProvider from './conditionsProvider'
 import { Licence } from '../@types/licenceApiClientTypes'
-
-jest.spyOn(conditionsProvider, 'expandAdditionalConditions').mockImplementation(conditions => conditions)
 
 const licenceTemplate = {
   additionalLicenceConditions: [],
