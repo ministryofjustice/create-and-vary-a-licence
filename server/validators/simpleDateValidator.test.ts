@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import ValidSimpleDate from './simpleDateValidator'
 
@@ -8,7 +8,7 @@ describe('Validators - ValidSimpleDate', () => {
 
   beforeEach(() => {
     validator = new ValidSimpleDate()
-    date = plainToClass(
+    date = plainToInstance(
       SimpleDate,
       {
         day: '31',

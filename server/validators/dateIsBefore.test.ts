@@ -1,5 +1,5 @@
 import { validate, ValidationError } from 'class-validator'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import DateIsBefore from './dateIsBefore'
 
@@ -12,7 +12,7 @@ class TestClass {
 
 describe('dateIsBefore', () => {
   it('should fail validation if the date being validated is after the given date', async () => {
-    const value = plainToClass(TestClass, { value: new SimpleDate('22', '03', '2021') })
+    const value = plainToInstance(TestClass, { value: new SimpleDate('22', '03', '2021') })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(1)
@@ -22,14 +22,14 @@ describe('dateIsBefore', () => {
   })
 
   it('should pass validation if the date being validated is equal to the given date', async () => {
-    const value = plainToClass(TestClass, { value: new SimpleDate('02', '02', '2020') })
+    const value = plainToInstance(TestClass, { value: new SimpleDate('02', '02', '2020') })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(0)
   })
 
   it('should pass validation if the date being validated is before the given date', async () => {
-    const value = plainToClass(TestClass, { value: new SimpleDate('22', '03', '2019') })
+    const value = plainToInstance(TestClass, { value: new SimpleDate('22', '03', '2019') })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(0)
