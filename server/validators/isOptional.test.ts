@@ -1,5 +1,5 @@
 import { MinLength, validate, ValidationError } from 'class-validator'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import IsOptional from './isOptional'
 
 import * as utils from '../utils/utils'
@@ -15,7 +15,7 @@ class TestClass {
 describe('isOptional', () => {
   it('should validate the field if the value is not empty', async () => {
     objectIsEmpty.mockReturnValue(false)
-    const value = plainToClass(TestClass, { value: 'validate me' })
+    const value = plainToInstance(TestClass, { value: 'validate me' })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(1)
@@ -26,7 +26,7 @@ describe('isOptional', () => {
 
   it('should not validate the field if the value is empty', async () => {
     objectIsEmpty.mockReturnValue(true)
-    const value = plainToClass(TestClass, { value: 'validate me' })
+    const value = plainToInstance(TestClass, { value: 'validate me' })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(0)

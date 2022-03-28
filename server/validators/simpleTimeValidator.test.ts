@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import ValidSimpleTime from './simpleTimeValidator'
 
@@ -8,7 +8,7 @@ describe('Validators - ValidSimpleTime', () => {
 
   beforeEach(() => {
     validator = new ValidSimpleTime()
-    time = plainToClass(
+    time = plainToInstance(
       SimpleTime,
       {
         hour: '01',

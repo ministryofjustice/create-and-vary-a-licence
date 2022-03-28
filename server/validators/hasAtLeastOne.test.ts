@@ -1,5 +1,5 @@
 import { validate, ValidationError } from 'class-validator'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import HasAtLeastOne from './hasAtLeastOne'
 
 class TestClass {
@@ -9,7 +9,7 @@ class TestClass {
 
 describe('hasAtLeastOne', () => {
   it('should fail validation if the field being validated is an empty array', async () => {
-    const value = plainToClass(TestClass, { value: [] })
+    const value = plainToInstance(TestClass, { value: [] })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(1)
@@ -19,7 +19,7 @@ describe('hasAtLeastOne', () => {
   })
 
   it('should fail validation if the field being validated is null', async () => {
-    const value = plainToClass(TestClass, { value: null })
+    const value = plainToInstance(TestClass, { value: null })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(1)
@@ -29,7 +29,7 @@ describe('hasAtLeastOne', () => {
   })
 
   it('should fail validation if the field being validated is an array of nulls', async () => {
-    const value = plainToClass(TestClass, { value: [null, null] })
+    const value = plainToInstance(TestClass, { value: [null, null] })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(1)
@@ -39,7 +39,7 @@ describe('hasAtLeastOne', () => {
   })
 
   it('should fail validation if the field being validated is an array of empty strings', async () => {
-    const value = plainToClass(TestClass, { value: ['', ''] })
+    const value = plainToInstance(TestClass, { value: ['', ''] })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(1)
@@ -49,7 +49,7 @@ describe('hasAtLeastOne', () => {
   })
 
   it('should pass validation if the field being validated is an array with at least one non empty string', async () => {
-    const value = plainToClass(TestClass, { value: ['', 'test'] })
+    const value = plainToInstance(TestClass, { value: ['', 'test'] })
     const errors: ValidationError[] = await validate(value)
 
     expect(errors.length).toBe(0)

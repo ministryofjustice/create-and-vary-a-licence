@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
-import { plainToClass } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
@@ -47,7 +47,7 @@ export default class CheckAnswersRoutes {
   }
 
   private validateLicence = async (licence: Licence): Promise<FieldValidationError[]> => {
-    const licenceToSubmit = plainToClass(LicenceToSubmit, licence, { excludeExtraneousValues: true })
+    const licenceToSubmit = plainToInstance(LicenceToSubmit, licence, { excludeExtraneousValues: true })
     const errors: ValidationError[] = await validate(licenceToSubmit)
 
     return errors.flatMap(error => ({
