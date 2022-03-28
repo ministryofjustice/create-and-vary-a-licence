@@ -44,7 +44,7 @@ describe('Route Handlers - Vary Licence - Confirm vary', () => {
       req.body = { answer: 'No' }
       await handler.POST(req, res)
 
-      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/view')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/view-active')
     })
 
     it('should create licence variation when answer is yes', async () => {

@@ -15,7 +15,7 @@ export default class ConfirmVaryActionRoutes {
     const { user } = res.locals
 
     if (answer === YesOrNo.NO) {
-      return res.redirect(`/licence/vary/id/${licenceId}/view`)
+      return res.redirect(`/licence/vary/id/${licenceId}/view-active`)
     }
 
     const newLicence = await this.licenceService.createVariation(licenceId, user)
