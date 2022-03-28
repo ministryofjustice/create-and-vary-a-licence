@@ -7,29 +7,19 @@
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/varyCallToActions.njk" import cta %}
 
-{% set pageTitle = applicationName + " - Vary a licence - View licence variation" %}
-{% set pageId = "view-variation-page" %}
+{% set pageTitle = applicationName + " - Vary a licence - Active licence" %}
+{% set pageId = "view-active-licence-page" %}
 {% set backLinkHref = "/licence/vary/caseload" %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if licence.isVariation %}
-                {% if licence.typeCode === 'AP' %}
-                    <h1 class="govuk-heading-l">View licence variation</h1>
-                {% elseif licence.typeCode === 'AP_PSS' %}
-                    <h1 class="govuk-heading-l">Vary licence and post sentence supervision order variation</h1>
-                {% elseif licence.typeCode === 'PSS' %}
-                    <h1 class="govuk-heading-l">Vary post sentence supervision order variation</h1>
-                {% endif %}
-            {% else %}
-                {% if licence.typeCode === 'AP' %}
-                    <h1 class="govuk-heading-l">View licence</h1>
-                {% elseif licence.typeCode === 'AP_PSS' %}
-                    <h1 class="govuk-heading-l">View licence and post sentence supervision</h1>
-                {% elseif licence.typeCode === 'PSS' %}
-                    <h1 class="govuk-heading-l">View post sentence supervision order</h1>
-                {% endif %}
+            {% if licence.typeCode === 'AP' %}
+                <h1 class="govuk-heading-l">Active licence</h1>
+            {% elseif licence.typeCode === 'AP_PSS' %}
+                <h1 class="govuk-heading-l">Active licence and post sentence supervision order</h1>
+            {% elseif licence.typeCode === 'PSS' %}
+                <h1 class="govuk-heading-l">Active post sentence supervision order</h1>
             {% endif %}
         </div>
     </div>

@@ -170,6 +170,15 @@ export default {
       tokenVerification.stubVerifyToken(),
       licence.updateComDetails(),
     ]),
+  stubProbationAcoSignIn: (): Promise<[Response, Response, Response, Response, Response, Response]> =>
+    Promise.all([
+      favicon(),
+      redirect(),
+      signOut(),
+      token(['ROLE_LICENCE_ACO'], 'delius'),
+      tokenVerification.stubVerifyToken(),
+      licence.updateComDetails(),
+    ]),
   systemToken: () => token(null, 'auth'),
   stubPrisonSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
     Promise.all([

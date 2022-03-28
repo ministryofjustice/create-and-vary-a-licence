@@ -40,7 +40,9 @@ const licencePlaceholder = {
   probationTeamCode: 'A',
   probationTeamDescription: 'Cardiff South Team A',
   dateCreated: '10/09/2021 10:00:00', // Make dynamic to now?
+  dateLastUpdated: '10/09/2021 10:01:00', // Make dynamic to now?
   createdByUsername: 'X12345',
+  createdByFullName: 'John Smith',
   standardLicenceConditions: [
     { id: 1, code: 'goodBehaviour', sequence: 1, text: 'Be of good behaviour' },
     { id: 2, code: 'notBreakLaw', sequence: 2, text: 'Do not break the law' },
@@ -539,6 +541,7 @@ export default {
             crn: licencePlaceholder.crn,
             dateOfBirth: licencePlaceholder.dateOfBirth,
             comUsername: licencePlaceholder.comUsername,
+            variationOf: status === 'VARIATION_SUBMITTED' ? 2 : null,
           },
         ],
       },
@@ -754,6 +757,34 @@ export default {
             eventTime: '12/06/2021 10:47:40',
           },
         ],
+      },
+    })
+  },
+
+  stubApproveVariation: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d*)/approve-variation`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubReferVariation: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d*)/refer-variation`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     })
   },

@@ -1173,6 +1173,11 @@ export interface components {
        * @description The licence Id which this licence is a variation of
        */
       variationOf?: number
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Gordon Sumner
+       */
+      createdByFullName?: string
     }
     /** @description Describes an event that was related to a licence */
     LicenceEvent: {

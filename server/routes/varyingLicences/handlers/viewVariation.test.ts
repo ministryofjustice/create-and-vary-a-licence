@@ -60,14 +60,12 @@ describe('Route - Vary - View variation', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/vary/viewVariation', {
+      expect(res.render).toHaveBeenCalledWith('pages/vary/viewSubmitted', {
         callToActions: {
           shouldShowEditAndDiscardButton: false,
-          shouldShowPrintButton: false,
-          shouldShowVaryButton: true,
         },
-        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
-        expandedPssConditions: res.locals.licence.additionalPssConditions,
+        conditionComparison,
+        conversation,
       })
     })
 
@@ -91,8 +89,6 @@ describe('Route - Vary - View variation', () => {
         conditionComparison,
         callToActions: {
           shouldShowEditAndDiscardButton: true,
-          shouldShowPrintButton: false,
-          shouldShowVaryButton: false,
         },
       })
     })
@@ -117,8 +113,6 @@ describe('Route - Vary - View variation', () => {
         conditionComparison,
         callToActions: {
           shouldShowEditAndDiscardButton: true,
-          shouldShowPrintButton: false,
-          shouldShowVaryButton: false,
         },
       })
     })
@@ -142,9 +136,7 @@ describe('Route - Vary - View variation', () => {
         conversation,
         conditionComparison,
         callToActions: {
-          shouldShowEditAndDiscardButton: true,
-          shouldShowPrintButton: true,
-          shouldShowVaryButton: false,
+          shouldShowEditAndDiscardButton: false,
         },
       })
     })

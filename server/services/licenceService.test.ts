@@ -28,6 +28,7 @@ import {
 import { CommunityApiOffenderManager } from '../@types/communityClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
+import TimelineEvent from '../@types/TimelineEvent'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -832,11 +833,57 @@ describe('Licence Service', () => {
     })
   })
 
-  it('should nofity com with prompt to create licence', async () => {
+  it('should notify the responsible officer with a prompt to create a licence', async () => {
     const expectedRequest = [
       { email: 'joe.bloggs@probation.gov.uk', comName: 'Joe Bloggs', initialPromptCases: [], urgentPromptCases: [] },
     ] as EmailContact[]
     await licenceService.notifyComsToPromptLicenceCreation(expectedRequest)
     expect(licenceApiClient.notifyComsToPromptEmailCreation).toBeCalledWith(expectedRequest)
+  })
+
+  describe('Get timeline events', () => {
+    const licenceVariation = {
+      id: 2,
+      statusCode: LicenceStatus.VARIATION_APPROVED,
+      variationOf: 1,
+      isVariation: true,
+      createdByFullName: 'James Brown',
+      dateLastUpdated: '12/11/2022 10:45:00',
+    } as Licence
+
+    const originalLicence = {
+      id: 1,
+      statusCode: LicenceStatus.ACTIVE,
+      variationOf: null,
+      isVariation: false,
+      createdByFullName: 'Jackson Browne',
+      dateLastUpdated: '10/11/2022 11:00:00',
+    } as Licence
+
+    const expectedEvents = [
+      {
+        eventType: 'VARIATION',
+        title: 'Licence varied',
+        statusCode: 'VARIATION_APPROVED',
+        createdBy: 'James Brown',
+        licenceId: 2,
+        lastUpdate: '12/11/2022 10:45:00',
+      },
+      {
+        eventType: 'CREATION',
+        title: 'Licence created',
+        statusCode: 'ACTIVE',
+        createdBy: 'Jackson Browne',
+        licenceId: 1,
+        lastUpdate: '10/11/2022 11:00:00',
+      },
+    ] as unknown as TimelineEvent[]
+
+    it('will return a list of timeline events for an approved variation', async () => {
+      licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
+      const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
+      expect(timelineEvents).toEqual(expectedEvents)
+      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith('1', user)
+    })
   })
 })

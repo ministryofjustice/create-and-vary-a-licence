@@ -3,7 +3,6 @@ import path from 'path'
 import LicenceService from '../../../services/licenceService'
 import CommunityService from '../../../services/communityService'
 import PrisonerService from '../../../services/prisonerService'
-import statusConfig from '../../../licences/licenceStatus'
 import { PrisonerSearchCriteria } from '../../../@types/prisonerSearchApiClientTypes'
 import { SearchDto } from '../../../@types/probationSearchApiClientTypes'
 
@@ -51,14 +50,6 @@ export default class SpikeRoutes {
     } else {
       res.sendFile(placeHolder)
     }
-  }
-
-  public getCaseloadView: RequestHandler = async (req, res): Promise<void> => {
-    const { username } = res.locals.user
-    const { staffId } = req.params
-    const staffIdentifier = staffId as unknown as number
-    const caseload = this.licenceService.getCaseload(username, staffIdentifier)
-    res.render('pages/caseload', { caseload, statusConfig })
   }
 
   public searchPrison: RequestHandler = async (req, res): Promise<void> => {

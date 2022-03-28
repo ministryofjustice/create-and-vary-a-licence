@@ -50,6 +50,8 @@ import { User } from '../@types/CvlUserDetails'
 import compareLicenceConditions, { VariedConditions } from '../utils/licenceComparator'
 import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
+import TimelineEvent from '../@types/TimelineEvent'
+import TimelineEventType from '../enumeration/TimelineEventType'
 
 export default class LicenceService {
   constructor(
@@ -425,8 +427,11 @@ export default class LicenceService {
   }
 
   async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
-    const originalLicence = await this.getLicence(variation.variationOf.toString(), user)
-    return compareLicenceConditions(originalLicence, variation)
+    if (variation?.variationOf) {
+      const originalLicence = await this.getLicence(variation.variationOf.toString(), user)
+      return compareLicenceConditions(originalLicence, variation)
+    }
+    return {} as VariedConditions
   }
 
   async getApprovalConversation(variation: Licence, user: User): Promise<ApprovalComment[]> {
@@ -459,6 +464,56 @@ export default class LicenceService {
     return this.licenceApiClient.notifyComsToPromptEmailCreation(emailGroups)
   }
 
+  async getTimelineEvents(licence: Licence, user: User): Promise<TimelineEvent[]> {
+    const licences: Licence[] = []
+    let thisLicence: Licence = licence
+    licences.push(thisLicence)
+
+    // Get the trail of variations back to the original licence
+    while (thisLicence?.isVariation) {
+      // eslint-disable-next-line no-await-in-loop
+      thisLicence = await this.licenceApiClient.getLicenceById(`${thisLicence?.variationOf}`, user)
+      if (thisLicence) {
+        licences.push(thisLicence)
+      }
+    }
+
+    return this.convertLicencesToTimelineEvents(licences)
+  }
+
+  private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {
+    return licences.map(licence => {
+      const { title, eventType } = this.getTimelineEventType(licence.variationOf, licence.statusCode)
+      return new TimelineEvent(
+        eventType,
+        title,
+        licence.statusCode,
+        licence.createdByFullName,
+        licence.id,
+        licence.dateLastUpdated
+      )
+    })
+  }
+
+  private getTimelineEventType(varyOf: number, status: string): { eventType: TimelineEventType; title: string } {
+    switch (status) {
+      case LicenceStatus.VARIATION_IN_PROGRESS:
+      case LicenceStatus.VARIATION_REJECTED:
+      case LicenceStatus.VARIATION_SUBMITTED:
+        return { eventType: TimelineEventType.VARIATION_IN_PROGRESS, title: 'Variation in progress' }
+
+      case LicenceStatus.VARIATION_APPROVED:
+        return { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }
+
+      case LicenceStatus.ACTIVE:
+      case LicenceStatus.INACTIVE:
+      default:
+        return varyOf
+          ? { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }
+          : { eventType: TimelineEventType.CREATION, title: 'Licence created' }
+    }
+  }
+
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {
     const tused = nomisRecord.sentenceDetail?.topupSupervisionExpiryDate
     const led = nomisRecord.sentenceDetail?.licenceExpiryDate
@@ -473,137 +528,5 @@ export default class LicenceService {
     }
 
     return LicenceType.AP_PSS
-  }
-
-  /**
-   * Build the list for the staff caseload view.
-   * Return the caseload for this staff member, merged with the licences which exist for these people.
-   * Only concerned with licences that have a statusCode in (IN_PROGRESS, SUBMITTED, REJECTED, ACTIVE, RECALLED) - ignore INACTIVE.
-   * When implemented for real this will use:
-   *   - communityService - get the caseload summary list (surname, crn, nomsNumber, currentRo, currentOm)
-   *   - prisonerService - use prisoner-offender-search to pull prisoner details matching the nomsNumber
-   *   - licenceService - pull back licences matching these people, assembled into a licence[]
-   */
-  getCaseload(username: string, staffId: number): Record<string, unknown> {
-    const content = [
-      {
-        nomsId: 'A1234AC',
-        crn: 'X10786',
-        prisonCode: 'LEI',
-        prisonDescription: 'Leeds HMP',
-        conditionalReleaseDate: '23/02/2022',
-        surname: 'Mustafa',
-        forename: 'Yasin',
-        dateOfBirth: '20/12/1978',
-        releaseDate: '20/12/2021',
-        staffId,
-        licences: [
-          {
-            id: 1,
-            typeCode: 'AP',
-            statusCode: 'IN_PROGRESS',
-          },
-        ],
-      },
-      {
-        nomsId: 'A1234AB',
-        crn: 'X10843',
-        prisonCode: 'MDI',
-        prisonDescription: 'Moorland HMP',
-        conditionalReleaseDate: '12/09/2021',
-        surname: 'McVeigh',
-        forename: 'Stephen',
-        dateOfBirth: '01/10/1994',
-        releaseDate: '19/09/2021',
-        staffId,
-        licences: [
-          {
-            id: 2,
-            typeCode: 'AP',
-            statusCode: 'REJECTED',
-          },
-        ],
-      },
-      {
-        nomsId: 'A1234AA',
-        crn: 'X10745',
-        prisonCode: 'LVI',
-        prisonDescription: 'Liverpool HMP',
-        conditionalReleaseDate: '19/01/2022',
-        surname: 'Harrison',
-        forename: 'Tim',
-        dateOfBirth: '11/02/1971',
-        releaseDate: '18/08/2021',
-        staffId,
-        licences: [
-          {
-            id: 3,
-            typeCode: 'AP',
-            statusCode: 'ACTIVE',
-          },
-          {
-            id: 4,
-            typeCode: 'AP',
-            statusCode: 'IN_PROGRESS',
-          },
-        ],
-      },
-      {
-        nomsId: 'A1234AD',
-        crn: 'X10743',
-        prisonCode: null,
-        prisonDescription: null,
-        conditionalReleaseDate: '19/01/2022',
-        surname: 'Stobart',
-        forename: 'Joel',
-        dateOfBirth: '12/03/1978',
-        releaseDate: '18/09/2021',
-        staffId,
-        licences: [],
-      },
-      {
-        nomsId: 'A1234AE',
-        crn: 'X10677',
-        prisonCode: 'DVI',
-        prisonDescription: 'Doncaster HMP',
-        conditionalReleaseDate: '19/02/2022',
-        surname: 'Elango',
-        forename: 'Arul',
-        dateOfBirth: '23/05/1975',
-        releaseDate: '16/07/2021',
-        staffId,
-        licences: [
-          {
-            id: 5,
-            typeCode: 'AP',
-            statusCode: 'ACTIVE',
-          },
-        ],
-      },
-    ]
-
-    return {
-      content,
-      results: {
-        from: 1,
-        to: 5,
-        count: 5,
-      },
-      previous: {
-        text: 'Previous',
-        ref: '#',
-      },
-      next: {
-        text: 'Next',
-        href: '#',
-      },
-      items: [
-        {
-          text: '1',
-          href: '#',
-          selected: true,
-        },
-      ],
-    }
   }
 }
