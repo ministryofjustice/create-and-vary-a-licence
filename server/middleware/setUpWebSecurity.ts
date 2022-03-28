@@ -15,6 +15,7 @@ export default function setUpWebSecurity(): Router {
   // 2. https://www.npmjs.com/package/helmet
   router.use(
     helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
       referrerPolicy: { policy: 'same-origin' },
       contentSecurityPolicy: {
         directives: {
