@@ -52,7 +52,6 @@ import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
 import TimelineEventType from '../enumeration/TimelineEventType'
-import logger from '../../logger'
 
 export default class LicenceService {
   constructor(
@@ -479,11 +478,7 @@ export default class LicenceService {
       }
     }
 
-    const timelineEvents = this.convertLicencesToTimelineEvents(licences)
-
-    logger.info(`Timeline Events = ${JSON.stringify(timelineEvents)}`)
-
-    return timelineEvents
+    return this.convertLicencesToTimelineEvents(licences)
   }
 
   private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {
