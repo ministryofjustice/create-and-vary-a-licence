@@ -39,10 +39,11 @@ export function getGroupedAdditionalConditions(licenceType: LicenceType): Record
 /**
  * Accepts an additional condition and data items for a licence and expands the
  * placeholders with their matching data to produce a formatted additional condition.
- * @param condition
+ * @param conditionCode
+ * @param enteredData
  */
-export function expandAdditionalCondition(condition: AdditionalCondition): string {
-  const configCondition = getAdditionalConditionByCode(condition.code)
+export function expandAdditionalCondition(conditionCode: string, enteredData: AdditionalConditionData[]): string {
+  const configCondition = getAdditionalConditionByCode(conditionCode)
 
   if (configCondition?.requiresInput) {
     const placeholders = getPlaceholderNames(configCondition.tpl as string)
@@ -59,9 +60,9 @@ export function expandAdditionalCondition(condition: AdditionalCondition): strin
         ph
           .split('||')
           .map(p => p.trim())
-          .find(p => getMatchingDataItems(p, condition.data).length > 0) || ph
+          .find(p => getMatchingDataItems(p, enteredData).length > 0) || ph
 
-      const matchingDataItems = getMatchingDataItems(fieldName, condition.data)
+      const matchingDataItems = getMatchingDataItems(fieldName, enteredData)
 
       if (matchingDataItems.length === 0) {
         // Unmatched placeholder
@@ -94,7 +95,7 @@ export function expandAdditionalCondition(condition: AdditionalCondition): strin
     return removeAllPlaceholders(conditionText)
   }
   // No input was required - keep the condition verbatim to print on the licence
-  return condition.text
+  return configCondition.text as string
 }
 
 /**

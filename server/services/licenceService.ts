@@ -236,7 +236,7 @@ export default class LicenceService {
       })
 
     const requestBody = {
-      expandedConditionText: expandAdditionalCondition(condition),
+      expandedConditionText: expandAdditionalCondition(condition.code, enteredData),
       data: enteredData,
     } as UpdateAdditionalConditionDataRequest
 

@@ -35,9 +35,7 @@ jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
 jest.mock('./prisonerService')
 jest.spyOn(utils, 'convertDateFormat').mockImplementation((value: string) => value)
-jest
-  .spyOn(conditionsProvider, 'expandAdditionalCondition')
-  .mockImplementation((value: AdditionalCondition) => value.text)
+jest.spyOn(conditionsProvider, 'expandAdditionalCondition').mockImplementation(() => 'condition')
 
 const getConditionsSpy = jest
   .spyOn(conditionsProvider, 'getStandardConditions')
