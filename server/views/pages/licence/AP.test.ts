@@ -36,11 +36,14 @@ describe('Print an AP licence', () => {
           { code: '6', text: 'Standard 6' },
           { code: '7', text: 'Standard 7' },
         ],
+        additionalLicenceConditions: [
+          {
+            expandedText:
+              'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohold problems.',
+          },
+        ],
         bespokeConditions: [{ text: 'Bespoke condition 1' }],
       },
-      additionalLicenceConditions: [
-        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohold problems.',
-      ],
       qrCodesEnabled: false,
     }
 

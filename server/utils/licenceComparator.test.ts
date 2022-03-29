@@ -17,12 +17,12 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            text: 'testCondition1',
+            expandedText: 'testCondition1',
           },
           {
             code: '2',
             category: 'category2',
-            text: 'testCondition2',
+            expandedText: 'testCondition2',
           },
         ],
         bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
@@ -72,12 +72,12 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            text: 'testCondition1',
+            expandedText: 'testCondition1',
           },
           {
             code: '2',
             category: 'category2',
-            text: 'testCondition2',
+            expandedText: 'testCondition2',
           },
         ],
         bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
@@ -117,7 +117,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            text: 'testCondition1',
+            expandedText: 'testCondition1',
           },
         ],
       } as Licence
@@ -128,7 +128,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            text: 'amendedTestCondition1',
+            expandedText: 'amendedTestCondition1',
           },
         ],
       } as Licence
@@ -157,7 +157,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            text: 'testCondition1',
+            expandedText: 'testCondition1',
           },
         ],
       } as Licence
@@ -194,7 +194,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            text: 'testCondition1',
+            expandedText: 'testCondition1',
           },
         ],
       } as Licence
@@ -221,7 +221,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            text: 'testCondition1',
+            expandedText: 'testCondition1',
           },
         ],
       } as Licence
@@ -232,7 +232,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            text: 'amendedTestCondition1',
+            expandedText: 'amendedTestCondition1',
           },
         ],
       } as Licence
@@ -260,7 +260,7 @@ describe('Licence Comparator', () => {
         {
           code: '1',
           category: 'category1',
-          text: 'testCondition1',
+          expandedText: 'testCondition1',
         },
       ],
       bespokeConditions: [{ text: 'bespoke1' }],
