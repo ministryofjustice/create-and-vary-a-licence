@@ -47,7 +47,16 @@ gotenberg:
 delius-wiremock:
   replicaCount: 1
 
+  resources:
+    requests:
+      cpu: 100m
+      memory: 640mi
+   limits:
+      cpu: 2000m
+      memory: 2048mi
+
   env:
+    JAVA_OPTS: "-Xmx2048m"
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
     PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
 
