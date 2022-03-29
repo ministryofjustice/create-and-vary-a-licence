@@ -82,10 +82,10 @@ export default class AdditionalConditionsInputPage extends Page {
     return this
   }
 
-  nextInput = (runAxe = true): AdditionalConditionsInputPage => {
-    cy.task('stubPutAdditionalConditionData')
-    cy.task('stubGetLicenceWithConditionToComplete', this.additionalConditionsToInput.shift())
+  nextCondition = (runAxe = true): AdditionalConditionsInputPage => {
     cy.get(this.continueButtonId).click()
+    cy.task('stubGetLicenceWithConditionToComplete', this.additionalConditionsToInput.shift())
+    cy.reload()
     this.checkOnPage()
     if (runAxe) {
       this.runAxe()
@@ -94,9 +94,9 @@ export default class AdditionalConditionsInputPage extends Page {
   }
 
   clickContinue = (): BespokeConditionsQuestionPage => {
-    cy.task('stubPutAdditionalConditionData')
-    cy.task('stubGetLicence')
     cy.get(this.continueButtonId).click()
+    cy.task('stubGetLicence')
+    cy.visit('/licence/create/id/1/bespoke-conditions-question')
     return Page.verifyOnPage(BespokeConditionsQuestionPage)
   }
 }
