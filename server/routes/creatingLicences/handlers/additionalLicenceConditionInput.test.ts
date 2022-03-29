@@ -94,7 +94,12 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
     it('should call licence service to update the additional condition data', async () => {
       await handler.POST(req, res)
-      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith('1', '1', {}, { username: 'joebloggs' })
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
+        '1',
+        { code: 'code1', id: 1 },
+        {},
+        { username: 'joebloggs' }
+      )
     })
 
     it('should redirect to the callback function', async () => {
@@ -149,7 +154,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       expect(licenceService.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', req.file, { username: 'joebloggs' })
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
-        '1',
+        { code: 'outOfBoundsRegion', id: 1 },
         { outOfBoundFilename: 'test.txt' },
         { username: 'joebloggs' }
       )
@@ -160,7 +165,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       await handler.POST(req, res)
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
-        '1',
+        { code: 'outOfBoundsRegion', id: 1 },
         { outOfBoundFilename: 'test.txt' },
         { username: 'joebloggs' }
       )

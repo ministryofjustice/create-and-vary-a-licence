@@ -361,7 +361,7 @@ export interface components {
        */
       text?: string
       /**
-       * @description The expanded value with data entered by the user inserted into the template
+       * @description The condition text with the users data inserted into the template
        * @example You must not enter the location Tesco Superstore
        */
       expandedText?: string
@@ -455,7 +455,7 @@ export interface components {
     UpdateAdditionalConditionDataRequest: {
       /** @description The list of data inputs associated with this additional condition */
       data: components['schemas']['AdditionalConditionData'][]
-      /** @description The additional condition expanded out with the user's data inserted into the template */
+      /** @description The expanded condition with the input data inserted into the template */
       expandedConditionText: string
     }
     /** @description Describes an audit event request */

@@ -2,6 +2,7 @@ import { Readable } from 'stream'
 import fs from 'fs'
 import moment from 'moment'
 import {
+  AdditionalCondition,
   AdditionalConditionsRequest,
   AppointmentAddressRequest,
   AppointmentPersonRequest,
@@ -25,7 +26,12 @@ import {
   UpdateVloDiscussionRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
-import { getAdditionalConditionByCode, getStandardConditions, getVersion } from '../utils/conditionsProvider'
+import {
+  expandAdditionalCondition,
+  getAdditionalConditionByCode,
+  getStandardConditions,
+  getVersion,
+} from '../utils/conditionsProvider'
 import {
   addressObjectToString,
   convertDateFormat,
@@ -194,44 +200,47 @@ export default class LicenceService {
 
   async updateAdditionalConditionData(
     licenceId: string,
-    additionalConditionId: string,
+    condition: AdditionalCondition,
     formData: unknown,
     user: User
   ): Promise<void> {
     let sequenceNumber = -1
 
+    const enteredData = Object.keys(formData)
+      .filter(key => formData[key] && !objectIsEmpty(formData[key]))
+      .flatMap((key, index) => {
+        // The POST request to the API will only accept an array of objects where value is a string.
+        // Therefore, if the type of data entered from the form is an array or an object, we need to convert that to a string type.
+        // For arrays, we can just split it into multiple objects each with a value from each member of that array.
+        // For objects, the objects needs to be converted into a string representation. Types which need to be represented as a string
+        // should extend Stringable and implement the stringify() method
+
+        const build = (value: unknown, i?: number) => {
+          return {
+            field: key,
+            value: value instanceof Stringable ? value.stringify() : value,
+            sequence: i || index,
+          }
+        }
+
+        if (Array.isArray(formData[key])) {
+          return formData[key]
+            .filter((v: string) => v)
+            .map((v: string) => {
+              sequenceNumber += 1
+              return build(v, sequenceNumber)
+            })
+        }
+        sequenceNumber += 1
+        return build(formData[key], sequenceNumber)
+      })
+
     const requestBody = {
-      data: Object.keys(formData)
-        .filter(key => formData[key] && !objectIsEmpty(formData[key]))
-        .flatMap((key, index) => {
-          // The POST request to the API will only accept an array of objects where value is a string.
-          // Therefore, if the type of data entered from the form is an array or an object, we need to convert that to a string type.
-          // For arrays, we can just split it into multiple objects each with a value from each member of that array.
-          // For objects, the objects needs to be converted into a string representation. Types which need to be represented as a string
-          // should extend Stringable and implement the stringify() method
-
-          const build = (value: unknown, i?: number) => {
-            return {
-              field: key,
-              value: value instanceof Stringable ? value.stringify() : value,
-              sequence: i || index,
-            }
-          }
-
-          if (Array.isArray(formData[key])) {
-            return formData[key]
-              .filter((v: string) => v)
-              .map((v: string) => {
-                sequenceNumber += 1
-                return build(v, sequenceNumber)
-              })
-          }
-          sequenceNumber += 1
-          return build(formData[key], sequenceNumber)
-        }),
+      expandedConditionText: expandAdditionalCondition(condition),
+      data: enteredData,
     } as UpdateAdditionalConditionDataRequest
 
-    return this.licenceApiClient.updateAdditionalConditionData(licenceId, additionalConditionId, requestBody, user)
+    return this.licenceApiClient.updateAdditionalConditionData(licenceId, condition.id.toString(), requestBody, user)
   }
 
   async uploadExclusionZoneFile(
