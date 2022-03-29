@@ -1,5 +1,5 @@
 import conditionsConfig from '../config/conditions'
-import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
+import { AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { convertToTitleCase, formatAddress } from './utils'
 import LicenceType from '../enumeration/licenceType'
 import InputTypes from '../enumeration/inputTypes'
