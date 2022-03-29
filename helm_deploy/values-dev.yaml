@@ -50,10 +50,10 @@ delius-wiremock:
   resources:
     requests:
       cpu: 100m
-      memory: 640mi
+      memory: 640Mi
    limits:
       cpu: 2000m
-      memory: 2048mi
+      memory: 2048Mi
 
   env:
     JAVA_OPTS: "-Xmx2048m"
