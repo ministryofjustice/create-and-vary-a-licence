@@ -135,6 +135,17 @@ delius-wiremock:
     pullPolicy: Always
     port: 5000
 
+  resources:
+    requests:
+      cpu: 100m
+      memory: 640Mi
+    limits:
+      cpu: 2000m
+      memory: 2048Mi
+
+  env:
+    JAVA_OPTS: "-Xmx2048M"
+
   namespace_secrets:
     create-and-vary-a-licence:
       SYSTEM_CLIENT_ID: "SYSTEM_CLIENT_ID"
