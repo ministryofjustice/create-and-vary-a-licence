@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 import LicenceService from '../../../services/licenceService'
 
 export default class ViewAndPrintLicenceRoutes {
@@ -14,9 +13,6 @@ export default class ViewAndPrintLicenceRoutes {
       licence?.statusCode === LicenceStatus.SUBMITTED ||
       licence?.statusCode === LicenceStatus.REJECTED
     ) {
-      const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
-      const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
-
       if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
         // Recorded here as we do not know the reason for fetchLicence in the API
         await this.licenceService.recordAuditEvent(
@@ -28,7 +24,7 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
-      res.render('pages/view/view', { expandedLicenceConditions, expandedPssConditions })
+      res.render('pages/view/view')
     } else {
       res.redirect(`/licence/view/cases`)
     }

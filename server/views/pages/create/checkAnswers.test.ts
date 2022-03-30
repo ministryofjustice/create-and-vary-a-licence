@@ -26,7 +26,7 @@ describe('Create a Licence Views - Check Answers', () => {
       {
         code: 'condition1',
         category: 'Category 1',
-        text: 'Template 1',
+        expandedText: 'Template 1',
         data: [
           {
             field: 'field1',
@@ -37,7 +37,7 @@ describe('Create a Licence Views - Check Answers', () => {
       {
         code: 'condition2',
         category: 'Category 2',
-        text: 'Template 2',
+        expandedText: 'Template 2',
         data: [
           {
             field: 'field2',
@@ -58,7 +58,7 @@ describe('Create a Licence Views - Check Answers', () => {
       {
         code: 'condition1',
         category: 'Category 1',
-        text: 'Template 1',
+        expandedText: 'Template 1',
         data: [
           {
             field: 'field1',
@@ -69,7 +69,7 @@ describe('Create a Licence Views - Check Answers', () => {
       {
         code: 'condition2',
         category: 'Category 2',
-        text: 'Template 2',
+        expandedText: 'Template 2',
         data: [
           {
             field: 'field2',
@@ -115,8 +115,6 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display a table containing the additional licence conditions', () => {
     viewContext = {
       licence,
-      expandedLicenceConditions: licence.additionalLicenceConditions,
-      expandedPssConditions: licence.additionalLicenceConditions,
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -152,8 +150,6 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display additional PSS conditions section if licence type is PSS', () => {
     viewContext = {
       licence: { ...licence, typeCode: 'PSS' },
-      expandedLicenceConditions: licence.additionalLicenceConditions,
-      expandedPssConditions: licence.additionalLicenceConditions,
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
     expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence requirements details')
@@ -162,8 +158,6 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display additional PSS conditions section if licence type is AP_PSS', () => {
     viewContext = {
       licence,
-      expandedLicenceConditions: licence.additionalLicenceConditions,
-      expandedPssConditions: licence.additionalLicenceConditions,
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
     expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence requirements details')
@@ -178,8 +172,6 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display a table containing the additional PSS conditions', () => {
     viewContext = {
       licence: { ...licence, typeCode: 'PSS' },
-      expandedLicenceConditions: licence.additionalLicenceConditions,
-      expandedPssConditions: licence.additionalLicenceConditions,
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -213,8 +205,6 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display a table containing the bespoke conditions for AP licences', () => {
     viewContext = {
       licence: { ...licence, typeCode: 'AP' },
-      expandedLicenceConditions: licence.additionalLicenceConditions,
-      expandedPssConditions: licence.additionalLicenceConditions,
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -238,8 +228,6 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should show change links and submit button when licence status is IN_PROGRESS', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'IN_PROGRESS' },
-      expandedLicenceConditions: licence.additionalLicenceConditions,
-      expandedPssConditions: licence.additionalLicenceConditions,
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -295,8 +283,6 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should hide change links and submit button when licence status is not IN_PROGRESS', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'SUBMITTED' },
-      expandedLicenceConditions: licence.additionalLicenceConditions,
-      expandedPssConditions: licence.additionalLicenceConditions,
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))

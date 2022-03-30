@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 
 export default class ApprovalViewRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -11,9 +10,6 @@ export default class ApprovalViewRoutes {
 
     // Check whether this licence is still in a SUBMITTED state - back button pressed - avoid re-approval
     if (licence?.statusCode === LicenceStatus.SUBMITTED) {
-      const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
-      const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
-
       // Recorded here as we do not know the reason for the fetchLicence in the API
       await this.licenceService.recordAuditEvent(
         `Licence viewed for approval for ${licence?.forename} ${licence?.surname}`,
@@ -22,7 +18,7 @@ export default class ApprovalViewRoutes {
         new Date(),
         user
       )
-      res.render('pages/approve/view', { expandedLicenceConditions, expandedPssConditions })
+      res.render('pages/approve/view')
     } else {
       res.redirect(`/licence/approve/cases`)
     }
