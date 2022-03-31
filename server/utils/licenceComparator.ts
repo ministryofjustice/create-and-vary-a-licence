@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { AdditionalCondition, BespokeCondition, Licence } from '../@types/licenceApiClientTypes'
 import ConditionType from '../enumeration/conditionType'
-import { expandAdditionalConditions } from './conditionsProvider'
 
 type Condition = {
   category: string
@@ -49,8 +48,8 @@ const compareAdditionalConditionSet = (
   conditionType: ConditionType
 ): VariedConditions => {
   const variedConditionsBuilder = new VariedConditionsBuilder(conditionType)
-  const sortedOriginalConditionSet = sortConditionSet(expandAdditionalConditions(originalConditionSet))
-  const sortedVariedConditionSet = sortConditionSet(expandAdditionalConditions(variedConditionSet))
+  const sortedOriginalConditionSet = sortConditionSet(originalConditionSet)
+  const sortedVariedConditionSet = sortConditionSet(variedConditionSet)
 
   let originalCondition = sortedOriginalConditionSet.shift()
   let variedCondition = sortedVariedConditionSet.shift()
@@ -59,20 +58,20 @@ const compareAdditionalConditionSet = (
     if (originalCondition?.code < variedCondition?.code || variedCondition === undefined) {
       variedConditionsBuilder.recordConditionRemoved({
         category: originalCondition.category,
-        condition: originalCondition.text,
+        condition: originalCondition.expandedText,
       })
       originalCondition = sortedOriginalConditionSet.shift()
     } else if (originalCondition?.code > variedCondition?.code || originalCondition === undefined) {
       variedConditionsBuilder.recordConditionAdded({
         category: variedCondition.category,
-        condition: variedCondition.text,
+        condition: variedCondition.expandedText,
       })
       variedCondition = sortedVariedConditionSet.shift()
     } else {
-      if (originalCondition.text !== variedCondition.text) {
+      if (originalCondition.expandedText !== variedCondition.expandedText) {
         variedConditionsBuilder.recordConditionAmended({
           category: variedCondition.category,
-          condition: variedCondition.text,
+          condition: variedCondition.expandedText,
         })
       }
 

@@ -34,7 +34,7 @@ describe('View and print - single licence view', () => {
       {
         code: 'condition1',
         category: 'Category 1',
-        text: 'Template 1',
+        expandedText: 'Template 1',
         data: [
           {
             field: 'field1',
@@ -45,7 +45,7 @@ describe('View and print - single licence view', () => {
       {
         code: 'condition2',
         category: 'Category 2',
-        text: 'Template 2',
+        expandedText: 'Template 2',
         data: [
           {
             field: 'field2',
@@ -66,7 +66,7 @@ describe('View and print - single licence view', () => {
       {
         code: 'condition1',
         category: 'Category 1',
-        text: 'Template 1',
+        expandedText: 'Template 1',
         data: [
           {
             field: 'field1',
@@ -78,12 +78,8 @@ describe('View and print - single licence view', () => {
     bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
   } as Licence
 
-  // Not really expanded - but don't need to be for this test
-  const expandedLicenceConditions = licence.additionalLicenceConditions
-  const expandedPssConditions = licence.additionalPssConditions
-
   it('should display a single licence to print', () => {
-    viewContext = { licence, expandedLicenceConditions, expandedPssConditions }
+    viewContext = { licence }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -163,7 +159,7 @@ describe('View and print - single licence view', () => {
   })
 
   it('Print buttons are not visible when licence is not approved or active', () => {
-    viewContext = { licence: { ...licence, statusCode: 'SUBMITTED' }, expandedLicenceConditions, expandedPssConditions }
+    viewContext = { licence: { ...licence, statusCode: 'SUBMITTED' } }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -171,7 +167,7 @@ describe('View and print - single licence view', () => {
   })
 
   it('Title changes to view when licence is not printable', () => {
-    viewContext = { licence: { ...licence, statusCode: 'SUBMITTED' }, expandedLicenceConditions, expandedPssConditions }
+    viewContext = { licence: { ...licence, statusCode: 'SUBMITTED' } }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
@@ -181,8 +177,6 @@ describe('View and print - single licence view', () => {
   it('Title changes depending on licence type', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'PSS' },
-      expandedLicenceConditions,
-      expandedPssConditions,
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))

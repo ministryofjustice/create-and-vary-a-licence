@@ -31,14 +31,15 @@ export default class AdditionalLicenceConditionInputRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { conditionId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
 
     // Check for file uploads on specific forms
     if (req.file && req.file.fieldname === 'outOfBoundFilename') {
       await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
     }
 
-    await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, user)
+    const condition = licence.additionalLicenceConditions.find((c: AdditionalCondition) => c.id === +conditionId)
+    await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-licence-conditions/callback${

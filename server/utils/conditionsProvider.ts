@@ -1,5 +1,5 @@
 import conditionsConfig from '../config/conditions'
-import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
+import { AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { convertToTitleCase, formatAddress } from './utils'
 import LicenceType from '../enumeration/licenceType'
 import InputTypes from '../enumeration/inputTypes'
@@ -37,71 +37,65 @@ export function getGroupedAdditionalConditions(licenceType: LicenceType): Record
 }
 
 /**
- * Accepts a list of additional conditions and data items for a licence and expands the
- * placeholders with their matching data to produce a list of formatted additional conditions.
- * @param conditions
+ * Accepts an additional condition and data items for a licence and expands the
+ * placeholders with their matching data to produce a formatted additional condition.
+ * @param conditionCode
+ * @param enteredData
  */
-export function expandAdditionalConditions(conditions: AdditionalCondition[]): AdditionalCondition[] {
-  const expandedConditions: AdditionalCondition[] = []
-  conditions?.forEach(condition => {
-    const configCondition = getAdditionalConditionByCode(condition.code)
+export function expandAdditionalCondition(conditionCode: string, enteredData: AdditionalConditionData[]): string {
+  const configCondition = getAdditionalConditionByCode(conditionCode)
 
-    if (configCondition?.requiresInput) {
-      const placeholders = getPlaceholderNames(configCondition.tpl as string)
-      const inputConfig = getConditionInputs(configCondition)
-      let conditionText = configCondition.tpl as string
+  if (configCondition?.requiresInput) {
+    const placeholders = getPlaceholderNames(configCondition.tpl as string)
+    const inputConfig = getConditionInputs(configCondition)
+    let conditionText = configCondition.tpl as string
 
-      placeholders.forEach(placeholder => {
-        const ph = placeholder.replace(/[{}]/g, '')?.trim()
+    placeholders.forEach(placeholder => {
+      const ph = placeholder.replace(/[{}]/g, '')?.trim()
 
-        // Double pipe notation is used to indicate that either value can be used in this placeholder.
-        // The field names are in priority order (i.e. the second field name will be used only if the first field has no data)
+      // Double pipe notation is used to indicate that either value can be used in this placeholder.
+      // The field names are in priority order (i.e. the second field name will be used only if the first field has no data)
 
-        const fieldName =
-          ph
-            .split('||')
-            .map(p => p.trim())
-            .find(p => getMatchingDataItems(p, condition.data).length > 0) || ph
+      const fieldName =
+        ph
+          .split('||')
+          .map(p => p.trim())
+          .find(p => getMatchingDataItems(p, enteredData).length > 0) || ph
 
-        const matchingDataItems = getMatchingDataItems(fieldName, condition.data)
+      const matchingDataItems = getMatchingDataItems(fieldName, enteredData)
 
-        if (matchingDataItems.length === 0) {
-          // Unmatched placeholder
-          conditionText = removeNamedPlaceholder(ph, conditionText)
-        } else if (matchingDataItems.length === 1) {
-          // Single matching value
-          const rules = inputConfig.find(item => item.name === fieldName)
-          let { value } = matchingDataItems[0]
-          value = adjustCase(rules?.case as string, value)
-          value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
-          value = rules?.type === InputTypes.ADDRESS ? formatAddress(value) : value
-          if (rules?.handleIndefiniteArticle) {
-            value = startsWithAVowel(value) ? `an ${value}` : `a ${value}`
-          }
-          conditionText = replacePlaceholderWithValue(ph, conditionText, value)
-        } else {
-          // List of values for this placeholder (lists of values can have listType 'AND' or 'OR')
-          const rules = inputConfig.find(item => item.name === fieldName)
-          let value = produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
-          value = adjustCase(rules?.case as string, value)
-          value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
-          if (rules?.handleIndefiniteArticle) {
-            value = startsWithAVowel(value) ? `an ${value}` : `a ${value}`
-          }
-          conditionText = replacePlaceholderWithValue(ph, conditionText, value)
+      if (matchingDataItems.length === 0) {
+        // Unmatched placeholder
+        conditionText = removeNamedPlaceholder(ph, conditionText)
+      } else if (matchingDataItems.length === 1) {
+        // Single matching value
+        const rules = inputConfig.find(item => item.name === fieldName)
+        let { value } = matchingDataItems[0]
+        value = adjustCase(rules?.case as string, value)
+        value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
+        value = rules?.type === InputTypes.ADDRESS ? formatAddress(value) : value
+        if (rules?.handleIndefiniteArticle) {
+          value = startsWithAVowel(value) ? `an ${value}` : `a ${value}`
         }
-      })
+        conditionText = replacePlaceholderWithValue(ph, conditionText, value)
+      } else {
+        // List of values for this placeholder (lists of values can have listType 'AND' or 'OR')
+        const rules = inputConfig.find(item => item.name === fieldName)
+        let value = produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
+        value = adjustCase(rules?.case as string, value)
+        value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
+        if (rules?.handleIndefiniteArticle) {
+          value = startsWithAVowel(value) ? `an ${value}` : `a ${value}`
+        }
+        conditionText = replacePlaceholderWithValue(ph, conditionText, value)
+      }
+    })
 
-      // Remove any unmatched placeholders that remain
-      conditionText = removeAllPlaceholders(conditionText)
-      expandedConditions.push({ ...condition, text: conditionText })
-    } else {
-      // No input was required - keep the condition verbatim to print on the licence
-      expandedConditions.push(condition)
-    }
-  })
-
-  return expandedConditions
+    // Remove any unmatched placeholders that remain
+    return removeAllPlaceholders(conditionText)
+  }
+  // No input was required - keep the condition verbatim to print on the licence
+  return configCondition.text as string
 }
 
 /**

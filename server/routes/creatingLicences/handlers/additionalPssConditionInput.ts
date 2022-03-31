@@ -21,9 +21,10 @@ export default class AdditionalPssConditionInputRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { conditionId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
 
-    await this.licenceService.updateAdditionalConditionData(licenceId, conditionId, req.body, user)
+    const condition = licence.additionalPssConditions.find((c: AdditionalCondition) => c.id === +conditionId)
+    await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-pss-conditions/callback${
