@@ -122,8 +122,6 @@ export default {
               category: 'Residence at a specific place',
               sequence: 0,
               text: 'You must reside within [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
-              expandedText:
-                'You must reside within London while of no fixed abode, unless otherwise approved by your supervising officer.',
               data: [
                 {
                   id: 1,
@@ -254,8 +252,6 @@ export default {
               category: 'Drug appointment',
               sequence: 0,
               text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
-              expandedText:
-                'Attend 123 Fake Street, Fakestown, London, SW2 5XF, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
               data: [
                 {
                   id: 1,

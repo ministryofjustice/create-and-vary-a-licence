@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalPssConditions(licence, isEditable) %}
+{% macro additionalPssConditions(licence, expandedPssConditions, isEditable) %}
     {% macro additionalConditionHtml(expandedConditionText, data) %}
         <div>
             {{ expandedConditionText }}
@@ -23,10 +23,10 @@
     {% set additionalPssConditions = [] %}
 
     {# Add select additional PSS requirements + count of existing requirements #}
-    {% set conditionWord = "requirement" if licence.additionalPssConditions.length === 1 else "requirements" %}
+    {% set conditionWord = "requirement" if expandedPssConditions.length === 1 else "requirements" %}
     {% set additionalPssConditions = (additionalPssConditions.push({
         key: {  text: "Select additional requirements" },
-        value: { text: "" + licence.additionalPssConditions.length + " " + conditionWord + " selected" },
+        value: { text: "" + expandedPssConditions.length + " " + conditionWord + " selected" },
         actions: {
             items: [
                 {
@@ -38,10 +38,10 @@
         } if isEditable
     }), additionalPssConditions) %}
 
-    {% for condition in licence.additionalPssConditions %}
+    {% for condition in expandedPssConditions %}
         {% set additionalPssConditions = (additionalPssConditions.push({
             key: {  text: condition.category },
-            value: { html: additionalConditionHtml(condition.expandedText, condition.data) },
+            value: { html: additionalConditionHtml(condition.text, condition.data) },
             actions: {
                 items: [
                     {

@@ -69,21 +69,13 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
   describe('POST', () => {
     beforeEach(() => {
       licenceService.updateAdditionalConditionData = jest.fn()
-      res.locals.licence = {
-        additionalPssConditions: [
-          {
-            id: 1,
-            code: 'code1',
-          },
-        ],
-      }
     })
 
     it('should call licence service to update the additional condition data', async () => {
       await handler.POST(req, res)
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
-        { code: 'code1', id: 1 },
+        '1',
         {},
         {
           username: 'joebloggs',

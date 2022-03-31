@@ -23,7 +23,6 @@ export default class AdditionalConditionsPage extends Page {
 
   clickContinue = (): AdditionalConditionsInputPage => {
     cy.task('stubPutAdditionalConditions')
-    cy.task('stubPutAdditionalConditionData')
     cy.task('stubGetLicenceWithConditionToComplete', this.context?.additionalConditions.shift())
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsInputPage)

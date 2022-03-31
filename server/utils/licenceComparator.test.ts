@@ -1,6 +1,9 @@
 import _ from 'lodash'
 import compareLicenceConditions from './licenceComparator'
+import * as conditionsProvider from './conditionsProvider'
 import { Licence } from '../@types/licenceApiClientTypes'
+
+jest.spyOn(conditionsProvider, 'expandAdditionalConditions').mockImplementation(conditions => conditions)
 
 const licenceTemplate = {
   additionalLicenceConditions: [],
@@ -17,12 +20,12 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            expandedText: 'testCondition1',
+            text: 'testCondition1',
           },
           {
             code: '2',
             category: 'category2',
-            expandedText: 'testCondition2',
+            text: 'testCondition2',
           },
         ],
         bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
@@ -72,12 +75,12 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            expandedText: 'testCondition1',
+            text: 'testCondition1',
           },
           {
             code: '2',
             category: 'category2',
-            expandedText: 'testCondition2',
+            text: 'testCondition2',
           },
         ],
         bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
@@ -117,7 +120,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            expandedText: 'testCondition1',
+            text: 'testCondition1',
           },
         ],
       } as Licence
@@ -128,7 +131,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            expandedText: 'amendedTestCondition1',
+            text: 'amendedTestCondition1',
           },
         ],
       } as Licence
@@ -157,7 +160,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            expandedText: 'testCondition1',
+            text: 'testCondition1',
           },
         ],
       } as Licence
@@ -194,7 +197,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            expandedText: 'testCondition1',
+            text: 'testCondition1',
           },
         ],
       } as Licence
@@ -221,7 +224,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            expandedText: 'testCondition1',
+            text: 'testCondition1',
           },
         ],
       } as Licence
@@ -232,7 +235,7 @@ describe('Licence Comparator', () => {
           {
             code: '1',
             category: 'category1',
-            expandedText: 'amendedTestCondition1',
+            text: 'amendedTestCondition1',
           },
         ],
       } as Licence
@@ -260,7 +263,7 @@ describe('Licence Comparator', () => {
         {
           code: '1',
           category: 'category1',
-          expandedText: 'testCondition1',
+          text: 'testCondition1',
         },
       ],
       bespokeConditions: [{ text: 'bespoke1' }],

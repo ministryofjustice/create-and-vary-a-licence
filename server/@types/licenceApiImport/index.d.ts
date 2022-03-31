@@ -84,10 +84,6 @@ export interface paths {
     /** Records an auditable event related to an action taken by a user or an automated in-service process. Requires ROLE_CVL_ADMIN. */
     put: operations['recordAuditEvent']
   }
-  '/licence/match': {
-    /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
-    post: operations['getLicencesMatchingCriteria']
-  }
   '/licence/id/{licenceId}/create-variation': {
     /** Create a variation of this licence. The new licence will have a new ID and have a statius VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createVariation']
@@ -111,6 +107,10 @@ export interface paths {
   '/audit/retrieve': {
     /** Retrieves a list of auditable events matching the criteria provided. Requires ROLE_CVL_ADMIN. */
     post: operations['requestAuditEvents']
+  }
+  '/licence/match': {
+    /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
+    get: operations['getLicencesMatchingCriteria']
   }
   '/licence/id/{licenceId}': {
     /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -360,11 +360,6 @@ export interface components {
        * @example You must not enter the location [DESCRIPTION]
        */
       text?: string
-      /**
-       * @description The condition text with the users data inserted into the template
-       * @example You must not enter the location Tesco Superstore
-       */
-      expandedText?: string
       /** @description The list of data items entered for this additional condition */
       data: components['schemas']['AdditionalConditionData'][]
       /** @description The list of file upload summary for this additional condition */
@@ -455,8 +450,6 @@ export interface components {
     UpdateAdditionalConditionDataRequest: {
       /** @description The list of data inputs associated with this additional condition */
       data: components['schemas']['AdditionalConditionData'][]
-      /** @description The expanded condition with the input data inserted into the template */
-      expandedConditionText: string
     }
     /** @description Describes an audit event request */
     AuditEvent: {
@@ -503,46 +496,6 @@ export interface components {
        * @example Updated a bespoke condition
        */
       detail?: string
-    }
-    /** @description Request object for searching licences by field */
-    MatchLicencesRequest: {
-      /**
-       * @description A list of prison codes
-       * @example ['PVI', 'BAI']
-       */
-      prison?: string[]
-      /**
-       * @description A list of licence status codes
-       * @example ['ACTIVE', 'APPROVED']
-       */
-      status?: (
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-      )[]
-      /**
-       * @description A list of staff identifiers - the responsible probation officer
-       * @example 1234,4321
-       */
-      staffId?: number[]
-      /**
-       * @description A list of NOMIS ID's
-       * @example ['B76546GH', 'Y76499GY']
-       */
-      nomsId?: string[]
-      /**
-       * @description A list of probation delivery unit codes
-       * @example ['N55', 'P66']
-       */
-      pdu?: string[]
     }
     /** @description Response object which summarises a licence */
     LicenceSummary: {
@@ -2059,40 +2012,6 @@ export interface operations {
       }
     }
   }
-  /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
-  getLicencesMatchingCriteria: {
-    parameters: {
-      query: {
-        sortBy?: string
-        sortOrder?: string
-      }
-    }
-    responses: {
-      /** Returned matching licence summary details - empty if no matches. */
-      200: {
-        content: {
-          'application/json': components['schemas']['LicenceSummary'][]
-        }
-      }
-      /** Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['MatchLicencesRequest']
-      }
-    }
-  }
   /** Create a variation of this licence. The new licence will have a new ID and have a statius VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   createVariation: {
     parameters: {
@@ -2291,6 +2210,52 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['AuditRequest']
+      }
+    }
+  }
+  /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
+  getLicencesMatchingCriteria: {
+    parameters: {
+      query: {
+        prison?: string[]
+        status?: (
+          | 'IN_PROGRESS'
+          | 'SUBMITTED'
+          | 'APPROVED'
+          | 'ACTIVE'
+          | 'REJECTED'
+          | 'INACTIVE'
+          | 'RECALLED'
+          | 'VARIATION_IN_PROGRESS'
+          | 'VARIATION_SUBMITTED'
+          | 'VARIATION_REJECTED'
+          | 'VARIATION_APPROVED'
+        )[]
+        staffId?: number[]
+        nomsId?: string[]
+        pdu?: string[]
+        sortBy?: string
+        sortOrder?: string
+      }
+    }
+    responses: {
+      /** Returned matching licence summary details - empty if no matches. */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary'][]
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
       }
     }
   }

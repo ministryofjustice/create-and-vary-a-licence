@@ -4,6 +4,7 @@ import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
+import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
@@ -26,13 +27,15 @@ export default class PrintLicenceRoutes {
     const { qrCodesEnabled } = res.locals
     const htmlPrint = true
     const qrCode = qrCodesEnabled ? await this.qrCodeService.getQrCode(licence) : null
-    const conditionIdWithUpload = this.getConditionWithUpload(licence.additionalLicenceConditions)
+    const additionalLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
+    const additionalPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
+    const conditionIdWithUpload = this.getConditionWithUpload(additionalLicenceConditions)
     const exclusionZoneMapData =
       conditionIdWithUpload !== 0
         ? await this.licenceService.getExclusionZoneImageData(licence.id, `${conditionIdWithUpload}`, user)
         : null
     const exclusionZoneDescription =
-      conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(licence.additionalLicenceConditions) : null
+      conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(additionalLicenceConditions) : null
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
@@ -44,6 +47,8 @@ export default class PrintLicenceRoutes {
     )
 
     res.render(`pages/licence/${licence.typeCode}`, {
+      additionalLicenceConditions,
+      additionalPssConditions,
       qrCode,
       htmlPrint,
       exclusionZoneDescription,
@@ -56,16 +61,18 @@ export default class PrintLicenceRoutes {
     const { qrCodesEnabled } = res.locals
     const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
     const qrCode = qrCodesEnabled ? await this.qrCodeService.getQrCode(licence) : null
+    const additionalLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
+    const additionalPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
     const imageData = await this.prisonerService.getPrisonerImageData(licence.nomsId, user)
     const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.lastName}.pdf`
     const footerHtml = this.getPdfFooter(licence)
-    const conditionIdWithUpload = this.getConditionWithUpload(licence.additionalLicenceConditions)
+    const conditionIdWithUpload = this.getConditionWithUpload(additionalLicenceConditions)
     const exclusionZoneMapData =
       conditionIdWithUpload !== 0
         ? await this.licenceService.getExclusionZoneImageData(licence.id, `${conditionIdWithUpload}`, user)
         : null
     const exclusionZoneDescription =
-      conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(licence.additionalLicenceConditions) : null
+      conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(additionalLicenceConditions) : null
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
@@ -81,6 +88,8 @@ export default class PrintLicenceRoutes {
       {
         licencesUrl,
         imageData,
+        additionalLicenceConditions,
+        additionalPssConditions,
         qrCode,
         htmlPrint: false,
         watermark,

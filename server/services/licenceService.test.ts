@@ -18,7 +18,6 @@ import SimpleDate from '../routes/creatingLicences/types/date'
 import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import {
-  AdditionalCondition,
   EmailContact,
   Licence,
   LicenceSummary,
@@ -35,7 +34,6 @@ jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
 jest.mock('./prisonerService')
 jest.spyOn(utils, 'convertDateFormat').mockImplementation((value: string) => value)
-jest.spyOn(conditionsProvider, 'expandAdditionalCondition').mockImplementation(() => 'condition')
 
 const getConditionsSpy = jest
   .spyOn(conditionsProvider, 'getStandardConditions')
@@ -468,18 +466,8 @@ describe('Licence Service', () => {
         key3: undefined as unknown,
       }
 
-      await licenceService.updateAdditionalConditionData(
-        '1',
-        { id: 2, text: 'condition' } as AdditionalCondition,
-        formData,
-        user
-      )
-      expect(licenceApiClient.updateAdditionalConditionData).toBeCalledWith(
-        '1',
-        '2',
-        { data: [], expandedConditionText: 'condition' },
-        user
-      )
+      await licenceService.updateAdditionalConditionData('1', '2', formData, user)
+      expect(licenceApiClient.updateAdditionalConditionData).toBeCalledWith('1', '2', { data: [] }, user)
     })
 
     it('should map form value to a condition', async () => {
@@ -489,17 +477,11 @@ describe('Licence Service', () => {
         key3: ['form value 3', 'form value 4'],
       }
 
-      await licenceService.updateAdditionalConditionData(
-        '1',
-        { id: 2, text: 'condition' } as AdditionalCondition,
-        formData,
-        user
-      )
+      await licenceService.updateAdditionalConditionData('1', '2', formData, user)
       expect(licenceApiClient.updateAdditionalConditionData).toBeCalledWith(
         '1',
         '2',
         {
-          expandedConditionText: 'condition',
           data: [
             {
               field: 'key1',
@@ -532,17 +514,11 @@ describe('Licence Service', () => {
         key1: new SimpleDate('22', '12', '2022'),
       }
 
-      await licenceService.updateAdditionalConditionData(
-        '1',
-        { id: 2, text: 'condition' } as AdditionalCondition,
-        formData,
-        user
-      )
+      await licenceService.updateAdditionalConditionData('1', '2', formData, user)
       expect(licenceApiClient.updateAdditionalConditionData).toBeCalledWith(
         '1',
         '2',
         {
-          expandedConditionText: 'condition',
           data: [
             {
               field: 'key1',

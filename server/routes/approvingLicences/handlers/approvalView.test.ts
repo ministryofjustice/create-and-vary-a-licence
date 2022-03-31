@@ -46,7 +46,10 @@ describe('Route - view and approve a licence', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/approve/view')
+      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
+        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
+        expandedPssConditions: res.locals.licence.additionalPssConditions,
+      })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
 
