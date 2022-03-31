@@ -1,8 +1,8 @@
 # Stage: base image
+FROM node:14.17-buster-slim as base
+
 ARG BUILD_NUMBER=1_0_0
 ARG GIT_REF=not-available
-
-FROM node:14.17-buster-slim as base
 
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
@@ -14,7 +14,9 @@ RUN addgroup --gid 2000 --system appgroup && \
 
 WORKDIR /app
 
-ENV BUILD_NUMBER=${BUILD_NUMBER:-1_0_0}
+# Cache breaking
+ENV BUILD_NUMBER ${BUILD_NUMBER:-1_0_0}
+
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get autoremove -y && \
