@@ -46,8 +46,6 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
         callToActions: { shouldShowVaryButton: true },
-        expandedLicenceConditions: res.locals.licence.additionalLicenceConditions,
-        expandedPssConditions: res.locals.licence.additionalPssConditions,
       })
     })
 

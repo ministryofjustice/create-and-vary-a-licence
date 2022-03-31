@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalLicenceConditions(licence, expandedLicenceConditions, isEditable) %}
+{% macro additionalLicenceConditions(licence, isEditable) %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-full">
@@ -10,11 +10,11 @@
 
     {% set additionalLicenceConditions = [] %}
 
-    {% set conditionWord = "condition" if expandedLicenceConditions.length === 1 else "conditions" %}
+    {% set conditionWord = "condition" if licence.additionalLicenceConditions.length === 1 else "conditions" %}
 
     {% set additionalLicenceConditions = (additionalLicenceConditions.push({
         key: {  text: "Select additional conditions" },
-        value: { text: "" + expandedLicenceConditions.length + " " + conditionWord + " selected" },
+        value: { text: "" + licence.additionalLicenceConditions.length + " " + conditionWord + " selected" },
         actions: {
             items: [
                 {
@@ -26,7 +26,7 @@
         } if isEditable
     }), additionalLicenceConditions) %}
 
-    {% for condition in expandedLicenceConditions %}
+    {% for condition in licence.additionalLicenceConditions %}
 
         {% if condition | checkConditionRequiresInput %}
           {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
@@ -59,7 +59,7 @@
 
 {% macro additionalConditionHtml(condition) %}
     <div>
-        {{ condition.text }}
+        {{ condition.expandedText }}
     </div>
     {% if condition.data.length %}
         <div class="govuk-!-font-weight-bold govuk-!-margin-top-3">

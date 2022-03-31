@@ -66,12 +66,12 @@
             {% endif %}
 
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalLicenceConditions(licence, expandedLicenceConditions, isInProgress) }}
+                {{ additionalLicenceConditions(licence, isInProgress) }}
                 {{ bespokeConditions(licence, isInProgress) }}
             {% endif %}
 
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, expandedPssConditions, isInProgress) }}
+                {{ additionalPssConditions(licence, isInProgress) }}
             {% endif %}
 
             {% if isInProgress and licence.isVariation %}
