@@ -5,6 +5,7 @@ import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
+import { expandAdditionalConditions } from '../../../utils/conditionsProvider'
 
 export default class CheckAnswersRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -24,7 +25,10 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    res.render('pages/create/checkAnswers')
+    const expandedLicenceConditions = expandAdditionalConditions(licence.additionalLicenceConditions)
+    const expandedPssConditions = expandAdditionalConditions(licence.additionalPssConditions)
+
+    res.render('pages/create/checkAnswers', { expandedLicenceConditions, expandedPssConditions })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

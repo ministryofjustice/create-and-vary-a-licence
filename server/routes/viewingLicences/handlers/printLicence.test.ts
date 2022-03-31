@@ -36,8 +36,6 @@ describe('Route - print a licence', () => {
           licence: {
             id: 1,
             typeCode: 'AP',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
           },
           qrCodesEnabled: false,
         },
@@ -48,6 +46,8 @@ describe('Route - print a licence', () => {
       await handler.preview(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/licence/AP', {
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
         qrCode: null,
         htmlPrint: true,
         exclusionZoneDescription: null,
@@ -66,8 +66,6 @@ describe('Route - print a licence', () => {
           licence: {
             id: 1,
             typeCode: 'PSS',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
           },
           qrCodesEnabled: false,
         },
@@ -78,6 +76,8 @@ describe('Route - print a licence', () => {
       await handler.preview(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', {
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
         qrCode: null,
         htmlPrint: true,
         exclusionZoneDescription: null,
@@ -104,8 +104,6 @@ describe('Route - print a licence', () => {
             pnc: 'PNC',
             version: '1.0',
             prisonCode: 'MDI',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
           },
           qrCodesEnabled: false,
         },
@@ -126,6 +124,8 @@ describe('Route - print a licence', () => {
         {
           licencesUrl,
           imageData: '-- base64 image data --',
+          additionalLicenceConditions: [],
+          additionalPssConditions: [],
           qrCode: null,
           htmlPrint: false,
           watermark,
@@ -186,6 +186,8 @@ describe('Route - print a licence', () => {
         {
           licencesUrl,
           imageData: '-- base64 image data --',
+          additionalLicenceConditions: res.locals.licence.additionalLicenceConditions,
+          additionalPssConditions: [],
           qrCode: null,
           htmlPrint: false,
           watermark,
@@ -216,8 +218,6 @@ describe('Route - print a licence', () => {
             pnc: 'PNC',
             version: '1.0',
             prisonCode: 'MDI',
-            additionalLicenceConditions: [],
-            additionalPssConditions: [],
           },
           qrCodesEnabled: true,
         },
@@ -238,6 +238,8 @@ describe('Route - print a licence', () => {
         {
           licencesUrl,
           imageData: '-- base64 image data --',
+          additionalLicenceConditions: [],
+          additionalPssConditions: [],
           qrCode: 'a QR code',
           htmlPrint: false,
           watermark,
