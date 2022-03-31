@@ -1,6 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalPssConditions(licence, isEditable) %}
+{% macro additionalPssConditions(licence, isEditable, validationErrors) %}
+    {% set errorMessage = validationErrors | findError('additionalPssConditions') %}
     {% macro additionalConditionHtml(expandedConditionText, data) %}
         <div>
             {{ expandedConditionText }}
@@ -25,6 +26,7 @@
     {# Add select additional PSS requirements + count of existing requirements #}
     {% set conditionWord = "requirement" if licence.additionalPssConditions.length === 1 else "requirements" %}
     {% set additionalPssConditions = (additionalPssConditions.push({
+        classes: 'govuk-summary-list__row--error' if errorMessage,
         key: {  text: "Select additional requirements" },
         value: { text: "" + licence.additionalPssConditions.length + " " + conditionWord + " selected" },
         actions: {
@@ -56,7 +58,7 @@
 
     {% if additionalPssConditions.length > 0 %}
       {{ govukSummaryList({
-        attributes: { id: 'additional-pss-conditions-details' },
+        attributes: { id: 'additionalPssConditions' },
         classes: 'govuk-!-margin-bottom-9',
         rows: additionalPssConditions
       }) }}
