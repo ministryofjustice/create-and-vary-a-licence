@@ -56,7 +56,7 @@ const populateAcoDetail = (fieldValues: string[]): AcoDetail => {
 logger.info(`COMMUNITY_API_URL = ${process.env.COMMUNITY_API_URL}`)
 
 // Change this filename to suit
-const csvFilePath = path.resolve(__dirname, 'wales-dev.csv')
+const csvFilePath = path.resolve(__dirname, 'wales-aco.csv')
 const lines = fs.readFileSync(csvFilePath, 'utf-8').split(/\r?\n/)
 
 // Force this processing to run in sequence, line by line, awaiting each line being processed.
