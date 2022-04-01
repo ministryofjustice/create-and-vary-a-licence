@@ -4,7 +4,6 @@ import SimpleDate from './date'
 import ValidSimpleDate from '../../../validators/simpleDateValidator'
 import SimpleTime from './time'
 import ValidSimpleTime from '../../../validators/simpleTimeValidator'
-import DateIsAfter from '../../../validators/dateIsAfter'
 import DateIsBefore from '../../../validators/dateIsBefore'
 
 class SimpleDateTime {
@@ -21,9 +20,10 @@ class SimpleDateTime {
   @DateIsBefore('licence.licenceExpiryDate', {
     message: 'Appointment date must be before the end of the licence date',
   })
-  @DateIsAfter('licence.conditionalReleaseDate', {
-    message: 'Appointment date must be on or after the release date',
-  })
+  // TODO: add this validation back in when bank holidays and confirmed release date is handled
+  // @DateIsAfter('licence.conditionalReleaseDate', {
+  //   message: 'Appointment date must be on or after the release date',
+  // })
   date: SimpleDate
 
   @Expose()
