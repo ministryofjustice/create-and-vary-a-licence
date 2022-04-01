@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: prompt-licence-creation
 spec:
-  schedule: "0 8 * * 1" # 8am every monday
+  schedule: "0 8 * * 2" # 8am every Tuesday monday
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200
