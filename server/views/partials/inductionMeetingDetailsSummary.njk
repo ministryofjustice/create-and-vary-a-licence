@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro inductionMeetingDetails(licence, isEditable) %}
+{% macro inductionMeetingDetails(licence, isEditable, validationErrors) %}
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
             <h2 class="govuk-heading-m">Initial appointment details</h2>
@@ -12,6 +12,7 @@
         classes: 'govuk-!-margin-bottom-9',
         rows: [
             {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentPerson'),
                 key: { text: "Name" },
                 value: { text: licence.appointmentPerson },
                 actions: {
@@ -25,6 +26,7 @@
                 } if isEditable
             },
             {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
                 key: { text: "Address" },
                 value: { text: licence.appointmentAddress | formatAddress },
                 actions: {
@@ -38,6 +40,7 @@
                 } if isEditable
             },
             {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentContact'),
                 key: { text: "Contact phone number" },
                 value: { text: licence.appointmentContact },
                 actions: {
@@ -51,6 +54,7 @@
                 } if isEditable
             },
             {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Date" },
                 value: { text: licence.appointmentTime | datetimeToDateShort },
                 actions: {
@@ -64,6 +68,7 @@
                 } if isEditable
             },
             {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Time" },
                 value: { text: licence.appointmentTime | datetimeTo12HourTime },
                 actions: {

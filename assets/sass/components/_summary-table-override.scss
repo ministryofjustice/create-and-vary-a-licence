@@ -1,0 +1,10 @@
+.govuk-summary-list {
+  .govuk-summary-list__row {
+    &--error {
+      .govuk-summary-list__key {
+        padding-left: govuk-spacing(3);
+      }
+      border-left: $govuk-border-width-form-group-error solid $govuk-error-colour;
+    }
+  }
+}
