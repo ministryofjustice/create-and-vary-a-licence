@@ -91,10 +91,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
         JSON.stringify([
-          { field: 'appointmentPerson', message: 'The person to meet at the induction meeting must be entered' },
-          { field: 'appointmentAddress', message: 'The address of the induction meeting must be entered' },
-          { field: 'appointmentContact', message: 'The telephone number for the induction meeting must be entered' },
-          { field: 'appointmentTime', message: 'The date and time of the induction meeting must be entered' },
+          { field: 'appointmentPerson', message: "Select 'Change' to go back and add who to meet" },
+          { field: 'appointmentAddress', message: "Select 'Change' to go back and add appointment address" },
+          { field: 'appointmentContact', message: "Select 'Change' to go back and add appointment telephone number" },
+          { field: 'appointmentTime', message: "Select 'Change' to go back and add appointment date and time" },
         ])
       )
       expect(res.redirect).toHaveBeenCalledWith('back')
