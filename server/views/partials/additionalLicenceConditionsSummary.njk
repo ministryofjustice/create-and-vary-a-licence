@@ -1,6 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalLicenceConditions(licence, isEditable) %}
+{% macro additionalLicenceConditions(licence, isEditable, validationErrors) %}
+    {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-full">
@@ -13,6 +14,7 @@
     {% set conditionWord = "condition" if licence.additionalLicenceConditions.length === 1 else "conditions" %}
 
     {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+        classes: 'govuk-summary-list__row--error' if errorMessage,
         key: {  text: "Select additional conditions" },
         value: { text: "" + licence.additionalLicenceConditions.length + " " + conditionWord + " selected" },
         actions: {
@@ -50,7 +52,7 @@
     {% endfor %}
 
     {{ govukSummaryList({
-        attributes: { id: 'additional-licence-conditions-details' },
+        attributes: { id: 'additionalLicenceConditions' },
         classes: 'govuk-!-margin-bottom-9',
         rows: additionalLicenceConditions
     }) }}
