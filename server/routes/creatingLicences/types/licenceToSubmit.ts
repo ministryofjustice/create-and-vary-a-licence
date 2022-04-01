@@ -5,19 +5,19 @@ import ConditionsHaveBeenExpanded from '../../../validators/conditionsHaveBeenEx
 
 class LicenceToSubmit {
   @Expose()
-  @IsNotEmpty({ message: 'The person to meet at the induction meeting must be entered' })
+  @IsNotEmpty({ message: "Select 'Change' to go back and add who to meet" })
   appointmentPerson: string
 
   @Expose()
-  @IsNotEmpty({ message: 'The address of the induction meeting must be entered' })
+  @IsNotEmpty({ message: "Select 'Change' to go back and add appointment address" })
   appointmentAddress: string
 
   @Expose()
-  @IsNotEmpty({ message: 'The telephone number for the induction meeting must be entered' })
+  @IsNotEmpty({ message: "Select 'Change' to go back and add appointment telephone number" })
   appointmentContact: string
 
   @Expose()
-  @IsNotEmpty({ message: 'The date and time of the induction meeting must be entered' })
+  @IsNotEmpty({ message: "Select 'Change' to go back and add appointment date and time" })
   appointmentTime: string
 
   @Expose()
