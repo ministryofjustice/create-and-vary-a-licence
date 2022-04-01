@@ -62,7 +62,7 @@
             {% if licence.isVariation %}
                 {{ variationSummary(licence, isInProgress) }}
             {% else %}
-                {{ inductionMeetingDetails(licence, isInProgress) }}
+                {{ inductionMeetingDetails(licence, isInProgress, validationErrors) }}
             {% endif %}
 
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
