@@ -82,6 +82,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         appointmentAddress: '',
         appointmentContact: '',
         appointmentTime: '',
+        additionalLicenceConditions: [],
+        additionalPssConditions: [],
       }
 
       await handler.POST(req, res)

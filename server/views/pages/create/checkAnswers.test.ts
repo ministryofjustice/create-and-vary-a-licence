@@ -119,31 +119,27 @@ describe('Create a Licence Views - Check Answers', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#additional-licence-conditions-details > .govuk-summary-list__row').length).toBe(3)
+    expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(3)
 
     // Check actual condition wording - 1st
-    expect($('#additional-licence-conditions-details > div:nth-child(2) > dt').text().trim()).toBe('Category 1')
-    expect($('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
+    expect($('#additionalLicenceConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 1')
+    expect($('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
       'Template 1'
     )
-    expect(
-      $('#additional-licence-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()
-    ).toBe('Data 1')
+    expect($('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()).toBe(
+      'Data 1'
+    )
 
     // Check actual condition wording - 2nd
-    expect($('#additional-licence-conditions-details > div:nth-child(3) > dt').text().trim()).toBe('Category 2')
-    expect($('#additional-licence-conditions-details > div:nth-child(3) > dd > div:nth-child(1)').text().trim()).toBe(
+    expect($('#additionalLicenceConditions > div:nth-child(3) > dt').text().trim()).toBe('Category 2')
+    expect($('#additionalLicenceConditions > div:nth-child(3) > dd > div:nth-child(1)').text().trim()).toBe(
       'Template 2'
     )
     expect(
-      $('#additional-licence-conditions-details > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(1)')
-        .text()
-        .trim()
+      $('#additionalLicenceConditions > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
     ).toBe('Data 2A, Data 2B')
     expect(
-      $('#additional-licence-conditions-details > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(2)')
-        .text()
-        .trim()
+      $('#additionalLicenceConditions > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
     ).toBe('Data 2C')
   })
 
@@ -176,29 +172,19 @@ describe('Create a Licence Views - Check Answers', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#additional-pss-conditions-details > .govuk-summary-list__row').length).toBe(3)
+    expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(3)
 
-    expect($('#additional-pss-conditions-details > div:nth-child(2) > dt').text().trim()).toBe('Category 1')
-    expect($('#additional-pss-conditions-details > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
-      'Template 1'
-    )
-    expect(
-      $('#additional-pss-conditions-details > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()
-    ).toBe('Data 1')
+    expect($('#additionalPssConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 1')
+    expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe('Template 1')
+    expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
 
-    expect($('#additional-pss-conditions-details > div:nth-child(3) > dt').text().trim()).toBe('Category 2')
-    expect($('#additional-pss-conditions-details > div:nth-child(3) > dd > div:nth-child(1)').text().trim()).toBe(
-      'Template 2'
-    )
+    expect($('#additionalPssConditions > div:nth-child(3) > dt').text().trim()).toBe('Category 2')
+    expect($('#additionalPssConditions > div:nth-child(3) > dd > div:nth-child(1)').text().trim()).toBe('Template 2')
     expect(
-      $('#additional-pss-conditions-details > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(1)')
-        .text()
-        .trim()
+      $('#additionalPssConditions > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
     ).toBe('Data 2A, Data 2B')
     expect(
-      $('#additional-pss-conditions-details > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(2)')
-        .text()
-        .trim()
+      $('#additionalPssConditions > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
     ).toBe('Data 2C')
   })
 
