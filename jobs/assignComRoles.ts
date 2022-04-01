@@ -31,7 +31,7 @@ const processCom = async (com: ComDetail): Promise<void> => {
         const caseload = await communityService.getManagedOffenders(userDetails.staffIdentifier)
         if (caseload?.length > 0) {
           await communityService.assignDeliusRole(com.username.trim().toUpperCase(), 'LHDCBT002')
-          logger.info(`${com.forename} ${com.surname} was assigned the role LDHCBT002`)
+          logger.info(`${com.forename} ${com.surname} was assigned the role LHDCBT002`)
         } else {
           logger.info(`${com.forename} ${com.surname} has an empty caseload}`)
         }
@@ -62,7 +62,7 @@ const populateComDetail = (fieldValues: string[]): ComDetail => {
 logger.info(`COMMUNITY_API_URL = ${process.env.COMMUNITY_API_URL}`)
 
 // Change file name to suit
-const csvFilePath = path.resolve(__dirname, 'wales-dev.csv')
+const csvFilePath = path.resolve(__dirname, 'wales-data.csv')
 
 const lines = fs.readFileSync(csvFilePath, 'utf-8').split(/\r?\n/)
 
