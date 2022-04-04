@@ -19,9 +19,9 @@
             'username': '{{ user.username }}',
             'displayName': '{{ user.displayName }}',
             'prisons': {{ user.prisonCaseload | formatListAsString | safe }},
-            'probationAreaCode': '{{ user.probationArea }}',
+            'probationAreaCode': '{{ user.probationAreaCode }}',
             'probationAreaDesc': '{{ user.probationAreaDescription }}',
-            'probationTeams': {{ user.probationTeams | formatListAsString | safe }},
+            'probationTeams': {{ user.probationTeamCodes | formatListAsString | safe }},
           },
         })</script>
     {% endif %}
