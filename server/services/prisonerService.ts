@@ -7,6 +7,7 @@ import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiCli
 import logger from '../../logger'
 import HdcStatus from '../@types/HdcStatus'
 import { User } from '../@types/CvlUserDetails'
+import config from '../config'
 
 export default class PrisonerService {
   constructor(
@@ -70,6 +71,9 @@ export default class PrisonerService {
   }
 
   async searchPrisonersByPrison(prisonCode: string, user?: User): Promise<Prisoner[]> {
+    if (!config.rollout.prisons.includes(prisonCode)) {
+      return []
+    }
     return this.prisonerSearchApiClient.searchPrisonersByPrison(prisonCode, user).then(pageable => pageable.content)
   }
 }
