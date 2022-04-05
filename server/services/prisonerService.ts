@@ -71,7 +71,7 @@ export default class PrisonerService {
   }
 
   async searchPrisonersByPrison(prisonCode: string, user?: User): Promise<Prisoner[]> {
-    if (!config.rollout.prisons.includes(prisonCode)) {
+    if (config.rollout.restricted && !config.rollout.prisons.includes(prisonCode)) {
       return []
     }
     return this.prisonerSearchApiClient.searchPrisonersByPrison(prisonCode, user).then(pageable => pageable.content)
