@@ -107,40 +107,40 @@ export default {
     prisonApi: {
       url: get('PRISON_API_URL', 'http://localhost:8080', requiredInProduction),
       timeout: {
-        response: get('PRISON_API_TIMEOUT_RESPONSE', 10000),
-        deadline: get('PRISON_API_TIMEOUT_DEADLINE', 10000),
+        response: get('PRISON_API_TIMEOUT_RESPONSE', 30000),
+        deadline: get('PRISON_API_TIMEOUT_DEADLINE', 30000),
       },
       agent: new AgentConfig(),
     },
     prisonerSearchApi: {
       url: get('PRISONER_SEARCH_API_URL', 'http://localhost:8090', requiredInProduction),
       timeout: {
-        response: get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 10000),
-        deadline: get('PRISONER_SEARCH_API_TIMEOUT_DEADLINE', 10000),
+        response: get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 30000),
+        deadline: get('PRISONER_SEARCH_API_TIMEOUT_DEADLINE', 30000),
       },
       agent: new AgentConfig(),
     },
     prisonRegisterApi: {
       url: get('PRISON_REGISTER_API_URL', 'http://localhost:8092', requiredInProduction),
       timeout: {
-        response: get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 10000),
-        deadline: get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 10000),
+        response: get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000),
+        deadline: get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 30000),
       },
       agent: new AgentConfig(),
     },
     probationSearchApi: {
       url: get('PROBATION_SEARCH_API_URL', 'http://localhost:8091', requiredInProduction),
       timeout: {
-        response: get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 10000),
-        deadline: get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 10000),
+        response: get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000),
+        deadline: get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 30000),
       },
       agent: new AgentConfig(),
     },
     communityApi: {
       url: get('COMMUNITY_API_URL', 'http://localhost:8088', requiredInProduction),
       timeout: {
-        response: get('COMMUNITY_API_TIMEOUT_RESPONSE', 10000),
-        deadline: get('COMMUNITY_API_TIMEOUT_DEADLINE', 10000),
+        response: get('COMMUNITY_API_TIMEOUT_RESPONSE', 30000),
+        deadline: get('COMMUNITY_API_TIMEOUT_DEADLINE', 30000),
       },
       agent: new AgentConfig(),
     },
