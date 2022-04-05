@@ -152,7 +152,7 @@ export default {
         marginLeft: '0.55',
         marginRight: '0.35',
       },
-      watermark: get('LICENCE_WATERMARK', false),
+      watermark: get('LICENCE_WATERMARK', 'false') === 'true',
 
       /*
        This is specific to the machine type you use locally:
