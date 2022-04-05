@@ -170,12 +170,12 @@ export default {
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   exitSurveyLink: get('EXIT_SURVEY_LINK', 'https://exit-survey-placeholder-link', requiredInProduction),
   phaseBannerLink: get('PHASE_BANNER_LINK', 'https://phase-banner-placeholder-link', requiredInProduction),
-  qrCodesEnabled: get('QR_CODES_ENABLED', false),
+  qrCodesEnabled: get('QR_CODES_ENABLED', 'false') === 'true',
   analytics: {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
   },
   rollout: {
-    restricted: get('RESTRICT_ROLLOUT', false),
+    restricted: get('RESTRICT_ROLLOUT', 'false') === 'true',
     probationAreas: ['N03'],
     prisons: ['CFI', 'SWI', 'UKI', 'UPI', 'PRI'],
   },
