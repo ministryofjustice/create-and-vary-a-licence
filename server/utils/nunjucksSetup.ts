@@ -25,6 +25,9 @@ export default function nunjucksSetup(app: express.Express): void {
   app.locals.phaseBannerLink = config.phaseBannerLink
   app.locals.exitSurveyLink = config.exitSurveyLink
 
+  // Set the value of the auth home link from config
+  app.locals.authHome = config.apis.hmppsAuth.url
+
   // Cachebusting version string
   if (production) {
     // Version only changes on reboot
