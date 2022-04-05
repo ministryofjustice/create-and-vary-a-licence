@@ -15,11 +15,11 @@ function get<T>(name: string, fallback: T, options = { requireInProduction: fals
 const requiredInProduction = { requireInProduction: true }
 
 export class AgentConfig {
-  maxSockets: 100
+  timeout: number
 
-  maxFreeSockets: 10
-
-  freeSocketTimeout: 30000
+  constructor(timeout = 8000) {
+    this.timeout = timeout
+  }
 }
 
 export interface ApiConfig {
@@ -81,7 +81,7 @@ export default {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000))),
       apiClientId: get('API_CLIENT_ID', 'create-and-vary-a-licence-client', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
       systemClientId: get('SYSTEM_CLIENT_ID', 'create-and-vary-a-licence-admin', requiredInProduction),
@@ -93,56 +93,56 @@ export default {
         response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
     licenceApi: {
       url: get('LICENCE_API_URL', 'http://localhost:8089', requiredInProduction),
       timeout: {
-        response: get('LICENCE_API_TIMEOUT_RESPONSE', 30000),
-        deadline: get('LICENCE_API_TIMEOUT_DEADLINE', 30000),
+        response: Number(get('LICENCE_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('LICENCE_API_TIMEOUT_DEADLINE', 30000)),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('LICENCE_API_TIMEOUT_RESPONSE', 30000))),
     },
     prisonApi: {
       url: get('PRISON_API_URL', 'http://localhost:8080', requiredInProduction),
       timeout: {
-        response: get('PRISON_API_TIMEOUT_RESPONSE', 30000),
-        deadline: get('PRISON_API_TIMEOUT_DEADLINE', 30000),
+        response: Number(get('PRISON_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('PRISON_API_TIMEOUT_DEADLINE', 30000)),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('PRISON_API_TIMEOUT_RESPONSE', 30000))),
     },
     prisonerSearchApi: {
       url: get('PRISONER_SEARCH_API_URL', 'http://localhost:8090', requiredInProduction),
       timeout: {
-        response: get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 30000),
-        deadline: get('PRISONER_SEARCH_API_TIMEOUT_DEADLINE', 30000),
+        response: Number(get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('PRISONER_SEARCH_API_TIMEOUT_DEADLINE', 30000)),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 30000))),
     },
     prisonRegisterApi: {
       url: get('PRISON_REGISTER_API_URL', 'http://localhost:8092', requiredInProduction),
       timeout: {
-        response: get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000),
-        deadline: get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 30000),
+        response: Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 30000)),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000))),
     },
     probationSearchApi: {
       url: get('PROBATION_SEARCH_API_URL', 'http://localhost:8091', requiredInProduction),
       timeout: {
-        response: get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000),
-        deadline: get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 30000),
+        response: Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 30000)),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000))),
     },
     communityApi: {
       url: get('COMMUNITY_API_URL', 'http://localhost:8088', requiredInProduction),
       timeout: {
-        response: get('COMMUNITY_API_TIMEOUT_RESPONSE', 30000),
-        deadline: get('COMMUNITY_API_TIMEOUT_DEADLINE', 30000),
+        response: Number(get('COMMUNITY_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('COMMUNITY_API_TIMEOUT_DEADLINE', 30000)),
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(Number(get('COMMUNITY_API_TIMEOUT_RESPONSE', 30000))),
     },
     gotenberg: {
       apiUrl: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
