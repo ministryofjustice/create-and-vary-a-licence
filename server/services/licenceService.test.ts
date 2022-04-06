@@ -63,12 +63,15 @@ describe('Licence Service', () => {
   describe('Create Licence', () => {
     beforeEach(() => {
       prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
-      communityService.getProbationer.mockResolvedValue({ offenderManagers: [] } as OffenderDetail)
+      communityService.getProbationer.mockResolvedValue({
+        offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
+      } as OffenderDetail)
       prisonerService.getPrisonInformation.mockResolvedValue({ phones: [] } as PrisonInformation)
       communityService.getAnOffendersManagers.mockResolvedValue([
         {
           isResponsibleOfficer: true,
           staffId: 2000,
+          staffCode: 'X12345',
           probationArea: {
             code: 'Area',
             description: 'AreaDesc',
