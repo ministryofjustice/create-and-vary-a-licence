@@ -7,8 +7,12 @@ export default class OffenderManagerChangedEventHandler {
 
   handle = async (event: ProbationEventMessage): Promise<void> => {
     const { crn } = event
+    const deliusRecord = await this.communityService.getProbationer({ crn })
     const offenderManagers = await this.communityService.getAnOffendersManagers(crn)
-    const newCom = offenderManagers.find(om => om.isResponsibleOfficer)
+
+    const responsibleOfficer = deliusRecord.offenderManagers.find(om => om.active)
+    const newCom = offenderManagers.find(om => om.staffCode === responsibleOfficer.staff.code)
+
     if (newCom) {
       const comDetails = await this.communityService.getStaffDetailByStaffIdentifier(newCom.staffId)
 

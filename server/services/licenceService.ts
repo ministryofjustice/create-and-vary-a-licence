@@ -76,7 +76,8 @@ export default class LicenceService {
       this.communityService.getAnOffendersManagers(deliusRecord.otherIds?.crn),
     ])
 
-    const responsibleOfficer = offenderManagers.find(om => om.isResponsibleOfficer)
+    const responsibleOfficer = deliusRecord.offenderManagers.find(om => om.active)
+    const responsibleOfficerDetails = offenderManagers.find(om => om.staffCode === responsibleOfficer.staff.code)
 
     const licenceType = this.getLicenceType(nomisRecord)
 
@@ -111,14 +112,14 @@ export default class LicenceService {
       ]
         .filter(n => n)
         .join(' '),
-      probationAreaCode: responsibleOfficer.probationArea?.code,
-      probationAreaDescription: responsibleOfficer.probationArea?.description,
-      probationPduCode: responsibleOfficer.team?.borough?.code,
-      probationPduDescription: responsibleOfficer.team?.borough?.description,
-      probationLauCode: responsibleOfficer.team?.district?.code,
-      probationLauDescription: responsibleOfficer.team?.district?.description,
-      probationTeamCode: responsibleOfficer.team?.code,
-      probationTeamDescription: responsibleOfficer.team?.description,
+      probationAreaCode: responsibleOfficerDetails.probationArea?.code,
+      probationAreaDescription: responsibleOfficerDetails.probationArea?.description,
+      probationPduCode: responsibleOfficerDetails.team?.borough?.code,
+      probationPduDescription: responsibleOfficerDetails.team?.borough?.description,
+      probationLauCode: responsibleOfficerDetails.team?.district?.code,
+      probationLauDescription: responsibleOfficerDetails.team?.district?.description,
+      probationTeamCode: responsibleOfficerDetails.team?.code,
+      probationTeamDescription: responsibleOfficerDetails.team?.description,
       crn: deliusRecord.otherIds?.crn,
       pnc: deliusRecord.otherIds?.pncNumber,
       cro: deliusRecord.otherIds?.croNumber,
@@ -128,13 +129,13 @@ export default class LicenceService {
       standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licenceType)
         ? getStandardConditions(LicenceType.PSS)
         : [],
-      responsibleComStaffId: responsibleOfficer.staffId,
+      responsibleComStaffId: responsibleOfficerDetails.staffId,
     } as CreateLicenceRequest
 
     // TODO: This section can be removed after having been live in production for some time. This is only needed initially because some
     //  COM records will not be saved in our database initially. Over time, the OFFENDER_MANAGER_CHANGED event, and logins will have populated
     //  staff details into the database, and this call will have become redundant
-    const comDetails = await this.communityService.getStaffDetailByStaffIdentifier(responsibleOfficer.staffId)
+    const comDetails = await this.communityService.getStaffDetailByStaffIdentifier(responsibleOfficerDetails.staffId)
     await this.updateComDetails({
       staffIdentifier: comDetails?.staffIdentifier,
       staffUsername: comDetails?.username,

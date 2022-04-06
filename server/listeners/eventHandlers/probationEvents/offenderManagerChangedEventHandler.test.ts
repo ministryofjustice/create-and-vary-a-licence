@@ -2,6 +2,7 @@ import LicenceService from '../../../services/licenceService'
 import { ProbationEventMessage } from '../../../@types/events'
 import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHandler'
 import CommunityService from '../../../services/communityService'
+import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
@@ -18,6 +19,7 @@ describe('Offender manager changed event handler', () => {
 
   it('should handle case where the offender has no managers allocated', async () => {
     communityService.getAnOffendersManagers.mockResolvedValue([])
+    communityService.getProbationer.mockResolvedValue({ offenderManagers: [] } as OffenderDetail)
 
     const event = {
       crn: 'X1234',
@@ -31,14 +33,24 @@ describe('Offender manager changed event handler', () => {
   })
 
   it('should update the responsible COM to the current RO in delius', async () => {
+    communityService.getProbationer.mockResolvedValue({
+      offenderManagers: [
+        {
+          active: true,
+          staff: {
+            code: 'X12345',
+          },
+        },
+      ],
+    } as OffenderDetail)
     communityService.getAnOffendersManagers.mockResolvedValue([
       {
+        staffCode: 'X12344',
         staffId: 2000,
-        isResponsibleOfficer: false,
       },
       {
+        staffCode: 'X12345',
         staffId: 3000,
-        isResponsibleOfficer: true,
       },
     ])
     communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({
@@ -63,14 +75,24 @@ describe('Offender manager changed event handler', () => {
   })
 
   it('should not update the responsible COM if the COM does not have a username', async () => {
+    communityService.getProbationer.mockResolvedValue({
+      offenderManagers: [
+        {
+          active: true,
+          staff: {
+            code: 'X12345',
+          },
+        },
+      ],
+    } as OffenderDetail)
     communityService.getAnOffendersManagers.mockResolvedValue([
       {
+        staffCode: 'X12344',
         staffId: 2000,
-        isResponsibleOfficer: false,
       },
       {
+        staffCode: 'X12345',
         staffId: 3000,
-        isResponsibleOfficer: true,
       },
     ])
     communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({

@@ -50,7 +50,7 @@ export default {
       secretAccessKey: get('SQS_PRISON_EVENTS_SECRET_ACCESS_KEY', 'bar', requiredInProduction),
       queueUrl: get(
         'SQS_PRISON_EVENTS_QUEUE_URL',
-        'http://localhost:4566/queue/create_and_vary_a_licence_prison_events_queue',
+        'http://localhost:4566/000000000000/create_and_vary_a_licence_prison_events_queue',
         requiredInProduction
       ),
     },
@@ -59,7 +59,7 @@ export default {
       secretAccessKey: get('SQS_PROBATION_EVENTS_SECRET_ACCESS_KEY', 'bar', requiredInProduction),
       queueUrl: get(
         'SQS_PROBATION_EVENTS_QUEUE_URL',
-        'http://localhost:4566/queue/create_and_vary_a_licence_probation_events_queue',
+        'http://localhost:4566/000000000000/create_and_vary_a_licence_probation_events_queue',
         requiredInProduction
       ),
     },
@@ -68,7 +68,7 @@ export default {
       secretAccessKey: get('SQS_DOMAIN_EVENTS_SECRET_ACCESS_KEY', 'bar', requiredInProduction),
       queueUrl: get(
         'SQS_DOMAIN_EVENTS_QUEUE_URL',
-        'http://localhost:4566/queue/create_and_vary_a_licence_domain_events_queue',
+        'http://localhost:4566/000000000000/create_and_vary_a_licence_domain_events_queue',
         requiredInProduction
       ),
     },
