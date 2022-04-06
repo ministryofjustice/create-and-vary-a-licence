@@ -257,6 +257,7 @@ export default {
           {
             isResponsibleOfficer: true,
             staffId: 2000,
+            staffCode: 'X12345',
             probationArea: {
               code: 'N01',
               description: 'Area N01',

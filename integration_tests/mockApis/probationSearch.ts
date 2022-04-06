@@ -22,6 +22,7 @@ export default {
               {
                 active: true,
                 staff: {
+                  code: 'X12345',
                   forenames: 'Joe',
                   surname: 'Bloggs',
                 },

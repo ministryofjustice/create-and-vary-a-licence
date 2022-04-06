@@ -60,6 +60,7 @@ context('Event handlers', () => {
 
   describe('Probation events', () => {
     it('should listen to the offender manager changed event and call endpoint to update responsible COM', () => {
+      cy.task('stubGetProbationer')
       cy.task('stubGetAnOffendersManagers')
       cy.task('stubGetStaffDetailsByStaffId')
       cy.task('stubUpdateResponsibleCom')
