@@ -1,4 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
+import moment from 'moment'
 import { stubFor } from '../wiremock'
 
 export default {
@@ -112,7 +113,7 @@ export default {
               receptionDate: '2021-01-08',
               locationDescription: 'Moorland (HMP & YOI)',
               restrictedPatient: false,
-              conditionalReleaseDate: '2022-09-09',
+              conditionalReleaseDate: moment().add(30, 'days').format('YYYY-MM-DD'),
             },
           ],
         },
