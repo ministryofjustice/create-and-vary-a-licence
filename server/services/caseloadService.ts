@@ -74,6 +74,17 @@ export default class CaseloadService {
       prisonCaseload.map(prison => this.prisonerService.searchPrisonersByPrison(prison, user))
     )
       .then(caseload => caseload.flat())
+      .then(caseload => {
+        // TODO: This .then() block is temporary to reduce the number of offenders being searched in probation-offender-search. A more permanent
+        //  fix will be to have an endpoint to search nomis by CRD (CVSL-492).
+        //  Temporary fix is to filter only prisoners who have a CRD in the next 13 weeks before searching them on delius
+        return caseload
+          .filter(offender => offender.conditionalReleaseDate)
+          .filter(offender => moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(moment(), 'day'))
+          .filter(offender =>
+            moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isBefore(moment().add(13, 'weeks'), 'day')
+          )
+      })
       .then(caseload => this.pairNomisRecordsWithDelius(caseload))
       .then(caseload => this.filterOffendersEligibleForLicence(caseload, user))
       .then(caseload => this.mapOffendersToLicences(caseload, user))
