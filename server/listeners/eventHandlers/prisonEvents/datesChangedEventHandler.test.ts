@@ -3,7 +3,7 @@ import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
-import SentenceDatesChangedEventHandler from './sentenceDatesChangedEventHandler'
+import SentenceDatesChangedEventHandler from './datesChangedEventHandler'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
