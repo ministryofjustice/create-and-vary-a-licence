@@ -4,6 +4,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import SentenceDatesChangedEventHandler from './datesChangedEventHandler'
+import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -32,6 +33,25 @@ afterEach(() => {
 
 describe('Sentence dates changed event handler', () => {
   const handler = new SentenceDatesChangedEventHandler(licenceService, prisonerService)
+
+  it('should use bookingId to get the nomisID, if the nomisId is not provided', async () => {
+    const event = {
+      bookingId: 1234,
+    } as PrisonEventMessage
+
+    prisonerService.searchPrisonersByBookingIds.mockResolvedValue([{ prisonerNumber: 'ABC123' } as Prisoner])
+
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'APPROVED',
+      } as LicenceSummary,
+    ])
+
+    await handler.handle(event)
+
+    expect(prisonerService.getPrisonerDetail).toHaveBeenCalledWith('ABC123')
+  })
 
   it('should not update sentence dates if the offender does not have a licence', async () => {
     const event = {
