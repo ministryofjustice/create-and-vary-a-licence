@@ -52,6 +52,20 @@ describe('Prisoner Search Api client tests', () => {
     expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
   })
 
+  it('Search Prisoner by booking ids', async () => {
+    post.mockResolvedValue([{ firstName: 'Joe', lastName: 'Bloggs' } as Prisoner])
+
+    const result = await prisonerSearchApiClient.searchPrisonersByBookingIds({ bookingIds: [1234] }, {
+      username: 'joebloggs',
+    } as User)
+
+    expect(post).toHaveBeenCalledWith(
+      { path: '/prisoner-search/booking-ids', data: { bookingIds: [1234] } },
+      { username: 'joebloggs' }
+    )
+    expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
+  })
+
   it('Search Prisoner by prison', async () => {
     get.mockResolvedValue({ content: [{ firstName: 'Joe', lastName: 'Bloggs' }] })
 

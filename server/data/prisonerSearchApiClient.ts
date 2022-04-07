@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
 import type { PagePrisoner, Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
-import { PrisonerSearchByNomisIds } from '../@types/prisonerSearchApiClientTypes'
+import { PrisonerSearchByBookingIds, PrisonerSearchByNomisIds } from '../@types/prisonerSearchApiClientTypes'
 import RestClient from './hmppsRestClient'
 import { User } from '../@types/CvlUserDetails'
 
@@ -24,6 +24,16 @@ export default class PrisonerSearchApiClient extends RestClient {
       {
         path: '/prisoner-search/prisoner-numbers',
         data: nomisIdsToSearch,
+      },
+      { username: user?.username }
+    )) as Promise<Prisoner[]>
+  }
+
+  async searchPrisonersByBookingIds(bookingIdsToSearch: PrisonerSearchByBookingIds, user?: User): Promise<Prisoner[]> {
+    return (await this.post(
+      {
+        path: '/prisoner-search/booking-ids',
+        data: bookingIdsToSearch,
       },
       { username: user?.username }
     )) as Promise<Prisoner[]>

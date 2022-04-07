@@ -56,6 +56,16 @@ export default class PrisonerService {
     return this.prisonerSearchApiClient.searchPrisonersByNomsIds(prisonerSearchCriteria, user)
   }
 
+  async searchPrisonersByBookingIds(bookingIds: number[], user?: User): Promise<Prisoner[]> {
+    if (bookingIds.length < 1) {
+      return []
+    }
+    const prisonerSearchCriteria = {
+      bookingIds,
+    }
+    return this.prisonerSearchApiClient.searchPrisonersByBookingIds(prisonerSearchCriteria, user)
+  }
+
   async getHdcStatuses(offenders: Prisoner[], user?: User): Promise<HdcStatus[]> {
     const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
     if (bookingIds.length === 0) {

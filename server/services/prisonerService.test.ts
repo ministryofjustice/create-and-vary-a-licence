@@ -109,6 +109,28 @@ describe('Prisoner Service', () => {
     })
   })
 
+  describe('Search Prisoners by booking ids', () => {
+    it('should return an empty list if criteria is empty', async () => {
+      const expectedResult = [] as Prisoner[]
+
+      const actualResult = await prisonerService.searchPrisonersByBookingIds([], user)
+
+      expect(actualResult).toEqual(expectedResult)
+      expect(prisonerSearchApiClient.searchPrisonersByBookingIds).not.toBeCalled()
+    })
+
+    it('should return a list of matching prisoners', async () => {
+      const expectedResult = [{ prisonerNumber: 'ABC1234', firstName: 'Joe', lastName: 'Bloggs' }] as Prisoner[]
+
+      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
+
+      const actualResult = await prisonerService.searchPrisonersByBookingIds([1234], user)
+
+      expect(actualResult).toEqual(expectedResult)
+      expect(prisonerSearchApiClient.searchPrisonersByBookingIds).toHaveBeenCalledWith({ bookingIds: [1234] }, user)
+    })
+  })
+
   describe('Get HDC statuses', () => {
     it('should return empty list if no booking ids are available', async () => {
       const actualResult = await prisonerService.getHdcStatuses(

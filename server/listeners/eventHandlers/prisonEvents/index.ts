@@ -1,11 +1,11 @@
 import { SQSMessage } from 'sqs-consumer'
 import logger from '../../../../logger'
 import { PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
-import SentenceDatesChangedEventHandler from './sentenceDatesChangedEventHandler'
+import DatesChangedEventHandler from './datesChangedEventHandler'
 import { Services } from '../../../services'
 
 export default function buildEventHandler({ licenceService, prisonerService }: Services) {
-  const sentenceDatesChangedEventHandler = new SentenceDatesChangedEventHandler(licenceService, prisonerService)
+  const datesChangedEventHandler = new DatesChangedEventHandler(licenceService, prisonerService)
 
   return async (messages: SQSMessage[]) => {
     messages.forEach(message => {
@@ -18,7 +18,8 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
 
       switch (eventType) {
         case 'SENTENCE_DATES-CHANGED':
-          sentenceDatesChangedEventHandler.handle(eventMessage).catch(error => logger.error(error))
+        case 'CONFIRMED_RELEASE_DATE-CHANGED':
+          datesChangedEventHandler.handle(eventMessage).catch(error => logger.error(error))
           break
       }
     })
