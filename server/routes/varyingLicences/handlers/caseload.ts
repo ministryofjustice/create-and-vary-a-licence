@@ -42,6 +42,11 @@ export default class CaseloadRoutes {
           c.probationPractitioner?.name.toLowerCase().includes(searchString)
         )
       })
+      .sort((a, b) => {
+        const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
+        const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
+        return crd1 - crd2
+      })
     res.render('pages/vary/caseload', { caseload: caseloadViewModel, statusConfig, search, teamView })
   }
 }

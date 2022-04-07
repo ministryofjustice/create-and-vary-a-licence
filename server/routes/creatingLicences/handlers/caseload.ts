@@ -27,7 +27,7 @@ export default class CaseloadRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           crnNumber: c.deliusRecord.offenderCrn,
           prisonerNumber: c.nomisRecord.prisonerNumber,
-          conditionalReleaseDate: moment(c.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
+          releaseDate: moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'),
           licenceStatus: _.head(c.licences).status,
           licenceType: _.head(c.licences).type,
           probationPractitioner: c.probationPractitioner,
@@ -42,6 +42,11 @@ export default class CaseloadRoutes {
           c.name.toLowerCase().includes(searchString) ||
           c.probationPractitioner?.name.toLowerCase().includes(searchString)
         )
+      })
+      .sort((a, b) => {
+        const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
+        const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
+        return crd1 - crd2
       })
     res.render('pages/create/caseload', { caseload: caseloadViewModel, statusConfig, teamView, search })
   }

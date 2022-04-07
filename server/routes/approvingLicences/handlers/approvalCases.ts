@@ -19,7 +19,7 @@ export default class ApprovalCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: moment(c.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
+          releaseDate: moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'),
         }
       })
       .filter(c => {
@@ -30,6 +30,11 @@ export default class ApprovalCaseRoutes {
           c.prisonerNumber?.toLowerCase().includes(searchString) ||
           c.probationPractitioner?.name.toLowerCase().includes(searchString)
         )
+      })
+      .sort((a, b) => {
+        const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
+        const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
+        return crd1 - crd2
       })
     res.render('pages/approve/cases', { cases: caseloadViewModel, search })
   }

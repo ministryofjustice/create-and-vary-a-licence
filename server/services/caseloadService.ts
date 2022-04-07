@@ -112,13 +112,6 @@ export default class CaseloadService {
       .getLicencesForApproval(user)
       .then(licences => this.mapLicencesToOffenders(licences))
       .then(caseload => this.mapResponsibleComsToCases(caseload))
-      .then(caseload =>
-        caseload.sort((a, b) => {
-          const crd1 = moment(a.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-          const crd2 = moment(b.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-          return crd1 - crd2
-        })
-      )
   }
 
   async getVaryApproverCaseload(user: User): Promise<ManagedCase[]> {
@@ -126,13 +119,6 @@ export default class CaseloadService {
       .getLicencesForVariationApproval(user)
       .then(licences => this.mapLicencesToOffenders(licences))
       .then(caseload => this.mapResponsibleComsToCases(caseload))
-      .then(cases =>
-        cases.sort((a, b) => {
-          const crd1 = moment(a.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-          const crd2 = moment(b.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-          return crd1 - crd2
-        })
-      )
   }
 
   public pairNomisRecordsWithDelius = async (prisoners: Prisoner[]): Promise<ManagedCase[]> => {
@@ -254,29 +240,18 @@ export default class CaseloadService {
           LicenceStatus.APPROVED,
         ].some(status => offender.licences.find(l => l.status === status))
       )
-      .sort((a, b) => {
-        const crd1 = moment(a.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-        const crd2 = moment(b.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-        return crd1 - crd2
-      })
   }
 
   private buildVaryCaseload = (managedOffenders: ManagedCase[]): ManagedCase[] => {
-    return managedOffenders
-      .filter(offender =>
-        [
-          LicenceStatus.ACTIVE,
-          LicenceStatus.VARIATION_IN_PROGRESS,
-          LicenceStatus.VARIATION_SUBMITTED,
-          LicenceStatus.VARIATION_APPROVED,
-          LicenceStatus.VARIATION_REJECTED,
-        ].some(status => offender.licences.find(l => l.status === status))
-      )
-      .sort((a, b) => {
-        const crd1 = moment(a.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-        const crd2 = moment(b.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-        return crd1 - crd2
-      })
+    return managedOffenders.filter(offender =>
+      [
+        LicenceStatus.ACTIVE,
+        LicenceStatus.VARIATION_IN_PROGRESS,
+        LicenceStatus.VARIATION_SUBMITTED,
+        LicenceStatus.VARIATION_APPROVED,
+        LicenceStatus.VARIATION_REJECTED,
+      ].some(status => offender.licences.find(l => l.status === status))
+    )
   }
 
   private pairDeliusRecordsWithNomis = async (managedOffenders: DeliusRecord[], user: User): Promise<ManagedCase[]> => {
