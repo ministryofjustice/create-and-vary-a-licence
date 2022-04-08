@@ -1,0 +1,27 @@
+.steps {
+  ol {
+    list-style: none outside;
+    counter-reset: steps-counter;
+    margin-bottom: 0.5rem;
+  }
+
+  ol li {
+    counter-increment: steps-counter;
+    margin-bottom: 1rem;
+    text-indent: -2.4rem;
+  }
+
+  li::before {
+    content: counter(steps-counter);
+    background: black;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 2rem;
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+    text-indent: 0;
+  }
+}
