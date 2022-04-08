@@ -30,7 +30,6 @@ export default function populateCurrentUser(userService: UserService, licenceSer
       if (res.locals.user?.token) {
         const { user } = res.locals
         if (!req.session?.currentUser) {
-          logger.info(`populateCurrentUser - populating ${user.authSource} user in session`)
           const cvlUser = new CvlUserDetails()
 
           if (user.authSource === 'nomis') {
@@ -39,18 +38,20 @@ export default function populateCurrentUser(userService: UserService, licenceSer
               userService.getPrisonUser(user),
               userService.getPrisonUserCaseloads(user),
             ])
+
             cvlUser.firstName = prisonUser.firstName
             cvlUser.lastName = prisonUser.lastName
             cvlUser.displayName = convertToTitleCase(`${prisonUser.firstName} ${prisonUser.lastName}`)
             cvlUser.activeCaseload = prisonUser.activeCaseLoadId
             cvlUser.nomisStaffId = prisonUser.staffId
             cvlUser.prisonCaseload = removeDuplicates(prisonUserCaseload.map(cs => cs.caseLoadId))
+
+            logger.info(
+              `Prison user session : username ${prisonUser?.username} name ${cvlUser?.displayName} caseload ${cvlUser?.prisonCaseload}`
+            )
           } else if (user.authSource === 'delius') {
             // Assemble user information from Delius via community API
             const probationUser = await userService.getProbationUser(user)
-
-            // TODO: Left in for now - to confirm operation in DEV against delius-wiremock and community API
-            logger.info(`Probation user = ${JSON.stringify(probationUser)}`)
 
             cvlUser.firstName = probationUser?.staff?.forenames
             cvlUser.lastName = probationUser?.staff?.surname
@@ -67,6 +68,10 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             cvlUser.probationLauCodes = probationUser?.teams?.map(team => team?.district?.code)
             cvlUser.probationTeamCodes = probationUser?.teams?.map(team => team?.code)
 
+            logger.info(
+              `Probation user session : username ${user?.username} name ${cvlUser?.displayName} area ${cvlUser?.probationAreaCode} teams ${cvlUser?.probationTeamCodes}`
+            )
+
             await licenceService.updateComDetails({
               staffIdentifier: probationUser?.staffIdentifier,
               staffUsername: user.username,
@@ -80,6 +85,8 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             if (authUser) {
               cvlUser.displayName = convertToTitleCase(authUser?.name)
             }
+
+            logger.info(`Auth user session : username ${user?.username} name ${cvlUser?.displayName}`)
           }
 
           // If there is no user email from Delius already try and get one from hmpps-auth
@@ -88,8 +95,9 @@ export default function populateCurrentUser(userService: UserService, licenceSer
               // Get the user's email, which may fail (unverified returns a 204) - catch and swallow the error
               const authEmail = await userService.getAuthUserEmail(user)
               cvlUser.emailAddress = authEmail ? authEmail.email : null
+              logger.info(`Auth user email : username ${user?.username} email ${authEmail?.email}`)
             } catch (error) {
-              logger.info(`Email unverified in auth? - status ${error?.statusCode} for ${cvlUser.displayName}`)
+              logger.info(`Email unverified in auth? - status ${error?.statusCode} for ${cvlUser?.displayName}`)
             }
           }
 

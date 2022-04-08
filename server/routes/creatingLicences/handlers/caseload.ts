@@ -7,6 +7,7 @@ import { convertToTitleCase } from '../../../utils/utils'
 import { prisonInRollout } from '../../../utils/rolloutUtils'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import logger from '../../../../logger'
 
 export default class CaseloadRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly caseloadService: CaseloadService) {}
@@ -16,6 +17,8 @@ export default class CaseloadRoutes {
     const search = req.query.search as string
 
     const { user } = res.locals
+
+    logger.info(`GET user caseload for ${user?.username} with roles ${user?.userRoles}`)
 
     const caseload = teamView
       ? await this.caseloadService.getTeamCreateCaseload(user)
