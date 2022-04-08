@@ -6,7 +6,13 @@ class HdcStatus {
     private readonly approvalStatus: string = null
   ) {
     this.bookingId = bookingId
-    this.eligibleForHdc = homeDetentionCurfewEligibilityDate && checksPassed === true && approvalStatus !== 'REJECTED'
+    this.eligibleForHdc =
+      homeDetentionCurfewEligibilityDate &&
+      checksPassed === true &&
+      approvalStatus !== 'REJECTED' &&
+      approvalStatus !== 'INELIGIBLE' &&
+      approvalStatus !== 'OPT_OUT' &&
+      approvalStatus !== 'PRES UNSUIT'
   }
 
   bookingId: string
