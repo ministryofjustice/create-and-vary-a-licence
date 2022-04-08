@@ -79,11 +79,15 @@ describe('Caseload Service', () => {
       { offenderCrn: 'X12348' },
       { offenderCrn: 'X12349' },
       { offenderCrn: 'X12350' },
+      { offenderCrn: 'X12351' },
+      { offenderCrn: 'X12352' },
     ])
     communityService.getOffendersByCrn.mockResolvedValue([
       { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
       { otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } } as OffenderDetail,
       { otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' } } as OffenderDetail,
+      { otherIds: { nomsNumber: 'AB1234L', crn: 'X12351' } } as OffenderDetail,
+      { otherIds: { nomsNumber: 'AB1234M', crn: 'X12352' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
       { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
@@ -91,8 +95,9 @@ describe('Caseload Service', () => {
       { prisonerNumber: 'AB1234G', legalStatus: 'DEAD' } as Prisoner,
       { prisonerNumber: 'AB1234H', indeterminateSentence: true } as Prisoner,
       { prisonerNumber: 'AB1234I' } as Prisoner,
-      { prisonerNumber: 'AB1234J', conditionalReleaseDate: '2022-03-20' } as Prisoner,
       { prisonerNumber: 'AB1234K', conditionalReleaseDate: '2022-06-20', bookingId: '123' } as Prisoner,
+      { prisonerNumber: 'AB1234L', confirmedReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234M', releaseDate: '2022-06-20', status: 'ACTIVE IN', recall: true } as Prisoner,
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
@@ -110,6 +115,36 @@ describe('Caseload Service', () => {
         nomisRecord: {
           prisonerNumber: 'AB1234E',
           conditionalReleaseDate: '2022-06-20',
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'AP',
+          },
+        ],
+      },
+      {
+        deliusRecord: {
+          offenderCrn: 'X12351',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234L',
+          confirmedReleaseDate: '2022-06-20',
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'AP',
+          },
+        ],
+      },
+      {
+        deliusRecord: {
+          offenderCrn: 'X12352',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234M',
+          releaseDate: '2022-06-20',
         },
         licences: [
           {
@@ -303,7 +338,7 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234E', releaseDate: '2022-06-20', status: 'INACTIVE OUT' } as Prisoner,
     ])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
@@ -334,7 +369,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          conditionalReleaseDate: '2022-06-20',
+          releaseDate: '2022-06-20',
         },
         licences: [
           {
@@ -364,8 +399,8 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
-      { prisonerNumber: 'AB1234F', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234E', releaseDate: '2022-06-20', status: 'INACTIVE OUT' } as Prisoner,
+      { prisonerNumber: 'AB1234F', releaseDate: '2022-06-20', status: 'INACTIVE OUT' } as Prisoner,
     ])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
@@ -412,7 +447,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          conditionalReleaseDate: '2022-06-20',
+          releaseDate: '2022-06-20',
         },
         licences: [
           {
@@ -433,7 +468,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234F',
-          conditionalReleaseDate: '2022-06-20',
+          releaseDate: '2022-06-20',
         },
         licences: [
           {
@@ -615,7 +650,7 @@ describe('Caseload Service', () => {
       } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234E', releaseDate: '2022-06-20', status: 'INACTIVE OUT' } as Prisoner,
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
       {
@@ -640,7 +675,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          conditionalReleaseDate: '2022-06-20',
+          releaseDate: '2022-06-20',
         },
         licences: [
           {
