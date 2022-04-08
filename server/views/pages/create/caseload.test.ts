@@ -24,14 +24,14 @@ describe('Create a Licence Views - Caseload', () => {
         {
           name: 'Adam Balasaravika',
           crnNumber: 'X381306',
-          conditionalReleaseDate: '03 August 2022',
+          releaseDate: '03 August 2022',
           insidePilot: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
         {
           name: 'John Smith',
           crnNumber: 'X123456',
-          conditionalReleaseDate: '01 September 2022',
+          releaseDate: '01 September 2022',
           insidePilot: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
@@ -55,7 +55,7 @@ describe('Create a Licence Views - Caseload', () => {
         {
           name: 'Adam Balasaravika',
           crnNumber: 'X381306',
-          conditionalReleaseDate: '03 August 2022',
+          releaseDate: '03 August 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
             staffCode: 'X12345',
@@ -66,7 +66,7 @@ describe('Create a Licence Views - Caseload', () => {
         {
           name: 'John Smith',
           crnNumber: 'X123456',
-          conditionalReleaseDate: '01 September 2022',
+          releaseDate: '01 September 2022',
           insidePilot: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
@@ -94,7 +94,7 @@ describe('Create a Licence Views - Caseload', () => {
         {
           name: 'Adam Balasaravika',
           crnNumber: 'X381306',
-          conditionalReleaseDate: '03 August 2022',
+          releaseDate: '03 August 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
             staffId: 2000,
@@ -105,7 +105,7 @@ describe('Create a Licence Views - Caseload', () => {
         {
           name: 'John Smith',
           crnNumber: 'X123456',
-          conditionalReleaseDate: '01 September 2022',
+          releaseDate: '01 September 2022',
           probationPractitioner: {
             name: 'Joe Bloggs',
             staffId: 2000,

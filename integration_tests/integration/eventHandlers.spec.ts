@@ -87,7 +87,7 @@ context('Event handlers', () => {
   })
 
   describe('Prison events', () => {
-    it('should listen to the sentence dates changed event and call endpoint to update sentence dates and update licence status', () => {
+    it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to update sentence dates and update licence status', () => {
       cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateLicenceStatus')
@@ -101,6 +101,34 @@ context('Event handlers', () => {
             "eventType": {
               "Type": "String",
               "Value": "SENTENCE_DATES-CHANGED"
+            }
+          }
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 }).then(success => {
+        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
+      })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 1 }).then(success => {
+        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
+      })
+    })
+
+    it('should listen to the CONFIRMED_RELEASE_DATE-CHANGED event and call endpoint to update sentence dates and update licence status', () => {
+      cy.task('searchPrisonersByBookingIds')
+      cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
+      cy.task('stubGetPrisonerDetail')
+      cy.task('stubUpdateLicenceStatus')
+      cy.task('stubUpdateSentenceDates')
+
+      cy.task(
+        'sendPrisonEvent',
+        `{
+          "Message": "{\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "CONFIRMED_RELEASE_DATE-CHANGED"
             }
           }
          }`

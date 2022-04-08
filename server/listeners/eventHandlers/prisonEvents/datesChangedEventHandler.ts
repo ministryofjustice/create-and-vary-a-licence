@@ -5,11 +5,16 @@ import { PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { convertDateFormat } from '../../../utils/utils'
 
-export default class SentenceDatesChangedEventHandler {
+export default class DatesChangedEventHandler {
   constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
 
   handle = async (event: PrisonEventMessage): Promise<void> => {
-    const nomisId = event.offenderIdDisplay
+    const { bookingId, offenderIdDisplay } = event
+
+    const nomisId =
+      offenderIdDisplay ||
+      (await this.prisonerService.searchPrisonersByBookingIds([bookingId])).map(o => o.prisonerNumber).pop()
+
     const licence = _.head(
       await this.licenceService.getLicencesByNomisIdsAndStatus(
         [nomisId],
