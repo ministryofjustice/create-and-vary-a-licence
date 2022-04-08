@@ -17,7 +17,7 @@ export default function authorisationMiddleware(req: Request, res: Response, nex
     }
 
     if (!roles?.some(isAuthorisedRole)) {
-      logger.error(`User ${res.locals.user?.username} is not authorised with current roles: ${JSON.stringify(roles)}`)
+      logger.warn(`User ${res.locals.user?.username} is not authorised with current roles: ${JSON.stringify(roles)}`)
       return res.redirect('/authError')
     }
 
