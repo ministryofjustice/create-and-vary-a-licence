@@ -95,6 +95,7 @@ describe('Caseload Service', () => {
       { prisonerNumber: 'AB1234G', legalStatus: 'DEAD' } as Prisoner,
       { prisonerNumber: 'AB1234H', indeterminateSentence: true } as Prisoner,
       { prisonerNumber: 'AB1234I' } as Prisoner,
+      { prisonerNumber: 'AB1234J', conditionalReleaseDate: '2022-03-20' } as Prisoner,
       { prisonerNumber: 'AB1234K', conditionalReleaseDate: '2022-06-20', bookingId: '123' } as Prisoner,
       { prisonerNumber: 'AB1234L', confirmedReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
       { prisonerNumber: 'AB1234M', releaseDate: '2022-06-20', status: 'ACTIVE IN', recall: true } as Prisoner,

@@ -211,6 +211,25 @@ export default class CaseloadService {
           offender.nomisRecord.releaseDate ||
           offender.nomisRecord.confirmedReleaseDate
       )
+      // TODO: Following filter rules can be removed after 18th April 2022
+      .filter(
+        offender =>
+          (offender.nomisRecord.conditionalReleaseDate &&
+            moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
+              moment('2022-04-18', 'YYYY-MM-DD'),
+              'day'
+            )) ||
+          (offender.nomisRecord.releaseDate &&
+            moment(offender.nomisRecord.releaseDate, 'YYYY-MM-DD').isSameOrAfter(
+              moment('2022-04-18', 'YYYY-MM-DD'),
+              'day'
+            )) ||
+          (offender.nomisRecord.confirmedReleaseDate &&
+            moment(offender.nomisRecord.confirmedReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
+              moment('2022-04-18', 'YYYY-MM-DD'),
+              'day'
+            ))
+      )
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
       eligibleOffenders.map(c => c.nomisRecord),
