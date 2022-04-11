@@ -80,7 +80,7 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/secure/users/jsmith/roles/LHDCBT002', times: 1 }).then(
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/secure/users/JSMITH/roles/LHDCBT002', times: 1 }).then(
         success => {
           if (!success) throw new Error(`Endpoint called an unexpected number of times`)
         }
