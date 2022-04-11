@@ -23,9 +23,7 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 }).then(success => {
-        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
-      })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
     })
 
     it('should listen to the transferred event and call endpoint to update prison information and update licence status', () => {
@@ -47,14 +45,8 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 }).then(success => {
-        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
-      })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/prison-information', times: 1 }).then(
-        success => {
-          if (!success) throw new Error(`Endpoint called an unexpected number of times`)
-        }
-      )
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/prison-information', times: 1 })
     })
   })
 
@@ -63,6 +55,8 @@ context('Event handlers', () => {
       cy.task('stubGetProbationer')
       cy.task('stubGetAnOffendersManagers')
       cy.task('stubGetStaffDetailsByStaffId')
+      cy.task('stubGetUserDetailsByUsername')
+      cy.task('stubAssignRole')
       cy.task('stubUpdateResponsibleCom')
 
       cy.task(
@@ -78,11 +72,8 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X1234/responsible-com', times: 1 }).then(
-        success => {
-          if (!success) throw new Error(`Endpoint called an unexpected number of times`)
-        }
-      )
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/secure/users/JSMITH/roles/LHDCBT002', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X1234/responsible-com', times: 1 })
     })
   })
 
@@ -106,12 +97,8 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 }).then(success => {
-        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
-      })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 1 }).then(success => {
-        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
-      })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 1 })
     })
 
     it('should listen to the CONFIRMED_RELEASE_DATE-CHANGED event and call endpoint to update sentence dates and update licence status', () => {
@@ -134,12 +121,8 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 }).then(success => {
-        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
-      })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 1 }).then(success => {
-        if (!success) throw new Error(`Endpoint called an unexpected number of times`)
-      })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 1 })
     })
   })
 })

@@ -2,6 +2,8 @@ import { ProbationEventMessage } from '../../../@types/events'
 import CommunityService from '../../../services/communityService'
 import LicenceService from '../../../services/licenceService'
 
+const COM_ROLE_ID = 'LHDCBT002'
+
 export default class OffenderManagerChangedEventHandler {
   constructor(private readonly communityService: CommunityService, private readonly licenceService: LicenceService) {}
 
@@ -18,6 +20,12 @@ export default class OffenderManagerChangedEventHandler {
 
       // If the COM does not have a username, they are assumed to be ineligible for use of this service. (e.g. the "unallocated" staff members)
       if (comDetails?.username) {
+        // Assign the com role to the user if they do not have it already
+        const userDetails = await this.communityService.getUserDetailsByUsername(comDetails.username)
+        if (userDetails.roles.find(role => role.name === COM_ROLE_ID) === undefined) {
+          await this.communityService.assignDeliusRole(comDetails.username.trim().toUpperCase(), COM_ROLE_ID)
+        }
+
         await this.licenceService.updateResponsibleCom(crn, {
           staffIdentifier: comDetails?.staffIdentifier,
           staffUsername: comDetails?.username,

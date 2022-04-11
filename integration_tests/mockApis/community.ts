@@ -55,6 +55,36 @@ export default {
     })
   },
 
+  stubGetUserDetailsByUsername: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/secure/users/(.)*/details`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          roles: [],
+        },
+      },
+    })
+  },
+
+  stubAssignRole: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/secure/users/(.)*/roles/(.)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
   stubGetStaffDetailsByStaffId: (): SuperAgentRequest => {
     return stubFor({
       request: {
