@@ -78,12 +78,15 @@ export default class CaseloadService {
         // TODO: This .then() block is temporary to reduce the number of offenders being searched in probation-offender-search. A more permanent
         //  fix will be to have an endpoint to search nomis by CRD (CVSL-492).
         //  Temporary fix is to filter only prisoners who have a CRD in the next 13 weeks before searching them on delius
-        return caseload
-          .filter(offender => offender.conditionalReleaseDate)
-          .filter(offender => moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(moment(), 'day'))
-          .filter(offender =>
-            moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isBefore(moment().add(13, 'weeks'), 'day')
-          )
+        return caseload.filter(
+          offender =>
+            (offender.conditionalReleaseDate &&
+              moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(moment(), 'day') &&
+              moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isBefore(moment().add(13, 'weeks'), 'day')) ||
+            (offender.confirmedReleaseDate &&
+              moment(offender.confirmedReleaseDate, 'YYYY-MM-DD').isSameOrAfter(moment(), 'day') &&
+              moment(offender.confirmedReleaseDate, 'YYYY-MM-DD').isBefore(moment().add(13, 'weeks'), 'day'))
+        )
       })
       .then(caseload => this.pairNomisRecordsWithDelius(caseload))
       .then(caseload => this.filterOffendersEligibleForLicence(caseload, user))
@@ -100,8 +103,15 @@ export default class CaseloadService {
           c.licences.find(l => l.status === status)
         )
       )
-      .filter(c =>
-        moment(c.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrBefore(moment().add(4, 'weeks'), 'day')
+      .filter(
+        c =>
+          (c.nomisRecord.conditionalReleaseDate &&
+            moment(c.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrBefore(
+              moment().add(4, 'weeks'),
+              'day'
+            )) ||
+          (c.nomisRecord.confirmedReleaseDate &&
+            moment(c.nomisRecord.confirmedReleaseDate, 'YYYY-MM-DD').isSameOrBefore(moment().add(4, 'weeks'), 'day'))
       )
 
     return this.mapResponsibleComsToCases([...casesWithLicences, ...casesPendingLicence])
@@ -181,14 +191,18 @@ export default class CaseloadService {
       // Work out the licence type from the prisoner search record
       const licenceType = this.getLicenceType(offender.nomisRecord)
 
-      // Create a case in the list in status NOT_STARTED
+      // Create a case in the list in status NOT_STARTED or NOT_IN_PILOT
       return {
         ...offender,
         licences: [
           {
             status:
               prisonInRollout(offender.nomisRecord.prisonId) &&
-              probationAreaInRollout(offender.deliusRecord.offenderManagers?.find(om => om.active)?.probationArea?.code)
+              probationAreaInRollout(
+                offender.deliusRecord.offenderManagers?.find(om => om.active)?.probationArea?.code
+              ) &&
+              !this.isRecall(offender) &&
+              !this.isBreachOfTopUpSupervision(offender)
                 ? LicenceStatus.NOT_STARTED
                 : LicenceStatus.NOT_IN_PILOT,
             type: licenceType,
@@ -203,24 +217,11 @@ export default class CaseloadService {
       .filter(offender => !offender.nomisRecord.paroleEligibilityDate)
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
       .filter(offender => !offender.nomisRecord.indeterminateSentence)
-      // TODO - Check with Jon on rules for filtering recalls
-      // .filter(offender => !offender.nomisRecord.recall)
-      .filter(
-        offender =>
-          offender.nomisRecord.conditionalReleaseDate ||
-          offender.nomisRecord.releaseDate ||
-          offender.nomisRecord.confirmedReleaseDate
-      )
       // TODO: Following filter rules can be removed after 18th April 2022
       .filter(
         offender =>
           (offender.nomisRecord.conditionalReleaseDate &&
             moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
-              moment('2022-04-18', 'YYYY-MM-DD'),
-              'day'
-            )) ||
-          (offender.nomisRecord.releaseDate &&
-            moment(offender.nomisRecord.releaseDate, 'YYYY-MM-DD').isSameOrAfter(
               moment('2022-04-18', 'YYYY-MM-DD'),
               'day'
             )) ||
@@ -377,5 +378,13 @@ export default class CaseloadService {
         ...caseload.find(c => c.offenderCrn === o.otherIds?.crn),
       }
     })
+  }
+
+  private isRecall = (offender: ManagedCase): boolean => {
+    return offender.nomisRecord?.recall && offender.nomisRecord?.recall === true
+  }
+
+  private isBreachOfTopUpSupervision = (offender: ManagedCase): boolean => {
+    return offender.nomisRecord?.imprisonmentStatus && offender.nomisRecord?.imprisonmentStatus === 'BOTUS'
   }
 }
