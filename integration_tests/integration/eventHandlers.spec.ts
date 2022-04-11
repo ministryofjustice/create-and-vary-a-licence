@@ -63,6 +63,8 @@ context('Event handlers', () => {
       cy.task('stubGetProbationer')
       cy.task('stubGetAnOffendersManagers')
       cy.task('stubGetStaffDetailsByStaffId')
+      cy.task('stubGetUserDetailsByUsername')
+      cy.task('stubAssignRole')
       cy.task('stubUpdateResponsibleCom')
 
       cy.task(
@@ -78,6 +80,11 @@ context('Event handlers', () => {
          }`
       )
 
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/secure/users/jsmith/roles/LHDCBT002', times: 1 }).then(
+        success => {
+          if (!success) throw new Error(`Endpoint called an unexpected number of times`)
+        }
+      )
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X1234/responsible-com', times: 1 }).then(
         success => {
           if (!success) throw new Error(`Endpoint called an unexpected number of times`)

@@ -3,6 +3,7 @@ import { ProbationEventMessage } from '../../../@types/events'
 import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHandler'
 import CommunityService from '../../../services/communityService'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
+import { CommunityApiUserDetails } from '../../../@types/communityClientTypes'
 
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
@@ -11,6 +12,12 @@ jest.mock('../../../services/licenceService')
 jest.mock('../../../services/communityService')
 
 describe('Offender manager changed event handler', () => {
+  beforeEach(() => {
+    communityService.getUserDetailsByUsername.mockResolvedValue({
+      roles: [{ name: 'LHDCBT002' }],
+    } as CommunityApiUserDetails)
+  })
+
   afterEach(() => {
     jest.resetAllMocks()
   })
@@ -109,5 +116,38 @@ describe('Offender manager changed event handler', () => {
     expect(communityService.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
     expect(communityService.getStaffDetailByStaffIdentifier).toHaveBeenCalledWith(3000)
     expect(licenceService.updateResponsibleCom).not.toHaveBeenCalled()
+  })
+
+  it('should assign the COM to a role if they do not have it already', async () => {
+    communityService.getProbationer.mockResolvedValue({
+      offenderManagers: [
+        {
+          active: true,
+          staff: {
+            code: 'X12345',
+          },
+        },
+      ],
+    } as OffenderDetail)
+    communityService.getAnOffendersManagers.mockResolvedValue([
+      {
+        staffCode: 'X12345',
+        staffId: 3000,
+      },
+    ])
+    communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({
+      staffIdentifier: 3000,
+      username: 'joebloggs',
+      email: 'joebloggs@probation.gov.uk',
+    })
+    communityService.getUserDetailsByUsername.mockResolvedValue({ roles: [] } as CommunityApiUserDetails)
+
+    const event = {
+      crn: 'X1234',
+    } as ProbationEventMessage
+
+    await handler.handle(event)
+
+    expect(communityService.assignDeliusRole).toHaveBeenCalledWith('JOEBLOGGS', 'LHDCBT002')
   })
 })
