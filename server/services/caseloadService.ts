@@ -203,13 +203,32 @@ export default class CaseloadService {
       .filter(offender => !offender.nomisRecord.paroleEligibilityDate)
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
       .filter(offender => !offender.nomisRecord.indeterminateSentence)
-      .filter(offender => offender.nomisRecord.conditionalReleaseDate)
-      // TODO: Following filter rule can be removed after 18th April 2022
-      .filter(offender =>
-        moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
-          moment('2022-04-18', 'YYYY-MM-DD'),
-          'day'
-        )
+      // TODO - Check with Jon on rules for filtering recalls
+      // .filter(offender => !offender.nomisRecord.recall)
+      .filter(
+        offender =>
+          offender.nomisRecord.conditionalReleaseDate ||
+          offender.nomisRecord.releaseDate ||
+          offender.nomisRecord.confirmedReleaseDate
+      )
+      // TODO: Following filter rules can be removed after 18th April 2022
+      .filter(
+        offender =>
+          (offender.nomisRecord.conditionalReleaseDate &&
+            moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
+              moment('2022-04-18', 'YYYY-MM-DD'),
+              'day'
+            )) ||
+          (offender.nomisRecord.releaseDate &&
+            moment(offender.nomisRecord.releaseDate, 'YYYY-MM-DD').isSameOrAfter(
+              moment('2022-04-18', 'YYYY-MM-DD'),
+              'day'
+            )) ||
+          (offender.nomisRecord.confirmedReleaseDate &&
+            moment(offender.nomisRecord.confirmedReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
+              moment('2022-04-18', 'YYYY-MM-DD'),
+              'day'
+            ))
       )
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
