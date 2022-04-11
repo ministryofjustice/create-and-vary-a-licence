@@ -19,6 +19,10 @@ const verifyEndpointCalled = async (options: { verb: string; path: string; times
     })
     .then(response => response.body)
     .then(response => response.count === options.times)
+    .then(success => {
+      if (!success) throw new Error(`Endpoint called an unexpected number of times`)
+      return success
+    })
 }
 
 export { stubFor, getRequests, resetStubs, verifyEndpointCalled }
