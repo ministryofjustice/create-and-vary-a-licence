@@ -4,7 +4,6 @@ import _ from 'lodash'
 import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
-import { prisonInRollout } from '../../../utils/rolloutUtils'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import logger from '../../../../logger'
@@ -18,7 +17,7 @@ export default class CaseloadRoutes {
 
     const { user } = res.locals
 
-    logger.info(`GET user caseload for ${user?.username} with roles ${user?.userRoles}`)
+    logger.info(`GET caseload for ${user?.username} with roles ${user?.userRoles} team view: ${teamView}`)
 
     const caseload = teamView
       ? await this.caseloadService.getTeamCreateCaseload(user)
@@ -34,7 +33,7 @@ export default class CaseloadRoutes {
           licenceStatus: _.head(c.licences).status,
           licenceType: _.head(c.licences).type,
           probationPractitioner: c.probationPractitioner,
-          insidePilot: prisonInRollout(c.nomisRecord.prisonId),
+          insidePilot: _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT,
         }
       })
       .filter(c => {

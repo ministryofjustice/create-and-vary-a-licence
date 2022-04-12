@@ -5,7 +5,6 @@ import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
-import config from '../../../config'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { ManagedCase } from '../../../@types/managedCase'
@@ -28,8 +27,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           offenderCrn: 'X381306',
         },
         nomisRecord: {
-          firstName: 'Joe',
-          lastName: 'Rogan',
+          firstName: 'John',
+          lastName: 'Roberts',
           conditionalReleaseDate: '2022-10-12',
           prisonerNumber: '123',
           prisonId: 'MDI',
@@ -53,8 +52,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           offenderCrn: 'X381306',
         },
         nomisRecord: {
-          firstName: 'Joe',
-          lastName: 'Rogan',
+          firstName: 'John',
+          lastName: 'Roberts',
           conditionalReleaseDate: '2022-10-12',
           prisonerNumber: '123',
           prisonId: 'MDI',
@@ -88,6 +87,24 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           },
         ],
       },
+      {
+        deliusRecord: {
+          offenderCrn: 'X381308',
+        },
+        nomisRecord: {
+          firstName: 'Mabel',
+          lastName: 'Moorhouse',
+          conditionalReleaseDate: '2023-10-12',
+          prisonerNumber: '125',
+          prisonId: 'LEI',
+        },
+        licences: [
+          {
+            type: LicenceType.AP_PSS,
+            status: LicenceStatus.NOT_IN_PILOT,
+          },
+        ],
+      },
     ] as unknown as ManagedCase[])
   })
 
@@ -116,7 +133,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
           {
-            name: 'Joe Rogan',
+            name: 'John Roberts',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             prisonerNumber: '123',
@@ -143,7 +160,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
           {
-            name: 'Joe Rogan',
+            name: 'John Roberts',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             prisonerNumber: '123',
@@ -163,6 +180,15 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
             insidePilot: true,
+          },
+          {
+            name: 'Mabel Moorhouse',
+            crnNumber: 'X381308',
+            releaseDate: '12 Oct 2023',
+            prisonerNumber: '125',
+            licenceStatus: LicenceStatus.NOT_IN_PILOT,
+            licenceType: LicenceType.AP_PSS,
+            insidePilot: false,
           },
         ],
         statusConfig,
@@ -203,7 +229,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
           {
-            name: 'Joe Rogan',
+            name: 'John Roberts',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             prisonerNumber: '123',
@@ -225,13 +251,13 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     })
 
     it('should successfully search by offender name', async () => {
-      req.query = { view: 'team', search: 'rogan' }
+      req.query = { view: 'team', search: 'roberts' }
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
           {
-            name: 'Joe Rogan',
+            name: 'John Roberts',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             prisonerNumber: '123',
@@ -246,75 +272,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         ],
         statusConfig,
         teamView: true,
-        search: 'rogan',
-      })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
-      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
-    })
-
-    it('should identify offenders outside the pilot areas for the single officer view', async () => {
-      config.rollout.restricted = true
-      config.rollout.prisons = ['LEI']
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
-        caseload: [
-          {
-            name: 'Joe Rogan',
-            crnNumber: 'X381306',
-            releaseDate: '12 Oct 2022',
-            prisonerNumber: '123',
-            licenceStatus: LicenceStatus.IN_PROGRESS,
-            licenceType: LicenceType.AP,
-            probationPractitioner: {
-              name: 'Joe Bloggs',
-              staffIdentifier: 2000,
-            },
-            insidePilot: false,
-          },
-        ],
-        statusConfig,
-        teamView: false,
-      })
-      expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
-      expect(caseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
-    })
-
-    it('should identify offenders outside the rollout pilot for the team view', async () => {
-      req.query = { view: 'team' }
-      config.rollout.restricted = true
-      config.rollout.prisons = ['MDI']
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
-        caseload: [
-          {
-            name: 'Joe Rogan',
-            crnNumber: 'X381306',
-            releaseDate: '12 Oct 2022',
-            prisonerNumber: '123',
-            licenceStatus: LicenceStatus.IN_PROGRESS,
-            licenceType: LicenceType.AP,
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-              staffIdentifier: 3000,
-            },
-            insidePilot: true,
-          },
-          {
-            name: 'Dr Who',
-            crnNumber: 'X381307',
-            releaseDate: '12 Oct 2023',
-            prisonerNumber: '124',
-            licenceStatus: LicenceStatus.IN_PROGRESS,
-            licenceType: LicenceType.AP_PSS,
-            insidePilot: false,
-          },
-        ],
-        statusConfig,
-        teamView: true,
+        search: 'roberts',
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
