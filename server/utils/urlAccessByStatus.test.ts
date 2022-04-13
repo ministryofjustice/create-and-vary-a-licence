@@ -19,6 +19,11 @@ describe('URL access checks for licence statuses', () => {
       path = '/licence/approve/id/1/view'
       expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(false)
     })
+
+    it('should deny access to pdf print', () => {
+      path = '/licence/view/id/1/pdf-print'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(false)
+    })
   })
 
   describe('URL access checks for SUBMITTED', () => {
@@ -41,6 +46,11 @@ describe('URL access checks for licence statuses', () => {
       path = '/licence/create/id/1/initial-meeting-name'
       expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(false)
     })
+
+    it('should deny access to pdf print', () => {
+      path = '/licence/view/id/1/pdf-print'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(false)
+    })
   })
 
   describe('URL access checks for APPROVED', () => {
@@ -61,6 +71,11 @@ describe('URL access checks for licence statuses', () => {
 
     it('should allow access to licence viewing', () => {
       path = '/licence/view/id/1/show'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
+    it('should allow access to pdf print', () => {
+      path = '/licence/view/id/1/pdf-print'
       expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
     })
 
@@ -90,6 +105,11 @@ describe('URL access checks for licence statuses', () => {
       path = '/licence/approve/id/1/confirm-rejected'
       expect(getUrlAccessByStatus(path, 1, 'REJECTED', username)).toEqual(true)
     })
+
+    it('should deny access to pdf print', () => {
+      path = '/licence/view/id/1/pdf-print'
+      expect(getUrlAccessByStatus(path, 1, 'REJECTED', username)).toEqual(false)
+    })
   })
 
   describe('URL access checks for ACTIVE', () => {
@@ -100,6 +120,11 @@ describe('URL access checks for licence statuses', () => {
 
     it('should allow access to licence viewing', () => {
       path = '/licence/view/id/1/show'
+      expect(getUrlAccessByStatus(path, 1, 'ACTIVE', username)).toEqual(true)
+    })
+
+    it('should allow access to pdf print', () => {
+      path = '/licence/view/id/1/pdf-print'
       expect(getUrlAccessByStatus(path, 1, 'ACTIVE', username)).toEqual(true)
     })
 
@@ -117,6 +142,11 @@ describe('URL access checks for licence statuses', () => {
 
     it('should allow access to licence viewing', () => {
       path = '/licence/view/id/1/show'
+      expect(getUrlAccessByStatus(path, 1, 'INACTIVE', username)).toEqual(true)
+    })
+
+    it('should allow access to pdf print', () => {
+      path = '/licence/view/id/1/pdf-print'
       expect(getUrlAccessByStatus(path, 1, 'INACTIVE', username)).toEqual(true)
     })
 

@@ -266,6 +266,28 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#edit-licence-button-2').length).toBe(1)
   })
 
+  it('should show print licence button when status is APPROVED', () => {
+    viewContext = {
+      licence: { ...licence, statusCode: 'APPROVED' },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#print-licence-button').length).toBe(1)
+    expect($('#print-licence-button-2').length).toBe(1)
+  })
+
+  it('should hide print licence button when status is SUBMITTED', () => {
+    viewContext = {
+      licence: { ...licence, statusCode: 'SUBMITTED' },
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#print-licence-button').length).toBe(0)
+    expect($('#print-licence-button-2').length).toBe(0)
+  })
+
   it('should hide change links and submit button when licence status is not IN_PROGRESS', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'SUBMITTED' },

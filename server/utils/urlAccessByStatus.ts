@@ -1,9 +1,16 @@
 import logger from '../../logger'
 
+type AllowedPathByStatusConfig = {
+  status: string
+  allowed?: string[]
+  disallowed?: string[]
+}
+
 const allowedPaths = [
   {
     status: 'IN_PROGRESS',
     allowed: ['/licence/create/.*', '/licence/view/.*'],
+    disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
   {
     status: 'SUBMITTED',
@@ -14,6 +21,7 @@ const allowedPaths = [
       '/licence/view/id/(\\d)*/.*',
       '/licence/approve/id/(\\d)*/.*',
     ],
+    disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
   {
     status: 'APPROVED',
@@ -32,6 +40,7 @@ const allowedPaths = [
       '/licence/approve/id/(\\d)*/confirm-rejected.*',
       '/licence/view/id/(\\d)*/.*',
     ],
+    disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
   {
     status: 'ACTIVE',
@@ -53,14 +62,17 @@ const allowedPaths = [
   {
     status: 'RECALLED',
     allowed: ['/licence/create/id/(\\d)*/check-your-answers.*', '/licence/view/id/(\\d)*/.*'],
+    disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
   {
     status: 'VARIATION_IN_PROGRESS',
     allowed: ['/licence/create/.*', '/licence/vary/.*'],
+    disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
   {
     status: 'VARIATION_SUBMITTED',
     allowed: ['/licence/vary/.*', '/licence/vary-approve/.*'],
+    disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
   {
     status: 'VARIATION_APPROVED',
@@ -69,8 +81,9 @@ const allowedPaths = [
   {
     status: 'VARIATION_REJECTED',
     allowed: ['/licence/vary/.*', '/licence/vary-approve/.*'],
+    disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
-]
+] as AllowedPathByStatusConfig[]
 
 /*
  * This is called within the fetchLicence middleware whilst retrieving a licence.
@@ -86,11 +99,18 @@ export default function getUrlAccessByStatus(
   let result = false
   const rules = allowedPaths.filter(allowed => allowed.status === licenceStatus)
   if (rules.length > 0) {
-    rules[0].allowed.forEach(val => {
+    rules[0].allowed?.forEach(val => {
       const regExp = new RegExp(val)
       if (regExp.test(path)) {
         logger.info(`Path allowed by rule ${val}`)
         result = true
+      }
+    })
+    rules[0].disallowed?.forEach(val => {
+      const regExp = new RegExp(val)
+      if (regExp.test(path)) {
+        logger.info(`Path disallowed by rule ${val}`)
+        result = false
       }
     })
   }
