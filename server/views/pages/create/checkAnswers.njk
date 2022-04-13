@@ -12,6 +12,7 @@
 
 {% set isInProgress = licence.statusCode == 'IN_PROGRESS' or licence.statusCode == 'VARIATION_IN_PROGRESS' %}
 {% set canChooseToEdit = licence.statusCode == 'APPROVED' or licence.statusCode == 'SUBMITTED' %}
+{% set canChooseToPrint = licence.statusCode == 'APPROVED' %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -36,24 +37,29 @@
         </div>
     </div>
 
-    {% if canChooseToEdit %}
+    {% if canChooseToEdit or canChooseToPrint %}
         <div class="govuk-button-group">
-            {{ govukButton({
-                text: "Edit licence",
-                href: '/licence/create/id/' + licence.id + '/edit',
-                attributes: {
-                    id: 'edit-licence-button'
-                }
-            }) }}
+            {% if canChooseToEdit %}
+                {{ govukButton({
+                    text: "Edit licence",
+                    href: '/licence/create/id/' + licence.id + '/edit',
+                    attributes: {
+                        id: 'edit-licence-button'
+                    }
+                }) }}
+            {% endif %}
 
-            {{ govukButton({
-                text: "View and print licence PDF",
-                href: '/licence/view/id/' + licence.id + '/pdf-print',
-                classes: "govuk-button--secondary",
-                attributes: {
-                    target: "_blank"
-                }
-            }) }}
+            {% if canChooseToPrint %}
+                {{ govukButton({
+                    text: "View and print licence PDF",
+                    href: '/licence/view/id/' + licence.id + '/pdf-print',
+                    classes: "govuk-button--secondary" if canChooseToEdit,
+                    attributes: {
+                        id: 'print-licence-button',
+                        target: "_blank"
+                    }
+                }) }}
+            {% endif %}
         </div>
     {% endif %}
 
@@ -101,7 +107,25 @@
                     {% endif %}
 
                     {% if canChooseToEdit %}
-                        <a id="edit-licence-button-2" href="{{'/licence/create/id/' + licence.id + '/edit'}}" class="govuk-button">Edit licence</a>
+                        {{ govukButton({
+                            text: "Edit licence",
+                            href: '/licence/create/id/' + licence.id + '/edit',
+                            attributes: {
+                                id: 'edit-licence-button-2'
+                            }
+                        }) }}
+                    {% endif %}
+
+                    {% if canChooseToPrint %}
+                        {{ govukButton({
+                            text: "View and print licence PDF",
+                            href: '/licence/view/id/' + licence.id + '/pdf-print',
+                            classes: "govuk-button--secondary" if canChooseToEdit,
+                            attributes: {
+                                id: 'print-licence-button-2',
+                                target: "_blank"
+                            }
+                        }) }}
                     {% endif %}
                 </div>
             </form>
