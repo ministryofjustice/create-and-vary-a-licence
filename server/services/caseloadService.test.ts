@@ -98,7 +98,12 @@ describe('Caseload Service', () => {
       { prisonerNumber: 'AB1234J', conditionalReleaseDate: '2022-03-20' } as Prisoner,
       { prisonerNumber: 'AB1234K', conditionalReleaseDate: '2022-06-20', bookingId: '123' } as Prisoner,
       { prisonerNumber: 'AB1234L', confirmedReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
-      { prisonerNumber: 'AB1234M', releaseDate: '2022-06-20', status: 'ACTIVE IN', recall: true } as Prisoner,
+      {
+        prisonerNumber: 'AB1234M',
+        conditionalReleaseDate: '2022-06-20',
+        status: 'ACTIVE IN',
+        recall: true,
+      } as Prisoner,
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
@@ -135,6 +140,27 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'AP',
+          },
+        ],
+      },
+      {
+        deliusRecord: {
+          otherIds: {
+            nomsNumber: 'AB1234M',
+            crn: 'X12352',
+          },
+          offenderCrn: 'X12352',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234M',
+          conditionalReleaseDate: '2022-06-20',
+          status: 'ACTIVE IN',
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'NOT_IN_PILOT',
             type: 'AP',
           },
         ],
