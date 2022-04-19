@@ -81,10 +81,10 @@ const buildEmailGroups = async (
 
       return {
         initialPromptCases: prisoners
-          .filter(p => initialPromptCases.find(ipc => _.isEqual(ipc, p)))
+          .filter(p => initialPromptCases.find(ipc => _.isEqual(ipc.nomisRecord, p)))
           .map(prisoner => mapPrisonerToReleaseCase(prisoner)),
         urgentPromptCases: prisoners
-          .filter(p => urgentPromptCases.find(upc => _.isEqual(upc, p)))
+          .filter(p => urgentPromptCases.find(upc => _.isEqual(upc.nomisRecord, p)))
           .map(prisoner => mapPrisonerToReleaseCase(prisoner)),
         comName,
         email,
@@ -100,8 +100,8 @@ const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
 }
 
 Promise.all([
-  pollPrisonersDueForLicence(moment().startOf('isoWeek'), moment().add(3, 'weeks').endOf('isoWeek')),
   pollPrisonersDueForLicence(moment().add(12, 'weeks').startOf('isoWeek'), moment().add(12, 'weeks').endOf('isoWeek')),
+  pollPrisonersDueForLicence(moment().startOf('isoWeek'), moment().add(3, 'weeks').endOf('isoWeek')),
 ])
   .then(([initialPromptCases, urgentPromptCases]) => buildEmailGroups(initialPromptCases, urgentPromptCases))
   .then(emailGroups => notifyComOfUpcomingReleases(emailGroups))
