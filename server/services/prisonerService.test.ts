@@ -1,5 +1,6 @@
 import { Readable } from 'stream'
 import fs from 'fs'
+import moment from 'moment'
 import { User } from '../@types/CvlUserDetails'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
@@ -171,16 +172,26 @@ describe('Prisoner Service', () => {
     })
   })
 
-  it('Search prisoners by prison', async () => {
+  it('Search prisoners by release date', async () => {
     const expectedResult = [{ firstName: 'Joe', lastName: 'Bloggs' }]
 
-    prisonerSearchApiClient.searchPrisonersByPrison.mockResolvedValue({
+    prisonerSearchApiClient.searchPrisonersByReleaseDate.mockResolvedValue({
       content: [{ firstName: 'Joe', lastName: 'Bloggs' }],
     } as PagePrisoner)
 
-    const actualResult = await prisonerService.searchPrisonersByPrison('MDI', user)
+    const actualResult = await prisonerService.searchPrisonersByReleaseDate(
+      moment('2022-01-01'),
+      moment('2022-01-01'),
+      ['MDI'],
+      user
+    )
 
     expect(actualResult).toEqual(expectedResult)
-    expect(prisonerSearchApiClient.searchPrisonersByPrison).toHaveBeenCalledWith('MDI', user)
+    expect(prisonerSearchApiClient.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
+      '2022-01-01',
+      '2022-01-01',
+      'MDI',
+      user
+    )
   })
 })
