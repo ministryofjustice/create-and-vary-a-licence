@@ -81,6 +81,9 @@ describe('Caseload Service', () => {
       { offenderCrn: 'X12350' },
       { offenderCrn: 'X12351' },
       { offenderCrn: 'X12352' },
+      { offenderCrn: 'X12353' },
+      { offenderCrn: 'X12354' },
+      { offenderCrn: 'X12355' },
     ])
     communityService.getOffendersByCrn.mockResolvedValue([
       { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
@@ -88,6 +91,9 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' } } as OffenderDetail,
       { otherIds: { nomsNumber: 'AB1234L', crn: 'X12351' } } as OffenderDetail,
       { otherIds: { nomsNumber: 'AB1234M', crn: 'X12352' } } as OffenderDetail,
+      { otherIds: { nomsNumber: 'AB1234N', crn: 'X12353' } } as OffenderDetail,
+      { otherIds: { nomsNumber: 'AB1234P', crn: 'X12354' } } as OffenderDetail,
+      { otherIds: { nomsNumber: 'AB1234Q', crn: 'X12355' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
       { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
@@ -98,7 +104,38 @@ describe('Caseload Service', () => {
       { prisonerNumber: 'AB1234J', conditionalReleaseDate: '2022-03-20' } as Prisoner,
       { prisonerNumber: 'AB1234K', conditionalReleaseDate: '2022-06-20', bookingId: '123' } as Prisoner,
       { prisonerNumber: 'AB1234L', confirmedReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
-      { prisonerNumber: 'AB1234M', releaseDate: '2022-06-20', status: 'ACTIVE IN', recall: true } as Prisoner,
+      // This case tests that recalls are overridden if the PRRD < the confirmedReleaseDate - so NOT_STARTED
+      {
+        prisonerNumber: 'AB1234M',
+        confirmedReleaseDate: '2022-06-20',
+        postRecallReleaseDate: '2022-06-19',
+        status: 'ACTIVE IN',
+        recall: true,
+      } as Prisoner,
+      // This case tests that recalls are NOT overridden if the PRRD > the confirmedReleaseDate - so NOT_IN_PILOT
+      {
+        prisonerNumber: 'AB1234N',
+        confirmedReleaseDate: '2022-06-20',
+        postRecallReleaseDate: '2022-06-21',
+        status: 'ACTIVE IN',
+        recall: true,
+      } as Prisoner,
+      // This case tests that recalls are NOT overridden if the PRRD > the conditionalReleaseDate - so NOT_IN_PILOT
+      {
+        prisonerNumber: 'AB1234P',
+        conditionalReleaseDate: '2022-06-20',
+        postRecallReleaseDate: '2022-06-21',
+        status: 'ACTIVE IN',
+        recall: true,
+      } as Prisoner,
+      // This case tests that recalls are overridden if the PRRD is equal to the conditionalReleaseDate - so NOT_STARTED
+      {
+        prisonerNumber: 'AB1234Q',
+        conditionalReleaseDate: '2022-06-19',
+        postRecallReleaseDate: '2022-06-19',
+        status: 'ACTIVE IN',
+        recall: true,
+      } as Prisoner,
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
@@ -131,6 +168,78 @@ describe('Caseload Service', () => {
         nomisRecord: {
           prisonerNumber: 'AB1234L',
           confirmedReleaseDate: '2022-06-20',
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'AP',
+          },
+        ],
+      },
+      {
+        deliusRecord: {
+          offenderCrn: 'X12352',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234M',
+          confirmedReleaseDate: '2022-06-20',
+          postRecallReleaseDate: '2022-06-19',
+          status: 'ACTIVE IN',
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'AP',
+          },
+        ],
+      },
+      {
+        deliusRecord: {
+          offenderCrn: 'X12353',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234N',
+          confirmedReleaseDate: '2022-06-20',
+          postRecallReleaseDate: '2022-06-21',
+          status: 'ACTIVE IN',
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'NOT_IN_PILOT',
+            type: 'AP',
+          },
+        ],
+      },
+      {
+        deliusRecord: {
+          offenderCrn: 'X12354',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234P',
+          conditionalReleaseDate: '2022-06-20',
+          postRecallReleaseDate: '2022-06-21',
+          status: 'ACTIVE IN',
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'NOT_IN_PILOT',
+            type: 'AP',
+          },
+        ],
+      },
+      {
+        deliusRecord: {
+          offenderCrn: 'X12355',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234Q',
+          conditionalReleaseDate: '2022-06-19',
+          postRecallReleaseDate: '2022-06-19',
+          status: 'ACTIVE IN',
+          recall: true,
         },
         licences: [
           {

@@ -381,7 +381,27 @@ export default class CaseloadService {
   }
 
   private isRecall = (offender: ManagedCase): boolean => {
-    return offender.nomisRecord?.recall && offender.nomisRecord?.recall === true
+    const recall = offender.nomisRecord?.recall && offender.nomisRecord.recall === true
+
+    // Get the confirmed release date (if present) or CRD, and use in that order of preference
+    const releaseDate = offender.nomisRecord?.confirmedReleaseDate
+      ? moment(offender.nomisRecord.confirmedReleaseDate, 'YYYY-MM-DD')
+      : moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
+
+    // Get the post recall release date (if present) or set to undefined.
+    const postRecallReleaseDate = offender.nomisRecord?.postRecallReleaseDate
+      ? moment(offender.nomisRecord?.postRecallReleaseDate, 'YYYY-MM-DD')
+      : undefined
+
+    // If the post-recall release date is AFTER the release date, then it is a genuine recall.
+    // If the post-recall release date is BEFORE or EQUAL to the release date - we ignore the recall flag.
+    // This catches the situation where multiple sentences exist and the recall applies to a previous sentence.
+    if (recall && releaseDate && postRecallReleaseDate) {
+      return postRecallReleaseDate.isAfter(releaseDate)
+    }
+
+    // Trust the Nomis recall flag as a fallback position if other data is not present.
+    return recall
   }
 
   private isBreachOfTopUpSupervision = (offender: ManagedCase): boolean => {
