@@ -190,7 +190,7 @@ describe('Prisoner Service', () => {
     expect(prisonerSearchApiClient.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
       '2022-01-01',
       '2022-01-01',
-      'MDI',
+      ['MDI'],
       user
     )
   })
