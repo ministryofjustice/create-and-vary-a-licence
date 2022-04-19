@@ -1,5 +1,6 @@
 import { Readable } from 'stream'
 import fs from 'fs'
+import { Moment } from 'moment'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
@@ -85,5 +86,21 @@ export default class PrisonerService {
       return []
     }
     return this.prisonerSearchApiClient.searchPrisonersByPrison(prisonCode, user).then(pageable => pageable.content)
+  }
+
+  async searchPrisonersByReleaseDate(
+    earliestReleaseDate: Moment,
+    latestReleaseDate: Moment,
+    prisonIds?: string[],
+    user?: User
+  ): Promise<Prisoner[]> {
+    return this.prisonerSearchApiClient
+      .searchPrisonersByReleaseDate(
+        earliestReleaseDate.format('YYYY-MM-DD'),
+        latestReleaseDate.format('YYYY-MM-DD'),
+        prisonIds,
+        user
+      )
+      .then(pageable => pageable.content)
   }
 }

@@ -1,3 +1,4 @@
+import { Moment } from 'moment'
 import config, { ApiConfig } from '../config'
 import type { PagePrisoner, Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import { PrisonerSearchByBookingIds, PrisonerSearchByNomisIds } from '../@types/prisonerSearchApiClientTypes'
@@ -43,6 +44,26 @@ export default class PrisonerSearchApiClient extends RestClient {
     return (await this.get(
       {
         path: `/prisoner-search/prison/${prisonCode}`,
+        query: { size: 2000 },
+      },
+      { username: user?.username }
+    )) as Promise<PagePrisoner>
+  }
+
+  async searchPrisonersByReleaseDate(
+    earliestReleaseDate: string,
+    latestReleaseDate: string,
+    prisonIds?: string[],
+    user?: User
+  ): Promise<PagePrisoner> {
+    return (await this.post(
+      {
+        path: `/prisoner-search/release-date-by-prison`,
+        data: {
+          earliestReleaseDate,
+          latestReleaseDate,
+          prisonIds,
+        },
         query: { size: 2000 },
       },
       { username: user?.username }

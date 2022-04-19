@@ -1,6 +1,6 @@
 import 'reflect-metadata'
-import moment from 'moment'
 import _ from 'lodash'
+import moment, { Moment } from 'moment'
 import { buildAppInsightsClient, flush, initialiseAppInsights } from '../server/utils/azureAppInsights'
 import logger from '../logger'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
@@ -16,73 +16,37 @@ buildAppInsightsClient('create-and-vary-a-licence-prompt-licence-create-job')
 
 const { caseloadService, prisonerService, communityService, licenceService } = services
 
-const pollPrisonersDueForLicence = async (): Promise<ManagedCase[]> => {
-  const getEligiblePrisoners = async (prisonCode: string): Promise<ManagedCase[]> => {
-    const filterPrisonersReleasedWithinNoticePeriod = (prisoners: Prisoner[]): Prisoner[] => {
-      const initialPromptPeriod = filterPrisonersForReleaseWithWeekRange(prisoners, 13, 14)
-      const regularPromptPeriod = filterPrisonersForReleaseWithWeekRange(prisoners, 0, 5)
-      return initialPromptPeriod.concat(regularPromptPeriod)
-    }
-
-    return prisonerService
-      .searchPrisonersByPrison(prisonCode)
-      .then(prisoners => prisoners.filter(offender => offender.status && offender.status.startsWith('ACTIVE')))
-      .then(prisoners => filterPrisonersReleasedWithinNoticePeriod(prisoners))
-      .then(caseload => caseloadService.pairNomisRecordsWithDelius(caseload))
-      .then(caseload => caseload.filter(c => c.deliusRecord.offenderManagers.find(om => om.active)))
-      .then(caseload => caseloadService.filterOffendersEligibleForLicence(caseload))
-      .then(prisoners => caseloadService.mapOffendersToLicences(prisoners))
-      .then(prisoners =>
-        prisoners.filter(offender =>
-          [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS].some(status =>
-            offender.licences.find(l => l.status === status)
-          )
-        )
-      )
-  }
-
+const pollPrisonersDueForLicence = async (
+  earliestReleaseDate: Moment,
+  latestReleaseDate: Moment
+): Promise<ManagedCase[]> => {
   const prisonCodes = config.rollout.prisons
 
-  let prisoners = [] as ManagedCase[]
-
-  for (let i = 0; i < prisonCodes.length; i += 1) {
-    // TODO: This will be replaced by a single call to elastic search to find all prisoners due for release
-    // In sequence rather than in parallel because elastic search cannot handle many requests
-    // eslint-disable-next-line no-await-in-loop
-    const prisonersFromPrison = await getEligiblePrisoners(prisonCodes[i])
-    prisoners = prisoners.concat(prisonersFromPrison)
-  }
-
-  return prisoners
-}
-
-const filterPrisonersForReleaseWithWeekRange = (
-  prisoners: Prisoner[],
-  startWeek: number,
-  endWeek: number
-): Prisoner[] => {
-  return prisoners
-    .filter(prisoner => {
-      return moment(prisoner.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
-        moment().add(startWeek, 'weeks'),
-        'day'
+  return prisonerService
+    .searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonCodes)
+    .then(prisoners => prisoners.filter(offender => offender.status && offender.status.startsWith('ACTIVE')))
+    .then(caseload => caseloadService.pairNomisRecordsWithDelius(caseload))
+    .then(caseload => caseloadService.filterOffendersEligibleForLicence(caseload))
+    .then(prisoners => caseloadService.mapOffendersToLicences(prisoners))
+    .then(prisoners =>
+      prisoners.filter(offender =>
+        [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS].some(status =>
+          offender.licences.find(l => l.status === status)
+        )
       )
-    })
-    .filter(prisoner => {
-      return moment(prisoner.conditionalReleaseDate, 'YYYY-MM-DD').isBefore(moment().add(endWeek, 'weeks'), 'day')
-    })
-    .sort((a, b) => {
-      const crd1 = moment(a.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-      const crd2 = moment(b.conditionalReleaseDate, 'YYYY-MM-DD').unix()
-      return crd1 - crd2
-    })
+    )
 }
 
-const buildEmailGroups = async (managedCases: ManagedCase[]): Promise<EmailContact[]> => {
+const buildEmailGroups = async (
+  initialPromptCases: ManagedCase[],
+  urgentPromptCases: ManagedCase[]
+): Promise<EmailContact[]> => {
+  const managedCases = [...initialPromptCases, ...urgentPromptCases]
+
   const mapPrisonerToReleaseCase = (prisoner: Prisoner) => {
     return {
       name: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
-      releaseDate: prisoner.conditionalReleaseDate,
+      releaseDate: prisoner.confirmedReleaseDate || prisoner.conditionalReleaseDate,
     }
   }
 
@@ -116,12 +80,12 @@ const buildEmailGroups = async (managedCases: ManagedCase[]): Promise<EmailConta
       const comName = emailGroup.map(managedOffender => managedOffender.comName).pop()
 
       return {
-        initialPromptCases: filterPrisonersForReleaseWithWeekRange(prisoners, 13, 14).map(prisoner =>
-          mapPrisonerToReleaseCase(prisoner)
-        ),
-        urgentPromptCases: filterPrisonersForReleaseWithWeekRange(prisoners, 0, 5).map(prisoner =>
-          mapPrisonerToReleaseCase(prisoner)
-        ),
+        initialPromptCases: prisoners
+          .filter(p => initialPromptCases.find(ipc => _.isEqual(ipc, p)))
+          .map(prisoner => mapPrisonerToReleaseCase(prisoner)),
+        urgentPromptCases: prisoners
+          .filter(p => urgentPromptCases.find(upc => _.isEqual(upc, p)))
+          .map(prisoner => mapPrisonerToReleaseCase(prisoner)),
         comName,
         email,
       }
@@ -130,12 +94,17 @@ const buildEmailGroups = async (managedCases: ManagedCase[]): Promise<EmailConta
 }
 
 const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
-  await licenceService.notifyComsToPromptLicenceCreation(emailGroups)
+  if (emailGroups.length > 0) {
+    await licenceService.notifyComsToPromptLicenceCreation(emailGroups)
+  }
 }
 
-pollPrisonersDueForLicence()
-  .then(prisoners => (prisoners.length > 0 ? buildEmailGroups(prisoners) : []))
-  .then(emailGroups => (emailGroups.length > 0 ? notifyComOfUpcomingReleases(emailGroups) : null))
+Promise.all([
+  pollPrisonersDueForLicence(moment().startOf('isoWeek'), moment().add(3, 'weeks').endOf('isoWeek')),
+  pollPrisonersDueForLicence(moment().add(12, 'weeks').startOf('isoWeek'), moment().add(12, 'weeks').endOf('isoWeek')),
+])
+  .then(([initialPromptCases, urgentPromptCases]) => buildEmailGroups(initialPromptCases, urgentPromptCases))
+  .then(emailGroups => notifyComOfUpcomingReleases(emailGroups))
   .then(() => {
     // Flush logs to app insights and only exit when complete
     flush({ callback: () => process.exit() }, 'success')
