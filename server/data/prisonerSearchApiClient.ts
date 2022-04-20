@@ -39,10 +39,20 @@ export default class PrisonerSearchApiClient extends RestClient {
     )) as Promise<Prisoner[]>
   }
 
-  async searchPrisonersByPrison(prisonCode: string, user?: User): Promise<PagePrisoner> {
-    return (await this.get(
+  async searchPrisonersByReleaseDate(
+    earliestReleaseDate: string,
+    latestReleaseDate: string,
+    prisonIds?: string[],
+    user?: User
+  ): Promise<PagePrisoner> {
+    return (await this.post(
       {
-        path: `/prisoner-search/prison/${prisonCode}`,
+        path: `/prisoner-search/release-date-by-prison`,
+        data: {
+          earliestReleaseDate,
+          latestReleaseDate,
+          prisonIds,
+        },
         query: { size: 2000 },
       },
       { username: user?.username }

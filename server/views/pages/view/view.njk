@@ -53,7 +53,7 @@
                 {{ additionalPssConditions(licence) }}
             {% endif %}
 
-            <div class="govuk-body">
+            <div class="govuk-button-group">
                 {% if isPrintable %}
                     {{ govukButton({
                         text: "View and print licence PDF",
@@ -65,7 +65,7 @@
 
                 {{ govukButton({
                    text: "Return to case list",
-                   classes: "govuk-button--secondary govuk-!-margin-bottom-0",
+                   classes: "govuk-button--secondary" if isPrintable,
                    href: '/licence/view/cases',
                    attributes: { 'data-qa': 'return-to-view-list' }
                 }) }}

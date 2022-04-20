@@ -98,7 +98,12 @@ describe('Caseload Service', () => {
       { prisonerNumber: 'AB1234J', conditionalReleaseDate: '2022-03-20' } as Prisoner,
       { prisonerNumber: 'AB1234K', conditionalReleaseDate: '2022-06-20', bookingId: '123' } as Prisoner,
       { prisonerNumber: 'AB1234L', confirmedReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
-      { prisonerNumber: 'AB1234M', releaseDate: '2022-06-20', status: 'ACTIVE IN', recall: true } as Prisoner,
+      {
+        prisonerNumber: 'AB1234M',
+        conditionalReleaseDate: '2022-06-20',
+        status: 'ACTIVE IN',
+        recall: true,
+      } as Prisoner,
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
@@ -135,6 +140,27 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'AP',
+          },
+        ],
+      },
+      {
+        deliusRecord: {
+          otherIds: {
+            nomsNumber: 'AB1234M',
+            crn: 'X12352',
+          },
+          offenderCrn: 'X12352',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234M',
+          conditionalReleaseDate: '2022-06-20',
+          status: 'ACTIVE IN',
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'NOT_IN_PILOT',
             type: 'AP',
           },
         ],
@@ -553,23 +579,51 @@ describe('Caseload Service', () => {
   })
 
   it('builds the omu caseload', async () => {
-    const crd = moment().add(4, 'weeks').format('YYYY-MM-DD')
-
-    prisonerService.searchPrisonersByPrison.mockResolvedValueOnce([
+    licenceService.getLicencesForOmu.mockResolvedValue([
+      {
+        nomisId: 'AB1234D',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.APPROVED,
+        comUsername: 'joebloggs',
+      },
+    ])
+    prisonerService.searchPrisonersByReleaseDate.mockResolvedValueOnce([
       {
         prisonerNumber: 'AB1234E',
         confirmedReleaseDate: '2022-06-20',
         status: 'ACTIVE IN',
       } as Prisoner,
-    ])
-    prisonerService.searchPrisonersByPrison.mockResolvedValueOnce([
       {
         prisonerNumber: 'AB1234F',
-        conditionalReleaseDate: crd,
+        conditionalReleaseDate: '2022-06-20',
         status: 'ACTIVE IN',
       } as Prisoner,
     ])
-    communityService.getOffendersByNomsNumbers.mockResolvedValue([
+    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
+      {
+        otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+      {
+        username: 'joebloggs',
+        staffCode: 'X1234',
+        staff: {
+          forenames: 'Joe',
+          surname: 'Bloggs',
+        },
+      },
+    ])
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+      {
+        prisonerNumber: 'AB1234D',
+        conditionalReleaseDate: '2022-06-20',
+        status: 'ACTIVE IN',
+      } as Prisoner,
+    ])
+    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
       {
         otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
@@ -582,18 +636,44 @@ describe('Caseload Service', () => {
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234E',
-        licenceId: 1,
+        licenceId: 2,
         licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.APPROVED,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
         comUsername: 'joebloggs',
       },
     ])
 
     const result = await serviceUnderTest.getOmuCaseload(user)
 
-    expect(prisonerService.searchPrisonersByPrison).toHaveBeenNthCalledWith(1, 'p1', user)
-    expect(prisonerService.searchPrisonersByPrison).toHaveBeenNthCalledWith(2, 'p2', user)
+    expect(prisonerService.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
+      moment().startOf('isoWeek'),
+      moment().add(3, 'weeks').endOf('isoWeek'),
+      ['p1', 'p2'],
+      user
+    )
     expect(result).toMatchObject([
+      {
+        nomisRecord: {
+          prisonerNumber: 'AB1234D',
+          conditionalReleaseDate: '2022-06-20',
+        },
+        deliusRecord: {
+          otherIds: {
+            nomsNumber: 'AB1234D',
+            crn: 'X12347',
+          },
+        },
+        licences: [
+          {
+            status: 'APPROVED',
+            type: 'AP',
+          },
+        ],
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'Joe Bloggs',
+        },
+      },
       {
         nomisRecord: {
           prisonerNumber: 'AB1234E',
@@ -607,8 +687,8 @@ describe('Caseload Service', () => {
         },
         licences: [
           {
-            id: 1,
-            status: 'APPROVED',
+            id: 2,
+            status: 'IN_PROGRESS',
             type: 'AP',
             comUsername: 'joebloggs',
           },
@@ -621,7 +701,7 @@ describe('Caseload Service', () => {
       {
         nomisRecord: {
           prisonerNumber: 'AB1234F',
-          conditionalReleaseDate: crd,
+          conditionalReleaseDate: '2022-06-20',
         },
         deliusRecord: {
           otherIds: {

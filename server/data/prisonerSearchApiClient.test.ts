@@ -13,7 +13,6 @@ const prisonerSearchApiClient = new PrisonerSearchApiClient()
 
 describe('Prisoner Search Api client tests', () => {
   const post = jest.spyOn(HmppsRestClient.prototype, 'post')
-  const get = jest.spyOn(HmppsRestClient.prototype, 'get')
 
   beforeEach(() => {
     post.mockResolvedValue(true)
@@ -66,18 +65,23 @@ describe('Prisoner Search Api client tests', () => {
     expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
   })
 
-  it('Search Prisoner by prison', async () => {
-    get.mockResolvedValue({ content: [{ firstName: 'Joe', lastName: 'Bloggs' }] })
+  it('Search Prisoner by release date', async () => {
+    post.mockResolvedValue({ content: [{ firstName: 'Joe', lastName: 'Bloggs' }] })
 
-    const result = await prisonerSearchApiClient.searchPrisonersByPrison('MDI', {
+    const result = await prisonerSearchApiClient.searchPrisonersByReleaseDate('2022-01-01', '2022-01-01', ['MDI'], {
       username: 'joebloggs',
     } as User)
 
-    expect(get).toHaveBeenCalledWith(
+    expect(post).toHaveBeenCalledWith(
       {
-        path: '/prisoner-search/prison/MDI',
+        path: '/prisoner-search/release-date-by-prison',
         query: {
           size: 2000,
+        },
+        data: {
+          earliestReleaseDate: '2022-01-01',
+          latestReleaseDate: '2022-01-01',
+          prisonIds: ['MDI'],
         },
       },
       { username: 'joebloggs' }
