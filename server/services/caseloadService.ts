@@ -197,6 +197,7 @@ export default class CaseloadService {
       .filter(offender => !offender.nomisRecord.paroleEligibilityDate)
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
       .filter(offender => !offender.nomisRecord.indeterminateSentence)
+      .filter(offender => offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate)
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
       eligibleOffenders.map(c => c.nomisRecord),
