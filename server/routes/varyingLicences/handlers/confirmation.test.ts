@@ -31,6 +31,7 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/confirmation', {
+        licenceType: 'licence and post sentence supervision order',
         titleText: 'Licence and post sentence supervision order variation for Joe Bloggs sent',
       })
     })
@@ -40,6 +41,7 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/confirmation', {
+        licenceType: 'licence',
         titleText: 'Licence variation for Joe Bloggs sent',
       })
     })
@@ -49,6 +51,7 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/confirmation', {
+        licenceType: 'post sentence supervision order',
         titleText: 'Post sentence supervision order variation for Joe Bloggs sent',
       })
     })
