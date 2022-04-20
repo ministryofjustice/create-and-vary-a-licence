@@ -81,6 +81,7 @@ describe('Caseload Service', () => {
       { offenderCrn: 'X12350' },
       { offenderCrn: 'X12351' },
       { offenderCrn: 'X12352' },
+      { offenderCrn: 'X12353' },
     ])
     communityService.getOffendersByCrn.mockResolvedValue([
       { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
@@ -88,6 +89,7 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' } } as OffenderDetail,
       { otherIds: { nomsNumber: 'AB1234L', crn: 'X12351' } } as OffenderDetail,
       { otherIds: { nomsNumber: 'AB1234M', crn: 'X12352' } } as OffenderDetail,
+      { otherIds: { nomsNumber: 'AB1234N', crn: 'X12353' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
       { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
@@ -103,6 +105,10 @@ describe('Caseload Service', () => {
         conditionalReleaseDate: '2022-06-20',
         status: 'ACTIVE IN',
         recall: true,
+      } as Prisoner,
+      {
+        prisonerNumber: 'AB1234N',
+        status: 'ACTIVE IN',
       } as Prisoner,
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
