@@ -117,11 +117,11 @@ export default {
     })
   },
 
-  searchPrisonersByPrison: (): SuperAgentRequest => {
+  searchPrisonersByReleaseDate: (): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'GET',
-        urlPattern: `/prisoner-search/prison/(.)*`,
+        method: 'POST',
+        urlPattern: `/prisoner-search/release-date-by-prison`,
       },
       response: {
         status: 200,

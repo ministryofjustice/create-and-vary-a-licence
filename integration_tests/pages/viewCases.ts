@@ -3,12 +3,14 @@ import ViewALicencePage from './viewALicence'
 import ComDetailsPage from './comDetails'
 
 export default class ViewCasesPage extends Page {
+  private viewLicenceLinkId = '#name-button-1'
+
   constructor() {
     super('view-cases-page')
   }
 
   clickALicence = (): ViewALicencePage => {
-    cy.contains('td a', 'Bob Zimmer').click()
+    cy.get(this.viewLicenceLinkId).click()
     return Page.verifyOnPage(ViewALicencePage)
   }
 

@@ -74,6 +74,9 @@ export default class CommunityService {
   }
 
   async getOffendersByNomsNumbers(nomsNumbers: string[]): Promise<OffenderDetail[]> {
-    return this.probationSearchApiClient.getOffendersByNomsNumbers(nomsNumbers)
+    if (nomsNumbers.length > 0) {
+      return this.probationSearchApiClient.getOffendersByNomsNumbers(nomsNumbers)
+    }
+    return []
   }
 }
