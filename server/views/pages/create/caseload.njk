@@ -10,9 +10,9 @@
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
 
-{% macro offenderName(offenderName, crn, prisonerNumber, probationPractitioner, insidePilot, index) %}
+{% macro offenderName(offenderName, crn, prisonerNumber, probationPractitioner, isClickable, index) %}
     <div class="caseload-offender-name">
-        {% if probationPractitioner and insidePilot %}
+        {% if probationPractitioner and isClickable %}
             <button id="name-button-{{ index }}" type="submit" name="prisonerNumber" value='{{ prisonerNumber }}' class="link-button govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</button>
         {% else %}
             <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</span>
@@ -38,7 +38,7 @@
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, offender.probationPractitioner, offender.insidePilot, loop.index)
+            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, offender.probationPractitioner, offender.isClickable, loop.index)
         },
         {
             attributes: {

@@ -26,6 +26,8 @@ export default class ViewAndPrintCaseRoutes {
           isClickable:
             _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&
             _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
+            _.head(c.licences).status !== LicenceStatus.OOS_RECALL &&
+            _.head(c.licences).status !== LicenceStatus.OOS_BOTUS &&
             _.head(c.licences).status !== LicenceStatus.IN_PROGRESS,
         }
       })

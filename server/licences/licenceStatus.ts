@@ -72,6 +72,16 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     description: 'Outside pilot area',
     colour: 'grey',
   },
+  OOS_BOTUS: {
+    label: 'Breach of supervision',
+    description: 'Breach of supervision',
+    colour: 'grey',
+  },
+  OOS_RECALL: {
+    label: 'Recall',
+    description: 'Recall',
+    colour: 'grey',
+  },
 }
 
 export default statusConfig
