@@ -6,19 +6,23 @@ export default class ConfirmationRoutes {
     const { licence } = res.locals
 
     let titleText
+    let licenceType
 
     switch (licence.typeCode) {
       case LicenceType.AP_PSS:
+        licenceType = 'licence and post sentence supervision order'
         titleText = `Licence and post sentence supervision order variation for ${licence.forename} ${licence.surname} sent`
         break
       case LicenceType.AP:
+        licenceType = 'licence'
         titleText = `Licence variation for ${licence.forename} ${licence.surname} sent`
         break
       case LicenceType.PSS:
+        licenceType = 'post sentence supervision order'
         titleText = `Post sentence supervision order variation for ${licence.forename} ${licence.surname} sent`
         break
     }
 
-    res.render('pages/vary/confirmation', { titleText })
+    res.render('pages/vary/confirmation', { titleText, licenceType })
   }
 }

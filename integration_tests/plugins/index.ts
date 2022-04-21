@@ -68,7 +68,7 @@ export default (on: (string, Record) => void): void => {
 
     searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
     searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
-    searchPrisonersByPrison: prisonerSearch.searchPrisonersByPrison,
+    searchPrisonersByReleaseDate: prisonerSearch.searchPrisonersByReleaseDate,
 
     stubGetPrisonUserDetails: prison.stubGetUserDetails,
     stubGetPrisonUserCaseloads: prison.stubGetUserCaseloads,

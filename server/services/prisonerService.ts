@@ -1,5 +1,6 @@
 import { Readable } from 'stream'
 import fs from 'fs'
+import { Moment } from 'moment'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
@@ -7,7 +8,6 @@ import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiCli
 import logger from '../../logger'
 import HdcStatus from '../@types/HdcStatus'
 import { User } from '../@types/CvlUserDetails'
-import config from '../config'
 
 export default class PrisonerService {
   constructor(
@@ -80,10 +80,19 @@ export default class PrisonerService {
     })
   }
 
-  async searchPrisonersByPrison(prisonCode: string, user?: User): Promise<Prisoner[]> {
-    if (config.rollout.restricted && !config.rollout.prisons.includes(prisonCode)) {
-      return []
-    }
-    return this.prisonerSearchApiClient.searchPrisonersByPrison(prisonCode, user).then(pageable => pageable.content)
+  async searchPrisonersByReleaseDate(
+    earliestReleaseDate: Moment,
+    latestReleaseDate: Moment,
+    prisonIds?: string[],
+    user?: User
+  ): Promise<Prisoner[]> {
+    return this.prisonerSearchApiClient
+      .searchPrisonersByReleaseDate(
+        earliestReleaseDate.format('YYYY-MM-DD'),
+        latestReleaseDate.format('YYYY-MM-DD'),
+        prisonIds,
+        user
+      )
+      .then(pageable => pageable.content)
   }
 }

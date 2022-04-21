@@ -70,51 +70,31 @@ export default class CaseloadService {
   async getOmuCaseload(user: User): Promise<ManagedCase[]> {
     const { prisonCaseload } = user
 
-    const eligibleOffenders = await Promise.all(
-      prisonCaseload.map(prison => this.prisonerService.searchPrisonersByPrison(prison, user))
-    )
-      .then(caseload => caseload.flat())
-      .then(caseload => {
-        // TODO: This .then() block is temporary to reduce the number of offenders being searched in probation-offender-search. A more permanent
-        //  fix will be to have an endpoint to search nomis by CRD (CVSL-492).
-        //  Temporary fix is to filter only prisoners who have a CRD in the next 13 weeks before searching them on delius
-        return caseload.filter(
-          offender =>
-            (offender.conditionalReleaseDate &&
-              moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(moment(), 'day') &&
-              moment(offender.conditionalReleaseDate, 'YYYY-MM-DD').isBefore(moment().add(13, 'weeks'), 'day')) ||
-            (offender.confirmedReleaseDate &&
-              moment(offender.confirmedReleaseDate, 'YYYY-MM-DD').isSameOrAfter(moment(), 'day') &&
-              moment(offender.confirmedReleaseDate, 'YYYY-MM-DD').isBefore(moment().add(13, 'weeks'), 'day'))
-        )
-      })
+    // Get cases with a licence in ACTIVE, APPROVED, or SUBMITTED state
+    const casesWithLicences = this.licenceService
+      .getLicencesForOmu(user)
+      .then(licences => this.mapLicencesToOffenders(licences))
+
+    // Get cases due for release soon which do not have a submitted licence
+    const startOfThisWeek = moment().startOf('isoWeek')
+    const endOfTheFourthWeekFromNow = moment().add(3, 'weeks').endOf('isoWeek')
+    const casesPendingLicence = this.prisonerService
+      .searchPrisonersByReleaseDate(startOfThisWeek, endOfTheFourthWeekFromNow, prisonCaseload, user)
       .then(caseload => this.pairNomisRecordsWithDelius(caseload))
       .then(caseload => this.filterOffendersEligibleForLicence(caseload, user))
       .then(caseload => this.mapOffendersToLicences(caseload, user))
-
-    const casesWithLicences = eligibleOffenders.filter(offender =>
-      [LicenceStatus.ACTIVE, LicenceStatus.SUBMITTED, LicenceStatus.APPROVED].some(status =>
-        offender.licences.find(l => l.status === status)
-      )
-    )
-    const casesPendingLicence = this.buildCreateCaseload(eligibleOffenders)
-      .filter(c =>
-        [LicenceStatus.NOT_STARTED, LicenceStatus.NOT_IN_PILOT, LicenceStatus.IN_PROGRESS].some(status =>
-          c.licences.find(l => l.status === status)
+      .then(caseload => this.buildCreateCaseload(caseload))
+      .then(caseload => {
+        return caseload.filter(c =>
+          [LicenceStatus.NOT_STARTED, LicenceStatus.NOT_IN_PILOT, LicenceStatus.IN_PROGRESS].some(status =>
+            c.licences.find(l => l.status === status)
+          )
         )
-      )
-      .filter(
-        c =>
-          (c.nomisRecord.conditionalReleaseDate &&
-            moment(c.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrBefore(
-              moment().add(4, 'weeks'),
-              'day'
-            )) ||
-          (c.nomisRecord.confirmedReleaseDate &&
-            moment(c.nomisRecord.confirmedReleaseDate, 'YYYY-MM-DD').isSameOrBefore(moment().add(4, 'weeks'), 'day'))
-      )
+      })
 
-    return this.mapResponsibleComsToCases([...casesWithLicences, ...casesPendingLicence])
+    const combinedCases = await Promise.all([casesWithLicences, casesPendingLicence]).then(c => c.flat())
+
+    return this.mapResponsibleComsToCases(combinedCases)
   }
 
   async getApproverCaseload(user: User): Promise<ManagedCase[]> {
@@ -217,20 +197,7 @@ export default class CaseloadService {
       .filter(offender => !offender.nomisRecord.paroleEligibilityDate)
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
       .filter(offender => !offender.nomisRecord.indeterminateSentence)
-      // TODO: Following filter rules can be removed after 18th April 2022
-      .filter(
-        offender =>
-          (offender.nomisRecord.conditionalReleaseDate &&
-            moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
-              moment('2022-04-18', 'YYYY-MM-DD'),
-              'day'
-            )) ||
-          (offender.nomisRecord.confirmedReleaseDate &&
-            moment(offender.nomisRecord.confirmedReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
-              moment('2022-04-18', 'YYYY-MM-DD'),
-              'day'
-            ))
-      )
+      .filter(offender => offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate)
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
       eligibleOffenders.map(c => c.nomisRecord),
