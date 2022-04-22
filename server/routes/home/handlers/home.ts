@@ -15,6 +15,7 @@ export default class HomeRoutes {
         hasRole(req.user, AuthRole.READONLY),
       shouldShowMyCaseloadCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER), // TODO: Probably remove this?
       shouldShowVaryApprovalCard: hasRole(req.user, AuthRole.ASSISTANT_CHIEF) && hasAuthSource(req.user, 'delius'),
+      shouldShowSupportCard: hasRole(req.user, AuthRole.SUPPORT),
     }
     res.render('pages/index', viewContext)
   }

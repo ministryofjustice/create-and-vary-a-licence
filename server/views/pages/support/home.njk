@@ -1,0 +1,27 @@
+{% extends "layout.njk" %}
+{% from "partials/card.njk" import card %}
+
+{% set pageTitle = applicationName + " - Support Home" %}
+{% set pageId = 'support-home-page' %}
+
+{% block content %}
+    <div class="grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">Create and vary a licence support</h1>
+            <div class="govuk-grid-row card-group">
+                <div class="govuk-grid-column-one-third card-group__item">
+                    {{ card({
+                        "href": "/support/offender-search",
+                        "clickable": "true",
+                        "heading": "Search an offender",
+                        "description": "Search for an offender by prisoner number (NOMIS ID) or case reference number (CRN) to view their details."
+                    }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/assets/js/card.js"></script>
+{% endblock %}
