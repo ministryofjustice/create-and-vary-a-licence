@@ -105,6 +105,24 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           },
         ],
       },
+      {
+        deliusRecord: {
+          offenderCrn: 'X381309',
+        },
+        nomisRecord: {
+          firstName: 'Ronald',
+          lastName: 'Recall',
+          conditionalReleaseDate: '2023-10-12',
+          prisonerNumber: '126',
+          prisonId: 'LEI',
+        },
+        licences: [
+          {
+            type: LicenceType.AP_PSS,
+            status: LicenceStatus.OOS_RECALL,
+          },
+        ],
+      },
     ] as unknown as ManagedCase[])
   })
 
@@ -143,7 +161,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Joe Bloggs',
               staffIdentifier: 2000,
             },
-            insidePilot: true,
+            isClickable: true,
           },
         ],
         statusConfig,
@@ -170,7 +188,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Sherlock Holmes',
               staffIdentifier: 3000,
             },
-            insidePilot: true,
+            isClickable: true,
           },
           {
             name: 'Dr Who',
@@ -179,7 +197,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             prisonerNumber: '124',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
-            insidePilot: true,
+            isClickable: true,
           },
           {
             name: 'Mabel Moorhouse',
@@ -188,7 +206,16 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             prisonerNumber: '125',
             licenceStatus: LicenceStatus.NOT_IN_PILOT,
             licenceType: LicenceType.AP_PSS,
-            insidePilot: false,
+            isClickable: false,
+          },
+          {
+            name: 'Ronald Recall',
+            crnNumber: 'X381309',
+            releaseDate: '12 Oct 2023',
+            prisonerNumber: '126',
+            licenceStatus: LicenceStatus.OOS_RECALL,
+            licenceType: LicenceType.AP_PSS,
+            isClickable: false,
           },
         ],
         statusConfig,
@@ -211,12 +238,36 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             prisonerNumber: '124',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
-            insidePilot: true,
+            isClickable: true,
           },
         ],
         statusConfig,
         teamView: true,
         search: 'x381307',
+      })
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
+    })
+
+    it('should successfully search by CRN for an un-clickable recall case', async () => {
+      req.query = { view: 'team', search: 'x381309' }
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            name: 'Ronald Recall',
+            crnNumber: 'X381309',
+            releaseDate: '12 Oct 2023',
+            prisonerNumber: '126',
+            licenceStatus: LicenceStatus.OOS_RECALL,
+            licenceType: LicenceType.AP_PSS,
+            isClickable: false,
+          },
+        ],
+        statusConfig,
+        teamView: true,
+        search: 'x381309',
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
@@ -239,7 +290,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Sherlock Holmes',
               staffIdentifier: 3000,
             },
-            insidePilot: true,
+            isClickable: true,
           },
         ],
         statusConfig,
@@ -267,7 +318,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Sherlock Holmes',
               staffIdentifier: 3000,
             },
-            insidePilot: true,
+            isClickable: true,
           },
         ],
         statusConfig,

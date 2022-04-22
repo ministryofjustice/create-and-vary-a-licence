@@ -82,6 +82,40 @@ describe('Route handlers - View and print case list', () => {
           name: 'Walter White',
         },
       },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.OOS_RECALL,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Harold',
+          lastName: 'Lloyd',
+          prisonerNumber: 'A1234AD',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Harry Goldman',
+        },
+      },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.OOS_BOTUS,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Stephen',
+          lastName: 'Rowe',
+          prisonerNumber: 'A1234AE',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Larry Johnson',
+        },
+      },
     ])
   })
 
@@ -125,6 +159,26 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.NOT_IN_PILOT,
+            isClickable: false,
+          },
+          {
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.OOS_RECALL,
+            isClickable: false,
+          },
+          {
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.OOS_BOTUS,
             isClickable: false,
           },
         ],

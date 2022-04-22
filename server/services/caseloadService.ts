@@ -86,9 +86,13 @@ export default class CaseloadService {
       .then(caseload => this.buildCreateCaseload(caseload))
       .then(caseload => {
         return caseload.filter(c =>
-          [LicenceStatus.NOT_STARTED, LicenceStatus.NOT_IN_PILOT, LicenceStatus.IN_PROGRESS].some(status =>
-            c.licences.find(l => l.status === status)
-          )
+          [
+            LicenceStatus.NOT_STARTED,
+            LicenceStatus.NOT_IN_PILOT,
+            LicenceStatus.OOS_RECALL,
+            LicenceStatus.OOS_BOTUS,
+            LicenceStatus.IN_PROGRESS,
+          ].some(status => c.licences.find(l => l.status === status))
         )
       })
 
@@ -168,27 +172,30 @@ export default class CaseloadService {
         }
       }
 
-      // Work out the licence type from the prisoner search record
+      // No licences present for this offender - determine how to show them in case lists
+
+      const inRollout =
+        prisonInRollout(offender.nomisRecord.prisonId) &&
+        probationAreaInRollout(offender.deliusRecord.offenderManagers?.find(om => om.active)?.probationArea?.code)
+
+      // Determine the likely type of intended licence from the prison record
       const licenceType = this.getLicenceType(offender.nomisRecord)
 
-      // Create a case in the list in status NOT_STARTED or NOT_IN_PILOT
-      return {
-        ...offender,
-        licences: [
-          {
-            status:
-              prisonInRollout(offender.nomisRecord.prisonId) &&
-              probationAreaInRollout(
-                offender.deliusRecord.offenderManagers?.find(om => om.active)?.probationArea?.code
-              ) &&
-              !this.isRecall(offender) &&
-              !this.isBreachOfTopUpSupervision(offender)
-                ? LicenceStatus.NOT_STARTED
-                : LicenceStatus.NOT_IN_PILOT,
-            type: licenceType,
-          },
-        ],
+      // Default status (if not overridden below) will show the case as clickable on case lists
+      let licenceStatus = LicenceStatus.NOT_STARTED
+
+      if (!inRollout) {
+        // Offender is not in a prison or probation that is inside the pilot area - not clickable
+        licenceStatus = LicenceStatus.NOT_IN_PILOT
+      } else if (this.isBreachOfTopUpSupervision(offender)) {
+        // Imprisonment status indicates a breach of top up supervision order - not clickable (yet)
+        licenceStatus = LicenceStatus.OOS_BOTUS
+      } else if (this.isRecall(offender)) {
+        // Offender is subject to an active recall - not clickable
+        licenceStatus = LicenceStatus.OOS_RECALL
       }
+
+      return { ...offender, licences: [{ status: licenceStatus, type: licenceType }] }
     })
   }
 
@@ -197,7 +204,7 @@ export default class CaseloadService {
       .filter(offender => !offender.nomisRecord.paroleEligibilityDate)
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
       .filter(offender => !offender.nomisRecord.indeterminateSentence)
-      .filter(offender => offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate)
+      .filter(offender => offender.nomisRecord.conditionalReleaseDate)
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
       eligibleOffenders.map(c => c.nomisRecord),
@@ -220,8 +227,10 @@ export default class CaseloadService {
       )
       .filter(offender =>
         [
-          LicenceStatus.NOT_STARTED,
+          LicenceStatus.OOS_RECALL,
+          LicenceStatus.OOS_BOTUS,
           LicenceStatus.NOT_IN_PILOT,
+          LicenceStatus.NOT_STARTED,
           LicenceStatus.IN_PROGRESS,
           LicenceStatus.SUBMITTED,
           LicenceStatus.APPROVED,
@@ -348,7 +357,28 @@ export default class CaseloadService {
   }
 
   private isRecall = (offender: ManagedCase): boolean => {
-    return offender.nomisRecord?.recall && offender.nomisRecord?.recall === true
+    const recall = offender.nomisRecord?.recall && offender.nomisRecord.recall === true
+    const crd = offender.nomisRecord?.conditionalReleaseDate
+    const prrd = offender.nomisRecord?.postRecallReleaseDate
+
+    // If a CRD but no PRRD it should NOT be treated as a recall
+    if (crd && !prrd) {
+      return false
+    }
+
+    if (crd && prrd) {
+      const dateCrd = moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
+      const datePrrd = moment(offender.nomisRecord.postRecallReleaseDate, 'YYYY-MM-DD')
+      // If the PRRD > CRD - it should be treated as a recall
+      if (datePrrd.isAfter(dateCrd)) {
+        return true
+      }
+      // If PRRD <= CRD - should not be treated as a recall
+      return false
+    }
+
+    // Trust the Nomis recall flag as a fallback position - the above rules should always override
+    return recall
   }
 
   private isBreachOfTopUpSupervision = (offender: ManagedCase): boolean => {

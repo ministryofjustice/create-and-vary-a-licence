@@ -33,7 +33,10 @@ export default class CaseloadRoutes {
           licenceStatus: _.head(c.licences).status,
           licenceType: _.head(c.licences).type,
           probationPractitioner: c.probationPractitioner,
-          insidePilot: _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT,
+          isClickable:
+            _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
+            _.head(c.licences).status !== LicenceStatus.OOS_RECALL &&
+            _.head(c.licences).status !== LicenceStatus.OOS_BOTUS,
         }
       })
       .filter(c => {
