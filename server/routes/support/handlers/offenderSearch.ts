@@ -14,7 +14,7 @@ export default class OffenderSearchRoutes {
     const { user } = res.locals
     const searchValues = { firstName, lastName, nomisId, crn }
 
-    if (_.isEmpty(req.query)) {
+    if (Object.values(searchValues).every(x => !x || x === '')) {
       return res.render('pages/support/offenderSearch')
     }
 
