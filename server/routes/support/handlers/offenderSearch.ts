@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express'
+import { Request, Response } from 'express'
 import _ from 'lodash'
 import { PrisonerSearchCriteria } from '../../../@types/prisonerSearchApiClientTypes'
 import PrisonerService from '../../../services/prisonerService'
@@ -9,7 +9,7 @@ import { convertToTitleCase } from '../../../utils/utils'
 export default class OffenderSearchRoutes {
   constructor(private readonly prisonerService: PrisonerService, private readonly communityService: CommunityService) {}
 
-  public GET: RequestHandler = async (req, res): Promise<void> => {
+  GET = async (req: Request, res: Response): Promise<void> => {
     const { firstName, lastName, nomisId, crn } = req.query as Record<string, string>
     const { user } = res.locals
     const searchValues = { firstName, lastName, nomisId, crn }

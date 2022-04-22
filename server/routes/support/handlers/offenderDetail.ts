@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express'
+import { Request, Response } from 'express'
 import _ from 'lodash'
 import moment from 'moment'
 import PrisonerService from '../../../services/prisonerService'
@@ -8,7 +8,7 @@ import { convertToTitleCase } from '../../../utils/utils'
 export default class OffenderDetailRoutes {
   constructor(private readonly prisonerService: PrisonerService, private readonly communityService: CommunityService) {}
 
-  public GET: RequestHandler = async (req, res): Promise<void> => {
+  GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { nomsId } = req.params
     const prisonerDetail = _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))
@@ -19,7 +19,7 @@ export default class OffenderDetailRoutes {
       : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
 
-    res.render('pages/support/prisonerDetail', {
+    res.render('pages/support/offenderDetail', {
       prisonerDetail: {
         ...prisonerDetail,
         name: convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`),

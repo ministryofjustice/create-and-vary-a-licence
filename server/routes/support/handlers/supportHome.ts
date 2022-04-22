@@ -1,7 +1,7 @@
-import { RequestHandler } from 'express'
+import { Request, Response } from 'express'
 
 export default class SupportHomeRoutes {
-  public GET: RequestHandler = async (req, res): Promise<void> => {
+  GET = async (req: Request, res: Response): Promise<void> => {
     res.render('pages/support/home')
   }
 }
