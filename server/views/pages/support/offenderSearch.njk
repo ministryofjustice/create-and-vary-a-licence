@@ -1,0 +1,151 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Support - Offender Search" %}
+{% set backLinkHref = "/" %}
+{% set noJsBackLink = true %}
+
+{% set offenders = [] %}
+
+{% for offender in searchResults %}
+
+    {% set offenders = (offenders.push([
+        {
+            attributes: {
+                "data-sort-value": offender.name
+            },
+            classes: "max-width max-width-220",
+            html: '<a href="/support/offender/' + offender.nomisId + '/detail" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">' + offender.name + '</a>'
+        },
+        {
+            attributes: {
+                "data-sort-value": offender.prison
+            },
+            text: offender.prison
+        },
+        {
+            attributes: {
+                "data-sort-value": offender.nomisId
+            },
+            text: offender.nomisId
+        },
+        {
+            attributes: {
+                "data-sort-value": offender.crn
+            },
+            text: offender.crn
+        }
+    ]), offenders) %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl">Search an offender</h1>
+        </div>
+    </div>
+
+    <form method="get">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-quarter">
+                {{ govukInput({
+                    label: {
+                        text: "Prisoner first name"
+                    },
+                    value: searchValues.firstName,
+                    name: "firstName"
+                }) }}
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+                {{ govukInput({
+                    label: {
+                        text: "Prisoner last name"
+                    },
+                    value: searchValues.lastName,
+                    name: "lastName"
+                }) }}
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+                {{ govukInput({
+                    label: {
+                        text: "Prisoner identifier"
+                    },
+                    value: searchValues.nomisId,
+                    name: "nomisId"
+                }) }}
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+                {{ govukInput({
+                    label: {
+                        text: "Case reference number"
+                    },
+                    value: searchValues.prisonerIdentifier,
+                    name: "crn"
+                }) }}
+            </div>
+        </div>
+
+        <div class="govuk-width-container">
+            <div class="govuk-button-group">
+                {{ govukButton({
+                    classes: "govuk-button--primary",
+                    text: "Search",
+                    preventDoubleClick: true,
+                    attributes: {  'data-qa': 'search-prison' }
+                }) }}
+
+                {{ govukButton({
+                    classes: "govuk-button--secondary",
+                    text: "Clear",
+                    href: '/support/offender-search'
+                }) }}
+            </div>
+        </div>
+    </form>
+
+    {% if offenders.length > 0 %}
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Search results",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "Name",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                },
+                {
+                    text: "Prison",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Prison number",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                },
+                {
+                    text: "Case reference number",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                }
+            ],
+            rows: offenders
+        }) }}
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h3 class="govuk-heading-s">There are no offenders who match the search criteria.</h3>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

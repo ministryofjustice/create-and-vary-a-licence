@@ -1,0 +1,150 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set pageTitle = applicationName + " - prisoner detail" %}
+{% set backLinkHref = "/support/offender-search" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <span class="govuk-caption-xl">{{ prisonerDetail.name }}</span>
+        <h1 class="govuk-heading-xl">Offender detail</h1>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">Offender</caption>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Name</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.name }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">DOB</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.dob }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Prisoner number</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.prisonerNumber }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">CRN</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.crn }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Location</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.locationDescription }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">Probation practitioner</caption>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Name</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.name }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Email</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.email }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Telephone</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.telephone }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Team</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.team }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">LDU</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.ldu }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">LAU</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.lau }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">PDU</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.pdu }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Region</th>
+                    <td class="govuk-table__cell">{{ probationPractitioner.region }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">Sentence details</caption>
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Legal status</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.legalStatus }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">CRD</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.conditionalReleaseDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Confirmed release date</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.confirmedReleaseDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">PRRD</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.postRecallReleaseDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">TUSED</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.tused }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDCED</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.hdced }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDC check status</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.hdcCheck }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">SED</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.sentenceExpiryDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">LED</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.licenceExpiryDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">PED</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.paroleEligibilityDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Determinate</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.determinate }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Return to search",
+            classes: 'js-backlink',
+            href: '/support/offender-search'
+        }) }}
+    </div>
+
+{% endblock %}

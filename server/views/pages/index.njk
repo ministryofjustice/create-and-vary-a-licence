@@ -74,20 +74,17 @@
                     </div>
                 {% endif %}
 
-{#
-                {% if shouldShowMyCaseloadCard %}
+                {% if shouldShowSupportCard %}
                     <div class="govuk-grid-column-one-third card-group__item">
                         {{ card({
-                            "id": "myCaseloadCard",
-                            "href": "/caseload/staffId/1",
+                            "id": "supportCard",
+                            "href": "/support",
                             "clickable": "true",
-                            "heading": "My caseload",
-                            "description": "View a list of my cases and their licences.",
-                            "data-qa": "my-caseload--link"
+                            "heading": "Support",
+                            "description": "View details about an offender or staff member to help with support."
                         }) }}
                     </div>
                 {% endif %}
-#}
 
             </div>
         </div>
