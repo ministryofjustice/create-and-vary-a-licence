@@ -25,6 +25,7 @@ describe('Route Handlers - Home', () => {
           shouldShowMyCaseloadCard: false,
           shouldShowViewOrPrintCard: true,
           shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: false,
         })
       })
 
@@ -38,6 +39,7 @@ describe('Route Handlers - Home', () => {
           shouldShowMyCaseloadCard: false,
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: false,
         })
       })
     })
@@ -53,6 +55,7 @@ describe('Route Handlers - Home', () => {
           shouldShowMyCaseloadCard: true,
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: false,
         })
       })
 
@@ -66,6 +69,7 @@ describe('Route Handlers - Home', () => {
           shouldShowMyCaseloadCard: true,
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: false,
         })
       })
     })
@@ -80,6 +84,7 @@ describe('Route Handlers - Home', () => {
         shouldShowMyCaseloadCard: false,
         shouldShowViewOrPrintCard: true,
         shouldShowVaryApprovalCard: false,
+        shouldShowSupportCard: false,
       })
     })
 
@@ -94,6 +99,7 @@ describe('Route Handlers - Home', () => {
           shouldShowMyCaseloadCard: false,
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: false,
         })
       })
 
@@ -107,6 +113,7 @@ describe('Route Handlers - Home', () => {
           shouldShowMyCaseloadCard: false,
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: false,
         })
       })
     })
@@ -122,6 +129,7 @@ describe('Route Handlers - Home', () => {
           shouldShowMyCaseloadCard: false,
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: true,
+          shouldShowSupportCard: false,
         })
       })
 
@@ -135,7 +143,22 @@ describe('Route Handlers - Home', () => {
           shouldShowMyCaseloadCard: false,
           shouldShowViewOrPrintCard: false,
           shouldShowVaryApprovalCard: false,
+          shouldShowSupportCard: false,
         })
+      })
+    })
+
+    it('For support admin role', async () => {
+      req = getReqWithRolesAndSource(['ROLE_NOMIS_BATCHLOAD'], 'nomis')
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/index', {
+        shouldShowCreateLicenceCard: false,
+        shouldShowVaryLicenceCard: false,
+        shouldShowApproveLicenceCard: false,
+        shouldShowMyCaseloadCard: false,
+        shouldShowViewOrPrintCard: false,
+        shouldShowVaryApprovalCard: false,
+        shouldShowSupportCard: true,
       })
     })
   })
