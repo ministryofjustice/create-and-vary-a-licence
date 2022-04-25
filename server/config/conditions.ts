@@ -939,6 +939,12 @@ export default {
               {
                 value: 'attendance at appointments',
               },
+              {
+                value: 'alcohol monitoring',
+              },
+              {
+                value: 'alcohol abstinence',
+              },
             ],
           },
         ],
