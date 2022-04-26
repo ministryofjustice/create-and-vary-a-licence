@@ -32,7 +32,7 @@ export default class DatesChangedEventHandler {
           convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseDate),
         actualReleaseDate: convertDateFormat(prisoner.sentenceDetail?.releaseDate),
         sentenceStartDate: convertDateFormat(prisoner.sentenceDetail?.sentenceStartDate),
-        sentenceEndDate: convertDateFormat(prisoner.sentenceDetail?.effectiveSentenceEndDate),
+        sentenceEndDate: convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryDate),
         licenceStartDate:
           convertDateFormat(prisoner.sentenceDetail?.releaseDate) ||
           convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||

@@ -16,7 +16,7 @@ const prisoner = {
   sentenceDetail: {
     conditionalReleaseDate: '2022-09-09',
     sentenceStartDate: '2021-09-09',
-    effectiveSentenceEndDate: '2023-09-09',
+    sentenceExpiryDate: '2023-09-09',
     licenceExpiryDate: '2023-09-09',
     topupSupervisionStartDate: '2023-09-09',
     topupSupervisionExpiryDate: '2024-09-09',

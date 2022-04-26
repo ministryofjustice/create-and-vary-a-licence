@@ -97,7 +97,7 @@ export default class LicenceService {
         convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseDate),
       actualReleaseDate: convertDateFormat(nomisRecord.sentenceDetail?.releaseDate),
       sentenceStartDate: convertDateFormat(nomisRecord.sentenceDetail?.sentenceStartDate),
-      sentenceEndDate: convertDateFormat(nomisRecord.sentenceDetail?.effectiveSentenceEndDate),
+      sentenceEndDate: convertDateFormat(nomisRecord.sentenceDetail?.sentenceExpiryDate),
       licenceStartDate:
         convertDateFormat(nomisRecord.sentenceDetail?.releaseDate) ||
         convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseOverrideDate) ||
