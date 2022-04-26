@@ -1,6 +1,5 @@
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import SentenceDatesChangedEventHandler from './datesChangedEventHandler'
@@ -57,6 +56,7 @@ describe('Sentence dates changed event handler', () => {
     const event = {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
+
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
 
     await handler.handle(event)
@@ -68,26 +68,11 @@ describe('Sentence dates changed event handler', () => {
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
   })
 
-  it('should update the licence to IN_PROGRESS', async () => {
-    const event = {
-      offenderIdDisplay: 'ABC123',
-    } as PrisonEventMessage
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
-      {
-        licenceId: 1,
-        licenceStatus: 'APPROVED',
-      } as LicenceSummary,
-    ])
-
-    await handler.handle(event)
-
-    expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.IN_PROGRESS)
-  })
-
   it('should update the sentence dates on the licence', async () => {
     const event = {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
+
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -121,6 +106,7 @@ describe('Sentence dates changed event handler', () => {
     const event = {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
+
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -154,6 +140,7 @@ describe('Sentence dates changed event handler', () => {
     const event = {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
+
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
