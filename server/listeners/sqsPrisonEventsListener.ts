@@ -16,7 +16,7 @@ export default function createSqsListener(services: Services) {
     queueUrl: config.sqs.prisonEvents.queueUrl,
     handleMessageBatch: buildEventHandler(services),
     sqs,
-    pollingWaitTimeMs: 300000,
+    pollingWaitTimeMs: config.sqs.pollingWaitTimeMs,
     batchSize: 10,
   })
 

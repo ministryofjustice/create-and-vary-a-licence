@@ -72,6 +72,7 @@ export default {
         requiredInProduction
       ),
     },
+    pollingWaitTimeMs: Number(get('SQS_POLLING_WAIT_TIME_MS', 300000)),
   },
   apis: {
     hmppsAuth: {
