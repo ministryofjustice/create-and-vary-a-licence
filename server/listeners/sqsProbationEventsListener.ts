@@ -16,7 +16,7 @@ export default function createSqsListener(services: Services) {
     queueUrl: config.sqs.probationEvents.queueUrl,
     handleMessageBatch: buildEventHandler(services),
     sqs,
-    pollingWaitTimeMs: 5000,
+    pollingWaitTimeMs: 300000,
     batchSize: 10,
   })
 
