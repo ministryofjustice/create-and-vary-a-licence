@@ -69,7 +69,7 @@ services:
     container_name: licences-db
     restart: always
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=create-and-vary-a-licence
       - POSTGRES_USER=create-and-vary-a-licence
