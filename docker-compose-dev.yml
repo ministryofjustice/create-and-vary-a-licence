@@ -61,5 +61,18 @@ services:
       - './.localstack:/tmp/localstack'
       - $PWD/localstack:/docker-entrypoint-initaws.d
 
+  # Optional - only when running API locally
+  licences-db:
+    image: postgres
+    networks:
+      - hmpps
+    container_name: licences-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=create-and-vary-a-licence
+      - POSTGRES_USER=create-and-vary-a-licence
+      - POSTGRES_DB=create-and-vary-a-licence-db
 networks:
   hmpps:
