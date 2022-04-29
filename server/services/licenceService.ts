@@ -388,8 +388,8 @@ export default class LicenceService {
   ): Promise<void> {
     const requestBody = {
       username: user.username,
-      eventTime: moment(eventTime).format('DD/MM/YYYY hh:mm:ss'),
-      eventType: user ? 'USER_EVENT' : 'SYSTEM_EVENT',
+      eventTime: moment(eventTime).format('DD/MM/YYYY HH:mm:ss'),
+      eventType: user && user?.username !== 'SYSTEM' ? 'USER_EVENT' : 'SYSTEM_EVENT',
       licenceId,
       fullName: `${user.firstName} ${user.lastName}`,
       summary,
