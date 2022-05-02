@@ -145,7 +145,7 @@ There are four services associated with this UI service:
 
 * create-and-vary-a-licence  (generic-service)
 * gotenberg (generic-service)
-* delius-wiremock (generic-service)
+* hmpps-community-api-wiremock (generic-service)
 * generic-prometheus-alerts
 
 ## Dependency Checks

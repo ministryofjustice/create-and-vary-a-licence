@@ -127,12 +127,12 @@ gotenberg:
     runAsUser: 1001
     runAsNonRoot: true
 
-delius-wiremock:
-  nameOverride: delius-wiremock
+hmpps-community-api-wiremock:
+  nameOverride: hmpps-community-api-wiremock
   replicaCount: 2
 
   image:
-    repository: smcveigh941/delius-wiremock
+    repository: quay.io/hmpps/hmpps-community-api-wiremock
     tag: latest
     pullPolicy: Always
     port: 5000

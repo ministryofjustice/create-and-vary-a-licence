@@ -25,8 +25,8 @@ generic-service:
     GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
 
     # A temporary reference to a local container which provides a stubbed Delius caseload
-    COMMUNITY_API_URL: "http://create-and-vary-a-licence-delius-wiremock"
-    PROBATION_SEARCH_API_URL: "http://create-and-vary-a-licence-delius-wiremock"
+    COMMUNITY_API_URL: "http://create-and-vary-a-licence-hmpps-community-api-wiremock"
+    PROBATION_SEARCH_API_URL: "http://create-and-vary-a-licence-hmpps-community-api-wiremock"
 
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: "http://create-and-vary-a-licence"
@@ -44,7 +44,7 @@ gotenberg:
     DISABLE_UNOCONV: 1
     DEFAULT_WAIT_TIMEOUT: 30
 
-delius-wiremock:
+hmpps-community-api-wiremock:
   replicaCount: 1
 
   env:

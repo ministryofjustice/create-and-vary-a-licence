@@ -11,11 +11,11 @@ services:
     ports:
       - '6379:6379'
 
-  delius-wiremock:
-    image: smcveigh941/delius-wiremock
+  hmpps-community-api-wiremock:
+    image: quay.io/hmpps/hmpps-community-api-wiremock:latest
     networks:
       - hmpps
-    container_name: delius-wiremock
+    container_name: hmpps-community-api-wiremock
     env_file:
       - ./.env
     ports:
