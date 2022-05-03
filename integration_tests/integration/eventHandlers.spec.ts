@@ -74,6 +74,7 @@ context('Event handlers', () => {
 
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/secure/users/JSMITH/roles/LHDCBT002', times: 1 })
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X1234/responsible-com', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X1234/probation-team', times: 1 })
     })
   })
 
