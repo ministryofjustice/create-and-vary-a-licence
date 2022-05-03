@@ -8,6 +8,10 @@ export interface paths {
     /** Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateResponsibleCom']
   }
+  '/offender/crn/{crn}/probation-team': {
+    /** Updates in-flight licences associated with an offender with a new probation team. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateProbationTeam']
+  }
   '/licence/id/{licenceId}/vlo-discussion': {
     /** Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateVloDiscussion']
@@ -173,6 +177,49 @@ export interface components {
       userMessage?: string
       developerMessage?: string
       moreInfo?: string
+    }
+    /** @description Request object for updating an offender's probation team */
+    UpdateProbationTeamRequest: {
+      /**
+       * @description The probation area code supervising this licence
+       * @example N01
+       */
+      probationAreaCode: string
+      /**
+       * @description The probation area description
+       * @example Wales
+       */
+      probationAreaDescription?: string
+      /**
+       * @description The probation delivery unit (PDU or borough) code
+       * @example NA01A12
+       */
+      probationPduCode?: string
+      /**
+       * @description The PDU description
+       * @example Cardiff
+       */
+      probationPduDescription?: string
+      /**
+       * @description The local administrative unit (LAU or district) code
+       * @example NA01A12
+       */
+      probationLauCode?: string
+      /**
+       * @description The LAU description
+       * @example Cardiff North
+       */
+      probationLauDescription?: string
+      /**
+       * @description The probation team code supervising this licence
+       * @example NA01A12-A
+       */
+      probationTeamCode?: string
+      /**
+       * @description The team description
+       * @example Cardiff North A
+       */
+      probationTeamDescription?: string
     }
     /** @description Request object for updating the VLO discussion */
     UpdateVloDiscussionRequest: {
@@ -1318,6 +1365,41 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['UpdateComRequest']
+      }
+    }
+  }
+  /** Updates in-flight licences associated with an offender with a new probation team. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateProbationTeam: {
+    parameters: {
+      path: {
+        crn: string
+      }
+    }
+    responses: {
+      /** The probation team was updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateProbationTeamRequest']
       }
     }
   }
