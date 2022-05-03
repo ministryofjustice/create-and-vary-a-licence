@@ -389,7 +389,7 @@ export default class LicenceService {
     const requestBody = {
       username: user.username,
       eventTime: moment(eventTime).format('DD/MM/YYYY HH:mm:ss'),
-      eventType: user && user?.username !== 'SYSTEM' ? 'USER_EVENT' : 'SYSTEM_EVENT',
+      eventType: user ? 'USER_EVENT' : 'SYSTEM_EVENT',
       licenceId,
       fullName: `${user.firstName} ${user.lastName}`,
       summary,
