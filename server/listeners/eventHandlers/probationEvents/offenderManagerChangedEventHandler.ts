@@ -26,25 +26,23 @@ export default class OffenderManagerChangedEventHandler {
           await this.communityService.assignDeliusRole(comDetails.username.trim().toUpperCase(), COM_ROLE_ID)
         }
 
-        await Promise.all([
-          this.licenceService.updateResponsibleCom(crn, {
-            staffIdentifier: comDetails?.staffIdentifier,
-            staffUsername: comDetails?.username,
-            staffEmail: comDetails?.email,
-            firstName: comDetails?.staff?.forenames,
-            lastName: comDetails?.staff?.surname,
-          }),
-          this.licenceService.updateProbationTeam(crn, {
-            probationAreaCode: newCom.probationArea?.code,
-            probationAreaDescription: newCom.probationArea?.description,
-            probationPduCode: newCom.team?.borough?.code,
-            probationPduDescription: newCom.team?.borough?.description,
-            probationLauCode: newCom.team?.district?.code,
-            probationLauDescription: newCom.team?.district?.description,
-            probationTeamCode: newCom.team?.code,
-            probationTeamDescription: newCom.team?.description,
-          }),
-        ])
+        await this.licenceService.updateResponsibleCom(crn, {
+          staffIdentifier: comDetails?.staffIdentifier,
+          staffUsername: comDetails?.username,
+          staffEmail: comDetails?.email,
+          firstName: comDetails?.staff?.forenames,
+          lastName: comDetails?.staff?.surname,
+        })
+        await this.licenceService.updateProbationTeam(crn, {
+          probationAreaCode: newCom.probationArea?.code,
+          probationAreaDescription: newCom.probationArea?.description,
+          probationPduCode: newCom.team?.borough?.code,
+          probationPduDescription: newCom.team?.borough?.description,
+          probationLauCode: newCom.team?.district?.code,
+          probationLauDescription: newCom.team?.district?.description,
+          probationTeamCode: newCom.team?.code,
+          probationTeamDescription: newCom.team?.description,
+        })
       }
     }
   }
