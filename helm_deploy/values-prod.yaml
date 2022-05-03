@@ -34,7 +34,7 @@ gotenberg:
     DISABLE_UNOCONV: 1
     DEFAULT_WAIT_TIMEOUT: 30
 
-delius-wiremock:
+hmpps-community-api-wiremock:
   replicaCount: 0
   env:
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
