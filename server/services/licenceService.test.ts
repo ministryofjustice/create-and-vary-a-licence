@@ -813,16 +813,16 @@ describe('Licence Service', () => {
   })
 
   describe('Audit events', () => {
-    const eventTime = moment('13/01/2022 11:00:00', 'DD/MM/YYYY hh:mm:ss').toDate()
-    const eventStart = moment('12/01/2022 10:45:00', 'DD/MM/YYYY hh:mm:ss').toDate()
-    const eventEnd = moment('13/01/2022 10:45:00', 'DD/MM/YYYY hh:mm:ss').toDate()
+    const eventTime = moment('13/01/2022 11:00:00', 'DD/MM/YYYY HH:mm:ss').toDate()
+    const eventStart = moment('12/01/2022 10:45:00', 'DD/MM/YYYY HH:mm:ss').toDate()
+    const eventEnd = moment('13/01/2022 10:45:00', 'DD/MM/YYYY HH:mm:ss').toDate()
 
     it('will record a new audit event', async () => {
       await licenceService.recordAuditEvent('Summary', 'Detail', 1, eventTime, user)
       expect(licenceApiClient.recordAuditEvent).toHaveBeenCalledWith(
         {
           username: user.username,
-          eventTime: moment(eventTime).format('DD/MM/YYYY hh:mm:ss'),
+          eventTime: moment(eventTime).format('DD/MM/YYYY HH:mm:ss'),
           eventType: 'USER_EVENT',
           licenceId: 1,
           fullName: `${user.firstName} ${user.lastName}`,
@@ -839,8 +839,8 @@ describe('Licence Service', () => {
         {
           username: 'username',
           licenceId: null,
-          startTime: moment(eventStart).format('DD/MM/YYYY hh:mm:ss'),
-          endTime: moment(eventEnd).format('DD/MM/YYYY hh:mm:ss'),
+          startTime: moment(eventStart).format('DD/MM/YYYY HH:mm:ss'),
+          endTime: moment(eventEnd).format('DD/MM/YYYY HH:mm:ss'),
         },
         user
       )
@@ -852,8 +852,8 @@ describe('Licence Service', () => {
         {
           username: null,
           licenceId: 1,
-          startTime: moment(eventStart).format('DD/MM/YYYY hh:mm:ss'),
-          endTime: moment(eventEnd).format('DD/MM/YYYY hh:mm:ss'),
+          startTime: moment(eventStart).format('DD/MM/YYYY HH:mm:ss'),
+          endTime: moment(eventEnd).format('DD/MM/YYYY HH:mm:ss'),
         },
         user
       )
