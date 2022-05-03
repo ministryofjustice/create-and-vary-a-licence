@@ -58,6 +58,7 @@ context('Event handlers', () => {
       cy.task('stubGetUserDetailsByUsername')
       cy.task('stubAssignRole')
       cy.task('stubUpdateResponsibleCom')
+      cy.task('stubUpdateProbationTeam')
 
       cy.task(
         'sendProbationEvent',

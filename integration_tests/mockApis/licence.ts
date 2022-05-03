@@ -85,6 +85,19 @@ export default {
     })
   },
 
+  stubUpdateProbationTeam: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/offender/crn/.*/probation-team`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      },
+    })
+  },
+
   stubGetLicence: (): SuperAgentRequest => {
     return stubFor({
       request: {
