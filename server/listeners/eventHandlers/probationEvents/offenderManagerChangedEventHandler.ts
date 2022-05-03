@@ -33,6 +33,16 @@ export default class OffenderManagerChangedEventHandler {
           firstName: comDetails?.staff?.forenames,
           lastName: comDetails?.staff?.surname,
         })
+        await this.licenceService.updateProbationTeam(crn, {
+          probationAreaCode: newCom.probationArea?.code,
+          probationAreaDescription: newCom.probationArea?.description,
+          probationPduCode: newCom.team?.borough?.code,
+          probationPduDescription: newCom.team?.borough?.description,
+          probationLauCode: newCom.team?.district?.code,
+          probationLauDescription: newCom.team?.district?.description,
+          probationTeamCode: newCom.team?.code,
+          probationTeamDescription: newCom.team?.description,
+        })
       }
     }
   }

@@ -19,6 +19,7 @@ import {
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdatePrisonInformationRequest,
+  UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
   UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
@@ -276,6 +277,33 @@ describe('Licence API client tests', () => {
         staffIdentifier: 2000,
         staffUsername: 'joebloggs',
         staffEmail: 'joebloggs@probation.gov.uk',
+      },
+    })
+  })
+
+  it('should update probation team for an offender', async () => {
+    await licenceApiClient.updateProbationTeam('X1234', {
+      probationAreaCode: 'N02',
+      probationAreaDescription: 'N02 Region',
+      probationPduCode: 'PDU2',
+      probationPduDescription: 'PDU2 Description',
+      probationLauCode: 'LAU2',
+      probationLauDescription: 'LAU2 Description',
+      probationTeamCode: 'Team2',
+      probationTeamDescription: 'Team2 Description',
+    } as UpdateProbationTeamRequest)
+
+    expect(put).toHaveBeenCalledWith({
+      path: '/offender/crn/X1234/probation-team',
+      data: {
+        probationAreaCode: 'N02',
+        probationAreaDescription: 'N02 Region',
+        probationPduCode: 'PDU2',
+        probationPduDescription: 'PDU2 Description',
+        probationLauCode: 'LAU2',
+        probationLauDescription: 'LAU2 Description',
+        probationTeamCode: 'Team2',
+        probationTeamDescription: 'Team2 Description',
       },
     })
   })
