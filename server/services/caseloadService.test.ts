@@ -84,6 +84,7 @@ describe('Caseload Service', () => {
       { offenderCrn: 'X12353' },
       { offenderCrn: 'X12354' },
       { offenderCrn: 'X12355' },
+      { offenderCrn: 'X12356' },
     ])
     communityService.getOffendersByCrn.mockResolvedValue([
       { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
@@ -94,6 +95,7 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234N', crn: 'X12353' } } as OffenderDetail,
       { otherIds: { nomsNumber: 'AB1234P', crn: 'X12354' } } as OffenderDetail,
       { otherIds: { nomsNumber: 'AB1234Q', crn: 'X12355' } } as OffenderDetail,
+      { otherIds: { nomsNumber: 'AB1234R', crn: 'X12356' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
       { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
@@ -134,6 +136,12 @@ describe('Caseload Service', () => {
         conditionalReleaseDate: '2022-06-19',
         status: 'ACTIVE IN',
         recall: true,
+      } as Prisoner,
+      // This case tests that the case is included when the status is INACTIVE TRN
+      {
+        prisonerNumber: 'AB1234R',
+        conditionalReleaseDate: '2022-06-19',
+        status: 'INACTIVE TRN',
       } as Prisoner,
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
@@ -249,6 +257,26 @@ describe('Caseload Service', () => {
             type: 'AP',
           },
         ],
+      },
+      {
+        deliusRecord: {
+          offenderCrn: 'X12356',
+          otherIds: {
+            crn: 'X12356',
+            nomsNumber: 'AB1234R',
+          },
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'AP',
+          },
+        ],
+        nomisRecord: {
+          conditionalReleaseDate: '2022-06-19',
+          prisonerNumber: 'AB1234R',
+          status: 'INACTIVE TRN',
+        },
       },
     ])
   })

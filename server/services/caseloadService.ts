@@ -219,7 +219,11 @@ export default class CaseloadService {
 
   private buildCreateCaseload = (managedOffenders: ManagedCase[]): ManagedCase[] => {
     return managedOffenders
-      .filter(offender => offender.nomisRecord.status && offender.nomisRecord.status.startsWith('ACTIVE'))
+      .filter(
+        offender =>
+          offender.nomisRecord.status &&
+          (offender.nomisRecord.status.startsWith('ACTIVE') || offender.nomisRecord.status === 'INACTIVE TRN')
+      )
       .filter(
         offender =>
           !offender.nomisRecord.releaseDate ||
