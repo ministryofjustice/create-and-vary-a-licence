@@ -93,7 +93,7 @@ export interface paths {
     post: operations['getLicencesMatchingCriteria']
   }
   '/licence/id/{licenceId}/create-variation': {
-    /** Create a variation of this licence. The new licence will have a new ID and have a statius VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    /** Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createVariation']
   }
   '/licence/create': {
@@ -127,10 +127,6 @@ export interface paths {
   '/events/match': {
     /** Get a list of licence events that match the supplied criteria. Requires ROLE_CVL_ADMIN. */
     get: operations['getEventsMatchingCriteria']
-  }
-  '/config/pdu-contacts': {
-    /** Retrieves a list of PDU contacts configured in this environment. Requires ROLE_CVL_ADMIN. */
-    get: operations['pduContacts']
   }
   '/licence/id/{licenceId}/discard': {
     /** Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -228,6 +224,19 @@ export interface components {
        * @example Yes
        */
       vloDiscussion: string
+    }
+    /** @description Request object for creating a new licence */
+    NotifyRequest: {
+      /**
+       * @description The name of the person to contact
+       * @example Joe Bloggs
+       */
+      name?: string
+      /**
+       * @description The email address to send the notification to
+       * @example joebloggs@probation.gov.uk
+       */
+      email?: string
     }
     /** @description Request object for updating the status of a licence */
     StatusUpdateRequest: {
@@ -1479,6 +1488,11 @@ export interface operations {
         }
       }
     }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['NotifyRequest']
+      }
+    }
   }
   /** Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   updateLicenceStatus: {
@@ -2175,7 +2189,7 @@ export interface operations {
       }
     }
   }
-  /** Create a variation of this licence. The new licence will have a new ID and have a statius VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  /** Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   createVariation: {
     parameters: {
       path: {
@@ -2471,35 +2485,6 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['LicenceEvent'][]
-        }
-      }
-      /** Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /** Retrieves a list of PDU contacts configured in this environment. Requires ROLE_CVL_ADMIN. */
-  pduContacts: {
-    responses: {
-      /** The configured list of PDU contacts. */
-      200: {
-        content: {
-          'application/json': string
-        }
-      }
-      /** Bad request, request body must be valid */
-      400: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** Unauthorised, requires a valid Oauth2 token */

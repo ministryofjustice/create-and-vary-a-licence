@@ -15,6 +15,7 @@ import {
   EmailContact,
   Licence,
   LicenceSummary,
+  NotifyRequest,
   ReferVariationRequest,
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
@@ -289,7 +290,11 @@ export default class LicenceService {
   }
 
   async submitLicence(id: string, user: User): Promise<void> {
-    return this.licenceApiClient.submitLicence(id, user)
+    return this.licenceApiClient.submitLicence(id, [], user)
+  }
+
+  async submitVariation(id: string, notifyDetails: NotifyRequest[], user: User): Promise<void> {
+    return this.licenceApiClient.submitLicence(id, notifyDetails, user)
   }
 
   async getLicencesByNomisIdsAndStatus(

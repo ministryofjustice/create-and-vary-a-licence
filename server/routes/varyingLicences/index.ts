@@ -61,7 +61,7 @@ export default function Index({ licenceService, caseloadService, communityServic
   const confirmAmendVariationHandler = new ConfirmAmendVariationRoutes(licenceService)
   const confirmDiscardVariationHandler = new ConfirmDiscardVariationRoutes(licenceService)
   const reasonForVariationHandler = new ReasonForVariationRoutes(licenceService)
-  const variationSummaryHandler = new VariationSummaryRoutes(licenceService)
+  const variationSummaryHandler = new VariationSummaryRoutes(licenceService, communityService)
   const confirmationHandler = new ConfirmationRoutes()
 
   get('/caseload', caseloadHandler.GET)

@@ -57,6 +57,10 @@ export default class CommunityService {
     return this.communityApiClient.assignDeliusRole(deliusUsername, deliusRoleId)
   }
 
+  async getPduHeads(pduCode: string): Promise<CommunityApiStaffDetails[]> {
+    return this.communityApiClient.getPduHeads(pduCode)
+  }
+
   async searchProbationers(searchCriteria: SearchDto): Promise<OffenderDetail[]> {
     return this.probationSearchApiClient.searchProbationer(searchCriteria)
   }

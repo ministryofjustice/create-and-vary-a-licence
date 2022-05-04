@@ -9,6 +9,7 @@ export default class VariationSummaryPage extends Page {
   }
 
   clickSendForApproval = (): ConfirmationPage => {
+    cy.task('stubGetPduHeads')
     cy.task('stubSubmitStatus')
     cy.get(this.sendForApprovalButtonId).click()
     return Page.verifyOnPage(ConfirmationPage)
