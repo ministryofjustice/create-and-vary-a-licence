@@ -26,3 +26,4 @@ export type UpdatePrisonInformationRequest = components['schemas']['UpdatePrison
 export type UpdateSentenceDatesRequest = components['schemas']['UpdateSentenceDatesRequest']
 export type ReferVariationRequest = components['schemas']['ReferVariationRequest']
 export type EmailContact = components['schemas']['PromptLicenceCreationRequest']
+export type NotifyRequest = components['schemas']['NotifyRequest']
