@@ -5,12 +5,15 @@ import VariationSummaryRoutes from './variationSummary'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { VariedConditions } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
+import CommunityService from '../../../services/communityService'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 jest.mock('../../../services/licenceService')
+jest.mock('../../../services/communityService')
 
 describe('Route Handlers - Vary Licence - Variation summary', () => {
-  const handler = new VariationSummaryRoutes(licenceService)
+  const handler = new VariationSummaryRoutes(licenceService, communityService)
   let req: Request
   let res: Response
 
