@@ -187,6 +187,7 @@ describe('Licence API client tests', () => {
     expect(put).toHaveBeenCalledWith(
       {
         path: '/licence/id/1/submit',
+        data: [],
       },
       { username: 'joebloggs' }
     )

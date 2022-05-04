@@ -77,9 +77,23 @@ describe('Route Handlers - Vary Licence - Variation summary', () => {
 
   describe('POST', () => {
     it('should submit the variation response and redirect to the confirmation page', async () => {
+      communityService.getPduHeads.mockResolvedValue([
+        {
+          email: 'jbloggs@probation.gov.uk',
+          staff: {
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+      ])
+
       await handler.POST(req, res)
 
-      expect(licenceService.submitLicence).toHaveBeenCalledWith(1, { username: 'joebloggs' })
+      expect(licenceService.submitVariation).toHaveBeenCalledWith(
+        1,
+        [{ name: 'Joe Bloggs', email: 'jbloggs@probation.gov.uk' }],
+        { username: 'joebloggs' }
+      )
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/confirmation')
     })
   })
