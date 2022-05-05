@@ -591,12 +591,7 @@ describe('Licence Service', () => {
 
   it('Submit licence', async () => {
     await licenceService.submitLicence('1', user)
-    expect(licenceApiClient.submitLicence).toBeCalledWith('1', [], user)
-  })
-
-  it('Submit variation', async () => {
-    await licenceService.submitVariation('1', [{ name: 'Joe Bloggs', email: 'Email' }], user)
-    expect(licenceApiClient.submitLicence).toBeCalledWith('1', [{ name: 'Joe Bloggs', email: 'Email' }], user)
+    expect(licenceApiClient.submitLicence).toBeCalledWith('1', user)
   })
 
   it('Get licences by nomis ids and statuses', async () => {

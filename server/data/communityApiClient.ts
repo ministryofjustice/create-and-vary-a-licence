@@ -73,8 +73,4 @@ export default class CommunityApiClient extends RestClient {
       path: `/secure/users/${deliusUsername}/roles/${deliusRoleId}`,
     })
   }
-
-  async getPduHeads(pduCode: string): Promise<CommunityApiStaffDetails[]> {
-    return (await this.get({ path: `/secure/staff/pduHeads/${pduCode}` })) as Promise<CommunityApiStaffDetails[]>
-  }
 }

@@ -182,12 +182,11 @@ describe('Licence API client tests', () => {
   })
 
   it('Submit licence', async () => {
-    await licenceApiClient.submitLicence('1', [], { username: 'joebloggs' } as User)
+    await licenceApiClient.submitLicence('1', { username: 'joebloggs' } as User)
 
     expect(put).toHaveBeenCalledWith(
       {
         path: '/licence/id/1/submit',
-        data: [],
       },
       { username: 'joebloggs' }
     )

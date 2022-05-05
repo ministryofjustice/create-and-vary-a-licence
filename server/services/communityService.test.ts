@@ -147,11 +147,6 @@ describe('Community Service', () => {
     expect(communityApiClient.assignDeliusRole).toHaveBeenCalledWith('X1234', 'ROLE_ID')
   })
 
-  it('should get PDU heads', async () => {
-    await communityService.getPduHeads('X1234')
-    expect(communityApiClient.getPduHeads).toHaveBeenCalledWith('X1234')
-  })
-
   it('Search probationers', async () => {
     const expectedResponse = [
       {
