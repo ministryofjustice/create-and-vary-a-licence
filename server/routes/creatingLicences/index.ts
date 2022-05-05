@@ -99,7 +99,6 @@ export default function Index({ licenceService, caseloadService, communityServic
   const confirmationHandler = new ConfirmationRoutes()
 
   get('/caseload', caseloadHandler.GET)
-  post('/caseload', caseloadHandler.POST)
   get('/probation-practitioner/staffCode/:staffCode', comDetailsHandler.GET)
   get('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.GET)
   post('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.POST, PersonName)

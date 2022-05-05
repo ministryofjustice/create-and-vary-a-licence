@@ -41,10 +41,10 @@ describe('Create a Licence Views - Caseload', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('tbody .govuk-table__row').length).toBe(2)
-    expect($('#name-1 > .caseload-offender-name > span').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
     expect($('#release-date-1').text()).toBe('03 August 2022')
-    expect($('#name-2 > .caseload-offender-name > span').text()).toBe('John Smith')
+    expect($('#name-2 > .caseload-offender-name > a').text()).toBe('John Smith')
     expect($('#name-2 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X123456')
     expect($('#release-date-2').text()).toBe('01 September 2022')
   })
@@ -76,13 +76,13 @@ describe('Create a Licence Views - Caseload', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
     expect($('tbody .govuk-table__row').length).toBe(2)
-    expect($('#name-1 > .caseload-offender-name > button').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
     expect($('#probation-practitioner-1').text()).toBe('Joe Bloggs')
     expect($('#probation-practitioner-1 > a').attr('href')).toBe(
       '/licence/create/probation-practitioner/staffCode/X12345'
     )
 
-    expect($('#name-2 > .caseload-offender-name > span').text()).toBe('John Smith')
+    expect($('#name-2 > .caseload-offender-name > a').text()).toBe('John Smith')
     expect($('#release-date-2').text()).toBe('01 September 2022')
     expect($('#probation-practitioner-2').text()).toBe('Unallocated')
   })
@@ -120,7 +120,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
-    expect($('#name-1 > .caseload-offender-name > button').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
     expect($('#release-date-1').text()).toBe('03 August 2022')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Not started')
@@ -164,7 +164,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
-    expect($('#name-1 > .caseload-offender-name > button').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
     expect($('#release-date-1').text()).toBe('03 August 2022')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Not started')
@@ -208,7 +208,7 @@ describe('Create a Licence Views - Caseload', () => {
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
-    expect($('#name-1 > .caseload-offender-name > button').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
     expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
     expect($('#release-date-1').text()).toBe('03 August 2022')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Not started')
@@ -217,5 +217,58 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#name-2 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X123456')
     expect($('#release-date-2').text()).toBe('01 September 2022')
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('Breach of supervision')
+  })
+
+  it('should display the caseload with links to the licence or confirm create page', () => {
+    viewContext = {
+      statusConfig,
+      caseload: [
+        {
+          name: 'Adam Balasaravika',
+          crnNumber: 'X381306',
+          prisonerNumber: 'ABC123',
+          releaseDate: '03 August 2022',
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffId: 2000,
+          },
+          isClickable: true,
+          licenceStatus: LicenceStatus.NOT_STARTED,
+        },
+        {
+          name: 'John Smith',
+          crnNumber: 'X123456',
+          prisonerNumber: 'ABC125',
+          releaseDate: '01 September 2022',
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffId: 2000,
+          },
+          isClickable: true,
+          licenceId: 1,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+        },
+      ],
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('tbody .govuk-table__row').length).toBe(2)
+
+    expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X381306')
+    expect($('#release-date-1').text()).toBe('03 August 2022')
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Not started')
+    expect($('#name-1 > .caseload-offender-name > a').attr('href').trim()).toBe(
+      '/licence/create/nomisId/ABC123/confirm'
+    )
+
+    expect($('#name-2 > .caseload-offender-name > a').text()).toBe('John Smith')
+    expect($('#name-2 > .caseload-offender-name > .govuk-hint').text()).toBe('CRN: X123456')
+    expect($('#release-date-2').text()).toBe('01 September 2022')
+    expect($('#licence-status-2 > .status-badge').text().trim()).toBe('In progress')
+    expect($('#name-2 > .caseload-offender-name > a').attr('href').trim()).toBe(
+      '/licence/create/id/1/check-your-answers'
+    )
   })
 })
