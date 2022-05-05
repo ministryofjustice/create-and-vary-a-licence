@@ -33,9 +33,10 @@ export default class TimelineRoutes {
     const { licenceId } = req.params
     const { user, licence } = res.locals
 
-    // The only POST to this form is the trigger to set approved variations to ACTIVE
+    // The POST is the trigger to set the approved variation to ACTIVE and varied licence to INACTIVE
     if (licence.statusCode === LicenceStatus.VARIATION_APPROVED) {
       await this.licenceService.updateStatus(licence.id, LicenceStatus.ACTIVE, user)
+      await this.licenceService.updateStatus(licence.variationOf, LicenceStatus.INACTIVE, user)
     }
 
     return res.redirect(`/licence/vary/id/${licenceId}/timeline`)
