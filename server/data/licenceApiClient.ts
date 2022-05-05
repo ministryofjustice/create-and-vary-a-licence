@@ -23,6 +23,7 @@ import type {
   ReferVariationRequest,
   EmailContact,
   UpdateProbationTeamRequest,
+  NotifyRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -124,8 +125,8 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest }, { username: user?.username })
   }
 
-  async submitLicence(licenceId: string, user: User): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/submit` }, { username: user.username })
+  async submitLicence(licenceId: string, body: NotifyRequest[], user: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/submit`, data: body }, { username: user.username })
   }
 
   async matchLicences(
