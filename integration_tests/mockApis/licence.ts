@@ -515,7 +515,13 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [],
+        jsonBody: [
+          {
+            licenceId: 1,
+            licenceStatus: 'IN_PROGRESS',
+            nomisId: 'G9786GC',
+          },
+        ],
       },
     })
   },

@@ -14,7 +14,7 @@ context('Edit a licence before release', () => {
 
   it('should click through edit journey', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicence()
+    const caseloadPage = indexPage.clickCreateALicenceToEdit()
     let checkAnswersPage = caseloadPage.clickNameToEditLicence()
     const editLicenceQuestionPage = checkAnswersPage.clickEditLicence()
     checkAnswersPage = editLicenceQuestionPage.selectYes().clickContinue()
