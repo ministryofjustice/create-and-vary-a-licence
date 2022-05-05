@@ -132,12 +132,4 @@ describe('Community Api client tests', () => {
       path: '/secure/users/deliusUsername/roles/SOMEROLE',
     })
   })
-
-  it(`Get PDU heads`, async () => {
-    await communityApiClient.getPduHeads('pduCode')
-
-    expect(get).toHaveBeenCalledWith({
-      path: '/secure/staff/pduHeads/pduCode',
-    })
-  })
 })
