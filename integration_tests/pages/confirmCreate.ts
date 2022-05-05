@@ -1,6 +1,4 @@
 import Page from './page'
-import AppointmentPlacePage from './appointmentPlace'
-import CheckAnswersPage from './checkAnswers'
 import AppointmentPersonPage from './appointmentPerson'
 
 export default class ConfirmCreatePage extends Page {
