@@ -128,12 +128,12 @@ describe('Sentence dates changed event handler', () => {
     })
   })
 
-  it('should use release date', async () => {
+  it('should use confirmed release date', async () => {
     prisonerService.getPrisonerDetail.mockResolvedValue({
       ...prisoner,
       sentenceDetail: {
         ...prisoner.sentenceDetail,
-        releaseDate: '2022-09-10',
+        confirmedReleaseDate: '2022-09-10',
       },
     } as PrisonApiPrisoner)
 
