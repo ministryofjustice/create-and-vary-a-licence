@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import CaseloadRoutes from './caseload'
 import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
-import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
@@ -35,6 +34,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         },
         licences: [
           {
+            id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.IN_PROGRESS,
           },
@@ -60,6 +60,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         },
         licences: [
           {
+            id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.IN_PROGRESS,
           },
@@ -82,6 +83,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         },
         licences: [
           {
+            id: 2,
             type: LicenceType.AP_PSS,
             status: LicenceStatus.IN_PROGRESS,
           },
@@ -155,6 +157,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             prisonerNumber: '123',
+            licenceId: 1,
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -182,6 +185,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             prisonerNumber: '123',
+            licenceId: 1,
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -195,9 +199,10 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381307',
             releaseDate: '12 Oct 2023',
             prisonerNumber: '124',
+            licenceId: 2,
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
-            isClickable: true,
+            isClickable: false,
           },
           {
             name: 'Mabel Moorhouse',
@@ -236,9 +241,10 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381307',
             releaseDate: '12 Oct 2023',
             prisonerNumber: '124',
+            licenceId: 2,
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
-            isClickable: true,
+            isClickable: false,
           },
         ],
         statusConfig,
@@ -284,6 +290,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             prisonerNumber: '123',
+            licenceId: 1,
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -312,6 +319,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             prisonerNumber: '123',
+            licenceId: 1,
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -327,51 +335,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
-    })
-  })
-
-  describe('POST', () => {
-    beforeEach(() => {
-      req = {
-        body: {
-          prisonerNumber: '123',
-        },
-      } as Request
-
-      res = {
-        redirect: jest.fn(),
-        locals: {
-          user: {
-            username: 'USER1',
-          },
-        },
-      } as unknown as Response
-      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
-    })
-
-    it('should redirect to check your answers page if the selected person already has a licence', async () => {
-      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
-        { licenceId: 1 },
-        { licenceId: 2 },
-      ] as LicenceSummary[])
-
-      await handler.POST(req, res)
-
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
-      expect(licenceService.createLicence).not.toBeCalled()
-      expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
-        ['123'],
-        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.APPROVED],
-        res.locals.user
-      )
-    })
-
-    it('should create a licence and redirect to the initial meeting screen', async () => {
-      licenceService.createLicence.mockResolvedValue({ licenceId: 1 } as LicenceSummary)
-
-      await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-name')
-      expect(licenceService.createLicence).toHaveBeenCalledWith('123', res.locals.user)
     })
   })
 })

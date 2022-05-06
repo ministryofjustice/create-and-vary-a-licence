@@ -1,7 +1,7 @@
 import Page from './page'
-import AppointmentPersonPage from './appointmentPerson'
 import CheckAnswersPage from './checkAnswers'
 import ComDetailsPage from './comDetails'
+import ConfirmCreatePage from './confirmCreate'
 
 export default class CaseloadPage extends Page {
   private createLicenceButtonId = '#name-button-1'
@@ -10,12 +10,9 @@ export default class CaseloadPage extends Page {
     super('caseload-page')
   }
 
-  clickNameToCreateLicence = (): AppointmentPersonPage => {
-    cy.task('stubGetStaffDetailsByStaffId')
-    cy.task('stubGetExistingLicenceForOffenderNoResult')
-    cy.task('stubPostLicence')
+  clickNameToCreateLicence = (): ConfirmCreatePage => {
     cy.get(this.createLicenceButtonId).click()
-    return Page.verifyOnPage(AppointmentPersonPage)
+    return Page.verifyOnPage(ConfirmCreatePage)
   }
 
   clickNameToEditLicence = (): CheckAnswersPage => {

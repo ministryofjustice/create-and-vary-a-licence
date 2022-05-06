@@ -18,10 +18,10 @@ context('Create a licence', () => {
     let caseloadPage = indexPage.clickCreateALicence()
     const comDetailsPage = caseloadPage.clickComName()
     caseloadPage = comDetailsPage.clickReturnToCaseload()
-    const appointmentPersonPage = caseloadPage.clickNameToCreateLicence()
+    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
+    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
     const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
-
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')

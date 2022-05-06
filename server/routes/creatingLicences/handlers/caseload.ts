@@ -30,10 +30,12 @@ export default class CaseloadRoutes {
           crnNumber: c.deliusRecord.offenderCrn,
           prisonerNumber: c.nomisRecord.prisonerNumber,
           releaseDate: moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'),
+          licenceId: _.head(c.licences).id,
           licenceStatus: _.head(c.licences).status,
           licenceType: _.head(c.licences).type,
           probationPractitioner: c.probationPractitioner,
           isClickable:
+            c.probationPractitioner !== undefined &&
             _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
             _.head(c.licences).status !== LicenceStatus.OOS_RECALL &&
             _.head(c.licences).status !== LicenceStatus.OOS_BOTUS,
@@ -54,24 +56,5 @@ export default class CaseloadRoutes {
         return crd1 - crd2
       })
     res.render('pages/create/caseload', { caseload: caseloadViewModel, statusConfig, teamView, search })
-  }
-
-  POST = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
-    const { prisonerNumber } = req.body
-
-    const existingLicence = _.head(
-      await this.licenceService.getLicencesByNomisIdsAndStatus(
-        [prisonerNumber],
-        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.APPROVED],
-        user
-      )
-    )
-    if (existingLicence) {
-      return res.redirect(`/licence/create/id/${existingLicence.licenceId}/check-your-answers`)
-    }
-
-    const { licenceId } = await this.licenceService.createLicence(prisonerNumber, user)
-    return res.redirect(`/licence/create/id/${licenceId}/initial-meeting-name`)
   }
 }
