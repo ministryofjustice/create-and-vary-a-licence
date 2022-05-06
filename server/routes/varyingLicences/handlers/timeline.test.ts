@@ -188,14 +188,20 @@ describe('Route Handlers - Timeline', () => {
         ...commonRes,
         locals: {
           licence: {
-            id: 1,
+            id: 2,
             statusCode: LicenceStatus.VARIATION_APPROVED,
+            variationOf: 1,
           },
           user: commonUser,
         },
       } as unknown as Response
+
       await handler.POST(req, res)
-      expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.ACTIVE, { username: 'joebloggs' })
+
+      expect(licenceService.updateStatus).toHaveBeenNthCalledWith(1, 2, LicenceStatus.ACTIVE, { username: 'joebloggs' })
+      expect(licenceService.updateStatus).toHaveBeenNthCalledWith(2, 1, LicenceStatus.INACTIVE, {
+        username: 'joebloggs',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/timeline')
     })
   })
