@@ -19,6 +19,9 @@ export default {
           middleName: 'JP',
           lastName: 'MCGUIRE',
           dateOfBirth: '1950-05-28',
+          sentenceDetail: {
+            conditionalReleaseDate: '2022-11-10',
+          },
         },
       },
     })

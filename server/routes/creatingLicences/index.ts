@@ -34,12 +34,18 @@ import AdditionalLicenceConditionRemoveUploadRoutes from './handlers/additionalL
 import ComDetailsRoutes from './handlers/comDetails'
 import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
 import PssConditionsYesOrNo from './types/pssConditionsYesOrNo'
-import YesOrNo from './types/yesOrNo'
+import YesOrNoQuestion from './types/yesOrNo'
 import AdditionalConditionsYesOrNo from './types/additionalConditionsYesOrNo'
+import ConfirmCreateRoutes from './handlers/confirmCreate'
 
 const upload = multer({ dest: 'uploads/' })
 
-export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
+export default function Index({
+  licenceService,
+  caseloadService,
+  communityService,
+  prisonerService,
+}: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/create${path}`
@@ -79,6 +85,7 @@ export default function Index({ licenceService, caseloadService, communityServic
 
   const caseloadHandler = new CaseloadRoutes(licenceService, caseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
+  const confirmCreateHandler = new ConfirmCreateRoutes(communityService, prisonerService, licenceService)
   const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService)
   const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService)
@@ -99,8 +106,9 @@ export default function Index({ licenceService, caseloadService, communityServic
   const confirmationHandler = new ConfirmationRoutes()
 
   get('/caseload', caseloadHandler.GET)
-  post('/caseload', caseloadHandler.POST)
   get('/probation-practitioner/staffCode/:staffCode', comDetailsHandler.GET)
+  get('/nomisId/:nomisId/confirm', confirmCreateHandler.GET)
+  post('/nomisId/:nomisId/confirm', confirmCreateHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.GET)
   post('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.POST, PersonName)
   get('/id/:licenceId/initial-meeting-place', initialMeetingPlaceHandler.GET)
@@ -153,7 +161,7 @@ export default function Index({ licenceService, caseloadService, communityServic
   get('/id/:licenceId/check-your-answers', checkAnswersHandler.GET)
   post('/id/:licenceId/check-your-answers', checkAnswersHandler.POST)
   get('/id/:licenceId/edit', editQuestionHandler.GET)
-  post('/id/:licenceId/edit', editQuestionHandler.POST, YesOrNo)
+  post('/id/:licenceId/edit', editQuestionHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/confirmation', confirmationHandler.GET)
 
   return router
