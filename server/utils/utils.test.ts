@@ -1,4 +1,5 @@
 import { isDefined } from 'class-validator'
+import moment from 'moment'
 import {
   addressObjectToString,
   convertDateFormat,
@@ -14,6 +15,7 @@ import {
   jsonDtToDateWithDay,
   objectIsEmpty,
   hasAuthSource,
+  isBankHolidayOrWeekend,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -299,5 +301,34 @@ describe('Check empty object', () => {
         field3: undefined,
       })
     ).toBe(false)
+  })
+})
+
+describe('Check bank holiday or weekend', () => {
+  it('should return false if date is a Friday', () => {
+    expect(isBankHolidayOrWeekend(moment('2022-05-13'), [])).toBe(false)
+  })
+
+  it('should return true if date is a Saturday', () => {
+    expect(isBankHolidayOrWeekend(moment('2022-05-14'), [])).toBe(true)
+  })
+
+  it('should return true if date is a Sunday', () => {
+    expect(isBankHolidayOrWeekend(moment('2022-05-15'), [])).toBe(true)
+  })
+
+  it('should return true if date is a Monday', () => {
+    expect(isBankHolidayOrWeekend(moment('2022-05-16'), [])).toBe(false)
+  })
+
+  it('should return true if date is in list of holidays', () => {
+    expect(
+      isBankHolidayOrWeekend(moment('2022-05-16'), [
+        {
+          title: 'Test holiday',
+          date: '2022-05-16',
+        },
+      ])
+    ).toBe(true)
   })
 })

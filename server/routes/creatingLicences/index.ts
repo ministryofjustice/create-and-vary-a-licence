@@ -45,6 +45,7 @@ export default function Index({
   caseloadService,
   communityService,
   prisonerService,
+  ukBankHolidayFeedService,
 }: Services): Router {
   const router = Router()
 
@@ -85,7 +86,12 @@ export default function Index({
 
   const caseloadHandler = new CaseloadRoutes(licenceService, caseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
-  const confirmCreateHandler = new ConfirmCreateRoutes(communityService, prisonerService, licenceService)
+  const confirmCreateHandler = new ConfirmCreateRoutes(
+    communityService,
+    prisonerService,
+    licenceService,
+    ukBankHolidayFeedService
+  )
   const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService)
   const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService)

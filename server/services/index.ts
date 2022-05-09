@@ -10,6 +10,7 @@ import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
 import LicenceApiClient from '../data/licenceApiClient'
+import UkBankHolidayFeedService from './ukBankHolidayFeedService'
 
 const hmppsAuthClient = new HmppsAuthClient()
 const prisonApiClient = new PrisonApiClient()
@@ -24,6 +25,7 @@ const communityService = new CommunityService(communityApiClient, probationSearc
 const userService = new UserService(hmppsAuthClient, prisonApiClient, communityService)
 const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService)
 const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
+const ukBankHolidayFeedService = new UkBankHolidayFeedService()
 
 // TODO - Remove prisonerService and community service as exports
 // The following services should not be exported eventually (after spikes have been removed), they should only ever be consumed by the caseload service.
@@ -36,6 +38,7 @@ export const services = {
   prisonerService,
   communityService,
   qrCodeService,
+  ukBankHolidayFeedService,
 }
 
 export type Services = typeof services
