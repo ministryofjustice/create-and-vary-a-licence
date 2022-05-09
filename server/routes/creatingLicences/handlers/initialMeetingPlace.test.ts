@@ -3,11 +3,13 @@ import { Request, Response } from 'express'
 import InitialMeetingPlaceRoutes from './initialMeetingPlace'
 import LicenceService from '../../../services/licenceService'
 import Address from '../types/address'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const ukBankHolidayFeedService = new UkBankHolidayFeedService() as jest.Mocked<UkBankHolidayFeedService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
-  const handler = new InitialMeetingPlaceRoutes(licenceService)
+  const handler = new InitialMeetingPlaceRoutes(licenceService, ukBankHolidayFeedService)
   let req: Request
   let res: Response
   let formAddress: Address
@@ -38,17 +40,22 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         },
         licence: {
           appointmentAddress: 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
+          conditionalReleaseDate: '14/05/2022',
         },
       },
     } as unknown as Response
 
     licenceService.updateAppointmentAddress = jest.fn()
+    ukBankHolidayFeedService.getEnglishAndWelshHolidays = jest.fn()
   })
 
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', { formAddress })
+      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
+        formAddress,
+        releaseIsOnBankHolidayOrWeekend: true,
+      })
     })
   })
 

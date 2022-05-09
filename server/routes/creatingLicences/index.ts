@@ -92,10 +92,10 @@ export default function Index({
     licenceService,
     ukBankHolidayFeedService
   )
-  const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService)
-  const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService)
-  const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService)
-  const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService)
+  const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService, ukBankHolidayFeedService)
+  const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService, ukBankHolidayFeedService)
+  const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService, ukBankHolidayFeedService)
+  const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
   const additionalLicenceConditionsQuestionHandler = new AdditionalLicenceConditionsQuestionRoutes()
   const additionalLicenceConditionsHandler = new AdditionalLicenceConditionsRoutes(licenceService)
   const additionalLicenceConditionsCallbackHandler = new AdditionalLicenceConditionsCallbackRoutes()

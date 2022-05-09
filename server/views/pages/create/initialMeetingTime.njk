@@ -6,6 +6,7 @@
   - formDate - is an object containing the current values from the API (if any) for inductionDate, inductionTime
 #}
 
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../partials/timePicker.njk" import timePicker %}
 {% from "../../partials/datePicker.njk" import datePicker %}
@@ -24,6 +25,12 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
+                {% if releaseIsOnBankHolidayOrWeekend %}
+                    {{ govukWarningText({
+                        text: "The release date is on a weekend or bank holiday. Check the release date with the prison OMU.",
+                        iconFallbackText: "Warning"
+                    }) }}
+                {% endif %}
 
                 {{ datePicker({
                     id: "date",

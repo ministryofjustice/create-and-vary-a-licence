@@ -1,11 +1,26 @@
 import { Request, Response } from 'express'
+import moment from 'moment'
 import LicenceService from '../../../services/licenceService'
+import { isBankHolidayOrWeekend } from '../../../utils/utils'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 export default class InitialMeetingContactRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly ukBankHolidayFeedService: UkBankHolidayFeedService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    res.render('pages/create/initialMeetingContact')
+    const { licence } = res.locals
+
+    const bankHolidays = await this.ukBankHolidayFeedService.getEnglishAndWelshHolidays()
+
+    res.render('pages/create/initialMeetingContact', {
+      releaseIsOnBankHolidayOrWeekend: isBankHolidayOrWeekend(
+        moment(licence.actualReleaseDate || licence.conditionalReleaseDate, 'DD/MM/YYYY'),
+        bankHolidays
+      ),
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

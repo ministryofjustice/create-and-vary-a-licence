@@ -3,11 +3,13 @@ import { Request, Response } from 'express'
 import InitialMeetingTimeRoutes from './initialMeetingTime'
 import LicenceService from '../../../services/licenceService'
 import SimpleDateTime from '../types/simpleDateTime'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const ukBankHolidayFeedService = new UkBankHolidayFeedService() as jest.Mocked<UkBankHolidayFeedService>
 
 describe('Route - create licence - initial meeting date and time', () => {
-  const handler = new InitialMeetingTimeRoutes(licenceService)
+  const handler = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
   let req: Request
   let res: Response
   let formDate: SimpleDateTime
@@ -43,17 +45,22 @@ describe('Route - create licence - initial meeting date and time', () => {
         },
         licence: {
           appointmentTime: '21/10/2022 14:15',
+          conditionalReleaseDate: '14/05/2022',
         },
       },
     } as unknown as Response
 
     licenceService.updateAppointmentTime = jest.fn()
+    ukBankHolidayFeedService.getEnglishAndWelshHolidays = jest.fn()
   })
 
   describe('GET', () => {
     it('should render initial meeting time view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', { formDate })
+      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
+        formDate,
+        releaseIsOnBankHolidayOrWeekend: true,
+      })
     })
   })
 

@@ -8,7 +8,6 @@ import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
-import { Holiday } from '../../../@types/ukBankHolidayFeedTypes'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
