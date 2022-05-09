@@ -25,43 +25,29 @@
                     "data-sort-value": licence.licenceId
                 },
                     classes: "max-width max-width-220",
-                    html: '<a href="/support/offender/' + prisonerDetail.id + '/licence/' + licence.licenceId + '/audit" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">' + licence.licenceId + '</a>'
+                    text:  licence.licenceId
                 },
                 {
-                    attributes: {
-                    "data-sort-value": licence.licenceStatus
-                },
                     text:  licence.licenceStatus
                 },
                 {
-                    attributes: {
-                    "data-sort-value": licence.licenceType
-                },
                     text: licence.licenceType
                 },
                 {
-                    attributes: {
-                    "data-sort-value": licence.crn
-                },
                     text: licence.crn
                 },
                 {
-                    attributes: {
-                    "data-sort-value": licence.nomisId
-                },
                     text: licence.nomisId
-                },
-                {
-                    attributes: {
-                    "data-sort-value": licence.forename + " " + licence.surname
-                },
-                    text: licence.forename + " " + licence.surname
                 },
                 {
                     attributes: {
                     "data-sort-value": licence.comUsername
                 },
                     text: licence.comUsername
+                },
+                {
+                    classes: "max-width max-width-220",
+                    html: '<a href="/support/offender/' + prisonerDetail.id + '/licence/' + licence.licenceId + '/audit" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">view</a>'
                 }
             ]), licenceList) %}
 
@@ -81,40 +67,25 @@
                 }
                 },
                 {
-                    text: "Status",
-                    attributes: {
-                    "aria-sort": "none"
-                }
+                    text: "Status"
                 },
                 {
-                    text: "Type",
-                    attributes: {
-                    "aria-sort": "none"
-                }
+                    text: "Type"
                 },
                 {
-                    text: "Case reference number",
-                    attributes: {
-                    "aria-sort": "none"
-                }
+                    text: "Case reference number"
                 },
                 {
-                    text: "Noms Id",
-                    attributes: {
-                    "aria-sort": "none"
-                }
-                },
-                {
-                    text: "Name",
-                    attributes: {
-                    "aria-sort": "none"
-                }
+                    text: "Noms Id"
                 },
                 {
                     text: "Com Name",
                     attributes: {
                     "aria-sort": "none"
                 }
+                },
+                {
+                    text: "Audit"
                 }
             ],
             rows: licenceList
