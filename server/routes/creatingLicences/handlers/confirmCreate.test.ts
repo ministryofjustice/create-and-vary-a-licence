@@ -52,20 +52,22 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   })
 
   describe('GET', () => {
-    prisonerService.getPrisonerDetail.mockResolvedValue({
-      sentenceDetail: {
-        confirmedReleaseDate: '2022-11-20',
-        conditionalReleaseDate: '2022-11-21',
-      },
-      dateOfBirth: '1960-11-10',
-      firstName: 'Patrick',
-      lastName: 'Holmes',
-    } as PrisonApiPrisoner)
-    communityService.getProbationer.mockResolvedValue({
-      otherIds: {
-        crn: 'X1234',
-      },
-    } as OffenderDetail)
+    beforeEach(() => {
+      prisonerService.getPrisonerDetail.mockResolvedValue({
+        sentenceDetail: {
+          confirmedReleaseDate: '2022-11-20',
+          conditionalReleaseDate: '2022-11-21',
+        },
+        dateOfBirth: '1960-11-10',
+        firstName: 'Patrick',
+        lastName: 'Holmes',
+      } as PrisonApiPrisoner)
+      communityService.getProbationer.mockResolvedValue({
+        otherIds: {
+          crn: 'X1234',
+        },
+      } as OffenderDetail)
+    })
 
     it('should render view', async () => {
       await handler.GET(req, res)
@@ -73,6 +75,30 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         licence: {
           conditionalReleaseDate: '21/11/2022',
           actualReleaseDate: '20/11/2022',
+          crn: 'X1234',
+          dateOfBirth: '10/11/1960',
+          forename: 'Patrick',
+          surname: 'Holmes',
+        },
+        releaseIsOnBankHolidayOrWeekend: true,
+      })
+    })
+
+    it('actualReleaseDate should be undefined if confirmedReleaseDate does not exist', async () => {
+      prisonerService.getPrisonerDetail.mockResolvedValue({
+        sentenceDetail: {
+          conditionalReleaseDate: '2022-11-20',
+        },
+        dateOfBirth: '1960-11-10',
+        firstName: 'Patrick',
+        lastName: 'Holmes',
+      } as PrisonApiPrisoner)
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
+        licence: {
+          conditionalReleaseDate: '20/11/2022',
+          actualReleaseDate: undefined,
           crn: 'X1234',
           dateOfBirth: '10/11/1960',
           forename: 'Patrick',
