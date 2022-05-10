@@ -184,25 +184,11 @@ describe('Licence Service', () => {
       it('Should set start date using the release date from NOMIS if it exists', async () => {
         prisonerService.getPrisonerDetail.mockResolvedValue({
           sentenceDetail: {
-            releaseDate: '26/12/2022',
-            conditionalReleaseOverrideDate: '27/11/2022',
+            confirmedReleaseDate: '26/12/2022',
             conditionalReleaseDate: '1/03/2023',
           },
         } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ licenceStartDate: '26/12/2022' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should set start date using the conditional release date override if release date does not exist', async () => {
-        prisonerService.getPrisonerDetail.mockResolvedValue({
-          sentenceDetail: {
-            conditionalReleaseOverrideDate: '27/11/2022',
-            conditionalReleaseDate: '1/03/2023',
-          },
-        } as PrisonApiPrisoner)
-        const expectedLicence = expect.objectContaining({ licenceStartDate: '27/11/2022' })
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)

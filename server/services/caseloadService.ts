@@ -224,10 +224,10 @@ export default class CaseloadService {
           offender.nomisRecord.status &&
           (offender.nomisRecord.status.startsWith('ACTIVE') || offender.nomisRecord.status === 'INACTIVE TRN')
       )
-      .filter(
-        offender =>
-          !offender.nomisRecord.releaseDate ||
-          moment().isSameOrBefore(moment(offender.nomisRecord.releaseDate, 'YYYY-MM-DD'), 'day')
+      .filter(offender =>
+        moment(
+          moment(offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
+        ).isSameOrAfter(moment(), 'day')
       )
       .filter(offender =>
         [
