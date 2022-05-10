@@ -38,7 +38,7 @@ interface PutRequest {
   path?: string
   headers?: Record<string, string>
   responseType?: string
-  data?: Record<string, unknown>
+  data?: Record<string, unknown> | number[] | string[] | Record<string, unknown>[]
   raw?: boolean
 }
 

@@ -274,6 +274,20 @@ export default {
     })
   },
 
+  stubGetPduHeads: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/secure/staff/pduHeads/(.)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [],
+      },
+    })
+  },
+
   stubGetAnOffendersManagers: (): SuperAgentRequest => {
     return stubFor({
       request: {
