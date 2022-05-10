@@ -1,0 +1,109 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set pageTitle = applicationName + " - prisoner audit" %}
+{% set backLinkHref = "/support/offender-search" %}
+
+{% block content %}
+
+    <div class="govuk-width-container">
+        <span class="govuk-caption-xl">{{ prisonerDetail.name }}</span>
+        <h1 class="govuk-heading-xl">Licences</h1>
+    </div>
+
+    {% if licences.length > 0 %}
+
+        {% set licenceList = [] %}
+
+        {% for licence in licences %}
+
+            {% set licenceList = (licenceList.push([
+                {
+                    attributes: {
+                    "data-sort-value": licence.licenceId
+                },
+                    classes: "max-width max-width-220",
+                    text:  licence.licenceId
+                },
+                {
+                    text:  licence.licenceStatus
+                },
+                {
+                    text: licence.licenceType
+                },
+                {
+                    text: licence.crn
+                },
+                {
+                    text: licence.nomisId
+                },
+                {
+                    attributes: {
+                    "data-sort-value": licence.comUsername
+                },
+                    text: licence.comUsername
+                },
+                {
+                    classes: "max-width max-width-220",
+                    html: '<a href="/support/offender/' + prisonerDetail.id + '/licence/' + licence.licenceId + '/audit" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">view</a>'
+                }
+            ]), licenceList) %}
+
+        {% endfor %}
+
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Licences",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "ID",
+                    attributes: {
+                    "aria-sort": "ascending"
+                }
+                },
+                {
+                    text: "Status"
+                },
+                {
+                    text: "Type"
+                },
+                {
+                    text: "Case reference number"
+                },
+                {
+                    text: "Noms Id"
+                },
+                {
+                    text: "Com Name",
+                    attributes: {
+                    "aria-sort": "none"
+                }
+                },
+                {
+                    text: "Audit"
+                }
+            ],
+            rows: licenceList
+        }) }}
+
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h3 class="govuk-heading-s">No results</h3>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Return to offender details",
+            classes: 'js-backlink'
+        }) }}
+    </div>
+
+{% endblock %}

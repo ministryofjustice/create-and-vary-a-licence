@@ -1,0 +1,106 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set pageTitle = applicationName + " - prisoner audit" %}
+{% set backLinkHref = "/support/offender-search" %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <span class="govuk-caption-xl">{{ prisonerDetail.name }}</span>
+        <h1 class="govuk-heading-xl">Audit log</h1>
+    </div>
+
+    {% if audit.length > 0 %}
+
+        {% set auditList = [] %}
+
+        {% for record in audit %}
+
+            {% set auditList = (auditList.push([
+                {
+                    attributes: {
+                    "data-sort-value": record.id
+                },
+                    text: record.id
+                },
+                {
+                    attributes: {
+                    "data-sort-value": record.fullName
+                },
+                    text: record.fullName
+                },
+                {
+                    text: record.eventTime
+                },
+                {
+                    text: record.eventType
+                },
+                {
+                    attributes: {
+                    "data-sort-value": record.summary
+                },
+                    text: record.summary
+                },
+                {
+                    attributes: {
+                    "data-sort-value": record.detail
+                },
+                    text: record.detail
+                }
+            ]), auditList) %}
+
+        {% endfor %}
+
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Audit Trail",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "ID",
+                    attributes: {
+                    "aria-sort": "descending"
+                }
+                },
+                {
+                    text: "Name",
+                    attributes: {
+                    "aria-sort": "none"
+                }
+                },
+                {
+                    text: "Time"
+                },
+                {
+                    text: "Event Type"
+                },
+                {
+                    text: "Summary"
+                },
+                {
+                    text: "Detail"
+                }
+            ],
+            rows: auditList
+        }) }}
+
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h3 class="govuk-heading-s">No results</h3>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Return to licences",
+            classes: 'js-backlink'
+        }) }}
+    </div>
+
+{% endblock %}
