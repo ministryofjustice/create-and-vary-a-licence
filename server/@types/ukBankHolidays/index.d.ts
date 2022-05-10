@@ -1,6 +1,4 @@
 declare module 'uk-bank-holidays' {
-  import { Holiday } from '../ukBankHolidayFeedTypes'
-
   export default class HolidayFeed {
     constructor()
 
@@ -11,5 +9,10 @@ declare module 'uk-bank-holidays' {
 
   export interface Division {
     holidays(): Holiday[]
+  }
+
+  export interface Holiday {
+    title: string
+    date: string
   }
 }

@@ -1,10 +1,10 @@
 import moment, { Moment } from 'moment'
+import { Holiday } from 'uk-bank-holidays'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import Address from '../routes/creatingLicences/types/address'
-import { Holiday } from '../@types/ukBankHolidayFeedTypes'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word

@@ -1,5 +1,4 @@
-import HolidayFeed from 'uk-bank-holidays'
-import { Holiday } from '../@types/ukBankHolidayFeedTypes'
+import HolidayFeed, { Holiday } from 'uk-bank-holidays'
 
 const A_DAY_IN_MS = 24 * 60 * 60 * 1000
 

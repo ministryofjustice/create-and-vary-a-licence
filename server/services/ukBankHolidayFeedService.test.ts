@@ -12,6 +12,7 @@ describe('Uk bank holiday feed service', () => {
       holidays: () => {
         return [
           {
+            title: "Queen's Platinum Jubilee",
             date: '2022-06-03',
           },
         ]
@@ -28,6 +29,7 @@ describe('Uk bank holiday feed service', () => {
       const result = await ukBankHolidayFeedService.getEnglishAndWelshHolidays()
       expect(result).toEqual([
         {
+          title: "Queen's Platinum Jubilee",
           date: '2022-06-03',
         },
       ])
