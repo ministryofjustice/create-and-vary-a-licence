@@ -28,7 +28,9 @@ export default class ConfirmCreateRoutes {
     return res.render('pages/create/confirmCreate', {
       licence: {
         crn: deliusRecord?.otherIds?.crn,
-        actualReleaseDate: moment(nomisRecord.sentenceDetail.confirmedReleaseDate).format('DD/MM/YYYY'),
+        actualReleaseDate: nomisRecord.sentenceDetail.confirmedReleaseDate
+          ? moment(nomisRecord.sentenceDetail.confirmedReleaseDate).format('DD/MM/YYYY')
+          : undefined,
         conditionalReleaseDate: moment(nomisRecord.sentenceDetail.conditionalReleaseDate).format('DD/MM/YYYY'),
         dateOfBirth: moment(nomisRecord.dateOfBirth).format('DD/MM/YYYY'),
         forename: convertToTitleCase(nomisRecord.firstName),
