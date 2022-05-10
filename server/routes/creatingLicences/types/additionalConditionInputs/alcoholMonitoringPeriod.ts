@@ -17,7 +17,7 @@ class AlcoholMonitoringPeriod {
     message: 'The monitoring end date must be before the licence expiry date',
   })
   @DateIsAfterExpectedReleaseDate({
-    message: 'The monitoring end date must be after the release date',
+    message: 'The monitoring end date must be on or after the release date',
   })
   endDate: SimpleDate
 }
