@@ -2,6 +2,8 @@
 
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set pageTitle = applicationName + " - Create a licence - Are you sure?" %}
 {% set pageId = "confirm-create-page" %}
@@ -16,45 +18,105 @@
 
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full-from-desktop">
-                {{ govukRadios({
-                    classes: "govuk-radios--inline",
-                    idPrefix: "answer",
-                    name: "answer",
-                    fieldset: {
-                        legend: {
-                            text: "Are you sure you want to create this licence?",
-                            isPageHeading: false,
-                            classes: "govuk-visually-hidden"
-                        }
-                    },
-                    errorMessage: validationErrors | findError('answer'),
-                    items: [
-                        {
-                            value: "Yes",
-                            text: "Yes"
-                        },
-                        {
-                            value: "No",
-                            text: "No"
-                        }
-                    ]
-                }) }}
-            </div>
-        </div>
+        {% if releaseIsOnBankHolidayOrWeekend %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full-from-desktop">
+                    {{ govukWarningText({
+                        text: "The release date is on a weekend or bank holiday. Check the release date with the prison OMU.",
+                        iconFallbackText: "Warning"
+                    }) }}
 
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <div class="govuk-button-group">
-                    {{ govukButton({
-                        text: 'Continue',
-                        type: "submit",
-                        attributes: { 'data-qa': 'continue' },
-                        preventDoubleClick: true
+                    {{ govukSummaryList({
+                        rows: [
+                            {
+                                key: {
+                                    text: "Name"
+                                },
+                                value: {
+                                    text: licence.forename + " " + licence.surname
+                                }
+                            },
+                            {
+                                key: {
+                                    text: "CRN"
+                                },
+                                value: {
+                                    text: licence.crn
+                                }
+                            },
+                            {
+                                key: {
+                                    text: "Release date"
+                                },
+                                value: {
+                                    text: licence.actualReleaseDate | datetimeToDate or licence.conditionalReleaseDate | datetimeToDate
+                                }
+                            }
+                        ]
                     }) }}
                 </div>
             </div>
-        </div>
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            text: 'Return to case list',
+                            href: '/licence/create/caseload'
+                        }) }}
+
+                        {{ govukButton({
+                            text: 'Continue and create licence',
+                            type: 'submit',
+                            name: 'answer',
+                            value: 'Yes',
+                            preventDoubleClick: true,
+                            classes: "govuk-button--secondary"
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full-from-desktop">
+                    {{ govukRadios({
+                        classes: "govuk-radios--inline",
+                        idPrefix: "answer",
+                        name: "answer",
+                        fieldset: {
+                            legend: {
+                                text: "Are you sure you want to create this licence?",
+                                isPageHeading: false,
+                                classes: "govuk-visually-hidden"
+                            }
+                        },
+                        errorMessage: validationErrors | findError('answer'),
+                        items: [
+                            {
+                                value: "Yes",
+                                text: "Yes"
+                            },
+                            {
+                                value: "No",
+                                text: "No"
+                            }
+                        ]
+                    }) }}
+                </div>
+            </div>
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            text: 'Continue',
+                            type: "submit",
+                            attributes: { 'data-qa': 'continue' },
+                            preventDoubleClick: true
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </form>
 {% endblock %}

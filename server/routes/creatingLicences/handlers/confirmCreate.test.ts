@@ -7,16 +7,19 @@ import PrisonerService from '../../../services/prisonerService'
 import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const ukBankHolidayFeedService = new UkBankHolidayFeedService() as jest.Mocked<UkBankHolidayFeedService>
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/communityService')
 jest.mock('../../../services/prisonerService')
+jest.mock('../../../services/ukBankHolidayFeedService')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(communityService, prisonerService, licenceService)
+  const handler = new ConfirmCreateRoutes(communityService, prisonerService, licenceService, ukBankHolidayFeedService)
   let req: Request
   let res: Response
 
@@ -51,6 +54,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   describe('GET', () => {
     prisonerService.getPrisonerDetail.mockResolvedValue({
       sentenceDetail: {
+        confirmedReleaseDate: '2022-11-20',
         conditionalReleaseDate: '2022-11-21',
       },
       dateOfBirth: '1960-11-10',
@@ -68,11 +72,13 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
         licence: {
           conditionalReleaseDate: '21/11/2022',
+          actualReleaseDate: '20/11/2022',
           crn: 'X1234',
           dateOfBirth: '10/11/1960',
           forename: 'Patrick',
           surname: 'Holmes',
         },
+        releaseIsOnBankHolidayOrWeekend: true,
       })
     })
   })

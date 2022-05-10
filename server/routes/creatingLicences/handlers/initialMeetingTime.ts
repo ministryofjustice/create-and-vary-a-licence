@@ -1,15 +1,29 @@
 import { Request, Response } from 'express'
+import moment from 'moment'
 import LicenceService from '../../../services/licenceService'
-import { jsonToSimpleDateTime } from '../../../utils/utils'
+import { isBankHolidayOrWeekend, jsonToSimpleDateTime } from '../../../utils/utils'
 import LicenceType from '../../../enumeration/licenceType'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 export default class InitialMeetingTimeRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly ukBankHolidayFeedService: UkBankHolidayFeedService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { appointmentTime } = res.locals.licence
-    const formDate = jsonToSimpleDateTime(appointmentTime)
-    res.render('pages/create/initialMeetingTime', { formDate })
+    const { licence } = res.locals
+
+    const bankHolidays = await this.ukBankHolidayFeedService.getEnglishAndWelshHolidays()
+
+    const formDate = jsonToSimpleDateTime(licence.appointmentTime)
+    res.render('pages/create/initialMeetingTime', {
+      formDate,
+      releaseIsOnBankHolidayOrWeekend: isBankHolidayOrWeekend(
+        moment(licence.actualReleaseDate || licence.conditionalReleaseDate, 'DD/MM/YYYY'),
+        bankHolidays
+      ),
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

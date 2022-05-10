@@ -2,11 +2,13 @@ import { Request, Response } from 'express'
 
 import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../services/licenceService'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const ukBankHolidayFeedService = new UkBankHolidayFeedService() as jest.Mocked<UkBankHolidayFeedService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
-  const handler = new InitialMeetingNameRoutes(licenceService)
+  const handler = new InitialMeetingNameRoutes(licenceService, ukBankHolidayFeedService)
   let req: Request
   let res: Response
 
@@ -26,15 +28,21 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
         user: {
           username: 'joebloggs',
         },
+        licence: {
+          conditionalReleaseDate: '14/05/2022',
+        },
       },
     } as unknown as Response
     licenceService.updateAppointmentPerson = jest.fn()
+    ukBankHolidayFeedService.getEnglishAndWelshHolidays = jest.fn()
   })
 
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPerson')
+      expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPerson', {
+        releaseIsOnBankHolidayOrWeekend: true,
+      })
     })
   })
 

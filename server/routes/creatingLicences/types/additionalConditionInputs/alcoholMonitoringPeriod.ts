@@ -3,7 +3,7 @@ import { IsNotEmpty, Validate } from 'class-validator'
 import SimpleDate from '../date'
 import ValidSimpleDate from '../../../../validators/simpleDateValidator'
 import DateIsBefore from '../../../../validators/dateIsBefore'
-import DateIsAfter from '../../../../validators/dateIsAfter'
+import DateIsAfterExpectedReleaseDate from '../../../../validators/dateIsAfterExpectedReleaseDate'
 
 class AlcoholMonitoringPeriod {
   @Expose()
@@ -16,8 +16,8 @@ class AlcoholMonitoringPeriod {
   @DateIsBefore('licence.licenceExpiryDate', {
     message: 'The monitoring end date must be before the licence expiry date',
   })
-  @DateIsAfter('licence.conditionalReleaseDate', {
-    message: 'The monitoring end date must be after the conditional release date',
+  @DateIsAfterExpectedReleaseDate({
+    message: 'The monitoring end date must be on or after the release date',
   })
   endDate: SimpleDate
 }

@@ -1,4 +1,5 @@
-import moment from 'moment'
+import moment, { Moment } from 'moment'
+import { Holiday } from 'uk-bank-holidays'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -144,6 +145,14 @@ const formatAddress = (address?: string) => {
     : undefined
 }
 
+const isBankHolidayOrWeekend = (date: Moment, bankHolidays: Holiday[]) => {
+  return (
+    date.isoWeekday() === 6 ||
+    date.isoWeekday() === 7 ||
+    bankHolidays.find(hol => moment(hol.date).isSame(date)) !== undefined
+  )
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -162,4 +171,5 @@ export {
   filterCentralCaseload,
   objectIsEmpty,
   formatAddress,
+  isBankHolidayOrWeekend,
 }
