@@ -68,16 +68,18 @@ export default class PrisonerService {
 
   async getHdcStatuses(offenders: Prisoner[], user?: User): Promise<HdcStatus[]> {
     const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
-    if (bookingIds.length === 0) {
-      return []
-    }
+    if (bookingIds.length === 0) return []
+
     const hdcList = await this.prisonApiClient.getLatestHdcStatusBatch(bookingIds, user)
-    return hdcList.map(h => {
-      const hdcEligibilityDate = offenders.find(
-        o => parseInt(o?.bookingId, 10) === h?.bookingId
-      )?.homeDetentionCurfewEligibilityDate
-      return new HdcStatus(`${h?.bookingId}`, hdcEligibilityDate, h?.passed, h?.approvalStatus)
-    })
+
+    return hdcList.map(
+      h =>
+        <HdcStatus>{
+          bookingId: h.bookingId.toString(),
+          approvalStatus: h?.approvalStatus || 'Not found',
+          checksPassed: h?.passed || 'Not found',
+        }
+    )
   }
 
   async searchPrisonersByReleaseDate(

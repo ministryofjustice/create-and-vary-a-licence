@@ -206,14 +206,16 @@ export default class CaseloadService {
       .filter(offender => !offender.nomisRecord.indeterminateSentence)
       .filter(offender => offender.nomisRecord.conditionalReleaseDate)
 
+    if (eligibleOffenders.length === 0) return eligibleOffenders
+
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
       eligibleOffenders.map(c => c.nomisRecord),
       user
     )
 
     return eligibleOffenders.filter(offender => {
-      const hdcStatus = hdcStatuses.find(hdc => hdc.bookingId === offender.nomisRecord.bookingId)
-      return !hdcStatus?.eligibleForHdc
+      const hdcRecord = hdcStatuses.find(hdc => hdc.bookingId === offender.nomisRecord.bookingId)
+      return !hdcRecord || hdcRecord.approvalStatus !== 'APPROVED'
     })
   }
 
