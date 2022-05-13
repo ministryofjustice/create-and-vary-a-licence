@@ -35,8 +35,13 @@ context('Create a licence', () => {
      select the next wednesday one year from now in order to avoid weekends and
      bank holidays, with the possible exceptions of Xmas and New Year
      */
+    const appointmentDate = moment().add(1, 'year').add(1, 'week').day(3)
+    if (appointmentDate.month() === 11) {
+      appointmentDate.add(1, 'month') // advance to Jan to avoid Xmas and New Year
+    }
+
     const additionalConditionsPage = appointmentTimePage
-      .enterDate(moment().add(1, 'year').add(1, 'week').day(3))
+      .enterDate(appointmentDate)
       .enterTime(moment())
       .clickContinue()
       .selectYes()
