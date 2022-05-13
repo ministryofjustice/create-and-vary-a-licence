@@ -164,8 +164,6 @@ describe('Prisoner Service', () => {
           approvalStatus: 'PASSED',
           bookingId: '123',
           checksPassed: true,
-          eligibleForHdc: true,
-          homeDetentionCurfewEligibilityDate: '26/12/2021',
         },
       ])
       expect(prisonApiClient.getLatestHdcStatusBatch).toBeCalledWith([123], user)
