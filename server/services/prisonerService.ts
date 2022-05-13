@@ -77,7 +77,7 @@ export default class PrisonerService {
         <HdcStatus>{
           bookingId: h.bookingId.toString(),
           approvalStatus: h?.approvalStatus || 'Not found',
-          checksPassed: h?.passed || 'Not found',
+          checksPassed: h?.passed || false,
         }
     )
   }
