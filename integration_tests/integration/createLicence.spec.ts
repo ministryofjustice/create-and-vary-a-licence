@@ -31,12 +31,21 @@ context('Create a licence', () => {
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
 
-    const additionalConditionsQuestionPage = appointmentTimePage
-      .enterDate(moment().add(1, 'year'))
+    /*
+     select the next wednesday one year from now in order to avoid weekends and
+     bank holidays, with the possible exceptions of Xmas and New Year
+     */
+    const appointmentDate = moment().add(1, 'year').add(1, 'week').day(3)
+    if (appointmentDate.month() === 11) {
+      appointmentDate.add(1, 'month') // advance to Jan to avoid Xmas and New Year
+    }
+
+    const additionalConditionsPage = appointmentTimePage
+      .enterDate(appointmentDate)
       .enterTime(moment())
       .clickContinue()
-
-    const additionalConditionsPage = additionalConditionsQuestionPage.selectYes().clickContinue()
+      .selectYes()
+      .clickContinue()
 
     const additionalConditionsInputPage = additionalConditionsPage
       .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')

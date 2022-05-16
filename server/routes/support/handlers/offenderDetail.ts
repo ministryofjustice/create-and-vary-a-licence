@@ -34,7 +34,7 @@ export default class OffenderDetailRoutes {
         paroleEligibilityDate: moment(prisonerDetail.paroleEligibilityDate).format('DD MMM YYYY'),
         determinate: prisonerDetail.indeterminateSentence ? 'No' : 'Yes',
         dob: moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY'),
-        hdcCheck: hdcStatus?.eligibleForHdc ? 'Eligible' : 'Ineligible',
+        hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',
       },
       probationPractitioner: {
         name: probationPractitioner
