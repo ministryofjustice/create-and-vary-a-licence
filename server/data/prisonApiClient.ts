@@ -50,8 +50,7 @@ export default class PrisonApiClient extends RestClient {
     )) as Promise<PrisonInformation>
   }
 
-  // TODO: No longer used - leave as might use in future check
-  async getLatestHdcStatus(bookingId: string, user: User): Promise<HomeDetentionCurfew> {
+  async getLatestHdcStatus(bookingId: string, user?: User): Promise<HomeDetentionCurfew> {
     return (await this.get(
       {
         path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,

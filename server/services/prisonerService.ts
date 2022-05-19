@@ -42,7 +42,7 @@ export default class PrisonerService {
     return this.prisonApiClient.getPrisonInformation(prisonId, user)
   }
 
-  async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria, user: User): Promise<Prisoner[]> {
+  async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria, user?: User): Promise<Prisoner[]> {
     return this.prisonerSearchApiClient.searchPrisoners(prisonerSearchCriteria, user)
   }
 
@@ -64,6 +64,22 @@ export default class PrisonerService {
       bookingIds,
     }
     return this.prisonerSearchApiClient.searchPrisonersByBookingIds(prisonerSearchCriteria, user)
+  }
+
+  async getActiveHdcStatus(bookingId: string): Promise<HdcStatus | null> {
+    const hdcLicence = await this.prisonApiClient.getLatestHdcStatus(bookingId)
+    if (!hdcLicence) return null
+
+    const hdcBookingId = hdcLicence.bookingId.toString()
+    if (hdcBookingId !== bookingId) {
+      throw new Error('BookingId for HDC licence does not match submitted BookingId')
+    }
+
+    return {
+      approvalStatus: hdcLicence.approvalStatus,
+      checksPassed: hdcLicence?.passed,
+      bookingId: hdcBookingId,
+    }
   }
 
   async getHdcStatuses(offenders: Prisoner[], user?: User): Promise<HdcStatus[]> {
