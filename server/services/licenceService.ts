@@ -324,6 +324,7 @@ export default class LicenceService {
       LicenceStatus.ACTIVE.valueOf(),
       LicenceStatus.APPROVED.valueOf(),
       LicenceStatus.SUBMITTED.valueOf(),
+      LicenceStatus.IN_PROGRESS.valueOf(),
     ]
     const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
     return this.licenceApiClient.matchLicences(

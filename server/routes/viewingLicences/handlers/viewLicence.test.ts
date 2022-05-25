@@ -67,13 +67,13 @@ describe('Route - view and approve a licence', () => {
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
 
-    it('should not render view when status is IN_PROGRESS', async () => {
+    it('should not render view when status is NOT_STARTED', async () => {
       res = {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
           user: { username, deliusStaffIdentifier: 999 },
-          licence: { ...licence, statusCode: LicenceStatus.IN_PROGRESS },
+          licence: { ...licence, statusCode: LicenceStatus.NOT_STARTED },
         },
       } as unknown as Response
 
