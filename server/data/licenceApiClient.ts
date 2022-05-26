@@ -162,6 +162,10 @@ export default class LicenceApiClient extends RestClient {
     await this.post({ path: `/licence/activate-licences`, data: licenceIds })
   }
 
+  async batchInActivateLicences(licenceIds: number[]): Promise<void> {
+    await this.post({ path: `/licence/inactivate-licences`, data: licenceIds })
+  }
+
   async uploadExclusionZoneFile(
     licenceId: string,
     conditionId: string,

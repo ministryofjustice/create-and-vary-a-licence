@@ -98,6 +98,11 @@ export default class PrisonerService {
     )
   }
 
+  async hdcLicenceIsApproved(bookingId: string): Promise<boolean> {
+    const hdcLicence = await this.getActiveHdcStatus(bookingId)
+    return !!hdcLicence && hdcLicence.approvalStatus === 'APPROVED'
+  }
+
   async searchPrisonersByReleaseDate(
     earliestReleaseDate: Moment,
     latestReleaseDate: Moment,

@@ -1,6 +1,7 @@
 import { Readable } from 'stream'
 import fs from 'fs'
 import moment from 'moment'
+import _ from 'lodash'
 import {
   AdditionalCondition,
   AdditionalConditionsRequest,
@@ -304,6 +305,15 @@ export default class LicenceService {
     return this.licenceApiClient.matchLicences(statuses, null, null, nomisIds, null, null, null, user)
   }
 
+  async getLatestLicenceByNomisIdsAndStatus(
+    nomisIds: string[],
+    statuses: LicenceStatus[],
+    user?: User
+  ): Promise<LicenceSummary | null | undefined> {
+    const licences = await this.licenceApiClient.matchLicences(statuses, null, null, nomisIds, null, null, null, user)
+    return _.head(licences)
+  }
+
   async getLicencesForApproval(user: User): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.SUBMITTED.valueOf()]
     const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
@@ -503,7 +513,7 @@ export default class LicenceService {
 
   private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {
     return licences.map(licence => {
-      const { title, eventType } = this.getTimelineEventType(licence.variationOf, licence.statusCode)
+      const { title, eventType } = LicenceService.getTimelineEventType(licence.variationOf, licence.statusCode)
       return new TimelineEvent(
         eventType,
         title,
@@ -515,7 +525,7 @@ export default class LicenceService {
     })
   }
 
-  private getTimelineEventType(varyOf: number, status: string): { eventType: TimelineEventType; title: string } {
+  private static getTimelineEventType(varyOf: number, status: string): { eventType: TimelineEventType; title: string } {
     switch (status) {
       case LicenceStatus.VARIATION_IN_PROGRESS:
       case LicenceStatus.VARIATION_REJECTED:
