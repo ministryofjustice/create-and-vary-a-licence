@@ -336,7 +336,7 @@ export default {
     })
   },
 
-  stubGetLicencesForOffender: (options: { nomisId: string; status: string }): SuperAgentRequest => {
+  stubGetLicencesForOffender: (options: { nomisId: string; status: string; bookingId: number }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -356,14 +356,14 @@ export default {
             licenceType: 'AP',
             actualReleaseDate: '23/03/2022',
             comUsername: 'jsmith',
-            bookingId: 12345,
+            bookingId: options.bookingId,
           },
         ],
       },
     })
   },
 
-  stubGetHdcLicencesForOffender: (options: { bookingId: string; status: string }): SuperAgentRequest => {
+  stubGetHdcLicencesForOffender: (options: { bookingId: number; status: string }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
