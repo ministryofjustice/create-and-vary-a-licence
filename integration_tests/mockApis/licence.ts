@@ -356,6 +356,7 @@ export default {
             licenceType: 'AP',
             actualReleaseDate: '23/03/2022',
             comUsername: 'jsmith',
+            bookingId: 12345,
           },
         ],
       },
@@ -366,7 +367,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: '/api/offender-sentences/booking/(\\d)/home-detention-curfews/latest',
+        urlPathPattern: '/api/offender-sentences/booking/(\\d)*/home-detention-curfews/latest',
       },
       response: {
         status: 200,

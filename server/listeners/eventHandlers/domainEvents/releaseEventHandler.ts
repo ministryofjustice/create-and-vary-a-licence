@@ -17,14 +17,15 @@ export default class ReleaseEventHandler {
 
     if (!licence) return
 
+    const licenceId = licence.licenceId.toString()
+
     // licence is not approved and the offender has been released, so can no longer be a valid licence
     // mark Licence as inactive if an approved HDC licence already exists for the offender
     const newStatus =
-      licence.licenceStatus !== LicenceStatus.APPROVED ||
-      (await this.prisonerService.hdcLicenceIsApproved(licence.bookingId))
+      licence.licenceStatus !== LicenceStatus.APPROVED || (await this.prisonerService.hdcLicenceIsApproved(licenceId))
         ? LicenceStatus.INACTIVE
         : LicenceStatus.ACTIVE
 
-    await this.licenceService.updateStatus(licence.licenceId.toString(), newStatus)
+    await this.licenceService.updateStatus(licenceId, newStatus)
   }
 }

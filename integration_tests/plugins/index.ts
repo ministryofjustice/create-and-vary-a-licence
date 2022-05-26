@@ -57,6 +57,7 @@ export default (on: (string, Record) => void): void => {
     stubMatchLicenceEvents: licence.stubMatchLicenceEvents,
     stubApproveVariation: licence.stubApproveVariation,
     stubReferVariation: licence.stubReferVariation,
+    stubGetHdcLicencesForOffender: licence.stubGetHdcLicencesForOffender,
 
     stubGetPduHeads: community.stubGetPduHeads,
     stubGetStaffDetails: community.stubGetStaffDetails,

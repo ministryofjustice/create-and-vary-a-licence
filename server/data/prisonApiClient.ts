@@ -55,7 +55,7 @@ export default class PrisonApiClient extends RestClient {
       {
         path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,
       },
-      { username: user.username }
+      { username: user?.username }
     )) as Promise<HomeDetentionCurfew>
   }
 
