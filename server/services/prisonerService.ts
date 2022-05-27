@@ -71,9 +71,6 @@ export default class PrisonerService {
     if (!hdcLicence) return null
 
     const hdcBookingId = hdcLicence.bookingId.toString()
-    if (hdcBookingId !== bookingId) {
-      throw new Error('BookingId for HDC licence does not match submitted BookingId')
-    }
 
     return {
       approvalStatus: hdcLicence.approvalStatus,
