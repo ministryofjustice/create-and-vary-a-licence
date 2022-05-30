@@ -91,7 +91,6 @@ export default class CaseloadService {
             LicenceStatus.NOT_IN_PILOT,
             LicenceStatus.OOS_RECALL,
             LicenceStatus.OOS_BOTUS,
-            LicenceStatus.IN_PROGRESS,
           ].some(status => c.licences.find(l => l.status === status))
         )
       })
