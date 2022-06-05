@@ -22,7 +22,7 @@ const pollLicencesToUpdate = async (): Promise<LicencesToUpdate> => {
   const nomisIds = approvedLicences.map(licence => licence.nomisId)
   const prisonersWithApprovedLicences = await getPrisoners(nomisIds)
   const bookingIds = prisonersWithApprovedLicences.map(prisoner => parseInt(prisoner.bookingId, 10))
-  const hdcStatusList = await getHdcStatues(bookingIds)
+  const hdcStatusList = await getHdcStatuses(bookingIds)
 
   /*
    * get list of offenders who have been released from prison ('INACTIVE' status from Nomis indicates they are released)
@@ -62,7 +62,7 @@ const getApprovedLicences = async (): Promise<LicenceSummary[]> => {
   return new LicenceApiClient().matchLicences([LicenceStatus.APPROVED])
 }
 
-const getHdcStatues = async (bookingIds: number[]): Promise<Map<number, string>> => {
+const getHdcStatuses = async (bookingIds: number[]): Promise<Map<number, string>> => {
   const hdcList = new Map<number, string>()
 
   if (bookingIds.length === 0) {
