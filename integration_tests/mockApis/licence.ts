@@ -336,7 +336,7 @@ export default {
     })
   },
 
-  stubGetLicencesForOffender: (options: { nomisId: string; status: string }): SuperAgentRequest => {
+  stubGetLicencesForOffender: (options: { nomisId: string; status: string; bookingId: number }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -356,8 +356,30 @@ export default {
             licenceType: 'AP',
             actualReleaseDate: '23/03/2022',
             comUsername: 'jsmith',
+            bookingId: options.bookingId,
           },
         ],
+      },
+    })
+  },
+
+  stubGetHdcLicencesForOffender: (options: { bookingId: number; status: string }): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/offender-sentences/booking/(\\d)*/home-detention-curfews/latest',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          approvalStatus: options.status,
+          approvalStatusDate: null,
+          bookingId: options.bookingId,
+          checksPassedDate: null,
+          passed: true,
+          refusedReason: '',
+        },
       },
     })
   },

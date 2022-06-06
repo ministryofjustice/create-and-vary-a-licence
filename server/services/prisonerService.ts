@@ -42,7 +42,7 @@ export default class PrisonerService {
     return this.prisonApiClient.getPrisonInformation(prisonId, user)
   }
 
-  async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria, user: User): Promise<Prisoner[]> {
+  async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria, user?: User): Promise<Prisoner[]> {
     return this.prisonerSearchApiClient.searchPrisoners(prisonerSearchCriteria, user)
   }
 
@@ -66,6 +66,19 @@ export default class PrisonerService {
     return this.prisonerSearchApiClient.searchPrisonersByBookingIds(prisonerSearchCriteria, user)
   }
 
+  async getActiveHdcStatus(bookingId: string): Promise<HdcStatus | null> {
+    const hdcLicence = await this.prisonApiClient.getLatestHdcStatus(bookingId)
+    if (!hdcLicence) return null
+
+    const hdcBookingId = hdcLicence.bookingId.toString()
+
+    return {
+      approvalStatus: hdcLicence.approvalStatus,
+      checksPassed: hdcLicence?.passed,
+      bookingId: hdcBookingId,
+    }
+  }
+
   async getHdcStatuses(offenders: Prisoner[], user?: User): Promise<HdcStatus[]> {
     const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
     if (bookingIds.length === 0) return []
@@ -80,6 +93,11 @@ export default class PrisonerService {
           checksPassed: h?.passed || false,
         }
     )
+  }
+
+  async hdcLicenceIsApproved(bookingId: string): Promise<boolean> {
+    const hdcLicence = await this.getActiveHdcStatus(bookingId)
+    return !!hdcLicence && hdcLicence.approvalStatus === 'APPROVED'
   }
 
   async searchPrisonersByReleaseDate(

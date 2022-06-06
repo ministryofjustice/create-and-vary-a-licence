@@ -6,7 +6,7 @@ import ReleaseEventHandler from './releaseEventHandler'
 import TransferredEventHandler from './transferredEventHandler'
 
 export default function buildEventHandler({ licenceService, prisonerService }: Services) {
-  const releaseEventHandler = new ReleaseEventHandler(licenceService)
+  const releaseEventHandler = new ReleaseEventHandler(licenceService, prisonerService)
   const transferredEventHandler = new TransferredEventHandler(licenceService, prisonerService)
 
   return async (messages: SQSMessage[]) => {

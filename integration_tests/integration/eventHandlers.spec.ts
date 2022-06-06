@@ -7,7 +7,8 @@ context('Event handlers', () => {
 
   describe('Domain events', () => {
     it('should listen to the released event and call endpoint to update licence status to ACTIVE', () => {
-      cy.task('stubGetLicencesForOffender', { nomisId: 'A7774DY', status: 'APPROVED' })
+      cy.task('stubGetLicencesForOffender', { nomisId: 'A7774DY', status: 'APPROVED', bookingId: 12345 })
+      cy.task('stubGetHdcLicencesForOffender', { status: 'REJECTED', bookingId: 12345 })
       cy.task('stubUpdateLicenceStatus')
 
       cy.task(

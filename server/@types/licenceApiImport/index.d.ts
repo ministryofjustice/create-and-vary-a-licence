@@ -721,6 +721,11 @@ export interface components {
        * @example jsmith
        */
       comUsername?: string
+      /**
+       * @description The bookingId associated with the licence
+       * @example 773722
+       */
+      bookingId?: string
     }
     /** @description Request object for creating a new licence */
     CreateLicenceRequest: {
