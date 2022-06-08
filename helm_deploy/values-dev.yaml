@@ -33,9 +33,6 @@ generic-service:
 
     LICENCE_WATERMARK: "true"
 
-  # Switches off the allow list in the DEV env only.
-  allowlist: null
-
 gotenberg:
   replicaCount: 1
 
