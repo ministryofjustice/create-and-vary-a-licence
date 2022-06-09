@@ -100,10 +100,15 @@
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <div class="govuk-button-group">
                     {% if isInProgress and not licence.isVariation %}
+                        {% if closeToRelease %}
                         {{ govukButton({
+                            text: "Continue",
+                            attributes: { 'data-qa': 'confirm-licence-conditions' }
+                        }) }} {% else %}
+                            {{ govukButton({
                             text: "Send to prison for approval",
                             attributes: { 'data-qa': 'send-licence-conditions' }
-                        }) }}
+                        }) }} {% endif %}
                     {% endif %}
 
                     {% if canChooseToEdit %}

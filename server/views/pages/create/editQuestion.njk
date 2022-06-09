@@ -10,8 +10,18 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">Are you sure you want to edit this licence?</h1>
-            <div class="govuk-hint govuk-!-margin-bottom-6">If you select ‘yes’, the licence will be marked as ‘in progress’. This means you will need to resend it for approval even if no changes are made.</div>
+            {% if closeToRelease %}
+                <h1 class="govuk-heading-l">Are you sure you want to edit this licence within 2 days of release?</h1>
+                <div class="govuk-hint govuk-!-margin-bottom-6">If you select ‘yes’, the licence will need to be sent for
+                    re-approval even if no changes are made. You must also contact the prison OMU directly to ensure they
+                    print the correct licence.
+                </div>
+            {% else %}
+                <h1 class="govuk-heading-l">Are you sure you want to edit this licence?</h1>
+                <div class="govuk-hint govuk-!-margin-bottom-6">If you select ‘yes’, the licence will be marked as ‘in
+                    progress’. This means you will need to resend it for approval even if no changes are made.
+                </div>
+            {% endif %}
         </div>
     </div>
     <form method="POST">

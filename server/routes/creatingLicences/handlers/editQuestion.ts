@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import YesOrNo from '../../../enumeration/yesOrNo'
+import { inflightLicenceIsApproachingRelease } from '../../../utils/utils'
 
 export default class EditQuestionRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -12,6 +13,7 @@ export default class EditQuestionRoutes {
     if (![LicenceStatus.APPROVED, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED].includes(statusCode)) {
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     }
+    res.locals.closeToRelease = inflightLicenceIsApproachingRelease(res.locals.licence)
     return res.render('pages/create/editQuestion')
   }
 
