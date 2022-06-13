@@ -40,7 +40,7 @@ export default class CheckAnswersRoutes {
       return res.redirect('back')
     }
 
-    if (inflightLicenceIsApproachingRelease(res.locals.licence)) {
+    if (inflightLicenceIsApproachingRelease(res.locals.licence) && req.body?.lateVariationConfirmation !== 'yes') {
       return res.render('pages/create/confirmChangeCloseToRelease')
     }
 

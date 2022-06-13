@@ -155,12 +155,9 @@ const isBankHolidayOrWeekend = (date: Moment, bankHolidays: Holiday[]) => {
   )
 }
 
-const inflightLicenceIsApproachingRelease = (licence: Licence) => {
-  return (
-    [LicenceStatus.APPROVED, LicenceStatus.SUBMITTED].includes(licence.statusCode as LicenceStatus) &&
-    moment(licence.conditionalReleaseDate).diff(moment(), 'days') <= 2
-  )
-}
+const inflightLicenceIsApproachingRelease = (licence: Licence) =>
+  [LicenceStatus.APPROVED, LicenceStatus.SUBMITTED].includes(licence.statusCode as LicenceStatus) &&
+  moment(licence.conditionalReleaseDate).diff(moment(), 'days') <= 2
 
 export {
   convertToTitleCase,
