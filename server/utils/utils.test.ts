@@ -16,12 +16,15 @@ import {
   objectIsEmpty,
   hasAuthSource,
   isBankHolidayOrWeekend,
+  licenceIsTwoDaysToRelease,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/creatingLicences/types/address'
+import { Licence } from '../@types/licenceApiClientTypes'
+import LicenceStatus from '../enumeration/licenceStatus'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -330,5 +333,29 @@ describe('Check bank holiday or weekend', () => {
         },
       ])
     ).toBe(true)
+  })
+})
+
+describe('Check licence is close to release', () => {
+  beforeEach(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => {
+      return new Date(2021, 4, 1, 0, 0, 0).getTime()
+    })
+  })
+
+  it('should return false if CRD is greater than 2 days from now', () => {
+    const licence = {
+      conditionalReleaseDate: '04/05/2021',
+      statusCode: LicenceStatus.APPROVED,
+    } as Licence
+    expect(licenceIsTwoDaysToRelease(licence)).toBeFalsy()
+  })
+
+  it('should return true if CRD is 2 days or less from now', () => {
+    const licence = {
+      conditionalReleaseDate: '03/05/2021',
+      statusCode: LicenceStatus.APPROVED,
+    } as Licence
+    expect(licenceIsTwoDaysToRelease(licence)).toBeTruthy()
   })
 })

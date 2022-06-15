@@ -38,7 +38,6 @@ export default class CheckAnswersRoutes {
     }
 
     await this.licenceService.submitLicence(licenceId, user)
-
     return res.redirect(`/licence/create/id/${licenceId}/confirmation`)
   }
 

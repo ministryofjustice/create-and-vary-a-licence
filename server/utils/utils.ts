@@ -5,6 +5,7 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import Address from '../routes/creatingLicences/types/address'
+import { Licence } from '../@types/licenceApiClientTypes'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -153,6 +154,9 @@ const isBankHolidayOrWeekend = (date: Moment, bankHolidays: Holiday[]) => {
   )
 }
 
+const licenceIsTwoDaysToRelease = (licence: Licence) =>
+  moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
+
 export {
   convertToTitleCase,
   hasRole,
@@ -172,4 +176,5 @@ export {
   objectIsEmpty,
   formatAddress,
   isBankHolidayOrWeekend,
+  licenceIsTwoDaysToRelease,
 }
