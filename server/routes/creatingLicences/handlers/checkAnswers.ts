@@ -5,7 +5,6 @@ import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
-import { inflightLicenceIsApproachingRelease } from '../../../utils/utils'
 
 export default class CheckAnswersRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -25,8 +24,6 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    res.locals.closeToRelease = inflightLicenceIsApproachingRelease(res.locals.licence)
-
     res.render('pages/create/checkAnswers')
   }
 
@@ -38,10 +35,6 @@ export default class CheckAnswersRoutes {
     if (errors.length > 0) {
       req.flash('validationErrors', JSON.stringify(errors))
       return res.redirect('back')
-    }
-
-    if (inflightLicenceIsApproachingRelease(res.locals.licence) && req.body?.lateVariationConfirmation !== 'yes') {
-      return res.render('pages/create/confirmChangeCloseToRelease')
     }
 
     await this.licenceService.submitLicence(licenceId, user)

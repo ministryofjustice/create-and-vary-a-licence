@@ -1,6 +1,5 @@
 import { isDefined } from 'class-validator'
 import moment from 'moment'
-import { forEach } from 'lodash'
 import {
   addressObjectToString,
   convertDateFormat,
@@ -17,7 +16,7 @@ import {
   objectIsEmpty,
   hasAuthSource,
   isBankHolidayOrWeekend,
-  inflightLicenceIsApproachingRelease,
+  licenceIsTwoDaysToRelease,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -338,60 +337,25 @@ describe('Check bank holiday or weekend', () => {
 })
 
 describe('Check licence is close to release', () => {
-  const invalidLicences = [
-    {
-      conditionalReleaseDate: '2021-05-03',
-      statusCode: LicenceStatus.IN_PROGRESS,
-    } as Licence,
-    {
-      conditionalReleaseDate: '2021-05-03',
-      statusCode: LicenceStatus.ACTIVE,
-    } as Licence,
-    {
-      conditionalReleaseDate: '2021-05-03',
-      statusCode: LicenceStatus.INACTIVE,
-    } as Licence,
-    {
-      conditionalReleaseDate: '2021-05-02',
-      statusCode: LicenceStatus.REJECTED,
-    } as Licence,
-  ]
-
   beforeEach(() => {
     jest.spyOn(Date, 'now').mockImplementation(() => {
       return new Date(2021, 4, 1, 0, 0, 0).getTime()
     })
   })
 
-  it('should return false if CRD is greater than 2 days from now for APPROVED or SUBMITTED licence', () => {
+  it('should return false if CRD is greater than 2 days from now', () => {
     const licence = {
       conditionalReleaseDate: '2021-05-04',
       statusCode: LicenceStatus.APPROVED,
     } as Licence
-    expect(inflightLicenceIsApproachingRelease(licence)).toBeFalsy()
-    licence.statusCode = LicenceStatus.SUBMITTED
-    expect(inflightLicenceIsApproachingRelease(licence)).toBeFalsy()
+    expect(licenceIsTwoDaysToRelease(licence)).toBeFalsy()
   })
 
-  it('should return true if CRD is 2 days or less from now for APPROVED Licence', () => {
+  it('should return true if CRD is 2 days or less from now', () => {
     const licence = {
       conditionalReleaseDate: '2021-05-03',
       statusCode: LicenceStatus.APPROVED,
     } as Licence
-    expect(inflightLicenceIsApproachingRelease(licence)).toBeTruthy()
-  })
-
-  it('should return true if CRD is 2 days or less from now for SUBMITTED Licence', () => {
-    const licence = {
-      conditionalReleaseDate: '2021-05-03',
-      statusCode: LicenceStatus.SUBMITTED,
-    } as Licence
-    expect(inflightLicenceIsApproachingRelease(licence)).toBeTruthy()
-  })
-
-  it('should return false if CRD is 2 days for licence NOT SUBMITTED or APPROVED', () => {
-    forEach(invalidLicences, l => {
-      expect(inflightLicenceIsApproachingRelease(l)).toBeFalsy()
-    })
+    expect(licenceIsTwoDaysToRelease(licence)).toBeTruthy()
   })
 })

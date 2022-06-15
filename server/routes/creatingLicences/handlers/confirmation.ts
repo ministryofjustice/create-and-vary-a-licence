@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import LicenceType from '../../../enumeration/licenceType'
-import { inflightLicenceIsApproachingRelease } from '../../../utils/utils'
 
 export default class ConfirmationRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -23,9 +22,6 @@ export default class ConfirmationRoutes {
         confirmationMessage = `We have sent the post sentence supervision order to ${licence.prisonDescription} for approval.`
         break
     }
-
-    if (inflightLicenceIsApproachingRelease(licence))
-      confirmationMessage += ` You must also contact the OMU directly about the changes you have made.`
 
     res.render('pages/create/confirmation', { titleText, confirmationMessage })
   }

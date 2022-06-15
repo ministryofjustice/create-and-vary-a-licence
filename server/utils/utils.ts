@@ -6,7 +6,6 @@ import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import Address from '../routes/creatingLicences/types/address'
 import { Licence } from '../@types/licenceApiClientTypes'
-import LicenceStatus from '../enumeration/licenceStatus'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -155,9 +154,8 @@ const isBankHolidayOrWeekend = (date: Moment, bankHolidays: Holiday[]) => {
   )
 }
 
-const inflightLicenceIsApproachingRelease = (licence: Licence) =>
-  [LicenceStatus.APPROVED, LicenceStatus.SUBMITTED].includes(licence.statusCode as LicenceStatus) &&
-  moment(licence.conditionalReleaseDate).diff(moment(), 'days') <= 2
+const licenceIsTwoDaysToRelease = (licence: Licence) =>
+  moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
 
 export {
   convertToTitleCase,
@@ -178,5 +176,5 @@ export {
   objectIsEmpty,
   formatAddress,
   isBankHolidayOrWeekend,
-  inflightLicenceIsApproachingRelease,
+  licenceIsTwoDaysToRelease,
 }
