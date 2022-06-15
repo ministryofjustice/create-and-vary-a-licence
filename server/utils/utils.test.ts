@@ -345,7 +345,7 @@ describe('Check licence is close to release', () => {
 
   it('should return false if CRD is greater than 2 days from now', () => {
     const licence = {
-      conditionalReleaseDate: '2021-05-04',
+      conditionalReleaseDate: '04/05/2021',
       statusCode: LicenceStatus.APPROVED,
     } as Licence
     expect(licenceIsTwoDaysToRelease(licence)).toBeFalsy()
@@ -353,7 +353,7 @@ describe('Check licence is close to release', () => {
 
   it('should return true if CRD is 2 days or less from now', () => {
     const licence = {
-      conditionalReleaseDate: '2021-05-03',
+      conditionalReleaseDate: '03/05/2021',
       statusCode: LicenceStatus.APPROVED,
     } as Licence
     expect(licenceIsTwoDaysToRelease(licence)).toBeTruthy()
