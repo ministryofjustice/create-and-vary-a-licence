@@ -75,6 +75,9 @@ describe('Caseload Service', () => {
   })
 
   it('filters offenders who are ineligible for a licence', async () => {
+    const elevenDaysFromNow = moment().add(11, 'days').format('YYYY-MM-DD')
+    const tenDaysFromNow = moment().add(10, 'days').format('YYYY-MM-DD')
+    const nineDaysFromNow = moment().add(9, 'days').format('YYYY-MM-DD')
     communityService.getManagedOffenders.mockResolvedValue([
       { offenderCrn: 'X12348' },
       { offenderCrn: 'X12349' },
@@ -98,49 +101,49 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234R', crn: 'X12356' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
-      { prisonerNumber: 'AB1234F', paroleEligibilityDate: '2022-06-20' } as Prisoner,
+      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234F', paroleEligibilityDate: tenDaysFromNow } as Prisoner,
       { prisonerNumber: 'AB1234G', legalStatus: 'DEAD' } as Prisoner,
       { prisonerNumber: 'AB1234H', indeterminateSentence: true } as Prisoner,
       { prisonerNumber: 'AB1234I' } as Prisoner,
-      { prisonerNumber: 'AB1234J', conditionalReleaseDate: '2022-03-20' } as Prisoner,
-      { prisonerNumber: 'AB1234K', conditionalReleaseDate: '2022-06-20', bookingId: '123' } as Prisoner,
-      { prisonerNumber: 'AB1234L', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234J', conditionalReleaseDate: tenDaysFromNow } as Prisoner,
+      { prisonerNumber: 'AB1234K', conditionalReleaseDate: tenDaysFromNow, bookingId: '123' } as Prisoner,
+      { prisonerNumber: 'AB1234L', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
       // This case tests that recalls are overridden if the PRRD < the conditionalReleaseDate - so NOT_STARTED
       {
         prisonerNumber: 'AB1234M',
-        conditionalReleaseDate: '2022-06-20',
-        postRecallReleaseDate: '2022-06-19',
+        conditionalReleaseDate: tenDaysFromNow,
+        postRecallReleaseDate: nineDaysFromNow,
         status: 'ACTIVE IN',
         recall: true,
       } as Prisoner,
       // This case tests that recalls are NOT overridden if the PRRD > the conditionalReleaseDate - so OOS_RECALL
       {
         prisonerNumber: 'AB1234N',
-        conditionalReleaseDate: '2022-06-20',
-        postRecallReleaseDate: '2022-06-21',
+        conditionalReleaseDate: tenDaysFromNow,
+        postRecallReleaseDate: elevenDaysFromNow,
         status: 'ACTIVE IN',
         recall: true,
       } as Prisoner,
       // This case tests that recalls are overridden if the PRRD is equal to the conditionalReleaseDate - so NOT_STARTED
       {
         prisonerNumber: 'AB1234P',
-        conditionalReleaseDate: '2022-06-19',
-        postRecallReleaseDate: '2022-06-19',
+        conditionalReleaseDate: nineDaysFromNow,
+        postRecallReleaseDate: nineDaysFromNow,
         status: 'ACTIVE IN',
         recall: true,
       } as Prisoner,
       // This case tests that recalls are overridden if no PRRD exists and there is only the conditionalReleaseDate - so NOT_STARTED
       {
         prisonerNumber: 'AB1234Q',
-        conditionalReleaseDate: '2022-06-19',
+        conditionalReleaseDate: nineDaysFromNow,
         status: 'ACTIVE IN',
         recall: true,
       } as Prisoner,
       // This case tests that the case is included when the status is INACTIVE TRN
       {
         prisonerNumber: 'AB1234R',
-        conditionalReleaseDate: '2022-06-19',
+        conditionalReleaseDate: nineDaysFromNow,
         status: 'INACTIVE TRN',
       } as Prisoner,
     ])
@@ -159,7 +162,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -174,7 +177,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234L',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -193,8 +196,8 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234M',
-          conditionalReleaseDate: '2022-06-20',
-          postRecallReleaseDate: '2022-06-19',
+          conditionalReleaseDate: tenDaysFromNow,
+          postRecallReleaseDate: nineDaysFromNow,
           status: 'ACTIVE IN',
           recall: true,
         },
@@ -211,8 +214,8 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234N',
-          conditionalReleaseDate: '2022-06-20',
-          postRecallReleaseDate: '2022-06-21',
+          conditionalReleaseDate: tenDaysFromNow,
+          postRecallReleaseDate: elevenDaysFromNow,
           status: 'ACTIVE IN',
           recall: true,
         },
@@ -229,8 +232,8 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234P',
-          conditionalReleaseDate: '2022-06-19',
-          postRecallReleaseDate: '2022-06-19',
+          conditionalReleaseDate: nineDaysFromNow,
+          postRecallReleaseDate: nineDaysFromNow,
           status: 'ACTIVE IN',
           recall: true,
         },
@@ -247,7 +250,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234Q',
-          conditionalReleaseDate: '2022-06-19',
+          conditionalReleaseDate: nineDaysFromNow,
           status: 'ACTIVE IN',
           recall: true,
         },
@@ -273,7 +276,7 @@ describe('Caseload Service', () => {
           },
         ],
         nomisRecord: {
-          conditionalReleaseDate: '2022-06-19',
+          conditionalReleaseDate: nineDaysFromNow,
           prisonerNumber: 'AB1234R',
           status: 'INACTIVE TRN',
         },
