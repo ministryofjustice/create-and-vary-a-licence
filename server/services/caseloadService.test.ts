@@ -15,6 +15,9 @@ jest.mock('./communityService')
 jest.mock('./licenceService')
 
 describe('Caseload Service', () => {
+  const elevenDaysFromNow = moment().add(11, 'days').format('YYYY-MM-DD')
+  const tenDaysFromNow = moment().add(10, 'days').format('YYYY-MM-DD')
+  const nineDaysFromNow = moment().add(9, 'days').format('YYYY-MM-DD')
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
@@ -51,7 +54,7 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
     ])
 
     const result = await serviceUnderTest.getStaffCreateCaseload(user)
@@ -62,7 +65,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -75,9 +78,6 @@ describe('Caseload Service', () => {
   })
 
   it('filters offenders who are ineligible for a licence', async () => {
-    const elevenDaysFromNow = moment().add(11, 'days').format('YYYY-MM-DD')
-    const tenDaysFromNow = moment().add(10, 'days').format('YYYY-MM-DD')
-    const nineDaysFromNow = moment().add(9, 'days').format('YYYY-MM-DD')
     communityService.getManagedOffenders.mockResolvedValue([
       { offenderCrn: 'X12348' },
       { offenderCrn: 'X12349' },
@@ -300,18 +300,18 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234I', crn: 'X12352' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
-      { prisonerNumber: 'AB1234F', conditionalReleaseDate: '2022-06-20', status: 'INACTIVE OUT' } as Prisoner,
-      { prisonerNumber: 'AB1234G', conditionalReleaseDate: '2022-06-20' } as Prisoner,
+      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234F', conditionalReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
+      { prisonerNumber: 'AB1234G', conditionalReleaseDate: tenDaysFromNow } as Prisoner,
       {
         prisonerNumber: 'AB1234H',
-        conditionalReleaseDate: '2022-06-20',
+        conditionalReleaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
         topupSupervisionExpiryDate: '2023-06-22',
       } as Prisoner,
       {
         prisonerNumber: 'AB1234I',
-        conditionalReleaseDate: '2022-06-20',
+        conditionalReleaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
         topupSupervisionExpiryDate: '2023-06-22',
         licenceExpiryDate: '2022-12-20',
@@ -346,7 +346,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -365,7 +365,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234H',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -380,7 +380,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234I',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -414,13 +414,13 @@ describe('Caseload Service', () => {
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
       {
         prisonerNumber: 'AB1234E',
-        conditionalReleaseDate: '2022-06-20',
+        conditionalReleaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
         prisonId: 'MHI',
       } as Prisoner,
       {
         prisonerNumber: 'AB1234F',
-        conditionalReleaseDate: '2022-06-20',
+        conditionalReleaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
         prisonId: 'CFI',
       } as Prisoner,
@@ -444,7 +444,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234F',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -491,8 +491,8 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
-      { prisonerNumber: 'AB1234F', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234F', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
     ])
 
     const result = await serviceUnderTest.getTeamCreateCaseload(user)
@@ -506,7 +506,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -525,7 +525,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234F',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -555,16 +555,16 @@ describe('Caseload Service', () => {
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
       {
         prisonerNumber: 'AB1234E',
-        conditionalReleaseDate: '2022-06-20',
-        postRecallReleaseDate: '2022-06-20',
-        releaseDate: '2022-06-20',
+        conditionalReleaseDate: tenDaysFromNow,
+        postRecallReleaseDate: tenDaysFromNow,
+        releaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
         recall: true,
       } as Prisoner,
       {
         prisonerNumber: 'AB1234F',
-        conditionalReleaseDate: '2022-06-20',
-        releaseDate: '2022-06-20',
+        conditionalReleaseDate: tenDaysFromNow,
+        releaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
         imprisonmentStatus: 'BOTUS',
         recall: true,
@@ -583,9 +583,9 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          releaseDate: '2022-06-20',
-          conditionalReleaseDate: '2022-06-20',
-          postRecallReleaseDate: '2022-06-20',
+          releaseDate: tenDaysFromNow,
+          conditionalReleaseDate: tenDaysFromNow,
+          postRecallReleaseDate: tenDaysFromNow,
           recall: true,
         },
         licences: [
@@ -605,8 +605,8 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234F',
-          releaseDate: '2022-06-20',
-          conditionalReleaseDate: '2022-06-20',
+          releaseDate: tenDaysFromNow,
+          conditionalReleaseDate: tenDaysFromNow,
           imprisonmentStatus: 'BOTUS',
         },
         licences: [
@@ -631,7 +631,7 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', confirmedReleaseDate: '2022-06-20', status: 'INACTIVE OUT' } as Prisoner,
+      { prisonerNumber: 'AB1234E', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
     ])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
@@ -662,7 +662,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          confirmedReleaseDate: '2022-06-20',
+          confirmedReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -692,8 +692,8 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', confirmedReleaseDate: '2022-06-20', status: 'INACTIVE OUT' } as Prisoner,
-      { prisonerNumber: 'AB1234F', confirmedReleaseDate: '2022-06-20', status: 'INACTIVE OUT' } as Prisoner,
+      { prisonerNumber: 'AB1234E', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
+      { prisonerNumber: 'AB1234F', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
     ])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
@@ -740,7 +740,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          confirmedReleaseDate: '2022-06-20',
+          confirmedReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -761,7 +761,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234F',
-          confirmedReleaseDate: '2022-06-20',
+          confirmedReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -799,7 +799,7 @@ describe('Caseload Service', () => {
     prisonerService.searchPrisonersByReleaseDate.mockResolvedValueOnce([
       {
         prisonerNumber: 'AB1234F',
-        conditionalReleaseDate: '2022-06-20',
+        conditionalReleaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
       } as Prisoner,
     ])
@@ -826,12 +826,12 @@ describe('Caseload Service', () => {
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
       {
         prisonerNumber: 'AB1234D',
-        conditionalReleaseDate: '2022-06-20',
+        conditionalReleaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
       } as Prisoner,
       {
         prisonerNumber: 'AB1234E',
-        conditionalReleaseDate: '2022-06-20',
+        conditionalReleaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
       } as Prisoner,
     ])
@@ -867,7 +867,7 @@ describe('Caseload Service', () => {
       {
         nomisRecord: {
           prisonerNumber: 'AB1234D',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         deliusRecord: {
           otherIds: {
@@ -889,7 +889,7 @@ describe('Caseload Service', () => {
       {
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         deliusRecord: {
           otherIds: {
@@ -913,7 +913,7 @@ describe('Caseload Service', () => {
       {
         nomisRecord: {
           prisonerNumber: 'AB1234F',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         deliusRecord: {
           otherIds: {
@@ -952,7 +952,7 @@ describe('Caseload Service', () => {
       } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: '2022-06-20', status: 'ACTIVE IN' } as Prisoner,
+      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
       {
@@ -977,7 +977,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          conditionalReleaseDate: '2022-06-20',
+          conditionalReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
@@ -1012,7 +1012,7 @@ describe('Caseload Service', () => {
       } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', confirmedReleaseDate: '2022-06-20', status: 'INACTIVE OUT' } as Prisoner,
+      { prisonerNumber: 'AB1234E', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
       {
@@ -1037,7 +1037,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',
-          confirmedReleaseDate: '2022-06-20',
+          confirmedReleaseDate: tenDaysFromNow,
         },
         licences: [
           {
