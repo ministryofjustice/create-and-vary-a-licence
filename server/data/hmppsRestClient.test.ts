@@ -385,7 +385,7 @@ describe('Hmpps Rest Client tests', () => {
       }
 
       expect(error).toBeDefined()
-      expect(error.message).toBe("Cannot read property 'path' of null")
+      expect(error.message).toBe("Cannot read properties of null (reading 'path')")
       expect(nock.isDone()).toBe(false)
     })
 
