@@ -91,6 +91,7 @@ generic-service:
     cloudplatform-live1-3: "35.177.252.54/32"
     hmp-parc-1: "217.161.76.162/32"
     hmp-parc-2: "217.161.76.154/32"
+    serco-external-ips: "217.22.14.0/24"
 
 gotenberg:
   nameOverride: gotenberg
