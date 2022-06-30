@@ -48,6 +48,15 @@ It finds all Approved licences and then checks whether the person in prison has 
 
 If released, the licence status is updated to Active.
 
+The job can also be run manually. Local environment variables will need to be configured against
+the environment you wish to run the script against, in this instance. 
+
+* Compile the service code `npm run build`
+* Start a local redis in docker (perhaps with `docker-compose -f docker-compose-dev.yaml up -d`)
+* Redis is required as the API clients need a local redis to cache tokens for clients.
+* Run the job wth `npm run activate-valid-licences`
+
+
 ## PromptLicenceCreation
 
 This job is scheduled within Kubernetes to run every Monday at 6am.
