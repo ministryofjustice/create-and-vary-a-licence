@@ -36,19 +36,21 @@ const pollLicencesToUpdate = async (): Promise<LicencesToUpdate> => {
     )
   })
 
+  const prisonerNumbers = prisonersForRelease.map(prisoner => prisoner.prisonerNumber)
+  const filteredLicences = approvedLicences.filter(licence => prisonerNumbers.includes(licence.nomisId))
+
   const licencesToActivate: number[] = []
   const licencesToInactivate: number[] = []
 
   /*
    * Check for an approved HDC licence. If one exists, we must inactivate the
    */
-  prisonersForRelease.forEach(prisoner => {
+  filteredLicences.forEach(prisoner => {
     const bookingId = parseInt(prisoner.bookingId, 10)
-    const prisonerNumber = parseInt(prisoner.prisonerNumber, 10)
     if (hdcStatusList.get(bookingId) === 'APPROVED') {
-      licencesToInactivate.push(prisonerNumber)
+      licencesToInactivate.push(prisoner.licenceId)
     } else {
-      licencesToActivate.push(prisonerNumber)
+      licencesToActivate.push(prisoner.licenceId)
     }
   })
 
