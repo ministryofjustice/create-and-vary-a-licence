@@ -19,19 +19,44 @@ export default class OffenderDetailRoutes {
       : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
 
+    const conditionalReleaseDate = prisonerDetail.conditionalReleaseDate
+      ? moment(prisonerDetail.conditionalReleaseDate).format('DD MMM YYYY')
+      : 'Not found'
+    const confirmedReleaseDate = prisonerDetail.confirmedReleaseDate
+      ? moment(prisonerDetail.confirmedReleaseDate).format('DD MMM YYYY')
+      : 'Not found'
+    const postRecallReleaseDate = prisonerDetail.postRecallReleaseDate
+      ? moment(prisonerDetail.postRecallReleaseDate).format('DD MMM YYYY')
+      : 'Not found'
+    const tused = prisonerDetail.topupSupervisionExpiryDate
+      ? moment(prisonerDetail.topupSupervisionExpiryDate).format('DD MMM YYYY')
+      : 'Not found'
+    const hdced = prisonerDetail.homeDetentionCurfewEligibilityDate
+      ? moment(prisonerDetail.homeDetentionCurfewEligibilityDate).format('DD MMM YYYY')
+      : 'Not found'
+    const sentenceExpiryDate = prisonerDetail.sentenceExpiryDate
+      ? moment(prisonerDetail.sentenceExpiryDate).format('DD MMM YYYY')
+      : 'Not found'
+    const licenceExpiryDate = prisonerDetail.licenceExpiryDate
+      ? moment(prisonerDetail.licenceExpiryDate).format('DD MMM YYYY')
+      : 'Not found'
+    const paroleEligibilityDate = prisonerDetail.paroleEligibilityDate
+      ? moment(prisonerDetail.paroleEligibilityDate).format('DD MMM YYYY')
+      : 'Not found'
+
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
         ...prisonerDetail,
         name: convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`),
         crn: deliusRecord?.otherIds.crn,
-        conditionalReleaseDate: moment(prisonerDetail.conditionalReleaseDate).format('DD MMM YYYY'),
-        confirmedReleaseDate: moment(prisonerDetail.confirmedReleaseDate).format('DD MMM YYYY'),
-        postRecallReleaseDate: moment(prisonerDetail.postRecallReleaseDate).format('DD MMM YYYY'),
-        tused: moment(prisonerDetail.topupSupervisionExpiryDate).format('DD MMM YYYY'),
-        hdced: moment(prisonerDetail.homeDetentionCurfewEligibilityDate).format('DD MMM YYYY'),
-        sentenceExpiryDate: moment(prisonerDetail.sentenceExpiryDate).format('DD MMM YYYY'),
-        licenceExpiryDate: moment(prisonerDetail.licenceExpiryDate).format('DD MMM YYYY'),
-        paroleEligibilityDate: moment(prisonerDetail.paroleEligibilityDate).format('DD MMM YYYY'),
+        conditionalReleaseDate,
+        confirmedReleaseDate,
+        postRecallReleaseDate,
+        tused,
+        hdced,
+        sentenceExpiryDate,
+        licenceExpiryDate,
+        paroleEligibilityDate,
         determinate: prisonerDetail.indeterminateSentence ? 'No' : 'Yes',
         dob: moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY'),
         hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',
