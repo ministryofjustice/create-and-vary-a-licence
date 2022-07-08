@@ -176,7 +176,7 @@
     "mocha": "^9.2.2",
     "mocha-junit-reporter": "^2.0.2",
     "nock": "^13.2.4",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.19",
     "path-parse": "^1.0.7",
     "pdf-parse": "^1.1.1",
     "prettier": "^2.6.1",
