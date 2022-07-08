@@ -222,4 +222,101 @@ describe('Route Handlers - Offender detail', () => {
       },
     })
   })
+  it('Should render all offender information with NULL sentence dates', async () => {
+    req.params = {
+      nomsId: 'ABC123',
+    }
+
+    const expectedPrisonerDetail = {
+      firstName: 'David',
+      lastName: 'Pepper',
+      conditionalReleaseDate: null,
+      confirmedReleaseDate: '2022-06-01',
+      postRecallReleaseDate: null,
+      topupSupervisionExpiryDate: null,
+      homeDetentionCurfewEligibilityDate: null,
+      sentenceExpiryDate: null,
+      licenceExpiryDate: null,
+      paroleEligibilityDate: null,
+      indeterminateSentence: false,
+      dateOfBirth: '1995-03-05',
+    } as Prisoner
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
+
+    communityService.searchProbationers.mockResolvedValue([
+      {
+        otherIds: {
+          crn: 'X1234',
+        },
+        offenderManagers: [
+          {
+            active: true,
+            staff: {
+              code: 'X123',
+              forenames: 'Mr',
+              surname: 'T',
+            },
+            team: {
+              description: 'The A Team',
+              localDeliveryUnit: {
+                description: 'LDU A',
+              },
+              district: {
+                description: 'LAU A',
+              },
+              borough: {
+                description: 'PDU A',
+              },
+            },
+            probationArea: {
+              description: 'Wales',
+            },
+          },
+        ],
+      } as unknown as OffenderDetail,
+    ])
+
+    prisonerService.getHdcStatuses.mockResolvedValue([
+      {
+        bookingId: '1',
+        approvalStatus: 'APPROVED',
+        checksPassed: true,
+      } as HdcStatus,
+    ])
+
+    communityService.getStaffDetailByStaffCode.mockResolvedValue({
+      email: 'mr.g@probation.gov.uk',
+      telephoneNumber: '078929482994',
+    })
+
+    await handler.GET(req, res)
+    expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
+      prisonerDetail: {
+        ...expectedPrisonerDetail,
+        conditionalReleaseDate: 'Not found',
+        confirmedReleaseDate: '01 Jun 2022',
+        crn: 'X1234',
+        determinate: 'Yes',
+        dob: '05 Mar 1995',
+        hdcStatus: 'APPROVED',
+        hdced: 'Not found',
+        licenceExpiryDate: 'Not found',
+        name: 'David Pepper',
+        paroleEligibilityDate: 'Not found',
+        postRecallReleaseDate: 'Not found',
+        sentenceExpiryDate: 'Not found',
+        tused: 'Not found',
+      },
+      probationPractitioner: {
+        email: 'mr.g@probation.gov.uk',
+        lau: 'LAU A',
+        ldu: 'LDU A',
+        name: 'Mr T',
+        pdu: 'PDU A',
+        region: 'Wales',
+        team: 'The A Team',
+        telephone: '078929482994',
+      },
+    })
+  })
 })

@@ -414,13 +414,13 @@ describe('Caseload Service', () => {
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
       {
         prisonerNumber: 'AB1234E',
-        conditionalReleaseDate: tenDaysFromNow,
+        conditionalReleaseDate: '2022-07-10',
         status: 'ACTIVE IN',
         prisonId: 'MHI',
       } as Prisoner,
       {
         prisonerNumber: 'AB1234F',
-        conditionalReleaseDate: tenDaysFromNow,
+        conditionalReleaseDate: '2022-07-10',
         status: 'ACTIVE IN',
         prisonId: 'CFI',
       } as Prisoner,
@@ -444,7 +444,7 @@ describe('Caseload Service', () => {
         },
         nomisRecord: {
           prisonerNumber: 'AB1234F',
-          conditionalReleaseDate: tenDaysFromNow,
+          conditionalReleaseDate: '2022-07-10',
         },
         licences: [
           {
