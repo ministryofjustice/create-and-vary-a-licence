@@ -26,7 +26,7 @@ import ReportToPoliceStation from '../routes/creatingLicences/types/additionalCo
 import AppointmentTimeAndPlaceDuringPss from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlaceDuringPss'
 
 export default {
-  version: '1.0',
+  version: '2.0',
 
   /*
     Each condition below has a universally unique identifier (UUID) as its 'code'.
@@ -60,6 +60,14 @@ export default {
       {
         code: 'e670ac69-eda2-4b04-a0a1-a3c8492fe1e6',
         text: 'Reside permanently at an address approved by the supervising officer and obtain the prior permission of the supervising officer for any stay of one or more nights at a different address.',
+      },
+      {
+        code: '78A5F860-4791-48F2-B707-D6D4413850EE',
+        text: 'Tell the supervising officer if you use a name which is different to the name or names which appear on your licence.',
+      },
+      {
+        code: '6FA6E492-F0AB-4E76-B868-63813DB44696',
+        text: 'Tell the supervising officer if you change or add any contact details, including phone number or email.',
       },
       {
         code: '88069445-08cb-4f16-915f-5a162d085c26',
@@ -1001,6 +1009,12 @@ export default {
           },
         ],
         type: AlcoholMonitoringPeriod,
+      },
+      {
+        code: '9678FD9E-F80D-423A-A6FB-B79909094887',
+        category: 'Terrorist personal search',
+        text: 'You must let the police search you if they ask. You must also let them search a vehicle you are with, like a car or a motorbike.',
+        requiresInput: false,
       },
     ],
     PSS: [
