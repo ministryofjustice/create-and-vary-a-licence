@@ -78,6 +78,7 @@ export default (on: (string, Record) => void): void => {
     stubGetPrisonerDetail: prison.stubGetPrisonerDetail,
     stubGetPrisonInformation: prison.stubGetPrisonInformation,
     stubGetHdcStatus: prison.stubGetHdcStatus,
+    stubGetPrisons: prison.stubGetPrisons,
 
     stubGetProbationer: probationSearch.stubGetProbationer,
     stubGetOffendersByCrn: probationSearch.stubGetOffendersByCrn,

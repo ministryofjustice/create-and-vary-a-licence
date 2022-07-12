@@ -17,6 +17,7 @@ context('View and print licence', () => {
     cy.task('stubGetCompletedLicence', 'APPROVED')
     cy.task('stubGetHdcStatus')
     cy.task('stubRecordAuditEvent')
+    cy.task('stubGetPrisons')
     cy.signIn()
   })
 

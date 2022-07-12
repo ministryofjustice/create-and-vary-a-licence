@@ -91,6 +91,16 @@
         </form>
     </div>
 
+    {% if hasMultipleCaseloadsInNomis %}
+        {% set comma = joiner() %}
+        <p> Showing: 
+            {% for prison in prisonsToDisplay -%}
+                {{ comma() }} <span class="govuk-body govuk-!-font-weight-bold"> {{ prison.description }}</span>
+            {%- endfor %}     
+            <a class="govuk-link govuk-!-margin-left-3" href="/licence/change-location" data-test="change-location-link">Change location</a>
+        </p>
+    {% endif %}
+
     {% if cases.length > 0 %}
         {{ govukTable({
             attributes: {

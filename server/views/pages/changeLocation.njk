@@ -1,0 +1,50 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set pageTitle = applicationName + " - View a licence - Select locations to view licences for" %}
+{% set pageId = "additional-pss-conditions-page" %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Select locations to view licences for</h1>
+        </div>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ govukCheckboxes({
+                    name: "caseload[]",
+                    idPrefix: "caseload", 
+                    fieldset: {
+                        legend: {
+                            text: '',
+                            isPageHeading: false,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                     hint: {
+                       text: "Select one or multiple locations."
+                    },
+                    errorMessage: validationErrors | findError('caseload'),
+                    items: caseload | toChecked('value', 'text', checked)
+                }) }}
+       
+                <div class="govuk-button-group govuk-!-padding-top-4">
+                    {{ govukButton({
+                        text: "Continue",
+                        type: "submit",
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+
+                    <a class="govuk-link" href="view/cases" data-qa='cancel'>Cancel</a>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

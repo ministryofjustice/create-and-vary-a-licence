@@ -625,7 +625,7 @@ describe('Licence Service', () => {
     jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
     licenceApiClient.matchLicences.mockResolvedValue([{ licenceId: 1 } as LicenceSummary])
 
-    const result = await licenceService.getLicencesForOmu(user)
+    const result = await licenceService.getLicencesForOmu(user, [])
     expect(licenceApiClient.matchLicences).toBeCalledWith(
       ['ACTIVE', 'APPROVED', 'SUBMITTED', 'IN_PROGRESS'],
       ['MDI'],

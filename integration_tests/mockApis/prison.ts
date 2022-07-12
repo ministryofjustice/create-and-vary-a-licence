@@ -116,4 +116,49 @@ export default {
       },
     })
   },
+
+  stubGetPrisons: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/agencies/type/INST\\?active=true',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            agencyId: 'LEI',
+            agencyType: 'INST',
+            description: 'Leeds (HMP)',
+            active: true,
+          },
+          {
+            agencyId: 'BMI',
+            agencyType: 'INST',
+            description: 'Birmingham (HMP)',
+            active: true,
+          },
+          {
+            agencyId: 'MDI',
+            agencyType: 'INST',
+            description: 'Moorland (HMP)',
+            active: true,
+          },
+          {
+            agencyId: 'BXI',
+            agencyType: 'INST',
+            description: 'Brixton (HMP)',
+            active: true,
+          },
+          {
+            agencyId: 'BAI',
+            agencyType: 'INST',
+            description: 'Belmarsh (HMP)',
+            active: true,
+          },
+        ],
+      },
+    })
+  },
 }
