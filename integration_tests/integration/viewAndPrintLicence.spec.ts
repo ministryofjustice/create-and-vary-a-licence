@@ -20,20 +20,45 @@ context('View and print licence', () => {
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetPrisons')
   })
+  const singleCaseload = {
+    details: [
+      {
+        caseLoadId: 'LEI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: true,
+        description: 'Leeds (HMP)',
+        type: 'INST',
+      },
+    ],
+  }
+  const multipleCaseloads = {
+    details: [
+      {
+        caseLoadId: 'LEI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: true,
+        description: 'Leeds (HMP)',
+        type: 'INST',
+      },
+      {
+        caseLoadId: 'MDI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: false,
+        description: 'Moorland (HMP)',
+        type: 'INST',
+      },
+      {
+        caseLoadId: 'BXI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: false,
+        description: 'Brixton (HMP)',
+        type: 'INST',
+      },
+    ],
+  }
 
   it('should click through the view and print a licence journey', () => {
-    const caseload = {
-      details: [
-        {
-          caseLoadId: 'LEI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: true,
-          description: 'Leeds (HMP)',
-          type: 'INST',
-        },
-      ],
-    }
-    cy.task('stubGetPrisonUserCaseloads', caseload)
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
 
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -46,18 +71,7 @@ context('View and print licence', () => {
   })
 
   it("should not show caseload information because doesn't have multiple caseloads", () => {
-    const caseload = {
-      details: [
-        {
-          caseLoadId: 'LEI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: true,
-          description: 'Leeds (HMP)',
-          type: 'INST',
-        },
-      ],
-    }
-    cy.task('stubGetPrisonUserCaseloads', caseload)
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
 
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -65,32 +79,7 @@ context('View and print licence', () => {
     viewCasesList.getChangeCaseloadOption().should('not.exist')
   })
   it('should allow user to change caseload to view', () => {
-    const caseload = {
-      details: [
-        {
-          caseLoadId: 'LEI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: true,
-          description: 'Leeds (HMP)',
-          type: 'INST',
-        },
-        {
-          caseLoadId: 'MDI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: false,
-          description: 'Moorland (HMP)',
-          type: 'INST',
-        },
-        {
-          caseLoadId: 'BXI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: false,
-          description: 'Brixton (HMP)',
-          type: 'INST',
-        },
-      ],
-    }
-    cy.task('stubGetPrisonUserCaseloads', caseload)
+    cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
 
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -109,32 +98,7 @@ context('View and print licence', () => {
   })
 
   it('cancel should return user to case page', () => {
-    const caseload = {
-      details: [
-        {
-          caseLoadId: 'LEI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: true,
-          description: 'Leeds (HMP)',
-          type: 'INST',
-        },
-        {
-          caseLoadId: 'MDI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: false,
-          description: 'Moorland (HMP)',
-          type: 'INST',
-        },
-        {
-          caseLoadId: 'BXI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: false,
-          description: 'Brixton (HMP)',
-          type: 'INST',
-        },
-      ],
-    }
-    cy.task('stubGetPrisonUserCaseloads', caseload)
+    cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
 
     const indexPage = Page.verifyOnPage(IndexPage)
@@ -150,32 +114,7 @@ context('View and print licence', () => {
   })
 
   it('cancel should display errors', () => {
-    const caseload = {
-      details: [
-        {
-          caseLoadId: 'LEI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: true,
-          description: 'Leeds (HMP)',
-          type: 'INST',
-        },
-        {
-          caseLoadId: 'MDI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: false,
-          description: 'Moorland (HMP)',
-          type: 'INST',
-        },
-        {
-          caseLoadId: 'BXI',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: false,
-          description: 'Brixton (HMP)',
-          type: 'INST',
-        },
-      ],
-    }
-    cy.task('stubGetPrisonUserCaseloads', caseload)
+    cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
 
     const indexPage = Page.verifyOnPage(IndexPage)
