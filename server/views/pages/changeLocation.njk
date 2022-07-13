@@ -4,15 +4,10 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% set pageTitle = applicationName + " - View a licence - Select locations to view licences for" %}
-{% set pageId = "additional-pss-conditions-page" %}
+{% set pageId = "change-location-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
 
 {% block content %}
-    <div class="govuk-grid-row govuk-!-margin-bottom-6">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Select locations to view licences for</h1>
-        </div>
-    </div>
 
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -23,8 +18,8 @@
                     idPrefix: "caseload", 
                     fieldset: {
                         legend: {
-                            text: '',
-                            isPageHeading: false,
+                            text: 'Select locations to view licences for',
+                            isPageHeading: true,
                             classes: "govuk-fieldset__legend--l"
                         }
                     },

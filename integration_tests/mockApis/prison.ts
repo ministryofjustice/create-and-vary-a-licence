@@ -95,7 +95,7 @@ export default {
     })
   },
 
-  stubGetUserCaseloads: (): SuperAgentRequest => {
+  stubGetUserCaseloads: (caseload): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -104,15 +104,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            caseLoadId: 'LEI',
-            caseloadFunction: 'GENERAL',
-            currentlyActive: true,
-            description: 'Leeds (HMP)',
-            type: 'INST',
-          },
-        ],
+        jsonBody: caseload.details,
       },
     })
   },

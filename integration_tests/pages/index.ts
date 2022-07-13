@@ -1,7 +1,7 @@
 import Page from './page'
 import CaseloadPage from './caseload'
 import ApprovalCasesPage from './approvalCases'
-import ViewCasesPage from './viewCases'
+import ViewCasesPage from './viewCasesPage'
 import VaryCasesPage from './varyCases'
 import VaryApproveCasesPage from './varyApproveCasesPage'
 

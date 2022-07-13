@@ -1,14 +1,11 @@
 {% extends "layout.njk" %}
-
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/statusBadge.njk" import statusBadge %}
-
 {% set pageTitle = applicationName + " - view an approved licence" %}
 {% set pageId = "view-cases-page" %}
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
-
 {% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, index) %}
     <div class="caseload-offender-name">
         {% if isClickable %}
@@ -18,17 +15,13 @@
         {% endif %}
     </div>
 {% endmacro %}
-
 {% set licences = [] %}
-
 {% for case in cases %}
-
     {% if case.probationPractitioner %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
-
     {% set licences = (licences.push([
         {
             attributes: {
@@ -69,40 +62,40 @@
         }
     ]), licences) %}
 {% endfor %}
-
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-xl">Select a person to view or print licences and supervision orders</h1>
         </div>
     </div>
-
     <div class="moj-search govuk-!-margin-bottom-6">
         <form method="GET">
             <div class="govuk-form-group">
                 <label class="govuk-visually-hidden" for="search">
                     Search for a case
                 </label>
-                <input class="govuk-input moj-search__input govuk-!-font-size-14" id="search" name="search" placeholder="You can search by name, prison number or probation practitioner" value="{{ search }}">
-            </div>
-            <button class="govuk-button moj-search__button" data-module="govuk-button">
-                Search
-            </button>
-        </form>
-    </div>
-
-    {% if hasMultipleCaseloadsInNomis %}
-        {% set comma = joiner() %}
-        <p> Showing: 
-            {% for prison in prisonsToDisplay -%}
-                {{ comma() }} <span class="govuk-body govuk-!-font-weight-bold"> {{ prison.description }}</span>
-            {%- endfor %}     
-            <a class="govuk-link govuk-!-margin-left-3" href="/licence/change-location" data-test="change-location-link">Change location</a>
-        </p>
-    {% endif %}
-
-    {% if cases.length > 0 %}
-        {{ govukTable({
+                <input class="govuk-input moj-search__input govuk-!-font-size-14" id="search" name="search" placeholder="You can search by name, prison number or probation practitioner" value="{{ search }}"></div>
+                <button class="govuk-button moj-search__button" data-module="govuk-button">
+                    Search
+                </button>
+            </form>
+        </div>
+        {% if hasMultipleCaseloadsInNomis %}
+            {% set comma = joiner() %}
+            <p data-qa="change-caseload">
+                Showing:
+                <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
+                    {% for prison in prisonsToDisplay -%}
+                        {{ comma() }}
+                        {{ prison.description }}
+                    {%- endfor %}
+                </span>
+                <a class="govuk-link govuk-!-margin-left-3" href="/licence/change-location" data-qa="change-location-link">Change
+                    location</a>
+            </p>
+        {% endif %}
+        {% if cases.length > 0 %}
+            {{ govukTable({
             attributes: {
                 'data-module': 'moj-sortable-table'
             },
@@ -142,11 +135,11 @@
             ],
             rows: licences
         }) }}
-    {% else %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-three-quarters">
-                <h3 class="govuk-heading-s">There are no licences to print which match the search criteria.</h3>
+        {% else %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-three-quarters">
+                    <h3 class="govuk-heading-s">There are no licences to print which match the search criteria.</h3>
+                </div>
             </div>
-        </div>
-    {% endif %}
-{% endblock %}
+        {% endif %}
+    {% endblock %}
