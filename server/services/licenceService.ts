@@ -314,9 +314,9 @@ export default class LicenceService {
     return _.head(licences)
   }
 
-  async getLicencesForApproval(user: User): Promise<LicenceSummary[]> {
+  async getLicencesForApproval(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.SUBMITTED.valueOf()]
-    const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
+    const filteredPrisons = filterCentralCaseload(prisonCaseload)
     return this.licenceApiClient.matchLicences(
       statuses,
       filteredPrisons,

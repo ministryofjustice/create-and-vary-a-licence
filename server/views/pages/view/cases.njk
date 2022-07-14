@@ -80,20 +80,18 @@
                 </button>
             </form>
         </div>
+        
         {% if hasMultipleCaseloadsInNomis %}
-            {% set comma = joiner() %}
             <p data-qa="change-caseload">
                 Showing:
                 <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
-                    {% for prison in prisonsToDisplay -%}
-                        {{ comma() }}
-                        {{ prison.description }}
-                    {%- endfor %}
+                    {{prisonsToDisplay | extractAttr('description') | join(', ')}} 
                 </span>
-                <a class="govuk-link govuk-!-margin-left-3" href="/licence/change-location" data-qa="change-location-link">Change
+                <a class="govuk-link govuk-!-margin-left-3" href="/licence/view/change-location" data-qa="change-location-link">Change
                     location</a>
             </p>
         {% endif %}
+
         {% if cases.length > 0 %}
             {{ govukTable({
             attributes: {

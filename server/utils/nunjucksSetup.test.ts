@@ -217,4 +217,48 @@ describe('Nunjucks Filters', () => {
       expect($('body').text()).toBe('09:15 pm')
     })
   })
+
+  describe('Should select a checkbox', () => {
+    it('toChecked', () => {
+      const model = [
+        { desc: 'car', code: 'CAR' },
+        { desc: 'bus', code: 'BUS' },
+        { desc: 'boat', code: 'BOAT' },
+      ]
+
+      const result = njkEnv.getFilter('toChecked')(model, 'code', 'desc', ['CAR', 'BOAT'])
+
+      expect(result).toEqual([
+        {
+          checked: true,
+          text: 'car',
+          value: 'CAR',
+        },
+        {
+          checked: false,
+          text: 'bus',
+          value: 'BUS',
+        },
+        {
+          checked: true,
+          text: 'boat',
+          value: 'BOAT',
+        },
+      ])
+    })
+  })
+
+  describe('Extract specified value from object array', () => {
+    it('extractAttr', () => {
+      const model = [
+        { id: 'a', description: 'Letter A' },
+        { id: 'b', description: 'Letter B' },
+        { id: 'c', description: 'Letter C' },
+      ]
+
+      const result = njkEnv.getFilter('extractAttr')(model, 'description')
+
+      expect(result).toEqual(['Letter A', 'Letter B', 'Letter C'])
+    })
+  })
 })

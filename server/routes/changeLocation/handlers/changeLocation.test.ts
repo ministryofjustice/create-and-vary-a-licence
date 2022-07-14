@@ -1,7 +1,8 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import ChangeLocationRoutes from './changeLocation'
 import UserService from '../../../services/userService'
 import { PrisonApiCaseload } from '../../../@types/prisonApiClientTypes'
+import AuthRole from '../../../enumeration/authRole'
 
 const userService = new UserService(null, null, null) as jest.Mocked<UserService>
 jest.mock('../../../services/userService')
@@ -10,6 +11,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
   const handler = new ChangeLocationRoutes(userService)
   let req: Request
   let res: Response
+  let next: NextFunction
 
   const caseloadsFromNomis = [
     {
@@ -59,7 +61,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     it('Should render page with all users caseloads in Nomis', async () => {
       userService.getPrisonUserCaseloads.mockResolvedValue(caseloadsFromNomis)
 
-      await handler.GET(req, res)
+      await handler.GET(AuthRole.CASE_ADMIN)(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/changeLocation', {
         caseload: [
@@ -69,13 +71,14 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
           { text: 'Moorland (HMP & YOI)', value: 'MDI' },
         ],
         checked: [],
+        cancelLink: '/licence/view/cases',
       })
     })
   })
 
   describe('POST', () => {
     it('Should redirect to caselist page', async () => {
-      await handler.POST(req, res)
+      await handler.POST(AuthRole.CASE_ADMIN)(req, res, next)
 
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
     })

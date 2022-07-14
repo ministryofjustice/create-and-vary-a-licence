@@ -2,6 +2,18 @@ import Page from '../pages/page'
 import IndexPage from '../pages'
 
 context('Reject a licence', () => {
+  const singleCaseload = {
+    details: [
+      {
+        caseLoadId: 'LEI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: true,
+        description: 'Leeds (HMP)',
+        type: 'INST',
+      },
+    ],
+  }
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
@@ -25,6 +37,8 @@ context('Reject a licence', () => {
     cy.task('stubUpdateLicenceStatus', 1)
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubRecordAuditEvent')
+    cy.task('stubGetPrisons')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
   })
 

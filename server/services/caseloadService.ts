@@ -98,9 +98,9 @@ export default class CaseloadService {
     return this.mapResponsibleComsToCases(combinedCases)
   }
 
-  async getApproverCaseload(user: User): Promise<ManagedCase[]> {
+  async getApproverCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
     return this.licenceService
-      .getLicencesForApproval(user)
+      .getLicencesForApproval(user, prisonCaseload)
       .then(licences => this.mapLicencesToOffenders(licences))
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
