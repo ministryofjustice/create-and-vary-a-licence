@@ -28,6 +28,6 @@ export default function Index({ userService }: Services): Router {
 
   get('/view/change-location', locationHandler.GET(AuthRole.CASE_ADMIN))
   post('/view/change-location', locationHandler.POST(AuthRole.CASE_ADMIN), Caseload)
-  
+
   return router
 }
