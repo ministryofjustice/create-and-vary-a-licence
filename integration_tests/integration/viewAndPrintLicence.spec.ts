@@ -82,7 +82,6 @@ context('View and print licence', () => {
   it('should allow user to change caseload', () => {
     cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
-
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     viewCasesList.getChangeCaseloadOption().should('exist')
@@ -101,7 +100,6 @@ context('View and print licence', () => {
   it('cancel should return user to cases page', () => {
     cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
-
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     viewCasesList.clickChangeLocationsLink()
@@ -117,7 +115,6 @@ context('View and print licence', () => {
   it('Should display errors if Continue without selecting any checkbox', () => {
     cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
-    
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     viewCasesList.clickChangeLocationsLink()
