@@ -67,12 +67,10 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  async getOmuCaseload(user: User): Promise<ManagedCase[]> {
-    const { prisonCaseload } = user
-
+  async getOmuCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
     // Get cases with a licence in ACTIVE, APPROVED, or SUBMITTED state
     const casesWithLicences = this.licenceService
-      .getLicencesForOmu(user)
+      .getLicencesForOmu(user, prisonCaseload)
       .then(licences => this.mapLicencesToOffenders(licences))
 
     // Get cases due for release soon which do not have a submitted licence

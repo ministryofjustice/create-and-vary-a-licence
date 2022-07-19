@@ -4120,6 +4120,20 @@ export interface components {
       /** The Prison name. */
       premise: string
     }
+
+    /** Contacts details for agency. The difference with PrisonContactDetail is, the prison description is in correct capitalisation */
+    PrisonDetail: {
+      agencyId: string
+      description: string
+      longDescription: string
+      agencyType: string
+      active: boolean
+      courtType: string
+      deactivationDate: string
+      addresses?: components['schemas']['AddressDto'][]
+      phones: components['schemas']['Telephone'][]
+      emails: components['schemas']['Email'][]
+    }
     /** Captures what is needed for cancellation of a scheduled prison to prison move. */
     PrisonMoveCancellation: {
       /** The reason code for cancellation of the move. */

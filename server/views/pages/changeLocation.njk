@@ -1,0 +1,45 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set pageTitle = applicationName + " - View a licence - Select locations to view licences for" %}
+{% set pageId = "change-location-page" %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
+
+{% block content %}
+
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ govukCheckboxes({
+                    name: "caseload[]",
+                    idPrefix: "caseload", 
+                    fieldset: {
+                        legend: {
+                            text: 'Select locations to view licences for',
+                            isPageHeading: true,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                     hint: {
+                       text: "Select one or multiple locations."
+                    },
+                    errorMessage: validationErrors | findError('caseload'),
+                    items: caseload | toChecked('value', 'text', checked)
+                }) }}
+       
+                <div class="govuk-button-group govuk-!-padding-top-4">
+                    {{ govukButton({
+                        text: "Continue",
+                        type: "submit",
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+
+                    <a class="govuk-link" href="view/cases" data-qa='cancel'>Cancel</a>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

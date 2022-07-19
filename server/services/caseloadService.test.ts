@@ -773,7 +773,7 @@ describe('Caseload Service', () => {
       },
     ])
 
-    const result = await serviceUnderTest.getOmuCaseload(user)
+    const result = await serviceUnderTest.getOmuCaseload(user, ['p1', 'p2'])
 
     expect(prisonerService.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
       moment().startOf('isoWeek'),

@@ -5,15 +5,22 @@ import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import PrisonerService from '../../../services/prisonerService'
 
 export default class ViewAndPrintCaseRoutes {
-  constructor(private readonly caseloadService: CaseloadService) {}
+  constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
 
     const { user } = res.locals
-    const cases = await this.caseloadService.getOmuCaseload(user)
+    const { caseloadsSelected = [] } = req.session
+    const hasMultipleCaseloadsInNomis = user.prisonCaseload.length > 1
+    const allPrisons = await this.prisonerService.getPrisons()
+    const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
+    const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
+
+    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
     const caseloadViewModel = cases
       .map(c => {
         return {
@@ -45,6 +52,15 @@ export default class ViewAndPrintCaseRoutes {
         const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
         return crd1 - crd2
       })
-    res.render('pages/view/cases', { cases: caseloadViewModel, statusConfig, search })
+
+    const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
+
+    res.render('pages/view/cases', {
+      cases: caseloadViewModel,
+      statusConfig,
+      search,
+      prisonsToDisplay,
+      hasMultipleCaseloadsInNomis,
+    })
   }
 }

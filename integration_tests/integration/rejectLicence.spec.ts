@@ -7,7 +7,17 @@ context('Reject a licence', () => {
     cy.task('stubPrisonSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonUserDetails')
-    cy.task('stubGetPrisonUserCaseloads')
+    cy.task('stubGetPrisonUserCaseloads', {
+      details: [
+        {
+          caseLoadId: 'LEI',
+          caseloadFunction: 'GENERAL',
+          currentlyActive: true,
+          description: 'Leeds (HMP)',
+          type: 'INST',
+        },
+      ],
+    })
     cy.task('stubGetCompletedLicence', 'SUBMITTED')
     cy.task('stubGetLicencesForStatus', 'SUBMITTED')
     cy.task('stubGetOffendersByNomsNumber')

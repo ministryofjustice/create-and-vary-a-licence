@@ -329,14 +329,14 @@ export default class LicenceService {
     )
   }
 
-  async getLicencesForOmu(user: User): Promise<LicenceSummary[]> {
+  async getLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
     const statuses = [
       LicenceStatus.ACTIVE.valueOf(),
       LicenceStatus.APPROVED.valueOf(),
       LicenceStatus.SUBMITTED.valueOf(),
       LicenceStatus.IN_PROGRESS.valueOf(),
     ]
-    const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
+    const filteredPrisons = filterCentralCaseload(prisonCaseload)
     return this.licenceApiClient.matchLicences(
       statuses,
       filteredPrisons,

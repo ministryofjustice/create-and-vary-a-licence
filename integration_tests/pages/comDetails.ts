@@ -1,5 +1,5 @@
 import Page from './page'
-import ViewCasesPage from './viewCases'
+import ViewCasesPage from './viewCasesPage'
 import CaseloadPage from './caseload'
 
 export default class ComDetailsPage extends Page {
