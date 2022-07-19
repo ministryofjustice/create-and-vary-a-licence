@@ -117,7 +117,7 @@ context('View and print licence', () => {
   it('Should display errors if Continue without selecting any checkbox', () => {
     cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
-
+    
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     viewCasesList.clickChangeLocationsLink()
