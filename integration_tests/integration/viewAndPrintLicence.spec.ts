@@ -78,6 +78,7 @@ context('View and print licence', () => {
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     viewCasesList.getChangeCaseloadOption().should('not.exist')
   })
+
   it('should allow user to change caseload', () => {
     cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()

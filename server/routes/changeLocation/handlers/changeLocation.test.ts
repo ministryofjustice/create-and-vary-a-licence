@@ -12,7 +12,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
   let req: Request
   let res: Response
   let next: NextFunction
-
+  
   const caseloadsFromNomis = [
     {
       caseLoadId: 'BAI',
@@ -60,7 +60,6 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
   describe('GET', () => {
     it('Should render page with all users caseloads in Nomis', async () => {
       userService.getPrisonUserCaseloads.mockResolvedValue(caseloadsFromNomis)
-
       await handler.GET(AuthRole.CASE_ADMIN)(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/changeLocation', {
@@ -79,7 +78,6 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
   describe('POST', () => {
     it('Should redirect to caselist page', async () => {
       await handler.POST(AuthRole.CASE_ADMIN)(req, res, next)
-
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
     })
   })
