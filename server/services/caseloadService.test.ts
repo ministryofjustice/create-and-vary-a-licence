@@ -883,7 +883,7 @@ describe('Caseload Service', () => {
       },
     ])
 
-    const result = await serviceUnderTest.getApproverCaseload(user)
+    const result = await serviceUnderTest.getApproverCaseload(user, [])
 
     expect(result).toMatchObject([
       {

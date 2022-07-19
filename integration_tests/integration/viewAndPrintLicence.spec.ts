@@ -78,10 +78,10 @@ context('View and print licence', () => {
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     viewCasesList.getChangeCaseloadOption().should('not.exist')
   })
-  it('should allow user to change caseload to view', () => {
+
+  it('should allow user to change caseload', () => {
     cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
-
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     viewCasesList.getChangeCaseloadOption().should('exist')
@@ -97,15 +97,14 @@ context('View and print licence', () => {
     })
   })
 
-  it('cancel should return user to case page', () => {
+  it('cancel should return user to cases page', () => {
     cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
-
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     viewCasesList.clickChangeLocationsLink()
     const changeLocationPage = Page.verifyOnPage(ChangeLocationPage)
-    changeLocationPage.clickCancel()
+    changeLocationPage.clickCancelForCA()
     Page.verifyOnPage(ViewCasesPage)
     viewCasesList.getCaseloadNames().contains('Leeds (HMP)')
     viewCasesList.getTableRows().should(rows => {
@@ -113,10 +112,9 @@ context('View and print licence', () => {
     })
   })
 
-  it('cancel should display errors', () => {
+  it('Should display errors if Continue without selecting any checkbox', () => {
     cy.task('stubGetPrisonUserCaseloads', multipleCaseloads)
     cy.signIn()
-
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
     viewCasesList.clickChangeLocationsLink()

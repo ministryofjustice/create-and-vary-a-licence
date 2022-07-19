@@ -2,21 +2,28 @@ import { Request, Response } from 'express'
 
 import ApprovalCaseRoutes from './approvalCases'
 import CaseloadService from '../../../services/caseloadService'
+import PrisonerService from '../../../services/prisonerService'
+
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
+import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
 
+const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
+jest.mock('../../../services/prisonerService')
+
 describe('Route Handlers - Approval - case list', () => {
-  const handler = new ApprovalCaseRoutes(caseloadService)
+  const handler = new ApprovalCaseRoutes(caseloadService, prisonerService)
   let req: Request
   let res: Response
 
   beforeEach(() => {
     req = {
       query: {},
+      session: { caseloadsSelected: [] },
     } as unknown as Request
 
     res = {
@@ -24,6 +31,8 @@ describe('Route Handlers - Approval - case list', () => {
       locals: {
         user: {
           username: 'joebloggs',
+          activeCaseload: 'BAI',
+          prisonCaseload: ['BAI'],
         },
       },
     } as unknown as Response
@@ -48,8 +57,26 @@ describe('Route Handlers - Approval - case list', () => {
         },
       },
     ])
-  })
 
+    prisonerService.getPrisons.mockResolvedValue([
+      {
+        agencyId: 'BAI',
+        description: 'Belmarsh (HMP)',
+      },
+      {
+        agencyId: 'BXI',
+        description: 'Brixton (HMP)',
+      },
+      {
+        agencyId: 'MDI',
+        description: 'Moorland (HMP)',
+      },
+      {
+        agencyId: 'BMI',
+        description: 'Birmingham (HMP)',
+      },
+    ] as PrisonDetail[])
+  })
   afterEach(() => {
     jest.resetAllMocks()
   })
@@ -57,7 +84,7 @@ describe('Route Handlers - Approval - case list', () => {
   describe('GET', () => {
     it('should render list of licences for approval', async () => {
       await handler.GET(req, res)
-      expect(caseloadService.getApproverCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getApproverCaseload).toHaveBeenCalledWith(res.locals.user, ['BAI'])
       expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
         cases: [
           {
@@ -70,6 +97,14 @@ describe('Route Handlers - Approval - case list', () => {
             },
           },
         ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        search: undefined,
       })
     })
 
@@ -88,6 +123,13 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
           },
         ],
         search: 'bob',
@@ -111,6 +153,13 @@ describe('Route Handlers - Approval - case list', () => {
             },
           },
         ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
         search: 'A1234AA',
       })
     })
@@ -132,6 +181,13 @@ describe('Route Handlers - Approval - case list', () => {
             },
           },
         ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
         search: 'white',
       })
     })
@@ -143,6 +199,13 @@ describe('Route Handlers - Approval - case list', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
         cases: [],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
         search: 'XXX',
       })
     })

@@ -1,5 +1,6 @@
 import Page from './page'
 import ViewCasesPage from './viewCasesPage'
+import ApprovalCasesPage from './approvalCases'
 
 export default class ChangeLocationPage extends Page {
   constructor() {
@@ -10,9 +11,14 @@ export default class ChangeLocationPage extends Page {
     return cy.get('[data-qa=continue]').click()
   }
 
-  clickCancel = (): ViewCasesPage => {
-    cy.get('[data-qa=cancel]').click()
+  clickCancelForCA = (): ViewCasesPage => {
+    cy.get('[href="/licence/view/cases"]').click()
     return Page.verifyOnPage(ViewCasesPage)
+  }
+
+  clickCancelForApprover = (): ApprovalCasesPage => {
+    cy.get('[href="/licence/approve/cases"]').click()
+    return Page.verifyOnPage(ApprovalCasesPage)
   }
 
   getErrorSummary = () => {
