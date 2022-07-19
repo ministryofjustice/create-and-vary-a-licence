@@ -12,7 +12,6 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
   let req: Request
   let res: Response
   let next: NextFunction
-  
   const caseloadsFromNomis = [
     {
       caseLoadId: 'BAI',
