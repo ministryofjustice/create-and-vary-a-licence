@@ -28,6 +28,9 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
         user: {
           username: 'joebloggs',
         },
+        licence: {
+          version: '1.1',
+        },
       },
     } as unknown as Response
   })

@@ -26,6 +26,7 @@ import {
   UpdateReasonForVariationRequest,
   UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
+  UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
@@ -278,6 +279,10 @@ export default class LicenceService {
     const sanitised = formData.conditions.filter((c: string) => c && c.length > 0)
     const requestBody = { conditions: sanitised } as BespokeConditionsRequest
     return this.licenceApiClient.updateBespokeConditions(id, requestBody, user)
+  }
+
+  async updateStandardConditions(id: string, data: UpdateStandardConditionDataRequest, user: User): Promise<void> {
+    await this.licenceApiClient.updateStandardConditions(id, data, user)
   }
 
   async updateStatus(id: string, newStatus: LicenceStatus, user?: User): Promise<void> {
