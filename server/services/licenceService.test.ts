@@ -885,15 +885,6 @@ describe('Licence Service', () => {
   })
 
   describe('Get timeline events', () => {
-    const licenceVariation = {
-      id: 2,
-      statusCode: LicenceStatus.VARIATION_APPROVED,
-      variationOf: 1,
-      isVariation: true,
-      createdByFullName: 'James Brown',
-      dateLastUpdated: '12/11/2022 10:45:00',
-    } as Licence
-
     const originalLicence = {
       id: 1,
       statusCode: LicenceStatus.ACTIVE,
@@ -905,14 +896,6 @@ describe('Licence Service', () => {
 
     const expectedEvents = [
       {
-        eventType: 'VARIATION',
-        title: 'Licence varied',
-        statusCode: 'VARIATION_APPROVED',
-        createdBy: 'James Brown',
-        licenceId: 2,
-        lastUpdate: '12/11/2022 10:45:00',
-      },
-      {
         eventType: 'CREATION',
         title: 'Licence created',
         statusCode: 'ACTIVE',
@@ -923,9 +906,76 @@ describe('Licence Service', () => {
     ] as unknown as TimelineEvent[]
 
     it('will return a list of timeline events for an approved variation', async () => {
+      const licenceVariation = {
+        id: 2,
+        statusCode: LicenceStatus.VARIATION_APPROVED,
+        variationOf: 1,
+        isVariation: true,
+        createdByFullName: 'James Brown',
+        dateLastUpdated: '12/11/2022 10:45:00',
+      } as Licence
+
+      const variationApproved = {
+        eventType: 'VARIATION',
+        title: 'Licence varied',
+        statusCode: 'VARIATION_APPROVED',
+        createdBy: 'James Brown',
+        licenceId: 2,
+        lastUpdate: '12/11/2022 10:45:00',
+      }
+
       licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
       const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
-      expect(timelineEvents).toEqual(expectedEvents)
+      expect(timelineEvents).toEqual([variationApproved, ...expectedEvents])
+      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith('1', user)
+    })
+
+    it('will return a list of timeline events for a submitted variation', async () => {
+      const licenceVariation = {
+        id: 2,
+        statusCode: LicenceStatus.VARIATION_SUBMITTED,
+        variationOf: 1,
+        isVariation: true,
+        createdByFullName: 'James Brown',
+        dateLastUpdated: '12/11/2022 10:45:00',
+      } as Licence
+
+      const variationSubmitted = {
+        eventType: 'SUBMITTED',
+        title: 'Variation submitted',
+        statusCode: 'VARIATION_SUBMITTED',
+        createdBy: 'James Brown',
+        licenceId: 2,
+        lastUpdate: '12/11/2022 10:45:00',
+      }
+
+      licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
+      const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
+      expect(timelineEvents).toEqual([variationSubmitted, ...expectedEvents])
+      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith('1', user)
+    })
+    it('will return a list of timeline events for a rejected variation', async () => {
+      const licenceVariation = {
+        id: 2,
+        statusCode: LicenceStatus.VARIATION_REJECTED,
+        variationOf: 1,
+        isVariation: true,
+        createdByFullName: 'James Brown',
+        dateLastUpdated: '12/11/2022 10:45:00',
+      } as Licence
+
+      const variationRejected = {
+        eventType: 'REJECTED',
+        title: 'Variation rejected',
+        statusCode: 'VARIATION_REJECTED',
+        createdBy: 'James Brown',
+        licenceId: 2,
+        lastUpdate: '12/11/2022 10:45:00',
+      }
+
+      licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
+      const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
+      expect(timelineEvents).toEqual([variationRejected, ...expectedEvents])
       expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith('1', user)
     })
   })

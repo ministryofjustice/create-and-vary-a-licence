@@ -528,9 +528,13 @@ export default class LicenceService {
   private static getTimelineEventType(varyOf: number, status: string): { eventType: TimelineEventType; title: string } {
     switch (status) {
       case LicenceStatus.VARIATION_IN_PROGRESS:
-      case LicenceStatus.VARIATION_REJECTED:
-      case LicenceStatus.VARIATION_SUBMITTED:
         return { eventType: TimelineEventType.VARIATION_IN_PROGRESS, title: 'Variation in progress' }
+
+      case LicenceStatus.VARIATION_SUBMITTED:
+        return { eventType: TimelineEventType.SUBMITTED, title: 'Variation submitted' }
+
+      case LicenceStatus.VARIATION_REJECTED:
+        return { eventType: TimelineEventType.REJECTED, title: 'Variation rejected' }
 
       case LicenceStatus.VARIATION_APPROVED:
         return { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }

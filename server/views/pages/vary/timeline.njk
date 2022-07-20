@@ -51,7 +51,9 @@
                     <h2 class="moj-timeline__title">{{ event.title }}</h2>
                     <p class="moj-timeline__byline">by {{ event.createdBy | title }}</p>
                 </div>
-                <p class="moj-timeline__date">last update: {{ event.lastUpdate | datetimeToDate }} at {{ event.lastUpdate | datetimeTo12HourTime }}</p>
+
+                <p class="moj-timeline__date">{{"Last update: " if event.statusCode === 'VARIATION_IN_PROGRESS'}} {{ event.lastUpdate | datetimeToDate }} at {{ event.lastUpdate | datetimeTo12HourTime }}</p>
+
                 <div class="moj-timeline__description">
                     {# Set up the links associated with this event #}
                     {% set viewLink = '/licence/vary/id/' + event.licenceId + '/view' %}
