@@ -5,6 +5,13 @@ import PrisonerService from './prisonerService'
 import { User } from '../@types/CvlUserDetails'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceApiClient from '../data/licenceApiClient'
+import { LicenceSummary } from '../@types/licenceApiClientTypes'
+
+export type LicencesExpired = Array<{
+  licenceId: number
+  SLED: string
+  TUSED: string
+}>
 
 export default class LicenceExpiryService {
   constructor(
@@ -14,15 +21,17 @@ export default class LicenceExpiryService {
   ) {}
 
   /**
-   * Filter offender records where a TUSED or SLED exists
-   * and is today or in the past
+   * Filter offender records where a TUSED or SLED exists and is today or in the past.
+   * Check for TUSED first, this takes priority over the SLED if present.
+   * TUSED is returned for PSS cases only
    * @param offenders
    */
   filterPrisonersByEligibleDates(offenders: Prisoner[]): Prisoner[] {
     const tomorrow = addDays(new Date(), 1)
     return offenders.filter(o => {
-      if (!o.topupSupervisionExpiryDate && !o.licenceExpiryDate) return false
-      const expiryDate = parse(o.topupSupervisionExpiryDate || o.licenceExpiryDate, 'dd/MM/yyyy', new Date())
+      const validExpiry = o.topupSupervisionExpiryDate || o.licenceExpiryDate
+      if (!validExpiry) return false
+      const expiryDate = parse(validExpiry, 'dd/MM/yyyy', new Date())
       return isBefore(expiryDate, tomorrow)
     })
   }
@@ -43,13 +52,36 @@ export default class LicenceExpiryService {
    * TUSED (Top Up Supervision Expiry Date)
    * are prior to todays date and  expired
    */
-  async expireLicences() {
+  async expireLicences(): Promise<LicencesExpired> {
     const activeLicences = await this.licenceService.getLicencesByNomisIdsAndStatus([], [LicenceStatus.ACTIVE])
     const eligibleNomisLicences = await this.getEligibleNomisLicences(activeLicences.map(l => l.nomisId))
-    const expiryList = activeLicences
-      .filter(l => eligibleNomisLicences.find(o => o.prisonerNumber === l.nomisId))
-      .map(l => l.licenceId)
-    if (expiryList.length === 0) return
-    await this.licenceApiClient.batchInActivateLicences(expiryList)
+    const licenceExpiryList = activeLicences.filter(l =>
+      eligibleNomisLicences.find(o => o.prisonerNumber === l.nomisId)
+    )
+    const idList = licenceExpiryList.map(l => l.licenceId)
+
+    if (idList.length === 0) return [] as LicencesExpired
+
+    await this.licenceApiClient.batchInActivateLicences(idList)
+    return this.LicencesExpiredSummary(licenceExpiryList, eligibleNomisLicences)
+  }
+
+  /**
+   * Retrieve licenceId, SLED and TUSED for each licence.
+   * licence and sentence data are split between two payloads
+   * @param licences
+   * @param offenderRecords
+   * @constructor
+   * @private
+   */
+  private LicencesExpiredSummary(licences: LicenceSummary[], offenderRecords: Prisoner[]): LicencesExpired {
+    return licences.map(l => {
+      const offenderRecord = offenderRecords.find(o => o.prisonerNumber === l.nomisId)
+      return {
+        licenceId: l.licenceId,
+        SLED: offenderRecord?.licenceExpiryDate,
+        TUSED: offenderRecord?.topupSupervisionExpiryDate,
+      }
+    })
   }
 }

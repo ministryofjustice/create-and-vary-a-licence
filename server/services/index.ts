@@ -11,6 +11,7 @@ import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
 import LicenceApiClient from '../data/licenceApiClient'
 import UkBankHolidayFeedService from './ukBankHolidayFeedService'
+import LicenceExpiryService from './licenceExpiryService'
 
 const hmppsAuthClient = new HmppsAuthClient()
 const prisonApiClient = new PrisonApiClient()
@@ -25,6 +26,7 @@ const communityService = new CommunityService(communityApiClient, probationSearc
 const userService = new UserService(hmppsAuthClient, prisonApiClient, communityService)
 const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService)
 const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
+const licenceExpiryService = new LicenceExpiryService(prisonerService, licenceApiClient, licenceService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
 
 // TODO - Remove prisonerService and community service as exports
@@ -39,6 +41,7 @@ export const services = {
   communityService,
   qrCodeService,
   ukBankHolidayFeedService,
+  licenceExpiryService,
 }
 
 export type Services = typeof services

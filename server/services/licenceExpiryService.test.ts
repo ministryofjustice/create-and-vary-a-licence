@@ -7,7 +7,7 @@ import LicenceService from './licenceService'
 import LicenceApiClient from '../data/licenceApiClient'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
-import LicenceExpiryService from './licenceExpiryService'
+import LicenceExpiryService, { LicencesExpired } from './licenceExpiryService'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -129,14 +129,20 @@ describe('Expire Licences where TUSED or SLED is today or in the past', () => {
   it('Updates eligible licences to expire', async () => {
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue(validPrisoners.concat(invalidPrisoners))
     licenceApiClient.matchLicences.mockResolvedValue(validLicences.concat(inValidLicences))
-    await expireLicenceService.expireLicences()
+    const summary = await expireLicenceService.expireLicences()
     expect(licenceApiClient.batchInActivateLicences).toBeCalledWith(validLicences.map(l => l.licenceId))
+    expect(summary).toEqual([
+      { licenceId: 1, SLED: todaysDate, TUSED: undefined },
+      { licenceId: 2, SLED: yesterdaysDate, TUSED: null },
+      { licenceId: 3, SLED: yesterdaysDate, TUSED: yesterdaysDate },
+    ] as LicencesExpired)
   })
 
   it('Does not call API where no licences are due to expire', async () => {
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue(invalidPrisoners)
     licenceApiClient.matchLicences.mockResolvedValue(inValidLicences)
-    await expireLicenceService.expireLicences()
+    const summary = await expireLicenceService.expireLicences()
+    expect(summary).toEqual([] as LicencesExpired)
     expect(licenceApiClient.batchInActivateLicences).not.toHaveBeenCalled()
   })
 })
