@@ -4,6 +4,14 @@
  */
 
 export interface paths {
+  '/omu/{prisonCode}/contact/email': {
+    /** Obtain prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getOmuContactByPrisonCode']
+    /** Updates the OMU email address used to contact members of a prison OMU. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateOmuEmail']
+    /** Delete prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    delete: operations['deleteOmuContactByPrisonCode']
+  }
   '/offender/crn/{crn}/responsible-com': {
     /** Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateResponsibleCom']
@@ -23,6 +31,10 @@ export interface paths {
   '/licence/id/{licenceId}/status': {
     /** Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     put: operations['updateLicenceStatus']
+  }
+  '/licence/id/{licenceId}/standard-conditions': {
+    /** Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    put: operations['updateStandardConditons']
   }
   '/licence/id/{licenceId}/spo-discussion': {
     /** Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -92,6 +104,10 @@ export interface paths {
     /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
     post: operations['getLicencesMatchingCriteria']
   }
+  '/licence/inactivate-licences': {
+    /** Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['inactivateLicences']
+  }
   '/licence/id/{licenceId}/create-variation': {
     /** Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createVariation']
@@ -136,6 +152,33 @@ export interface paths {
 
 export interface components {
   schemas: {
+    /** @description Request object for updating / creating OMU email contact */
+    UpdateOmuEmailRequest: {
+      /**
+       * @description The email used to contact the OMU
+       * @example test@omu.prison.com
+       */
+      email: string
+    }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
+    OmuContact: {
+      /** Format: int64 */
+      id: number
+      prisonCode: string
+      email: string
+      /** Format: date-time */
+      dateCreated: string
+      /** Format: date-time */
+      dateLastUpdated?: string
+    }
     /** @description Request object for updating the COM responsible for an offender */
     UpdateComRequest: {
       /**
@@ -164,15 +207,6 @@ export interface components {
        * @example Bloggs
        */
       lastName?: string
-    }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** @description Request object for updating an offender's probation team */
     UpdateProbationTeamRequest: {
@@ -267,6 +301,37 @@ export interface components {
        * @example John Smythe
        */
       fullName?: string
+    }
+    /** @description Describes a standard condition on this licence */
+    StandardCondition: {
+      /**
+       * Format: int64
+       * @description The internal ID for this standard condition on this licence
+       * @example 98987
+       */
+      id?: number
+      /**
+       * @description The unique code for this standard condition
+       * @example 9ce9d594-e346-4785-9642-c87e764bee37
+       */
+      code?: string
+      /**
+       * Format: int32
+       * @description The sequence of this standard condition
+       * @example 1
+       */
+      sequence?: number
+      /**
+       * @description The text of this standard condition
+       * @example Be of generally good behaviour
+       */
+      text?: string
+    }
+    UpdateStandardConditionDataRequest: {
+      /** @description The list of standard licence conditions from service configuration */
+      standardLicenceConditions: components['schemas']['StandardCondition'][]
+      /** @description The list of standard post sentence supervision conditions from service configuration */
+      standardPssConditions: components['schemas']['StandardCondition'][]
     }
     /** @description Request object for updating the SPO discussion */
     UpdateSpoDiscussionRequest: {
@@ -722,6 +787,7 @@ export interface components {
        */
       comUsername?: string
       /**
+       * Format: int64
        * @description The bookingId associated with the licence
        * @example 773722
        */
@@ -896,31 +962,6 @@ export interface components {
        * @example 1231332
        */
       responsibleComStaffId: number
-    }
-    /** @description Describes a standard condition on this licence */
-    StandardCondition: {
-      /**
-       * Format: int64
-       * @description The internal ID for this standard condition on this licence
-       * @example 98987
-       */
-      id?: number
-      /**
-       * @description The unique code for this standard condition
-       * @example 9ce9d594-e346-4785-9642-c87e764bee37
-       */
-      code?: string
-      /**
-       * Format: int32
-       * @description The sequence of this standard condition
-       * @example 1
-       */
-      sequence?: number
-      /**
-       * @description The text of this standard condition
-       * @example Be of generally good behaviour
-       */
-      text?: string
     }
     /** @description Describes a prisoner due for release */
     PrisonerForRelease: {
@@ -1347,6 +1388,103 @@ export interface components {
 }
 
 export interface operations {
+  /** Obtain prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getOmuContactByPrisonCode: {
+    parameters: {
+      path: {
+        prisonCode: string
+      }
+    }
+    responses: {
+      /** The OMU was found */
+      200: {
+        content: {
+          'application/json': components['schemas']['OmuContact']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Not found, the OMU email was not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Updates the OMU email address used to contact members of a prison OMU. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateOmuEmail: {
+    parameters: {
+      path: {
+        prisonCode: string
+      }
+    }
+    responses: {
+      /** The OMU was updated */
+      200: {
+        content: {
+          'application/json': components['schemas']['OmuContact']
+        }
+      }
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateOmuEmailRequest']
+      }
+    }
+  }
+  /** Delete prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  deleteOmuContactByPrisonCode: {
+    parameters: {
+      path: {
+        prisonCode: string
+      }
+    }
+    responses: {
+      /** The OMU email address was deleted */
+      200: unknown
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   /** Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   updateResponsibleCom: {
     parameters: {
@@ -1495,7 +1633,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['NotifyRequest']
+        'application/json': components['schemas']['NotifyRequest'][]
       }
     }
   }
@@ -1537,6 +1675,47 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['StatusUpdateRequest']
+      }
+    }
+  }
+  /** Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  updateStandardConditons: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Standard conditions updated */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateStandardConditionDataRequest']
       }
     }
   }
@@ -2191,6 +2370,36 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['MatchLicencesRequest']
+      }
+    }
+  }
+  /** Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  inactivateLicences: {
+    responses: {
+      /** Inactivate Licences */
+      200: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': number[]
       }
     }
   }

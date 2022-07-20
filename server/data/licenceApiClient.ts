@@ -24,6 +24,7 @@ import type {
   EmailContact,
   UpdateProbationTeamRequest,
   NotifyRequest,
+  UpdateStandardConditionDataRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -102,6 +103,17 @@ export default class LicenceApiClient extends RestClient {
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/additional-conditions`, data: additionalConditions },
+      { username: user.username }
+    )
+  }
+
+  async updateStandardConditions(
+    licenceId: string,
+    standardConditions: UpdateStandardConditionDataRequest,
+    user: User
+  ): Promise<void> {
+    await this.put(
+      { path: `/licence/id/${licenceId}/standard-conditions`, data: standardConditions },
       { username: user.username }
     )
   }
