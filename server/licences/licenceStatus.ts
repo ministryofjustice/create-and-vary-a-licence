@@ -64,8 +64,8 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   },
   VARIATION_REJECTED: {
     label: 'Attention needed',
-    description: 'Variation submitted for approval',
-    colour: 'pink',
+    description: 'Feedback from Head of PDU received',
+    colour: 'red',
   },
   NOT_IN_PILOT: {
     label: 'Outside pilot',
