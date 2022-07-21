@@ -9,6 +9,7 @@ import rolloutRoutes from './rollout'
 import viewLicenceRoutes from './viewingLicences'
 import approveVariationsLicenceRoutes from './approvingVariations'
 import supportRoutes from './support'
+import changeLocationRoutes from './changeLocation'
 import auth from '../authentication/auth'
 import tokenVerifier from '../data/tokenVerification'
 import populateCurrentUser from '../middleware/populateCurrentUser'
@@ -34,6 +35,7 @@ export default function Index(services: Services): Router {
   router.use(viewLicenceRoutes(services))
   router.use(approveVariationsLicenceRoutes(services))
   router.use(supportRoutes(services))
+  router.use(changeLocationRoutes(services))
 
   return router
 }

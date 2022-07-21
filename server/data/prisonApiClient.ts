@@ -7,6 +7,7 @@ import type {
   PrisonApiUserDetail,
   PrisonInformation,
   HomeDetentionCurfew,
+  PrisonDetail,
 } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
 
@@ -48,6 +49,10 @@ export default class PrisonApiClient extends RestClient {
       { path: `/api/agencies/prison/${prisonId}` },
       { username: user?.username }
     )) as Promise<PrisonInformation>
+  }
+
+  async getPrisons(): Promise<PrisonDetail[]> {
+    return (await this.get({ path: `/api/agencies/type/INST?active=true` })) as Promise<PrisonDetail[]>
   }
 
   async getLatestHdcStatus(bookingId: string, user?: User): Promise<HomeDetentionCurfew> {

@@ -5,7 +5,7 @@ import { User } from '../@types/CvlUserDetails'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import PrisonerService from './prisonerService'
-import { HomeDetentionCurfew, PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
+import { HomeDetentionCurfew, PrisonApiPrisoner, PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
 import { PagePrisoner, Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 
 jest.mock('fs')
@@ -69,6 +69,17 @@ describe('Prisoner Service', () => {
 
     expect(actualResult).toEqual(expectedResult)
     expect(prisonApiClient.getPrisonInformation).toHaveBeenCalledWith('MDI', user)
+  })
+
+  it('Get Prisons', async () => {
+    const expectedResult = [{ agencyId: 'MDI', description: 'Moorland (HMP)' }] as PrisonDetail[]
+
+    prisonApiClient.getPrisons.mockResolvedValue(expectedResult)
+
+    const actualResult = await prisonerService.getPrisons()
+
+    expect(actualResult).toEqual(expectedResult)
+    expect(prisonApiClient.getPrisons).toHaveBeenCalledWith()
   })
 
   it('Search Prisoners', async () => {

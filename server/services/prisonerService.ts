@@ -3,7 +3,7 @@ import fs from 'fs'
 import { Moment } from 'moment'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
-import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
+import { PrisonApiPrisoner, PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
 import HdcStatus from '../@types/HdcStatus'
@@ -40,6 +40,10 @@ export default class PrisonerService {
 
   async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {
     return this.prisonApiClient.getPrisonInformation(prisonId, user)
+  }
+
+  async getPrisons(): Promise<PrisonDetail[]> {
+    return this.prisonApiClient.getPrisons()
   }
 
   async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria, user?: User): Promise<Prisoner[]> {

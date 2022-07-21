@@ -2,12 +2,34 @@ import Page from '../pages/page'
 import IndexPage from '../pages'
 
 context('Reject a licence', () => {
+  const singleCaseload = {
+    details: [
+      {
+        caseLoadId: 'LEI',
+        caseloadFunction: 'GENERAL',
+        currentlyActive: true,
+        description: 'Leeds (HMP)',
+        type: 'INST',
+      },
+    ],
+  }
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
     cy.task('stubAuthUser')
     cy.task('stubGetPrisonUserDetails')
-    cy.task('stubGetPrisonUserCaseloads')
+    cy.task('stubGetPrisonUserCaseloads', {
+      details: [
+        {
+          caseLoadId: 'LEI',
+          caseloadFunction: 'GENERAL',
+          currentlyActive: true,
+          description: 'Leeds (HMP)',
+          type: 'INST',
+        },
+      ],
+    })
     cy.task('stubGetCompletedLicence', 'SUBMITTED')
     cy.task('stubGetLicencesForStatus', 'SUBMITTED')
     cy.task('stubGetOffendersByNomsNumber')
@@ -15,6 +37,8 @@ context('Reject a licence', () => {
     cy.task('stubUpdateLicenceStatus', 1)
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubRecordAuditEvent')
+    cy.task('stubGetPrisons')
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
   })
 

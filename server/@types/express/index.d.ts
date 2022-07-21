@@ -8,6 +8,7 @@ declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     currentUser: CvlUserDetails
+    caseloadsSelected: string[]
   }
 }
 

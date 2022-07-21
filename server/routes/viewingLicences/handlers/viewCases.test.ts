@@ -4,20 +4,27 @@ import ViewAndPrintCaseRoutes from './viewCases'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
+import PrisonerService from '../../../services/prisonerService'
+
 import LicenceType from '../../../enumeration/licenceType'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
+import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
 
+const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
+jest.mock('../../../services/prisonerService')
+
 describe('Route handlers - View and print case list', () => {
-  const handler = new ViewAndPrintCaseRoutes(caseloadService)
+  const handler = new ViewAndPrintCaseRoutes(caseloadService, prisonerService)
   let req: Request
   let res: Response
 
   beforeEach(() => {
     req = {
       query: {},
+      session: { caseloadsSelected: [] },
     } as unknown as Request
 
     res = {
@@ -25,6 +32,8 @@ describe('Route handlers - View and print case list', () => {
       locals: {
         user: {
           username: 'joebloggs',
+          activeCaseload: 'BAI',
+          prisonCaseload: ['BAI'],
         },
       },
     } as unknown as Response
@@ -117,6 +126,25 @@ describe('Route handlers - View and print case list', () => {
         },
       },
     ])
+
+    prisonerService.getPrisons.mockResolvedValue([
+      {
+        agencyId: 'BAI',
+        description: 'Belmarsh (HMP)',
+      },
+      {
+        agencyId: 'BXI',
+        description: 'Brixton (HMP)',
+      },
+      {
+        agencyId: 'MDI',
+        description: 'Moorland (HMP)',
+      },
+      {
+        agencyId: 'BMI',
+        description: 'Birmingham (HMP)',
+      },
+    ] as PrisonDetail[])
   })
 
   afterEach(() => {
@@ -124,10 +152,16 @@ describe('Route handlers - View and print case list', () => {
   })
 
   describe('GET', () => {
-    it('should render list of licences', async () => {
+    it('should render list of licences and display the currently active caseload prison', async () => {
+      res.locals.prisonCaseload = ['BAI']
       await handler.GET(req, res)
 
-      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith({ username: 'joebloggs' })
+      expect(prisonerService.getPrisons).toHaveBeenCalled()
+
+      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+        { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
+        ['BAI']
+      )
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
@@ -142,6 +176,7 @@ describe('Route handlers - View and print case list', () => {
             isClickable: true,
           },
           {
+            licenceId: undefined,
             name: 'Joe Bloggs',
             prisonerNumber: 'A1234AB',
             probationPractitioner: {
@@ -152,6 +187,7 @@ describe('Route handlers - View and print case list', () => {
             isClickable: false,
           },
           {
+            licenceId: undefined,
             name: 'Harvey Smith',
             prisonerNumber: 'A1234AC',
             probationPractitioner: {
@@ -162,6 +198,7 @@ describe('Route handlers - View and print case list', () => {
             isClickable: false,
           },
           {
+            licenceId: undefined,
             name: 'Harold Lloyd',
             prisonerNumber: 'A1234AD',
             probationPractitioner: {
@@ -172,6 +209,7 @@ describe('Route handlers - View and print case list', () => {
             isClickable: false,
           },
           {
+            licenceId: undefined,
             name: 'Stephen Rowe',
             prisonerNumber: 'A1234AE',
             probationPractitioner: {
@@ -182,6 +220,181 @@ describe('Route handlers - View and print case list', () => {
             isClickable: false,
           },
         ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should render list of licences and display a single user selected prison which is not the currently active prison', async () => {
+      req.session.caseloadsSelected = ['MDI']
+      res.locals.user.prisonCaseload = ['BAI', 'MDI']
+      await handler.GET(req, res)
+
+      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+        {
+          activeCaseload: 'BAI',
+          prisonCaseload: ['BAI', 'MDI'],
+          username: 'joebloggs',
+        },
+        ['MDI']
+      )
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.SUBMITTED,
+            isClickable: true,
+          },
+          {
+            licenceId: undefined,
+            name: 'Joe Bloggs',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Thor',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.NOT_STARTED,
+            isClickable: false,
+          },
+          {
+            licenceId: undefined,
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.NOT_IN_PILOT,
+            isClickable: false,
+          },
+          {
+            licenceId: undefined,
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.OOS_RECALL,
+            isClickable: false,
+          },
+          {
+            licenceId: undefined,
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.OOS_BOTUS,
+            isClickable: false,
+          },
+        ],
+        hasMultipleCaseloadsInNomis: true,
+        prisonsToDisplay: [
+          {
+            agencyId: 'MDI',
+            description: 'Moorland (HMP)',
+          },
+        ],
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should render list of licences and display with multiple user selected prisons', async () => {
+      req.session.caseloadsSelected = ['MDI', 'BXI']
+      res.locals.user.prisonCaseload = ['BAI', 'MDI', 'BXI']
+      await handler.GET(req, res)
+
+      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+        { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI', 'MDI', 'BXI'] },
+        ['MDI', 'BXI']
+      )
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.SUBMITTED,
+            isClickable: true,
+          },
+          {
+            licenceId: undefined,
+            name: 'Joe Bloggs',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Thor',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.NOT_STARTED,
+            isClickable: false,
+          },
+          {
+            licenceId: undefined,
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.NOT_IN_PILOT,
+            isClickable: false,
+          },
+          {
+            licenceId: undefined,
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.OOS_RECALL,
+            isClickable: false,
+          },
+          {
+            licenceId: undefined,
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.OOS_BOTUS,
+            isClickable: false,
+          },
+        ],
+        hasMultipleCaseloadsInNomis: true,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BXI',
+            description: 'Brixton (HMP)',
+          },
+          {
+            agencyId: 'MDI',
+            description: 'Moorland (HMP)',
+          },
+        ],
+        search: undefined,
         statusConfig,
       })
     })
@@ -203,6 +416,13 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.SUBMITTED,
             isClickable: true,
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
           },
         ],
         search: 'bob',
@@ -229,6 +449,13 @@ describe('Route handlers - View and print case list', () => {
             isClickable: true,
           },
         ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
         search: 'A1234AA',
         statusConfig,
       })
@@ -251,6 +478,13 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.SUBMITTED,
             isClickable: true,
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
           },
         ],
         search: 'holmes',

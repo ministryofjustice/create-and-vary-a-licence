@@ -202,5 +202,19 @@ export function registerNunjucks(app?: express.Express): Environment {
       : undefined
   })
 
+  njkEnv.addFilter('extractAttr', (array, key) => {
+    return array.map((item: string) => {
+      return item[key]
+    })
+  })
+
+  njkEnv.addFilter('toChecked', <T>(array: T[], valueKey: string, textKey: string, values: T[] = []) => {
+    return array.map(item => ({
+      value: item[valueKey],
+      text: item[textKey],
+      checked: values.includes(item[valueKey]),
+    }))
+  })
+
   return njkEnv
 }

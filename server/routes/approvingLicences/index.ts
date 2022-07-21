@@ -12,7 +12,12 @@ import ConfirmRejectedRoutes from './handlers/confirmRejected'
 import { Services } from '../../services'
 import ComDetailsRoutes from './handlers/comDetails'
 
-export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
+export default function Index({
+  licenceService,
+  caseloadService,
+  communityService,
+  prisonerService,
+}: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/approve${path}`
 
@@ -34,7 +39,7 @@ export default function Index({ licenceService, caseloadService, communityServic
     )
 
   const comDetailsHandler = new ComDetailsRoutes(communityService)
-  const approvalCasesHandler = new ApprovalCaseRoutes(caseloadService)
+  const approvalCasesHandler = new ApprovalCaseRoutes(caseloadService, prisonerService)
   const approvalViewHandler = new ApprovalViewRoutes(licenceService)
   const approvalConfirmedHandler = new ConfirmApprovedRoutes()
   const approvalRejectedHandler = new ConfirmRejectedRoutes()

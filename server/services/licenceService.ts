@@ -26,6 +26,7 @@ import {
   UpdateReasonForVariationRequest,
   UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
+  UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
@@ -280,6 +281,10 @@ export default class LicenceService {
     return this.licenceApiClient.updateBespokeConditions(id, requestBody, user)
   }
 
+  async updateStandardConditions(id: string, data: UpdateStandardConditionDataRequest, user: User): Promise<void> {
+    await this.licenceApiClient.updateStandardConditions(id, data, user)
+  }
+
   async updateStatus(id: string, newStatus: LicenceStatus, user?: User): Promise<void> {
     const requestBody = {
       status: newStatus,
@@ -314,9 +319,9 @@ export default class LicenceService {
     return _.head(licences)
   }
 
-  async getLicencesForApproval(user: User): Promise<LicenceSummary[]> {
+  async getLicencesForApproval(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.SUBMITTED.valueOf()]
-    const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
+    const filteredPrisons = filterCentralCaseload(prisonCaseload)
     return this.licenceApiClient.matchLicences(
       statuses,
       filteredPrisons,
@@ -329,14 +334,14 @@ export default class LicenceService {
     )
   }
 
-  async getLicencesForOmu(user: User): Promise<LicenceSummary[]> {
+  async getLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
     const statuses = [
       LicenceStatus.ACTIVE.valueOf(),
       LicenceStatus.APPROVED.valueOf(),
       LicenceStatus.SUBMITTED.valueOf(),
       LicenceStatus.IN_PROGRESS.valueOf(),
     ]
-    const filteredPrisons = filterCentralCaseload(user.prisonCaseload)
+    const filteredPrisons = filterCentralCaseload(prisonCaseload)
     return this.licenceApiClient.matchLicences(
       statuses,
       filteredPrisons,
@@ -528,9 +533,13 @@ export default class LicenceService {
   private static getTimelineEventType(varyOf: number, status: string): { eventType: TimelineEventType; title: string } {
     switch (status) {
       case LicenceStatus.VARIATION_IN_PROGRESS:
-      case LicenceStatus.VARIATION_REJECTED:
-      case LicenceStatus.VARIATION_SUBMITTED:
         return { eventType: TimelineEventType.VARIATION_IN_PROGRESS, title: 'Variation in progress' }
+
+      case LicenceStatus.VARIATION_SUBMITTED:
+        return { eventType: TimelineEventType.SUBMITTED, title: 'Variation submitted' }
+
+      case LicenceStatus.VARIATION_REJECTED:
+        return { eventType: TimelineEventType.REJECTED, title: 'Variation rejected' }
 
       case LicenceStatus.VARIATION_APPROVED:
         return { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }

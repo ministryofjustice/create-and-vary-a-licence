@@ -5,6 +5,8 @@ import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
+import { getStandardConditions, getVersion } from '../../../utils/conditionsProvider'
+import LicenceType from '../../../enumeration/licenceType'
 
 export default class CheckAnswersRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -38,6 +40,24 @@ export default class CheckAnswersRoutes {
     }
 
     await this.licenceService.submitLicence(licenceId, user)
+
+    /**
+     * TODO
+     * replace when proper versioning functionality is ready.
+     * update the standard conditions to the current policy version if
+     * licence was created on a previous version.
+     */
+    if (licence.version !== getVersion()) {
+      const newStdConditions = {
+        standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode)
+          ? getStandardConditions(LicenceType.AP)
+          : [],
+        standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licence.typeCode)
+          ? getStandardConditions(LicenceType.PSS)
+          : [],
+      }
+      await this.licenceService.updateStandardConditions(licenceId, newStdConditions, user)
+    }
     return res.redirect(`/licence/create/id/${licenceId}/confirmation`)
   }
 

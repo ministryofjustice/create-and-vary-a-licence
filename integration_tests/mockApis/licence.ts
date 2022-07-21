@@ -833,4 +833,18 @@ export default {
       },
     })
   },
+
+  stubUpdateStandardConditions: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/licence/id/(\\d*)/standard-conditions`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
 }

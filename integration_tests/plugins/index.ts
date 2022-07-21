@@ -57,6 +57,7 @@ export default (on: (string, Record) => void): void => {
     stubMatchLicenceEvents: licence.stubMatchLicenceEvents,
     stubApproveVariation: licence.stubApproveVariation,
     stubReferVariation: licence.stubReferVariation,
+    stubUpdateStandardConditions: licence.stubUpdateStandardConditions,
     stubGetHdcLicencesForOffender: licence.stubGetHdcLicencesForOffender,
 
     stubGetPduHeads: community.stubGetPduHeads,
@@ -78,6 +79,7 @@ export default (on: (string, Record) => void): void => {
     stubGetPrisonerDetail: prison.stubGetPrisonerDetail,
     stubGetPrisonInformation: prison.stubGetPrisonInformation,
     stubGetHdcStatus: prison.stubGetHdcStatus,
+    stubGetPrisons: prison.stubGetPrisons,
 
     stubGetProbationer: probationSearch.stubGetProbationer,
     stubGetOffendersByCrn: probationSearch.stubGetOffendersByCrn,
