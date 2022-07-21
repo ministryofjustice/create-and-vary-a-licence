@@ -25,7 +25,7 @@ describe('Caseload', () => {
           crnNumber: 'Z882661',
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
-          licenceStatus: null,
+          licenceStatus: 'ACTIVE',
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
         },
       ],
@@ -74,7 +74,6 @@ describe('Caseload', () => {
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('.status-badge')).toHaveLength(1)
     expect($('.status-badge').text().toString()).toContain('Variation in progress')
   })
 })

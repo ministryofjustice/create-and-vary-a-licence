@@ -29,7 +29,7 @@ export default class CaseloadRoutes {
           crnNumber: c.deliusRecord.otherIds.crn,
           licenceType: licence.type,
           releaseDate: moment(c.nomisRecord.releaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
-          licenceStatus: licence.status === LicenceStatus.ACTIVE ? null : licence.status,
+          licenceStatus: licence.status,
           probationPractitioner: c.probationPractitioner,
         }
       })
