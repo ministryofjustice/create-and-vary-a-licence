@@ -1,9 +1,11 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% macro statusBadge(params, statusConfig) %}
+{% if params.status %}
   {{ govukTag({
       text: statusConfig[params.status].label,
       classes: "govuk-tag--" + statusConfig[params.status].colour + " status-badge"
     })
   }}
+  {% endif %}
 {% endmacro %}
