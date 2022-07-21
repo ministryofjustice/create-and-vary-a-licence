@@ -7,7 +7,8 @@ import LicenceService from './licenceService'
 import LicenceApiClient from '../data/licenceApiClient'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
-import LicenceExpiryService, { LicencesExpired } from './licenceExpiryService'
+import LicenceExpiryService from './licenceExpiryService'
+import { LicencesExpired } from '../@types/licencesExpiredSummary'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')

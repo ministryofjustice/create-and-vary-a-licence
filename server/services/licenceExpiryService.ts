@@ -6,12 +6,7 @@ import { User } from '../@types/CvlUserDetails'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceApiClient from '../data/licenceApiClient'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
-
-export type LicencesExpired = Array<{
-  licenceId: number
-  SLED: string
-  TUSED: string
-}>
+import { LicencesExpired } from '../@types/licencesExpiredSummary'
 
 export default class LicenceExpiryService {
   constructor(
