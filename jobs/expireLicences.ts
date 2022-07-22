@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import { initialiseAppInsights, buildAppInsightsClient, flush } from '../server/utils/azureAppInsights'
 import { services } from '../server/services'
 import logger from '../logger'
