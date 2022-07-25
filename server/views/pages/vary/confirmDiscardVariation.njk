@@ -9,18 +9,16 @@
 
 {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">Are you sure you want to discard this variation?</h1>
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">Are you sure you want to delete this licence variation?</h1>
         </div>
     </div>
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                <div class="govuk-hint govuk-!-margin-bottom-3">Selecting Yes will cancel all changes made and return to the caseview.</div>
 
                 {{ govukRadios({
-                    classes: "govuk-radios--inline",
                     idPrefix: "radio-option",
                     name: "answer",
                     fieldset: {
@@ -36,17 +34,17 @@
                     items: [
                         {
                             value: "Yes",
-                            text: "Yes"
+                            text: "Yes - delete changes and return to case list"
                         },
                         {
                             value: "No",
-                            text: "No"
+                            text: "No - keep changes and continue varying licence"
                         }
                     ]
                 }) }}
 
                 {{ govukButton({
-                    text: "Continue",
+                    text: "Confirm",
                     type: "submit",
                     attributes: { 'data-qa': 'continue' }
                 }) }}
