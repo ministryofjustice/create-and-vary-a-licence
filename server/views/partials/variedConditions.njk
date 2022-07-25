@@ -27,12 +27,12 @@
         {{ buildConditionsSummaryCard('Licence conditions amended', conditionComparison.licenceConditionsAmended) }}
     {% endif %}
     {% if conditionComparison.pssConditionsAdded.length > 0 %}
-        {{ buildConditionsSummaryCard('Post sentence requirements added', conditionComparison.pssConditionsAdded) }}
+        {{ buildConditionsSummaryCard('Post sentence supervision requirement added', conditionComparison.pssConditionsAdded) }}
     {% endif %}
     {% if conditionComparison.pssConditionsRemoved.length > 0 %}
-        {{ buildConditionsSummaryCard('Post sentence requirements removed', conditionComparison.pssConditionsRemoved) }}
+        {{ buildConditionsSummaryCard('Post sentence supervision requirement removed', conditionComparison.pssConditionsRemoved) }}
     {% endif %}
     {% if conditionComparison.pssConditionsAmended.length > 0 %}
-        {{ buildConditionsSummaryCard('Post sentence requirements amended', conditionComparison.pssConditionsAmended) }}
+        {{ buildConditionsSummaryCard('Post sentence supervision requirement amended', conditionComparison.pssConditionsAmended) }}
     {% endif %}
 {% endmacro %}
