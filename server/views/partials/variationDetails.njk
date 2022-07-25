@@ -17,13 +17,13 @@
     {% endfor %}
 
     {% set comments = (comments.push({
-        key: { text: "SPO awareness" },
-        value: { text: "Have you communicated and agreed this change with your SPO?" },
+        key: { text: "SPO consultation" },
+        value: { text: "Have you discussed this variation request with your SPO?" },
         extraDetail: { items: [{ text: licence.spoDiscussion }] }
     }), comments) %}
 
     {% set comments = (comments.push({
-        key: { text: "VLO Communications" },
+        key: { text: "VLO consultation" },
         value: { text: "Have you consulted with the victim liaison officer (VLO) for this case?" },
         extraDetail: { items: [{ text: licence.vloDiscussion }] }
     }), comments) %}
