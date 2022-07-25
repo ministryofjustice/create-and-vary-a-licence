@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalPssConditions(licence, isEditable, validationErrors) %}
+{% macro additionalPssConditions(licence, isEditable, validationErrors, title) %}
     {% set errorMessage = validationErrors | findError('additionalPssConditions') %}
     {% macro additionalConditionHtml(expandedConditionText, data) %}
         <div>
@@ -17,7 +17,7 @@
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
-            <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">Additional post sentence requirements details</h2>
+            <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">{{ title or 'Additional post sentence requirements details' }}</h2>
         </div>
     </div>
 
