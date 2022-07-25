@@ -21,6 +21,7 @@ import ComDetailsRoutes from './handlers/comDetails'
 import TimelineRoutes from './handlers/timeline'
 import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
 import YesOrNotApplicable from '../creatingLicences/types/yesOrNotApplicable'
+import DeleteVariation from './types/deleteVariation'
 
 export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
   const router = Router()
@@ -79,7 +80,7 @@ export default function Index({ licenceService, caseloadService, communityServic
   get('/id/:licenceId/confirm-amend-variation', confirmAmendVariationHandler.GET)
   post('/id/:licenceId/confirm-amend-variation', confirmAmendVariationHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/confirm-discard-variation', confirmDiscardVariationHandler.GET)
-  post('/id/:licenceId/confirm-discard-variation', confirmDiscardVariationHandler.POST, YesOrNoQuestion)
+  post('/id/:licenceId/confirm-discard-variation', confirmDiscardVariationHandler.POST, DeleteVariation)
   get('/id/:licenceId/reason-for-variation', reasonForVariationHandler.GET)
   post('/id/:licenceId/reason-for-variation', reasonForVariationHandler.POST, ReasonForVariation)
   get('/id/:licenceId/summary', variationSummaryHandler.GET)
