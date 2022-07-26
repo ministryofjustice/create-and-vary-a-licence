@@ -1,11 +1,11 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalLicenceConditions(licence, isEditable, validationErrors) %}
+{% macro additionalLicenceConditions(licence, isEditable, validationErrors, title) %}
     {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-full">
-            <h2 id="additional-licence-conditions-heading" class="govuk-heading-m">Additional conditions details</h2>
+            <h2 id="additional-licence-conditions-heading" class="govuk-heading-m">{{ title or "Additional conditions details" }}</h2>
         </div>
     </div>
 
