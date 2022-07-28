@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator'
 
 class ReasonForReferral {
   @Expose()
-  @IsNotEmpty({ message: 'Please provide a short explanation why amendments should be made to this variation' })
+  @IsNotEmpty({ message: 'You must add a reason for wanting to decline the variation request' })
   reasonForReferral: string
 }
 
