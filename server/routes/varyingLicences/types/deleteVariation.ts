@@ -2,7 +2,7 @@ import { Expose } from 'class-transformer'
 import { IsIn, IsNotEmpty } from 'class-validator'
 import YesOrNo from '../../../enumeration/yesOrNo'
 
-const message = 'Select yes or no for if you want to delete the licence variation'
+const message = 'Select yes or no to keep or delete the variation'
 
 class DeleteVariation {
   @Expose()
