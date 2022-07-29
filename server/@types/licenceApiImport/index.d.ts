@@ -651,7 +651,10 @@ export interface components {
       )[]
       /**
        * @description A list of staff identifiers - the responsible probation officer
-       * @example 1234,4321
+       * @example [
+       *   1234,
+       *   4321
+       * ]
        */
       staffId?: number[]
       /**
@@ -792,6 +795,11 @@ export interface components {
        * @example 773722
        */
       bookingId?: string
+      /**
+       * Format: date-time
+       * @description The date the licence was created
+       */
+      dateCreated?: string
     }
     /** @description Request object for creating a new licence */
     CreateLicenceRequest: {

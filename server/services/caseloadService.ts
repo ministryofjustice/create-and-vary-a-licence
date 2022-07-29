@@ -112,6 +112,13 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
+  async getVaryApproverCaseloadByRegion(user: User): Promise<ManagedCase[]> {
+    return this.licenceService
+      .getLicencesForVariationApprovalByRegion(user)
+      .then(licences => this.mapLicencesToOffenders(licences))
+      .then(caseload => this.mapResponsibleComsToCases(caseload))
+  }
+
   public pairNomisRecordsWithDelius = async (prisoners: Prisoner[]): Promise<ManagedCase[]> => {
     const caseloadNomisIds = prisoners
       .filter(offender => offender.prisonerNumber)
@@ -285,6 +292,7 @@ export default class CaseloadService {
               type: <LicenceType>l.licenceType,
               status: <LicenceStatus>l.licenceStatus,
               comUsername: l.comUsername,
+              dateCreated: l.dateCreated,
             }
           }),
       }

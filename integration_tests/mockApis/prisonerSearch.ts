@@ -29,6 +29,7 @@ export default {
             prisonId: 'MDI',
             prisonName: 'Moorland (HMP & YOI)',
             cellLocation: 'RECP',
+            dateCreated: '2022-07-05 10:30:00',
             aliases: [
               {
                 firstName: 'DOUGLAS',

@@ -17,6 +17,7 @@ export type Licence = {
   status: LicenceStatus
   type: LicenceType
   comUsername?: string
+  dateCreated?: string
 }
 
 export type ManagedCase = {

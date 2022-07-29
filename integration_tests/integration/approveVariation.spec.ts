@@ -27,6 +27,17 @@ context('ACO review a licence variation', () => {
     varyApproveCasesPage.signOut().click()
   })
 
+  it('ACO approve a licence variation in another region', () => {
+    cy.task('stubApproveVariation')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let varyApproveCasesPage = indexPage.clickApproveAVariation()
+    const varyApproveAllRegions = varyApproveCasesPage.clickViewAllRegions()
+    const varyApproveViewPage = varyApproveAllRegions.selectCase()
+    const varyApproveConfirmPage = varyApproveViewPage.clickApproveVariation()
+    varyApproveCasesPage = varyApproveConfirmPage.clickBackToCaseList()
+    varyApproveCasesPage.signOut().click()
+  })
+
   it('ACO reject a licence variation', () => {
     cy.task('stubReferVariation')
     const indexPage = Page.verifyOnPage(IndexPage)
