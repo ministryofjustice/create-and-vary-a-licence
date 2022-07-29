@@ -32,7 +32,7 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/confirmation', {
         licenceType: 'licence and post sentence supervision order',
-        titleText: 'Licence and post sentence supervision order variation for Joe Bloggs sent',
+        titleText: 'Variation for Joe Bloggs sent',
       })
     })
 
