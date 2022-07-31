@@ -149,7 +149,8 @@ export default class LicenceApiClient extends RestClient {
     pdus?: string[],
     sortBy?: string,
     sortOrder?: string,
-    user?: User
+    user?: User,
+    probationAreaCodes?: string[]
   ): Promise<LicenceSummary[]> {
     return (await this.post(
       {
@@ -160,6 +161,7 @@ export default class LicenceApiClient extends RestClient {
           staffId: staffIds,
           nomsId: nomisIds,
           pdu: pdus,
+          probationAreaCodes,
         },
         query: {
           sortBy: sortBy || undefined,

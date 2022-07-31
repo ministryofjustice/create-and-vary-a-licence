@@ -357,6 +357,7 @@ export default {
             actualReleaseDate: '23/03/2022',
             comUsername: 'jsmith',
             bookingId: options.bookingId,
+            dateCreated: '01/03/2021',
           },
         ],
       },

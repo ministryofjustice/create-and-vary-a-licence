@@ -9,17 +9,22 @@ export default class VaryApproveListRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
+    const regionCases = req.query?.view === 'region'
     const { user } = res.locals
 
-    const cases = await this.caseloadService.getVaryApproverCaseload(user)
+    const cases = regionCases
+      ? await this.caseloadService.getVaryApproverCaseloadByRegion(user)
+      : await this.caseloadService.getVaryApproverCaseload(user)
 
     const caseloadViewModel = cases
       .map(c => {
+        const licence = _.head(c.licences)
         return {
-          licenceId: _.head(c.licences).id,
+          licenceId: licence.id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           crnNumber: c.deliusRecord.otherIds.crn,
-          licenceType: _.head(c.licences).type,
+          licenceType: licence.type,
+          variationRequestDate: moment(licence.dateCreated, 'YYYY-MM-DD').format('DD MMM YYYY'),
           releaseDate: moment(c.nomisRecord.releaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
           probationPractitioner: c.probationPractitioner,
         }
@@ -38,6 +43,6 @@ export default class VaryApproveListRoutes {
         const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
         return crd1 - crd2
       })
-    res.render('pages/vary-approve/cases', { caseload: caseloadViewModel, search })
+    res.render('pages/vary-approve/cases', { caseload: caseloadViewModel, search, regionCases })
   }
 }

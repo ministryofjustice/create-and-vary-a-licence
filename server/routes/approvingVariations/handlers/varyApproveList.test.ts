@@ -36,6 +36,7 @@ describe('Route Handlers - Variation approval list', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.VARIATION_SUBMITTED,
+            dateCreated: '2022-05-01 10:15',
           },
         ],
         nomisRecord: {
@@ -72,11 +73,14 @@ describe('Route Handlers - Variation approval list', () => {
             crnNumber: 'X12345',
             licenceType: 'AP',
             releaseDate: '01 May 2022',
+            variationRequestDate: '01 May 2022',
             probationPractitioner: {
               name: 'Walter White',
             },
           },
         ],
+        regionCases: false,
+        search: undefined,
       })
     })
 
@@ -93,11 +97,13 @@ describe('Route Handlers - Variation approval list', () => {
             crnNumber: 'X12345',
             licenceType: 'AP',
             releaseDate: '01 May 2022',
+            variationRequestDate: '01 May 2022',
             probationPractitioner: {
               name: 'Walter White',
             },
           },
         ],
+        regionCases: false,
         search: 'bob',
       })
     })
@@ -115,11 +121,13 @@ describe('Route Handlers - Variation approval list', () => {
             crnNumber: 'X12345',
             licenceType: 'AP',
             releaseDate: '01 May 2022',
+            variationRequestDate: '01 May 2022',
             probationPractitioner: {
               name: 'Walter White',
             },
           },
         ],
+        regionCases: false,
         search: 'X12345',
       })
     })
@@ -137,11 +145,13 @@ describe('Route Handlers - Variation approval list', () => {
             crnNumber: 'X12345',
             licenceType: 'AP',
             releaseDate: '01 May 2022',
+            variationRequestDate: '01 May 2022',
             probationPractitioner: {
               name: 'Walter White',
             },
           },
         ],
+        regionCases: false,
         search: 'white',
       })
     })
@@ -154,6 +164,7 @@ describe('Route Handlers - Variation approval list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
         caseload: [],
         search: 'XXX',
+        regionCases: false,
       })
     })
   })
