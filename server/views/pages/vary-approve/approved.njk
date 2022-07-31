@@ -11,20 +11,23 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
-                titleText: "The licence variation for " + licence.forename + " " + licence.surname + " has been approved."
+                titleText: "Licence variation for " + licence.forename + " " + licence.surname + " approved."
             }) }}
 
             <h2 class="govuk-heading-m">What happens next</h2>
             <p class="govuk-body" id="sent-to">
-                The licence variation for {{ licence.forename }} {{ licence.surname }} been approved.
+                The variation for {{ licence.forename }} {{ licence.surname }} has been approved with your digital signature.
             </p>
             <p class="govuk-body" id="notified-to">
-                The probation team will be notified of the approval.
+                We have sent an email notification to the probation practitioner.
+            </p>
+            <p class="govuk-body">
+                They will be able to print and issue the licence.
             </p>
 
             <p class="govuk-body">
                 {{ govukButton({
-                    text: "Return to approvals case list",
+                    text: "Return to case list",
                     classes: "govuk-button--primary govuk-!-margin-bottom-0 govuk-body",
                     href: '/licence/vary-approve/list',
                     attributes: { 'data-qa': 'return-to-vary-approve-cases' }

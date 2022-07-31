@@ -8,25 +8,25 @@
 {% set hideLicenceBanner = true %}
 
 {% block content %}
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row govuk-body">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
               titleText: titleText
             }) }}
 
             <h2 class="govuk-heading-m">What happens next</h2>
-            <p class="govuk-body">
-                We have sent the {{ licenceType }} variation request to the Head of PDU for approval.
+            <p>
+                We have sent the variation request to the head of PDU for approval.
             </p>
-            <p class="govuk-body">
+            <p>
                 They will contact you if they need more information.
             </p>
-            <p class="govuk-body">
-                You will get an email when the variation is approved and you will be able to print and issue the licence.            
+            <p>
+                You will get an email when the variation is approved and you will be able to print 	and issue the licence or post sentence supervision order.          
             </p>
 
             <h2 class="govuk-heading-m">Give us your feedback</h2>
-            <p class="govuk-body">
+            <p>
                 <a href="{{ exitSurveyLink }}" rel="noreferrer noopener" target="_blank" id="exit-survey" class="govuk-link">What did you think of this service?</a> (takes 30 seconds)
             </p>
 

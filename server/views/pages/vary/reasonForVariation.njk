@@ -13,7 +13,7 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">Add reasons for the licence variation</h1>
+            <h1 class="govuk-heading-l">Add reasons for the variation</h1>
         </div>
     </div>
     <form method="POST">
@@ -23,7 +23,7 @@
 
                 {{ variationDetails(licence, conversation) }}
 
-                <div class="govuk-hint">Add a short explanation for every licence condition you want to vary. You should include:
+                <div class="govuk-hint">Add a short explanation for everything you want to vary. You should include:
                     <ul class="govuk-list govuk-list--bullet govuk-hint">
                         <li>why the changes are being made now and why they are necessary to manage current risk</li>
                         <li>who you have consulted about the variations and if they support your decision</li>
@@ -31,7 +31,7 @@
                 </div>
 
                 {{ govukDetails({
-                    summaryText: "View the licence variation details",
+                    summaryText: "View variation details",
                     html: variedConditions(conditionComparison)
                 }) }}
 
