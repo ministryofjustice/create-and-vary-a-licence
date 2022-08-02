@@ -36,7 +36,7 @@ describe('Route Handlers - Variation approval list', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.VARIATION_SUBMITTED,
-            dateCreated: '2022-05-01 10:15',
+            dateCreated: '01/05/2022 10:15',
           },
         ],
         nomisRecord: {

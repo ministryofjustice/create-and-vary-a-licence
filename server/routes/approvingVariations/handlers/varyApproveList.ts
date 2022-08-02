@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import _ from 'lodash'
+import { format, parse } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
 
@@ -19,13 +20,15 @@ export default class VaryApproveListRoutes {
     const caseloadViewModel = cases
       .map(c => {
         const licence = _.head(c.licences)
+        const variationCreatedDate = parse(licence.dateCreated, 'dd/MM/yyyy HH:mm', new Date())
+        const releaseDate = parse(c.nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
         return {
           licenceId: licence.id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           crnNumber: c.deliusRecord.otherIds.crn,
           licenceType: licence.type,
-          variationRequestDate: moment(licence.dateCreated, 'YYYY-MM-DD').format('DD MMM YYYY'),
-          releaseDate: moment(c.nomisRecord.releaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
+          variationRequestDate: format(variationCreatedDate, 'dd MMMM yyyy'),
+          releaseDate: format(releaseDate, 'dd MMM yyyy'),
           probationPractitioner: c.probationPractitioner,
         }
       })
