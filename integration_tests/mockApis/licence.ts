@@ -39,7 +39,7 @@ const licencePlaceholder = {
   probationLauDescription: 'Cardiff South',
   probationTeamCode: 'A',
   probationTeamDescription: 'Cardiff South Team A',
-  dateCreated: '10/09/2021 10:00:00', // Make dynamic to now?
+  dateCreated: '10/09/2021 10:00', // Make dynamic to now?
   dateLastUpdated: '10/09/2021 10:01:00', // Make dynamic to now?
   createdByUsername: 'X12345',
   createdByFullName: 'John Smith',
@@ -357,7 +357,7 @@ export default {
             actualReleaseDate: '23/03/2022',
             comUsername: 'jsmith',
             bookingId: options.bookingId,
-            dateCreated: '01/03/2021',
+            dateCreated: '01/03/2021 10:15',
           },
         ],
       },

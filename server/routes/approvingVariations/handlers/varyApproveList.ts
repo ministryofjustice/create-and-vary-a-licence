@@ -20,15 +20,22 @@ export default class VaryApproveListRoutes {
     const caseloadViewModel = cases
       .map(c => {
         const licence = _.head(c.licences)
-        const variationCreatedDate = parse(licence.dateCreated, 'dd/MM/yyyy HH:mm', new Date())
-        const releaseDate = parse(c.nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
+
+        const releaseDate = c.nomisRecord.releaseDate
+          ? format(parse(c.nomisRecord.releaseDate, 'yyyy-MM-dd', new Date()), 'dd MMM yyyy')
+          : null
+
+        const variationRequestDate = licence.dateCreated
+          ? format(parse(licence.dateCreated, 'dd/MM/yyyy HH:mm', new Date()), 'dd MMMM yyyy')
+          : null
+
         return {
           licenceId: licence.id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           crnNumber: c.deliusRecord.otherIds.crn,
           licenceType: licence.type,
-          variationRequestDate: format(variationCreatedDate, 'dd MMMM yyyy'),
-          releaseDate: format(releaseDate, 'dd MMM yyyy'),
+          variationRequestDate,
+          releaseDate,
           probationPractitioner: c.probationPractitioner,
         }
       })
