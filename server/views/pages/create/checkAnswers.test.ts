@@ -97,13 +97,13 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display additional licence conditions section if licence type is AP', () => {
     viewContext = { licence: { ...licence, typeCode: 'AP' } }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-licence-conditions-heading').text()).toBe('Additional conditions details')
+    expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions')
   })
 
   it('should display additional licence conditions section if licence type is AP_PSS', () => {
     viewContext = { licence }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-licence-conditions-heading').text()).toBe('Additional conditions details')
+    expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions')
   })
 
   it('should not display additional licence conditions section if licence type is PSS', () => {
@@ -148,7 +148,7 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: { ...licence, typeCode: 'PSS' },
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence requirements details')
+    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements')
   })
 
   it('should display additional PSS conditions section if licence type is AP_PSS', () => {
@@ -156,7 +156,7 @@ describe('Create a Licence Views - Check Answers', () => {
       licence,
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence requirements details')
+    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements')
   })
 
   it('should not display additional licence conditions section if licence type is AP', () => {
