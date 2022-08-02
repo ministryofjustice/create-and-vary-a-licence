@@ -23,9 +23,10 @@
                         Hour
                     </label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
-                           id="{{ params.id }}-hour"
-                           name="{{ params.id }}[hour]" type="text" pattern="[0-9]*" inputmode="numeric"
-                           value="{{ params.formResponses['hour'] }}">
+                        maxlength="2"
+                        id="{{ params.id }}-hour"
+                        name="{{ params.id }}[hour]" type="text" pattern="[0-9]*" inputmode="numeric"
+                        value="{{ params.formResponses['hour'] }}">
                 </div>
             </div>
             <div class="govuk-date-input__item">
@@ -34,9 +35,10 @@
                         Minute
                     </label>
                     <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
-                           id="{{ params.id }}-minute"
-                           name="{{ params.id }}[minute]" type="text" pattern="[0-9]*" inputmode="numeric"
-                           value="{{ params.formResponses['minute'] }}">
+                        maxlength="2"
+                        id="{{ params.id }}-minute"
+                        name="{{ params.id }}[minute]" type="text" pattern="[0-9]*" inputmode="numeric"
+                        value="{{ params.formResponses['minute'] }}">
                 </div>
             </div>
             <div class="govuk-date-input__item">
