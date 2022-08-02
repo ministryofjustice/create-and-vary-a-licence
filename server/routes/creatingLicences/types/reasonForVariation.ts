@@ -3,7 +3,7 @@ import { IsNotEmpty } from 'class-validator'
 
 class ReasonForVariation {
   @Expose()
-  @IsNotEmpty({ message: 'You must add a reason for each variation' })
+  @IsNotEmpty({ message: 'You must add a reason for everything you want to vary' })
   reasonForVariation: string
 }
 
