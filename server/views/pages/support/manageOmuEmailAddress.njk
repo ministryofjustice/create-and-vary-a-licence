@@ -1,0 +1,138 @@
+{% extends "layout.njk" %}
+
+{% set pageTitle = applicationName + " - Support - Manage OMU email" %}
+{% set backLinkHref = "/support" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl">Manage OMU email address</h1>
+        </div>
+    </div>
+    <form method="post" action="/support/manage-omu-email-address">        
+        <h2 class="govuk-heading-m">View current</h2>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-quarter">
+                {{ govukInput({
+                    label: {
+                        text: "Prison ID"
+                    },
+                    id: "prisonIdCurrent", 
+                    classes: "govuk-input--width-3 govuk-!-padding-left-3",
+                    name: "prisonIdCurrent", 
+                    attributes:{ maxLength:"3" },
+                    value: prisonIdCurrent | toUpper,
+                    errorMessage: validationErrors | findError('prisonIdCurrent')
+                 }) }}
+            </div>
+
+            <div class="govuk-grid-column-one-quarter govuk-!-padding-top-6">
+                <div class="govuk-width-container">
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            classes: "govuk-button--primary",
+                            text: "View email",
+                            preventDoubleClick: true,
+                            attributes: {  'data-qa': 'get-email' }                        
+                        }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="govuk-grid-column-one-half govuk-!-padding-top-6"> 
+                <p class="govuk-!-font-weight-bold">{{ emailCurrent }} </p>
+            </div>
+        </div>
+    </form>
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-1 govuk-!-margin-bottom-8">
+    
+    <form method="post" action="/support/manage-omu-email-address/add-or-edit">
+        <h2 class="govuk-heading-m">Add or edit</h2>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-quarter">
+                {{ govukInput({
+                    label: {
+                        text: "Prison ID"
+                    },
+                    id: "prisonIdEdit", 
+                    classes: "govuk-input--width-3 govuk-!-padding-left-3",
+                    name: "prisonIdEdit", 
+                    attributes:{ maxLength:"3" },
+                    value: formResponses.prisonIdEdit | toUpper,
+                    errorMessage: validationErrors | findError('prisonIdEdit')
+                }) }}
+            </div>
+
+            <div class="govuk-grid-column-one-half">
+                {{ govukInput({
+                    label: {
+                        text: "OMU email"
+                    },
+                    id: "email",
+                    name: "email", 
+                    value: formResponses.email,
+                    errorMessage: validationErrors | findError('email')
+                }) }}
+            </div>
+
+            <div class="govuk-grid-column-one-quarter govuk-!-padding-top-6">
+                <div class="govuk-width-container">
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            classes: "govuk-button--primary",
+                            text: "Add or edit",
+                            preventDoubleClick: true,
+                            attributes: {  'data-qa': 'add-edit' }
+                        }) }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-3 govuk-!-margin-bottom-8">
+
+    <form method="post" action="/support/manage-omu-email-address/delete">
+        <h2 class="govuk-heading-m">Delete</h2>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-quarter">
+                {{ govukInput({
+                    label: {
+                        text: "Prison ID"
+                    },
+                    id: "prisonIdDelete", 
+                    classes: "govuk-input--width-3 govuk-!-padding-left-3",
+                    name: "prisonIdDelete", 
+                    attributes:{ maxLength:"3" },
+                    value: prisonIdDelete | toUpper,
+                    errorMessage: validationErrors | findError('prisonIdDelete')
+                }) }}
+            </div>
+
+            <div class="govuk-grid-column-one-quarter govuk-!-padding-top-6">
+                <div class="govuk-width-container">
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            classes: "govuk-button--warning",
+                            text: "Delete email",
+                            preventDoubleClick: true,
+                            attributes: {  'data-qa': 'delete' }
+                        }) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="govuk-grid-column-one-half govuk-!-padding-top-6">
+                <p class="govuk-!-font-weight-bold"> {{ deleteMessage }}
+            </div>
+
+        </div>
+    </form>
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-3 govuk-!-margin-bottom-8">
+
+{% endblock %}

@@ -25,6 +25,7 @@ import type {
   UpdateProbationTeamRequest,
   NotifyRequest,
   UpdateStandardConditionDataRequest,
+  OmuContact,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -33,6 +34,39 @@ import { UpdateComRequest } from '../@types/licenceApiClientTypes'
 export default class LicenceApiClient extends RestClient {
   constructor() {
     super('Licence API', config.apis.licenceApi as ApiConfig)
+  }
+
+  async getOmuEmail(prisonId: string, user: User): Promise<OmuContact | null> {
+    try {
+      return (await this.get(
+        { path: `/omu/${prisonId}/contact/email` },
+        { username: user.username }
+      )) as Promise<OmuContact>
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
+  }
+
+  async updateOmuEmailAddress(prisonId: string, user: User, omuEmail: Record<string, string>): Promise<OmuContact> {
+    try {
+      return (await this.put(
+        { path: `/omu/${prisonId}/contact/email`, data: omuEmail },
+        { username: user.username }
+      )) as Promise<OmuContact>
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
+  }
+
+  async deleteOmuEmailAddress(prisonId: string, user: User): Promise<void> {
+    try {
+      return (await this.delete(
+        { path: `/omu/${prisonId}/contact/email` },
+        { username: user.username }
+      )) as Promise<void>
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
   }
 
   async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceSummary> {

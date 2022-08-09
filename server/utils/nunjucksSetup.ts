@@ -216,5 +216,9 @@ export function registerNunjucks(app?: express.Express): Environment {
     }))
   })
 
+  njkEnv.addFilter('toUpper', val => {
+    return val?.toUpperCase()
+  })
+
   return njkEnv
 }
