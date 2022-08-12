@@ -132,6 +132,10 @@ export interface paths {
     /** Retrieves a list of auditable events matching the criteria provided. Requires ROLE_CVL_ADMIN. */
     post: operations['requestAuditEvents']
   }
+  '/licence/variations/submitted/area/{areaCode}': {
+    /** Get a list of licence summaries for all submitted variations belonging to the specified probation area code. Requires ROLE_CVL_ADMIN. */
+    get: operations['submittedVariations']
+  }
   '/licence/id/{licenceId}': {
     /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getLicenceById']
@@ -2609,6 +2613,34 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['AuditRequest']
+      }
+    }
+  }
+  /** Get a list of licence summaries for all submitted variations belonging to the specified probation area code. Requires ROLE_CVL_ADMIN. */
+  submittedVariations: {
+    parameters: {
+      path: {
+        areaCode: string
+      }
+    }
+    responses: {
+      /** Returned matching licence summary details - empty if no matches. */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary'][]
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
       }
     }
   }

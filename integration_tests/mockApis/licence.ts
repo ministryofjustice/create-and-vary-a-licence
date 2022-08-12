@@ -1,5 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
+import LicenceStatus from '../../server/licences/licenceStatus'
 
 const licencePlaceholder = {
   id: 1,
@@ -350,6 +351,37 @@ export default {
             licenceId: 1,
             nomisId: options.nomisId,
             licenceStatus: options.status,
+            forename: 'Bob',
+            surname: 'Zimmer',
+            crn: 'X12345',
+            licenceType: 'AP',
+            actualReleaseDate: '23/03/2022',
+            comUsername: 'jsmith',
+            bookingId: options.bookingId,
+            dateCreated: '01/03/2021 10:15',
+          },
+        ],
+      },
+    })
+  },
+
+  stubGetVariationsSubmittedByRegionForOffender: (options: {
+    nomisId: string
+    bookingId: number
+  }): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/licence/variations/submitted/area/(\\w)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: 1,
+            nomisId: options.nomisId,
+            licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
             forename: 'Bob',
             surname: 'Zimmer',
             crn: 'X12345',
