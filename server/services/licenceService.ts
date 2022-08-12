@@ -369,10 +369,7 @@ export default class LicenceService {
   }
 
   async getLicencesForVariationApprovalByRegion(user: User): Promise<LicenceSummary[]> {
-    const statuses = [LicenceStatus.VARIATION_SUBMITTED.valueOf()]
-    return this.licenceApiClient.matchLicences(statuses, null, null, null, null, 'conditionalReleaseDate', null, user, [
-      user?.probationAreaCode,
-    ])
+    return this.licenceApiClient.submittedVariationsByProbationArea(user?.probationAreaCode, user)
   }
 
   async updateResponsibleCom(crn: string, newCom: UpdateComRequest): Promise<void> {
