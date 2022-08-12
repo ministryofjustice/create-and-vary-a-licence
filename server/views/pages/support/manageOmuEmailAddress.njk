@@ -22,7 +22,7 @@
                     classes: "govuk-input--width-3 govuk-!-padding-left-3",
                     name: "prisonIdCurrent", 
                     attributes:{ maxLength:"3" },
-                    value: prisonIdCurrent | toUpper,
+                    value: prisonIdCurrent | upper,
                     errorMessage: validationErrors | findError('prisonIdCurrent')
                  }) }}
             </div>
@@ -60,7 +60,7 @@
                     classes: "govuk-input--width-3 govuk-!-padding-left-3",
                     name: "prisonIdEdit", 
                     attributes:{ maxLength:"3" },
-                    value: formResponses.prisonIdEdit | toUpper,
+                    value: formResponses.prisonIdEdit | upper,
                     errorMessage: validationErrors | findError('prisonIdEdit')
                 }) }}
             </div>
@@ -108,7 +108,7 @@
                     classes: "govuk-input--width-3 govuk-!-padding-left-3",
                     name: "prisonIdDelete", 
                     attributes:{ maxLength:"3" },
-                    value: prisonIdDelete | toUpper,
+                    value: prisonIdDelete | upper,
                     errorMessage: validationErrors | findError('prisonIdDelete')
                 }) }}
             </div>
