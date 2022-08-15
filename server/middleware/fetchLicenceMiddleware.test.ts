@@ -30,6 +30,7 @@ const probationRes = {
       deliusStaffIdentifier: 123,
       probationAreaCode: 'N55',
       probationTeamCodes: ['N55A'],
+      userRoles: ['ROLE_LICENCE_RO'],
     },
     licence: undefined,
   },
@@ -116,5 +117,16 @@ describe('fetchLicenceMiddleware', () => {
     expect(licenceService.getLicence).toBeCalledTimes(1)
     expect(res.redirect).toBeCalledWith('/access-denied')
     expect(next).not.toBeCalled()
+  })
+
+  it('should allow access for PDUH regardless of teams', async () => {
+    res = probationRes
+    res.locals.licence = undefined
+    res.locals.user.probationTeamCodes = ['WRONG', 'WRONG-AGAIN']
+    res.locals.user.userRoles = ['ROLE_LICENCE_ACO'] // PDU role
+    await middleware(req, res, next)
+    expect(res.locals.licence).toEqual(licence)
+    expect(licenceService.getLicence).toBeCalledTimes(1)
+    expect(next).toBeCalledTimes(1)
   })
 })
