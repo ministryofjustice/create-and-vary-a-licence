@@ -28,6 +28,7 @@ import {
   UpdateSpoDiscussionRequest,
   UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
+  OmuContact,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import {
@@ -518,6 +519,18 @@ export default class LicenceService {
     }
 
     return this.convertLicencesToTimelineEvents(licences)
+  }
+
+  async getOmuEmail(prisonId: string, user: User): Promise<OmuContact | null> {
+    return this.licenceApiClient.getOmuEmail(prisonId, user)
+  }
+
+  async updateOmuEmailAddress(prisonId: string, user: User, omuEmail: Record<string, string>): Promise<OmuContact> {
+    return this.licenceApiClient.updateOmuEmailAddress(prisonId, user, omuEmail)
+  }
+
+  async deleteOmuEmailAddress(prisonId: string, user: User): Promise<void> {
+    return this.licenceApiClient.deleteOmuEmailAddress(prisonId, user)
   }
 
   private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {
