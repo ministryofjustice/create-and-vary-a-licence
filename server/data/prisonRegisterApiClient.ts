@@ -9,12 +9,16 @@ export default class PrisonRegisterApiClient extends RestClient {
   }
 
   async getPrisonDescription(agencyId: string, user: User): Promise<PrisonDto> {
-    return (await this.get(
-      {
-        path: `/prisons/id/${agencyId}`,
-      },
-      { username: user.username }
-    )) as Promise<PrisonDto>
+    try {
+      return (await this.get(
+        {
+          path: `/prisons/id/${agencyId}`,
+        },
+        { username: user.username }
+      )) as Promise<PrisonDto>
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
   }
 
   async getPrisonOmuContactEmail(agencyId: string, user: User): Promise<string> {

@@ -11,10 +11,14 @@ import validationMiddleware from '../../middleware/validationMiddleware'
 import prisonIdCurrent from './types/prisonIdCurrent'
 import prisonIdAndEmail from './types/prisonIdAndEmail'
 import prisonIdDelete from './types/prisonIdDelete'
-
 import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
 
-export default function Index({ communityService, prisonerService, licenceService }: Services): Router {
+export default function Index({
+  communityService,
+  prisonerService,
+  licenceService,
+  prisonRegisterService,
+}: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
 
@@ -33,7 +37,7 @@ export default function Index({ communityService, prisonerService, licenceServic
   const offenderDetailHandler = new OffenderDetailRoutes(prisonerService, communityService)
   const offenderLicenceHandler = new OffenderLicencesRoutes(licenceService, prisonerService)
   const offenderAuditHandler = new OffenderAuditRoutes(licenceService, prisonerService)
-  const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService)
+  const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
