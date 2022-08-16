@@ -5,24 +5,26 @@ export default class OmuEmailAddressRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { formResponses } = res.locals
-
     return res.render('pages/support/manageOmuEmailAddress', {
-      formResponses,
       prisonIdCurrent: req.flash('prisonIdCurrent')[0],
       emailCurrent: req.flash('emailCurrent')[0],
+      prisonIdEdit: req.flash('prisonIdEdit')[0],
+      email: req.flash('email')[0],
+      requestStatus: req.flash('requestStatus')[0],
       prisonIdDelete: req.flash('prisonIdDelete')[0],
       deleteMessage: req.flash('deleteMessage')[0],
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  CURRENT = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonIdCurrent } = req.body
-    const result = await this.licenceService.getOmuEmail(prisonIdCurrent.toUpperCase(), user)
-    const emailCurrent = result?.email || 'None found'
+    const prisonId = prisonIdCurrent.toUpperCase()
 
-    req.flash('prisonIdCurrent', prisonIdCurrent)
+    const result = await this.licenceService.getOmuEmail(prisonId, user)
+    const emailCurrent = result?.email || `Email for ${prisonId} does not exist`
+
+    req.flash('prisonIdCurrent', prisonId)
     req.flash('emailCurrent', emailCurrent)
     res.redirect('/support/manage-omu-email-address')
   }
@@ -30,24 +32,36 @@ export default class OmuEmailAddressRoutes {
   ADD_OR_EDIT = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonIdEdit, email } = req.body
+    const prisonId = prisonIdEdit.toUpperCase()
 
-    await this.licenceService.updateOmuEmailAddress(prisonIdEdit.toUpperCase(), user, { email })
+    const omu = await this.licenceService.getOmuEmail(prisonId, user)
+
+    if (omu?.prisonCode) {
+      await this.licenceService.updateOmuEmailAddress(prisonId, user, { email })
+      req.flash('requestStatus', `Email for ${prisonId} added/edited`)
+    } else {
+      req.flash('requestStatus', `Prison ID ${prisonId} does not exist`)
+    }
+    req.flash('prisonIdEdit', prisonId)
+    req.flash('email', email)
     res.redirect('/support/manage-omu-email-address')
   }
 
   DELETE = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonIdDelete } = req.body
-    const result = await this.licenceService.getOmuEmail(prisonIdDelete.toUpperCase(), user)
+    const prisonId = prisonIdDelete.toUpperCase()
+
+    const result = await this.licenceService.getOmuEmail(prisonId, user)
 
     if (result?.email) {
-      await this.licenceService.deleteOmuEmailAddress(prisonIdDelete.toUpperCase(), user)
-      req.flash('deleteMessage', `Email for ${prisonIdDelete.toUpperCase()} deleted`)
+      await this.licenceService.deleteOmuEmailAddress(prisonId, user)
+      req.flash('deleteMessage', `Email for ${prisonId} deleted`)
     } else {
-      req.flash('deleteMessage', `Email for ${prisonIdDelete.toUpperCase()} does not exist`)
+      req.flash('deleteMessage', `Email for ${prisonId} does not exist`)
     }
 
-    req.flash('prisonIdDelete', prisonIdDelete)
+    req.flash('prisonIdDelete', prisonId)
     res.redirect('/support/manage-omu-email-address')
   }
 }

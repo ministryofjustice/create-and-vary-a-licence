@@ -22,7 +22,7 @@
                     classes: "govuk-input--width-3 govuk-!-padding-left-3",
                     name: "prisonIdCurrent", 
                     attributes:{ maxLength:"3" },
-                    value: prisonIdCurrent | upper,
+                    value: prisonIdCurrent,
                     errorMessage: validationErrors | findError('prisonIdCurrent')
                  }) }}
             </div>
@@ -31,7 +31,7 @@
                 <div class="govuk-width-container">
                     <div class="govuk-button-group">
                         {{ govukButton({
-                            classes: "govuk-button--primary",
+                            classes: "govuk-button--primary govuk-!-margin-top-1",
                             text: "View email",
                             preventDoubleClick: true,
                             attributes: {  'data-qa': 'get-email' }                        
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="govuk-grid-column-one-half govuk-!-padding-top-6"> 
+            <div class="govuk-grid-column-one-half govuk-!-padding-top-7"> 
                 <p class="govuk-!-font-weight-bold">{{ emailCurrent }} </p>
             </div>
         </div>
@@ -60,7 +60,7 @@
                     classes: "govuk-input--width-3 govuk-!-padding-left-3",
                     name: "prisonIdEdit", 
                     attributes:{ maxLength:"3" },
-                    value: formResponses.prisonIdEdit | upper,
+                    value: formResponses.prisonIdEdit | upper or prisonIdEdit,
                     errorMessage: validationErrors | findError('prisonIdEdit')
                 }) }}
             </div>
@@ -72,7 +72,7 @@
                     },
                     id: "email",
                     name: "email", 
-                    value: formResponses.email,
+                    value: formResponses.email or email,
                     errorMessage: validationErrors | findError('email')
                 }) }}
             </div>
@@ -81,7 +81,7 @@
                 <div class="govuk-width-container">
                     <div class="govuk-button-group">
                         {{ govukButton({
-                            classes: "govuk-button--primary",
+                            classes: "govuk-button--primary govuk-!-margin-top-1",
                             text: "Add or edit",
                             preventDoubleClick: true,
                             attributes: {  'data-qa': 'add-edit' }
@@ -90,6 +90,11 @@
                 </div>
             </div>
 
+        </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                 <p class="govuk-!-font-weight-bold"> {{requestStatus}} </p>
+            </div>
         </div>
     </form>
 
@@ -108,7 +113,7 @@
                     classes: "govuk-input--width-3 govuk-!-padding-left-3",
                     name: "prisonIdDelete", 
                     attributes:{ maxLength:"3" },
-                    value: prisonIdDelete | upper,
+                    value: prisonIdDelete,
                     errorMessage: validationErrors | findError('prisonIdDelete')
                 }) }}
             </div>
@@ -117,7 +122,7 @@
                 <div class="govuk-width-container">
                     <div class="govuk-button-group">
                         {{ govukButton({
-                            classes: "govuk-button--warning",
+                            classes: "govuk-button--warning govuk-!-margin-top-1",
                             text: "Delete email",
                             preventDoubleClick: true,
                             attributes: {  'data-qa': 'delete' }
@@ -126,7 +131,7 @@
                 </div>
             </div>
 
-            <div class="govuk-grid-column-one-half govuk-!-padding-top-6">
+            <div class="govuk-grid-column-one-half govuk-!-padding-top-7">
                 <p class="govuk-!-font-weight-bold"> {{ deleteMessage }}
             </div>
 

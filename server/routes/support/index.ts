@@ -39,7 +39,7 @@ export default function Index({ communityService, prisonerService, licenceServic
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
   post('/manage-omu-email-address/add-or-edit', manageOmuEmailAddressHandler.ADD_OR_EDIT, prisonIdAndEmail)
   post('/manage-omu-email-address/delete', manageOmuEmailAddressHandler.DELETE, prisonIdDelete)
-  post('/manage-omu-email-address', manageOmuEmailAddressHandler.POST, prisonIdCurrent)
+  post('/manage-omu-email-address', manageOmuEmailAddressHandler.CURRENT, prisonIdCurrent)
   get('/offender-search', offenderSearchHandler.GET)
   get('/offender/:nomsId/detail', offenderDetailHandler.GET)
   get('/offender/:nomsId/licences', offenderLicenceHandler.GET)
