@@ -1,0 +1,49 @@
+{% extends "layout.njk" %}
+{% from "customComponents/datePicker/datePicker.njk" import datePicker %}
+
+
+{% set pageTitle = applicationName + " - Support - Get licences data" %}
+{% set backLinkHref = "/support" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-xl">Summary licence statistics</h1>
+            <h2 class="govuk-heading-m">Enter dates for the report</h2>
+            <form method="POST">        
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                {{ datePicker({
+                id: 'startDate',
+                label: 'Start date',
+                name: 'startDate',
+                date: formResponses.startDate or startDate,
+                attributes: {"date-format": "d/m/yy"},
+                errorMessage: validationErrors | findError('startDate'),
+                containerClass: 'govuk-\!-width-one-quarter'
+                }) }}
+
+                <p class = 'govuk-!-font-weight-bold'>{{dateOrderMessage}}<p>
+
+                {{ datePicker({
+                id: 'endDate',
+                label: 'End date',
+                name: 'endDate',
+                date: formResponses.endDate or endDate,
+                attributes: {"date-format": "d/m/yy"},
+                errorMessage: validationErrors | findError('endDate'),
+                containerClass: 'govuk-\!-width-one-quarter'
+                }) }}
+                {{ govukButton({
+                    classes: "govuk-button--primary govuk-!-margin-top-2",
+                    text: "Download",
+                    attributes: {  'data-qa': 'download' },
+                    type: "submit"
+                }) }}
+            </form> 
+        </div>
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-1 govuk-!-margin-bottom-8">
+
+{% endblock %}

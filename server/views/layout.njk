@@ -3,6 +3,10 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
 
 {% set continueOrReturnToCheckAnswers = "Return to check your answers" if fromReview else "Continue" %}
 
@@ -50,6 +54,7 @@
   <script src="/assets/js/jquery.min.js"></script> 
   <script src="/assets/js/jquery-ui.min.js"></script>
   <link href="/assets/stylesheets/jquery-ui.min.css" rel="stylesheet">
+  <script src="/assets/js/main.js"></script>
 
 {% endblock %}
 

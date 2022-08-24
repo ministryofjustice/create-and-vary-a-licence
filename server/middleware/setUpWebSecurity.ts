@@ -17,6 +17,7 @@ export default function setUpWebSecurity(): Router {
     helmet({
       crossOriginResourcePolicy: { policy: 'cross-origin' },
       referrerPolicy: { policy: 'same-origin' },
+      crossOriginEmbedderPolicy: false,
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],

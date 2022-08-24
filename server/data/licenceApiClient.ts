@@ -26,6 +26,7 @@ import type {
   NotifyRequest,
   UpdateStandardConditionDataRequest,
   OmuContact,
+  LicenceStatistics,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -77,6 +78,17 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user.username }
     )) as Promise<LicenceSummary>
+  }
+
+  async getlicenceStatistics(startDate: string, endDate: string, user: User): Promise<LicenceStatistics[]> {
+    try {
+      return (await this.get(
+        { path: `/support/licence-statistics?startDate=${startDate}&endDate=${endDate}` },
+        { username: user.username }
+      )) as Promise<LicenceStatistics[]>
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
   }
 
   async getLicenceById(licenceId: string, user: User): Promise<Licence> {

@@ -156,6 +156,15 @@ export interface paths {
 
 export interface components {
   schemas: {
+    LicenceStatistics: {
+      metric: string
+      licenceType: string
+      prison: string
+      region: string
+      pdu: string
+      team: string
+    }
+
     /** @description Request object for updating / creating OMU email contact */
     UpdateOmuEmailRequest: {
       /**

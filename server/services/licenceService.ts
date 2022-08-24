@@ -151,6 +151,11 @@ export default class LicenceService {
     return this.licenceApiClient.createLicence(licence, user)
   }
 
+  async getlicenceStatistics(startDate: string, endDate: string, user: User) {
+    const data = this.licenceApiClient.getlicenceStatistics(startDate, endDate, user)
+    return data
+  }
+
   async getLicence(id: string, user: User): Promise<Licence> {
     return this.licenceApiClient.getLicenceById(id, user)
   }

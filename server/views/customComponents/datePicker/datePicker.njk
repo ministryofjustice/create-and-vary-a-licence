@@ -1,0 +1,19 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{%  macro datePicker(params) %}
+    <div class="{{params.containerClass | default('')}}">
+        {{ govukInput({
+            label: {
+                text: params.label,
+                classes: params.labelClasses
+            },
+            id: params.id,
+            name: params.name,
+            errorMessage: params.errorMessage,
+            value: params.date,
+            classes: 'date-input ' + params.classes | default(''),
+            autocomplete: 'off',
+            attributes: params.attributes
+        }) }}
+    </div>
+{%  endmacro %}
