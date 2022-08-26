@@ -21,9 +21,9 @@ This service requires instances of these dependent services:
 
 Ensure you have the appropriate tools installed:
 
-`node - v14.16.x`
+`node - v16.x`
 
-`npm - v6.x`
+`npm - v8.x`
 
 Then:
 
