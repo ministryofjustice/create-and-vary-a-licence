@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { isFuture, parse } from 'date-fns'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
@@ -205,7 +206,7 @@ export default class CaseloadService {
 
   public filterOffendersEligibleForLicence = async (offenders: ManagedCase[], user?: User) => {
     const eligibleOffenders = offenders
-      .filter(offender => !offender.nomisRecord.paroleEligibilityDate)
+      .filter(offender => !CaseloadService.isParoleEligible(offender.nomisRecord.paroleEligibilityDate))
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
       .filter(offender => !offender.nomisRecord.indeterminateSentence)
       .filter(offender => offender.nomisRecord.conditionalReleaseDate)
@@ -394,5 +395,16 @@ export default class CaseloadService {
 
   private isBreachOfTopUpSupervision = (offender: ManagedCase): boolean => {
     return offender.nomisRecord?.imprisonmentStatus && offender.nomisRecord?.imprisonmentStatus === 'BOTUS'
+  }
+
+  /**
+   * Parole Eligibility Date must be set and in the future
+   * If the date is in the past, it's no longer valid
+   * @param ped
+   */
+  public static isParoleEligible(ped: string): boolean {
+    if (!ped) return false
+    const pedDate = parse(ped, 'yyyy-MM-dd', new Date())
+    return isFuture(pedDate)
   }
 }
