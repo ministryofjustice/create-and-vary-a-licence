@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { addDays, format } from 'date-fns'
 import CaseloadService from './caseloadService'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
@@ -15,9 +16,10 @@ jest.mock('./communityService')
 jest.mock('./licenceService')
 
 describe('Caseload Service', () => {
-  const elevenDaysFromNow = moment().add(11, 'days').format('YYYY-MM-DD')
-  const tenDaysFromNow = moment().add(10, 'days').format('YYYY-MM-DD')
-  const nineDaysFromNow = moment().add(9, 'days').format('YYYY-MM-DD')
+  const elevenDaysFromNow = format(addDays(new Date(), 11), 'yyyy-MM-dd')
+  const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
+  const nineDaysFromNow = format(addDays(new Date(), 9), 'yyyy-MM-dd')
+  const yesterday = format(addDays(new Date(), -1), 'yyyy-MM-dd')
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
@@ -101,7 +103,12 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234R', crn: 'X12356' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
+      {
+        prisonerNumber: 'AB1234E',
+        conditionalReleaseDate: tenDaysFromNow,
+        paroleEligibilityDate: yesterday,
+        status: 'ACTIVE IN',
+      } as Prisoner,
       { prisonerNumber: 'AB1234F', paroleEligibilityDate: tenDaysFromNow } as Prisoner,
       { prisonerNumber: 'AB1234G', legalStatus: 'DEAD' } as Prisoner,
       { prisonerNumber: 'AB1234H', indeterminateSentence: true } as Prisoner,
@@ -971,5 +978,20 @@ describe('Caseload Service', () => {
         },
       },
     ])
+  })
+
+  describe('Is Parole Eligible', () => {
+    it('returns FALSE when PED is not set', () => {
+      expect(CaseloadService.isParoleEligible(null)).toBeFalsy()
+    })
+    it('returns TRUE when PED is in the future', () => {
+      expect(CaseloadService.isParoleEligible(tenDaysFromNow)).toBeTruthy()
+    })
+    it('returns FALSE when PED is in the past', () => {
+      expect(CaseloadService.isParoleEligible(yesterday)).toBeFalsy()
+    })
+    it('returns FALSE when PED is not valid', () => {
+      expect(CaseloadService.isParoleEligible('aaa')).toBeFalsy()
+    })
   })
 })
