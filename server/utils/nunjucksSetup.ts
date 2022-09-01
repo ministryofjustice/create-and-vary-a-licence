@@ -28,6 +28,9 @@ export default function nunjucksSetup(app: express.Express): void {
   // Set the value of the auth home link from config
   app.locals.authHome = config.apis.hmppsAuth.url
 
+  // Set domain url on current environment
+  app.locals.domain = config.domain
+
   // Cachebusting version string
   if (production) {
     // Version only changes on reboot
