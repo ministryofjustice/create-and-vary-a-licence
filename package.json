@@ -152,8 +152,8 @@
     "@types/redis": "^2.8.32",
     "@types/redis-mock": "^0.17.1",
     "@types/superagent": "^4.1.15",
-    "@typescript-eslint/eslint-plugin": "^5.20.0",
-    "@typescript-eslint/parser": "^5.20.0",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/parser": "^5.36.1",
     "axe-core": "^4.4.1",
     "better-npm-audit": "^3.7.3",
     "cheerio": "^1.0.0-rc.10",
@@ -164,7 +164,7 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-import-resolver-typescript": "^2.7.0",
+    "eslint-import-resolver-typescript": "^3.5.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-prettier": "^4.0.0",
@@ -180,10 +180,10 @@
     "nodemon": "^2.0.19",
     "path-parse": "^1.0.7",
     "pdf-parse": "^1.1.1",
-    "prettier": "^2.6.1",
+    "prettier": "^2.7.1",
     "redis-mock": "^0.56.3",
     "sass": "^1.50.1",
     "ts-jest": "^27.1.4",
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.2"
   }
 }
