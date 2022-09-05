@@ -28,7 +28,12 @@ export default class ViewAndPrintCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'),
+          releaseDate: moment(
+            c.nomisRecord.confirmedReleaseDate ||
+              c.nomisRecord.conditionalReleaseOverrideDate ||
+              c.nomisRecord.conditionalReleaseDate
+          ).format('DD MMM YYYY'),
+          releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: _.head(c.licences).status,
           isClickable:
             _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&

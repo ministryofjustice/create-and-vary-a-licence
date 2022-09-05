@@ -6,6 +6,10 @@
 
 .max-width {
   overflow: hidden;
+  &-120 {
+    width:12%;
+    max-width:120px;
+  }
   &-200 {
     max-width: 200px;
   }

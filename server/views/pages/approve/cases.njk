@@ -38,7 +38,7 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": case.releaseDate | dateToUnix
             },
-            text: case.releaseDate
+            html: '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' 
         }
     ]), licences) %}
 {% endfor %}
@@ -92,7 +92,7 @@
                     }
                 },
                 {
-                    text: "Prisoner number",
+                    text: "Prison number",
                     attributes: {
                         "aria-sort": "none"
                     }
