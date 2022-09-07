@@ -3,7 +3,7 @@ import ApprovalViewPage from './approvalView'
 import ChangeLocationPage from './changeLocationPage'
 
 export default class ApprovalCasesPage extends Page {
-  private approveLicenceButtonId = '#name-1'
+  private approveLicenceButtonId = '#name-1 a'
 
   private changeLocationsLink = '[data-qa=change-location-link]'
 
