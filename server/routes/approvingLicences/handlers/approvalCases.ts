@@ -1,9 +1,10 @@
 import { Request, Response } from 'express'
-import moment from 'moment'
 import _ from 'lodash'
+import { format, getUnixTime } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase } from '../../../utils/utils'
+import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 
 export default class ApprovalCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
@@ -26,11 +27,7 @@ export default class ApprovalCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: moment(
-            c.nomisRecord.confirmedReleaseDate ||
-              c.nomisRecord.conditionalReleaseOverrideDate ||
-              c.nomisRecord.conditionalReleaseDate
-          ).format('DD MMM YYYY'),
+          releaseDate: format(new Date(this.selectReleaseDate(c.nomisRecord)), 'dd MMM yyyy'),
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
         }
       })
@@ -44,8 +41,8 @@ export default class ApprovalCaseRoutes {
         )
       })
       .sort((a, b) => {
-        const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
-        const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
+        const crd1 = getUnixTime(new Date(a.releaseDate))
+        const crd2 = getUnixTime(new Date(b.releaseDate))
         return crd1 - crd2
       })
 
@@ -57,5 +54,15 @@ export default class ApprovalCaseRoutes {
       prisonsToDisplay,
       hasMultipleCaseloadsInNomis,
     })
+  }
+
+  selectReleaseDate(nomisRecord: Prisoner) {
+    if (nomisRecord.confirmedReleaseDate) {
+      return nomisRecord.confirmedReleaseDate
+    }
+    if (nomisRecord.conditionalReleaseOverrideDate) {
+      return nomisRecord.conditionalReleaseOverrideDate
+    }
+    return nomisRecord.conditionalReleaseDate
   }
 }
