@@ -226,10 +226,6 @@ export interface components {
       indeterminateSentence?: boolean
       /** Start Date for this sentence */
       sentenceStartDate?: string
-      /** Actual of most likely Release Date */
-      releaseDate?: string
-      /** Release Date Confirmed */
-      confirmedReleaseDate?: string
       /** Sentence Expiry Date */
       sentenceExpiryDate?: string
       /** Licence Expiry Date */
@@ -258,7 +254,13 @@ export interface components {
       automaticReleaseDate?: string
       /** Post Recall Release Date. if postRecallReleaseOverrideDate is available then it will be set as postRecallReleaseDate */
       postRecallReleaseDate?: string
-      /** Conditional Release Date. If conditionalReleaseOverrideDate is available then it will be set as conditionalReleaseDate */
+      /** Actual of most likely Release Date */
+      releaseDate?: string
+      /** Release Date Confirmed */
+      confirmedReleaseDate?: string
+      /** ConditionalReleaseOverrideDate Date */
+      conditionalReleaseOverrideDate?: string
+      /** Conditional Release Date. */
       conditionalReleaseDate?: string
       /** Actual Parole Date */
       actualParoleDate?: string

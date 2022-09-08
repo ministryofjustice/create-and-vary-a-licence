@@ -50,10 +50,46 @@ describe('Route Handlers - Approval - case list', () => {
           firstName: 'Bob',
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
-          conditionalReleaseDate: '2022-05-01',
+          confirmedReleaseDate: '2022-05-01',
         } as Prisoner,
         probationPractitioner: {
           name: 'Walter White',
+        },
+      },
+      {
+        licences: [
+          {
+            id: 2,
+            type: LicenceType.AP,
+            status: LicenceStatus.NOT_STARTED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Joe',
+          lastName: 'Bloggs',
+          prisonerNumber: 'A1234AB',
+          conditionalReleaseOverrideDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Thor',
+        },
+      },
+      {
+        licences: [
+          {
+            id: 3,
+            type: LicenceType.AP,
+            status: LicenceStatus.NOT_IN_PILOT,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Harvey',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AC',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Walter Black',
         },
       },
     ])
@@ -92,9 +128,30 @@ describe('Route Handlers - Approval - case list', () => {
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
             },
+          },
+          {
+            licenceId: 2,
+            name: 'Joe Bloggs',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Thor',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            licenceId: 3,
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter Black',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -120,6 +177,7 @@ describe('Route Handlers - Approval - case list', () => {
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
             },
@@ -148,6 +206,7 @@ describe('Route Handlers - Approval - case list', () => {
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
             },
@@ -176,6 +235,7 @@ describe('Route Handlers - Approval - case list', () => {
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
             },

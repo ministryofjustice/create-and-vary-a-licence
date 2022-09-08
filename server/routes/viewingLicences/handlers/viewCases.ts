@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
-import moment from 'moment'
+import { format, getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
+import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
@@ -28,7 +29,8 @@ export default class ViewAndPrintCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'),
+          releaseDate: format(new Date(this.selectReleaseDate(c.nomisRecord)), 'dd MMM yyyy'),
+          releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: _.head(c.licences).status,
           isClickable:
             _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&
@@ -48,8 +50,8 @@ export default class ViewAndPrintCaseRoutes {
         )
       })
       .sort((a, b) => {
-        const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
-        const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
+        const crd1 = getUnixTime(new Date(a.releaseDate))
+        const crd2 = getUnixTime(new Date(b.releaseDate))
         return crd1 - crd2
       })
 
@@ -62,5 +64,15 @@ export default class ViewAndPrintCaseRoutes {
       prisonsToDisplay,
       hasMultipleCaseloadsInNomis,
     })
+  }
+
+  selectReleaseDate(nomisRecord: Prisoner) {
+    if (nomisRecord.confirmedReleaseDate) {
+      return nomisRecord.confirmedReleaseDate
+    }
+    if (nomisRecord.conditionalReleaseOverrideDate) {
+      return nomisRecord.conditionalReleaseOverrideDate
+    }
+    return nomisRecord.conditionalReleaseDate
   }
 }
