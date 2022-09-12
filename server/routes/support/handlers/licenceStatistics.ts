@@ -14,28 +14,48 @@ export default class LicenceStatisticsRoutes {
     const { startDate, endDate } = req.body
     const fields = [
       {
-        label: 'Metric',
-        value: 'metric',
+        label: 'Prison',
+        value: 'prison',
       },
       {
         label: 'Licence type',
         value: 'licenceType',
       },
       {
-        label: 'Prison',
-        value: 'prison',
+        label: 'Eligible for CVL',
+        value: 'eligibleForCvl',
       },
       {
-        label: 'Region',
-        value: 'region',
+        label: 'Submitted',
+        value: 'submitted',
       },
       {
-        label: 'PDU',
-        value: 'pdu',
+        label: 'Approved',
+        value: 'approved',
       },
       {
-        label: 'Team',
-        value: 'team',
+        label: 'Active',
+        value: 'active',
+      },
+      {
+        label: 'Inactive total',
+        value: 'inactiveTotal',
+      },
+      {
+        label: 'Inactive not approved',
+        value: 'inactiveNotApproved',
+      },
+      {
+        label: 'Inactive approved',
+        value: 'inactiveApproved',
+      },
+      {
+        label: 'Inactive HDC approved',
+        value: 'inactiveHdcApproved',
+      },
+      {
+        label: 'Approved not printed',
+        value: 'approvedNotPrinted',
       },
     ]
     const json2csvParser = new Parser({ fields })
