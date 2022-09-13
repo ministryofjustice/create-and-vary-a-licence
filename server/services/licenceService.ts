@@ -152,7 +152,7 @@ export default class LicenceService {
   }
 
   async getlicenceStatistics(startDate: string, endDate: string, user: User) {
-    const data = this.licenceApiClient.getlicenceStatistics(startDate, endDate, user)
+    const data = await this.licenceApiClient.getlicenceStatistics(startDate, endDate, user)
     return data
   }
 
