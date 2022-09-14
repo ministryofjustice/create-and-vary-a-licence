@@ -26,6 +26,10 @@ export default class LicenceStatisticsRoutes {
         value: 'eligibleForCvl',
       },
       {
+        label: 'In progress',
+        value: 'inProgress',
+      },
+      {
         label: 'Submitted',
         value: 'submitted',
       },
