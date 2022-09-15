@@ -81,14 +81,10 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async getlicenceStatistics(startDate: string, endDate: string, user: User): Promise<LicenceStatistics[]> {
-    try {
-      return (await this.get(
-        { path: `/support/licence-statistics?startDate=${startDate}&endDate=${endDate}` },
-        { username: user.username }
-      )) as Promise<LicenceStatistics[]>
-    } catch (error) {
-      return error.status >= 400 && error.status < 500 ? null : error
-    }
+    return (await this.get(
+      { path: `/support/licence-statistics?startDate=${startDate}&endDate=${endDate}` },
+      { username: user.username }
+    )) as Promise<LicenceStatistics[]>
   }
 
   async getLicenceById(licenceId: string, user: User): Promise<Licence> {

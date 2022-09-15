@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Parser } from 'json2csv'
 import LicenceService from '../../../services/licenceService'
+import convertToDateString from '../../../utils/date'
 
 export default class LicenceStatisticsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -63,7 +64,12 @@ export default class LicenceStatisticsRoutes {
       },
     ]
     const json2csvParser = new Parser({ fields })
-    const licenceStatistics = await this.licenceService.getlicenceStatistics(startDate, endDate, user)
+
+    const licenceStatistics = await this.licenceService.getlicenceStatistics(
+      convertToDateString(startDate),
+      convertToDateString(endDate),
+      user
+    )
     const csv = json2csvParser.parse(licenceStatistics)
 
     res.setHeader('content-type', 'text/csv')

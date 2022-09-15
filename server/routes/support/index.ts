@@ -8,10 +8,10 @@ import OffenderDetailRoutes from './handlers/offenderDetail'
 import OffenderAuditRoutes from './handlers/offenderAudit'
 import OffenderLicencesRoutes from './handlers/offenderLicences'
 import validationMiddleware from '../../middleware/validationMiddleware'
-import prisonIdCurrent from './types/prisonIdCurrent'
-import prisonIdAndEmail from './types/prisonIdAndEmail'
-import prisonIdDelete from './types/prisonIdDelete'
-import dateRange from './types/dateRange'
+import PrisonIdCurrent from './types/prisonIdCurrent'
+import PrisonIdAndEmail from './types/prisonIdAndEmail'
+import PrisonIdDelete from './types/prisonIdDelete'
+import DateRange from './types/dateRange'
 import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
 import LicenceStatistics from './handlers/licenceStatistics'
 
@@ -44,16 +44,15 @@ export default function Index({
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
-  post('/manage-omu-email-address/add-or-edit', manageOmuEmailAddressHandler.ADD_OR_EDIT, prisonIdAndEmail)
-  post('/manage-omu-email-address/delete', manageOmuEmailAddressHandler.DELETE, prisonIdDelete)
-  post('/manage-omu-email-address', manageOmuEmailAddressHandler.CURRENT, prisonIdCurrent)
+  post('/manage-omu-email-address/add-or-edit', manageOmuEmailAddressHandler.ADD_OR_EDIT, PrisonIdAndEmail)
+  post('/manage-omu-email-address/delete', manageOmuEmailAddressHandler.DELETE, PrisonIdDelete)
+  post('/manage-omu-email-address', manageOmuEmailAddressHandler.CURRENT, PrisonIdCurrent)
   get('/offender-search', offenderSearchHandler.GET)
   get('/offender/:nomsId/detail', offenderDetailHandler.GET)
   get('/offender/:nomsId/licences', offenderLicenceHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/audit', offenderAuditHandler.GET)
-
   get('/licence-statistics', licenceStatistics.GET)
-  post('/licence-statistics', licenceStatistics.POST, dateRange)
+  post('/licence-statistics', licenceStatistics.POST, DateRange)
 
   return router
 }
