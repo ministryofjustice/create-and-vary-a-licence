@@ -1,4 +1,6 @@
 import { registerDecorator, ValidationOptions, ValidationArguments } from 'class-validator'
+import { startOfDay, endOfDay } from 'date-fns'
+import { toDate } from '../../../utils/date'
 
 interface DateAsString extends ValidationArguments {
   object: { startDate: string; endDate: string }
@@ -15,7 +17,7 @@ export default class CustomValidators {
         options: validationOptions,
         validator: {
           validate(endDate: string) {
-            const regex = /[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}/
+            const regex = /^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}$/
             return regex.test(endDate)
           },
         },
@@ -42,17 +44,5 @@ export default class CustomValidators {
 }
 
 function isStartBeforeEnd(startDate: string, endDate: string) {
-  const parsedStartDate = startDate.split('/')
-  const parsedEndDate = endDate.split('/')
-  const StartDateDate = parseInt(parsedStartDate[0], 10)
-  const StartDateMonth = parseInt(parsedStartDate[1], 10)
-  const StartDateYear = parseInt(parsedStartDate[2], 10)
-
-  const EndDateDate = parseInt(parsedEndDate[0], 10)
-  const EndDateMonth = parseInt(parsedEndDate[1], 10)
-  const EndDateYear = parseInt(parsedEndDate[2], 10)
-
-  const dateStart = new Date(StartDateYear, StartDateMonth - 1, StartDateDate, 0, 0, 0, 0)
-  const dateEnd = new Date(EndDateYear, EndDateMonth - 1, EndDateDate + 1, 0, 0, 0, 0)
-  return dateStart < dateEnd
+  return startOfDay(toDate(startDate)) < endOfDay(toDate(endDate))
 }
