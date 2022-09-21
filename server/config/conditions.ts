@@ -490,6 +490,13 @@ export default {
         type: WorkingWithChildren,
       },
       {
+        code: '0EDB6D01-46B6-408F-971C-0EBFF5FA93F0',
+        category: 'Participation in, or co-operation with, a programme or set of activities',
+        categoryShort: 'Programmes or activities',
+        text: 'To engage with the Integrated Offender Management Team, and follow their instructions.',
+        requiresInput: false,
+      },
+      {
         code: '8e52e16e-1abf-4251-baca-2fabfcb243d0',
         category: 'Possession, ownership, control or inspection of specified items or documents',
         categoryShort: 'Items and documents',

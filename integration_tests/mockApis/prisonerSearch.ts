@@ -1,6 +1,9 @@
 import { SuperAgentRequest } from 'superagent'
-import moment from 'moment'
+import { addDays, addMonths, format } from 'date-fns'
 import { stubFor } from '../wiremock'
+
+const nextMonth = format(addMonths(new Date(), 1), 'yyyy-MM-dd')
+const nextThirtyDays = format(addDays(new Date(), 30), 'yyyy-MM-dd')
 
 export default {
   searchPrisonersByNomisIds: (): SuperAgentRequest => {
@@ -54,7 +57,7 @@ export default {
             receptionDate: '2021-01-08',
             locationDescription: 'Moorland (HMP & YOI)',
             restrictedPatient: false,
-            conditionalReleaseDate: '2022-09-09',
+            conditionalReleaseDate: nextMonth,
           },
         ],
       },
@@ -111,7 +114,7 @@ export default {
             receptionDate: '2021-01-08',
             locationDescription: 'Moorland (HMP & YOI)',
             restrictedPatient: false,
-            conditionalReleaseDate: '2022-09-09',
+            conditionalReleaseDate: nextMonth,
           },
         ],
       },
@@ -169,7 +172,7 @@ export default {
               receptionDate: '2021-01-08',
               locationDescription: 'Moorland (HMP & YOI)',
               restrictedPatient: false,
-              conditionalReleaseDate: moment().add(30, 'days').format('YYYY-MM-DD'),
+              conditionalReleaseDate: nextThirtyDays,
             },
           ],
         },
