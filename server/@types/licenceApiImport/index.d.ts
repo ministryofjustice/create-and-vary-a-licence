@@ -156,6 +156,15 @@ export interface paths {
 
 export interface components {
   schemas: {
+    /** @description Editted Licences that were not approved by CRD */
+    UnapprovedLicence: {
+      crn: string
+      forename: string
+      surname: string
+      comFirstName: string
+      comLastName: string
+      comEmail: string
+    }
     /** @description Request object for updating / creating OMU email contact */
     UpdateOmuEmailRequest: {
       /**
