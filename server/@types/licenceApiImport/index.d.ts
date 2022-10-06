@@ -34,7 +34,7 @@ export interface paths {
   }
   '/licence/id/{licenceId}/standard-conditions': {
     /** Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-    put: operations['updateStandardConditons']
+    put: operations['updateStandardConditions']
   }
   '/licence/id/{licenceId}/spo-discussion': {
     /** Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -112,6 +112,10 @@ export interface paths {
     /** Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createVariation']
   }
+  '/licence/id/{licenceId}/additional-condition/{conditionType}': {
+    /** Add the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['addAdditionalCondition']
+  }
   '/licence/create': {
     /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createLicence']
@@ -152,6 +156,10 @@ export interface paths {
     /** Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     delete: operations['discard']
   }
+  '/licence/id/{licenceId}/additional-conditions/{conditionId}': {
+    /** Remove additional condition from the licence list of additional conditions.All user submitted condition data will also be removed. */
+    delete: operations['deleteAdditionalCondition']
+  }
 }
 
 export interface components {
@@ -164,15 +172,6 @@ export interface components {
        */
       email: string
     }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
     OmuContact: {
       /** Format: int64 */
       id: number
@@ -182,6 +181,15 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string
+    }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
     }
     /** @description Request object for updating the COM responsible for an offender */
     UpdateComRequest: {
@@ -798,7 +806,7 @@ export interface components {
        * @description The bookingId associated with the licence
        * @example 773722
        */
-      bookingId?: string
+      bookingId?: number
       /**
        * Format: date-time
        * @description The date the licence was created
@@ -1691,7 +1699,7 @@ export interface operations {
     }
   }
   /** Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-  updateStandardConditons: {
+  updateStandardConditions: {
     parameters: {
       path: {
         licenceId: number
@@ -2455,6 +2463,52 @@ export interface operations {
       }
     }
   }
+  /** Add the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  addAdditionalCondition: {
+    parameters: {
+      path: {
+        licenceId: number
+        conditionType: string
+      }
+    }
+    responses: {
+      /** Set of additional conditions added */
+      200: {
+        content: {
+          'application/json': components['schemas']['AdditionalCondition']
+        }
+      }
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AdditionalCondition']
+      }
+    }
+  }
   /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   createLicence: {
     responses: {
@@ -2771,6 +2825,37 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Remove additional condition from the licence list of additional conditions.All user submitted condition data will also be removed. */
+  deleteAdditionalCondition: {
+    parameters: {
+      path: {
+        licenceId: number
+        conditionId: number
+      }
+    }
+    responses: {
+      /** Condition has been removed from the licence */
+      204: never
       /** Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {

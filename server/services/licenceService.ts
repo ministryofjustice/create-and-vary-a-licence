@@ -180,6 +180,14 @@ export default class LicenceService {
     return this.licenceApiClient.updateContactNumber(id, requestBody, user)
   }
 
+  async addAdditionalCondition(id: string, conditionType: LicenceType, formData: AdditionalCondition, user: User) {
+    return this.licenceApiClient.addAdditionalCondition(id, conditionType, formData, user)
+  }
+
+  async deleteAdditionalCondition(conditionId: number, licenceId: number, user: User) {
+    return this.licenceApiClient.deleteAdditionalCondition(conditionId, licenceId, user)
+  }
+
   async updateAdditionalConditions(
     id: string,
     conditionType: LicenceType,

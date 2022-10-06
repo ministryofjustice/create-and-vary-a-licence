@@ -4,6 +4,7 @@ import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
+import { User } from '../../../@types/CvlUserDetails'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
@@ -26,13 +27,8 @@ export default class PrintLicenceRoutes {
     const { qrCodesEnabled } = res.locals
     const htmlPrint = true
     const qrCode = qrCodesEnabled ? await this.qrCodeService.getQrCode(licence) : null
-    const conditionIdWithUpload = this.getConditionWithUpload(licence.additionalLicenceConditions)
-    const exclusionZoneMapData =
-      conditionIdWithUpload !== 0
-        ? await this.licenceService.getExclusionZoneImageData(licence.id, `${conditionIdWithUpload}`, user)
-        : null
-    const exclusionZoneDescription =
-      conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(licence.additionalLicenceConditions) : null
+    const conditionsWithUploads = this.getConditionsWithUploads(licence.additionalLicenceConditions)
+    const exclusionZoneMapData = await this.getExclusionZones(licence, conditionsWithUploads, user)
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
@@ -46,7 +42,6 @@ export default class PrintLicenceRoutes {
     res.render(`pages/licence/${licence.typeCode}`, {
       qrCode,
       htmlPrint,
-      exclusionZoneDescription,
       exclusionZoneMapData,
     })
   }
@@ -59,13 +54,8 @@ export default class PrintLicenceRoutes {
     const imageData = await this.prisonerService.getPrisonerImageData(licence.nomsId, user)
     const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.lastName}.pdf`
     const footerHtml = this.getPdfFooter(licence)
-    const conditionIdWithUpload = this.getConditionWithUpload(licence.additionalLicenceConditions)
-    const exclusionZoneMapData =
-      conditionIdWithUpload !== 0
-        ? await this.licenceService.getExclusionZoneImageData(licence.id, `${conditionIdWithUpload}`, user)
-        : null
-    const exclusionZoneDescription =
-      conditionIdWithUpload !== 0 ? this.getExclusionZoneDescription(licence.additionalLicenceConditions) : null
+    const additionalConditionsWithUploads = this.getConditionsWithUploads(licence.additionalLicenceConditions)
+    const exclusionZoneMapData = await this.getExclusionZones(licence, additionalConditionsWithUploads, user)
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
@@ -76,6 +66,10 @@ export default class PrintLicenceRoutes {
       user
     )
 
+    const additionalConditions = licence.additionalLicenceConditions.filter(
+      (c: AdditionalCondition) => !licence.additionalLicenceConditions.find((c2: AdditionalCondition) => c.id === c2.id)
+    )
+
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
       {
@@ -84,7 +78,8 @@ export default class PrintLicenceRoutes {
         qrCode,
         htmlPrint: false,
         watermark,
-        exclusionZoneDescription,
+        additionalConditions,
+        additionalConditionsWithUploads,
         exclusionZoneMapData,
       },
       { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
@@ -110,23 +105,22 @@ export default class PrintLicenceRoutes {
      </span>`
   }
 
-  getConditionWithUpload = (additionalConditions: AdditionalCondition[]): number => {
-    let conditionId = 0
-    additionalConditions.forEach(condition => {
-      if (condition?.uploadSummary?.length > 0) {
-        conditionId = condition.id
-      }
-    })
-    return conditionId
+  getConditionsWithUploads = (additionalConditions: AdditionalCondition[]): AdditionalCondition[] => {
+    return additionalConditions.filter(condition => condition?.uploadSummary?.length > 0)
   }
 
-  getExclusionZoneDescription = (additionalConditions: AdditionalCondition[]): string => {
-    let description = ''
-    additionalConditions.forEach(condition => {
-      if (condition?.uploadSummary?.length > 0) {
-        description = condition.uploadSummary[0]?.description
-      }
-    })
-    return description
+  getExclusionZones(licence: Licence, conditionsWithUploads: AdditionalCondition[], user: User) {
+    return Promise.all(
+      conditionsWithUploads.map(async c => {
+        const mapData = await this.licenceService.getExclusionZoneImageData(licence.id.toString(), `${c.id}`, user)
+        const description = c.uploadSummary[0]?.description
+        const dataValue = c.data.find(d => d.field === 'outOfBoundArea')
+        return {
+          mapData,
+          description,
+          dataValue,
+        }
+      })
+    )
   }
 }

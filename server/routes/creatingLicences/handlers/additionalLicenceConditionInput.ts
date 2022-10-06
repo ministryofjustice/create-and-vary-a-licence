@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import { getAdditionalConditionByCode } from '../../../utils/conditionsProvider'
-import LicenceType from '../../../enumeration/licenceType'
 
 export default class AdditionalLicenceConditionInputRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -32,20 +31,27 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { licenceId } = req.params
     const { conditionId } = req.params
     const { user, licence } = res.locals
+    const isFileUploadRequest = req.file && req.file.fieldname === 'outOfBoundFilename'
+
+    const { code } = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10)
+    )
+
+    const redirect = isFileUploadRequest
+      ? `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads`
+      : `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
+          req.query?.fromReview ? '?fromReview=true' : ''
+        }`
 
     // Check for file uploads on specific forms
-    if (req.file && req.file.fieldname === 'outOfBoundFilename') {
+    if (isFileUploadRequest) {
       await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
     }
 
     const condition = licence.additionalLicenceConditions.find((c: AdditionalCondition) => c.id === +conditionId)
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
-    return res.redirect(
-      `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
-        req.query?.fromReview ? '?fromReview=true' : ''
-      }`
-    )
+    return res.redirect(redirect)
   }
 
   DELETE = async (req: Request, res: Response): Promise<void> => {
@@ -53,16 +59,7 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
-    const additionalConditionCodes = licence.additionalLicenceConditions
-      .filter((condition: AdditionalCondition) => condition.id !== parseInt(conditionId, 10))
-      .map((condition: AdditionalCondition) => condition.code)
-
-    await this.licenceService.updateAdditionalConditions(
-      licence.id,
-      LicenceType.AP,
-      { additionalConditions: additionalConditionCodes },
-      user
-    )
+    await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)
 
     return res.redirect(
       `/licence/create/id/${licence.id}/additional-licence-conditions/callback${

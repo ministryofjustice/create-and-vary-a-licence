@@ -23,6 +23,18 @@ export function getAdditionalConditionByCode(searchCode: string): Record<string,
     .find(({ code }) => code === searchCode)
 }
 
+export function getAdditionalConditionType(searchCode: string): LicenceType {
+  if (
+    Object.values(conditionsConfig.additionalConditions.AP)
+      .flat()
+      .find(({ code }) => code === searchCode)
+  ) {
+    return LicenceType.AP
+  }
+
+  return LicenceType.PSS
+}
+
 export function getGroupedAdditionalConditions(licenceType: LicenceType): Record<string, unknown>[] {
   const map = new Map()
   conditionsConfig.additionalConditions[licenceType].forEach((condition: Record<string, unknown>) => {

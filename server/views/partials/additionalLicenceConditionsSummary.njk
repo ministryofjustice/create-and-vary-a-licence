@@ -5,7 +5,8 @@
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-full">
-            <h2 id="additional-licence-conditions-heading" class="govuk-heading-m">{{ title or "Additional licence conditions" }}</h2>
+            <h2 id="additional-licence-conditions-heading"
+                class="govuk-heading-m">{{ title or "Additional licence conditions" }}</h2>
         </div>
     </div>
 
@@ -30,10 +31,12 @@
 
     {% for condition in licence.additionalLicenceConditions %}
 
-        {% if condition | checkConditionRequiresInput %}
-          {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
+        {% if condition.uploadSummary.length %}
+            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.code + "/file-uploads" %}
+        {% elseif condition | checkConditionRequiresInput %}
+            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
         {% else %}
-          {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
         {% endif %}
 
         {% set additionalLicenceConditions = (additionalLicenceConditions.push({
@@ -72,7 +75,7 @@
     {% endif %}
 
     {% if condition.uploadSummary.length %}
-       {{ includeExclusionZoneImage(condition) }}
+        {{ includeExclusionZoneImage(condition) }}
     {% endif %}
 
 {% endmacro %}
@@ -80,7 +83,8 @@
 {% macro includeExclusionZoneImage(condition) %}
     <div id="exclusion-zone" class="upload-container">
         <div class="upload-thumbnail">
-            <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"  alt="Exclusion zone map"/>
+            <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"
+                 alt="Exclusion zone map"/>
         </div>
         <div class="upload-detail">
             {{ condition.uploadSummary[0].description }}
