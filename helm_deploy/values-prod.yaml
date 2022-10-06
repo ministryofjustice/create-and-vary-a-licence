@@ -41,4 +41,4 @@ hmpps-community-api-wiremock:
     PRISONER_SEARCH_API_URL: "https://prisoner-offender-search.prison.service.justice.gov.uk"
 
 generic-prometheus-alerts:
-  alertSeverity: digital-prison-service
+  alertSeverity: elephant_alerts

@@ -1,28 +1,28 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@5.1.0
+  hmpps: ministryofjustice/hmpps@5.2.0
   slack: circleci/slack@4.4.2
   codecov: codecov/codecov@3.2.0
 
 parameters:
   alerts-slack-channel:
     type: string
-    default: farsight-alerts
+    default: elephant_alerts_security
 
   releases-slack-channel:
     type: string
-    default: farsight-alerts
+    default: the_elephants_devs
 
   node-version:
     type: string
-    default: 16.13-browsers
+    default: 16.17-browsers
 
 executors:
   integration-tests:
     docker:
-      - image: 'cimg/node:<<parameters.node_tag>>'
-      - image: 'circleci/redis:<<parameters.redis_tag>>'
+      - image: 'cimg/node:<<pipeline.parameters.node-version>>'
+      - image: 'circleci/redis:buster'
       - image: 'localstack/localstack:0.13.2'
         environment:
           SERVICES: sqs
@@ -30,17 +30,7 @@ executors:
           TMP_DIR: /private
           DEFAULT_REGION: eu-west-2
     working_directory: ~/app
-    resource_class: <<parameters.resource_class>>
-    parameters:
-      resource_class:
-        default: medium
-        type: string
-      node_tag:
-        default: "14.16-browsers"
-        type: string
-      redis_tag:
-        default: "buster"
-        type: string
+    resource_class: medium
 
 jobs:
   build:
