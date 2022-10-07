@@ -29,7 +29,7 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-import { UpdateComRequest, UnapprovedLicence } from '../@types/licenceApiClientTypes'
+import { UpdateComRequest } from '../@types/licenceApiClientTypes'
 
 export default class LicenceApiClient extends RestClient {
   constructor() {
@@ -369,16 +369,9 @@ export default class LicenceApiClient extends RestClient {
     )) as LicenceEvent[]
   }
 
-  async getEditedLicencesUnapprovedByCrd(): Promise<UnapprovedLicence[]> {
-    return (await this.get({
-      path: '/edited-licences-unapproved-by-crd',
-    })) as Promise<UnapprovedLicence[]>
-  }
-
-  async notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd(data: UnapprovedLicence[]): Promise<void> {
+  async notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd(): Promise<void> {
     await this.post({
       path: '/notify-probation-of-unapproved-licences',
-      data,
     })
   }
 }

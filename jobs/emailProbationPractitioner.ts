@@ -5,13 +5,9 @@ import logger from '../logger'
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-email-probation-practioner-job')
 
-const emailPpIfEditedLicencesNotApprovedByCrd = async (): Promise<void> => {
-  const licenceApi = new LicenceApiClient()
-  const editedLicencesUnapprovedByCrd = await licenceApi.getEditedLicencesUnapprovedByCrd()
-  await licenceApi.notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd(editedLicencesUnapprovedByCrd)
-}
-
-emailPpIfEditedLicencesNotApprovedByCrd()
+const licenceApiClient = new LicenceApiClient()
+licenceApiClient
+  .notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd()
   .then(() => {
     // Flush logs to app insights and only exit when complete
     flush({ callback: () => process.exit() }, 'success')

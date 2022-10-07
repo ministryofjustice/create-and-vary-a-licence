@@ -16,7 +16,6 @@ import {
   LicenceSummary,
   ReferVariationRequest,
   StatusUpdateRequest,
-  UnapprovedLicence,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdatePrisonInformationRequest,
@@ -573,36 +572,9 @@ describe('Licence API client tests', () => {
     })
   })
   describe('Unapproved licence: ', () => {
-    it('should GET unapproved licences from the api', async () => {
-      await licenceApiClient.getEditedLicencesUnapprovedByCrd()
-      expect(get).toHaveBeenCalledWith({
-        path: '/edited-licences-unapproved-by-crd',
-      })
-    })
-
-    it('should POST unapproved licences', async () => {
-      const unapprovedLicences = [
-        {
-          crn: 'A123',
-          forename: 'prisoner',
-          surname: 'one',
-          comFirstName: 'Com',
-          comLastName: 'One',
-          comEmail: 'com.one@gmail.com',
-        },
-        {
-          crn: 'B345',
-          forename: 'prisoner',
-          surname: 'two',
-          comFirstName: 'Com',
-          comLastName: 'Two',
-          comEmail: 'com.two@gmail.com',
-        },
-      ]
-      await licenceApiClient.notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd(
-        unapprovedLicences as UnapprovedLicence[]
-      )
-      expect(post).toHaveBeenCalledWith({ path: '/notify-probation-of-unapproved-licences', data: unapprovedLicences })
+    it('should call the api', async () => {
+      await licenceApiClient.notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd()
+      expect(post).toHaveBeenCalledWith({ path: '/notify-probation-of-unapproved-licences' })
     })
   })
 })
