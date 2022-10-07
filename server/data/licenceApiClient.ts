@@ -29,7 +29,7 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-import { UpdateComRequest, UnapprovedLicence } from '../@types/licenceApiClientTypes'
+import { UpdateComRequest } from '../@types/licenceApiClientTypes'
 
 export default class LicenceApiClient extends RestClient {
   constructor() {

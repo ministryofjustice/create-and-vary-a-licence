@@ -29,4 +29,3 @@ export type ReferVariationRequest = components['schemas']['ReferVariationRequest
 export type EmailContact = components['schemas']['PromptLicenceCreationRequest']
 export type NotifyRequest = components['schemas']['NotifyRequest']
 export type OmuContact = components['schemas']['OmuContact']
-export type UnapprovedLicence = components['schemas']['UnapprovedLicence']

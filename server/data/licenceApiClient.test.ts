@@ -16,7 +16,6 @@ import {
   LicenceSummary,
   ReferVariationRequest,
   StatusUpdateRequest,
-  UnapprovedLicence,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
   UpdatePrisonInformationRequest,
