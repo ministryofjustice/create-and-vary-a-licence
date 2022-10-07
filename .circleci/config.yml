@@ -114,7 +114,7 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: unit tests
-          command: npm run test
+          command: npm run test:ci
       - codecov/upload:
           file: coverage/coverage-final.json
       - store_test_results:
