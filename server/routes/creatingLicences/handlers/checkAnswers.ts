@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 import { plainToInstance } from 'class-transformer'
 import LicenceService from '../../../services/licenceService'
-import { Licence } from '../../../@types/licenceApiClientTypes'
+import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import { getStandardConditions, getVersion } from '../../../utils/conditionsProvider'
@@ -26,7 +26,15 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    res.render('pages/create/checkAnswers')
+    const conditionsWithUploads = licence.additionalLicenceConditions.filter(
+      (condition: AdditionalCondition) => condition?.uploadSummary?.length > 0
+    )
+
+    const additionalConditions = licence.additionalLicenceConditions.filter(
+      (c: AdditionalCondition) => !conditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
+    )
+
+    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

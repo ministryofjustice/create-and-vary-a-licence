@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import { getAdditionalConditionByCode, getAdditionalConditionType } from '../../../utils/conditionsProvider'
-import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
+import { AddAdditionalConditionRequest } from '../../../@types/licenceApiClientTypes'
 import conditionType from '../../../enumeration/conditionType'
 
 export default class AdditionalLicenceConditionUploadsHandler {
@@ -34,11 +34,12 @@ export default class AdditionalLicenceConditionUploadsHandler {
     }
 
     const request = {
-      code: conditionCode,
-      sequence: 0,
-      category: condition?.categoryShort || condition?.category,
-      text: condition.text,
-    } as AdditionalCondition
+      conditionCode,
+      conditionCategory: condition?.categoryShort || condition?.category,
+      conditionText: condition.text,
+      conditionType: type,
+      expandedText: condition.tpl,
+    } as AddAdditionalConditionRequest
 
     const conditionResult = await this.licenceService.addAdditionalCondition(licenceId, type, request, user)
 

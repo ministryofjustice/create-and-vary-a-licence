@@ -27,6 +27,7 @@ import type {
   UpdateStandardConditionDataRequest,
   OmuContact,
   AdditionalCondition,
+  AddAdditionalConditionRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -135,7 +136,7 @@ export default class LicenceApiClient extends RestClient {
   async addAdditionalCondition(
     licenceId: string,
     type: LicenceType,
-    additionalCondition: AdditionalCondition,
+    additionalCondition: AddAdditionalConditionRequest,
     user: User
   ): Promise<AdditionalCondition> {
     return (await this.post(

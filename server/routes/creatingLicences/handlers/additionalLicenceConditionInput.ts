@@ -37,11 +37,13 @@ export default class AdditionalLicenceConditionInputRoutes {
       (c: AdditionalCondition) => c.id === parseInt(conditionId, 10)
     )
 
-    const redirect = isFileUploadRequest
-      ? `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads`
-      : `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
-          req.query?.fromReview ? '?fromReview=true' : ''
-        }`
+    // if the update involves a file or updating a data element for exclusion zone name outOfBoundArea
+    const redirect =
+      isFileUploadRequest || 'outOfBoundArea' in req.body
+        ? `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads`
+        : `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
+            req.query?.fromReview ? '?fromReview=true' : ''
+          }`
 
     // Check for file uploads on specific forms
     if (isFileUploadRequest) {

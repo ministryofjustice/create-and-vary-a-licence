@@ -100,6 +100,10 @@ export interface paths {
     /** Records an auditable event related to an action taken by a user or an automated in-service process. Requires ROLE_CVL_ADMIN. */
     put: operations['recordAuditEvent']
   }
+  '/notify-probation-of-unapproved-licences': {
+    /** Send email to probation practioner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['notifyProbationOfUnapprovedLicences']
+  }
   '/licence/match': {
     /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
     post: operations['getLicencesMatchingCriteria']
@@ -136,6 +140,10 @@ export interface paths {
     /** Retrieves a list of auditable events matching the criteria provided. Requires ROLE_CVL_ADMIN. */
     post: operations['requestAuditEvents']
   }
+  '/support/licence-statistics': {
+    /** Licence statistics data required by the support staff. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getLicenceStatistics']
+  }
   '/licence/variations/submitted/area/{areaCode}': {
     /** Get a list of licence summaries for all submitted variations belonging to the specified probation area code. Requires ROLE_CVL_ADMIN. */
     get: operations['submittedVariations']
@@ -152,11 +160,15 @@ export interface paths {
     /** Get a list of licence events that match the supplied criteria. Requires ROLE_CVL_ADMIN. */
     get: operations['getEventsMatchingCriteria']
   }
+  '/edited-licences-unapproved-by-crd': {
+    /** Returns prisoner and com details Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getEditedLicencesUnapprovedByCrd']
+  }
   '/licence/id/{licenceId}/discard': {
     /** Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     delete: operations['discard']
   }
-  '/licence/id/{licenceId}/additional-conditions/{conditionId}': {
+  '/licence/id/{licenceId}/additional-condition/id/{conditionId}': {
     /** Remove additional condition from the licence list of additional conditions.All user submitted condition data will also be removed. */
     delete: operations['deleteAdditionalCondition']
   }
@@ -172,6 +184,15 @@ export interface components {
        */
       email: string
     }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     OmuContact: {
       /** Format: int64 */
       id: number
@@ -181,15 +202,6 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string
-    }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** @description Request object for updating the COM responsible for an offender */
     UpdateComRequest: {
@@ -637,6 +649,39 @@ export interface components {
        */
       detail?: string
     }
+    /** @description Describes a prisoner's first and last name, their CRN if present and a COM's contact details for use in an email to COM */
+    UnapprovedLicence: {
+      /**
+       * @description The Crime Reference Number
+       * @example Z882661
+       */
+      crn?: string
+      /**
+       * @description The prisoner's first name
+       * @example Jim
+       */
+      forename?: string
+      /**
+       * @description The prisoner's last name
+       * @example Smith
+       */
+      surname?: string
+      /**
+       * @description The COM's first name
+       * @example Joseph
+       */
+      comFirstName?: string
+      /**
+       * @description The COM's last name
+       * @example Bloggs
+       */
+      comLastName?: string
+      /**
+       * @description The COM's email address
+       * @example jbloggs@probation.gov.uk
+       */
+      comEmail?: string
+    }
     /** @description Request object for searching licences by field */
     MatchLicencesRequest: {
       /**
@@ -812,6 +857,40 @@ export interface components {
        * @description The date the licence was created
        */
       dateCreated?: string
+    }
+    /** @description Describes an additional condition request */
+    AddAdditionalConditionRequest: {
+      /**
+       * @description Coded value for the additional condition
+       * @example meetingAddress
+       */
+      conditionCode: string
+      /**
+       * @description Condition type, either AP or PSS
+       * @example AP
+       */
+      conditionType: string
+      /**
+       * @description The category of the additional condition
+       * @example Freedom of movement
+       */
+      conditionCategory?: string
+      /**
+       * Format: int32
+       * @description Sequence of this additional condition within the additional conditions
+       * @example 1
+       */
+      sequence?: number
+      /**
+       * @description The textual value for this additional condition
+       * @example You must not enter the location [DESCRIPTION]
+       */
+      conditionText: string
+      /**
+       * @description The condition text with the users data inserted into the template
+       * @example You must not enter the location Tesco Superstore
+       */
+      expandedText: string
     }
     /** @description Request object for creating a new licence */
     CreateLicenceRequest: {
@@ -1036,6 +1115,76 @@ export interface components {
        * @description The end time to query for events (default is now)
        */
       endTime: string
+    }
+    /** @description Management stats */
+    LicenceStatistics: {
+      /** @description Prison ID */
+      prison?: string
+      /**
+       * @description Type of licence
+       * @example AP, PSS, APPSS
+       */
+      licenceType?: string
+      /**
+       * Format: int32
+       * @description Number eligible for CVL within timeframe
+       * @example 10
+       */
+      eligibleForCvl?: number
+      /**
+       * Format: int32
+       * @description Status of In progress
+       * @example 2
+       */
+      inProgress?: number
+      /**
+       * Format: int32
+       * @description Status of Submitted
+       * @example 2
+       */
+      submitted?: number
+      /**
+       * Format: int32
+       * @description Status of Approved
+       * @example 8
+       */
+      approved?: number
+      /**
+       * Format: int32
+       * @description Status of Active
+       * @example 5
+       */
+      active?: number
+      /**
+       * Format: int32
+       * @description Total inactive
+       * @example 5
+       */
+      inactiveTotal?: number
+      /**
+       * Format: int32
+       * @description Status of Inactive not approved
+       * @example 6
+       */
+      inactiveNotApproved?: number
+      /**
+       * Format: int32
+       * @description Status of Inactive aprroved
+       * @example 3
+       */
+      inactiveApproved?: number
+      /**
+       * Format: int32
+       * @description Inactive because HDC approved
+       * @example 2
+       */
+      inactiveHdcApproved?: number
+      /**
+       * Format: int32
+       * @description Approved but never printed
+       * @example 1
+       */
+      approvedNotPrinted?: number
     }
     /** @description Describes a bespoke condition on a licence */
     BespokeCondition: {
@@ -2359,6 +2508,34 @@ export interface operations {
       }
     }
   }
+  /** Send email to probation practioner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  notifyProbationOfUnapprovedLicences: {
+    responses: {
+      /** Emails sent */
+      200: {
+        content: {
+          'application/json': components['schemas']['UnapprovedLicence']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UnapprovedLicence'][]
+      }
+    }
+  }
   /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
   getLicencesMatchingCriteria: {
     parameters: {
@@ -2505,7 +2682,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['AdditionalCondition']
+        'application/json': components['schemas']['AddAdditionalConditionRequest']
       }
     }
   }
@@ -2670,6 +2847,41 @@ export interface operations {
       }
     }
   }
+  /** Licence statistics data required by the support staff. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getLicenceStatistics: {
+    parameters: {
+      query: {
+        startDate: string
+        endDate: string
+      }
+    }
+    responses: {
+      /** Licence statistics found */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceStatistics']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Licence statistics not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   /** Get a list of licence summaries for all submitted variations belonging to the specified probation area code. Requires ROLE_CVL_ADMIN. */
   submittedVariations: {
     parameters: {
@@ -2793,6 +3005,29 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['LicenceEvent'][]
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Returns prisoner and com details Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getEditedLicencesUnapprovedByCrd: {
+    responses: {
+      /** Licence(s) found */
+      200: {
+        content: {
+          'application/json': components['schemas']['UnapprovedLicence']
         }
       }
       /** Unauthorised, requires a valid Oauth2 token */
