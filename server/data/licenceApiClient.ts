@@ -390,4 +390,10 @@ export default class LicenceApiClient extends RestClient {
       { username: user?.username }
     )) as LicenceEvent[]
   }
+
+  async notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd(): Promise<void> {
+    await this.post({
+      path: '/notify-probation-of-unapproved-licences',
+    })
+  }
 }
