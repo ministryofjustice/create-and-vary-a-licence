@@ -51,6 +51,8 @@ describe('Route - print a licence', () => {
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
+        additionalConditions: [],
+        additionalConditionsWithUploads: [],
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
@@ -80,6 +82,8 @@ describe('Route - print a licence', () => {
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
+        additionalConditions: [],
+        additionalConditionsWithUploads: [],
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
