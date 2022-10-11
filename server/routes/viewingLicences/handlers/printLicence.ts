@@ -27,8 +27,8 @@ export default class PrintLicenceRoutes {
     const { qrCodesEnabled } = res.locals
     const htmlPrint = true
     const qrCode = qrCodesEnabled ? await this.qrCodeService.getQrCode(licence) : null
-    const conditionsWithUploads = this.getConditionsWithUploads(licence.additionalLicenceConditions)
-    const exclusionZoneMapData = await this.getExclusionZones(licence, conditionsWithUploads, user)
+    const additionalConditionsWithUploads = this.getConditionsWithUploads(licence.additionalLicenceConditions)
+    const exclusionZoneMapData = await this.getExclusionZones(licence, additionalConditionsWithUploads, user)
 
     // Recorded here as we do not know the reason for the fetchLicence within the API
     await this.licenceService.recordAuditEvent(
@@ -39,10 +39,16 @@ export default class PrintLicenceRoutes {
       user
     )
 
+    const additionalConditions = licence.additionalLicenceConditions.filter(
+      (c: AdditionalCondition) => !additionalConditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
+    )
+
     res.render(`pages/licence/${licence.typeCode}`, {
       qrCode,
       htmlPrint,
       exclusionZoneMapData,
+      additionalConditions,
+      additionalConditionsWithUploads,
     })
   }
 
