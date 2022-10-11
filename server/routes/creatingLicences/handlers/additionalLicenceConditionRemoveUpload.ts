@@ -18,8 +18,7 @@ export default class AdditionalLicenceConditionRemoveUploadRoutes {
       condition.uploadSummary.length > 0
         ? `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
         : `back`
-    console.dir(condition, { depth: null })
-    console.log(redirect, 'SDSD')
+
     await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), parseInt(licence.id, 10), user)
     return res.redirect(redirect)
   }

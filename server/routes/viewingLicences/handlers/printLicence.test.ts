@@ -50,8 +50,7 @@ describe('Route - print a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/licence/AP', {
         qrCode: null,
         htmlPrint: true,
-        exclusionZoneDescription: null,
-        exclusionZoneMapData: null,
+        exclusionZoneMapData: [],
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
@@ -80,8 +79,7 @@ describe('Route - print a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/licence/PSS', {
         qrCode: null,
         htmlPrint: true,
-        exclusionZoneDescription: null,
-        exclusionZoneMapData: null,
+        exclusionZoneMapData: [],
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
@@ -129,8 +127,9 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
-          exclusionZoneDescription: null,
-          exclusionZoneMapData: null,
+          additionalConditions: [],
+          additionalConditionsWithUploads: [],
+          exclusionZoneMapData: [],
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
@@ -145,6 +144,7 @@ describe('Route - print a licence', () => {
           id: 1,
           code: 'code',
           uploadSummary: [{ id: 1, description: 'Some words' }],
+          data: [{ field: 'outOfBoundArea' }, { value: 'London' }],
         },
       ]
 
@@ -189,8 +189,36 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
-          exclusionZoneDescription: 'Some words',
-          exclusionZoneMapData: 'base64 data',
+          additionalConditions: [],
+          additionalConditionsWithUploads: [
+            {
+              code: 'code',
+              data: [
+                {
+                  field: 'outOfBoundArea',
+                },
+                {
+                  value: 'London',
+                },
+              ],
+              id: 1,
+              uploadSummary: [
+                {
+                  description: 'Some words',
+                  id: 1,
+                },
+              ],
+            },
+          ],
+          exclusionZoneMapData: [
+            {
+              dataValue: {
+                field: 'outOfBoundArea',
+              },
+              description: 'Some words',
+              mapData: 'base64 data',
+            },
+          ],
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
@@ -241,8 +269,9 @@ describe('Route - print a licence', () => {
           qrCode: 'a QR code',
           htmlPrint: false,
           watermark,
-          exclusionZoneDescription: null,
-          exclusionZoneMapData: null,
+          additionalConditions: [],
+          additionalConditionsWithUploads: [],
+          exclusionZoneMapData: [],
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )

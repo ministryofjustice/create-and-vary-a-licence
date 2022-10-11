@@ -12,7 +12,7 @@
 
     {% set additionalLicenceConditions = [] %}
 
-    {% set conditionCount = additionalConditions.length + 1 if conditionsWithUploads.length else 0 %}
+    {% set conditionCount = additionalConditions.length + (1 if conditionsWithUploads.length else 0) %}
 
     {% set conditionWord = "condition" if (conditionCount) === 1 else "conditions" %}
 
@@ -32,7 +32,6 @@
     }), additionalLicenceConditions) %}
 
     {% for condition in additionalConditions %}
-
         {% if condition.uploadSummary.length %}
             {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.code + "/file-uploads" %}
         {% elseif condition | checkConditionRequiresInput %}
@@ -56,7 +55,7 @@
         }), additionalLicenceConditions) %}
     {% endfor %}
 
-    {% if conditionsWithUploads %}
+    {% if conditionsWithUploads.length %}
         {% set conditionHtml = [] %}
         {% for condition in conditionsWithUploads %}
             {% set conditionHtml = (conditionHtml.push(additionalConditionHtml(condition)), conditionHtml) %}

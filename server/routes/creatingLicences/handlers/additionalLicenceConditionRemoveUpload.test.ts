@@ -26,7 +26,14 @@ describe('Route Handlers - Create Licence - Remove file upload from condition', 
       status: jest.fn(),
       locals: {
         licence: {
-          additionalLicenceConditions: [],
+          id: '2',
+          additionalLicenceConditions: [
+            {
+              id: 2,
+              code: 'testcode',
+              uploadSummary: [{}, {}],
+            },
+          ],
         },
         user: {
           username: 'joebloggs',
@@ -34,12 +41,14 @@ describe('Route Handlers - Create Licence - Remove file upload from condition', 
       },
     } as unknown as Response
 
-    licenceService.removeExclusionZoneFile = jest.fn()
+    licenceService.deleteAdditionalCondition = jest.fn()
   })
 
   it('should remove the file upload for a condition', async () => {
     await handler.GET(req, res)
-    expect(licenceService.removeExclusionZoneFile).toHaveBeenCalledWith('2', '2', { username: 'joebloggs' } as User)
-    expect(res.redirect).toHaveBeenCalledWith('back')
+    expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(2, 2, { username: 'joebloggs' } as User)
+    expect(res.redirect).toHaveBeenCalledWith(
+      '/licence/create/id/2/additional-licence-conditions/condition/testcode/file-uploads'
+    )
   })
 })

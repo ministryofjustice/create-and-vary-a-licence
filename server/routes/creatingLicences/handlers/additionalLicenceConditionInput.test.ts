@@ -176,6 +176,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
   describe('DELETE', () => {
     beforeEach(() => {
       licenceService.updateAdditionalConditions = jest.fn()
+      licenceService.deleteAdditionalCondition = jest.fn()
       res.locals.licence = {
         id: 1,
         additionalLicenceConditions: [
@@ -193,14 +194,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
     it('should call licence service to update the additional conditions with the condition removed', async () => {
       await handler.DELETE(req, res)
-      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
-        1,
-        'AP',
-        {
-          additionalConditions: ['code2'],
-        },
-        { username: 'joebloggs' }
-      )
+      expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(1, 1, { username: 'joebloggs' })
     })
 
     it('should redirect to the callback function', async () => {

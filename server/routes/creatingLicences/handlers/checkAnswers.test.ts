@@ -52,7 +52,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
   describe('GET', () => {
     it('should render view and not record audit event (owner)', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers')
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        conditionsWithUploads: [],
+      })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
 
@@ -70,7 +73,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers')
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        conditionsWithUploads: [],
+      })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
   })
