@@ -67,7 +67,7 @@ export default class PrintLicenceRoutes {
     )
 
     const additionalConditions = licence.additionalLicenceConditions.filter(
-      (c: AdditionalCondition) => !licence.additionalLicenceConditions.find((c2: AdditionalCondition) => c.id === c2.id)
+      (c: AdditionalCondition) => !additionalConditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
     )
 
     res.renderPDF(
