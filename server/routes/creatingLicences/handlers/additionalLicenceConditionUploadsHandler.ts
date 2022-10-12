@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import { getAdditionalConditionByCode, getAdditionalConditionType } from '../../../utils/conditionsProvider'
+import {
+  currentOrNextSequenceForCondition,
+  getAdditionalConditionByCode,
+  getAdditionalConditionType,
+} from '../../../utils/conditionsProvider'
 import { AddAdditionalConditionRequest } from '../../../@types/licenceApiClientTypes'
 import conditionType from '../../../enumeration/conditionType'
 
@@ -23,7 +27,7 @@ export default class AdditionalLicenceConditionUploadsHandler {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
     const { uploadFile, conditionCode } = req.body
 
     const condition = getAdditionalConditionByCode(conditionCode)
@@ -33,12 +37,15 @@ export default class AdditionalLicenceConditionUploadsHandler {
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     }
 
+    const sequence = currentOrNextSequenceForCondition(licence.additionalLicenceConditions, conditionCode)
+
     const request = {
       conditionCode,
       conditionCategory: condition?.categoryShort || condition?.category,
       conditionText: condition.text,
       conditionType: type,
       expandedText: condition.tpl,
+      sequence,
     } as AddAdditionalConditionRequest
 
     const conditionResult = await this.licenceService.addAdditionalCondition(licenceId, type, request, user)

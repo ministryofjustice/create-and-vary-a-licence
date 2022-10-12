@@ -1,9 +1,12 @@
 import {
+  additionalConditionsCollection,
+  currentOrNextSequenceForCondition,
   getAdditionalConditionByCode,
   getGroupedAdditionalConditions,
   getStandardConditions,
 } from './conditionsProvider'
 import LicenceType from '../enumeration/licenceType'
+import { AdditionalCondition } from '../@types/licenceApiClientTypes'
 
 jest.mock('../config/conditions', () => ({
   standardConditions: {
@@ -118,6 +121,44 @@ describe('Conditions Provider', () => {
           sequence: 2,
         },
       ])
+    })
+  })
+
+  describe('currentOrNextSequenceForCondition', () => {
+    const conditions = [
+      { code: 'AAA', sequence: 1, text: 'test', category: 'test', data: [], uploadSummary: [] },
+      { code: 'BBB', sequence: 2, text: 'test', category: 'test', data: [], uploadSummary: [] },
+      { code: 'CCC', sequence: 3, text: 'test', category: 'test', data: [], uploadSummary: [] },
+      { code: 'DDD', sequence: 4, text: 'test', category: 'test', data: [], uploadSummary: [] },
+    ] as AdditionalCondition[]
+
+    it('should return sequence belonging to existing condition based on condition code', () => {
+      expect(currentOrNextSequenceForCondition(conditions, 'CCC')).toEqual(3)
+    })
+
+    it('should return next sequence if no existing condition is found', () => {
+      expect(currentOrNextSequenceForCondition(conditions, 'ZZZ')).toEqual(5)
+    })
+
+    it('should return 1 if not existing conditions are present', () => {
+      expect(currentOrNextSequenceForCondition([], 'ZZZ')).toEqual(1)
+    })
+  })
+
+  describe('additionalConditionsCollection', () => {
+    const conditions = [
+      { id: 1, code: 'AAA', sequence: 1, text: 'test', category: 'test', data: [], uploadSummary: [] },
+      { id: 2, code: 'BBB', sequence: 2, text: 'test', category: 'test', data: [], uploadSummary: [] },
+      { id: 3, code: 'CCC', sequence: 3, text: 'test', category: 'test', data: [], uploadSummary: [{}] },
+      { id: 4, code: 'DDD', sequence: 4, text: 'test', category: 'test', data: [], uploadSummary: [] },
+    ] as AdditionalCondition[]
+
+    it('should return additional conditions with and without uploads ', () => {
+      const { conditionsWithUploads, additionalConditions } = additionalConditionsCollection(conditions)
+      expect(conditionsWithUploads.length).toEqual(1)
+      expect(conditionsWithUploads).toEqual([conditions[2]])
+      expect(additionalConditions.length).toEqual(3)
+      expect(additionalConditions).toEqual([conditions[0], conditions[1], conditions[3]])
     })
   })
 })

@@ -41,6 +41,7 @@
         {% endif %}
 
         {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+            sequence: condition.sequence,
             key: {  text: condition.category },
             value: { html: additionalConditionHtml(condition) },
             actions: {
@@ -62,6 +63,7 @@
         {% endfor %}
         {% set conditionHtml = conditionHtml | join %}
         {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+            sequence: conditionsWithUploads[0].sequence,
             key: {  text: conditionsWithUploads[0].category },
             value: { html: conditionHtml },
             actions: {
@@ -75,6 +77,8 @@
             }
         }), additionalLicenceConditions) %}
     {% endif %}
+
+    {% set additionalLicenceConditions = additionalLicenceConditions | sortConditionsBySequence %}
 
     {{ govukSummaryList({
         attributes: { id: 'additionalLicenceConditions' },

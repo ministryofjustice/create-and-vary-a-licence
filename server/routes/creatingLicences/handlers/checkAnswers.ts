@@ -2,10 +2,10 @@ import { Request, Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 import { plainToInstance } from 'class-transformer'
 import LicenceService from '../../../services/licenceService'
-import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
-import { getStandardConditions, getVersion } from '../../../utils/conditionsProvider'
+import { additionalConditionsCollection, getStandardConditions, getVersion } from '../../../utils/conditionsProvider'
 import LicenceType from '../../../enumeration/licenceType'
 
 export default class CheckAnswersRoutes {
@@ -26,12 +26,8 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    const conditionsWithUploads = licence.additionalLicenceConditions.filter(
-      (condition: AdditionalCondition) => condition?.uploadSummary?.length > 0
-    )
-
-    const additionalConditions = licence.additionalLicenceConditions.filter(
-      (c: AdditionalCondition) => !conditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
+    const { conditionsWithUploads, additionalConditions } = additionalConditionsCollection(
+      licence.additionalLicenceConditions
     )
 
     res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads })

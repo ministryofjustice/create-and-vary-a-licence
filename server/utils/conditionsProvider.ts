@@ -1,5 +1,5 @@
 import conditionsConfig from '../config/conditions'
-import { AdditionalConditionData } from '../@types/licenceApiClientTypes'
+import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { convertToTitleCase, formatAddress } from './utils'
 import LicenceType from '../enumeration/licenceType'
 import InputTypes from '../enumeration/inputTypes'
@@ -129,6 +129,25 @@ export const produceValueAsFormattedList = (listType = 'AND', matchingDataItems:
     valueCounter += 1
   })
   return value
+}
+
+export function currentOrNextSequenceForCondition(conditions: AdditionalCondition[], conditionCode: string): number {
+  const existingConditionWithType = conditions.find((c: AdditionalCondition) => c.code === conditionCode)
+  if (existingConditionWithType) {
+    return existingConditionWithType.sequence
+  }
+  const conditionsBySequence = conditions.sort((a, b) => a.sequence - b.sequence)
+  return conditionsBySequence.length ? conditionsBySequence.pop().sequence + 1 : 1
+}
+
+export function additionalConditionsCollection(conditions: AdditionalCondition[]) {
+  const conditionsWithUploads = conditions.filter(
+    (condition: AdditionalCondition) => condition?.uploadSummary?.length > 0
+  )
+  const additionalConditions = conditions.filter(
+    (c: AdditionalCondition) => !conditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
+  )
+  return { conditionsWithUploads, additionalConditions }
 }
 
 /**

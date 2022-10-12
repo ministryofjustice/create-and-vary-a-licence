@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
+import { additionalConditionsCollection } from '../../../utils/conditionsProvider'
 
 export default class ApprovalViewRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -20,12 +20,8 @@ export default class ApprovalViewRoutes {
         user
       )
 
-      const conditionsWithUploads = licence.additionalLicenceConditions.filter(
-        (condition: AdditionalCondition) => condition?.uploadSummary?.length > 0
-      )
-
-      const additionalConditions = licence.additionalLicenceConditions.filter(
-        (c: AdditionalCondition) => !conditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
+      const { conditionsWithUploads, additionalConditions } = additionalConditionsCollection(
+        licence.additionalLicenceConditions
       )
 
       res.render('pages/approve/view', { additionalConditions, conditionsWithUploads })

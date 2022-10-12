@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
+import { additionalConditionsCollection } from '../../../utils/conditionsProvider'
 
 export default class ViewActiveLicenceRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -13,12 +13,8 @@ export default class ViewActiveLicenceRoutes {
 
     const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
 
-    const conditionsWithUploads = licence.additionalLicenceConditions.filter(
-      (condition: AdditionalCondition) => condition?.uploadSummary?.length > 0
-    )
-
-    const additionalConditions = licence.additionalLicenceConditions.filter(
-      (c: AdditionalCondition) => !conditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
+    const { conditionsWithUploads, additionalConditions } = additionalConditionsCollection(
+      licence.additionalLicenceConditions
     )
 
     return res.render('pages/vary/viewActive', {
