@@ -47,7 +47,7 @@ const pollLicencesToUpdate = async (): Promise<LicencesToUpdate> => {
    */
   filteredLicences.forEach(prisoner => {
     const { bookingId } = prisoner
-    if (hdcStatusList.get(bookingId) === 'APPROVED') {
+    if (bookingId && hdcStatusList.get(bookingId) === 'APPROVED') {
       licencesToInactivate.push(prisoner.licenceId)
     } else {
       licencesToActivate.push(prisoner.licenceId)
