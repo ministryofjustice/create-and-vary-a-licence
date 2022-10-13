@@ -1,0 +1,11 @@
+{% macro exclusionZones(conditions) %}
+    {% if conditions.length %}
+        {% set c = conditions.pop() %}
+        <div class="condition">
+            <span>{{ c.expandedText or c.text }}</span>
+            {% for condition in conditions %}
+                <p> {{ condition.expandedText or condition.text }} </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}

@@ -29,6 +29,7 @@ import {
   UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
   OmuContact,
+  AddAdditionalConditionRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import {
@@ -178,6 +179,19 @@ export default class LicenceService {
   async updateContactNumber(id: string, formData: Telephone, user: User): Promise<void> {
     const requestBody = { telephone: formData.telephone } as ContactNumberRequest
     return this.licenceApiClient.updateContactNumber(id, requestBody, user)
+  }
+
+  async addAdditionalCondition(
+    id: string,
+    conditionType: LicenceType,
+    formData: AddAdditionalConditionRequest,
+    user: User
+  ) {
+    return this.licenceApiClient.addAdditionalCondition(id, conditionType, formData, user)
+  }
+
+  async deleteAdditionalCondition(conditionId: number, licenceId: number, user: User) {
+    return this.licenceApiClient.deleteAdditionalCondition(conditionId, licenceId, user)
   }
 
   async updateAdditionalConditions(

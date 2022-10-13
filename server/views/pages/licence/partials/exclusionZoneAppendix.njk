@@ -1,8 +1,19 @@
 <div id="exclusion-zone" class="section">
     <p><strong>Appendices</strong></p>
-    <p>You are subject to the exclusion zone which is described and shown below.</p>
-    <img alt="Exclusion zone" src="data:image/jpeg;charset-utf8;base64,{{ exclusionZoneMapData }}" width="585px" height="780px"/>
-    <p>
-    {{ exclusionZoneDescription | striptags(false) | trim | escape }}
-    </p>
+    You are subject to the exclusion zone which is described and shown below.
+    <ol>
+        {% for data in exclusionZoneMapData %}
+            <li>{{ data.dataValue.value }}</li>
+        {% endfor %}
+    </ol>
+    {% for data in exclusionZoneMapData %}
+        <div>
+            <div class="bold">{{ data.dataValue.value }}</div>
+            <img alt="Exclusion zone" src="data:image/jpeg;charset-utf8;base64,{{ data.mapData }}" width="585px"
+                 height="780px"/>
+            <p>
+                {{ data.description | striptags(false) | trim | escape }}
+            </p>
+        </div>
+    {% endfor %}
 </div>

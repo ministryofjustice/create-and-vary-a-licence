@@ -219,5 +219,9 @@ export function registerNunjucks(app?: express.Express): Environment {
     }))
   })
 
+  njkEnv.addFilter('sortConditionsBySequence', (array: AdditionalCondition[]) => {
+    return array.sort((a, b) => a.sequence - b.sequence)
+  })
+
   return njkEnv
 }

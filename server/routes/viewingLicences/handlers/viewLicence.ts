@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceService from '../../../services/licenceService'
+import { additionalConditionsCollection } from '../../../utils/conditionsProvider'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -25,7 +26,11 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
-      res.render('pages/view/view')
+      const { conditionsWithUploads, additionalConditions } = additionalConditionsCollection(
+        licence.additionalLicenceConditions
+      )
+
+      res.render('pages/view/view', { conditionsWithUploads, additionalConditions })
     } else {
       res.redirect(`/licence/view/cases`)
     }

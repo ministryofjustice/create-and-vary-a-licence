@@ -79,7 +79,42 @@ describe('View and print - single licence view', () => {
   } as Licence
 
   it('should display a single licence to print', () => {
-    viewContext = { licence }
+    viewContext = {
+      licence,
+      additionalConditions: [
+        {
+          code: 'condition1',
+          category: 'Category 1',
+          expandedText: 'Template 1',
+          data: [
+            {
+              field: 'field1',
+              value: 'Data 1',
+            },
+          ],
+        },
+        {
+          code: 'condition2',
+          category: 'Category 2',
+          expandedText: 'Template 2',
+          data: [
+            {
+              field: 'field2',
+              value: 'Data 2A',
+            },
+            {
+              field: 'field2',
+              value: 'Data 2B',
+            },
+            {
+              field: 'field3',
+              value: 'Data 2C',
+            },
+          ],
+        },
+      ],
+      conditionsWithUploads: [],
+    }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 

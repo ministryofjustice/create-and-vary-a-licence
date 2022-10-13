@@ -1,22 +1,25 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalLicenceConditions(licence, isEditable, validationErrors, title) %}
+{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, title) %}
     {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-full">
-            <h2 id="additional-licence-conditions-heading" class="govuk-heading-m">{{ title or "Additional licence conditions" }}</h2>
+            <h2 id="additional-licence-conditions-heading"
+                class="govuk-heading-m">{{ title or "Additional licence conditions" }}</h2>
         </div>
     </div>
 
     {% set additionalLicenceConditions = [] %}
 
-    {% set conditionWord = "condition" if licence.additionalLicenceConditions.length === 1 else "conditions" %}
+    {% set conditionCount = additionalConditions.length + (1 if conditionsWithUploads.length else 0) %}
+
+    {% set conditionWord = "condition" if (conditionCount) === 1 else "conditions" %}
 
     {% set additionalLicenceConditions = (additionalLicenceConditions.push({
         classes: 'govuk-summary-list__row--error' if errorMessage,
         key: {  text: "Select additional conditions" },
-        value: { text: "" + licence.additionalLicenceConditions.length + " " + conditionWord + " selected" },
+        value: { text: "" + conditionCount  + " " + conditionWord + " selected" },
         actions: {
             items: [
                 {
@@ -28,15 +31,17 @@
         } if isEditable
     }), additionalLicenceConditions) %}
 
-    {% for condition in licence.additionalLicenceConditions %}
-
-        {% if condition | checkConditionRequiresInput %}
-          {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
+    {% for condition in additionalConditions %}
+        {% if condition.uploadSummary.length %}
+            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.code + "/file-uploads" %}
+        {% elseif condition | checkConditionRequiresInput %}
+            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
         {% else %}
-          {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
         {% endif %}
 
         {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+            sequence: condition.sequence,
             key: {  text: condition.category },
             value: { html: additionalConditionHtml(condition) },
             actions: {
@@ -50,6 +55,30 @@
             } if isEditable
         }), additionalLicenceConditions) %}
     {% endfor %}
+
+    {% if conditionsWithUploads.length %}
+        {% set conditionHtml = [] %}
+        {% for condition in conditionsWithUploads %}
+            {% set conditionHtml = (conditionHtml.push(additionalConditionHtml(condition)), conditionHtml) %}
+        {% endfor %}
+        {% set conditionHtml = conditionHtml | join %}
+        {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+            sequence: conditionsWithUploads[0].sequence,
+            key: {  text: conditionsWithUploads[0].category },
+            value: { html: conditionHtml },
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + conditionsWithUploads[0].code + "/file-uploads?fromReview=true",
+                        text: "Change",
+                        visuallyHiddenText: "Change condition"
+                    }
+                ] if isEditable
+            }
+        }), additionalLicenceConditions) %}
+    {% endif %}
+
+    {% set additionalLicenceConditions = additionalLicenceConditions | sortConditionsBySequence %}
 
     {{ govukSummaryList({
         attributes: { id: 'additionalLicenceConditions' },
@@ -72,7 +101,7 @@
     {% endif %}
 
     {% if condition.uploadSummary.length %}
-       {{ includeExclusionZoneImage(condition) }}
+        {{ includeExclusionZoneImage(condition) }}
     {% endif %}
 
 {% endmacro %}
@@ -80,7 +109,8 @@
 {% macro includeExclusionZoneImage(condition) %}
     <div id="exclusion-zone" class="upload-container">
         <div class="upload-thumbnail">
-            <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"  alt="Exclusion zone map"/>
+            <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"
+                 alt="Exclusion zone map"/>
         </div>
         <div class="upload-detail">
             {{ condition.uploadSummary[0].description }}
