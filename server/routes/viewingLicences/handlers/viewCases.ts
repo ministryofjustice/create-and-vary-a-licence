@@ -25,6 +25,7 @@ export default class ViewAndPrintCaseRoutes {
 
     const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay, view as string)
     const caseloadViewModel = cases
+      .unwrap()
       .map(c => {
         return {
           licenceId: _.head(c.licences).id,
@@ -70,6 +71,19 @@ export default class ViewAndPrintCaseRoutes {
       hasMultipleCaseloadsInNomis,
       probationView,
     })
+  }
+
+  GET_WITH_EXCLUSIONS = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
+    const { caseloadsSelected = [] } = req.session
+    const view = req.query.view || 'prison'
+    const allPrisons = await this.prisonerService.getPrisons()
+    const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
+    const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
+
+    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay, view.toString())
+    res.header('Content-Type', 'application/json')
+    res.send(JSON.stringify(cases, null, 4))
   }
 
   selectReleaseDate(nomisRecord: Prisoner) {

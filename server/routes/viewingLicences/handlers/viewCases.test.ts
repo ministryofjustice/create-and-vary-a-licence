@@ -9,6 +9,7 @@ import PrisonerService from '../../../services/prisonerService'
 import LicenceType from '../../../enumeration/licenceType'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
+import Container from '../../../services/container'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
@@ -28,6 +29,8 @@ describe('Route handlers - View and print case list', () => {
     } as unknown as Request
 
     res = {
+      header: jest.fn(),
+      send: jest.fn(),
       render: jest.fn(),
       locals: {
         user: {
@@ -63,7 +66,7 @@ describe('Route handlers - View and print case list', () => {
   })
 
   describe('GET', () => {
-    const prisonViewCases = [
+    const prisonViewCases = new Container([
       {
         licences: [
           {
@@ -133,8 +136,8 @@ describe('Route handlers - View and print case list', () => {
           name: 'Larry Johnson',
         },
       },
-    ]
-    const probationViewCases = [
+    ])
+    const probationViewCases = new Container([
       {
         licences: [
           {
@@ -204,9 +207,10 @@ describe('Route handlers - View and print case list', () => {
           name: 'Harry Goldman',
         },
       },
-    ]
+    ])
+
     it('should render cases when user only has 1 caseloaded prison', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue([])
+      caseloadService.getOmuCaseload.mockResolvedValue(new Container([]))
       res.locals.prisonCaseload = ['BAI']
       await handler.GET(req, res)
 
@@ -233,7 +237,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should render cases when user selects prison which is not their currently active prison', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue([])
+      caseloadService.getOmuCaseload.mockResolvedValue(new Container([]))
       res.locals.user.prisonCaseload = ['BAI', 'MDI']
       req.session.caseloadsSelected = ['MDI']
 
@@ -265,7 +269,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should render list of licences for multiple selected prisons', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue([])
+      caseloadService.getOmuCaseload.mockResolvedValue(new Container([]))
       req.session.caseloadsSelected = ['MDI', 'BXI']
       res.locals.user.prisonCaseload = ['BAI', 'MDI', 'BXI']
       await handler.GET(req, res)
@@ -295,7 +299,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should successfully search by name', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue([])
+      caseloadService.getOmuCaseload.mockResolvedValue(new Container([]))
       req.query.search = 'bob'
       await handler.GET(req, res)
 
@@ -519,6 +523,25 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: undefined,
         statusConfig,
+      })
+    })
+
+    describe('GET_WITH_EXCLUSIONS', () => {
+      it('should render list of licences and display the currently active caseload prison', async () => {
+        res.locals.prisonCaseload = ['BAI']
+        caseloadService.getOmuCaseload.mockResolvedValue(prisonViewCases)
+
+        await handler.GET_WITH_EXCLUSIONS(req, res)
+
+        expect(prisonerService.getPrisons).toHaveBeenCalled()
+
+        expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+          { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
+          ['BAI'],
+          'prison'
+        )
+        expect(res.header).toHaveBeenCalledWith('Content-Type', 'application/json')
+        expect(res.send).toHaveBeenCalledWith(JSON.stringify(prisonViewCases, null, 4))
       })
     })
   })
