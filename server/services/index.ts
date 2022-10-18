@@ -14,6 +14,7 @@ import UkBankHolidayFeedService from './ukBankHolidayFeedService'
 import LicenceExpiryService from './licenceExpiryService'
 import PrisonRegisterService from './prisonRegisterService'
 import PrisonRegisterApiClient from '../data/prisonRegisterApiClient'
+import ConditionService from './conditionService'
 
 const hmppsAuthClient = new HmppsAuthClient()
 const prisonApiClient = new PrisonApiClient()
@@ -27,7 +28,8 @@ const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
 const communityService = new CommunityService(communityApiClient, probationSearchApiClient)
 const userService = new UserService(hmppsAuthClient, prisonApiClient, communityService)
-const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService)
+const conditionService = new ConditionService(licenceApiClient)
+const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
 const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
 const licenceExpiryService = new LicenceExpiryService(prisonerService, licenceApiClient, licenceService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
@@ -47,6 +49,7 @@ export const services = {
   ukBankHolidayFeedService,
   licenceExpiryService,
   prisonRegisterService,
+  conditionService,
 }
 
 export type Services = typeof services

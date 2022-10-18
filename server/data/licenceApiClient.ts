@@ -30,6 +30,7 @@ import type {
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
 import { UpdateComRequest } from '../@types/licenceApiClientTypes'
+import { ConditionsObj } from '../services/conditionService'
 
 export default class LicenceApiClient extends RestClient {
   constructor() {
@@ -367,5 +368,25 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username }
     )) as LicenceEvent[]
+  }
+
+  async getConditions(version: string): Promise<ConditionsObj> {
+    try {
+      return this.get({ path: `/licence-policy/version/${version}` }) as Promise<ConditionsObj>
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
+  }
+
+  async getActiveConditions() {
+    try {
+      return this.get({ path: `/licence-policy/active` }) as Promise<ConditionsObj>
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
+  }
+
+  async getPolicyChanges(licenceId: string, activePolicyVersion: string) {
+    return this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` })
   }
 }

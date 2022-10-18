@@ -1,0 +1,58 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "partials/variedConditions.njk" import variedConditions %}
+{% from "partials/variationDetails.njk" import variationDetails %}
+
+{% set pageTitle = applicationName + " - Vary a licence - Policy Changes" %}
+{% set pageId = "policy-changes-page" %}
+{% set backLinkHref = "/licence/vary/id/" + licence.id + "/vlo-discussion" %}
+{% set noJsBackLink = true %}
+
+{% block content %}
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h1 class="govuk-fieldset__heading">
+                        Review policy changes to additional licence conditions
+                    </h1>
+                </legend>
+                    <br>
+                <div class="govuk-form-group">
+                    <p>
+                        {{numberOfChanges}} of the additional conditions that were previously chosen for this licence have changed<br>
+                        in the Licence Conditions Policy Framework to use new wording or have different options.
+                        <br> 
+                    </p>
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h2 class="govuk-fieldset__heading" style="margin-top: 10px;">
+                            Before varying this licence  
+                        </h2>
+                    </legend>
+                    <p>
+                        You must review these changes on the next screens so the updated licence conditions can be used.
+                        <br>
+                        If necessary, you will also need to add some extra information to complete the licence condition.
+                    </p>
+                    <p>
+                        We only ask you to do this when varying a licence containing conditions that have changed.
+                    </p> 
+                </div>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        <div class="govuk-button-group">
+                            {{ govukButton({
+                                text: "Continue",
+                                attributes: { 'data-qa': 'continue' }
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+{% endblock %}
