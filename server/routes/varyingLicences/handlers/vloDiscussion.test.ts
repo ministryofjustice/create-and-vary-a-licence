@@ -1,13 +1,17 @@
 import { Request, Response } from 'express'
+import { Licence } from '../../../@types/licenceApiClientTypes'
+import ConditionService from '../../../services/conditionService'
 
 import LicenceService from '../../../services/licenceService'
 import VloDiscussionRoutes from './vloDiscussion'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
+jest.mock('../../../services/conditionService')
 
 describe('Route Handlers - Vary Licence - Vlo discussion', () => {
-  const handler = new VloDiscussionRoutes(licenceService)
+  const handler = new VloDiscussionRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -39,8 +43,10 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
   })
 
   describe('POST', () => {
-    it('should save response and redirect to the check your answers page', async () => {
+    it('should save response and redirect to the check your answers page if the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      conditionService.getVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
       expect(licenceService.updateVloDiscussion).toHaveBeenCalledWith(
@@ -49,6 +55,20 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
         { username: 'joebloggs' }
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+    })
+
+    it('should save response and redirect to the policy changes page if the licence version is up to date', async () => {
+      req.body = { answer: 'Yes' }
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
+      conditionService.getVersion.mockResolvedValue('2.0')
+      await handler.POST(req, res)
+
+      expect(licenceService.updateVloDiscussion).toHaveBeenCalledWith(
+        1,
+        { vloDiscussion: 'Yes' },
+        { username: 'joebloggs' }
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/policy-changes')
     })
   })
 })

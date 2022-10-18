@@ -1,12 +1,13 @@
 import { Request, Response } from 'express'
+import ConditionService from '../../../services/conditionService'
 
-import * as conditionsProvider from '../../../utils/conditionsProvider'
 import AdditionalPssConditionsCallbackRoutes from './additionalPssConditionsCallback'
 
-const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
 
 describe('Route Handlers - Create Licence - Additional Pss Conditions Callback', () => {
-  const handler = new AdditionalPssConditionsCallbackRoutes()
+  const handler = new AdditionalPssConditionsCallbackRoutes(conditionService)
   let req: Request
   let res: Response
 
@@ -69,11 +70,18 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions Callback',
         ],
       }
 
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: true })
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: false })
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: true })
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: true })
-
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 1', requiresInput: true, code: 'CON1' })
+      )
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 2', requiresInput: false, code: 'CON2' })
+      )
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 3', requiresInput: true, code: 'CON3' })
+      )
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 4', requiresInput: true, code: 'CON4' })
+      )
       await handler.GET(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/additional-pss-conditions/condition/3`)
@@ -92,7 +100,9 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions Callback',
         ],
       }
 
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: true })
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 1', requiresInput: true, code: 'CON1' })
+      )
 
       await handler.GET(req, res)
 

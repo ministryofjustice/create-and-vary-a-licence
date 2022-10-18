@@ -1,18 +1,19 @@
 import { Request, Response } from 'express'
 
 import LicenceService from '../../../services/licenceService'
-import * as conditionsProvider from '../../../utils/conditionsProvider'
 import LicenceType from '../../../enumeration/licenceType'
 import AdditionalPssConditionsRoutes from './additionalPssConditions'
+import ConditionService from '../../../services/conditionService'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
 
 jest
-  .spyOn(conditionsProvider, 'getGroupedAdditionalConditions')
-  .mockReturnValue([{ groupName: 'group1', conditions: [{ code: 'condition1' }] }])
+  .spyOn(conditionService, 'getGroupedAdditionalConditions')
+  .mockReturnValue(Promise.resolve([{ category: 'group1', conditions: [{ text: 'Condition 1', code: 'condition1' }] }]))
 
 describe('Route Handlers - Create Licence - Additional Pss Conditions', () => {
-  const handler = new AdditionalPssConditionsRoutes(licenceService)
+  const handler = new AdditionalPssConditionsRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -43,8 +44,8 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/additionalPssConditions', {
         additionalConditions: [
           {
-            groupName: 'group1',
-            conditions: [{ code: 'condition1' }],
+            category: 'group1',
+            conditions: [{ text: 'Condition 1', code: 'condition1' }],
           },
         ],
       })

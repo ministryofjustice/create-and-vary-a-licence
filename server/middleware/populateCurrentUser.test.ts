@@ -15,7 +15,7 @@ let req = {} as Request
 const next = jest.fn()
 
 const userServiceMock = new UserService(null, null, null) as jest.Mocked<UserService>
-const licenceServiceMock = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const licenceServiceMock = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
 const middleware = populateCurrentUser(userServiceMock, licenceServiceMock)
 
@@ -67,6 +67,7 @@ describe('populateCurrentUser', () => {
     expect(next).toBeCalled()
   })
 
+  // Causes an error to appear in the console with message 'Failed to get user details for: joebloggs' (expected)
   it('should catch error from user service and persist it to next', async () => {
     userServiceMock.getAuthUser.mockRejectedValue(new Error('Some error'))
 

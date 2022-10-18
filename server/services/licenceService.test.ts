@@ -5,7 +5,6 @@ import LicenceApiClient from '../data/licenceApiClient'
 import LicenceService from './licenceService'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
-import * as conditionsProvider from '../utils/conditionsProvider'
 import * as utils from '../utils/utils'
 import * as licenceComparator from '../utils/licenceComparator'
 import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
@@ -31,22 +30,27 @@ import { CommunityApiOffenderManager } from '../@types/communityClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
+import ConditionService, { Condition, ConditionsObj, Input } from './conditionService'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
 jest.mock('./prisonerService')
+jest.mock('./conditionService')
 jest.spyOn(utils, 'convertDateFormat').mockImplementation((value: string) => value)
-jest.spyOn(conditionsProvider, 'expandAdditionalCondition').mockImplementation(() => 'condition')
-
-const getConditionsSpy = jest
-  .spyOn(conditionsProvider, 'getStandardConditions')
-  .mockReturnValue([{ text: 'fake standard condition' }])
 
 describe('Licence Service', () => {
   const licenceApiClient = new LicenceApiClient() as jest.Mocked<LicenceApiClient>
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-  const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService)
+  const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
+  const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
+
+  conditionService.expandAdditionalCondition.mockResolvedValue(Promise.resolve('condition'))
+  conditionService.getConditions.mockResolvedValue(Promise.resolve([]))
+
+  conditionService.getStandardConditions.mockResolvedValue(
+    Promise.resolve([{ text: 'fake standard condition', code: 'fake1' }])
+  )
 
   const user = {
     username: 'joebloggs',
@@ -91,6 +95,12 @@ describe('Licence Service', () => {
           },
         } as CommunityApiOffenderManager,
       ])
+      conditionService.getAdditionalConditionByCode.mockResolvedValue(Promise.resolve({} as Condition))
+      conditionService.expandAdditionalCondition.mockResolvedValue(Promise.resolve('condition'))
+      licenceApiClient.getConditions.mockResolvedValue(Promise.resolve({} as ConditionsObj))
+      licenceApiClient.getActiveConditions.mockResolvedValue(Promise.resolve({} as ConditionsObj))
+      licenceApiClient.getPolicyChanges.mockResolvedValue({})
+      licenceApiClient.updateAdditionalConditions.mockImplementation()
     })
 
     describe('Licence Types', () => {
@@ -291,14 +301,14 @@ describe('Licence Service', () => {
       it('Should get standard licence conditions only if licence type is AP', async () => {
         prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({
-          standardLicenceConditions: [{ text: 'fake standard condition' }],
+          standardLicenceConditions: [{ code: 'fake1', text: 'fake standard condition' }],
           standardPssConditions: [],
         })
 
         await licenceService.createLicence('ABC1234', user)
 
-        expect(getConditionsSpy).toBeCalledTimes(1)
-        expect(getConditionsSpy).toBeCalledWith('AP')
+        expect(conditionService.getStandardConditions).toBeCalledTimes(1)
+        expect(conditionService.getStandardConditions).toBeCalledWith('AP')
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
 
@@ -308,13 +318,13 @@ describe('Licence Service', () => {
         } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({
           standardLicenceConditions: [],
-          standardPssConditions: [{ text: 'fake standard condition' }],
+          standardPssConditions: [{ code: 'fake1', text: 'fake standard condition' }],
         })
 
         await licenceService.createLicence('ABC1234', user)
 
-        expect(getConditionsSpy).toBeCalledTimes(1)
-        expect(getConditionsSpy).toBeCalledWith('PSS')
+        expect(conditionService.getStandardConditions).toBeCalledTimes(1)
+        expect(conditionService.getStandardConditions).toBeCalledWith('PSS')
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
 
@@ -327,15 +337,15 @@ describe('Licence Service', () => {
           },
         } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({
-          standardLicenceConditions: [{ text: 'fake standard condition' }],
-          standardPssConditions: [{ text: 'fake standard condition' }],
+          standardLicenceConditions: [{ code: 'fake1', text: 'fake standard condition' }],
+          standardPssConditions: [{ code: 'fake1', text: 'fake standard condition' }],
         })
 
         await licenceService.createLicence('ABC1234', user)
 
-        expect(getConditionsSpy).toBeCalledTimes(2)
-        expect(getConditionsSpy).toHaveBeenNthCalledWith(1, 'AP')
-        expect(getConditionsSpy).toHaveBeenNthCalledWith(2, 'PSS')
+        expect(conditionService.getStandardConditions).toBeCalledTimes(2)
+        expect(conditionService.getStandardConditions).toHaveBeenNthCalledWith(1, 'AP')
+        expect(conditionService.getStandardConditions).toHaveBeenNthCalledWith(2, 'PSS')
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
     })
@@ -405,17 +415,22 @@ describe('Licence Service', () => {
     })
 
     it('should build list of conditions correctly with index numbers and short category name if it exists', async () => {
-      const conditionConfigProvider = jest
-        .spyOn(conditionsProvider, 'getAdditionalConditionByCode')
-        .mockReturnValueOnce({
-          categoryShort: 'Short category name',
-          category: 'Longer category name',
-          text: 'Condition 1',
-        })
-        .mockReturnValueOnce({
-          category: 'Longer category name',
-          text: 'Condition 2',
-        })
+      conditionService.getAdditionalConditionByCode
+        .mockReturnValueOnce(
+          Promise.resolve({
+            categoryShort: 'Short category name',
+            category: 'Longer category name',
+            text: 'Condition 1',
+            code: 'CON1,',
+          })
+        )
+        .mockReturnValueOnce(
+          Promise.resolve({
+            category: 'Longer category name',
+            text: 'Condition 2',
+            code: 'CON2',
+          })
+        )
 
       await licenceService.updateAdditionalConditions(
         '1',
@@ -444,9 +459,9 @@ describe('Licence Service', () => {
         },
         user
       )
-      expect(conditionConfigProvider).toBeCalledTimes(2)
-      expect(conditionConfigProvider).toHaveBeenNthCalledWith(1, 'code1')
-      expect(conditionConfigProvider).toHaveBeenNthCalledWith(2, 'code2')
+      expect(conditionService.getAdditionalConditionByCode).toBeCalledTimes(2)
+      expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(1, 'code1')
+      expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(2, 'code2')
     })
   })
 

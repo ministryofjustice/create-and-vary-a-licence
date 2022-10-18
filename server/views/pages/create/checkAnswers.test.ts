@@ -3,12 +3,44 @@ import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-import * as conditionsProvider from '../../../utils/conditionsProvider'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import ConditionService from '../../../services/conditionService'
 
-const additionalCondition = { code: 'condition1', inputRequired: true }
+const activeConditions = {
+  version: '1.0',
+  standardConditions: {},
+  additionalConditions: {
+    AP: [
+      {
+        text: 'Condition 1',
+        code: 'condition1',
+        inputRequired: true,
+      },
+      {
+        text: 'Condition 2',
+        code: 'condition2',
+        inputRequired: true,
+      },
+    ],
+    PSS: [
+      {
+        text: 'Condition 1',
+        code: 'condition1',
+        inputRequired: true,
+      },
+      {
+        text: 'Condition 2',
+        code: 'condition2',
+        inputRequired: true,
+      },
+    ],
+    bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
+  },
+}
 
-jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode').mockReturnValue(additionalCondition)
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+
+jest.spyOn(conditionService, 'getActiveConditions').mockReturnValue(Promise.resolve(activeConditions))
 
 const snippet = fs.readFileSync('server/views/pages/create/checkAnswers.njk')
 
@@ -16,7 +48,7 @@ describe('Create a Licence Views - Check Answers', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const njkEnv = registerNunjucks()
+  const njkEnv = registerNunjucks(conditionService)
 
   const licence = {
     id: 1,
@@ -159,7 +191,7 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements')
   })
 
-  it('should not display additional licence conditions section if licence type is AP', () => {
+  it('should not display additional PSS licence conditions section if licence type is AP', () => {
     viewContext = { licence: { ...licence, typeCode: 'AP' } }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
     expect($('#additional-pss-conditions-heading').length).toBe(0)
@@ -218,7 +250,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('.govuk-summary-list__actions').length).toBe(12)
+    expect($('.govuk-summary-list__actions').length).toBe(14)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 

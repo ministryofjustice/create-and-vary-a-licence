@@ -6,7 +6,7 @@ import TransferredEventHandler from './transferredEventHandler'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonInformation } from '../../../@types/prisonApiClientTypes'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../../../services/licenceService')
