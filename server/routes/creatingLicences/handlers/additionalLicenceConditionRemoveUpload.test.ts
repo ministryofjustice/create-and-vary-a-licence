@@ -3,7 +3,7 @@ import { User } from '../../../@types/CvlUserDetails'
 import LicenceService from '../../../services/licenceService'
 import AdditionalLicenceConditionRemoveUploadRoutes from './additionalLicenceConditionRemoveUpload'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Remove file upload from condition', () => {
   const handler = new AdditionalLicenceConditionRemoveUploadRoutes(licenceService)

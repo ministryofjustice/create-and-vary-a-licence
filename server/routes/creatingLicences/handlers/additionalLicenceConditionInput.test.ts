@@ -2,13 +2,14 @@ import { Request, Response } from 'express'
 
 import AdditionalLicenceConditionInputRoutes from './additionalLicenceConditionInput'
 import LicenceService from '../../../services/licenceService'
-import * as conditionsProvider from '../../../utils/conditionsProvider'
+import ConditionService from '../../../services/conditionService'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
-const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
 
 describe('Route Handlers - Create Licence - Additional Licence Condition Input', () => {
-  const handler = new AdditionalLicenceConditionInputRoutes(licenceService)
+  const handler = new AdditionalLicenceConditionInputRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -50,9 +51,12 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
     })
 
     it('should render view with the additional condition and its config', async () => {
-      conditionsProviderSpy.mockReturnValue({
+      // conditionService.getAdditionalConditionByCode = jest.fn()
+      conditionsProviderSpy.mockReturnValue(Promise.resolve({
+        text: 'Condition 1',
+        code: 'code1',
         inputs: [],
-      })
+      }))
 
       req.query.fromReview = 'true'
 
@@ -66,14 +70,16 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       }
 
       await handler.GET(req, res)
-      expect(conditionsProviderSpy).toHaveBeenCalledWith('code1')
+      // expect(conditionsProviderSpy).toHaveBeenCalledWith('code1')
       expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditionInput', {
         additionalCondition: {
           id: 1,
           code: 'code1',
         },
         config: {
+          code: 'code1',
           inputs: [],
+          text: 'Condition 1',
         },
       })
     })

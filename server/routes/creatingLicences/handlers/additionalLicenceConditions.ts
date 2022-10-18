@@ -1,13 +1,16 @@
 import { Request, Response } from 'express'
-import { getGroupedAdditionalConditions } from '../../../utils/conditionsProvider'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
+import ConditionService from '../../../services/conditionService'
 
 export default class AdditionalLicenceConditionsRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const additionalConditions = getGroupedAdditionalConditions(LicenceType.AP)
+    const additionalConditions = await this.conditionService.getGroupedAdditionalConditions(LicenceType.AP)
     return res.render('pages/create/additionalLicenceConditions', { additionalConditions })
   }
 

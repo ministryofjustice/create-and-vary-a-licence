@@ -4,10 +4,11 @@ import { IsIn, IsNotEmpty, ValidateNested } from 'class-validator'
 import { Expose, Type } from 'class-transformer'
 import validationMiddleware from './validationMiddleware'
 
-import * as conditionsProvider from '../utils/conditionsProvider'
 import IsValidExclusionZoneFile from '../validators/isValidExclusionZoneFile'
+import ConditionService from '../services/conditionService'
 
-const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
 
 describe('validationMiddleware', () => {
   describe('middleware', () => {
@@ -55,8 +56,8 @@ describe('validationMiddleware', () => {
     })
 
     it('should validate against a type from config if the form is an additional condition input', async () => {
-      const additionalCondition = { code: 'condition1', inputRequired: true, type: DummyChild }
-      conditionsProviderSpy.mockReturnValue(additionalCondition)
+      const additionalCondition = { text: 'Condition 1', code: 'condition1', inputRequired: true, type: DummyChild }
+      conditionsProviderSpy.mockReturnValue(Promise.resolve(additionalCondition))
 
       const next = jest.fn()
       req = {
@@ -70,7 +71,7 @@ describe('validationMiddleware', () => {
         },
       } as unknown as Request
 
-      await validationMiddleware()(req, res, next)
+      await validationMiddleware(conditionService)(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith(
@@ -90,7 +91,7 @@ describe('validationMiddleware', () => {
         },
       } as Request
 
-      await validationMiddleware(DummyForm)(req, res, next)
+      await validationMiddleware(conditionService, DummyForm)(req, res, next)
 
       expect(next).toHaveBeenCalledTimes(1)
     })
@@ -106,7 +107,7 @@ describe('validationMiddleware', () => {
         },
       } as unknown as Request
 
-      await validationMiddleware(DummyForm)(req, res, next)
+      await validationMiddleware(conditionService, DummyForm)(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith(
@@ -127,7 +128,7 @@ describe('validationMiddleware', () => {
         },
       } as unknown as Request
 
-      await validationMiddleware(DummyForm)(req, res, next)
+      await validationMiddleware(conditionService, DummyForm)(req, res, next)
 
       expect(next).not.toHaveBeenCalled()
       expect(req.flash).toHaveBeenCalledWith(
@@ -154,7 +155,7 @@ describe('validationMiddleware', () => {
         body: { outOfBoundArea: 'Anywhere' },
       } as unknown as Request
 
-      await validationMiddleware(DummyFileUpload)(req, res, next)
+      await validationMiddleware(conditionService, DummyFileUpload)(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })
@@ -168,7 +169,7 @@ describe('validationMiddleware', () => {
         body: { addressLine: 'valid' },
       } as unknown as Request
 
-      await validationMiddleware(DummyAddress)(req, res, next)
+      await validationMiddleware(conditionService, DummyAddress)(req, res, next)
 
       expect(next).toHaveBeenCalled()
     })

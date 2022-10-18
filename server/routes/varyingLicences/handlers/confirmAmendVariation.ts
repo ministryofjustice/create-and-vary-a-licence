@@ -2,11 +2,14 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { getStandardConditions, getVersion } from '../../../utils/conditionsProvider'
 import LicenceType from '../../../enumeration/licenceType'
+import ConditionService from '../../../services/conditionService'
 
 export default class ConfirmAmendVariationRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     res.render('pages/vary/confirmAmendVariation')
@@ -25,13 +28,13 @@ export default class ConfirmAmendVariationRoutes {
        * update the standard conditions to the current policy version if
        * licence was created on a previous version.
        */
-      if (licence.version !== getVersion()) {
+       if ((await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !== (await this.conditionService.getVersion())){
         const newStdConditions = {
           standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode)
-            ? getStandardConditions(LicenceType.AP)
+            ? await this.conditionService.getStandardConditions(LicenceType.AP)
             : [],
           standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licence.typeCode)
-            ? getStandardConditions(LicenceType.PSS)
+            ? await this.conditionService.getStandardConditions(LicenceType.PSS)
             : [],
         }
         await this.licenceService.updateStandardConditions(licenceId, newStdConditions, user)

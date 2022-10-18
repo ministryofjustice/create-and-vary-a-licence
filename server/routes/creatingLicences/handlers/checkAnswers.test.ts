@@ -2,13 +2,17 @@ import { Request, Response } from 'express'
 
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
+import ConditionService from '../../../services/conditionService'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 jest.mock('../../../services/licenceService')
+jest.mock('../../../services/conditionService')
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Check Answers', () => {
-  const handler = new CheckAnswersRoutes(licenceService)
+  const handler = new CheckAnswersRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -101,6 +105,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should call the licence API to submit the licence for approval', async () => {
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({version:'2.0'} as Licence)
+      conditionService.getVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(licenceService.submitLicence).toHaveBeenCalledWith('1', {
         username: 'joebloggs',
@@ -109,6 +115,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should redirect to the confirmation page', async () => {
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({version:'2.0'} as Licence)
+      conditionService.getVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/confirmation')
     })

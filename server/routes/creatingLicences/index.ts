@@ -46,6 +46,7 @@ export default function Index({
   communityService,
   prisonerService,
   ukBankHolidayFeedService,
+  conditionService,
 }: Services): Router {
   const router = Router()
 
@@ -70,7 +71,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      validationMiddleware(type),
+      validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
     )
 
@@ -80,7 +81,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       upload.single('outOfBoundFilename'),
-      validationMiddleware(type),
+      validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
     )
 
@@ -97,17 +98,17 @@ export default function Index({
   const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService, ukBankHolidayFeedService)
   const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
   const additionalLicenceConditionsQuestionHandler = new AdditionalLicenceConditionsQuestionRoutes()
-  const additionalLicenceConditionsHandler = new AdditionalLicenceConditionsRoutes(licenceService)
-  const additionalLicenceConditionsCallbackHandler = new AdditionalLicenceConditionsCallbackRoutes()
-  const additionalLicenceConditionInputHandler = new AdditionalLicenceConditionInputRoutes(licenceService)
+  const additionalLicenceConditionsHandler = new AdditionalLicenceConditionsRoutes(licenceService, conditionService)
+  const additionalLicenceConditionsCallbackHandler = new AdditionalLicenceConditionsCallbackRoutes(conditionService)
+  const additionalLicenceConditionInputHandler = new AdditionalLicenceConditionInputRoutes(licenceService, conditionService)
   const additionalLicenceConditionRemoveUploadHandler = new AdditionalLicenceConditionRemoveUploadRoutes(licenceService)
   const additionalPssConditionsQuestionHandler = new AdditionalPssConditionsQuestionRoutes()
-  const additionalPssConditionsHandler = new AdditionalPssConditionsRoutes(licenceService)
-  const additionalPssConditionsCallbackHandler = new AdditionalPssConditionsCallbackRoutes()
-  const additionalPssConditionInputHandler = new AdditionalPssConditionInputRoutes(licenceService)
+  const additionalPssConditionsHandler = new AdditionalPssConditionsRoutes(licenceService, conditionService)
+  const additionalPssConditionsCallbackHandler = new AdditionalPssConditionsCallbackRoutes(conditionService)
+  const additionalPssConditionInputHandler = new AdditionalPssConditionInputRoutes(licenceService, conditionService)
   const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
   const bespokeConditionsHandler = new BespokeConditionsRoutes(licenceService)
-  const checkAnswersHandler = new CheckAnswersRoutes(licenceService)
+  const checkAnswersHandler = new CheckAnswersRoutes(licenceService, conditionService)
   const editQuestionHandler = new EditQuestionRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
 

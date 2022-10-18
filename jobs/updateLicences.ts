@@ -46,7 +46,7 @@ const pollLicencesToUpdate = async (): Promise<LicencesToUpdate> => {
    * Check for an approved HDC licence. If one exists, we must inactivate the
    */
   filteredLicences.forEach(prisoner => {
-    const bookingId = parseInt(prisoner.bookingId, 10)
+    const bookingId = prisoner.bookingId
     if (hdcStatusList.get(bookingId) === 'APPROVED') {
       licencesToInactivate.push(prisoner.licenceId)
     } else {

@@ -1,11 +1,14 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
-import { getAdditionalConditionByCode } from '../../../utils/conditionsProvider'
 import LicenceType from '../../../enumeration/licenceType'
+import ConditionService from '../../../services/conditionService'
 
 export default class AdditionalPssConditionInputRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { additionalPssConditions } = res.locals.licence
@@ -14,7 +17,7 @@ export default class AdditionalPssConditionInputRoutes {
       (condition: AdditionalCondition) => condition.id === +conditionId
     )
 
-    const config = getAdditionalConditionByCode(additionalCondition.code)
+    const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code)
     return res.render('pages/create/additionalPssConditionInput', { additionalCondition, config })
   }
 

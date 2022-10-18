@@ -4,6 +4,7 @@ import LicenceService from '../services/licenceService'
 import { Licence } from '../@types/licenceApiClientTypes'
 
 jest.mock('../services/licenceService')
+jest.mock('../services/userService')
 
 let res = {} as unknown as Response
 const req = {
@@ -45,7 +46,7 @@ const licence = {
   probationTeamCode: 'N55A',
 } as unknown as Licence
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
 const middleware = fetchLicence(licenceService)
 
@@ -76,6 +77,7 @@ describe('fetchLicenceMiddleware', () => {
     expect(next).toBeCalledTimes(1)
   })
 
+  // Causes an error to appear in the console with message 'Failed to get licence details for licence Id: 1' (expected)
   it('should handle error from licence service', async () => {
     licenceService.getLicence.mockRejectedValue('Error')
 

@@ -1,14 +1,15 @@
 import { Request, Response } from 'express'
+import ConditionService from '../../../services/conditionService'
 
 import LicenceService from '../../../services/licenceService'
-import * as conditionsProvider from '../../../utils/conditionsProvider'
 import AdditionalPssConditionInputRoutes from './additionalPssConditionInput'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
-const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
 
 describe('Route Handlers - Create Licence - Additional Licence Condition Input', () => {
-  const handler = new AdditionalPssConditionInputRoutes(licenceService)
+  const handler = new AdditionalPssConditionInputRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -39,9 +40,11 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
   describe('GET', () => {
     it('should render view with the additional condition and its config', async () => {
-      conditionsProviderSpy.mockReturnValue({
+      conditionsProviderSpy.mockReturnValue(Promise.resolve({
+        text: 'Condition 1',
+        code: 'code1',
         inputs: [],
-      })
+      }))
 
       res.locals.licence = {
         additionalPssConditions: [
@@ -58,9 +61,12 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         additionalCondition: {
           id: 1,
           code: 'code1',
+          
         },
         config: {
+          code: 'code1',
           inputs: [],
+          text: 'Condition 1',
         },
       })
     })
