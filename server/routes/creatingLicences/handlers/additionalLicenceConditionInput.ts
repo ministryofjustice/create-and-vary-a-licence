@@ -61,12 +61,19 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
+    const condition = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10)
+    ) as AdditionalCondition
+
+    // if the exclusion zone name outOfBoundArea is present, redirect to file uploads dialog
+    const redirect = condition.expandedText.indexOf('{outOfBoundsArea}')
+      ? `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
+      : `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
+          req.query?.fromReview ? '?fromReview=true' : ''
+        }`
+
     await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)
 
-    return res.redirect(
-      `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
-        req.query?.fromReview ? '?fromReview=true' : ''
-      }`
-    )
+    return res.redirect(redirect)
   }
 }

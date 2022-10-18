@@ -708,8 +708,7 @@ export default {
           },
           {
             type: InputTypes.FILE_UPLOAD,
-            label:
-              'Find and select the <a class="govuk-link" href="https://mapmaker.field-dynamics.co.uk/moj/map/default" rel="noreferrer noopener" target="_blank">Mapmaker PDF map</a> to include on the licence',
+            label: 'Select a map of the area they must not enter to include in the licence',
             name: 'outOfBoundFilename',
           },
         ],

@@ -194,6 +194,13 @@ export default class LicenceService {
     return this.licenceApiClient.deleteAdditionalCondition(conditionId, licenceId, user)
   }
 
+  async deleteAdditionalConditionsByCode(conditionCode: string, licence: Licence, user: User): Promise<void> {
+    const conditionIds = licence.additionalLicenceConditions.filter(c => c.code === conditionCode).map(c => c.id)
+    await Promise.all(
+      conditionIds.map(conditionId => this.licenceApiClient.deleteAdditionalCondition(conditionId, licence.id, user))
+    )
+  }
+
   async updateAdditionalConditions(
     id: string,
     conditionType: LicenceType,

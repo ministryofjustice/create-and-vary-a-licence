@@ -3,6 +3,7 @@ import nunjucks, { Environment } from 'nunjucks'
 import express from 'express'
 import path from 'path'
 import moment from 'moment'
+import { filesize } from 'filesize'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
 import { formatAddress, jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateShort, jsonDtToDateWithDay } from './utils'
@@ -221,6 +222,23 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('sortConditionsBySequence', (array: AdditionalCondition[]) => {
     return array.sort((a, b) => a.sequence - b.sequence)
+  })
+
+  njkEnv.addFilter('sortConditionsById', (array: AdditionalCondition[]) => {
+    return array.sort((a, b) => a.id - b.id)
+  })
+
+  njkEnv.addFilter('humanReadableFileSize', (numberOfBytes: number) =>
+    filesize(numberOfBytes || 0, { base: 2, standard: 'jedec' })
+  )
+
+  njkEnv.addFilter('humanReadableMimeType', (mimeType: string) => {
+    switch (mimeType) {
+      case 'application/pdf':
+        return 'PDF'
+      default:
+        return mimeType
+    }
   })
 
   return njkEnv

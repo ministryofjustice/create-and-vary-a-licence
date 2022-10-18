@@ -112,7 +112,7 @@ export default class PrintLicenceRoutes {
   }
 
   getConditionsWithUploads = (additionalConditions: AdditionalCondition[]): AdditionalCondition[] => {
-    return additionalConditions.filter(condition => condition?.uploadSummary?.length > 0)
+    return additionalConditions.filter(condition => condition?.uploadSummary?.length > 0).sort((a, b) => a.id - b.id)
   }
 
   getExclusionZones(licence: Licence, conditionsWithUploads: AdditionalCondition[], user: User) {

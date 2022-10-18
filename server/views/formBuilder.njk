@@ -209,7 +209,7 @@
                 {% for item in formValues %}
                     {# When submitting an empty form, the formValues is an array containing an empty string #}
                     {# This is to cater for other input types which are part of the Add-Another pattern #}
-                    {% if item.length > 1 %}
+                    {% if (item.length > 1) and (additionalCondition.uploadSummary[0].thumbnailImage) %}
                         {# There was a value for the uploaded file name - show the thumbnail image and a delete link #}
                         <input type="hidden" name="{{ input.name }}" value="{{ item }}"/>
                         {{ includeExclusionZoneImage(licenceId, additionalCondition, item, csrfToken) }}
@@ -242,34 +242,25 @@
         </div>
         <div class="upload-detail-container">
             <div class="upload-detail govuk-body">
-                Name: <strong>{{ condition.uploadSummary[0].filename }}</strong>
+                File Name: <strong>{{ condition.uploadSummary[0].filename }}</strong>
             </div>
             <div class="upload-detail govuk-body">
-                Type: <strong>{{ condition.uploadSummary[0].fileType }}</strong>
+                Type: <strong>{{ condition.uploadSummary[0].fileType | humanReadableMimeType }}</strong>
             </div>
             <div class="upload-detail govuk-body">
-                Size: <strong>{{ condition.uploadSummary[0].fileSize }} bytes</strong>
+                Size: <strong>{{ condition.uploadSummary[0].fileSize | humanReadableFileSize }} </strong>
             </div>
         </div>
     </div>
     <div class="govuk-body">
         <div>
             {% set removeFileUploadLink = "/licence/create/id/"+ licenceId +"/condition/id/" + condition.id + "/remove-upload?_csrf=" + csrfToken %}
-            <a href="{{ removeFileUploadLink }}">Delete this file</a>
         </div>
     </div>
     <div class="govuk-body">
         {{ condition.uploadSummary[0].description }}
     </div>
-    <h2 class="govuk-heading-m">Help with this licence condition</h2>
-    {{ govukDetails({
-        summaryText: "If you need to add more than one map",
-        text: "Add your first map on this page. You can add more from the next page."
-    }) }}
-    {{ govukDetails({
-        summaryText: "You do not have a map",
-        html: "You can create one on <a class='govuk-link govuk-link--no-visited-state' href='https://mapmaker.field-dynamics.co.uk/moj/map/default' target='_blank'>Map Maker</a>"
-    }) }}
+    <br/>
 {% endmacro %}
 
 {% macro fileTypeInput(name, acceptTypes, label, validationErrors, formValue) %}

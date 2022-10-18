@@ -38,6 +38,8 @@ import YesOrNoQuestion from './types/yesOrNo'
 import AdditionalConditionsYesOrNo from './types/additionalConditionsYesOrNo'
 import ConfirmCreateRoutes from './handlers/confirmCreate'
 import AdditionalLicenceConditionUploadsHandler from './handlers/additionalLicenceConditionUploadsHandler'
+import AdditionalLicenceTypesHandler from './handlers/additionalLicenceTypesHandler'
+import AdditionalLicenceConditionDeletionHandler from './handlers/additionalLicenceConditionDeletionHandler'
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -102,6 +104,8 @@ export default function Index({
   const additionalLicenceConditionsCallbackHandler = new AdditionalLicenceConditionsCallbackRoutes()
   const additionalLicenceConditionInputHandler = new AdditionalLicenceConditionInputRoutes(licenceService)
   const additionalLicenceConditionUploads = new AdditionalLicenceConditionUploadsHandler(licenceService)
+  const additionalLicenceTypesHandler = new AdditionalLicenceTypesHandler(licenceService)
+  const additionalLicenceConditionDeletionHandler = new AdditionalLicenceConditionDeletionHandler(licenceService)
   const additionalLicenceConditionRemoveUploadHandler = new AdditionalLicenceConditionRemoveUploadRoutes(licenceService)
   const additionalPssConditionsQuestionHandler = new AdditionalPssConditionsQuestionRoutes()
   const additionalPssConditionsHandler = new AdditionalPssConditionsRoutes(licenceService)
@@ -146,10 +150,20 @@ export default function Index({
     '/id/:licenceId/additional-licence-conditions/condition/:conditionCode/file-uploads',
     additionalLicenceConditionUploads.GET
   )
+  get(
+    '/id/:licenceId/additional-licence-conditions/condition/:conditionId/remove',
+    additionalLicenceConditionDeletionHandler.GET
+  )
+  post(
+    '/id/:licenceId/additional-licence-conditions/condition/:conditionId/remove',
+    additionalLicenceConditionDeletionHandler.POST
+  )
   post(
     '/id/:licenceId/additional-licence-conditions/condition/:conditionCode/file-uploads',
     additionalLicenceConditionUploads.POST
   )
+
+  post('/id/:licenceId/additional-licence-types/condition/delete', additionalLicenceTypesHandler.DELETE)
 
   post(
     '/id/:licenceId/additional-licence-conditions/condition/:conditionId/delete',

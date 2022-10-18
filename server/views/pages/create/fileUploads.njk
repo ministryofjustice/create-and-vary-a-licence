@@ -16,20 +16,21 @@
     {% for condition in conditions %}
         {% set items = (items.push({
             key: {
-                text: 'File name:'
+                html: 'Name of area: <br/> File name:'
             },
             value: {
-                html: condition.uploadSummary[0].filename
+                html:  condition.data[0].value + '<br/>' + condition.uploadSummary[0].filename
             },
+            classes: 'govuk-summary-list__row--file-upload',
             actions: {
                 items: [
                     {
                         href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true",
-                        text: "Change",
+                        text: "Change details",
                         visuallyHiddenText: condition.uploadSummary[0].fileName
                     },
                     {
-                        href: "/licence/create/id/"+ licenceId + "/condition/id/"+ condition.id +"/remove-upload",
+                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/remove",
                         text: "Delete",
                         visuallyHiddenText: condition.uploadSummary[0].filename
                     }
@@ -53,22 +54,24 @@
                 <input type="hidden" name="conditionCode" value="{{ conditions[0].code}}">
                 {{ govukRadios({
                     name: "uploadFile",
+                    classes: "govuk-radios--inline",
                     fieldset: {
                         legend: {
-                            text: "Do you want to upload another map?",
+                            text: "Do you want to add another map?",
                             classes: "govuk-fieldset__legend--m"
                         }
                     },
                     items: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             text: "Yes"
                         },
                         {
-                            value: "no",
+                            value: "No",
                             text: "No"
                         }
-                    ]
+                    ],
+                    errorMessage: displayMessage
                 }) }}
 
                 {{ govukButton({
@@ -79,5 +82,15 @@
                 }) }}
             </div>
         </div>
+    </form>
+    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-types/condition/delete"}}" method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <input type="hidden" name="conditionCode" value="{{ conditions[0].code}}">
+        {{ govukButton({
+            text: "Delete this condition",
+            type: "submit",
+            classes: 'govuk-button--secondary',
+            attributes: { 'data-qa': 'delete' }
+        }) }}
     </form>
 {% endblock %}
