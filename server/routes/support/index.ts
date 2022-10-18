@@ -18,6 +18,7 @@ export default function Index({
   prisonerService,
   licenceService,
   prisonRegisterService,
+  conditionService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -29,7 +30,7 @@ export default function Index({
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']),
-      validationMiddleware(type),
+      validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
     )
   const supportHomeHandler = new SupportHomeRoutes()

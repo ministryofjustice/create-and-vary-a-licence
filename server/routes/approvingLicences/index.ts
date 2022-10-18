@@ -17,6 +17,7 @@ export default function Index({
   caseloadService,
   communityService,
   prisonerService,
+  conditionService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/approve${path}`
@@ -34,7 +35,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_DM']),
       fetchLicence(licenceService),
-      validationMiddleware(type),
+      validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
     )
 

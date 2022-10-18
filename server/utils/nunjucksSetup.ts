@@ -7,15 +7,15 @@ import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
 import { formatAddress, jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateShort, jsonDtToDateWithDay } from './utils'
 import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
-import { getAdditionalConditionByCode } from './conditionsProvider'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/creatingLicences/types/address'
 import LicenceStatus from '../enumeration/licenceStatus'
+import ConditionService from '../services/conditionService'
 
 const production = process.env.NODE_ENV === 'production'
 
-export default function nunjucksSetup(app: express.Express): void {
+export default function nunjucksSetup(app: express.Express, conditionService: ConditionService): void {
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
@@ -43,10 +43,10 @@ export default function nunjucksSetup(app: express.Express): void {
     })
   }
 
-  registerNunjucks(app)
+  registerNunjucks(conditionService, app)
 }
 
-export function registerNunjucks(app?: express.Express): Environment {
+export function registerNunjucks(conditionService: ConditionService, app?: express.Express): Environment {
   const njkEnv = nunjucks.configure(
     [
       path.join(__dirname, '../views'),
@@ -131,8 +131,8 @@ export function registerNunjucks(app?: express.Express): Environment {
     return addresses[index] ? addresses[index][property] : ''
   })
 
-  njkEnv.addFilter('checkConditionRequiresInput', (additionalCondition: AdditionalCondition) => {
-    return getAdditionalConditionByCode(additionalCondition.code).requiresInput
+  njkEnv.addFilter('checkConditionRequiresInput', async (additionalCondition: AdditionalCondition) => {
+    return (await conditionService.getAdditionalConditionByCode(additionalCondition.code)).requiresInput
   })
 
   njkEnv.addFilter('datetimeToDate', (dt: string) => {

@@ -1,15 +1,22 @@
 import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import ConditionService from '../../../services/conditionService'
 import LicenceService from '../../../services/licenceService'
 
 export default class ViewVariationRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user, licence } = res.locals
 
     // If already in progress jump directly to check your answers to continue editing
     if (licence.statusCode === LicenceStatus.VARIATION_IN_PROGRESS) {
+      if (
+        (await this.licenceService.getParentLicenceOrSelf(licence.id, user)).version !==
+        (await this.conditionService.getVersion())
+      ) {
+        return res.redirect(`/licence/vary/id/${licence.id}/policy-changes`)
+      }
       return res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
     }
 

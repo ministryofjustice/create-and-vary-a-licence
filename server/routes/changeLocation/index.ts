@@ -7,7 +7,7 @@ import { Services } from '../../services'
 import Caseload from './types/caseload'
 import AuthRole from '../../enumeration/authRole'
 
-export default function Index({ userService }: Services): Router {
+export default function Index({ userService, conditionService }: Services): Router {
   const routePrefix = (path: string) => `/licence${path}`
 
   const router = Router()
@@ -18,7 +18,7 @@ export default function Index({ userService }: Services): Router {
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_DM']),
-      validationMiddleware(type),
+      validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
     )
   const locationHandler = new ChangeLocationRoutes(userService)

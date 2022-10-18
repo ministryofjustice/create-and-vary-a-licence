@@ -12,7 +12,12 @@ import VaryReferConfirmRoutes from './handlers/varyReferConfirm'
 import ComDetailsRoutes from './handlers/comDetails'
 import ReasonForReferral from '../creatingLicences/types/reasonForReferral'
 
-export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
+export default function Index({
+  licenceService,
+  caseloadService,
+  communityService,
+  conditionService,
+}: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/vary-approve${path}`
 
@@ -38,7 +43,7 @@ export default function Index({ licenceService, caseloadService, communityServic
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_ACO']),
       fetchLicence(licenceService),
-      validationMiddleware(type),
+      validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
     )
 

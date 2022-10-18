@@ -5,11 +5,11 @@ import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
-import { getStandardConditions, getVersion } from '../../../utils/conditionsProvider'
 import LicenceType from '../../../enumeration/licenceType'
+import ConditionService from '../../../services/conditionService'
 
 export default class CheckAnswersRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -39,25 +39,29 @@ export default class CheckAnswersRoutes {
       return res.redirect('back')
     }
 
-    await this.licenceService.submitLicence(licenceId, user)
-
     /**
      * TODO
      * replace when proper versioning functionality is ready.
      * update the standard conditions to the current policy version if
      * licence was created on a previous version.
      */
-    if (licence.version !== getVersion()) {
+    if (
+      (await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !==
+      (await this.conditionService.getVersion())
+    ) {
       const newStdConditions = {
         standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode)
-          ? getStandardConditions(LicenceType.AP)
+          ? await this.conditionService.getStandardConditions(LicenceType.AP)
           : [],
         standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licence.typeCode)
-          ? getStandardConditions(LicenceType.PSS)
+          ? await this.conditionService.getStandardConditions(LicenceType.PSS)
           : [],
       }
       await this.licenceService.updateStandardConditions(licenceId, newStdConditions, user)
     }
+
+    await this.licenceService.submitLicence(licenceId, user)
+
     return res.redirect(`/licence/create/id/${licenceId}/confirmation`)
   }
 
