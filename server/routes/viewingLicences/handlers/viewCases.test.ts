@@ -160,7 +160,8 @@ describe('Route handlers - View and print case list', () => {
 
       expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
         { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
-        ['BAI']
+        ['BAI'],
+        'prison'
       )
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
@@ -232,6 +233,7 @@ describe('Route handlers - View and print case list', () => {
             description: 'Belmarsh (HMP)',
           },
         ],
+        probationView: false,
         search: undefined,
         statusConfig,
       })
@@ -248,7 +250,8 @@ describe('Route handlers - View and print case list', () => {
           prisonCaseload: ['BAI', 'MDI'],
           username: 'joebloggs',
         },
-        ['MDI']
+        ['MDI'],
+        'prison'
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
@@ -321,6 +324,7 @@ describe('Route handlers - View and print case list', () => {
             description: 'Moorland (HMP)',
           },
         ],
+        probationView: false,
         search: undefined,
         statusConfig,
       })
@@ -333,7 +337,8 @@ describe('Route handlers - View and print case list', () => {
 
       expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
         { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI', 'MDI', 'BXI'] },
-        ['MDI', 'BXI']
+        ['MDI', 'BXI'],
+        'prison'
       )
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
@@ -409,6 +414,7 @@ describe('Route handlers - View and print case list', () => {
             description: 'Moorland (HMP)',
           },
         ],
+        probationView: false,
         search: undefined,
         statusConfig,
       })
@@ -441,6 +447,7 @@ describe('Route handlers - View and print case list', () => {
             description: 'Belmarsh (HMP)',
           },
         ],
+        probationView: false,
         search: 'bob',
         statusConfig,
       })
@@ -473,6 +480,7 @@ describe('Route handlers - View and print case list', () => {
             description: 'Belmarsh (HMP)',
           },
         ],
+        probationView: false,
         search: 'A1234AA',
         statusConfig,
       })
@@ -505,6 +513,7 @@ describe('Route handlers - View and print case list', () => {
             description: 'Belmarsh (HMP)',
           },
         ],
+        probationView: false,
         search: 'holmes',
         statusConfig,
       })

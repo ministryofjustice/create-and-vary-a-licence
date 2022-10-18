@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { format, getUnixTime } from 'date-fns'
-import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
@@ -15,7 +14,8 @@ export default class ViewAndPrintCaseRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
-
+    const view = req.query.view || 'prison'
+    const probationView = view === 'probation'
     const { user } = res.locals
     const { caseloadsSelected = [] } = req.session
     const hasMultipleCaseloadsInNomis = user.prisonCaseload.length > 1
@@ -23,7 +23,7 @@ export default class ViewAndPrintCaseRoutes {
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
 
-    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
+    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay, view as string)
     const caseloadViewModel = cases
       .map(c => {
         return {
@@ -40,6 +40,9 @@ export default class ViewAndPrintCaseRoutes {
             LicenceStatus.OOS_RECALL,
             LicenceStatus.OOS_BOTUS,
             LicenceStatus.IN_PROGRESS,
+            LicenceStatus.VARIATION_IN_PROGRESS,
+            LicenceStatus.VARIATION_APPROVED,
+            LicenceStatus.VARIATION_SUBMITTED,
           ]),
         }
       })
@@ -66,6 +69,7 @@ export default class ViewAndPrintCaseRoutes {
       search,
       prisonsToDisplay,
       hasMultipleCaseloadsInNomis,
+      probationView,
     })
   }
 
