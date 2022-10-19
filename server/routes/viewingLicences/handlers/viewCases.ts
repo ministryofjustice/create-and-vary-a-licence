@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import { format, getUnixTime } from 'date-fns'
+import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import { Licence } from '../../../@types/managedCase'
 import logger from '../../../../logger'
 
 export default class ViewAndPrintCaseRoutes {
@@ -27,23 +27,22 @@ export default class ViewAndPrintCaseRoutes {
     const caseloadViewModel = cases
       .map(c => {
         return {
-          licenceId: c.licences[0].id,
+          licenceId: _.head(c.licences).id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
           releaseDate: this.selectReleaseDate(c.nomisRecord),
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
-          licenceStatus: c.licences[0].status,
-          isClickable: this.doesNotHaveStatus(c.licences[0], [
-            LicenceStatus.NOT_STARTED,
-            LicenceStatus.NOT_IN_PILOT,
-            LicenceStatus.OOS_RECALL,
-            LicenceStatus.OOS_BOTUS,
-            LicenceStatus.IN_PROGRESS,
-            LicenceStatus.VARIATION_IN_PROGRESS,
-            LicenceStatus.VARIATION_APPROVED,
-            LicenceStatus.VARIATION_SUBMITTED,
-          ]),
+          licenceStatus: _.head(c.licences).status,
+          isClickable:
+            _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&
+            _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
+            _.head(c.licences).status !== LicenceStatus.OOS_RECALL &&
+            _.head(c.licences).status !== LicenceStatus.OOS_BOTUS &&
+            _.head(c.licences).status !== LicenceStatus.IN_PROGRESS &&
+            _.head(c.licences).status !== LicenceStatus.VARIATION_IN_PROGRESS &&
+            _.head(c.licences).status !== LicenceStatus.VARIATION_APPROVED &&
+            _.head(c.licences).status !== LicenceStatus.VARIATION_SUBMITTED,
         }
       })
       .filter(c => {
@@ -71,10 +70,6 @@ export default class ViewAndPrintCaseRoutes {
       hasMultipleCaseloadsInNomis,
       probationView,
     })
-  }
-
-  doesNotHaveStatus(c: Licence, statuses: string[]) {
-    return statuses.map(s => s === c.status).every(val => val === false)
   }
 
   selectReleaseDate(nomisRecord: Prisoner) {
