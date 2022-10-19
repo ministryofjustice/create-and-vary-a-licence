@@ -144,6 +144,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           {
             id: 1,
             code: 'outOfBoundsRegion',
+            expandedText: 'expanded text',
           },
         ],
       }
@@ -154,7 +155,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       expect(licenceService.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', req.file, { username: 'joebloggs' })
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
-        { code: 'outOfBoundsRegion', id: 1 },
+        { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
         { outOfBoundFilename: 'test.txt' },
         { username: 'joebloggs' }
       )
@@ -165,7 +166,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       await handler.POST(req, res)
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
-        { code: 'outOfBoundsRegion', id: 1 },
+        { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
         { outOfBoundFilename: 'test.txt' },
         { username: 'joebloggs' }
       )
@@ -183,10 +184,12 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           {
             id: 1,
             code: 'code1',
+            expandedText: 'expanded text',
           },
           {
             id: 2,
             code: 'code2',
+            expandedText: 'more expanded text',
           },
         ],
       }

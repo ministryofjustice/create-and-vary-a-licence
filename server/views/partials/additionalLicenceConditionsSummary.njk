@@ -57,6 +57,7 @@
     {% endfor %}
 
     {% if conditionsWithUploads.length %}
+        {% set conditionsWithUploads = conditionsWithUploads | sortConditionsById %}
         {% set conditionHtml = [] %}
         {% for condition in conditionsWithUploads %}
             {% set conditionHtml = (conditionHtml.push(additionalConditionHtml(condition)), conditionHtml) %}
@@ -107,7 +108,7 @@
 {% endmacro %}
 
 {% macro includeExclusionZoneImage(condition) %}
-    <div id="exclusion-zone" class="upload-container">
+    <div id="exclusion-zone">
         <div class="upload-thumbnail">
             <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"
                  alt="Exclusion zone map"/>
