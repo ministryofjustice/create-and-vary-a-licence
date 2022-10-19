@@ -28,6 +28,7 @@ import LicenceType from '../enumeration/licenceType'
 import { AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { convertToTitleCase, formatAddress } from '../utils/utils'
 import InputTypes from '../enumeration/inputTypes'
+import ElectronicTagPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicTagPeriod'
 
 export interface ConditionsObj {
   version: string
@@ -429,6 +430,8 @@ export default class ConditionService {
         case 'AlcoholMonitoringPeriod':
           condition.type = AlcoholMonitoringPeriod
           break
+        case 'ElectronicTagPeriod':
+          condition.type = ElectronicTagPeriod
       }
     })
     responseObj.additionalConditions.PSS.forEach((condition: Condition) => {
