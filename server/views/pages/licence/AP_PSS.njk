@@ -121,7 +121,7 @@
     {% include "pages/licence/partials/signatures.njk" %}
     {% include "pages/licence/partials/footer.njk" %}
 
-    {% if exclusionZoneMapData %}
+    {% if exclusionZoneMapData.length %}
         {% include "pages/licence/partials/exclusionZoneAppendix.njk" %}
     {% endif %}
 {% endblock %}
