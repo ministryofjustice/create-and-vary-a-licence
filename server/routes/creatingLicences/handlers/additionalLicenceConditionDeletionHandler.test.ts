@@ -24,7 +24,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Deletio
       status: jest.fn(),
       locals: {
         licence: {
-          additionalLicenceConditions: [{ id: 1, code: 'testCode' }],
+          additionalLicenceConditions: [{ id: 1, code: 'testCode', uploadSummary: [{ filename: 'testFile' }] }],
         },
         user: {
           username: 'joebloggs',
@@ -40,6 +40,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Deletio
         conditionId: '1',
         conditionCode: 'testCode',
         displayMessage: null,
+        fileName: 'testFile',
       })
     })
   })
@@ -54,7 +55,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Deletio
         locals: {
           licence: {
             id: 1,
-            additionalLicenceConditions: [{ id: 1, code: 'testCode' }],
+            additionalLicenceConditions: [{ id: 1, code: 'testCode', uploadSummary: [{ filename: 'testFile' }] }],
           },
           user: {
             username: 'joebloggs',
@@ -101,6 +102,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Deletio
         conditionId: '1',
         conditionCode: 'testCode',
         displayMessage: { text: 'Select yes or no' },
+        fileName: 'testFile',
       })
     })
   })
