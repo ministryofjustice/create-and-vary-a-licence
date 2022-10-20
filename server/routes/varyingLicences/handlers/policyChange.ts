@@ -9,13 +9,17 @@ export default class PolicyChangeRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { licence } = res.locals
+    const { licence, user } = res.locals
     const { licenceId, changeCounter } = req.params
 
     const conditionCounter = +changeCounter
     const policyChangesCount = req.session.changedConditions.length
     const condition = req.session.changedConditions[conditionCounter - 1]
-    const conditionHintText = policyChangeHintText[condition.code][this.formatVersionNumber('2.1')]
+    let conditionHintText
+
+    if (condition) {
+      conditionHintText = policyChangeHintText[condition.code][this.formatVersionNumber('2.1')]
+    }
 
     // Overriding session changeCounter for when the back link is clicked
     req.session.changedConditionsCounter = conditionCounter
@@ -30,13 +34,23 @@ export default class PolicyChangeRoutes {
           this.conditionService.getAdditionalConditionByCode(replacement.code)
         )
       )
-      if (
-        replacements?.every((replacement: Condition) =>
-          this.conditionService.getAdditionalConditionByCode(
-            replacement.code,
-            `${(parseFloat(licence.version) - 1).toString()}.0`
-          )
+
+      const replacementsInParentPolicyVersion = await Promise.all(
+        replacements.map(
+          async replacement =>
+            (
+              await this.conditionService.getAdditionalConditionByCode(
+                replacement.code,
+                (
+                  await this.licenceService.getParentLicenceOrSelf(licenceId, user)
+                ).version
+              )
+            ).code
         )
+      )
+
+      if (
+        replacements?.every((replacement: Condition) => replacementsInParentPolicyVersion.includes(replacement.code))
       ) {
         return res.render('pages/vary/policyConditionDeleted', {
           licenceId,
@@ -94,7 +108,6 @@ export default class PolicyChangeRoutes {
     } else if (conditionType === LicenceType.PSS) {
       additionalLicenceConditions = licence.additionalPssConditions
     }
-
     const licenceCondition = additionalLicenceConditions.find((c: AdditionalCondition) => c.code === condition.code)
 
     const inputs = []
@@ -178,7 +191,6 @@ export default class PolicyChangeRoutes {
   }
 
   formatVersionNumber = (version: string): string => {
-    version.replace('.', '_')
-    return `v${version}`
+    return `v${version.replace('.', '_')}`
   }
 }

@@ -71,18 +71,19 @@
                                 }
                             }), items) %}
                         {% endfor %}
-
-                        {{ govukCheckboxes({
-                            name: "additionalConditions[]",
-                            fieldset: {
-                                legend: {
-                                    text: "",
-                                    isPageHeading: false,
-                                    classes: "govuk-fieldset__legend--l"
-                                }
-                            },
-                            items: items
-                        }) }}
+                        <div class="govuk-inset-text">
+                            {{ govukCheckboxes({
+                                name: "additionalConditions[]",
+                                fieldset: {
+                                    legend: {
+                                        text: "",
+                                        isPageHeading: false,
+                                        classes: "govuk-fieldset__legend--l"
+                                    }
+                                },
+                                items: items
+                            }) }}
+                        </div>
                     </div>
                 </div>
                 <br />
