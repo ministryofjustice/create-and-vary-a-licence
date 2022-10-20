@@ -48,8 +48,14 @@ const compareAdditionalConditionSet = (
   conditionType: ConditionType
 ): VariedConditions => {
   const variedConditionsBuilder = new VariedConditionsBuilder(conditionType)
-  const sortedOriginalConditionSet = sortConditionSet(originalConditionSet)
-  const sortedVariedConditionSet = sortConditionSet(variedConditionSet)
+
+  const originalExclusionsZoneConditionsSet = originalConditionSet.filter(c => c.uploadSummary.length)
+  const originalConditionsSet = originalConditionSet.filter(c => c.uploadSummary.length === 0)
+  const variedExclusionZoneConditionsSet = variedConditionSet.filter(c => c.uploadSummary.length)
+  const variedConditionsSet = variedConditionSet.filter(c => c.uploadSummary.length === 0)
+
+  const sortedOriginalConditionSet = sortConditionSet(originalConditionsSet)
+  const sortedVariedConditionSet = sortConditionSet(variedConditionsSet)
 
   let originalCondition = sortedOriginalConditionSet.shift()
   let variedCondition = sortedVariedConditionSet.shift()
@@ -80,7 +86,61 @@ const compareAdditionalConditionSet = (
     }
   }
 
+  const newZones = variedExclusionZoneConditionsSet.map(c => c.expandedText).join('\n\n')
+
+  if (originalExclusionsZoneConditionsSet.length === 0 && variedExclusionZoneConditionsSet.length > 0) {
+    variedConditionsBuilder.recordConditionAdded({
+      category: 'Freedom of movement',
+      condition: `Exclusion zones have been added as follows: \n\n ${newZones}`,
+    })
+  } else if (changesToMultipleExclusionZones(variedExclusionZoneConditionsSet, originalExclusionsZoneConditionsSet)) {
+    if (newZones.length === 0) {
+      variedConditionsBuilder.recordConditionRemoved({
+        category: 'Freedom of movement',
+        condition: `Exclusion zones have been removed`,
+      })
+    } else {
+      variedConditionsBuilder.recordConditionAmended({
+        category: 'Freedom of movement',
+        condition: `Exclusion zones have changed to the following: \n\n ${newZones}`,
+      })
+    }
+  }
+
   return variedConditionsBuilder.buildVariedConditions()
+}
+
+/**
+ * Check if there are differences between the original and varied conditions. Check differences
+ * both ways to find removed conditions
+ */
+const changesToMultipleExclusionZones = (
+  VariedExclusionZoneConditionsSet: AdditionalCondition[],
+  OriginalExclusionsZoneConditionsSet: AdditionalCondition[]
+): boolean => {
+  return (
+    VariedExclusionZoneConditionsSet.filter(
+      c =>
+        !OriginalExclusionsZoneConditionsSet.find(
+          c2 =>
+            c2.expandedText === c.expandedText &&
+            c2.category === c.category &&
+            c2.uploadSummary.length &&
+            c.uploadSummary.length
+        )
+    ).concat(
+      OriginalExclusionsZoneConditionsSet.filter(
+        c =>
+          !VariedExclusionZoneConditionsSet.find(
+            c2 =>
+              c2.expandedText === c.expandedText &&
+              c2.category === c.category &&
+              c2.uploadSummary.length &&
+              c.uploadSummary.length
+          )
+      )
+    ).length > 0
+  )
 }
 
 const compareBespokeConditionSet = (
