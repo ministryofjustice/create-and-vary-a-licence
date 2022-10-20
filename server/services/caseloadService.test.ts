@@ -859,7 +859,7 @@ describe('Caseload Service', () => {
           },
         ],
         nomisRecord: {
-          conditionalReleaseDate: '2022-10-28',
+          conditionalReleaseDate: tenDaysFromNow,
           prisonerNumber: 'AB1234D',
           status: 'ACTIVE IN',
         },
@@ -895,7 +895,7 @@ describe('Caseload Service', () => {
           },
         ],
         nomisRecord: {
-          conditionalReleaseDate: '2022-10-28',
+          conditionalReleaseDate: tenDaysFromNow,
           prisonerNumber: 'AB1234E',
           status: 'ACTIVE IN',
         },
@@ -931,7 +931,7 @@ describe('Caseload Service', () => {
           },
         ],
         nomisRecord: {
-          conditionalReleaseDate: '2022-10-28',
+          conditionalReleaseDate: tenDaysFromNow,
           prisonerNumber: 'AB1234H',
           status: 'ACTIVE IN',
         },
@@ -969,7 +969,7 @@ describe('Caseload Service', () => {
           },
         ],
         nomisRecord: {
-          conditionalReleaseDate: '2022-10-28',
+          conditionalReleaseDate: tenDaysFromNow,
           prisonerNumber: 'AB1234F',
           status: 'ACTIVE IN',
         },
@@ -1088,7 +1088,7 @@ describe('Caseload Service', () => {
           },
         ],
         nomisRecord: {
-          conditionalReleaseDate: '2022-10-28',
+          conditionalReleaseDate: tenDaysFromNow,
           prisonerNumber: 'AB1234D',
           status: 'OUT',
         },

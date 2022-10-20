@@ -44,7 +44,7 @@ Then:
 There is a single integration test to verify that the Gotenberg container can support the
 conversion of HTML to PDF documents. To run this, follow these instructions:
 
-`$ docker-compose -f docker-compose-dev.yaml up -d`
+`$ docker-compose -f docker-compose-dev.yml up -d`
 
 This runs local redis and gotenberg containers.
 
@@ -58,9 +58,9 @@ to check that it contains some of the wording requested.
 
 Pull images and start dependent services:
 
-`$ docker-compose -f docker-compose-test.yaml pull`
+`$ docker-compose -f docker-compose-test.yml pull`
 
-`$ docker-compose -f docker-compose-test.yaml up -d`
+`$ docker-compose -f docker-compose-test.yml up -d`
 
 In a different terminal:
 
@@ -123,7 +123,7 @@ GOTENBERG_API_URL=http://localhost:3001
 
 3. Start the two required containers.
 
-   `$ docker-compose -f docker-compose-dev.yaml up -d` 
+   `$ docker-compose -f docker-compose-dev.yml up -d` 
 
 
 4. Start a local `create-and-vary-a-licence` service with `$ npm run start`, which will use the `.env` file to set 
