@@ -38,95 +38,6 @@ describe('Route handlers - View and print case list', () => {
       },
     } as unknown as Response
 
-    caseloadService.getOmuCaseload.mockResolvedValue([
-      {
-        licences: [
-          {
-            id: 1,
-            type: LicenceType.AP,
-            status: LicenceStatus.SUBMITTED,
-          },
-        ],
-        nomisRecord: {
-          firstName: 'Bob',
-          lastName: 'Smith',
-          prisonerNumber: 'A1234AA',
-          confirmedReleaseDate: '2022-05-01',
-        } as Prisoner,
-        probationPractitioner: {
-          name: 'Sherlock Holmes',
-        },
-      },
-      {
-        licences: [
-          {
-            type: LicenceType.AP,
-            status: LicenceStatus.NOT_STARTED,
-          },
-        ],
-        nomisRecord: {
-          firstName: 'Joe',
-          lastName: 'Bloggs',
-          prisonerNumber: 'A1234AB',
-          conditionalReleaseOverrideDate: '2022-05-01',
-        } as Prisoner,
-        probationPractitioner: {
-          name: 'Thor',
-        },
-      },
-      {
-        licences: [
-          {
-            type: LicenceType.AP,
-            status: LicenceStatus.NOT_IN_PILOT,
-          },
-        ],
-        nomisRecord: {
-          firstName: 'Harvey',
-          lastName: 'Smith',
-          prisonerNumber: 'A1234AC',
-          conditionalReleaseDate: '2022-05-01',
-        } as Prisoner,
-        probationPractitioner: {
-          name: 'Walter White',
-        },
-      },
-      {
-        licences: [
-          {
-            type: LicenceType.AP,
-            status: LicenceStatus.OOS_RECALL,
-          },
-        ],
-        nomisRecord: {
-          firstName: 'Harold',
-          lastName: 'Lloyd',
-          prisonerNumber: 'A1234AD',
-          conditionalReleaseDate: '2022-05-01',
-        } as Prisoner,
-        probationPractitioner: {
-          name: 'Harry Goldman',
-        },
-      },
-      {
-        licences: [
-          {
-            type: LicenceType.AP,
-            status: LicenceStatus.OOS_BOTUS,
-          },
-        ],
-        nomisRecord: {
-          firstName: 'Stephen',
-          lastName: 'Rowe',
-          prisonerNumber: 'A1234AE',
-          conditionalReleaseDate: '2022-05-01',
-        } as Prisoner,
-        probationPractitioner: {
-          name: 'Larry Johnson',
-        },
-      },
-    ])
-
     prisonerService.getPrisons.mockResolvedValue([
       {
         agencyId: 'BAI',
@@ -152,7 +63,150 @@ describe('Route handlers - View and print case list', () => {
   })
 
   describe('GET', () => {
-    it('should render list of licences and display the currently active caseload prison', async () => {
+    const prisonViewCases = [
+      {
+        licences: [
+          {
+            id: 1,
+            type: LicenceType.AP,
+            status: LicenceStatus.NOT_STARTED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Bob',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AA',
+          confirmedReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Sherlock Holmes',
+        },
+      },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.IN_PROGRESS,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Harvey',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AC',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
+      },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.SUBMITTED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Harold',
+          lastName: 'Lloyd',
+          prisonerNumber: 'A1234AD',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Harry Goldman',
+        },
+      },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.APPROVED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Stephen',
+          lastName: 'Rowe',
+          prisonerNumber: 'A1234AE',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Larry Johnson',
+        },
+      },
+    ]
+    const probationViewCases = [
+      {
+        licences: [
+          {
+            id: 1,
+            type: LicenceType.AP,
+            status: LicenceStatus.ACTIVE,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Bob',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AA',
+          confirmedReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Sherlock Holmes',
+        },
+      },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.VARIATION_IN_PROGRESS,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Joe',
+          lastName: 'Bloggs',
+          prisonerNumber: 'A1234AB',
+          conditionalReleaseOverrideDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Thor',
+        },
+      },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.VARIATION_SUBMITTED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Harvey',
+          lastName: 'Smith',
+          prisonerNumber: 'A1234AC',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
+      },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
+            status: LicenceStatus.VARIATION_APPROVED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Harold',
+          lastName: 'Lloyd',
+          prisonerNumber: 'A1234AD',
+          conditionalReleaseDate: '2022-05-01',
+        } as Prisoner,
+        probationPractitioner: {
+          name: 'Harry Goldman',
+        },
+      },
+    ]
+    it('should render cases when user only has 1 caseloaded prison', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue([])
       res.locals.prisonCaseload = ['BAI']
       await handler.GET(req, res)
 
@@ -164,68 +218,7 @@ describe('Route handlers - View and print case list', () => {
         'prison'
       )
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [
-          {
-            licenceId: 1,
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
-            licenceStatus: LicenceStatus.SUBMITTED,
-            isClickable: true,
-          },
-          {
-            licenceId: undefined,
-            name: 'Joe Bloggs',
-            prisonerNumber: 'A1234AB',
-            probationPractitioner: {
-              name: 'Thor',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.NOT_STARTED,
-            isClickable: false,
-          },
-          {
-            licenceId: undefined,
-            name: 'Harvey Smith',
-            prisonerNumber: 'A1234AC',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.NOT_IN_PILOT,
-            isClickable: false,
-          },
-          {
-            licenceId: undefined,
-            name: 'Harold Lloyd',
-            prisonerNumber: 'A1234AD',
-            probationPractitioner: {
-              name: 'Harry Goldman',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.OOS_RECALL,
-            isClickable: false,
-          },
-          {
-            licenceId: undefined,
-            name: 'Stephen Rowe',
-            prisonerNumber: 'A1234AE',
-            probationPractitioner: {
-              name: 'Larry Johnson',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.OOS_BOTUS,
-            isClickable: false,
-          },
-        ],
+        cases: [],
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -239,9 +232,11 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
-    it('should render list of licences and display a single user selected prison which is not the currently active prison', async () => {
-      req.session.caseloadsSelected = ['MDI']
+    it('should render cases when user selects prison which is not their currently active prison', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue([])
       res.locals.user.prisonCaseload = ['BAI', 'MDI']
+      req.session.caseloadsSelected = ['MDI']
+
       await handler.GET(req, res)
 
       expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
@@ -255,68 +250,7 @@ describe('Route handlers - View and print case list', () => {
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [
-          {
-            licenceId: 1,
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
-            licenceStatus: LicenceStatus.SUBMITTED,
-            isClickable: true,
-          },
-          {
-            licenceId: undefined,
-            name: 'Joe Bloggs',
-            prisonerNumber: 'A1234AB',
-            probationPractitioner: {
-              name: 'Thor',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.NOT_STARTED,
-            isClickable: false,
-          },
-          {
-            licenceId: undefined,
-            name: 'Harvey Smith',
-            prisonerNumber: 'A1234AC',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.NOT_IN_PILOT,
-            isClickable: false,
-          },
-          {
-            licenceId: undefined,
-            name: 'Harold Lloyd',
-            prisonerNumber: 'A1234AD',
-            probationPractitioner: {
-              name: 'Harry Goldman',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.OOS_RECALL,
-            isClickable: false,
-          },
-          {
-            licenceId: undefined,
-            name: 'Stephen Rowe',
-            prisonerNumber: 'A1234AE',
-            probationPractitioner: {
-              name: 'Larry Johnson',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.OOS_BOTUS,
-            isClickable: false,
-          },
-        ],
+        cases: [],
         hasMultipleCaseloadsInNomis: true,
         prisonsToDisplay: [
           {
@@ -330,7 +264,8 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
-    it('should render list of licences and display with multiple user selected prisons', async () => {
+    it('should render list of licences for multiple selected prisons', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue([])
       req.session.caseloadsSelected = ['MDI', 'BXI']
       res.locals.user.prisonCaseload = ['BAI', 'MDI', 'BXI']
       await handler.GET(req, res)
@@ -341,68 +276,7 @@ describe('Route handlers - View and print case list', () => {
         'prison'
       )
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [
-          {
-            licenceId: 1,
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
-            licenceStatus: LicenceStatus.SUBMITTED,
-            isClickable: true,
-          },
-          {
-            licenceId: undefined,
-            name: 'Joe Bloggs',
-            prisonerNumber: 'A1234AB',
-            probationPractitioner: {
-              name: 'Thor',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.NOT_STARTED,
-            isClickable: false,
-          },
-          {
-            licenceId: undefined,
-            name: 'Harvey Smith',
-            prisonerNumber: 'A1234AC',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.NOT_IN_PILOT,
-            isClickable: false,
-          },
-          {
-            licenceId: undefined,
-            name: 'Harold Lloyd',
-            prisonerNumber: 'A1234AD',
-            probationPractitioner: {
-              name: 'Harry Goldman',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.OOS_RECALL,
-            isClickable: false,
-          },
-          {
-            licenceId: undefined,
-            name: 'Stephen Rowe',
-            prisonerNumber: 'A1234AE',
-            probationPractitioner: {
-              name: 'Larry Johnson',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            licenceStatus: LicenceStatus.OOS_BOTUS,
-            isClickable: false,
-          },
-        ],
+        cases: [],
         hasMultipleCaseloadsInNomis: true,
         prisonsToDisplay: [
           {
@@ -421,25 +295,12 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should successfully search by name', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue([])
       req.query.search = 'bob'
-
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [
-          {
-            licenceId: 1,
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
-            licenceStatus: LicenceStatus.SUBMITTED,
-            isClickable: true,
-          },
-        ],
+        cases: [],
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -454,8 +315,8 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should successfully search by prison number', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(prisonViewCases)
       req.query.search = 'A1234AA'
-
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
@@ -469,8 +330,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            licenceStatus: LicenceStatus.SUBMITTED,
-            isClickable: true,
+            licenceStatus: LicenceStatus.NOT_STARTED,
+            isClickable: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -487,14 +348,16 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should successfully search by probation practitioner', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(prisonViewCases)
       req.query.search = 'holmes'
-
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
+            isClickable: false,
             licenceId: 1,
+            licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
@@ -502,8 +365,6 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            licenceStatus: LicenceStatus.SUBMITTED,
-            isClickable: true,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -515,6 +376,148 @@ describe('Route handlers - View and print case list', () => {
         ],
         probationView: false,
         search: 'holmes',
+        statusConfig,
+      })
+    })
+
+    it('should evaluate the clickability of cases for probation view', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(probationViewCases)
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'probation'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: true,
+            licenceId: 1,
+            licenceStatus: 'ACTIVE',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_IN_PROGRESS',
+            name: 'Joe Bloggs',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Thor',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_SUBMITTED',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_APPROVED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: true,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should evaluate the clickability of cases for prison view', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(prisonViewCases)
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: false,
+            licenceId: 1,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'IN_PROGRESS',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'SUBMITTED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'APPROVED',
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
         statusConfig,
       })
     })
