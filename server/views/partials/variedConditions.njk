@@ -4,9 +4,10 @@
     {% macro buildConditionsSummaryCard(title, conditions) %}
         {% set rows = [] %}
         {% for condition in conditions %}
+            {% set valueText = condition.condition | striptags(true) | escape | nl2br  %}
             {% set rows = (rows.push({
                 key: {  text: condition.category },
-                value: { text: condition.condition }
+                value: { html: valueText }
             }), rows) %}
         {% endfor %}
 
