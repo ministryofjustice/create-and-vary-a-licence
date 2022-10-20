@@ -729,7 +729,7 @@ describe('Caseload Service', () => {
       },
       {
         nomisId: 'AB1234H',
-        licenceId: 3,
+        licenceId: 4,
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.SUBMITTED,
         comUsername: 'joebloggs',
@@ -925,7 +925,7 @@ describe('Caseload Service', () => {
           {
             comUsername: 'joebloggs',
             dateCreated: undefined,
-            id: 3,
+            id: 4,
             status: 'SUBMITTED',
             type: 'AP',
           },
