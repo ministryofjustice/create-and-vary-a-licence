@@ -1,5 +1,5 @@
 import { Expose, Type } from 'class-transformer'
-import { IsNotEmpty, Validate } from 'class-validator'
+import { Validate } from 'class-validator'
 import SimpleDate from '../date'
 import ValidSimpleDate from '../../../../validators/simpleDateValidator'
 import DateIsBefore from '../../../../validators/dateIsBefore'

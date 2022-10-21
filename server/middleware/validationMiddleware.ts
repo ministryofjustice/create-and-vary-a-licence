@@ -1,7 +1,6 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
-import { services } from '../services/index'
 import ConditionService from '../services/conditionService'
 
 export type FieldValidationError = {
