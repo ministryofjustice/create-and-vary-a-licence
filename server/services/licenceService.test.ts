@@ -18,8 +18,11 @@ import BespokeConditions from '../routes/creatingLicences/types/bespokeCondition
 import LicenceStatus from '../enumeration/licenceStatus'
 import {
   AdditionalCondition,
+  AdditionalConditionAp,
   EmailContact,
   Licence,
+  LicenceConditionChange,
+  LicencePolicy,
   LicenceSummary,
   UpdateComRequest,
   UpdatePrisonInformationRequest,
@@ -30,7 +33,7 @@ import { CommunityApiOffenderManager } from '../@types/communityClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
-import ConditionService, { Condition, ConditionsObj, Input } from './conditionService'
+import ConditionService from './conditionService'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -46,7 +49,7 @@ describe('Licence Service', () => {
   const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
 
   conditionService.expandAdditionalCondition.mockResolvedValue(Promise.resolve('condition'))
-  conditionService.getConditions.mockResolvedValue(Promise.resolve([]))
+  conditionService.getConditions.mockResolvedValue(Promise.resolve({} as LicencePolicy))
 
   conditionService.getStandardConditions.mockResolvedValue(
     Promise.resolve([{ text: 'fake standard condition', code: 'fake1' }])
@@ -95,11 +98,11 @@ describe('Licence Service', () => {
           },
         } as CommunityApiOffenderManager,
       ])
-      conditionService.getAdditionalConditionByCode.mockResolvedValue(Promise.resolve({} as Condition))
+      conditionService.getAdditionalConditionByCode.mockResolvedValue(Promise.resolve({} as AdditionalConditionAp))
       conditionService.expandAdditionalCondition.mockResolvedValue(Promise.resolve('condition'))
-      licenceApiClient.getConditions.mockResolvedValue(Promise.resolve({} as ConditionsObj))
-      licenceApiClient.getActiveConditions.mockResolvedValue(Promise.resolve({} as ConditionsObj))
-      licenceApiClient.getPolicyChanges.mockResolvedValue({})
+      licenceApiClient.getConditions.mockResolvedValue(Promise.resolve({} as LicencePolicy))
+      licenceApiClient.getActiveConditions.mockResolvedValue(Promise.resolve({} as LicencePolicy))
+      licenceApiClient.getPolicyChanges.mockResolvedValue({} as LicenceConditionChange[])
       licenceApiClient.updateAdditionalConditions.mockImplementation()
     })
 
@@ -422,6 +425,7 @@ describe('Licence Service', () => {
             category: 'Longer category name',
             text: 'Condition 1',
             code: 'CON1,',
+            requiresInput: false,
           })
         )
         .mockReturnValueOnce(
@@ -429,6 +433,7 @@ describe('Licence Service', () => {
             category: 'Longer category name',
             text: 'Condition 2',
             code: 'CON2',
+            requiresInput: false,
           })
         )
 

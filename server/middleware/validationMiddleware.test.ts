@@ -56,7 +56,13 @@ describe('validationMiddleware', () => {
     })
 
     it('should validate against a type from config if the form is an additional condition input', async () => {
-      const additionalCondition = { text: 'Condition 1', code: 'condition1', inputRequired: true, type: DummyChild }
+      const additionalCondition = {
+        text: 'Condition 1',
+        code: 'condition1',
+        requiresInput: true,
+        type: DummyChild,
+        category: 'category',
+      }
       conditionsProviderSpy.mockReturnValue(Promise.resolve(additionalCondition))
 
       const next = jest.fn()

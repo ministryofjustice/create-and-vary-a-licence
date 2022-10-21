@@ -3,12 +3,12 @@ import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-import { Licence } from '../../../@types/licenceApiClientTypes'
+import { Licence, StandardConditions } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
 
 const activeConditions = {
   version: '1.0',
-  standardConditions: {},
+  standardConditions: {} as StandardConditions,
   additionalConditions: {
     AP: [
       {

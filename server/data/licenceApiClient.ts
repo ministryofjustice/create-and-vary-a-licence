@@ -26,11 +26,12 @@ import type {
   NotifyRequest,
   UpdateStandardConditionDataRequest,
   OmuContact,
+  LicencePolicy,
+  LicenceConditionChange,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
 import { UpdateComRequest } from '../@types/licenceApiClientTypes'
-import { ConditionsObj } from '../services/conditionService'
 
 export default class LicenceApiClient extends RestClient {
   constructor() {
@@ -370,23 +371,25 @@ export default class LicenceApiClient extends RestClient {
     )) as LicenceEvent[]
   }
 
-  async getConditions(version: string): Promise<ConditionsObj> {
+  async getConditions(version: string): Promise<LicencePolicy> {
     try {
-      return this.get({ path: `/licence-policy/version/${version}` }) as Promise<ConditionsObj>
+      return this.get({ path: `/licence-policy/version/${version}` }) as Promise<LicencePolicy>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
     }
   }
 
-  async getActiveConditions() {
+  async getActiveConditions(): Promise<LicencePolicy> {
     try {
-      return this.get({ path: `/licence-policy/active` }) as Promise<ConditionsObj>
+      return this.get({ path: `/licence-policy/active` }) as Promise<LicencePolicy>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
     }
   }
 
-  async getPolicyChanges(licenceId: string, activePolicyVersion: string) {
-    return this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` })
+  async getPolicyChanges(licenceId: string, activePolicyVersion: string): Promise<LicenceConditionChange[]> {
+    return this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` }) as Promise<
+      LicenceConditionChange[]
+    >
   }
 }

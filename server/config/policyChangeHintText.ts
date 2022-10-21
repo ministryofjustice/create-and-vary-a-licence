@@ -1,5 +1,5 @@
 export default {
-  '62c83b80-2223-4562-a195-0670f4072088': {
+  'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65': {
     v2_1: {
       description: ['Details of appointment time, date and location removed.'],
       bulletpoints: [],
@@ -21,12 +21,12 @@ export default {
     v2_1: {
       description: [
         'The previous condition has been removed.',
-        'If you still need an electronically monitored curfew, you can add the conditions below when you vary this licence.',
+        'If a curfew with electronic monitoring is required, you must select both of the conditions below. If a curfew only is required, choose the first condition.',
       ],
       bulletpoints: [],
     },
   },
-  'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65': {
+  '599bdcae-d545-461c-b1a9-02cb3d4ba268': {
     v2_1: {
       description: ['The previous condition has been split into 2:'],
       bulletpoints: [

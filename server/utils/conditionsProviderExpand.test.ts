@@ -1,5 +1,5 @@
-import { AdditionalCondition } from '../@types/licenceApiClientTypes'
-import ConditionService, { Condition } from '../services/conditionService'
+import { AdditionalCondition, AdditionalConditionAp } from '../@types/licenceApiClientTypes'
+import ConditionService from '../services/conditionService'
 
 describe('Conditions Provider - expansions', () => {
   const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
@@ -17,7 +17,7 @@ describe('Conditions Provider - expansions', () => {
         data: [],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: 'ed607a91-fe3a-4816-8eb9-b447c945935c',
         category: 'Possession, ownership, control or inspection of specified items or documents',
         text: 'Not to own or use a camera without the prior approval of your supervising officer.',
@@ -41,7 +41,7 @@ describe('Conditions Provider - expansions', () => {
         data: [{ id: 1, field: 'probationRegion', value: 'London', sequence: 0 }],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
         category: 'Residence at a specific place',
         text: 'You must reside within the [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
@@ -68,7 +68,7 @@ describe('Conditions Provider - expansions', () => {
         data: [{ id: 1, field: 'wrongName', value: 'London', sequence: 0 }],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
         category: 'Residence at a specific place',
         text: 'You must reside within the [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
@@ -96,7 +96,7 @@ describe('Conditions Provider - expansions', () => {
         data: [{ id: 1, field: 'age', value: '18', sequence: 0 }],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '9da214a3-c6ae-45e1-a465-12e22adf7c87',
         category: 'Participation in, or co-operation with, a programme or set of activities',
         text: 'Not to undertake work or other organised activity which will involve a person under the age of [INSERT AGE], either on a paid or unpaid basis without the prior approval of your supervising officer.',
@@ -129,7 +129,7 @@ describe('Conditions Provider - expansions', () => {
         uploadSummary: [],
       }
 
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: 'fce34fb2-02f4-4eb0-9b8d-d091e11451fa',
         category: 'Restriction of residency',
         text: 'Not to reside (not even to stay for one night) in the same household as [ANY / ANY FEMALE / ANY MALE] child under the age of [INSERT AGE] without the prior approval of your supervising officer.',
@@ -168,7 +168,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
         category: 'Participation in, or co-operation with, a programme or set of activities',
         text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific / offending behaviour problems at the [NAME OF COURSE / CENTRE].',
@@ -213,7 +213,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
         category: 'Participation in, or co-operation with, a programme or set of activities',
         text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific / offending behaviour problems at the [NAME OF COURSE / CENTRE].',
@@ -257,7 +257,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
         category: 'Making or maintaining contact with a person',
         text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
@@ -307,7 +307,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
         category: 'Making or maintaining contact with a person',
         text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
@@ -358,7 +358,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
         category: 'Making or maintaining contact with a person',
         text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
@@ -413,7 +413,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
         category: 'Participation in, or co-operation with, a programme or set of activities',
         text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific / offending behaviour problems at the [NAME OF COURSE / CENTRE].',
@@ -459,7 +459,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
         category: 'Making or maintaining contact with a person',
         text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
@@ -508,7 +508,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '4858cd8b-bca6-4f11-b6ee-439e27216d7d',
         category: 'Making or maintaining contact with a person',
         text: 'Not to seek to approach or communicate with [INSERT NAME OF VICTIM AND / OR FAMILY MEMBERS] without the prior approval of your supervising officer and / or [INSERT NAME OF APPROPRIATE SOCIAL SERVICES DEPARTMENT].',
@@ -552,7 +552,7 @@ describe('Conditions Provider - expansions', () => {
         data: [{ id: 1, field: 'appointmentAddress', value: '123 Fake Street, , Fakestown, , LN123TO', sequence: 0 }],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
         category: 'Making or maintaining contact with a person',
         text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
@@ -605,7 +605,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
@@ -674,7 +674,7 @@ describe('Conditions Provider - expansions', () => {
         ],
         uploadSummary: [],
       }
-      const conditionConfig: Condition = {
+      const conditionConfig: AdditionalConditionAp = {
         code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
         category:
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',

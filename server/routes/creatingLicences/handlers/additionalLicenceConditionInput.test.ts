@@ -57,6 +57,8 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           text: 'Condition 1',
           code: 'code1',
           inputs: [],
+          category: 'category',
+          requiresInput: false,
         })
       )
 
@@ -79,9 +81,11 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           code: 'code1',
         },
         config: {
+          text: 'Condition 1',
           code: 'code1',
           inputs: [],
-          text: 'Condition 1',
+          category: 'category',
+          requiresInput: false,
         },
       })
     })

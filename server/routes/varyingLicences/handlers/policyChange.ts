@@ -1,23 +1,27 @@
 import { Response, Request } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
-import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
-import ConditionService, { Condition } from '../../../services/conditionService'
+import {
+  AdditionalCondition,
+  AdditionalConditionAp,
+  AdditionalConditionPss,
+} from '../../../@types/licenceApiClientTypes'
+import ConditionService from '../../../services/conditionService'
 import policyChangeHintText from '../../../config/policyChangeHintText'
+import conditionChangeType from '../../../enumeration/conditionChangeType'
 
 export default class PolicyChangeRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { licence, user } = res.locals
     const { licenceId, changeCounter } = req.params
 
     const conditionCounter = +changeCounter
     const policyChangesCount = req.session.changedConditions.length
     const condition = req.session.changedConditions[conditionCounter - 1]
-    let conditionHintText
 
-    if (condition) {
+    let conditionHintText
+    if (condition && policyChangeHintText[condition.code]) {
       conditionHintText = policyChangeHintText[condition.code][this.formatVersionNumber('2.1')]
     }
 
@@ -28,30 +32,17 @@ export default class PolicyChangeRoutes {
       return res.redirect(`/licence/vary/id/${licenceId}/policy-changes`)
     }
 
-    if (!condition.currentText) {
-      const replacements = await Promise.all(
-        condition.replacedBy?.map(async (replacement: { code: string }) =>
+    let replacements: AdditionalConditionAp[] | AdditionalConditionPss[] = []
+    if (condition.suggestions) {
+      replacements = await Promise.all(
+        condition.suggestions?.map(async (replacement: { code: string }) =>
           this.conditionService.getAdditionalConditionByCode(replacement.code)
         )
       )
+    }
 
-      const replacementsInParentPolicyVersion = await Promise.all(
-        replacements.map(
-          async replacement =>
-            (
-              await this.conditionService.getAdditionalConditionByCode(
-                replacement.code,
-                (
-                  await this.licenceService.getParentLicenceOrSelf(licenceId, user)
-                ).version
-              )
-            ).code
-        )
-      )
-
-      if (
-        replacements?.every((replacement: Condition) => replacementsInParentPolicyVersion.includes(replacement.code))
-      ) {
+    switch (condition.changeType) {
+      case conditionChangeType.DELETED:
         return res.render('pages/vary/policyConditionDeleted', {
           licenceId,
           conditionCounter,
@@ -60,33 +51,33 @@ export default class PolicyChangeRoutes {
           conditionHintText,
           replacements,
         })
-      }
-      return res.render('pages/vary/policyConditionReplaced', {
-        licenceId,
-        conditionCounter,
-        policyChangesCount,
-        condition,
-        conditionHintText,
-        replacements,
-      })
+      case conditionChangeType.REPLACED:
+        return res.render('pages/vary/policyConditionReplaced', {
+          licenceId,
+          conditionCounter,
+          policyChangesCount,
+          condition,
+          conditionHintText,
+          replacements,
+        })
+      case conditionChangeType.NEW_OPTIONS:
+        return res.render('pages/vary/policyNewOptions', {
+          licenceId,
+          conditionCounter,
+          policyChangesCount,
+          conditionHintText,
+          condition,
+        })
+      // Default to TEXT_CHANGE in case something is wrong with the returned type
+      default:
+        return res.render('pages/vary/policyTextChange', {
+          licenceId,
+          conditionCounter,
+          policyChangesCount,
+          conditionHintText,
+          condition,
+        })
     }
-    if (condition.currentText === condition.previousText) {
-      return res.render('pages/vary/policyNewOptions', {
-        licenceId,
-        conditionCounter,
-        policyChangesCount,
-        conditionHintText,
-        condition,
-      })
-    }
-
-    return res.render('pages/vary/policyTextChange', {
-      licenceId,
-      conditionCounter,
-      policyChangesCount,
-      conditionHintText,
-      condition,
-    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
@@ -113,11 +104,11 @@ export default class PolicyChangeRoutes {
     const inputs = []
     let licenceConditionCodes = additionalLicenceConditions.map((c: AdditionalCondition) => c.code)
     const changeType =
-      condition.replacedBy !== undefined && condition.replacedBy.length >= 1 ? 'replacement' : 'textChange'
+      condition.suggestions !== undefined && condition.suggestions.length >= 1 ? 'replacement' : 'textChange'
 
     // if the condition is being replaced by new condition(s)
     if (changeType === 'replacement') {
-      const replacedByCodes = condition.replacedBy.map((replacement: { code: string }) => replacement.code)
+      const replacedByCodes = condition.suggestions.map((replacement: { code: string }) => replacement.code)
 
       // Remove replaced condition and any previously-selected replacements
       // Previously selected replacements removed to allow user to go back and unselect or reselect erroneous changes

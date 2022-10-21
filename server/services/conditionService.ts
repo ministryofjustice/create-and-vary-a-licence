@@ -25,55 +25,17 @@ import NamedOrganisation from '../routes/creatingLicences/types/additionalCondit
 import ReportToPoliceStation from '../routes/creatingLicences/types/additionalConditionInputs/reportToPoliceStation'
 import AppointmentTimeAndPlaceDuringPss from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlaceDuringPss'
 import LicenceType from '../enumeration/licenceType'
-import { AdditionalConditionData } from '../@types/licenceApiClientTypes'
+import {
+  AdditionalConditionAp,
+  AdditionalConditionData,
+  AdditionalConditionPss,
+  Input,
+  LicencePolicy,
+  StandardCondition,
+} from '../@types/licenceApiClientTypes'
 import { convertToTitleCase, formatAddress } from '../utils/utils'
 import InputTypes from '../enumeration/inputTypes'
 import ElectronicTagPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicTagPeriod'
-
-export interface ConditionsObj {
-  version: string
-  standardConditions: {
-    AP?: Condition[]
-    PSS?: Condition[]
-  }
-  additionalConditions: {
-    AP: Condition[]
-    PSS: Condition[]
-  }
-  bespokeConditions?: []
-}
-
-export interface Condition {
-  code: string
-  category?: string
-  text: string
-  tpl?: string | null
-  requiresInput?: boolean | null
-  inputs?: Input[] | null
-  categoryShort?: string | null
-  subtext?: string | null
-  type?: any | null
-  sequence?: number
-}
-
-export interface Input {
-  type: string
-  label: string
-  name: string
-  listType?: string | null
-  options?: [
-    {
-      value?: string
-      conditional?: {
-        inputs: Input[]
-      } | null
-    }
-  ]
-  case?: string | null
-  handleIndefiniteArticle?: boolean | null
-  addAnother?: any | null
-  includeBefore?: string | null
-}
 
 export default class ConditionService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
@@ -82,14 +44,14 @@ export default class ConditionService {
     return (await this.getActiveConditions()).version
   }
 
-  async getStandardConditions(licenceType: string, version: string = null): Promise<Condition[]> {
-    let conditions: ConditionsObj
+  async getStandardConditions(licenceType: string, version: string = null): Promise<StandardCondition[]> {
+    let conditions: LicencePolicy
     if (version) {
       conditions = await this.getConditions(version)
     } else {
       conditions = await this.getActiveConditions()
     }
-    return conditions.standardConditions[licenceType].map((condition: Condition, index: number) => {
+    return conditions.standardConditions[licenceType].map((condition: StandardCondition, index: number) => {
       return {
         ...condition,
         sequence: index,
@@ -97,8 +59,11 @@ export default class ConditionService {
     })
   }
 
-  async getAdditionalConditionByCode(searchCode: string, version: string = null): Promise<Condition> {
-    let conditions: ConditionsObj
+  async getAdditionalConditionByCode(
+    searchCode: string,
+    version: string = null
+  ): Promise<AdditionalConditionAp | AdditionalConditionPss> {
+    let conditions: LicencePolicy
     if (version) {
       conditions = await this.getConditions(version)
     } else {
@@ -112,27 +77,29 @@ export default class ConditionService {
   async getGroupedAdditionalConditions(
     licenceType: string,
     version: string = null
-  ): Promise<{ category: string; conditions: Condition[] }[]> {
-    let policyConditions: ConditionsObj
+  ): Promise<{ category: string; conditions: AdditionalConditionAp[] | AdditionalConditionPss[] }[]> {
+    let policyConditions: LicencePolicy
     if (version) {
       policyConditions = await this.getConditions(version)
     } else {
       policyConditions = await this.getActiveConditions()
     }
     const map = new Map()
-    policyConditions.additionalConditions[licenceType].forEach((condition: Condition) => {
-      const collection = map.get(condition.category)
-      if (!collection) {
-        map.set(condition.category, [condition])
-      } else {
-        collection.push(condition)
+    policyConditions.additionalConditions[licenceType].forEach(
+      (condition: AdditionalConditionAp | AdditionalConditionPss) => {
+        const collection = map.get(condition.category)
+        if (!collection) {
+          map.set(condition.category, [condition])
+        } else {
+          collection.push(condition)
+        }
       }
-    })
+    )
     return Array.from(map, ([category, conditions]) => ({ category, conditions }))
   }
 
   async getAdditionalConditionType(searchCode: string, version: string = null): Promise<LicenceType> {
-    let conditions: ConditionsObj
+    let conditions: LicencePolicy
     if (version) {
       conditions = await this.getConditions(version)
     } else {
@@ -319,7 +286,9 @@ export default class ConditionService {
     return conditionData.filter((cd: AdditionalConditionData) => cd.field === placeholder) || []
   }
 
-  getConditionInputs = (conditionConfig: Condition | { inputs: Input[] }): Input[] => {
+  getConditionInputs = (
+    conditionConfig: AdditionalConditionAp | AdditionalConditionPss | { inputs: Input[] }
+  ): Input[] => {
     if (!conditionConfig) {
       return []
     }
@@ -340,20 +309,24 @@ export default class ConditionService {
     return [...topLevelInputs, ...deeperLevelInputs]
   }
 
-  async getConditions(version: string): Promise<any> {
-    const response = await this.licenceApiClient.getConditions(version).then((res: any) => this.parseResponse(res))
+  async getConditions(version: string): Promise<LicencePolicy> {
+    const response = await this.licenceApiClient
+      .getConditions(version)
+      .then((res: LicencePolicy) => this.parseResponse(res))
     return response
   }
 
-  async getActiveConditions(): Promise<ConditionsObj> {
-    const response = await this.licenceApiClient.getActiveConditions().then((res: any) => this.parseResponse(res))
+  async getActiveConditions(): Promise<LicencePolicy> {
+    const response = await this.licenceApiClient
+      .getActiveConditions()
+      .then((res: LicencePolicy) => this.parseResponse(res))
     return response
   }
 
   /* eslint-disable no-param-reassign */
-  parseResponse = (response: any): ConditionsObj => {
+  parseResponse = (response: LicencePolicy): LicencePolicy => {
     const responseObj = response
-    responseObj.additionalConditions.AP.forEach((condition: Condition) => {
+    responseObj.additionalConditions.AP.forEach((condition: AdditionalConditionAp) => {
       switch (condition.type) {
         case null:
           delete condition.type
@@ -434,7 +407,7 @@ export default class ConditionService {
           condition.type = ElectronicTagPeriod
       }
     })
-    responseObj.additionalConditions.PSS.forEach((condition: Condition) => {
+    responseObj.additionalConditions.PSS.forEach((condition: AdditionalConditionPss) => {
       switch (condition.type) {
         case null:
           delete condition.type

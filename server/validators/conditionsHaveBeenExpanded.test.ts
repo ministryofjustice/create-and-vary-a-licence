@@ -30,6 +30,7 @@ describe('Validate that additional conditions have been expanded with user input
         text: 'Condition 1',
         code: 'CON1',
         requiresInput: false,
+        category: 'group1',
       })
     )
     const value = plainToInstance(TestClass, {
@@ -51,6 +52,7 @@ describe('Validate that additional conditions have been expanded with user input
         text: 'Condition 1',
         code: 'CON1',
         requiresInput: true,
+        category: 'group1',
       })
     )
     const value = plainToInstance(TestClass, {
@@ -77,6 +79,7 @@ describe('Validate that additional conditions have been expanded with user input
         text: 'Condition 1',
         code: 'CON1',
         requiresInput: true,
+        category: 'group1',
       })
     )
     const value = plainToInstance(TestClass, {

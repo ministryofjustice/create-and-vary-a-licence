@@ -159,7 +159,7 @@ export default class LicenceService {
     return this.licenceApiClient.getActiveConditions()
   }
 
-  async getPolicyChanges(id: string, user: User): Promise<[]> {
+  async getPolicyChanges(id: string): Promise<[]> {
     const activePolicyVersion = await this.conditionService.getVersion()
 
     return this.licenceApiClient.getPolicyChanges(id, activePolicyVersion) as Promise<[]>

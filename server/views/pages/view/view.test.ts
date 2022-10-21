@@ -6,7 +6,7 @@ import { registerNunjucks } from '../../../utils/nunjucksSetup'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
 
-const additionalCondition = { text: 'Condition 1', code: 'condition1', inputRequired: true }
+const additionalCondition = { text: 'Condition 1', code: 'condition1', requiresInput: true, category: 'group1' }
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 jest.spyOn(conditionService, 'getAdditionalConditionByCode').mockReturnValue(Promise.resolve(additionalCondition))
 

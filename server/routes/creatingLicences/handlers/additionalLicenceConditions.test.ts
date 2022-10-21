@@ -8,9 +8,14 @@ import ConditionService from '../../../services/conditionService'
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
 
-jest
-  .spyOn(conditionService, 'getGroupedAdditionalConditions')
-  .mockReturnValue(Promise.resolve([{ category: 'group1', conditions: [{ text: 'Condition 1', code: 'condition1' }] }]))
+jest.spyOn(conditionService, 'getGroupedAdditionalConditions').mockReturnValue(
+  Promise.resolve([
+    {
+      category: 'group1',
+      conditions: [{ text: 'Condition 1', code: 'condition1', category: 'group1', requiresInput: false }],
+    },
+  ])
+)
 
 describe('Route Handlers - Create Licence - Additional Licence Conditions', () => {
   const handler = new AdditionalLicenceConditionsRoutes(licenceService, conditionService)
@@ -45,7 +50,7 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
         additionalConditions: [
           {
             category: 'group1',
-            conditions: [{ code: 'condition1', text: 'Condition 1' }],
+            conditions: [{ text: 'Condition 1', code: 'condition1', category: 'group1', requiresInput: false }],
           },
         ],
       })

@@ -71,16 +71,16 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions Callback',
       }
 
       conditionsProviderSpy.mockReturnValueOnce(
-        Promise.resolve({ text: 'Condition 1', requiresInput: true, code: 'CON1' })
+        Promise.resolve({ text: 'Condition 1', requiresInput: true, code: 'CON1', category: 'group1' })
       )
       conditionsProviderSpy.mockReturnValueOnce(
-        Promise.resolve({ text: 'Condition 2', requiresInput: false, code: 'CON2' })
+        Promise.resolve({ text: 'Condition 2', requiresInput: false, code: 'CON2', category: 'group2' })
       )
       conditionsProviderSpy.mockReturnValueOnce(
-        Promise.resolve({ text: 'Condition 3', requiresInput: true, code: 'CON3' })
+        Promise.resolve({ text: 'Condition 3', requiresInput: true, code: 'CON3', category: 'group3' })
       )
       conditionsProviderSpy.mockReturnValueOnce(
-        Promise.resolve({ text: 'Condition 4', requiresInput: true, code: 'CON4' })
+        Promise.resolve({ text: 'Condition 4', requiresInput: true, code: 'CON4', category: 'group4' })
       )
       await handler.GET(req, res)
 
@@ -101,7 +101,7 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions Callback',
       }
 
       conditionsProviderSpy.mockReturnValueOnce(
-        Promise.resolve({ text: 'Condition 1', requiresInput: true, code: 'CON1' })
+        Promise.resolve({ text: 'Condition 1', requiresInput: true, code: 'CON1', category: 'group1' })
       )
 
       await handler.GET(req, res)

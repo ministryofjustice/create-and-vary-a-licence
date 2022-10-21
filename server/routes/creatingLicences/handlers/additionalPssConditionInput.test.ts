@@ -44,6 +44,8 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         Promise.resolve({
           text: 'Condition 1',
           code: 'code1',
+          category: 'group1',
+          requiresInput: true,
           inputs: [],
         })
       )
@@ -65,9 +67,11 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           code: 'code1',
         },
         config: {
-          code: 'code1',
-          inputs: [],
           text: 'Condition 1',
+          code: 'code1',
+          category: 'group1',
+          requiresInput: true,
+          inputs: [],
         },
       })
     })
