@@ -3,8 +3,7 @@ import { Request, Response } from 'express'
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
-import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
-import AdditionalConditions from '../types/additionalConditions'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -56,8 +55,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
   describe('GET', () => {
     it('should render view and not record audit event (owner)', async () => {
-      const additionalConditions: AdditionalCondition[] = []
-      const conditionswWithUploads: AdditionalCondition[] = []
       conditionService.additionalConditionsCollection.mockReturnValue({
         additionalConditions: [],
         conditionsWithUploads: [],
