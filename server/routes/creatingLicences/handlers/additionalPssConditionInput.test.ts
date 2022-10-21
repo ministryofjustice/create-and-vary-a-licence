@@ -131,6 +131,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
             code: 'code2',
           },
         ],
+        version: 'version',
       }
     })
 
@@ -144,7 +145,8 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         },
         {
           username: 'joebloggs',
-        }
+        },
+        'version'
       )
     })
 

@@ -39,6 +39,9 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
         user: {
           username: 'joebloggs',
         },
+        licence: {
+          version: 'version',
+        },
       },
     } as unknown as Response
   })
@@ -68,7 +71,8 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
         1,
         LicenceType.AP,
         {},
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
+        'version'
       )
     })
 

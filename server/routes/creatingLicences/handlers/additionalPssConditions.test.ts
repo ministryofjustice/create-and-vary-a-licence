@@ -39,6 +39,9 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions', () => {
         user: {
           username: 'joebloggs',
         },
+        licence: {
+          version: 'version',
+        },
       },
     } as unknown as Response
   })
@@ -68,7 +71,8 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions', () => {
         1,
         LicenceType.PSS,
         {},
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
+        'version'
       )
     })
 

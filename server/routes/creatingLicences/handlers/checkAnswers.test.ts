@@ -3,7 +3,8 @@ import { Request, Response } from 'express'
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
-import { Licence } from '../../../@types/licenceApiClientTypes'
+import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
+import AdditionalConditions from '../types/additionalConditions'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -55,6 +56,12 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
   describe('GET', () => {
     it('should render view and not record audit event (owner)', async () => {
+      const additionalConditions: AdditionalCondition[] = []
+      const conditionswWithUploads: AdditionalCondition[] = []
+      conditionService.additionalConditionsCollection.mockReturnValue({
+        additionalConditions: [],
+        conditionsWithUploads: [],
+      })
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
@@ -64,6 +71,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should render view and record audit event (not owner)', async () => {
+      conditionService.additionalConditionsCollection.mockReturnValue({
+        additionalConditions: [],
+        conditionsWithUploads: [],
+      })
       res = {
         ...res,
         locals: {

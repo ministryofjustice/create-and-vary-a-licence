@@ -12,7 +12,7 @@ const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditi
 
 describe('validationMiddleware', () => {
   describe('middleware', () => {
-    const res = { redirect: jest.fn(), locals: {} } as unknown as Response
+    const res = { redirect: jest.fn(), locals: { licence: { version: 'version' } } } as unknown as Response
     let req = {} as Request
 
     const notEmptyMessage = 'not empty'

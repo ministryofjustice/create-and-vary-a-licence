@@ -409,7 +409,7 @@ describe('Licence Service', () => {
 
   describe('Update additional conditions', () => {
     it('should handle undefined list of additional conditions', async () => {
-      await licenceService.updateAdditionalConditions('1', LicenceType.AP, {} as AdditionalConditions, user)
+      await licenceService.updateAdditionalConditions('1', LicenceType.AP, {} as AdditionalConditions, user, 'version')
       expect(licenceApiClient.updateAdditionalConditions).toBeCalledWith(
         '1',
         { additionalConditions: [], conditionType: 'AP' },
@@ -441,7 +441,8 @@ describe('Licence Service', () => {
         '1',
         LicenceType.AP,
         { additionalConditions: ['code1', 'code2'] },
-        user
+        user,
+        'version'
       )
       expect(licenceApiClient.updateAdditionalConditions).toBeCalledWith(
         '1',
@@ -465,12 +466,17 @@ describe('Licence Service', () => {
         user
       )
       expect(conditionService.getAdditionalConditionByCode).toBeCalledTimes(2)
-      expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(1, 'code1')
-      expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(2, 'code2')
+      expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(1, 'code1', 'version')
+      expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(2, 'code2', 'version')
     })
   })
 
   describe('Update additional conditions data', () => {
+    licenceApiClient.getLicenceById.mockResolvedValue({
+      id: 1,
+      version: 'version',
+    } as Licence)
+
     it('should handle empty form data', async () => {
       const formData = {
         key1: '',

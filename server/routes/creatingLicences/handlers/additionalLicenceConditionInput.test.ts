@@ -30,6 +30,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       locals: {
         licence: {
           additionalLicenceConditions: [],
+          version: 'version',
         },
         user: {
           username: 'joebloggs',
@@ -71,10 +72,11 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
             code: 'code1',
           },
         ],
+        version: 'version',
       }
 
       await handler.GET(req, res)
-      expect(conditionsProviderSpy).toHaveBeenCalledWith('code1')
+      expect(conditionsProviderSpy).toHaveBeenCalledWith('code1', 'version')
       expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditionInput', {
         additionalCondition: {
           id: 1,
