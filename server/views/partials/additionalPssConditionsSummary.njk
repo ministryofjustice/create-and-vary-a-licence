@@ -52,7 +52,7 @@
                         visuallyHiddenText: "Change requirement"
                     }
                 ]
-            } if condition | checkConditionRequiresInput and isEditable
+            } if condition | checkConditionRequiresInput(licence.version) and isEditable
         }), additionalPssConditions) %}
     {% endfor %}
 

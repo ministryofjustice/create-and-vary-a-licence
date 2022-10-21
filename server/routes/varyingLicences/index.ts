@@ -64,7 +64,7 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(communityService)
   const timelineHandler = new TimelineRoutes(licenceService)
   const viewLicenceHandler = new ViewVariationRoutes(licenceService, conditionService)
-  const viewActiveLicenceHandler = new ViewActiveLicenceRoutes()
+  const viewActiveLicenceHandler = new ViewActiveLicenceRoutes(conditionService)
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)
   const spoDiscussionHandler = new SpoDiscussionRoutes(licenceService)
   const vloDiscussionHandler = new VloDiscussionRoutes(licenceService, conditionService)

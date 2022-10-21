@@ -142,7 +142,8 @@ export default class PolicyChangeRoutes {
       licence.id,
       conditionType,
       { additionalConditions: licenceConditionCodes },
-      user
+      user,
+      licence.version
     )
 
     req.session.changedConditionsInputs = inputs
@@ -175,7 +176,8 @@ export default class PolicyChangeRoutes {
       licence.id,
       conditionType,
       { additionalConditions: additionalConditionCodes },
-      user
+      user,
+      licence.version
     )
 
     return res.redirect(`/licence/vary/id/${licenceId}/policy-changes/callback`)

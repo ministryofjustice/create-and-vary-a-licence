@@ -1,13 +1,25 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
+import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 
 export default class AdditionalLicenceConditionRemoveUploadRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
-    const { licenceId, conditionId } = req.params
-    await this.licenceService.removeExclusionZoneFile(licenceId, conditionId, user)
-    return res.redirect('back')
+    const { user, licence } = res.locals
+    const { conditionId } = req.params
+
+    const condition = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10)
+    )
+
+    // when removing file upload, redirect to file-uploads controller
+    const redirect =
+      condition.uploadSummary.length > 0
+        ? `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
+        : `back`
+
+    await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), parseInt(licence.id, 10), user)
+    return res.redirect(redirect)
   }
 }

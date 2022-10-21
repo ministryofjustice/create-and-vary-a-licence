@@ -59,6 +59,7 @@ describe('Create a Licence Views - Check Answers', () => {
         code: 'condition1',
         category: 'Category 1',
         expandedText: 'Template 1',
+        uploadSummary: [],
         data: [
           {
             field: 'field1',
@@ -70,6 +71,7 @@ describe('Create a Licence Views - Check Answers', () => {
         code: 'condition2',
         category: 'Category 2',
         expandedText: 'Template 2',
+        uploadSummary: [],
         data: [
           {
             field: 'field2',
@@ -91,6 +93,7 @@ describe('Create a Licence Views - Check Answers', () => {
         code: 'condition1',
         category: 'Category 1',
         expandedText: 'Template 1',
+        uploadSummary: [],
         data: [
           {
             field: 'field1',
@@ -102,6 +105,7 @@ describe('Create a Licence Views - Check Answers', () => {
         code: 'condition2',
         category: 'Category 2',
         expandedText: 'Template 2',
+        uploadSummary: [],
         data: [
           {
             field: 'field2',
@@ -147,6 +151,40 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display a table containing the additional licence conditions', () => {
     viewContext = {
       licence,
+      additionalConditions: [
+        {
+          code: 'condition1',
+          category: 'Category 1',
+          expandedText: 'Template 1',
+          uploadSummary: [],
+          data: [
+            {
+              field: 'field1',
+              value: 'Data 1',
+            },
+          ],
+        },
+        {
+          code: 'condition2',
+          category: 'Category 2',
+          expandedText: 'Template 2',
+          uploadSummary: [],
+          data: [
+            {
+              field: 'field2',
+              value: 'Data 2A',
+            },
+            {
+              field: 'field2',
+              value: 'Data 2B',
+            },
+            {
+              field: 'field3',
+              value: 'Data 2C',
+            },
+          ],
+        },
+      ],
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -246,6 +284,40 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should show change links and submit button when licence status is IN_PROGRESS', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'IN_PROGRESS' },
+      additionalConditions: [
+        {
+          code: 'condition1',
+          category: 'Category 1',
+          expandedText: 'Template 1',
+          uploadSummary: [],
+          data: [
+            {
+              field: 'field1',
+              value: 'Data 1',
+            },
+          ],
+        },
+        {
+          code: 'condition2',
+          category: 'Category 2',
+          expandedText: 'Template 2',
+          uploadSummary: [],
+          data: [
+            {
+              field: 'field2',
+              value: 'Data 2A',
+            },
+            {
+              field: 'field2',
+              value: 'Data 2B',
+            },
+            {
+              field: 'field3',
+              value: 'Data 2C',
+            },
+          ],
+        },
+      ],
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))

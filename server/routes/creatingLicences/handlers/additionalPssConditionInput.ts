@@ -46,7 +46,8 @@ export default class AdditionalPssConditionInputRoutes {
       licence.id,
       LicenceType.PSS,
       { additionalConditions: additionalConditionCodes },
-      user
+      user,
+      licence.version
     )
 
     return res.redirect(

@@ -7,11 +7,12 @@
 {% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
 {% from "partials/datePicker.njk" import datePicker %}
 {% from "partials/timePicker.njk" import timePicker %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {# TODO: Currently, this form builder only supports the "add another" functionality for the text input type. #}
 {# It can be extended in future if the other field types require Add Another functionality #}
 
-{%  macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken) %}
+{% macro formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken) %}
     {% for input in config.inputs %}
         {% set validationError = validationErrors | findError(input.name) %}
         {% set formValues = getFormResponses(formResponses, input.name) or getValueFromAdditionalCondition(additionalCondition, input.name) %}
@@ -208,9 +209,9 @@
                 {% for item in formValues %}
                     {# When submitting an empty form, the formValues is an array containing an empty string #}
                     {# This is to cater for other input types which are part of the Add-Another pattern #}
-                    {% if item.length > 1 %}
+                    {% if (item.length > 1) and (additionalCondition.uploadSummary[0].thumbnailImage) %}
                         {# There was a value for the uploaded file name - show the thumbnail image and a delete link #}
-                        <input type="hidden" name="{{ input.name }}" value="{{ item }}" />
+                        <input type="hidden" name="{{ input.name }}" value="{{ item }}"/>
                         {{ includeExclusionZoneImage(licenceId, additionalCondition, item, csrfToken) }}
                     {% else %}
                         {# Form values were present but empty, so show the file selector #}
@@ -237,27 +238,29 @@
 {% macro includeExclusionZoneImage(licenceId, condition, item, csrfToken) %}
     <div id="exclusion-zone" class="govuk-body upload-container">
         <div class="upload-thumbnail">
-            <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}"  alt="{{ item }}"/>
+            <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}" alt="{{ item }}"/>
         </div>
         <div class="upload-detail-container">
             <div class="upload-detail govuk-body">
-                Name: <strong>{{ condition.uploadSummary[0].filename }}</strong>
+                File Name: <strong>{{ condition.uploadSummary[0].filename }}</strong>
             </div>
             <div class="upload-detail govuk-body">
-                Type: <strong>{{ condition.uploadSummary[0].fileType }}</strong>
+                Type: <strong>{{ condition.uploadSummary[0].fileType | humanReadableMimeType }}</strong>
             </div>
             <div class="upload-detail govuk-body">
-                Size: <strong>{{ condition.uploadSummary[0].fileSize }} bytes</strong>
+                Size: <strong>{{ condition.uploadSummary[0].fileSize | humanReadableFileSize }} </strong>
             </div>
-            <div class="upload-detail govuk-link govuk-!-font-size-16">
-                {% set removeFileUploadLink = "/licence/create/id/"+ licenceId +"/condition/id/" + condition.id + "/remove-upload?_csrf=" + csrfToken %}
-                <a href="{{ removeFileUploadLink }}">Delete this file</a>
-            </div>
+        </div>
+    </div>
+    <div class="govuk-body">
+        <div>
+            {% set removeFileUploadLink = "/licence/create/id/"+ licenceId +"/condition/id/" + condition.id + "/remove-upload?_csrf=" + csrfToken %}
         </div>
     </div>
     <div class="govuk-body">
         {{ condition.uploadSummary[0].description }}
     </div>
+    <br/>
 {% endmacro %}
 
 {% macro fileTypeInput(name, acceptTypes, label, validationErrors, formValue) %}
@@ -266,11 +269,11 @@
         name: name,
         value: formValue,
         attributes: {
-           accept: acceptTypes
+            accept: acceptTypes
         },
         label: {
-           html: label,
-           classes: "govuk-!-font-weight-bold"
+            html: label,
+            classes: "govuk-!-font-weight-bold"
         },
         errorMessage: validationErrors | findError(name)
     }) }}
@@ -304,7 +307,9 @@
             }) }}
 
             {% if input.addAnother and removeButton %}
-                <button type="button" class="govuk-button govuk-button--secondary moj-add-another__remove-button">Remove</button>
+                <button type="button" class="govuk-button govuk-button--secondary moj-add-another__remove-button">
+                    Remove
+                </button>
             {% endif %}
         {% endcall %}
     {% endif %}

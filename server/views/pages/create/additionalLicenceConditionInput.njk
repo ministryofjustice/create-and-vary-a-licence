@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "formBuilder.njk" import formBuilder %}
@@ -27,44 +28,71 @@
 
     {# Check for any fileUpload type in the inputs for this condition - it changes the form submission #}
     {% set fileUpload = false %}
+    {% set fileUploadPresent = false %}
     {% for input in config.inputs %}
-       {% if input.type === 'fileUpload' %}
-           {% set fileUpload = true %}
-       {% endif %}
+        {% if input.type === 'fileUpload' %}
+            {% if additionalCondition.uploadSummary.length > 0 %}
+                {% set fileUploadPresent = true %}
+            {% endif %}
+            {% set fileUpload = true %}
+        {% endif %}
     {% endfor %}
 
     {# Alter the form encoding to multi-part formdata and supply csrf token in query params for file upload conditions #}
-    <form method="POST"
-        {% if fileUpload %}
+    <div class="govuk-button-group">
+        <form method="POST"
+                {% if fileUpload %}
             encType="multipart/form-data"
             action="?_csrf={{ csrfToken }}{{ fromReviewAppend }}{{ fromPolicyReviewAppend }}"
         {% endif %}>
 
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        <input type="hidden" name="code" value="{{ config.code }}">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" name="code" value="{{ config.code }}">
 
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
-                <p class="govuk-body">
-                    {{ config.text }}
-                </p>
-                {% if config.subtext %}
-                    <div class="govuk-hint">{{ config.subtext }}</div>
-                {% endif %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <p class="govuk-body">
+                        {{ config.text }}
+                    </p>
+                    {% if config.subtext %}
+                        <div class="govuk-hint">{{ config.subtext }}</div>
+                    {% endif %}
 
-                {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
-
-                {{ govukButton({
-                    text: "Continue",
-                    type: "submit",
-                    classes: 'govuk-!-margin-top-6',
-                    attributes: { 'data-qa': 'continue' }
-                }) }}
+                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+                    {% if fileUpload %}
+                        <h2 class="govuk-heading-m">Help with this licence condition</h2>
+                        {{ govukDetails({
+                            summaryText: "If you need to add more than one map",
+                            text: "Add your first map on this page. You can add more from the next page.",
+                            classes: 'govuk-!-margin-bottom-3'
+                        }) }}
+                        {% if fileUploadPresent == false %}
+                            {{ govukDetails({
+                                summaryText: "If you do not have a map",
+                                html: "You can create one on <a class='govuk-link govuk-link--no-visited-state' href='https://mapmaker.field-dynamics.co.uk/moj/map/default' target='_blank'>Map Maker</a>",
+                                classes: 'govuk-!-margin-bottom-3'
+                            }) }}
+                        {% endif %}
+                    {% endif %}
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            text: "Continue",
+                            type: "submit",
+                            classes: 'govuk-!-margin-top-6',
+                            attributes: { 'data-qa': 'continue' }
+                        }) }}
+                        {% if fileUploadPresent == true %}
+                            <a class="govuk-link govuk-link--no-visited-state"
+                               href={{ "/licence/create/id/" + licence.id +"/additional-licence-conditions/condition/"+additionalCondition.code+"/file-uploads?fromReview=true" }}>Cancel</a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </form>
 
-    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReview }}" method="POST">
+    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReview }}" 
+      method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         {{ govukButton({
             text: "Delete this condition",

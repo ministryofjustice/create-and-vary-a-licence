@@ -1,9 +1,10 @@
 import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import ConditionService from '../../../services/conditionService'
 import LicenceService from '../../../services/licenceService'
 
 export default class ViewAndPrintLicenceRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -25,7 +26,11 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
-      res.render('pages/view/view')
+      const { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
+        licence.additionalLicenceConditions
+      )
+
+      res.render('pages/view/view', { conditionsWithUploads, additionalConditions })
     } else {
       res.redirect(`/licence/view/cases`)
     }

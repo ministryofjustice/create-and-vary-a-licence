@@ -156,6 +156,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           {
             id: 1,
             code: 'outOfBoundsRegion',
+            expandedText: 'expanded text',
           },
         ],
       }
@@ -166,7 +167,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       expect(licenceService.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', req.file, { username: 'joebloggs' })
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
-        { code: 'outOfBoundsRegion', id: 1 },
+        { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
         { outOfBoundFilename: 'test.txt' },
         { username: 'joebloggs' }
       )
@@ -177,7 +178,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       await handler.POST(req, res)
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
-        { code: 'outOfBoundsRegion', id: 1 },
+        { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
         { outOfBoundFilename: 'test.txt' },
         { username: 'joebloggs' }
       )
@@ -188,16 +189,19 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
   describe('DELETE', () => {
     beforeEach(() => {
       licenceService.updateAdditionalConditions = jest.fn()
+      licenceService.deleteAdditionalCondition = jest.fn()
       res.locals.licence = {
         id: 1,
         additionalLicenceConditions: [
           {
             id: 1,
             code: 'code1',
+            expandedText: 'expanded text',
           },
           {
             id: 2,
             code: 'code2',
+            expandedText: 'more expanded text',
           },
         ],
       }
@@ -205,14 +209,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
     it('should call licence service to update the additional conditions with the condition removed', async () => {
       await handler.DELETE(req, res)
-      expect(licenceService.updateAdditionalConditions).toHaveBeenCalledWith(
-        1,
-        'AP',
-        {
-          additionalConditions: ['code2'],
-        },
-        { username: 'joebloggs' }
-      )
+      expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(1, 1, { username: 'joebloggs' })
     })
 
     it('should redirect to the callback function', async () => {

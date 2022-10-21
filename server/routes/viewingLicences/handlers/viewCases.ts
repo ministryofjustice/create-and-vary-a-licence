@@ -7,6 +7,7 @@ import { convertToTitleCase } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
+import logger from '../../../../logger'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
@@ -29,7 +30,7 @@ export default class ViewAndPrintCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: format(new Date(this.selectReleaseDate(c.nomisRecord)), 'dd MMM yyyy'),
+          releaseDate: this.selectReleaseDate(c.nomisRecord),
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: _.head(c.licences).status,
           isClickable:
@@ -67,12 +68,24 @@ export default class ViewAndPrintCaseRoutes {
   }
 
   selectReleaseDate(nomisRecord: Prisoner) {
+    let dateString = nomisRecord.conditionalReleaseDate
+
     if (nomisRecord.confirmedReleaseDate) {
-      return nomisRecord.confirmedReleaseDate
+      dateString = nomisRecord.confirmedReleaseDate
     }
+
     if (nomisRecord.conditionalReleaseOverrideDate) {
-      return nomisRecord.conditionalReleaseOverrideDate
+      dateString = nomisRecord.conditionalReleaseOverrideDate
     }
-    return nomisRecord.conditionalReleaseDate
+
+    try {
+      dateString = format(new Date(dateString), 'dd MMM yyyy')
+    } catch (e) {
+      logger.error(
+        `Date error: ${e.message} for prisonerNumber: ${nomisRecord.prisonerNumber} using date: ${dateString}`
+      )
+    }
+
+    return dateString
   }
 }

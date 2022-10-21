@@ -29,6 +29,7 @@ import {
   UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
   OmuContact,
+  AddAdditionalConditionRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import {
@@ -190,15 +191,39 @@ export default class LicenceService {
     return this.licenceApiClient.updateContactNumber(id, requestBody, user)
   }
 
+  async addAdditionalCondition(
+    id: string,
+    conditionType: LicenceType,
+    formData: AddAdditionalConditionRequest,
+    user: User
+  ) {
+    return this.licenceApiClient.addAdditionalCondition(id, conditionType, formData, user)
+  }
+
+  async deleteAdditionalCondition(conditionId: number, licenceId: number, user: User) {
+    return this.licenceApiClient.deleteAdditionalCondition(conditionId, licenceId, user)
+  }
+
+  async deleteAdditionalConditionsByCode(conditionCode: string, licence: Licence, user: User): Promise<void> {
+    const conditionIds = licence.additionalLicenceConditions.filter(c => c.code === conditionCode).map(c => c.id)
+    await Promise.all(
+      conditionIds.map(conditionId => this.licenceApiClient.deleteAdditionalCondition(conditionId, licence.id, user))
+    )
+  }
+
   async updateAdditionalConditions(
     id: string,
     conditionType: LicenceType,
     formData: AdditionalConditions,
-    user: User
+    user: User,
+    licenceVersion: string
   ): Promise<void> {
     const additionalConditions =
       formData.additionalConditions?.map(async (conditionCode, index) => {
-        const additionalConditionConfig = await this.conditionService.getAdditionalConditionByCode(conditionCode)
+        const additionalConditionConfig = await this.conditionService.getAdditionalConditionByCode(
+          conditionCode,
+          licenceVersion
+        )
         return {
           code: conditionCode,
           sequence: index,
@@ -252,8 +277,13 @@ export default class LicenceService {
         return build(formData[key], sequenceNumber)
       })
 
+    const licence = await this.getLicence(licenceId, user)
     const requestBody = {
-      expandedConditionText: await this.conditionService.expandAdditionalCondition(condition.code, enteredData),
+      expandedConditionText: await this.conditionService.expandAdditionalCondition(
+        condition.code,
+        enteredData,
+        licence.version
+      ),
       data: enteredData,
     } as UpdateAdditionalConditionDataRequest
 

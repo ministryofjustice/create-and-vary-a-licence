@@ -1,8 +1,10 @@
 {% from "pages/licence/partials/conditions.njk" import conditions %}
+{% from "pages/licence/partials/exclusionZones.njk" import exclusionZones %}
 
 <div id="ap-conditions" class="section section--large">
     <span>During your licence period you must:</span>
     {{ conditions(licence.standardLicenceConditions) }}
-    {{ conditions(licence.additionalLicenceConditions) }}
+    {{ conditions(additionalConditions) }}
+    {{ exclusionZones(additionalConditionsWithUploads) }}
     {{ conditions(licence.bespokeConditions) }}
 </div>

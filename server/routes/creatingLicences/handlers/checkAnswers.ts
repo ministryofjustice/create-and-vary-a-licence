@@ -26,7 +26,11 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    res.render('pages/create/checkAnswers')
+    const { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
+      licence.additionalLicenceConditions
+    )
+
+    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

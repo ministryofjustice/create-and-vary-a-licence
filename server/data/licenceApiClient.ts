@@ -28,10 +28,13 @@ import type {
   OmuContact,
   LicencePolicy,
   LicenceConditionChange,
+  AdditionalCondition,
+  AddAdditionalConditionRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
 import { UpdateComRequest } from '../@types/licenceApiClientTypes'
+import LicenceType from '../enumeration/licenceType'
 
 export default class LicenceApiClient extends RestClient {
   constructor() {
@@ -128,6 +131,25 @@ export default class LicenceApiClient extends RestClient {
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/bespoke-conditions`, data: bespokeConditions },
+      { username: user.username }
+    )
+  }
+
+  async addAdditionalCondition(
+    licenceId: string,
+    type: LicenceType,
+    additionalCondition: AddAdditionalConditionRequest,
+    user: User
+  ): Promise<AdditionalCondition> {
+    return (await this.post(
+      { path: `/licence/id/${licenceId}/additional-condition/${type}`, data: additionalCondition },
+      { username: user.username }
+    )) as Promise<AdditionalCondition>
+  }
+
+  async deleteAdditionalCondition(conditionId: number, licenceId: number, user: User) {
+    await this.delete(
+      { path: `/licence/id/${licenceId}/additional-condition/id/${conditionId}` },
       { username: user.username }
     )
   }
@@ -391,5 +413,11 @@ export default class LicenceApiClient extends RestClient {
     return this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` }) as Promise<
       LicenceConditionChange[]
     >
+  }
+
+  async notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd(): Promise<void> {
+    await this.post({
+      path: '/notify-probation-of-unapproved-licences',
+    })
   }
 }

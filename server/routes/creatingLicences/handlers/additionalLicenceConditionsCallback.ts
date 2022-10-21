@@ -7,17 +7,18 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { additionalLicenceConditions } = res.locals.licence
+    const { licence } = res.locals
 
     const conditionCodesRequiringInput = await Promise.all(
-      additionalLicenceConditions.map(async (condition: AdditionalCondition) => {
-        return (await this.conditionService.getAdditionalConditionByCode(condition.code))?.requiresInput
+      licence.additionalLicenceConditions.map(async (condition: AdditionalCondition) => {
+        return (await this.conditionService.getAdditionalConditionByCode(condition.code, licence.version))
+          ?.requiresInput
           ? condition.code
           : undefined
       })
     )
 
-    const requiringInput = additionalLicenceConditions
+    const requiringInput = licence.additionalLicenceConditions
       .filter((condition: AdditionalCondition) => conditionCodesRequiringInput.includes(condition.code))
       .sort((a: AdditionalCondition, b: AdditionalCondition) => (a.sequence > b.sequence ? 1 : -1))
       .find((condition: AdditionalCondition) => condition.data.length === 0)

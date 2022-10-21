@@ -1,3 +1,5 @@
+[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fcreate-and-vary-a-licence)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#create-and-vary-a-licence "Link to report")
+[![CircleCI](https://circleci.com/gh/ministryofjustice/create-and-vary-a-licence/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/create-and-vary-a-licence)
 [![codecov](https://codecov.io/gh/ministryofjustice/create-and-vary-a-licence/branch/main/graph/badge.svg?token=S8DS3BV91P)](https://codecov.io/gh/ministryofjustice/create-and-vary-a-licence)
 
 # Create and vary a licence

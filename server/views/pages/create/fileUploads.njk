@@ -1,0 +1,96 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Create a licence - File Upload " %}
+{% set pageId = "licence-upload-file-page" %}
+
+{% block content %}
+
+    {% set uploadCount = conditions.length %}
+
+    <h1 class="govuk-heading-l">You have added {{ uploadCount }} map{% if uploadCount > 1 %}s{% endif %}</h1>
+
+    {% set items = [] %}
+    {% for condition in conditions %}
+        {% set items = (items.push({
+            key: {
+                html: 'Name of area: <br/> File name:'
+            },
+            value: {
+                html:  condition.data[0].value + '<br/>' + condition.uploadSummary[0].filename
+            },
+            classes: 'govuk-summary-list__row--file-upload',
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true",
+                        text: "Change details",
+                        visuallyHiddenText: condition.uploadSummary[0].fileName
+                    },
+                    {
+                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/remove",
+                        text: "Delete",
+                        visuallyHiddenText: condition.uploadSummary[0].filename
+                    }
+                ]
+            }
+        }), items) %}
+    {% endfor %}
+
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {{ govukSummaryList({
+                rows: items
+            }) }}
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <input type="hidden" name="conditionCode" value="{{ conditions[0].code}}">
+                {{ govukRadios({
+                    name: "uploadFile",
+                    classes: "govuk-radios--inline",
+                    fieldset: {
+                        legend: {
+                            text: "Do you want to add another map?",
+                            classes: "govuk-fieldset__legend--m"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "Yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "No",
+                            text: "No"
+                        }
+                    ],
+                    errorMessage: displayMessage
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit",
+                    classes: 'govuk-!-margin-top-6',
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+            </div>
+        </div>
+    </form>
+    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-types/condition/delete"}}" method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <input type="hidden" name="conditionCode" value="{{ conditions[0].code}}">
+        {{ govukButton({
+            text: "Delete this condition",
+            type: "submit",
+            classes: 'govuk-button--secondary',
+            attributes: { 'data-qa': 'delete' }
+        }) }}
+    </form>
+{% endblock %}

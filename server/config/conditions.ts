@@ -697,8 +697,7 @@ export default {
         code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
         category: 'Freedom of movement',
         text: 'Not to enter the area of [CLEARLY SPECIFIED AREA], as defined by the attached map without the prior approval of your supervising officer.',
-        subtext:
-          'If you need to upload more than one map, add one here and then email all maps directly to the prison OMU. Make sure the names of areas shown on all maps are entered here as a list. For example, Bridgend, Porthcawl and Port Talbot.',
+        subtext: null,
         tpl: 'Not to enter the area of {outOfBoundArea}, as defined by the attached map without the prior approval of your supervising officer.',
         requiresInput: true,
         inputs: [
@@ -709,8 +708,7 @@ export default {
           },
           {
             type: InputTypes.FILE_UPLOAD,
-            label:
-              'Find and select the <a class="govuk-link" href="https://mapmaker.field-dynamics.co.uk/moj/map/default" rel="noreferrer noopener" target="_blank">Mapmaker PDF map</a> to include on the licence',
+            label: 'Select a map of the area they must not enter to include in the licence',
             name: 'outOfBoundFilename',
           },
         ],

@@ -18,11 +18,13 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
+            uploadSummary: [],
           },
           {
             code: '2',
             category: 'category2',
             expandedText: 'testCondition2',
+            uploadSummary: [],
           },
         ],
         bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
@@ -73,11 +75,13 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
+            uploadSummary: [],
           },
           {
             code: '2',
             category: 'category2',
             expandedText: 'testCondition2',
+            uploadSummary: [],
           },
         ],
         bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
@@ -118,6 +122,7 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
+            uploadSummary: [],
           },
         ],
       } as Licence
@@ -129,6 +134,7 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'amendedTestCondition1',
+            uploadSummary: [],
           },
         ],
       } as Licence
@@ -158,6 +164,7 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
+            uploadSummary: [],
           },
         ],
       } as Licence
@@ -195,6 +202,7 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
+            uploadSummary: [],
           },
         ],
       } as Licence
@@ -222,6 +230,7 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
+            uploadSummary: [],
           },
         ],
       } as Licence
@@ -233,6 +242,7 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'amendedTestCondition1',
+            uploadSummary: [],
           },
         ],
       } as Licence
@@ -261,6 +271,7 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'testCondition1',
+          uploadSummary: [],
         },
       ],
       bespokeConditions: [{ text: 'bespoke1' }],
@@ -269,6 +280,252 @@ describe('Licence Comparator', () => {
     expect(compareLicenceConditions(originalLicence, _.cloneDeep(originalLicence))).toEqual({
       licenceConditionsAdded: [],
       licenceConditionsAmended: [],
+      licenceConditionsRemoved: [],
+      pssConditionsAdded: [],
+      pssConditionsAmended: [],
+      pssConditionsRemoved: [],
+    })
+  })
+
+  it('should return changes to multiple exclusion zones', () => {
+    const originalLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'testCondition1',
+          uploadSummary: [],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'Wales',
+          uploadSummary: [{}],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'England',
+          uploadSummary: [{}],
+        },
+      ],
+    } as Licence
+
+    const variedLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'amendedTestCondition1',
+          uploadSummary: [],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'Wales',
+          uploadSummary: [{}],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'Scotland',
+          uploadSummary: [{}],
+        },
+      ],
+    } as Licence
+
+    expect(compareLicenceConditions(originalLicence, variedLicence)).toEqual({
+      licenceConditionsAdded: [],
+      licenceConditionsAmended: [
+        {
+          category: 'category1',
+          condition: 'amendedTestCondition1',
+        },
+        {
+          category: 'Freedom of movement',
+          condition: 'Exclusion zones have changed to the following: \n\n Wales\n\nScotland',
+        },
+      ],
+      licenceConditionsRemoved: [],
+      pssConditionsAdded: [],
+      pssConditionsAmended: [],
+      pssConditionsRemoved: [],
+    })
+  })
+
+  it('should not return changes to multiple exclusion zones', () => {
+    const originalLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'testCondition1',
+          uploadSummary: [],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'Wales',
+          uploadSummary: [{}],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'England',
+          uploadSummary: [{}],
+        },
+      ],
+    } as Licence
+
+    const variedLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'amendedTestCondition1',
+          uploadSummary: [],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'Wales',
+          uploadSummary: [{}],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'England',
+          uploadSummary: [{}],
+        },
+      ],
+    } as Licence
+
+    expect(compareLicenceConditions(originalLicence, variedLicence)).toEqual({
+      licenceConditionsAdded: [],
+      licenceConditionsAmended: [
+        {
+          category: 'category1',
+          condition: 'amendedTestCondition1',
+        },
+      ],
+      licenceConditionsRemoved: [],
+      pssConditionsAdded: [],
+      pssConditionsAmended: [],
+      pssConditionsRemoved: [],
+    })
+  })
+
+  it('should return multiple exclusion zones have been removed', () => {
+    const originalLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'testCondition1',
+          uploadSummary: [],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'Wales',
+          uploadSummary: [{}],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'England',
+          uploadSummary: [{}],
+        },
+      ],
+    } as Licence
+
+    const variedLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'amendedTestCondition1',
+          uploadSummary: [],
+        },
+      ],
+    } as Licence
+
+    expect(compareLicenceConditions(originalLicence, variedLicence)).toEqual({
+      licenceConditionsAdded: [],
+      licenceConditionsAmended: [
+        {
+          category: 'category1',
+          condition: 'amendedTestCondition1',
+        },
+      ],
+      licenceConditionsRemoved: [
+        {
+          category: 'Freedom of movement',
+          condition: 'Exclusion zones have been removed',
+        },
+      ],
+      pssConditionsAdded: [],
+      pssConditionsAmended: [],
+      pssConditionsRemoved: [],
+    })
+  })
+
+  it('should return added multiple exclusion zones when parent licence had none present', () => {
+    const originalLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'testCondition1',
+          uploadSummary: [],
+        },
+      ],
+    } as Licence
+
+    const variedLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'amendedTestCondition1',
+          uploadSummary: [],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'Wales',
+          uploadSummary: [{}],
+        },
+        {
+          code: '2',
+          category: 'Freedom of movement',
+          expandedText: 'England',
+          uploadSummary: [{}],
+        },
+      ],
+    } as Licence
+
+    expect(compareLicenceConditions(originalLicence, variedLicence)).toEqual({
+      licenceConditionsAdded: [
+        {
+          category: 'Freedom of movement',
+          condition: 'Exclusion zones have been added as follows: \n\n Wales\n\nEngland',
+        },
+      ],
+      licenceConditionsAmended: [
+        {
+          category: 'category1',
+          condition: 'amendedTestCondition1',
+        },
+      ],
       licenceConditionsRemoved: [],
       pssConditionsAdded: [],
       pssConditionsAmended: [],

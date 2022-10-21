@@ -34,7 +34,7 @@ export interface paths {
   }
   '/licence/id/{licenceId}/standard-conditions': {
     /** Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-    put: operations['updateStandardConditons']
+    put: operations['updateStandardConditions']
   }
   '/licence/id/{licenceId}/spo-discussion': {
     /** Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -100,6 +100,10 @@ export interface paths {
     /** Records an auditable event related to an action taken by a user or an automated in-service process. Requires ROLE_CVL_ADMIN. */
     put: operations['recordAuditEvent']
   }
+  '/notify-probation-of-unapproved-licences': {
+    /** Send email to probation practioner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['notifyProbationOfUnapprovedLicences']
+  }
   '/licence/match': {
     /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
     post: operations['getLicencesMatchingCriteria']
@@ -111,6 +115,10 @@ export interface paths {
   '/licence/id/{licenceId}/create-variation': {
     /** Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createVariation']
+  }
+  '/licence/id/{licenceId}/additional-condition/{conditionType}': {
+    /** Add the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['addAdditionalCondition']
   }
   '/licence/create': {
     /** Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -132,6 +140,10 @@ export interface paths {
     /** Retrieves a list of auditable events matching the criteria provided. Requires ROLE_CVL_ADMIN. */
     post: operations['requestAuditEvents']
   }
+  '/support/licence-statistics': {
+    /** Licence statistics data required by the support staff. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getLicenceStatistics']
+  }
   '/licence/variations/submitted/area/{areaCode}': {
     /** Get a list of licence summaries for all submitted variations belonging to the specified probation area code. Requires ROLE_CVL_ADMIN. */
     get: operations['submittedVariations']
@@ -148,9 +160,17 @@ export interface paths {
     /** Get a list of licence events that match the supplied criteria. Requires ROLE_CVL_ADMIN. */
     get: operations['getEventsMatchingCriteria']
   }
+  '/edited-licences-unapproved-by-crd': {
+    /** Returns prisoner and com details Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getEditedLicencesUnapprovedByCrd']
+  }
   '/licence/id/{licenceId}/discard': {
     /** Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     delete: operations['discard']
+  }
+  '/licence/id/{licenceId}/additional-condition/id/{conditionId}': {
+    /** Remove additional condition from the licence list of additional conditions.All user submitted condition data will also be removed. */
+    delete: operations['deleteAdditionalCondition']
   }
 }
 
@@ -629,6 +649,39 @@ export interface components {
        */
       detail?: string
     }
+    /** @description Describes a prisoner's first and last name, their CRN if present and a COM's contact details for use in an email to COM */
+    UnapprovedLicence: {
+      /**
+       * @description The Crime Reference Number
+       * @example Z882661
+       */
+      crn?: string
+      /**
+       * @description The prisoner's first name
+       * @example Jim
+       */
+      forename?: string
+      /**
+       * @description The prisoner's last name
+       * @example Smith
+       */
+      surname?: string
+      /**
+       * @description The COM's first name
+       * @example Joseph
+       */
+      comFirstName?: string
+      /**
+       * @description The COM's last name
+       * @example Bloggs
+       */
+      comLastName?: string
+      /**
+       * @description The COM's email address
+       * @example jbloggs@probation.gov.uk
+       */
+      comEmail?: string
+    }
     /** @description Request object for searching licences by field */
     MatchLicencesRequest: {
       /**
@@ -798,12 +851,46 @@ export interface components {
        * @description The bookingId associated with the licence
        * @example 773722
        */
-      bookingId?: string
+      bookingId?: number
       /**
        * Format: date-time
        * @description The date the licence was created
        */
       dateCreated?: string
+    }
+    /** @description Describes an additional condition request */
+    AddAdditionalConditionRequest: {
+      /**
+       * @description Coded value for the additional condition
+       * @example meetingAddress
+       */
+      conditionCode: string
+      /**
+       * @description Condition type, either AP or PSS
+       * @example AP
+       */
+      conditionType: string
+      /**
+       * @description The category of the additional condition
+       * @example Freedom of movement
+       */
+      conditionCategory?: string
+      /**
+       * Format: int32
+       * @description Sequence of this additional condition within the additional conditions
+       * @example 1
+       */
+      sequence?: number
+      /**
+       * @description The textual value for this additional condition
+       * @example You must not enter the location [DESCRIPTION]
+       */
+      conditionText: string
+      /**
+       * @description The condition text with the users data inserted into the template
+       * @example You must not enter the location Tesco Superstore
+       */
+      expandedText: string
     }
     /** @description Request object for creating a new licence */
     CreateLicenceRequest: {
@@ -1028,6 +1115,76 @@ export interface components {
        * @description The end time to query for events (default is now)
        */
       endTime: string
+    }
+    /** @description Management stats */
+    LicenceStatistics: {
+      /** @description Prison ID */
+      prison?: string
+      /**
+       * @description Type of licence
+       * @example AP, PSS, APPSS
+       */
+      licenceType?: string
+      /**
+       * Format: int32
+       * @description Number eligible for CVL within timeframe
+       * @example 10
+       */
+      eligibleForCvl?: number
+      /**
+       * Format: int32
+       * @description Status of In progress
+       * @example 2
+       */
+      inProgress?: number
+      /**
+       * Format: int32
+       * @description Status of Submitted
+       * @example 2
+       */
+      submitted?: number
+      /**
+       * Format: int32
+       * @description Status of Approved
+       * @example 8
+       */
+      approved?: number
+      /**
+       * Format: int32
+       * @description Status of Active
+       * @example 5
+       */
+      active?: number
+      /**
+       * Format: int32
+       * @description Total inactive
+       * @example 5
+       */
+      inactiveTotal?: number
+      /**
+       * Format: int32
+       * @description Status of Inactive not approved
+       * @example 6
+       */
+      inactiveNotApproved?: number
+      /**
+       * Format: int32
+       * @description Status of Inactive aprroved
+       * @example 3
+       */
+      inactiveApproved?: number
+      /**
+       * Format: int32
+       * @description Inactive because HDC approved
+       * @example 2
+       */
+      inactiveHdcApproved?: number
+      /**
+       * Format: int32
+       * @description Approved but never printed
+       * @example 1
+       */
+      approvedNotPrinted?: number
     }
     /** @description Describes a bespoke condition on a licence */
     BespokeCondition: {
@@ -1784,7 +1941,7 @@ export interface operations {
     }
   }
   /** Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-  updateStandardConditons: {
+  updateStandardConditions: {
     parameters: {
       path: {
         licenceId: number
@@ -2444,6 +2601,34 @@ export interface operations {
       }
     }
   }
+  /** Send email to probation practioner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  notifyProbationOfUnapprovedLicences: {
+    responses: {
+      /** Emails sent */
+      200: {
+        content: {
+          'application/json': components['schemas']['UnapprovedLicence']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UnapprovedLicence'][]
+      }
+    }
+  }
   /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
   getLicencesMatchingCriteria: {
     parameters: {
@@ -2545,6 +2730,52 @@ export interface operations {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
+      }
+    }
+  }
+  /** Add the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  addAdditionalCondition: {
+    parameters: {
+      path: {
+        licenceId: number
+        conditionType: string
+      }
+    }
+    responses: {
+      /** Set of additional conditions added */
+      200: {
+        content: {
+          'application/json': components['schemas']['AdditionalCondition']
+        }
+      }
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AddAdditionalConditionRequest']
       }
     }
   }
@@ -2709,6 +2940,41 @@ export interface operations {
       }
     }
   }
+  /** Licence statistics data required by the support staff. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getLicenceStatistics: {
+    parameters: {
+      query: {
+        startDate: string
+        endDate: string
+      }
+    }
+    responses: {
+      /** Licence statistics found */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceStatistics']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Licence statistics not found */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   /** Get a list of licence summaries for all submitted variations belonging to the specified probation area code. Requires ROLE_CVL_ADMIN. */
   submittedVariations: {
     parameters: {
@@ -2848,6 +3114,29 @@ export interface operations {
       }
     }
   }
+  /** Returns prisoner and com details Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getEditedLicencesUnapprovedByCrd: {
+    responses: {
+      /** Licence(s) found */
+      200: {
+        content: {
+          'application/json': components['schemas']['UnapprovedLicence']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   /** Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   discard: {
     parameters: {
@@ -2864,6 +3153,37 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Remove additional condition from the licence list of additional conditions.All user submitted condition data will also be removed. */
+  deleteAdditionalCondition: {
+    parameters: {
+      path: {
+        licenceId: number
+        conditionId: number
+      }
+    }
+    responses: {
+      /** Condition has been removed from the licence */
+      204: never
       /** Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {

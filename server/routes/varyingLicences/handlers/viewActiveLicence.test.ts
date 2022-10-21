@@ -3,9 +3,12 @@ import { Request, Response } from 'express'
 import ViewActiveLicenceRoutes from './viewActiveLicence'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import ConditionService from '../../../services/conditionService'
+
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 
 describe('Route Handlers - Vary Licence - View active licence', () => {
-  const handler = new ViewActiveLicenceRoutes()
+  const handler = new ViewActiveLicenceRoutes(conditionService)
   let req: Request
   let res: Response
 
@@ -46,6 +49,8 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
         callToActions: { shouldShowVaryButton: true },
+        additionalConditions: [],
+        conditionsWithUploads: [],
       })
     })
 

@@ -4,12 +4,14 @@ import ViewAndPrintLicenceRoutes from './viewLicence'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import ConditionService from '../../../services/conditionService'
 
 const username = 'joebloggs'
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ViewAndPrintLicenceRoutes(licenceService)
+  const handler = new ViewAndPrintLicenceRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -47,7 +49,10 @@ describe('Route - view and approve a licence', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/view/view')
+      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+        additionalConditions: [],
+        conditionsWithUploads: [],
+      })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
 
@@ -63,7 +68,10 @@ describe('Route - view and approve a licence', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/view/view')
+      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+        additionalConditions: [],
+        conditionsWithUploads: [],
+      })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
 

@@ -26,6 +26,7 @@ import ReportToPoliceStation from '../routes/creatingLicences/types/additionalCo
 import AppointmentTimeAndPlaceDuringPss from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlaceDuringPss'
 import LicenceType from '../enumeration/licenceType'
 import {
+  AdditionalCondition,
   AdditionalConditionAp,
   AdditionalConditionData,
   AdditionalConditionPss,
@@ -129,8 +130,12 @@ export default class ConditionService {
    * @param conditionCode
    * @param enteredData
    */
-  async expandAdditionalCondition(conditionCode: string, enteredData: AdditionalConditionData[]): Promise<string> {
-    const configCondition = await this.getAdditionalConditionByCode(conditionCode)
+  async expandAdditionalCondition(
+    conditionCode: string,
+    enteredData: AdditionalConditionData[],
+    licenceVersion: string
+  ): Promise<string> {
+    const configCondition = await this.getAdditionalConditionByCode(conditionCode, licenceVersion)
 
     if (configCondition?.requiresInput) {
       const placeholders = this.getPlaceholderNames(configCondition.tpl as string)
@@ -183,6 +188,25 @@ export default class ConditionService {
     }
     // No input was required - keep the condition verbatim to print on the licence
     return configCondition.text as string
+  }
+
+  currentOrNextSequenceForCondition(conditions: AdditionalCondition[], conditionCode: string): number {
+    const existingConditionWithType = conditions.find((c: AdditionalCondition) => c.code === conditionCode)
+    if (existingConditionWithType) {
+      return existingConditionWithType.sequence
+    }
+    const conditionsBySequence = conditions.sort((a, b) => a.sequence - b.sequence)
+    return conditionsBySequence.length ? conditionsBySequence.pop().sequence + 1 : 1
+  }
+
+  additionalConditionsCollection(conditions: AdditionalCondition[]) {
+    const conditionsWithUploads = conditions.filter(
+      (condition: AdditionalCondition) => condition?.uploadSummary?.length > 0
+    )
+    const additionalConditions = conditions.filter(
+      (c: AdditionalCondition) => !conditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
+    )
+    return { conditionsWithUploads, additionalConditions }
   }
 
   /**
@@ -310,10 +334,8 @@ export default class ConditionService {
   }
 
   async getConditions(version: string): Promise<LicencePolicy> {
-    const response = await this.licenceApiClient
-      .getConditions(version)
-      .then((res: LicencePolicy) => this.parseResponse(res))
-    return response
+    const response = await this.licenceApiClient.getConditions(version)
+    return this.parseResponse(response)
   }
 
   async getActiveConditions(): Promise<LicencePolicy> {
