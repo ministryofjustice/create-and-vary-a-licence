@@ -94,6 +94,15 @@ generic-service:
     hmp-parc-1: "217.161.76.162/32"
     hmp-parc-2: "217.161.76.154/32"
     serco-external-ips: "217.22.14.0/24"
+    sodexo-northumberland-01: "88.98.48.10/32"
+    sodexo-northumberland-02: "51.148.47.137/32"
+    altcourse-g4s: 217.161.76.184/29
+    oakwood-01: "217.161.76.184/29"
+    oakwood-02: "217.161.76.192/29"
+    oakwood-old-1: "217.161.76.187/32"
+    oakwood-old-2: "217.161.76.195/32"
+    oakwood-old-3: "217.161.76.186/32"
+    oakwood-old-4: "217.161.76.194/32"
 
 gotenberg:
   nameOverride: gotenberg
