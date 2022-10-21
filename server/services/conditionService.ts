@@ -15,6 +15,7 @@ import ElectronicMonitoringTypes from '../routes/creatingLicences/types/addition
 import ElectronicMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicMonitoringPeriod'
 import ApprovedAddress from '../routes/creatingLicences/types/additionalConditionInputs/approvedAddress'
 import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholMonitoringPeriod'
+import AlcoholRestrictionPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholRestrictionPeriod'
 import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInputs/curfewTerms'
 import CurfewAddress from '../routes/creatingLicences/types/additionalConditionInputs/curfewAddress'
 import NoContactWithVictim from '../routes/creatingLicences/types/additionalConditionInputs/noContactWithVictim'
@@ -425,8 +426,12 @@ export default class ConditionService {
         case 'AlcoholMonitoringPeriod':
           condition.type = AlcoholMonitoringPeriod
           break
+        case 'AlcoholRestrictionPeriod':
+          condition.type = AlcoholRestrictionPeriod
+          break
         case 'ElectronicTagPeriod':
           condition.type = ElectronicTagPeriod
+          break
       }
     })
     responseObj.additionalConditions.PSS.forEach((condition: AdditionalConditionPss) => {
