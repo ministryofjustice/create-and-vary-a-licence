@@ -210,6 +210,47 @@ export default class CaseloadService {
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
       .filter(offender => !offender.nomisRecord.indeterminateSentence)
       .filter(offender => offender.nomisRecord.conditionalReleaseDate)
+      // TODO: Following filter rule can be removed after 7th November 2022
+      .filter(
+        offender =>
+          ![
+            'DTI',
+            'DMI',
+            'HHI',
+            'KVI',
+            'NLI',
+            'LNI',
+            'FKI',
+            'GHI',
+            'STI',
+            'LPI',
+            'PNI',
+            'RSI',
+            'TCI',
+            'HVI',
+            'KMI',
+            'LFI',
+            'WMI',
+            'ACI',
+            'BMI',
+            'SFI',
+            'DHI',
+            'SHI',
+            'BSI',
+            'HEI',
+            'DGI',
+            'OWI',
+            'SNI',
+            'ONI',
+            'RHI',
+            'FSI',
+            'LLI',
+          ].includes(offender.nomisRecord.prisonId) ||
+          moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
+            moment('2022-11-07', 'YYYY-MM-DD'),
+            'day'
+          )
+      )
 
     if (eligibleOffenders.length === 0) return eligibleOffenders
 
