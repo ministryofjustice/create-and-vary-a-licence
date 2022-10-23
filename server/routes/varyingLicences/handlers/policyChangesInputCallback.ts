@@ -27,7 +27,7 @@ export default class PolicyChangeInputCallbackRoutes {
     const conditionCode = changedConditionInputs[inputCounter - 1]
 
     const condition = licence.additionalLicenceConditions.find((c: AdditionalCondition) => c.code === conditionCode)
-    const conditionType = await this.conditionService.getAdditionalConditionType(conditionCode)
+    const conditionType = await this.conditionService.getAdditionalConditionType(conditionCode, licence.version)
 
     if (conditionType === 'AP') {
       return res.redirect(
