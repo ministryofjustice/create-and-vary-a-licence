@@ -15,6 +15,7 @@ export default class PolicyChangeRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId, changeCounter } = req.params
+    const { licence } = res.locals
 
     const conditionCounter = +changeCounter
     const policyChangesCount = req.session.changedConditions.length
@@ -36,7 +37,7 @@ export default class PolicyChangeRoutes {
     if (condition.suggestions) {
       replacements = await Promise.all(
         condition.suggestions?.map(async (replacement: { code: string }) =>
-          this.conditionService.getAdditionalConditionByCode(replacement.code)
+          this.conditionService.getAdditionalConditionByCode(replacement.code, licence.version)
         )
       )
     }
@@ -119,14 +120,14 @@ export default class PolicyChangeRoutes {
       // Add replacement conditions
       req.body.additionalConditions?.forEach(async (code: string) => {
         licenceConditionCodes.push(code)
-        const replacement = await this.conditionService.getAdditionalConditionByCode(code)
+        const replacement = await this.conditionService.getAdditionalConditionByCode(code, licence.version)
         if (replacement.requiresInput) {
           inputs.push(code)
         }
       })
     } else if (
       changeType === 'textChange' &&
-      (await this.conditionService.getAdditionalConditionByCode(licenceCondition.code)).requiresInput
+      (await this.conditionService.getAdditionalConditionByCode(licenceCondition.code), licence.version).requiresInput
     ) {
       inputs.push(licenceCondition.code)
     } else if (changeType === 'textChange') {
@@ -158,7 +159,12 @@ export default class PolicyChangeRoutes {
 
     const counter = +changeCounter
     const conditionCode = req.session.changedConditions[counter - 1].code
-    const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(conditionCode)
+    const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
+      conditionCode,
+      (
+        await this.licenceService.getParentLicenceOrSelf(licenceId, user)
+      ).version
+    )
 
     let additionalConditionCodes: string[] = []
 

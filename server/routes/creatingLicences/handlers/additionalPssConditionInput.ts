@@ -8,13 +8,13 @@ export default class AdditionalPssConditionInputRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { additionalPssConditions } = res.locals.licence
+    const { licence } = res.locals
     const { conditionId } = req.params
-    const additionalCondition = additionalPssConditions.find(
+    const additionalCondition = licence.additionalPssConditions.find(
       (condition: AdditionalCondition) => condition.id === +conditionId
     )
 
-    const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code)
+    const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code, licence.version)
     return res.render('pages/create/additionalPssConditionInput', { additionalCondition, config })
   }
 
