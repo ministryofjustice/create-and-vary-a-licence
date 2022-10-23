@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, title) %}
+{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, title, useLatestVersion) %}
     {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
 
     <div class="govuk-grid-row check-answers-header">
@@ -34,7 +34,7 @@
     {% for condition in additionalConditions %}
         {% if condition.uploadSummary.length %}
             {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.code + "/file-uploads" %}
-        {% elseif condition | checkConditionRequiresInput %}
+        {% elseif condition | checkConditionRequiresInput(useLatestVersion) %}
             {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
         {% else %}
             {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}

@@ -31,7 +31,7 @@ describe('Conditions Provider - expansions', () => {
 
       const result = expandAdditionalCondition(condition.code, condition.data)
       expect(result).toEqual(
-        'You must reside within the London probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
+        'You must reside overnight within London probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
       )
     })
 
@@ -48,7 +48,7 @@ describe('Conditions Provider - expansions', () => {
       const result = expandAdditionalCondition(condition.code, condition.data)
       // The two consecutive spaces are expected here
       expect(result).toEqual(
-        'You must reside within the  probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
+        'You must reside overnight within  probation region while of no fixed abode, unless otherwise approved by your supervising officer.'
       )
     })
 
@@ -143,7 +143,7 @@ describe('Conditions Provider - expansions', () => {
 
       const result = expandAdditionalCondition(condition.code, condition.data)
       expect(result).toEqual(
-        'Attend Harlow Clinic, High Street, London, W1 3GV, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
+        'Attend appointments, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
       )
     })
 
@@ -162,7 +162,7 @@ describe('Conditions Provider - expansions', () => {
       }
       const result = expandAdditionalCondition(condition.code, condition.data)
       expect(result).toEqual(
-        'Attend Harlow Clinic, High Street, London, W1 3GV on 12th February 2022, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
+        'Attend appointments, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
       )
     })
 
@@ -182,7 +182,7 @@ describe('Conditions Provider - expansions', () => {
       }
       const result = expandAdditionalCondition(condition.code, condition.data)
       expect(result).toEqual(
-        'Attend Harlow Clinic, High Street, London, W1 3GV on 12th February 2022 at 11:15 am, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
+        'Attend appointments, as directed, to address your dependency on, or propensity to misuse, a controlled drug.'
       )
     })
 
@@ -207,7 +207,7 @@ describe('Conditions Provider - expansions', () => {
 
       const result = expandAdditionalCondition(condition.code, condition.data)
       expect(result).toEqual(
-        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol, drug, sexual, violent, gambling and anger problems at the AA meeting.'
+        'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific offending / offending behaviour problems.'
       )
     })
 
@@ -258,7 +258,7 @@ describe('Conditions Provider - expansions', () => {
         code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
         category: 'Residence at a specific place',
         sequence: 1,
-        text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+        text: 'Attend appointments, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
         data: [{ id: 1, field: 'appointmentAddress', value: '123 Fake Street, , Fakestown, , LN123TO', sequence: 0 }],
         uploadSummary: [],
       }
@@ -287,7 +287,7 @@ describe('Conditions Provider - expansions', () => {
       }
       const result = expandAdditionalCondition(condition.code, condition.data)
       expect(result).toEqual(
-        'Report to staff at The Police Station at 2pm, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a fortnightly basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.'
+        'Report to staff at The Police Station at 2pm , unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a fortnightly basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.'
       )
     })
 
@@ -303,7 +303,7 @@ describe('Conditions Provider - expansions', () => {
           { id: 1, field: 'approvedPremises', value: 'the police station', sequence: 0 },
           { id: 2, field: 'reportingTime', value: '2pm', sequence: 1 },
           { id: 3, field: 'reviewPeriod', value: 'Other', sequence: 2 },
-          { id: 4, field: 'alternativeReviewPeriod', value: 'ongoing', sequence: 3 },
+          { id: 4, field: 'alternativeReviewPeriod', value: 'Fortnightly', sequence: 3 },
         ],
         uploadSummary: [],
       }

@@ -7,6 +7,7 @@ export default function ConditionsHaveBeenExpanded(validationOptions?: Validatio
     return (
       conditions.filter(c => {
         const conditionConfig = getAdditionalConditionByCode(c.code)
+        if (!conditionConfig) return false
         return conditionConfig.requiresInput && c.data.length === 0
       }).length === 0
     )

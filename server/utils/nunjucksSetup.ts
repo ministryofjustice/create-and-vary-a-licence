@@ -132,9 +132,12 @@ export function registerNunjucks(app?: express.Express): Environment {
     return addresses[index] ? addresses[index][property] : ''
   })
 
-  njkEnv.addFilter('checkConditionRequiresInput', (additionalCondition: AdditionalCondition) => {
-    return getAdditionalConditionByCode(additionalCondition.code).requiresInput
-  })
+  njkEnv.addFilter(
+    'checkConditionRequiresInput',
+    (additionalCondition: AdditionalCondition, useLatestPolicy = true) => {
+      return getAdditionalConditionByCode(additionalCondition.code, useLatestPolicy).requiresInput
+    }
+  )
 
   njkEnv.addFilter('datetimeToDate', (dt: string) => {
     return jsonDtToDate(dt)

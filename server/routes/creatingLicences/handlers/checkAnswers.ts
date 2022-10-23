@@ -26,11 +26,17 @@ export default class CheckAnswersRoutes {
       )
     }
 
+    const useLatestPolicy = licence.version !== '2.0'
     const { conditionsWithUploads, additionalConditions } = additionalConditionsCollection(
-      licence.additionalLicenceConditions
+      licence.additionalLicenceConditions,
+      useLatestPolicy
     )
 
-    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads })
+    res.render('pages/create/checkAnswers', {
+      additionalConditions,
+      conditionsWithUploads,
+      useLatestPolicy,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

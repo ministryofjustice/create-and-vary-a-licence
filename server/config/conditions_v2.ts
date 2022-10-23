@@ -1,8 +1,12 @@
 import InputTypes from '../enumeration/inputTypes'
 import RegionOfResidence from '../routes/creatingLicences/types/additionalConditionInputs/regionOfResidence'
 import RestrictionOfResidency from '../routes/creatingLicences/types/additionalConditionInputs/restrictionOfResidency'
+import MedicalAppointmentType from '../routes/creatingLicences/types/additionalConditionInputs/medicalAppointmentType'
 import UnsupervisedContact from '../routes/creatingLicences/types/additionalConditionInputs/unsupervisedContact'
 import WorkingWithChildren from '../routes/creatingLicences/types/additionalConditionInputs/workingWithChildren'
+import IntimateRelationshipWithGender from '../routes/creatingLicences/types/additionalConditionInputs/intimateRelationshipWithGender'
+import BehaviourProblems from '../routes/creatingLicences/types/additionalConditionInputs/behaviourProblems'
+import AppointmentTimeAndPlace from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlace'
 import OutOfBoundsRegion from '../routes/creatingLicences/types/additionalConditionInputs/outOfBoundsRegion'
 import OutOfBoundsPremises from '../routes/creatingLicences/types/additionalConditionInputs/outOfBoundsPremises'
 import OutOfBoundsPremisesType from '../routes/creatingLicences/types/additionalConditionInputs/outOfBoundsPremisesType'
@@ -10,19 +14,31 @@ import DrugTestLocation from '../routes/creatingLicences/types/additionalConditi
 import ElectronicMonitoringTypes from '../routes/creatingLicences/types/additionalConditionInputs/electronicMonitoringTypes'
 import ElectronicMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicMonitoringPeriod'
 import ApprovedAddress from '../routes/creatingLicences/types/additionalConditionInputs/approvedAddress'
+import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholMonitoringPeriod'
 import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInputs/curfewTerms'
+import CurfewAddress from '../routes/creatingLicences/types/additionalConditionInputs/curfewAddress'
 import NoContactWithVictim from '../routes/creatingLicences/types/additionalConditionInputs/noContactWithVictim'
+import ReportToApprovedPremises from '../routes/creatingLicences/types/additionalConditionInputs/reportToApprovedPremises'
 import SpecifiedItem from '../routes/creatingLicences/types/additionalConditionInputs/specifiedItem'
 import NamedIndividuals from '../routes/creatingLicences/types/additionalConditionInputs/namedIndividuals'
 import NamedOrganisation from '../routes/creatingLicences/types/additionalConditionInputs/namedOrganisation'
+import ReportToPoliceStation from '../routes/creatingLicences/types/additionalConditionInputs/reportToPoliceStation'
 import AppointmentTimeAndPlaceDuringPss from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlaceDuringPss'
-import AlcoholRestrictionPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholRestrictedPeriod'
-import ElectronicTagPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicTagPeriod'
-import ReportToApprovedPremises21 from '../routes/creatingLicences/types/additionalConditionInputs/reportToApprovedPremises21'
-import ReportToPoliceStation21 from '../routes/creatingLicences/types/additionalConditionInputs/reportToPoliceStation21'
 
 export default {
-  version: '2.1',
+  version: '2.0',
+
+  /*
+    Each condition below has a universally unique identifier (UUID) as its 'code'.
+    This UUID should stay constant for the entire lifetime of the condition policy.
+
+    If a change in policy means the content of a particular licence condition should be updated, including conditions on any existing or varied licences,
+    then the content can be changed here whilst ensuring the condition keeps the same UUID.
+
+    Any condition added with a new UUID will be treated as a new condition and any edit of an in-flight or varied licence will not be affected by the change.
+
+    A UUID can be generated on MacOS or Linux terminal by running the command 'uuidgen'
+ */
   standardConditions: {
     AP: [
       {
@@ -102,8 +118,8 @@ export default {
       {
         code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
         category: 'Residence at a specific place',
-        text: 'You must reside overnight within [REGION] probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
-        tpl: 'You must reside overnight within {probationRegion} probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
+        text: 'You must reside within the [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
+        tpl: 'You must reside within the {probationRegion} probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
         requiresInput: true,
         inputs: [
           {
@@ -196,8 +212,30 @@ export default {
         code: 'b72fdbf2-0dc9-4e7f-81e4-c2ccb5d1bc90',
         category: 'Making or maintaining contact with a person',
         categoryShort: 'Contact with a person',
-        text: 'Attend all appointments arranged for you with a psychiatrist / psychologist / medical practitioner, unless otherwise approved by your supervising officer.',
-        requiresInput: false,
+        text: 'Attend all appointments arranged for you with a [PSYCHIATRIST / PSYCHOLOGIST / MEDICAL PRACTITIONER].',
+        tpl: 'Attend all appointments arranged for you with a {appointmentType}.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: InputTypes.CHECK,
+            label: 'Select all the relevant options',
+            name: 'appointmentType',
+            case: 'lower',
+            listType: 'AND',
+            options: [
+              {
+                value: 'Psychiatrist',
+              },
+              {
+                value: 'Psychologist',
+              },
+              {
+                value: 'Medical practitioner',
+              },
+            ],
+          },
+        ],
+        type: MedicalAppointmentType,
       },
       {
         code: '9ae2a336-3491-4667-aaed-dd852b09b4b9',
@@ -210,8 +248,29 @@ export default {
         code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
         category: 'Making or maintaining contact with a person',
         categoryShort: 'Contact with a person',
-        text: 'Attend appointments, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
-        requiresInput: false,
+        text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+        tpl: 'Attend {appointmentAddress}{appointmentDate}{appointmentTime}, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: InputTypes.TIME,
+            label: 'Enter time (optional)',
+            name: 'appointmentTime',
+            includeBefore: ' at ',
+          },
+          {
+            type: InputTypes.DATE,
+            label: 'Enter date (optional)',
+            name: 'appointmentDate',
+            includeBefore: ' on ',
+          },
+          {
+            type: InputTypes.ADDRESS,
+            label: 'Enter the address for the appointment',
+            name: 'appointmentAddress',
+          },
+        ],
+        type: AppointmentTimeAndPlace,
       },
       {
         code: '75a6aac6-02a7-4414-af14-942be6736892',
@@ -355,8 +414,56 @@ export default {
         code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
         category: 'Participation in, or co-operation with, a programme or set of activities',
         categoryShort: 'Programmes or activities',
-        text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific offending / offending behaviour problems.',
-        requiresInput: false,
+        text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your alcohol / drug / sexual / violent / gambling / solvent abuse / anger / debt / prolific / offending behaviour problems at the [NAME OF COURSE / CENTRE].',
+        tpl: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your {behaviourProblems} problems{course}.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: InputTypes.CHECK,
+            label: 'Select all that apply',
+            name: 'behaviourProblems',
+            listType: 'AND',
+            options: [
+              {
+                value: 'alcohol',
+              },
+              {
+                value: 'drug',
+              },
+              {
+                value: 'sexual',
+              },
+              {
+                value: 'violent',
+              },
+              {
+                value: 'gambling',
+              },
+              {
+                value: 'solvent abuse',
+              },
+              {
+                value: 'anger',
+              },
+              {
+                value: 'debt',
+              },
+              {
+                value: 'prolific offending behaviour',
+              },
+              {
+                value: 'offending behaviour',
+              },
+            ],
+          },
+          {
+            type: InputTypes.TEXT,
+            label: 'Enter name of course or centre (optional)',
+            name: 'course',
+            includeBefore: ' at the ',
+          },
+        ],
+        type: BehaviourProblems,
       },
       {
         code: '9da214a3-c6ae-45e1-a465-12e22adf7c87',
@@ -414,7 +521,7 @@ export default {
         code: '680b3b27-43cc-46c6-9ba6-b10d4aba6531',
         category: 'Possession, ownership, control or inspection of specified items or documents',
         categoryShort: 'Items and documents',
-        text: 'To make any device capable of making or storing digital images (including a camera and a mobile phone with a camera function) available for inspection upon request.',
+        text: 'To make any device capable of making or storing digital images (including a camera and a mobile phone with a camera function) available for inspection on request by your supervising officer and/or a police officer.',
         requiresInput: false,
       },
       {
@@ -435,7 +542,7 @@ export default {
         code: '2d67f68a-8adf-47a9-a68d-a6fc9f2c4556',
         category: 'Possession, ownership, control or inspection of specified items or documents',
         categoryShort: 'Items and documents',
-        text: 'Not to delete the usage history on any internet enabled device or computer used and to allow such items to be inspected as requested. Such inspection may include removal of the device for inspection and the installation of monitoring software.',
+        text: 'Not to delete the usage history on any internet enabled device or computer used and to allow such items to be inspected as required by the police or your supervising officer. Such inspection may include removal of the device for inspection and the installation of monitoring software.',
         requiresInput: false,
       },
       {
@@ -468,8 +575,29 @@ export default {
       {
         code: 'db2d7e24-b130-4c7e-a1bf-6bb5f3036c02',
         category: 'Disclosure of information',
-        text: 'Notify your supervising officer of any developing relationships, including the ending of any relationships.',
-        requiresInput: false,
+        text: 'Notify your supervising officer of any developing intimate relationships with [WOMEN / MEN / WOMEN OR MEN].',
+        tpl: 'Notify your supervising officer of any developing intimate relationships with {gender}.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: InputTypes.RADIO,
+            label: 'Select the relevant text',
+            name: 'gender',
+            case: 'lower',
+            options: [
+              {
+                value: 'men',
+              },
+              {
+                value: 'women',
+              },
+              {
+                value: 'women or men',
+              },
+            ],
+          },
+        ],
+        type: IntimateRelationshipWithGender,
       },
       {
         code: 'c5e91330-748d-46f3-93f6-bbe5ea8324ce',
@@ -540,9 +668,36 @@ export default {
         type: CurfewTerms,
       },
       {
+        code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
+        category: 'Curfew arrangement',
+        text: 'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
+        tpl: 'Confine yourself to remain at {curfewAddress} initially from {curfewStart} until {curfewEnd} each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
+        subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: InputTypes.ADDRESS,
+            label: 'Enter the curfew address',
+            name: 'curfewAddress',
+          },
+          {
+            type: InputTypes.TIME,
+            label: 'Enter the curfew start time',
+            name: 'curfewStart',
+          },
+          {
+            type: InputTypes.TIME,
+            label: 'Enter the curfew end time',
+            name: 'curfewEnd',
+          },
+        ],
+        type: CurfewAddress,
+      },
+      {
         code: '0f9a20f4-35c7-4c77-8af8-f200f153fa11',
         category: 'Freedom of movement',
         text: 'Not to enter the area of [CLEARLY SPECIFIED AREA], as defined by the attached map without the prior approval of your supervising officer.',
+        subtext: null,
         tpl: 'Not to enter the area of {outOfBoundArea}, as defined by the attached map without the prior approval of your supervising officer.',
         requiresInput: true,
         inputs: [
@@ -613,7 +768,7 @@ export default {
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
         categoryShort: 'Supervision in the community',
         text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-        tpl: 'Report to staff at {approvedPremises} at {reportingTime}{reportingTime1}{reportingTime2} {alternativeReportingFrequency || reportingFrequency}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+        tpl: 'Report to staff at {approvedPremises} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         requiresInput: true,
         inputs: [
           {
@@ -623,69 +778,9 @@ export default {
             case: 'capitalised',
           },
           {
-            type: InputTypes.RADIO,
-            label: 'Select when the person needs to report',
-            name: 'reportingFrequency',
-            options: [
-              {
-                value: 'Daily',
-              },
-              {
-                value: 'Monday to Friday',
-              },
-              {
-                value: 'Other',
-                conditional: {
-                  inputs: [
-                    {
-                      type: InputTypes.TEXT,
-                      label: 'Enter the other frequency',
-                      name: 'alternativeReportingFrequency',
-                      case: 'capitalise',
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-          {
-            type: InputTypes.RADIO,
-            label: 'Select how many times each day they need to report',
-            subtext:
-              'If you want to add more than 2 reporting times per day, this must be done as a bespoke condition approved by PPCS.',
-            name: 'numberOfReportingTimes',
-            options: [
-              {
-                value: 'Once a day',
-                conditional: {
-                  inputs: [
-                    {
-                      type: InputTypes.TIME,
-                      label: 'Enter the reporting time',
-                      name: 'reportingTime',
-                    },
-                  ],
-                },
-              },
-              {
-                value: 'Twice a day',
-                conditional: {
-                  inputs: [
-                    {
-                      type: InputTypes.TIME,
-                      label: 'Enter the first reporting time',
-                      name: 'reportingTime1',
-                    },
-                    {
-                      type: InputTypes.TIME,
-                      label: 'Enter the second reporting time',
-                      name: 'reportingTime2',
-                      includeBefore: ' and ',
-                    },
-                  ],
-                },
-              },
-            ],
+            type: InputTypes.TIME,
+            label: 'Enter a reporting time',
+            name: 'reportingTime',
           },
           {
             type: InputTypes.RADIO,
@@ -717,7 +812,7 @@ export default {
             ],
           },
         ],
-        type: ReportToApprovedPremises21,
+        type: ReportToApprovedPremises,
       },
       {
         code: '2027ae19-04a2-4fa6-8d1b-a62dffba2e62',
@@ -725,7 +820,7 @@ export default {
           'Supervision in the community by the supervising officer, or other responsible officer, or organisation',
         categoryShort: 'Supervision in the community',
         text: 'Report to staff at [NAME OF POLICE STATION] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-        tpl: 'Report to staff at {policeStation} at {reportingTime}{reportingTime1}{reportingTime2} {alternativeReportingFrequency || reportingFrequency}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+        tpl: 'Report to staff at {policeStation} at {reportingTime}, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
         requiresInput: true,
         inputs: [
           {
@@ -735,69 +830,9 @@ export default {
             case: 'capitalised',
           },
           {
-            type: InputTypes.RADIO,
-            label: 'Select when the person needs to report',
-            name: 'reportingFrequency',
-            options: [
-              {
-                value: 'Daily',
-              },
-              {
-                value: 'Monday to Friday',
-              },
-              {
-                value: 'Other',
-                conditional: {
-                  inputs: [
-                    {
-                      type: InputTypes.TEXT,
-                      label: 'Enter the other frequency',
-                      name: 'alternativeReportingFrequency',
-                      case: 'capitalise',
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-          {
-            type: InputTypes.RADIO,
-            label: 'Select how many times each day they need to report',
-            subtext:
-              'If you want to add more than 2 reporting times per day, this must be done as a bespoke condition approved by PPCS.',
-            name: 'numberOfReportingTimes',
-            options: [
-              {
-                value: 'Once a day',
-                conditional: {
-                  inputs: [
-                    {
-                      type: InputTypes.TIME,
-                      label: 'Enter the reporting time',
-                      name: 'reportingTime',
-                    },
-                  ],
-                },
-              },
-              {
-                value: 'Twice a day',
-                conditional: {
-                  inputs: [
-                    {
-                      type: InputTypes.TIME,
-                      label: 'Enter the first reporting time',
-                      name: 'reportingTime1',
-                    },
-                    {
-                      type: InputTypes.TIME,
-                      label: 'Enter the second reporting time',
-                      name: 'reportingTime2',
-                      includeBefore: ' and ',
-                    },
-                  ],
-                },
-              },
-            ],
+            type: InputTypes.TIME,
+            label: 'Enter a reporting time',
+            name: 'reportingTime',
           },
           {
             type: InputTypes.RADIO,
@@ -829,7 +864,7 @@ export default {
             ],
           },
         ],
-        type: ReportToPoliceStation21,
+        type: ReportToPoliceStation,
       },
       {
         code: '7a9ca3bb-922a-433a-9601-1e475c6c0095',
@@ -877,8 +912,22 @@ export default {
       {
         code: '322bb3f7-2ee1-46aa-ae1c-3f743efd4327',
         category: 'Drug testing',
-        text: 'Attend a location, as required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour. Do not take any action that could hamper or frustrate the drug testing process.',
-        requiresInput: false,
+        text: 'Attend [INSERT NAME AND ADDRESS], as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour. Not to take any action that could hamper or frustrate the drug testing process.',
+        tpl: 'Attend {name} {address}, as reasonably required by your supervising officer, to give a sample of oral fluid / urine in order to test whether you have any specified Class A and specified Class B drugs in your body, for the purpose of ensuring that you are complying with the condition of your licence requiring you to be of good behaviour. Not to take any action that could hamper or frustrate the drug testing process.',
+        requiresInput: true,
+        inputs: [
+          {
+            type: InputTypes.TEXT,
+            label: 'Enter name of organisation',
+            name: 'name',
+          },
+          {
+            type: InputTypes.ADDRESS,
+            label: 'Enter address',
+            name: 'address',
+          },
+        ],
+        type: DrugTestLocation,
       },
       {
         code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
@@ -947,34 +996,24 @@ export default {
         type: ApprovedAddress,
       },
       {
-        code: 'd36a3b77-30ba-40ce-8953-83e761d3b487',
+        code: '599bdcae-d545-461c-b1a9-02cb3d4ba268',
         category: 'Electronic monitoring',
-        text: 'You must not drink any alcohol until [END DATE] unless your probation officer says you can. You will need to wear an electronic tag all the time so we can check this.',
-        tpl: 'You must not drink any alcohol until {endDate} unless your probation officer says you can. You will need to wear an electronic tag all the time so we can check this.',
+        text: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitored for a period of [INSERT TIMEFRAME] ending on [END DATE], and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
+        tpl: 'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitored for a period of {timeframe} ending on {endDate}, and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
         requiresInput: true,
         inputs: [
+          {
+            type: InputTypes.TEXT,
+            label: 'Enter the timeframe',
+            name: 'timeframe',
+          },
           {
             type: InputTypes.DATE,
             label: 'Enter the end date',
             name: 'endDate',
           },
         ],
-        type: AlcoholRestrictionPeriod,
-      },
-      {
-        code: '2F8A5418-C6E4-4F32-9E58-64B23550E504',
-        category: 'Electronic monitoring',
-        text: 'You will need to wear an electronic tag all the time until [END DATE] so we can check how much alcohol you are drinking, and if you are drinking alcohol when you have been told you must not. To help you drink less alcohol you must take part in any activities, like treatment programmes, your probation officer asks you to.',
-        tpl: 'You will need to wear an electronic tag all the time until {endDate} so we can check how much alcohol you are drinking, and if you are drinking alcohol when you have been told you must not. To help you drink less alcohol you must take part in any activities, like treatment programmes, your probation officer asks you to.',
-        requiresInput: true,
-        inputs: [
-          {
-            type: InputTypes.DATE,
-            label: 'Enter the end date',
-            name: 'endDate',
-          },
-        ],
-        type: ElectronicTagPeriod,
+        type: AlcoholMonitoringPeriod,
       },
       {
         code: '9678FD9E-F80D-423A-A6FB-B79909094887',

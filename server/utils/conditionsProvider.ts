@@ -1,15 +1,20 @@
-import conditionsConfig from '../config/conditions'
+import currentPolicyConditions from '../config/conditions'
+import previousPolicyConditions from '../config/conditions_v2'
+
 import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
 import { convertToTitleCase, formatAddress } from './utils'
 import LicenceType from '../enumeration/licenceType'
 import InputTypes from '../enumeration/inputTypes'
 
 export function getVersion(): string {
-  return conditionsConfig.version
+  return currentPolicyConditions.version
 }
 
-export function getStandardConditions(licenceType: string): Record<string, unknown>[] {
-  return conditionsConfig.standardConditions[licenceType].map((condition: Record<string, unknown>, index: number) => {
+export function getStandardConditions(licenceType: string, useCurrentPolicy = true): Record<string, unknown>[] {
+  const standardConditions = useCurrentPolicy
+    ? currentPolicyConditions.standardConditions
+    : previousPolicyConditions.standardConditions
+  return standardConditions[licenceType].map((condition: Record<string, unknown>, index: number) => {
     return {
       ...condition,
       sequence: index,
@@ -17,15 +22,24 @@ export function getStandardConditions(licenceType: string): Record<string, unkno
   })
 }
 
-export function getAdditionalConditionByCode(searchCode: string): Record<string, unknown> {
-  return Object.values(conditionsConfig.additionalConditions)
+export function getAdditionalConditionByCode(
+  searchCode: string,
+  useCurrentPolicyVersion = true
+): Record<string, unknown> {
+  const additionalConditions = useCurrentPolicyVersion
+    ? currentPolicyConditions.additionalConditions
+    : previousPolicyConditions.additionalConditions
+  return Object.values(additionalConditions)
     .flat()
     .find(({ code }) => code === searchCode)
 }
 
-export function getAdditionalConditionType(searchCode: string): LicenceType {
+export function getAdditionalConditionType(searchCode: string, useCurrentPolicyVersion = true): LicenceType {
+  const additionalConditionsAP = useCurrentPolicyVersion
+    ? currentPolicyConditions.additionalConditions.AP
+    : previousPolicyConditions.additionalConditions.AP
   if (
-    Object.values(conditionsConfig.additionalConditions.AP)
+    Object.values(additionalConditionsAP)
       .flat()
       .find(({ code }) => code === searchCode)
   ) {
@@ -35,9 +49,15 @@ export function getAdditionalConditionType(searchCode: string): LicenceType {
   return LicenceType.PSS
 }
 
-export function getGroupedAdditionalConditions(licenceType: LicenceType): Record<string, unknown>[] {
+export function getGroupedAdditionalConditions(
+  licenceType: LicenceType,
+  useCurrentPolicyVersion = true
+): Record<string, unknown>[] {
+  const additionalConditions = useCurrentPolicyVersion
+    ? currentPolicyConditions.additionalConditions
+    : previousPolicyConditions.additionalConditions
   const map = new Map()
-  conditionsConfig.additionalConditions[licenceType].forEach((condition: Record<string, unknown>) => {
+  additionalConditions[licenceType].forEach((condition: Record<string, unknown>) => {
     const collection = map.get(condition.category)
     if (!collection) {
       map.set(condition.category, [condition])
@@ -140,12 +160,14 @@ export function currentOrNextSequenceForCondition(conditions: AdditionalConditio
   return conditionsBySequence.length ? conditionsBySequence.pop().sequence + 1 : 1
 }
 
-export function additionalConditionsCollection(conditions: AdditionalCondition[]) {
+export function additionalConditionsCollection(conditions: AdditionalCondition[], useCurrentPolicyVersion = true) {
   const conditionsWithUploads = conditions.filter(
     (condition: AdditionalCondition) => condition?.uploadSummary?.length > 0
   )
   const additionalConditions = conditions.filter(
-    (c: AdditionalCondition) => !conditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
+    (c: AdditionalCondition) =>
+      !conditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id) &&
+      getAdditionalConditionByCode(c.code, useCurrentPolicyVersion)
   )
   return { conditionsWithUploads, additionalConditions }
 }
