@@ -10,6 +10,8 @@ context('Edit a licence before release', () => {
     cy.task('stubGetLicence')
     cy.task('stubUpdateStandardConditions')
     cy.task('stubRecordAuditEvent')
+    cy.task('stubGetLicencePolicyConditions')
+    cy.task('stubGetActivePolicyConditions')
     cy.signIn()
   })
 
