@@ -7,7 +7,12 @@ export default class AdditionalPssConditionsRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const additionalConditions = await this.conditionService.getGroupedAdditionalConditions(LicenceType.PSS)
+    const { licence } = res.locals
+
+    const additionalConditions = await this.conditionService.getGroupedAdditionalConditions(
+      LicenceType.PSS,
+      licence.version
+    )
     return res.render('pages/create/additionalPssConditions', { additionalConditions })
   }
 

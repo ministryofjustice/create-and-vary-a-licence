@@ -7,17 +7,18 @@ export default class AdditionalPssConditionsCallbackRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { additionalPssConditions } = res.locals.licence
+    const { licence } = res.locals
 
     const conditionCodesRequiringInput = await Promise.all(
-      additionalPssConditions.map(async (condition: AdditionalCondition) => {
-        return (await this.conditionService.getAdditionalConditionByCode(condition.code))?.requiresInput
+      licence.additionalPssConditions.map(async (condition: AdditionalCondition) => {
+        return (await this.conditionService.getAdditionalConditionByCode(condition.code, licence.version))
+          ?.requiresInput
           ? condition.code
           : undefined
       })
     )
 
-    const requiringInput = additionalPssConditions
+    const requiringInput = licence.additionalPssConditions
       .filter((condition: AdditionalCondition) => conditionCodesRequiringInput.includes(condition.code))
       .sort((a: AdditionalCondition, b: AdditionalCondition) => (a.sequence > b.sequence ? 1 : -1))
       .find((condition: AdditionalCondition) => condition.data.length === 0)

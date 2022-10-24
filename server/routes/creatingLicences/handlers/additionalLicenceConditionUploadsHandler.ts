@@ -34,8 +34,8 @@ export default class AdditionalLicenceConditionUploadsHandler {
     const { user, licence } = res.locals
     const { uploadFile, conditionCode } = req.body
 
-    const condition = await this.conditionService.getAdditionalConditionByCode(conditionCode)
-    const type = await this.conditionService.getAdditionalConditionType(conditionCode)
+    const condition = await this.conditionService.getAdditionalConditionByCode(conditionCode, licence.version)
+    const type = await this.conditionService.getAdditionalConditionType(conditionCode, licence.version)
 
     if (!uploadFile) {
       const displayMessage = { text: 'Select yes or no' }
