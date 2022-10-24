@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
+import ConditionService from '../../../services/conditionService'
 import LicenceService from '../../../services/licenceService'
 
 export default class VloDiscussionRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     res.render('pages/vary/vloDiscussion')
@@ -14,6 +15,13 @@ export default class VloDiscussionRoutes {
     const { user } = res.locals
 
     await this.licenceService.updateVloDiscussion(licenceId, { vloDiscussion: answer }, user)
+
+    if (
+      (await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !==
+      (await this.conditionService.getVersion())
+    ) {
+      return res.redirect(`/licence/vary/id/${licenceId}/policy-changes`)
+    }
 
     return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
   }

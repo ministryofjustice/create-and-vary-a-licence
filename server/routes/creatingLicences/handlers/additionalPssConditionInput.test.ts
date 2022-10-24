@@ -1,14 +1,15 @@
 import { Request, Response } from 'express'
+import ConditionService from '../../../services/conditionService'
 
 import LicenceService from '../../../services/licenceService'
-import * as conditionsProvider from '../../../utils/conditionsProvider'
 import AdditionalPssConditionInputRoutes from './additionalPssConditionInput'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
-const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
 
 describe('Route Handlers - Create Licence - Additional Licence Condition Input', () => {
-  const handler = new AdditionalPssConditionInputRoutes(licenceService)
+  const handler = new AdditionalPssConditionInputRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -39,9 +40,15 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
   describe('GET', () => {
     it('should render view with the additional condition and its config', async () => {
-      conditionsProviderSpy.mockReturnValue({
-        inputs: [],
-      })
+      conditionsProviderSpy.mockReturnValue(
+        Promise.resolve({
+          text: 'Condition 1',
+          code: 'code1',
+          category: 'group1',
+          requiresInput: true,
+          inputs: [],
+        })
+      )
 
       res.locals.licence = {
         additionalPssConditions: [
@@ -60,6 +67,10 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           code: 'code1',
         },
         config: {
+          text: 'Condition 1',
+          code: 'code1',
+          category: 'group1',
+          requiresInput: true,
           inputs: [],
         },
       })
@@ -120,6 +131,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
             code: 'code2',
           },
         ],
+        version: 'version',
       }
     })
 
@@ -133,7 +145,8 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         },
         {
           username: 'joebloggs',
-        }
+        },
+        'version'
       )
     })
 

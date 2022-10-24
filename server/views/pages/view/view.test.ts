@@ -3,11 +3,12 @@ import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-import * as conditionsProvider from '../../../utils/conditionsProvider'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import ConditionService from '../../../services/conditionService'
 
-const additionalCondition = { code: 'condition1', inputRequired: true }
-jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode').mockReturnValue(additionalCondition)
+const additionalCondition = { text: 'Condition 1', code: 'condition1', requiresInput: true, category: 'group1' }
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+jest.spyOn(conditionService, 'getAdditionalConditionByCode').mockReturnValue(Promise.resolve(additionalCondition))
 
 const snippet = fs.readFileSync('server/views/pages/view/view.njk')
 
@@ -15,7 +16,7 @@ describe('View and print - single licence view', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const njkEnv = registerNunjucks()
+  const njkEnv = registerNunjucks(conditionService)
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)

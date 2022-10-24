@@ -6,14 +6,17 @@ import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceService from '../../../services/licenceService'
 import { VariedConditions } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
+import ConditionService from '../../../services/conditionService'
 
 const username = 'joebloggs'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
+jest.mock('../../../services/conditionService')
 
 describe('Route - Vary - View variation', () => {
-  const handler = new ViewVariationRoutes(licenceService)
+  const handler = new ViewVariationRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -141,7 +144,7 @@ describe('Route - Vary - View variation', () => {
       })
     })
 
-    it('should redirect to check your answers if variation is in progress', async () => {
+    it('should redirect to check your answers if variation is in progress and the licence version is up to date', async () => {
       res = {
         render: jest.fn(),
         redirect: jest.fn(),
@@ -154,9 +157,33 @@ describe('Route - Vary - View variation', () => {
         },
       } as unknown as Response
 
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      conditionService.getVersion.mockResolvedValue('2.0')
+
       await handler.GET(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+    })
+
+    it('should redirect to policy changes if variation is in progress and the licence version is out of date', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username },
+          licence: {
+            ...licence,
+            statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
+          },
+        },
+      } as unknown as Response
+
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
+      conditionService.getVersion.mockResolvedValue('2.0')
+
+      await handler.GET(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/policy-changes')
     })
   })
 })

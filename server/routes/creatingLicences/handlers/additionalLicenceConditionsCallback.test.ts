@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
+import ConditionService from '../../../services/conditionService'
 
 import AdditionalLicenceConditionsCallbackRoutes from './additionalLicenceConditionsCallback'
 
-import * as conditionsProvider from '../../../utils/conditionsProvider'
-
-const conditionsProviderSpy = jest.spyOn(conditionsProvider, 'getAdditionalConditionByCode')
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
 
 describe('Route Handlers - Create Licence - Additional Conditions Callback', () => {
-  const handler = new AdditionalLicenceConditionsCallbackRoutes()
+  const handler = new AdditionalLicenceConditionsCallbackRoutes(conditionService)
   let req: Request
   let res: Response
 
@@ -70,10 +70,18 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
         ],
       }
 
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: true })
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: false })
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: true })
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: true })
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 1', requiresInput: true, code: 'CON1', category: 'group1' })
+      )
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 2', requiresInput: false, code: 'CON2', category: 'group2' })
+      )
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 3', requiresInput: true, code: 'CON3', category: 'group3' })
+      )
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 4', requiresInput: true, code: 'CON4', category: 'group4' })
+      )
 
       await handler.GET(req, res)
 
@@ -93,7 +101,9 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
         ],
       }
 
-      conditionsProviderSpy.mockReturnValueOnce({ requiresInput: true })
+      conditionsProviderSpy.mockReturnValueOnce(
+        Promise.resolve({ text: 'Condition 1', requiresInput: true, code: 'CON1', category: 'group1' })
+      )
 
       await handler.GET(req, res)
 

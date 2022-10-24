@@ -26,6 +26,8 @@ import type {
   NotifyRequest,
   UpdateStandardConditionDataRequest,
   OmuContact,
+  LicencePolicy,
+  LicenceConditionChange,
   AdditionalCondition,
   AddAdditionalConditionRequest,
 } from '../@types/licenceApiClientTypes'
@@ -389,6 +391,28 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username }
     )) as LicenceEvent[]
+  }
+
+  async getConditions(version: string): Promise<LicencePolicy> {
+    try {
+      return this.get({ path: `/licence-policy/version/${version}` }) as Promise<LicencePolicy>
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
+  }
+
+  async getActiveConditions(): Promise<LicencePolicy> {
+    try {
+      return this.get({ path: `/licence-policy/active` }) as Promise<LicencePolicy>
+    } catch (error) {
+      return error.status >= 400 && error.status < 500 ? null : error
+    }
+  }
+
+  async getPolicyChanges(licenceId: string, activePolicyVersion: string): Promise<LicenceConditionChange[]> {
+    return this.get({ path: `/licence-policy/compare/${activePolicyVersion}/licence/${licenceId}` }) as Promise<
+      LicenceConditionChange[]
+    >
   }
 
   async notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd(): Promise<void> {

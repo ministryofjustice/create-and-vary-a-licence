@@ -4,7 +4,7 @@ import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import ConfirmVaryActionRoutes from './confirmVaryAction'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Vary Licence - Confirm vary', () => {

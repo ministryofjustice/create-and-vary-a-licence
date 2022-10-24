@@ -1,0 +1,114 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set pageTitle = applicationName + " - Vary a licence - Policy Changes" %}
+{% set pageId = "policy-changes-page" %}
+{% set backLinkHref = "/licence/vary/id/" + licenceId + "/policy-changes/condition/" + (conditionCounter - 1) + "/" %}
+{% set noJsBackLink = true %}
+
+{% block content %}
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <div class="govuk-grid-column">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <span class="govuk-caption-l">Change {{conditionCounter}} of {{policyChangesCount}}</span>
+                        <h1 class="govuk-fieldset__heading">
+                            Review policy change
+                        </h1>
+                    </legend>
+                    <br>
+                    <p>
+                        This licence condition has been changed in policy
+                    </p>
+                    <p>
+                        Before you can continue varying this licence, you must review the condition that is no longer in use. It will then be removed from the licence automatically.
+                    </p>
+                    <p>
+                        You need to add or check some information before we can update the licence.
+                    </p>
+                    <div class="govuk-form-group">
+                        <h2 class="govuk-heading-m govuk-!-margin-top-8">
+                            Licence condition being removed
+                        </h2>
+                        <p>
+                            {{condition.previousText}}
+                        </p>
+                        <h2 class="govuk-heading-m govuk-!-margin-top-6">
+                            Select new licence conditions to use
+                        </h2>
+                        {% if conditionHintText.description.length > 0 %}
+                            <p class="govuk-hint">
+                                {% for line in conditionHintText.description %}
+                                    {{line}}
+                                    <br/>
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                        {% if conditionHintText.bulletpoints.length > 0 %}
+                            <ul class="govuk-hint govuk-list govuk-list--bullet">
+                                {% for bp in conditionHintText.bulletpoints %}
+                                    <li>
+                                        {{bp}}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <br/>
+                        {% endif %}
+                        {% set items = [] %}
+                        {% for condition in replacements %}
+                            {% set items = (items.push({
+                                id: condition.code,
+                                value: condition.code,
+                                text: condition.text,
+                                checked: condition.code | additionalConditionChecked(licence.additionalLicenceConditions),
+                                label: {
+                                    classes: 'govuk-!-padding-top-0'
+                                }
+                            }), items) %}
+                        {% endfor %}
+                        <div class="govuk-inset-text">
+                            {{ govukCheckboxes({
+                                name: "additionalConditions[]",
+                                fieldset: {
+                                    legend: {
+                                        text: "",
+                                        isPageHeading: false,
+                                        classes: "govuk-fieldset__legend--l"
+                                    }
+                                },
+                                items: items
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        <div class="govuk-button-group">
+                            {{ govukButton({
+                                text: "Continue",
+                                attributes: { 'data-qa': 'continue' }
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+
+    <form action="{{ "/licence/vary/id/" + licence.id + "/policy-changes/condition/" + conditionCounter + "/delete"}}" method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        {{ govukButton({
+            text: "Delete this condition",
+            type: "submit",
+            classes: 'govuk-button--secondary',
+            attributes: { 'data-qa': 'delete' }
+        }) }}
+    </form>
+{% endblock %}
+

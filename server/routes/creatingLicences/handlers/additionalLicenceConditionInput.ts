@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
-import { getAdditionalConditionByCode } from '../../../utils/conditionsProvider'
+import ConditionService from '../../../services/conditionService'
 
 export default class AdditionalLicenceConditionInputRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { additionalLicenceConditions } = res.locals.licence
+    const { licence } = res.locals
     const { conditionId } = req.params
 
-    const additionalCondition = additionalLicenceConditions.find(
+    const additionalCondition = licence.additionalLicenceConditions.find(
       (condition: AdditionalCondition) => condition.id === +conditionId
     )
 
@@ -23,7 +23,17 @@ export default class AdditionalLicenceConditionInputRoutes {
       )
     }
 
-    const config = getAdditionalConditionByCode(additionalCondition.code)
+    const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code, licence.version)
+
+    if (req.query?.fromPolicyReview) {
+      const policyChangeInputCounter = +req.session.changedConditionsInputsCounter
+      return res.render('pages/create/additionalLicenceConditionInput', {
+        additionalCondition,
+        config,
+        policyChangeInputCounter,
+      })
+    }
+
     return res.render('pages/create/additionalLicenceConditionInput', { additionalCondition, config })
   }
 
@@ -38,12 +48,20 @@ export default class AdditionalLicenceConditionInputRoutes {
     )
 
     // if the update involves a file or updating a data element for exclusion zone name outOfBoundArea
-    const redirect =
-      isFileUploadRequest || 'outOfBoundArea' in req.body
-        ? `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads`
-        : `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
-            req.query?.fromReview ? '?fromReview=true' : ''
-          }`
+    let redirect
+    if (isFileUploadRequest || 'outOfBoundArea' in req.body) {
+      redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads${
+        req.query?.fromPolicyReview ? '?fromPolicyReview=true' : ''
+      }`
+    } else if (req.query?.fromPolicyReview) {
+      redirect = `/licence/vary/id/${licenceId}/policy-changes/input/callback/${
+        +req.session.changedConditionsInputsCounter + 1
+      }`
+    } else {
+      redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
+        req.query?.fromReview ? '?fromReview=true' : ''
+      }`
+    }
 
     // Check for file uploads on specific forms
     if (isFileUploadRequest) {
@@ -66,12 +84,18 @@ export default class AdditionalLicenceConditionInputRoutes {
     ) as AdditionalCondition
 
     // if the exclusion zone name outOfBoundArea is present, redirect to file uploads dialog
-    const redirect =
-      condition.expandedText.indexOf('{outOfBoundsArea}') > 1
-        ? `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
-        : `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
-            req.query?.fromReview ? '?fromReview=true' : ''
-          }`
+    let redirect
+    if (condition.expandedText.indexOf('{outOfBoundsArea}') > 1) {
+      redirect = `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
+    } else if (req.query?.fromPolicyReview) {
+      redirect = `/licence/vary/id/${licence.id}/policy-changes/input/callback/${
+        +req.session.changedConditionsInputsCounter + 1
+      }`
+    } else {
+      redirect = `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
+        req.query?.fromReview ? '?fromReview=true' : ''
+      }`
+    }
 
     await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)
 

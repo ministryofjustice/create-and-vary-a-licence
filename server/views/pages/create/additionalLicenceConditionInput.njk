@@ -6,9 +6,18 @@
 
 {% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
 {% set pageId = "additional-condition-input-page" %}
-{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
 {% set fromReview = "?fromReview=true" if fromReview %}
 {% set fromReviewAppend = "&fromReview=true" if fromReview %}
+
+
+{% if fromPolicyReview %}
+  {% set fromPolicyReview = "?fromPolicyReview=true"%}
+  {% set fromPolicyReviewAppend = "&fromPolicyReview=true"%}
+  {% set backLinkHref = "/licence/vary/id/" + licence.id + "/policy-changes/input/callback/"+ (policyChangeInputCounter - 1)%}
+  {% set noJsBackLink = true%}
+{% else %}
+  {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+{% endif %}
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
@@ -34,8 +43,8 @@
         <form method="POST"
                 {% if fileUpload %}
             encType="multipart/form-data"
-            action="?_csrf={{ csrfToken }}{{ fromReviewAppend }}"
-                {% endif %}>
+            action="?_csrf={{ csrfToken }}{{ fromReviewAppend }}{{ fromPolicyReviewAppend }}"
+        {% endif %}>
 
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             <input type="hidden" name="code" value="{{ config.code }}">
@@ -79,10 +88,11 @@
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
-    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview }}"
-          method="POST">
+        </div>
+    </form>
+
+    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReview }}" 
+      method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         {{ govukButton({
             text: "Delete this condition",

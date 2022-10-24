@@ -3,13 +3,15 @@ import { Request, Response } from 'express'
 import ApprovalViewRoutes from './approvalView'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import ConditionService from '../../../services/conditionService'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ApprovalViewRoutes(licenceService)
+  const handler = new ApprovalViewRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 

@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import AdditionalLicenceTypesHandler from './additionalLicenceTypesHandler'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 describe('Route Handlers - Create Licence - Additional Licence Types Handler', () => {
   const handler = new AdditionalLicenceTypesHandler(licenceService)
   let req: Request

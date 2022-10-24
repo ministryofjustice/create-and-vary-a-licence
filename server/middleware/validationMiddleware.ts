@@ -1,18 +1,20 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
-import { getAdditionalConditionByCode } from '../utils/conditionsProvider'
+import ConditionService from '../services/conditionService'
 
 export type FieldValidationError = {
   field: string
   message: string
 }
 
-function validationMiddleware(type?: new () => object): RequestHandler {
+function validationMiddleware(conditionService: ConditionService, type?: new () => object): RequestHandler {
   return async (req, res, next) => {
     const { licence } = res.locals
 
-    const classType = (getAdditionalConditionByCode(req.body.code)?.type as ClassConstructor<object>) || type
+    const classType =
+      ((await conditionService.getAdditionalConditionByCode(req.body.code, licence.version))
+        ?.type as ClassConstructor<object>) || type
 
     // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
     if (req.file && req.file.fieldname === 'outOfBoundFilename') {

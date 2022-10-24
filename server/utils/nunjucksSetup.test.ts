@@ -1,12 +1,15 @@
 import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
+import ConditionService from '../services/conditionService'
 import { registerNunjucks } from './nunjucksSetup'
 
 describe('Nunjucks Filters', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const njkEnv = registerNunjucks()
+  const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+
+  const njkEnv = registerNunjucks(conditionService)
 
   describe('initialiseName', () => {
     it('should return null if full name is not provided', () => {

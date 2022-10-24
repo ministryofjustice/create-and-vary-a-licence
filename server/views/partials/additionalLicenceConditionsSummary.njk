@@ -34,7 +34,7 @@
     {% for condition in additionalConditions %}
         {% if condition.uploadSummary.length %}
             {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.code + "/file-uploads" %}
-        {% elseif condition | checkConditionRequiresInput %}
+        {% elseif condition | checkConditionRequiresInput(licence.version) %}
             {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
         {% else %}
             {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}

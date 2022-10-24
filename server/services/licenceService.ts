@@ -33,12 +33,6 @@ import {
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import {
-  expandAdditionalCondition,
-  getAdditionalConditionByCode,
-  getStandardConditions,
-  getVersion,
-} from '../utils/conditionsProvider'
-import {
   addressObjectToString,
   convertDateFormat,
   convertToTitleCase,
@@ -64,12 +58,14 @@ import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
 import TimelineEventType from '../enumeration/TimelineEventType'
+import ConditionService from './conditionService'
 
 export default class LicenceService {
   constructor(
     private readonly licenceApiClient: LicenceApiClient,
     private readonly prisonerService: PrisonerService,
-    private readonly communityService: CommunityService
+    private readonly communityService: CommunityService,
+    private readonly conditionService: ConditionService
   ) {}
 
   async createLicence(prisonerNumber: string, user: User): Promise<LicenceSummary> {
@@ -89,7 +85,7 @@ export default class LicenceService {
 
     const licence = {
       typeCode: licenceType,
-      version: getVersion(),
+      version: await this.conditionService.getVersion(),
       nomsId: prisonerNumber,
       bookingNo: nomisRecord.bookingNo,
       bookingId: nomisRecord.bookingId,
@@ -129,10 +125,10 @@ export default class LicenceService {
       pnc: deliusRecord.otherIds?.pncNumber,
       cro: deliusRecord.otherIds?.croNumber,
       standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licenceType)
-        ? getStandardConditions(LicenceType.AP)
+        ? await this.conditionService.getStandardConditions(LicenceType.AP)
         : [],
       standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licenceType)
-        ? getStandardConditions(LicenceType.PSS)
+        ? await this.conditionService.getStandardConditions(LicenceType.PSS)
         : [],
       responsibleComStaffId: responsibleOfficerDetails.staffId,
     } as CreateLicenceRequest
@@ -154,6 +150,20 @@ export default class LicenceService {
 
   async getLicence(id: string, user: User): Promise<Licence> {
     return this.licenceApiClient.getLicenceById(id, user)
+  }
+
+  async getConditions(version: string) {
+    return this.licenceApiClient.getConditions(version)
+  }
+
+  async getActiveConditions() {
+    return this.licenceApiClient.getActiveConditions()
+  }
+
+  async getPolicyChanges(id: string): Promise<[]> {
+    const activePolicyVersion = await this.conditionService.getVersion()
+
+    return this.licenceApiClient.getPolicyChanges(id, activePolicyVersion) as Promise<[]>
   }
 
   async updateAppointmentPerson(id: string, formData: PersonName, user: User): Promise<void> {
@@ -205,19 +215,25 @@ export default class LicenceService {
     id: string,
     conditionType: LicenceType,
     formData: AdditionalConditions,
-    user: User
+    user: User,
+    licenceVersion: string
   ): Promise<void> {
+    const additionalConditions =
+      formData.additionalConditions?.map(async (conditionCode, index) => {
+        const additionalConditionConfig = await this.conditionService.getAdditionalConditionByCode(
+          conditionCode,
+          licenceVersion
+        )
+        return {
+          code: conditionCode,
+          sequence: index,
+          category: additionalConditionConfig?.categoryShort || additionalConditionConfig?.category,
+          text: additionalConditionConfig?.text,
+        }
+      }) || []
+
     const requestBody = {
-      additionalConditions:
-        formData.additionalConditions?.map((conditionCode, index) => {
-          const additionalConditionConfig = getAdditionalConditionByCode(conditionCode)
-          return {
-            code: conditionCode,
-            sequence: index,
-            category: additionalConditionConfig?.categoryShort || additionalConditionConfig?.category,
-            text: additionalConditionConfig?.text,
-          }
-        }) || [],
+      additionalConditions: await Promise.all(additionalConditions),
       conditionType,
     } as AdditionalConditionsRequest
 
@@ -233,7 +249,7 @@ export default class LicenceService {
     let sequenceNumber = -1
 
     const enteredData = Object.keys(formData)
-      .filter(key => formData[key] && !objectIsEmpty(formData[key]))
+      .filter(key => !['_csrf', 'code'].includes(key) && formData[key] && !objectIsEmpty(formData[key]))
       .flatMap((key, index) => {
         // The POST request to the API will only accept an array of objects where value is a string.
         // Therefore, if the type of data entered from the form is an array or an object, we need to convert that to a string type.
@@ -261,8 +277,13 @@ export default class LicenceService {
         return build(formData[key], sequenceNumber)
       })
 
+    const licence = await this.getLicence(licenceId, user)
     const requestBody = {
-      expandedConditionText: expandAdditionalCondition(condition.code, enteredData),
+      expandedConditionText: await this.conditionService.expandAdditionalCondition(
+        condition.code,
+        enteredData,
+        licence.version
+      ),
       data: enteredData,
     } as UpdateAdditionalConditionDataRequest
 
@@ -552,6 +573,15 @@ export default class LicenceService {
 
   async deleteOmuEmailAddress(prisonId: string, user: User): Promise<void> {
     return this.licenceApiClient.deleteOmuEmailAddress(prisonId, user)
+  }
+
+  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
+    const licence = await this.licenceApiClient.getLicenceById(licenceId, user)
+    if (!licence.variationOf) {
+      return licence
+    }
+
+    return this.licenceApiClient.getLicenceById(licence.variationOf.toString(), user)
   }
 
   private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {

@@ -2,17 +2,23 @@ import { Request, Response } from 'express'
 
 import AdditionalLicenceConditionsRoutes from './additionalLicenceConditions'
 import LicenceService from '../../../services/licenceService'
-import * as conditionsProvider from '../../../utils/conditionsProvider'
 import LicenceType from '../../../enumeration/licenceType'
+import ConditionService from '../../../services/conditionService'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
 
-jest
-  .spyOn(conditionsProvider, 'getGroupedAdditionalConditions')
-  .mockReturnValue([{ groupName: 'group1', conditions: [{ code: 'condition1' }] }])
+jest.spyOn(conditionService, 'getGroupedAdditionalConditions').mockReturnValue(
+  Promise.resolve([
+    {
+      category: 'group1',
+      conditions: [{ text: 'Condition 1', code: 'condition1', category: 'group1', requiresInput: false }],
+    },
+  ])
+)
 
 describe('Route Handlers - Create Licence - Additional Licence Conditions', () => {
-  const handler = new AdditionalLicenceConditionsRoutes(licenceService)
+  const handler = new AdditionalLicenceConditionsRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -33,6 +39,9 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
         user: {
           username: 'joebloggs',
         },
+        licence: {
+          version: 'version',
+        },
       },
     } as unknown as Response
   })
@@ -43,8 +52,8 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
       expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditions', {
         additionalConditions: [
           {
-            groupName: 'group1',
-            conditions: [{ code: 'condition1' }],
+            category: 'group1',
+            conditions: [{ text: 'Condition 1', code: 'condition1', category: 'group1', requiresInput: false }],
           },
         ],
       })
@@ -62,7 +71,8 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
         1,
         LicenceType.AP,
         {},
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
+        'version'
       )
     })
 

@@ -22,8 +22,17 @@ import TimelineRoutes from './handlers/timeline'
 import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
 import YesOrNotApplicable from '../creatingLicences/types/yesOrNotApplicable'
 import DeleteVariation from './types/deleteVariation'
+import PolicyChangesNoticeRoutes from './handlers/policyChanges'
+import PolicyChangesCallbackRoutes from './handlers/policyChangesCallback'
+import PolicyChangeRoutes from './handlers/policyChange'
+import PolicyChangesInputCallbackRoutes from './handlers/policyChangesInputCallback'
 
-export default function Index({ licenceService, caseloadService, communityService }: Services): Router {
+export default function Index({
+  licenceService,
+  caseloadService,
+  communityService,
+  conditionService,
+}: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/vary${path}`
@@ -47,23 +56,27 @@ export default function Index({ licenceService, caseloadService, communityServic
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      validationMiddleware(type),
+      validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
     )
 
   const caseloadHandler = new CaseloadRoutes(caseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
   const timelineHandler = new TimelineRoutes(licenceService)
-  const viewLicenceHandler = new ViewVariationRoutes(licenceService)
-  const viewActiveLicenceHandler = new ViewActiveLicenceRoutes()
+  const viewLicenceHandler = new ViewVariationRoutes(licenceService, conditionService)
+  const viewActiveLicenceHandler = new ViewActiveLicenceRoutes(conditionService)
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)
   const spoDiscussionHandler = new SpoDiscussionRoutes(licenceService)
-  const vloDiscussionHandler = new VloDiscussionRoutes(licenceService)
-  const confirmAmendVariationHandler = new ConfirmAmendVariationRoutes(licenceService)
+  const vloDiscussionHandler = new VloDiscussionRoutes(licenceService, conditionService)
+  const confirmAmendVariationHandler = new ConfirmAmendVariationRoutes(licenceService, conditionService)
   const confirmDiscardVariationHandler = new ConfirmDiscardVariationRoutes(licenceService)
   const reasonForVariationHandler = new ReasonForVariationRoutes(licenceService)
   const variationSummaryHandler = new VariationSummaryRoutes(licenceService, communityService)
   const confirmationHandler = new ConfirmationRoutes()
+  const policyChangesNoticeHandler = new PolicyChangesNoticeRoutes(licenceService)
+  const policyChangesCallbackHandler = new PolicyChangesCallbackRoutes()
+  const policyChangeHandler = new PolicyChangeRoutes(licenceService, conditionService)
+  const policyChangeInputCallbackHandler = new PolicyChangesInputCallbackRoutes(conditionService)
 
   get('/caseload', caseloadHandler.GET)
   get('/id/:licenceId/probation-practitioner', comDetailsHandler.GET)
@@ -86,6 +99,13 @@ export default function Index({ licenceService, caseloadService, communityServic
   get('/id/:licenceId/summary', variationSummaryHandler.GET)
   post('/id/:licenceId/summary', variationSummaryHandler.POST)
   get('/id/:licenceId/confirmation', confirmationHandler.GET)
+  get('/id/:licenceId/policy-changes', policyChangesNoticeHandler.GET)
+  post('/id/:licenceId/policy-changes', policyChangesNoticeHandler.POST)
+  get('/id/:licenceId/policy-changes/callback', policyChangesCallbackHandler.GET)
+  get('/id/:licenceId/policy-changes/condition/:changeCounter', policyChangeHandler.GET)
+  post('/id/:licenceId/policy-changes/condition/:changeCounter', policyChangeHandler.POST)
+  post('/id/:licenceId/policy-changes/condition/:changeCounter/delete', policyChangeHandler.DELETE)
+  get('/id/:licenceId/policy-changes/input/callback/:changeCounter', policyChangeInputCallbackHandler.GET)
 
   return router
 }

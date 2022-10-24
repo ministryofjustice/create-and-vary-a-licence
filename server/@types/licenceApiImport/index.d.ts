@@ -1553,6 +1553,99 @@ export interface components {
        */
       eventTime?: string
     }
+    LicencePolicy: {
+      version: string
+      standardConditions: components['schemas']['StandardConditions']
+      additionalConditions: components['schemas']['AdditionalConditions']
+      changeHints?: ChangeHint[]
+    }
+    StandardConditions: {
+      AP: components['schemas']['StandardCondition'][]
+      PSS: components['schemas']['StandardCondition'][]
+    }
+    StandardCondition: {
+      code: string
+      text: string
+      requiresInput: boolean
+      tpl?: string
+    }
+    AdditionalConditions: {
+      AP: components['schemas']['AdditionalConditionsAp'][]
+      PSS: components['schemas']['AdditionalConditionsPss'][]
+    }
+    AdditionalConditionAp: {
+      code: string
+      category: string
+      text: string
+      tpl?: string
+      requiresInput: boolean
+      inputs?: components['schemas']['Input'][]
+      categoryShort?: string
+      subtext?: string
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      type?: any
+    }
+    AdditionalConditionPss: {
+      code: string
+      category: string
+      text: string
+      tpl?: string
+      requiresInput: boolean
+      pssDates?: boolean
+      inputs?: components['schemas']['Input'][]
+      categoryShort?: string
+      subtext?: string
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      type?: any
+    }
+    Input: {
+      type: string
+      label: string
+      name: string
+      listType?: string
+      options?: components['schemas']['Option'][]
+      case?: string
+      handleIndefiniteArticle?: boolean
+      addAnother?: components['schemas']['AddAnother']
+      includeBefore?: string
+      subtext?: string
+    }
+    AddAnother: {
+      label: string
+    }
+    Option: {
+      value: string
+      conditional?: components['schemas']['Conditional']
+    }
+    Conditional: {
+      inputs: components['schemas']['ConditionalInput'][]
+    }
+    ConditionalInput: {
+      type: string
+      label: string
+      name: string
+      case?: string
+      handleIndefiniteArticle?: boolean
+      includeBefore?: string
+      subtext?: string
+    }
+    LicenceConditionChange: {
+      changeType: string
+      code: string
+      sequence?: number
+      previousText: string
+      currentText?: string
+      dataChanges: components['schemas']['AdditionalConditionData'][]
+      suggestions: components['schemas']['SuggestedCondition'][]
+    }
+    SuggestedCondition: {
+      code: string
+      currentText: string
+    }
+    ChangeHint: {
+      previousCode: string
+      replacements: string[]
+    }
   }
 }
 

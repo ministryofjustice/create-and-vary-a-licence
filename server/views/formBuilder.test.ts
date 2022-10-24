@@ -1,12 +1,14 @@
 import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
+import ConditionService from '../services/conditionService'
 import { registerNunjucks } from '../utils/nunjucksSetup'
 
 describe('View Partials - Form builder', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const njkEnv = registerNunjucks()
+  const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+  const njkEnv = registerNunjucks(conditionService)
   const nunjucksString =
     '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken)}}'
 

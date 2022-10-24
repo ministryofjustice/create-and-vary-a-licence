@@ -8,7 +8,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { ManagedCase } from '../../../@types/managedCase'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
 jest.mock('../../../services/licenceService')

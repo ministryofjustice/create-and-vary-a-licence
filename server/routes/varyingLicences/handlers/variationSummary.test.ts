@@ -7,7 +7,7 @@ import { VariedConditions } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
 import CommunityService from '../../../services/communityService'
 
-const licenceService = new LicenceService(null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/communityService')

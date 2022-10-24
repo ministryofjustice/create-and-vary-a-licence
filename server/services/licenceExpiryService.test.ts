@@ -9,6 +9,7 @@ import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
 import LicenceExpiryService from './licenceExpiryService'
 import { LicencesExpired } from '../@types/licencesExpiredSummary'
+import ConditionService from './conditionService'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -23,7 +24,13 @@ describe('Expire Licences where TUSED or SLED is today or in the past', () => {
   const licenceApiClient = new LicenceApiClient() as jest.Mocked<LicenceApiClient>
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-  const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService) as LicenceService
+  const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
+  const licenceService = new LicenceService(
+    licenceApiClient,
+    prisonerService,
+    communityService,
+    conditionService
+  ) as LicenceService
   const expireLicenceService = new LicenceExpiryService(prisonerService, licenceApiClient, licenceService)
 
   const validLicences: Array<LicenceSummary> = [

@@ -1,4 +1,5 @@
 import CvlUserDetails from '../CvlUserDetails'
+import { LicenceConditionChange } from '../licenceApiClientTypes'
 
 export default {}
 
@@ -9,6 +10,10 @@ declare module 'express-session' {
     nowInMinutes: number
     currentUser: CvlUserDetails
     caseloadsSelected: string[]
+    changedConditions: LicenceConditionChange[]
+    changedConditionsCounter: number
+    changedConditionsInputs: string[]
+    changedConditionsInputsCounter: number
   }
 }
 
