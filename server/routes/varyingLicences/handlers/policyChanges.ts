@@ -11,9 +11,12 @@ export default class PolicyChangesNoticeRoutes {
     const changedConditions = await this.licenceService.getPolicyChanges(licenceId)
     const numberOfChanges = changedConditions.length
 
-    req.session.changedConditions = changedConditions.sort((a: LicenceConditionChange, b: LicenceConditionChange) =>
-      a.sequence > b.sequence ? 1 : -1
-    )
+    req.session.changedConditions = changedConditions.sort((a: LicenceConditionChange, b: LicenceConditionChange) => {
+      if (['REPLACED', 'DELETED'].includes(a.changeType)) {
+        return -1
+      }
+      return a.sequence > b.sequence ? 1 : -1
+    })
     req.session.changedConditionsCounter = 0
 
     res.render('pages/vary/policyChanges', { numberOfChanges })
