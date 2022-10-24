@@ -3,7 +3,8 @@ import { IsNotEmpty, Validate, ValidateIf } from 'class-validator'
 import SimpleTime from '../time'
 import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
 
-class ReportToApprovedPremises {
+// eslint-disable-next-line camelcase
+class ReportToApprovedPremisesPolicyV2_0 {
   @Expose()
   @IsNotEmpty({ message: 'Enter name of approved premises' })
   approvedPremises: string
@@ -26,4 +27,5 @@ class ReportToApprovedPremises {
   alternativeReviewPeriod: string
 }
 
-export default ReportToApprovedPremises
+// eslint-disable-next-line camelcase
+export default ReportToApprovedPremisesPolicyV2_0

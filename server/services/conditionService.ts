@@ -20,10 +20,14 @@ import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInp
 import CurfewAddress from '../routes/creatingLicences/types/additionalConditionInputs/curfewAddress'
 import NoContactWithVictim from '../routes/creatingLicences/types/additionalConditionInputs/noContactWithVictim'
 import ReportToApprovedPremises from '../routes/creatingLicences/types/additionalConditionInputs/reportToApprovedPremises'
+// eslint-disable-next-line camelcase
+import ReportToApprovedPremisesPolicyV2_0 from '../routes/creatingLicences/types/additionalConditionInputs/reportToApprovedPremisesPolicyV2_0'
 import SpecifiedItem from '../routes/creatingLicences/types/additionalConditionInputs/specifiedItem'
 import NamedIndividuals from '../routes/creatingLicences/types/additionalConditionInputs/namedIndividuals'
 import NamedOrganisation from '../routes/creatingLicences/types/additionalConditionInputs/namedOrganisation'
 import ReportToPoliceStation from '../routes/creatingLicences/types/additionalConditionInputs/reportToPoliceStation'
+// eslint-disable-next-line camelcase
+import ReportToPoliceStationPolicyV2_0 from '../routes/creatingLicences/types/additionalConditionInputs/reportToPoliceStationPolicyV2_0'
 import AppointmentTimeAndPlaceDuringPss from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlaceDuringPss'
 import LicenceType from '../enumeration/licenceType'
 import {
@@ -408,8 +412,16 @@ export default class ConditionService {
         case 'ReportToApprovedPremises':
           condition.type = ReportToApprovedPremises
           break
+        case 'ReportToApprovedPremisesPolicyV2_0':
+          // eslint-disable-next-line camelcase
+          condition.type = ReportToApprovedPremisesPolicyV2_0
+          break
         case 'ReportToPoliceStation':
           condition.type = ReportToPoliceStation
+          break
+        case 'ReportToPoliceStationPolicyV2_0':
+          // eslint-disable-next-line camelcase
+          condition.type = ReportToPoliceStationPolicyV2_0
           break
         case 'DrugTestLocation':
           condition.type = DrugTestLocation
