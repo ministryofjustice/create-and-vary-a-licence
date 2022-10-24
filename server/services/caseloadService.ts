@@ -245,6 +245,7 @@ export default class CaseloadService {
             'RHI',
             'FSI',
             'LLI',
+            'BWI',
           ].includes(offender.nomisRecord.prisonId) ||
           moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
             moment('2022-11-07', 'YYYY-MM-DD'),

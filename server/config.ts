@@ -224,6 +224,7 @@ export default {
       'RHI',
       'FSI',
       'LLI',
+      'BWI',
     ],
   },
 }
