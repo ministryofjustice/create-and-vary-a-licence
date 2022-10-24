@@ -102,7 +102,7 @@ const compareAdditionalConditionSet = (
     } else {
       variedConditionsBuilder.recordConditionAmended({
         category: 'Freedom of movement',
-        condition: `Exclusion zones have changed to the following: \n\n ${newZones}`,
+        condition: `${newZones}`,
       })
     }
   }
