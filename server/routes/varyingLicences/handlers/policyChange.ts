@@ -127,7 +127,7 @@ export default class PolicyChangeRoutes {
       })
     } else if (
       changeType === 'textChange' &&
-      (await this.conditionService.getAdditionalConditionByCode(licenceCondition.code), licence.version).requiresInput
+      (await this.conditionService.getAdditionalConditionByCode(licenceCondition.code, licence.version)).requiresInput
     ) {
       inputs.push(licenceCondition.code)
     } else if (changeType === 'textChange') {
