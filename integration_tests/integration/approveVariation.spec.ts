@@ -18,6 +18,8 @@ context('ACO review a licence variation', () => {
     cy.task('stubRecordAuditEvent')
     cy.task('stubMatchLicenceEvents')
     cy.task('stubUpdateLicenceStatus')
+    cy.task('stubGetLicencePolicyConditions')
+    cy.task('stubGetActivePolicyConditions')
     cy.signIn()
   })
 
