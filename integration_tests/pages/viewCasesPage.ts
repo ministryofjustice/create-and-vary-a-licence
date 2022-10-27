@@ -38,4 +38,12 @@ export default class ViewCasesPage extends Page {
   getTableRows = () => {
     return cy.get('tbody tr')
   }
+
+  getRow = n => {
+    return cy.get('tbody  tr').eq(n)
+  }
+
+  clickLinkWithDataQa = id => {
+    return cy.get(`[data-qa=${id}]`).click()
+  }
 }

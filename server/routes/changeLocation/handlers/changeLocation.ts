@@ -11,7 +11,8 @@ export default class ChangeLocationRoutes {
       const prisonCaseloadFromNomis = await this.userService.getPrisonUserCaseloads(user)
       const caseload = prisonCaseloadFromNomis.map(c => ({ value: c.caseLoadId, text: c.description }))
       const checked = req.session.caseloadsSelected
-      const cancelLink = role === AuthRole.CASE_ADMIN ? '/licence/view/cases' : '/licence/approve/cases'
+      const cancelToUrl = req.query.view ? '/licence/view/cases?view=probation' : '/licence/view/cases'
+      const cancelLink = role === AuthRole.CASE_ADMIN ? cancelToUrl : '/licence/approve/cases'
       res.render('pages/changeLocation', { caseload, checked, cancelLink })
     }
   }
@@ -19,7 +20,8 @@ export default class ChangeLocationRoutes {
   public POST(role: AuthRole.CASE_ADMIN | AuthRole.DECISION_MAKER): RequestHandler {
     return async (req, res) => {
       req.session.caseloadsSelected = req.body.caseload
-      const nextPage = role === AuthRole.CASE_ADMIN ? '/licence/view/cases' : '/licence/approve/cases'
+      const returnToUrl = req.query.view ? '/licence/view/cases?view=probation' : '/licence/view/cases'
+      const nextPage = role === AuthRole.CASE_ADMIN ? returnToUrl : '/licence/approve/cases'
       res.redirect(nextPage)
     }
   }

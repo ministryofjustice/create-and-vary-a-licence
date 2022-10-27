@@ -68,9 +68,9 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  async getOmuCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
-    // Get cases with a licence in ACTIVE, APPROVED, or SUBMITTED state
-    const casesWithLicences = this.licenceService
+  async getOmuCaseload(user: User, prisonCaseload: string[], view: string): Promise<ManagedCase[]> {
+    // Get cases with a licence in ACTIVE, APPROVED, SUBMITTED, IN_PROGRESS or VARIATION_IN_* state
+    const casesWithLicences = await this.licenceService
       .getLicencesForOmu(user, prisonCaseload)
       .then(licences => this.mapLicencesToOffenders(licences))
 
@@ -95,8 +95,30 @@ export default class CaseloadService {
       })
 
     const combinedCases = await Promise.all([casesWithLicences, casesPendingLicence]).then(c => c.flat())
+    const casesFilteredByView = this.filterByPrisonOrProbationView(view, combinedCases)
+    return this.mapResponsibleComsToCases(casesFilteredByView)
+  }
 
-    return this.mapResponsibleComsToCases(combinedCases)
+  public filterByPrisonOrProbationView = (view: string, combinedCases: ManagedCase[]) => {
+    const prisonViewStatuses = [
+      LicenceStatus.NOT_STARTED,
+      LicenceStatus.IN_PROGRESS,
+      LicenceStatus.APPROVED,
+      LicenceStatus.SUBMITTED,
+    ]
+
+    const probationViewStatuses = [
+      LicenceStatus.ACTIVE,
+      LicenceStatus.VARIATION_IN_PROGRESS,
+      LicenceStatus.VARIATION_APPROVED,
+      LicenceStatus.VARIATION_SUBMITTED,
+      LicenceStatus.NOT_IN_PILOT,
+      LicenceStatus.OOS_RECALL,
+      LicenceStatus.OOS_BOTUS,
+    ]
+    const statuses = view === 'prison' ? prisonViewStatuses : probationViewStatuses
+
+    return combinedCases.filter(c => statuses.includes(c?.licences[0]?.status))
   }
 
   async getApproverCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {

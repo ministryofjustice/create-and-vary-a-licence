@@ -14,7 +14,8 @@ export default class ViewAndPrintCaseRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
-
+    const view = req.query.view || 'prison'
+    const probationView = view === 'probation'
     const { user } = res.locals
     const { caseloadsSelected = [] } = req.session
     const hasMultipleCaseloadsInNomis = user.prisonCaseload.length > 1
@@ -22,7 +23,7 @@ export default class ViewAndPrintCaseRoutes {
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
 
-    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
+    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay, view as string)
     const caseloadViewModel = cases
       .map(c => {
         return {
@@ -38,7 +39,10 @@ export default class ViewAndPrintCaseRoutes {
             _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
             _.head(c.licences).status !== LicenceStatus.OOS_RECALL &&
             _.head(c.licences).status !== LicenceStatus.OOS_BOTUS &&
-            _.head(c.licences).status !== LicenceStatus.IN_PROGRESS,
+            _.head(c.licences).status !== LicenceStatus.IN_PROGRESS &&
+            _.head(c.licences).status !== LicenceStatus.VARIATION_IN_PROGRESS &&
+            _.head(c.licences).status !== LicenceStatus.VARIATION_APPROVED &&
+            _.head(c.licences).status !== LicenceStatus.VARIATION_SUBMITTED,
         }
       })
       .filter(c => {
@@ -64,6 +68,7 @@ export default class ViewAndPrintCaseRoutes {
       search,
       prisonsToDisplay,
       hasMultipleCaseloadsInNomis,
+      probationView,
     })
   }
 
