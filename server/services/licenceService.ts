@@ -30,6 +30,7 @@ import {
   UpdateVloDiscussionRequest,
   OmuContact,
   AddAdditionalConditionRequest,
+  LicenceConditionChange,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import {
@@ -160,10 +161,10 @@ export default class LicenceService {
     return this.licenceApiClient.getActiveConditions()
   }
 
-  async getPolicyChanges(id: string): Promise<[]> {
+  async getPolicyChanges(id: string): Promise<LicenceConditionChange[]> {
     const activePolicyVersion = await this.conditionService.getVersion()
 
-    return this.licenceApiClient.getPolicyChanges(id, activePolicyVersion) as Promise<[]>
+    return this.licenceApiClient.getPolicyChanges(id, activePolicyVersion) as Promise<LicenceConditionChange[]>
   }
 
   async updateAppointmentPerson(id: string, formData: PersonName, user: User): Promise<void> {
