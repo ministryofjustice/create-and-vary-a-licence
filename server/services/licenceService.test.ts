@@ -48,12 +48,10 @@ describe('Licence Service', () => {
   const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
   const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
 
-  conditionService.expandAdditionalCondition.mockResolvedValue(Promise.resolve('condition'))
-  conditionService.getConditions.mockResolvedValue(Promise.resolve({} as LicencePolicy))
+  conditionService.expandAdditionalCondition.mockResolvedValue('condition')
+  conditionService.getConditions.mockResolvedValue({} as LicencePolicy)
 
-  conditionService.getStandardConditions.mockResolvedValue(
-    Promise.resolve([{ text: 'fake standard condition', code: 'fake1' }])
-  )
+  conditionService.getStandardConditions.mockResolvedValue([{ text: 'fake standard condition', code: 'fake1' }])
 
   const user = {
     username: 'joebloggs',
@@ -98,10 +96,10 @@ describe('Licence Service', () => {
           },
         } as CommunityApiOffenderManager,
       ])
-      conditionService.getAdditionalConditionByCode.mockResolvedValue(Promise.resolve({} as AdditionalConditionAp))
-      conditionService.expandAdditionalCondition.mockResolvedValue(Promise.resolve('condition'))
-      licenceApiClient.getConditions.mockResolvedValue(Promise.resolve({} as LicencePolicy))
-      licenceApiClient.getActiveConditions.mockResolvedValue(Promise.resolve({} as LicencePolicy))
+      conditionService.getAdditionalConditionByCode.mockResolvedValue({} as AdditionalConditionAp)
+      conditionService.expandAdditionalCondition.mockResolvedValue('condition')
+      licenceApiClient.getConditions.mockResolvedValue({} as LicencePolicy)
+      licenceApiClient.getActiveConditions.mockResolvedValue({} as LicencePolicy)
       licenceApiClient.getPolicyChanges.mockResolvedValue({} as LicenceConditionChange[])
       licenceApiClient.updateAdditionalConditions.mockImplementation()
     })
@@ -419,23 +417,19 @@ describe('Licence Service', () => {
 
     it('should build list of conditions correctly with index numbers and short category name if it exists', async () => {
       conditionService.getAdditionalConditionByCode
-        .mockReturnValueOnce(
-          Promise.resolve({
-            categoryShort: 'Short category name',
-            category: 'Longer category name',
-            text: 'Condition 1',
-            code: 'CON1,',
-            requiresInput: false,
-          })
-        )
-        .mockReturnValueOnce(
-          Promise.resolve({
-            category: 'Longer category name',
-            text: 'Condition 2',
-            code: 'CON2',
-            requiresInput: false,
-          })
-        )
+        .mockResolvedValueOnce({
+          categoryShort: 'Short category name',
+          category: 'Longer category name',
+          text: 'Condition 1',
+          code: 'CON1,',
+          requiresInput: false,
+        })
+        .mockResolvedValueOnce({
+          category: 'Longer category name',
+          text: 'Condition 2',
+          code: 'CON2',
+          requiresInput: false,
+        })
 
       await licenceService.updateAdditionalConditions(
         '1',

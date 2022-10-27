@@ -25,14 +25,12 @@ describe('Validate that additional conditions have been expanded with user input
   })
 
   it('should pass validation for a condition which does not require input', async () => {
-    conditionsConfigSpy.mockReturnValue(
-      Promise.resolve({
-        text: 'Condition 1',
-        code: 'CON1',
-        requiresInput: false,
-        category: 'group1',
-      })
-    )
+    conditionsConfigSpy.mockResolvedValue({
+      text: 'Condition 1',
+      code: 'CON1',
+      requiresInput: false,
+      category: 'group1',
+    })
     const value = plainToInstance(TestClass, {
       additionalConditions: [
         {
@@ -47,14 +45,12 @@ describe('Validate that additional conditions have been expanded with user input
   })
 
   it('should pass validation for a condition which has input', async () => {
-    conditionsConfigSpy.mockReturnValue(
-      Promise.resolve({
-        text: 'Condition 1',
-        code: 'CON1',
-        requiresInput: true,
-        category: 'group1',
-      })
-    )
+    conditionsConfigSpy.mockResolvedValue({
+      text: 'Condition 1',
+      code: 'CON1',
+      requiresInput: true,
+      category: 'group1',
+    })
     const value = plainToInstance(TestClass, {
       additionalConditions: [
         {
@@ -74,14 +70,12 @@ describe('Validate that additional conditions have been expanded with user input
   })
 
   it('should fail validation when the condition requires input and none were provided', async () => {
-    conditionsConfigSpy.mockReturnValue(
-      Promise.resolve({
-        text: 'Condition 1',
-        code: 'CON1',
-        requiresInput: true,
-        category: 'group1',
-      })
-    )
+    conditionsConfigSpy.mockResolvedValue({
+      text: 'Condition 1',
+      code: 'CON1',
+      requiresInput: true,
+      category: 'group1',
+    })
     const value = plainToInstance(TestClass, {
       additionalConditions: [
         {

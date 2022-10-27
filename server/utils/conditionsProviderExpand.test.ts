@@ -25,7 +25,7 @@ describe('Conditions Provider - expansions', () => {
         categoryShort: 'Items and documents',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual('Not to own or use a camera without the prior approval of your supervising officer.')
@@ -50,7 +50,7 @@ describe('Conditions Provider - expansions', () => {
         inputs: [],
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -77,7 +77,7 @@ describe('Conditions Provider - expansions', () => {
         inputs: [],
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       // The two consecutive spaces are expected here
@@ -107,7 +107,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'WorkingWithChildren',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -146,7 +146,7 @@ describe('Conditions Provider - expansions', () => {
         categoryShort: null,
         type: 'RestrictionOfResidency',
       }
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -192,7 +192,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'BehaviourProblems',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -237,7 +237,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'BehaviourProblems',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -286,7 +286,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'AppointmentTimeAndPlace',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -336,7 +336,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'AppointmentTimeAndPlace',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -387,7 +387,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'AppointmentTimeAndPlace',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -437,7 +437,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'BehaviourProblems',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -485,7 +485,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'NoContactWithVictim',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -534,7 +534,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'NoContactWithVictim',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -581,7 +581,7 @@ describe('Conditions Provider - expansions', () => {
         type: 'AppointmentTimeAndPlace',
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -650,7 +650,7 @@ describe('Conditions Provider - expansions', () => {
         ],
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(
@@ -719,7 +719,7 @@ describe('Conditions Provider - expansions', () => {
         ],
       }
 
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(conditionConfig))
+      conditionsProviderSpy.mockResolvedValue(conditionConfig)
 
       const result = await conditionService.expandAdditionalCondition(condition.code, condition.data, 'version')
       expect(result).toEqual(

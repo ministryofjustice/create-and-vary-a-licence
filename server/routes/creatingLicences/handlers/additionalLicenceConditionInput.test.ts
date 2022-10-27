@@ -53,15 +53,13 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
     it('should render view with the additional condition and its config', async () => {
       // conditionService.getAdditionalConditionByCode = jest.fn()
-      conditionsProviderSpy.mockReturnValue(
-        Promise.resolve({
-          text: 'Condition 1',
-          code: 'code1',
-          inputs: [],
-          category: 'category',
-          requiresInput: false,
-        })
-      )
+      conditionsProviderSpy.mockResolvedValue({
+        text: 'Condition 1',
+        code: 'code1',
+        inputs: [],
+        category: 'category',
+        requiresInput: false,
+      })
 
       req.query.fromReview = 'true'
 

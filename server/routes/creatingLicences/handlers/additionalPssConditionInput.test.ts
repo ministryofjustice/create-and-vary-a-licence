@@ -40,15 +40,13 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
   describe('GET', () => {
     it('should render view with the additional condition and its config', async () => {
-      conditionsProviderSpy.mockReturnValue(
-        Promise.resolve({
-          text: 'Condition 1',
-          code: 'code1',
-          category: 'group1',
-          requiresInput: true,
-          inputs: [],
-        })
-      )
+      conditionsProviderSpy.mockResolvedValue({
+        text: 'Condition 1',
+        code: 'code1',
+        category: 'group1',
+        requiresInput: true,
+        inputs: [],
+      })
 
       res.locals.licence = {
         version: 'version',
