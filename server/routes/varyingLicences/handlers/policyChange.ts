@@ -115,18 +115,20 @@ export default class PolicyChangeRoutes {
         .filter((code: string) => !replacedByCodes.includes(code))
 
       // Add replacement conditions
-      const replacementArray = await Promise.all(
-        req.body.additionalConditions?.map(async (code: string) => {
-          return this.conditionService.getAdditionalConditionByCode(code, licence.version)
-        })
-      )
+      if (req.body.additionalConditions?.length > 0) {
+        const replacementArray = await Promise.all(
+          req.body.additionalConditions.map(async (code: string) => {
+            return this.conditionService.getAdditionalConditionByCode(code, licence.version)
+          })
+        )
 
-      replacementArray.forEach(replacement => {
-        licenceConditionCodes.push(replacement.code)
-        if (replacement.requiresInput) {
-          inputs.push(replacement.code)
-        }
-      })
+        replacementArray.forEach(replacement => {
+          licenceConditionCodes.push(replacement.code)
+          if (replacement.requiresInput) {
+            inputs.push(replacement.code)
+          }
+        })
+      }
     } else if (
       condition.changeType === conditionChangeType.NEW_OPTIONS ||
       (condition.changeType === conditionChangeType.TEXT_CHANGE &&
