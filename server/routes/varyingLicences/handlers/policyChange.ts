@@ -117,7 +117,7 @@ export default class PolicyChangeRoutes {
       // Add replacement conditions
       if (req.body.additionalConditions?.length > 0) {
         const replacementArray = await Promise.all(
-          req.body.additionalConditions.map(async (code: string) => {
+          req.body.additionalConditions.map((code: string) => {
             return this.conditionService.getAdditionalConditionByCode(code, licence.version)
           })
         )

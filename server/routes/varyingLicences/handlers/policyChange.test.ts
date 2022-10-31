@@ -17,7 +17,7 @@ describe('Route handlers', () => {
 
   licenceService.getParentLicenceOrSelf.mockResolvedValue({ id: 1, version: 'version', typeCode: 'AP_PSS' } as Licence)
 
-  let condition1 = {
+  const condition1 = {
     changeType: 'DELETED',
     code: 'code1',
     sequence: 1,
@@ -162,7 +162,11 @@ describe('Route handlers', () => {
 
     it('sets the changeConditionInputs in session storage', async () => {
       req.body.additionalConditions = ['code 5', 'code 7']
-      condition1 = { ...condition1, suggestions: [{ code: 'code 5' }, { code: 'code 7' }] } as LicenceConditionChange
+      const condition1TwoReplacements = {
+        ...condition1,
+        suggestions: [{ code: 'code 5' }, { code: 'code 7' }],
+      } as LicenceConditionChange
+      req.session.changedConditions = [condition1TwoReplacements, condition2, condition3, condition4]
       const newCondition1 = { code: 'code 5', text: 'Conditon 5', category: 'group1', requiresInput: true }
       const newCondition2 = { code: 'code 7', text: 'Conditon 7', category: 'group1', requiresInput: true }
       conditionService.getAdditionalConditionByCode.mockResolvedValueOnce(newCondition1)
