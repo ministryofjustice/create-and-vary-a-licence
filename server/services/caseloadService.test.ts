@@ -118,21 +118,6 @@ describe('Caseload Service', () => {
     expect(result).toMatchObject([
       {
         deliusRecord: {
-          offenderCrn: 'X12349',
-        },
-        nomisRecord: {
-          prisonerNumber: 'AB1234F',
-          conditionalReleaseDate: '2022-10-30',
-        },
-        licences: [
-          {
-            status: 'NOT_STARTED',
-            type: 'AP',
-          },
-        ],
-      },
-      {
-        deliusRecord: {
           offenderCrn: 'X12350',
         },
         nomisRecord: {
