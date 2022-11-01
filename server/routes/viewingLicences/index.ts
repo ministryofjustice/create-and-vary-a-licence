@@ -34,6 +34,7 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(communityService)
 
   get('/cases', viewCasesHandler.GET)
+  get('/cases-with-exclusions.json', viewCasesHandler.GET_WITH_EXCLUSIONS)
   get('/probation-practitioner/staffCode/:staffCode', comDetailsHandler.GET)
   get('/id/:licenceId/show', viewLicenceHandler.GET)
   get('/id/:licenceId/html-print', printHandler.preview)

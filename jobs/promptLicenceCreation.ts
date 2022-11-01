@@ -10,6 +10,7 @@ import { ManagedCase } from '../server/@types/managedCase'
 import LicenceStatus from '../server/enumeration/licenceStatus'
 import { EmailContact } from '../server/@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../server/utils/utils'
+import Container from '../server/services/container'
 
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-prompt-licence-create-job')
@@ -24,17 +25,23 @@ const pollPrisonersDueForLicence = async (
 
   return prisonerService
     .searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonCodes)
-    .then(prisoners => prisoners.filter(offender => offender.status && offender.status.startsWith('ACTIVE')))
+    .then(caseload => new Container(caseload))
+    .then(prisoners =>
+      prisoners.filter(offender => offender.status && offender.status.startsWith('ACTIVE'), 'not active')
+    )
     .then(caseload => caseloadService.pairNomisRecordsWithDelius(caseload))
     .then(caseload => caseloadService.filterOffendersEligibleForLicence(caseload))
     .then(prisoners => caseloadService.mapOffendersToLicences(prisoners))
     .then(prisoners =>
-      prisoners.filter(offender =>
-        [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS].some(status =>
-          offender.licences.find(l => l.status === status)
-        )
+      prisoners.filter(
+        offender =>
+          [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS].some(status =>
+            offender.licences.find(l => l.status === status)
+          ),
+        'No licences that are NOT_STARTED or IN_PROGRESS'
       )
     )
+    .then(caseload => caseload.unwrap())
 }
 
 const buildEmailGroups = async (

@@ -119,6 +119,10 @@ describe('Caseload Service', () => {
       {
         deliusRecord: {
           offenderCrn: 'X12350',
+          otherIds: {
+            crn: 'X12350',
+            nomsNumber: 'AB1234G',
+          },
         },
         nomisRecord: {
           prisonerNumber: 'AB1234G',
@@ -886,7 +890,7 @@ describe('Caseload Service', () => {
       ['p1', 'p2'],
       user
     )
-    expect(result).toMatchObject([
+    expect(result.unwrap()).toMatchObject([
       {
         deliusRecord: {
           offenderManagers: [
@@ -1115,7 +1119,7 @@ describe('Caseload Service', () => {
       ['p1', 'p2'],
       user
     )
-    expect(result).toMatchObject([
+    expect(result.unwrap()).toMatchObject([
       {
         deliusRecord: {
           offenderManagers: [
@@ -1154,6 +1158,96 @@ describe('Caseload Service', () => {
       },
     ])
   })
+
+  it('returns exclusions', async () => {
+    licenceService.getLicencesForOmu.mockResolvedValue([
+      {
+        nomisId: 'AB1234D',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.APPROVED,
+        comUsername: 'joebloggs',
+      },
+      {
+        nomisId: 'AB1234E',
+        licenceId: 2,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        comUsername: 'joebloggs',
+      },
+    ])
+    prisonerService.searchPrisonersByReleaseDate.mockResolvedValueOnce([
+      {
+        prisonerNumber: 'AB1234F',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+        legalStatus: 'DEAD',
+      } as Prisoner,
+    ])
+    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
+      {
+        otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+      {
+        otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+      {
+        username: 'joebloggs',
+        staffCode: 'X1234',
+        staff: {
+          forenames: 'Joe',
+          surname: 'Bloggs',
+        },
+      },
+    ])
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+      {
+        prisonerNumber: 'AB1234D',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+      } as Prisoner,
+      {
+        prisonerNumber: 'AB1234E',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+      } as Prisoner,
+    ])
+    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
+      {
+        otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+      {
+        otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+    ])
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        nomisId: 'AB1234E',
+        licenceId: 2,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        comUsername: 'joebloggs',
+      },
+    ])
+
+    const result = await serviceUnderTest.getOmuCaseload(user, ['p1', 'p2'], 'prison')
+
+    expect(result.exclusions()).toMatchObject([
+      [{ deliusRecord: { otherIds: { crn: 'X12349', nomsNumber: 'AB1234F' } } }, 'is dead'],
+    ])
+
+    expect(result.unwrap()).toMatchObject([
+      { deliusRecord: { otherIds: { crn: 'X12347', nomsNumber: 'AB1234D' } } },
+      { deliusRecord: { otherIds: { crn: 'X12348', nomsNumber: 'AB1234E' } } },
+    ])
+  })
+
   it('builds the approver caseload', async () => {
     licenceService.getLicencesForApproval.mockResolvedValue([
       {
