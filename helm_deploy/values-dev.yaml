@@ -5,7 +5,8 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk
+    hosts: 
+     - create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk
     contextColour: green
 
   env:
