@@ -111,20 +111,34 @@ export default class CaseloadService {
       LicenceStatus.SUBMITTED,
     ]
 
+    const outOfScopePrisonViewStatuses = [LicenceStatus.NOT_IN_PILOT, LicenceStatus.OOS_RECALL, LicenceStatus.OOS_BOTUS]
+
     const probationViewStatuses = [
       LicenceStatus.ACTIVE,
       LicenceStatus.VARIATION_IN_PROGRESS,
       LicenceStatus.VARIATION_APPROVED,
       LicenceStatus.VARIATION_SUBMITTED,
-      LicenceStatus.NOT_IN_PILOT,
-      LicenceStatus.OOS_RECALL,
-      LicenceStatus.OOS_BOTUS,
     ]
-    const statuses = view === 'prison' ? prisonViewStatuses : probationViewStatuses
+
+    if (view === 'prison') {
+      return combinedCases.filter(c => {
+        const releaseDate =
+          c.nomisRecord.confirmedReleaseDate ||
+          c.nomisRecord.conditionalReleaseOverrideDate ||
+          c.nomisRecord.conditionalReleaseDate
+
+        return (
+          prisonViewStatuses.includes(c?.licences[0]?.status) ||
+          (releaseDate
+            ? outOfScopePrisonViewStatuses.includes(c?.licences[0]?.status) && isFuture(new Date(releaseDate))
+            : false)
+        )
+      }, `invalid status for prison view, not one ${prisonViewStatuses}`)
+    }
 
     return combinedCases.filter(
-      c => statuses.includes(c?.licences[0]?.status),
-      `invalid status for view ${view}, not one ${statuses}`
+      c => probationViewStatuses.includes(c?.licences[0]?.status),
+      `invalid status for probation view, not one ${probationViewStatuses}`
     )
   }
 
