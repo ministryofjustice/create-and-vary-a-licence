@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@5.2.0
+  hmpps: ministryofjustice/hmpps@6
   slack: circleci/slack@4.4.2
   codecov: codecov/codecov@3.2.0
 
