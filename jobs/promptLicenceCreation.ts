@@ -93,16 +93,16 @@ const buildEmailGroups = async (
     .value()
 }
 
+/* eslint-disable */
 const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
   if (emailGroups.length === 0) return
   const workList = _.chunk(emailGroups, 30)
 
-  for (let i = 0; i < workList.length; i += 1) {
-    const probationOfficers = workList[i]
-    // eslint-disable-next-line no-await-in-loop
+  for (const probationOfficers of workList) {
     await licenceService.notifyComsToPromptLicenceCreation(probationOfficers)
   }
 }
+/* eslint-enable */
 
 Promise.all([
   pollPrisonersDueForLicence(moment().add(12, 'weeks').startOf('isoWeek'), moment().add(12, 'weeks').endOf('isoWeek')),
