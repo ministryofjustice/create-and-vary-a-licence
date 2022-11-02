@@ -125,7 +125,12 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/prisoner-search/release-date-by-prison`,
+        urlPathPattern: `/prisoner-search/release-date-by-prison`,
+        queryParameters: {
+          size: {
+            equalTo: '2000',
+          },
+        },
       },
       response: {
         status: 200,
