@@ -94,8 +94,13 @@ const buildEmailGroups = async (
 }
 
 const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
-  if (emailGroups.length > 0) {
-    await licenceService.notifyComsToPromptLicenceCreation(emailGroups)
+  if (emailGroups.length === 0) return
+  const workList = _.chunk(emailGroups, 30)
+
+  for (let i = 0; i < workList.length; i += 1) {
+    const probationOfficers = workList[i]
+    // eslint-disable-next-line no-await-in-loop
+    await licenceService.notifyComsToPromptLicenceCreation(probationOfficers)
   }
 }
 
