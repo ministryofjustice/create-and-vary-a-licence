@@ -683,7 +683,8 @@ describe('Route handlers - View and print case list', () => {
     describe('GET_WITH_EXCLUSIONS', () => {
       it('should render list of licences and display the currently active caseload prison', async () => {
         res.locals.prisonCaseload = ['BAI']
-        caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+        const omuCaselist = new OmuCaselist(caseList)
+        caseloadService.getOmuCaseload.mockResolvedValue(omuCaselist)
 
         await handler.GET_WITH_EXCLUSIONS(req, res)
 
@@ -694,7 +695,7 @@ describe('Route handlers - View and print case list', () => {
           ['BAI']
         )
         expect(res.header).toHaveBeenCalledWith('Content-Type', 'application/json')
-        expect(res.send).toHaveBeenCalledWith(JSON.stringify({ cases: caseList }, null, 4))
+        expect(res.send).toHaveBeenCalledWith(JSON.stringify(omuCaselist.getPrisonView(), null, 4))
       })
     })
   })

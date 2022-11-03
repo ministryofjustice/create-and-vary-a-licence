@@ -80,7 +80,8 @@ export default class ViewAndPrintCaseRoutes {
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
 
-    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
+    const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
+    const cases = req.query.view === 'probation' ? caselist.getProbationView() : caselist.getPrisonView()
     res.header('Content-Type', 'application/json')
     res.send(JSON.stringify(cases, null, 4))
   }
