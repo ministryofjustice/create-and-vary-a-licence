@@ -26,26 +26,34 @@ const PROBATION_VIEW_STATUSES = [
 export default class OmuCaselist {
   constructor(readonly cases: Container<ManagedCase>) {}
 
-  getPrisonView = () => {
-    return this.cases.filter(c => {
-      const releaseDate =
-        c.nomisRecord.confirmedReleaseDate ||
-        c.nomisRecord.conditionalReleaseOverrideDate ||
-        c.nomisRecord.conditionalReleaseDate
-
-      return (
-        PRISON_VIEW_STATUSES.includes(c?.licences[0]?.status) ||
-        (releaseDate
-          ? OUT_OF_SCOPE_PRISON_VIEW_STATUSES.includes(c?.licences[0]?.status) && isFuture(new Date(releaseDate))
-          : false)
+  getPrisonView = () =>
+    this.cases
+      .filter(
+        c => isOutOfScope(c) || hasValidStatus(PRISON_VIEW_STATUSES, c),
+        `invalid status for prison view, not one ${PRISON_VIEW_STATUSES}`
       )
-    }, `invalid status for prison view, not one ${PRISON_VIEW_STATUSES}`)
-  }
+      .filter(c => !isOutOfScope(c) || isInTheFuture(c), 'is out of scope and in the past')
 
   getProbationView = () => {
     return this.cases.filter(
-      c => PROBATION_VIEW_STATUSES.includes(c?.licences[0]?.status),
+      c => hasValidStatus(PROBATION_VIEW_STATUSES, c),
       `invalid status for probation view, not one ${PROBATION_VIEW_STATUSES}`
     )
   }
+}
+
+function hasValidStatus(statuses: LicenceStatus[], c: ManagedCase) {
+  return statuses.includes(c?.licences[0]?.status)
+}
+
+function isOutOfScope(c: ManagedCase) {
+  return hasValidStatus(OUT_OF_SCOPE_PRISON_VIEW_STATUSES, c)
+}
+
+function isInTheFuture(c: ManagedCase) {
+  const releaseDate =
+    c.nomisRecord.confirmedReleaseDate ||
+    c.nomisRecord.conditionalReleaseOverrideDate ||
+    c.nomisRecord.conditionalReleaseDate
+  return isFuture(new Date(releaseDate))
 }
