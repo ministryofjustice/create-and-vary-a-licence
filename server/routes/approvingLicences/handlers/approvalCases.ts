@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { format, getUnixTime } from 'date-fns'
+import { getUnixTime } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
-import { convertToTitleCase } from '../../../utils/utils'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
+import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
 
 export default class ApprovalCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
@@ -27,7 +26,7 @@ export default class ApprovalCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: format(new Date(this.selectReleaseDate(c.nomisRecord)), 'dd MMM yyyy'),
+          releaseDate: selectReleaseDate(c.nomisRecord),
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
         }
       })
@@ -54,15 +53,5 @@ export default class ApprovalCaseRoutes {
       prisonsToDisplay,
       hasMultipleCaseloadsInNomis,
     })
-  }
-
-  selectReleaseDate(nomisRecord: Prisoner) {
-    if (nomisRecord.confirmedReleaseDate) {
-      return nomisRecord.confirmedReleaseDate
-    }
-    if (nomisRecord.conditionalReleaseOverrideDate) {
-      return nomisRecord.conditionalReleaseOverrideDate
-    }
-    return nomisRecord.conditionalReleaseDate
   }
 }

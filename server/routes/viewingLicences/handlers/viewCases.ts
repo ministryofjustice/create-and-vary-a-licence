@@ -1,13 +1,11 @@
 import { Request, Response } from 'express'
-import { format, getUnixTime } from 'date-fns'
+import { getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
-import { convertToTitleCase } from '../../../utils/utils'
+import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import logger from '../../../../logger'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
@@ -32,7 +30,7 @@ export default class ViewAndPrintCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: this.selectReleaseDate(c.nomisRecord),
+          releaseDate: selectReleaseDate(c.nomisRecord),
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: _.head(c.licences).status,
           isClickable:
@@ -84,27 +82,5 @@ export default class ViewAndPrintCaseRoutes {
     const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay, view.toString())
     res.header('Content-Type', 'application/json')
     res.send(JSON.stringify(cases, null, 4))
-  }
-
-  selectReleaseDate(nomisRecord: Prisoner) {
-    let dateString = nomisRecord.conditionalReleaseDate
-
-    if (nomisRecord.confirmedReleaseDate) {
-      dateString = nomisRecord.confirmedReleaseDate
-    }
-
-    if (nomisRecord.conditionalReleaseOverrideDate) {
-      dateString = nomisRecord.conditionalReleaseOverrideDate
-    }
-
-    try {
-      dateString = format(new Date(dateString), 'dd MMM yyyy')
-    } catch (e) {
-      logger.error(
-        `Date error: ${e.message} for prisonerNumber: ${nomisRecord.prisonerNumber} using date: ${dateString}`
-      )
-    }
-
-    return dateString
   }
 }
