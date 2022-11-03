@@ -4,8 +4,6 @@ import { format, getUnixTime } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import logger from '../../../../logger'
 
 export default class ApprovalCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}

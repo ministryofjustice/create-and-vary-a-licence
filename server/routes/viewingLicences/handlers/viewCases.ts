@@ -6,8 +6,6 @@ import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import logger from '../../../../logger'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
