@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { format, getUnixTime } from 'date-fns'
+import { getUnixTime } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'

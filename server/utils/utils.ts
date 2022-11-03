@@ -171,10 +171,17 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
     dateString = nomisRecord.conditionalReleaseOverrideDate
   }
 
+  if (!dateString) {
+    logger.error(`No release date found for prisonerNumber: ${nomisRecord.prisonerNumber}`)
+    return 'not found'
+  }
+
   try {
     dateString = format(new Date(dateString), 'dd MMM yyyy')
   } catch (e) {
-    logger.error(`Date error: ${e.message} for prisonerNumber: ${nomisRecord.prisonerNumber} using date: ${dateString}`)
+    logger.error(
+      `Invalid date error: ${e.message} for prisonerNumber: ${nomisRecord.prisonerNumber} using date: ${dateString}`
+    )
   }
 
   return dateString

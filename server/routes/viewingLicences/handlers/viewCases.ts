@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { format, getUnixTime } from 'date-fns'
+import { getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'

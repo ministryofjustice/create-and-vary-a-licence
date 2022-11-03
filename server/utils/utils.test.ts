@@ -17,6 +17,7 @@ import {
   hasAuthSource,
   isBankHolidayOrWeekend,
   licenceIsTwoDaysToRelease,
+  selectReleaseDate,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -25,6 +26,7 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/creatingLicences/types/address'
 import { Licence } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
+import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -357,5 +359,49 @@ describe('Check licence is close to release', () => {
       statusCode: LicenceStatus.APPROVED,
     } as Licence
     expect(licenceIsTwoDaysToRelease(licence)).toBeTruthy()
+  })
+})
+
+describe('Get prisoner release date from Nomis', () => {
+  it('No date returns "not found', () => {
+    const nomisRecord = {
+      conditionalReleaseDate: null,
+    } as Prisoner
+
+    expect(selectReleaseDate(nomisRecord)).toBe('not found')
+  })
+
+  it('Release date should be Conditional Release Date 22 Nov 2035', () => {
+    const nomisRecord = {
+      conditionalReleaseDate: '2035-11-22',
+    } as Prisoner
+
+    expect(selectReleaseDate(nomisRecord)).toBe('22 Nov 2035')
+  })
+
+  it('Release date should be Confirmed Release Date 22 Oct 2035', () => {
+    const nomisRecord = {
+      conditionalReleaseDate: '2035-11-22',
+      confirmedReleaseDate: '2035-10-22',
+    } as Prisoner
+
+    expect(selectReleaseDate(nomisRecord)).toBe('22 Oct 2035')
+  })
+
+  it('Release date should be Conditional Release Override Date 22 Nov 2036', () => {
+    const nomisRecord = {
+      conditionalReleaseDate: '2036-11-01',
+      conditionalReleaseOverrideDate: '2036-11-22',
+    } as Prisoner
+
+    expect(selectReleaseDate(nomisRecord)).toBe('22 Nov 2036')
+  })
+
+  it('Returns malformed date as is', () => {
+    const nomisRecord = {
+      conditionalReleaseDate: 'aaa2036-11-01',
+    } as Prisoner
+
+    expect(selectReleaseDate(nomisRecord)).toBe('aaa2036-11-01')
   })
 })
