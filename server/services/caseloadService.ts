@@ -3,6 +3,7 @@ import { isFuture, parse } from 'date-fns'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
+import OmuCaselist from './omuCaselist'
 import { DeliusRecord, ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
@@ -69,7 +70,7 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  async getOmuCaseload(user: User, prisonCaseload: string[], view: string): Promise<Container<ManagedCase>> {
+  async getOmuCaseload(user: User, prisonCaseload: string[]): Promise<OmuCaselist> {
     // Get cases with a licence in ACTIVE, APPROVED, SUBMITTED, IN_PROGRESS or VARIATION_IN_* state
     const casesWithLicences = this.licenceService
       .getLicencesForOmu(user, prisonCaseload)
@@ -99,33 +100,9 @@ export default class CaseloadService {
       })
 
     const [withLicence, pending] = await Promise.all([casesWithLicences, casesPendingLicence])
-    const casesFilteredByView = this.filterByPrisonOrProbationView(view, withLicence.concat(pending))
-    return this.mapResponsibleComsToCasesWithExclusions(casesFilteredByView)
-  }
+    const casesWithComs = await this.mapResponsibleComsToCasesWithExclusions(withLicence.concat(pending))
 
-  public filterByPrisonOrProbationView = (view: string, combinedCases: Container<ManagedCase>) => {
-    const prisonViewStatuses = [
-      LicenceStatus.NOT_STARTED,
-      LicenceStatus.IN_PROGRESS,
-      LicenceStatus.APPROVED,
-      LicenceStatus.SUBMITTED,
-    ]
-
-    const probationViewStatuses = [
-      LicenceStatus.ACTIVE,
-      LicenceStatus.VARIATION_IN_PROGRESS,
-      LicenceStatus.VARIATION_APPROVED,
-      LicenceStatus.VARIATION_SUBMITTED,
-      LicenceStatus.NOT_IN_PILOT,
-      LicenceStatus.OOS_RECALL,
-      LicenceStatus.OOS_BOTUS,
-    ]
-    const statuses = view === 'prison' ? prisonViewStatuses : probationViewStatuses
-
-    return combinedCases.filter(
-      c => statuses.includes(c?.licences[0]?.status),
-      `invalid status for view ${view}, not one ${statuses}`
-    )
+    return new OmuCaselist(casesWithComs)
   }
 
   async getApproverCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
