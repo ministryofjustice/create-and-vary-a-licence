@@ -19,7 +19,9 @@ const { caseloadService, prisonerService, communityService, licenceService } = s
 
 const pollPrisonersDueForLicence = async (
   earliestReleaseDate: Moment,
-  latestReleaseDate: Moment
+  latestReleaseDate: Moment,
+  licenceStatus: LicenceStatus[],
+  exclusionMessage: string
 ): Promise<ManagedCase[]> => {
   const prisonCodes = config.rollout.prisons
 
@@ -34,11 +36,8 @@ const pollPrisonersDueForLicence = async (
     .then(prisoners => caseloadService.mapOffendersToLicences(prisoners))
     .then(prisoners =>
       prisoners.filter(
-        offender =>
-          [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS].some(status =>
-            offender.licences.find(l => l.status === status)
-          ),
-        'No licences that are NOT_STARTED or IN_PROGRESS'
+        offender => licenceStatus.some(status => offender.licences.find(l => l.status === status)),
+        exclusionMessage
       )
     )
     .then(caseload => caseload.unwrap())
@@ -112,8 +111,18 @@ const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
 /* eslint-enable */
 
 Promise.all([
-  pollPrisonersDueForLicence(moment().add(12, 'weeks').startOf('isoWeek'), moment().add(12, 'weeks').endOf('isoWeek')),
-  pollPrisonersDueForLicence(moment().startOf('isoWeek'), moment().add(3, 'weeks').endOf('isoWeek')),
+  pollPrisonersDueForLicence(
+    moment().add(12, 'weeks').startOf('isoWeek'),
+    moment().add(12, 'weeks').endOf('isoWeek'),
+    [LicenceStatus.NOT_STARTED],
+    'No licences that are NOT_STARTED'
+  ),
+  pollPrisonersDueForLicence(
+    moment().startOf('isoWeek'),
+    moment().add(3, 'weeks').endOf('isoWeek'),
+    [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS],
+    'No licences that are NOT_STARTED or IN_PROGRESS'
+  ),
 ])
   .then(([initialPromptCases, urgentPromptCases]) => buildEmailGroups(initialPromptCases, urgentPromptCases))
   .then(emailGroups => notifyComOfUpcomingReleases(emailGroups))
