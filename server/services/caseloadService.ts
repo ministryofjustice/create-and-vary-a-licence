@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isFuture, parse } from 'date-fns'
+import { isFuture, parse, startOfWeek, add, endOfWeek } from 'date-fns'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
@@ -77,8 +77,8 @@ export default class CaseloadService {
       .then(licences => this.mapLicencesToOffenders(licences))
 
     // Get cases due for release soon which do not have a submitted licence
-    const startOfThisWeek = moment().startOf('isoWeek')
-    const endOfTheFourthWeekFromNow = moment().add(3, 'weeks').endOf('isoWeek')
+    const startOfThisWeek = startOfWeek(new Date(), { weekStartsOn: 1 })
+    const endOfTheFourthWeekFromNow = endOfWeek(add(new Date(), { weeks: 3 }), { weekStartsOn: 1 })
     const casesPendingLicence = this.prisonerService
       .searchPrisonersByReleaseDate(startOfThisWeek, endOfTheFourthWeekFromNow, prisonCaseload, user)
       .then(caseload => this.wrap(caseload))

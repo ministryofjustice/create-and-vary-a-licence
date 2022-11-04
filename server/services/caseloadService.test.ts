@@ -1,5 +1,4 @@
-import moment from 'moment'
-import { addDays, format } from 'date-fns'
+import { addDays, add, format, startOfWeek, endOfWeek } from 'date-fns'
 import CaseloadService from './caseloadService'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
@@ -885,8 +884,8 @@ describe('Caseload Service', () => {
     const result = await serviceUnderTest.getOmuCaseload(user, ['p1', 'p2'])
 
     expect(prisonerService.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
-      moment().startOf('isoWeek'),
-      moment().add(3, 'weeks').endOf('isoWeek'),
+      startOfWeek(new Date(), { weekStartsOn: 1 }),
+      endOfWeek(add(new Date(), { weeks: 3 }), { weekStartsOn: 1 }),
       ['p1', 'p2'],
       user
     )

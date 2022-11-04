@@ -1,6 +1,5 @@
 import { Readable } from 'stream'
 import fs from 'fs'
-import moment from 'moment'
 import { User } from '../@types/CvlUserDetails'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
@@ -189,8 +188,8 @@ describe('Prisoner Service', () => {
     } as PagePrisoner)
 
     const actualResult = await prisonerService.searchPrisonersByReleaseDate(
-      moment('2022-01-01'),
-      moment('2022-01-01'),
+      new Date('2022-01-01'),
+      new Date('2022-01-01'),
       ['MDI'],
       user
     )

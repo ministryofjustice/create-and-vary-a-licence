@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import _ from 'lodash'
-import moment, { Moment } from 'moment'
+import { add, startOfWeek, endOfWeek } from 'date-fns'
 import { buildAppInsightsClient, flush, initialiseAppInsights } from '../server/utils/azureAppInsights'
 import logger from '../logger'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
@@ -18,8 +18,8 @@ buildAppInsightsClient('create-and-vary-a-licence-prompt-licence-create-job')
 const { caseloadService, prisonerService, communityService, licenceService } = services
 
 const pollPrisonersDueForLicence = async (
-  earliestReleaseDate: Moment,
-  latestReleaseDate: Moment,
+  earliestReleaseDate: Date,
+  latestReleaseDate: Date,
   licenceStatus: LicenceStatus[],
   exclusionMessage: string
 ): Promise<ManagedCase[]> => {
@@ -112,14 +112,14 @@ const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
 
 Promise.all([
   pollPrisonersDueForLicence(
-    moment().add(12, 'weeks').startOf('isoWeek'),
-    moment().add(12, 'weeks').endOf('isoWeek'),
+    startOfWeek(add(new Date(), { weeks: 12 }), { weekStartsOn: 1 }),
+    endOfWeek(add(new Date(), { weeks: 12 }), { weekStartsOn: 1 }),
     [LicenceStatus.NOT_STARTED],
     'No licences that are NOT_STARTED'
   ),
   pollPrisonersDueForLicence(
-    moment().startOf('isoWeek'),
-    moment().add(3, 'weeks').endOf('isoWeek'),
+    startOfWeek(new Date(), { weekStartsOn: 1 }),
+    endOfWeek(add(new Date(), { weeks: 3 }), { weekStartsOn: 1 }),
     [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS],
     'No licences that are NOT_STARTED or IN_PROGRESS'
   ),
