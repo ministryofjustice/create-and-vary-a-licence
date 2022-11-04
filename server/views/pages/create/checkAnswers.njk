@@ -15,8 +15,10 @@
 {% set canChooseToPrint = licence.statusCode == 'APPROVED' %}
 {% if licence.isVariation %} 
   {% set submitButtonText = 'View summary and add notes' %}
+  {% set submitButtonAttrs = { 'data-qa': 'add-notes' } %}
 {% else %} 
   {% set submitButtonText = 'Send to prison for approval'%}
+  {% set submitButtonAttrs = { 'data-qa': 'send-licence-conditions' } %}
 {% endif %}
 
 {% block content %}
@@ -91,7 +93,7 @@
                     {% if isInProgress %}
                         {{ govukButton({
                             text: submitButtonText,
-                            attributes: { 'data-qa': 'send-licence-conditions' }
+                            attributes: submitButtonAttrs
                         }) }}
                     {% endif %}
 
