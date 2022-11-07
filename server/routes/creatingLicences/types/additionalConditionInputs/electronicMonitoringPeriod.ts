@@ -1,9 +1,4 @@
-import { Expose, Type } from 'class-transformer'
-import { Validate } from 'class-validator'
-import SimpleDate from '../date'
-import ValidSimpleDate from '../../../../validators/simpleDateValidator'
-import DateIsBefore from '../../../../validators/dateIsBefore'
-import DateIsAfterExpectedReleaseDate from '../../../../validators/dateIsAfterExpectedReleaseDate'
+import { Expose } from 'class-transformer'
 
 class ElectronicMonitoringPeriod {
   @Expose()
