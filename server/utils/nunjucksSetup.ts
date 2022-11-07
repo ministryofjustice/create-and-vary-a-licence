@@ -173,6 +173,10 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
     const map = new Map()
     data.forEach(item => {
       const collection = map.get(item.field)
+      // infoInputReviewed is a hidden field solely used for internal purposes and shouldn't be shown
+      if (item.field === 'infoInputReviewed') {
+        return
+      }
       if (!collection) {
         map.set(item.field, [item])
       } else {

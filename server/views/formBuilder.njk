@@ -231,6 +231,25 @@
                     }) }}
                 </div>
             {% endif %}
+            
+            {% if input.type === 'info'%}
+                <div id='info'>
+                    <h2 class='govuk-heading-s'>
+                        {{input.label}}
+                    </h2>
+                    <p>
+                      {{formValues}}
+                    </p>
+                    <input type="hidden" name="{{input.name}}" value="{{formValues}}" />
+                    <input hidden name="infoInputReviewed" value="true" />
+                    <h2 class="govuk-heading-m">Help with this licence condition</h2>
+                    {{ govukDetails({
+                        summaryText: input.helpLink.summary,
+                        text: input.helpLink.text,
+                        classes: 'govuk-!-margin-bottom-3'
+                    }) }}
+                </div>
+            {% endif %}
         </div>
     {% endfor %}
 {% endmacro %}

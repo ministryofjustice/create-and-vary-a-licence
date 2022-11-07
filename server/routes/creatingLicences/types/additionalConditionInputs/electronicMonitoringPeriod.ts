@@ -7,15 +7,10 @@ import DateIsAfterExpectedReleaseDate from '../../../../validators/dateIsAfterEx
 
 class ElectronicMonitoringPeriod {
   @Expose()
-  @Type(() => SimpleDate)
-  @Validate(ValidSimpleDate)
-  @DateIsBefore('licence.licenceExpiryDate', {
-    message: 'The monitoring end date must be before the licence expiry date',
-  })
-  @DateIsAfterExpectedReleaseDate({
-    message: 'The monitoring end date must be on or after the release date',
-  })
-  endDate: SimpleDate
+  endDate: string
+
+  @Expose()
+  infoInputReviewed: boolean
 }
 
 export default ElectronicMonitoringPeriod
