@@ -78,65 +78,6 @@ describe('Caseload Service', () => {
     ])
   })
 
-  // TODO: Following filter rule can be removed after 7th November 2022
-  it('filters cases with release date prior to 7th November 2022 for North East, North West and West Midlands', async () => {
-    communityService.getManagedOffenders.mockResolvedValue([
-      { offenderCrn: 'X12348' },
-      { offenderCrn: 'X12349' },
-      { offenderCrn: 'X12350' },
-    ])
-
-    communityService.getOffendersByCrn.mockResolvedValue([
-      { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
-      { otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } } as OffenderDetail,
-      { otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' } } as OffenderDetail,
-    ])
-
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      {
-        prisonerNumber: 'AB1234E',
-        conditionalReleaseDate: '2022-10-30',
-        status: 'ACTIVE IN',
-        prisonId: 'DTI', // North east
-      } as Prisoner,
-      {
-        prisonerNumber: 'AB1234F',
-        conditionalReleaseDate: '2022-10-30',
-        status: 'ACTIVE IN',
-        prisonId: 'CFI', // Wales
-      } as Prisoner,
-      {
-        prisonerNumber: 'AB1234G',
-        conditionalReleaseDate: '2022-11-07',
-        status: 'ACTIVE IN',
-        prisonId: 'DTI', // North east
-      } as Prisoner,
-    ])
-
-    const result = await serviceUnderTest.getStaffCreateCaseload(user)
-    expect(result).toMatchObject([
-      {
-        deliusRecord: {
-          offenderCrn: 'X12350',
-          otherIds: {
-            crn: 'X12350',
-            nomsNumber: 'AB1234G',
-          },
-        },
-        nomisRecord: {
-          prisonerNumber: 'AB1234G',
-          conditionalReleaseDate: '2022-11-07',
-        },
-        licences: [
-          {
-            status: 'NOT_STARTED',
-            type: 'AP',
-          },
-        ],
-      },
-    ])
-  })
-
   it('filters offenders who are ineligible for a licence', async () => {
     communityService.getManagedOffenders.mockResolvedValue([
       { offenderCrn: 'X12348' },
