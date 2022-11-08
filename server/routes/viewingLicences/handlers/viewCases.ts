@@ -58,7 +58,7 @@ export default class ViewAndPrintCaseRoutes {
       .sort((a, b) => {
         const crd1 = getUnixTime(new Date(a.releaseDate))
         const crd2 = getUnixTime(new Date(b.releaseDate))
-        return crd1 - crd2
+        return view === 'prison' ? crd1 - crd2 : crd2 - crd1
       })
 
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))

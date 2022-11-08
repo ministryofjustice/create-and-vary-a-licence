@@ -130,7 +130,7 @@ describe('Route handlers - View and print case list', () => {
           firstName: 'Stephen',
           lastName: 'Rowe',
           prisonerNumber: 'A1234AE',
-          conditionalReleaseDate: '2022-05-01',
+          conditionalReleaseDate: '2022-06-10',
         } as Prisoner,
         probationPractitioner: {
           name: 'Larry Johnson',
@@ -147,7 +147,7 @@ describe('Route handlers - View and print case list', () => {
           firstName: 'Bob',
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
-          confirmedReleaseDate: '2022-05-01',
+          confirmedReleaseDate: '2022-07-01',
         } as Prisoner,
         probationPractitioner: {
           name: 'Sherlock Holmes',
@@ -164,7 +164,7 @@ describe('Route handlers - View and print case list', () => {
           firstName: 'Joe',
           lastName: 'Bloggs',
           prisonerNumber: 'A1234AB',
-          conditionalReleaseOverrideDate: '2022-05-01',
+          conditionalReleaseOverrideDate: '2022-06-01',
         } as Prisoner,
         probationPractitioner: {
           name: 'Thor',
@@ -264,7 +264,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Larry Johnson',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
           },
         ],
@@ -344,7 +344,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Larry Johnson',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
           },
         ],
@@ -418,7 +418,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Larry Johnson',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
           },
         ],
@@ -434,6 +434,147 @@ describe('Route handlers - View and print case list', () => {
           },
         ],
         probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should render licences for for People In Prison in ascending order', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      req.session.caseloadsSelected = ['MDI']
+      res.locals.user.prisonCaseload = ['MDI']
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'IN_PROGRESS',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'SUBMITTED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'APPROVED',
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '10 Jun 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'MDI',
+            description: 'Moorland (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should render licences for for People On Probation in descending order', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      req.session.caseloadsSelected = ['MDI']
+      res.locals.user.prisonCaseload = ['MDI']
+      req.query.view = 'probation'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'ACTIVE',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 Jul 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_IN_PROGRESS',
+            name: 'Joe Bloggs',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Thor',
+            },
+            releaseDate: '01 Jun 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_SUBMITTED',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_APPROVED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'MDI',
+            description: 'Moorland (HMP)',
+          },
+        ],
+        probationView: true,
         search: undefined,
         statusConfig,
       })
@@ -555,7 +696,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Sherlock Holmes',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01 Jul 2022',
             releaseDateLabel: 'Confirmed release date',
           },
           {
@@ -567,7 +708,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Thor',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '01 Jun 2022',
             releaseDateLabel: 'CRD',
           },
           {
@@ -662,7 +803,7 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Larry Johnson',
             },
-            releaseDate: '01 May 2022',
+            releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
           },
         ],
