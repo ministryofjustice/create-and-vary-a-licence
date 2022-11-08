@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
 
 import AdditionalLicenceConditionsCallbackRoutes from './additionalLicenceConditionsCallback'
@@ -121,6 +122,64 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       req.query.fromReview = 'true'
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/1/check-your-answers`)
+    })
+  })
+
+  describe('needsReview', () => {
+    it('should return true when the licence condition has the infoInputReviewed flag and the flag is false', () => {
+      expect(
+        handler.needsReview({
+          id: 1,
+          code: 'code1',
+          data: [
+            {
+              field: 'field1',
+              value: '123',
+            },
+            {
+              field: 'infoInputReviewed',
+              value: 'false',
+            },
+          ],
+          sequence: 1,
+        } as AdditionalCondition)
+      ).toEqual(true)
+    })
+
+    it('should return false when the infoInputReviewed flag is true', () => {
+      expect(
+        handler.needsReview({
+          id: 1,
+          code: 'code1',
+          data: [
+            {
+              field: 'field1',
+              value: '123',
+            },
+            {
+              field: 'infoInputReviewed',
+              value: 'true',
+            },
+          ],
+          sequence: 1,
+        } as AdditionalCondition)
+      ).toEqual(false)
+    })
+
+    it('should return false when the infoInputReviewed flag is not present', () => {
+      expect(
+        handler.needsReview({
+          id: 1,
+          code: 'code1',
+          data: [
+            {
+              field: 'field1',
+              value: '123',
+            },
+          ],
+          sequence: 1,
+        } as AdditionalCondition)
+      ).toEqual(false)
     })
   })
 })

@@ -380,4 +380,39 @@ describe('View Partials - Form builder', () => {
     expect($('.govuk-label').text().trim()).toBe('label for file upload')
     expect($('.govuk-file-upload').length).toBe(1)
   })
+
+  it('should build an info type correctly', () => {
+    viewContext = {
+      formResponses: [],
+      additionalCondition: {
+        data: [],
+      },
+      config: {
+        inputs: [
+          {
+            type: 'info',
+            label: 'Info input',
+            name: 'info',
+            helpLink: {
+              summary: 'Helplink summary',
+              text: 'Helplink text',
+            },
+          },
+        ],
+      },
+      csrfToken: 'not-real',
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    expect($('#info').length).toBe(1)
+    expect($('#info > .govuk-heading-s').text().trim()).toBe('Info input')
+    expect($('#info > input').length).toBe(2)
+    expect($('#info > input')[0].attribs.name).toBe('info')
+    expect($('#info > input')[0].attribs.hidden).toBeDefined()
+    expect($('#info > input')[1].attribs.name).toBe('infoInputReviewed')
+    expect($('#info > input')[1].attribs.hidden).toBeDefined()
+    expect($('#info > input')[1].attribs.value).toBe('true')
+    expect($('.govuk-details').length).toBe(1)
+  })
 })
