@@ -38,10 +38,10 @@ const pollPrisonersDueForLicence = async (
 }
 
 const buildEmailGroups = async (
-  initialPromptCases: ManagedCase[],
-  urgentPromptCases: ManagedCase[]
+  urgentPromptCases: ManagedCase[],
+  initialPromptCases: ManagedCase[]
 ): Promise<EmailContact[]> => {
-  const managedCases = [...initialPromptCases, ...urgentPromptCases]
+  const managedCases = [...urgentPromptCases, ...initialPromptCases]
 
   const mapPrisonerToReleaseCase = (prisoner: Prisoner) => {
     return {
@@ -120,11 +120,10 @@ const excludeCasesNotAssignedToPpWithinPast7Days = (caseload: ManagedCase[]): Ma
 }
 
 Promise.all([
-  pollPrisonersDueForLicence(
-    startOfISOWeek(add(new Date(), { weeks: 12 })),
-    endOfISOWeek(add(new Date(), { weeks: 12 })),
-    [LicenceStatus.NOT_STARTED]
-  ),
+  pollPrisonersDueForLicence(startOfISOWeek(new Date()), endOfISOWeek(add(new Date(), { weeks: 3 })), [
+    LicenceStatus.NOT_STARTED,
+    LicenceStatus.IN_PROGRESS,
+  ]),
 
   pollPrisonersDueForLicence(
     startOfISOWeek(add(new Date(), { weeks: 4 })),
@@ -132,13 +131,14 @@ Promise.all([
     [LicenceStatus.NOT_STARTED]
   ).then(caseload => excludeCasesNotAssignedToPpWithinPast7Days(caseload)),
 
-  pollPrisonersDueForLicence(startOfISOWeek(new Date()), endOfISOWeek(add(new Date(), { weeks: 3 })), [
-    LicenceStatus.NOT_STARTED,
-    LicenceStatus.IN_PROGRESS,
-  ]),
+  pollPrisonersDueForLicence(
+    startOfISOWeek(add(new Date(), { weeks: 12 })),
+    endOfISOWeek(add(new Date(), { weeks: 12 })),
+    [LicenceStatus.NOT_STARTED]
+  ),
 ])
-  .then(([week13InitialPromptCases, week5to12InitialPromptCases, urgentPromptCases]) =>
-    buildEmailGroups([...week13InitialPromptCases, ...week5to12InitialPromptCases], urgentPromptCases)
+  .then(([urgentPromptCases, week13InitialPromptCases, week5to12InitialPromptCases]) =>
+    buildEmailGroups(urgentPromptCases, [...week13InitialPromptCases, ...week5to12InitialPromptCases])
   )
   .then(emailGroups => notifyComOfUpcomingReleases(emailGroups))
   .then(() => {
