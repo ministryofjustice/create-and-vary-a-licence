@@ -1,7 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
 import LicenceStatus from '../../server/licences/licenceStatus'
-import Policy from './polices/v2-0'
+import Policy from './polices/v2-1'
 
 const licencePlaceholder = {
   id: 1,

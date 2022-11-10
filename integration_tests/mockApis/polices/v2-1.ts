@@ -541,7 +541,7 @@ export default {
           {
             type: 'fileUpload',
             label:
-              'Find and select the <a class="govuk-link" href="https://mapmaker.field-dynamics.co.uk/moj/map/default" rel="noreferrer noopener" target="_blank">Mapmaker PDF map</a> to include on the licence',
+              "Find and select the <a class='govuk-link' href='https://mapmaker.field-dynamics.co.uk/moj/map/default' rel='noreferrer noopener' target='_blank'>Mapmaker PDF map</a> to include on the licence",
             name: 'outOfBoundFilename',
           },
         ],
@@ -912,9 +912,13 @@ export default {
         requiresInput: true,
         inputs: [
           {
-            type: 'datePicker',
-            label: 'Enter the end date',
+            type: 'info',
+            label: 'End date',
             name: 'endDate',
+            helpLink: {
+              summary: "Why can't I change the monitoring period end date?",
+              text: 'It is calculated automatically using release date and licence end date.\nIf one of these dates changes, we will update the monitoring period end date and notify you by email.',
+            },
           },
         ],
         type: 'ElectronicMonitoringPeriod',
