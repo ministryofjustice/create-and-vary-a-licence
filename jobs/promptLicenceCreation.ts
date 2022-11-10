@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import _ from 'lodash'
-import { add, subDays, startOfISOWeek, endOfISOWeek } from 'date-fns'
+import { add, startOfISOWeek, endOfISOWeek } from 'date-fns'
 import { buildAppInsightsClient, flush, initialiseAppInsights } from '../server/utils/azureAppInsights'
 import logger from '../logger'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
@@ -10,32 +10,14 @@ import { ManagedCase } from '../server/@types/managedCase'
 import LicenceStatus from '../server/enumeration/licenceStatus'
 import { EmailContact } from '../server/@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../server/utils/utils'
-import Container from '../server/services/container'
+import PromptLicenceCreationService from './promptLicenceCreationService'
 
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-prompt-licence-create-job')
 
 const { caseloadService, prisonerService, communityService, licenceService } = services
 
-const pollPrisonersDueForLicence = async (
-  earliestReleaseDate: Date,
-  latestReleaseDate: Date,
-  licenceStatus: LicenceStatus[]
-): Promise<ManagedCase[]> => {
-  const prisonCodes = config.rollout.prisons
-
-  return prisonerService
-    .searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonCodes)
-    .then(prisoners => prisoners.filter(offender => offender.status && offender.status.startsWith('ACTIVE')))
-    .then(caseload => new Container(caseload))
-    .then(caseload => caseloadService.pairNomisRecordsWithDelius(caseload))
-    .then(caseload => caseloadService.filterOffendersEligibleForLicence(caseload))
-    .then(prisoners => caseloadService.mapOffendersToLicences(prisoners))
-    .then(caseload => caseload.unwrap())
-    .then(prisoners =>
-      prisoners.filter(offender => licenceStatus.some(status => offender.licences.find(l => l.status === status)))
-    )
-}
+const promptLicenceCreationService = new PromptLicenceCreationService(prisonerService, caseloadService)
 
 const buildEmailGroups = async (
   urgentPromptCases: ManagedCase[],
@@ -104,34 +86,22 @@ const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
 }
 /* eslint-enable */
 
-const excludeCasesNotAssignedToPpWithinPast7Days = (caseload: ManagedCase[]): ManagedCase[] => {
-  const previousWeekStart = startOfISOWeek(subDays(new Date(), 7))
-  const previousWeekEnd = endOfISOWeek(subDays(new Date(), 7))
-
-  const isWithinPastWeek = (c: ManagedCase) => {
-    if (c.deliusRecord.allocationDate) {
-      const dateAllocatedToPp = new Date(c.deliusRecord.allocationDate)
-      return dateAllocatedToPp >= previousWeekStart && dateAllocatedToPp <= previousWeekEnd
-    }
-    return false
-  }
-
-  return caseload.filter(isWithinPastWeek)
-}
-
 Promise.all([
-  pollPrisonersDueForLicence(startOfISOWeek(new Date()), endOfISOWeek(add(new Date(), { weeks: 3 })), [
-    LicenceStatus.NOT_STARTED,
-    LicenceStatus.IN_PROGRESS,
-  ]),
+  promptLicenceCreationService.pollPrisonersDueForLicence(
+    startOfISOWeek(new Date()),
+    endOfISOWeek(add(new Date(), { weeks: 3 })),
+    [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS]
+  ),
 
-  pollPrisonersDueForLicence(
-    startOfISOWeek(add(new Date(), { weeks: 4 })),
-    endOfISOWeek(add(new Date(), { weeks: 11 })),
-    [LicenceStatus.NOT_STARTED]
-  ).then(caseload => excludeCasesNotAssignedToPpWithinPast7Days(caseload)),
+  promptLicenceCreationService
+    .pollPrisonersDueForLicence(
+      startOfISOWeek(add(new Date(), { weeks: 4 })),
+      endOfISOWeek(add(new Date(), { weeks: 11 })),
+      [LicenceStatus.NOT_STARTED]
+    )
+    .then(caseload => promptLicenceCreationService.excludeCasesNotAssignedToPpWithinPast7Days(caseload)),
 
-  pollPrisonersDueForLicence(
+  promptLicenceCreationService.pollPrisonersDueForLicence(
     startOfISOWeek(add(new Date(), { weeks: 12 })),
     endOfISOWeek(add(new Date(), { weeks: 12 })),
     [LicenceStatus.NOT_STARTED]
