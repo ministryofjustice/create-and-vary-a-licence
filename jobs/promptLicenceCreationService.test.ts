@@ -15,6 +15,8 @@ const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerS
 
 const promptLicenceCreationService = new PromptLicenceCreationService(prisonerService, caseloadService)
 
+type OffenderManager = { active: boolean; fromDate: string }
+
 describe('prompt licence creation service ', () => {
   beforeEach(() => {
     prisonerService.searchPrisonersByReleaseDate = jest.fn()
@@ -28,65 +30,30 @@ describe('prompt licence creation service ', () => {
   })
 
   const managedCases = [
-    {
-      deliusRecord: { offenderId: 1, offenderManagers: [{ active: true, fromDate: format(new Date(), 'yyyy-MM-dd') }] },
-      nomisRecord: {
-        restrictedPatient: false,
-        prisonId: 'someId',
-        conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
-        status: 'someStatus',
-      },
-      licences: [{ status: LicenceStatus.NOT_STARTED, type: LicenceType.AP }],
-      probationPractitioner: { name: 'jim' },
-    },
-    {
-      deliusRecord: {
-        offenderId: 2,
-        offenderManagers: [
-          { active: true, fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd') },
-          { active: false, fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd') },
-        ],
-      },
+    createManagedCase([{ active: true, fromDate: format(new Date(), 'yyyy-MM-dd') }], LicenceStatus.NOT_STARTED),
 
-      nomisRecord: {
-        restrictedPatient: false,
-        prisonId: 'someId',
-        conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
-        status: 'someStatus',
-      },
-      licences: [{ status: LicenceStatus.APPROVED, type: LicenceType.AP }],
-      probationPractitioner: { name: 'tom' },
-    },
-    {
-      deliusRecord: {
-        offenderId: 3,
-        offenderManagers: [{ active: true, fromDate: format(subDays(new Date(), 7), 'yyyy-MM-dd') }, { active: false }],
-      },
-      nomisRecord: {
-        restrictedPatient: false,
-        prisonId: 'someId',
-        conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
-        status: 'someStatus',
-      },
-      licences: [{ status: LicenceStatus.IN_PROGRESS, type: LicenceType.AP }],
-      probationPractitioner: { name: 'jack' },
-    },
-    {
-      deliusRecord: {
-        offenderId: 4,
-        offenderManagers: [{ active: true, fromDate: format(subDays(new Date(), 8), 'yyyy-MM-dd') }],
-      },
+    createManagedCase(
+      [
+        { active: true, fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd') },
+        { active: false, fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd') },
+      ],
+      LicenceStatus.APPROVED
+    ),
 
-      nomisRecord: {
-        restrictedPatient: false,
-        prisonId: 'someId',
-        conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
-        status: 'someStatus',
-      },
-      licences: [{ status: LicenceStatus.IN_PROGRESS, type: LicenceType.AP }],
-      probationPractitioner: { name: 'andy' },
-    },
+    createManagedCase(
+      [
+        { active: true, fromDate: format(subDays(new Date(), 7), 'yyyy-MM-dd') },
+        { active: false, fromDate: format(subDays(new Date(), 7), 'yyyy-MM-dd') },
+      ],
+      LicenceStatus.IN_PROGRESS
+    ),
+
+    createManagedCase(
+      [{ active: true, fromDate: format(subDays(new Date(), 8), 'yyyy-MM-dd') }],
+      LicenceStatus.IN_PROGRESS
+    ),
   ]
+
   const containerOfManagedCases = new Container(managedCases)
 
   describe('pollPrisonersDueForLicence', () => {
@@ -114,3 +81,17 @@ describe('prompt licence creation service ', () => {
     })
   })
 })
+
+function createManagedCase(offenderManagers: OffenderManager[], licenceStatus: LicenceStatus) {
+  return {
+    deliusRecord: { offenderId: 1, offenderManagers },
+    nomisRecord: {
+      restrictedPatient: false,
+      prisonId: 'someId',
+      conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
+      status: 'someStatus',
+    },
+    licences: [{ status: licenceStatus, type: LicenceType.AP }],
+    probationPractitioner: { name: 'jim' },
+  }
+}
