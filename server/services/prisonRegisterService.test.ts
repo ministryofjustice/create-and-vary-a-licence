@@ -22,13 +22,4 @@ describe('Prison Register Service', () => {
     expect(actualResult).toEqual(actualResult)
     expect(prisonRegisterApiClient.getPrisonDescription).toBeCalledWith('MDI', user)
   })
-
-  it('Get OMU contact email', async () => {
-    prisonRegisterApiClient.getPrisonOmuContactEmail.mockResolvedValue('omu@prison.gov.uk')
-
-    const actualResult = await prisonRegisterService.getPrisonOmuContactEmail('MDI', user)
-
-    expect(actualResult).toEqual('omu@prison.gov.uk')
-    expect(prisonRegisterApiClient.getPrisonOmuContactEmail).toBeCalledWith('MDI', user)
-  })
 })
