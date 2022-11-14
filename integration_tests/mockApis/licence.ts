@@ -6,7 +6,7 @@ import Policy from './polices/v2-1'
 const licencePlaceholder = {
   id: 1,
   typeCode: 'AP_PSS',
-  version: '2.0',
+  version: '2.1',
   statusCode: 'IN_PROGRESS',
   nomsId: 'G9786GC',
   bookingNo: '123456',
