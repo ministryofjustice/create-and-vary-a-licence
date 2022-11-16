@@ -64,6 +64,10 @@ export default class CheckAnswersRoutes {
       await this.licenceService.updateStandardConditions(licenceId, newStdConditions, user)
     }
 
+    if (licence.isVariation) {
+      return res.redirect(`/licence/vary/id/${licence.id}/reason-for-variation`)
+    }
+
     await this.licenceService.submitLicence(licenceId, user)
 
     return res.redirect(`/licence/create/id/${licenceId}/confirmation`)

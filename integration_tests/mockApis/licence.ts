@@ -744,6 +744,10 @@ export default {
           statusCode: 'VARIATION_IN_PROGRESS',
           spoDiscussion: 'Yes',
           vloDiscussion: 'Yes',
+          appointmentPerson: 'Isaac Newton',
+          appointmentAddress: 'Down the road, over there',
+          appointmentContact: '07891245678',
+          appointmentTime: '01/12/2021 00:34',
         },
       },
     })

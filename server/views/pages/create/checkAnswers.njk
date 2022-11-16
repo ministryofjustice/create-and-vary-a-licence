@@ -13,6 +13,13 @@
 {% set isInProgress = licence.statusCode == 'IN_PROGRESS' or licence.statusCode == 'VARIATION_IN_PROGRESS' %}
 {% set canChooseToEdit = licence.statusCode == 'APPROVED' or licence.statusCode == 'SUBMITTED' %}
 {% set canChooseToPrint = licence.statusCode == 'APPROVED' %}
+{% if licence.isVariation %} 
+  {% set submitButtonText = 'View summary and add notes' %}
+  {% set submitButtonAttrs = { 'data-qa': 'add-notes' } %}
+{% else %} 
+  {% set submitButtonText = 'Send to prison for approval'%}
+  {% set submitButtonAttrs = { 'data-qa': 'send-licence-conditions' } %}
+{% endif %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -80,29 +87,13 @@
                 {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
             {% endif %}
 
-            {% if isInProgress and licence.isVariation %}
-                <div class="govuk-button-group">
-                    {{ govukButton({
-                        text: "View summary and add notes",
-                        attributes: { 'data-qa': 'add-notes' },
-                        href: '/licence/vary/id/' + licence.id + '/reason-for-variation'
-                    }) }}
-                    {{ govukButton({
-                        text: "Discard changes",
-                        classes: "govuk-button--secondary",
-                        attributes: { 'data-qa': 'discard' },
-                        href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
-                    }) }}
-                </div>
-            {% endif %}
-
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <div class="govuk-button-group">
-                    {% if isInProgress and not licence.isVariation %}
+                    {% if isInProgress %}
                         {{ govukButton({
-                            text: "Send to prison for approval",
-                            attributes: { 'data-qa': 'send-licence-conditions' }
+                            text: submitButtonText,
+                            attributes: submitButtonAttrs
                         }) }}
                     {% endif %}
 
@@ -129,6 +120,16 @@
                     {% endif %}
                 </div>
             </form>
+
+            {% if isInProgress and licence.isVariation %}
+                    {{ govukButton({
+                        text: "Discard changes",
+                        classes: "govuk-button--secondary",
+                        attributes: { 'data-qa': 'discard' },
+                        href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
+                    }) }}
+                </div>
+            {% endif %}
 
             {% if licence.isVariation %}
                 <a href="/licence/vary/caseload" class="govuk-link govuk-!-font-size-19">Return to caselist</a>
