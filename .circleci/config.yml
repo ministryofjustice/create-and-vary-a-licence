@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@5.2.0
+  hmpps: ministryofjustice/hmpps@6
   slack: circleci/slack@4.4.2
   codecov: codecov/codecov@3.2.0
 
@@ -180,9 +180,9 @@ workflows:
       - unit_test:
           requires:
             - build
-      # - integration_test:
-      #     requires:
-      #       - build
+      - integration_test:
+         requires:
+            - build
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
@@ -202,7 +202,7 @@ workflows:
           requires:
             - helm_lint
             - unit_test
-            # - integration_test
+            - integration_test
             - build_docker
 
       - request-preprod-approval:

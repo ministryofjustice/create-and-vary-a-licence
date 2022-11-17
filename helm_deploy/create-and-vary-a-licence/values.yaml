@@ -10,8 +10,11 @@ generic-service:
 
   ingress:
     enabled: true
-    host: app-hostname.local    # override per environment
+    hosts: 
+     - app-hostname.local    # override per environment
     tlsSecretName: create-and-vary-a-licence-cert
+    v1_2_enabled: true
+    v0_47_enabled: false
 
   livenessProbe:
     httpGet:
@@ -96,6 +99,7 @@ generic-service:
     serco-external-ips: "217.22.14.0/24"
     sodexo-northumberland-01: "88.98.48.10/32"
     sodexo-northumberland-02: "51.148.47.137/32"
+    sodoxeo-forest-bank: "51.155.85.249/32"
     altcourse-g4s: 217.161.76.184/29
     oakwood-01: "217.161.76.184/29"
     oakwood-02: "217.161.76.192/29"

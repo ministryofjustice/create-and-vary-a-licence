@@ -1,6 +1,7 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
 import LicenceStatus from '../../server/licences/licenceStatus'
+import Policy from './polices/v2-0'
 
 const licencePlaceholder = {
   id: 1,
@@ -743,6 +744,10 @@ export default {
           statusCode: 'VARIATION_IN_PROGRESS',
           spoDiscussion: 'Yes',
           vloDiscussion: 'Yes',
+          appointmentPerson: 'Isaac Newton',
+          appointmentAddress: 'Down the road, over there',
+          appointmentContact: '07891245678',
+          appointmentTime: '01/12/2021 00:34',
         },
       },
     })
@@ -877,6 +882,34 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {},
+      },
+    })
+  },
+
+  stubGetLicencePolicyConditions: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence-policy/version/([0-9]+[.]+[0-9])`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: Policy,
+      },
+    })
+  },
+
+  stubGetActivePolicyConditions: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence-policy/active`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: Policy,
       },
     })
   },

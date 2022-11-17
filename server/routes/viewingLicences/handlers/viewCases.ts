@@ -1,36 +1,38 @@
 import { Request, Response } from 'express'
-import { format, getUnixTime } from 'date-fns'
+import { getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
-import { convertToTitleCase } from '../../../utils/utils'
+import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import logger from '../../../../logger'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
-
+    const view = req.query.view || 'prison'
+    const probationView = view === 'probation'
     const { user } = res.locals
     const { caseloadsSelected = [] } = req.session
     const hasMultipleCaseloadsInNomis = user.prisonCaseload.length > 1
     const allPrisons = await this.prisonerService.getPrisons()
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
+    const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
 
-    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
-    const caseloadViewModel = cases
+    const casesToView = view === 'prison' ? caselist.getPrisonView() : caselist.getProbationView()
+
+    const caseloadViewModel = casesToView
+      .unwrap()
       .map(c => {
         return {
           licenceId: _.head(c.licences).id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: this.selectReleaseDate(c.nomisRecord),
+          releaseDate: selectReleaseDate(c.nomisRecord),
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: _.head(c.licences).status,
           isClickable:
@@ -38,7 +40,10 @@ export default class ViewAndPrintCaseRoutes {
             _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
             _.head(c.licences).status !== LicenceStatus.OOS_RECALL &&
             _.head(c.licences).status !== LicenceStatus.OOS_BOTUS &&
-            _.head(c.licences).status !== LicenceStatus.IN_PROGRESS,
+            _.head(c.licences).status !== LicenceStatus.IN_PROGRESS &&
+            _.head(c.licences).status !== LicenceStatus.VARIATION_IN_PROGRESS &&
+            _.head(c.licences).status !== LicenceStatus.VARIATION_APPROVED &&
+            _.head(c.licences).status !== LicenceStatus.VARIATION_SUBMITTED,
         }
       })
       .filter(c => {
@@ -53,7 +58,7 @@ export default class ViewAndPrintCaseRoutes {
       .sort((a, b) => {
         const crd1 = getUnixTime(new Date(a.releaseDate))
         const crd2 = getUnixTime(new Date(b.releaseDate))
-        return crd1 - crd2
+        return view === 'prison' ? crd1 - crd2 : crd2 - crd1
       })
 
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
@@ -64,28 +69,20 @@ export default class ViewAndPrintCaseRoutes {
       search,
       prisonsToDisplay,
       hasMultipleCaseloadsInNomis,
+      probationView,
     })
   }
 
-  selectReleaseDate(nomisRecord: Prisoner) {
-    let dateString = nomisRecord.conditionalReleaseDate
+  GET_WITH_EXCLUSIONS = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
+    const { caseloadsSelected = [] } = req.session
+    const allPrisons = await this.prisonerService.getPrisons()
+    const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
+    const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
 
-    if (nomisRecord.confirmedReleaseDate) {
-      dateString = nomisRecord.confirmedReleaseDate
-    }
-
-    if (nomisRecord.conditionalReleaseOverrideDate) {
-      dateString = nomisRecord.conditionalReleaseOverrideDate
-    }
-
-    try {
-      dateString = format(new Date(dateString), 'dd MMM yyyy')
-    } catch (e) {
-      logger.error(
-        `Date error: ${e.message} for prisonerNumber: ${nomisRecord.prisonerNumber} using date: ${dateString}`
-      )
-    }
-
-    return dateString
+    const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
+    const cases = req.query.view === 'probation' ? caselist.getProbationView() : caselist.getPrisonView()
+    res.header('Content-Type', 'application/json')
+    res.send(JSON.stringify(cases, null, 4))
   }
 }

@@ -647,7 +647,15 @@ describe('Licence Service', () => {
 
     const result = await licenceService.getLicencesForOmu(user, [])
     expect(licenceApiClient.matchLicences).toBeCalledWith(
-      ['ACTIVE', 'APPROVED', 'SUBMITTED', 'IN_PROGRESS'],
+      [
+        'ACTIVE',
+        'APPROVED',
+        'SUBMITTED',
+        'IN_PROGRESS',
+        'VARIATION_APPROVED',
+        'VARIATION_IN_PROGRESS',
+        'VARIATION_SUBMITTED',
+      ],
       ['MDI'],
       null,
       null,

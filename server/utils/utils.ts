@@ -1,11 +1,14 @@
 import moment, { Moment } from 'moment'
 import { Holiday } from 'uk-bank-holidays'
+import { format } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import Address from '../routes/creatingLicences/types/address'
 import { Licence } from '../@types/licenceApiClientTypes'
+import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
+import logger from '../../logger'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -157,6 +160,33 @@ const isBankHolidayOrWeekend = (date: Moment, bankHolidays: Holiday[]) => {
 const licenceIsTwoDaysToRelease = (licence: Licence) =>
   moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
 
+const selectReleaseDate = (nomisRecord: Prisoner) => {
+  let dateString = nomisRecord.conditionalReleaseDate
+
+  if (nomisRecord.confirmedReleaseDate) {
+    dateString = nomisRecord.confirmedReleaseDate
+  }
+
+  if (nomisRecord.conditionalReleaseOverrideDate) {
+    dateString = nomisRecord.conditionalReleaseOverrideDate
+  }
+
+  if (!dateString) {
+    logger.error(`No release date found for prisonerNumber: ${nomisRecord.prisonerNumber}`)
+    return 'not found'
+  }
+
+  try {
+    dateString = format(new Date(dateString), 'dd MMM yyyy')
+  } catch (e) {
+    logger.error(
+      `Invalid date error: ${e.message} for prisonerNumber: ${nomisRecord.prisonerNumber} using date: ${dateString}`
+    )
+  }
+
+  return dateString
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -177,4 +207,5 @@ export {
   formatAddress,
   isBankHolidayOrWeekend,
   licenceIsTwoDaysToRelease,
+  selectReleaseDate,
 }

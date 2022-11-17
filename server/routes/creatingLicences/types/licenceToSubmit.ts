@@ -22,13 +22,15 @@ class LicenceToSubmit {
 
   @Expose()
   @ConditionsHaveBeenExpanded({
-    message: "Select 'Change' to go back and add text to the licence condition",
+    message:
+      'At least one of the additional conditions you have chosen is incomplete. Check the conditions and add the missing information or remove any conditions you do not need',
   })
   additionalLicenceConditions: AdditionalConditions[]
 
   @Expose()
   @ConditionsHaveBeenExpanded({
-    message: "Select 'Change' to go back and add text to the PSS requirement",
+    message:
+      'At least one of the additional PSS requirements you have chosen is incomplete. Check the requirements and add the missing information or remove any requirements you do not need',
   })
   additionalPssConditions: AdditionalConditions[]
 }

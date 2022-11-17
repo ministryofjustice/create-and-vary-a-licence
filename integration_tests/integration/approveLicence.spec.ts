@@ -30,6 +30,8 @@ context('Approve a licence', () => {
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetPrisons')
+    cy.task('stubGetLicencePolicyConditions')
+    cy.task('stubGetActivePolicyConditions')
   })
 
   const singleCaseload = {

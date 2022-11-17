@@ -11,8 +11,8 @@ export default class ChangeLocationPage extends Page {
     return cy.get('[data-qa=continue]').click()
   }
 
-  clickCancelForCA = (): ViewCasesPage => {
-    cy.get('[href="/licence/view/cases"]').click()
+  clickCancelLink = (): ViewCasesPage => {
+    cy.get('[data-qa=cancel-link]').click()
     return Page.verifyOnPage(ViewCasesPage)
   }
 

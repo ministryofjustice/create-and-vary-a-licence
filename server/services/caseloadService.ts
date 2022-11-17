@@ -1,8 +1,9 @@
 import moment from 'moment'
-import { isFuture, parse } from 'date-fns'
+import { isFuture, parse, startOfWeek, add, endOfWeek } from 'date-fns'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
+import OmuCaselist from './omuCaselist'
 import { DeliusRecord, ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
@@ -11,6 +12,7 @@ import { prisonInRollout, probationAreaInRollout } from '../utils/rolloutUtils'
 import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
+import Container from './container'
 
 export default class CaseloadService {
   constructor(
@@ -68,35 +70,39 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  async getOmuCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
-    // Get cases with a licence in ACTIVE, APPROVED, or SUBMITTED state
+  async getOmuCaseload(user: User, prisonCaseload: string[]): Promise<OmuCaselist> {
+    // Get cases with a licence in ACTIVE, APPROVED, SUBMITTED, IN_PROGRESS or VARIATION_IN_* state
     const casesWithLicences = this.licenceService
       .getLicencesForOmu(user, prisonCaseload)
       .then(licences => this.mapLicencesToOffenders(licences))
 
     // Get cases due for release soon which do not have a submitted licence
-    const startOfThisWeek = moment().startOf('isoWeek')
-    const endOfTheFourthWeekFromNow = moment().add(3, 'weeks').endOf('isoWeek')
+    const startOfThisWeek = startOfWeek(new Date(), { weekStartsOn: 1 })
+    const endOfTheFourthWeekFromNow = endOfWeek(add(new Date(), { weeks: 3 }), { weekStartsOn: 1 })
     const casesPendingLicence = this.prisonerService
       .searchPrisonersByReleaseDate(startOfThisWeek, endOfTheFourthWeekFromNow, prisonCaseload, user)
+      .then(caseload => this.wrap(caseload))
       .then(caseload => this.pairNomisRecordsWithDelius(caseload))
       .then(caseload => this.filterOffendersEligibleForLicence(caseload, user))
       .then(caseload => this.mapOffendersToLicences(caseload, user))
       .then(caseload => this.buildCreateCaseload(caseload))
       .then(caseload => {
-        return caseload.filter(c =>
-          [
-            LicenceStatus.NOT_STARTED,
-            LicenceStatus.NOT_IN_PILOT,
-            LicenceStatus.OOS_RECALL,
-            LicenceStatus.OOS_BOTUS,
-          ].some(status => c.licences.find(l => l.status === status))
+        return caseload.filter(
+          c =>
+            [
+              LicenceStatus.NOT_STARTED,
+              LicenceStatus.NOT_IN_PILOT,
+              LicenceStatus.OOS_RECALL,
+              LicenceStatus.OOS_BOTUS,
+            ].some(status => c.licences.find(l => l.status === status)),
+          'Has no licence in NOT_STARTED, NOT_IN_PILOT, OOS_RECALL, OOS_BOTUS'
         )
       })
 
-    const combinedCases = await Promise.all([casesWithLicences, casesPendingLicence]).then(c => c.flat())
+    const [withLicence, pending] = await Promise.all([casesWithLicences, casesPendingLicence])
+    const casesWithComs = await this.mapResponsibleComsToCasesWithExclusions(withLicence.concat(pending))
 
-    return this.mapResponsibleComsToCases(combinedCases)
+    return new OmuCaselist(casesWithComs)
   }
 
   async getApproverCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
@@ -120,8 +126,9 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  public pairNomisRecordsWithDelius = async (prisoners: Prisoner[]): Promise<ManagedCase[]> => {
+  public pairNomisRecordsWithDelius = async (prisoners: Container<Prisoner>): Promise<Container<ManagedCase>> => {
     const caseloadNomisIds = prisoners
+      .unwrap()
       .filter(offender => offender.prisonerNumber)
       .map(offender => offender.prisonerNumber)
 
@@ -139,14 +146,17 @@ export default class CaseloadService {
             },
           }
         }
-        return {}
+        return { nomisRecord: offender }
       })
-      .filter(offender => offender.nomisRecord && offender.deliusRecord)
+      .filter(offender => offender.nomisRecord && offender.deliusRecord, 'Unable to find delius record')
   }
 
-  public mapOffendersToLicences = async (offenders: ManagedCase[], user?: User): Promise<ManagedCase[]> => {
+  public mapOffendersToLicences = async (
+    offenders: Container<ManagedCase>,
+    user?: User
+  ): Promise<Container<ManagedCase>> => {
     const existingLicences = await this.licenceService.getLicencesByNomisIdsAndStatus(
-      offenders.map(offender => offender.nomisRecord.prisonerNumber),
+      offenders.map(offender => offender.nomisRecord.prisonerNumber).unwrap(),
       [
         LicenceStatus.ACTIVE,
         LicenceStatus.IN_PROGRESS,
@@ -204,107 +214,120 @@ export default class CaseloadService {
     })
   }
 
-  public filterOffendersEligibleForLicence = async (offenders: ManagedCase[], user?: User) => {
+  public filterOffendersEligibleForLicence = async (offenders: Container<ManagedCase>, user?: User) => {
     const eligibleOffenders = offenders
-      .filter(offender => !CaseloadService.isParoleEligible(offender.nomisRecord.paroleEligibilityDate))
-      .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
-      .filter(offender => !offender.nomisRecord.indeterminateSentence)
-      .filter(offender => offender.nomisRecord.conditionalReleaseDate)
-      // TODO: Following filter rule can be removed after 7th November 2022
+      .filter(
+        offender => !CaseloadService.isParoleEligible(offender.nomisRecord.paroleEligibilityDate),
+        'is eligible for parole'
+      )
+      .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD', 'is dead')
+      .filter(offender => !offender.nomisRecord.indeterminateSentence, 'on indeterminate sentence')
+      .filter(offender => offender.nomisRecord.conditionalReleaseDate, 'has no conditional release date')
+      // TODO: Following filter rule can be removed after 21st November 2022
       .filter(
         offender =>
           ![
-            'DTI',
-            'DMI',
-            'HHI',
-            'KVI',
-            'NLI',
-            'LNI',
-            'FKI',
-            'GHI',
-            'STI',
-            'LPI',
-            'PNI',
-            'RSI',
-            'TCI',
-            'HVI',
-            'KMI',
-            'LFI',
-            'WMI',
-            'ACI',
-            'BMI',
-            'SFI',
-            'DHI',
-            'SHI',
-            'BSI',
-            'HEI',
-            'DGI',
-            'OWI',
-            'SNI',
-            'ONI',
-            'RHI',
-            'FSI',
-            'LLI',
-            'BWI',
+            'AGI',
+            'DNI',
+            'FNI',
+            'HDI',
+            'HLI',
+            'HMI',
+            'LEI',
+            'LHI',
+            'MDI',
+            'NHI',
+            'WEI',
+            'WDI',
+            'BCI',
+            'FBI',
+            'HII',
+            'MRI',
+            'ASI',
+            'BLI',
+            'CWI',
+            'DAI',
+            'EEI',
+            'EWI',
+            'EXI',
+            'GMI',
+            'LYI',
+            'PDI',
+            'VEI',
           ].includes(offender.nomisRecord.prisonId) ||
           moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
-            moment('2022-11-07', 'YYYY-MM-DD'),
+            moment('2022-11-21', 'YYYY-MM-DD'),
             'day'
-          )
+          ),
+        'Limited due to new rollout prison'
       )
 
-    if (eligibleOffenders.length === 0) return eligibleOffenders
+    if (eligibleOffenders.isEmpty()) return eligibleOffenders
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
-      eligibleOffenders.map(c => c.nomisRecord),
+      eligibleOffenders.map(c => c.nomisRecord).unwrap(),
       user
     )
 
     return eligibleOffenders.filter(offender => {
       const hdcRecord = hdcStatuses.find(hdc => hdc.bookingId === offender.nomisRecord.bookingId)
       return !hdcRecord || hdcRecord.approvalStatus !== 'APPROVED'
-    })
+    }, 'approved for HDC')
   }
 
-  private buildCreateCaseload = (managedOffenders: ManagedCase[]): ManagedCase[] => {
+  private buildCreateCaseload = (managedOffenders: Container<ManagedCase>): Container<ManagedCase> => {
     return managedOffenders
       .filter(
         offender =>
           offender.nomisRecord.status &&
-          (offender.nomisRecord.status.startsWith('ACTIVE') || offender.nomisRecord.status === 'INACTIVE TRN')
+          (offender.nomisRecord.status.startsWith('ACTIVE') || offender.nomisRecord.status === 'INACTIVE TRN'),
+        'status is not ACTIVE or INACTIVE TRN'
       )
-      .filter(offender =>
-        moment(
-          moment(offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
-        ).isSameOrAfter(moment(), 'day')
+      .filter(
+        offender =>
+          moment(
+            moment(
+              offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate,
+              'YYYY-MM-DD'
+            )
+          ).isSameOrAfter(moment(), 'day'),
+        'confirmed release date (or conditional release date) is before today'
       )
-      .filter(offender =>
-        [
-          LicenceStatus.OOS_RECALL,
-          LicenceStatus.OOS_BOTUS,
-          LicenceStatus.NOT_IN_PILOT,
-          LicenceStatus.NOT_STARTED,
-          LicenceStatus.IN_PROGRESS,
-          LicenceStatus.SUBMITTED,
-          LicenceStatus.APPROVED,
-        ].some(status => offender.licences.find(l => l.status === status))
+      .filter(
+        offender =>
+          [
+            LicenceStatus.OOS_RECALL,
+            LicenceStatus.OOS_BOTUS,
+            LicenceStatus.NOT_IN_PILOT,
+            LicenceStatus.NOT_STARTED,
+            LicenceStatus.IN_PROGRESS,
+            LicenceStatus.SUBMITTED,
+            LicenceStatus.APPROVED,
+          ].some(status => offender.licences.find(l => l.status === status)),
+        'licence status is not one of OOS_RECALL, OOS_BOTUS, NOT_IN_PILOT, NOT_STARTED, IN_PROGRESS, SUBMITTED, APPROVED,'
       )
   }
 
-  private buildVaryCaseload = (managedOffenders: ManagedCase[]): ManagedCase[] => {
-    return managedOffenders.filter(offender =>
-      [
-        LicenceStatus.ACTIVE,
-        LicenceStatus.VARIATION_IN_PROGRESS,
-        LicenceStatus.VARIATION_SUBMITTED,
-        LicenceStatus.VARIATION_APPROVED,
-        LicenceStatus.VARIATION_REJECTED,
-      ].some(status => offender.licences.find(l => l.status === status))
+  private buildVaryCaseload = (managedOffenders: Container<ManagedCase>): Container<ManagedCase> => {
+    return managedOffenders.filter(
+      offender =>
+        [
+          LicenceStatus.ACTIVE,
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_APPROVED,
+          LicenceStatus.VARIATION_REJECTED,
+        ].some(status => offender.licences.find(l => l.status === status)),
+      'licence status is not one of ACTIVE, VARIATION_IN_PROGRESS, VARIATION_SUBMITTED, VARIATION_APPROVED, VARIATION_REJECTED'
     )
   }
 
-  private pairDeliusRecordsWithNomis = async (managedOffenders: DeliusRecord[], user: User): Promise<ManagedCase[]> => {
+  private pairDeliusRecordsWithNomis = async (
+    managedOffenders: Container<DeliusRecord>,
+    user: User
+  ): Promise<Container<ManagedCase>> => {
     const caseloadNomisIds = managedOffenders
+      .unwrap()
       .filter(offender => offender.otherIds?.nomsNumber)
       .map(offender => offender.otherIds?.nomsNumber)
 
@@ -317,13 +340,13 @@ export default class CaseloadService {
           nomisRecord: nomisRecords.find(nomisRecord => nomisRecord.prisonerNumber === offender.otherIds?.nomsNumber),
         }
       })
-      .filter(offender => offender.nomisRecord)
+      .filter(offender => offender.nomisRecord, 'unable to find prison record')
   }
 
-  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<ManagedCase[]> => {
+  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<Container<ManagedCase>> => {
     const nomisIds = licences.map(l => l.nomisId)
     const deliusRecords = await this.communityService.getOffendersByNomsNumbers(nomisIds)
-    const offenders = await this.pairDeliusRecordsWithNomis(deliusRecords, user)
+    const offenders = await this.pairDeliusRecordsWithNomis(this.wrap(deliusRecords), user)
     return offenders.map(offender => {
       return {
         ...offender,
@@ -342,8 +365,11 @@ export default class CaseloadService {
     })
   }
 
-  private async mapResponsibleComsToCases(caseload: ManagedCase[]): Promise<ManagedCase[]> {
+  private async mapResponsibleComsToCasesWithExclusions(
+    caseload: Container<ManagedCase>
+  ): Promise<Container<ManagedCase>> {
     const comUsernames = caseload
+      .unwrap()
       .map(
         offender =>
           offender.licences.find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE).comUsername
@@ -387,6 +413,10 @@ export default class CaseloadService {
     })
   }
 
+  private async mapResponsibleComsToCases(caseload: Container<ManagedCase>): Promise<ManagedCase[]> {
+    return this.mapResponsibleComsToCasesWithExclusions(caseload).then(it => it.unwrap())
+  }
+
   private getLicenceType = (nomisRecord: Prisoner): LicenceType => {
     if (!nomisRecord.topupSupervisionExpiryDate) {
       return LicenceType.AP
@@ -399,15 +429,17 @@ export default class CaseloadService {
 
   private mapManagedOffenderRecordToOffenderDetail = async (
     caseload: CommunityApiManagedOffender[]
-  ): Promise<DeliusRecord[]> => {
+  ): Promise<Container<DeliusRecord>> => {
     const crns = caseload.map(c => c.offenderCrn)
     const offenders = await this.communityService.getOffendersByCrn(crns)
-    return offenders.map(o => {
-      return {
-        ...o,
-        ...caseload.find(c => c.offenderCrn === o.otherIds?.crn),
-      }
-    })
+    return this.wrap(
+      offenders.map(o => {
+        return {
+          ...o,
+          ...caseload.find(c => c.offenderCrn === o.otherIds?.crn),
+        }
+      })
+    )
   }
 
   private isRecall = (offender: ManagedCase): boolean => {
@@ -448,5 +480,9 @@ export default class CaseloadService {
     if (!ped) return false
     const pedDate = parse(ped, 'yyyy-MM-dd', new Date())
     return isFuture(pedDate)
+  }
+
+  wrap<T>(items: T[]): Container<T> {
+    return new Container(items)
   }
 }

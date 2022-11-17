@@ -53,11 +53,12 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     req = {
       session: { caseloadsSelected: [] },
       body: { caseload: [] },
+      query: {},
     } as unknown as Request
   })
 
   describe('GET', () => {
-    it('Should render page with all users caseloads in Nomis', async () => {
+    it('Should render page with all users caseloads in Nomis, for prison view', async () => {
       userService.getPrisonUserCaseloads.mockResolvedValue(caseloadsFromNomis)
       await handler.GET(AuthRole.CASE_ADMIN)(req, res, next)
 
@@ -72,12 +73,34 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
         cancelLink: '/licence/view/cases',
       })
     })
+    it('Should render page with all users caseloads in Nomis, for probation view', async () => {
+      userService.getPrisonUserCaseloads.mockResolvedValue(caseloadsFromNomis)
+      req.query.view = 'probation'
+      await handler.GET(AuthRole.CASE_ADMIN)(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/changeLocation', {
+        caseload: [
+          { text: 'Belmarsh (HMP)', value: 'BAI' },
+          { text: 'Birmingham (HMP)', value: 'BMI' },
+          { text: 'Brixton (HMP)', value: 'BXI' },
+          { text: 'Moorland (HMP & YOI)', value: 'MDI' },
+        ],
+        checked: [],
+        cancelLink: '/licence/view/cases?view=probation',
+      })
+    })
   })
 
   describe('POST', () => {
-    it('Should redirect to caselist page', async () => {
+    it('Should redirect to caselist page for prison view', async () => {
       await handler.POST(AuthRole.CASE_ADMIN)(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
+    })
+
+    it('Should redirect to caselist page for probation view', async () => {
+      req.query.view = 'probation'
+      await handler.POST(AuthRole.CASE_ADMIN)(req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases?view=probation')
     })
   })
 })
