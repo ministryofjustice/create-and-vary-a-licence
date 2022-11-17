@@ -1,6 +1,6 @@
 import { Readable } from 'stream'
 import fs from 'fs'
-import { Moment } from 'moment'
+import { format } from 'date-fns'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import { PrisonApiPrisoner, PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
@@ -105,15 +105,16 @@ export default class PrisonerService {
   }
 
   async searchPrisonersByReleaseDate(
-    earliestReleaseDate: Moment,
-    latestReleaseDate: Moment,
+    earliestReleaseDate: Date,
+    latestReleaseDate: Date,
     prisonIds?: string[],
     user?: User
   ): Promise<Prisoner[]> {
     return this.prisonerSearchApiClient
       .searchPrisonersByReleaseDate(
-        earliestReleaseDate.format('YYYY-MM-DD'),
-        latestReleaseDate.format('YYYY-MM-DD'),
+        format(earliestReleaseDate, 'yyyy-MM-dd'),
+        format(latestReleaseDate, 'yyyy-MM-dd'),
+
         prisonIds,
         user
       )

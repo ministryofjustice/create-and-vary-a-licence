@@ -10,6 +10,7 @@ import LicenceType from '../../../enumeration/licenceType'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import Container from '../../../services/container'
+import OmuCaselist from '../../../services/omuCaselist'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
@@ -66,11 +67,10 @@ describe('Route handlers - View and print case list', () => {
   })
 
   describe('GET', () => {
-    const prisonViewCases = new Container([
+    const caseList = new Container([
       {
         licences: [
           {
-            id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.NOT_STARTED,
           },
@@ -130,18 +130,15 @@ describe('Route handlers - View and print case list', () => {
           firstName: 'Stephen',
           lastName: 'Rowe',
           prisonerNumber: 'A1234AE',
-          conditionalReleaseDate: '2022-05-01',
+          conditionalReleaseDate: '2022-06-10',
         } as Prisoner,
         probationPractitioner: {
           name: 'Larry Johnson',
         },
       },
-    ])
-    const probationViewCases = new Container([
       {
         licences: [
           {
-            id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
           },
@@ -150,7 +147,7 @@ describe('Route handlers - View and print case list', () => {
           firstName: 'Bob',
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
-          confirmedReleaseDate: '2022-05-01',
+          confirmedReleaseDate: '2022-07-01',
         } as Prisoner,
         probationPractitioner: {
           name: 'Sherlock Holmes',
@@ -167,7 +164,7 @@ describe('Route handlers - View and print case list', () => {
           firstName: 'Joe',
           lastName: 'Bloggs',
           prisonerNumber: 'A1234AB',
-          conditionalReleaseOverrideDate: '2022-05-01',
+          conditionalReleaseOverrideDate: '2022-06-01',
         } as Prisoner,
         probationPractitioner: {
           name: 'Thor',
@@ -210,7 +207,7 @@ describe('Route handlers - View and print case list', () => {
     ])
 
     it('should render cases when user only has 1 caseloaded prison', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new Container([]))
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
       res.locals.prisonCaseload = ['BAI']
       await handler.GET(req, res)
 
@@ -218,254 +215,13 @@ describe('Route handlers - View and print case list', () => {
 
       expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
         { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
-        ['BAI'],
-        'prison'
+        ['BAI']
       )
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [],
-        hasMultipleCaseloadsInNomis: false,
-        prisonsToDisplay: [
-          {
-            agencyId: 'BAI',
-            description: 'Belmarsh (HMP)',
-          },
-        ],
-        probationView: false,
-        search: undefined,
-        statusConfig,
-      })
-    })
-
-    it('should render cases when user selects prison which is not their currently active prison', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new Container([]))
-      res.locals.user.prisonCaseload = ['BAI', 'MDI']
-      req.session.caseloadsSelected = ['MDI']
-
-      await handler.GET(req, res)
-
-      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
-        {
-          activeCaseload: 'BAI',
-          prisonCaseload: ['BAI', 'MDI'],
-          username: 'joebloggs',
-        },
-        ['MDI'],
-        'prison'
-      )
-
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [],
-        hasMultipleCaseloadsInNomis: true,
-        prisonsToDisplay: [
-          {
-            agencyId: 'MDI',
-            description: 'Moorland (HMP)',
-          },
-        ],
-        probationView: false,
-        search: undefined,
-        statusConfig,
-      })
-    })
-
-    it('should render list of licences for multiple selected prisons', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new Container([]))
-      req.session.caseloadsSelected = ['MDI', 'BXI']
-      res.locals.user.prisonCaseload = ['BAI', 'MDI', 'BXI']
-      await handler.GET(req, res)
-
-      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
-        { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI', 'MDI', 'BXI'] },
-        ['MDI', 'BXI'],
-        'prison'
-      )
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [],
-        hasMultipleCaseloadsInNomis: true,
-        prisonsToDisplay: [
-          {
-            agencyId: 'BXI',
-            description: 'Brixton (HMP)',
-          },
-          {
-            agencyId: 'MDI',
-            description: 'Moorland (HMP)',
-          },
-        ],
-        probationView: false,
-        search: undefined,
-        statusConfig,
-      })
-    })
-
-    it('should successfully search by name', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new Container([]))
-      req.query.search = 'bob'
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [],
-        hasMultipleCaseloadsInNomis: false,
-        prisonsToDisplay: [
-          {
-            agencyId: 'BAI',
-            description: 'Belmarsh (HMP)',
-          },
-        ],
-        probationView: false,
-        search: 'bob',
-        statusConfig,
-      })
-    })
-
-    it('should successfully search by prison number', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(prisonViewCases)
-      req.query.search = 'A1234AA'
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
-          {
-            licenceId: 1,
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
-            licenceStatus: LicenceStatus.NOT_STARTED,
-            isClickable: false,
-          },
-        ],
-        hasMultipleCaseloadsInNomis: false,
-        prisonsToDisplay: [
-          {
-            agencyId: 'BAI',
-            description: 'Belmarsh (HMP)',
-          },
-        ],
-        probationView: false,
-        search: 'A1234AA',
-        statusConfig,
-      })
-    })
-
-    it('should successfully search by probation practitioner', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(prisonViewCases)
-      req.query.search = 'holmes'
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [
-          {
-            isClickable: false,
-            licenceId: 1,
-            licenceStatus: 'NOT_STARTED',
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
-          },
-        ],
-        hasMultipleCaseloadsInNomis: false,
-        prisonsToDisplay: [
-          {
-            agencyId: 'BAI',
-            description: 'Belmarsh (HMP)',
-          },
-        ],
-        probationView: false,
-        search: 'holmes',
-        statusConfig,
-      })
-    })
-
-    it('should evaluate the clickability of cases for probation view', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(probationViewCases)
-      res.locals.user.prisonCaseload = ['BAI']
-      req.query.view = 'probation'
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [
-          {
-            isClickable: true,
-            licenceId: 1,
-            licenceStatus: 'ACTIVE',
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
-          },
           {
             isClickable: false,
             licenceId: undefined,
-            licenceStatus: 'VARIATION_IN_PROGRESS',
-            name: 'Joe Bloggs',
-            prisonerNumber: 'A1234AB',
-            probationPractitioner: {
-              name: 'Thor',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-          },
-          {
-            isClickable: false,
-            licenceId: undefined,
-            licenceStatus: 'VARIATION_SUBMITTED',
-            name: 'Harvey Smith',
-            prisonerNumber: 'A1234AC',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-          },
-          {
-            isClickable: false,
-            licenceId: undefined,
-            licenceStatus: 'VARIATION_APPROVED',
-            name: 'Harold Lloyd',
-            prisonerNumber: 'A1234AD',
-            probationPractitioner: {
-              name: 'Harry Goldman',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-          },
-        ],
-
-        hasMultipleCaseloadsInNomis: false,
-        prisonsToDisplay: [
-          {
-            agencyId: 'BAI',
-            description: 'Belmarsh (HMP)',
-          },
-        ],
-        probationView: true,
-        search: undefined,
-        statusConfig,
-      })
-    })
-
-    it('should evaluate the clickability of cases for prison view', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(prisonViewCases)
-      res.locals.user.prisonCaseload = ['BAI']
-      req.query.view = 'prison'
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [
-          {
-            isClickable: false,
-            licenceId: 1,
             licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
@@ -508,7 +264,546 @@ describe('Route handlers - View and print case list', () => {
             probationPractitioner: {
               name: 'Larry Johnson',
             },
+            releaseDate: '10 Jun 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should render cases when user selects prison which is not their currently active prison', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      res.locals.user.prisonCaseload = ['BAI', 'MDI']
+      req.session.caseloadsSelected = ['MDI']
+
+      await handler.GET(req, res)
+
+      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+        {
+          activeCaseload: 'BAI',
+          prisonCaseload: ['BAI', 'MDI'],
+          username: 'joebloggs',
+        },
+        ['MDI']
+      )
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
             releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'IN_PROGRESS',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'SUBMITTED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'APPROVED',
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '10 Jun 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: true,
+        prisonsToDisplay: [
+          {
+            agencyId: 'MDI',
+            description: 'Moorland (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should render list of licences for multiple selected prisons', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      req.session.caseloadsSelected = ['MDI', 'BXI']
+      res.locals.user.prisonCaseload = ['BAI', 'MDI', 'BXI']
+      await handler.GET(req, res)
+
+      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+        { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI', 'MDI', 'BXI'] },
+        ['MDI', 'BXI']
+      )
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'IN_PROGRESS',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'SUBMITTED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'APPROVED',
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '10 Jun 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: true,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BXI',
+            description: 'Brixton (HMP)',
+          },
+          {
+            agencyId: 'MDI',
+            description: 'Moorland (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should render licences for for People In Prison in ascending order', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      req.session.caseloadsSelected = ['MDI']
+      res.locals.user.prisonCaseload = ['MDI']
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'IN_PROGRESS',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'SUBMITTED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'APPROVED',
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '10 Jun 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'MDI',
+            description: 'Moorland (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should render licences for for People On Probation in descending order', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      req.session.caseloadsSelected = ['MDI']
+      res.locals.user.prisonCaseload = ['MDI']
+      req.query.view = 'probation'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'ACTIVE',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 Jul 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_IN_PROGRESS',
+            name: 'Joe Bloggs',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Thor',
+            },
+            releaseDate: '01 Jun 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_SUBMITTED',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_APPROVED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'MDI',
+            description: 'Moorland (HMP)',
+          },
+        ],
+        probationView: true,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should successfully search by name', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      req.query.search = 'bob'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: 'bob',
+        statusConfig,
+      })
+    })
+
+    it('should successfully search by prison number', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      req.query.search = 'A1234AA'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            licenceId: undefined,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+            licenceStatus: LicenceStatus.NOT_STARTED,
+            isClickable: false,
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: 'A1234AA',
+        statusConfig,
+      })
+    })
+
+    it('should successfully search by probation practitioner', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      req.query.search = 'holmes'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: 'holmes',
+        statusConfig,
+      })
+    })
+
+    it('should evaluate the clickability of cases for probation view', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'probation'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'ACTIVE',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 Jul 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_IN_PROGRESS',
+            name: 'Joe Bloggs',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Thor',
+            },
+            releaseDate: '01 Jun 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_SUBMITTED',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'VARIATION_APPROVED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+        ],
+
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: true,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should evaluate the clickability of cases for prison view', async () => {
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+          {
+            isClickable: false,
+            licenceId: undefined,
+            licenceStatus: 'IN_PROGRESS',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'SUBMITTED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+          },
+          {
+            isClickable: true,
+            licenceId: undefined,
+            licenceStatus: 'APPROVED',
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
           },
         ],
@@ -529,7 +824,8 @@ describe('Route handlers - View and print case list', () => {
     describe('GET_WITH_EXCLUSIONS', () => {
       it('should render list of licences and display the currently active caseload prison', async () => {
         res.locals.prisonCaseload = ['BAI']
-        caseloadService.getOmuCaseload.mockResolvedValue(prisonViewCases)
+        const omuCaselist = new OmuCaselist(caseList)
+        caseloadService.getOmuCaseload.mockResolvedValue(omuCaselist)
 
         await handler.GET_WITH_EXCLUSIONS(req, res)
 
@@ -537,11 +833,10 @@ describe('Route handlers - View and print case list', () => {
 
         expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
           { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
-          ['BAI'],
-          'prison'
+          ['BAI']
         )
         expect(res.header).toHaveBeenCalledWith('Content-Type', 'application/json')
-        expect(res.send).toHaveBeenCalledWith(JSON.stringify(prisonViewCases, null, 4))
+        expect(res.send).toHaveBeenCalledWith(JSON.stringify(omuCaselist.getPrisonView(), null, 4))
       })
     })
   })

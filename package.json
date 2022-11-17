@@ -21,7 +21,7 @@
     "record-build-info": "node ./bin/record-build-info",
     "lint": "eslint . --cache --max-warnings 0",
     "typecheck": "tsc",
-    "test": "jest --collectCoverage=true --testPathPattern=/server/.*",
+    "test": "jest --collectCoverage=true",
     "test:ci": "jest --maxWorkers=2 --collectCoverage=true --testPathPattern=/server/.*",
     "integrationTest": "jest --runInBand --testPathPattern=/integration_tests/.*",
     "security_audit": "better-npm-audit audit",
@@ -50,6 +50,7 @@
     ],
     "testMatch": [
       "<rootDir>/server/**/?(*.)(spec|test).{ts,js,jsx,mjs}",
+      "<rootDir>/jobs/**/?(*.)(spec|test).{ts,js,jsx,mjs}",
       "<rootDir>/integration_tests/gotenberg/?(*.)(spec|test).{ts,js,jsx,mjs}"
     ],
     "setupFilesAfterEnv": [

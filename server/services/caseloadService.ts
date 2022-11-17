@@ -1,8 +1,9 @@
 import moment from 'moment'
-import { isFuture, parse } from 'date-fns'
+import { isFuture, parse, startOfWeek, add, endOfWeek } from 'date-fns'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
+import OmuCaselist from './omuCaselist'
 import { DeliusRecord, ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
@@ -69,15 +70,15 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  async getOmuCaseload(user: User, prisonCaseload: string[], view: string): Promise<Container<ManagedCase>> {
+  async getOmuCaseload(user: User, prisonCaseload: string[]): Promise<OmuCaselist> {
     // Get cases with a licence in ACTIVE, APPROVED, SUBMITTED, IN_PROGRESS or VARIATION_IN_* state
     const casesWithLicences = this.licenceService
       .getLicencesForOmu(user, prisonCaseload)
       .then(licences => this.mapLicencesToOffenders(licences))
 
     // Get cases due for release soon which do not have a submitted licence
-    const startOfThisWeek = moment().startOf('isoWeek')
-    const endOfTheFourthWeekFromNow = moment().add(3, 'weeks').endOf('isoWeek')
+    const startOfThisWeek = startOfWeek(new Date(), { weekStartsOn: 1 })
+    const endOfTheFourthWeekFromNow = endOfWeek(add(new Date(), { weeks: 3 }), { weekStartsOn: 1 })
     const casesPendingLicence = this.prisonerService
       .searchPrisonersByReleaseDate(startOfThisWeek, endOfTheFourthWeekFromNow, prisonCaseload, user)
       .then(caseload => this.wrap(caseload))
@@ -99,33 +100,9 @@ export default class CaseloadService {
       })
 
     const [withLicence, pending] = await Promise.all([casesWithLicences, casesPendingLicence])
-    const casesFilteredByView = this.filterByPrisonOrProbationView(view, withLicence.concat(pending))
-    return this.mapResponsibleComsToCasesWithExclusions(casesFilteredByView)
-  }
+    const casesWithComs = await this.mapResponsibleComsToCasesWithExclusions(withLicence.concat(pending))
 
-  public filterByPrisonOrProbationView = (view: string, combinedCases: Container<ManagedCase>) => {
-    const prisonViewStatuses = [
-      LicenceStatus.NOT_STARTED,
-      LicenceStatus.IN_PROGRESS,
-      LicenceStatus.APPROVED,
-      LicenceStatus.SUBMITTED,
-    ]
-
-    const probationViewStatuses = [
-      LicenceStatus.ACTIVE,
-      LicenceStatus.VARIATION_IN_PROGRESS,
-      LicenceStatus.VARIATION_APPROVED,
-      LicenceStatus.VARIATION_SUBMITTED,
-      LicenceStatus.NOT_IN_PILOT,
-      LicenceStatus.OOS_RECALL,
-      LicenceStatus.OOS_BOTUS,
-    ]
-    const statuses = view === 'prison' ? prisonViewStatuses : probationViewStatuses
-
-    return combinedCases.filter(
-      c => statuses.includes(c?.licences[0]?.status),
-      `invalid status for view ${view}, not one ${statuses}`
-    )
+    return new OmuCaselist(casesWithComs)
   }
 
   async getApproverCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
@@ -246,45 +223,40 @@ export default class CaseloadService {
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD', 'is dead')
       .filter(offender => !offender.nomisRecord.indeterminateSentence, 'on indeterminate sentence')
       .filter(offender => offender.nomisRecord.conditionalReleaseDate, 'has no conditional release date')
-      // TODO: Following filter rule can be removed after 7th November 2022
+      // TODO: Following filter rule can be removed after 21st November 2022
       .filter(
         offender =>
           ![
-            'DTI',
-            'DMI',
-            'HHI',
-            'KVI',
-            'NLI',
-            'LNI',
-            'FKI',
-            'GHI',
-            'STI',
-            'LPI',
-            'PNI',
-            'RSI',
-            'TCI',
-            'HVI',
-            'KMI',
-            'LFI',
-            'WMI',
-            'ACI',
-            'BMI',
-            'SFI',
-            'DHI',
-            'SHI',
-            'BSI',
-            'HEI',
-            'DGI',
-            'OWI',
-            'SNI',
-            'ONI',
-            'RHI',
-            'FSI',
-            'LLI',
-            'BWI',
+            'AGI',
+            'DNI',
+            'FNI',
+            'HDI',
+            'HLI',
+            'HMI',
+            'LEI',
+            'LHI',
+            'MDI',
+            'NHI',
+            'WEI',
+            'WDI',
+            'BCI',
+            'FBI',
+            'HII',
+            'MRI',
+            'ASI',
+            'BLI',
+            'CWI',
+            'DAI',
+            'EEI',
+            'EWI',
+            'EXI',
+            'GMI',
+            'LYI',
+            'PDI',
+            'VEI',
           ].includes(offender.nomisRecord.prisonId) ||
           moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD').isSameOrAfter(
-            moment('2022-11-07', 'YYYY-MM-DD'),
+            moment('2022-11-21', 'YYYY-MM-DD'),
             'day'
           ),
         'Limited due to new rollout prison'

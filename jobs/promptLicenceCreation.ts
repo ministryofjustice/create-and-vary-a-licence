@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import _ from 'lodash'
-import moment, { Moment } from 'moment'
+import { add, startOfISOWeek, endOfISOWeek } from 'date-fns'
 import { buildAppInsightsClient, flush, initialiseAppInsights } from '../server/utils/azureAppInsights'
 import logger from '../logger'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
@@ -10,45 +10,20 @@ import { ManagedCase } from '../server/@types/managedCase'
 import LicenceStatus from '../server/enumeration/licenceStatus'
 import { EmailContact } from '../server/@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../server/utils/utils'
-import Container from '../server/services/container'
+import PromptLicenceCreationService from './promptLicenceCreationService'
 
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-prompt-licence-create-job')
 
 const { caseloadService, prisonerService, communityService, licenceService } = services
 
-const pollPrisonersDueForLicence = async (
-  earliestReleaseDate: Moment,
-  latestReleaseDate: Moment
-): Promise<ManagedCase[]> => {
-  const prisonCodes = config.rollout.prisons
-
-  return prisonerService
-    .searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonCodes)
-    .then(caseload => new Container(caseload))
-    .then(prisoners =>
-      prisoners.filter(offender => offender.status && offender.status.startsWith('ACTIVE'), 'not active')
-    )
-    .then(caseload => caseloadService.pairNomisRecordsWithDelius(caseload))
-    .then(caseload => caseloadService.filterOffendersEligibleForLicence(caseload))
-    .then(prisoners => caseloadService.mapOffendersToLicences(prisoners))
-    .then(prisoners =>
-      prisoners.filter(
-        offender =>
-          [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS].some(status =>
-            offender.licences.find(l => l.status === status)
-          ),
-        'No licences that are NOT_STARTED or IN_PROGRESS'
-      )
-    )
-    .then(caseload => caseload.unwrap())
-}
+const promptLicenceCreationService = new PromptLicenceCreationService(prisonerService, caseloadService)
 
 const buildEmailGroups = async (
-  initialPromptCases: ManagedCase[],
-  urgentPromptCases: ManagedCase[]
+  urgentPromptCases: ManagedCase[],
+  initialPromptCases: ManagedCase[]
 ): Promise<EmailContact[]> => {
-  const managedCases = [...initialPromptCases, ...urgentPromptCases]
+  const managedCases = [...urgentPromptCases, ...initialPromptCases]
 
   const mapPrisonerToReleaseCase = (prisoner: Prisoner) => {
     return {
@@ -112,10 +87,29 @@ const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
 /* eslint-enable */
 
 Promise.all([
-  pollPrisonersDueForLicence(moment().add(12, 'weeks').startOf('isoWeek'), moment().add(12, 'weeks').endOf('isoWeek')),
-  pollPrisonersDueForLicence(moment().startOf('isoWeek'), moment().add(3, 'weeks').endOf('isoWeek')),
+  promptLicenceCreationService.pollPrisonersDueForLicence(
+    startOfISOWeek(new Date()),
+    endOfISOWeek(add(new Date(), { weeks: 3 })),
+    [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS]
+  ),
+
+  promptLicenceCreationService
+    .pollPrisonersDueForLicence(
+      startOfISOWeek(add(new Date(), { weeks: 4 })),
+      endOfISOWeek(add(new Date(), { weeks: 11 })),
+      [LicenceStatus.NOT_STARTED]
+    )
+    .then(caseload => promptLicenceCreationService.excludeCasesNotAssignedToPpWithinPast7Days(caseload)),
+
+  promptLicenceCreationService.pollPrisonersDueForLicence(
+    startOfISOWeek(add(new Date(), { weeks: 12 })),
+    endOfISOWeek(add(new Date(), { weeks: 12 })),
+    [LicenceStatus.NOT_STARTED]
+  ),
 ])
-  .then(([initialPromptCases, urgentPromptCases]) => buildEmailGroups(initialPromptCases, urgentPromptCases))
+  .then(([urgentPromptCases, week13InitialPromptCases, week5to12InitialPromptCases]) =>
+    buildEmailGroups(urgentPromptCases, [...week13InitialPromptCases, ...week5to12InitialPromptCases])
+  )
   .then(emailGroups => notifyComOfUpcomingReleases(emailGroups))
   .then(() => {
     // Flush logs to app insights and only exit when complete

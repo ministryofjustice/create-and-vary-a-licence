@@ -20,9 +20,11 @@ export default class ViewAndPrintCaseRoutes {
     const allPrisons = await this.prisonerService.getPrisons()
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
+    const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
 
-    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay, view as string)
-    const caseloadViewModel = cases
+    const casesToView = view === 'prison' ? caselist.getPrisonView() : caselist.getProbationView()
+
+    const caseloadViewModel = casesToView
       .unwrap()
       .map(c => {
         return {
@@ -56,7 +58,7 @@ export default class ViewAndPrintCaseRoutes {
       .sort((a, b) => {
         const crd1 = getUnixTime(new Date(a.releaseDate))
         const crd2 = getUnixTime(new Date(b.releaseDate))
-        return crd1 - crd2
+        return view === 'prison' ? crd1 - crd2 : crd2 - crd1
       })
 
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
@@ -74,12 +76,12 @@ export default class ViewAndPrintCaseRoutes {
   GET_WITH_EXCLUSIONS = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { caseloadsSelected = [] } = req.session
-    const view = req.query.view || 'prison'
     const allPrisons = await this.prisonerService.getPrisons()
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
 
-    const cases = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay, view.toString())
+    const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
+    const cases = req.query.view === 'probation' ? caselist.getProbationView() : caselist.getPrisonView()
     res.header('Content-Type', 'application/json')
     res.send(JSON.stringify(cases, null, 4))
   }
