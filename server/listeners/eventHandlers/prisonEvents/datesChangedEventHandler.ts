@@ -6,6 +6,7 @@ import { PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { convertDateFormat } from '../../../utils/utils'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import logger from '../../../../logger'
 
 export default class DatesChangedEventHandler {
   constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
@@ -30,6 +31,9 @@ export default class DatesChangedEventHandler {
       // IS91 cases receive an update that wipes their CRD when their CRD passes.
       // We want to keep it in the service, so we should ignore any date-changing events that meet this criteria.
       if (['DET', 'RECEP_IMM'].includes(prisoner.imprisonmentStatus) && isPassedArdOrCrd(licence)) {
+        logger.info(
+          `Ignoring date update event for NOMIS ID: ${nomisId}, CRN: ${licence.crn}, licence ID: ${licence.licenceId}`
+        )
         return
       }
 
