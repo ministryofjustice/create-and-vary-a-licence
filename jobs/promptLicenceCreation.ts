@@ -39,7 +39,7 @@ const buildEmailGroups = async (
   const staffDetails = []
   /* eslint-disable */
   for (const codes of _.chunk(staffCodes, 500)) {
-    const partResult = await await communityService.getStaffDetailByStaffCodeList(codes)
+    const partResult = await communityService.getStaffDetailByStaffCodeList(codes)
     staffDetails.push(partResult)
   }
   /* eslint-enable */
