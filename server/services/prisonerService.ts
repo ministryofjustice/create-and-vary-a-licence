@@ -1,4 +1,5 @@
 import { Readable } from 'stream'
+import _ from 'lodash'
 import fs from 'fs'
 import { format } from 'date-fns'
 import PrisonApiClient from '../data/prisonApiClient'
@@ -87,9 +88,16 @@ export default class PrisonerService {
     const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
     if (bookingIds.length === 0) return []
 
-    const hdcList = await this.prisonApiClient.getLatestHdcStatusBatch(bookingIds, user)
+    const hdcList = []
 
-    return hdcList.map(
+    /* eslint-disable */
+    for (const ids of _.chunk(bookingIds, 500)) {
+      const partResult = await this.prisonApiClient.getLatestHdcStatusBatch(ids, user)
+      hdcList.push(partResult)
+    }
+    /* eslint-enable */
+
+    return hdcList.flat().map(
       h =>
         <HdcStatus>{
           bookingId: h.bookingId.toString(),

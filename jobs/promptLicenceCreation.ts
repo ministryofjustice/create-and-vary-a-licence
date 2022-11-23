@@ -36,8 +36,15 @@ const buildEmailGroups = async (
     managedCases.map(prisoner => prisoner.deliusRecord.offenderManagers.find(manager => manager.active)?.staff.code)
   )
 
-  const staff = await communityService.getStaffDetailByStaffCodeList(staffCodes)
+  const staffDetails = []
+  /* eslint-disable */
+  for (const codes of _.chunk(staffCodes, 500)) {
+    const partResult = await await communityService.getStaffDetailByStaffCodeList(codes)
+    staffDetails.push(partResult)
+  }
+  /* eslint-enable */
 
+  const staff = staffDetails.flat()
   const prisonersWithCom = managedCases
     .map(prisoner => {
       const responsibleComStaffCode = prisoner.deliusRecord.offenderManagers.find(manager => manager.active)?.staff.code

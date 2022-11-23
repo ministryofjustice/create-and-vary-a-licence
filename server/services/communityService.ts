@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
 import { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
@@ -78,8 +79,15 @@ export default class CommunityService {
   }
 
   async getOffendersByNomsNumbers(nomsNumbers: string[]): Promise<OffenderDetail[]> {
+    const offenderDetails = []
     if (nomsNumbers.length > 0) {
-      return this.probationSearchApiClient.getOffendersByNomsNumbers(nomsNumbers)
+      /* eslint-disable */
+      for (const nomsNums of _.chunk(nomsNumbers, 500)) {
+        const partResult = await this.probationSearchApiClient.getOffendersByNomsNumbers(nomsNums)
+        offenderDetails.push(partResult)
+      }
+      /* eslint-enable */
+      return offenderDetails.flat()
     }
     return []
   }
