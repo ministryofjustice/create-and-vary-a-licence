@@ -51,4 +51,13 @@ describe('Timeline', () => {
     const $ = cheerio.load(compiledTemplate.render(viewContext))
     expect($('.moj-timeline__date').text()).not.toContain('Last update: ')
   })
+  it('should display correct date description for "vary" routes', () => {
+    viewContext = {
+      isVaryJourney: true,
+      licence: { typeCode: 'AP', licenceExpiryDate: '01/01/2022' },
+    }
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    expect($('[data-qa=date]').text()).not.toContain('Release date: ')
+    expect($('[data-qa=date]').text()).toContain('Licence end date:')
+  })
 })

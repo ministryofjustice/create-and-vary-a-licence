@@ -110,6 +110,11 @@ const jsonDtTo12HourTime = (dt: string): string => {
   return momentTime.isValid() ? momentTime.format('hh:mm a') : null
 }
 
+const toDate = (date: string) => {
+  const [day, month, year] = date.split('/')
+  return new Date(`${year}-${month}-${day}`)
+}
+
 const removeDuplicates = (list: string[]): string[] => {
   return [...new Set(list)]
 }
@@ -200,6 +205,7 @@ export {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   jsonDtTo12HourTime,
+  toDate,
   convertDateFormat,
   removeDuplicates,
   filterCentralCaseload,

@@ -1,4 +1,4 @@
-import { RequestHandler, Router } from 'express'
+import { RequestHandler, Request, Response, NextFunction, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -27,6 +27,13 @@ import PolicyChangesCallbackRoutes from './handlers/policyChangesCallback'
 import PolicyChangeRoutes from './handlers/policyChange'
 import PolicyChangesInputCallbackRoutes from './handlers/policyChangesInputCallback'
 
+function alterResObject() {
+  return (req: Request, res: Response, next: NextFunction) => {
+    res.locals.isVaryJourney = true
+    next()
+  }
+}
+
 export default function Index({
   licenceService,
   caseloadService,
@@ -48,6 +55,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
+      alterResObject(),
       asyncMiddleware(handler)
     )
 

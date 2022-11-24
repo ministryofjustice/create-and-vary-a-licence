@@ -1,5 +1,6 @@
 import fs from 'fs'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
+import { addDays } from 'date-fns'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
@@ -402,5 +403,17 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('.govuk-summary-list__actions').length).toBe(0)
     expect($('.check-answers-header__change-link').length).toBe(0)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(0)
+  })
+
+  it('should display correct date description for "non-vary" routes ', () => {
+    const tomorrow = addDays(new Date(), 1)
+
+    viewContext = {
+      isVaryJourney: false,
+      licence: { typeCode: 'AP', licenceExpiryDate: tomorrow },
+    }
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    expect($('[data-qa=date]').text()).toContain('Release date')
+    expect($('[data-qa=date]').text()).not.toContain('Licence end date')
   })
 })
