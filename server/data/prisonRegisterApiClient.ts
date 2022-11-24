@@ -20,14 +20,4 @@ export default class PrisonRegisterApiClient extends RestClient {
       return error.status >= 400 && error.status < 500 ? null : error
     }
   }
-
-  async getPrisonOmuContactEmail(agencyId: string, user: User): Promise<string> {
-    return (await this.get(
-      {
-        path: `/secure/prisons/id/${agencyId}/offender-management-unit/email-address`,
-        responseType: 'text',
-      },
-      { username: user.username }
-    )) as Promise<string>
-  }
 }

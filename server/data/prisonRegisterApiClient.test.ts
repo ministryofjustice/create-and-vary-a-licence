@@ -30,16 +30,4 @@ describe('Prison Register Api client tests', () => {
     expect(get).toHaveBeenCalledWith({ path: '/prisons/id/MDI' }, { username: 'joebloggs' })
     expect(result).toEqual({ prisonName: 'Moorland (HMP)' })
   })
-
-  it('Get prison OMU contact email', async () => {
-    get.mockResolvedValue('prisonOmuEmail@justice.gov.uk')
-
-    const result = await prisonRegisterApiClient.getPrisonOmuContactEmail('MDI', { username: 'joebloggs' } as User)
-
-    expect(get).toHaveBeenCalledWith(
-      { path: '/secure/prisons/id/MDI/offender-management-unit/email-address', responseType: 'text' },
-      { username: 'joebloggs' }
-    )
-    expect(result).toEqual('prisonOmuEmail@justice.gov.uk')
-  })
 })

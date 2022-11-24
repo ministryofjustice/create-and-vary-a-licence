@@ -8,8 +8,4 @@ export default class PrisonRegisterService {
   async getPrisonDescription(agencyId: string, user: User): Promise<PrisonDto> {
     return this.prisonRegisterApiClient.getPrisonDescription(agencyId, user)
   }
-
-  async getPrisonOmuContactEmail(agencyId: string, user: User): Promise<string> {
-    return this.prisonRegisterApiClient.getPrisonOmuContactEmail(agencyId, user)
-  }
 }
