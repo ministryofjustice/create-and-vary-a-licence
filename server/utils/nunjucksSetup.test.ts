@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio'
-import { format, addDays, addMonths } from 'date-fns'
+import { format, addDays, subDays, addMonths } from 'date-fns'
 import nunjucks, { Template } from 'nunjucks'
 import ConditionService from '../services/conditionService'
 import { registerNunjucks } from './nunjucksSetup'
@@ -294,6 +294,19 @@ describe('Nunjucks Filters', () => {
       const licence = {
         typeCode: 'AP_PSS',
         topupSupervisionStartDate: today,
+        topupSupervisionExpiryDate: tused,
+      } as Licence
+      const result = njkEnv.getFilter('dateToDisplay')(licence)
+      expect(result).toEqual(`PSS end date: ${tusedInLongerForm}`)
+    })
+
+    it('Should handle AP_PSS where led has passed and tused exists but no tussd', () => {
+      const yesterday = format(subDays(new Date(), 1), 'd/MM/yyyy')
+      const tused = format(addMonths(new Date(), 1), 'd/MM/yyyy')
+      const tusedInLongerForm = format(addMonths(new Date(), 1), 'd MMM yyy')
+      const licence = {
+        typeCode: 'AP_PSS',
+        licenceExpiryDate: yesterday,
         topupSupervisionExpiryDate: tused,
       } as Licence
       const result = njkEnv.getFilter('dateToDisplay')(licence)

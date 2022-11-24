@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import nunjucks, { Environment } from 'nunjucks'
-import { isToday, format } from 'date-fns'
+import { isToday, isYesterday, format } from 'date-fns'
 import express from 'express'
 import path from 'path'
 import moment from 'moment'
@@ -262,17 +262,17 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
     let dateToDisplay: Date
     let textToDisplay = ''
 
-    if (licenceType === 'AP') {
+    if (licenceType === 'AP' || licenceType === 'AP_PSS') {
       textToDisplay = 'Licence end date'
       dateToDisplay = led
     }
 
-    if (licenceType === 'AP_PSS') {
-      textToDisplay = isToday(tussd) ? 'PSS end date' : 'Licence end date'
-      dateToDisplay = isToday(tussd) ? tused : led
-    }
+    const conditionsToDisplayTused =
+      (licenceType === 'AP_PSS' && tussd && isToday(tussd)) ||
+      (licenceType === 'AP_PSS' && !tussd && tused && led && isYesterday(led)) ||
+      licenceType === 'PSS'
 
-    if (licenceType === 'PSS') {
+    if (conditionsToDisplayTused) {
       textToDisplay = 'PSS end date'
       dateToDisplay = tused
     }
