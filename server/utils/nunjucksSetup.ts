@@ -1,13 +1,21 @@
 /* eslint-disable no-param-reassign */
 import nunjucks, { Environment } from 'nunjucks'
+import { isToday, isYesterday, format } from 'date-fns'
 import express from 'express'
 import path from 'path'
 import moment from 'moment'
 import { filesize } from 'filesize'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
-import { formatAddress, jsonDtTo12HourTime, jsonDtToDate, jsonDtToDateShort, jsonDtToDateWithDay } from './utils'
-import { AdditionalCondition, AdditionalConditionData } from '../@types/licenceApiClientTypes'
+import {
+  formatAddress,
+  jsonDtTo12HourTime,
+  jsonDtToDate,
+  jsonDtToDateShort,
+  jsonDtToDateWithDay,
+  toDate,
+} from './utils'
+import { AdditionalCondition, AdditionalConditionData, Licence } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/creatingLicences/types/address'
@@ -243,6 +251,37 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
       default:
         return mimeType
     }
+  })
+
+  njkEnv.addFilter('dateToDisplay', (licence: Licence) => {
+    const licenceType = licence.typeCode
+    const led = licence.licenceExpiryDate ? toDate(licence.licenceExpiryDate) : null
+    const tussd = licence.topupSupervisionStartDate ? toDate(licence.topupSupervisionStartDate) : null
+    const tused = licence.topupSupervisionExpiryDate ? toDate(licence.topupSupervisionExpiryDate) : null
+
+    let dateToDisplay: Date
+    let textToDisplay = ''
+
+    if (licenceType === 'AP' || licenceType === 'AP_PSS') {
+      textToDisplay = 'Licence end date'
+      dateToDisplay = led
+    }
+
+    const conditionsToDisplayTused =
+      (licenceType === 'AP_PSS' && tussd && isToday(tussd)) ||
+      (licenceType === 'AP_PSS' && !tussd && tused && led && isYesterday(led)) ||
+      licenceType === 'PSS'
+
+    if (conditionsToDisplayTused) {
+      textToDisplay = 'PSS end date'
+      dateToDisplay = tused
+    }
+
+    if (dateToDisplay) {
+      return `${textToDisplay}: ${format(dateToDisplay, 'd MMM yyy')}`
+    }
+
+    return `${textToDisplay}: not available`
   })
 
   return njkEnv

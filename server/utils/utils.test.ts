@@ -10,6 +10,7 @@ import {
   stringToAddressObject,
   jsonDtTo12HourTime,
   jsonDtToDate,
+  toDate,
   removeDuplicates,
   filterCentralCaseload,
   jsonDtToDateWithDay,
@@ -148,6 +149,13 @@ describe('Convert date format', () => {
   it('should return YYYY-MM-DD date in format DD/MM/YYYY', () => {
     const date = '2015-04-26'
     expect(convertDateFormat(date)).toEqual('26/04/2015')
+  })
+})
+
+describe('Create date from string', () => {
+  it('should return date object', () => {
+    const dateString = '25/12/2022'
+    expect(toDate(dateString)).toStrictEqual(new Date('2022-12-25'))
   })
 })
 
