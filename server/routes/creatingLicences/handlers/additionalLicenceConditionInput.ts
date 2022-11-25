@@ -27,10 +27,14 @@ export default class AdditionalLicenceConditionInputRoutes {
 
     if (req.query?.fromPolicyReview) {
       const policyChangeInputCounter = +req.session.changedConditionsInputsCounter
+      const conditionCounter = req.session.changedConditionsCounter
+      const policyChangesCount = req.session.changedConditions.length
       return res.render('pages/create/additionalLicenceConditionInput', {
         additionalCondition,
         config,
         policyChangeInputCounter,
+        conditionCounter,
+        policyChangesCount,
       })
     }
 

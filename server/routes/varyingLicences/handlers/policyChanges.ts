@@ -1,6 +1,8 @@
 import { Response, Request } from 'express'
+import Converter from 'number-to-words'
 import { LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
 import LicenceService from '../../../services/licenceService'
+import { convertToTitleCase } from '../../../utils/utils'
 
 export default class PolicyChangesNoticeRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -9,7 +11,7 @@ export default class PolicyChangesNoticeRoutes {
     const { licenceId } = req.params
 
     const changedConditions = await this.licenceService.getPolicyChanges(licenceId)
-    const numberOfChanges = changedConditions.length
+    const numberOfChanges = convertToTitleCase(Converter.toWords(changedConditions.length))
 
     req.session.changedConditions = changedConditions.sort((a: LicenceConditionChange, b: LicenceConditionChange) => {
       if (['REPLACED', 'DELETED'].includes(a.changeType)) {
