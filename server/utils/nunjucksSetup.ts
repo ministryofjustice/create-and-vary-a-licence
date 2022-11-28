@@ -281,7 +281,7 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
       return `${textToDisplay}: ${format(dateToDisplay, 'd MMM yyy')}`
     }
 
-    return `${textToDisplay}: not available`
+    return `${textToDisplay}: Not available`
   })
 
   return njkEnv

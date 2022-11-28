@@ -276,7 +276,7 @@ describe('Nunjucks Filters', () => {
     it('Should handle AP licence without led', () => {
       const licence = { typeCode: 'AP', licenceExpiryDate: undefined } as Licence
       const result = njkEnv.getFilter('dateToDisplay')(licence)
-      expect(result).toEqual('Licence end date: not available')
+      expect(result).toEqual('Licence end date: Not available')
     })
 
     it('Should handle AP_PSS where tussd is not today', () => {
