@@ -63,7 +63,7 @@ describe('validationMiddleware', () => {
         type: DummyChild,
         category: 'category',
       }
-      conditionsProviderSpy.mockReturnValue(Promise.resolve(additionalCondition))
+      conditionsProviderSpy.mockResolvedValue(additionalCondition)
 
       const next = jest.fn()
       req = {

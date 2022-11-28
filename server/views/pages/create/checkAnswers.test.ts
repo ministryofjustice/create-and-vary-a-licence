@@ -41,7 +41,7 @@ const activeConditions = {
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 
-jest.spyOn(conditionService, 'getActiveConditions').mockReturnValue(Promise.resolve(activeConditions))
+jest.spyOn(conditionService, 'getActiveConditions').mockResolvedValue(activeConditions)
 
 const snippet = fs.readFileSync('server/views/pages/create/checkAnswers.njk')
 

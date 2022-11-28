@@ -5,17 +5,17 @@ import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
 
+jest.mock('../../../services/conditionService')
+
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
 
-jest.spyOn(conditionService, 'getGroupedAdditionalConditions').mockReturnValue(
-  Promise.resolve([
-    {
-      category: 'group1',
-      conditions: [{ text: 'Condition 1', code: 'condition1', category: 'group1', requiresInput: false }],
-    },
-  ])
-)
+conditionService.getGroupedAdditionalConditions.mockResolvedValue([
+  {
+    category: 'group1',
+    conditions: [{ text: 'Condition 1', code: 'condition1', category: 'group1', requiresInput: false }],
+  },
+])
 
 describe('Route Handlers - Create Licence - Additional Licence Conditions', () => {
   const handler = new AdditionalLicenceConditionsRoutes(licenceService, conditionService)

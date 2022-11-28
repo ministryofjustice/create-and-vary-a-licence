@@ -8,7 +8,7 @@ import ConditionService from '../../../services/conditionService'
 
 const additionalCondition = { text: 'Condition 1', code: 'condition1', requiresInput: true, category: 'group1' }
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-jest.spyOn(conditionService, 'getAdditionalConditionByCode').mockReturnValue(Promise.resolve(additionalCondition))
+jest.spyOn(conditionService, 'getAdditionalConditionByCode').mockResolvedValue(additionalCondition)
 
 const snippet = fs.readFileSync('server/views/pages/view/view.njk')
 

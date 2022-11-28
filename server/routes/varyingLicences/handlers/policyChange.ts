@@ -100,15 +100,12 @@ export default class PolicyChangeRoutes {
     } else if (conditionType === LicenceType.PSS) {
       additionalLicenceConditions = licence.additionalPssConditions
     }
-    const licenceCondition = additionalLicenceConditions.find((c: AdditionalCondition) => c.code === condition.code)
 
     const inputs = []
     let licenceConditionCodes = additionalLicenceConditions.map((c: AdditionalCondition) => c.code)
-    const changeType =
-      condition.suggestions !== undefined && condition.suggestions.length >= 1 ? 'replacement' : 'textChange'
 
     // if the condition is being replaced by new condition(s)
-    if (changeType === 'replacement') {
+    if (condition.changeType === conditionChangeType.DELETED || condition.changeType === conditionChangeType.REPLACED) {
       const replacedByCodes = condition.suggestions.map((replacement: { code: string }) => replacement.code)
 
       // Remove replaced condition and any previously-selected replacements
@@ -118,19 +115,28 @@ export default class PolicyChangeRoutes {
         .filter((code: string) => !replacedByCodes.includes(code))
 
       // Add replacement conditions
-      req.body.additionalConditions?.forEach(async (code: string) => {
-        licenceConditionCodes.push(code)
-        const replacement = await this.conditionService.getAdditionalConditionByCode(code, licence.version)
-        if (replacement.requiresInput) {
-          inputs.push(code)
-        }
-      })
+      if (req.body.additionalConditions?.length > 0) {
+        const replacementArray = await Promise.all(
+          req.body.additionalConditions.map((code: string) => {
+            return this.conditionService.getAdditionalConditionByCode(code, licence.version)
+          })
+        )
+
+        replacementArray.forEach(replacement => {
+          licenceConditionCodes.push(replacement.code)
+          if (replacement.requiresInput) {
+            inputs.push(replacement.code)
+          }
+        })
+      }
     } else if (
-      changeType === 'textChange' &&
-      (await this.conditionService.getAdditionalConditionByCode(licenceCondition.code, licence.version)).requiresInput
+      condition.changeType === conditionChangeType.NEW_OPTIONS ||
+      (condition.changeType === conditionChangeType.TEXT_CHANGE &&
+        (await this.conditionService.getAdditionalConditionByCode(condition.code, licence.version)).requiresInput)
     ) {
-      inputs.push(licenceCondition.code)
-    } else if (changeType === 'textChange') {
+      inputs.push(condition.code)
+    } else if (condition.changeType === conditionChangeType.TEXT_CHANGE) {
+      // Removes any now-unused user-entered data
       await this.licenceService.updateAdditionalConditionData(
         licenceId,
         additionalLicenceConditions.find((c: AdditionalCondition) => c.code === condition.code),
