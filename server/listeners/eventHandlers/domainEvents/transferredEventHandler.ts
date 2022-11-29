@@ -18,25 +18,21 @@ export default class TransferredEventHandler {
         )
       )
 
-      if (licence) {
-        if (licence.licenceStatus === LicenceStatus.APPROVED) {
-          await this.licenceService.updateStatus(licence.licenceId.toString(), LicenceStatus.SUBMITTED)
-        }
+      if (!licence) return
 
-        const prisonCode = event.additionalInformation.prisonId
-        const prisonInformation = await this.prisonerService.getPrisonInformation(prisonCode)
+      const prisonCode = event.additionalInformation.prisonId
+      const prisonInformation = await this.prisonerService.getPrisonInformation(prisonCode)
 
-        await this.licenceService.updatePrisonInformation(licence.licenceId.toString(), {
-          prisonCode,
-          prisonDescription: prisonInformation.formattedDescription || 'Not known',
-          prisonTelephone: [
-            prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
-            prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
-          ]
-            .filter(n => n)
-            .join(' '),
-        })
-      }
+      await this.licenceService.updatePrisonInformation(licence.licenceId.toString(), {
+        prisonCode,
+        prisonDescription: prisonInformation.formattedDescription || 'Not known',
+        prisonTelephone: [
+          prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
+          prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
+        ]
+          .filter(n => n)
+          .join(' '),
+      })
     }
   }
 }

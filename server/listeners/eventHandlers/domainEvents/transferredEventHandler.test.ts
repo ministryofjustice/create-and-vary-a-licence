@@ -1,7 +1,6 @@
 import LicenceService from '../../../services/licenceService'
 import { DomainEventMessage } from '../../../@types/events'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 import TransferredEventHandler from './transferredEventHandler'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonInformation } from '../../../@types/prisonApiClientTypes'
@@ -60,26 +59,6 @@ describe('Transferred event handler', () => {
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
     expect(licenceService.updatePrisonInformation).not.toHaveBeenCalled()
-  })
-
-  it('should update the licence to SUBMITTED if the licence for the offender is APPROVED', async () => {
-    const event = {
-      additionalInformation: {
-        reason: 'TRANSFERRED',
-        nomsNumber: 'ABC1234',
-        prisonId: 'PVI',
-      },
-    } as DomainEventMessage
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
-      {
-        licenceId: 1,
-        licenceStatus: 'APPROVED',
-      } as LicenceSummary,
-    ])
-
-    await handler.handle(event)
-
-    expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.SUBMITTED)
   })
 
   it('should not update the licence status if the licence for the offender is not APPROVED', async () => {
