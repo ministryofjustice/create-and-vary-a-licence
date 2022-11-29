@@ -26,29 +26,6 @@ context('Event handlers', () => {
 
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
     })
-
-    it('should listen to the transferred event and call endpoint to update prison information and update licence status', () => {
-      cy.task('stubGetLicencesForOffender', { nomisId: 'A7774DY', status: 'APPROVED' })
-      cy.task('stubGetPrisonInformation')
-      cy.task('stubUpdateLicenceStatus')
-      cy.task('stubUpdatePrisonInformation')
-
-      cy.task(
-        'sendDomainEvent',
-        `{
-          "Message": "{\\"additionalInformation\\":{\\"nomsNumber\\":\\"A7774DY\\",\\"reason\\":\\"TRANSFERRED\\",\\"details\\":\\"Movement reason code CR\\",\\"currentLocation\\":\\"IN_PRISON\\",\\"prisonId\\":\\"PVI\\"},\\"version\\":1,\\"occurredAt\\":\\"2022-01-12T14:56:51.662128Z\\",\\"publishedAt\\":\\"2022-01-12T14:58:25.021008001Z\\",\\"description\\":\\"A prisoner has been received into prison\\"}",
-          "MessageAttributes": {
-            "eventType": {
-              "Type": "String",
-              "Value": "prison-offender-events.prisoner.received"
-            }
-          }
-         }`
-      )
-
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/prison-information', times: 1 })
-    })
   })
 
   describe('Probation events', () => {
