@@ -17,6 +17,8 @@ context('Vary a licence', () => {
     cy.task('stubMatchLicenceEvents')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
+    cy.task('stubGetPolicyChanges')
+    cy.task('stubUpdateStandardConditions')
     cy.signIn()
   })
 
@@ -29,6 +31,39 @@ context('Vary a licence', () => {
     const spoDiscussionPage = confirmVaryPage.selectYes().clickContinue()
     const vloDiscussionPage = spoDiscussionPage.selectYes().clickContinue()
     const checkAnswersPage = vloDiscussionPage.selectYes().clickContinue()
+    const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
+    const variationSummaryPage = reasonForVariationPage
+      .enterReason('In December Mr Zimmer failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
+      .clickContinue()
+    const confirmationPage = variationSummaryPage.clickSendForApproval()
+
+    confirmationPage.signOut().click()
+  })
+
+  it('should click through the inflight licence vary journey, where the licence is not on the active policy version', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const varyCasesPage = indexPage.clickVaryALicence()
+    const timelinePage = varyCasesPage.selectCase()
+    const viewActiveLicencePage = timelinePage.checkTimelineContent().selectVary()
+    const confirmVaryPage = viewActiveLicencePage.selectVary()
+    const spoDiscussionPage = confirmVaryPage.selectYes().clickContinue()
+    const vloDiscussionPage = spoDiscussionPage.selectYes().clickContinue()
+    const policyChangesPage = vloDiscussionPage.selectYes().clickContinuePolicyChanges()
+
+    const checkAnswersPage = policyChangesPage
+      .clickNextChange()
+      .clickNextChange()
+      .clickNextChange()
+      .clickNextInput(false) // Hidden fields cause Axe to fail
+      .enterText('The Approved Premises', 'approvedPremises')
+      .selectRadio('Daily')
+      .selectRadio('Once a day')
+      .enterTime('9', '30', 'reportingTime')
+      .selectRadio('Monthly')
+      .clickNextChange()
+      .clickNextInput()
+      .clickContinueFromVary()
+
     const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
     const variationSummaryPage = reasonForVariationPage
       .enterReason('In December Mr Zimmer failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')

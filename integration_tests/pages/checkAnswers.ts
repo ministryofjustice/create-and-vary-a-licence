@@ -29,6 +29,7 @@ export default class CheckAnswersPage extends Page {
   }
 
   clickAddVariationNotes = (): ReasonForVariationPage => {
+    cy.task('stubGetLicenceVariationInProgress')
     cy.get(this.addNotesButtonId).click()
     return Page.verifyOnPage(ReasonForVariationPage)
   }

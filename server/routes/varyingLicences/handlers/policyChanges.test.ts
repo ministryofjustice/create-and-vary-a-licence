@@ -74,8 +74,10 @@ describe('Route handlers', () => {
     it('renders the policy changes notice screen', async () => {
       await handler.GET(req, res)
 
+      // Should have a param of the written form of the number of changes
+      expect(req.session.changedConditions.length).toEqual(3)
       expect(res.render).toHaveBeenCalledWith('pages/vary/policyChanges', {
-        numberOfChanges: req.session.changedConditions.length,
+        numberOfChanges: 'Three',
       })
     })
   })

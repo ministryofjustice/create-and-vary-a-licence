@@ -1,12 +1,17 @@
 import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
 import LicenceStatus from '../../server/licences/licenceStatus'
-import Policy from './polices/v2-0'
+// eslint-disable-next-line camelcase
+import Policyv2_0 from './polices/v2-0'
+// eslint-disable-next-line camelcase
+import Policyv2_1 from './polices/v2-1'
+
+const ACTIVE_POLICY_VERSION = '2.1'
 
 const licencePlaceholder = {
   id: 1,
   typeCode: 'AP_PSS',
-  version: '2.0',
+  version: ACTIVE_POLICY_VERSION,
   statusCode: 'IN_PROGRESS',
   nomsId: 'G9786GC',
   bookingNo: '123456',
@@ -55,7 +60,37 @@ const licencePlaceholder = {
     { id: 2, code: 'notBreakLaw', sequence: 2, text: 'Do not break the law' },
     { id: 3, code: 'attendMeetings', sequence: 3, text: 'Attend arranged meetings' },
   ],
-  additionalLicenceConditions: [],
+  additionalLicenceConditions: [
+    {
+      id: 1,
+      code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
+      category: 'Residence at a specific place',
+      sequence: 0,
+      text: 'You must reside overnight within [REGION] probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
+      expandedText:
+        'You must reside overnight within London while of no fixed abode, unless otherwise approved by your supervising officer.',
+      data: [
+        {
+          id: 1,
+          sequence: 0,
+          field: 'probationRegion',
+          value: 'London',
+        },
+      ],
+      uploadSummary: [],
+    },
+    {
+      id: 2,
+      code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+      category: 'Supervision in the community',
+      sequence: 1,
+      text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+      expandedText:
+        'Report to staff at The Approved Premises at 9:30AM Daily, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a Monthly basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+      data: [{}],
+      uploadSummary: [],
+    },
+  ],
   bespokeConditions: [],
   additionalPssConditions: [],
 }
@@ -110,6 +145,95 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: licencePlaceholder,
+      },
+    })
+  },
+
+  stubGetPolicyChanges: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence-policy/compare/(\\d.\\d)/licence/((\\d))`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            changeType: 'NEW_OPTIONS',
+            code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
+            sequence: 1,
+            previousText:
+              'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
+            dataChanges: [],
+            suggestions: [],
+          },
+          {
+            changeType: 'TEXT_CHANGE',
+            code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
+            sequence: 2,
+            previousText:
+              'You must reside within the [INSERT REGION] while of no fixed abode, unless otherwise approved by your supervising officer.',
+            currentText:
+              'You must reside overnight within [REGION] probation region while of no fixed abode, unless otherwise approved by your supervising officer.',
+            dataChanges: [],
+            suggestions: [],
+          },
+          {
+            changeType: 'REPLACED',
+            code: 'c2435d4a-20a0-47de-b080-e1e740d1514c',
+            sequence: 3,
+            previousText:
+              'Confine yourself to remain at [CURFEW ADDRESS] initially from [START OF CURFEW HOURS] until [END OF CURFEW HOURS] each day, and, thereafter, for such a period as may be reasonably notified to you by your supervising officer; and comply with such arrangements as may be reasonably put in place and notified to you by your supervising officer so as to allow for your whereabouts and your compliance with your curfew requirement be monitored (whether by electronic means involving your wearing an electronic tag or otherwise).',
+            dataChanges: [],
+            suggestions: [
+              {
+                code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
+                currentText:
+                  'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
+              },
+              {
+                code: 'fd129172-bdd3-4d97-a4a0-efd7b47a49d4',
+                currentText:
+                  'Allow person(s) as designated by your supervising officer to install an electronic monitoring tag on you and access to install any associated equipment in your property, and for the purpose of ensuring that equipment is functioning correctly. You must not damage or tamper with these devices and ensure that the tag is charged, and report to your supervising officer and the EM provider immediately if the tag or the associated equipment are not working correctly. This will be for the purpose of monitoring your [INSERT TYPES OF CONDITIONS TO BE ELECTRONICALLY MONITORED HERE] licence condition(s) unless otherwise authorised by your supervising officer.',
+              },
+            ],
+          },
+          {
+            changeType: 'DELETED',
+            code: '599bdcae-d545-461c-b1a9-02cb3d4ba268',
+            sequence: 4,
+            previousText:
+              'You are subject to alcohol monitoring. Your alcohol intake will be electronically monitored for a period of [INSERT TIMEFRAME] ending on [END DATE], and you may not consume units of alcohol, unless otherwise permitted by your supervising officer.',
+            dataChanges: [],
+            suggestions: [
+              {
+                code: 'd36a3b77-30ba-40ce-8953-83e761d3b487',
+                currentText:
+                  'You must not drink any alcohol until [END DATE] unless your probation officer says you can. You will need to wear an electronic tag all the time so we can check this.',
+              },
+              {
+                code: '2F8A5418-C6E4-4F32-9E58-64B23550E504',
+                currentText:
+                  'You will need to wear an electronic tag all the time until [END DATE] so we can check how much alcohol you are drinking, and if you are drinking alcohol when you have been told you must not. To help you drink less alcohol you must take part in any activities, like treatment programmes, your probation officer asks you to.',
+              },
+            ],
+          },
+        ],
+      },
+    })
+  },
+
+  stubGetNextPolicyChange: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `licence/vary/id/(\\d)/policy-changes/condition/(\\d)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     })
   },
@@ -727,7 +851,7 @@ export default {
     })
   },
 
-  stubGetLicenceVariationInProgress: (): SuperAgentRequest => {
+  stubGetLicenceVariationInProgress: (licenceVersion = ACTIVE_POLICY_VERSION): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -739,6 +863,7 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           id: 2,
+          version: licenceVersion,
           variationOf: 1,
           isVariation: true,
           statusCode: 'VARIATION_IN_PROGRESS',
@@ -886,7 +1011,22 @@ export default {
     })
   },
 
-  stubGetLicencePolicyConditions: (): SuperAgentRequest => {
+  stubGetLicencePolicyConditions: (version = ACTIVE_POLICY_VERSION): SuperAgentRequest => {
+    let policy
+    switch (version) {
+      case '2.0':
+        // eslint-disable-next-line camelcase
+        policy = Policyv2_0
+        break
+      case '2.1':
+        // eslint-disable-next-line camelcase
+        policy = Policyv2_1
+        break
+      default:
+        // eslint-disable-next-line camelcase
+        policy = Policyv2_1
+        break
+    }
     return stubFor({
       request: {
         method: 'GET',
@@ -895,7 +1035,7 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: Policy,
+        jsonBody: policy,
       },
     })
   },
@@ -909,7 +1049,8 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: Policy,
+        // eslint-disable-next-line camelcase
+        jsonBody: Policyv2_1,
       },
     })
   },
