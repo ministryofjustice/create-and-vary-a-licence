@@ -1,4 +1,4 @@
-import { addDays, add, format, startOfWeek, endOfWeek } from 'date-fns'
+import { addDays, add, format, startOfDay, endOfDay } from 'date-fns'
 import CaseloadService from './caseloadService'
 import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
@@ -825,8 +825,8 @@ describe('Caseload Service', () => {
     const result = await serviceUnderTest.getOmuCaseload(user, ['p1', 'p2'])
 
     expect(prisonerService.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
-      startOfWeek(new Date(), { weekStartsOn: 1 }),
-      endOfWeek(add(new Date(), { weeks: 3 }), { weekStartsOn: 1 }),
+      startOfDay(new Date()),
+      endOfDay(add(new Date(), { weeks: 4 })),
       ['p1', 'p2'],
       user
     )
