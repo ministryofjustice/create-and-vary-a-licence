@@ -3,6 +3,9 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+{% set pageTitle = applicationName + " - Vary a licence - Policy Changes" %}
+{% set pageId = "policy-confirm-delete" %}
+
 {% block content %}
     <form action="{{ "/licence/vary/id/" + licence.id + "/policy-changes/condition/" + changeCounter + "/delete"}}" method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -32,7 +35,7 @@
         {{ govukButton({
             text: "Continue",
             type: "submit",
-            attributes: { 'data-qa': 'delete' }
+            attributes: { 'data-qa': 'continue' }
         }) }}
     </form>
 {% endblock %}

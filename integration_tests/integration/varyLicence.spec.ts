@@ -73,6 +73,38 @@ context('Vary a licence', () => {
     confirmationPage.signOut().click()
   })
 
+  it('should redirect to the new condition delete page when the button is clicked from the inflight variation journey', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const varyCasesPage = indexPage.clickVaryALicence()
+    const timelinePage = varyCasesPage.selectCase()
+    const viewActiveLicencePage = timelinePage.checkTimelineContent().selectVary()
+    const confirmVaryPage = viewActiveLicencePage.selectVary()
+    const spoDiscussionPage = confirmVaryPage.selectYes().clickContinue()
+    const vloDiscussionPage = spoDiscussionPage.selectYes().clickContinue()
+    const policyChangesPage = vloDiscussionPage.selectYes().clickContinuePolicyChanges()
+
+    const checkAnswersPage = policyChangesPage
+      .clickNextChange()
+      .clickNextChange()
+      .clickNextChange()
+      .clickDeleteCondition()
+      .selectRadio('no')
+      .clickContinue()
+      .clickDeleteCondition()
+      .selectRadio('yes')
+      .clickContinue()
+      .clickNextInput()
+      .clickContinueFromVary()
+
+    const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
+    const variationSummaryPage = reasonForVariationPage
+      .enterReason('In December Mr Zimmer failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
+      .clickContinue()
+    const confirmationPage = variationSummaryPage.clickSendForApproval()
+
+    confirmationPage.signOut().click()
+  })
+
   it('should discard a licence variation', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const varyCasesPage = indexPage.clickVaryALicence()

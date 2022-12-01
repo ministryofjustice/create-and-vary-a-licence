@@ -2,9 +2,9 @@ import { SuperAgentRequest } from 'superagent'
 import { stubFor } from '../wiremock'
 import LicenceStatus from '../../server/licences/licenceStatus'
 // eslint-disable-next-line camelcase
-import Policyv2_0 from './polices/v2-0'
+import policyV2_0 from './polices/v2-0'
 // eslint-disable-next-line camelcase
-import Policyv2_1 from './polices/v2-1'
+import policyV2_1 from './polices/v2-1'
 
 const ACTIVE_POLICY_VERSION = '2.1'
 
@@ -1016,15 +1016,15 @@ export default {
     switch (version) {
       case '2.0':
         // eslint-disable-next-line camelcase
-        policy = Policyv2_0
+        policy = policyV2_0
         break
       case '2.1':
         // eslint-disable-next-line camelcase
-        policy = Policyv2_1
+        policy = policyV2_1
         break
       default:
         // eslint-disable-next-line camelcase
-        policy = Policyv2_1
+        policy = policyV2_1
         break
     }
     return stubFor({
@@ -1050,7 +1050,7 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         // eslint-disable-next-line camelcase
-        jsonBody: Policyv2_1,
+        jsonBody: policyV2_1,
       },
     })
   },

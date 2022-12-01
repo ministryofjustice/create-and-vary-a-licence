@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import PolicyChangesNoticeRoutes from './policyChanges'
+import PolicyChangesNoticeRoutes from './policyChangesNotice'
 import { LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
