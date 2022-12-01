@@ -26,7 +26,7 @@ import PolicyChangesNoticeRoutes from './handlers/policyChangesNotice'
 import PolicyChangesCallbackRoutes from './handlers/policyChangesCallback'
 import PolicyChangeRoutes from './handlers/policyChange'
 import PolicyChangesInputCallbackRoutes from './handlers/policyChangesInputCallback'
-import PolicyConfirmDelete from './handlers/policyConfirmDelete'
+import PolicyConfirmDeleteRoutes from './handlers/policyConfirmDelete'
 
 function alterResObject() {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -85,7 +85,7 @@ export default function Index({
   const policyChangesNoticeHandler = new PolicyChangesNoticeRoutes(licenceService)
   const policyChangesCallbackHandler = new PolicyChangesCallbackRoutes()
   const policyChangeHandler = new PolicyChangeRoutes(licenceService, conditionService)
-  const policyConfirmDeleteHandler = new PolicyConfirmDelete()
+  const policyConfirmDeleteHandler = new PolicyConfirmDeleteRoutes()
   const policyChangeInputCallbackHandler = new PolicyChangesInputCallbackRoutes(conditionService)
 
   get('/caseload', caseloadHandler.GET)

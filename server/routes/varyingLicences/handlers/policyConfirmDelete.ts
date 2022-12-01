@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-export default class PolicyConfirmDelete {
+export default class PolicyConfirmDeleteRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId, changeCounter } = req.params
 
