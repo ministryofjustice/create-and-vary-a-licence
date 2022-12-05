@@ -1,0 +1,92 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set pageTitle = applicationName + " - licence status" %}
+{% set backLinkHref = "/support/offender-search" %}
+
+{% block content %}
+
+    <div class="govuk-width-container">
+        <span class="govuk-caption-xl"> Licence Id {{ licenceId }}</span>
+        <h1 class="govuk-heading-l">Override Licence Status {{ currentStatus }}</h1>
+        <p>
+            Use care when manually updating the status for a licence. You should only override the status when
+            there's an edge case CVL cannot account for.
+        </p>
+        <P>
+            Please enter a reason for overriding the licence status. The reason will be visible in the audit log against
+            the current licence.
+        </P>
+    </div>
+
+    <hr/>
+    <br/>
+
+    {% set statusCodeError = ({ text: "You must select a new status code" } if statusCodeError else null)%}
+    {% set statusReasonError = ({ text: "You must enter a reason" } if statusReasonError else null)%}
+
+    {% set statusCodes = [{
+        value: null,
+        text: 'select...'
+    }] %}
+
+    {% for code in availableStatusCodes %}
+        {% set statusCodes = (statusCodes.push({
+            value: code,
+            text: statusConfig[code].label
+        }), statusCodes) %}
+    {% endfor %}
+
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+        {{ govukSelect({
+            id: "status",
+            name: "status",
+            label: {
+                text: "New status"
+            },
+            items: statusCodes,
+            value: status,
+            errorMessage: statusCodeError
+        }) }}
+
+        {{ govukCharacterCount({
+            name: "statusChangeReason",
+            id: "statusChangeReason",
+            value: statusChangeReason,
+            maxlength: 200,
+            rows: 3,
+            label: {
+                text: "Reason for status change",
+                classes: "govuk-label--m",
+                isPageHeading: true
+            },
+            hint: {
+                text: "Enter a reason for overriding the licence status"
+            },
+            errorMessage: statusReasonError
+        }) }}
+
+        <div class="govuk-width-container">
+            <div class="govuk-button-group">
+                {{ govukButton({
+                    classes: "govuk-button--primary",
+                    text: "Submit",
+                    preventDoubleClick: true,
+                    attributes: {  'data-qa': 'search-prison' }
+                }) }}
+
+                {{ govukButton({
+                    classes: "govuk-button--secondary",
+                    text: "Cancel",
+                    href: '/support/offender-search'
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

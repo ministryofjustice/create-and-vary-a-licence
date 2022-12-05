@@ -28,7 +28,8 @@
                     text:  licence.licenceId
                 },
                 {
-                    text:  licence.licenceStatus
+                    classes: "max-width max-width-220",
+                    html: '<a href="/support/offender/' + prisonerDetail.id + '/licence/' + licence.licenceId + '/status" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">' + licence.licenceStatus + '</a>'
                 },
                 {
                     text: licence.licenceType
