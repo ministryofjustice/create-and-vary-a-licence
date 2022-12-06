@@ -1,5 +1,5 @@
 import fs from 'fs'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 import ConditionService from '../../../services/conditionService'
@@ -34,9 +34,9 @@ describe('Create a Licence Views - Additional Conditions', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('.govuk-form-group > fieldset > legend > h1').length).toBe(2)
-    expect($('.govuk-form-group:nth-child(1) > fieldset > legend > h1').text().trim()).toBe('Group 1')
-    expect($('.govuk-form-group:nth-child(2) > fieldset > legend > h1').text().trim()).toBe('Group 2')
+    expect($('.govuk-form-group > fieldset > legend').length).toBe(2)
+    expect($('.govuk-form-group:nth-child(1) > fieldset > legend').text().trim()).toBe('Group 1')
+    expect($('.govuk-form-group:nth-child(2) > fieldset > legend').text().trim()).toBe('Group 2')
   })
 
   it('should display a checkbox for each condition in a group', () => {
