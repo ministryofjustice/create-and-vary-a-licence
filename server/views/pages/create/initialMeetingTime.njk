@@ -40,18 +40,30 @@
                             text: "Date"
                         },
                         hint: {
+                            id: "date-hint",
                             text: "For example, 12 11 2022"
                         },
                         errorMessage: validationErrors | findError('date'),
                         formResponses: formResponses.date or formDate.date
                     }) }}
+                {% endcall %}
+                
+                {% call govukFieldset({
+                    classes:"govuk-!-margin-top-7",
 
+                    legend: {
+                        text: "Time",
+                        classes: "govuk-visually-hidden",
+                        isPageHeading: false}
+                    }) %}
+                
                     {{ timePicker({
                         id: "time",
                         label: {
                             text: "Time"
                         },
                         hint: {
+                            id: "time-hint",
                             text: "For example, 9:30am or 2:55pm"
                         },
                         errorMessage: validationErrors | findError('time'),
