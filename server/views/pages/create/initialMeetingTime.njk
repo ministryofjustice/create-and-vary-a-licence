@@ -6,8 +6,6 @@
   - formDate - is an object containing the current values from the API (if any) for inductionDate, inductionTime
 #}
 
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../../partials/timePicker.njk" import timePicker %}
 {% from "../../partials/datePicker.njk" import datePicker %}
 
@@ -16,42 +14,62 @@
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-contact" %}
 
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">When is the initial appointment?</h1>
-        </div>
-    </div>
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                {% if releaseIsOnBankHolidayOrWeekend %}
-                    {{ govukWarningText({
-                        text: "The release date is on a weekend or bank holiday. Check the release date with the prison OMU.",
-                        iconFallbackText: "Warning"
+
+                {% call govukFieldset({
+                    legend: {
+                        text: "When is the initial appointment?",
+                        classes: "govuk-fieldset__legend--l",
+                        isPageHeading: true
+                    }
+                    }) %}
+
+                    {% if releaseIsOnBankHolidayOrWeekend %}
+                        {{ govukWarningText({
+                            text: "The release date is on a weekend or bank holiday. Check the release date with the prison OMU.",
+                            iconFallbackText: "Warning"
+                        }) }}
+                    {% endif %}
+
+                    {{ datePicker({
+                        id: "date",
+                        label: {
+                            text: "Date"
+                        },
+                        hint: {
+                            id: "date-hint",
+                            text: "For example, 12 11 2022"
+                        },
+                        errorMessage: validationErrors | findError('date'),
+                        formResponses: formResponses.date or formDate.date
                     }) }}
-                {% endif %}
+                {% endcall %}
+                
+                {% call govukFieldset({
+                    classes:"govuk-!-margin-top-7",
 
-                {{ datePicker({
-                    id: "date",
-                    hint: {
-                        text: "For example, 12 11 2022"
-                    },
-                    errorMessage: validationErrors | findError('date'),
-                    formResponses: formResponses.date or formDate.date
-                }) }}
-
-                {{ timePicker({
-                    id: "time",
-                    label: {
-                        text: "Time"
-                    },
-                    hint: {
-                        text: "For example, 9:30am or 2:55pm"
-                    },
-                    errorMessage: validationErrors | findError('time'),
-                    formResponses: formResponses.time or formDate.time
-                }) }}
+                    legend: {
+                        text: "Time",
+                        classes: "govuk-visually-hidden",
+                        isPageHeading: false}
+                    }) %}
+                
+                    {{ timePicker({
+                        id: "time",
+                        label: {
+                            text: "Time"
+                        },
+                        hint: {
+                            id: "time-hint",
+                            text: "For example, 9:30am or 2:55pm"
+                        },
+                        errorMessage: validationErrors | findError('time'),
+                        formResponses: formResponses.time or formDate.time
+                    }) }}
+                {% endcall %}
 
                 {{ govukButton({
                     text: continueOrReturnToCheckAnswers,
