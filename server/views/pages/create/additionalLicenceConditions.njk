@@ -8,10 +8,10 @@
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions-question" %}
 
 {% block content %}
-    <div class="govuk-grid-row govuk-!-margin-bottom-6">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Select additional licence conditions</h1>
-            <div class="govuk-hint">Select all relevant conditions</div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Select additional licence conditions</h1>
+            <p class="govuk-body">Select all relevant conditions</p>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
                         name: "additionalConditions[]",
                         fieldset: {
                             legend: {
-                                text: group.category,
+                                html: "<h2 class='govuk-heading-l govuk-!-margin-bottom-0 govuk-!-margin-top-6'>"+group.category+"</h2>",
                                 isPageHeading: false,
                                 classes: "govuk-fieldset__legend--l"
                             }
