@@ -1,4 +1,4 @@
-import { ClassConstructor, plainToInstance } from 'class-transformer'
+import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
 import ConditionService from '../services/conditionService'
@@ -15,11 +15,9 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
     let classType
     if (licence) {
       classType =
-        ((await conditionService.getAdditionalConditionByCode(req.body.code, licence.version))
-          ?.type as ClassConstructor<object>) || type
+        (await conditionService.getAdditionalConditionByCode(req.body.code, licence.version))?.validatorType || type
     } else {
-      classType =
-        ((await conditionService.getAdditionalConditionByCode(req.body.code))?.type as ClassConstructor<object>) || type
+      classType = (await conditionService.getAdditionalConditionByCode(req.body.code))?.validatorType || type
     }
     // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
     if (req.file && req.file.fieldname === 'outOfBoundFilename') {

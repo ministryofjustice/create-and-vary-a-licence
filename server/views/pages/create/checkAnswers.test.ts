@@ -6,6 +6,7 @@ import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
 import { Licence, StandardConditions } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
+import { LicencePolicy } from '../../../@types/LicencePolicy'
 
 const activeConditions = {
   version: '1.0',
@@ -15,33 +16,38 @@ const activeConditions = {
       {
         text: 'Condition 1',
         code: 'condition1',
-        inputRequired: true,
+        requiresInput: true,
+        category: 'category1',
       },
       {
         text: 'Condition 2',
         code: 'condition2',
-        inputRequired: true,
+        requiresInput: true,
+        category: 'category2',
       },
     ],
     PSS: [
       {
         text: 'Condition 1',
         code: 'condition1',
-        inputRequired: true,
+        requiresInput: true,
+        category: 'category1',
       },
       {
         text: 'Condition 2',
         code: 'condition2',
-        inputRequired: true,
+        requiresInput: true,
+        category: 'category1',
       },
     ],
     bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
   },
-}
+  changeHints: [],
+} as LicencePolicy
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 
-jest.spyOn(conditionService, 'getActiveConditions').mockResolvedValue(activeConditions)
+jest.spyOn(conditionService, 'getAdditionalConditions').mockResolvedValue(activeConditions.additionalConditions)
 
 const snippet = fs.readFileSync('server/views/pages/create/checkAnswers.njk')
 

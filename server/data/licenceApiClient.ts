@@ -26,10 +26,10 @@ import type {
   NotifyRequest,
   UpdateStandardConditionDataRequest,
   OmuContact,
-  LicencePolicy,
   LicenceConditionChange,
   AdditionalCondition,
   AddAdditionalConditionRequest,
+  LicencePolicyResponse,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -393,17 +393,17 @@ export default class LicenceApiClient extends RestClient {
     )) as LicenceEvent[]
   }
 
-  async getConditions(version: string): Promise<LicencePolicy> {
+  async getConditions(version: string): Promise<LicencePolicyResponse> {
     try {
-      return this.get({ path: `/licence-policy/version/${version}` }) as Promise<LicencePolicy>
+      return this.get({ path: `/licence-policy/version/${version}` }) as Promise<LicencePolicyResponse>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
     }
   }
 
-  async getActiveConditions(): Promise<LicencePolicy> {
+  async getActiveConditions(): Promise<LicencePolicyResponse> {
     try {
-      return this.get({ path: `/licence-policy/active` }) as Promise<LicencePolicy>
+      return this.get({ path: `/licence-policy/active` }) as Promise<LicencePolicyResponse>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
     }

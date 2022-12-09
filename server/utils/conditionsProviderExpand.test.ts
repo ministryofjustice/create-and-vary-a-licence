@@ -1,4 +1,5 @@
-import { AdditionalCondition, AdditionalConditionAp } from '../@types/licenceApiClientTypes'
+import { AdditionalCondition } from '../@types/licenceApiClientTypes'
+import { AdditionalConditionAp } from '../@types/LicencePolicy'
 import ConditionService from '../services/conditionService'
 
 describe('Conditions Provider - expansions', () => {

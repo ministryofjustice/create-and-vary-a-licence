@@ -1,14 +1,11 @@
 import { Response, Request } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
-import {
-  AdditionalCondition,
-  AdditionalConditionAp,
-  AdditionalConditionPss,
-} from '../../../@types/licenceApiClientTypes'
+import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
 import policyChangeHintText from '../../../config/policyChangeHintText'
 import conditionChangeType from '../../../enumeration/conditionChangeType'
+import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/LicencePolicy'
 
 export default class PolicyChangeRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}

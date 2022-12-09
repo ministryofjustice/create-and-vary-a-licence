@@ -1,11 +1,7 @@
-import {
-  AdditionalConditionAp,
-  AdditionalConditionData,
-  AdditionalConditionPss,
-  Input,
-} from '../@types/licenceApiClientTypes'
+import { AdditionalConditionData, Input } from '../@types/licenceApiClientTypes'
 import { convertToTitleCase, formatAddress } from '../utils/utils'
 import InputTypes from '../enumeration/inputTypes'
+import { AdditionalConditionAp, AdditionalConditionPss } from '../@types/LicencePolicy'
 
 export default class ConditionFormatter {
   /**
