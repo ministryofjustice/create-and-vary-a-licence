@@ -21,7 +21,7 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
     const requiringInput = licence.additionalLicenceConditions
       .filter((condition: AdditionalCondition) => conditionCodesRequiringInput.includes(condition.code))
       .sort((a: AdditionalCondition, b: AdditionalCondition) => (a.sequence > b.sequence ? 1 : -1))
-      .find((condition: AdditionalCondition) => condition.data.length === 0)
+      .find((condition: AdditionalCondition) => condition.data.length === 0 || this.needsReview(condition))
 
     if (requiringInput) {
       return res.redirect(
@@ -35,5 +35,11 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     }
     return res.redirect(`/licence/create/id/${licenceId}/bespoke-conditions-question`)
+  }
+
+  needsReview = (condition: AdditionalCondition) => {
+    return condition.data.some(data => {
+      return data.field === 'infoInputReviewed' && data.value !== 'true'
+    })
   }
 }

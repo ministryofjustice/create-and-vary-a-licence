@@ -53,10 +53,12 @@ context('Create a licence', () => {
     const additionalConditionsInputPage = additionalConditionsPage
       .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
       .selectCondition('fce34fb2-02f4-4eb0-9b8d-d091e11451fa')
-      .selectCondition('a7c57e4e-30fe-4797-9fe7-70a35dbd7b65')
-      .selectCondition('89e656ec-77e8-4832-acc4-6ec05d3e9a98')
+      .selectCondition('d36a3b77-30ba-40ce-8953-83e761d3b487')
+      .selectCondition('fd129172-bdd3-4d97-a4a0-efd7b47a49d4')
+      .selectCondition('86e6f2a9-bb60-40f8-9ac4-310ebc72ac2f')
       .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
       .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
+      .selectCondition('524f2fd6-ad53-47dd-8edc-2161d3dd2ed4')
       .clickContinue()
 
     const bespokeConditionsQuestionPage = additionalConditionsInputPage
@@ -65,11 +67,11 @@ context('Create a licence', () => {
       .nextCondition()
       .selectRadio()
       .nextCondition()
-      .enterTime()
       .enterDate()
-      .enterAddress()
       .nextCondition()
       .checkBoxes()
+      .nextCondition()
+      .enterAddress()
       .nextCondition(false) // aria-expanded attribute causes issues with Axe
       .enterTime('10', '30', 'curfewStart')
       .enterTime('11', '30', 'curfewEnd')
@@ -79,6 +81,7 @@ context('Create a licence', () => {
       .enterText('Knives', 'item[0]')
       .clickAddAnother()
       .enterText('Needles', 'item[1]')
+      .nextCondition()
       .clickContinue()
 
     const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
