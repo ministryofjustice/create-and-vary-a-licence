@@ -2,14 +2,16 @@ import moment from 'moment'
 import Page from './page'
 import BespokeConditionsQuestionPage from './bespokeConditionsQuestion'
 import { Context } from '../support/context'
+import CheckAnswersPage from './checkAnswers'
+import PolicyChangesPage from './policyChangesPage'
 
 export default class AdditionalConditionsInputPage extends Page {
   private continueButtonId = '[data-qa=continue]'
 
   private additionalConditionsToInput = []
 
-  constructor() {
-    super('additional-condition-input-page')
+  constructor(runAxe = true) {
+    super('additional-condition-input-page', runAxe)
   }
 
   withContext = (context: Context): AdditionalConditionsInputPage => {
@@ -98,5 +100,21 @@ export default class AdditionalConditionsInputPage extends Page {
     cy.task('stubGetLicence')
     cy.visit('/licence/create/id/1/bespoke-conditions-question')
     return Page.verifyOnPage(BespokeConditionsQuestionPage)
+  }
+
+  clickNextChange = (): PolicyChangesPage => {
+    cy.task('stubPutAdditionalConditions')
+    cy.task('stubPutAdditionalConditionData')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(PolicyChangesPage)
+  }
+
+  clickContinueFromVary = (): CheckAnswersPage => {
+    cy.task('stubPutAdditionalConditions')
+    cy.task('stubPutAdditionalConditionData')
+    cy.task('stubGetLicenceVariationInProgress')
+    this.checkOnPage()
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(CheckAnswersPage)
   }
 }

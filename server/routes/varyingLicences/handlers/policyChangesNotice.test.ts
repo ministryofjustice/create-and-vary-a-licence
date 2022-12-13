@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import PolicyChangesNoticeRoutes from './policyChanges'
+import PolicyChangesNoticeRoutes from './policyChangesNotice'
 import { LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
@@ -74,8 +74,10 @@ describe('Route handlers', () => {
     it('renders the policy changes notice screen', async () => {
       await handler.GET(req, res)
 
+      // Should have a param of the written form of the number of changes
+      expect(req.session.changedConditions.length).toEqual(3)
       expect(res.render).toHaveBeenCalledWith('pages/vary/policyChanges', {
-        numberOfChanges: req.session.changedConditions.length,
+        numberOfChanges: 'Three',
       })
     })
   })

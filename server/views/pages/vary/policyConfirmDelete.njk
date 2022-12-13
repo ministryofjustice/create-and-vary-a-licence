@@ -1,0 +1,41 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Vary a licence - Policy Changes" %}
+{% set pageId = "policy-confirm-delete" %}
+
+{% block content %}
+    <form action="{{ "/licence/vary/id/" + licence.id + "/policy-changes/condition/" + changeCounter + "/delete"}}" method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        {{ govukRadios({
+            name: "confirm-delete",
+            fieldset: {
+                legend: {
+                    text: "Are you sure you want to delete this condition?",
+                    isPageHeading: true,
+                    classes: "govuk-fieldset__legend--l"
+                }
+            },
+            hint: {
+                text: conditionText
+            },
+            items: [
+                {
+                    value: "yes",
+                    text: "Yes"
+                },
+                {
+                    value: "no",
+                    text: "No"
+                }
+            ]
+        }) }}
+        {{ govukButton({
+            text: "Continue",
+            type: "submit",
+            attributes: { 'data-qa': 'continue' }
+        }) }}
+    </form>
+{% endblock %}

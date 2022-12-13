@@ -22,10 +22,11 @@ import TimelineRoutes from './handlers/timeline'
 import YesOrNoQuestion from '../creatingLicences/types/yesOrNo'
 import YesOrNotApplicable from '../creatingLicences/types/yesOrNotApplicable'
 import DeleteVariation from './types/deleteVariation'
-import PolicyChangesNoticeRoutes from './handlers/policyChanges'
+import PolicyChangesNoticeRoutes from './handlers/policyChangesNotice'
 import PolicyChangesCallbackRoutes from './handlers/policyChangesCallback'
 import PolicyChangeRoutes from './handlers/policyChange'
 import PolicyChangesInputCallbackRoutes from './handlers/policyChangesInputCallback'
+import PolicyConfirmDeleteRoutes from './handlers/policyConfirmDelete'
 
 function alterResObject() {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -84,6 +85,7 @@ export default function Index({
   const policyChangesNoticeHandler = new PolicyChangesNoticeRoutes(licenceService)
   const policyChangesCallbackHandler = new PolicyChangesCallbackRoutes()
   const policyChangeHandler = new PolicyChangeRoutes(licenceService, conditionService)
+  const policyConfirmDeleteHandler = new PolicyConfirmDeleteRoutes()
   const policyChangeInputCallbackHandler = new PolicyChangesInputCallbackRoutes(conditionService)
 
   get('/caseload', caseloadHandler.GET)
@@ -113,6 +115,7 @@ export default function Index({
   get('/id/:licenceId/policy-changes/condition/:changeCounter', policyChangeHandler.GET)
   post('/id/:licenceId/policy-changes/condition/:changeCounter', policyChangeHandler.POST)
   post('/id/:licenceId/policy-changes/condition/:changeCounter/delete', policyChangeHandler.DELETE)
+  get('/id/:licenceId/policy-changes/condition/:changeCounter/delete', policyConfirmDeleteHandler.GET)
   get('/id/:licenceId/policy-changes/input/callback/:changeCounter', policyChangeInputCallbackHandler.GET)
 
   return router

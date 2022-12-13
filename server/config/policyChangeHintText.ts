@@ -38,7 +38,8 @@ export default {
   '4673ebe4-9fc0-4e48-87c9-eb17d5280867': {
     v2_1: {
       description: [
-        'The wording of this licence condition will stay the same. If you need to, you can now add more precise reporting times on the next page.',
+        'The wording of this licence condition will stay the same.',
+        'If you need to, you can now add more precise reporting times on the next page.',
       ],
       bulletpoints: [],
     },
@@ -52,7 +53,8 @@ export default {
   '2027ae19-04a2-4fa6-8d1b-a62dffba2e62': {
     v2_1: {
       description: [
-        'The wording of this licence condition will stay the same. If you need to, you can now add more precise reporting times on the next page.',
+        'The wording of this licence condition will stay the same.',
+        'If you need to, you can now add more precise reporting times on the next page.',
       ],
       bulletpoints: [],
     },

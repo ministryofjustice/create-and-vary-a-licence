@@ -4,18 +4,15 @@ import ConditionService from '../../../services/conditionService'
 import PolicyChangeRoutes from './policyChange'
 import { Licence, LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
 
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
-
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
 describe('Route handlers', () => {
+  const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+  const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
   const handler = new PolicyChangeRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
-
-  licenceService.getParentLicenceOrSelf.mockResolvedValue({ id: 1, version: 'version', typeCode: 'AP_PSS' } as Licence)
 
   const condition1 = {
     changeType: 'DELETED',
@@ -56,6 +53,13 @@ describe('Route handlers', () => {
   } as LicenceConditionChange
 
   beforeEach(() => {
+    jest.resetAllMocks()
+    licenceService.getParentLicenceOrSelf.mockResolvedValue({
+      id: 1,
+      version: 'version',
+      typeCode: 'AP_PSS',
+    } as Licence)
+
     req = {
       params: {
         licenceId: '1',
@@ -179,6 +183,30 @@ describe('Route handlers', () => {
     it('updates the additional licence conditions', async () => {
       await handler.POST(req, res)
       expect(licenceService.updateAdditionalConditions).toHaveBeenCalled()
+    })
+  })
+
+  describe('DELETE', () => {
+    it('calls to delete the condition and progress to the condition change if the "yes" option was selected', async () => {
+      req.body['confirm-delete'] = 'yes'
+      req.session.changedConditionsCounter = 1
+
+      await handler.DELETE(req, res)
+
+      expect(licenceService.updateAdditionalConditions).toHaveBeenCalled()
+      expect(req.session.changedConditionsCounter).toEqual(1)
+      expect(res.redirect).toHaveBeenCalledWith(`/licence/vary/id/1/policy-changes/callback`)
+    })
+
+    it('redirects to the previous condition change if the "no" option was selected', async () => {
+      req.body['confirm-delete'] = 'no'
+      req.session.changedConditionsCounter = 1
+
+      await handler.DELETE(req, res)
+
+      expect(licenceService.updateAdditionalConditions).not.toHaveBeenCalled()
+      expect(req.session.changedConditionsCounter).toEqual(0)
+      expect(res.redirect).toHaveBeenCalledWith(`/licence/vary/id/1/policy-changes/callback`)
     })
   })
 
