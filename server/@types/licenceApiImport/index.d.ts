@@ -1623,7 +1623,6 @@ export interface components {
        * @example Be of generally good behaviour
        */
       text: string
-      requiresInput: boolean
       tpl?: string
     }
     StandardConditionPss: {
@@ -1637,7 +1636,6 @@ export interface components {
        * @example Be of generally good behaviour
        */
       text: string
-      requiresInput: boolean
       tpl?: string
     }
     StandardConditions: {
@@ -3397,6 +3395,3 @@ export interface operations {
     }
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface external {}
