@@ -54,6 +54,7 @@
                     label: {
                         text: "Prisoner first name"
                     },
+                    id: "first-name",
                     value: searchValues.firstName,
                     name: "firstName"
                 }) }}
@@ -63,6 +64,7 @@
                     label: {
                         text: "Prisoner last name"
                     },
+                    id: "last-name",
                     value: searchValues.lastName,
                     name: "lastName"
                 }) }}
@@ -72,6 +74,7 @@
                     label: {
                         text: "Prisoner identifier"
                     },
+                    id: "nomis-id",
                     value: searchValues.nomisId,
                     name: "nomisId"
                 }) }}
@@ -81,6 +84,7 @@
                     label: {
                         text: "Case reference number"
                     },
+                    id: "crn",
                     value: searchValues.crn,
                     name: "crn"
                 }) }}
@@ -143,7 +147,7 @@
     {% else %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                <h3 class="govuk-heading-s">There are no offenders who match the search criteria.</h3>
+                <h2 class="govuk-heading-s">There are no offenders who match the search criteria.</h2>
             </div>
         </div>
     {% endif %}
