@@ -56,7 +56,6 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-                            <br/>
                         {% endif %}
                         {% set items = [] %}
                         {% for condition in replacements %}
@@ -87,6 +86,7 @@
                     </div>
                 </div>
                 <br />
+                <br />
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-full">
                         <div class="govuk-button-group">
@@ -94,20 +94,16 @@
                                 text: "Continue",
                                 attributes: { 'data-qa': 'continue' }
                             }) }}
+                            {{ govukButton({
+                                text: "Delete this condition",
+                                classes: "govuk-button--secondary",
+                                attributes: { 'data-qa': 'delete' },
+                                href: "/licence/vary/id/" + licence.id + "/policy-changes/condition/" + conditionCounter + "/delete"
+                            }) }}
                         </div>
                     </div>
                 </div>
             </fieldset>
         </div>
-    </form>
-
-    <form action="{{ "/licence/vary/id/" + licence.id + "/policy-changes/condition/" + conditionCounter + "/delete"}}" method="POST">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        {{ govukButton({
-            text: "Delete this condition",
-            type: "submit",
-            classes: 'govuk-button--secondary',
-            attributes: { 'data-qa': 'delete' }
-        }) }}
     </form>
 {% endblock %}

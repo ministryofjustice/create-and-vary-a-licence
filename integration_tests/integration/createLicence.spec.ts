@@ -53,7 +53,6 @@ context('Create a licence', () => {
     const additionalConditionsInputPage = additionalConditionsPage
       .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
       .selectCondition('fce34fb2-02f4-4eb0-9b8d-d091e11451fa')
-      .selectCondition('a7c57e4e-30fe-4797-9fe7-70a35dbd7b65')
       .selectCondition('89e656ec-77e8-4832-acc4-6ec05d3e9a98')
       .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
       .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
@@ -64,10 +63,6 @@ context('Create a licence', () => {
       .selectRadio('London')
       .nextCondition()
       .selectRadio()
-      .nextCondition()
-      .enterTime()
-      .enterDate()
-      .enterAddress()
       .nextCondition()
       .checkBoxes()
       .nextCondition(false) // aria-expanded attribute causes issues with Axe

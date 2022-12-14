@@ -134,8 +134,14 @@ export default class PolicyChangeRoutes {
       (condition.changeType === conditionChangeType.TEXT_CHANGE &&
         (await this.conditionService.getAdditionalConditionByCode(condition.code, licence.version)).requiresInput)
     ) {
+      if (!licenceConditionCodes.includes(condition.code)) {
+        licenceConditionCodes.push(condition.code)
+      }
       inputs.push(condition.code)
     } else if (condition.changeType === conditionChangeType.TEXT_CHANGE) {
+      if (!licenceConditionCodes.includes(condition.code)) {
+        licenceConditionCodes.push(condition.code)
+      }
       // Removes any now-unused user-entered data
       await this.licenceService.updateAdditionalConditionData(
         licenceId,
@@ -163,34 +169,38 @@ export default class PolicyChangeRoutes {
     const { licence, user } = res.locals
     const { licenceId, changeCounter } = req.params
 
-    const counter = +changeCounter
-    const conditionCode = req.session.changedConditions[counter - 1].code
-    const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
-      conditionCode,
-      (
-        await this.licenceService.getParentLicenceOrSelf(licenceId, user)
-      ).version
-    )
+    if (req.body['confirm-delete'] === 'yes') {
+      const counter = +changeCounter
+      const conditionCode = req.session.changedConditions[counter - 1].code
+      const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
+        conditionCode,
+        (
+          await this.licenceService.getParentLicenceOrSelf(licenceId, user)
+        ).version
+      )
 
-    let additionalConditionCodes: string[] = []
+      let additionalConditionCodes: string[] = []
 
-    if (conditionType === LicenceType.AP) {
-      additionalConditionCodes = licence.additionalLicenceConditions
-        .filter((c: AdditionalCondition) => c.code !== conditionCode)
-        .map((condition: AdditionalCondition) => condition.code)
-    } else if (conditionType === LicenceType.PSS) {
-      additionalConditionCodes = licence.additionalPssConditions
-        .filter((c: AdditionalCondition) => c.code !== conditionCode)
-        .map((condition: AdditionalCondition) => condition.code)
+      if (conditionType === LicenceType.AP) {
+        additionalConditionCodes = licence.additionalLicenceConditions
+          .filter((c: AdditionalCondition) => c.code !== conditionCode)
+          .map((condition: AdditionalCondition) => condition.code)
+      } else if (conditionType === LicenceType.PSS) {
+        additionalConditionCodes = licence.additionalPssConditions
+          .filter((c: AdditionalCondition) => c.code !== conditionCode)
+          .map((condition: AdditionalCondition) => condition.code)
+      }
+
+      await this.licenceService.updateAdditionalConditions(
+        licence.id,
+        conditionType,
+        { additionalConditions: additionalConditionCodes },
+        user,
+        licence.version
+      )
+    } else {
+      req.session.changedConditionsCounter -= 1
     }
-
-    await this.licenceService.updateAdditionalConditions(
-      licence.id,
-      conditionType,
-      { additionalConditions: additionalConditionCodes },
-      user,
-      licence.version
-    )
 
     return res.redirect(`/licence/vary/id/${licenceId}/policy-changes/callback`)
   }

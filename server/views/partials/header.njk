@@ -2,10 +2,10 @@
     <div id="header-contents" class="govuk-width-container">
         <div id="site-header-block">
             <div id="logo">
-                <img alt="Ministry of Justice logo" src="/assets/images/crest.svg"/>
+                <img alt="" src="/assets/images/crest.svg"/>
             </div>
             <a id="hmpps-title" href="{{ authHome }}" class="govuk-header__link govuk-!-padding-top-1 govuk-!-padding-bottom-1">
-                HMPPS
+                HMPPS&nbsp;
             </a>
             <a id="main-title" href="/" class="govuk-header__link govuk-!-padding-top-1 govuk-!-padding-bottom-1">
                 {{applicationName}}
@@ -17,7 +17,7 @@
                     {{ user.displayName | initialiseName }}
                 </div>
                 <div class="govuk-!-padding-right-0">
-                    <a data-qa="signOut" href="/logout">Sign out</a>
+                    <a class="sign-out-link" data-qa="signOut" href="/logout">Sign out</a>
                 </div>
             </div>
         {% endif %}

@@ -76,7 +76,7 @@ generic-service:
     ark-nps-hmcts-ttp3: "194.33.193.0/25"
     ark-nps-hmcts-ttp4: "194.33.196.0/25"
     ark-nps-hmcts-ttp5: "194.33.197.0/25"
-    bronzefield: "51.155.55.241"
+    sodexo-peterborough: "51.155.55.241/32"
     moj-official-ark-c-vodafone: "194.33.248.0/29"
     moj-official-ark-f-vodafone: "194.33.249.0/29"
     dxc_webproxy1: "195.92.38.20/32"

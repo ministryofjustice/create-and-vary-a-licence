@@ -20,6 +20,9 @@
 {% endif %}
 
 {% block content %}
+    {% if fromPolicyReview %}
+        <span class="govuk-caption-l">Change {{conditionCounter}} of {{policyChangesCount}}</span>
+    {% endif %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Complete the licence condition</h1>

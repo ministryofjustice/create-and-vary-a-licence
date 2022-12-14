@@ -1,66 +1,68 @@
 {% macro timePicker(params) %}
     <div class="govuk-form-group {% if params.errorMessage %}govuk-form-group--error{% endif %}">
-        {% if params.label %}
-            <legend class="govuk-fieldset__legend {{ params.label.classes }}">
-                {{ params.label.text }}
-            </legend>
-        {% endif %}
-        {% if params.hint %}
-            <div id="{{ params.id }}-hint" class="govuk-hint {{ params.hint.classes }}">
-                {{ params.hint.text }}
-            </div>
-        {% endif %}
-        {% if params.errorMessage %}
-            <span id="{{ params.id }}-error" class="govuk-error-message">
-                <span class="govuk-visually-hidden">Error:</span>
-                <span>{{ params.errorMessage.text }}</span>
-            </span>
-        {% endif %}
-        <div class="govuk-date-input" id="{{ params.id }}">
-            <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-hour">
-                        Hour
-                    </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
-                        maxlength="2"
-                        id="{{ params.id }}-hour"
-                        name="{{ params.id }}[hour]" type="text" pattern="[0-9]*" inputmode="numeric"
-                        value="{{ params.formResponses['hour'] }}">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="{{ params.hint.id }}">
+            {% if params.label %}
+                <legend class="govuk-fieldset__legend {{ params.label.classes }}">
+                    {{ params.label.text }}
+                </legend>
+            {% endif %}
+            {% if params.hint %}
+                <div id="{{ params.id }}-hint" class="govuk-hint {{ params.hint.classes }}">
+                    {{ params.hint.text }}
+                </div>
+            {% endif %}
+            {% if params.errorMessage %}
+                <span id="{{ params.id }}-error" class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span>
+                    <span>{{ params.errorMessage.text }}</span>
+                </span>
+            {% endif %}
+            <div class="govuk-date-input" id="{{ params.id }}">
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-hour">
+                            Hour
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
+                            maxlength="2"
+                            id="{{ params.id }}-hour"
+                            name="{{ params.id }}[hour]" type="text" pattern="[0-9]*" inputmode="numeric"
+                            value="{{ params.formResponses['hour'] }}">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-minute">
+                            Minute
+                        </label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
+                            maxlength="2"
+                            id="{{ params.id }}-minute"
+                            name="{{ params.id }}[minute]" type="text" pattern="[0-9]*" inputmode="numeric"
+                            value="{{ params.formResponses['minute'] }}">
+                    </div>
+                </div>
+                <div class="govuk-date-input__item">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-ampm">
+                            am or pm
+                        </label>
+                        <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"
+                                id="{{ params.id }}-ampm"
+                                name="{{ params.id }}[ampm]">
+                            <option value="">
+                                -
+                            </option>
+                            <option value="am" {% if params.formResponses['ampm'] == 'am' %} selected {% endif %}>
+                                am
+                            </option>
+                            <option value="pm" {% if params.formResponses['ampm'] == 'pm' %} selected {% endif %}>
+                                pm
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-minute">
-                        Minute
-                    </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-input--error{% endif %}"
-                        maxlength="2"
-                        id="{{ params.id }}-minute"
-                        name="{{ params.id }}[minute]" type="text" pattern="[0-9]*" inputmode="numeric"
-                        value="{{ params.formResponses['minute'] }}">
-                </div>
-            </div>
-            <div class="govuk-date-input__item">
-                <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{ params.id }}-ampm">
-                        am or pm
-                    </label>
-                    <select class="govuk-select govuk-date-input__input govuk-input--width-2 {% if params.errorMessage %}govuk-select--error{% endif %}"
-                            id="{{ params.id }}-ampm"
-                            name="{{ params.id }}[ampm]">
-                        <option value="">
-                            -
-                        </option>
-                        <option value="am" {% if params.formResponses['ampm'] == 'am' %} selected {% endif %}>
-                            am
-                        </option>
-                        <option value="pm" {% if params.formResponses['ampm'] == 'pm' %} selected {% endif %}>
-                            pm
-                        </option>
-                    </select>
-                </div>
-            </div>
-        </div>
+        </fieldset>
     </div>
 {% endmacro %}

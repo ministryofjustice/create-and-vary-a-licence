@@ -1,4 +1,5 @@
 import moment from 'moment'
+import _ from 'lodash'
 import { initialiseAppInsights, buildAppInsightsClient, flush } from '../server/utils/azureAppInsights'
 import logger from '../logger'
 
@@ -71,9 +72,13 @@ const getHdcStatuses = async (bookingIds: number[]): Promise<Map<number, string>
     return hdcList
   }
 
-  await new PrisonApiClient()
-    .getLatestHdcStatusBatch(bookingIds)
-    .then(r => r.forEach(hdc => hdcList.set(hdc.bookingId, hdc.approvalStatus)))
+  // eslint-disable-next-line no-restricted-syntax
+  for (const ids of _.chunk(bookingIds, 500)) {
+    // eslint-disable-next-line no-await-in-loop
+    await new PrisonApiClient()
+      .getLatestHdcStatusBatch(ids)
+      .then(r => r.forEach(hdc => hdcList.set(hdc.bookingId, hdc.approvalStatus)))
+  }
   return hdcList
 }
 
@@ -82,10 +87,17 @@ const getPrisoners = async (nomisIds: string[]): Promise<Prisoner[]> => {
     return []
   }
 
-  const prisonerSearchCriteria = {
-    prisonerNumbers: nomisIds,
+  const prisoners = []
+  const searchApi = new PrisonerSearchApiClient()
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const ids of _.chunk(nomisIds, 500)) {
+    // eslint-disable-next-line no-await-in-loop
+    const results = await searchApi.searchPrisonersByNomsIds({ prisonerNumbers: ids })
+    prisoners.push(results)
   }
-  return new PrisonerSearchApiClient().searchPrisonersByNomsIds(prisonerSearchCriteria)
+
+  return prisoners.flat()
 }
 
 const batchActivateLicences = async (licenceIds: number[]): Promise<void> => {

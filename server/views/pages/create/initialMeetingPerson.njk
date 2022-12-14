@@ -4,38 +4,49 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set pageTitle = applicationName + " - Create a licence - Initial meeting" %}
+{% set pageTitle = applicationName + " - Create a licence - Who is the initial appointment with?" %}
 {% set pageId = "appointment-person-page" %}
 {% set backLinkHref = "/licence/create/caseload" %}
 
+{% set contactName = licence.appointmentPerson | fillFormResponse(formResponses.contactName) %}
+{% set errorMessage = validationErrors | findError('contactName') %}
+{% set isError = errorMessage.text %}
+
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">Who is the initial appointment with?</h1>
-        </div>
-    </div>
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                {% if releaseIsOnBankHolidayOrWeekend %}
-                    {{ govukWarningText({
-                        text: "The release date is on a weekend or bank holiday. Check the release date with the prison OMU.",
-                        iconFallbackText: "Warning"
-                    }) }}
-                {% endif %}
+                <div class="govuk-form-group {{ "govuk-form-group--error" if isError }}">
+                    
+                    <h1 class="govuk-label-wrapper">
+                        <label class="govuk-label govuk-label--l" for="contactName"> 
+                            Who is the initial appointment with? 
+                        </label> 
+                    </h1> 
 
-                {{ govukInput({
-                    id: "contactName",
-                    name: "contactName",
-                    label: {
-                        text: "contact name",
-                        classes: "govuk-visually-hidden"
-                    },
-                    classes: "govuk-!-width-one-third",
-                    errorMessage: validationErrors | findError('contactName'),
-                    value: licence.appointmentPerson | fillFormResponse(formResponses.contactName)
-                }) }}
+                    {% if releaseIsOnBankHolidayOrWeekend %}
+                        {{ govukWarningText({
+                            text: "The release date is on a weekend or bank holiday. Check the release date with the prison OMU.",
+                            iconFallbackText: "Warning"
+                        }) }}
+                    {% endif %}
+                    
+                    {% if isError %}
+                        <p class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> {{ errorMessage.text }}
+                        </p>
+                    {% endif %}
+
+                    <input 
+                        class="govuk-input govuk-!-width-one-third {{ "govuk-input--error" if isError }}" 
+                        id="contactName" 
+                        name="contactName" 
+                        type="text"
+                        value="{{ contactName }}"
+                        aria-describedby="contactName"
+                        >  
+                </div>
 
                 {{ govukButton({
                     text: continueOrReturnToCheckAnswers,

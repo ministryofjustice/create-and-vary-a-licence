@@ -61,8 +61,23 @@
   justify-content: flex-end;
   height: 30px;
 
-  a {
-    color: white;
+  .sign-out-link  {
+    &:link,
+    &:visited,
+    &:active {
+      color: govuk-colour('white');
+      text-decoration: none;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus {
+      color: govuk-colour('black');
+      outline: 3px solid transparent;
+      box-shadow: 0 -2px #fd0
+    }
   }
 
   div {

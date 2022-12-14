@@ -1,5 +1,6 @@
 import Page from './page'
 import CheckAnswersPage from './checkAnswers'
+import PolicyChangesPage from './policyChangesPage'
 
 export default class VloDiscussionPage extends Page {
   private yesRadioButtonId = '[value=Yes]'
@@ -20,5 +21,11 @@ export default class VloDiscussionPage extends Page {
     cy.task('stubGetLicenceVariationInProgress')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
+  }
+
+  clickContinuePolicyChanges = (): PolicyChangesPage => {
+    cy.task('stubGetLicenceVariationInProgress', '2.0')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(PolicyChangesPage)
   }
 }
