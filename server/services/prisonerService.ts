@@ -73,7 +73,7 @@ export default class PrisonerService {
 
   async getActiveHdcStatus(bookingId: string): Promise<HdcStatus | null> {
     const hdcLicence = await this.prisonApiClient.getLatestHdcStatus(bookingId)
-    if (!hdcLicence) return null
+    if (!hdcLicence || !hdcLicence.bookingId) return null
 
     const hdcBookingId = hdcLicence.bookingId.toString()
 
