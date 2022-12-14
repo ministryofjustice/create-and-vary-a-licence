@@ -9,10 +9,10 @@
 {% set fromReview = "?fromReview=true" if fromReview %}
 {% set fromReviewAppend = "&fromReview=true" if fromReview %}
 
+{% set fromPolicyReviewQuery = "?fromPolicyReview=true" if fromPolicyReview %}
+{% set fromPolicyReviewAppend = "&fromPolicyReview=true" if fromPolicyReview %}
 
 {% if fromPolicyReview %}
-  {% set fromPolicyReview = "?fromPolicyReview=true"%}
-  {% set fromPolicyReviewAppend = "&fromPolicyReview=true"%}
   {% set backLinkHref = "/licence/vary/id/" + licence.id + "/policy-changes/input/callback/"+ (policyChangeInputCounter - 1)%}
   {% set noJsBackLink = true%}
 {% else %}
@@ -94,7 +94,7 @@
         </div>
     </form>
 
-    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReview }}" 
+    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReviewQuery }}" 
       method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         {{ govukButton({
