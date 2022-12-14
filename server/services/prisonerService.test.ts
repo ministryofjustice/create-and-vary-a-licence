@@ -180,6 +180,40 @@ describe('Prisoner Service', () => {
     })
   })
 
+  describe('Get Latest HDC Status', () => {
+    it('Should return NULL if no bookingId is found', async () => {
+      prisonApiClient.getLatestHdcStatus.mockResolvedValue({
+        bookingId: null,
+        approvalStatus: 'PASSED',
+        passed: true,
+      } as HomeDetentionCurfew)
+
+      const actualResult = await prisonerService.getActiveHdcStatus('123')
+
+      expect(actualResult).toBeNull()
+
+      expect(prisonApiClient.getLatestHdcStatus).toBeCalledWith('123')
+    })
+
+    it('Should return PASSED approval status', async () => {
+      prisonApiClient.getLatestHdcStatus.mockResolvedValue({
+        bookingId: 123,
+        approvalStatus: 'PASSED',
+        passed: true,
+      } as HomeDetentionCurfew)
+
+      const actualResult = await prisonerService.getActiveHdcStatus('123')
+
+      expect(actualResult).toEqual({
+        bookingId: '123',
+        approvalStatus: 'PASSED',
+        checksPassed: true,
+      })
+
+      expect(prisonApiClient.getLatestHdcStatus).toBeCalledWith('123')
+    })
+  })
+
   it('Search prisoners by release date', async () => {
     const expectedResult = [{ firstName: 'Joe', lastName: 'Bloggs' }]
 
