@@ -5,11 +5,15 @@
 
 {% set pageTitle = applicationName + " - Vary a licence - Policy Changes" %}
 {% set pageId = "policy-confirm-delete" %}
+{% set backLinkHref = "/licence/vary/id/" + licence.id + "/policy-changes/condition/" + changeCounter %}
+{% set noJsBackLink = true%}
+
 
 {% block content %}
     <form action="{{ "/licence/vary/id/" + licence.id + "/policy-changes/condition/" + changeCounter + "/delete"}}" method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         {{ govukRadios({
+            classes: "govuk-radios--inline",
             name: "confirm-delete",
             fieldset: {
                 legend: {
