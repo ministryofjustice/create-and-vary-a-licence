@@ -858,6 +858,27 @@ export interface components {
        */
       dateCreated?: string
     }
+    /** @description Request object for overriding a licence status */
+    OverrideLicenceStatusRequest: {
+      /**
+       * @description The new status code to assign to the licence
+       * @enum {string}
+       */
+      statusCode:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+      /** @description Reason for overriding the licence status */
+      reason: string
+    }
     /** @description Describes an additional condition request */
     AddAdditionalConditionRequest: {
       /**
@@ -2693,6 +2714,47 @@ export interface operations {
       }
     }
   }
+  /** Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  changeStatus: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Status has been updated */
+      202: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OverrideLicenceStatusRequest']
+      }
+    }
+  }
   /** Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   createVariation: {
     parameters: {
@@ -3080,14 +3142,18 @@ export interface operations {
         eventType?: (
           | 'CREATED'
           | 'SUBMITTED'
+          | 'BACK_IN_PROGRESS'
           | 'APPROVED'
           | 'ACTIVATED'
           | 'SUPERSEDED'
           | 'VARIATION_CREATED'
           | 'VARIATION_SUBMITTED_REASON'
+          | 'VARIATION_IN_PROGRESS'
           | 'VARIATION_SUBMITTED'
           | 'VARIATION_REFERRED'
           | 'VARIATION_APPROVED'
+          | 'INACTIVE'
+          | 'RECALLED'
         )[]
         sortBy?: string
         sortOrder?: string

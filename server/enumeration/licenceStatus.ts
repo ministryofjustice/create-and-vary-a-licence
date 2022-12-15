@@ -16,4 +16,15 @@ enum LicenceStatus {
   OOS_RECALL = 'OOS_RECALL',
 }
 
+const SelectableLicenceStatus = Object.values(LicenceStatus).filter(
+  s =>
+    ![
+      LicenceStatus.OOS_BOTUS,
+      LicenceStatus.OOS_RECALL,
+      LicenceStatus.NOT_IN_PILOT,
+      LicenceStatus.NOT_IN_PILOT,
+    ].includes(s)
+)
+
 export default LicenceStatus
+export { SelectableLicenceStatus }

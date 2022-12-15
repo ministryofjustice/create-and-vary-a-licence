@@ -1,24 +1,25 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import LicenceStatus from '../../../enumeration/licenceStatus'
+import LicenceStatus, { SelectableLicenceStatus } from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
 import { User } from '../../../@types/CvlUserDetails'
+import LicenceOverrideService from '../../../services/licenceOverrideService'
 
 export default class OffenderLicenceStatusRoutes {
-  constructor(private licenceService: LicenceService) {}
+  constructor(private licenceService: LicenceService, private licenceOverrideService: LicenceOverrideService) {}
 
   private async getLicenceData(nomsId: string, licenceId: string, user: User) {
     const licences = await this.licenceService.getLicencesByNomisIdsAndStatus([nomsId], [], user)
-    const currentLicenceIndex = licences.findIndex(l => l.licenceId === parseInt(licenceId, 10))
-    const statusCodesInUse: string[] = licences.map(l => l.licenceStatus.toString()).splice(currentLicenceIndex, 1)
+
+    const currentLicence = licences.find(l => l.licenceId === parseInt(licenceId, 10))
 
     // multiple licences against an offender can be INACTIVE
-    const availableCodes = Object.values(LicenceStatus)
-      .filter((s: LicenceStatus) => s === LicenceStatus.INACTIVE || !statusCodesInUse.includes(s))
-      .sort()
+    const availableCodes = SelectableLicenceStatus.filter(
+      (s: LicenceStatus) => s === LicenceStatus.INACTIVE || !licences.some(l => l.licenceStatus === s)
+    ).sort()
 
     return {
-      currentLicence: licences[currentLicenceIndex],
+      currentLicence,
       statusCodes: availableCodes,
     }
   }
@@ -47,6 +48,12 @@ export default class OffenderLicenceStatusRoutes {
     const { licenceId, nomsId } = req.params
     const { user } = res.locals
     const { status, statusChangeReason } = req.body
+
+    if (status && statusChangeReason) {
+      await this.licenceOverrideService.overrideStatusCode(parseInt(licenceId, 10), status, statusChangeReason)
+      res.redirect(`/support/offender/${nomsId}/licences`)
+      return
+    }
 
     const data = await this.getLicenceData(nomsId, licenceId, user)
 
