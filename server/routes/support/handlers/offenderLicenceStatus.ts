@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import LicenceStatus, { SelectableLicenceStatus } from '../../../enumeration/licenceStatus'
+import LicenceStatus, { selectableLicenceStatus } from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
 import { User } from '../../../@types/CvlUserDetails'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
@@ -14,9 +14,9 @@ export default class OffenderLicenceStatusRoutes {
     const currentLicence = licences.find(l => l.licenceId === parseInt(licenceId, 10))
 
     // multiple licences against an offender can be INACTIVE
-    const availableCodes = SelectableLicenceStatus.filter(
-      (s: LicenceStatus) => s === LicenceStatus.INACTIVE || !licences.some(l => l.licenceStatus === s)
-    ).sort()
+    const availableCodes = selectableLicenceStatus
+      .filter((s: LicenceStatus) => s === LicenceStatus.INACTIVE || !licences.some(l => l.licenceStatus === s))
+      .sort()
 
     return {
       currentLicence,
