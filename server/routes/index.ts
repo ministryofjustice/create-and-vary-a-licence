@@ -13,7 +13,6 @@ import changeLocationRoutes from './changeLocation'
 import auth from '../authentication/auth'
 import tokenVerifier from '../data/tokenVerification'
 import populateCurrentUser from '../middleware/populateCurrentUser'
-import rolloutMiddleware from '../middleware/rolloutMiddleware'
 import flashMessages from '../middleware/flashMessageMiddleware'
 import fromReviewMiddleware from '../middleware/fromReviewMiddleware'
 
@@ -22,7 +21,6 @@ export default function Index(services: Services): Router {
 
   router.use(auth.authenticationMiddleware(tokenVerifier))
   router.use(populateCurrentUser(services.userService, services.licenceService))
-  router.use(rolloutMiddleware())
   router.use(csrf())
   router.use(flashMessages())
   router.use(fromReviewMiddleware())
