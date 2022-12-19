@@ -8,6 +8,7 @@ import sanitiseError from '../sanitisedError'
 import { ApiConfig } from '../config'
 import type { UnsanitisedError } from '../sanitisedError'
 import TokenStore from './tokenStore'
+import { createRedisClient } from './redisClient'
 
 interface GetRequest {
   userToken?: string
@@ -67,7 +68,9 @@ export default class HmppsRestClient {
 
   constructor(private readonly name: string, private readonly apiConfig: ApiConfig) {
     this.agent = apiConfig.url.startsWith('https') ? new HttpsAgent(apiConfig.agent) : new Agent(apiConfig.agent)
-    this.tokenStore = new TokenStore()
+    const client = createRedisClient({ legacyMode: true })
+    client.connect()
+    this.tokenStore = new TokenStore(client)
   }
 
   async get(
@@ -81,7 +84,7 @@ export default class HmppsRestClient {
       .get(`${this.apiConfig.url}${path}`)
       .agent(this.agent)
       .set('Content-Type', 'application/json')
-      .retry(2, (err, res) => {
+      .retry(2, err => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
       })
@@ -113,7 +116,7 @@ export default class HmppsRestClient {
       .set('Content-Type', 'application/json')
       .agent(this.agent)
       .query(query)
-      .retry(2, (err, res) => {
+      .retry(2, err => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
       })
@@ -143,7 +146,7 @@ export default class HmppsRestClient {
       .send(data)
       .set('Content-Type', 'application/json')
       .agent(this.agent)
-      .retry(2, (err, res) => {
+      .retry(2, err => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
       })
@@ -170,7 +173,7 @@ export default class HmppsRestClient {
       .agent(this.agent)
       .set('Content-Type', 'application/json')
       .auth(signedWith, { type: 'bearer' })
-      .retry(2, (err, res) => {
+      .retry(2, err => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
       })
@@ -199,7 +202,7 @@ export default class HmppsRestClient {
       .post(`${this.apiConfig.url}${path}`)
       .attach('file', fileToUpload.path, { filename: fileToUpload.originalname, contentType: fileToUpload.mimetype })
       .agent(this.agent)
-      .retry(2, (err, res) => {
+      .retry(2, err => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
       })
@@ -227,7 +230,7 @@ export default class HmppsRestClient {
     return superagent
       .delete(`${this.apiConfig.url}${path}`)
       .agent(this.agent)
-      .retry(2, (err, res) => {
+      .retry(2, err => {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
         return undefined // retry handler only for logging retries, not to influence retry logic
       })
