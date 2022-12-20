@@ -9,6 +9,8 @@ import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import HdcStatus from '../@types/HdcStatus'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
+import { ManagedCase } from '../@types/managedCase'
+import Container from './container'
 
 jest.mock('./prisonerService')
 jest.mock('./communityService')
@@ -41,6 +43,26 @@ describe('Caseload Service', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
+  })
+
+  it('Does not call Licence API when no Nomis records are found', () => {
+    const offenders = new Container([
+      {
+        nomisRecord: { prisonerNumber: null },
+      } as ManagedCase,
+    ])
+    serviceUnderTest.mapOffendersToLicences(offenders)
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toBeCalledTimes(0)
+  })
+
+  it('Calls Licence API when no Nomis records are found', () => {
+    const offenders = new Container([
+      {
+        nomisRecord: { prisonerNumber: 'ABC123' },
+      } as ManagedCase,
+    ])
+    serviceUnderTest.mapOffendersToLicences(offenders)
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toBeCalledTimes(1)
   })
 
   it('filters invalid data due to mismatch between delius and nomis', async () => {

@@ -8,7 +8,6 @@ import { DeliusRecord, ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
-import { prisonInRollout, probationAreaInRollout } from '../utils/rolloutUtils'
 import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
@@ -155,20 +154,28 @@ export default class CaseloadService {
     offenders: Container<ManagedCase>,
     user?: User
   ): Promise<Container<ManagedCase>> => {
-    const existingLicences = await this.licenceService.getLicencesByNomisIdsAndStatus(
-      offenders.map(offender => offender.nomisRecord.prisonerNumber).unwrap(),
-      [
-        LicenceStatus.ACTIVE,
-        LicenceStatus.IN_PROGRESS,
-        LicenceStatus.SUBMITTED,
-        LicenceStatus.APPROVED,
-        LicenceStatus.VARIATION_IN_PROGRESS,
-        LicenceStatus.VARIATION_SUBMITTED,
-        LicenceStatus.VARIATION_APPROVED,
-        LicenceStatus.VARIATION_REJECTED,
-      ],
-      user
-    )
+    const nomisIdList = offenders
+      .map(offender => offender.nomisRecord.prisonerNumber)
+      .unwrap()
+      .filter(id => id !== null)
+
+    const existingLicences =
+      nomisIdList.length === 0
+        ? []
+        : await this.licenceService.getLicencesByNomisIdsAndStatus(
+            nomisIdList,
+            [
+              LicenceStatus.ACTIVE,
+              LicenceStatus.IN_PROGRESS,
+              LicenceStatus.SUBMITTED,
+              LicenceStatus.APPROVED,
+              LicenceStatus.VARIATION_IN_PROGRESS,
+              LicenceStatus.VARIATION_SUBMITTED,
+              LicenceStatus.VARIATION_APPROVED,
+              LicenceStatus.VARIATION_REJECTED,
+            ],
+            user
+          )
 
     return offenders.map(offender => {
       const licences = existingLicences.filter(licence => licence.nomisId === offender.nomisRecord.prisonerNumber)
@@ -189,20 +196,13 @@ export default class CaseloadService {
 
       // No licences present for this offender - determine how to show them in case lists
 
-      const inRollout =
-        prisonInRollout(offender.nomisRecord.prisonId) &&
-        probationAreaInRollout(offender.deliusRecord.offenderManagers?.find(om => om.active)?.probationArea?.code)
-
       // Determine the likely type of intended licence from the prison record
       const licenceType = this.getLicenceType(offender.nomisRecord)
 
       // Default status (if not overridden below) will show the case as clickable on case lists
       let licenceStatus = LicenceStatus.NOT_STARTED
 
-      if (!inRollout) {
-        // Offender is not in a prison or probation that is inside the pilot area - not clickable
-        licenceStatus = LicenceStatus.NOT_IN_PILOT
-      } else if (this.isBreachOfTopUpSupervision(offender)) {
+      if (this.isBreachOfTopUpSupervision(offender)) {
         // Imprisonment status indicates a breach of top up supervision order - not clickable (yet)
         licenceStatus = LicenceStatus.OOS_BOTUS
       } else if (this.isRecall(offender)) {
