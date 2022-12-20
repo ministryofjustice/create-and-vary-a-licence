@@ -4,6 +4,7 @@ import TokenStore from './tokenStore'
 const redisClient = {
   get: jest.fn(),
   set: jest.fn(),
+  setEx: jest.fn(),
   on: jest.fn(),
   connect: jest.fn(),
   isOpen: true,
@@ -42,7 +43,7 @@ describe('tokenStore', () => {
     it('Can set token', async () => {
       await tokenStore.setToken('user-1', 'token-1', 10)
 
-      expect(redisClient.set).toHaveBeenCalledWith('systemToken:user-1', 'token-1', { EX: 10 })
+      expect(redisClient.setEx).toHaveBeenCalledWith('systemToken:user-1', 10, 'token-1')
     })
 
     it('Connects when no connection calling set token', async () => {
