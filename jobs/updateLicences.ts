@@ -31,7 +31,7 @@ const pollLicencesToUpdate = async (): Promise<LicencesToUpdate> => {
    */
   const prisonersForRelease = prisonersWithApprovedLicences.filter(prisoner => {
     return (
-      prisoner.status.startsWith('INACTIVE') &&
+      (prisoner.status.startsWith('INACTIVE') || prisoner.legalStatus === 'IMMIGRATION_DETAINEE') &&
       prisoner.confirmedReleaseDate &&
       moment(prisoner.confirmedReleaseDate, 'YYYY-MM-DD').isSameOrBefore(moment())
     )
