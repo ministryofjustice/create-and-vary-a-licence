@@ -1,5 +1,5 @@
 import { AdditionalCondition, AdditionalConditionsResponse } from '../@types/licenceApiClientTypes'
-import { AdditionalConditionAp, AdditionalConditionsConfig } from '../@types/LicencePolicy'
+import { AdditionalConditionsConfig } from '../@types/LicencePolicy'
 import LicenceApiClient from '../data/licenceApiClient'
 import ConditionFormatter from './conditionFormatter'
 import ConditionService from './conditionService'
