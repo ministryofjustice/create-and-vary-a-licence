@@ -1,3 +1,4 @@
+import logger from '../../../../logger'
 import { ProbationEventMessage } from '../../../@types/events'
 import CommunityService from '../../../services/communityService'
 import LicenceService from '../../../services/licenceService'
@@ -11,8 +12,10 @@ export default class OffenderManagerChangedEventHandler {
     const { crn } = event
     const deliusRecord = await this.communityService.getProbationer({ crn })
     const offenderManagers = await this.communityService.getAnOffendersManagers(crn)
-
     const responsibleOfficer = deliusRecord.offenderManagers.find(om => om.active)
+
+    logger.info(`responsible officer code for crn ${crn} is ${responsibleOfficer?.staff?.code}`)
+
     const newCom = offenderManagers.find(om => om.staffCode === responsibleOfficer.staff.code)
 
     if (newCom) {
@@ -44,6 +47,8 @@ export default class OffenderManagerChangedEventHandler {
           probationTeamDescription: newCom.team?.description,
         })
       }
+    } else {
+      logger.info(`newCom not found for crn: ${crn}`)
     }
   }
 }

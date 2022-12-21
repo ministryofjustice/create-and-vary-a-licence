@@ -18,7 +18,11 @@ export default function buildEventHandler({ communityService, licenceService }: 
 
       switch (eventType) {
         case 'OFFENDER_MANAGER_CHANGED':
-          offenderManagerChangedHandler.handle(eventMessage).catch(error => logger.error(error))
+          offenderManagerChangedHandler
+            .handle(eventMessage)
+            .catch(error =>
+              logger.error(`${error} OFFENDER_MANAGER_CHANGED event unsuccessful for crn: ${eventMessage.crn}`)
+            )
       }
     })
   }
