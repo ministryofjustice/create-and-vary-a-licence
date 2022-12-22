@@ -31,7 +31,7 @@ const pollLicencesToUpdate = async (): Promise<LicencesToUpdate> => {
    */
   const prisonersForRelease = prisonersWithApprovedLicences.filter(prisoner => {
     const licence = approvedLicences.find(l => l.nomisId === prisoner.prisonerNumber)
-    return validPrisonerForRelease(prisoner) && isPassedArdOrCrd(licence)
+    return validPrisonerForRelease(prisoner) && isPassedArdOrCrd(licence, prisoner)
   })
 
   const prisonerNumbers = prisonersForRelease.map(prisoner => prisoner.prisonerNumber)
@@ -113,8 +113,14 @@ const validPrisonerForRelease = (prisoner: Prisoner): boolean => {
   return prisoner.status.startsWith('INACTIVE') || prisoner.legalStatus === 'IMMIGRATION_DETAINEE'
 }
 
-const isPassedArdOrCrd = (licence: LicenceSummary): boolean => {
-  const releaseDate = licence.actualReleaseDate || licence.conditionalReleaseDate
+const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner): boolean => {
+  let releaseDate
+
+  if (prisoner.legalStatus === 'IMMIGRATION_DETAINEE') {
+    releaseDate = licence.actualReleaseDate || licence.conditionalReleaseDate
+  } else {
+    releaseDate = licence.actualReleaseDate
+  }
 
   if (releaseDate) {
     return moment(releaseDate, 'YYYY-MM-DD').isSameOrBefore(moment())
