@@ -30,11 +30,8 @@ const pollLicencesToUpdate = async (): Promise<LicencesToUpdate> => {
    * and a confirmed release date exists, which is before or equal to today
    */
   const prisonersForRelease = prisonersWithApprovedLicences.filter(prisoner => {
-    return (
-      (prisoner.status.startsWith('INACTIVE') || prisoner.legalStatus === 'IMMIGRATION_DETAINEE') &&
-      prisoner.confirmedReleaseDate &&
-      moment(prisoner.confirmedReleaseDate, 'YYYY-MM-DD').isSameOrBefore(moment())
-    )
+    const licence = approvedLicences.find(l => l.nomisId === prisoner.prisonerNumber)
+    return validPrisonerForRelease(prisoner) && isPassedArdOrCrd(licence, prisoner)
   })
 
   const prisonerNumbers = prisonersForRelease.map(prisoner => prisoner.prisonerNumber)
@@ -110,6 +107,26 @@ const batchInactivateLicences = async (licenceIds: number[]): Promise<void> => {
   if (licenceIds.length > 0) {
     await new LicenceApiClient().batchInActivateLicences(licenceIds)
   }
+}
+
+const validPrisonerForRelease = (prisoner: Prisoner): boolean => {
+  return prisoner.status.startsWith('INACTIVE') || prisoner.legalStatus === 'IMMIGRATION_DETAINEE'
+}
+
+const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner): boolean => {
+  let releaseDate
+
+  if (prisoner.legalStatus === 'IMMIGRATION_DETAINEE') {
+    releaseDate = licence.actualReleaseDate || licence.conditionalReleaseDate
+  } else {
+    releaseDate = licence.actualReleaseDate
+  }
+
+  if (releaseDate) {
+    return moment(releaseDate, 'YYYY-MM-DD').isSameOrBefore(moment())
+  }
+
+  return false
 }
 
 pollLicencesToUpdate()

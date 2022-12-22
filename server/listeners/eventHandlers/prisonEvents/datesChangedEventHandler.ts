@@ -30,7 +30,7 @@ export default class DatesChangedEventHandler {
 
       // IS91 cases receive an update that wipes their CRD when their CRD passes.
       // We want to keep it in the service, so we should ignore any date-changing events that meet this criteria.
-      if (['DET', 'RECEP_IMM'].includes(prisoner.imprisonmentStatus) && isPassedArdOrCrd(licence)) {
+      if (prisoner.legalStatus === 'IMMIGRATION_DETAINEE' && isPassedArdOrCrd(licence)) {
         logger.info(
           `Ignoring date update event for NOMIS ID: ${nomisId}, CRN: ${licence.crn}, licence ID: ${licence.licenceId}`
         )

@@ -166,7 +166,7 @@ describe('Sentence dates changed event handler', () => {
   it('should not update sentence dates if the offender is an IS91 case and has a CRD in the past', async () => {
     const is91Prisoner = {
       ...prisoner,
-      imprisonmentStatus: 'DET',
+      legalStatus: 'IMMIGRATION_DETAINEE',
     } as PrisonApiPrisoner
 
     prisonerService.getPrisonerDetail.mockResolvedValue(is91Prisoner)
@@ -195,7 +195,7 @@ describe('Sentence dates changed event handler', () => {
   it('should not update sentence dates if the offender is an IS91 case and has a ARD of today', async () => {
     const is91Prisoner = {
       ...prisoner,
-      imprisonmentStatus: 'DET',
+      legalStatus: 'IMMIGRATION_DETAINEE',
     } as PrisonApiPrisoner
 
     prisonerService.getPrisonerDetail.mockResolvedValue(is91Prisoner)
@@ -224,7 +224,7 @@ describe('Sentence dates changed event handler', () => {
   it('should update the sentence dates if the offender is an IS91 case and has an ARD in the future', async () => {
     const is91Prisoner = {
       ...prisoner,
-      imprisonmentStatus: 'DET',
+      legalStatus: 'IMMIGRATION_DETAINEE',
     } as PrisonApiPrisoner
 
     prisonerService.getPrisonerDetail.mockResolvedValue(is91Prisoner)
@@ -258,7 +258,7 @@ describe('Sentence dates changed event handler', () => {
   it('should update the sentence dates if the offender is an IS91 case but it has no ARD', async () => {
     const is91Prisoner = {
       ...prisoner,
-      imprisonmentStatus: 'DET',
+      legalStatus: 'IMMIGRATION_DETAINEE',
     } as PrisonApiPrisoner
 
     prisonerService.getPrisonerDetail.mockResolvedValue(is91Prisoner)
