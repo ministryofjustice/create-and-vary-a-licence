@@ -64,7 +64,7 @@ describe('Sentence dates changed event handler', () => {
 
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC123'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
+      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED', 'ACTIVE']
     )
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
   })
@@ -187,7 +187,7 @@ describe('Sentence dates changed event handler', () => {
 
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC123'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
+      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED', 'ACTIVE']
     )
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
   })
@@ -216,7 +216,7 @@ describe('Sentence dates changed event handler', () => {
 
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC123'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
+      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED', 'ACTIVE']
     )
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
   })
