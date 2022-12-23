@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment'
 import { Holiday } from 'uk-bank-holidays'
-import { format } from 'date-fns'
+import { format, startOfToday, startOfDay } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -37,6 +37,17 @@ const hasAuthSource = (user: Express.User, source: string): boolean => user?.aut
  * @returns date converted to format DD/MM/YYYY.
  */
 const convertDateFormat = (date: string): string => (date ? moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY') : undefined)
+
+/**
+ * converts dd/mm/yyyy to yyyy-mm-dd so that it can be consumed by new Date()
+ */
+const reformatDate = (date: string) => {
+  if (date) {
+    const [day, month, year] = date.split('/')
+    return `${year}-${month}-${day}`
+  }
+  return undefined
+}
 
 /**
  * Converts a SimpleDateTime display value to a JSON string format dd/mm/yyyy hh:mm
@@ -192,6 +203,13 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
   return dateString
 }
 
+const isWithinPssPeriod = (topupSupervisionStartDate: string, topupSupervisionExpiryDate: string) => {
+  const today = startOfToday()
+  const tussd = topupSupervisionStartDate ? startOfDay(new Date(topupSupervisionStartDate)) : undefined
+  const tused = topupSupervisionExpiryDate ? startOfDay(new Date(topupSupervisionExpiryDate)) : undefined
+  return today >= tussd && today < tused
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -206,6 +224,7 @@ export {
   jsonDtToDateWithDay,
   jsonDtTo12HourTime,
   toDate,
+  reformatDate,
   convertDateFormat,
   removeDuplicates,
   filterCentralCaseload,
@@ -214,4 +233,5 @@ export {
   isBankHolidayOrWeekend,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
+  isWithinPssPeriod,
 }

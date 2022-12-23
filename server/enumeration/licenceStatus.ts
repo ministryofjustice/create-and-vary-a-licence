@@ -14,6 +14,8 @@ enum LicenceStatus {
   NOT_IN_PILOT = 'NOT_IN_PILOT',
   OOS_BOTUS = 'OOS_BOTUS',
   OOS_RECALL = 'OOS_RECALL',
+  // ON_PSS status is not saved within licence and only added here in order to show it as a label in the UI
+  ON_PSS = 'ON_PSS',
 }
 
 export default LicenceStatus

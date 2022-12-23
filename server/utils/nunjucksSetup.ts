@@ -14,6 +14,8 @@ import {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   toDate,
+  isWithinPssPeriod,
+  reformatDate,
 } from './utils'
 import { AdditionalCondition, AdditionalConditionData, Licence } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
@@ -282,6 +284,13 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
     }
 
     return `${textToDisplay}: Not available`
+  })
+
+  njkEnv.addFilter('isApPssWithinPssPeriod', (licence: Licence) => {
+    return isWithinPssPeriod(
+      reformatDate(licence.topupSupervisionStartDate),
+      reformatDate(licence.topupSupervisionExpiryDate)
+    )
   })
 
   return njkEnv

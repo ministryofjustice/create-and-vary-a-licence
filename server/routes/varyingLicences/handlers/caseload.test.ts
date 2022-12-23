@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { addDays, format } from 'date-fns'
 
 import CaseloadRoutes from './caseload'
 import CaseloadService from '../../../services/caseloadService'
@@ -7,6 +8,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { DeliusRecord } from '../../../@types/managedCase'
+import logger from '../../../../logger'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
@@ -36,6 +38,54 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         deliusRecord: {
           otherIds: {
             crn: 'X12345',
+          },
+        } as DeliusRecord,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
+      },
+      {
+        licences: [
+          {
+            id: 2,
+            type: LicenceType.AP_PSS,
+            status: LicenceStatus.ACTIVE,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'John',
+          lastName: 'Deer',
+          prisonerNumber: 'B1234BB',
+          releaseDate: '2022-05-01',
+        } as Prisoner,
+        deliusRecord: {
+          otherIds: {
+            crn: 'Y12345',
+          },
+        } as DeliusRecord,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
+      },
+      {
+        licences: [
+          {
+            id: 3,
+            type: LicenceType.AP_PSS,
+            status: LicenceStatus.ACTIVE,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'Henry',
+          lastName: 'Hall',
+          prisonerNumber: 'C1234CC',
+          releaseDate: '2022-05-01',
+          topupSupervisionStartDate: format(new Date(), 'yyyy-MM-dd'),
+          topupSupervisionExpiryDate: format(addDays(new Date(), 7), 'yyyy-MM-dd'),
+        } as Prisoner,
+        deliusRecord: {
+          otherIds: {
+            crn: 'Z12345',
           },
         } as DeliusRecord,
         probationPractitioner: {
@@ -111,6 +161,79 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       } as unknown as Response
     })
 
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('should raise log if licence is in PSS period and tussd or tused missing', async () => {
+      caseloadService.getStaffVaryCaseload.mockResolvedValue([
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP_PSS,
+              status: LicenceStatus.ACTIVE,
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Harry',
+            lastName: 'Hall',
+            prisonerNumber: 'D1234DD',
+            releaseDate: '2022-05-01',
+            topupSupervisionStartDate: undefined,
+            topupSupervisionExpiryDate: '2022-10-03',
+          } as Prisoner,
+          deliusRecord: {
+            otherIds: {
+              crn: 'Z12345',
+            },
+          } as DeliusRecord,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+      ])
+
+      const spy = jest.spyOn(logger, 'error')
+      await handler.GET(req, res)
+
+      expect(spy).toHaveBeenCalledWith('AP_PSS licence with CRN: Z12345 missing tussd or tused')
+    })
+
+    it('should not log if tussd/tused not missing', async () => {
+      caseloadService.getStaffVaryCaseload.mockResolvedValue([
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP_PSS,
+              status: LicenceStatus.ACTIVE,
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Harry',
+            lastName: 'Hall',
+            prisonerNumber: 'D1234DD',
+            releaseDate: '2022-05-01',
+            topupSupervisionStartDate: '2022-10-01',
+            topupSupervisionExpiryDate: '2022-10-03',
+          } as Prisoner,
+          deliusRecord: {
+            otherIds: {
+              crn: 'Z12345',
+            },
+          } as DeliusRecord,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+      ])
+
+      const spy = jest.spyOn(logger, 'error')
+      await handler.GET(req, res)
+      expect(spy).not.toHaveBeenCalled()
+    })
+
     it('should render view with My Cases tab selected', async () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
@@ -122,6 +245,28 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+          {
+            licenceId: 2,
+            name: 'John Deer',
+            crnNumber: 'Y12345',
+            releaseDate: '01 May 2022',
+            licenceStatus: 'ACTIVE',
+            licenceType: 'AP_PSS',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+          {
+            licenceId: 3,
+            name: 'Henry Hall',
+            crnNumber: 'Z12345',
+            licenceStatus: 'ON_PSS',
+            releaseDate: '01 May 2022',
+            licenceType: 'AP_PSS',
             probationPractitioner: {
               name: 'Walter White',
             },

@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio'
-import { format, addDays, subDays, addMonths } from 'date-fns'
+import { format, addDays, subDays, addMonths, startOfYesterday, startOfTomorrow } from 'date-fns'
 import nunjucks, { Template } from 'nunjucks'
 import ConditionService from '../services/conditionService'
 import { registerNunjucks } from './nunjucksSetup'
@@ -317,6 +317,34 @@ describe('Nunjucks Filters', () => {
       const licence = { typeCode: 'PSS', topupSupervisionExpiryDate: '13/12/2022' } as Licence
       const result = njkEnv.getFilter('dateToDisplay')(licence)
       expect(result).toEqual('PSS end date: 13 Dec 2022')
+    })
+  })
+  describe('check if AP_PSS licence is within pss period', () => {
+    it('should return true when today is in PSS period', () => {
+      const yesterday = format(startOfYesterday(), 'dd/MM/yyyy')
+      const tomorrow = format(startOfTomorrow(), 'dd/MM/yyyy')
+      const licence = { topupSupervisionStartDate: yesterday, topupSupervisionExpiryDate: tomorrow }
+      const result = njkEnv.getFilter('isApPssWithinPssPeriod')(licence)
+      expect(result).toEqual(true)
+    })
+    it('should return false when today is before PSS period', () => {
+      const tomorrow = format(startOfTomorrow(), 'dd/MM/yyyy')
+      const licence = { topupSupervisionStartDate: tomorrow, topupSupervisionExpiryDate: tomorrow }
+      const result = njkEnv.getFilter('isApPssWithinPssPeriod')(licence)
+      expect(result).toEqual(false)
+    })
+    it('should return false when today is after PSS period', () => {
+      const yesterday = format(startOfYesterday(), 'dd/MM/yyyy')
+      const licence = { topupSupervisionStartDate: yesterday, topupSupervisionExpiryDate: yesterday }
+      const result = njkEnv.getFilter('isApPssWithinPssPeriod')(licence)
+      expect(result).toEqual(false)
+    })
+
+    it('should handle missing date', () => {
+      const yesterday = format(startOfYesterday(), 'dd/MM/yyyy')
+      const licence = { topupSupervisionStartDate: null as string, topupSupervisionExpiryDate: yesterday }
+      const result = njkEnv.getFilter('isApPssWithinPssPeriod')(licence)
+      expect(result).toEqual(false)
     })
   })
 })

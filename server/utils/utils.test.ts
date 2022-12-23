@@ -1,8 +1,10 @@
 import { isDefined } from 'class-validator'
 import moment from 'moment'
+import { format, startOfToday, startOfTomorrow, startOfYesterday, endOfYesterday, subDays, addDays } from 'date-fns'
 import {
   addressObjectToString,
   convertDateFormat,
+  reformatDate,
   convertToTitleCase,
   hasRole,
   jsonToSimpleDateTime,
@@ -19,6 +21,7 @@ import {
   isBankHolidayOrWeekend,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
+  isWithinPssPeriod,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -353,6 +356,10 @@ describe('Check licence is close to release', () => {
     })
   })
 
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
   it('should return false if CRD is greater than 2 days from now', () => {
     const licence = {
       conditionalReleaseDate: '04/05/2021',
@@ -411,5 +418,60 @@ describe('Get prisoner release date from Nomis', () => {
     } as Prisoner
 
     expect(selectReleaseDate(nomisRecord)).toBe('aaa2036-11-01')
+  })
+})
+
+describe('Check if within PSS period', () => {
+  it('should return false if today is before tussd', () => {
+    const topupSupervisionStartDate = format(startOfTomorrow(), 'yyyy-MM-dd')
+    const topupSupervisionExpiryDate = format(addDays(new Date(), 2), 'yyyy-MM-dd')
+
+    expect(isWithinPssPeriod(topupSupervisionStartDate, topupSupervisionExpiryDate)).toBe(false)
+  })
+
+  it('should return true if tussd is today', () => {
+    const topupSupervisionStartDate = format(startOfToday(), 'yyyy-MM-dd')
+    const topupSupervisionExpiryDate = format(startOfTomorrow(), 'yyyy-MM-dd')
+
+    expect(isWithinPssPeriod(topupSupervisionStartDate, topupSupervisionExpiryDate)).toBe(true)
+  })
+
+  it('should return true if today is between tussd and tused', () => {
+    const topupSupervisionStartDate = format(startOfYesterday(), 'yyyy-MM-dd')
+    const topupSupervisionExpiryDate = format(startOfTomorrow(), 'yyyy-MM-dd')
+
+    expect(isWithinPssPeriod(topupSupervisionStartDate, topupSupervisionExpiryDate)).toBe(true)
+  })
+
+  it('should return false if tused is today', () => {
+    const topupSupervisionStartDate = format(subDays(new Date(), 1), 'yyyy-MM-dd')
+    const topupSupervisionExpiryDate = format(startOfToday(), 'yyyy-MM-dd')
+
+    expect(isWithinPssPeriod(topupSupervisionStartDate, topupSupervisionExpiryDate)).toBe(false)
+  })
+  it('should return false if today is after tused', () => {
+    const topupSupervisionStartDate = format(subDays(new Date(), 2), 'yyyy-MM-dd')
+    const topupSupervisionExpiryDate = format(endOfYesterday(), 'yyyy-MM-dd')
+
+    expect(isWithinPssPeriod(topupSupervisionStartDate, topupSupervisionExpiryDate)).toBe(false)
+  })
+
+  it('should handle missing dates', () => {
+    const topupSupervisionStartDate = null as string
+    const topupSupervisionExpiryDate = null as string
+
+    expect(isWithinPssPeriod(topupSupervisionStartDate, topupSupervisionExpiryDate)).toBe(false)
+  })
+})
+
+describe('Reformat date', () => {
+  it('should reformat date', () => {
+    const date = '19/12/2022'
+    expect(reformatDate(date)).toBe('2022-12-19')
+  })
+
+  it('should handle missing date', () => {
+    const date: string = null
+    expect(reformatDate(date)).toBe(undefined)
   })
 })

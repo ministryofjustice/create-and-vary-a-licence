@@ -82,6 +82,12 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     description: 'Recall',
     colour: 'grey',
   },
+  // ON_PSS status is not saved within licence and only added here in order to show it as a label in the UI
+  ON_PSS: {
+    label: 'On PSS',
+    description: 'On PSS',
+    colour: 'turquoise',
+  },
 }
 
 export default statusConfig

@@ -3,8 +3,10 @@ import moment from 'moment'
 import _ from 'lodash'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
-import { convertToTitleCase } from '../../../utils/utils'
+import LicenceType from '../../../enumeration/licenceType'
+import { convertToTitleCase, isWithinPssPeriod } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import logger from '../../../../logger'
 
 export default class CaseloadRoutes {
   constructor(private readonly caseloadService: CaseloadService) {}
@@ -23,13 +25,31 @@ export default class CaseloadRoutes {
         const licence =
           c.licences.length > 1 ? c.licences.find(l => l.status !== LicenceStatus.ACTIVE) : _.head(c.licences)
 
+        let pssLicenceStatus: LicenceStatus = null
+
+        if (
+          licence.type === LicenceType.AP_PSS &&
+          (!c.nomisRecord.topupSupervisionStartDate || !c.nomisRecord.topupSupervisionExpiryDate)
+        ) {
+          logger.error(`AP_PSS licence with CRN: ${c.deliusRecord.otherIds.crn} missing tussd or tused`)
+        }
+
+        const inPssPeriod = isWithinPssPeriod(
+          c.nomisRecord.topupSupervisionStartDate,
+          c.nomisRecord.topupSupervisionExpiryDate
+        )
+
+        if (licence.type === LicenceType.AP_PSS && inPssPeriod) {
+          pssLicenceStatus = LicenceStatus.ON_PSS
+        }
+
         return {
           licenceId: licence.id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           crnNumber: c.deliusRecord.otherIds.crn,
           licenceType: licence.type,
           releaseDate: moment(c.nomisRecord.releaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
-          licenceStatus: licence.status,
+          licenceStatus: pssLicenceStatus || licence.status,
           probationPractitioner: c.probationPractitioner,
         }
       })
