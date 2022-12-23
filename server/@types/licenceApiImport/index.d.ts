@@ -423,6 +423,11 @@ export interface components {
        * @description The date when the post sentence supervision period ends, from prison services
        */
       topupSupervisionExpiryDate?: string
+      /**
+       * Format: date
+       * @description The date when a person is recalled to prison, after being released on a license
+       */
+      postRecallReleaseDate?: string
     }
     /** @description Request object for referring a licence variation */
     ReferVariationRequest: {

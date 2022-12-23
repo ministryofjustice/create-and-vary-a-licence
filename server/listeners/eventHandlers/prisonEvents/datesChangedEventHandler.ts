@@ -21,7 +21,13 @@ export default class DatesChangedEventHandler {
     const licence = _.head(
       await this.licenceService.getLicencesByNomisIdsAndStatus(
         [nomisId],
-        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED]
+        [
+          LicenceStatus.IN_PROGRESS,
+          LicenceStatus.SUBMITTED,
+          LicenceStatus.REJECTED,
+          LicenceStatus.APPROVED,
+          LicenceStatus.ACTIVE,
+        ]
       )
     )
 
@@ -49,6 +55,7 @@ export default class DatesChangedEventHandler {
           convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
           convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseDate),
         licenceExpiryDate: convertDateFormat(prisoner.sentenceDetail?.licenceExpiryDate),
+        postRecallReleaseDate: convertDateFormat(prisoner.sentenceDetail?.postRecallReleaseDate),
         topupSupervisionStartDate: convertDateFormat(prisoner.sentenceDetail?.topupSupervisionStartDate),
         topupSupervisionExpiryDate: convertDateFormat(prisoner.sentenceDetail?.topupSupervisionExpiryDate),
       })
