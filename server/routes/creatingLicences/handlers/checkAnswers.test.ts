@@ -120,7 +120,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
     it('should call the licence API to submit the licence for approval', async () => {
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getVersion.mockResolvedValue('2.0')
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(licenceService.submitLicence).toHaveBeenCalledWith('1', {
         username: 'joebloggs',
@@ -130,7 +130,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
     it('should redirect to the confirmation page', async () => {
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getVersion.mockResolvedValue('2.0')
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/confirmation')
     })

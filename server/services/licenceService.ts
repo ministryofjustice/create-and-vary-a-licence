@@ -86,7 +86,7 @@ export default class LicenceService {
 
     const licence = {
       typeCode: licenceType,
-      version: await this.conditionService.getVersion(),
+      version: await this.conditionService.getPolicyVersion(),
       nomsId: prisonerNumber,
       bookingNo: nomisRecord.bookingNo,
       bookingId: nomisRecord.bookingId,
@@ -153,16 +153,8 @@ export default class LicenceService {
     return this.licenceApiClient.getLicenceById(id, user)
   }
 
-  async getConditions(version: string) {
-    return this.licenceApiClient.getConditions(version)
-  }
-
-  async getActiveConditions() {
-    return this.licenceApiClient.getActiveConditions()
-  }
-
   async getPolicyChanges(id: string): Promise<LicenceConditionChange[]> {
-    const activePolicyVersion = await this.conditionService.getVersion()
+    const activePolicyVersion = await this.conditionService.getPolicyVersion()
 
     return this.licenceApiClient.getPolicyChanges(id, activePolicyVersion) as Promise<LicenceConditionChange[]>
   }

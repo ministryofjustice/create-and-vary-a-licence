@@ -51,7 +51,7 @@ export default class CheckAnswersRoutes {
      */
     if (
       (await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !==
-      (await this.conditionService.getVersion())
+      (await this.conditionService.getPolicyVersion())
     ) {
       const newStdConditions = {
         standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode)

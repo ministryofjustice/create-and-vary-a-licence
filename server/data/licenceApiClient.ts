@@ -393,7 +393,7 @@ export default class LicenceApiClient extends RestClient {
     )) as LicenceEvent[]
   }
 
-  async getConditions(version: string): Promise<LicencePolicyResponse> {
+  async getLicencePolicyForVersion(version: string): Promise<LicencePolicyResponse> {
     try {
       return this.get({ path: `/licence-policy/version/${version}` }) as Promise<LicencePolicyResponse>
     } catch (error) {
@@ -401,7 +401,7 @@ export default class LicenceApiClient extends RestClient {
     }
   }
 
-  async getActiveConditions(): Promise<LicencePolicyResponse> {
+  async getActiveLicencePolicy(): Promise<LicencePolicyResponse> {
     try {
       return this.get({ path: `/licence-policy/active` }) as Promise<LicencePolicyResponse>
     } catch (error) {

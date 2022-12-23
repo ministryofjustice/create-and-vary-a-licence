@@ -17,12 +17,12 @@ describe('ConditionService', () => {
   const licenceApiClient = new LicenceApiClient() as jest.Mocked<LicenceApiClient>
   const conditionService = new ConditionService(licenceApiClient, conditionFormatter) as jest.Mocked<ConditionService>
 
-  licenceApiClient.getConditions.mockResolvedValue(policyV2_0)
-  licenceApiClient.getActiveConditions.mockResolvedValue(policyV2_1)
+  licenceApiClient.getLicencePolicyForVersion.mockResolvedValue(policyV2_0)
+  licenceApiClient.getActiveLicencePolicy.mockResolvedValue(policyV2_1)
 
-  describe('getVersion', () => {
-    it('returns the version of the version of the policy config returned by getActiveConditions on the licenceApiClient', async () => {
-      expect(await conditionService.getVersion()).toEqual(policyV2_1.version)
+  describe('getPolicyVersion', () => {
+    it('returns the version of the version of the policy config returned by getActiveLicencePolicy on the licenceApiClient', async () => {
+      expect(await conditionService.getPolicyVersion()).toEqual(policyV2_1.version)
     })
   })
 

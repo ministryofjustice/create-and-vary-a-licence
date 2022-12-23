@@ -42,29 +42,31 @@ import ElectronicTagPeriod from '../routes/creatingLicences/types/additionalCond
 import ConditionFormatter from './conditionFormatter'
 import { AdditionalConditionAp, AdditionalConditionPss, AdditionalConditionsConfig } from '../@types/LicencePolicy'
 
+type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
+
 export default class ConditionService {
   constructor(
     private readonly licenceApiClient: LicenceApiClient,
     private readonly conditionFormatter = new ConditionFormatter()
   ) {}
 
-  private async getConditions(version: string = null): Promise<LicencePolicyResponse> {
-    let conditions
+  private async getLicencePolicy(version: string = null): Promise<LicencePolicyResponse> {
+    let licencePolicy
     if (version) {
-      conditions = await this.licenceApiClient.getConditions(version)
+      licencePolicy = await this.licenceApiClient.getLicencePolicyForVersion(version)
     } else {
-      conditions = await this.licenceApiClient.getActiveConditions()
+      licencePolicy = await this.licenceApiClient.getActiveLicencePolicy()
     }
 
-    return conditions
+    return licencePolicy
   }
 
-  async getVersion(): Promise<string> {
-    return (await this.getConditions()).version
+  async getPolicyVersion(): Promise<string> {
+    return (await this.getLicencePolicy()).version
   }
 
   async getStandardConditions(licenceType: string, version: string = null): Promise<StandardCondition[]> {
-    const conditions = await this.getConditions(version)
+    const conditions = await this.getLicencePolicy(version)
     return conditions.standardConditions[licenceType].map((condition: StandardCondition, index: number) => {
       return {
         ...condition,
@@ -74,14 +76,11 @@ export default class ConditionService {
   }
 
   async getAdditionalConditions(version: string): Promise<AdditionalConditionsConfig> {
-    const policy = await this.getConditions(version)
+    const policy = await this.getLicencePolicy(version)
     return this.parseResponse(policy.additionalConditions)
   }
 
-  async getAdditionalConditionByCode(
-    searchCode: string,
-    version: string = null
-  ): Promise<AdditionalConditionAp | AdditionalConditionPss> {
+  async getAdditionalConditionByCode(searchCode: string, version: string = null): Promise<PolicyAdditionalCondition> {
     const additionalConditions = await this.getAdditionalConditions(version)
     return Object.values(additionalConditions)
       .flat()
@@ -91,10 +90,10 @@ export default class ConditionService {
   async getGroupedAdditionalConditions(
     licenceType: string,
     version: string = null
-  ): Promise<{ category: string; conditions: AdditionalConditionAp[] | AdditionalConditionPss[] }[]> {
+  ): Promise<{ category: string; conditions: PolicyAdditionalCondition[] }[]> {
     const additionalConditions = await this.getAdditionalConditions(version)
-    const map = new Map()
-    additionalConditions[licenceType].forEach((condition: AdditionalConditionAp | AdditionalConditionPss) => {
+    const map = new Map<string, PolicyAdditionalCondition[]>()
+    additionalConditions[licenceType].forEach((condition: PolicyAdditionalCondition) => {
       const collection = map.get(condition.category)
       if (!collection) {
         map.set(condition.category, [condition])

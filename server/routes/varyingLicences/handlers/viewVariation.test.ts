@@ -158,7 +158,7 @@ describe('Route - Vary - View variation', () => {
       } as unknown as Response
 
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getVersion.mockResolvedValue('2.0')
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
 
       await handler.GET(req, res)
 
@@ -179,7 +179,7 @@ describe('Route - Vary - View variation', () => {
       } as unknown as Response
 
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
-      conditionService.getVersion.mockResolvedValue('2.0')
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
 
       await handler.GET(req, res)
 
