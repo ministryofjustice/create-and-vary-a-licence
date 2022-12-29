@@ -34,10 +34,6 @@ context('Create a licence', () => {
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
 
-    /*
-     select the next wednesday one year from now in order to avoid weekends and
-     bank holidays, with the possible exceptions of Xmas and New Year
-     */
     cy.task('getNoneWorkingDays').then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
         .enterDate(moment(appointmentDate))
