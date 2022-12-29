@@ -1,7 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "es2019",
+    "target": "ES2021",
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist",
@@ -18,6 +18,6 @@
     "experimentalDecorators": true,
     "typeRoots": ["./server/@types", "./node_modules/@types"]
   },
-  "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "coverage"],
+  "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "coverage", "./cypress.config.ts"],
   "include": ["**/*.ts"]
 }
