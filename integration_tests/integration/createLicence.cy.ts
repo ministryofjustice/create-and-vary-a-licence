@@ -34,7 +34,7 @@ context('Create a licence', () => {
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
 
-    cy.task('getNoneWorkingDays').then(appointmentDate => {
+    cy.task('getNextWorkingDay').then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
         .enterDate(moment(appointmentDate))
         .enterTime(moment())

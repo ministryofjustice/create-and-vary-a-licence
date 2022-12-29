@@ -112,7 +112,7 @@ export default defineConfig({
         sendPrisonEvent: events.sendPrisonEvent,
         sendProbationEvent: events.sendProbationEvent,
         purgeQueues: events.purgeQueues,
-        getNoneWorkingDays: (): Promise<Moment> =>
+        getNextWorkingDay: (): Promise<Moment> =>
           new UkBankHolidayFeedService().getEnglishAndWelshHolidays().then(ukHolidays => {
             const appointmentDate = moment().add(1, 'year').add(1, 'week').day(7)
             while (isBankHolidayOrWeekend(appointmentDate, ukHolidays)) {
