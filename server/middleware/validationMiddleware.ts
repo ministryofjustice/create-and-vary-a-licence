@@ -1,24 +1,31 @@
 import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
-import { RequestHandler } from 'express'
-import ConditionService from '../services/conditionService'
+import type { RequestHandler } from 'express'
+import type { Licence } from '../@types/licenceApiClientTypes'
+import type ConditionService from '../services/conditionService'
 
 export type FieldValidationError = {
   field: string
   message: string
 }
 
-function validationMiddleware(conditionService: ConditionService, type?: new () => object): RequestHandler {
-  return async (req, res, next) => {
-    const { licence } = res.locals
+async function getValidator(
+  conditionService: ConditionService,
+  licenceVersion: string | undefined,
+  conditionCode: string,
+  type: new () => object
+): Promise<new () => object> {
+  if (!conditionCode) return type
+  const condition = await conditionService.getAdditionalConditionByCode(conditionCode, licenceVersion)
+  return condition?.validatorType || type
+}
 
-    let classType
-    if (licence) {
-      classType =
-        (await conditionService.getAdditionalConditionByCode(req.body.code, licence.version))?.validatorType || type
-    } else {
-      classType = (await conditionService.getAdditionalConditionByCode(req.body.code))?.validatorType || type
-    }
+function createMiddleware(conditionService: ConditionService, type?: new () => object): RequestHandler {
+  return async (req, res, next) => {
+    const { licence } = res.locals as Record<string, Licence>
+
+    const classType = await getValidator(conditionService, licence.version, req.body.code, type)
+
     // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
     if (req.file && req.file.fieldname === 'outOfBoundFilename') {
       req.body = { ...req.body, outOfBoundFilename: req.file.originalname }
@@ -38,12 +45,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       return next()
     }
 
-    const buildError = (
-      error: ValidationError,
-      constraints: {
-        [type: string]: string
-      }
-    ): FieldValidationError => ({
+    const buildError = (error: ValidationError, constraints: Record<string, string>): FieldValidationError => ({
       field: error.property,
       message: Object.values(constraints)[Object.values(constraints).length - 1],
     })
@@ -63,4 +65,13 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
   }
 }
 
-export default validationMiddleware
+export default (conditionService: ConditionService, type?: new () => object): RequestHandler => {
+  const middleware = createMiddleware(conditionService, type)
+  return async (req, res, next) => {
+    try {
+      await middleware(req, res, next)
+    } catch (err) {
+      next(err)
+    }
+  }
+}

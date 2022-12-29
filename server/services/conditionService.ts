@@ -273,5 +273,4 @@ export default class ConditionService {
     })
     return mappedConditions
   }
-  /* eslint-disable no-param-reassign */
 }

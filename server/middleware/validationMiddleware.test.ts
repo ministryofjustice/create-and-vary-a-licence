@@ -88,6 +88,18 @@ describe('validationMiddleware', () => {
       expect(req.flash).toHaveBeenCalledWith('formResponses', JSON.stringify(req.body))
     })
 
+    it('should not call condition service if no condition code is present', async () => {
+      const next = jest.fn()
+      req = {
+        params: {},
+        body: {},
+      } as unknown as Request
+
+      await validationMiddleware(conditionService)(req, res, next)
+
+      expect(conditionService.getAdditionalConditionByCode).not.toHaveBeenCalled()
+    })
+
     it('should call next when there are no validation errors', async () => {
       const next = jest.fn()
       req = {
@@ -101,6 +113,20 @@ describe('validationMiddleware', () => {
       await validationMiddleware(conditionService, DummyForm)(req, res, next)
 
       expect(next).toHaveBeenCalledTimes(1)
+    })
+
+    it('should propagate errors to next when there are unexpected exceptions', async () => {
+      const next = jest.fn()
+      req = {
+        params: {},
+        body: { code: 'condition1' },
+      } as unknown as Request
+
+      conditionService.getAdditionalConditionByCode.mockRejectedValue('some horrible error')
+
+      await validationMiddleware(conditionService, DummyForm)(req, res, next)
+
+      expect(next).toHaveBeenCalledWith('some horrible error')
     })
 
     it('should return flash responses', async () => {
