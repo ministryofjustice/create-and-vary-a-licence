@@ -105,7 +105,7 @@
     "@types/multer": "^1.4.7",
     "agentkeepalive": "^4.2.1",
     "applicationinsights": "^2.2.2",
-    "aws-sdk": "^2.1101.0",
+    "aws-sdk": "^2.1271.0",
     "body-parser": "^1.20.1",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
