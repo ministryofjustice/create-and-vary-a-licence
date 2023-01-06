@@ -1,4 +1,3 @@
-import moment from 'moment'
 import _ from 'lodash'
 import { initialiseAppInsights, buildAppInsightsClient, flush } from '../server/utils/azureAppInsights'
 import logger from '../logger'
@@ -9,6 +8,7 @@ import LicenceApiClient from '../server/data/licenceApiClient'
 import PrisonApiClient from '../server/data/prisonApiClient'
 import PrisonerSearchApiClient from '../server/data/prisonerSearchApiClient'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
+import { isPassedArdOrCrd } from '../server/utils/utils'
 
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-activate-licences-job')
@@ -111,22 +111,6 @@ const batchInactivateLicences = async (licenceIds: number[]): Promise<void> => {
 
 const validPrisonerForRelease = (prisoner: Prisoner): boolean => {
   return prisoner.status.startsWith('INACTIVE') || prisoner.legalStatus === 'IMMIGRATION_DETAINEE'
-}
-
-const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner): boolean => {
-  let releaseDate
-
-  if (prisoner.legalStatus === 'IMMIGRATION_DETAINEE') {
-    releaseDate = licence.actualReleaseDate || licence.conditionalReleaseDate
-  } else {
-    releaseDate = licence.actualReleaseDate
-  }
-
-  if (releaseDate) {
-    return moment(releaseDate, 'YYYY-MM-DD').isSameOrBefore(moment())
-  }
-
-  return false
 }
 
 pollLicencesToUpdate()
