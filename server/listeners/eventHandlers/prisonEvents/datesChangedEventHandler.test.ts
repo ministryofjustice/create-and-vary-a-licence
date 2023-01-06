@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { addDays, format } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import PrisonerService from '../../../services/prisonerService'
@@ -179,7 +180,7 @@ describe('Sentence dates changed event handler', () => {
       {
         licenceId: 1,
         licenceStatus: 'SUBMITTED',
-        actualReleaseDate: moment().subtract(1, 'week').format('YYYY-MM-DD'),
+        actualReleaseDate: format(addDays(new Date(), -7), 'dd/MM/yyyy'),
       } as LicenceSummary,
     ])
 
@@ -204,7 +205,7 @@ describe('Sentence dates changed event handler', () => {
       {
         licenceId: 1,
         licenceStatus: 'SUBMITTED',
-        actualReleaseDate: moment().format('YYYY-MM-DD'),
+        actualReleaseDate: format(new Date(), 'dd/MM/yyyy'),
       } as LicenceSummary,
     ])
 
