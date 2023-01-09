@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import _ from 'lodash'
 import { initialiseAppInsights, buildAppInsightsClient, flush } from '../server/utils/azureAppInsights'
 import logger from '../logger'
