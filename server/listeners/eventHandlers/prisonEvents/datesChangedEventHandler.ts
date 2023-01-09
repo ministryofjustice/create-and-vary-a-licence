@@ -1,11 +1,9 @@
 import _ from 'lodash'
-import moment from 'moment'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { convertDateFormat } from '../../../utils/utils'
-import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import { convertDateFormat, isPassedArdOrCrd } from '../../../utils/utils'
 import logger from '../../../../logger'
 
 export default class DatesChangedEventHandler {
@@ -30,7 +28,7 @@ export default class DatesChangedEventHandler {
 
       // IS91 cases receive an update that wipes their CRD when their CRD passes.
       // We want to keep it in the service, so we should ignore any date-changing events that meet this criteria.
-      if (prisoner.legalStatus === 'IMMIGRATION_DETAINEE' && isPassedArdOrCrd(licence)) {
+      if (prisoner.legalStatus === 'IMMIGRATION_DETAINEE' && isPassedArdOrCrd(licence, prisoner)) {
         logger.info(
           `Ignoring date update event for NOMIS ID: ${nomisId}, CRN: ${licence.crn}, licence ID: ${licence.licenceId}`
         )
@@ -54,14 +52,4 @@ export default class DatesChangedEventHandler {
       })
     }
   }
-}
-
-const isPassedArdOrCrd = (licence: LicenceSummary): boolean => {
-  const releaseDate = licence.actualReleaseDate || licence.conditionalReleaseDate
-
-  if (releaseDate) {
-    return moment(releaseDate, 'YYYY-MM-DD').isSameOrBefore(moment())
-  }
-
-  return false
 }

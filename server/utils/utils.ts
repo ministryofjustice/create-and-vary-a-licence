@@ -1,14 +1,15 @@
 import moment, { Moment } from 'moment'
 import { Holiday } from 'uk-bank-holidays'
-import { format } from 'date-fns'
+import { format, isBefore, parse } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import Address from '../routes/creatingLicences/types/address'
-import { Licence } from '../@types/licenceApiClientTypes'
+import { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
+import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -192,6 +193,20 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
   return dateString
 }
 
+const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonApiPrisoner): boolean => {
+  const releaseDate =
+    prisoner.legalStatus !== 'IMMIGRATION_DETAINEE'
+      ? licence.actualReleaseDate
+      : licence.actualReleaseDate || licence.conditionalReleaseDate
+
+  if (releaseDate) {
+    const rDate = parse(releaseDate, 'dd/MM/yyyy', new Date())
+    return isBefore(rDate, new Date())
+  }
+
+  return false
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -214,4 +229,5 @@ export {
   isBankHolidayOrWeekend,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
+  isPassedArdOrCrd,
 }

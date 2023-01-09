@@ -1,5 +1,6 @@
 import { isDefined } from 'class-validator'
 import moment from 'moment'
+import { addDays, format } from 'date-fns'
 import {
   addressObjectToString,
   convertDateFormat,
@@ -19,13 +20,14 @@ import {
   isBankHolidayOrWeekend,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
+  isPassedArdOrCrd,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/creatingLicences/types/address'
-import { Licence } from '../@types/licenceApiClientTypes'
+import { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 
@@ -411,5 +413,95 @@ describe('Get prisoner release date from Nomis', () => {
     } as Prisoner
 
     expect(selectReleaseDate(nomisRecord)).toBe('aaa2036-11-01')
+  })
+
+  describe('isPassedArdOrCrd', () => {
+    it('Should return true when legal status is NOT immigration and actualReleaseDate is yesterday', () => {
+      const licence = {
+        actualReleaseDate: format(addDays(new Date(), -1), 'dd/MM/yyyy'),
+        conditionalReleaseDate: format(addDays(new Date(), 5), 'dd/MM/yyyy'),
+      } as LicenceSummary
+
+      const prisoner = { legalStatus: 'SENTENCED' } as Prisoner
+
+      expect(isPassedArdOrCrd(licence, prisoner)).toBe(true)
+    })
+
+    it('Should return true when legal status is NOT immigration and actualReleaseDate is today', () => {
+      const licence = {
+        actualReleaseDate: format(new Date(), 'dd/MM/yyyy'),
+        conditionalReleaseDate: format(addDays(new Date(), 5), 'dd/MM/yyyy'),
+      } as LicenceSummary
+
+      const prisoner = { legalStatus: 'SENTENCED' } as Prisoner
+
+      expect(isPassedArdOrCrd(licence, prisoner)).toBe(true)
+    })
+
+    it('Should return false when legal status is NOT immigration and actualReleaseDate is tomorrow', () => {
+      const licence = {
+        actualReleaseDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+        conditionalReleaseDate: format(addDays(new Date(), 5), 'dd/MM/yyyy'),
+      } as LicenceSummary
+
+      const prisoner = { legalStatus: 'SENTENCED' } as Prisoner
+
+      expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
+    })
+
+    it('Should return true when legal status is immigration and conditionalReleaseDate is today', () => {
+      const licence = {
+        actualReleaseDate: undefined,
+        conditionalReleaseDate: format(new Date(), 'dd/MM/yyyy'),
+      } as LicenceSummary
+
+      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
+
+      expect(isPassedArdOrCrd(licence, prisoner)).toBe(true)
+    })
+
+    it('Should return false when legal status is immigration and conditionalReleaseDate is tomorrow', () => {
+      const licence = {
+        actualReleaseDate: undefined,
+        conditionalReleaseDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+      } as LicenceSummary
+
+      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
+
+      expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
+    })
+
+    it('Should return true when legal status is immigration and actualReleaseDate is present and in the past', () => {
+      const licence = {
+        actualReleaseDate: format(new Date(), 'dd/MM/yyyy'),
+        conditionalReleaseDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+      } as LicenceSummary
+
+      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
+
+      expect(isPassedArdOrCrd(licence, prisoner)).toBe(true)
+    })
+
+    it('Should return false when legal status is immigration and actualReleaseDate is present and in the future', () => {
+      const licence = {
+        actualReleaseDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+        conditionalReleaseDate: format(new Date(), 'dd/MM/yyyy'),
+      } as LicenceSummary
+
+      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
+
+      expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
+    })
+
+    it('Should return false when legal status is immigration and no dates are present', () => {
+      const licence = {
+        actualReleaseDate: undefined,
+        conditionalReleaseDate: undefined,
+      } as LicenceSummary
+
+      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
+
+      expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
+    })
   })
 })
