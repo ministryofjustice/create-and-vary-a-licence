@@ -18,12 +18,12 @@ import BespokeConditions from '../routes/creatingLicences/types/bespokeCondition
 import LicenceStatus from '../enumeration/licenceStatus'
 import {
   AdditionalCondition,
-  AdditionalConditionAp,
   EmailContact,
   Licence,
   LicenceConditionChange,
-  LicencePolicy,
+  LicencePolicyResponse,
   LicenceSummary,
+  StandardCondition,
   UpdateComRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
@@ -34,6 +34,7 @@ import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
 import ConditionService from './conditionService'
+import { AdditionalConditionAp, AdditionalConditionsConfig } from '../@types/LicencePolicy'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -49,7 +50,8 @@ describe('Licence Service', () => {
   const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
 
   conditionService.expandAdditionalCondition.mockResolvedValue('condition')
-  conditionService.getConditions.mockResolvedValue({} as LicencePolicy)
+  conditionService.getStandardConditions.mockResolvedValue({} as StandardCondition[])
+  conditionService.getAdditionalConditions.mockResolvedValue({} as AdditionalConditionsConfig)
 
   conditionService.getStandardConditions.mockResolvedValue([{ text: 'fake standard condition', code: 'fake1' }])
 
@@ -98,8 +100,8 @@ describe('Licence Service', () => {
       ])
       conditionService.getAdditionalConditionByCode.mockResolvedValue({} as AdditionalConditionAp)
       conditionService.expandAdditionalCondition.mockResolvedValue('condition')
-      licenceApiClient.getConditions.mockResolvedValue({} as LicencePolicy)
-      licenceApiClient.getActiveConditions.mockResolvedValue({} as LicencePolicy)
+      licenceApiClient.getLicencePolicyForVersion.mockResolvedValue({} as LicencePolicyResponse)
+      licenceApiClient.getActiveLicencePolicy.mockResolvedValue({} as LicencePolicyResponse)
       licenceApiClient.getPolicyChanges.mockResolvedValue({} as LicenceConditionChange[])
       licenceApiClient.updateAdditionalConditions.mockImplementation()
     })

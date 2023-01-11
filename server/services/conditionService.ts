@@ -32,15 +32,17 @@ import AppointmentTimeAndPlaceDuringPss from '../routes/creatingLicences/types/a
 import LicenceType from '../enumeration/licenceType'
 import {
   AdditionalCondition,
-  AdditionalConditionAp,
   AdditionalConditionData,
-  AdditionalConditionPss,
-  LicencePolicy,
+  AdditionalConditionsResponse,
+  LicencePolicyResponse,
   StandardCondition,
 } from '../@types/licenceApiClientTypes'
 
 import ElectronicTagPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicTagPeriod'
 import ConditionFormatter from './conditionFormatter'
+import { AdditionalConditionAp, AdditionalConditionPss, AdditionalConditionsConfig } from '../@types/LicencePolicy'
+
+type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
 export default class ConditionService {
   constructor(
@@ -48,17 +50,23 @@ export default class ConditionService {
     private readonly conditionFormatter = new ConditionFormatter()
   ) {}
 
-  async getVersion(): Promise<string> {
-    return (await this.getActiveConditions()).version
+  private async getLicencePolicy(version: string = null): Promise<LicencePolicyResponse> {
+    let licencePolicy
+    if (version) {
+      licencePolicy = await this.licenceApiClient.getLicencePolicyForVersion(version)
+    } else {
+      licencePolicy = await this.licenceApiClient.getActiveLicencePolicy()
+    }
+
+    return licencePolicy
+  }
+
+  async getPolicyVersion(): Promise<string> {
+    return (await this.getLicencePolicy()).version
   }
 
   async getStandardConditions(licenceType: string, version: string = null): Promise<StandardCondition[]> {
-    let conditions: LicencePolicy
-    if (version) {
-      conditions = await this.getConditions(version)
-    } else {
-      conditions = await this.getActiveConditions()
-    }
+    const conditions = await this.getLicencePolicy(version)
     return conditions.standardConditions[licenceType].map((condition: StandardCondition, index: number) => {
       return {
         ...condition,
@@ -67,17 +75,14 @@ export default class ConditionService {
     })
   }
 
-  async getAdditionalConditionByCode(
-    searchCode: string,
-    version: string = null
-  ): Promise<AdditionalConditionAp | AdditionalConditionPss> {
-    let conditions: LicencePolicy
-    if (version) {
-      conditions = await this.getConditions(version)
-    } else {
-      conditions = await this.getActiveConditions()
-    }
-    return Object.values(conditions.additionalConditions)
+  async getAdditionalConditions(version: string): Promise<AdditionalConditionsConfig> {
+    const policy = await this.getLicencePolicy(version)
+    return this.parseResponse(policy.additionalConditions)
+  }
+
+  async getAdditionalConditionByCode(searchCode: string, version: string = null): Promise<PolicyAdditionalCondition> {
+    const additionalConditions = await this.getAdditionalConditions(version)
+    return Object.values(additionalConditions)
       .flat()
       .find(({ code }) => code === searchCode)
   }
@@ -85,43 +90,31 @@ export default class ConditionService {
   async getGroupedAdditionalConditions(
     licenceType: string,
     version: string = null
-  ): Promise<{ category: string; conditions: AdditionalConditionAp[] | AdditionalConditionPss[] }[]> {
-    let policyConditions: LicencePolicy
-    if (version) {
-      policyConditions = await this.getConditions(version)
-    } else {
-      policyConditions = await this.getActiveConditions()
-    }
-    const map = new Map()
-    policyConditions.additionalConditions[licenceType].forEach(
-      (condition: AdditionalConditionAp | AdditionalConditionPss) => {
-        const collection = map.get(condition.category)
-        if (!collection) {
-          map.set(condition.category, [condition])
-        } else {
-          collection.push(condition)
-        }
+  ): Promise<{ category: string; conditions: PolicyAdditionalCondition[] }[]> {
+    const additionalConditions = await this.getAdditionalConditions(version)
+    const map = new Map<string, PolicyAdditionalCondition[]>()
+    additionalConditions[licenceType].forEach((condition: PolicyAdditionalCondition) => {
+      const collection = map.get(condition.category)
+      if (!collection) {
+        map.set(condition.category, [condition])
+      } else {
+        collection.push(condition)
       }
-    )
+    })
     return Array.from(map, ([category, conditions]) => ({ category, conditions }))
   }
 
   async getAdditionalConditionType(searchCode: string, version: string = null): Promise<LicenceType> {
-    let conditions: LicencePolicy
-    if (version) {
-      conditions = await this.getConditions(version)
-    } else {
-      conditions = await this.getActiveConditions()
-    }
+    const additionalConditions = await this.getAdditionalConditions(version)
     if (
-      Object.values(conditions.additionalConditions.AP)
+      Object.values(additionalConditions.AP)
         .flat()
         .find(({ code }) => code === searchCode)
     ) {
       return LicenceType.AP
     }
     if (
-      Object.values(conditions.additionalConditions.PSS)
+      Object.values(additionalConditions.PSS)
         .flat()
         .find(({ code }) => code === searchCode)
     ) {
@@ -165,128 +158,120 @@ export default class ConditionService {
     return { conditionsWithUploads, additionalConditions }
   }
 
-  async getConditions(version: string): Promise<LicencePolicy> {
-    const response = await this.licenceApiClient.getConditions(version)
-    return this.parseResponse(response)
-  }
-
-  async getActiveConditions(): Promise<LicencePolicy> {
-    const response = await this.licenceApiClient
-      .getActiveConditions()
-      .then((res: LicencePolicy) => this.parseResponse(res))
-    return response
-  }
-
   /* eslint-disable no-param-reassign */
-  parseResponse = (response: LicencePolicy): LicencePolicy => {
-    const responseObj = response
-    responseObj.additionalConditions.AP.forEach((condition: AdditionalConditionAp) => {
+  parseResponse = (additionalConditionsResponse: AdditionalConditionsResponse): AdditionalConditionsConfig => {
+    const mappedConditions: AdditionalConditionsConfig = { AP: [], PSS: [] }
+    mappedConditions.AP = additionalConditionsResponse.AP.map(condition => {
+      let validator
       switch (condition.type) {
         case null:
           delete condition.type
           break
         case 'RegionOfResidence':
-          condition.type = RegionOfResidence
+          validator = RegionOfResidence
           break
         case 'RestrictionOfResidency':
-          condition.type = RestrictionOfResidency
+          validator = RestrictionOfResidency
           break
         case 'MedicalAppointmentType':
-          condition.type = MedicalAppointmentType
+          validator = MedicalAppointmentType
           break
         case 'AppointmentTimeAndPlace':
-          condition.type = AppointmentTimeAndPlace
+          validator = AppointmentTimeAndPlace
           break
         case 'NoContactWithVictim':
-          condition.type = NoContactWithVictim
+          validator = NoContactWithVictim
           break
         case 'UnsupervisedContact':
-          condition.type = UnsupervisedContact
+          validator = UnsupervisedContact
           break
         case 'NamedIndividuals':
-          condition.type = NamedIndividuals
+          validator = NamedIndividuals
           break
         case 'NamedOrganisation':
-          condition.type = NamedOrganisation
+          validator = NamedOrganisation
           break
         case 'BehaviourProblems':
-          condition.type = BehaviourProblems
+          validator = BehaviourProblems
           break
         case 'WorkingWithChildren':
-          condition.type = WorkingWithChildren
+          validator = WorkingWithChildren
           break
         case 'SpecifiedItem':
-          condition.type = SpecifiedItem
+          validator = SpecifiedItem
           break
         case 'IntimateRelationshipWithGender':
-          condition.type = IntimateRelationshipWithGender
+          validator = IntimateRelationshipWithGender
           break
         case 'CurfewTerms':
-          condition.type = CurfewTerms
+          validator = CurfewTerms
           break
         case 'CurfewAddress':
-          condition.type = CurfewAddress
+          validator = CurfewAddress
           break
         case 'OutOfBoundsRegion':
-          condition.type = OutOfBoundsRegion
+          validator = OutOfBoundsRegion
           break
         case 'OutOfBoundsPremises':
-          condition.type = OutOfBoundsPremises
+          validator = OutOfBoundsPremises
           break
         case 'OutOfBoundsPremisesType':
-          condition.type = OutOfBoundsPremisesType
+          validator = OutOfBoundsPremisesType
           break
         case 'ReportToApprovedPremises':
-          condition.type = ReportToApprovedPremises
+          validator = ReportToApprovedPremises
           break
         case 'ReportToApprovedPremisesPolicyV2_0':
           // eslint-disable-next-line camelcase
-          condition.type = ReportToApprovedPremisesPolicyV2_0
+          validator = ReportToApprovedPremisesPolicyV2_0
           break
         case 'ReportToPoliceStation':
-          condition.type = ReportToPoliceStation
+          validator = ReportToPoliceStation
           break
         case 'ReportToPoliceStationPolicyV2_0':
           // eslint-disable-next-line camelcase
-          condition.type = ReportToPoliceStationPolicyV2_0
+          validator = ReportToPoliceStationPolicyV2_0
           break
         case 'DrugTestLocation':
-          condition.type = DrugTestLocation
+          validator = DrugTestLocation
           break
         case 'ElectronicMonitoringTypes':
-          condition.type = ElectronicMonitoringTypes
+          validator = ElectronicMonitoringTypes
           break
         case 'ElectronicMonitoringPeriod':
-          condition.type = ElectronicMonitoringPeriod
+          validator = ElectronicMonitoringPeriod
           break
         case 'ApprovedAddress':
-          condition.type = ApprovedAddress
+          validator = ApprovedAddress
           break
         case 'AlcoholMonitoringPeriod':
-          condition.type = AlcoholMonitoringPeriod
+          validator = AlcoholMonitoringPeriod
           break
         case 'AlcoholRestrictionPeriod':
-          condition.type = AlcoholRestrictionPeriod
+          validator = AlcoholRestrictionPeriod
           break
         case 'ElectronicTagPeriod':
-          condition.type = ElectronicTagPeriod
+          validator = ElectronicTagPeriod
           break
       }
+      return { ...condition, validatorType: validator }
     })
-    responseObj.additionalConditions.PSS.forEach((condition: AdditionalConditionPss) => {
+    mappedConditions.PSS = additionalConditionsResponse.PSS.map(condition => {
+      let validator
       switch (condition.type) {
         case null:
           delete condition.type
           break
         case 'AppointmentTimeAndPlaceDuringPss':
-          condition.type = AppointmentTimeAndPlaceDuringPss
+          validator = AppointmentTimeAndPlaceDuringPss
           break
         case 'DrugTestLocation':
-          condition.type = DrugTestLocation
+          validator = DrugTestLocation
           break
       }
+      return { ...condition, validatorType: validator }
     })
-    return responseObj
+    return mappedConditions
   }
   /* eslint-disable no-param-reassign */
 }

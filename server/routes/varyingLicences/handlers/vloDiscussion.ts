@@ -18,7 +18,7 @@ export default class VloDiscussionRoutes {
 
     if (
       (await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !==
-      (await this.conditionService.getVersion())
+      (await this.conditionService.getPolicyVersion())
     ) {
       return res.redirect(`/licence/vary/id/${licenceId}/policy-changes`)
     }

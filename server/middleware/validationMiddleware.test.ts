@@ -8,7 +8,7 @@ import IsValidExclusionZoneFile from '../validators/isValidExclusionZoneFile'
 import ConditionService from '../services/conditionService'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
+jest.mock('../services/conditionService')
 
 describe('validationMiddleware', () => {
   describe('middleware', () => {
@@ -60,10 +60,11 @@ describe('validationMiddleware', () => {
         text: 'Condition 1',
         code: 'condition1',
         requiresInput: true,
-        type: DummyChild,
+        validatorType: DummyChild,
         category: 'category',
       }
-      conditionsProviderSpy.mockResolvedValue(additionalCondition)
+
+      conditionService.getAdditionalConditionByCode.mockResolvedValue(additionalCondition)
 
       const next = jest.fn()
       req = {

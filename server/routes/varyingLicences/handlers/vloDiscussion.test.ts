@@ -46,7 +46,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
     it('should save response and redirect to the check your answers page if the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getVersion.mockResolvedValue('2.0')
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
       expect(licenceService.updateVloDiscussion).toHaveBeenCalledWith(
@@ -60,7 +60,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
     it('should save response and redirect to the policy changes page if the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
-      conditionService.getVersion.mockResolvedValue('2.0')
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
       expect(licenceService.updateVloDiscussion).toHaveBeenCalledWith(

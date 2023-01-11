@@ -112,12 +112,16 @@ export interface paths {
     /** Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['inactivateLicences']
   }
+  '/licence/id/{licenceId}/override/status': {
+    /** Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    post: operations['changeStatus']
+  }
   '/licence/id/{licenceId}/create-variation': {
     /** Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['createVariation']
   }
   '/licence/id/{licenceId}/additional-condition/{conditionType}': {
-    /** Add the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    /** Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     post: operations['addAdditionalCondition']
   }
   '/licence/create': {
@@ -152,6 +156,22 @@ export interface paths {
     /** Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getLicenceById']
   }
+  '/licence-policy/version/{version}': {
+    /** Returns a single policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getPolicyByVersion']
+  }
+  '/licence-policy/compare/{version}/licence/{licenceId}': {
+    /** Returns condition data saved against a licence no longer present within the new licence policyRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['compareLicence']
+  }
+  '/licence-policy/active': {
+    /** Returns the active policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getCurrentPolicy']
+  }
+  '/licence-policy/': {
+    /** Returns a list of policies, active and presentRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+    get: operations['getPolicies']
+  }
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/full-size-image': {
     /** Get the exclusion zone map image. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
     get: operations['getExclusionZoneImage']
@@ -159,10 +179,6 @@ export interface paths {
   '/events/match': {
     /** Get a list of licence events that match the supplied criteria. Requires ROLE_CVL_ADMIN. */
     get: operations['getEventsMatchingCriteria']
-  }
-  '/edited-licences-unapproved-by-crd': {
-    /** Returns prisoner and com details Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-    get: operations['getEditedLicencesUnapprovedByCrd']
   }
   '/licence/id/{licenceId}/discard': {
     /** Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
@@ -489,6 +505,11 @@ export interface components {
        * @example meetingAddress
        */
       code?: string
+      /**
+       * @description Version number for condition
+       * @example 2.1
+       */
+      version?: string
       /**
        * @description The category of the additional condition
        * @example Freedom of movement
@@ -857,6 +878,27 @@ export interface components {
        * @description The date the licence was created
        */
       dateCreated?: string
+    }
+    /** @description Request object for overriding a licence status */
+    OverrideLicenceStatusRequest: {
+      /**
+       * @description The new status code to assign to the licence
+       * @enum {string}
+       */
+      statusCode:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+      /** @description Reason for overriding the licence status */
+      reason: string
     }
     /** @description Describes an additional condition request */
     AddAdditionalConditionRequest: {
@@ -1497,6 +1539,123 @@ export interface components {
        */
       createdByFullName?: string
     }
+    AddAnother: {
+      label: string
+    }
+    AdditionalConditionAp: {
+      code: string
+      category: string
+      text: string
+      tpl?: string
+      requiresInput: boolean
+      inputs?: components['schemas']['Input'][]
+      categoryShort?: string
+      subtext?: string
+      type?: string
+    }
+    AdditionalConditionPss: {
+      code: string
+      category: string
+      text: string
+      tpl?: string
+      requiresInput: boolean
+      categoryShort?: string
+      pssDates?: boolean
+      inputs?: components['schemas']['PssInput'][]
+      type?: string
+    }
+    AdditionalConditions: {
+      AP: components['schemas']['AdditionalConditionAp'][]
+      PSS: components['schemas']['AdditionalConditionPss'][]
+    }
+    ChangeHint: {
+      previousCode: string
+      replacements: string[]
+    }
+    Conditional: {
+      inputs: components['schemas']['ConditionalInput'][]
+    }
+    ConditionalInput: {
+      type: string
+      label: string
+      name: string
+      case?: string
+      handleIndefiniteArticle?: boolean
+      includeBefore?: string
+      subtext?: string
+    }
+    Input: {
+      type: string
+      label: string
+      name: string
+      listType?: string
+      options?: components['schemas']['Option'][]
+      case?: string
+      handleIndefiniteArticle?: boolean
+      addAnother?: components['schemas']['AddAnother']
+      includeBefore?: string
+      subtext?: string
+    }
+    LicencePolicy: {
+      version: string
+      standardConditions: components['schemas']['StandardConditions']
+      additionalConditions: components['schemas']['AdditionalConditions']
+      changeHints: components['schemas']['ChangeHint'][]
+    }
+    Option: {
+      value: string
+      conditional?: components['schemas']['Conditional']
+    }
+    PssInput: {
+      type: string
+      label: string
+      name: string
+      includeBefore?: string
+    }
+    StandardConditionAp: {
+      /**
+       * @description The unique code for this standard AP condition
+       * @example 9ce9d594-e346-4785-9642-c87e764bee37
+       */
+      code: string
+      /**
+       * @description The text of this standard AP condition
+       * @example Be of generally good behaviour
+       */
+      text: string
+      tpl?: string
+    }
+    StandardConditionPss: {
+      /**
+       * @description The unique code for this standard PSS condition
+       * @example 9ce9d594-e346-4785-9642-c87e764bee37
+       */
+      code: string
+      /**
+       * @description The text of this standard PSS condition
+       * @example Be of generally good behaviour
+       */
+      text: string
+      tpl?: string
+    }
+    StandardConditions: {
+      AP: components['schemas']['StandardConditionAp'][]
+      PSS: components['schemas']['StandardConditionPss'][]
+    }
+    LicenceConditionChanges: {
+      /** @enum {string} */
+      changeType: 'DELETED' | 'REPLACED' | 'REMOVED_NO_REPLACEMENTS' | 'NEW_OPTIONS' | 'TEXT_CHANGE'
+      code: string
+      /** Format: int32 */
+      sequence?: number
+      previousText: string
+      currentText?: string
+      suggestions: components['schemas']['SuggestedCondition'][]
+    }
+    SuggestedCondition: {
+      code: string
+      currentText: string
+    }
     /** @description Describes an event that was related to a licence */
     LicenceEvent: {
       /**
@@ -1519,14 +1678,18 @@ export interface components {
       eventType?:
         | 'CREATED'
         | 'SUBMITTED'
+        | 'BACK_IN_PROGRESS'
         | 'APPROVED'
         | 'ACTIVATED'
         | 'SUPERSEDED'
         | 'VARIATION_CREATED'
         | 'VARIATION_SUBMITTED_REASON'
+        | 'VARIATION_IN_PROGRESS'
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REFERRED'
         | 'VARIATION_APPROVED'
+        | 'INACTIVE'
+        | 'RECALLED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -1552,99 +1715,6 @@ export interface components {
        * @description The date and time of the event
        */
       eventTime?: string
-    }
-    LicencePolicy: {
-      version: string
-      standardConditions: components['schemas']['StandardConditions']
-      additionalConditions: components['schemas']['AdditionalConditions']
-      changeHints?: ChangeHint[]
-    }
-    StandardConditions: {
-      AP: components['schemas']['StandardCondition'][]
-      PSS: components['schemas']['StandardCondition'][]
-    }
-    StandardCondition: {
-      code: string
-      text: string
-      requiresInput: boolean
-      tpl?: string
-    }
-    AdditionalConditions: {
-      AP: components['schemas']['AdditionalConditionsAp'][]
-      PSS: components['schemas']['AdditionalConditionsPss'][]
-    }
-    AdditionalConditionAp: {
-      code: string
-      category: string
-      text: string
-      tpl?: string
-      requiresInput: boolean
-      inputs?: components['schemas']['Input'][]
-      categoryShort?: string
-      subtext?: string
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      type?: any
-    }
-    AdditionalConditionPss: {
-      code: string
-      category: string
-      text: string
-      tpl?: string
-      requiresInput: boolean
-      pssDates?: boolean
-      inputs?: components['schemas']['Input'][]
-      categoryShort?: string
-      subtext?: string
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      type?: any
-    }
-    Input: {
-      type: string
-      label: string
-      name: string
-      listType?: string
-      options?: components['schemas']['Option'][]
-      case?: string
-      handleIndefiniteArticle?: boolean
-      addAnother?: components['schemas']['AddAnother']
-      includeBefore?: string
-      subtext?: string
-    }
-    AddAnother: {
-      label: string
-    }
-    Option: {
-      value: string
-      conditional?: components['schemas']['Conditional']
-    }
-    Conditional: {
-      inputs: components['schemas']['ConditionalInput'][]
-    }
-    ConditionalInput: {
-      type: string
-      label: string
-      name: string
-      case?: string
-      handleIndefiniteArticle?: boolean
-      includeBefore?: string
-      subtext?: string
-    }
-    LicenceConditionChange: {
-      changeType: string
-      code: string
-      sequence?: number
-      previousText: string
-      currentText?: string
-      dataChanges: components['schemas']['AdditionalConditionData'][]
-      suggestions: components['schemas']['SuggestedCondition'][]
-    }
-    SuggestedCondition: {
-      code: string
-      currentText: string
-    }
-    ChangeHint: {
-      previousCode: string
-      replacements: string[]
     }
   }
 }
@@ -2623,11 +2693,6 @@ export interface operations {
         }
       }
     }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UnapprovedLicence'][]
-      }
-    }
   }
   /** Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN. */
   getLicencesMatchingCriteria: {
@@ -2693,6 +2758,47 @@ export interface operations {
       }
     }
   }
+  /** Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  changeStatus: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    responses: {
+      /** Status has been updated */
+      202: unknown
+      /** Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['OverrideLicenceStatusRequest']
+      }
+    }
+  }
   /** Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   createVariation: {
     parameters: {
@@ -2733,7 +2839,7 @@ export interface operations {
       }
     }
   }
-  /** Add the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  /** Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   addAdditionalCondition: {
     parameters: {
       path: {
@@ -3037,6 +3143,109 @@ export interface operations {
       }
     }
   }
+  /** Returns a single policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getPolicyByVersion: {
+    parameters: {
+      path: {
+        version: string
+      }
+    }
+    responses: {
+      /** Licence Policy found */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicencePolicy']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Returns condition data saved against a licence no longer present within the new licence policyRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  compareLicence: {
+    parameters: {
+      path: {
+        version: string
+        licenceId: number
+      }
+    }
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceConditionChanges'][]
+        }
+      }
+    }
+  }
+  /** Returns the active policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getCurrentPolicy: {
+    responses: {
+      /** Licence Policy found */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicencePolicy']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Returns a list of policies, active and presentRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
+  getPolicies: {
+    responses: {
+      /** Licence Policy found */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicencePolicy']
+        }
+      }
+      /** Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   /** Get the exclusion zone map image. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
   getExclusionZoneImage: {
     parameters: {
@@ -3080,14 +3289,18 @@ export interface operations {
         eventType?: (
           | 'CREATED'
           | 'SUBMITTED'
+          | 'BACK_IN_PROGRESS'
           | 'APPROVED'
           | 'ACTIVATED'
           | 'SUPERSEDED'
           | 'VARIATION_CREATED'
           | 'VARIATION_SUBMITTED_REASON'
+          | 'VARIATION_IN_PROGRESS'
           | 'VARIATION_SUBMITTED'
           | 'VARIATION_REFERRED'
           | 'VARIATION_APPROVED'
+          | 'INACTIVE'
+          | 'RECALLED'
         )[]
         sortBy?: string
         sortOrder?: string
@@ -3098,29 +3311,6 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['LicenceEvent'][]
-        }
-      }
-      /** Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /** Returns prisoner and com details Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN. */
-  getEditedLicencesUnapprovedByCrd: {
-    responses: {
-      /** Licence(s) found */
-      200: {
-        content: {
-          'application/json': components['schemas']['UnapprovedLicence']
         }
       }
       /** Unauthorised, requires a valid Oauth2 token */

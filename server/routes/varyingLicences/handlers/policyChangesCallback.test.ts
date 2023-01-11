@@ -33,7 +33,7 @@ describe('Route handlers', () => {
     sequence: 3,
     previousText: 'Condition 3 current text',
     dataChanges: [],
-    suggestions: [{ code: 'code 6' }],
+    suggestions: [{ code: 'code 6', currentText: 'Condition 6' }],
   } as LicenceConditionChange
 
   beforeEach(() => {

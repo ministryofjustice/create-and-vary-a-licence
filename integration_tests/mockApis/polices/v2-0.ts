@@ -1,5 +1,6 @@
 export default {
   version: '2.0',
+  changeHints: [],
   standardConditions: {
     AP: [
       {

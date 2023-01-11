@@ -20,7 +20,7 @@ describe('Route handlers', () => {
     sequence: 1,
     previousText: 'Condition 1 text',
     dataChanges: [],
-    suggestions: [{ code: 'code 5' }],
+    suggestions: [{ code: 'code 5', currentText: 'Condition 5' }],
   } as LicenceConditionChange
 
   const condition2 = {
@@ -49,7 +49,7 @@ describe('Route handlers', () => {
     sequence: 4,
     previousText: 'Condition 4 text',
     dataChanges: [],
-    suggestions: [{ code: 'code 6' }],
+    suggestions: [{ code: 'code 6', currentText: 'Condition 6' }],
   } as LicenceConditionChange
 
   beforeEach(() => {

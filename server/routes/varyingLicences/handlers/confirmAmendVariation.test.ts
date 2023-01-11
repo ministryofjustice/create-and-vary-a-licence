@@ -54,7 +54,7 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
     it('should update status to in progress when answer is yes and the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-      conditionService.getVersion.mockResolvedValue('2.0')
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
       expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.VARIATION_IN_PROGRESS, {
@@ -66,7 +66,7 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
     it('should update status to in progress and update the standard conditions when answer is yes and the licence version is out of date', async () => {
       req.body = { answer: 'Yes' }
       licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
-      conditionService.getVersion.mockResolvedValue('2.0')
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
       conditionService.getStandardConditions.mockResolvedValue([])
       await handler.POST(req, res)
 
