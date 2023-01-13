@@ -193,6 +193,23 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
   return dateString
 }
 
+const selectReleaseDateFromLicence = (licence: Licence) => {
+  let dateString = licence.actualReleaseDate || licence.conditionalReleaseDate
+
+  if (!dateString) {
+    logger.error(`No release date found for NOMIS ID: ${licence.nomsId}`)
+    return 'not found'
+  }
+
+  try {
+    dateString = format(new Date(dateString), 'dd MMM yyyy')
+  } catch (e) {
+    logger.error(`Invalid date error: ${e.message} for NOMIS ID: ${licence.nomsId} using date: ${dateString}`)
+  }
+
+  return dateString
+}
+
 const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonApiPrisoner): boolean => {
   const releaseDate =
     prisoner.legalStatus !== 'IMMIGRATION_DETAINEE'
@@ -205,6 +222,13 @@ const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonAp
   }
 
   return false
+}
+
+const releaseDateLabel = (licence: Licence, nomisRecord: Prisoner): string => {
+  if (licence) {
+    return licence.actualReleaseDate ? 'Confirmed release date' : 'CRD'
+  }
+  return nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD'
 }
 
 export {
@@ -229,5 +253,7 @@ export {
   isBankHolidayOrWeekend,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
+  selectReleaseDateFromLicence,
   isPassedArdOrCrd,
+  releaseDateLabel,
 }

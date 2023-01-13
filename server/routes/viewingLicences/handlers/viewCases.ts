@@ -3,12 +3,22 @@ import { getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
-import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
+import {
+  convertToTitleCase,
+  selectReleaseDate,
+  selectReleaseDateFromLicence,
+  releaseDateLabel,
+} from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
+import LicenceService from '../../../services/licenceService'
 
 export default class ViewAndPrintCaseRoutes {
-  constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
+  constructor(
+    private readonly caseloadService: CaseloadService,
+    private readonly prisonerService: PrisonerService,
+    private readonly licenceService: LicenceService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
@@ -24,16 +34,23 @@ export default class ViewAndPrintCaseRoutes {
 
     const casesToView = view === 'prison' ? caselist.getPrisonView() : caselist.getProbationView()
 
+    const caseloadLicences = await Promise.all(
+      casesToView.unwrap().map(c => {
+        return this.licenceService.getLicence(_.head(c.licences).id.toString(), user)
+      })
+    )
+
     const caseloadViewModel = casesToView
       .unwrap()
       .map(c => {
+        const licence = caseloadLicences.find(l => l?.id === _.head(c.licences).id)
         return {
           licenceId: _.head(c.licences).id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: selectReleaseDate(c.nomisRecord),
-          releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
+          releaseDate: licence ? selectReleaseDateFromLicence(licence) : selectReleaseDate(c.nomisRecord),
+          releaseDateLabel: releaseDateLabel(licence, c.nomisRecord),
           licenceStatus: _.head(c.licences).status,
           isClickable:
             _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&

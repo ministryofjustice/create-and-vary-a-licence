@@ -8,6 +8,8 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
+import LicenceService from '../../../services/licenceService'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
@@ -15,8 +17,11 @@ jest.mock('../../../services/caseloadService')
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 jest.mock('../../../services/prisonerService')
 
+const licenceService = new LicenceService(null, prisonerService, null, null) as jest.Mocked<LicenceService>
+jest.mock('../../../services/licenceService')
+
 describe('Route Handlers - Approval - case list', () => {
-  const handler = new ApprovalCaseRoutes(caseloadService, prisonerService)
+  const handler = new ApprovalCaseRoutes(caseloadService, prisonerService, licenceService)
   let req: Request
   let res: Response
 
@@ -112,6 +117,17 @@ describe('Route Handlers - Approval - case list', () => {
         description: 'Birmingham (HMP)',
       },
     ] as PrisonDetail[])
+
+    licenceService.getLicence.mockResolvedValue({
+      id: 1,
+      typeCode: 'AP',
+      additionalLicenceConditions: [],
+      additionalPssConditions: [],
+      bespokeConditions: [],
+      isVariation: false,
+      conditionalReleaseDate: '2022-1-5',
+      actualReleaseDate: '2022-1-3',
+    }) as unknown as Licence
   })
   afterEach(() => {
     jest.resetAllMocks()
@@ -127,7 +143,7 @@ describe('Route Handlers - Approval - case list', () => {
             licenceId: 1,
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '03 Jan 2022',
             releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
@@ -176,7 +192,7 @@ describe('Route Handlers - Approval - case list', () => {
             licenceId: 1,
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '03 Jan 2022',
             releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
@@ -205,7 +221,7 @@ describe('Route Handlers - Approval - case list', () => {
             licenceId: 1,
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '03 Jan 2022',
             releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
@@ -234,7 +250,7 @@ describe('Route Handlers - Approval - case list', () => {
             licenceId: 1,
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '03 Jan 2022',
             releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
