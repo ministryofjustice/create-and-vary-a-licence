@@ -136,6 +136,9 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     beforeEach(() => {
       req = {
         query: {},
+        session: {
+          teamSelection: ['teamA'],
+        },
       } as Request
 
       res = {
@@ -143,6 +146,17 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         locals: {
           user: {
             username: 'USER1',
+            probationTeamCodes: ['teamA', 'teamB'],
+            probationTeams: [
+              {
+                code: 'teamA',
+                label: 'teamA',
+              },
+              {
+                code: 'teamB',
+                label: 'teamB',
+              },
+            ],
           },
         },
       } as unknown as Response
@@ -167,8 +181,10 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             isClickable: true,
           },
         ],
+        search: undefined,
         statusConfig,
         teamView: false,
+        teamName: null,
       })
       expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
       expect(caseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
@@ -199,6 +215,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381307',
             releaseDate: '12 Oct 2023',
             prisonerNumber: '124',
+            probationPractitioner: undefined,
             licenceId: 2,
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
@@ -208,7 +225,9 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'Mabel Moorhouse',
             crnNumber: 'X381308',
             releaseDate: '12 Oct 2023',
+            licenceId: undefined,
             prisonerNumber: '125',
+            probationPractitioner: undefined,
             licenceStatus: LicenceStatus.NOT_IN_PILOT,
             licenceType: LicenceType.AP_PSS,
             isClickable: false,
@@ -217,16 +236,20 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'Ronald Recall',
             crnNumber: 'X381309',
             releaseDate: '12 Oct 2023',
+            licenceId: undefined,
             prisonerNumber: '126',
+            probationPractitioner: undefined,
             licenceStatus: LicenceStatus.OOS_RECALL,
             licenceType: LicenceType.AP_PSS,
             isClickable: false,
           },
         ],
         statusConfig,
+        search: undefined,
+        teamName: 'teamA',
         teamView: true,
       })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
@@ -239,6 +262,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             name: 'Dr Who',
             crnNumber: 'X381307',
+            probationPractitioner: undefined,
             releaseDate: '12 Oct 2023',
             prisonerNumber: '124',
             licenceId: 2,
@@ -248,10 +272,11 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           },
         ],
         statusConfig,
+        teamName: 'teamA',
         teamView: true,
         search: 'x381307',
       })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
@@ -273,9 +298,10 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         ],
         statusConfig,
         teamView: true,
+        teamName: 'teamA',
         search: 'x381309',
       })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
@@ -302,9 +328,10 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         ],
         statusConfig,
         teamView: true,
+        teamName: 'teamA',
         search: 'holmes',
       })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
@@ -331,9 +358,10 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         ],
         statusConfig,
         teamView: true,
+        teamName: 'teamA',
         search: 'roberts',
       })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
   })

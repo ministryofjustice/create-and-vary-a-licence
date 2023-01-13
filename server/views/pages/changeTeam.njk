@@ -1,0 +1,48 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - View a licence - team selection" %}
+{% set pageId = "change-team-page" %}
+
+{% if checked %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
+{% endif %}
+
+{% block content %}
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ govukRadios({
+                    name: "teams[]",
+                    idPrefix: "teams",
+                    fieldset: {
+                        legend: {
+                            text: 'Which team\'s licences would you like to view?',
+                            isPageHeading: true,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    hint: {
+                        text: "Select one team."
+                    },
+                    errorMessage: validationErrors | findError('teams'),
+                    items: probationTeams | toChecked('code', 'label', checked)
+                }) }}
+
+                <div class="govuk-button-group govuk-!-padding-top-4">
+                    {{ govukButton({
+                        text: "Continue",
+                        type: "submit",
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+                    {% if checked %}
+                    <a class="govuk-link" href="/licence/create/caseload?view=team" data-qa="cancel-link">Cancel</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

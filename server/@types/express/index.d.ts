@@ -10,6 +10,7 @@ declare module 'express-session' {
     nowInMinutes: number
     currentUser: CvlUserDetails
     caseloadsSelected: string[]
+    teamSelection: string[]
     changedConditions: LicenceConditionChange[]
     changedConditionsCounter: number
     changedConditionsInputs: string[]

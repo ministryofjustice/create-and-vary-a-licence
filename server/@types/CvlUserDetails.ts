@@ -41,6 +41,9 @@ export default class CvlUserDetails {
   // Probation team codes
   probationTeamCodes?: string[]
 
+  // List of probation teams assigned to a Delius user
+  probationTeams?: { code: string; label: string }[]
+
   // Email address - from Nomis, Delius or Auth depending on source
   emailAddress?: string
 }
