@@ -138,7 +138,7 @@
     "redis": "^3.1.2",
     "reflect-metadata": "^0.1.13",
     "sqs-consumer": "^5.6.0",
-    "superagent": "^7.1.6",
+    "superagent": "^8.0.6",
     "uk-bank-holidays": "^0.1.0"
   },
   "devDependencies": {
