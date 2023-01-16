@@ -143,6 +143,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
 
       res = {
         render: jest.fn(),
+        redirect: jest.fn(),
         locals: {
           user: {
             username: 'USER1',
@@ -251,6 +252,23 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
+    })
+
+    it('should redirect to change team page when user has multiple teams and no active team selected', async () => {
+      req.query = { view: 'team' }
+      req.session.teamSelection = null
+      await handler.GET(req, res)
+      expect(res.redirect).toBeCalledWith('caseload/change-team')
+    })
+
+    it('should use default team if user has only one assigned', async () => {
+      req.query = { view: 'team' }
+      req.session.teamSelection = null
+      res.locals.user.probationTeams = [{ code: 'ABC', label: 'Team A' }]
+      res.locals.user.probationTeamCodes = ['ABC']
+
+      await handler.GET(req, res)
+      expect(res.redirect).toBeCalledTimes(0)
     })
 
     it('should successfully search by CRN', async () => {

@@ -11,7 +11,7 @@ export default class ChangeTeamRoutes {
     return async (req, res) => {
       const teamCode = req.body.teams
 
-      if (teamCode) {
+      if (Array.isArray(teamCode) && teamCode.length > 0) {
         req.session.teamSelection = teamCode
         res.redirect('/licence/create/caseload?view=team')
         return
@@ -24,6 +24,15 @@ export default class ChangeTeamRoutes {
   private render(req: Request, res: Response, validationErrors?: [{ field: string; message: string }] | []) {
     const { user } = res.locals
     const { probationTeams } = user
+
+    /*
+     * Not a valid page if user has only one team. Redirect to users caseload page.
+     * Avoid redirect to team page, just in case a redirect loop is introduced from the team page to here.
+     */
+    if (!Array.isArray(probationTeams) || probationTeams.length === 1) {
+      res.redirect('/licence/create/caseload')
+    }
+
     const checked = req.session.teamSelection
     res.render('pages/changeTeam', { probationTeams, checked, validationErrors })
   }
