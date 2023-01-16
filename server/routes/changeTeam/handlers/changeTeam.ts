@@ -31,6 +31,7 @@ export default class ChangeTeamRoutes {
      */
     if (!Array.isArray(probationTeams) || probationTeams.length === 1) {
       res.redirect('/licence/create/caseload')
+      return
     }
 
     const checked = req.session.teamSelection

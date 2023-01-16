@@ -24,9 +24,11 @@ export default class CaseloadRoutes {
       : await this.caseloadService.getStaffCreateCaseload(user)
 
     let teamName = null
+    let multipleTeams = false
 
     if (teamView) {
       const selectedTeam = req.session.teamSelection
+      multipleTeams = user.probationTeamCodes.length > 1
 
       // user must select a team if more than one is available
       if (user.probationTeamCodes.length > 1 && !selectedTeam) {
@@ -69,6 +71,13 @@ export default class CaseloadRoutes {
         const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
         return crd1 - crd2
       })
-    res.render('pages/create/caseload', { caseload: caseloadViewModel, statusConfig, teamView, teamName, search })
+    res.render('pages/create/caseload', {
+      caseload: caseloadViewModel,
+      statusConfig,
+      teamView,
+      teamName,
+      multipleTeams,
+      search,
+    })
   }
 }
