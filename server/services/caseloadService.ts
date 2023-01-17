@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { isFuture, parse, startOfDay, add, endOfDay } from 'date-fns'
+import _ from 'lodash'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
@@ -33,11 +34,11 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  async getTeamCreateCaseload(user: User): Promise<ManagedCase[]> {
-    const { probationTeamCodes } = user
+  async getTeamCreateCaseload(user: User, teamSelected?: string[]): Promise<ManagedCase[]> {
+    const teamCode = _.head(teamSelected || user.probationTeamCodes)
 
-    return Promise.all(probationTeamCodes.map(teamCode => this.communityService.getManagedOffendersByTeam(teamCode)))
-      .then(caseload => caseload.flat())
+    return this.communityService
+      .getManagedOffendersByTeam(teamCode)
       .then(caseload => this.mapManagedOffenderRecordToOffenderDetail(caseload))
       .then(caseload => this.pairDeliusRecordsWithNomis(caseload, user))
       .then(caseload => this.filterOffendersEligibleForLicence(caseload, user))

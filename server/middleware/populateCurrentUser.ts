@@ -67,6 +67,9 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             cvlUser.probationPduCodes = probationUser?.teams?.map(team => team?.borough?.code)
             cvlUser.probationLauCodes = probationUser?.teams?.map(team => team?.district?.code)
             cvlUser.probationTeamCodes = probationUser?.teams?.map(team => team?.code)
+            cvlUser.probationTeams = probationUser?.teams
+              .map(team => ({ code: team.code, label: team.description }))
+              .sort((a, b) => (a.label > b.label ? 1 : -1))
 
             logger.info(
               `Probation user session : username ${user?.username} name ${cvlUser?.displayName} area ${cvlUser?.probationAreaCode} teams ${cvlUser?.probationTeamCodes}`

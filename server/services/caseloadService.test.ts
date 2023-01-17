@@ -428,8 +428,6 @@ describe('Caseload Service', () => {
   it('builds the team create caseload', async () => {
     communityService.getManagedOffendersByTeam.mockResolvedValueOnce([
       { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
-    ])
-    communityService.getManagedOffendersByTeam.mockResolvedValueOnce([
       { offenderCrn: 'X12349', staff: { forenames: 'Sherlock', surname: 'Holmes', code: 'X54321' } },
     ])
     communityService.getOffendersByCrn.mockResolvedValue([
@@ -441,10 +439,8 @@ describe('Caseload Service', () => {
       { prisonerNumber: 'AB1234F', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
     ])
 
-    const result = await serviceUnderTest.getTeamCreateCaseload(user)
-
+    const result = await serviceUnderTest.getTeamCreateCaseload(user, ['teamA'])
     expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(1, 'teamA')
-    expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(2, 'teamB')
     expect(result).toMatchObject([
       {
         deliusRecord: {
@@ -485,13 +481,12 @@ describe('Caseload Service', () => {
         },
       },
     ])
+    expect(communityService.getManagedOffendersByTeam).toBeCalledTimes(1)
   })
 
   it('check licence status for recalls and breach of supervision on team create caseload', async () => {
     communityService.getManagedOffendersByTeam.mockResolvedValueOnce([
       { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
-    ])
-    communityService.getManagedOffendersByTeam.mockResolvedValueOnce([
       { offenderCrn: 'X12349', staff: { forenames: 'Sherlock', surname: 'Holmes', code: 'X54321' } },
     ])
     communityService.getOffendersByCrn.mockResolvedValue([
@@ -517,10 +512,9 @@ describe('Caseload Service', () => {
       } as Prisoner,
     ])
 
-    const result = await serviceUnderTest.getTeamCreateCaseload(user)
+    const result = await serviceUnderTest.getTeamCreateCaseload(user, ['teamB'])
 
-    expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(1, 'teamA')
-    expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(2, 'teamB')
+    expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(1, 'teamB')
 
     expect(result).toMatchObject([
       {
@@ -567,6 +561,7 @@ describe('Caseload Service', () => {
         },
       },
     ])
+    expect(communityService.getManagedOffendersByTeam).toBeCalledTimes(1)
   })
 
   it('builds the staff vary caseload', async () => {
