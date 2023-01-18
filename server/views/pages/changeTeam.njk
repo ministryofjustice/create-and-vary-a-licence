@@ -6,10 +6,6 @@
 {% set pageTitle = applicationName + " - View a licence - team selection" %}
 {% set pageId = "change-team-page" %}
 
-{% if checked %}
-{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
-{% endif %}
-
 {% block content %}
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -26,7 +22,7 @@
                         }
                     },
                     hint: {
-                        text: "Select one team."
+                        text: ""
                     },
                     errorMessage: validationErrors | findError('teams'),
                     items: probationTeams | toChecked('code', 'label', checked)
@@ -38,9 +34,7 @@
                         type: "submit",
                         attributes: { 'data-qa': 'continue' }
                     }) }}
-                    {% if checked %}
-                    <a class="govuk-link" href="/licence/create/caseload?view=team" data-qa="cancel-link">Cancel</a>
-                    {% endif %}
+                    <a class="govuk-link" href="{{ backLinkHref }}" data-qa="cancel-link">Cancel</a>
                 </div>
             </div>
         </div>

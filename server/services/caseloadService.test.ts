@@ -624,8 +624,6 @@ describe('Caseload Service', () => {
   it('builds the team vary caseload', async () => {
     communityService.getManagedOffendersByTeam.mockResolvedValueOnce([
       { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
-    ])
-    communityService.getManagedOffendersByTeam.mockResolvedValueOnce([
       { offenderCrn: 'X12349', staff: { forenames: 'Sherlock', surname: 'Holmes', code: 'X54321' } },
     ])
     communityService.getOffendersByCrn.mockResolvedValue([
@@ -673,7 +671,6 @@ describe('Caseload Service', () => {
 
     const result = await serviceUnderTest.getTeamVaryCaseload(user)
     expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(1, 'teamA')
-    expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(2, 'teamB')
     expect(result).toMatchObject([
       {
         deliusRecord: {

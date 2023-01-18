@@ -98,6 +98,9 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
     beforeEach(() => {
       req = {
         query: {},
+        session: {
+          teamSelection: ['teamA'],
+        },
       } as Request
 
       res = {
@@ -106,6 +109,17 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           user: {
             username: 'USER1',
             deliusStaffIdentifier: 2000,
+            probationTeamCodes: ['teamA', 'teamB'],
+            probationTeams: [
+              {
+                code: 'teamA',
+                label: 'teamA',
+              },
+              {
+                code: 'teamB',
+                label: 'teamB',
+              },
+            ],
           },
         },
       } as unknown as Response
@@ -127,7 +141,10 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
           },
         ],
+        multipleTeams: false,
+        search: undefined,
         statusConfig,
+        teamName: null,
         teamView: false,
       })
       expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
@@ -161,10 +178,13 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
           },
         ],
+        multipleTeams: true,
+        search: undefined,
         statusConfig,
+        teamName: 'teamA',
         teamView: true,
       })
-      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
 
     it('should render the non-active licence if 2 exist', async () => {
@@ -214,7 +234,10 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
           },
         ],
+        multipleTeams: false,
+        search: undefined,
         statusConfig,
+        teamName: null,
         teamView: false,
       })
       expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
@@ -239,11 +262,13 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
           },
         ],
+        multipleTeams: true,
         statusConfig,
+        teamName: 'teamA',
         teamView: true,
         search: 'smith',
       })
-      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
 
     it('should successfully search by probation practitioner', async () => {
@@ -265,11 +290,13 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
           },
         ],
+        multipleTeams: true,
         statusConfig,
+        teamName: 'teamA',
         teamView: true,
         search: 'white',
       })
-      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
 
     it('should successfully search by crn', async () => {
@@ -291,11 +318,13 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             },
           },
         ],
+        multipleTeams: true,
         statusConfig,
+        teamName: 'teamA',
         teamView: true,
         search: 'x12345',
       })
-      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
   })
 })
