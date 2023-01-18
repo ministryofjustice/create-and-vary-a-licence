@@ -26,7 +26,7 @@ export default function Index({ conditionService }: Services): Router {
   get(createPrefix('/change-team'), teamHandler.GET())
   get(varyPrefix('/change-team'), teamHandler.GET())
 
-  post(varyPrefix('/change-team'), teamHandler.POST())
+  post(createPrefix('/change-team'), teamHandler.POST())
   post(varyPrefix('/change-team'), teamHandler.POST())
 
   return router

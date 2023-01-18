@@ -40,7 +40,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       expect(res.render).toBeCalledWith('pages/changeTeam', {
         probationTeams,
         checked: null,
-        backLink: '/licence/create/caseload?view=team',
+        backLinkHref: '/licence/create/caseload',
         validationErrors: [],
       })
     })
@@ -49,7 +49,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       req.session.teamSelection = ['ABCD']
       await handler.GET()(req, res, next)
       expect(res.render).toBeCalledWith('pages/changeTeam', {
-        backLink: '/licence/create/caseload?view=team',
+        backLinkHref: '/licence/create/caseload?view=team',
         probationTeams,
         checked: ['ABCD'],
         validationErrors: [],
@@ -76,7 +76,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       expect(req.session.teamSelection).toEqual(null)
       expect(res.render).toBeCalledWith('pages/changeTeam', {
         probationTeams,
-        backLink: '/licence/create/caseload?view=team',
+        backLinkHref: '/licence/create/caseload',
         checked: null,
         validationErrors: [{ field: 'teams', message: 'Select the team you wish to view cases for' }],
       })

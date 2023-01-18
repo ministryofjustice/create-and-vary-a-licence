@@ -41,7 +41,7 @@ export default class ChangeTeamRoutes {
   }
 
   private getBackLink = (route: string, hasSelectedTeam: boolean) => {
-    const tab = hasSelectedTeam ? '?team' : ''
+    const tab = hasSelectedTeam ? '?view=team' : ''
     return route === '/licence/create/caseload/change-team'
       ? `/licence/create/caseload${tab}`
       : `/licence/vary/caseload${tab}`
