@@ -15,6 +15,7 @@ import LicenceExpiryService from './licenceExpiryService'
 import PrisonRegisterService from './prisonRegisterService'
 import PrisonRegisterApiClient from '../data/prisonRegisterApiClient'
 import ConditionService from './conditionService'
+import LicenceOverrideService from './licenceOverrideService'
 
 const hmppsAuthClient = new HmppsAuthClient()
 const prisonApiClient = new PrisonApiClient()
@@ -34,6 +35,7 @@ const caseloadService = new CaseloadService(prisonerService, communityService, l
 const licenceExpiryService = new LicenceExpiryService(prisonerService, licenceApiClient, licenceService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
+const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
 
 // TODO - Remove prisonerService and community service as exports
 // The following services should not be exported eventually (after spikes have been removed), they should only ever be consumed by the caseload service.
@@ -50,6 +52,7 @@ export const services = {
   licenceExpiryService,
   prisonRegisterService,
   conditionService,
+  licenceOverrideService,
 }
 
 export type Services = typeof services
