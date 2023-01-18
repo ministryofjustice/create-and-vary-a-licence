@@ -63,7 +63,6 @@ export default class CaseloadService {
 
     return this.communityService
       .getManagedOffendersByTeam(teamCode)
-      .then(caseload => caseload.flat())
       .then(caseload => this.mapManagedOffenderRecordToOffenderDetail(caseload))
       .then(caseload => this.pairDeliusRecordsWithNomis(caseload, user))
       .then(caseload => this.mapOffendersToLicences(caseload, user))
