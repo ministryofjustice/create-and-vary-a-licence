@@ -58,10 +58,11 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  async getTeamVaryCaseload(user: User): Promise<ManagedCase[]> {
-    const { probationTeamCodes } = user
+  async getTeamVaryCaseload(user: User, teamSelected?: string[]): Promise<ManagedCase[]> {
+    const teamCode = _.head(teamSelected || user.probationTeamCodes)
 
-    return Promise.all(probationTeamCodes.map(teamCode => this.communityService.getManagedOffendersByTeam(teamCode)))
+    return this.communityService
+      .getManagedOffendersByTeam(teamCode)
       .then(caseload => caseload.flat())
       .then(caseload => this.mapManagedOffenderRecordToOffenderDetail(caseload))
       .then(caseload => this.pairDeliusRecordsWithNomis(caseload, user))

@@ -28,19 +28,32 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       session: { teamSelection: null },
       body: { teams: [] },
       query: {},
+      route: {
+        path: '/licence/create/caseload/change-team',
+      },
     } as unknown as Request
   })
 
   describe('GET', () => {
     it('Should list all teams with no selected team', async () => {
       await handler.GET()(req, res, next)
-      expect(res.render).toBeCalledWith('pages/changeTeam', { probationTeams, checked: null, validationErrors: [] })
+      expect(res.render).toBeCalledWith('pages/changeTeam', {
+        probationTeams,
+        checked: null,
+        backLink: '/licence/create/caseload?view=team',
+        validationErrors: [],
+      })
     })
 
     it('Should list all teams with active team', async () => {
       req.session.teamSelection = ['ABCD']
       await handler.GET()(req, res, next)
-      expect(res.render).toBeCalledWith('pages/changeTeam', { probationTeams, checked: ['ABCD'], validationErrors: [] })
+      expect(res.render).toBeCalledWith('pages/changeTeam', {
+        backLink: '/licence/create/caseload?view=team',
+        probationTeams,
+        checked: ['ABCD'],
+        validationErrors: [],
+      })
     })
 
     it('Should redirect to caseload page if number of user teams is one', async () => {
@@ -63,6 +76,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       expect(req.session.teamSelection).toEqual(null)
       expect(res.render).toBeCalledWith('pages/changeTeam', {
         probationTeams,
+        backLink: '/licence/create/caseload?view=team',
         checked: null,
         validationErrors: [{ field: 'teams', message: 'Select the team you wish to view cases for' }],
       })

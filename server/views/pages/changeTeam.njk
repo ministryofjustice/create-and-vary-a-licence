@@ -7,7 +7,7 @@
 {% set pageId = "change-team-page" %}
 
 {% if checked %}
-{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
+{% set backLinkHref = backLink %}
 {% endif %}
 
 {% block content %}
@@ -39,7 +39,7 @@
                         attributes: { 'data-qa': 'continue' }
                     }) }}
                     {% if checked %}
-                    <a class="govuk-link" href="/licence/create/caseload?view=team" data-qa="cancel-link">Cancel</a>
+                    <a class="govuk-link" href="{{ backLink }}" data-qa="cancel-link">Cancel</a>
                     {% endif %}
                 </div>
             </div>

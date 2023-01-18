@@ -6,15 +6,16 @@ import ChangeTeamsLocation from './handlers/changeTeam'
 import { Services } from '../../services'
 
 export default function Index({ conditionService }: Services): Router {
-  const routePrefix = (path: string) => `/licence/create/caseload${path}`
+  const createPrefix = (path: string) => `/licence/create/caseload${path}`
+  const varyPrefix = (path: string) => `/licence/vary/caseload${path}`
 
   const router = Router()
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), asyncMiddleware(handler))
+    router.get(path, roleCheckMiddleware(['ROLE_LICENCE_RO']), asyncMiddleware(handler))
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
-      routePrefix(path),
+      path,
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
@@ -22,8 +23,11 @@ export default function Index({ conditionService }: Services): Router {
 
   const teamHandler = new ChangeTeamsLocation()
 
-  get('/change-team', teamHandler.GET())
-  post('/change-team', teamHandler.POST())
+  get(createPrefix('/change-team'), teamHandler.GET())
+  get(varyPrefix('/change-team'), teamHandler.GET())
+
+  post(varyPrefix('/change-team'), teamHandler.POST())
+  post(varyPrefix('/change-team'), teamHandler.POST())
 
   return router
 }

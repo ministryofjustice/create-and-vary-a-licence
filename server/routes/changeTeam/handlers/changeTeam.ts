@@ -13,7 +13,7 @@ export default class ChangeTeamRoutes {
 
       if (Array.isArray(teamCode) && teamCode.length > 0) {
         req.session.teamSelection = teamCode
-        res.redirect('/licence/create/caseload?view=team')
+        res.redirect(this.getBackLink(req.route.path))
         return
       }
 
@@ -35,6 +35,13 @@ export default class ChangeTeamRoutes {
     }
 
     const checked = req.session.teamSelection
-    res.render('pages/changeTeam', { probationTeams, checked, validationErrors })
+    const backLink = this.getBackLink(req.route.path)
+
+    res.render('pages/changeTeam', { probationTeams, checked, validationErrors, backLink })
   }
+
+  private getBackLink = (route: string) =>
+    route === '/licence/create/caseload/change-team'
+      ? '/licence/create/caseload?view=team'
+      : '/licence/vary/caseload?view=team'
 }
