@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import moment from 'moment'
+import { subYears } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase } from '../../../utils/utils'
@@ -16,8 +16,8 @@ export default class OffenderAuditRoutes {
     const audit = await this.licenceServer.getAuditEvents(
       parseInt(licenceId, 10),
       null,
-      moment().subtract(2, 'years').toDate(),
-      moment().toDate(),
+      subYears(new Date(), 2),
+      new Date(),
       user
     )
 
