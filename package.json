@@ -107,7 +107,7 @@
     "applicationinsights": "^2.2.2",
     "aws-sdk": "^2.1296.0",
     "body-parser": "^1.20.1",
-    "bunyan": "^1.8.15",
+    "bunyan": "^2.0.5",
     "bunyan-format": "^0.2.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
