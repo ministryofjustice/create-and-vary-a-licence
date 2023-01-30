@@ -178,7 +178,6 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
   }
 
   if (!dateString) {
-    logger.error(`No release date found for prisonerNumber: ${nomisRecord.prisonerNumber}`)
     return 'not found'
   }
 
