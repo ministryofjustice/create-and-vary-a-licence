@@ -26,15 +26,6 @@ export default class DatesChangedEventHandler {
     if (licence) {
       const prisoner = await this.prisonerService.getPrisonerDetail(nomisId)
 
-      // IS91 cases receive an update that wipes their CRD when their CRD passes.
-      // We want to keep it in the service, so we should ignore any date-changing events that meet this criteria.
-      if (prisoner.legalStatus === 'IMMIGRATION_DETAINEE' && isPassedArdOrCrd(licence, prisoner)) {
-        logger.info(
-          `Ignoring date update event for NOMIS ID: ${nomisId}, CRN: ${licence.crn}, licence ID: ${licence.licenceId}`
-        )
-        return
-      }
-
       await this.licenceService.updateSentenceDates(licence.licenceId.toString(), {
         conditionalReleaseDate:
           convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
