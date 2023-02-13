@@ -3,8 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { convertDateFormat, isPassedArdOrCrd } from '../../../utils/utils'
-import logger from '../../../../logger'
+import { convertDateFormat } from '../../../utils/utils'
 
 export default class DatesChangedEventHandler {
   constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
