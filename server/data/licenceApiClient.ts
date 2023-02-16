@@ -35,6 +35,7 @@ import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
 import { UpdateComRequest } from '../@types/licenceApiClientTypes'
 import LicenceType from '../enumeration/licenceType'
+import LicenceStatus from '../enumeration/licenceStatus'
 
 export default class LicenceApiClient extends RestClient {
   constructor() {
@@ -419,5 +420,9 @@ export default class LicenceApiClient extends RestClient {
     await this.post({
       path: '/notify-probation-of-unapproved-licences',
     })
+  }
+
+  async overrideStatusCode(licenceId: number, request: { reason: string; statusCode: LicenceStatus }) {
+    await this.post({ path: `/licence/id/${licenceId}/override/status`, data: request })
   }
 }

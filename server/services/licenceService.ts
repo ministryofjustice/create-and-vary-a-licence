@@ -1,7 +1,7 @@
 import { Readable } from 'stream'
 import fs from 'fs'
-import moment from 'moment'
 import _ from 'lodash'
+import { format } from 'date-fns'
 import {
   AdditionalCondition,
   AdditionalConditionsRequest,
@@ -456,7 +456,7 @@ export default class LicenceService {
   ): Promise<void> {
     const requestBody = {
       username: user.username,
-      eventTime: moment(eventTime).format('DD/MM/YYYY HH:mm:ss'),
+      eventTime: format(eventTime, 'dd/MM/yyyy HH:mm:ss'),
       eventType: user ? 'USER_EVENT' : 'SYSTEM_EVENT',
       licenceId,
       fullName: `${user.firstName} ${user.lastName}`,
@@ -477,8 +477,8 @@ export default class LicenceService {
     const requestBody = {
       username: forUsername || null,
       licenceId: forLicenceId || null,
-      startTime: moment(startTime).format('DD/MM/YYYY hh:mm:ss'),
-      endTime: moment(endTime).format('DD/MM/YYYY hh:mm:ss'),
+      startTime: format(startTime, 'dd/MM/yyyy HH:mm:ss'),
+      endTime: format(endTime, 'dd/MM/yyyy HH:mm:ss'),
     } as AuditRequest
 
     return this.licenceApiClient.getAuditEvents(requestBody, user)

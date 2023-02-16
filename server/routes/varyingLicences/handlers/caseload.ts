@@ -15,8 +15,26 @@ export default class CaseloadRoutes {
     const { user } = res.locals
 
     const cases = teamView
-      ? await this.caseloadService.getTeamVaryCaseload(user)
+      ? await this.caseloadService.getTeamVaryCaseload(user, req.session.teamSelection)
       : await this.caseloadService.getStaffVaryCaseload(user)
+
+    let teamName = null
+    let multipleTeams = false
+
+    if (teamView) {
+      const selectedTeam = req.session.teamSelection
+      multipleTeams = user.probationTeamCodes.length > 1
+
+      // user must select a team if more than one is available
+      if (user.probationTeamCodes.length > 1 && !selectedTeam) {
+        res.redirect('caseload/change-team')
+        return
+      }
+
+      // selectedTeam and probationTeamCodes are both arrays
+      const teamCode = _.head(selectedTeam || user.probationTeamCodes)
+      teamName = user.probationTeams.find((t: { code: string }) => t.code === teamCode)?.label
+    }
 
     const caseloadViewModel = cases
       .map(c => {
@@ -47,6 +65,14 @@ export default class CaseloadRoutes {
         const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
         return crd1 - crd2
       })
-    res.render('pages/vary/caseload', { caseload: caseloadViewModel, statusConfig, search, teamView })
+
+    res.render('pages/vary/caseload', {
+      caseload: caseloadViewModel,
+      statusConfig,
+      teamView,
+      teamName,
+      multipleTeams,
+      search,
+    })
   }
 }
