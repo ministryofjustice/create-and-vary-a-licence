@@ -116,6 +116,11 @@ const toDate = (date: string) => {
   return new Date(`${year}-${month}-${day}`)
 }
 
+const toDateString = (date: string): string => {
+  const [day, month, year] = date.split('/')
+  return `${year}-${month}-${day}`
+}
+
 const removeDuplicates = (list: string[]): string[] => {
   return [...new Set(list)]
 }
@@ -200,6 +205,8 @@ const selectReleaseDateFromLicence = (licence: Licence) => {
     return 'not found'
   }
 
+  dateString = toDateString(dateString)
+
   try {
     dateString = format(new Date(dateString), 'dd MMM yyyy')
   } catch (e) {
@@ -255,4 +262,5 @@ export {
   selectReleaseDateFromLicence,
   isPassedArdOrCrd,
   releaseDateLabel,
+  toDateString,
 }

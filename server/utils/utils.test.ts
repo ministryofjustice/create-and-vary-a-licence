@@ -12,6 +12,7 @@ import {
   jsonDtTo12HourTime,
   jsonDtToDate,
   toDate,
+  toDateString,
   removeDuplicates,
   filterCentralCaseload,
   jsonDtToDateWithDay,
@@ -160,6 +161,13 @@ describe('Create date from string', () => {
   it('should return date object', () => {
     const dateString = '25/12/2022'
     expect(toDate(dateString)).toStrictEqual(new Date('2022-12-25'))
+  })
+})
+
+describe('toDateString', () => {
+  it('converts a data from dd/mm/yyyy format to yyyy-mm-dd format', () => {
+    const dateString = '25/12/2022'
+    expect(toDateString(dateString)).toEqual('2022-12-25')
   })
 })
 
@@ -429,7 +437,7 @@ describe('Get prisoner release date from Licence', () => {
 
   it('Release date should be Conditional Release Date 22 Nov 2035', () => {
     const licence = {
-      conditionalReleaseDate: '2035-11-22',
+      conditionalReleaseDate: '22/11/2035',
     } as Licence
 
     expect(selectReleaseDateFromLicence(licence)).toBe('22 Nov 2035')
@@ -437,8 +445,8 @@ describe('Get prisoner release date from Licence', () => {
 
   it('Release date should be Confirmed Release Date 22 Oct 2035', () => {
     const licence = {
-      conditionalReleaseDate: '2035-11-22',
-      actualReleaseDate: '2035-10-22',
+      conditionalReleaseDate: '22/11/2035',
+      actualReleaseDate: '22/10/2035',
     } as unknown as Licence
 
     expect(selectReleaseDateFromLicence(licence)).toBe('22 Oct 2035')
@@ -446,10 +454,10 @@ describe('Get prisoner release date from Licence', () => {
 
   it('Returns malformed date as is', () => {
     const licence = {
-      conditionalReleaseDate: 'aaa2036-11-01',
+      conditionalReleaseDate: 'aaa01/11/2036',
     } as Licence
 
-    expect(selectReleaseDateFromLicence(licence)).toBe('aaa2036-11-01')
+    expect(selectReleaseDateFromLicence(licence)).toBe('2036-11-aaa01')
   })
 })
 
