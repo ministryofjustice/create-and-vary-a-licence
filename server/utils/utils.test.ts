@@ -20,9 +20,7 @@ import {
   hasAuthSource,
   isBankHolidayOrWeekend,
   licenceIsTwoDaysToRelease,
-  selectReleaseDate,
   isPassedArdOrCrd,
-  selectReleaseDateFromLicence,
   releaseDateLabel,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
@@ -382,85 +380,6 @@ describe('Check licence is close to release', () => {
   })
 })
 
-describe('Get prisoner release date from Nomis', () => {
-  it('No date returns "not found', () => {
-    const nomisRecord = {
-      conditionalReleaseDate: null,
-    } as Prisoner
-
-    expect(selectReleaseDate(nomisRecord)).toBe('not found')
-  })
-
-  it('Release date should be Conditional Release Date 22 Nov 2035', () => {
-    const nomisRecord = {
-      conditionalReleaseDate: '2035-11-22',
-    } as Prisoner
-
-    expect(selectReleaseDate(nomisRecord)).toBe('22 Nov 2035')
-  })
-
-  it('Release date should be Confirmed Release Date 22 Oct 2035', () => {
-    const nomisRecord = {
-      conditionalReleaseDate: '2035-11-22',
-      confirmedReleaseDate: '2035-10-22',
-    } as Prisoner
-
-    expect(selectReleaseDate(nomisRecord)).toBe('22 Oct 2035')
-  })
-
-  it('Release date should be Conditional Release Override Date 22 Nov 2036', () => {
-    const nomisRecord = {
-      conditionalReleaseDate: '2036-11-01',
-      conditionalReleaseOverrideDate: '2036-11-22',
-    } as Prisoner
-
-    expect(selectReleaseDate(nomisRecord)).toBe('22 Nov 2036')
-  })
-
-  it('Returns malformed date as is', () => {
-    const nomisRecord = {
-      conditionalReleaseDate: 'aaa2036-11-01',
-    } as Prisoner
-
-    expect(selectReleaseDate(nomisRecord)).toBe('aaa2036-11-01')
-  })
-})
-
-describe('Get prisoner release date from Licence', () => {
-  it('No date returns "not found', () => {
-    const licence = {
-      conditionalReleaseDate: null,
-    } as Licence
-
-    expect(selectReleaseDateFromLicence(licence)).toBe('not found')
-  })
-
-  it('Release date should be Conditional Release Date 22 Nov 2035', () => {
-    const licence = {
-      conditionalReleaseDate: '22/11/2035',
-    } as Licence
-
-    expect(selectReleaseDateFromLicence(licence)).toBe('22 Nov 2035')
-  })
-
-  it('Release date should be Confirmed Release Date 22 Oct 2035', () => {
-    const licence = {
-      conditionalReleaseDate: '22/11/2035',
-      actualReleaseDate: '22/10/2035',
-    } as unknown as Licence
-
-    expect(selectReleaseDateFromLicence(licence)).toBe('22 Oct 2035')
-  })
-
-  it('Returns malformed date as is', () => {
-    const licence = {
-      conditionalReleaseDate: 'aaa01/11/2036',
-    } as Licence
-
-    expect(selectReleaseDateFromLicence(licence)).toBe('2036-11-aaa01')
-  })
-})
-
 describe('isPassedArdOrCrd', () => {
   it('Should return true when legal status is NOT immigration and actualReleaseDate is yesterday', () => {
     const licence = {
@@ -570,7 +489,7 @@ describe('releaseDateLabel', () => {
 
   it('returns "CRD" if the release date from the licence is a CRD, regardless of NOMIS record', () => {
     const licence = {
-      conditionalReleaseDate: '2035-11-22',
+      conditionalReleaseDate: '22/11/2035',
     } as unknown as Licence
 
     const nomisRecord = {
@@ -583,8 +502,8 @@ describe('releaseDateLabel', () => {
 
   it('returns "Confirmed release date" if the release date from the licence is an ARD, regardless of the NOMIS record', () => {
     const licence = {
-      conditionalReleaseDate: '2035-11-22',
-      actualReleaseDate: '2035-11-24',
+      conditionalReleaseDate: '22/11/2035',
+      actualReleaseDate: '24/11/2035',
     } as unknown as Licence
 
     const nomisRecord = {

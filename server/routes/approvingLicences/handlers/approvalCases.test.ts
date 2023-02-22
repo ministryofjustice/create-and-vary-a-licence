@@ -125,8 +125,8 @@ describe('Route Handlers - Approval - case list', () => {
       additionalPssConditions: [],
       bespokeConditions: [],
       isVariation: false,
-      conditionalReleaseDate: '2022-1-5',
-      actualReleaseDate: '2022-1-3',
+      conditionalReleaseDate: '5/1/2022',
+      actualReleaseDate: '3/1/2022',
     }) as unknown as Licence
   })
   afterEach(() => {

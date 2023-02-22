@@ -3,15 +3,11 @@ import { getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
-import {
-  convertToTitleCase,
-  selectReleaseDate,
-  selectReleaseDateFromLicence,
-  releaseDateLabel,
-} from '../../../utils/utils'
+import { convertToTitleCase, releaseDateLabel } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import LicenceService from '../../../services/licenceService'
+import { getReleaseDateFromNomis, getReleaseDateFromLicence } from '../../../services/getReleaseDate'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(
@@ -49,7 +45,7 @@ export default class ViewAndPrintCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: licence ? selectReleaseDateFromLicence(licence) : selectReleaseDate(c.nomisRecord),
+          releaseDate: licence ? getReleaseDateFromLicence(licence) : getReleaseDateFromNomis(c.nomisRecord),
           releaseDateLabel: releaseDateLabel(licence, c.nomisRecord),
           licenceStatus: _.head(c.licences).status,
           isClickable:
