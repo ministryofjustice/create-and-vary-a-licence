@@ -50,7 +50,7 @@ export default class OffenderLicenceStatusRoutes {
     const { status, statusChangeReason } = req.body
 
     if (status && statusChangeReason) {
-      await this.licenceOverrideService.overrideStatusCode(parseInt(licenceId, 10), status, statusChangeReason)
+      await this.licenceOverrideService.overrideStatusCode(parseInt(licenceId, 10), status, statusChangeReason, user)
       res.redirect(`/support/offender/${nomsId}/licences`)
       return
     }

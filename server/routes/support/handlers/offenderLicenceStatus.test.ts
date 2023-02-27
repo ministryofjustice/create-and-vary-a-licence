@@ -5,6 +5,7 @@ import OffenderLicenceStatusRoutes from './offenderLicenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
+import { User } from '../../../@types/CvlUserDetails'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const overrideService = new LicenceOverrideService(null) as jest.Mocked<LicenceOverrideService>
@@ -31,11 +32,13 @@ describe('Route Handlers - Licence Status Override', () => {
     } as LicenceSummary,
   ]
 
+  const user = { username: 'Test User' } as User
+
   beforeEach(() => {
     jest.resetAllMocks()
     res = {
       locals: {
-        user: {},
+        user,
       },
       render: jest.fn(),
       redirect: jest.fn(),
@@ -89,7 +92,12 @@ describe('Route Handlers - Licence Status Override', () => {
 
       await handler.POST(req, res)
 
-      expect(overrideService.overrideStatusCode).toHaveBeenCalledWith(1, LicenceStatus.APPROVED.toString(), reason)
+      expect(overrideService.overrideStatusCode).toHaveBeenCalledWith(
+        1,
+        LicenceStatus.APPROVED.toString(),
+        reason,
+        user
+      )
 
       expect(res.redirect).toHaveBeenCalledWith(`/support/offender/ABC123/licences`)
     })
