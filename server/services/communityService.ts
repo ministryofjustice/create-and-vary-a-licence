@@ -91,4 +91,10 @@ export default class CommunityService {
     }
     return []
   }
+
+  // Has slower lookup than probation offender search /crns, but also has no lag-time after Community API event raised
+  // Only to be used when probation offender search api is return outdated information.
+  async getSingleOffenderByCrn(crn: string): Promise<OffenderDetail> {
+    return this.communityApiClient.getOffenderDetails(crn)
+  }
 }

@@ -6,6 +6,7 @@ import {
   CommunityApiManagedOffender,
   CommunityApiUserDetails,
 } from '../@types/communityClientTypes'
+import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 
 export default class CommunityApiClient extends RestClient {
   constructor() {
@@ -76,5 +77,9 @@ export default class CommunityApiClient extends RestClient {
 
   async getPduHeads(pduCode: string): Promise<CommunityApiStaffDetails[]> {
     return (await this.get({ path: `/secure/staff/pduHeads/${pduCode}` })) as Promise<CommunityApiStaffDetails[]>
+  }
+
+  async getOffenderDetails(crn: string): Promise<OffenderDetail> {
+    return (await this.get({ path: `secure/offenders/crn/${crn}/all` })) as Promise<OffenderDetail>
   }
 }
