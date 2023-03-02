@@ -324,50 +324,48 @@ export default {
     })
   },
 
-  stubGetSingleOffender: (): SuperAgentRequest => {
+  stubGetSingleOffenderByCrn: (): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'POST',
+        method: 'GET',
         urlPattern: `/secure/offenders/crn/(.)*/all`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            otherIds: {
-              crn: 'X2345',
-              pncNumber: '1234/12345',
-              croNumber: '1/12345',
-            },
-            offenderManagers: [
-              {
-                active: true,
-                staff: {
-                  code: 'X12345',
-                  forenames: 'Joe',
-                  surname: 'Bloggs',
+        jsonBody: {
+          otherIds: {
+            crn: 'X2345',
+            pncNumber: '1234/12345',
+            croNumber: '1/12345',
+          },
+          offenderManagers: [
+            {
+              active: true,
+              staff: {
+                code: 'X12345',
+                forenames: 'Joe',
+                surname: 'Bloggs',
+              },
+              probationArea: {
+                code: 'N01',
+                description: 'Area N01',
+              },
+              team: {
+                code: 'A',
+                description: 'Team A',
+                borough: {
+                  code: 'PDU1',
+                  description: 'PDU one',
                 },
-                probationArea: {
-                  code: 'N01',
-                  description: 'Area N01',
-                },
-                team: {
-                  code: 'A',
-                  description: 'Team A',
-                  borough: {
-                    code: 'PDU1',
-                    description: 'PDU one',
-                  },
-                  district: {
-                    code: 'LAU1',
-                    description: 'LAU one',
-                  },
+                district: {
+                  code: 'LAU1',
+                  description: 'LAU one',
                 },
               },
-            ],
-          },
-        ],
+            },
+          ],
+        },
       },
     })
   },

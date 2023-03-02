@@ -80,6 +80,6 @@ export default class CommunityApiClient extends RestClient {
   }
 
   async getOffenderDetails(crn: string): Promise<OffenderDetail> {
-    return (await this.get({ path: `secure/offenders/crn/${crn}/all` })) as Promise<OffenderDetail>
+    return (await this.get({ path: `/secure/offenders/crn/${crn}/all` })) as Promise<OffenderDetail>
   }
 }
