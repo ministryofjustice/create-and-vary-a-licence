@@ -30,7 +30,7 @@ context('Event handlers', () => {
 
   describe('Probation events', () => {
     it('should listen to the offender manager changed event and call endpoint to update responsible COM', () => {
-      cy.task('stubGetProbationer')
+      cy.task('stubGetSingleOffenderByCrn')
       cy.task('stubGetAnOffendersManagers')
       cy.task('stubGetStaffDetailsByStaffId')
       cy.task('stubGetUserDetailsByUsername')
@@ -41,7 +41,7 @@ context('Event handlers', () => {
       cy.task(
         'sendProbationEvent',
         `{
-          "Message": "{\\"crn\\":\\"X1234\\"}",
+          "Message": "{\\"crn\\":\\"X2345\\"}",
           "MessageAttributes": {
             "eventType": {
               "Type": "String",
@@ -52,8 +52,8 @@ context('Event handlers', () => {
       )
 
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/secure/users/JSMITH/roles/LHDCBT002', times: 1 })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X1234/responsible-com', times: 1 })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X1234/probation-team', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X2345/responsible-com', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X2345/probation-team', times: 1 })
     })
   })
 
