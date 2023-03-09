@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: activate-licences
 spec:
-  schedule: "0 9,12,15 * * *" # 9am, 12, 15 every day
+  schedule: "0 9,12,15, 18 * * *" # 9am, 12, 15, 18 every day
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200
