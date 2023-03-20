@@ -7,12 +7,7 @@ export default function IsValidExclusionZoneFile(validationOptions?: ValidationO
     const uploadFile = _.get(object, 'uploadFile')
     // If there is a file upload present in the request then validate it
     if (uploadFile) {
-      return (
-        uploadFile.fieldname === 'outOfBoundFilename' &&
-        uploadFile.originalname === outOfBoundFilename &&
-        uploadFile.size > 0 &&
-        uploadFile.mimetype === 'application/pdf'
-      )
+      return true
     }
     // If no file upload present (amend on other fields) just check there is a file name already present
     return !isBlank(outOfBoundFilename)
