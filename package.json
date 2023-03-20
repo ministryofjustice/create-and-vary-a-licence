@@ -150,7 +150,7 @@
     "@types/csurf": "^1.11.2",
     "@types/express-request-id": "^1.4.3",
     "@types/express-session": "^1.17.7",
-    "@types/http-errors": "^1.8.2",
+    "@types/http-errors": "^2.0.1",
     "@types/jest": "^29.5.0",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/lodash": "^4.14.191",
