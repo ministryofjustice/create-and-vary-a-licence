@@ -168,7 +168,7 @@
     "axe-core": "^4.6.3",
     "better-npm-audit": "^3.7.3",
     "cheerio": "^1.0.0-rc.10",
-    "concurrently": "^6.5.1",
+    "concurrently": "^7.6.0",
     "cypress": "^12.8.1",
     "cypress-axe": "^1.4.0",
     "cypress-multi-reporters": "^1.6.3",
