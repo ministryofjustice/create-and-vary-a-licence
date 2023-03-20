@@ -154,7 +154,7 @@
     "@types/jest": "^29.5.0",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/lodash": "^4.14.191",
-    "@types/node": "^14.17.6",
+    "@types/node": "^18.15.3",
     "@types/number-to-words": "^1.2.1",
     "@types/nunjucks": "^3.2.2",
     "@types/passport": "^1.0.12",
