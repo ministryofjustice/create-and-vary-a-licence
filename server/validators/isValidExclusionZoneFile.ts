@@ -10,7 +10,8 @@ export default function IsValidExclusionZoneFile(validationOptions?: ValidationO
       return (
         uploadFile.fieldname === 'outOfBoundFilename' &&
         uploadFile.originalname === outOfBoundFilename &&
-        uploadFile.mimetype === 'application/pdf'
+        uploadFile.mimetype === 'application/pdf' &&
+        (uploadFile.size as number) > 0
       )
     }
     // If no file upload present (amend on other fields) just check there is a file name already present
