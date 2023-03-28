@@ -37,6 +37,7 @@ describe('Healthcheck', () => {
 function successfulCheck(name: string): HealthCheckService {
   return () =>
     new Promise((resolve, _reject) =>
+      // eslint-disable-next-line no-promise-executor-return
       resolve({
         name: `${name}`,
         status: 'ok',
@@ -48,6 +49,7 @@ function successfulCheck(name: string): HealthCheckService {
 function erroredCheck(name: string): HealthCheckService {
   return () =>
     new Promise((resolve, _reject) =>
+      // eslint-disable-next-line no-promise-executor-return
       resolve({
         name: `${name}`,
         status: 'ERROR',

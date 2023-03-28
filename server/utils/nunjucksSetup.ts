@@ -101,6 +101,7 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
     }))
   })
 
+  // eslint-disable-next-line no-use-before-define,default-param-last
   njkEnv.addFilter('findError', (array: FieldValidationError[] = [], formFieldId: string) => {
     const item = array.find(error => error.field === formFieldId)
     if (item) {

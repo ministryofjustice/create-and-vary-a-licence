@@ -450,6 +450,7 @@ export default class LicenceService {
   async recordAuditEvent(
     summary: string,
     detail: string,
+    // eslint-disable-next-line default-param-last
     licenceId: number = null,
     eventTime: Date,
     user: User = null
@@ -468,7 +469,9 @@ export default class LicenceService {
   }
 
   async getAuditEvents(
+    // eslint-disable-next-line default-param-last
     forLicenceId: number = null,
+    // eslint-disable-next-line default-param-last
     forUsername: string = null,
     startTime: Date,
     endTime: Date,
