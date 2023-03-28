@@ -1,5 +1,4 @@
 import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator'
-import _ from 'lodash'
 import { isBlank } from '../utils/utils'
 
 export default function IsValidExclusionZoneFile(validationOptions?: ValidationOptions) {
