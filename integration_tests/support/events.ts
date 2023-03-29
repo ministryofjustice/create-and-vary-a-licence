@@ -47,7 +47,6 @@ const sendDomainEvent = async (body: string): Promise<unknown> => {
     MessageBody: body,
   })
   // Wait for the event listener to clear the queue
-  // eslint-disable-next-line no-promise-executor-return
   await new Promise(resolve => {
     setTimeout(resolve, 10000)
   })
@@ -60,7 +59,6 @@ const sendPrisonEvent = async (body: string): Promise<unknown> => {
     MessageBody: body,
   })
   // Wait for the event listener to clear the queue
-  // eslint-disable-next-line no-promise-executor-return
   await new Promise(resolve => {
     setTimeout(resolve, 10000)
   })
@@ -73,7 +71,6 @@ const sendProbationEvent = async (body: string): Promise<unknown> => {
     MessageBody: body,
   })
   // Wait for the event listener to clear the queue
-  // eslint-disable-next-line no-promise-executor-return
   await new Promise(resolve => {
     setTimeout(resolve, 10000)
   })
