@@ -2,6 +2,7 @@ import { Readable } from 'stream'
 import fs from 'fs'
 import _ from 'lodash'
 import { format } from 'date-fns'
+import moment from 'moment'
 import {
   AdditionalCondition,
   AdditionalConditionsRequest,
@@ -620,14 +621,13 @@ export default class LicenceService {
   private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {
     const tused = nomisRecord.sentenceDetail?.topupSupervisionExpiryDate
     const led = nomisRecord.sentenceDetail?.licenceExpiryDate
-    const sed = nomisRecord.sentenceDetail?.sentenceExpiryDate
 
-    if (!tused) {
-      return LicenceType.AP
+    if (!led) {
+      return LicenceType.PSS
     }
 
-    if (!led && !sed) {
-      return LicenceType.PSS
+    if (!tused || moment(tused, 'YYYY-MM-DD') <= moment(led, 'YYYY-MM-DD')) {
+      return LicenceType.AP
     }
 
     return LicenceType.AP_PSS

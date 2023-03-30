@@ -382,12 +382,17 @@ export default class CaseloadService {
   }
 
   private getLicenceType = (nomisRecord: Prisoner): LicenceType => {
-    if (!nomisRecord.topupSupervisionExpiryDate) {
-      return LicenceType.AP
-    }
-    if (!nomisRecord.licenceExpiryDate && !nomisRecord.sentenceExpiryDate) {
+    const tused = nomisRecord.topupSupervisionExpiryDate
+    const led = nomisRecord.licenceExpiryDate
+
+    if (!led) {
       return LicenceType.PSS
     }
+
+    if (!tused || moment(tused, 'YYYY-MM-DD') <= moment(led, 'YYYY-MM-DD')) {
+      return LicenceType.AP
+    }
+
     return LicenceType.AP_PSS
   }
 

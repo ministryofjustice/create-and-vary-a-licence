@@ -107,17 +107,41 @@ describe('Licence Service', () => {
     })
 
     describe('Licence Types', () => {
-      it('Should create an AP licence when a TUSED is not set in NOMIS', async () => {
-        prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
+      it('Should create an AP licence when a TUSED is not set but a LED is set in NOMIS', async () => {
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: { licenceExpiryDate: '26/12/2022' },
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ typeCode: 'AP' })
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
 
-      it('Should create a PSS licence when LED and SED is not set but TUSED is set', async () => {
+      it('Should create an AP licence when TUSED is less than LED', async () => {
         prisonerService.getPrisonerDetail.mockResolvedValue({
-          sentenceDetail: { topupSupervisionExpiryDate: '26/12/2022' },
+          sentenceDetail: { licenceExpiryDate: '2022-12-26', topupSupervisionExpiryDate: '2022-12-20' },
+        } as PrisonApiPrisoner)
+
+        const expectedLicence = expect.objectContaining({ typeCode: 'AP' })
+
+        await licenceService.createLicence('ABC1234', user)
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+
+      it('Should create an AP licence when TUSED is equal to LED', async () => {
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: { licenceExpiryDate: '2022-12-26', topupSupervisionExpiryDate: '2022-12-26' },
+        } as PrisonApiPrisoner)
+
+        const expectedLicence = expect.objectContaining({ typeCode: 'AP' })
+
+        await licenceService.createLicence('ABC1234', user)
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+
+      it('Should create a PSS licence when LED is not set but TUSED is set', async () => {
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: { topupSupervisionExpiryDate: '2022-12-26' },
         } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ typeCode: 'PSS' })
 
@@ -125,38 +149,11 @@ describe('Licence Service', () => {
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
 
-      it('Should create a AP_PSS licence when LED is not set but TUSED and SED is set', async () => {
+      it('Should create a AP_PSS licence when both TUSED is after LED', async () => {
         prisonerService.getPrisonerDetail.mockResolvedValue({
           sentenceDetail: {
-            topupSupervisionExpiryDate: '26/12/2022',
-            sentenceExpiryDate: '26/12/2023',
-          },
-        } as PrisonApiPrisoner)
-        const expectedLicence = expect.objectContaining({ typeCode: 'AP_PSS' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should create a AP_PSS licence when SED is not set but TUSED and LED is set', async () => {
-        prisonerService.getPrisonerDetail.mockResolvedValue({
-          sentenceDetail: {
-            topupSupervisionExpiryDate: '26/12/2022',
-            licenceExpiryDate: '26/12/2023',
-          },
-        } as PrisonApiPrisoner)
-        const expectedLicence = expect.objectContaining({ typeCode: 'AP_PSS' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should create a AP_PSS licence when SLED and TUSED are set', async () => {
-        prisonerService.getPrisonerDetail.mockResolvedValue({
-          sentenceDetail: {
-            topupSupervisionExpiryDate: '26/12/2022',
-            licenceExpiryDate: '26/12/2023',
-            sentenceExpiryDate: '26/12/2023',
+            topupSupervisionExpiryDate: '2023-12-26',
+            licenceExpiryDate: '2022-12-26',
           },
         } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ typeCode: 'AP_PSS' })
