@@ -16,9 +16,16 @@ import tokenVerifier from '../data/tokenVerification'
 import populateCurrentUser from '../middleware/populateCurrentUser'
 import flashMessages from '../middleware/flashMessageMiddleware'
 import fromReviewMiddleware from '../middleware/fromReviewMiddleware'
+import config from '../config'
 
 export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
+
+  if (config.serviceIsUnvailable) {
+    router.all('*', (req, res) => {
+      res.render('service-unavailable.njk')
+    })
+  }
 
   router.use(auth.authenticationMiddleware(tokenVerifier))
   router.use(populateCurrentUser(services.userService, services.licenceService))
