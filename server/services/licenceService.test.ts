@@ -242,7 +242,7 @@ describe('Licence Service', () => {
       it('Should populate probation locations from DELIUS', async () => {
         prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({
-          typeCode: 'AP',
+          typeCode: 'PSS',
           probationAreaCode: 'Area',
           probationAreaDescription: 'AreaDesc',
           probationPduCode: 'PDU',
@@ -299,7 +299,9 @@ describe('Licence Service', () => {
 
     describe('Standard conditions', () => {
       it('Should get standard licence conditions only if licence type is AP', async () => {
-        prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: { licenceExpiryDate: '26/12/2022' },
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({
           standardLicenceConditions: [{ code: 'fake1', text: 'fake standard condition' }],
           standardPssConditions: [],
@@ -331,7 +333,7 @@ describe('Licence Service', () => {
       it('Should get both standard licence and PSS conditions if licence type is AP_PSS', async () => {
         prisonerService.getPrisonerDetail.mockResolvedValue({
           sentenceDetail: {
-            topupSupervisionExpiryDate: '26/12/2022',
+            topupSupervisionExpiryDate: '27/12/2022',
             licenceExpiryDate: '26/12/2023',
             sentenceExpiryDate: '26/12/2023',
           },
