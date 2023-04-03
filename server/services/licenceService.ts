@@ -124,7 +124,7 @@ export default class LicenceService {
       probationTeamDescription: responsibleOfficerDetails.team?.description,
       crn: deliusRecord.otherIds?.crn,
       pnc: deliusRecord.otherIds?.pncNumber,
-      cro: deliusRecord.otherIds?.croNumber || this.getCRONumber(prisonerNumber, user),
+      cro: deliusRecord.otherIds?.croNumber || (await this.getCRONumber(prisonerNumber, user)),
       standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licenceType)
         ? await this.conditionService.getStandardConditions(LicenceType.AP)
         : [],
