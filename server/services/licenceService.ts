@@ -150,11 +150,11 @@ export default class LicenceService {
   }
 
   private async getCRONumber(prisonerNumber: string, user: User): Promise<string> {
-    const prisioners = await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user)
-    if (prisioners != null) {
-      return prisioners[0].croNumber
+    const prisoners = await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user)
+    if (prisoners != null) {
+      return prisoners[0].croNumber
     }
-    return null
+    return ''
   }
 
   async getLicence(id: string, user: User): Promise<Licence> {
