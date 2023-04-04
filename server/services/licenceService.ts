@@ -124,7 +124,7 @@ export default class LicenceService {
       probationTeamDescription: responsibleOfficerDetails.team?.description,
       crn: deliusRecord.otherIds?.crn,
       pnc: deliusRecord.otherIds?.pncNumber,
-      cro: deliusRecord.otherIds?.croNumber,
+      cro: deliusRecord.otherIds?.croNumber || (await this.getCroNumberFromNomis(prisonerNumber, user)),
       standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licenceType)
         ? await this.conditionService.getStandardConditions(LicenceType.AP)
         : [],
@@ -631,5 +631,13 @@ export default class LicenceService {
     }
 
     return LicenceType.AP_PSS
+  }
+
+  private async getCroNumberFromNomis(prisonerNumber: string, user: User): Promise<string> {
+    const prisoners = await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user)
+    if (prisoners) {
+      return prisoners[0]?.croNumber
+    }
+    return null
   }
 }
