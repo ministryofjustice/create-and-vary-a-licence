@@ -35,6 +35,7 @@ import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
 import ConditionService from './conditionService'
 import { AdditionalConditionAp, AdditionalConditionsConfig } from '../@types/LicencePolicy'
+import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 
 jest.mock('../data/licenceApiClient')
 jest.mock('./communityService')
@@ -349,6 +350,53 @@ describe('Licence Service', () => {
         expect(conditionService.getStandardConditions).toBeCalledTimes(2)
         expect(conditionService.getStandardConditions).toHaveBeenNthCalledWith(1, 'AP')
         expect(conditionService.getStandardConditions).toHaveBeenNthCalledWith(2, 'PSS')
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+    })
+
+    describe('CRO number', () => {
+      it('is set to null if neither Delius nor NOMIS have a CRO for the offender', async () => {
+        const expectedLicence = expect.objectContaining({ cro: null })
+        await licenceService.createLicence('ABC1234', user)
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+
+      it('returns the CRO number from Delius', async () => {
+        communityService.getProbationer.mockResolvedValue({
+          otherIds: { croNumber: '12345' },
+          offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
+        } as OffenderDetail)
+
+        const expectedLicence = expect.objectContaining({ cro: '12345' })
+        await licenceService.createLicence('ABC1234', user)
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+
+      it("returns the CRO number from NOMIS if it's not in Delius", async () => {
+        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+          {
+            croNumber: '09876',
+          },
+        ] as Prisoner[])
+
+        const expectedLicence = expect.objectContaining({ cro: '09876' })
+        await licenceService.createLicence('ABC1234', user)
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+
+      it("returns the CRO number from Delius if it's in Delius and NOMIS", async () => {
+        communityService.getProbationer.mockResolvedValue({
+          otherIds: { croNumber: '12345' },
+          offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
+        } as OffenderDetail)
+        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+          {
+            croNumber: '09876',
+          },
+        ] as Prisoner[])
+
+        const expectedLicence = expect.objectContaining({ cro: '12345' })
+        await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
     })
