@@ -4,10 +4,11 @@
 {% set pageTitle =  "This service is unavailable" %}
 
 {% block beforeContent %}
-    {{ govukBackLink({
-        text: "Digital Prison Services",
-        href: links.exitUrl
-    }) }}
+      {{ govukBackLink({
+        text: "Back",
+        href: '',
+        classes: 'js-backlink' 
+      }) }}
 {% endblock %}
 
 {% block content %}
@@ -18,7 +19,7 @@
         <p>You will be able to use it again at 8am on Tuesday 11 April.</p>
 
         <p class = "govuk-!-margin-top-8">
-            <a href="{{ links.exitUrl }}" class=" govuk-link govuk-!-font-size-19 govuk-link--no-visited-state">Go to the Digital Services homepage.</a>
+            <a href="{{ authHome }}" class=" govuk-link govuk-!-font-size-19 govuk-link--no-visited-state">Go to the Digital Services homepage.</a>
         </p>
 
     </div>
