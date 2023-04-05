@@ -27,6 +27,7 @@ generic-service:
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: "http://create-and-vary-a-licence"
     RESTRICT_ROLLOUT: "false"
+    SERVICE_IS_UNAVAILABLE: "false"
 
 gotenberg:
   replicaCount: 2
