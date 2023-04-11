@@ -5,3 +5,4 @@ export type CommunityApiOffenderManager = definitions['CommunityOrPrisonOffender
 export type CommunityApiManagedOffender = definitions['ManagedOffenderCrn']
 export type CommunityApiUserDetails = definitions['UserDetails']
 export type CommunityApiLocalDeliveryUnits = definitions['ProbationAreaWithLocalDeliveryUnits']
+export type CommunityApiOffenderDetail = definitions['OffenderDetail']

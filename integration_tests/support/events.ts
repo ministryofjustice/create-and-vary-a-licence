@@ -47,7 +47,9 @@ const sendDomainEvent = async (body: string): Promise<unknown> => {
     MessageBody: body,
   })
   // Wait for the event listener to clear the queue
-  await new Promise(resolve => setTimeout(resolve, 10000))
+  await new Promise(resolve => {
+    setTimeout(resolve, 10000)
+  })
   return null
 }
 
@@ -57,7 +59,9 @@ const sendPrisonEvent = async (body: string): Promise<unknown> => {
     MessageBody: body,
   })
   // Wait for the event listener to clear the queue
-  await new Promise(resolve => setTimeout(resolve, 10000))
+  await new Promise(resolve => {
+    setTimeout(resolve, 10000)
+  })
   return null
 }
 
@@ -67,7 +71,9 @@ const sendProbationEvent = async (body: string): Promise<unknown> => {
     MessageBody: body,
   })
   // Wait for the event listener to clear the queue
-  await new Promise(resolve => setTimeout(resolve, 10000))
+  await new Promise(resolve => {
+    setTimeout(resolve, 10000)
+  })
   return null
 }
 

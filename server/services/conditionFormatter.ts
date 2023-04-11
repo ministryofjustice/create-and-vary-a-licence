@@ -72,6 +72,7 @@ export default class ConditionFormatter {
    * @param listType - either null, AND or OR - treat null as an AND
    * @param matchingDataItems
    */
+  // eslint-disable-next-line default-param-last
   private produceValueAsFormattedList = (listType = 'AND', matchingDataItems: AdditionalConditionData[]): string => {
     let value = ''
     let valueCounter = 1
@@ -93,7 +94,7 @@ export default class ConditionFormatter {
    * @param value
    */
   private startsWithAVowel = (value: string): boolean => {
-    const regex = new RegExp('^[aeiou].*', 'i')
+    const regex = /^[aeiou].*/i
     return value && regex.test(value.trim())
   }
 

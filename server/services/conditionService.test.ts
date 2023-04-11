@@ -22,6 +22,7 @@ describe('ConditionService', () => {
 
   describe('getPolicyVersion', () => {
     it('returns the version of the version of the policy config returned by getActiveLicencePolicy on the licenceApiClient', async () => {
+      // eslint-disable-next-line camelcase
       expect(await conditionService.getPolicyVersion()).toEqual(policyV2_1.version)
     })
   })
