@@ -638,6 +638,6 @@ export default class LicenceService {
     if (prisoners) {
       return prisoners[0]?.croNumber
     }
-    return null
+    return ''
   }
 }
