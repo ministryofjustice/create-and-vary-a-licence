@@ -621,100 +621,114 @@ describe('Caseload Service', () => {
     ])
   })
 
-  it('builds the team vary caseload', async () => {
-    communityService.getManagedOffendersByTeam.mockResolvedValueOnce([
-      { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
-      { offenderCrn: 'X12349', staff: { forenames: 'Sherlock', surname: 'Holmes', code: 'X54321' } },
-    ])
-    communityService.getOffendersByCrn.mockResolvedValue([
-      { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
-      { otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } } as OffenderDetail,
-    ])
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
-      { prisonerNumber: 'AB1234F', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
-    ])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
-      {
-        nomisId: 'AB1234E',
-        licenceId: 1,
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
-        comUsername: 'joebloggs',
-      },
-      {
-        nomisId: 'AB1234F',
-        licenceId: 2,
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
-        comUsername: 'sherlockholmes',
-      },
-    ])
-    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
-      {
-        username: 'sherlockholmes',
-        staffCode: 'X54321',
-        staff: {
-          forenames: 'Sherlock',
-          surname: 'Holmes',
+  describe('#getTeamVaryCaseload', () => {
+    beforeEach(() => {
+      communityService.getOffendersByCrn.mockResolvedValue([
+        { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
+        { otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } } as OffenderDetail,
+      ])
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        { prisonerNumber: 'AB1234E', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
+        { prisonerNumber: 'AB1234F', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
+      ])
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        {
+          nomisId: 'AB1234E',
+          licenceId: 1,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+          comUsername: 'joebloggs',
         },
-      },
-      {
-        username: 'joebloggs',
-        staffCode: 'X1234',
-        staff: {
-          forenames: 'Joe',
-          surname: 'Bloggs',
+        {
+          nomisId: 'AB1234F',
+          licenceId: 2,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+          comUsername: 'sherlockholmes',
         },
-      },
-    ])
-
-    const result = await serviceUnderTest.getTeamVaryCaseload(user)
-    expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(1, 'teamA')
-    expect(result).toMatchObject([
-      {
-        deliusRecord: {
-          offenderCrn: 'X12348',
-        },
-        nomisRecord: {
-          prisonerNumber: 'AB1234E',
-          confirmedReleaseDate: tenDaysFromNow,
-        },
-        licences: [
-          {
-            id: 1,
-            status: 'VARIATION_IN_PROGRESS',
-            type: 'AP',
-            comUsername: 'joebloggs',
-          },
-        ],
-        probationPractitioner: {
-          staffCode: 'X1234',
-          name: 'Joe Bloggs',
-        },
-      },
-      {
-        deliusRecord: {
-          offenderCrn: 'X12349',
-        },
-        nomisRecord: {
-          prisonerNumber: 'AB1234F',
-          confirmedReleaseDate: tenDaysFromNow,
-        },
-        licences: [
-          {
-            id: 2,
-            status: 'VARIATION_IN_PROGRESS',
-            type: 'AP',
-            comUsername: 'sherlockholmes',
-          },
-        ],
-        probationPractitioner: {
+      ])
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+        {
+          username: 'sherlockholmes',
           staffCode: 'X54321',
-          name: 'Sherlock Holmes',
+          staff: {
+            forenames: 'Sherlock',
+            surname: 'Holmes',
+          },
         },
-      },
-    ])
+        {
+          username: 'joebloggs',
+          staffCode: 'X1234',
+          staff: {
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+      ])
+    })
+
+    it('builds the team vary caseload', async () => {
+      communityService.getManagedOffendersByTeam.mockResolvedValueOnce([
+        { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
+        { offenderCrn: 'X12349', staff: { forenames: 'Sherlock', surname: 'Holmes', code: 'X54321' } },
+      ])
+
+      const result = await serviceUnderTest.getTeamVaryCaseload(user)
+      expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(1, 'teamA')
+      expect(result).toMatchObject([
+        {
+          deliusRecord: {
+            offenderCrn: 'X12348',
+          },
+          nomisRecord: {
+            prisonerNumber: 'AB1234E',
+            confirmedReleaseDate: tenDaysFromNow,
+          },
+          licences: [
+            {
+              id: 1,
+              status: 'VARIATION_IN_PROGRESS',
+              type: 'AP',
+              comUsername: 'joebloggs',
+            },
+          ],
+          probationPractitioner: {
+            staffCode: 'X1234',
+            name: 'Joe Bloggs',
+          },
+        },
+        {
+          deliusRecord: {
+            offenderCrn: 'X12349',
+          },
+          nomisRecord: {
+            prisonerNumber: 'AB1234F',
+            confirmedReleaseDate: tenDaysFromNow,
+          },
+          licences: [
+            {
+              id: 2,
+              status: 'VARIATION_IN_PROGRESS',
+              type: 'AP',
+              comUsername: 'sherlockholmes',
+            },
+          ],
+          probationPractitioner: {
+            staffCode: 'X54321',
+            name: 'Sherlock Holmes',
+          },
+        },
+      ])
+    })
+
+    it('batches calls to the community CRN endpoint', async () => {
+      communityService.getManagedOffendersByTeam.mockResolvedValue(
+        Array(600).fill({ offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } })
+      )
+
+      await serviceUnderTest.getTeamVaryCaseload(user)
+      expect(communityService.getOffendersByCrn).toHaveBeenCalledTimes(2)
+    })
   })
 
   it('OMU caseload', async () => {

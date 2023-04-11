@@ -26,7 +26,7 @@ describe('Offender manager changed event handler', () => {
 
   it('should handle case where the offender has no managers allocated', async () => {
     communityService.getAnOffendersManagers.mockResolvedValue([])
-    communityService.getProbationer.mockResolvedValue({ offenderManagers: [] } as OffenderDetail)
+    communityService.getSingleOffenderByCrn.mockResolvedValue({ offenderManagers: [] } as OffenderDetail)
 
     const event = {
       crn: 'X1234',
@@ -40,7 +40,7 @@ describe('Offender manager changed event handler', () => {
   })
 
   it('should update the responsible COM to the current RO in delius', async () => {
-    communityService.getProbationer.mockResolvedValue({
+    communityService.getSingleOffenderByCrn.mockResolvedValue({
       offenderManagers: [
         {
           active: true,
@@ -88,7 +88,7 @@ describe('Offender manager changed event handler', () => {
   })
 
   it('should update the probation team', async () => {
-    communityService.getProbationer.mockResolvedValue({
+    communityService.getSingleOffenderByCrn.mockResolvedValue({
       offenderManagers: [
         {
           active: true,
@@ -145,7 +145,7 @@ describe('Offender manager changed event handler', () => {
   })
 
   it('should not update the responsible COM if the COM does not have a username', async () => {
-    communityService.getProbationer.mockResolvedValue({
+    communityService.getSingleOffenderByCrn.mockResolvedValue({
       offenderManagers: [
         {
           active: true,
@@ -182,7 +182,7 @@ describe('Offender manager changed event handler', () => {
   })
 
   it('should assign the COM to a role if they do not have it already', async () => {
-    communityService.getProbationer.mockResolvedValue({
+    communityService.getSingleOffenderByCrn.mockResolvedValue({
       offenderManagers: [
         {
           active: true,

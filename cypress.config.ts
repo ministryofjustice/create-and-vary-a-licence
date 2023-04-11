@@ -92,6 +92,7 @@ export default defineConfig({
         stubGetAnOffendersManagers: community.stubGetAnOffendersManagers,
         stubGetUserDetailsByUsername: community.stubGetUserDetailsByUsername,
         stubAssignRole: community.stubAssignRole,
+        stubGetSingleOffenderByCrn: community.stubGetSingleOffenderByCrn,
 
         searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
         searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
