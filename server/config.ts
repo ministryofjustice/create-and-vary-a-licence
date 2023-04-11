@@ -30,7 +30,6 @@ export interface ApiConfig {
 }
 
 export default {
-  serviceIsUnvailable: process.env.SERVICE_IS_UNAVAILABLE === 'true',
   https: production,
   staticResourceCacheDuration: 20,
   redis: {

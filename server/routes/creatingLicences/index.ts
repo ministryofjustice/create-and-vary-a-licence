@@ -40,7 +40,6 @@ import ConfirmCreateRoutes from './handlers/confirmCreate'
 import AdditionalLicenceConditionUploadsHandler from './handlers/additionalLicenceConditionUploadsHandler'
 import AdditionalLicenceTypesHandler from './handlers/additionalLicenceTypesHandler'
 import AdditionalLicenceConditionDeletionHandler from './handlers/additionalLicenceConditionDeletionHandler'
-import config from '../../config'
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -124,12 +123,6 @@ export default function Index({
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService, conditionService)
   const editQuestionHandler = new EditQuestionRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
-
-  if (config.serviceIsUnvailable) {
-    router.all('*', (req, res) => {
-      res.render('service-unavailable.njk')
-    })
-  }
 
   get('/caseload', caseloadHandler.GET)
   get('/probation-practitioner/staffCode/:staffCode', comDetailsHandler.GET)

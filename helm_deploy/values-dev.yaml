@@ -33,7 +33,6 @@ generic-service:
     LICENCES_URL: "http://create-and-vary-a-licence"
 
     LICENCE_WATERMARK: "true"
-    SERVICE_IS_UNAVAILABLE: "false"
 
 gotenberg:
   replicaCount: 1
