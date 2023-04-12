@@ -1,33 +1,57 @@
 {% extends "layout.njk" %}
 
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-
-{% set pageTitle = applicationName + " - access denied" %}
+{% set pageTitle = applicationName + " - You do not have permission to view this" %}
+{% set backLinkHref = "/" %}
 {% set pageId = "access-denied-page" %}
 
 {% block content %}
-    <div class="govuk-grid-row govuk-body">
+    <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            {{ govukWarningText({
-                text: "Access is denied",
-                iconFallbackText: "Warning"
-            }) }}
-
-            <h2 class="govuk-heading-s">Why am I seeing this page?</h2>
-            <p>
-                You have attempted to access an area of the service which your permissions do not allow.
-                This may be because the person or licence accessed is no longer within your prison or probation case view.
-            </p>
-
-            <p class="govuk-body">
-                {{ govukButton({
-                    text: "Home page",
-                    classes: "govuk-button--primary govuk-!-margin-bottom-0 govuk-body",
-                    href: '/',
-                    attributes: { 'data-qa': 'return-to-home-page' }
-                }) }}
-            </p>
+            <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">You do not have permission to view this</h1>
+            <div class="govuk-!-padding-top-7">
+                <h2 class="govuk-heading-l govuk-!-margin-bottom-4">If you work for the Probation Service</h2>
+                <p class="govuk-body">
+                    Access problems can be caused if your details in NDelius are not up to date. Check these details are correct:
+                </p>
+                <ul class="govuk-body">
+                    <li>Role</li>
+                    <li>Team or teams if you work in more than one</li>
+                    <li>Region</li>
+                    <li>Grade</li>
+                    <li>PDU</li>
+                </ul>
+            </div>
+            <div class="govuk-!-padding-top-7">
+                <h2 class="govuk-heading-l govuk-!-margin-bottom-4">If you work for a prison</h2>
+                <p class="govuk-body">
+                    Ask a local systems administrator in your office to check you have one of these roles on Digital Prison Services:
+                </p>
+                <ul class="govuk-body">
+                    <li>
+                        Licences case admin – for case administrators and others who do not need to approve licences.
+                        A local systems administrator can give you this if you need it
+                    </li>
+                    <br>
+                    <li>
+                        Licences decision makers – for people who approve licences, including those who provide cover when
+                        these people are away. You must request this from helpdesk if you do not have it
+                    </li>
+                </ul>
+            </div>
+            <div class="govuk-!-padding-top-7">
+                <h2 class="govuk-heading-l govuk-!-margin-bottom-4">For support</h2>
+                <p class="govuk-body">
+                    Contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.
+                    <br>
+                    <br>
+                    {% if user.authSource == 'nomis' %}
+                        <a class="govuk-link" href="https://digital.prison.service.justice.gov.uk">Go to the Digital Prison Services homepage.</a>
+                    {% endif %}
+                    {% if user.authSource == 'delius' %}
+                        <a class="govuk-link" href="https://sign-in.hmpps.service.justice.gov.uk/auth">Go to the Digital Services homepage.</a>
+                    {% endif %}
+                </p>
+            </div>
         </div>
     </div>
 {% endblock %}
