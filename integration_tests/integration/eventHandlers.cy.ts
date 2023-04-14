@@ -60,6 +60,7 @@ context('Event handlers', () => {
   describe('Prison events', () => {
     it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to update sentence dates', () => {
       cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
+      cy.task('stubGetActiveLicencesForOffender')
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
 
@@ -79,9 +80,33 @@ context('Event handlers', () => {
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 1 })
     })
 
+    it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to deactivate licence if prisoner has been re-sentenced', () => {
+      cy.task('stubGetActiveLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
+      cy.task('stubGetPrisonerDetail')
+      cy.task('stubUpdateSentenceDates')
+      cy.task('stubOverrideLicenceStatus')
+
+      cy.task(
+        'sendPrisonEvent',
+        `{
+          "Message": "{\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "SENTENCE_DATES-CHANGED"
+            }
+          }
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', { verb: 'POST', path: '/licence/id/1/override/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 0 })
+    })
+
     it('should listen to the CONFIRMED_RELEASE_DATE-CHANGED event and call endpoint to update sentence dates', () => {
       cy.task('searchPrisonersByBookingIds')
       cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
+      cy.task('stubGetActiveLicencesForOffender')
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
 
