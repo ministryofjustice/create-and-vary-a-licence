@@ -7,14 +7,9 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import { convertDateFormat, isPassedArdOrCrd } from '../../../utils/utils'
 import logger from '../../../../logger'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
-import LicenceOverrideService from '../../../services/licenceOverrideService'
 
 export default class DatesChangedEventHandler {
-  constructor(
-    private readonly licenceService: LicenceService,
-    private readonly licenceOverrideService: LicenceOverrideService,
-    private readonly prisonerService: PrisonerService
-  ) {}
+  constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
 
   handle = async (event: PrisonEventMessage): Promise<void> => {
     const { bookingId, offenderIdDisplay } = event
@@ -54,11 +49,7 @@ export default class DatesChangedEventHandler {
       logger.info(
         `new sentence start date: ${ssd} is after licence crd: ${crd} so deactivating current licence with id: ${licence.licenceId}`
       )
-      await this.licenceOverrideService.overrideStatusCode(
-        licence.licenceId,
-        LicenceStatus.INACTIVE,
-        'Deactivating existing licence for a re-sentenced prisoner'
-      )
+      await this.licenceService.updateStatus(licence.licenceId.toString(), LicenceStatus.INACTIVE)
     }
   }
 

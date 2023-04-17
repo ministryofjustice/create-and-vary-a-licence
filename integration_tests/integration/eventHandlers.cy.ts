@@ -84,7 +84,7 @@ context('Event handlers', () => {
       cy.task('stubGetActiveLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
-      cy.task('stubOverrideLicenceStatus')
+      cy.task('stubUpdateLicenceStatus')
 
       cy.task(
         'sendPrisonEvent',
@@ -99,7 +99,7 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'POST', path: '/licence/id/1/override/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 0 })
     })
 

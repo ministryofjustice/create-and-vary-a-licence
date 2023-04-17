@@ -4,8 +4,8 @@ import { PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import DatesChangedEventHandler from './datesChangedEventHandler'
 import { Services } from '../../../services'
 
-export default function buildEventHandler({ licenceService, licenceOverrideService, prisonerService }: Services) {
-  const datesChangedEventHandler = new DatesChangedEventHandler(licenceService, licenceOverrideService, prisonerService)
+export default function buildEventHandler({ licenceService, prisonerService }: Services) {
+  const datesChangedEventHandler = new DatesChangedEventHandler(licenceService, prisonerService)
 
   return async (messages: SQSMessage[]) => {
     messages.forEach(message => {

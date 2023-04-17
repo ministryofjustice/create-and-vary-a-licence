@@ -1097,16 +1097,4 @@ export default {
       },
     })
   },
-
-  stubOverrideLicenceStatus: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: `/licence/id/(\\d)*/override/status`,
-      },
-      response: {
-        status: 200,
-      },
-    })
-  },
 }

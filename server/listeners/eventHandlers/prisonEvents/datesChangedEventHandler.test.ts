@@ -6,15 +6,12 @@ import PrisonerService from '../../../services/prisonerService'
 import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import SentenceDatesChangedEventHandler from './datesChangedEventHandler'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import LicenceOverrideService from '../../../services/licenceOverrideService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-const licenceOverrideService = new LicenceOverrideService(null) as jest.Mocked<LicenceOverrideService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/licenceOverrideService')
 jest.mock('../../../services/prisonerService')
 
 const prisoner = {
@@ -37,7 +34,7 @@ afterEach(() => {
 })
 
 describe('Sentence dates changed event handler', () => {
-  const handler = new SentenceDatesChangedEventHandler(licenceService, licenceOverrideService, prisonerService)
+  const handler = new SentenceDatesChangedEventHandler(licenceService, prisonerService)
 
   it('should use bookingId to get the nomisID, if the nomisId is not provided', async () => {
     const event = {
@@ -316,7 +313,7 @@ describe('Sentence dates changed event handler', () => {
 
     await handler.handle(event)
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
-    expect(licenceOverrideService.overrideStatusCode).not.toHaveBeenCalled()
+    expect(licenceService.updateStatus).not.toHaveBeenCalled()
   })
 
   it('should deactivate an active licence if the sentence start date is after the licence CRD', async () => {
@@ -334,10 +331,6 @@ describe('Sentence dates changed event handler', () => {
 
     await handler.handle(event)
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
-    expect(licenceOverrideService.overrideStatusCode).toHaveBeenCalledWith(
-      1,
-      LicenceStatus.INACTIVE,
-      'Deactivating existing licence for a re-sentenced prisoner'
-    )
+    expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.INACTIVE)
   })
 })
