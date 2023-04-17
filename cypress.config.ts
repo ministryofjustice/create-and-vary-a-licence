@@ -48,6 +48,7 @@ export default defineConfig({
         stubGetLicence: licence.stubGetLicence,
         stubPostLicence: licence.stubPostLicence,
         stubGetExistingLicenceForOffenderWithResult: licence.stubGetExistingLicenceForOffenderWithResult,
+        stubGetActiveLicencesForOffender: licence.stubGetActiveLicencesForOffender,
         stubGetLicencesForOffender: licence.stubGetLicencesForOffender,
         stubPutAppointmentPerson: licence.stubPutAppointmentPerson,
         stubPutAppointmentTime: licence.stubPutAppointmentTime,
@@ -92,6 +93,7 @@ export default defineConfig({
         stubGetAnOffendersManagers: community.stubGetAnOffendersManagers,
         stubGetUserDetailsByUsername: community.stubGetUserDetailsByUsername,
         stubAssignRole: community.stubAssignRole,
+        stubGetSingleOffenderByCrn: community.stubGetSingleOffenderByCrn,
 
         searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
         searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,

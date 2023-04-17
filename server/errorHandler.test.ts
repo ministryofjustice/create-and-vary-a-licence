@@ -24,7 +24,7 @@ describe('Error Handler', () => {
   })
 
   it('should log user out if error is 401', () => {
-    const handler = createErrorHandler(false)
+    const handler = createErrorHandler()
 
     error = {
       status: 401,
@@ -36,7 +36,7 @@ describe('Error Handler', () => {
   })
 
   it('should log user out if error is 403', () => {
-    const handler = createErrorHandler(false)
+    const handler = createErrorHandler()
 
     error = {
       status: 403,
@@ -47,46 +47,8 @@ describe('Error Handler', () => {
     expect(res.redirect).toHaveBeenCalledWith('/logout')
   })
 
-  it('should render error page with stacktrace if not in production', () => {
-    const handler = createErrorHandler(false)
-
-    error = {
-      status: 400,
-      message: 'bad request',
-      stack: 'stacktrace',
-    } as HTTPError
-
-    handler(error, req, res, jest.fn)
-
-    expect(res.render).toHaveBeenCalledWith('pages/error', {
-      message: 'bad request',
-      status: 400,
-      stack: 'stacktrace',
-    })
-    expect(res.status).toHaveBeenCalledWith(400)
-  })
-
-  it('should render error page with error message if not in production', () => {
-    const handler = createErrorHandler(true)
-
-    error = {
-      status: 400,
-      message: 'bad request',
-      stack: 'stacktrace',
-    } as HTTPError
-
-    handler(error, req, res, jest.fn)
-
-    expect(res.render).toHaveBeenCalledWith('pages/error', {
-      message: 'Something went wrong. The error has been logged. Please try again',
-      status: 400,
-      stack: null,
-    })
-    expect(res.status).toHaveBeenCalledWith(400)
-  })
-
   it('should set status to 500 if status not supplied in error', () => {
-    const handler = createErrorHandler(true)
+    const handler = createErrorHandler()
 
     error = {
       message: 'error',
@@ -95,10 +57,7 @@ describe('Error Handler', () => {
 
     handler(error, req, res, jest.fn)
 
-    expect(res.render).toHaveBeenCalledWith('pages/error', {
-      message: 'Something went wrong. The error has been logged. Please try again',
-      stack: null,
-    })
+    expect(res.render).toHaveBeenCalledWith('pages/error')
     expect(res.status).toHaveBeenCalledWith(500)
   })
 })

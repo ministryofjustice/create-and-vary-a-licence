@@ -13,6 +13,7 @@ import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
 import Container from './container'
+import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 
 export default class CaseloadService {
   constructor(
@@ -394,7 +395,11 @@ export default class CaseloadService {
     caseload: CommunityApiManagedOffender[]
   ): Promise<Container<DeliusRecord>> => {
     const crns = caseload.map(c => c.offenderCrn)
-    const offenders = await this.communityService.getOffendersByCrn(crns)
+    const batchedCrns = _.chunk(crns, 500)
+    const batchedOffenders: Promise<OffenderDetail[]>[] = batchedCrns.map(batch => {
+      return this.communityService.getOffendersByCrn(batch)
+    })
+    const offenders = (await Promise.all(batchedOffenders)).flat()
     return this.wrap(
       offenders.map(o => {
         return {
