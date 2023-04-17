@@ -400,7 +400,7 @@ describe('Licence Service', () => {
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
 
-      it('returns empty string when no value in Delius and NOMIS ', async () => {
+      it('returns empty string when no value in Delius and NOMIS', async () => {
         communityService.getProbationer.mockResolvedValue({
           otherIds: { croNumber: undefined },
           offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
