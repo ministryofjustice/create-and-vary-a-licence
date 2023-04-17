@@ -639,7 +639,7 @@ export default class LicenceService {
   private async getCroNumberFromNomis(prisonerNumber: string, user: User): Promise<string> {
     const prisoners = await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user)
     if (prisoners) {
-      if (prisoners[0]?.croNumber !== undefined) return prisoners[0]?.croNumber
+      if (prisoners[0]?.croNumber !== undefined) return prisoners[0]?.croNumber || ''
     }
     return ''
   }
