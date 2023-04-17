@@ -14,7 +14,6 @@ import Container from './container'
 
 jest.mock('./prisonerService')
 jest.mock('./communityService')
-jest.mock('./licenceService')
 
 describe('Caseload Service', () => {
   const elevenDaysFromNow = format(addDays(new Date(), 11), 'yyyy-MM-dd')
@@ -30,6 +29,9 @@ describe('Caseload Service', () => {
     probationTeamCodes: ['teamA', 'teamB'],
     prisonCaseload: ['p1', 'p2'],
   } as User
+
+  const getLicencesForOmu = jest.spyOn(licenceService, 'getLicencesForOmu')
+  const getLicencesByNomisIdsAndStatus = jest.spyOn(licenceService, 'getLicencesByNomisIdsAndStatus')
 
   beforeEach(() => {
     communityService.getManagedOffenders.mockResolvedValue([])
@@ -93,6 +95,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
       },
@@ -194,6 +197,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
       },
@@ -208,6 +212,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
       },
@@ -229,6 +234,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
       },
@@ -246,6 +252,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'OOS_RECALL',
+            type: 'PSS',
           },
         ],
       },
@@ -263,6 +270,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
       },
@@ -279,6 +287,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
       },
@@ -293,6 +302,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
         nomisRecord: {
@@ -342,7 +352,7 @@ describe('Caseload Service', () => {
         licenceExpiryDate: elevenDaysFromNow,
       } as Prisoner,
     ])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234I',
         licenceId: 1,
@@ -377,6 +387,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'AP',
           },
         ],
         probationPractitioner: {
@@ -395,6 +406,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
       },
@@ -411,6 +423,7 @@ describe('Caseload Service', () => {
           {
             id: 1,
             status: 'SUBMITTED',
+            type: 'AP_PSS',
           },
         ],
         probationPractitioner: {
@@ -455,6 +468,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'AP',
           },
         ],
         probationPractitioner: {
@@ -473,6 +487,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
         probationPractitioner: {
@@ -531,6 +546,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'PSS',
           },
         ],
         probationPractitioner: {
@@ -551,6 +567,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'OOS_BOTUS',
+            type: 'PSS',
           },
         ],
         probationPractitioner: {
@@ -577,7 +594,7 @@ describe('Caseload Service', () => {
         status: 'INACTIVE OUT',
       } as Prisoner,
     ])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234E',
         licenceId: 1,
@@ -613,6 +630,7 @@ describe('Caseload Service', () => {
           {
             id: 1,
             status: 'VARIATION_IN_PROGRESS',
+            type: 'AP',
             comUsername: 'sherlockholmes',
           },
         ],
@@ -639,7 +657,7 @@ describe('Caseload Service', () => {
           status: 'INACTIVE OUT',
         } as Prisoner,
       ])
-      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      getLicencesByNomisIdsAndStatus.mockResolvedValue([
         {
           nomisId: 'AB1234E',
           licenceId: 1,
@@ -696,6 +714,7 @@ describe('Caseload Service', () => {
             {
               id: 1,
               status: 'VARIATION_IN_PROGRESS',
+              type: 'PSS',
               comUsername: 'joebloggs',
             },
           ],
@@ -717,6 +736,7 @@ describe('Caseload Service', () => {
             {
               id: 2,
               status: 'VARIATION_IN_PROGRESS',
+              type: 'AP',
               comUsername: 'sherlockholmes',
             },
           ],
@@ -739,7 +759,7 @@ describe('Caseload Service', () => {
   })
 
   it('OMU caseload', async () => {
-    licenceService.getLicencesForOmu.mockResolvedValue([
+    getLicencesForOmu.mockResolvedValue([
       {
         nomisId: 'AB1234D',
         licenceId: 1,
@@ -769,7 +789,7 @@ describe('Caseload Service', () => {
         comUsername: 'joebloggs',
       },
     ])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234F',
         licenceId: 4,
@@ -912,6 +932,7 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 1,
             status: 'APPROVED',
+            type: 'PSS',
           },
         ],
         nomisRecord: {
@@ -947,6 +968,7 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 2,
             status: 'IN_PROGRESS',
+            type: 'PSS',
           },
         ],
         nomisRecord: {
@@ -982,6 +1004,7 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 4,
             status: 'SUBMITTED',
+            type: 'AP',
           },
         ],
         nomisRecord: {
@@ -1018,6 +1041,7 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 3,
             status: 'ACTIVE',
+            type: 'AP',
           },
         ],
         nomisRecord: {
@@ -1056,6 +1080,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
+            type: 'AP_PSS',
           },
         ],
         nomisRecord: {
@@ -1074,7 +1099,7 @@ describe('Caseload Service', () => {
   })
 
   it('returns exclusions', async () => {
-    licenceService.getLicencesForOmu.mockResolvedValue([
+    getLicencesForOmu.mockResolvedValue([
       {
         nomisId: 'AB1234D',
         licenceId: 1,
@@ -1140,7 +1165,7 @@ describe('Caseload Service', () => {
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
       } as OffenderDetail,
     ])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234E',
         licenceId: 2,
@@ -1163,7 +1188,7 @@ describe('Caseload Service', () => {
   })
 
   it('builds the approver caseload', async () => {
-    licenceService.getLicencesForApproval.mockResolvedValue([
+    jest.spyOn(licenceService, 'getLicencesForApproval').mockResolvedValue([
       {
         nomisId: 'AB1234E',
         licenceId: 1,
@@ -1209,6 +1234,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             id: 1,
+            type: 'AP',
             status: 'SUBMITTED',
             comUsername: 'joebloggs',
           },
@@ -1222,7 +1248,7 @@ describe('Caseload Service', () => {
   })
 
   it('builds the vary approver caseload', async () => {
-    licenceService.getLicencesForVariationApproval.mockResolvedValue([
+    jest.spyOn(licenceService, 'getLicencesForVariationApproval').mockResolvedValue([
       {
         nomisId: 'AB1234E',
         licenceId: 1,
@@ -1268,6 +1294,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             id: 1,
+            type: 'PSS',
             status: 'VARIATION_SUBMITTED',
             comUsername: 'joebloggs',
           },
