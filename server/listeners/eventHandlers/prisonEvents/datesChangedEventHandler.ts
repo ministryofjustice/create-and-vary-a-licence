@@ -54,7 +54,6 @@ export default class DatesChangedEventHandler {
   }
 
   updateLicenceSentenceDates = async (licence: LicenceSummary, nomisId: string, prisoner: PrisonApiPrisoner) => {
-
     await this.licenceService.updateSentenceDates(licence.licenceId.toString(), {
       conditionalReleaseDate:
         convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
