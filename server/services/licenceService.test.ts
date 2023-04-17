@@ -355,8 +355,8 @@ describe('Licence Service', () => {
     })
 
     describe('CRO number', () => {
-      it('is set to null if neither Delius nor NOMIS have a CRO for the offender', async () => {
-        const expectedLicence = expect.objectContaining({ cro: null })
+      it('is set to blank if neither Delius nor NOMIS have a CRO for the offender', async () => {
+        const expectedLicence = expect.objectContaining({ cro: '' })
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
@@ -396,6 +396,22 @@ describe('Licence Service', () => {
         ] as Prisoner[])
 
         const expectedLicence = expect.objectContaining({ cro: '12345' })
+        await licenceService.createLicence('ABC1234', user)
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+
+      it('returns empty string when no value in Delius and NOMIS', async () => {
+        communityService.getProbationer.mockResolvedValue({
+          otherIds: { croNumber: undefined },
+          offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
+        } as OffenderDetail)
+        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+          {
+            croNumber: undefined,
+          },
+        ] as Prisoner[])
+
+        const expectedLicence = expect.objectContaining({ cro: '' })
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
