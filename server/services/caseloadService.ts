@@ -381,21 +381,6 @@ export default class CaseloadService {
     return this.mapResponsibleComsToCasesWithExclusions(caseload).then(it => it.unwrap())
   }
 
-  private getLicenceType = (nomisRecord: Prisoner): LicenceType => {
-    const tused = nomisRecord.topupSupervisionExpiryDate
-    const led = nomisRecord.licenceExpiryDate
-
-    if (!led) {
-      return LicenceType.PSS
-    }
-
-    if (!tused || moment(tused, 'YYYY-MM-DD') <= moment(led, 'YYYY-MM-DD')) {
-      return LicenceType.AP
-    }
-
-    return LicenceType.AP_PSS
-  }
-
   private mapManagedOffenderRecordToOffenderDetail = async (
     caseload: CommunityApiManagedOffender[]
   ): Promise<Container<DeliusRecord>> => {
