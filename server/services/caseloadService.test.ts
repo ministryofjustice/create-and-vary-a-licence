@@ -93,7 +93,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
       },
@@ -195,7 +194,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
       },
@@ -210,7 +208,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
       },
@@ -232,7 +229,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
       },
@@ -250,7 +246,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'OOS_RECALL',
-            type: 'PSS',
           },
         ],
       },
@@ -268,7 +263,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
       },
@@ -285,7 +279,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
       },
@@ -300,7 +293,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
         nomisRecord: {
@@ -385,7 +377,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
           },
         ],
         probationPractitioner: {
@@ -404,7 +395,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
       },
@@ -421,7 +411,6 @@ describe('Caseload Service', () => {
           {
             id: 1,
             status: 'SUBMITTED',
-            type: 'AP_PSS',
           },
         ],
         probationPractitioner: {
@@ -466,7 +455,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
           },
         ],
         probationPractitioner: {
@@ -485,7 +473,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
         probationPractitioner: {
@@ -544,7 +531,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'PSS',
           },
         ],
         probationPractitioner: {
@@ -565,7 +551,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'OOS_BOTUS',
-            type: 'PSS',
           },
         ],
         probationPractitioner: {
@@ -628,7 +613,6 @@ describe('Caseload Service', () => {
           {
             id: 1,
             status: 'VARIATION_IN_PROGRESS',
-            type: 'AP',
             comUsername: 'sherlockholmes',
           },
         ],
@@ -712,7 +696,6 @@ describe('Caseload Service', () => {
             {
               id: 1,
               status: 'VARIATION_IN_PROGRESS',
-              type: 'PSS',
               comUsername: 'joebloggs',
             },
           ],
@@ -734,7 +717,6 @@ describe('Caseload Service', () => {
             {
               id: 2,
               status: 'VARIATION_IN_PROGRESS',
-              type: 'AP',
               comUsername: 'sherlockholmes',
             },
           ],
@@ -930,7 +912,6 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 1,
             status: 'APPROVED',
-            type: 'PSS',
           },
         ],
         nomisRecord: {
@@ -966,7 +947,6 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 2,
             status: 'IN_PROGRESS',
-            type: 'PSS',
           },
         ],
         nomisRecord: {
@@ -1002,7 +982,6 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 4,
             status: 'SUBMITTED',
-            type: 'AP',
           },
         ],
         nomisRecord: {
@@ -1039,7 +1018,6 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 3,
             status: 'ACTIVE',
-            type: 'AP',
           },
         ],
         nomisRecord: {
@@ -1078,7 +1056,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP_PSS',
           },
         ],
         nomisRecord: {
@@ -1232,7 +1209,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             id: 1,
-            type: 'AP',
             status: 'SUBMITTED',
             comUsername: 'joebloggs',
           },
@@ -1292,7 +1268,6 @@ describe('Caseload Service', () => {
         licences: [
           {
             id: 1,
-            type: 'PSS',
             status: 'VARIATION_SUBMITTED',
             comUsername: 'joebloggs',
           },
