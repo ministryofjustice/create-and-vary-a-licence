@@ -21,6 +21,7 @@ export default {
           dateOfBirth: '1950-05-28',
           sentenceDetail: {
             conditionalReleaseDate: '2022-11-10',
+            sentenceStartDate: '2023-04-15',
           },
         },
       },

@@ -6,6 +6,7 @@ import PrisonerService from '../../../services/prisonerService'
 import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import SentenceDatesChangedEventHandler from './datesChangedEventHandler'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
+import LicenceStatus from '../../../enumeration/licenceStatus'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -75,6 +76,7 @@ describe('Sentence dates changed event handler', () => {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
 
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -109,6 +111,7 @@ describe('Sentence dates changed event handler', () => {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
 
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -143,6 +146,7 @@ describe('Sentence dates changed event handler', () => {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
 
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -176,6 +180,7 @@ describe('Sentence dates changed event handler', () => {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
 
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -201,6 +206,7 @@ describe('Sentence dates changed event handler', () => {
 
     prisonerService.getPrisonerDetail.mockResolvedValue(is91Prisoner)
 
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -234,6 +240,7 @@ describe('Sentence dates changed event handler', () => {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
 
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -268,6 +275,7 @@ describe('Sentence dates changed event handler', () => {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
 
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
@@ -288,5 +296,41 @@ describe('Sentence dates changed event handler', () => {
       topupSupervisionStartDate: '09/09/2023',
       topupSupervisionExpiryDate: '09/09/2024',
     })
+  })
+
+  it('should not deactivate an active licence if the sentence start dates is before the licence CRD', async () => {
+    const event = {
+      offenderIdDisplay: 'ABC123',
+    } as PrisonEventMessage
+
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'ACTIVE',
+        conditionalReleaseDate: '20/02/2022',
+      } as LicenceSummary,
+    ])
+
+    await handler.handle(event)
+    expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
+    expect(licenceService.updateStatus).not.toHaveBeenCalled()
+  })
+
+  it('should deactivate an active licence if the sentence start date is after the licence CRD', async () => {
+    const event = {
+      offenderIdDisplay: 'ABC123',
+    } as PrisonEventMessage
+
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'ACTIVE',
+        conditionalReleaseDate: '08/09/2021',
+      } as LicenceSummary,
+    ])
+
+    await handler.handle(event)
+    expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
+    expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.INACTIVE)
   })
 })

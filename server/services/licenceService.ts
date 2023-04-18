@@ -123,7 +123,7 @@ export default class LicenceService {
       probationTeamDescription: responsibleOfficerDetails.team?.description,
       crn: deliusRecord.otherIds?.crn,
       pnc: deliusRecord.otherIds?.pncNumber,
-      cro: deliusRecord.otherIds?.croNumber,
+      cro: deliusRecord.otherIds?.croNumber || (await this.getCroNumberFromNomis(prisonerNumber, user)),
       standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licenceType)
         ? await this.conditionService.getStandardConditions(LicenceType.AP)
         : [],
@@ -449,6 +449,7 @@ export default class LicenceService {
   async recordAuditEvent(
     summary: string,
     detail: string,
+    // eslint-disable-next-line default-param-last
     licenceId: number = null,
     eventTime: Date,
     user: User = null
@@ -467,7 +468,9 @@ export default class LicenceService {
   }
 
   async getAuditEvents(
+    // eslint-disable-next-line default-param-last
     forLicenceId: number = null,
+    // eslint-disable-next-line default-param-last
     forUsername: string = null,
     startTime: Date,
     endTime: Date,
@@ -629,5 +632,10 @@ export default class LicenceService {
           ? { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }
           : { eventType: TimelineEventType.CREATION, title: 'Licence created' }
     }
+  }
+
+  private async getCroNumberFromNomis(prisonerNumber: string, user: User): Promise<string> {
+    const prisoners = await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user)
+    return prisoners?.[0]?.croNumber || ''
   }
 }
