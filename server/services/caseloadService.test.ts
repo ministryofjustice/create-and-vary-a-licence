@@ -1286,7 +1286,7 @@ describe('Caseload Service', () => {
     it('returns true if past PED and ARD is equal to CRD', () => {
       expect(CaseloadService.isEligibleEDS(yesterday, tenDaysFromNow, tenDaysFromNow, null)).toBe(true)
     })
-    it('returns false if past PED and ARD is more than for days before CRD', () => {
+    it('returns false if past PED and ARD is more than 4 days before CRD', () => {
       expect(
         CaseloadService.isEligibleEDS(yesterday, tenDaysFromNow, format(addDays(new Date(), 5), 'yyyy-MM-dd'), null)
       ).toBe(false)
