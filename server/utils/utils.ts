@@ -159,7 +159,7 @@ const isBankHolidayOrWeekend = (date: Moment, bankHolidays: Holiday[]) => {
   return (
     date.isoWeekday() === 6 ||
     date.isoWeekday() === 7 ||
-    bankHolidays.find(hol => moment(hol.date).isSame(date)) !== undefined
+    bankHolidays.find(hol => moment(hol.date).isSame(date, 'day')) !== undefined
   )
 }
 
