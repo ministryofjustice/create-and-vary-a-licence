@@ -664,7 +664,7 @@ export default {
           },
           {
             type: 'fileUpload',
-            label: 'Select a PDF map of the area this person musts not enter',
+            label: 'Select a PDF map of the area this person must not enter',
             name: 'outOfBoundFilename',
           },
         ],
