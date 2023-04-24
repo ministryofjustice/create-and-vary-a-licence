@@ -13,6 +13,7 @@ const licenceService = new LicenceService(null, null, null, null) as jest.Mocked
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/communityService')
+jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Offender detail', () => {
   const handler = new OffenderDetailRoutes(prisonerService, communityService, licenceService)
@@ -125,6 +126,16 @@ describe('Route Handlers - Offender detail', () => {
           team: 'The A Team',
           telephone: '078929482994',
         },
+        license: {
+          crd: undefined,
+          crn: undefined,
+          led: undefined,
+          licensetused: undefined,
+          releaseDate: undefined,
+          sed: undefined,
+          sentenceStartDate: undefined,
+          tussd: undefined,
+        },
       })
     })
   })
@@ -223,6 +234,16 @@ describe('Route Handlers - Offender detail', () => {
         team: 'The A Team',
         telephone: '078929482994',
       },
+      license: {
+        crd: undefined,
+        crn: undefined,
+        led: undefined,
+        licensetused: undefined,
+        releaseDate: undefined,
+        sed: undefined,
+        sentenceStartDate: undefined,
+        tussd: undefined,
+      },
     })
   })
   it('Should render all offender information with NULL sentence dates', async () => {
@@ -319,6 +340,16 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Wales',
         team: 'The A Team',
         telephone: '078929482994',
+      },
+      license: {
+        crd: undefined,
+        crn: undefined,
+        led: undefined,
+        licensetused: undefined,
+        releaseDate: undefined,
+        sed: undefined,
+        sentenceStartDate: undefined,
+        tussd: undefined,
       },
     })
   })
