@@ -4,9 +4,14 @@ import moment from 'moment'
 import PrisonerService from '../../../services/prisonerService'
 import CommunityService from '../../../services/communityService'
 import { convertToTitleCase } from '../../../utils/utils'
+import LicenceService from '../../../services/licenceService'
 
 export default class OffenderDetailRoutes {
-  constructor(private readonly prisonerService: PrisonerService, private readonly communityService: CommunityService) {}
+  constructor(
+    private readonly prisonerService: PrisonerService,
+    private readonly communityService: CommunityService,
+    private readonly licenceServer: LicenceService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
@@ -18,7 +23,33 @@ export default class OffenderDetailRoutes {
       ? await this.communityService.getStaffDetailByStaffCode(probationPractitioner?.staff.code)
       : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
+    const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
 
+    let crn
+    let crd
+    let releaseDate
+    let sentenceStartDate
+    let sed
+    let led
+    let tussd
+    let licensetused
+
+    if (licenceSummary != null) {
+      const licence = await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
+
+      crn = licence.crn
+      crd = licence.conditionalReleaseDate
+      releaseDate = licence.actualReleaseDate
+      sentenceStartDate = licence.sentenceStartDate
+      sed = licence.sentenceEndDate
+      led = licence.licenceExpiryDate
+      tussd = licence.topupSupervisionStartDate
+        ? moment(licence.topupSupervisionStartDate).format('DD MMM YYYY')
+        : 'Not found'
+      licensetused = licence.topupSupervisionExpiryDate
+        ? moment(licence.topupSupervisionExpiryDate).format('DD MMM YYYY')
+        : 'Not found'
+    }
     const conditionalReleaseDate = prisonerDetail.conditionalReleaseDate
       ? moment(prisonerDetail.conditionalReleaseDate).format('DD MMM YYYY')
       : 'Not found'
@@ -72,6 +103,16 @@ export default class OffenderDetailRoutes {
         lau: probationPractitioner?.team?.district?.description,
         pdu: probationPractitioner?.team?.borough?.description,
         region: probationPractitioner?.probationArea?.description,
+      },
+      license: {
+        crn,
+        crd,
+        releaseDate,
+        sentenceStartDate,
+        sed,
+        led,
+        tussd,
+        licensetused,
       },
     })
   }

@@ -5,14 +5,17 @@ import OffenderDetailRoutes from './offenderDetail'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import HdcStatus from '../../../@types/HdcStatus'
+import LicenceService from '../../../services/licenceService'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/communityService')
 
 describe('Route Handlers - Offender detail', () => {
-  const handler = new OffenderDetailRoutes(prisonerService, communityService)
+  const handler = new OffenderDetailRoutes(prisonerService, communityService, licenceService)
   let req: Request
   let res: Response
 
