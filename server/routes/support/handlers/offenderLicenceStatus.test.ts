@@ -75,7 +75,7 @@ describe('Route Handlers - Licence Status Override', () => {
   })
 
   describe('POST', () => {
-    it('Update licence status from IN_PROGRESS to APPROVED', async () => {
+    it('Update licence status from IN_PROGRESS to APPROVED ', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
 
       req.params = {
