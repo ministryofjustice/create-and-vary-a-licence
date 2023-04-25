@@ -25,7 +25,7 @@ export default class OffenderDetailRoutes {
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
     const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
 
-    let crn = 'Not found'
+    let licencecrn = 'Not found'
     let crd = 'Not found'
     let releaseDate = 'Not found'
     let sentenceStartDate = 'Not found'
@@ -37,7 +37,7 @@ export default class OffenderDetailRoutes {
     if (licenceSummary != null) {
       const licence = await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
 
-      crn = licence.crn
+      licencecrn = licence.crn
       crd = licence.conditionalReleaseDate
       releaseDate = licence.actualReleaseDate
       sentenceStartDate = licence.sentenceStartDate
@@ -105,7 +105,7 @@ export default class OffenderDetailRoutes {
         region: probationPractitioner?.probationArea?.description,
       },
       license: {
-        crn,
+        licencecrn,
         crd,
         releaseDate,
         sentenceStartDate,
