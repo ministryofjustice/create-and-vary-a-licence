@@ -28,7 +28,7 @@ export default class OffenderDetailRoutes {
     let licenceFromSummary
     let licencecrn = 'Not found'
     let crd = 'Not found'
-    let releaseDate = 'Not found'
+    let actualReleaseDate = 'Not found'
     let sentenceStartDate = 'Not found'
     let sed = 'Not found'
     let led = 'Not found'
@@ -41,17 +41,23 @@ export default class OffenderDetailRoutes {
     if (licenceFromSummary != null) {
       licencecrn = licenceFromSummary.crn ? licenceFromSummary.crn : 'Not found'
       crd = licenceFromSummary.conditionalReleaseDate
-        ? moment(licenceFromSummary.conditionalReleaseDate).format('DD MMM YYYY')
+        ? moment(licenceFromSummary.conditionalReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY')
         : 'Not found'
-      releaseDate = licenceFromSummary.actualReleaseDate ? licenceFromSummary.actualReleaseDate : 'Not found'
-      sentenceStartDate = licenceFromSummary.sentenceStartDate ? licenceFromSummary.sentenceStartDate : 'Not found'
-      sed = licenceFromSummary.sentenceEndDate ? licenceFromSummary.sentenceEndDate : 'Not found'
-      led = licenceFromSummary.licenceExpiryDate ? licenceFromSummary.licenceExpiryDate : 'Not found'
+      actualReleaseDate = licenceFromSummary.actualReleaseDate ? licenceFromSummary.actualReleaseDate : 'Not found'
+      sentenceStartDate = licenceFromSummary.sentenceStartDate
+        ? moment(licenceFromSummary.sentenceStartDate, 'DD/MM/YYYY').format('DD MMM YYYY')
+        : 'Not found'
+      sed = licenceFromSummary.sentenceEndDate
+        ? moment(licenceFromSummary.sentenceEndDate, 'DD/MM/YYYY').format('DD MMM YYYY')
+        : 'Not found'
+      led = licenceFromSummary.licenceExpiryDate
+        ? moment(licenceFromSummary.licenceExpiryDate, 'DD/MM/YYYY').format('DD MMM YYYY')
+        : 'Not found'
       tussd = licenceFromSummary.topupSupervisionStartDate
-        ? moment(licenceFromSummary.topupSupervisionStartDate).format('DD MMM YYYY')
+        ? moment(licenceFromSummary.topupSupervisionStartDate, 'DD/MM/YYYY').format('DD MMM YYYY')
         : 'Not found'
       licenceTused = licenceFromSummary.topupSupervisionExpiryDate
-        ? moment(licenceFromSummary.topupSupervisionExpiryDate).format('DD MMM YYYY')
+        ? moment(licenceFromSummary.topupSupervisionExpiryDate, 'DD/MM/YYYY').format('DD MMM YYYY')
         : 'Not found'
     }
     const conditionalReleaseDate = prisonerDetail.conditionalReleaseDate
@@ -111,7 +117,7 @@ export default class OffenderDetailRoutes {
       license: {
         licencecrn,
         crd,
-        releaseDate,
+        actualReleaseDate,
         sentenceStartDate,
         sed,
         led,
