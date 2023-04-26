@@ -5,6 +5,17 @@ import PrisonerService from '../../../services/prisonerService'
 import CommunityService from '../../../services/communityService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
+import { User } from '../../../@types/CvlUserDetails'
+
+type LicenceDates = {
+  crd: string
+  ard: string
+  ssd: string
+  sed: string
+  led: string
+  tussd: string
+  tused: string
+}
 
 export default class OffenderDetailRoutes {
   constructor(
@@ -23,43 +34,6 @@ export default class OffenderDetailRoutes {
       ? await this.communityService.getStaffDetailByStaffCode(probationPractitioner?.staff.code)
       : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
-    const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
-
-    let licenceFromSummary
-    let licencecrn = 'Not found'
-    let crd = 'Not found'
-    let actualReleaseDate = 'Not found'
-    let sentenceStartDate = 'Not found'
-    let sed = 'Not found'
-    let led = 'Not found'
-    let tussd = 'Not found'
-    let licenceTused = 'Not found'
-
-    if (licenceSummary != null) {
-      licenceFromSummary = await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
-    }
-    if (licenceFromSummary != null) {
-      licencecrn = licenceFromSummary.crn ? licenceFromSummary.crn : 'Not found'
-      crd = licenceFromSummary.conditionalReleaseDate
-        ? moment(licenceFromSummary.conditionalReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found'
-      actualReleaseDate = licenceFromSummary.actualReleaseDate ? licenceFromSummary.actualReleaseDate : 'Not found'
-      sentenceStartDate = licenceFromSummary.sentenceStartDate
-        ? moment(licenceFromSummary.sentenceStartDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found'
-      sed = licenceFromSummary.sentenceEndDate
-        ? moment(licenceFromSummary.sentenceEndDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found'
-      led = licenceFromSummary.licenceExpiryDate
-        ? moment(licenceFromSummary.licenceExpiryDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found'
-      tussd = licenceFromSummary.topupSupervisionStartDate
-        ? moment(licenceFromSummary.topupSupervisionStartDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found'
-      licenceTused = licenceFromSummary.topupSupervisionExpiryDate
-        ? moment(licenceFromSummary.topupSupervisionExpiryDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found'
-    }
     const conditionalReleaseDate = prisonerDetail.conditionalReleaseDate
       ? moment(prisonerDetail.conditionalReleaseDate).format('DD MMM YYYY')
       : 'Not found'
@@ -114,16 +88,47 @@ export default class OffenderDetailRoutes {
         pdu: probationPractitioner?.team?.borough?.description,
         region: probationPractitioner?.probationArea?.description,
       },
-      license: {
-        licencecrn,
-        crd,
-        actualReleaseDate,
-        sentenceStartDate,
-        sed,
-        led,
-        tussd,
-        licenceTused,
-      },
+      licence: await this.getLicenceDates(nomsId, user),
     })
+  }
+
+  getLicenceDates = async (nomsId: string, user: User): Promise<LicenceDates> => {
+    const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
+
+    if (!licenceSummary) {
+      return {
+        crd: 'Not found',
+        ard: 'Not found',
+        ssd: 'Not found',
+        sed: 'Not found',
+        led: 'Not found',
+        tussd: 'Not found',
+        tused: 'Not found',
+      }
+    }
+
+    const licence = await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
+
+    return {
+      crd: licence.conditionalReleaseDate
+        ? moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY')
+        : 'Not found',
+      ard: licence.actualReleaseDate
+        ? moment(licence.actualReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY')
+        : 'Not found',
+      ssd: licence.sentenceStartDate
+        ? moment(licence.sentenceStartDate, 'DD/MM/YYYY').format('DD MMM YYYY')
+        : 'Not found',
+      sed: licence.sentenceEndDate ? moment(licence.sentenceEndDate, 'DD/MM/YYYY').format('DD MMM YYYY') : 'Not found',
+      led: licence.licenceExpiryDate
+        ? moment(licence.licenceExpiryDate, 'DD/MM/YYYY').format('DD MMM YYYY')
+        : 'Not found',
+      tussd: licence.topupSupervisionStartDate
+        ? moment(licence.topupSupervisionStartDate, 'DD/MM/YYYY').format('DD MMM YYYY')
+        : 'Not found',
+      tused: licence.topupSupervisionExpiryDate
+        ? moment(licence.topupSupervisionExpiryDate, 'DD/MM/YYYY').format('DD MMM YYYY')
+        : 'Not found',
+    }
   }
 }
