@@ -25,6 +25,7 @@ export default class OffenderDetailRoutes {
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
     const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
 
+    let licenceFromSummary
     let licencecrn = 'Not found'
     let crd = 'Not found'
     let releaseDate = 'Not found'
@@ -32,22 +33,25 @@ export default class OffenderDetailRoutes {
     let sed = 'Not found'
     let led = 'Not found'
     let tussd = 'Not found'
-    let licensetused = 'Not found'
+    let licenceTused = 'Not found'
 
     if (licenceSummary != null) {
-      const licence = await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
-
-      licencecrn = licence.crn
-      crd = licence.conditionalReleaseDate
-      releaseDate = licence.actualReleaseDate
-      sentenceStartDate = licence.sentenceStartDate
-      sed = licence.sentenceEndDate
-      led = licence.licenceExpiryDate
-      tussd = licence.topupSupervisionStartDate
-        ? moment(licence.topupSupervisionStartDate).format('DD MMM YYYY')
+      licenceFromSummary = await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
+    }
+    if (licenceFromSummary != null) {
+      licencecrn = licenceFromSummary.crn ? licenceFromSummary.crn : 'Not found'
+      crd = licenceFromSummary.conditionalReleaseDate
+        ? moment(licenceFromSummary.conditionalReleaseDate).format('DD MMM YYYY')
         : 'Not found'
-      licensetused = licence.topupSupervisionExpiryDate
-        ? moment(licence.topupSupervisionExpiryDate).format('DD MMM YYYY')
+      releaseDate = licenceFromSummary.actualReleaseDate ? licenceFromSummary.actualReleaseDate : 'Not found'
+      sentenceStartDate = licenceFromSummary.sentenceStartDate ? licenceFromSummary.sentenceStartDate : 'Not found'
+      sed = licenceFromSummary.sentenceEndDate ? licenceFromSummary.sentenceEndDate : 'Not found'
+      led = licenceFromSummary.licenceExpiryDate ? licenceFromSummary.licenceExpiryDate : 'Not found'
+      tussd = licenceFromSummary.topupSupervisionStartDate
+        ? moment(licenceFromSummary.topupSupervisionStartDate).format('DD MMM YYYY')
+        : 'Not found'
+      licenceTused = licenceFromSummary.topupSupervisionExpiryDate
+        ? moment(licenceFromSummary.topupSupervisionExpiryDate).format('DD MMM YYYY')
         : 'Not found'
     }
     const conditionalReleaseDate = prisonerDetail.conditionalReleaseDate
@@ -112,7 +116,7 @@ export default class OffenderDetailRoutes {
         sed,
         led,
         tussd,
-        licensetused,
+        licenceTused,
       },
     })
   }
