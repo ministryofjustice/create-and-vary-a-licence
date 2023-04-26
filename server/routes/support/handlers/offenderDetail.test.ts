@@ -126,15 +126,13 @@ describe('Route Handlers - Offender detail', () => {
           team: 'The A Team',
           telephone: '078929482994',
         },
-        license: {
+        licence: {
           led: 'Not found',
-          crn: undefined,
+          ssd: 'Not found',
           crd: 'Not found',
-          licenceTused: 'Not found',
-          licencecrn: 'Not found',
-          actualReleaseDate: 'Not found',
+          ard: 'Not found',
           sed: 'Not found',
-          sentenceStartDate: 'Not found',
+          tused: 'Not found',
           tussd: 'Not found',
         },
       })
@@ -235,15 +233,13 @@ describe('Route Handlers - Offender detail', () => {
         team: 'The A Team',
         telephone: '078929482994',
       },
-      license: {
+      licence: {
         led: 'Not found',
-        crn: undefined,
+        ssd: 'Not found',
         crd: 'Not found',
-        licencecrn: 'Not found',
-        licenceTused: 'Not found',
-        actualReleaseDate: 'Not found',
+        ard: 'Not found',
         sed: 'Not found',
-        sentenceStartDate: 'Not found',
+        tused: 'Not found',
         tussd: 'Not found',
       },
     })
@@ -343,15 +339,13 @@ describe('Route Handlers - Offender detail', () => {
         team: 'The A Team',
         telephone: '078929482994',
       },
-      license: {
+      licence: {
         led: 'Not found',
-        crn: undefined,
+        ssd: 'Not found',
         crd: 'Not found',
-        licencecrn: 'Not found',
-        licenceTused: 'Not found',
-        actualReleaseDate: 'Not found',
+        ard: 'Not found',
         sed: 'Not found',
-        sentenceStartDate: 'Not found',
+        tused: 'Not found',
         tussd: 'Not found',
       },
     })
