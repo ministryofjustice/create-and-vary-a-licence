@@ -74,23 +74,27 @@
                     errorMessage: displayMessage
                 }) }}
 
-                {{ govukButton({
-                    text: "Continue",
-                    type: "submit",
-                    classes: 'govuk-!-margin-top-6',
-                    attributes: { 'data-qa': 'continue' }
-                }) }}
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: "Continue",
+                        type: "submit",
+                        classes: 'govuk-!-margin-top-6',
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+                    </form>
+                    <form class="display-inline-flex" action="{{ "/licence/create/id/" + licence.id + "/additional-licence-types/condition/delete"}}" method="POST">
+                        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                        <input type="hidden" name="conditionCode" value="{{ conditions[0].code}}">
+                        {{ govukButton({
+                            text: "Delete this condition",
+                            type: "submit",
+                            classes: 'govuk-button--secondary',
+                            attributes: { 'data-qa': 'delete' }
+                        }) }}
+                    </form>
+                </div>
             </div>
         </div>
-    </form>
-    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-types/condition/delete"}}" method="POST">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        <input type="hidden" name="conditionCode" value="{{ conditions[0].code}}">
-        {{ govukButton({
-            text: "Delete this condition",
-            type: "submit",
-            classes: 'govuk-button--secondary',
-            attributes: { 'data-qa': 'delete' }
-        }) }}
-    </form>
+    
+    
 {% endblock %}
