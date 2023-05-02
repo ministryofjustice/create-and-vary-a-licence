@@ -47,6 +47,8 @@ describe('azureAppInsights', () => {
         displayName: 'A User',
         nomisStaffId: 'N123',
         prisonCaseload: ['MDI'],
+        username: 'N123',
+        activeCaseLoadId: ['MDI'],
       }
 
       const envelope = createEnvelope({ other: 'things' })
