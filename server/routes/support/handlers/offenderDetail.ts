@@ -59,6 +59,7 @@ export default class OffenderDetailRoutes {
         determinate: prisonerDetail.indeterminateSentence ? 'No' : 'Yes',
         dob: moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY'),
         hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',
+        recallStatus: prisonerDetail.recall ? 'Yes' : '',
       },
       probationPractitioner: {
         name: probationPractitioner
