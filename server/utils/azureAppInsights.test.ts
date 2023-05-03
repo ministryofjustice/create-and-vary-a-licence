@@ -47,8 +47,6 @@ describe('azureAppInsights', () => {
         displayName: 'A User',
         nomisStaffId: 'N123',
         prisonCaseload: ['MDI'],
-        username: 'N123',
-        activeCaseLoadId: ['MDI'],
       }
 
       const envelope = createEnvelope({ other: 'things' })
@@ -57,6 +55,8 @@ describe('azureAppInsights', () => {
 
       expect(envelope.data.baseData.properties).toStrictEqual({
         ...user,
+        username: user.nomisStaffId,
+        activeCaseLoadId: user.prisonCaseload,
         other: 'things',
       })
     })
