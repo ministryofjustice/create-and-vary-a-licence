@@ -34,30 +34,14 @@ export default class OffenderDetailRoutes {
       ? await this.communityService.getStaffDetailByStaffCode(probationPractitioner?.staff.code)
       : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
-    const conditionalReleaseDate = prisonerDetail.conditionalReleaseDate
-      ? moment(prisonerDetail.conditionalReleaseDate).format('DD MMM YYYY')
-      : 'Not found'
-    const confirmedReleaseDate = prisonerDetail.confirmedReleaseDate
-      ? moment(prisonerDetail.confirmedReleaseDate).format('DD MMM YYYY')
-      : 'Not found'
-    const postRecallReleaseDate = prisonerDetail.postRecallReleaseDate
-      ? moment(prisonerDetail.postRecallReleaseDate).format('DD MMM YYYY')
-      : 'Not found'
-    const tused = prisonerDetail.topupSupervisionExpiryDate
-      ? moment(prisonerDetail.topupSupervisionExpiryDate).format('DD MMM YYYY')
-      : 'Not found'
-    const hdced = prisonerDetail.homeDetentionCurfewEligibilityDate
-      ? moment(prisonerDetail.homeDetentionCurfewEligibilityDate).format('DD MMM YYYY')
-      : 'Not found'
-    const sentenceExpiryDate = prisonerDetail.sentenceExpiryDate
-      ? moment(prisonerDetail.sentenceExpiryDate).format('DD MMM YYYY')
-      : 'Not found'
-    const licenceExpiryDate = prisonerDetail.licenceExpiryDate
-      ? moment(prisonerDetail.licenceExpiryDate).format('DD MMM YYYY')
-      : 'Not found'
-    const paroleEligibilityDate = prisonerDetail.paroleEligibilityDate
-      ? moment(prisonerDetail.paroleEligibilityDate).format('DD MMM YYYY')
-      : 'Not found'
+    const conditionalReleaseDate = this.formatLicenceDate(prisonerDetail.conditionalReleaseDate)
+    const confirmedReleaseDate = this.formatLicenceDate(prisonerDetail.confirmedReleaseDate)
+    const postRecallReleaseDate = this.formatLicenceDate(prisonerDetail.postRecallReleaseDate)
+    const tused = this.formatLicenceDate(prisonerDetail.topupSupervisionExpiryDate)
+    const hdced = this.formatLicenceDate(prisonerDetail.homeDetentionCurfewEligibilityDate)
+    const sentenceExpiryDate = this.formatLicenceDate(prisonerDetail.sentenceExpiryDate)
+    const licenceExpiryDate = this.formatLicenceDate(prisonerDetail.licenceExpiryDate)
+    const paroleEligibilityDate = this.formatLicenceDate(prisonerDetail.paroleEligibilityDate)
 
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -130,5 +114,9 @@ export default class OffenderDetailRoutes {
         ? moment(licence.topupSupervisionExpiryDate, 'DD/MM/YYYY').format('DD MMM YYYY')
         : 'Not found',
     }
+  }
+
+  formatLicenceDate = (dateToFormat: string): string => {
+    return dateToFormat ? moment(dateToFormat).format('DD MMM YYYY') : 'Not found'
   }
 }
