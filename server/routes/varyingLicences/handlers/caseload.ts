@@ -34,9 +34,15 @@ export default class CaseloadRoutes {
       // selectedTeam and probationTeamCodes are both arrays
       const teamCode = _.head(selectedTeam || user.probationTeamCodes)
       teamName = user.probationTeams.find((t: { code: string }) => t.code === teamCode)?.label
+<<<<<<< HEAD
       req.session.returnToCase = '/licence/vary/caseload?view=team'
     } else {
       req.session.returnToCase = '/licence/vary/caseload'
+=======
+      req.session.returnTo = '/licence/vary/caseload?view=team'
+    } else {
+      req.session.returnTo = '/licence/vary/caseload'
+>>>>>>> cb43f66 (CVSL-990-Returns user to wrong place after submitting)
     }
 
     const caseloadViewModel = cases
