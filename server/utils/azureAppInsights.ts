@@ -62,6 +62,8 @@ const getUserDetails = (user: CvlUserDetails) => {
     displayName,
     nomisStaffId,
     prisonCaseload,
+    nomisStaffId: username,
+    prisonCaseload: activeCaseLoadId,
     deliusStaffIdentifier,
     deliusStaffCode,
     probationAreaCode,
@@ -71,7 +73,7 @@ const getUserDetails = (user: CvlUserDetails) => {
   } = user
 
   if (user.nomisStaffId) {
-    return { displayName, nomisStaffId, prisonCaseload }
+    return { displayName, nomisStaffId, prisonCaseload, username, activeCaseLoadId }
   }
   if (user.deliusStaffCode) {
     return {
