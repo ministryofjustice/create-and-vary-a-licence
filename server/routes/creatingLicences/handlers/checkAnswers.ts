@@ -13,6 +13,7 @@ export default class CheckAnswersRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
+    const backLinkHref = req.session.returnTo
 
     // Record the view event only when an officer views a licence which is not their own
     if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
@@ -30,7 +31,7 @@ export default class CheckAnswersRoutes {
       licence.additionalLicenceConditions
     )
 
-    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads })
+    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads, backLinkHref })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

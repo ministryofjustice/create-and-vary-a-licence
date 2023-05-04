@@ -131,11 +131,7 @@
                 </div>
             {% endif %}
 
-            {% if licence.isVariation %}
-                <a href="/licence/vary/caseload" class="govuk-link govuk-!-font-size-19">Return to caselist</a>
-            {% else %}
-                <a href="/licence/create/caseload" class="govuk-link govuk-!-font-size-19">Return to caselist</a>
-            {% endif %}
+            <a href={{ backLinkHref }} class="govuk-link govuk-!-font-size-19">Return to caselist</a>
         </div>
     </div>
 {% endblock %}
