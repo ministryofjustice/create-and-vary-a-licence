@@ -18,6 +18,7 @@ export default class ConfirmCreateRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
+    const backLinkHref = req.session.returnTo
 
     const [nomisRecord, deliusRecord, bankHolidays] = await Promise.all([
       this.prisonerService.getPrisonerDetail(nomisId, user),
@@ -40,6 +41,7 @@ export default class ConfirmCreateRoutes {
         moment(nomisRecord.sentenceDetail.confirmedReleaseDate || nomisRecord.sentenceDetail.conditionalReleaseDate),
         bankHolidays
       ),
+      backLinkHref,
     })
   }
 
@@ -47,11 +49,12 @@ export default class ConfirmCreateRoutes {
     const { nomisId } = req.params
     const { user } = res.locals
     const { answer } = req.body
+    const backLinkHref = req.session.returnTo
 
     if (answer === YesOrNo.YES) {
       const { licenceId } = await this.licenceService.createLicence(nomisId, user)
       return res.redirect(`/licence/create/id/${licenceId}/initial-meeting-name`)
     }
-    return res.redirect(`/licence/create/caseload`)
+    return res.redirect(backLinkHref)
   }
 }

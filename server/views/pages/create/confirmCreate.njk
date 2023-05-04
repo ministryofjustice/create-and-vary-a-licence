@@ -7,7 +7,6 @@
 
 {% set pageTitle = applicationName + " - Create a licence - Are you sure?" %}
 {% set pageId = "confirm-create-page" %}
-{% set backLinkHref = "/licence/create/caseload" %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -62,7 +61,7 @@
                     <div class="govuk-button-group">
                         {{ govukButton({
                             text: 'Return to case list',
-                            href: '/licence/create/caseload'
+                            href: backLinkHref
                         }) }}
 
                         {{ govukButton({
