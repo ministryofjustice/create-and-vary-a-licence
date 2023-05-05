@@ -4,7 +4,7 @@ import LicenceType from '../../../enumeration/licenceType'
 export default class ConfirmationRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
-    const backLinkHref = req.session.returnTo
+    const backLink = req.session.returnToCase
 
     let titleText
     let confirmationMessage
@@ -24,6 +24,6 @@ export default class ConfirmationRoutes {
         break
     }
 
-    res.render('pages/create/confirmation', { titleText, confirmationMessage, backLinkHref })
+    res.render('pages/create/confirmation', { titleText, confirmationMessage, backLink })
   }
 }

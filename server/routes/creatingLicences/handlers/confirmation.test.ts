@@ -13,7 +13,7 @@ describe('Route Handlers - Create Licence - Confirmation', () => {
         licenceId: 1,
       },
       session: {
-        returnTo: '/licence/create/caseload',
+        returnToCase: '/licence/create/caseload',
       },
     } as unknown as Request
 
@@ -38,7 +38,7 @@ describe('Route Handlers - Create Licence - Confirmation', () => {
         confirmationMessage:
           'We have sent the licence and post sentence supervision order to Leeds (HMP) for approval.',
         titleText: 'Licence and post sentence supervision order for Bobby Zamora sent',
-        backLinkHref: req.session.returnTo,
+        backLink: req.session.returnToCase,
       })
     })
 
@@ -49,7 +49,7 @@ describe('Route Handlers - Create Licence - Confirmation', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
         confirmationMessage: 'We have sent the licence to Leeds (HMP) for approval.',
         titleText: 'Licence conditions for Bobby Zamora sent',
-        backLinkHref: req.session.returnTo,
+        backLink: req.session.returnToCase,
       })
     })
 
@@ -60,7 +60,7 @@ describe('Route Handlers - Create Licence - Confirmation', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
         confirmationMessage: 'We have sent the post sentence supervision order to Leeds (HMP) for approval.',
         titleText: 'Post sentence supervision order for Bobby Zamora sent',
-        backLinkHref: req.session.returnTo,
+        backLink: req.session.returnToCase,
       })
     })
   })

@@ -26,7 +26,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         licenceId: '1',
       },
       session: {
-        returnTo: '/licence/vary/caseload',
+        returnToCase: '/licence/vary/caseload',
       },
       flash: jest.fn(),
     } as unknown as Request
@@ -66,7 +66,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
-        backLinkHref: req.session.returnTo,
+        backLink: req.session.returnToCase,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -92,7 +92,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
-        backLinkHref: req.session.returnTo,
+        backLink: req.session.returnToCase,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })

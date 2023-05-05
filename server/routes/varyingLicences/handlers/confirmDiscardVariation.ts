@@ -13,11 +13,11 @@ export default class ConfirmDiscardVariationRoutes {
     const { licenceId } = req.params
     const { answer } = req.body
     const { user } = res.locals
-    const backLinkHref = req.session.returnTo
+    const backLink = req.session.returnToCase
 
     if (answer === YesOrNo.YES) {
       await this.licenceService.discard(licenceId, user)
-      return res.redirect(backLinkHref)
+      return res.redirect(backLink)
     }
 
     return res.redirect(`/licence/vary/id/${licenceId}/view`)
