@@ -13,11 +13,7 @@ export default class CheckAnswersRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
-<<<<<<< HEAD
     const backLink = req.session.returnToCase
-=======
-    const backLinkHref = req.session.returnTo
->>>>>>> cb43f66 (CVSL-990-Returns user to wrong place after submitting)
 
     // Record the view event only when an officer views a licence which is not their own
     if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
@@ -35,11 +31,7 @@ export default class CheckAnswersRoutes {
       licence.additionalLicenceConditions
     )
 
-<<<<<<< HEAD
     res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads, backLink })
-=======
-    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads, backLinkHref })
->>>>>>> cb43f66 (CVSL-990-Returns user to wrong place after submitting)
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

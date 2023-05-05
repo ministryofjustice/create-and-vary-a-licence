@@ -12,23 +12,14 @@ export default class ComDetailsRoutes {
 
     const isInCurrentUsersTeam =
       staffDetails.teams?.find(team => user.probationTeamCodes?.includes(team.code)) !== undefined
-
-<<<<<<< HEAD
     const backLink = req.session.returnToCase
-=======
-    const backLinkHref = req.session.returnTo
->>>>>>> cb43f66 (CVSL-990-Returns user to wrong place after submitting)
 
     if (!isInCurrentUsersTeam) {
       return res.redirect('/access-denied')
     }
 
     return res.render('pages/comDetails', {
-<<<<<<< HEAD
       returnLink: backLink,
-=======
-      returnLink: backLinkHref,
->>>>>>> cb43f66 (CVSL-990-Returns user to wrong place after submitting)
       name: `${staffDetails.staff?.forenames} ${staffDetails.staff?.surname}`.trim(),
       telephone: staffDetails.telephoneNumber,
       email: staffDetails.email,

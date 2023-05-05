@@ -4,11 +4,7 @@ import LicenceType from '../../../enumeration/licenceType'
 export default class ConfirmationRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
-<<<<<<< HEAD
     const backLink = req.session.returnToCase
-=======
-    const backLinkHref = req.session.returnTo
->>>>>>> cb43f66 (CVSL-990-Returns user to wrong place after submitting)
 
     let titleText
     let licenceType
@@ -28,10 +24,6 @@ export default class ConfirmationRoutes {
         break
     }
 
-<<<<<<< HEAD
     res.render('pages/vary/confirmation', { titleText, licenceType, backLink })
-=======
-    res.render('pages/vary/confirmation', { titleText, licenceType, backLinkHref })
->>>>>>> cb43f66 (CVSL-990-Returns user to wrong place after submitting)
   }
 }
