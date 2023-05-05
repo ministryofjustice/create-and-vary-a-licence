@@ -18,6 +18,9 @@ describe('Route Handlers - Vary Licence - Confirm discard variation', () => {
       },
       body: {},
       query: {},
+      session: {
+        returnTo: '/licence/vary/caseload',
+      },
     } as unknown as Request
 
     res = {
@@ -48,7 +51,7 @@ describe('Route Handlers - Vary Licence - Confirm discard variation', () => {
       await handler.POST(req, res)
 
       expect(licenceService.discard).toHaveBeenCalledWith('1', { username: 'joebloggs' })
-      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/caseload')
+      expect(res.redirect).toHaveBeenCalledWith(req.session.returnTo)
     })
 
     it('should redirect to view variation when answer is no', async () => {
