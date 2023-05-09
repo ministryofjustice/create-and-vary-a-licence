@@ -467,11 +467,16 @@ describe('Licence API client tests', () => {
   })
 
   it('Override licence status code', async () => {
-    await licenceApiClient.overrideStatusCode(1, { reason: 'Test Reason', statusCode: LicenceStatus.APPROVED })
-    expect(post).toHaveBeenCalledWith({
-      path: `/licence/id/1/override/status`,
-      data: { reason: 'Test Reason', statusCode: LicenceStatus.APPROVED },
-    })
+    await licenceApiClient.overrideStatusCode(1, { reason: 'Test Reason', statusCode: LicenceStatus.APPROVED }, {
+      username: 'bob',
+    } as User)
+    expect(post).toHaveBeenCalledWith(
+      {
+        path: `/licence/id/1/override/status`,
+        data: { reason: 'Test Reason', statusCode: LicenceStatus.APPROVED },
+      },
+      { username: 'bob' }
+    )
   })
 
   describe('Exclusion zone file', () => {
