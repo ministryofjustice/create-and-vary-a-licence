@@ -6,7 +6,7 @@ export default class AdditionalLicenceTypesHandler {
 
   DELETE = async (req: Request, res: Response): Promise<void> => {
     const { user, licence } = res.locals
-    const { conditionCode } = req.body
+    const { conditionCode } = req.params
     await this.licenceService.deleteAdditionalConditionsByCode(conditionCode, licence, user)
     return res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
   }

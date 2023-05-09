@@ -118,20 +118,21 @@
                             }
                         }) }}
                     {% endif %}
+               
+
+                    {% if isInProgress and licence.isVariation %}
+                            {{ govukButton({
+                                text: "Discard changes",
+                                classes: "govuk-button--secondary",
+                                attributes: { 'data-qa': 'discard' },
+                                href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
+                            }) }}
+                        
+                    {% endif %}
+
+                    <a href={{ backLink }} class="govuk-link govuk-!-font-size-19">Return to caselist</a>
                 </div>
             </form>
-
-            {% if isInProgress and licence.isVariation %}
-                    {{ govukButton({
-                        text: "Discard changes",
-                        classes: "govuk-button--secondary",
-                        attributes: { 'data-qa': 'discard' },
-                        href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
-                    }) }}
-                </div>
-            {% endif %}
-
-            <a href={{ backLink }} class="govuk-link govuk-!-font-size-19">Return to caselist</a>
         </div>
     </div>
 {% endblock %}
