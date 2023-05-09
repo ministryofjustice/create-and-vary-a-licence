@@ -1,6 +1,7 @@
 import express, { Router, Response } from 'express'
 import helmet from 'helmet'
 import crypto from 'crypto'
+import config from '../config'
 
 export default function setUpWebSecurity(): Router {
   const router = express.Router()
@@ -39,6 +40,7 @@ export default function setUpWebSecurity(): Router {
           connectSrc: ["'self'", '*.googletagmanager.com', '*.google-analytics.com', '*.analytics.google.com'],
           styleSrc: ["'self'", 'code.jquery.com'],
           fontSrc: ["'self'"],
+          formAction: [`'self' ${config.apis.hmppsAuth.externalUrl}`],
         },
       },
     })
