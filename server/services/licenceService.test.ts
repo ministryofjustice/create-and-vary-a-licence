@@ -7,7 +7,7 @@ import PrisonerService from './prisonerService'
 import CommunityService from './communityService'
 import * as utils from '../utils/utils'
 import * as licenceComparator from '../utils/licenceComparator'
-import { PrisonInformation } from '../@types/prisonApiClientTypes'
+import { PrisonApiPrisoner, PrisonInformation } from '../@types/prisonApiClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/creatingLicences/types/address'
@@ -71,7 +71,7 @@ describe('Licence Service', () => {
 
   describe('Create Licence', () => {
     beforeEach(() => {
-      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([{}] as Prisoner[])
+      prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
       communityService.getProbationer.mockResolvedValue({
         offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
       } as OffenderDetail)
@@ -108,70 +108,58 @@ describe('Licence Service', () => {
     })
 
     describe('Licence Types', () => {
-      it('Should create an AP licence when a TUSED is not set but a LED is set in NOMIS', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            licenceExpiryDate: '26/12/2022',
-          },
-        ] as Prisoner[])
+      it('Should create an AP licence when a TUSED is not set in NOMIS', async () => {
+        prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ typeCode: 'AP' })
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
 
-      it('Should create an AP licence when TUSED is less than LED', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            licenceExpiryDate: '2022-12-26',
-            topupSupervisionExpiryDate: '2022-12-20',
-          },
-        ] as Prisoner[])
-
-        const expectedLicence = expect.objectContaining({ typeCode: 'AP' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should create an AP licence when TUSED is equal to LED', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            licenceExpiryDate: '2022-12-26',
-            topupSupervisionExpiryDate: '2022-12-26',
-          },
-        ] as Prisoner[])
-
-        const expectedLicence = expect.objectContaining({ typeCode: 'AP' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should create a PSS licence when LED is not set but TUSED is set', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            topupSupervisionExpiryDate: '2022-12-26',
-          },
-        ] as Prisoner[])
+      it('Should create a PSS licence when LED and SED is not set but TUSED is set', async () => {
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: { topupSupervisionExpiryDate: '26/12/2022' },
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ typeCode: 'PSS' })
 
         await licenceService.createLicence('ABC1234', user)
         expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
       })
 
-      it('Should create a AP_PSS licence when both TUSED is after LED', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            topupSupervisionExpiryDate: '2023-12-26',
-            licenceExpiryDate: '2022-12-26',
+      it('Should create a AP_PSS licence when LED is not set but TUSED and SED is set', async () => {
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: {
+            topupSupervisionExpiryDate: '26/12/2022',
+            sentenceExpiryDate: '26/12/2023',
           },
-        ] as Prisoner[])
+        } as PrisonApiPrisoner)
+        const expectedLicence = expect.objectContaining({ typeCode: 'AP_PSS' })
+
+        await licenceService.createLicence('ABC1234', user)
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+
+      it('Should create a AP_PSS licence when SED is not set but TUSED and LED is set', async () => {
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: {
+            topupSupervisionExpiryDate: '26/12/2022',
+            licenceExpiryDate: '26/12/2023',
+          },
+        } as PrisonApiPrisoner)
+        const expectedLicence = expect.objectContaining({ typeCode: 'AP_PSS' })
+
+        await licenceService.createLicence('ABC1234', user)
+        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
+      })
+
+      it('Should create a AP_PSS licence when SLED and TUSED are set', async () => {
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: {
+            topupSupervisionExpiryDate: '26/12/2022',
+            licenceExpiryDate: '26/12/2023',
+            sentenceExpiryDate: '26/12/2023',
+          },
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ typeCode: 'AP_PSS' })
 
         await licenceService.createLicence('ABC1234', user)
@@ -181,13 +169,12 @@ describe('Licence Service', () => {
 
     describe('Conditional release date', () => {
       it('Should set CRD using the override date from NOMIS if it exists', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: {
             conditionalReleaseOverrideDate: '26/12/2022',
             conditionalReleaseDate: '17/06/2023',
           },
-        ] as Prisoner[])
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ conditionalReleaseDate: '26/12/2022' })
 
         await licenceService.createLicence('ABC1234', user)
@@ -195,12 +182,11 @@ describe('Licence Service', () => {
       })
 
       it('Should set CRD when override date does not exist', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: {
             conditionalReleaseDate: '17/06/2023',
           },
-        ] as Prisoner[])
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ conditionalReleaseDate: '17/06/2023' })
 
         await licenceService.createLicence('ABC1234', user)
@@ -210,13 +196,12 @@ describe('Licence Service', () => {
 
     describe('Licence start date', () => {
       it('Should set start date using the release date from NOMIS if it exists', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: {
             confirmedReleaseDate: '26/12/2022',
             conditionalReleaseDate: '1/03/2023',
           },
-        ] as Prisoner[])
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ licenceStartDate: '26/12/2022' })
 
         await licenceService.createLicence('ABC1234', user)
@@ -224,12 +209,11 @@ describe('Licence Service', () => {
       })
 
       it('Should set start date using the conditional release date if release date and CRD override do not exist', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: {
             conditionalReleaseDate: '1/03/2023',
           },
-        ] as Prisoner[])
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({ licenceStartDate: '1/03/2023' })
 
         await licenceService.createLicence('ABC1234', user)
@@ -260,9 +244,9 @@ describe('Licence Service', () => {
 
     describe('Probation locations are populated', () => {
       it('Should populate probation locations from DELIUS', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([{}] as Prisoner[])
+        prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({
-          typeCode: 'PSS',
+          typeCode: 'AP',
           probationAreaCode: 'Area',
           probationAreaDescription: 'AreaDesc',
           probationPduCode: 'PDU',
@@ -319,11 +303,7 @@ describe('Licence Service', () => {
 
     describe('Standard conditions', () => {
       it('Should get standard licence conditions only if licence type is AP', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            licenceExpiryDate: '26/12/2022',
-          },
-        ] as Prisoner[])
+        prisonerService.getPrisonerDetail.mockResolvedValue({} as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({
           standardLicenceConditions: [{ code: 'fake1', text: 'fake standard condition' }],
           standardPssConditions: [],
@@ -337,11 +317,9 @@ describe('Licence Service', () => {
       })
 
       it('Should get standard PSS conditions only if licence type is PSS', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            topupSupervisionExpiryDate: '26/12/2022',
-          },
-        ] as Prisoner[])
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: { topupSupervisionExpiryDate: '26/12/2022' },
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({
           standardLicenceConditions: [],
           standardPssConditions: [{ code: 'fake1', text: 'fake standard condition' }],
@@ -355,13 +333,13 @@ describe('Licence Service', () => {
       })
 
       it('Should get both standard licence and PSS conditions if licence type is AP_PSS', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            topupSupervisionExpiryDate: '27/12/2022',
+        prisonerService.getPrisonerDetail.mockResolvedValue({
+          sentenceDetail: {
+            topupSupervisionExpiryDate: '26/12/2022',
             licenceExpiryDate: '26/12/2023',
             sentenceExpiryDate: '26/12/2023',
           },
-        ] as Prisoner[])
+        } as PrisonApiPrisoner)
         const expectedLicence = expect.objectContaining({
           standardLicenceConditions: [{ code: 'fake1', text: 'fake standard condition' }],
           standardPssConditions: [{ code: 'fake1', text: 'fake standard condition' }],
