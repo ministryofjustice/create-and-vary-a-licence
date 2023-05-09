@@ -17,6 +17,9 @@ describe('Route Handlers - Create Licence - Com Details', () => {
         params: {
           staffCode: 'X12345',
         },
+        session: {
+          returnToCase: '/licence/create/caseload',
+        },
       } as unknown as Request
 
       res = {
@@ -62,7 +65,7 @@ describe('Route Handlers - Create Licence - Com Details', () => {
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
-        returnLink: '/licence/create/caseload',
+        returnLink: req.session.returnToCase,
         name: 'Joe Rogan',
         telephone: '07892486128',
         email: 'jrogan@probation.gov.uk',

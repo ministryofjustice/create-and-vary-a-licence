@@ -12,13 +12,14 @@ export default class ComDetailsRoutes {
 
     const isInCurrentUsersTeam =
       staffDetails.teams?.find(team => user.probationTeamCodes?.includes(team.code)) !== undefined
+    const backLink = req.session.returnToCase
 
     if (!isInCurrentUsersTeam) {
       return res.redirect('/access-denied')
     }
 
     return res.render('pages/comDetails', {
-      returnLink: '/licence/create/caseload',
+      returnLink: backLink,
       name: `${staffDetails.staff?.forenames} ${staffDetails.staff?.surname}`.trim(),
       telephone: staffDetails.telephoneNumber,
       email: staffDetails.email,
