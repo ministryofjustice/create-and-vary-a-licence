@@ -34,14 +34,14 @@ export default class OffenderDetailRoutes {
       ? await this.communityService.getStaffDetailByStaffCode(probationPractitioner?.staff.code)
       : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
-    const conditionalReleaseDate = this.formatLicenceDate(prisonerDetail.conditionalReleaseDate)
-    const confirmedReleaseDate = this.formatLicenceDate(prisonerDetail.confirmedReleaseDate)
-    const postRecallReleaseDate = this.formatLicenceDate(prisonerDetail.postRecallReleaseDate)
-    const tused = this.formatLicenceDate(prisonerDetail.topupSupervisionExpiryDate)
-    const hdced = this.formatLicenceDate(prisonerDetail.homeDetentionCurfewEligibilityDate)
-    const sentenceExpiryDate = this.formatLicenceDate(prisonerDetail.sentenceExpiryDate)
-    const licenceExpiryDate = this.formatLicenceDate(prisonerDetail.licenceExpiryDate)
-    const paroleEligibilityDate = this.formatLicenceDate(prisonerDetail.paroleEligibilityDate)
+    const conditionalReleaseDate = this.formatNomisDate(prisonerDetail.conditionalReleaseDate)
+    const confirmedReleaseDate = this.formatNomisDate(prisonerDetail.confirmedReleaseDate)
+    const postRecallReleaseDate = this.formatNomisDate(prisonerDetail.postRecallReleaseDate)
+    const tused = this.formatNomisDate(prisonerDetail.topupSupervisionExpiryDate)
+    const hdced = this.formatNomisDate(prisonerDetail.homeDetentionCurfewEligibilityDate)
+    const sentenceExpiryDate = this.formatNomisDate(prisonerDetail.sentenceExpiryDate)
+    const licenceExpiryDate = this.formatNomisDate(prisonerDetail.licenceExpiryDate)
+    const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
 
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -94,29 +94,21 @@ export default class OffenderDetailRoutes {
     const licence = await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
 
     return {
-      crd: licence.conditionalReleaseDate
-        ? moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found',
-      ard: licence.actualReleaseDate
-        ? moment(licence.actualReleaseDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found',
-      ssd: licence.sentenceStartDate
-        ? moment(licence.sentenceStartDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found',
-      sed: licence.sentenceEndDate ? moment(licence.sentenceEndDate, 'DD/MM/YYYY').format('DD MMM YYYY') : 'Not found',
-      led: licence.licenceExpiryDate
-        ? moment(licence.licenceExpiryDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found',
-      tussd: licence.topupSupervisionStartDate
-        ? moment(licence.topupSupervisionStartDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found',
-      tused: licence.topupSupervisionExpiryDate
-        ? moment(licence.topupSupervisionExpiryDate, 'DD/MM/YYYY').format('DD MMM YYYY')
-        : 'Not found',
+      crd: this.formatLicenceDate(licence.conditionalReleaseDate),
+      ard: this.formatLicenceDate(licence.actualReleaseDate),
+      ssd: this.formatLicenceDate(licence.sentenceStartDate),
+      sed: this.formatLicenceDate(licence.sentenceEndDate),
+      led: this.formatLicenceDate(licence.licenceExpiryDate),
+      tussd: this.formatLicenceDate(licence.topupSupervisionStartDate),
+      tused: this.formatLicenceDate(licence.topupSupervisionExpiryDate),
     }
   }
 
+  formatNomisDate = (dateToFormat: string): string => {
+    return dateToFormat ? moment(dateToFormat, 'YYYY-MM-DD').format('DD MMM YYYY') : 'Not found'
+  }
+
   formatLicenceDate = (dateToFormat: string): string => {
-    return dateToFormat ? moment(dateToFormat).format('DD MMM YYYY') : 'Not found'
+    return dateToFormat ? moment(dateToFormat, 'DD/MM/YYYY').format('DD MMM YYYY') : 'Not found'
   }
 }

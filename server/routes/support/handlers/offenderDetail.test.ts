@@ -2,8 +2,9 @@ import { Request, Response } from 'express'
 import PrisonerService from '../../../services/prisonerService'
 import CommunityService from '../../../services/communityService'
 import OffenderDetailRoutes from './offenderDetail'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
+import type { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
+import type { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
+import type { LicenceSummary, Licence } from '../../../@types/licenceApiClientTypes'
 import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
 
@@ -350,6 +351,7 @@ describe('Route Handlers - Offender detail', () => {
       },
     })
   })
+
   it('Should render all offender information with eligible HDC licence and license dates', async () => {
     req.params = {
       nomsId: 'ABC123',
@@ -417,6 +419,21 @@ describe('Route Handlers - Offender detail', () => {
       telephoneNumber: '078929482994',
     })
 
+    licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
+      licenceId: 1,
+    } as LicenceSummary)
+
+    licenceService.getLicence.mockResolvedValue({
+      licenceId: 1,
+      conditionalReleaseDate: '01/01/2022',
+      actualReleaseDate: '02/01/2022',
+      sentenceStartDate: '03/01/2022',
+      sentenceEndDate: '04/01/2022',
+      licenceExpiryDate: '05/01/2022',
+      topupSupervisionStartDate: '06/01/2022',
+      topupSupervisionExpiryDate: '07/01/2022',
+    } as Partial<Licence> as Licence)
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -446,13 +463,13 @@ describe('Route Handlers - Offender detail', () => {
         telephone: '078929482994',
       },
       licence: {
-        led: 'Not found',
-        ssd: 'Not found',
-        crd: 'Not found',
-        ard: 'Not found',
-        sed: 'Not found',
-        tused: 'Not found',
-        tussd: 'Not found',
+        led: '05 Jan 2022',
+        ssd: '03 Jan 2022',
+        crd: '01 Jan 2022',
+        ard: '02 Jan 2022',
+        sed: '04 Jan 2022',
+        tused: '07 Jan 2022',
+        tussd: '06 Jan 2022',
       },
     })
   })
