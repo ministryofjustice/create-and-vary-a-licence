@@ -1,9 +1,11 @@
 import fs from 'fs'
+import path from 'path'
 import config from './config'
 
-const {
-  packageData: { name: applicationName },
-} = JSON.parse(fs.readFileSync('../package.json').toString())
+const packageJson =
+  process.env.NODE_ENV !== 'test' ? path.join(__dirname, '../../package.json') : path.join(__dirname, '../package.json')
+
+const { name: applicationName } = JSON.parse(fs.readFileSync(packageJson).toString())
 
 const { buildNumber, gitRef } = config
 
