@@ -7,7 +7,7 @@ import moment from 'moment'
 import { filesize } from 'filesize'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
-import applicationVersion from '../applicationVersion'
+import applicationVersion from '../applicationInfo'
 import {
   formatAddress,
   jsonDtTo12HourTime,
@@ -44,7 +44,7 @@ export default function nunjucksSetup(app: express.Express, conditionService: Co
   // Cachebusting version string
   if (production) {
     // Version only changes with each commit
-    app.locals.version = applicationVersion.shortHash
+    app.locals.version = applicationVersion.gitShortHash
   } else {
     // Version changes every request
     app.use((req, res, next) => {
