@@ -199,7 +199,7 @@ export default class CaseloadService {
       // No licences present for this offender - determine how to show them in case lists
 
       // Determine the likely type of intended licence from the prison record
-      const licenceType = LicenceService.getLicenceType(offender.nomisRecord)
+      const licenceType = this.getLicenceType(offender.nomisRecord)
 
       // Default status (if not overridden below) will show the case as clickable on case lists
       let licenceStatus = LicenceStatus.NOT_STARTED
@@ -389,6 +389,16 @@ export default class CaseloadService {
 
   private async mapResponsibleComsToCases(caseload: Container<ManagedCase>): Promise<ManagedCase[]> {
     return this.mapResponsibleComsToCasesWithExclusions(caseload).then(it => it.unwrap())
+  }
+
+  private getLicenceType = (nomisRecord: Prisoner): LicenceType => {
+    if (!nomisRecord.topupSupervisionExpiryDate) {
+      return LicenceType.AP
+    }
+    if (!nomisRecord.licenceExpiryDate && !nomisRecord.sentenceExpiryDate) {
+      return LicenceType.PSS
+    }
+    return LicenceType.AP_PSS
   }
 
   private mapManagedOffenderRecordToOffenderDetail = async (

@@ -31,6 +31,9 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       params: {
         nomisId: 'ABC123',
       },
+      session: {
+        returnToCase: '/licence/create/caseload',
+      },
       user: {
         username: 'joebloggs',
       },
@@ -81,6 +84,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           surname: 'Holmes',
         },
         releaseIsOnBankHolidayOrWeekend: true,
+        backLink: req.session.returnToCase,
       })
     })
 
@@ -105,6 +109,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           surname: 'Holmes',
         },
         releaseIsOnBankHolidayOrWeekend: true,
+        backLink: req.session.returnToCase,
       })
     })
   })
@@ -124,7 +129,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       req.body.answer = 'No'
       await handler.POST(req, res)
       expect(licenceService.createLicence).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/caseload')
+      expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
     })
   })
 })

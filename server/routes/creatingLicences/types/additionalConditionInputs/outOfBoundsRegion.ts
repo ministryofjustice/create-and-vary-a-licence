@@ -8,6 +8,6 @@ export default class OutOfBoundsRegion {
   outOfBoundArea: string
 
   @Expose()
-  @IsValidExclusionZoneFile({ message: 'Select a Map Maker PDF file from your computer' })
+  @IsValidExclusionZoneFile()
   outOfBoundFilename: string
 }

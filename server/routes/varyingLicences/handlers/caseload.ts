@@ -34,6 +34,10 @@ export default class CaseloadRoutes {
       // selectedTeam and probationTeamCodes are both arrays
       const teamCode = _.head(selectedTeam || user.probationTeamCodes)
       teamName = user.probationTeams.find((t: { code: string }) => t.code === teamCode)?.label
+
+      req.session.returnToCase = '/licence/vary/caseload?view=team'
+    } else {
+      req.session.returnToCase = '/licence/vary/caseload'
     }
 
     const caseloadViewModel = cases

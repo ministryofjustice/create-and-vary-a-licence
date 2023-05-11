@@ -12,6 +12,9 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
       params: {
         licenceId: 1,
       },
+      session: {
+        returnToCase: '/licence/vary/caseload',
+      },
     } as unknown as Request
 
     res = {
@@ -33,6 +36,7 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/confirmation', {
         licenceType: 'licence and post sentence supervision order',
         titleText: 'Variation for Joe Bloggs sent',
+        backLink: req.session.returnToCase,
       })
     })
 
@@ -43,6 +47,7 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/confirmation', {
         licenceType: 'licence',
         titleText: 'Licence variation for Joe Bloggs sent',
+        backLink: req.session.returnToCase,
       })
     })
 
@@ -53,6 +58,7 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/confirmation', {
         licenceType: 'post sentence supervision order',
         titleText: 'Post sentence supervision order variation for Joe Bloggs sent',
+        backLink: req.session.returnToCase,
       })
     })
   })

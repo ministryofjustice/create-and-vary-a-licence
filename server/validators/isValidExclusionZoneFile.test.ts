@@ -8,7 +8,7 @@ class TestClass {
   outOfBoundArea: string
 
   @Expose()
-  @IsValidExclusionZoneFile({ message: 'Select a file' })
+  @IsValidExclusionZoneFile()
   outOfBoundFilename: string
 }
 
@@ -55,7 +55,7 @@ describe('File upload validation', () => {
     const errors: ValidationError[] = await validate(value)
     expect(errors.length).toBe(1)
     expect(errors[0].constraints).toEqual({
-      isValidExclusionZoneFile: 'Select a file',
+      isValidExclusionZoneFile: 'Select a PDF map',
     })
   })
 
@@ -69,7 +69,21 @@ describe('File upload validation', () => {
     const errors: ValidationError[] = await validate(value)
     expect(errors.length).toBe(1)
     expect(errors[0].constraints).toEqual({
-      isValidExclusionZoneFile: 'Select a file',
+      isValidExclusionZoneFile: 'Select a PDF map',
+    })
+  })
+
+  it('should fail validation when the upload file exceeds the maximum size limit', async () => {
+    const bigFile = { ...uploadFile, size: 99999999999, fieldname: 'incorrect' }
+    const value = plainToInstance(TestClass, {
+      outOfBoundArea: 'Somewhere',
+      outOfBoundFilename: bigFile.originalname,
+      uploadFile: bigFile,
+    })
+    const errors: ValidationError[] = await validate(value)
+    expect(errors.length).toBe(1)
+    expect(errors[0].constraints).toEqual({
+      isValidExclusionZoneFile: 'The selected file must be smaller than 10MB',
     })
   })
 })

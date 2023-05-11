@@ -26,7 +26,7 @@
                         <td class="govuk-table__cell">{{ prisonerDetail.dob }}</td>
                     </tr>
                     <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Prisoner number</th>
+                        <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Prison number</th>
                         <td class="govuk-table__cell">{{ prisonerDetail.prisonerNumber }}</td>
                     </tr>
                     <tr class="govuk-table__row">
@@ -92,7 +92,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <table class="govuk-table">
-                <caption class="govuk-table__caption govuk-table__caption--m">Sentence details</caption>
+                <caption class="govuk-table__caption govuk-table__caption--m">Sentence details. This information comes from NOMIS.</caption>
                 <tbody class="govuk-table__body">
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">Legal status</th>
@@ -142,6 +142,48 @@
             </table>
         </div>
     </div>
+
+    <details class="govuk-details" data-module="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+          View dates stored by Create and vary a licence
+        </span>
+      </summary>
+      <div class="govuk-details__text">
+            <table class="govuk-table">
+                <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">CRD</th>
+                        <td class="govuk-table__cell">{{ licence.crd }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Confirmed release date</th>
+                        <td class="govuk-table__cell">{{ licence.ard }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Sentence start date</th>
+                        <td class="govuk-table__cell">{{ licence.ssd }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">SED</th>
+                        <td class="govuk-table__cell">{{ licence.sed }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">LED</th>
+                        <td class="govuk-table__cell">{{ licence.led }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">TUSSD</th>
+                        <td class="govuk-table__cell">{{ licence.tussd }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">TUSED</th>
+                        <td class="govuk-table__cell">{{ licence.tused }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </details>
 
     <div class="govuk-button-group">
         {{ govukButton({

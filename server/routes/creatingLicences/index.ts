@@ -170,9 +170,9 @@ export default function Index({
     additionalLicenceConditionUploads.POST
   )
 
-  post('/id/:licenceId/additional-licence-types/condition/delete', additionalLicenceTypesHandler.DELETE)
+  get('/id/:licenceId/additional-licence-types/condition/:conditionCode/delete', additionalLicenceTypesHandler.DELETE)
 
-  post(
+  get(
     '/id/:licenceId/additional-licence-conditions/condition/:conditionId/delete',
     additionalLicenceConditionInputHandler.DELETE
   )
