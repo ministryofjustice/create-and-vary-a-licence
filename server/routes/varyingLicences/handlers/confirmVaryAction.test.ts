@@ -28,8 +28,15 @@ describe('Route Handlers - Vary Licence - Confirm vary', () => {
         user: {
           username: 'joebloggs',
         },
+        licence: {
+          nomsId: '150612',
+        },
       },
     } as unknown as Response
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('GET', () => {
@@ -55,6 +62,16 @@ describe('Route Handlers - Vary Licence - Confirm vary', () => {
 
       expect(licenceService.createVariation).toHaveBeenCalledWith('1', { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/2/spo-discussion')
+    })
+
+    it('should not create a new licence variation when a variation already exists', async () => {
+      licenceService.getLicenceVariations.mockResolvedValue([{ licenceId: 48 }] as LicenceSummary[])
+
+      req.body = { answer: 'Yes' }
+      await handler.POST(req, res)
+
+      expect(licenceService.createVariation).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/48/spo-discussion')
     })
   })
 })

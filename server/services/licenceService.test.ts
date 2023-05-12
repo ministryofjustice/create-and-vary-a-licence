@@ -1072,5 +1072,34 @@ describe('Licence Service', () => {
       expect(timelineEvents).toEqual([variationRejected, ...expectedEvents])
       expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith('1', user)
     })
+
+    it('will get variations of a licence', async () => {
+      const nomisId = '250412'
+      const licenceVariation = {
+        licenceId: 2,
+        nomisId,
+        licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+      } as LicenceSummary
+
+      licenceApiClient.matchLicences.mockResolvedValue([licenceVariation])
+      const licenceVariations = await licenceService.getLicenceVariations(nomisId)
+
+      expect(licenceVariations).toEqual([licenceVariation])
+      expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
+        [
+          LicenceStatus.VARIATION_IN_PROGRESS,
+          LicenceStatus.VARIATION_SUBMITTED,
+          LicenceStatus.VARIATION_REJECTED,
+          LicenceStatus.VARIATION_APPROVED,
+        ],
+        null,
+        null,
+        [nomisId],
+        null,
+        null,
+        null,
+        undefined
+      )
+    })
   })
 })

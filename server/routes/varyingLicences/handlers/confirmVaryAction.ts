@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
+import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 
 export default class ConfirmVaryActionRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -12,13 +13,19 @@ export default class ConfirmVaryActionRoutes {
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { answer } = req.body
-    const { user } = res.locals
+    const { user, licence } = res.locals
 
     if (answer === YesOrNo.NO) {
       return res.redirect(`/licence/vary/id/${licenceId}/view-active`)
     }
 
-    const newLicence = await this.licenceService.createVariation(licenceId, user)
+    let newLicence: LicenceSummary
+    const licenceVariations = await this.licenceService.getLicenceVariations(licence.nomsId)
+    if (licenceVariations?.length > 0) {
+      ;[newLicence] = licenceVariations
+    } else {
+      newLicence = await this.licenceService.createVariation(licenceId, user)
+    }
 
     return res.redirect(`/licence/vary/id/${newLicence.licenceId}/spo-discussion`)
   }

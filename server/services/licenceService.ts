@@ -583,6 +583,18 @@ export default class LicenceService {
     return this.licenceApiClient.getLicenceById(licence.variationOf.toString(), user)
   }
 
+  async getLicenceVariations(nomisId: string): Promise<LicenceSummary[]> {
+    return this.getLicencesByNomisIdsAndStatus(
+      [nomisId],
+      [
+        LicenceStatus.VARIATION_IN_PROGRESS,
+        LicenceStatus.VARIATION_SUBMITTED,
+        LicenceStatus.VARIATION_REJECTED,
+        LicenceStatus.VARIATION_APPROVED,
+      ]
+    )
+  }
+
   private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {
     return licences.map(licence => {
       const { title, eventType } = LicenceService.getTimelineEventType(licence.variationOf, licence.statusCode)
