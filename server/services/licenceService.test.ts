@@ -1082,7 +1082,7 @@ describe('Licence Service', () => {
       } as LicenceSummary
 
       licenceApiClient.matchLicences.mockResolvedValue([licenceVariation])
-      const licenceVariations = await licenceService.getLicenceVariations(nomisId)
+      const licenceVariations = await licenceService.getIncompleteLicenceVariations(nomisId)
 
       expect(licenceVariations).toEqual([licenceVariation])
       expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(

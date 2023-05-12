@@ -21,7 +21,7 @@ export default class ConfirmVaryActionRoutes {
     }
 
     let newLicence: LicenceSummary
-    const licenceVariations = await this.licenceService.getLicenceVariations(licence.nomsId)
+    const licenceVariations = await this.licenceService.getIncompleteLicenceVariations(licence.nomsId)
     if (licenceVariations?.length > 0) {
       newLicence = _.head(licenceVariations)
     } else {

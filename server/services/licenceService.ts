@@ -583,7 +583,7 @@ export default class LicenceService {
     return this.licenceApiClient.getLicenceById(licence.variationOf.toString(), user)
   }
 
-  async getLicenceVariations(nomisId: string): Promise<LicenceSummary[]> {
+  async getIncompleteLicenceVariations(nomisId: string): Promise<LicenceSummary[]> {
     return this.getLicencesByNomisIdsAndStatus(
       [nomisId],
       [
