@@ -46,13 +46,16 @@
                         items: items
                     }) }}
                 {% endfor %}
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: "Continue",
+                        type: "submit",
+                        classes: 'govuk-!-margin-top-6',
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
 
-                {{ govukButton({
-                    text: "Continue",
-                    type: "submit",
-                    classes: 'govuk-!-margin-top-6',
-                    attributes: { 'data-qa': 'continue' }
-                }) }}
+                    <a class="govuk-link js-backlink" href={{ backLinkHref }}>Cancel</a>
+                </div>
             </div>
         </div>
     </form>

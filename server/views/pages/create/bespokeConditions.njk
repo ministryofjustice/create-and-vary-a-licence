@@ -23,7 +23,6 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <div data-module="moj-add-another">
-                    <h2 class="moj-add-another__heading govuk-visually-hidden" tabindex="-1">Bespoke conditions</h2>
 
                     {% for c in conditions %}
                         {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
@@ -50,12 +49,14 @@
         </div>
 
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-grid-column-two-thirds govuk-button-group">
                 {{ govukButton({
                     text: 'Save and return to licence details',
                     type: "submit",
                     attributes: { 'data-qa': 'continue' }
                 }) }}
+
+                <a class="govuk-link js-backlink" href={{ backLinkHref }}>Cancel</a>
             </div>
         </div>
 
