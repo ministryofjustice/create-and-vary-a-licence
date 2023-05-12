@@ -18,7 +18,7 @@ describe('Caseload', () => {
 
   let viewContext = {} as unknown as Record<string, unknown>
 
-  it('should not display badge', () => {
+  it('should display Active badge', () => {
     viewContext = {
       caseload: [
         {
@@ -45,7 +45,7 @@ describe('Caseload', () => {
       },
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('.status-badge')).toHaveLength(0)
+    expect($('.status-badge').text().toString()).toContain('Active')
   })
 
   it('should display badge', () => {
