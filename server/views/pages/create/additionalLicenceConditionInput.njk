@@ -84,24 +84,23 @@
                             classes: 'govuk-!-margin-top-6',
                             attributes: { 'data-qa': 'continue' }
                         }) }}
+                        
                         {% if fileUploadPresent == true %}
                             <a class="govuk-link govuk-link--no-visited-state"
-                               href={{ "/licence/create/id/" + licence.id +"/additional-licence-conditions/condition/"+additionalCondition.code+"/file-uploads?fromReview=true" }}>Cancel</a>
+                                href={{ "/licence/create/id/" + licence.id +"/additional-licence-conditions/condition/"+additionalCondition.code+"/file-uploads?fromReview=true" }}>Cancel</a>
                         {% endif %}
+                      
+                        {{ govukButton({
+                            text: "Delete this condition",
+                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReviewQuery,
+                            classes: 'govuk-button--secondary',
+                            attributes: { 'data-qa': 'delete' }
+                        }) }}
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 
-    <form action="{{ "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReviewQuery }}" 
-      method="POST">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        {{ govukButton({
-            text: "Delete this condition",
-            type: "submit",
-            classes: 'govuk-button--secondary',
-            attributes: { 'data-qa': 'delete' }
-        }) }}
-    </form>
+
 {% endblock %}

@@ -1,20 +1,16 @@
 import { setup, defaultClient, TelemetryClient, DistributedTracingModes, Contracts } from 'applicationinsights'
 import FlushOptions from 'applicationinsights/out/Library/FlushOptions'
 import CvlUserDetails from '../@types/CvlUserDetails'
-import applicationVersion from '../applicationVersion'
+import applicationInfo from '../applicationInfo'
 
 type TelemetryProcessor = Parameters<typeof TelemetryClient.prototype.addTelemetryProcessor>[0]
 
 function defaultName(): string {
-  const {
-    packageData: { name },
-  } = applicationVersion
-  return name
+  return applicationInfo.applicationName
 }
 
 function version(): string {
-  const { buildNumber } = applicationVersion
-  return buildNumber
+  return applicationInfo.buildNumber
 }
 
 export function initialiseAppInsights(): void {
@@ -62,6 +58,8 @@ const getUserDetails = (user: CvlUserDetails) => {
     displayName,
     nomisStaffId,
     prisonCaseload,
+    nomisStaffId: username,
+    prisonCaseload: activeCaseLoadId,
     deliusStaffIdentifier,
     deliusStaffCode,
     probationAreaCode,
@@ -71,7 +69,7 @@ const getUserDetails = (user: CvlUserDetails) => {
   } = user
 
   if (user.nomisStaffId) {
-    return { displayName, nomisStaffId, prisonCaseload }
+    return { displayName, nomisStaffId, prisonCaseload, username, activeCaseLoadId }
   }
   if (user.deliusStaffCode) {
     return {

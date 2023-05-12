@@ -4,9 +4,25 @@ import moment from 'moment'
 import PrisonerService from '../../../services/prisonerService'
 import CommunityService from '../../../services/communityService'
 import { convertToTitleCase } from '../../../utils/utils'
+import LicenceService from '../../../services/licenceService'
+import { User } from '../../../@types/CvlUserDetails'
+
+type LicenceDates = {
+  crd: string
+  ard: string
+  ssd: string
+  sed: string
+  led: string
+  tussd: string
+  tused: string
+}
 
 export default class OffenderDetailRoutes {
-  constructor(private readonly prisonerService: PrisonerService, private readonly communityService: CommunityService) {}
+  constructor(
+    private readonly prisonerService: PrisonerService,
+    private readonly communityService: CommunityService,
+    private readonly licenceServer: LicenceService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
@@ -18,31 +34,14 @@ export default class OffenderDetailRoutes {
       ? await this.communityService.getStaffDetailByStaffCode(probationPractitioner?.staff.code)
       : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
-
-    const conditionalReleaseDate = prisonerDetail.conditionalReleaseDate
-      ? moment(prisonerDetail.conditionalReleaseDate).format('DD MMM YYYY')
-      : 'Not found'
-    const confirmedReleaseDate = prisonerDetail.confirmedReleaseDate
-      ? moment(prisonerDetail.confirmedReleaseDate).format('DD MMM YYYY')
-      : 'Not found'
-    const postRecallReleaseDate = prisonerDetail.postRecallReleaseDate
-      ? moment(prisonerDetail.postRecallReleaseDate).format('DD MMM YYYY')
-      : 'Not found'
-    const tused = prisonerDetail.topupSupervisionExpiryDate
-      ? moment(prisonerDetail.topupSupervisionExpiryDate).format('DD MMM YYYY')
-      : 'Not found'
-    const hdced = prisonerDetail.homeDetentionCurfewEligibilityDate
-      ? moment(prisonerDetail.homeDetentionCurfewEligibilityDate).format('DD MMM YYYY')
-      : 'Not found'
-    const sentenceExpiryDate = prisonerDetail.sentenceExpiryDate
-      ? moment(prisonerDetail.sentenceExpiryDate).format('DD MMM YYYY')
-      : 'Not found'
-    const licenceExpiryDate = prisonerDetail.licenceExpiryDate
-      ? moment(prisonerDetail.licenceExpiryDate).format('DD MMM YYYY')
-      : 'Not found'
-    const paroleEligibilityDate = prisonerDetail.paroleEligibilityDate
-      ? moment(prisonerDetail.paroleEligibilityDate).format('DD MMM YYYY')
-      : 'Not found'
+    const conditionalReleaseDate = this.formatNomisDate(prisonerDetail.conditionalReleaseDate)
+    const confirmedReleaseDate = this.formatNomisDate(prisonerDetail.confirmedReleaseDate)
+    const postRecallReleaseDate = this.formatNomisDate(prisonerDetail.postRecallReleaseDate)
+    const tused = this.formatNomisDate(prisonerDetail.topupSupervisionExpiryDate)
+    const hdced = this.formatNomisDate(prisonerDetail.homeDetentionCurfewEligibilityDate)
+    const sentenceExpiryDate = this.formatNomisDate(prisonerDetail.sentenceExpiryDate)
+    const licenceExpiryDate = this.formatNomisDate(prisonerDetail.licenceExpiryDate)
+    const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
 
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -73,6 +72,43 @@ export default class OffenderDetailRoutes {
         pdu: probationPractitioner?.team?.borough?.description,
         region: probationPractitioner?.probationArea?.description,
       },
+      licence: await this.getLicenceDates(nomsId, user),
     })
+  }
+
+  getLicenceDates = async (nomsId: string, user: User): Promise<LicenceDates> => {
+    const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
+
+    if (!licenceSummary) {
+      return {
+        crd: 'Not found',
+        ard: 'Not found',
+        ssd: 'Not found',
+        sed: 'Not found',
+        led: 'Not found',
+        tussd: 'Not found',
+        tused: 'Not found',
+      }
+    }
+
+    const licence = await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
+
+    return {
+      crd: this.formatLicenceDate(licence.conditionalReleaseDate),
+      ard: this.formatLicenceDate(licence.actualReleaseDate),
+      ssd: this.formatLicenceDate(licence.sentenceStartDate),
+      sed: this.formatLicenceDate(licence.sentenceEndDate),
+      led: this.formatLicenceDate(licence.licenceExpiryDate),
+      tussd: this.formatLicenceDate(licence.topupSupervisionStartDate),
+      tused: this.formatLicenceDate(licence.topupSupervisionExpiryDate),
+    }
+  }
+
+  formatNomisDate = (dateToFormat: string): string => {
+    return dateToFormat ? moment(dateToFormat, 'YYYY-MM-DD').format('DD MMM YYYY') : 'Not found'
+  }
+
+  formatLicenceDate = (dateToFormat: string): string => {
+    return dateToFormat ? moment(dateToFormat, 'DD/MM/YYYY').format('DD MMM YYYY') : 'Not found'
   }
 }

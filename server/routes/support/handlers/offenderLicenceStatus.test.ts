@@ -35,7 +35,7 @@ describe('Route Handlers - Licence Status Override', () => {
     jest.resetAllMocks()
     res = {
       locals: {
-        user: {},
+        user: { username: 'bob' },
       },
       render: jest.fn(),
       redirect: jest.fn(),
@@ -89,7 +89,9 @@ describe('Route Handlers - Licence Status Override', () => {
 
       await handler.POST(req, res)
 
-      expect(overrideService.overrideStatusCode).toHaveBeenCalledWith(1, LicenceStatus.APPROVED.toString(), reason)
+      expect(overrideService.overrideStatusCode).toHaveBeenCalledWith(1, LicenceStatus.APPROVED.toString(), reason, {
+        username: 'bob',
+      })
 
       expect(res.redirect).toHaveBeenCalledWith(`/support/offender/ABC123/licences`)
     })

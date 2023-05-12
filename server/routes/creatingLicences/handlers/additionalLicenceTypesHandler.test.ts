@@ -10,7 +10,7 @@ describe('Route Handlers - Create Licence - Additional Licence Types Handler', (
 
   beforeEach(() => {
     req = {
-      body: { conditionCode: 'abc' },
+      params: { conditionCode: 'abc' },
     } as unknown as Request
 
     licenceService.deleteAdditionalConditionsByCode = jest.fn()

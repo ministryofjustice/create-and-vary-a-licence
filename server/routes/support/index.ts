@@ -37,7 +37,7 @@ export default function Index({
     )
   const supportHomeHandler = new SupportHomeRoutes()
   const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, communityService)
-  const offenderDetailHandler = new OffenderDetailRoutes(prisonerService, communityService)
+  const offenderDetailHandler = new OffenderDetailRoutes(prisonerService, communityService, licenceService)
   const offenderLicenceHandler = new OffenderLicencesRoutes(licenceService, prisonerService)
   const offenderAuditHandler = new OffenderAuditRoutes(licenceService, prisonerService)
   const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
