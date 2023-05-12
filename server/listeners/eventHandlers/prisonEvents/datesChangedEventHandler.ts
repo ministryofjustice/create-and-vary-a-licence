@@ -4,7 +4,7 @@ import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { convertDateFormat, isPassedArdOrCrd } from '../../../utils/utils'
+import { convertDateFormat } from '../../../utils/utils'
 import logger from '../../../../logger'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 
@@ -54,15 +54,6 @@ export default class DatesChangedEventHandler {
   }
 
   updateLicenceSentenceDates = async (licence: LicenceSummary, nomisId: string, prisoner: PrisonApiPrisoner) => {
-    // IS91 cases receive an update that wipes their CRD when their CRD passes.
-    // We want to keep it in the service, so we should ignore any date-changing events that meet this criteria.
-    if (prisoner.legalStatus === 'IMMIGRATION_DETAINEE' && isPassedArdOrCrd(licence, prisoner)) {
-      logger.info(
-        `Ignoring date update event for NOMIS ID: ${nomisId}, CRN: ${licence.crn}, licence ID: ${licence.licenceId}`
-      )
-      return
-    }
-
     await this.licenceService.updateSentenceDates(licence.licenceId.toString(), {
       conditionalReleaseDate:
         convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
