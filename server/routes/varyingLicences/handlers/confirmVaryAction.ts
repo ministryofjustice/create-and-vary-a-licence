@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import _ from 'lodash'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
@@ -22,7 +23,7 @@ export default class ConfirmVaryActionRoutes {
     let newLicence: LicenceSummary
     const licenceVariations = await this.licenceService.getLicenceVariations(licence.nomsId)
     if (licenceVariations?.length > 0) {
-      ;[newLicence] = licenceVariations
+      newLicence = _.head(licenceVariations)
     } else {
       newLicence = await this.licenceService.createVariation(licenceId, user)
     }
