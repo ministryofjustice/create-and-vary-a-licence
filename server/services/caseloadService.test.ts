@@ -1321,4 +1321,35 @@ describe('Caseload Service', () => {
       expect(CaseloadService.isParoleEligible('aaa')).toBeFalsy()
     })
   })
+
+  describe('#isEligibleEDS', () => {
+    it('returns true when PED is not set', () => {
+      expect(CaseloadService.isEligibleEDS(null, null, null, null)).toBe(true)
+    })
+    it('returns false when PED is set and CRD is not', () => {
+      expect(CaseloadService.isEligibleEDS(yesterday, null, null, null)).toBe(false)
+    })
+    it('returns false when PED is in the future', () => {
+      expect(CaseloadService.isEligibleEDS(nineDaysFromNow, tenDaysFromNow, null, null)).toBe(false)
+    })
+    it('returns true if past PED and ARD is within 4 days of CRD', () => {
+      expect(
+        CaseloadService.isEligibleEDS(yesterday, tenDaysFromNow, format(addDays(new Date(), 6), 'yyyy-MM-dd'), null)
+      ).toBe(true)
+    })
+    it('returns true if past PED and ARD is equal to CRD', () => {
+      expect(CaseloadService.isEligibleEDS(yesterday, tenDaysFromNow, tenDaysFromNow, null)).toBe(true)
+    })
+    it('returns false if past PED and ARD is more than 4 days before CRD', () => {
+      expect(
+        CaseloadService.isEligibleEDS(yesterday, tenDaysFromNow, format(addDays(new Date(), 5), 'yyyy-MM-dd'), null)
+      ).toBe(false)
+    })
+    it('returns true if past PED and ARD not set', () => {
+      expect(CaseloadService.isEligibleEDS(yesterday, tenDaysFromNow, null, null)).toBe(true)
+    })
+    it('returns false if APD is set', () => {
+      expect(CaseloadService.isEligibleEDS(yesterday, tenDaysFromNow, tenDaysFromNow, nineDaysFromNow)).toBe(false)
+    })
+  })
 })
