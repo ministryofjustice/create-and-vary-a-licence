@@ -58,7 +58,6 @@ jobs:
             DATE=$(date '+%Y-%m-%d')
             export BUILD_NUMBER=${DATE}.${CIRCLE_BUILD_NUM}
             export GIT_REF="$CIRCLE_SHA1"
-            npm run record-build-info
       - run: # Run linter after build because the integration test code depend on compiled typescript...
           name: Linter check
           command: npm run lint
@@ -67,7 +66,6 @@ jobs:
           paths:
             - node_modules
             - assets/stylesheets
-            - build-info.json
             - build
             - dist
             - .cache/Cypress
