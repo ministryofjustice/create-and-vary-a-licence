@@ -14,7 +14,6 @@ import Container from './container'
 
 jest.mock('./prisonerService')
 jest.mock('./communityService')
-jest.mock('./licenceService')
 
 describe('Caseload Service', () => {
   const elevenDaysFromNow = format(addDays(new Date(), 11), 'yyyy-MM-dd')
@@ -30,6 +29,9 @@ describe('Caseload Service', () => {
     probationTeamCodes: ['teamA', 'teamB'],
     prisonCaseload: ['p1', 'p2'],
   } as User
+
+  const getLicencesForOmu = jest.spyOn(licenceService, 'getLicencesForOmu')
+  const getLicencesByNomisIdsAndStatus = jest.spyOn(licenceService, 'getLicencesByNomisIdsAndStatus')
 
   beforeEach(() => {
     communityService.getManagedOffenders.mockResolvedValue([])
@@ -93,7 +95,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
       },
@@ -195,7 +197,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
       },
@@ -210,7 +212,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
       },
@@ -232,7 +234,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
       },
@@ -250,7 +252,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'OOS_RECALL',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
       },
@@ -268,7 +270,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
       },
@@ -285,7 +287,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
       },
@@ -300,7 +302,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
         nomisRecord: {
@@ -328,7 +330,12 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234I', crn: 'X12352' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
+      {
+        prisonerNumber: 'AB1234E',
+        conditionalReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
+        status: 'ACTIVE IN',
+      } as Prisoner,
       { prisonerNumber: 'AB1234F', conditionalReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
       { prisonerNumber: 'AB1234G', conditionalReleaseDate: tenDaysFromNow } as Prisoner,
       {
@@ -342,10 +349,10 @@ describe('Caseload Service', () => {
         conditionalReleaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
         topupSupervisionExpiryDate: '2023-06-22',
-        licenceExpiryDate: '2022-12-20',
+        licenceExpiryDate: elevenDaysFromNow,
       } as Prisoner,
     ])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234I',
         licenceId: 1,
@@ -375,6 +382,7 @@ describe('Caseload Service', () => {
         nomisRecord: {
           prisonerNumber: 'AB1234E',
           conditionalReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
         },
         licences: [
           {
@@ -409,6 +417,7 @@ describe('Caseload Service', () => {
         nomisRecord: {
           prisonerNumber: 'AB1234I',
           conditionalReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: elevenDaysFromNow,
         },
         licences: [
           {
@@ -435,7 +444,12 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
+      {
+        prisonerNumber: 'AB1234E',
+        conditionalReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
+        status: 'ACTIVE IN',
+      } as Prisoner,
       { prisonerNumber: 'AB1234F', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
     ])
 
@@ -449,6 +463,7 @@ describe('Caseload Service', () => {
         nomisRecord: {
           prisonerNumber: 'AB1234E',
           conditionalReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
         },
         licences: [
           {
@@ -472,7 +487,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
         probationPractitioner: {
@@ -531,7 +546,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
         probationPractitioner: {
@@ -552,7 +567,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'OOS_BOTUS',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
         probationPractitioner: {
@@ -572,9 +587,14 @@ describe('Caseload Service', () => {
       { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
     ])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-      { prisonerNumber: 'AB1234E', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
+      {
+        prisonerNumber: 'AB1234E',
+        confirmedReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
+        status: 'INACTIVE OUT',
+      } as Prisoner,
     ])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234E',
         licenceId: 1,
@@ -604,6 +624,7 @@ describe('Caseload Service', () => {
         nomisRecord: {
           prisonerNumber: 'AB1234E',
           confirmedReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
         },
         licences: [
           {
@@ -629,13 +650,18 @@ describe('Caseload Service', () => {
       ])
       prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
         { prisonerNumber: 'AB1234E', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
-        { prisonerNumber: 'AB1234F', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } as Prisoner,
+        {
+          prisonerNumber: 'AB1234F',
+          confirmedReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
+          status: 'INACTIVE OUT',
+        } as Prisoner,
       ])
-      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      getLicencesByNomisIdsAndStatus.mockResolvedValue([
         {
           nomisId: 'AB1234E',
           licenceId: 1,
-          licenceType: LicenceType.AP,
+          licenceType: LicenceType.PSS,
           licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
           comUsername: 'joebloggs',
         },
@@ -688,7 +714,7 @@ describe('Caseload Service', () => {
             {
               id: 1,
               status: 'VARIATION_IN_PROGRESS',
-              type: 'AP',
+              type: 'PSS',
               comUsername: 'joebloggs',
             },
           ],
@@ -704,6 +730,7 @@ describe('Caseload Service', () => {
           nomisRecord: {
             prisonerNumber: 'AB1234F',
             confirmedReleaseDate: tenDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
           },
           licences: [
             {
@@ -732,18 +759,18 @@ describe('Caseload Service', () => {
   })
 
   it('OMU caseload', async () => {
-    licenceService.getLicencesForOmu.mockResolvedValue([
+    getLicencesForOmu.mockResolvedValue([
       {
         nomisId: 'AB1234D',
         licenceId: 1,
-        licenceType: LicenceType.AP,
+        licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.APPROVED,
         comUsername: 'joebloggs',
       },
       {
         nomisId: 'AB1234E',
         licenceId: 2,
-        licenceType: LicenceType.AP,
+        licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.IN_PROGRESS,
         comUsername: 'joebloggs',
       },
@@ -754,6 +781,15 @@ describe('Caseload Service', () => {
         licenceStatus: LicenceStatus.ACTIVE,
         comUsername: 'joebloggs',
       },
+      {
+        nomisId: 'AB1234F',
+        licenceId: 4,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.SUBMITTED,
+        comUsername: 'joebloggs',
+      },
+    ])
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234F',
         licenceId: 4,
@@ -776,6 +812,13 @@ describe('Caseload Service', () => {
       {
         prisonerNumber: 'AB1234H',
         conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+      },
+      {
+        prisonerNumber: 'AB1234I',
+        conditionalReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
+        topupSupervisionExpiryDate: '2023-12-26',
         status: 'ACTIVE IN',
       },
     ] as Prisoner[])
@@ -822,16 +865,19 @@ describe('Caseload Service', () => {
       {
         prisonerNumber: 'AB1234F',
         conditionalReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
         status: 'ACTIVE IN',
       },
       {
         prisonerNumber: 'AB1234G',
         conditionalReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
         status: 'OUT',
       },
       {
         prisonerNumber: 'AB1234H',
         conditionalReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
         status: 'ACTIVE IN',
       },
     ] as Prisoner[])
@@ -846,6 +892,10 @@ describe('Caseload Service', () => {
       },
       {
         otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234I', crn: 'X12351' },
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
       },
     ] as OffenderDetail[])
@@ -882,7 +932,7 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 1,
             status: 'APPROVED',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
         nomisRecord: {
@@ -918,7 +968,7 @@ describe('Caseload Service', () => {
             dateCreated: undefined,
             id: 2,
             status: 'IN_PROGRESS',
-            type: 'AP',
+            type: 'PSS',
           },
         ],
         nomisRecord: {
@@ -959,6 +1009,7 @@ describe('Caseload Service', () => {
         ],
         nomisRecord: {
           conditionalReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
           prisonerNumber: 'AB1234F',
           status: 'ACTIVE IN',
         },
@@ -995,6 +1046,7 @@ describe('Caseload Service', () => {
         ],
         nomisRecord: {
           conditionalReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
           prisonerNumber: 'AB1234G',
           status: 'OUT',
         },
@@ -1016,8 +1068,8 @@ describe('Caseload Service', () => {
             },
           ],
           otherIds: {
-            crn: 'X12349',
-            nomsNumber: 'AB1234F',
+            crn: 'X12351',
+            nomsNumber: 'AB1234I',
           },
           staff: {
             code: 'X1234',
@@ -1028,12 +1080,14 @@ describe('Caseload Service', () => {
         licences: [
           {
             status: 'NOT_STARTED',
-            type: 'AP',
+            type: 'AP_PSS',
           },
         ],
         nomisRecord: {
           conditionalReleaseDate: tenDaysFromNow,
-          prisonerNumber: 'AB1234F',
+          licenceExpiryDate: '2022-12-26',
+          topupSupervisionExpiryDate: '2023-12-26',
+          prisonerNumber: 'AB1234I',
           status: 'ACTIVE IN',
         },
         probationPractitioner: {
@@ -1045,7 +1099,7 @@ describe('Caseload Service', () => {
   })
 
   it('returns exclusions', async () => {
-    licenceService.getLicencesForOmu.mockResolvedValue([
+    getLicencesForOmu.mockResolvedValue([
       {
         nomisId: 'AB1234D',
         licenceId: 1,
@@ -1111,11 +1165,11 @@ describe('Caseload Service', () => {
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
       } as OffenderDetail,
     ])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234E',
         licenceId: 2,
-        licenceType: LicenceType.AP,
+        licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.IN_PROGRESS,
         comUsername: 'joebloggs',
       },
@@ -1134,7 +1188,7 @@ describe('Caseload Service', () => {
   })
 
   it('builds the approver caseload', async () => {
-    licenceService.getLicencesForApproval.mockResolvedValue([
+    jest.spyOn(licenceService, 'getLicencesForApproval').mockResolvedValue([
       {
         nomisId: 'AB1234E',
         licenceId: 1,
@@ -1194,11 +1248,11 @@ describe('Caseload Service', () => {
   })
 
   it('builds the vary approver caseload', async () => {
-    licenceService.getLicencesForVariationApproval.mockResolvedValue([
+    jest.spyOn(licenceService, 'getLicencesForVariationApproval').mockResolvedValue([
       {
         nomisId: 'AB1234E',
         licenceId: 1,
-        licenceType: LicenceType.AP,
+        licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
         comUsername: 'joebloggs',
       },
@@ -1240,7 +1294,7 @@ describe('Caseload Service', () => {
         licences: [
           {
             id: 1,
-            type: 'AP',
+            type: 'PSS',
             status: 'VARIATION_SUBMITTED',
             comUsername: 'joebloggs',
           },
