@@ -3,14 +3,13 @@ import nock from 'nock'
 import { Readable } from 'stream'
 import HmppsRestClient from './hmppsRestClient'
 import { ApiConfig } from '../config'
+import { InMemoryTokenStore } from './tokenStore'
 
-jest.mock('./tokenStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getSystemToken: () => 'token' }
-  })
-})
-
-const restClient = new HmppsRestClient('Rest Client', { url: 'http://localhost:8080' } as ApiConfig)
+const restClient = new HmppsRestClient(
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
+  'Rest Client',
+  { url: 'http://localhost:8080' } as ApiConfig
+)
 
 describe('Hmpps Rest Client tests', () => {
   afterEach(() => {
@@ -22,7 +21,7 @@ describe('Hmpps Rest Client tests', () => {
   describe('GET', () => {
     it('Should return raw response body', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .get('/test?query1=value1')
         .reply(200, { success: true })
@@ -44,7 +43,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should return response body data only', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .get('/test?query1=value1')
         .reply(200, { success: true })
@@ -81,7 +80,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should throw error when bad response', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .get('/test?query1=value1')
         .reply(404, { success: false })
@@ -105,7 +104,7 @@ describe('Hmpps Rest Client tests', () => {
   describe('POST', () => {
     it('Should return raw response body', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .post('/test', { testData1: 'testValue1' })
         .reply(200, { success: true })
@@ -129,7 +128,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should return response body data only', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .post('/test', { testData1: 'testValue1' })
         .reply(200, { success: true })
@@ -170,7 +169,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should throw error when bad response', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .post('/test', { testData1: 'testValue1' })
         .reply(404, { success: true })
@@ -196,7 +195,7 @@ describe('Hmpps Rest Client tests', () => {
   describe('PUT', () => {
     it('Should return raw response body', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .put('/test', { testData1: 'testValue1' })
         .reply(200, { success: true })
@@ -220,7 +219,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should return response body data only', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .put('/test', { testData1: 'testValue1' })
         .reply(200, { success: true })
@@ -261,7 +260,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should throw error when bad response', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .put('/test', { testData1: 'testValue1' })
         .reply(404, { success: true })
@@ -287,7 +286,7 @@ describe('Hmpps Rest Client tests', () => {
   describe('STREAM', () => {
     it('Should return response body as a stream', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .get('/test')
         .reply(200, [1, 2, 3])
@@ -319,7 +318,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should throw error when bad response', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .get('/test')
         .reply(404, { success: false })
@@ -350,7 +349,7 @@ describe('Hmpps Rest Client tests', () => {
       await fs.writeFileSync('test-file.txt', 'a test file')
 
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .post('/test')
         .reply(200, { success: true })
@@ -368,7 +367,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should throw error when no file provided', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .post('/test')
         .reply(200, { success: true })
@@ -393,7 +392,7 @@ describe('Hmpps Rest Client tests', () => {
       await fs.writeFileSync('test-file.txt', 'a test file')
 
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .post('/test')
         .reply(404, { success: false })
@@ -419,7 +418,7 @@ describe('Hmpps Rest Client tests', () => {
   describe('DELETE', () => {
     it('Should return raw response body', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .delete('/test')
         .reply(200, { success: true })
@@ -440,7 +439,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should return response body data only', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .delete('/test')
         .reply(200, { success: true })
@@ -475,7 +474,7 @@ describe('Hmpps Rest Client tests', () => {
 
     it('Should throw error when bad response', async () => {
       nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token', header1: 'headerValue1' },
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
       })
         .delete('/test')
         .reply(404, { success: true })

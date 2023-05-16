@@ -6,7 +6,7 @@ import type { User } from '../@types/CvlUserDetails'
 jest.mock('../data/licenceApiClient')
 
 describe('Licence Override Service', () => {
-  const licenceApiClient = new LicenceApiClient() as jest.Mocked<LicenceApiClient>
+  const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const overrideStatus = new LicenceOverrideService(licenceApiClient)
   const user = { username: 'bob' } as User
 

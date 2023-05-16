@@ -36,10 +36,11 @@ import { User } from '../@types/CvlUserDetails'
 import { UpdateComRequest } from '../@types/licenceApiClientTypes'
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
+import type { TokenStore } from './tokenStore'
 
 export default class LicenceApiClient extends RestClient {
-  constructor() {
-    super('Licence API', config.apis.licenceApi as ApiConfig)
+  constructor(tokenStore: TokenStore) {
+    super(tokenStore, 'Licence API', config.apis.licenceApi as ApiConfig)
   }
 
   async getOmuEmail(prisonId: string, user: User): Promise<OmuContact | null> {
