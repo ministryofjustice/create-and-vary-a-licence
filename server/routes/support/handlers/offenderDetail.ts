@@ -43,11 +43,6 @@ export default class OffenderDetailRoutes {
     const licenceExpiryDate = this.formatNomisDate(prisonerDetail.licenceExpiryDate)
     const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
 
-    let isRecall
-    if (prisonerDetail.recall !== undefined) {
-      isRecall = prisonerDetail.recall ? 'Yes' : 'No'
-    }
-
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
         ...prisonerDetail,
@@ -64,7 +59,7 @@ export default class OffenderDetailRoutes {
         determinate: prisonerDetail.indeterminateSentence ? 'No' : 'Yes',
         dob: moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY'),
         hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',
-        recall: isRecall,
+        recall: prisonerDetail.recall ? 'Yes' : 'No',
       },
       probationPractitioner: {
         name: probationPractitioner

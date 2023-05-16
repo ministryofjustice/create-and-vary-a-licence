@@ -267,6 +267,7 @@ describe('Route Handlers - Offender detail', () => {
       paroleEligibilityDate: null,
       indeterminateSentence: false,
       dateOfBirth: '1995-03-05',
+      recall: false,
     } as Prisoner
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
 
@@ -333,6 +334,7 @@ describe('Route Handlers - Offender detail', () => {
         postRecallReleaseDate: 'Not found',
         sentenceExpiryDate: 'Not found',
         tused: 'Not found',
+        recall: 'No',
       },
       probationPractitioner: {
         email: 'mr.g@probation.gov.uk',
@@ -374,6 +376,7 @@ describe('Route Handlers - Offender detail', () => {
       paroleEligibilityDate: '2022-01-01',
       indeterminateSentence: false,
       dateOfBirth: '1995-03-05',
+      recall: true,
     } as Prisoner
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
 
@@ -455,6 +458,7 @@ describe('Route Handlers - Offender detail', () => {
         postRecallReleaseDate: '01 May 2022',
         sentenceExpiryDate: '01 Jun 2022',
         tused: '01 May 2023',
+        recall: 'Yes',
       },
       probationPractitioner: {
         email: 'mr.g@probation.gov.uk',
