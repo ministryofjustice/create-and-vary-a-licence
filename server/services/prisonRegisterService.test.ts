@@ -6,7 +6,7 @@ import { PrisonDto } from '../@types/prisonRegisterTypes'
 jest.mock('../data/prisonRegisterApiClient')
 
 describe('Prison Register Service', () => {
-  const prisonRegisterApiClient = new PrisonRegisterApiClient() as jest.Mocked<PrisonRegisterApiClient>
+  const prisonRegisterApiClient = new PrisonRegisterApiClient(null) as jest.Mocked<PrisonRegisterApiClient>
   const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
 
   const user = { username: 'joebloggs' } as User

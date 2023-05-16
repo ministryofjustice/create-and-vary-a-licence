@@ -14,7 +14,7 @@ jest.mock('../data/licenceApiClient')
 
 describe('ConditionService', () => {
   const conditionFormatter = new ConditionFormatter()
-  const licenceApiClient = new LicenceApiClient() as jest.Mocked<LicenceApiClient>
+  const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const conditionService = new ConditionService(licenceApiClient, conditionFormatter) as jest.Mocked<ConditionService>
 
   licenceApiClient.getLicencePolicyForVersion.mockResolvedValue(policyV2_0)

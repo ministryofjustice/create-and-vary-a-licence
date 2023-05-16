@@ -7,10 +7,11 @@ import {
   CommunityApiUserDetails,
 } from '../@types/communityClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
+import type { TokenStore } from './tokenStore'
 
 export default class CommunityApiClient extends RestClient {
-  constructor() {
-    super('Community API', config.apis.communityApi as ApiConfig)
+  constructor(tokenStore: TokenStore) {
+    super(tokenStore, 'Community API', config.apis.communityApi as ApiConfig)
   }
 
   async getStaffDetailByUsername(username: string): Promise<CommunityApiStaffDetails> {

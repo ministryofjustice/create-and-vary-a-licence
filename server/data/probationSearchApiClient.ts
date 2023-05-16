@@ -1,10 +1,11 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
 import type { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
+import type { TokenStore } from './tokenStore'
 
 export default class ProbationSearchApiClient extends RestClient {
-  constructor() {
-    super('Probation search API', config.apis.probationSearchApi as ApiConfig)
+  constructor(tokenStore: TokenStore) {
+    super(tokenStore, 'Probation search API', config.apis.probationSearchApi as ApiConfig)
   }
 
   async searchProbationer(searchCriteria: SearchDto): Promise<OffenderDetail[]> {

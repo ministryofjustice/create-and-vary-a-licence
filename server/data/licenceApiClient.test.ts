@@ -29,14 +29,11 @@ import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { User } from '../@types/CvlUserDetails'
 import LicenceEventType from '../enumeration/licenceEventType'
+import { InMemoryTokenStore } from './tokenStore'
 
-jest.mock('./tokenStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getAuthToken: () => '' }
-  })
-})
-
-const licenceApiClient = new LicenceApiClient()
+const licenceApiClient = new LicenceApiClient(
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+)
 
 describe('Licence API client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')
