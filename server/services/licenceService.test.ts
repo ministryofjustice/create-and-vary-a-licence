@@ -44,7 +44,7 @@ jest.mock('./conditionService')
 jest.spyOn(utils, 'convertDateFormat').mockImplementation((value: string) => value)
 
 describe('Licence Service', () => {
-  const licenceApiClient = new LicenceApiClient() as jest.Mocked<LicenceApiClient>
+  const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>

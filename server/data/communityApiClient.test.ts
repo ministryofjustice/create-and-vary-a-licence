@@ -6,14 +6,11 @@ import {
   CommunityApiStaffDetails,
   CommunityApiUserDetails,
 } from '../@types/communityClientTypes'
+import { InMemoryTokenStore } from './tokenStore'
 
-jest.mock('./tokenStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getAuthToken: () => '' }
-  })
-})
-
-const communityApiClient = new CommunityApiClient()
+const communityApiClient = new CommunityApiClient(
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+)
 
 describe('Community Api client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')
