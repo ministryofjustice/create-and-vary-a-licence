@@ -462,49 +462,6 @@ export default {
     })
   },
 
-  stubGetActiveLicencesForOffender: (options: {
-    nomisId: string
-    status: string
-    bookingId: number
-  }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'POST',
-        urlPathPattern: `/licence/match`,
-        bodyPatterns: [
-          {
-            matchesJsonPath: {
-              expression: '$.status',
-              contains: 'ACTIVE',
-            },
-          },
-        ],
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: options
-          ? [
-              {
-                licenceId: 1,
-                nomisId: options.nomisId,
-                licenceStatus: options.status,
-                forename: 'Bob',
-                surname: 'Zimmer',
-                crn: 'X12345',
-                licenceType: 'AP',
-                actualReleaseDate: '23/03/2022',
-                comUsername: 'jsmith',
-                bookingId: options.bookingId,
-                conditionalReleaseDate: '13/04/2023',
-                dateCreated: '01/03/2021 10:15',
-              },
-            ]
-          : [],
-      },
-    })
-  },
-
   stubGetLicencesForOffender: (options: { nomisId: string; status: string; bookingId: number }): SuperAgentRequest => {
     return stubFor({
       request: {

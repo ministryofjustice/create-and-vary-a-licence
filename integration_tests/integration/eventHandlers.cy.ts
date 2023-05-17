@@ -60,7 +60,7 @@ context('Event handlers', () => {
   describe('Prison events', () => {
     it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to update sentence dates', () => {
       cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
-      cy.task('stubGetActiveLicencesForOffender')
+      cy.task('stubGetLicencesForOffender')
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
 
@@ -81,7 +81,30 @@ context('Event handlers', () => {
     })
 
     it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to deactivate licence if prisoner has been re-sentenced', () => {
-      cy.task('stubGetActiveLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
+      cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
+      cy.task('stubGetPrisonerDetail')
+      cy.task('stubUpdateSentenceDates')
+      cy.task('stubUpdateLicenceStatus')
+
+      cy.task(
+        'sendPrisonEvent',
+        `{
+          "Message": "{\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "SENTENCE_DATES-CHANGED"
+            }
+          }
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 0 })
+    })
+
+    it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to deactivate (VARIATION_IN_PROGRESS) licence if prisoner has been re-sentenced', () => {
+      cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'VARIATION_IN_PROGRESS' })
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
       cy.task('stubUpdateLicenceStatus')
@@ -106,7 +129,7 @@ context('Event handlers', () => {
     it('should listen to the CONFIRMED_RELEASE_DATE-CHANGED event and call endpoint to update sentence dates', () => {
       cy.task('searchPrisonersByBookingIds')
       cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
-      cy.task('stubGetActiveLicencesForOffender')
+      cy.task('stubGetLicencesForOffender')
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
 
