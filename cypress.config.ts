@@ -49,7 +49,7 @@ export default defineConfig({
         stubPostLicence: licence.stubPostLicence,
         stubGetExistingLicenceForOffenderWithResult: licence.stubGetExistingLicenceForOffenderWithResult,
         stubGetActiveAndVariationLicencesForOffender: licence.stubGetActiveAndVariationLicencesForOffender,
-        stubGetLicencesForOffender: licence.stubGetHdcLicencesForOffender,
+        stubGetLicencesForOffender: licence.stubGetLicencesForOffender,
         stubPutAppointmentPerson: licence.stubPutAppointmentPerson,
         stubPutAppointmentTime: licence.stubPutAppointmentTime,
         stubPutAppointmentAddress: licence.stubPutAppointmentAddress,
