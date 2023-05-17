@@ -10,9 +10,16 @@ import PrisonApiClient from '../server/data/prisonApiClient'
 import PrisonerSearchApiClient from '../server/data/prisonerSearchApiClient'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
 import { isPassedArdOrCrd } from '../server/utils/utils'
+import { InMemoryTokenStore } from '../server/data/tokenStore'
+import { getSystemToken } from '../server/data/systemToken'
 
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-activate-licences-job')
+
+const tokenStore = new InMemoryTokenStore(getSystemToken)
+const licenceApiClient = new LicenceApiClient(tokenStore)
+const prisonApiClient = new PrisonApiClient(tokenStore)
+const searchApi = new PrisonerSearchApiClient(tokenStore)
 
 type LicencesToUpdate = {
   forActivation: number[]
@@ -60,7 +67,7 @@ const pollLicencesToUpdate = async (): Promise<LicencesToUpdate> => {
 }
 
 const getApprovedLicences = async (): Promise<LicenceSummary[]> => {
-  return new LicenceApiClient().matchLicences([LicenceStatus.APPROVED])
+  return licenceApiClient.matchLicences([LicenceStatus.APPROVED])
 }
 
 const getHdcStatuses = async (bookingIds: number[]): Promise<Map<number, string>> => {
@@ -73,7 +80,7 @@ const getHdcStatuses = async (bookingIds: number[]): Promise<Map<number, string>
   // eslint-disable-next-line no-restricted-syntax
   for (const ids of _.chunk(bookingIds, 500)) {
     // eslint-disable-next-line no-await-in-loop
-    await new PrisonApiClient()
+    await prisonApiClient
       .getLatestHdcStatusBatch(ids)
       .then(r => r.forEach(hdc => hdcList.set(hdc.bookingId, hdc.approvalStatus)))
   }
@@ -86,7 +93,6 @@ const getPrisoners = async (nomisIds: string[]): Promise<Prisoner[]> => {
   }
 
   const prisoners = []
-  const searchApi = new PrisonerSearchApiClient()
 
   // eslint-disable-next-line no-restricted-syntax
   for (const ids of _.chunk(nomisIds, 500)) {
@@ -100,13 +106,13 @@ const getPrisoners = async (nomisIds: string[]): Promise<Prisoner[]> => {
 
 const batchActivateLicences = async (licenceIds: number[]): Promise<void> => {
   if (licenceIds.length > 0) {
-    await new LicenceApiClient().batchActivateLicences(licenceIds)
+    await licenceApiClient.batchActivateLicences(licenceIds)
   }
 }
 
 const batchInactivateLicences = async (licenceIds: number[]): Promise<void> => {
   if (licenceIds.length > 0) {
-    await new LicenceApiClient().batchInActivateLicences(licenceIds)
+    await licenceApiClient.batchInActivateLicences(licenceIds)
   }
 }
 

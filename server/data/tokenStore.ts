@@ -1,33 +1,13 @@
-import redis from 'redis'
-import { promisify } from 'util'
-
-import querystring from 'querystring'
-import superagent from 'superagent'
 import logger from '../../logger'
-import config from '../config'
-import generateOauthClientToken from '../authentication/clientCredentials'
+import type { RedisClient } from './redisClient'
+import type { SystemTokenSupplier } from './systemToken'
 
-export default class TokenStore {
-  private readonly getRedisAsync: (key: string) => Promise<string>
+export abstract class TokenStore {
+  constructor(private readonly systemTokenSupplier: SystemTokenSupplier) {}
 
-  private readonly setRedisAsync: (key: string, value: string, mode: string, durationSeconds: number) => Promise<void>
+  abstract setToken(key: string, token: string, durationSeconds: number): Promise<void>
 
-  constructor() {
-    const redisClient = redis.createClient({
-      port: config.redis.port,
-      password: config.redis.password,
-      host: config.redis.host,
-      tls: config.redis.tls_enabled === 'true' ? {} : false,
-      prefix: 'systemToken:',
-    })
-
-    redisClient.on('error', error => {
-      logger.error(error, `Redis error`)
-    })
-
-    this.getRedisAsync = promisify(redisClient.get).bind(redisClient)
-    this.setRedisAsync = promisify(redisClient.set).bind(redisClient)
-  }
+  abstract getToken(key: string): Promise<string>
 
   public getSystemToken = async (username?: string): Promise<string> => {
     const key = username || '%ANONYMOUS%'
@@ -36,36 +16,49 @@ export default class TokenStore {
       return token
     }
 
-    const clientToken = generateOauthClientToken(
-      config.apis.hmppsAuth.systemClientId,
-      config.apis.hmppsAuth.systemClientSecret
-    )
+    const systemToken = await this.systemTokenSupplier(username)
+    await this.setToken(key, systemToken.token, systemToken.expiresIn - 60)
+    return systemToken.token
+  }
+}
 
-    const authRequest = username
-      ? querystring.stringify({ grant_type: 'client_credentials', username })
-      : querystring.stringify({ grant_type: 'client_credentials' })
+export class RedisTokenStore extends TokenStore {
+  private readonly prefix = 'systemToken:'
 
-    logger.info(
-      `HMPPS Auth request '${authRequest}' for client id '${config.apis.hmppsAuth.systemClientId}' and user '${username}'`
-    )
-
-    const response = await superagent
-      .post(`${config.apis.hmppsAuth.url}/oauth/token`)
-      .set('Authorization', clientToken)
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send(authRequest)
-      .timeout(config.apis.hmppsAuth.timeout)
-
-    // Set the TTL slightly less than expiry of token
-    await this.setToken(key, response.body.access_token, response.body.expires_in - 60)
-    return response.body.access_token
+  constructor(systemTokenSupplier: SystemTokenSupplier, private readonly client: RedisClient) {
+    super(systemTokenSupplier)
+    client.on('error', error => {
+      logger.error(error, `Redis error`)
+    })
   }
 
-  private async setToken(key: string, token: string, durationSeconds: number): Promise<void> {
-    await this.setRedisAsync(key, token, 'EX', durationSeconds)
+  private async ensureConnected() {
+    if (!this.client.isOpen) {
+      await this.client.connect()
+    }
   }
 
-  private async getToken(key: string): Promise<string> {
-    return this.getRedisAsync(key)
+  public async setToken(key: string, token: string, durationSeconds: number): Promise<void> {
+    await this.ensureConnected()
+    await this.client.setEx(`${this.prefix}${key}`, durationSeconds, token)
+  }
+
+  public async getToken(key: string): Promise<string> {
+    await this.ensureConnected()
+    return this.client.get(`${this.prefix}${key}`)
+  }
+}
+
+export class InMemoryTokenStore extends TokenStore {
+  constructor(systemTokenSupplier: SystemTokenSupplier, private readonly tokenMap: Map<string, string> = new Map()) {
+    super(systemTokenSupplier)
+  }
+
+  public async setToken(key: string, token: string): Promise<void> {
+    this.tokenMap.set(key, token)
+  }
+
+  public async getToken(key: string): Promise<string> {
+    return this.tokenMap.get(key)
   }
 }

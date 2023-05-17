@@ -3,14 +3,11 @@ import { Buffer } from 'buffer'
 import HmppsRestClient from './hmppsRestClient'
 import PrisonApiClient from './prisonApiClient'
 import { User } from '../@types/CvlUserDetails'
+import { InMemoryTokenStore } from './tokenStore'
 
-jest.mock('./tokenStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getAuthToken: () => '' }
-  })
-})
-
-const prisonApiClient = new PrisonApiClient()
+const prisonApiClient = new PrisonApiClient(
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+)
 
 describe('Prison Api client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')

@@ -1,14 +1,11 @@
 import HmppsRestClient from './hmppsRestClient'
 import HmppsAuthClient, { AuthUserDetails, AuthUserEmail } from './hmppsAuthClient'
 import { User } from '../@types/CvlUserDetails'
+import { InMemoryTokenStore } from './tokenStore'
 
-jest.mock('./tokenStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getAuthToken: () => '' }
-  })
-})
-
-const authClient = new HmppsAuthClient()
+const authClient = new HmppsAuthClient(
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+)
 
 describe('Auth Api client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')

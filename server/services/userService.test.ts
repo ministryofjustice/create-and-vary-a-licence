@@ -19,8 +19,8 @@ describe('User service', () => {
   let userService: UserService
 
   beforeEach(() => {
-    hmppsAuthClient = new HmppsAuthClient() as jest.Mocked<HmppsAuthClient>
-    prisonApiClient = new PrisonApiClient() as jest.Mocked<PrisonApiClient>
+    hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+    prisonApiClient = new PrisonApiClient(null) as jest.Mocked<PrisonApiClient>
     communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
     userService = new UserService(hmppsAuthClient, prisonApiClient, communityService)
   })

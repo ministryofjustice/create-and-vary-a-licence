@@ -1,14 +1,11 @@
 import HmppsRestClient from './hmppsRestClient'
 import ProbationSearchApiClient from './probationSearchApiClient'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
+import { InMemoryTokenStore } from './tokenStore'
 
-jest.mock('./tokenStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getAuthToken: () => '' }
-  })
-})
-
-const probationSearchApiClient = new ProbationSearchApiClient()
+const probationSearchApiClient = new ProbationSearchApiClient(
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+)
 
 describe('Probation Search Api client tests', () => {
   const post = jest.spyOn(HmppsRestClient.prototype, 'post')

@@ -2,11 +2,13 @@ import config, { ApiConfig } from '../config'
 import type { PagePrisoner, Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import { PrisonerSearchByBookingIds, PrisonerSearchByNomisIds } from '../@types/prisonerSearchApiClientTypes'
 import RestClient from './hmppsRestClient'
+import type { TokenStore } from './tokenStore'
+
 import { User } from '../@types/CvlUserDetails'
 
 export default class PrisonerSearchApiClient extends RestClient {
-  constructor() {
-    super('Prisoner search API', config.apis.prisonerSearchApi as ApiConfig)
+  constructor(tokenStore: TokenStore) {
+    super(tokenStore, 'Prisoner search API', config.apis.prisonerSearchApi as ApiConfig)
   }
 
   async searchPrisoners(prisonerSearchCriteria: PrisonerSearchCriteria, user: User): Promise<Prisoner[]> {
