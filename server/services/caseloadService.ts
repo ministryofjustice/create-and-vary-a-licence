@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isFuture, parse, startOfDay, add, endOfDay } from 'date-fns'
+import { isFuture, parse, startOfDay, add, endOfDay, isWithinInterval, sub } from 'date-fns'
 import _ from 'lodash'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
@@ -199,7 +199,7 @@ export default class CaseloadService {
       // No licences present for this offender - determine how to show them in case lists
 
       // Determine the likely type of intended licence from the prison record
-      const licenceType = this.getLicenceType(offender.nomisRecord)
+      const licenceType = LicenceService.getLicenceType(offender.nomisRecord)
 
       // Default status (if not overridden below) will show the case as clickable on case lists
       let licenceStatus = LicenceStatus.NOT_STARTED
@@ -225,6 +225,16 @@ export default class CaseloadService {
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD', 'is dead')
       .filter(offender => !offender.nomisRecord.indeterminateSentence, 'on indeterminate sentence')
       .filter(offender => offender.nomisRecord.conditionalReleaseDate, 'has no conditional release date')
+      .filter(
+        offender =>
+          CaseloadService.isEligibleEDS(
+            offender.nomisRecord.paroleEligibilityDate,
+            offender.nomisRecord.conditionalReleaseDate,
+            offender.nomisRecord.confirmedReleaseDate,
+            offender.nomisRecord.actualParoleDate
+          ),
+        'is on an ineligible Extended Determinate Sentence'
+      )
 
     if (eligibleOffenders.isEmpty()) return eligibleOffenders
 
@@ -381,16 +391,6 @@ export default class CaseloadService {
     return this.mapResponsibleComsToCasesWithExclusions(caseload).then(it => it.unwrap())
   }
 
-  private getLicenceType = (nomisRecord: Prisoner): LicenceType => {
-    if (!nomisRecord.topupSupervisionExpiryDate) {
-      return LicenceType.AP
-    }
-    if (!nomisRecord.licenceExpiryDate && !nomisRecord.sentenceExpiryDate) {
-      return LicenceType.PSS
-    }
-    return LicenceType.AP_PSS
-  }
-
   private mapManagedOffenderRecordToOffenderDetail = async (
     caseload: CommunityApiManagedOffender[]
   ): Promise<Container<DeliusRecord>> => {
@@ -441,13 +441,37 @@ export default class CaseloadService {
 
   /**
    * Parole Eligibility Date must be set and in the future
-   * If the date is in the past, it's no longer valid
+   * If the date is in the past, it's no longer parole eligible
+   * Parole eligibility excludes the offender, so a truthy return here is an exclusion from CVL
    * @param ped
    */
   public static isParoleEligible(ped: string): boolean {
     if (!ped) return false
     const pedDate = parse(ped, 'yyyy-MM-dd', new Date())
     return isFuture(pedDate)
+  }
+
+  public static isEligibleEDS(ped: string, crd: string, ard: string, apd: string): boolean {
+    if (!ped) return true // All EDSs have PEDs, so if no ped, not an EDS and can stop the check here
+    if (!crd) return false // This should never be hit as a previous filter removes those without CRDs
+
+    const crdDate = parse(crd, 'yyyy-MM-dd', new Date())
+    const ardDate = ard ? parse(ard, 'yyyy-MM-dd', new Date()) : undefined
+
+    // if PED is in the future, they are OOS
+    if (isFuture(parse(ped, 'yyyy-MM-dd', new Date()))) return false
+
+    // if ARD is not between CRD - 4 days and CRD (to account for bank holidays and weekends), then OOS
+    if (ardDate && !isWithinInterval(ardDate, { start: sub(crdDate, { days: 4 }), end: crdDate })) {
+      return false
+    }
+
+    // an APD with a PED in the past means they were a successful parole applicant on a later attempt, so are OOS
+    if (apd) {
+      return false
+    }
+
+    return true
   }
 
   wrap<T>(items: T[]): Container<T> {
