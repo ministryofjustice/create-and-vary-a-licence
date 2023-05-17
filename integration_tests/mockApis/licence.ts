@@ -467,6 +467,14 @@ export default {
       request: {
         method: 'POST',
         urlPathPattern: `/licence/match`,
+        bodyPatterns: [
+          {
+            matchesJsonPath: {
+              expression: '$.status',
+              contains: 'ACTIVE',
+            },
+          },
+        ],
       },
       response: {
         status: 200,
