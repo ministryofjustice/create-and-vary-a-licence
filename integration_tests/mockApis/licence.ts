@@ -462,7 +462,11 @@ export default {
     })
   },
 
-  stubGetLicencesForOffender: (options: { nomisId: string; status: string; bookingId: number }): SuperAgentRequest => {
+  stubGetActiveAndVariationLicencesForOffender: (options: {
+    nomisId: string
+    status: string
+    bookingId: number
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -472,6 +476,30 @@ export default {
             matchesJsonPath: {
               expression: '$.status',
               contains: 'ACTIVE',
+            },
+          },
+          {
+            matchesJsonPath: {
+              expression: '$.status',
+              contains: 'VARIATION_IN_PROGRESS',
+            },
+          },
+          {
+            matchesJsonPath: {
+              expression: '$.status',
+              contains: 'VARIATION_SUBMITTED',
+            },
+          },
+          {
+            matchesJsonPath: {
+              expression: '$.status',
+              contains: 'VARIATION_REJECTED',
+            },
+          },
+          {
+            matchesJsonPath: {
+              expression: '$.status',
+              contains: 'VARIATION_APPROVED',
             },
           },
         ],
