@@ -105,7 +105,7 @@
     "@types/multer": "^1.4.7",
     "@types/uuid": "^9.0.1",
     "agentkeepalive": "^4.3.0",
-    "applicationinsights": "^2.5.1",
+    "applicationinsights": "^2.6.0",
     "aws-sdk": "^2.1354.0",
     "body-parser": "^1.20.2",
     "bunyan": "^1.8.15",
