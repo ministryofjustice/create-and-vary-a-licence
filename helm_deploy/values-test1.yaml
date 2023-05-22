@@ -1,0 +1,54 @@
+---
+# Per environment values which override defaults in create-and-vary-a-licence/values.yaml
+
+generic-service:
+  replicaCount: 2
+
+  ingress:
+    hosts:
+     - create-and-vary-a-licence-test1.hmpps.service.justice.gov.uk
+    contextColour: green
+    tlsSecretName: create-and-vary-a-licence-ui-cert
+
+  env:
+    INGRESS_URL: "https://create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk"
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    # COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
+    PRISON_API_URL: "https://api-dev.prison.service.justice.gov.uk"
+    LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
+    PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
+    # PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
+    PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
+    EXIT_SURVEY_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
+    PHASE_BANNER_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
+
+    # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
+    GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
+
+    # A temporary reference to a local container which provides a stubbed Delius caseload
+    COMMUNITY_API_URL: "http://create-and-vary-a-licence-hmpps-community-api-wiremock"
+    PROBATION_SEARCH_API_URL: "http://create-and-vary-a-licence-hmpps-community-api-wiremock"
+
+    # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
+    LICENCES_URL: "http://create-and-vary-a-licence"
+
+    LICENCE_WATERMARK: "true"
+
+gotenberg:
+  replicaCount: 1
+
+  env:
+    GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
+    DISABLE_UNOCONV: 1
+    DEFAULT_WAIT_TIMEOUT: 30
+
+hmpps-community-api-wiremock:
+  replicaCount: 1
+
+  env:
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
+
+generic-prometheus-alerts:
+  alertSeverity: cvl-alerts-non-prod
