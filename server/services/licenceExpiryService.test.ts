@@ -21,7 +21,7 @@ describe('Expire Licences where TUSED or SLED is today or in the past', () => {
   const tomorrowsDate = format(addDays(today, 2), 'dd/MM/yyyy')
   const yesterdaysDate = format(subDays(today, 1), 'dd/MM/yyyy')
 
-  const licenceApiClient = new LicenceApiClient() as jest.Mocked<LicenceApiClient>
+  const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>

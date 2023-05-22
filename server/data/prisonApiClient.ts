@@ -1,6 +1,7 @@
 import { Readable } from 'stream'
 import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
+import type { TokenStore } from './tokenStore'
 import type {
   PrisonApiCaseload,
   PrisonApiPrisoner,
@@ -12,8 +13,8 @@ import type {
 import { User } from '../@types/CvlUserDetails'
 
 export default class PrisonApiClient extends RestClient {
-  constructor() {
-    super('Prison API', config.apis.prisonApi as ApiConfig)
+  constructor(tokenStore: TokenStore) {
+    super(tokenStore, 'Prison API', config.apis.prisonApi as ApiConfig)
   }
 
   // Streamed - for embedding in HTML pages

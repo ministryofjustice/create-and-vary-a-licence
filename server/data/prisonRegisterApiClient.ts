@@ -2,10 +2,11 @@ import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
 import type { PrisonDto } from '../@types/prisonRegisterTypes'
 import { User } from '../@types/CvlUserDetails'
+import { TokenStore } from './tokenStore'
 
 export default class PrisonRegisterApiClient extends RestClient {
-  constructor() {
-    super('Prison register API', config.apis.prisonRegisterApi as ApiConfig)
+  constructor(tokenStore: TokenStore) {
+    super(tokenStore, 'Prison register API', config.apis.prisonRegisterApi as ApiConfig)
   }
 
   async getPrisonDescription(agencyId: string, user: User): Promise<PrisonDto> {
