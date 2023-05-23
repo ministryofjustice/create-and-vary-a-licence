@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
+import BespokeConditions from '../types/bespokeConditions'
 
 export default class BespokeConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -27,6 +28,13 @@ export default class BespokeConditionsRoutes {
       return res.redirect(`/licence/create/id/${licenceId}/additional-pss-conditions-question`)
     }
 
+    return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
+  }
+
+  DELETE = async (req: Request, res: Response): Promise<void> => {
+    const { licenceId } = req.params
+    const { user } = res.locals
+    await this.licenceService.updateBespokeConditions(licenceId, { conditions: [] } as BespokeConditions, user)
     return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
   }
 }

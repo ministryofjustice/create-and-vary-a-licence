@@ -40,7 +40,7 @@
                     <div class="moj-button-action">
                         {{ govukButton({
                             text: 'Add another bespoke condition',
-                            classes: 'govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4',
+                            classes: 'govuk-button--secondary moj-add-another__add-button custom-add-button govuk-!-margin-bottom-7',
                             attributes: { 'data-qa': 'add-another' }
                         }) }}
                     </div>
@@ -51,12 +51,16 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds govuk-button-group">
                 {{ govukButton({
-                    text: 'Save and return to licence details',
+                    text: 'Continue',
                     type: "submit",
                     attributes: { 'data-qa': 'continue' }
                 }) }}
-
-                <a class="govuk-link js-backlink" href={{ backLinkHref }}>Cancel</a>
+                {{  govukButton({
+                    text: "Delete these conditions" if conditions.length > 1 else "Delete this condition",
+                    href: "/licence/create/id/" + licence.id + "/bespoke-conditions/delete?fromReview=true",
+                    classes: 'govuk-button--secondary delete-condition-button',
+                    attributes: { 'data-qa': 'delete' }
+                }) }}
             </div>
         </div>
 
@@ -78,3 +82,7 @@
         value: conditionValue
     }) }}
 {% endmacro %}
+
+{% block pageScripts %}
+    <script src="/assets/js/bespoke.js"></script>
+{% endblock %}
