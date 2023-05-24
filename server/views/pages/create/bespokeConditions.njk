@@ -22,7 +22,7 @@
 
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <div data-module="moj-add-another">
+                <div data-module="moj-custom-add-another">
 
                     {% for c in conditions %}
                         {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
@@ -40,7 +40,7 @@
                     <div class="moj-button-action">
                         {{ govukButton({
                             text: 'Add another bespoke condition',
-                            classes: 'govuk-button--secondary moj-add-another__add-button custom-add-button govuk-!-margin-bottom-7',
+                            classes: 'govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-7',
                             attributes: { 'data-qa': 'add-another' }
                         }) }}
                     </div>
