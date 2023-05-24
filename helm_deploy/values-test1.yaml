@@ -3,13 +3,14 @@
 
 generic-service:
   replicaCount: 2
-
+  serviceAccountName: create-and-vary-a-licence-test1
+  
   ingress:
     hosts:
      - create-and-vary-a-licence-test1.hmpps.service.justice.gov.uk
     contextColour: green
     tlsSecretName: create-and-vary-a-licence-ui-cert
-
+  
   env:
     INGRESS_URL: "https://create-and-vary-a-licence-test1.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
