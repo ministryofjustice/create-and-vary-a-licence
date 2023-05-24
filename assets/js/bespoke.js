@@ -11,13 +11,13 @@ window.onload = function () {
     changeButtonTextContent()
   }
 
-  var $addAnothers = document.querySelectorAll('[data-module="moj-custom-add-another"]')
+  const $addAnothers = document.querySelectorAll('[data-module="moj-custom-add-another"]')
   const addAnother = new MOJFrontend.AddAnother($addAnothers)
 
   const changeButtonTextContent = () => {
     const buttons = document.getElementsByClassName('delete-condition-button')
     if (buttons.length) {
-      var button = buttons[0]
+      const button = buttons[0]
       button.textContent = addAnother.getItems().length > 1 ? 'Delete these conditions' : 'Delete this condition'
     }
   }
