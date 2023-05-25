@@ -8,8 +8,8 @@ jest.mock('../data/communityApiClient')
 jest.mock('../data/probationSearchApiClient')
 
 describe('Community Service', () => {
-  const communityApiClient = new CommunityApiClient() as jest.Mocked<CommunityApiClient>
-  const probationSearchApiClient = new ProbationSearchApiClient() as jest.Mocked<ProbationSearchApiClient>
+  const communityApiClient = new CommunityApiClient(null) as jest.Mocked<CommunityApiClient>
+  const probationSearchApiClient = new ProbationSearchApiClient(null) as jest.Mocked<ProbationSearchApiClient>
   const communityService = new CommunityService(communityApiClient, probationSearchApiClient)
 
   it('Get Staff Detail', async () => {

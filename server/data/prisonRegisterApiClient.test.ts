@@ -2,14 +2,11 @@ import HmppsRestClient from './hmppsRestClient'
 import PrisonRegisterApiClient from './prisonRegisterApiClient'
 import { PrisonDto } from '../@types/prisonRegisterTypes'
 import { User } from '../@types/CvlUserDetails'
+import { InMemoryTokenStore } from './tokenStore'
 
-jest.mock('./tokenStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getAuthToken: () => '' }
-  })
-})
-
-const prisonRegisterApiClient = new PrisonRegisterApiClient()
+const prisonRegisterApiClient = new PrisonRegisterApiClient(
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+)
 
 describe('Prison Register Api client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')

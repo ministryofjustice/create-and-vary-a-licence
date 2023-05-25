@@ -13,8 +13,8 @@ jest.mock('../data/prisonerSearchApiClient')
 jest.spyOn(fs, 'readFileSync').mockReturnValue(Buffer.from('placeholder image'))
 
 describe('Prisoner Service', () => {
-  const prisonApiClient = new PrisonApiClient() as jest.Mocked<PrisonApiClient>
-  const prisonerSearchApiClient = new PrisonerSearchApiClient() as jest.Mocked<PrisonerSearchApiClient>
+  const prisonApiClient = new PrisonApiClient(null) as jest.Mocked<PrisonApiClient>
+  const prisonerSearchApiClient = new PrisonerSearchApiClient(null) as jest.Mocked<PrisonerSearchApiClient>
   const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
 
   const user = { username: 'joebloggs' } as User

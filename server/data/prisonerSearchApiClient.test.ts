@@ -2,14 +2,11 @@ import HmppsRestClient from './hmppsRestClient'
 import PrisonerSearchApiClient from './prisonerSearchApiClient'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
+import { InMemoryTokenStore } from './tokenStore'
 
-jest.mock('./tokenStore', () => {
-  return jest.fn().mockImplementation(() => {
-    return { TokenStore: () => '', getAuthToken: () => '' }
-  })
-})
-
-const prisonerSearchApiClient = new PrisonerSearchApiClient()
+const prisonerSearchApiClient = new PrisonerSearchApiClient(
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+)
 
 describe('Prisoner Search Api client tests', () => {
   const post = jest.spyOn(HmppsRestClient.prototype, 'post')

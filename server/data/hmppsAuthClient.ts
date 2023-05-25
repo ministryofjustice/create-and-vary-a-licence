@@ -1,6 +1,7 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
 import { User } from '../@types/CvlUserDetails'
+import { TokenStore } from './tokenStore'
 
 export type AuthUserDetails = {
   name: string
@@ -18,8 +19,8 @@ export type AuthUserRole = {
 }
 
 export default class HmppsAuthClient extends RestClient {
-  constructor() {
-    super('HMPPS Auth Client', config.apis.hmppsAuth as ApiConfig)
+  constructor(tokenStore: TokenStore) {
+    super(tokenStore, 'HMPPS Auth Client', config.apis.hmppsAuth as ApiConfig)
   }
 
   async getUser(user: User): Promise<AuthUserDetails> {

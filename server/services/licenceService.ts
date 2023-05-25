@@ -2,6 +2,7 @@ import { Readable } from 'stream'
 import fs from 'fs'
 import _ from 'lodash'
 import { format } from 'date-fns'
+import moment from 'moment'
 import {
   AdditionalCondition,
   AdditionalConditionsRequest,
@@ -52,7 +53,6 @@ import CommunityService from './communityService'
 import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
 import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 import LicenceType from '../enumeration/licenceType'
-import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
 import compareLicenceConditions, { VariedConditions } from '../utils/licenceComparator'
 import ApprovalComment from '../@types/ApprovalComment'
@@ -60,6 +60,7 @@ import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
 import TimelineEventType from '../enumeration/TimelineEventType'
 import ConditionService from './conditionService'
+import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 
 export default class LicenceService {
   constructor(
@@ -70,43 +71,41 @@ export default class LicenceService {
   ) {}
 
   async createLicence(prisonerNumber: string, user: User): Promise<LicenceSummary> {
-    const [nomisRecord, deliusRecord] = await Promise.all([
-      this.prisonerService.getPrisonerDetail(prisonerNumber, user),
-      this.communityService.getProbationer({ nomsNumber: prisonerNumber }),
-    ])
+    const nomisRecord = _.head(await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user))
+    const deliusRecord = await this.communityService.getProbationer({ nomsNumber: prisonerNumber })
+
     const [prisonInformation, offenderManagers] = await Promise.all([
-      this.prisonerService.getPrisonInformation(nomisRecord.agencyId, user),
+      this.prisonerService.getPrisonInformation(nomisRecord.prisonId, user),
       this.communityService.getAnOffendersManagers(deliusRecord.otherIds?.crn),
     ])
 
     const responsibleOfficer = deliusRecord.offenderManagers.find(om => om.active)
     const responsibleOfficerDetails = offenderManagers.find(om => om.staffCode === responsibleOfficer.staff.code)
 
-    const licenceType = this.getLicenceType(nomisRecord)
+    const licenceType = LicenceService.getLicenceType(nomisRecord)
 
     const licence = {
       typeCode: licenceType,
       version: await this.conditionService.getPolicyVersion(),
       nomsId: prisonerNumber,
-      bookingNo: nomisRecord.bookingNo,
-      bookingId: nomisRecord.bookingId,
-      prisonCode: nomisRecord.agencyId,
+      bookingNo: nomisRecord.bookNumber,
+      bookingId: parseInt(nomisRecord.bookingId, 10),
+      prisonCode: nomisRecord.prisonId,
       forename: convertToTitleCase(nomisRecord.firstName),
-      middleNames: convertToTitleCase(nomisRecord.middleName),
+      middleNames: convertToTitleCase(nomisRecord.middleNames),
       surname: convertToTitleCase(nomisRecord.lastName),
       dateOfBirth: convertDateFormat(nomisRecord.dateOfBirth),
       conditionalReleaseDate:
-        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseOverrideDate) ||
-        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseDate),
-      actualReleaseDate: convertDateFormat(nomisRecord.sentenceDetail?.confirmedReleaseDate),
-      sentenceStartDate: convertDateFormat(nomisRecord.sentenceDetail?.sentenceStartDate),
-      sentenceEndDate: convertDateFormat(nomisRecord.sentenceDetail?.sentenceExpiryDate),
+        convertDateFormat(nomisRecord.conditionalReleaseOverrideDate) ||
+        convertDateFormat(nomisRecord.conditionalReleaseDate),
+      actualReleaseDate: convertDateFormat(nomisRecord.confirmedReleaseDate),
+      sentenceStartDate: convertDateFormat(nomisRecord.sentenceStartDate),
+      sentenceEndDate: convertDateFormat(nomisRecord.sentenceExpiryDate),
       licenceStartDate:
-        convertDateFormat(nomisRecord.sentenceDetail?.confirmedReleaseDate) ||
-        convertDateFormat(nomisRecord.sentenceDetail?.conditionalReleaseDate),
-      licenceExpiryDate: convertDateFormat(nomisRecord.sentenceDetail?.licenceExpiryDate),
-      topupSupervisionStartDate: convertDateFormat(nomisRecord.sentenceDetail?.topupSupervisionStartDate),
-      topupSupervisionExpiryDate: convertDateFormat(nomisRecord.sentenceDetail?.topupSupervisionExpiryDate),
+        convertDateFormat(nomisRecord.confirmedReleaseDate) || convertDateFormat(nomisRecord.conditionalReleaseDate),
+      licenceExpiryDate: convertDateFormat(nomisRecord.licenceExpiryDate),
+      topupSupervisionStartDate: convertDateFormat(nomisRecord.topupSupervisionStartDate),
+      topupSupervisionExpiryDate: convertDateFormat(nomisRecord.topupSupervisionExpiryDate),
       prisonDescription: prisonInformation.formattedDescription || 'Not known',
       prisonTelephone: [
         prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
@@ -593,6 +592,20 @@ export default class LicenceService {
         LicenceStatus.VARIATION_APPROVED,
       ]
     )
+
+  public static getLicenceType = (sentenceDetail: Prisoner): LicenceType => {
+    const tused = sentenceDetail?.topupSupervisionExpiryDate
+    const led = sentenceDetail?.licenceExpiryDate
+
+    if (!led) {
+      return LicenceType.PSS
+    }
+
+    if (!tused || moment(tused, 'YYYY-MM-DD') <= moment(led, 'YYYY-MM-DD')) {
+      return LicenceType.AP
+    }
+
+    return LicenceType.AP_PSS
   }
 
   private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {
@@ -630,22 +643,6 @@ export default class LicenceService {
           ? { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }
           : { eventType: TimelineEventType.CREATION, title: 'Licence created' }
     }
-  }
-
-  private getLicenceType = (nomisRecord: PrisonApiPrisoner): LicenceType => {
-    const tused = nomisRecord.sentenceDetail?.topupSupervisionExpiryDate
-    const led = nomisRecord.sentenceDetail?.licenceExpiryDate
-    const sed = nomisRecord.sentenceDetail?.sentenceExpiryDate
-
-    if (!tused) {
-      return LicenceType.AP
-    }
-
-    if (!led && !sed) {
-      return LicenceType.PSS
-    }
-
-    return LicenceType.AP_PSS
   }
 
   private async getCroNumberFromNomis(prisonerNumber: string, user: User): Promise<string> {

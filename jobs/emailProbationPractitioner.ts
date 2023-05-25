@@ -1,11 +1,13 @@
 import { initialiseAppInsights, buildAppInsightsClient, flush } from '../server/utils/azureAppInsights'
 import LicenceApiClient from '../server/data/licenceApiClient'
 import logger from '../logger'
+import { InMemoryTokenStore } from '../server/data/tokenStore'
+import { getSystemToken } from '../server/data/systemToken'
 
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-email-probation-practioner-job')
 
-const licenceApiClient = new LicenceApiClient()
+const licenceApiClient = new LicenceApiClient(new InMemoryTokenStore(getSystemToken))
 licenceApiClient
   .notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd()
   .then(() => {
