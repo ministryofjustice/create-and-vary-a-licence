@@ -40,7 +40,7 @@ export default function IsValidExclusionZoneFile(validationOptions?: ValidationO
           if (uploadFile && !isValidSize(uploadFile)) {
             return 'The selected file must be smaller than 10MB'
           }
-          return 'Select a PDF map'
+          return 'Select a PDF of the map you wish to use. If you have multiple maps, add one on this page. You can add more from the next page'
         },
       },
     })

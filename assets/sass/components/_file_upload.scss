@@ -14,7 +14,6 @@ $thumbnail-border-color: $govuk-border-colour;
   align-items: flex-start;
   margin-bottom: govuk-spacing(3);
   margin-left: govuk-spacing(3);
-  padding: 2px;
 }
 
 .upload-detail {
@@ -24,7 +23,6 @@ $thumbnail-border-color: $govuk-border-colour;
 }
 
 .upload-thumbnail {
-  margin-top: govuk-spacing(3);
   margin-bottom: govuk-spacing(3);
   margin-right: govuk-spacing(3);
   border: $thumbnail-border-width solid $thumbnail-border-color;

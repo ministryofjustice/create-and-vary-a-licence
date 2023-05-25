@@ -242,15 +242,17 @@
             <img src="data:image/jpeg;base64, {{ condition.uploadSummary[0].thumbnailImage }}" alt="{{ item }}"/>
         </div>
         <div class="upload-detail-container">
-            <div class="upload-detail govuk-body">
-                File Name: <strong>{{ condition.uploadSummary[0].filename }}</strong>
-            </div>
-            <div class="upload-detail govuk-body">
-                Type: <strong>{{ condition.uploadSummary[0].fileType | humanReadableMimeType }}</strong>
-            </div>
-            <div class="upload-detail govuk-body">
-                Size: <strong>{{ condition.uploadSummary[0].fileSize | humanReadableFileSize }} </strong>
-            </div>
+            <ul class="govuk-list">
+                <li>
+                    File Name: <strong>{{ condition.uploadSummary[0].filename }}</strong>
+                </li>
+                <li>
+                    Type: <strong>{{ condition.uploadSummary[0].fileType | humanReadableMimeType }}</strong>
+                </li>
+                <li>
+                    Size: <strong>{{ condition.uploadSummary[0].fileSize | humanReadableFileSize }} </strong>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="govuk-body">
