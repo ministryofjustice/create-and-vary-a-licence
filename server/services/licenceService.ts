@@ -592,6 +592,7 @@ export default class LicenceService {
         LicenceStatus.VARIATION_APPROVED,
       ]
     )
+  }
 
   public static getLicenceType = (sentenceDetail: Prisoner): LicenceType => {
     const tused = sentenceDetail?.topupSupervisionExpiryDate
