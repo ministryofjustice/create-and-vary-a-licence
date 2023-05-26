@@ -94,4 +94,14 @@ describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })
+
+  describe('DELETE', () => {
+    it('should render check answers page view', async () => {
+      await handler.DELETE(req, res)
+      expect(licenceService.updateBespokeConditions).toHaveBeenCalledWith(1, { conditions: [] } as BespokeConditions, {
+        username: 'joebloggs',
+      })
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+    })
+  })
 })

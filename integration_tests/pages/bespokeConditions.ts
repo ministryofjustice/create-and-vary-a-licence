@@ -21,6 +21,16 @@ export default class BespokeConditionsPage extends Page {
     return this
   }
 
+  checkDeleteThisCondition = (): BespokeConditionsPage => {
+    cy.get('.delete-condition-button').should('contain.text', 'Delete this condition')
+    return this
+  }
+
+  checkDeleteTheseConditions = (): BespokeConditionsPage => {
+    cy.get('.delete-condition-button').should('contain.text', 'Delete these conditions')
+    return this
+  }
+
   clickContinue = (): PssConditionsQuestionPage => {
     cy.task('stubPutBespokeConditions')
     cy.task('stubGetLicence')

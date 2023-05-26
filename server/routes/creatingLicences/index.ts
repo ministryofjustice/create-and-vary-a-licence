@@ -195,6 +195,7 @@ export default function Index({
   post('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, BespokeConditionsYesOrNo)
   get('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.GET)
   post('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.POST, BespokeConditions)
+  get('/id/:licenceId/bespoke-conditions/delete', bespokeConditionsHandler.DELETE)
   get('/id/:licenceId/check-your-answers', checkAnswersHandler.GET)
   post('/id/:licenceId/check-your-answers', checkAnswersHandler.POST)
   get('/id/:licenceId/edit', editQuestionHandler.GET)
