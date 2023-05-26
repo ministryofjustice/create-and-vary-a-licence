@@ -91,7 +91,7 @@ const compareAdditionalConditionSet = (
   if (originalExclusionsZoneConditionsSet.length === 0 && variedExclusionZoneConditionsSet.length > 0) {
     variedConditionsBuilder.recordConditionAdded({
       category: 'Freedom of movement',
-      condition: `Exclusion zones have been added as follows: \n\n ${newZones}`,
+      condition: `${newZones}`,
     })
   } else if (changesToMultipleExclusionZones(variedExclusionZoneConditionsSet, originalExclusionsZoneConditionsSet)) {
     if (newZones.length === 0) {

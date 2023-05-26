@@ -517,7 +517,7 @@ describe('Licence Comparator', () => {
       licenceConditionsAdded: [
         {
           category: 'Freedom of movement',
-          condition: 'Exclusion zones have been added as follows: \n\n Wales\n\nEngland',
+          condition: 'Wales\n\nEngland',
         },
       ],
       licenceConditionsAmended: [

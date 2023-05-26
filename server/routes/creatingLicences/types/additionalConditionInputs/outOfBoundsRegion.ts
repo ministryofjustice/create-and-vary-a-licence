@@ -4,7 +4,7 @@ import IsValidExclusionZoneFile from '../../../../validators/isValidExclusionZon
 
 export default class OutOfBoundsRegion {
   @Expose()
-  @IsNotEmpty({ message: 'Enter the name of the area on the map' })
+  @IsNotEmpty({ message: 'Enter the name of the area shown on the map' })
   outOfBoundArea: string
 
   @Expose()

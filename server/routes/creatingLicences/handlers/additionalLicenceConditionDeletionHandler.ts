@@ -21,6 +21,7 @@ export default class AdditionalLicenceConditionDeletionHandler {
       conditionId,
       conditionCode: condition.code,
       displayMessage: null,
+      description: condition.data[0].value,
       fileName: condition.uploadSummary[0].filename,
     })
   }
@@ -37,6 +38,7 @@ export default class AdditionalLicenceConditionDeletionHandler {
         conditionId,
         conditionCode: condition.code,
         displayMessage,
+        description: condition.uploadSummary[0].description,
         fileName: condition.uploadSummary[0].filename,
       })
     }

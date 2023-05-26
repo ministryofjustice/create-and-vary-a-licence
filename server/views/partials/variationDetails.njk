@@ -5,7 +5,7 @@
 
     {% for comment in conversation %}
         {% set comments = (comments.push({
-            key: { text: "Reasons for the variaton" if comment.role === "COM" else "Feedback from approver" },
+            key: { text: "Reasons for the variation" if comment.role === "COM" else "Feedback from approver" },
             value: { html: comment.comment },
             extraDetail: {
                 items: [
