@@ -1,0 +1,75 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Support - Probationer Search" %}
+{% set backLinkHref = "/support" %}
+
+{% set offenders = [] %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl">Search an Probation practioner / Team</h1>
+        </div>
+    </div>
+
+    <form method="get">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half">
+                {{ govukInput({
+                    label: {
+                        text: "User name"
+                    },
+                    id: "user-name",
+                    value: userName,
+                    name: "userName"
+                }) }}
+            </div>
+            <div class="govuk-grid-column-one-half">
+                {{ govukInput({
+                    label: {
+                        text: "Team"
+                    },
+                    id: "team",
+                    value: teamName,
+                    name: "teamName"
+                }) }}
+            </div>
+        </div>
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half">
+                {{ govukButton({
+                    classes: "govuk-button--primary",
+                    text: "User Search",
+                    preventDoubleClick: true,
+                    attributes: {  'data-qa': 'search-prison' }
+                }) }}
+
+                {{ govukButton({
+                    classes: "govuk-button--secondary",
+                    text: "Clear",
+                    href: '/support/probationer-search'
+                }) }}
+            </div>
+            <div class="govuk-grid-column-one-half">
+                {{ govukButton({
+                    classes: "govuk-button--primary",
+                    text: "Team Search",
+                    preventDoubleClick: true,
+                    attributes: {  'data-qa': 'search-prison' }
+                }) }}
+
+                {{ govukButton({
+                    classes: "govuk-button--secondary",
+                    text: "Clear",
+                    href: '/support/probationer-search'
+                }) }}
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

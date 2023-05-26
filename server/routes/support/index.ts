@@ -13,10 +13,14 @@ import prisonIdAndEmail from './types/prisonIdAndEmail'
 import prisonIdDelete from './types/prisonIdDelete'
 import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
 import OffenderLicenceStatusRoutes from './handlers/offenderLicenceStatus'
+import ProbationerSearchRoutes from './handlers/probationerSearch'
+import ProbationerUserSearchRoutes from './handlers/probationerUserSearch'
 
 export default function Index({
   communityService,
   prisonerService,
+  caseloadService,
+  userService,
   licenceService,
   prisonRegisterService,
   conditionService,
@@ -37,6 +41,8 @@ export default function Index({
     )
   const supportHomeHandler = new SupportHomeRoutes()
   const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, communityService)
+  const probationerSearchHandler = new ProbationerSearchRoutes(userService, caseloadService, communityService)
+  const probationerUserSearchHandler = new ProbationerUserSearchRoutes(caseloadService, communityService)
   const offenderDetailHandler = new OffenderDetailRoutes(prisonerService, communityService, licenceService)
   const offenderLicenceHandler = new OffenderLicencesRoutes(licenceService, prisonerService)
   const offenderAuditHandler = new OffenderAuditRoutes(licenceService, prisonerService)
@@ -54,6 +60,8 @@ export default function Index({
   get('/offender/:nomsId/licence/:licenceId/audit', offenderAuditHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
+  get('/probationer-search', probationerSearchHandler.GET)
+  get('/probationer-user-search/:teamName/:teamCode/:deliusStaffIdentifier', probationerUserSearchHandler.GET)
 
   return router
 }
