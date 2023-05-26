@@ -7,8 +7,6 @@ import { Services } from '../services'
 
 const sqs = new AWS.SQS({
   region: 'eu-west-2',
-  accessKeyId: config.sqs.domainEvents.accessKeyId,
-  secretAccessKey: config.sqs.domainEvents.secretAccessKey,
 })
 
 export default function createSqsListener(services: Services) {
