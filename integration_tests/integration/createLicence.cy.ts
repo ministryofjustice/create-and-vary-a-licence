@@ -72,10 +72,13 @@ context('Create a licence', () => {
 
       const pssConditionsQuestionPage = bespokeConditionsPage
         .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
+        .checkDeleteThisCondition() // for single Bespoke Condition
         .clickAddAnother()
         .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
+        .checkDeleteTheseConditions() // for multiple Bespoke Condition
         .clickAddAnother()
         .enterBespokeCondition(2, 'A third bespoke condition must surely be be a mistake')
+        .checkDeleteTheseConditions() // for multiple Bespoke Condition
         .clickContinue()
 
       const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()

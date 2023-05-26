@@ -582,6 +582,18 @@ export default class LicenceService {
     return this.licenceApiClient.getLicenceById(licence.variationOf.toString(), user)
   }
 
+  async getIncompleteLicenceVariations(nomisId: string): Promise<LicenceSummary[]> {
+    return this.getLicencesByNomisIdsAndStatus(
+      [nomisId],
+      [
+        LicenceStatus.VARIATION_IN_PROGRESS,
+        LicenceStatus.VARIATION_SUBMITTED,
+        LicenceStatus.VARIATION_REJECTED,
+        LicenceStatus.VARIATION_APPROVED,
+      ]
+    )
+  }
+
   public static getLicenceType = (sentenceDetail: Prisoner): LicenceType => {
     const tused = sentenceDetail?.topupSupervisionExpiryDate
     const led = sentenceDetail?.licenceExpiryDate
