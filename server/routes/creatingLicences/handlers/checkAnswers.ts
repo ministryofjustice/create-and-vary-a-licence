@@ -7,6 +7,7 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
+import { isInPssPeriod } from '../../../utils/utils'
 
 export default class CheckAnswersRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
@@ -31,7 +32,19 @@ export default class CheckAnswersRoutes {
       licence.additionalLicenceConditions
     )
 
-    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads, backLink })
+    const { additionalConditions: parentAdditionalConditions } = this.conditionService.additionalConditionsCollection(
+      (await this.licenceService.getParentLicenceOrSelf(licence.id, user)).additionalLicenceConditions
+    )
+
+    const inPssPeriod = isInPssPeriod(licence)
+
+    res.render('pages/create/checkAnswers', {
+      additionalConditions,
+      parentAdditionalConditions,
+      conditionsWithUploads,
+      inPssPeriod,
+      backLink,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

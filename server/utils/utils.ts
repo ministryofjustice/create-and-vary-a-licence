@@ -206,6 +206,17 @@ const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonAp
   return false
 }
 
+const isInPssPeriod = (licence: Licence): boolean => {
+  const { licenceExpiryDate, topupSupervisionExpiryDate } = licence
+  const today = new Date()
+  const LED = parse(licenceExpiryDate, 'dd/MM/yyyy', new Date())
+  const TUSED = parse(topupSupervisionExpiryDate, 'dd/MM/yyyy', new Date())
+  if (LED && TUSED) {
+    return isBefore(LED, today) && !isBefore(TUSED, today)
+  }
+  return false
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -229,4 +240,5 @@ export {
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
   isPassedArdOrCrd,
+  isInPssPeriod,
 }

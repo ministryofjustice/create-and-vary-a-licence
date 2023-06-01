@@ -3,12 +3,15 @@ import _ from 'lodash'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import { isInPssPeriod } from '../../../utils/utils'
 
 export default class ConfirmVaryActionRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    res.render('pages/vary/confirmVaryQuestion')
+    const { licence } = res.locals
+    const pssPeriod = isInPssPeriod(licence)
+    res.render('pages/vary/confirmVaryQuestion', { pssPeriod, licence })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

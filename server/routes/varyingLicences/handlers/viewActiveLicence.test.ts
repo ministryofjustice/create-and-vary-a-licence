@@ -4,11 +4,13 @@ import ViewActiveLicenceRoutes from './viewActiveLicence'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
+import LicenceService from '../../../services/licenceService'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Vary Licence - View active licence', () => {
-  const handler = new ViewActiveLicenceRoutes(conditionService)
+  const handler = new ViewActiveLicenceRoutes(conditionService, licenceService)
   let req: Request
   let res: Response
 
