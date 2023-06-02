@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 
 import { addDays, format, subDays } from 'date-fns'
-import ViewActiveLicenceRoutes from './viewActiveLicence'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
 import LicenceService from '../../../services/licenceService'
+import ViewActiveLicenceRoutes from './viewActiveLicence'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>

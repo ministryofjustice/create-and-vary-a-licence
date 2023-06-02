@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 
 import { addDays, format, subDays } from 'date-fns'
-import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import CheckAnswersRoutes from './checkAnswers'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -145,6 +145,27 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         inPssPeriod: true,
         additionalConditions: [],
+        conditionsWithUploads: [],
+      })
+      res = {
+        ...res,
+        locals: {
+          licence: {
+            licenceExpiryDate: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
+            topupSupervisionExpiryDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+          },
+          user: {
+            username: 'joebloggs',
+            deliusStaffIdentifier: 999,
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        inPssPeriod: true,
+        parentOrSelfAdditionalConditions: [],
         conditionsWithUploads: [],
         backLink: req.session.returnToCase,
       })
