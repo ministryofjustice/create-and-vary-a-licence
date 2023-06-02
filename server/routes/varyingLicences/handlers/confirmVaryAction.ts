@@ -10,8 +10,8 @@ export default class ConfirmVaryActionRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
-    const pssPeriod = isInPssPeriod(licence)
-    res.render('pages/vary/confirmVaryQuestion', { pssPeriod, licence })
+    const inPssPeriod = isInPssPeriod(licence)
+    res.render('pages/vary/confirmVaryQuestion', { inPssPeriod, licence })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

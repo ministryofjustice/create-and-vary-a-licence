@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { addDays, format, subDays } from 'date-fns'
 import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
@@ -64,7 +65,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       })
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        additionalConditions: [],
+        parentOrSelfAdditionalConditions: [],
+        inPssPeriod: false,
         conditionsWithUploads: [],
         backLink: req.session.returnToCase,
       })
@@ -90,7 +92,38 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        inPssPeriod: false,
+        parentOrSelfAdditionalConditions: [],
+        conditionsWithUploads: [],
+        backLink: req.session.returnToCase,
+      })
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+    })
+
+    it('should render view, record audit event (not owner) and PSS period should be true', async () => {
+      conditionService.additionalConditionsCollection.mockReturnValue({
         additionalConditions: [],
+        conditionsWithUploads: [],
+      })
+      res = {
+        ...res,
+        locals: {
+          licence: {
+            licenceExpiryDate: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
+            topupSupervisionExpiryDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+          },
+          user: {
+            username: 'joebloggs',
+            deliusStaffIdentifier: 999,
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        inPssPeriod: true,
+        parentOrSelfAdditionalConditions: [],
         conditionsWithUploads: [],
         backLink: req.session.returnToCase,
       })

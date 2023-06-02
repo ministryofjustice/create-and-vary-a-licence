@@ -158,7 +158,7 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display a table containing the additional licence conditions', () => {
     viewContext = {
       licence,
-      additionalConditions: [
+      parentOrSelfAdditionalConditions: [
         {
           code: 'condition1',
           category: 'Category 1',
@@ -225,7 +225,7 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: { ...licence, typeCode: 'PSS' },
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements')
+    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence requirements details')
   })
 
   it('should display additional PSS conditions section if licence type is AP_PSS', () => {
@@ -233,7 +233,7 @@ describe('Create a Licence Views - Check Answers', () => {
       licence,
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements')
+    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence requirements details')
   })
 
   it('should not display additional PSS licence conditions section if licence type is AP', () => {
@@ -291,7 +291,7 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should show change links and submit button when licence status is IN_PROGRESS', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'IN_PROGRESS' },
-      additionalConditions: [
+      parentOrSelfAdditionalConditions: [
         {
           code: 'condition1',
           category: 'Category 1',
