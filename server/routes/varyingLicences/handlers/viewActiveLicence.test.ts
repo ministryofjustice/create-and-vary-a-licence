@@ -58,7 +58,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
     } as unknown as Response
   })
 
-  fdescribe('GET', () => {
+  describe('GET', () => {
     it('should render a licence view for active licence', async () => {
       await handler.GET(req, res)
 
