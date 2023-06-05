@@ -55,8 +55,7 @@ describe('File upload validation', () => {
     const errors: ValidationError[] = await validate(value)
     expect(errors.length).toBe(1)
     expect(errors[0].constraints).toEqual({
-      isValidExclusionZoneFile:
-        'Select a PDF of the map you wish to use. If you have multiple maps, add one on this page. You can add more from the next page',
+      isValidExclusionZoneFile: 'Select a PDF map',
     })
   })
 
@@ -70,8 +69,7 @@ describe('File upload validation', () => {
     const errors: ValidationError[] = await validate(value)
     expect(errors.length).toBe(1)
     expect(errors[0].constraints).toEqual({
-      isValidExclusionZoneFile:
-        'Select a PDF of the map you wish to use. If you have multiple maps, add one on this page. You can add more from the next page',
+      isValidExclusionZoneFile: 'Select a PDF map',
     })
   })
 
