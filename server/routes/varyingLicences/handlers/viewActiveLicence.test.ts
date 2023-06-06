@@ -65,7 +65,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
         callToActions: { shouldShowVaryButton: true },
         inPssPeriod: false,
-        parentOrSelfAdditionalConditions: [],
+        parentOrSelfAdditionalAPConditions: [],
         conditionsWithUploads: [],
       })
     })
@@ -105,7 +105,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
         callToActions: { shouldShowVaryButton: true },
         inPssPeriod: true,
-        parentOrSelfAdditionalConditions: [],
+        parentOrSelfAdditionalAPConditions: [],
         conditionsWithUploads: [],
       })
     })

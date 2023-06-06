@@ -158,7 +158,7 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display a table containing the additional licence conditions', () => {
     viewContext = {
       licence,
-      parentOrSelfAdditionalConditions: [
+      parentOrSelfAdditionalAPConditions: [
         {
           code: 'condition1',
           category: 'Category 1',
@@ -291,7 +291,7 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should show change links and submit button when licence status is IN_PROGRESS', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'IN_PROGRESS' },
-      parentOrSelfAdditionalConditions: [
+      parentOrSelfAdditionalAPConditions: [
         {
           code: 'condition1',
           category: 'Category 1',

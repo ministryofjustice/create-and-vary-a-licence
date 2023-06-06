@@ -65,7 +65,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       })
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        parentOrSelfAdditionalConditions: [],
+        parentOrSelfAdditionalAPConditions: [],
         inPssPeriod: false,
         conditionsWithUploads: [],
         backLink: req.session.returnToCase,
@@ -93,7 +93,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         inPssPeriod: false,
-        parentOrSelfAdditionalConditions: [],
+        parentOrSelfAdditionalAPConditions: [],
         conditionsWithUploads: [],
         backLink: req.session.returnToCase,
       })
@@ -123,7 +123,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         inPssPeriod: true,
-        parentOrSelfAdditionalConditions: [],
+        parentOrSelfAdditionalAPConditions: [],
         conditionsWithUploads: [],
         backLink: req.session.returnToCase,
       })
