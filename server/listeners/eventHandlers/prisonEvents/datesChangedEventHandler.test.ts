@@ -24,11 +24,9 @@ const prisoner = {
   },
 } as PrisonApiPrisoner
 
-const latestSentenceStartDate = new Date(2021, 8, 9)
-
 beforeEach(() => {
   prisonerService.getPrisonerDetail.mockResolvedValue(prisoner)
-  prisonerService.getPrisonerLatestSentenceStartDate.mockResolvedValue(latestSentenceStartDate)
+  prisonerService.getPrisonerLatestSentenceStartDate.mockResolvedValue(new Date(2021, 8, 9))
 })
 
 afterEach(() => {

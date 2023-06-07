@@ -44,7 +44,7 @@ export default {
             lineSequence: 1,
             caseSequence: 1,
             caseReference: 'ABC123',
-            courtDescription: 'Mold Crown Court',
+            courtDescription: 'A court',
             sentenceStatus: 'A',
             sentenceCategory: '1984',
             sentenceCalculationType: 'ABC',
@@ -94,9 +94,9 @@ export default {
               {
                 offenderChargeId: 6788948,
                 offenceStartDate: '2022-05-02',
-                offenceCode: 'SX03220',
-                offenceDescription: 'Breach SHPO / interim SHPO / SOPO / interim SOPO / foreign travel order',
-                indicators: ['99', 'PIMMS3', 'M', 'S'],
+                offenceCode: 'BF4343',
+                offenceDescription: 'did something wrong',
+                indicators: ['12', 'GHIJ', 'A', 'X'],
               },
             ],
           },
@@ -124,9 +124,9 @@ export default {
             offences: [
               {
                 offenderChargeId: 4355345,
-                offenceCode: 'ZZ01008',
+                offenceCode: 'ABC1243',
                 offenceDescription: 'offence desc',
-                indicators: ['700'],
+                indicators: ['456'],
               },
             ],
             fineAmount: 9999999.12,
