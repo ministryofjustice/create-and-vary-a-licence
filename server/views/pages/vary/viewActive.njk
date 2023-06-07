@@ -41,14 +41,14 @@
                             </span>
                         </summary>
                         <div class="govuk-details__text">
-                            {{ additionalLicenceConditions(licence, parentOrSelfAdditionalAPConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
+                            {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
                             {{ bespokeConditions(licence, null, 'Bespoke licence conditions') }}
                         </div>
                     </details>
                 </div>
             {% endif %}
             {% if not inPssPeriod and ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') %}
-                {{ additionalLicenceConditions(licence, parentOrSelfAdditionalAPConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
+                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
                 {{ bespokeConditions(licence, null, 'Bespoke licence conditions') }}
             {% endif %}
             {% if not inPssPeriod and (licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS') %}

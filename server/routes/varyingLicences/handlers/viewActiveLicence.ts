@@ -10,7 +10,8 @@ export default class ViewActiveLicenceRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
-    let parentOrSelfAdditionalAPConditions: AdditionalCondition[]
+    let additionalConditions
+    let conditionsWithUploads: AdditionalCondition[]
 
     // If not still ACTIVE then redirect back to the vary timeline
     if (licence.statusCode !== LicenceStatus.ACTIVE) {
@@ -19,23 +20,21 @@ export default class ViewActiveLicenceRoutes {
 
     const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
 
-    const { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
+    ;({ conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
       licence.additionalLicenceConditions
-    )
-    parentOrSelfAdditionalAPConditions = additionalConditions
+    ))
 
     const inPssPeriod = isInPssPeriod(licence)
 
     if (inPssPeriod) {
-      const { additionalConditions: parentAdditionalConditions } = this.conditionService.additionalConditionsCollection(
+      ;({ conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
         (await this.licenceService.getParentLicenceOrSelf(licence.id, user))?.additionalLicenceConditions
-      )
-      parentOrSelfAdditionalAPConditions = parentAdditionalConditions
+      ))
     }
 
     return res.render('pages/vary/viewActive', {
+      additionalConditions,
       conditionsWithUploads,
-      parentOrSelfAdditionalAPConditions,
       inPssPeriod,
       callToActions: { shouldShowVaryButton },
     })

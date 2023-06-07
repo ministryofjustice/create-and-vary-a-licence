@@ -35,9 +35,9 @@
             {% else %}
                 {% if licence.typeCode === 'AP' %}
                     <h1 class="govuk-heading-l">Check licence details</h1>
-                {% elseif licence.typeCode === 'AP_PSS' %}
-                    <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
-                {% elseif licence.typeCode === 'PSS' %}
+                {% elseif not inPssPeriod and licence.typeCode === 'AP_PSS' %}
+                    <h1 class="govuk-heading-l">Check licence and post sentence supervision order details</h1>
+                {% elseif (inPssPeriod and licence.typeCode === 'AP_PSS') or licence.typeCode === 'PSS' %}
                     <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
                 {% endif %}
             {% endif %}
@@ -91,7 +91,7 @@
                             </span>
                         </summary>
                         <div class="govuk-details__text">
-                            {{ additionalLicenceConditions(licence, parentOrSelfAdditionalAPConditions, conditionsWithUploads, null, validationErrors) }}
+                            {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, validationErrors) }}
                             {{ bespokeConditions(licence, null) }}
                         </div>
                     </details>
@@ -99,7 +99,7 @@
             {% endif %}
 
             {% if not inPssPeriod and (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) %}
-                {{ additionalLicenceConditions(licence, parentOrSelfAdditionalAPConditions, conditionsWithUploads, isInProgress, validationErrors) }}
+                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors) }}
                 {{ bespokeConditions(licence, isInProgress) }}
             {% endif %}
 
