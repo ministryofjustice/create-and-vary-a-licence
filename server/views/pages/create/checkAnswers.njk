@@ -78,8 +78,18 @@
                 {{ inductionMeetingDetails(licence, isInProgress, validationErrors) }}
             {% endif %}
 
-            {% if inPssPeriod and licence.typeCode === 'AP_PSS' %}
+
+
+            {% if not inPssPeriod and (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) %}
+                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors) }}
+                {{ bespokeConditions(licence, isInProgress) }}
+            {% endif %}
+
+            {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
+            {% endif %}
+
+            {% if inPssPeriod and licence.typeCode === 'AP_PSS' %}
                 <div>
                     <h2 class="govuk-heading-m">Conditions from expired licence</h2>
                     <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 
@@ -98,14 +108,7 @@
                 </div>
             {% endif %}
 
-            {% if not inPssPeriod and (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) %}
-                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors) }}
-                {{ bespokeConditions(licence, isInProgress) }}
-            {% endif %}
-
-            {% if not inPssPeriod and (licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS') %}
-                {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
-            {% endif %}
+            
 
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">

@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { validate, ValidationError } from 'class-validator'
 import { plainToInstance } from 'class-transformer'
 import LicenceService from '../../../services/licenceService'
-import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
@@ -15,8 +15,6 @@ export default class CheckAnswersRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     const backLink = req.session.returnToCase
-    let additionalConditions
-    let conditionsWithUploads: AdditionalCondition[]
 
     // Record the view event only when an officer views a licence which is not their own
     if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
@@ -30,9 +28,9 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    ;({ conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
+    let { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
       licence.additionalLicenceConditions
-    ))
+    )
 
     const inPssPeriod = isInPssPeriod(licence)
 
