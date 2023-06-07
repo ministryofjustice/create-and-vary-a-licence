@@ -137,57 +137,5 @@ gotenberg:
     runAsUser: 1001
     runAsNonRoot: true
 
-hmpps-community-api-wiremock:
-  nameOverride: hmpps-community-api-wiremock
-  replicaCount: 2
-
-  image:
-    repository: quay.io/hmpps/hmpps-community-api-wiremock
-    tag: latest
-    pullPolicy: Always
-    port: 5000
-
-  resources:
-    requests:
-      cpu: 100m
-      memory: 640Mi
-    limits:
-      cpu: 2000m
-      memory: 2048Mi
-
-  env:
-    JAVA_OPTS: "-Xmx2048M"
-
-  namespace_secrets:
-    create-and-vary-a-licence:
-      SYSTEM_CLIENT_ID: "SYSTEM_CLIENT_ID"
-      SYSTEM_CLIENT_SECRET: "SYSTEM_CLIENT_SECRET"
-
-  ingress:
-    enabled: false
-
-  livenessProbe:
-    httpGet:
-      path: /actuator/health/liveness
-    periodSeconds: 30
-    initialDelaySeconds: 60
-    timeoutSeconds: 20
-    failureThreshold: 10
-
-  readinessProbe:
-    httpGet:
-      path: /actuator/health/readiness
-    periodSeconds: 20
-    initialDelaySeconds: 60
-    timeoutSeconds: 30
-    failureThreshold: 15
-
-  podSecurityContext:
-    fsGroup: 1001
-
-  securityContext:
-    runAsUser: 1001
-    runAsNonRoot: true
-
 generic-prometheus-alerts:
   targetApplication: create-and-vary-a-licence

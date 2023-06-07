@@ -51,18 +51,6 @@ services:
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
-  hmpps-community-api-wiremock:
-    image: quay.io/hmpps/hmpps-community-api-wiremock:latest
-    networks:
-      - hmpps
-    container_name: hmpps-community-api-wiremock
-    env_file:
-      - ./.env
-    ports:
-      - "5000:5000"
-    healthcheck:
-      test: [ 'CMD', 'curl', '-f', 'http://localhost:5000/actuator/health' ]
-
   localstack:
     image: localstack/localstack:0.13.2
     networks:
