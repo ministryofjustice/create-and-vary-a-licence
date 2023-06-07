@@ -18,6 +18,14 @@ export interface paths {
      */
     put: operations['addApiAccessForCaseload']
   }
+  '/api/smoketest/offenders/{offenderNo}/release': {
+    /** Releases this offender, with smoke test data */
+    put: operations['releasePrisoner']
+  }
+  '/api/smoketest/offenders/{offenderNo}/recall': {
+    /** Recalls this offender, with smoke test data */
+    put: operations['recallPrisoner']
+  }
   '/api/reference-domains/domains/{domain}/codes/{code}': {
     /**
      * Reference code detail for reference domain and code (with sub-codes).
@@ -47,11 +55,11 @@ export interface paths {
   }
   '/api/offenders/{offenderNo}/release': {
     /** *** BETA *** Releases a prisoner from their current prison location. Must be an active prisoner in currently inside a prison, requires the RELEASE_PRISONER role */
-    put: operations['releasePrisoner']
+    put: operations['releasePrisoner_1']
   }
   '/api/offenders/{offenderNo}/recall': {
     /** Recalls a prisoner into prison. TRANSFER_PRISONER role */
-    put: operations['recallPrisoner']
+    put: operations['recallPrisoner_1']
   }
   '/api/offenders/{offenderNo}/discharge-to-hospital': {
     /** *** BETA *** Discharges a prisoner to hospital, requires the RELEASE_PRISONER role */
@@ -251,6 +259,10 @@ export interface paths {
      * @description user details for supplied usernames
      */
     post: operations['getUserDetailsList']
+  }
+  '/api/smoketest/offenders/{offenderNo}/imprisonment-status': {
+    /** Sets imprisonment status smoke test data for this offender */
+    post: operations['imprisonmentDataSetup']
   }
   '/api/schedules/{agencyId}/visits': {
     /** @description <p>This endpoint uses the REPLICA database.</p> */
@@ -7491,10 +7503,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       first?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
@@ -7503,15 +7515,15 @@ export interface components {
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
       pageSize?: number
-      paged?: boolean
-      unpaged?: boolean
       /** Format: int32 */
       pageNumber?: number
+      paged?: boolean
+      unpaged?: boolean
     }
     SortObject: {
       empty?: boolean
-      unsorted?: boolean
       sorted?: boolean
+      unsorted?: boolean
     }
     /** @description PersonIdentifier */
     PersonIdentifier: {
@@ -9570,10 +9582,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       first?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     Pageable: {
@@ -10267,10 +10279,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       first?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Offender Employment */
@@ -10374,10 +10386,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       first?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageEducation: {
@@ -10392,10 +10404,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       first?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Represents a court date and its outcome */
@@ -10603,10 +10615,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       first?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Visit details */
@@ -10877,10 +10889,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       first?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Case Note Count Detail */
@@ -10935,10 +10947,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       first?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Adjudication Summary for offender */
@@ -11013,10 +11025,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       first?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Prisoner Booking Summary */
@@ -11474,6 +11486,62 @@ export interface operations {
       }
     }
   }
+  /** Releases this offender, with smoke test data */
+  releasePrisoner: {
+    parameters: {
+      path: {
+        /**
+         * @description offenderNo
+         * @example A1234AA
+         */
+        offenderNo: string
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: never
+      /** @description Requires role ROLE_SMOKE_TEST */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Requested resource not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /** Recalls this offender, with smoke test data */
+  recallPrisoner: {
+    parameters: {
+      path: {
+        /**
+         * @description offenderNo
+         * @example A1234AA
+         */
+        offenderNo: string
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: never
+      /** @description Requires role ROLE_SMOKE_TEST */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Requested resource not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   /**
    * Reference code detail for reference domain and code (with sub-codes).
    * @description Reference code detail for reference domain and code (with sub-codes).<p>This endpoint uses the REPLICA database.</p>
@@ -11787,7 +11855,7 @@ export interface operations {
     }
   }
   /** *** BETA *** Releases a prisoner from their current prison location. Must be an active prisoner in currently inside a prison, requires the RELEASE_PRISONER role */
-  releasePrisoner: {
+  releasePrisoner_1: {
     parameters: {
       path: {
         /**
@@ -11836,7 +11904,7 @@ export interface operations {
     }
   }
   /** Recalls a prisoner into prison. TRANSFER_PRISONER role */
-  recallPrisoner: {
+  recallPrisoner_1: {
     parameters: {
       path: {
         /**
@@ -13223,6 +13291,34 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['UserDetail'][]
+        }
+      }
+    }
+  }
+  /** Sets imprisonment status smoke test data for this offender */
+  imprisonmentDataSetup: {
+    parameters: {
+      path: {
+        /**
+         * @description offenderNo
+         * @example A1234AA
+         */
+        offenderNo: string
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: never
+      /** @description Requires role ROLE_SMOKE_TEST */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Requested resource not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
