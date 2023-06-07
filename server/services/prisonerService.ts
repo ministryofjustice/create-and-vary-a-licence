@@ -1,10 +1,15 @@
 import { Readable } from 'stream'
 import _ from 'lodash'
 import fs from 'fs'
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
-import { PrisonApiPrisoner, PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
+import {
+  PrisonApiPrisoner,
+  PrisonInformation,
+  PrisonDetail,
+  OffenderSentenceAndOffences,
+} from '../@types/prisonApiClientTypes'
 import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
 import HdcStatus from '../@types/HdcStatus'
@@ -37,6 +42,21 @@ export default class PrisonerService {
 
   async getPrisonerDetail(nomsId: string, user?: User): Promise<PrisonApiPrisoner> {
     return this.prisonApiClient.getPrisonerDetail(nomsId, user)
+  }
+
+  async getPrisonerSentenceAndOffenceDetails(bookingId: number, user?: User): Promise<OffenderSentenceAndOffences[]> {
+    return this.prisonApiClient.getPrisonerSentenceAndOffences(bookingId, user)
+  }
+
+  async getPrisonerLatestSentenceStartDate(bookingId: number, user?: User): Promise<Date> {
+    const sentenceAndOffenceDetails: OffenderSentenceAndOffences[] = await this.getPrisonerSentenceAndOffenceDetails(
+      bookingId,
+      user
+    )
+    const sentenceStartDates: Date[] = sentenceAndOffenceDetails.map(details =>
+      parse(details.sentenceDate, 'yyyy-MM-dd', new Date())
+    )
+    return new Date(Math.max(...sentenceStartDates.map(date => date.getTime())))
   }
 
   async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {

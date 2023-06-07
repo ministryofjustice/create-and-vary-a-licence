@@ -1,12 +1,13 @@
 import _ from 'lodash'
-import { isAfter, parse } from 'date-fns'
+import { format, isAfter, parse } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
-import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
+import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { convertDateFormat } from '../../../utils/utils'
 import logger from '../../../../logger'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import { PrisonEventMessage } from '../../../@types/events'
 
 export default class DatesChangedEventHandler {
   constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
@@ -19,6 +20,7 @@ export default class DatesChangedEventHandler {
       (await this.prisonerService.searchPrisonersByBookingIds([bookingId])).map(o => o.prisonerNumber).pop()
     const prisoner = await this.prisonerService.getPrisonerDetail(nomisId)
 
+    const latestSentenceStartDate = await this.prisonerService.getPrisonerLatestSentenceStartDate(prisoner.bookingId)
     const activeAndVariationLicences = await this.licenceService.getLicencesByNomisIdsAndStatus(
       [nomisId],
       [
@@ -31,7 +33,7 @@ export default class DatesChangedEventHandler {
     )
 
     if (activeAndVariationLicences.length) {
-      await this.deactivateLicencesIfPrisonerResentenced(activeAndVariationLicences, prisoner)
+      await this.deactivateLicencesIfPrisonerResentenced(activeAndVariationLicences, latestSentenceStartDate)
     } else {
       const licence = _.head(
         await this.licenceService.getLicencesByNomisIdsAndStatus(
@@ -41,16 +43,12 @@ export default class DatesChangedEventHandler {
       )
 
       if (licence) {
-        await this.updateLicenceSentenceDates(licence, nomisId, prisoner)
+        await this.updateLicenceSentenceDates(licence, nomisId, prisoner, latestSentenceStartDate)
       }
     }
   }
 
-  deactivateLicencesIfPrisonerResentenced = async (licences: LicenceSummary[], prisoner: PrisonApiPrisoner) => {
-    const ssd = prisoner.sentenceDetail?.sentenceStartDate
-      ? parse(prisoner.sentenceDetail?.sentenceStartDate, 'yyyy-MM-dd', new Date())
-      : null
-
+  deactivateLicencesIfPrisonerResentenced = async (licences: LicenceSummary[], ssd: Date) => {
     await Promise.all(
       licences.map(async licence => {
         const crd = licence.conditionalReleaseDate
@@ -67,13 +65,18 @@ export default class DatesChangedEventHandler {
     )
   }
 
-  updateLicenceSentenceDates = async (licence: LicenceSummary, nomisId: string, prisoner: PrisonApiPrisoner) => {
+  updateLicenceSentenceDates = async (
+    licence: LicenceSummary,
+    nomisId: string,
+    prisoner: PrisonApiPrisoner,
+    sentenceStartDate: Date
+  ) => {
     await this.licenceService.updateSentenceDates(licence.licenceId.toString(), {
       conditionalReleaseDate:
         convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
         convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseDate),
       actualReleaseDate: convertDateFormat(prisoner.sentenceDetail?.confirmedReleaseDate),
-      sentenceStartDate: convertDateFormat(prisoner.sentenceDetail?.sentenceStartDate),
+      sentenceStartDate: format(sentenceStartDate, 'dd/MM/yyyy'),
       sentenceEndDate: convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryDate),
       licenceStartDate:
         convertDateFormat(prisoner.sentenceDetail?.confirmedReleaseDate) ||

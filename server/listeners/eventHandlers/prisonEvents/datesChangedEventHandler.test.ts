@@ -1,10 +1,11 @@
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import PrisonerService from '../../../services/prisonerService'
-import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
+import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import SentenceDatesChangedEventHandler from './datesChangedEventHandler'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { PrisonEventMessage } from '../../../@types/events'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -23,8 +24,11 @@ const prisoner = {
   },
 } as PrisonApiPrisoner
 
+const latestSentenceStartDate = new Date(2021, 8, 9)
+
 beforeEach(() => {
   prisonerService.getPrisonerDetail.mockResolvedValue(prisoner)
+  prisonerService.getPrisonerLatestSentenceStartDate.mockResolvedValue(latestSentenceStartDate)
 })
 
 afterEach(() => {

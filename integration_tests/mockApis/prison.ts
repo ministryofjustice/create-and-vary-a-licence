@@ -28,6 +28,114 @@ export default {
     })
   },
 
+  stubGetPrisonerSentencesAndOffences: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/offender-sentences/booking/1234/sentences-and-offences`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            bookingId: 1234,
+            sentenceSequence: 1,
+            lineSequence: 1,
+            caseSequence: 1,
+            caseReference: 'ABC123',
+            courtDescription: 'Mold Crown Court',
+            sentenceStatus: 'A',
+            sentenceCategory: '1984',
+            sentenceCalculationType: 'ABC',
+            sentenceTypeDescription: 'Standard Determinate Sentence',
+            sentenceDate: '2021-09-27',
+            terms: [
+              {
+                years: 0,
+                months: 15,
+                weeks: 0,
+                days: 0,
+                code: 'IMP',
+              },
+            ],
+            offences: [
+              {
+                offenderChargeId: 5678,
+                offenceStartDate: '2021-05-02',
+                offenceCode: 'AB1234',
+                offenceDescription: 'offence',
+                indicators: ['912', 'ABC'],
+              },
+            ],
+          },
+          {
+            bookingId: 1234,
+            sentenceSequence: 2,
+            lineSequence: 2,
+            caseSequence: 1,
+            caseReference: 'case ref',
+            courtDescription: 'Some court',
+            sentenceStatus: 'A',
+            sentenceCategory: '2020',
+            sentenceCalculationType: 'calc type',
+            sentenceTypeDescription: 'type description',
+            sentenceDate: '2021-09-27',
+            terms: [
+              {
+                years: 0,
+                months: 20,
+                weeks: 0,
+                days: 0,
+                code: 'IMP',
+              },
+            ],
+            offences: [
+              {
+                offenderChargeId: 6788948,
+                offenceStartDate: '2022-05-02',
+                offenceCode: 'SX03220',
+                offenceDescription: 'Breach SHPO / interim SHPO / SOPO / interim SOPO / foreign travel order',
+                indicators: ['99', 'PIMMS3', 'M', 'S'],
+              },
+            ],
+          },
+          {
+            bookingId: 1234,
+            sentenceSequence: 2,
+            lineSequence: 2,
+            caseSequence: 2,
+            caseReference: 'case ref',
+            courtDescription: 'another court',
+            sentenceStatus: 'A',
+            sentenceCategory: '2020',
+            sentenceCalculationType: 'calc type',
+            sentenceTypeDescription: 'type desc 2',
+            sentenceDate: '2023-04-27',
+            terms: [
+              {
+                years: 0,
+                months: 0,
+                weeks: 0,
+                days: 15,
+                code: 'IMP',
+              },
+            ],
+            offences: [
+              {
+                offenderChargeId: 4355345,
+                offenceCode: 'ZZ01008',
+                offenceDescription: 'offence desc',
+                indicators: ['700'],
+              },
+            ],
+            fineAmount: 9999999.12,
+          },
+        ],
+      },
+    })
+  },
+
   stubGetPrisonInformation: (): SuperAgentRequest => {
     return stubFor({
       request: {

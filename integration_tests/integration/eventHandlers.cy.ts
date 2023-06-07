@@ -63,6 +63,7 @@ context('Event handlers', () => {
       cy.task('stubGetActiveAndVariationLicencesForOffender')
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
+      cy.task('stubGetPrisonerSentencesAndOffences')
 
       cy.task(
         'sendPrisonEvent',
@@ -85,6 +86,7 @@ context('Event handlers', () => {
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
       cy.task('stubUpdateLicenceStatus')
+      cy.task('stubGetPrisonerSentencesAndOffences')
 
       cy.task(
         'sendPrisonEvent',
@@ -108,6 +110,7 @@ context('Event handlers', () => {
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
       cy.task('stubUpdateLicenceStatus')
+      cy.task('stubGetPrisonerSentencesAndOffences')
 
       cy.task(
         'sendPrisonEvent',
@@ -132,6 +135,7 @@ context('Event handlers', () => {
       cy.task('stubGetActiveAndVariationLicencesForOffender')
       cy.task('stubGetPrisonerDetail')
       cy.task('stubUpdateSentenceDates')
+      cy.task('stubGetPrisonerSentencesAndOffences')
 
       cy.task(
         'sendPrisonEvent',
