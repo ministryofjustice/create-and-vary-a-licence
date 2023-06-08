@@ -58,10 +58,10 @@ describe('Prison Api client tests', () => {
   })
 
   it('Gets prisoner sentences and offences', async () => {
-    const sentencesAndOffences = { bookingId: '123', sentenceDate: '2023-04-27"' }
-    get.mockResolvedValue(sentencesAndOffences)
-
     const bookingId = 123
+    const sentencesAndOffences = { bookingId, sentenceDate: '2023-04-27"' }
+
+    get.mockResolvedValue(sentencesAndOffences)
     const user = { username: 'CVL user' } as User
     const result = await prisonApiClient.getPrisonerSentenceAndOffences(bookingId, user)
 
