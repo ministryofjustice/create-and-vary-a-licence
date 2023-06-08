@@ -58,7 +58,7 @@ const getUserDetails = (user: CvlUserDetails) => {
     displayName,
     nomisStaffId,
     prisonCaseload,
-    nomisStaffId: username,
+    username,
     prisonCaseload: activeCaseLoadId,
     deliusStaffIdentifier,
     deliusStaffCode,

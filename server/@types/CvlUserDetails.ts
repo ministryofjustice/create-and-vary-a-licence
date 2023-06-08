@@ -5,6 +5,9 @@ export default class CvlUserDetails {
   // e.g. smith
   lastName?: string
 
+  // e.g. John_Smith
+  username?: string
+
   // e.g. John Smith
   displayName?: string
 
