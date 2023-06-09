@@ -5,9 +5,6 @@ export default class CvlUserDetails {
   // e.g. smith
   lastName?: string
 
-  // e.g. John_Smith
-  username?: string
-
   // e.g. John Smith
   displayName?: string
 
@@ -51,4 +48,4 @@ export default class CvlUserDetails {
   emailAddress?: string
 }
 
-export type User = Express.User & CvlUserDetails
+export type User = Express.LocalsUser

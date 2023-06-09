@@ -1,6 +1,6 @@
 import { setup, defaultClient, TelemetryClient, DistributedTracingModes, Contracts } from 'applicationinsights'
 import FlushOptions from 'applicationinsights/out/Library/FlushOptions'
-import CvlUserDetails from '../@types/CvlUserDetails'
+import { User } from '../@types/CvlUserDetails'
 import applicationInfo from '../applicationInfo'
 
 type TelemetryProcessor = Parameters<typeof TelemetryClient.prototype.addTelemetryProcessor>[0]
@@ -53,7 +53,7 @@ export const addUserDataToRequests: TelemetryProcessor = (envelope, contextObjec
   return true
 }
 
-const getUserDetails = (user: CvlUserDetails) => {
+const getUserDetails = (user: User) => {
   const {
     displayName,
     nomisStaffId,
