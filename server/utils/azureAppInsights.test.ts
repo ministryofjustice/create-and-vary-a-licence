@@ -56,7 +56,6 @@ describe('azureAppInsights', () => {
 
       expect(envelope.data.baseData.properties).toStrictEqual({
         ...user,
-        username: user.username,
         activeCaseLoadId: user.prisonCaseload,
         other: 'things',
       })
