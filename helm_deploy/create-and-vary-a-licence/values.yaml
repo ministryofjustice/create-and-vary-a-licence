@@ -2,6 +2,7 @@
 generic-service:
   nameOverride: create-and-vary-a-licence
   replicaCount: 4
+  serviceAccountName: create-and-vary-a-licence
 
   image:
     repository: quay.io/hmpps/create-and-vary-a-licence

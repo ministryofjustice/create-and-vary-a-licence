@@ -3,7 +3,6 @@
 
 generic-service:
   replicaCount: 2
-  serviceAccountName: create-and-vary-a-licence-test1
   
   ingress:
     hosts:
