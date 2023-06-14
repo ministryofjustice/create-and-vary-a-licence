@@ -19,13 +19,14 @@ This service requires instances of these dependent services:
 * `prison-register` - prison register and contant information
 * `gotenberg` - produce PDFs from HTML templated URLs
 
+It also requires a connection to 3 SQS queues to listen to prison events, probation events and HMPPS domain events.
+In local development this uses localstack to simulate aws.
+
 ## Building
 
-Ensure you have the appropriate tools installed:
+Use `nvm` to ensure that you are running the correct version of node.
 
-`node - v16.x`
-
-`npm - v8.x`
+Run `nvm install --latest-npm` within the repository folder to use the correct version of node, and the latest version of npm. This should match the `engines` config in `package.json` and the CircleCI build config.
 
 Then:
 
@@ -44,7 +45,7 @@ Then:
 There is a single integration test to verify that the Gotenberg container can support the
 conversion of HTML to PDF documents. To run this, follow these instructions:
 
-`$ docker-compose -f docker-compose-dev.yml up -d`
+`$ docker-compose up -d`
 
 This runs local redis and gotenberg containers.
 
@@ -53,6 +54,8 @@ This runs local redis and gotenberg containers.
 This runs the specific integration test `gotenbergIntegration.test.ts` causing a HTML document
 to be sent to the local Gotenberg container, converted to PDF and returned. The PDF is parsed
 to check that it contains some of the wording requested.
+
+NOTE: This test is not currently run in CI. 
 
 ## Integration tests (Cypress/Wiremock)
 
@@ -78,60 +81,28 @@ OR
 
 ## Running locally
 
-###1. Using docker-compose
-
-`$ docker-compose pull` - To pull the latest images for the service and dependent containers.
-
-Then use the script:
-
-`$ run-full.sh` -follow the onscreen instructions.
-
-Point a browser to `localhost:3000` and login as a user with any of the roles - ROLE_LICENCE_CA, ROLE_LICENCE_CA, ROLE_LICENCE_DM.
-e.g. AUTH_RO_USER2 or CVL_OMU_LOCAL (both with the standard local password)
-
-Point a browser to `localhost:3000`
-
-## Running locally against the DEV environment
-
-Where your local machine does not cope well with multiple required containers it is possible to run a small number of 
-containers locally whilst relying on the development services for others. You will need a VPN active.
+You will need to be on VPN.
 
 ###1. Locally required containers
 
 These are:
 
 * redis
+* localstack
 * gotenberg
 
-2. Create a `.env` file in the root of the project with the following content :
+2. Copy `.env.example` to `.env` in the root of the project and customise.
+For the client ID and secrets present in the file, you will need to retrieve these values from the kubernetes dev environment. 
 
-```
-HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
-TOKEN_VERIFICATION_API_URL=https://token-verification-api-dev.prison.service.justice.gov.uk
-LICENCE_API_URL=https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk
-PRISON_API_URL=https://api-dev.prison.service.justice.gov.uk
-OFFENDER_SEARCH_API_URL=https://prisoner-offender-search-dev.prison.service.justice.gov.uk
-COMMUNITY_API_URL=https://community-api-secure.test.delius.probation.hmpps.dsd.io
-PRISONER_SEARCH_API_URL=https://prisoner-offender-search-dev.prison.service.justice.gov.uk
-PROBATION_SEARCH_API_URL=https://probation-offender-search-dev.hmpps.service.justice.gov.uk
-API_CLIENT_ID=create-and-vary-a-licence-client
-API_CLIENT_SECRET=fill this in
-SYSTEM_CLIENT_ID=create-and-vary-a-licence-admin
-SYSTEM_CLIENT_SECRET=fill this in
-GOTENBERG_API_URL=http://localhost:3001
-```
+3. Start the required containers.
 
-3. Start the two required containers.
-
-   `$ docker-compose -f docker-compose-dev.yml up -d` 
+   `$ docker-compose up -d` 
 
 
-4. Start a local `create-and-vary-a-licence` service with `$ npm run start`, which will use the `.env` file to set 
-   up its environment to reference the DEV APIs.
+4. Start a local `create-and-vary-a-licence` service with `$ npm run start:dev`, which will use the `.env` file to set up its environment to reference the DEV APIs.
    
 
-5. Bear in mind that the login details, and all data you will see, will be from the `licence-db` and APIs in the DEV 
-   environment. Only the redis functions and any use of the gotenberg container will be local operations.
+5. Bear in mind that the login details, and all data you will see, will be from the `licence-db` and APIs in the DEV environment. Only the redis functions and any use of the gotenberg container will be local operations.
 
 ### Run linter
 
@@ -141,7 +112,7 @@ GOTENBERG_API_URL=http://localhost:3001
 ## Deployment
 
 
-## Helm
+### Helm
 
 There are four services associated with this UI service:
 
@@ -192,7 +163,7 @@ using a hostname. It does this to pull in resources like stylesheets and images 
 
 For any docker container to reference the docker host (where the UI service is running), the hostname 
 `host.docker-internal` is used. For Mac and Windows users, this just works. For Linux users, this host
-needs to be passed into Gotenburg as an `extra-host`. See the `docker-compose-test.yaml` file for this.
+needs to be passed into Gotenburg as an `extra-host`. See the `docker-compose.yaml` file for this.
 
 e.g. 
 ```angular2html
