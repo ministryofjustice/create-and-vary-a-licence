@@ -427,4 +427,10 @@ export default class LicenceApiClient extends RestClient {
   async overrideStatusCode(licenceId: number, request: { reason: string; statusCode: LicenceStatus }, user: User) {
     await this.post({ path: `/licence/id/${licenceId}/override/status`, data: request }, { username: user?.username })
   }
+
+  async runLicenceActivationJob() {
+    await this.post({
+      path: '/run-activation-job',
+    })
+  }
 }
