@@ -5,7 +5,6 @@ import PrisonerService from '../../../services/prisonerService'
 import CommunityService from '../../../services/communityService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
-import { User } from '../../../@types/CvlUserDetails'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
 type LicenceDates = {
