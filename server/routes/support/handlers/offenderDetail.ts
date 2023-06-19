@@ -6,6 +6,7 @@ import CommunityService from '../../../services/communityService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import { User } from '../../../@types/CvlUserDetails'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 type LicenceDates = {
   crd: string
@@ -15,6 +16,15 @@ type LicenceDates = {
   led: string
   tussd: string
   tused: string
+}
+
+type CvlCom = {
+  email: string
+  username: string
+  team: string
+  lau: string
+  pdu: string
+  region: string
 }
 
 export default class OffenderDetailRoutes {
@@ -42,6 +52,11 @@ export default class OffenderDetailRoutes {
     const sentenceExpiryDate = this.formatNomisDate(prisonerDetail.sentenceExpiryDate)
     const licenceExpiryDate = this.formatNomisDate(prisonerDetail.licenceExpiryDate)
     const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
+
+    const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
+    const licence = licenceSummary
+      ? await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
+      : null
 
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -73,14 +88,35 @@ export default class OffenderDetailRoutes {
         pdu: probationPractitioner?.team?.borough?.description,
         region: probationPractitioner?.probationArea?.description,
       },
-      licence: await this.getLicenceDates(nomsId, user),
+      cvlCom: this.getCvlComDetails(licence),
+      licence: this.getLicenceDates(licence),
     })
   }
 
-  getLicenceDates = async (nomsId: string, user: User): Promise<LicenceDates> => {
-    const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
+  getCvlComDetails = (licence: Licence): CvlCom => {
+    if (!licence) {
+      return {
+        email: 'Not found',
+        username: 'Not found',
+        team: 'Not found',
+        lau: 'Not found',
+        pdu: 'Not found',
+        region: 'Not found',
+      }
+    }
 
-    if (!licenceSummary) {
+    return {
+      email: licence.comEmail,
+      username: licence.comUsername,
+      team: `${licence.probationTeamCode} - ${licence.probationTeamDescription}`,
+      lau: `${licence.probationLauCode} - ${licence.probationLauDescription}`,
+      pdu: `${licence.probationPduCode} - ${licence.probationPduDescription}`,
+      region: `${licence.probationAreaCode} - ${licence.probationAreaDescription}`,
+    }
+  }
+
+  getLicenceDates = (licence: Licence): LicenceDates => {
+    if (!licence) {
       return {
         crd: 'Not found',
         ard: 'Not found',
@@ -91,8 +127,6 @@ export default class OffenderDetailRoutes {
         tused: 'Not found',
       }
     }
-
-    const licence = await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
 
     return {
       crd: this.formatLicenceDate(licence.conditionalReleaseDate),
