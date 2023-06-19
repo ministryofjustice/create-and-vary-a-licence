@@ -105,12 +105,12 @@ export default class OffenderDetailRoutes {
     }
 
     return {
-      email: licence.comEmail,
-      username: licence.comUsername,
-      team: `${licence.probationTeamCode} - ${licence.probationTeamDescription}`,
-      lau: `${licence.probationLauCode} - ${licence.probationLauDescription}`,
-      pdu: `${licence.probationPduCode} - ${licence.probationPduDescription}`,
-      region: `${licence.probationAreaCode} - ${licence.probationAreaDescription}`,
+      email: licence.comEmail || 'Not found',
+      username: licence.comUsername || 'Not found',
+      team: licence.probationTeamDescription || 'Not found',
+      lau: licence.probationLauDescription || 'Not found',
+      pdu: licence.probationPduDescription || 'Not found',
+      region: licence.probationAreaDescription || 'Not found',
     }
   }
 
