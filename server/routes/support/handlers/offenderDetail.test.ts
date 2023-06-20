@@ -129,6 +129,14 @@ describe('Route Handlers - Offender detail', () => {
           team: 'The A Team',
           telephone: '078929482994',
         },
+        cvlCom: {
+          email: 'Not found',
+          username: 'Not found',
+          team: 'Not found',
+          lau: 'Not found',
+          pdu: 'Not found',
+          region: 'Not found',
+        },
         licence: {
           led: 'Not found',
           ssd: 'Not found',
@@ -238,6 +246,14 @@ describe('Route Handlers - Offender detail', () => {
         team: 'The A Team',
         telephone: '078929482994',
       },
+      cvlCom: {
+        email: 'Not found',
+        username: 'Not found',
+        team: 'Not found',
+        lau: 'Not found',
+        pdu: 'Not found',
+        region: 'Not found',
+      },
       licence: {
         led: 'Not found',
         ssd: 'Not found',
@@ -346,6 +362,14 @@ describe('Route Handlers - Offender detail', () => {
         team: 'The A Team',
         telephone: '078929482994',
       },
+      cvlCom: {
+        email: 'Not found',
+        username: 'Not found',
+        team: 'Not found',
+        lau: 'Not found',
+        pdu: 'Not found',
+        region: 'Not found',
+      },
       licence: {
         led: 'Not found',
         ssd: 'Not found',
@@ -358,7 +382,7 @@ describe('Route Handlers - Offender detail', () => {
     })
   })
 
-  it('Should render all offender information with eligible HDC licence and license dates', async () => {
+  it('Should render all offender information with eligible HDC licence and licence dates', async () => {
     req.params = {
       nomsId: 'ABC123',
     }
@@ -431,7 +455,7 @@ describe('Route Handlers - Offender detail', () => {
     } as LicenceSummary)
 
     licenceService.getLicence.mockResolvedValue({
-      licenceId: 1,
+      id: 1,
       conditionalReleaseDate: '01/01/2022',
       actualReleaseDate: '02/01/2022',
       sentenceStartDate: '03/01/2022',
@@ -470,6 +494,14 @@ describe('Route Handlers - Offender detail', () => {
         team: 'The A Team',
         telephone: '078929482994',
       },
+      cvlCom: {
+        email: 'Not found',
+        username: 'Not found',
+        team: 'Not found',
+        lau: 'Not found',
+        pdu: 'Not found',
+        region: 'Not found',
+      },
       licence: {
         led: '05 Jan 2022',
         ssd: '03 Jan 2022',
@@ -478,6 +510,137 @@ describe('Route Handlers - Offender detail', () => {
         sed: '04 Jan 2022',
         tused: '07 Jan 2022',
         tussd: '06 Jan 2022',
+      },
+    })
+  })
+
+  it('should render COM information stored in CVL', async () => {
+    req.params = {
+      nomsId: 'ABC123',
+    }
+
+    const expectedPrisonerDetail = {
+      firstName: 'David',
+      lastName: 'Pepper',
+      conditionalReleaseDate: '2022-06-01',
+      confirmedReleaseDate: '2022-06-01',
+      postRecallReleaseDate: '2022-05-01',
+      topupSupervisionExpiryDate: '2023-05-01',
+      homeDetentionCurfewEligibilityDate: '2022-05-01',
+      sentenceExpiryDate: '2022-06-01',
+      licenceExpiryDate: '2022-06-01',
+      paroleEligibilityDate: '2022-01-01',
+      indeterminateSentence: false,
+      dateOfBirth: '1995-03-05',
+      recall: true,
+    } as Prisoner
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
+
+    communityService.searchProbationers.mockResolvedValue([
+      {
+        otherIds: {
+          crn: 'X1234',
+        },
+        offenderManagers: [
+          {
+            active: true,
+            staff: {
+              code: 'X123',
+              forenames: 'Mr',
+              surname: 'T',
+            },
+            team: {
+              description: 'The A Team',
+              localDeliveryUnit: {
+                description: 'LDU A',
+              },
+              district: {
+                description: 'LAU A',
+              },
+              borough: {
+                description: 'PDU A',
+              },
+            },
+            probationArea: {
+              description: 'Wales',
+            },
+          },
+        ],
+      } as unknown as OffenderDetail,
+    ])
+
+    prisonerService.getHdcStatuses.mockResolvedValue([
+      {
+        bookingId: '1',
+        approvalStatus: 'APPROVED',
+        checksPassed: true,
+      } as HdcStatus,
+    ])
+
+    communityService.getStaffDetailByStaffCode.mockResolvedValue({
+      email: 'mr.g@probation.gov.uk',
+      telephoneNumber: '078929482994',
+    })
+
+    licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
+      licenceId: 1,
+    } as LicenceSummary)
+
+    licenceService.getLicence.mockResolvedValue({
+      id: 1,
+      comEmail: 'test@probation.gov.uk',
+      comUsername: 'AB123C',
+      probationTeamDescription: 'Team 1',
+      probationLauDescription: 'LAU 1',
+      probationPduDescription: 'PDU 1',
+      probationAreaDescription: 'Region 1',
+    } as Licence)
+
+    await handler.GET(req, res)
+    expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
+      prisonerDetail: {
+        ...expectedPrisonerDetail,
+        conditionalReleaseDate: '01 Jun 2022',
+        confirmedReleaseDate: '01 Jun 2022',
+        crn: 'X1234',
+        determinate: 'Yes',
+        dob: '05 Mar 1995',
+        hdcStatus: 'APPROVED',
+        hdced: '01 May 2022',
+        licenceExpiryDate: '01 Jun 2022',
+        name: 'David Pepper',
+        paroleEligibilityDate: '01 Jan 2022',
+        postRecallReleaseDate: '01 May 2022',
+        sentenceExpiryDate: '01 Jun 2022',
+        tused: '01 May 2023',
+        recall: 'Yes',
+      },
+      probationPractitioner: {
+        email: 'mr.g@probation.gov.uk',
+        lau: 'LAU A',
+        ldu: 'LDU A',
+        name: 'Mr T',
+        pdu: 'PDU A',
+        region: 'Wales',
+        team: 'The A Team',
+        telephone: '078929482994',
+      },
+      cvlCom: {
+        email: 'test@probation.gov.uk',
+        username: 'AB123C',
+        team: 'Team 1',
+        lau: 'LAU 1',
+        pdu: 'PDU 1',
+        region: 'Region 1',
+      },
+      licence: {
+        led: 'Not found',
+        ssd: 'Not found',
+        crd: 'Not found',
+        ard: 'Not found',
+        sed: 'Not found',
+        tused: 'Not found',
+        tussd: 'Not found',
       },
     })
   })
