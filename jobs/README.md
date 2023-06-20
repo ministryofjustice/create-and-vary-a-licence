@@ -21,7 +21,7 @@ TestUserNPS2,Tony,Test,tony.test@justice.gov.uk,N44004,PSO
 * Do not include the headers
 * Compile the service code `npm run build`
 * Copy the CSV file containing user details into ./dist/jobs
-* Start a local redis in docker (perhaps with `docker-compose -f docker-compose-dev.yaml up -d`)
+* Start a local redis in docker (perhaps with `docker-compose up -d`)
 * Redis is required as the API clients need a local redis to cache tokens for clients. 
 * Run the job wth `npm run assign-com-roles`
 
@@ -35,7 +35,7 @@ To run the job
 
 * Compile the service code `npm run build`
 * Copy the CSV file containing ACO user details into ./dist/jobs
-* Start a local redis in docker (perhaps with `docker-compose -f docker-compose-dev.yaml up -d`)
+* Start a local redis in docker (perhaps with `docker-compose up -d`)
 * Redis is required as the API clients need a local redis to cache tokens for clients.
 * Run the job wth `npm run assign-aco-roles`
 
@@ -52,7 +52,7 @@ The job can also be run manually. Local environment variables will need to be co
 the environment you wish to run the script against, in this instance. 
 
 * Compile the service code `npm run build`
-* Start a local redis in docker (perhaps with `docker-compose -f docker-compose-dev.yaml up -d`)
+* Start a local redis in docker (perhaps with `docker-compose up -d`)
 * Redis is required as the API clients need a local redis to cache tokens for clients.
 * Run the job wth `npm run activate-valid-licences`
 
