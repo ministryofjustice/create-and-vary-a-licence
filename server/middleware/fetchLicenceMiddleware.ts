@@ -15,7 +15,7 @@ export default function fetchLicence(licenceService: LicenceService): RequestHan
           if (user?.nomisStaffId) {
             if (!user.prisonCaseload.includes(licence.prisonCode)) {
               logger.info(
-                `Prison caseload ${user?.prisonCasload} denied access to licence ID ${licence.id} ${licence.prisonCode}`
+                `Prison caseload ${user?.prisonCaseload} denied access to licence ID ${licence.id} ${licence.prisonCode}`
               )
               return res.redirect('/access-denied')
             }

@@ -28,6 +28,12 @@ export declare global {
       userRoles: string[]
     }
 
+    type LocalsUser = User & CvlUserDetails
+
+    interface Locals {
+      user?: LocalsUser
+    }
+
     interface Request {
       verified?: boolean
 
