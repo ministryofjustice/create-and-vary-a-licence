@@ -23,7 +23,7 @@ import { getSystemToken } from './systemToken'
 type RestClientBuilder<T> = (token: string) => T
 
 export const dataAccess = () => {
-  const redisClient = createRedisClient({ legacyMode: false })
+  const redisClient = createRedisClient()
 
   const tokenStore = new RedisTokenStore(getSystemToken, redisClient)
   const hmppsAuthClient = new HmppsAuthClient(tokenStore)
