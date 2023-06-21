@@ -5,11 +5,16 @@ services:
     image: 'redis:5.0'
     networks:
       - hmpps
-    container_name: redis 
+    container_name: redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
       - '6379:6379'
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   gotenberg:
     image: thecodingmachine/gotenberg:7.5.0
@@ -21,6 +26,9 @@ services:
     restart: always
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   localstack:
     image: localstack/localstack:0.13.2
@@ -42,6 +50,11 @@ services:
     volumes:
       - './.localstack:/tmp/localstack'
       - $PWD/localstack:/docker-entrypoint-initaws.d
+    healthcheck:
+      test: awslocal sqs list-queues
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
 networks:
   hmpps:

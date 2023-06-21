@@ -94,15 +94,11 @@ These are:
 2. Copy `.env.example` to `.env` in the root of the project and customise.
 For the client ID and secrets present in the file, you will need to retrieve these values from the kubernetes dev environment. 
 
-3. Start the required containers.
+3. Run the script to start the required containers and start the local service, which will use the `.env` file to set up its environment to reference the DEV APIs.
 
-   `$ docker-compose up -d` 
+`$ ./run-local.sh`
 
-
-4. Start a local `create-and-vary-a-licence` service with `$ npm run start:dev`, which will use the `.env` file to set up its environment to reference the DEV APIs.
-   
-
-5. Bear in mind that the login details, and all data you will see, will be from the `licence-db` and APIs in the DEV environment. Only the redis functions and any use of the gotenberg container will be local operations.
+4. Bear in mind that the login details, and all data you will see, will be from the `licence-db` and APIs in the DEV environment. Only the redis functions and any use of the gotenberg container will be local operations.
 
 ### Run linter
 
