@@ -37,6 +37,7 @@ import { UpdateComRequest } from '../@types/licenceApiClientTypes'
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
+import { LicenceDates } from '../@types/licenceDates'
 
 export default class LicenceApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -432,5 +433,13 @@ export default class LicenceApiClient extends RestClient {
     await this.post({
       path: '/run-activation-job',
     })
+  }
+
+  async overrideLicenceDates(licenceId: number, dates: LicenceDates, reason: string, user: User) {
+    const request = {
+      ...dates,
+      reason,
+    }
+    await this.put({ path: `/licence/id/${licenceId}/override/dates`, data: request }, { username: user?.username })
   }
 }

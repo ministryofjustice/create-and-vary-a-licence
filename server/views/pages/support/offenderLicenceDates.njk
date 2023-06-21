@@ -1,0 +1,171 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "../../partials/datePicker.njk" import datePicker %}
+
+{% set pageTitle = applicationName + " - licence dates" %}
+{% set backLinkHref = "/support/offender-search" %}
+
+{% block content %}
+
+    <div class="govuk-width-container">
+        <span class="govuk-caption-xl"> Licence Id {{ licence.id }}</span>
+        <h1 class="govuk-heading-l">Override Licence Dates</h1>
+        <p>
+            Use care when manually updating the dates for a licence. You should only override the dates when
+            there's an edge case CVL cannot account for.
+        </p>
+        <P>
+            Please enter a reason for overriding the licence dates. The reason will be visible in the audit log against
+            the current licence.
+        </P>
+    </div>
+
+    <hr/>
+    <br/>
+
+    {% set dateChangeReasonError = ({ text: "You must enter a reason" } if dateChangeReasonError else null)%}
+
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+        <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-table__caption--m">Licence dates</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th scope="col" class="govuk-table__header">Date</th>
+                  <th scope="col" class="govuk-table__header">Current licence date</th>
+                  <th scope="col" class="govuk-table__header">New licence date</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Conditional release date</th>
+                    <td class="govuk-table__cell">{{ licence.conditionalReleaseDate | datetimeToDateShort}}</td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "crd",
+                            errorMessage: validationErrors | findError('crd'),
+                            formResponses: formResponses.crd or licenceDates.crd
+                        }) }}
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Confirmed release date</th>
+                    <td class="govuk-table__cell">{{ licence.actualReleaseDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "ard",
+                            errorMessage: validationErrors | findError('ard'),
+                            formResponses: formResponses.ard or licenceDates.ard
+                        }) }}
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Sentence start date</th>
+                    <td class="govuk-table__cell">{{ licence.sentenceStartDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "ssd",
+                            errorMessage: validationErrors | findError('ssd'),
+                            formResponses: formResponses.ssd or licenceDates.ssd
+                        }) }}
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Sentence end date</th>
+                    <td class="govuk-table__cell">{{ licence.sentenceEndDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "sed",
+                            errorMessage: validationErrors | findError('sed'),
+                            formResponses: formResponses.sed or licenceDates.sed
+                        }) }}
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Licence start date</th>
+                    <td class="govuk-table__cell">{{ licence.licenceStartDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "lsd",
+                            errorMessage: validationErrors | findError('lsd'),
+                            formResponses: formResponses.led or licenceDates.lsd
+                        }) }}
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Licence expiry date</th>
+                    <td class="govuk-table__cell">{{ licence.licenceExpiryDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "led",
+                            errorMessage: validationErrors | findError('led'),
+                            formResponses: formResponses.led or licenceDates.led
+                        }) }}
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Top-up supervision start date</th>
+                    <td class="govuk-table__cell">{{ licence.topupSupervisionStartDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "tussd",
+                            errorMessage: validationErrors | findError('tussd'),
+                            formResponses: formResponses.tussd or licenceDates.tussd
+                        }) }}
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Top-up supervision expiry date</th>
+                    <td class="govuk-table__cell">{{ licence.topupSupervisionExpiryDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "tused",
+                            errorMessage: validationErrors | findError('tused'),
+                            formResponses: formResponses.tused or licenceDates.tused
+                        }) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        {{ govukCharacterCount({
+            name: "dateChangeReason",
+            id: "dateChangeReason",
+            value: dateChangeReason,
+            maxlength: 200,
+            rows: 3,
+            label: {
+                text: "Reason for dates change",
+                classes: "govuk-label--m",
+                isPageHeading: true
+            },
+            hint: {
+                text: "Enter a reason for overriding the licence dates"
+            },
+            errorMessage : validationErrors | findError('dateChangeReason')
+        }) }}
+
+        <div class="govuk-width-container">
+            <div class="govuk-button-group">
+                {{ govukButton({
+                    classes: "govuk-button--primary",
+                    text: "Submit",
+                    preventDoubleClick: true,
+                    attributes: {  'data-qa': 'search-prison' }
+                }) }}
+
+                {{ govukButton({
+                    classes: "govuk-button--secondary",
+                    text: "Cancel",
+                    href: '/support/offender-search'
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

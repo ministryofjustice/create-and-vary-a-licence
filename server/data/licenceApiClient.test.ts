@@ -476,6 +476,30 @@ describe('Licence API client tests', () => {
     )
   })
 
+  it('Override licence dates', async () => {
+    const dates = {
+      conditionalReleaseDate: '01/01/2022',
+      actualReleaseDate: '02/01/2022',
+      sentenceStartDate: '03/01/2022',
+      sentenceEndDate: '04/01/2022',
+      licenceStartDate: '28/09/2021',
+      licenceExpiryDate: '05/01/2022',
+      topupSupervisionStartDate: '06/01/2022',
+      topupSupervisionExpiryDate: '07/01/2022',
+    }
+
+    await licenceApiClient.overrideLicenceDates(1, dates, 'Test Reason', {
+      username: 'bob',
+    } as User)
+    expect(put).toHaveBeenCalledWith(
+      {
+        path: `/licence/id/1/override/dates`,
+        data: { ...dates, reason: 'Test Reason' },
+      },
+      { username: 'bob' }
+    )
+  })
+
   describe('Exclusion zone file', () => {
     it('Upload an exclusion zone PDF file', async () => {
       const myUpload = { path: 'test-file' } as Express.Multer.File

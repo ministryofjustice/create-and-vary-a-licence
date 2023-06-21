@@ -21,4 +21,21 @@ describe('Licence Override Service', () => {
       user
     )
   })
+
+  it('Updates licence dates', () => {
+    const dates = {
+      conditionalReleaseDate: '01/01/2022',
+      actualReleaseDate: '02/01/2022',
+      sentenceStartDate: '03/01/2022',
+      sentenceEndDate: '04/01/2022',
+      licenceStartDate: '28/09/2021',
+      licenceExpiryDate: '05/01/2022',
+      topupSupervisionStartDate: '06/01/2022',
+      topupSupervisionExpiryDate: '07/01/2022',
+    }
+    const reason = 'reason to update dates'
+
+    overrideStatus.overrideDates(1, dates, reason, user)
+    expect(licenceApiClient.overrideLicenceDates).toHaveBeenCalledWith(1, dates, reason, user)
+  })
 })
