@@ -50,8 +50,7 @@ export default class ConditionFormatter {
         } else {
           // List of values for this placeholder (lists of values can have listType 'AND' or 'OR')
           const rules = inputConfig.find(item => item.name === fieldName)
-          let value = this.produceValueAsFormattedList(rules?.listType as string, matchingDataItems)
-          value = this.adjustCase(rules?.case as string, value)
+          let value = this.produceValueAsFormattedList(rules, matchingDataItems)
           value = rules?.includeBefore ? `${rules.includeBefore}${value}` : `${value}`
           if (rules?.handleIndefiniteArticle) {
             value = this.startsWithAVowel(value) ? `an ${value}` : `a ${value}`
@@ -73,16 +72,19 @@ export default class ConditionFormatter {
    * @param matchingDataItems
    */
   // eslint-disable-next-line default-param-last
-  private produceValueAsFormattedList = (listType = 'AND', matchingDataItems: AdditionalConditionData[]): string => {
+  private produceValueAsFormattedList = (rule: Input, matchingDataItems: AdditionalConditionData[]): string => {
+    const listType = rule?.listType || 'AND'
+
     let value = ''
     let valueCounter = 1
     matchingDataItems.forEach(mdi => {
+      const text = this.adjustCase(rule?.case as string, mdi.value)
       if (valueCounter < matchingDataItems.length - 1) {
-        value = value.concat(`${mdi.value}, `)
+        value = value.concat(`${text}, `)
       } else if (valueCounter === matchingDataItems.length - 1) {
-        value = listType && listType === 'OR' ? value.concat(`${mdi.value} or `) : value.concat(`${mdi.value} and `)
+        value = listType && listType === 'OR' ? value.concat(`${text} or `) : value.concat(`${text} and `)
       } else {
-        value = value.concat(`${mdi.value}`)
+        value = value.concat(`${text}`)
       }
       valueCounter += 1
     })
