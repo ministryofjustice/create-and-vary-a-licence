@@ -45,7 +45,13 @@
             <tbody class="govuk-table__body">
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Conditional release date</th>
-                    <td class="govuk-table__cell">{{ licence.conditionalReleaseDate | datetimeToDateShort}}</td>
+                    <td class="govuk-table__cell">
+                        {% if licence.conditionalReleaseDate %}
+                            {{ licence.conditionalReleaseDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
                     <td class="govuk-table__cell">
                         {{ datePicker({
                             id: "crd",
@@ -56,7 +62,13 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Confirmed release date</th>
-                    <td class="govuk-table__cell">{{ licence.actualReleaseDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {% if licence.actualReleaseDate %}
+                            {{ licence.actualReleaseDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
                     <td class="govuk-table__cell">
                         {{ datePicker({
                             id: "ard",
@@ -67,7 +79,13 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Sentence start date</th>
-                    <td class="govuk-table__cell">{{ licence.sentenceStartDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {% if licence.sentenceStartDate %}
+                            {{ licence.sentenceStartDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
                     <td class="govuk-table__cell">
                         {{ datePicker({
                             id: "ssd",
@@ -78,7 +96,13 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Sentence end date</th>
-                    <td class="govuk-table__cell">{{ licence.sentenceEndDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {% if licence.sentenceEndDate %}
+                            {{ licence.sentenceEndDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
                     <td class="govuk-table__cell">
                         {{ datePicker({
                             id: "sed",
@@ -89,7 +113,13 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Licence start date</th>
-                    <td class="govuk-table__cell">{{ licence.licenceStartDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {% if licence.licenceStartDate %}
+                            {{ licence.licenceStartDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
                     <td class="govuk-table__cell">
                         {{ datePicker({
                             id: "lsd",
@@ -100,7 +130,13 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Licence expiry date</th>
-                    <td class="govuk-table__cell">{{ licence.licenceExpiryDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {% if licence.licenceExpiryDate %}
+                            {{ licence.licenceExpiryDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
                     <td class="govuk-table__cell">
                         {{ datePicker({
                             id: "led",
@@ -111,7 +147,13 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Top-up supervision start date</th>
-                    <td class="govuk-table__cell">{{ licence.topupSupervisionStartDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {% if licence.topupSupervisionStartDate %}
+                            {{ licence.topupSupervisionStartDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
                     <td class="govuk-table__cell">
                         {{ datePicker({
                             id: "tussd",
@@ -122,7 +164,13 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header">Top-up supervision expiry date</th>
-                    <td class="govuk-table__cell">{{ licence.topupSupervisionExpiryDate | datetimeToDateShort }}</td>
+                    <td class="govuk-table__cell">
+                        {% if licence.topupSupervisionExpiryDate %}
+                            {{ licence.topupSupervisionExpiryDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
                     <td class="govuk-table__cell">
                         {{ datePicker({
                             id: "tused",

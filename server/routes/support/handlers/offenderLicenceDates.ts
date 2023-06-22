@@ -26,14 +26,15 @@ export default class OffenderLicenceDatesRoutes {
     const { user } = res.locals
     const { licenceId, nomsId } = req.params
     const { dateChangeReason } = req.body
+    const updatedDates = await this.getDatesFromSimpleDates(req.body)
 
-    const licence = await this.licenceService.getLicence(licenceId, user)
-    const updatedDates = await this.getFormDates(req.body)
     if (updatedDates && dateChangeReason) {
       await this.licenceOverrideService.overrideDates(parseInt(licenceId, 10), updatedDates, dateChangeReason, user)
       res.redirect(`/support/offender/${nomsId}/licences`)
       return
     }
+
+    const licence = await this.licenceService.getLicence(licenceId, user)
     const licenceDates = await this.getLicenceSimpleDates(licence)
     res.render('pages/support/offenderLicenceDates', {
       licence,
@@ -55,20 +56,20 @@ export default class OffenderLicenceDatesRoutes {
     }
   }
 
-  getFormDates = async (formData: LicenceDatesAndReason): Promise<object> => {
+  getDatesFromSimpleDates = async (formData: LicenceDatesAndReason): Promise<object> => {
     return {
-      conditionalReleaseDate: this.simpleDateToJson(formData.crd),
-      actualReleaseDate: this.simpleDateToJson(formData.ard),
-      sentenceStartDate: this.simpleDateToJson(formData.ssd),
-      sentenceEndDate: this.simpleDateToJson(formData.sed),
-      licenceStartDate: this.simpleDateToJson(formData.lsd),
-      licenceExpiryDate: this.simpleDateToJson(formData.led),
-      topupSupervisionStartDate: this.simpleDateToJson(formData.tussd),
-      topupSupervisionExpiryDate: this.simpleDateToJson(formData.tused),
+      conditionalReleaseDate: this.simpleDateToLicenceDate(formData.crd),
+      actualReleaseDate: this.simpleDateToLicenceDate(formData.ard),
+      sentenceStartDate: this.simpleDateToLicenceDate(formData.ssd),
+      sentenceEndDate: this.simpleDateToLicenceDate(formData.sed),
+      licenceStartDate: this.simpleDateToLicenceDate(formData.lsd),
+      licenceExpiryDate: this.simpleDateToLicenceDate(formData.led),
+      topupSupervisionStartDate: this.simpleDateToLicenceDate(formData.tussd),
+      topupSupervisionExpiryDate: this.simpleDateToLicenceDate(formData.tused),
     }
   }
 
-  simpleDateToJson = (date: SimpleDate): string | undefined => {
+  simpleDateToLicenceDate = (date: SimpleDate): string | undefined => {
     if (!date) {
       return undefined
     }
