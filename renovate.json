@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", ":disableDependencyDashboard"],
+  "enabledManagers": ["npm", "nvm", "dockerfile", "docker-compose", "helmv3", "helm-values", "github-actions"],
+  "printConfig": true,
+  "timezone": "Europe/London",
+  "schedule": ["before 9am on the first day of the month", "after 4pm on the 20th day of the month"],
+  "rebaseWhen": "behind-base-branch",
+  "prCreation": "not-pending",
+  "branchPrefix": "renovate-",
+  "rollbackPrs": true,
+  "prBodyTemplate": "{{{table}}}{{{notes}}}{{{warnings}}}{{{controls}}}",
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "rangeStrategy": "bump"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non major NPM dependencies",
+      "groupSlug": "all-npm-minor-patch",
+      "stabilityDays": 5
+    },
+    {
+      "matchPackageNames": ["typescript", "govuk-frontend"],
+      "rangeStrategy": "bump",
+      "stabilityDays": 0
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["@types/node"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "stabilityDays": 0
+  }
+}

@@ -43,7 +43,7 @@ describe('ConditionService', () => {
             label: 'Enter name of offender or individual',
             name: 'nameOfIndividual',
             listType: 'OR',
-            case: 'capitalise',
+            case: 'capitalised',
             addAnother: {
               label: 'Add another person',
             },
@@ -418,7 +418,7 @@ describe('ConditionService', () => {
                 label: 'Enter name of offender or individual',
                 name: 'nameOfIndividual',
                 listType: 'OR',
-                case: 'capitalise',
+                case: 'capitalised',
                 addAnother: {
                   label: 'Add another person',
                 },
@@ -465,7 +465,7 @@ describe('ConditionService', () => {
                 label: 'Enter name of offender or individual',
                 name: 'nameOfIndividual',
                 listType: 'OR',
-                case: 'capitalise',
+                case: 'capitalised',
                 addAnother: {
                   label: 'Add another person',
                 },

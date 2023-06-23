@@ -48,4 +48,4 @@ export default class CvlUserDetails {
   emailAddress?: string
 }
 
-export type User = Express.User & CvlUserDetails
+export type User = Express.LocalsUser
