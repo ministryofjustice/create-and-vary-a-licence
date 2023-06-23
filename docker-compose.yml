@@ -5,40 +5,16 @@ services:
     image: 'redis:5.0'
     networks:
       - hmpps
-    container_name: redis 
+    container_name: redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
       - '6379:6379'
-
-  # For the API to seed & interact with - there is no direct connection from the UI service
-  licences-db:
-    image: postgres
-    networks:
-      - hmpps
-    container_name: licences-db
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_PASSWORD=create-and-vary-a-licence
-      - POSTGRES_USER=create-and-vary-a-licence
-      - POSTGRES_DB=create-and-vary-a-licence-db
-
-  create-and-vary-a-licence-api:
-    image: quay.io/hmpps/create-and-vary-a-licence-api:latest
-    networks:
-      - hmpps
-    container_name: create-and-vary-a-licence-api
-    restart: always
-    ports:
-      - "8089:8080"
-    environment:
-      - DB_USER=create-and-vary-a-licence
-      - DB_PASS=create-and-vary-a-licence
-      - HMPPS_AUTH_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal/create-and-vary-a-licence-db
-      - NOTIFY_ENABLED=false
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   gotenberg:
     image: thecodingmachine/gotenberg:7.5.0
@@ -50,6 +26,9 @@ services:
     restart: always
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   localstack:
     image: localstack/localstack:0.13.2
@@ -71,6 +50,11 @@ services:
     volumes:
       - './.localstack:/tmp/localstack'
       - $PWD/localstack:/docker-entrypoint-initaws.d
+    healthcheck:
+      test: awslocal sqs list-queues
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
 networks:
   hmpps:

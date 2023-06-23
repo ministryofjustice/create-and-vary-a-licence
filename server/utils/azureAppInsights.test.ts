@@ -44,6 +44,7 @@ describe('azureAppInsights', () => {
 
     it('adds prison user data to properties when present', () => {
       const user = {
+        username: 'A_User',
         displayName: 'A User',
         nomisStaffId: 'N123',
         prisonCaseload: ['MDI'],
@@ -55,7 +56,6 @@ describe('azureAppInsights', () => {
 
       expect(envelope.data.baseData.properties).toStrictEqual({
         ...user,
-        username: user.nomisStaffId,
         activeCaseLoadId: user.prisonCaseload,
         other: 'things',
       })
