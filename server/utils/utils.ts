@@ -51,6 +51,18 @@ const simpleDateTimeToJson = (dt: SimpleDateTime): string | undefined => {
 }
 
 /**
+ * Converts a date to a SimpleDate for display in a date picker
+ * @param date: a date string with format `dd/mm/yyyy`
+ */
+const dateStringToSimpleDate = (date: string): SimpleDate | undefined => {
+  const momentDate = moment(date, 'D/MM/YYYY HHmm')
+  if (!momentDate.isValid()) {
+    return undefined
+  }
+  return new SimpleDate(momentDate.format('DD'), momentDate.format('MM'), momentDate.format('YYYY'))
+}
+
+/**
  * Converts a JSON date time `dd/mm/yyyy hh:mm` to a SimpleDateTime for display
  * @param dt: string
  */
@@ -67,7 +79,7 @@ const jsonToSimpleDateTime = (dt: string): SimpleDateTime | undefined => {
 
 /**
  * Converts an Address object to a comma-separated string
- * @param address: SimpleDateTime
+ * @param address: Address
  */
 const addressObjectToString = (address: Address): string => {
   return Object.values(address).join(', ')
@@ -212,6 +224,7 @@ export {
   hasAuthSource,
   isBlank,
   simpleDateTimeToJson,
+  dateStringToSimpleDate,
   jsonToSimpleDateTime,
   addressObjectToString,
   stringToAddressObject,
