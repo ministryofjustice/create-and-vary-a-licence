@@ -85,9 +85,13 @@ describe('Route handlers - Licence dates override', () => {
 
       await handler.POST(req, res)
 
-      expect(overrideService.overrideDates).toHaveBeenCalledWith(1, licenceDates, dateChangeReason, {
-        username: 'bob',
-      })
+      expect(overrideService.overrideDates).toHaveBeenCalledWith(
+        1,
+        { ...licenceDates, reason: dateChangeReason },
+        {
+          username: 'bob',
+        }
+      )
 
       expect(res.redirect).toHaveBeenCalledWith(`/support/offender/ABC123/licences`)
     })

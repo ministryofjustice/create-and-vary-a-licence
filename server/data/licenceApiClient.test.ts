@@ -488,7 +488,7 @@ describe('Licence API client tests', () => {
       topupSupervisionExpiryDate: '07/01/2022',
     }
 
-    await licenceApiClient.overrideLicenceDates(1, dates, 'Test Reason', {
+    await licenceApiClient.overrideLicenceDates(1, { ...dates, reason: 'Test Reason' }, {
       username: 'bob',
     } as User)
     expect(put).toHaveBeenCalledWith(

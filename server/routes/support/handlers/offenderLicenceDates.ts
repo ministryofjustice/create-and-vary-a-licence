@@ -29,7 +29,11 @@ export default class OffenderLicenceDatesRoutes {
     const updatedDates = await this.getDatesFromSimpleDates(req.body)
 
     if (updatedDates && dateChangeReason) {
-      await this.licenceOverrideService.overrideDates(parseInt(licenceId, 10), updatedDates, dateChangeReason, user)
+      await this.licenceOverrideService.overrideDates(
+        parseInt(licenceId, 10),
+        { ...updatedDates, reason: dateChangeReason },
+        user
+      )
       res.redirect(`/support/offender/${nomsId}/licences`)
       return
     }
