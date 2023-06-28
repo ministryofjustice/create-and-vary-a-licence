@@ -1,7 +1,7 @@
 import type { User } from '../@types/CvlUserDetails'
 import LicenceApiClient from '../data/licenceApiClient'
 import LicenceStatus from '../enumeration/licenceStatus'
-import { LicenceDates } from '../@types/licenceDates'
+import { OverrideLicenceDatesRequest } from '../@types/licenceApiClientTypes'
 
 export default class LicenceOverrideService {
   constructor(private licenceApiClient: LicenceApiClient) {}
@@ -14,7 +14,7 @@ export default class LicenceOverrideService {
     await this.licenceApiClient.overrideStatusCode(licenceId, request, user)
   }
 
-  async overrideDates(licenceId: number, dates: LicenceDates, reason: string, user: User) {
-    await this.licenceApiClient.overrideLicenceDates(licenceId, dates, reason, user)
+  async overrideDates(licenceId: number, request: OverrideLicenceDatesRequest, user: User) {
+    await this.licenceApiClient.overrideLicenceDates(licenceId, request, user)
   }
 }
