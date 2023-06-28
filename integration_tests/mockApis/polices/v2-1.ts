@@ -1,4 +1,6 @@
-export default {
+import type { LicencePolicyResponse } from '../../../server/@types/licenceApiClientTypes'
+
+const policy: LicencePolicyResponse = {
   version: '2.1',
   changeHints: [
     {
@@ -1062,3 +1064,5 @@ export default {
     ],
   },
 }
+
+export default policy
