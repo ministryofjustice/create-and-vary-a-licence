@@ -1,4 +1,6 @@
-export default {
+import type { LicencePolicyResponse } from '../../../server/@types/licenceApiClientTypes'
+
+const policy: LicencePolicyResponse = {
   version: '2.1',
   changeHints: [
     {
@@ -220,7 +222,7 @@ export default {
             label: 'Enter name of victim or family member',
             name: 'name',
             listType: 'OR',
-            case: 'capitalise',
+            case: 'capitalised',
             addAnother: {
               label: 'Add another person',
             },
@@ -230,7 +232,7 @@ export default {
             label: 'Enter social services department (optional)',
             name: 'socialServicesDepartment',
             includeBefore: ' and / or ',
-            case: 'capitalise',
+            case: 'capitalised',
           },
         ],
         type: 'NoContactWithVictim',
@@ -278,7 +280,7 @@ export default {
             label: 'Enter social services department (optional)',
             name: 'socialServicesDepartment',
             includeBefore: ' and / or ',
-            case: 'capitalise',
+            case: 'capitalised',
           },
         ],
         type: 'UnsupervisedContact',
@@ -296,7 +298,7 @@ export default {
             label: 'Enter name of offender or individual',
             name: 'nameOfIndividual',
             listType: 'OR',
-            case: 'capitalise',
+            case: 'capitalised',
             addAnother: {
               label: 'Add another person',
             },
@@ -670,7 +672,6 @@ export default {
                       type: 'text',
                       label: 'Enter the other frequency',
                       name: 'alternativeReportingFrequency',
-                      case: 'capitalise',
                     },
                   ],
                 },
@@ -782,7 +783,6 @@ export default {
                       type: 'text',
                       label: 'Enter the other frequency',
                       name: 'alternativeReportingFrequency',
-                      case: 'capitalise',
                     },
                   ],
                 },
@@ -1064,3 +1064,5 @@ export default {
     ],
   },
 }
+
+export default policy

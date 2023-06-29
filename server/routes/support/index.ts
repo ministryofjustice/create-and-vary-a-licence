@@ -13,6 +13,8 @@ import prisonIdAndEmail from './types/prisonIdAndEmail'
 import prisonIdDelete from './types/prisonIdDelete'
 import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
 import OffenderLicenceStatusRoutes from './handlers/offenderLicenceStatus'
+import OffenderLicenceDatesRoutes from './handlers/offenderLicenceDates'
+import LicenceDatesAndReason from './types/licenceDatesAndReason'
 
 export default function Index({
   communityService,
@@ -42,6 +44,7 @@ export default function Index({
   const offenderAuditHandler = new OffenderAuditRoutes(licenceService, prisonerService)
   const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
+  const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
@@ -54,6 +57,8 @@ export default function Index({
   get('/offender/:nomsId/licence/:licenceId/audit', offenderAuditHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
+  get('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.GET)
+  post('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.POST, LicenceDatesAndReason)
 
   return router
 }

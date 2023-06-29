@@ -3,7 +3,6 @@
 
 generic-service:
   replicaCount: 2
-  serviceAccountName: create-and-vary-a-licence-test1
   
   ingress:
     hosts:
@@ -28,8 +27,8 @@ generic-service:
     GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
 
     # A temporary reference to a local container which provides a stubbed Delius caseload
-    COMMUNITY_API_URL: "http://create-and-vary-a-licence-hmpps-community-api-wiremock"
-    PROBATION_SEARCH_API_URL: "http://create-and-vary-a-licence-hmpps-community-api-wiremock"
+    COMMUNITY_API_URL: "https://cvl-probation-mock.hmpps.service.justice.gov.uk"
+    PROBATION_SEARCH_API_URL: "https://cvl-probation-mock.hmpps.service.justice.gov.uk"
 
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: "http://create-and-vary-a-licence"
@@ -43,13 +42,6 @@ gotenberg:
     GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
     DISABLE_UNOCONV: 1
     DEFAULT_WAIT_TIMEOUT: 30
-
-hmpps-community-api-wiremock:
-  replicaCount: 1
-
-  env:
-    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
-    PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts-non-prod

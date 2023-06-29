@@ -55,7 +55,7 @@ export default class LicenceExpiryService {
     )
     const idList = licenceExpiryList.map(l => l.licenceId)
 
-    if (idList.length === 0) return [] as LicencesExpired
+    if (idList.length === 0) return []
 
     await this.licenceApiClient.batchInActivateLicences(idList)
     return this.LicencesExpiredSummary(licenceExpiryList, eligibleNomisLicences)
