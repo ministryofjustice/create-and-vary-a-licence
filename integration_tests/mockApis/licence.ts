@@ -1121,4 +1121,18 @@ export default {
       },
     })
   },
+
+  stubUpdateOffenderDetails: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/offender/nomisid/.*/update-offender-details`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
 }
