@@ -13,7 +13,7 @@ describe('Route Handlers - Create Licence - Confirmation', () => {
         licenceId: 1,
       },
       session: {
-        returnToCase: '/licence/create/caseload',
+        returnToCase: 'some-back-link',
       },
     } as unknown as Request
 
@@ -39,6 +39,26 @@ describe('Route Handlers - Create Licence - Confirmation', () => {
           'We have sent the licence and post sentence supervision order to Leeds (HMP) for approval.',
         titleText: 'Licence and post sentence supervision order for Bobby Zamora sent',
         backLink: req.session.returnToCase,
+      })
+    })
+
+    it('should render default return to caseload link if no session state', async () => {
+      const reqWithEmptySession = {
+        params: {
+          licenceId: '1',
+        },
+        session: {},
+        flash: jest.fn(),
+      } as unknown as Request
+
+      res.locals.licence.typeCode = 'AP_PSS'
+
+      await handler.GET(reqWithEmptySession, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
+        confirmationMessage:
+          'We have sent the licence and post sentence supervision order to Leeds (HMP) for approval.',
+        titleText: 'Licence and post sentence supervision order for Bobby Zamora sent',
+        backLink: '/licence/create/caseload',
       })
     })
 

@@ -88,7 +88,7 @@ export default function Index({
       asyncMiddleware(handler)
     )
 
-  const caseloadHandler = new CaseloadRoutes(licenceService, caseloadService)
+  const caseloadHandler = new CaseloadRoutes(caseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
   const confirmCreateHandler = new ConfirmCreateRoutes(
     communityService,

@@ -61,5 +61,20 @@ describe('Route Handlers - Vary Licence - Confirm discard variation', () => {
       expect(licenceService.discard).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/view')
     })
+
+    it('should redirect to default if no session state', async () => {
+      const reqWithEmptySession = {
+        params: {
+          licenceId: '1',
+        },
+        body: { answer: 'Yes' },
+        session: {},
+        flash: jest.fn(),
+      } as unknown as Request
+
+      await handler.POST(reqWithEmptySession, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/caseload')
+    })
   })
 })
