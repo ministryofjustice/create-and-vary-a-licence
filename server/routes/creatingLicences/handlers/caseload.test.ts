@@ -1,21 +1,18 @@
 import { Request, Response } from 'express'
 
 import CaseloadRoutes from './caseload'
-import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { ManagedCase } from '../../../@types/managedCase'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
-jest.mock('../../../services/licenceService')
 jest.mock('../../../services/caseloadService')
 
 describe('Route Handlers - Create Licence - Caseload', () => {
-  const handler = new CaseloadRoutes(licenceService, caseloadService)
+  const handler = new CaseloadRoutes(caseloadService)
   let req: Request
   let res: Response
 
