@@ -1,15 +1,20 @@
+/* eslint-disable import/first */
+/*
+ * Do appinsights first to instrument the logger
+ */
 import 'reflect-metadata'
 import { initialiseAppInsights, buildAppInsightsClient, flush } from '../server/utils/azureAppInsights'
-import logger from '../logger'
-
-import LicenceApiClient from '../server/data/licenceApiClient'
-import { InMemoryTokenStore } from '../server/data/tokenStore'
-import { getSystemToken } from '../server/data/systemToken'
 
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-activate-licences-job')
 
-const licenceApiClient = new LicenceApiClient(new InMemoryTokenStore(getSystemToken))
+import logger from '../logger'
+
+import LicenceApiClient from '../server/data/licenceApiClient'
+import { InMemoryTokenStore } from '../server/data/tokenStore'
+import { getSystemTokenWithRetries } from '../server/data/systemToken'
+
+const licenceApiClient = new LicenceApiClient(new InMemoryTokenStore(getSystemTokenWithRetries))
 
 licenceApiClient
   .runLicenceActivationJob()
