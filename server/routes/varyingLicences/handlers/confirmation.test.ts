@@ -40,6 +40,26 @@ describe('Route Handlers - Vary Licence - Confirmation', () => {
       })
     })
 
+    it('should render default backlink if no session state', async () => {
+      const reqWithEmptySession = {
+        params: {
+          licenceId: '1',
+        },
+        body: { answer: 'Yes' },
+        session: {},
+        flash: jest.fn(),
+      } as unknown as Request
+
+      res.locals.licence.typeCode = 'AP_PSS'
+
+      await handler.GET(reqWithEmptySession, res)
+      expect(res.render).toHaveBeenCalledWith('pages/vary/confirmation', {
+        licenceType: 'licence and post sentence supervision order',
+        titleText: 'Variation for Joe Bloggs sent',
+        backLink: '/licence/vary/caseload',
+      })
+    })
+
     it('should render view for AP licence type', async () => {
       res.locals.licence.typeCode = 'AP'
 

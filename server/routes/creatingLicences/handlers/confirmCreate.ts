@@ -18,7 +18,7 @@ export default class ConfirmCreateRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
-    const backLink = req.session.returnToCase
+    const backLink = req.session.returnToCase || '/licence/create/caseload'
 
     const [nomisRecord, deliusRecord, bankHolidays] = await Promise.all([
       this.prisonerService.getPrisonerDetail(nomisId, user),

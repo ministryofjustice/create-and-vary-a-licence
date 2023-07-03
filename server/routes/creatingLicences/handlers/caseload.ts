@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import _ from 'lodash'
-import LicenceService from '../../../services/licenceService'
 import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase } from '../../../utils/utils'
 import statusConfig from '../../../licences/licenceStatus'
@@ -9,7 +8,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import logger from '../../../../logger'
 
 export default class CaseloadRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly caseloadService: CaseloadService) {}
+  constructor(private readonly caseloadService: CaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const teamView = req.query.view === 'team'
