@@ -43,6 +43,8 @@ describe('Sentence dates changed event handler', () => {
 
     prisonerService.searchPrisonersByBookingIds.mockResolvedValue([{ prisonerNumber: 'ABC123' } as Prisoner])
 
+    // first call to get active and variation licences
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
