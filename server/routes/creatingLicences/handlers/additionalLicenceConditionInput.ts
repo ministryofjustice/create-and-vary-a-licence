@@ -54,9 +54,12 @@ export default class AdditionalLicenceConditionInputRoutes {
     // if the update involves a file or updating a data element for exclusion zone name outOfBoundArea
     let redirect
     if (isFileUploadRequest || 'outOfBoundArea' in req.body) {
-      redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads${
-        req.query?.fromPolicyReview ? '?fromPolicyReview=true' : ''
-      }`
+      redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads`
+      if (req.query?.fromPolicyReview) {
+        redirect += '?fromPolicyReview=true'
+      } else if (req.query?.fromReview) {
+        redirect += '?fromReview=true'
+      }
     } else if (req.query?.fromPolicyReview) {
       redirect = `/licence/vary/id/${licenceId}/policy-changes/input/callback/${
         +req.session.changedConditionsInputsCounter + 1

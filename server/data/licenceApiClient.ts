@@ -30,6 +30,7 @@ import type {
   AdditionalCondition,
   AddAdditionalConditionRequest,
   LicencePolicyResponse,
+  OverrideLicenceDatesRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -426,5 +427,15 @@ export default class LicenceApiClient extends RestClient {
 
   async overrideStatusCode(licenceId: number, request: { reason: string; statusCode: LicenceStatus }, user: User) {
     await this.post({ path: `/licence/id/${licenceId}/override/status`, data: request }, { username: user?.username })
+  }
+
+  async runLicenceActivationJob() {
+    await this.post({
+      path: '/run-activation-job',
+    })
+  }
+
+  async overrideLicenceDates(licenceId: number, request: OverrideLicenceDatesRequest, user: User) {
+    await this.put({ path: `/licence/id/${licenceId}/override/dates`, data: request }, { username: user?.username })
   }
 }

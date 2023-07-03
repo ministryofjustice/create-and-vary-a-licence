@@ -53,7 +53,12 @@ export default class AdditionalLicenceConditionUploadsHandler {
           }`
         )
       }
-      return res.redirect(`/licence/create/id/${licenceId}/additional-licence-conditions/callback?fromReview=true`)
+
+      return res.redirect(
+        `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
+          req.query?.fromReview ? '?fromReview=true' : ''
+        }`
+      )
     }
 
     const sequence = this.conditionService.currentOrNextSequenceForCondition(

@@ -5,12 +5,12 @@
 
 {% set pageTitle = applicationName + " - Create a licence - File Upload " %}
 {% set pageId = "licence-upload-file-page" %}
-
+{% set fromReviewAppend = "&fromReview=true" if fromReview %}
 {% block content %}
 
     {% set uploadCount = conditions.length %}
 
-    <h1 class="govuk-heading-l">You have added {{ uploadCount }} map{% if uploadCount > 1 %}s{% endif %}</h1>
+    <h1 class="govuk-heading-l">You have added {% if uploadCount == 1 %}one{% else %}{{ uploadCount }}{% endif %} map{% if uploadCount > 1 %}s{% endif %}</h1>
 
     {% set items = [] %}
     {% for condition in conditions %}
@@ -25,7 +25,7 @@
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true",
+                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" + fromReviewAppend,
                         text: "Change details",
                         visuallyHiddenText: condition.uploadSummary[0].fileName
                     },

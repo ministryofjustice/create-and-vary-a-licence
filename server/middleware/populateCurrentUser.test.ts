@@ -6,6 +6,7 @@ import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClien
 import { AuthUserDetails, AuthUserEmail } from '../data/hmppsAuthClient'
 import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
 import LicenceService from '../services/licenceService'
+import { User } from '../@types/CvlUserDetails'
 
 jest.mock('../services/userService')
 jest.mock('../services/licenceService')
@@ -57,7 +58,7 @@ describe('populateCurrentUser', () => {
   })
 
   it('should skip calling the user service and call next if no token is available', async () => {
-    res.locals.user = {}
+    res.locals.user = {} as User
 
     await middleware(req, res, next)
 

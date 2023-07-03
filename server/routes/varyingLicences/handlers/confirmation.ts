@@ -4,7 +4,7 @@ import LicenceType from '../../../enumeration/licenceType'
 export default class ConfirmationRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
-    const backLink = req.session.returnToCase
+    const backLink = req.session.returnToCase || '/licence/vary/caseload'
 
     let titleText
     let licenceType

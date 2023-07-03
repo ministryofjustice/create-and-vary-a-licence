@@ -3,7 +3,6 @@
 
 generic-service:
   replicaCount: 2
-  serviceAccountName: create-and-vary-a-licence-preprod
   
   ingress:
     hosts: 
@@ -34,12 +33,6 @@ gotenberg:
     GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
     DISABLE_UNOCONV: 1
     DEFAULT_WAIT_TIMEOUT: 30
-
-hmpps-community-api-wiremock:
-  replicaCount: 0
-  env:
-    HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
-    PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-preprod.prison.service.justice.gov.uk"
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts-non-prod

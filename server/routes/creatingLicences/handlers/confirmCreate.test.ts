@@ -32,7 +32,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         nomisId: 'ABC123',
       },
       session: {
-        returnToCase: '/licence/create/caseload',
+        returnToCase: 'some-back-link',
       },
       user: {
         username: 'joebloggs',
@@ -85,6 +85,30 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         },
         releaseIsOnBankHolidayOrWeekend: true,
         backLink: req.session.returnToCase,
+      })
+    })
+
+    it('should render default return to caseload link if no session state', async () => {
+      const reqWithEmptySession = {
+        params: {
+          licenceId: '1',
+        },
+        session: {},
+        flash: jest.fn(),
+      } as unknown as Request
+
+      await handler.GET(reqWithEmptySession, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
+        licence: {
+          conditionalReleaseDate: '21/11/2022',
+          actualReleaseDate: '20/11/2022',
+          crn: 'X1234',
+          dateOfBirth: '10/11/1960',
+          forename: 'Patrick',
+          surname: 'Holmes',
+        },
+        releaseIsOnBankHolidayOrWeekend: true,
+        backLink: '/licence/create/caseload',
       })
     })
 
