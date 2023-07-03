@@ -1,4 +1,5 @@
-#
+#!/bin/bash
+
 # This script is used to run the Create and Vary a licence UI locally, to sets up the containers and installs the
 # necessary dependencies required for the UI.
 #
@@ -25,13 +26,13 @@ docker compose -f docker-compose.yml pull
 docker compose -f docker-compose.yml up -d
 
 echo "Waiting for front end containers to be ready ..."
-until [ "`docker inspect -f {{.State.Health.Status}} gotenberg`" == "healthy" ]; do
+until [ "$(docker inspect -f {{.State.Health.Status}} gotenberg)" == "healthy" ]; do
     sleep 0.1;
 done;
-until [ "`docker inspect -f {{.State.Health.Status}} redis`" == "healthy" ]; do
+until [ "$(docker inspect -f {{.State.Health.Status}} redis)" == "healthy" ]; do
     sleep 0.1;
 done;
-until [ "`docker inspect -f {{.State.Health.Status}} localstack`" == "healthy" ]; do
+until [ "$(docker inspect -f {{.State.Health.Status}} localstack)" == "healthy" ]; do
     sleep 0.1;
 done;
 

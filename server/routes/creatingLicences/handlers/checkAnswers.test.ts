@@ -26,7 +26,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         licenceId: '1',
       },
       session: {
-        returnToCase: '/licence/vary/caseload',
+        returnToCase: 'some-back-link',
       },
       flash: jest.fn(),
     } as unknown as Request
@@ -69,6 +69,27 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         backLink: req.session.returnToCase,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
+
+    it('should render default return to caseload link if no session state', async () => {
+      const reqWithEmptySession = {
+        params: {
+          licenceId: '1',
+        },
+        session: {},
+        flash: jest.fn(),
+      } as unknown as Request
+
+      conditionService.additionalConditionsCollection.mockReturnValue({
+        additionalConditions: [],
+        conditionsWithUploads: [],
+      })
+      await handler.GET(reqWithEmptySession, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        conditionsWithUploads: [],
+        backLink: '/licence/create/caseload',
+      })
     })
 
     it('should render view and record audit event (not owner)', async () => {
