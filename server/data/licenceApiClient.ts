@@ -31,6 +31,7 @@ import type {
   AddAdditionalConditionRequest,
   LicencePolicyResponse,
   OverrideLicenceDatesRequest,
+  UpdateOffenderDetailsRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -437,5 +438,12 @@ export default class LicenceApiClient extends RestClient {
 
   async overrideLicenceDates(licenceId: number, request: OverrideLicenceDatesRequest, user: User) {
     await this.put({ path: `/licence/id/${licenceId}/override/dates`, data: request }, { username: user?.username })
+  }
+
+  async updateOffenderDetails(nomisId: string, offenderDetails: UpdateOffenderDetailsRequest) {
+    await this.put({
+      path: `/offender/nomisid/${nomisId}/update-offender-details`,
+      data: offenderDetails,
+    })
   }
 }

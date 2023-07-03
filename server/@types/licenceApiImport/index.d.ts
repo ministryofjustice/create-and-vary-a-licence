@@ -21,6 +21,13 @@ export interface paths {
      */
     delete: operations['deleteOmuContactByPrisonCode']
   }
+  '/offender/nomisid/{nomsId}/update-offender-details': {
+    /**
+     * Updates the offender's personal information on all of their licences.
+     * @description Updates the name and date of birth stored on all licences associated with the given offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    put: operations['updateOffenderDetails']
+  }
   '/offender/crn/{crn}/responsible-com': {
     /**
      * Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender.
@@ -373,15 +380,6 @@ export interface components {
        */
       email: string
     }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
     OmuContact: {
       /** Format: int64 */
       id: number
@@ -391,6 +389,38 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string
+    }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
+    /** @description Request object for updating an offender's personal details */
+    UpdateOffenderDetailsRequest: {
+      /**
+       * @description The offender forename
+       * @example Steven
+       */
+      forename: string
+      /**
+       * @description The offender middle names
+       * @example Jason Kyle
+       */
+      middleNames?: string
+      /**
+       * @description The offender surname
+       * @example Smith
+       */
+      surname: string
+      /**
+       * Format: date
+       * @description The offender's date of birth, from either prison or probation services
+       */
+      dateOfBirth: string
     }
     /** @description Request object for updating the COM responsible for an offender */
     UpdateComRequest: {
@@ -2087,6 +2117,44 @@ export interface operations {
     responses: {
       /** @description The OMU email address was deleted */
       200: never
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Updates the offender's personal information on all of their licences.
+   * @description Updates the name and date of birth stored on all licences associated with the given offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+   */
+  updateOffenderDetails: {
+    parameters: {
+      path: {
+        nomsId: string
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateOffenderDetailsRequest']
+      }
+    }
+    responses: {
+      /** @description The offender details were updated */
+      200: never
+      /** @description Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {
