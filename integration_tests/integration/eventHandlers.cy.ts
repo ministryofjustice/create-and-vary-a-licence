@@ -148,5 +148,53 @@ context('Event handlers', () => {
 
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 1 })
     })
+
+    it('should listen to the OFFENDER-UPDATED event and call the prison API endpoint to update offender details', () => {
+      cy.task('stubGetPrisonerDetail')
+      cy.task('stubUpdateOffenderDetails')
+
+      cy.task(
+        'sendPrisonEvent',
+        `{
+          "Message": "{\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "OFFENDER-UPDATED"
+            }
+          }
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', {
+        verb: 'PUT',
+        path: '/offender/nomisid/G9786GC/update-offender-details',
+        times: 1,
+      })
+    })
+
+    it('should listen to the OFFENDER_DETAILS-CHANGED event and call the prison API endpoint to update offender details', () => {
+      cy.task('stubGetPrisonerDetail')
+      cy.task('stubUpdateOffenderDetails')
+
+      cy.task(
+        'sendPrisonEvent',
+        `{
+          "Message": "{\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "OFFENDER_DETAILS-CHANGED"
+            }
+          }
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', {
+        verb: 'PUT',
+        path: '/offender/nomisid/G9786GC/update-offender-details',
+        times: 1,
+      })
+    })
   })
 })

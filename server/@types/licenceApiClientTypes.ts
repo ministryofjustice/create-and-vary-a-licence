@@ -39,3 +39,4 @@ export type AdditionalConditionPssResponse = components['schemas']['AdditionalCo
 export type Input = components['schemas']['Input']
 export type LicenceConditionChange = components['schemas']['LicenceConditionChanges']
 export type OverrideLicenceDatesRequest = components['schemas']['OverrideLicenceDatesRequest']
+export type UpdateOffenderDetailsRequest = components['schemas']['UpdateOffenderDetailsRequest']
