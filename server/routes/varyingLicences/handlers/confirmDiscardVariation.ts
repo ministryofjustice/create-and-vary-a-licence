@@ -13,7 +13,7 @@ export default class ConfirmDiscardVariationRoutes {
     const { licenceId } = req.params
     const { answer } = req.body
     const { user } = res.locals
-    const backLink = req.session.returnToCase
+    const backLink = req.session.returnToCase || '/licence/vary/caseload'
 
     if (answer === YesOrNo.YES) {
       await this.licenceService.discard(licenceId, user)
