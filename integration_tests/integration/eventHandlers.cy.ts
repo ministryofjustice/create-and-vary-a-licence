@@ -91,7 +91,7 @@ context('Event handlers', () => {
       cy.task(
         'sendPrisonEvent',
         `{
-          "Message": "{\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "Message": "{\\"bookingId\\":1234,\\"offenderIdDisplay\\":\\"G9786GC\\"}",
           "MessageAttributes": {
             "eventType": {
               "Type": "String",
@@ -115,7 +115,7 @@ context('Event handlers', () => {
       cy.task(
         'sendPrisonEvent',
         `{
-          "Message": "{\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "Message": "{\\"bookingId\\":1234,\\"offenderIdDisplay\\":\\"G9786GC\\"}",
           "MessageAttributes": {
             "eventType": {
               "Type": "String",
