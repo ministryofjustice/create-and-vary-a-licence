@@ -1,6 +1,6 @@
 import { isDefined } from 'class-validator'
 import moment from 'moment'
-import { addDays, format, subDays } from 'date-fns'
+import { addDays, format } from 'date-fns'
 import {
   addressObjectToString,
   convertDateFormat,
