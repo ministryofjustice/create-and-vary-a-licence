@@ -1,8 +1,8 @@
 import { SQSMessage } from 'sqs-consumer'
 import logger from '../../../../logger'
-import { PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
 import DatesChangedEventHandler from './datesChangedEventHandler'
 import { Services } from '../../../services'
+import { PrisonEventMessage } from '../../../@types/events'
 import OffenderDetailsChangedEventHandler from './offenderDetailsChangedEventHandler'
 
 export default function buildEventHandler({ licenceService, prisonerService }: Services) {

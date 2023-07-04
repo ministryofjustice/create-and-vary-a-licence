@@ -57,6 +57,21 @@ describe('Prison Api client tests', () => {
     expect(result).toEqual({ bookingId: '123', agencyId: 'MDI' })
   })
 
+  it('Gets prisoner sentences and offences', async () => {
+    const bookingId = 123
+    const sentencesAndOffences = { bookingId, sentenceDate: '2023-04-27"' }
+
+    get.mockResolvedValue(sentencesAndOffences)
+    const user = { username: 'CVL user' } as User
+    const result = await prisonApiClient.getPrisonerSentenceAndOffences(bookingId, user)
+
+    expect(get).toHaveBeenCalledWith(
+      { path: `/api/offender-sentences/booking/${bookingId}/sentences-and-offences` },
+      user
+    )
+    expect(result).toEqual(sentencesAndOffences)
+  })
+
   it('Get prison information', async () => {
     get.mockResolvedValue({ description: 'Moorland (HMP)' })
 

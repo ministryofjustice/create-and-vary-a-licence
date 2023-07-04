@@ -1,8 +1,9 @@
-import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
+import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import OffenderDetailsChangedEventHandler from './offenderDetailsChangedEventHandler'
+import { PrisonEventMessage } from '../../../@types/events'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>

@@ -9,6 +9,7 @@ import type {
   PrisonInformation,
   HomeDetentionCurfew,
   PrisonDetail,
+  OffenderSentenceAndOffences,
 } from '../@types/prisonApiClientTypes'
 import { User } from '../@types/CvlUserDetails'
 
@@ -43,6 +44,13 @@ export default class PrisonApiClient extends RestClient {
       { path: `/api/offenders/${nomsId}` },
       { username: user?.username }
     )) as Promise<PrisonApiPrisoner>
+  }
+
+  async getPrisonerSentenceAndOffences(bookingId: number, user?: User): Promise<OffenderSentenceAndOffences[]> {
+    return (await this.get(
+      { path: `/api/offender-sentences/booking/${bookingId}/sentences-and-offences` },
+      { username: user?.username }
+    )) as Promise<OffenderSentenceAndOffences[]>
   }
 
   async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {

@@ -1,10 +1,11 @@
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import PrisonerService from '../../../services/prisonerService'
-import { PrisonApiPrisoner, PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
+import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import SentenceDatesChangedEventHandler from './datesChangedEventHandler'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { PrisonEventMessage } from '../../../@types/events'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -25,6 +26,7 @@ const prisoner = {
 
 beforeEach(() => {
   prisonerService.getPrisonerDetail.mockResolvedValue(prisoner)
+  prisonerService.getPrisonerLatestSentenceStartDate.mockResolvedValue(new Date(2021, 8, 9))
 })
 
 afterEach(() => {
@@ -41,6 +43,8 @@ describe('Sentence dates changed event handler', () => {
 
     prisonerService.searchPrisonersByBookingIds.mockResolvedValue([{ prisonerNumber: 'ABC123' } as Prisoner])
 
+    // first call to get active and variation licences
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
