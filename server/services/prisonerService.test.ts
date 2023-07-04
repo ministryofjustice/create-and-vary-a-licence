@@ -59,6 +59,52 @@ describe('Prisoner Service', () => {
     expect(prisonApiClient.getPrisonerDetail).toHaveBeenCalledWith('ABC1234', user)
   })
 
+  it('Gets prisoner sentence and offence details', async () => {
+    const bookingId = 956
+    const expectedResult = [
+      {
+        bookingId,
+        sentenceDate: '2022-07-16',
+      },
+      {
+        bookingId,
+        sentenceDate: '2023-02-20',
+      },
+    ]
+
+    prisonApiClient.getPrisonerSentenceAndOffences.mockResolvedValue(expectedResult)
+    const actualResult = await prisonerService.getPrisonerSentenceAndOffenceDetails(bookingId, user)
+    expect(actualResult).toEqual(expectedResult)
+    expect(prisonApiClient.getPrisonerSentenceAndOffences).toHaveBeenCalledWith(bookingId, user)
+  })
+
+  it('Gets the latest sentence start for a prisoner', async () => {
+    const bookingId = 250412
+    const sentencesAndOffences = [
+      {
+        bookingId,
+        sentenceDate: '2022-07-16',
+      },
+      {
+        bookingId,
+        sentenceDate: '2023-02-20',
+      },
+      {
+        bookingId,
+        sentenceDate: '2021-06-15',
+      },
+      {
+        bookingId,
+        sentenceDate: '2022-03-21',
+      },
+    ]
+
+    prisonApiClient.getPrisonerSentenceAndOffences.mockResolvedValue(sentencesAndOffences)
+    const result = await prisonerService.getPrisonerLatestSentenceStartDate(bookingId, user)
+    expect(result).toEqual(new Date(2023, 1, 20))
+    expect(prisonApiClient.getPrisonerSentenceAndOffences).toHaveBeenCalledWith(bookingId, user)
+  })
+
   it('Get Prison Information', async () => {
     const expectedResult = { agencyId: 'MDI', description: 'Moorland (HMP)' } as PrisonInformation
 

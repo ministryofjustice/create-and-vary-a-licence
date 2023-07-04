@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import { convertDateFormat } from '../../../utils/utils'
 
+
 export default class OffenderDetailsChangedEventHandler {
   constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
 
