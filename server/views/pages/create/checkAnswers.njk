@@ -35,9 +35,9 @@
             {% else %}
                 {% if licence.typeCode === 'AP' %}
                     <h1 class="govuk-heading-l">Check licence details</h1>
-                {% elseif not inPssPeriod and licence.typeCode === 'AP_PSS' %}
+                {% elseif not isInPssPeriod and licence.typeCode === 'AP_PSS' %}
                     <h1 class="govuk-heading-l">Check licence and post sentence supervision order details</h1>
-                {% elseif (inPssPeriod and licence.typeCode === 'AP_PSS') or licence.typeCode === 'PSS' %}
+                {% elseif (isInPssPeriod and licence.typeCode === 'AP_PSS') or licence.typeCode === 'PSS' %}
                     <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
                 {% endif %}
             {% endif %}
@@ -80,7 +80,7 @@
 
 
 
-            {% if not inPssPeriod and (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) %}
+            {% if not isInPssPeriod and (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors) }}
                 {{ bespokeConditions(licence, isInProgress) }}
             {% endif %}
@@ -89,7 +89,7 @@
                 {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
             {% endif %}
 
-            {% if inPssPeriod and licence.typeCode === 'AP_PSS' %}
+            {% if isInPssPeriod and licence.typeCode === 'AP_PSS' %}
                 <div>
                     <h2 class="govuk-heading-m">Conditions from expired licence</h2>
                     <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 

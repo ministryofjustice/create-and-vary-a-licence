@@ -21,7 +21,6 @@ import {
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
   isPassedArdOrCrd,
-  isInPssPeriod,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -504,39 +503,5 @@ describe('Get prisoner release date from Nomis', () => {
 
       expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
     })
-  })
-})
-
-describe('Check licence is in PSS Period', () => {
-  it('should return true if LED is less than today and TUSED is greater than today', () => {
-    const licence = {
-      licenceExpiryDate: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
-      topupSupervisionExpiryDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-    } as Licence
-    expect(isInPssPeriod(licence)).toBeTruthy()
-  })
-
-  it('should return false if LED is greater than today and TUSED is greater than today', () => {
-    const licence = {
-      licenceExpiryDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-      topupSupervisionExpiryDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-    } as Licence
-    expect(isInPssPeriod(licence)).toBeFalsy()
-  })
-
-  it('should return true if LED is less than today and TUSED is equal to today', () => {
-    const licence = {
-      licenceExpiryDate: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
-      topupSupervisionExpiryDate: format(new Date(), 'dd/MM/yyyy'),
-    } as Licence
-    expect(isInPssPeriod(licence)).toBeFalsy()
-  })
-
-  it('should return false if LED is less than today and TUSED is less than today', () => {
-    const licence = {
-      licenceExpiryDate: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
-      topupSupervisionExpiryDate: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
-    } as Licence
-    expect(isInPssPeriod(licence)).toBeFalsy()
   })
 })

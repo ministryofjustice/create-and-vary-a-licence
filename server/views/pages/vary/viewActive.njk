@@ -28,14 +28,14 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if not inPssPeriod and ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') %}
+            {% if not isInPssPeriod and ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
                 {{ bespokeConditions(licence, null, 'Bespoke licence conditions') }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence, null, [], 'Additional post sentence supervision requirements') }}
             {% endif %}
-            {% if inPssPeriod and licence.typeCode === 'AP_PSS' %}
+            {% if isInPssPeriod and licence.typeCode === 'AP_PSS' %}
                 <div>
                     <h2 class="govuk-heading-m">Conditions from expired licence</h2>
                     <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 

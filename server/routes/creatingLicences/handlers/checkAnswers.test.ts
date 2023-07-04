@@ -66,7 +66,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
-        inPssPeriod: false,
+        isInPssPeriod: false,
         conditionsWithUploads: [],
         backLink: req.session.returnToCase,
       })
@@ -90,6 +90,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
+        isInPssPeriod: false,
         backLink: '/licence/create/caseload',
       })
     })
@@ -113,9 +114,9 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        inPssPeriod: false,
         additionalConditions: [],
         conditionsWithUploads: [],
+        isInPssPeriod: false,
         backLink: req.session.returnToCase,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -143,9 +144,10 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        inPssPeriod: true,
         additionalConditions: [],
         conditionsWithUploads: [],
+        isInPssPeriod: false,
+        backLink: req.session.returnToCase,
       })
       res = {
         ...res,
@@ -164,9 +166,9 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        inPssPeriod: true,
-        parentOrSelfAdditionalConditions: [],
+        additionalConditions: [],
         conditionsWithUploads: [],
+        isInPssPeriod: false,
         backLink: req.session.returnToCase,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()

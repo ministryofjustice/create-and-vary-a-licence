@@ -2,13 +2,13 @@ import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
 import LicenceService from '../../../services/licenceService'
-import { isInPssPeriod } from '../../../utils/utils'
 
 export default class ViewActiveLicenceRoutes {
   constructor(private readonly conditionService: ConditionService, private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
+    const { isInPssPeriod = false } = licence
 
     // If not still ACTIVE then redirect back to the vary timeline
     if (licence.statusCode !== LicenceStatus.ACTIVE) {
@@ -21,18 +21,16 @@ export default class ViewActiveLicenceRoutes {
       licence.additionalLicenceConditions
     )
 
-    const inPssPeriod = isInPssPeriod(licence)
-
-    if (inPssPeriod) {
+    if (isInPssPeriod) {
       ;({ conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
-        (await this.licenceService.getParentLicenceOrSelf(licence.id, user))?.additionalLicenceConditions
+        (await this.licenceService.getParentLicenceOrSelf(licence.id.toString(), user))?.additionalLicenceConditions
       ))
     }
 
     return res.render('pages/vary/viewActive', {
       additionalConditions,
       conditionsWithUploads,
-      inPssPeriod,
+      isInPssPeriod,
       callToActions: { shouldShowVaryButton },
     })
   }

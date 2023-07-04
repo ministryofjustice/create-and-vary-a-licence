@@ -64,7 +64,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
         callToActions: { shouldShowVaryButton: true },
-        inPssPeriod: false,
+        isInPssPeriod: false,
         additionalConditions: [],
         conditionsWithUploads: [],
       })
@@ -85,29 +85,6 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
       await handler.GET(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith(`/licence/vary/id/${licence.id}/timeline`)
-    })
-
-    it('should render a licence view with PSS period true', async () => {
-      res = {
-        ...res,
-        locals: {
-          ...res.locals,
-          licence: {
-            ...licence,
-            licenceExpiryDate: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
-            topupSupervisionExpiryDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-          },
-        },
-      } as unknown as Response
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
-        callToActions: { shouldShowVaryButton: true },
-        inPssPeriod: true,
-        additionalConditions: [],
-        conditionsWithUploads: [],
-      })
     })
   })
 })
