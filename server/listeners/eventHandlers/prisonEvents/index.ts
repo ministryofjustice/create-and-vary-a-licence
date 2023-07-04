@@ -3,9 +3,11 @@ import logger from '../../../../logger'
 import DatesChangedEventHandler from './datesChangedEventHandler'
 import { Services } from '../../../services'
 import { PrisonEventMessage } from '../../../@types/events'
+import OffenderDetailsChangedEventHandler from './offenderDetailsChangedEventHandler'
 
 export default function buildEventHandler({ licenceService, prisonerService }: Services) {
   const datesChangedEventHandler = new DatesChangedEventHandler(licenceService, prisonerService)
+  const offenderDetailsChangedEventHandler = new OffenderDetailsChangedEventHandler(licenceService, prisonerService)
 
   return async (messages: SQSMessage[]) => {
     messages.forEach(message => {
@@ -20,6 +22,10 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
         case 'SENTENCE_DATES-CHANGED':
         case 'CONFIRMED_RELEASE_DATE-CHANGED':
           datesChangedEventHandler.handle(eventMessage).catch(error => logger.error(error))
+          break
+        case 'OFFENDER-UPDATED':
+        case 'OFFENDER_DETAILS-CHANGED':
+          offenderDetailsChangedEventHandler.handle(eventMessage).catch(error => logger.error(error))
           break
       }
     })

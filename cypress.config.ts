@@ -83,6 +83,7 @@ export default defineConfig({
         stubGetLicencePolicyConditions: licence.stubGetLicencePolicyConditions,
         stubGetActivePolicyConditions: licence.stubGetActivePolicyConditions,
         stubGetPolicyChanges: licence.stubGetPolicyChanges,
+        stubUpdateOffenderDetails: licence.stubUpdateOffenderDetails,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
