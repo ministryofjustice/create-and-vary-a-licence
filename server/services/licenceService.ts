@@ -32,6 +32,7 @@ import {
   OmuContact,
   AddAdditionalConditionRequest,
   LicenceConditionChange,
+  UpdateOffenderDetailsRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import {
@@ -592,6 +593,10 @@ export default class LicenceService {
         LicenceStatus.VARIATION_APPROVED,
       ]
     )
+  }
+
+  async updateOffenderDetails(nomisId: string, offenderDetails: UpdateOffenderDetailsRequest): Promise<void> {
+    return this.licenceApiClient.updateOffenderDetails(nomisId, offenderDetails)
   }
 
   public static getLicenceType = (sentenceDetail: Prisoner): LicenceType => {
