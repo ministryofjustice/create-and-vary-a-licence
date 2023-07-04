@@ -1,4 +1,4 @@
-import { PrisonEventMessage } from '../../../@types/prisonApiClientTypes'
+import { PrisonEventMessage } from '../../../@types/events'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import { convertDateFormat } from '../../../utils/utils'
