@@ -12,9 +12,9 @@ jest.mock('../../../services/licenceService')
 jest.mock('../../../services/prisonerService')
 
 const prisoner = {
-  firstName: 'first_name',
-  middleName: 'middle_name_1 middle_name_2',
-  lastName: 'last_name',
+  firstName: 'FIRST_NAME',
+  middleName: 'MIDDLE_NAME_1 MIDDLE_NAME_2',
+  lastName: 'LAST_NAME',
   dateOfBirth: '1970-01-01',
 } as PrisonApiPrisoner
 
@@ -59,9 +59,9 @@ describe('offenderDetailsChangedEventHandler', () => {
     await handler.handle(event)
 
     expect(licenceService.updateOffenderDetails).toHaveBeenCalledWith('ABC123', {
-      forename: prisoner.firstName,
-      middleNames: prisoner.middleName,
-      surname: prisoner.lastName,
+      forename: 'First_name',
+      middleNames: 'Middle_name_1 Middle_name_2',
+      surname: 'Last_name',
       dateOfBirth: '01/01/1970',
     })
   })
