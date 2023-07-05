@@ -583,6 +583,14 @@ export default class LicenceService {
     return this.licenceApiClient.getLicenceById(licence.variationOf.toString(), user)
   }
 
+  async getParentOrSelfAdditionalLicenceConditions(licence: Licence, user: User): Promise<AdditionalCondition[]> {
+    if (licence.isInPssPeriod) {
+      return (await this.getParentLicenceOrSelf(licence.id.toString(), user))?.additionalLicenceConditions
+    }
+
+    return licence.additionalLicenceConditions
+  }
+
   async getIncompleteLicenceVariations(nomisId: string): Promise<LicenceSummary[]> {
     return this.getLicencesByNomisIdsAndStatus(
       [nomisId],

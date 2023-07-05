@@ -28,15 +28,10 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    let { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
-      licence.additionalLicenceConditions
-    )
+    const conditionsToDisplay = await this.licenceService.getParentOrSelfAdditionalLicenceConditions(licence, user)
 
-    if (isInPssPeriod) {
-      ;({ conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
-        (await this.licenceService.getParentLicenceOrSelf(licence.id.toString(), user))?.additionalLicenceConditions
-      ))
-    }
+    const { conditionsWithUploads, additionalConditions } =
+      this.conditionService.additionalConditionsCollection(conditionsToDisplay)
 
     res.render('pages/create/checkAnswers', {
       additionalConditions,

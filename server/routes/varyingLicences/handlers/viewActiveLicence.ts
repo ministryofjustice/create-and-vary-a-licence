@@ -17,15 +17,10 @@ export default class ViewActiveLicenceRoutes {
 
     const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
 
-    let { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
-      licence.additionalLicenceConditions
-    )
+    const conditionsToDisplay = await this.licenceService.getParentOrSelfAdditionalLicenceConditions(licence, user)
 
-    if (isInPssPeriod) {
-      ;({ conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
-        (await this.licenceService.getParentLicenceOrSelf(licence.id.toString(), user))?.additionalLicenceConditions
-      ))
-    }
+    const { conditionsWithUploads, additionalConditions } =
+      this.conditionService.additionalConditionsCollection(conditionsToDisplay)
 
     return res.render('pages/vary/viewActive', {
       additionalConditions,

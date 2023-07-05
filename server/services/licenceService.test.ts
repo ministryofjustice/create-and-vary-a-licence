@@ -1124,4 +1124,46 @@ describe('Licence Service', () => {
       )
     })
   })
+
+  describe('Get parent or self licence additional conditions', () => {
+    const parentLicence = {
+      id: 2,
+      statusCode: LicenceStatus.VARIATION_APPROVED,
+      variationOf: 1,
+      isVariation: true,
+      createdByFullName: 'James Brown',
+      dateLastUpdated: '12/11/2022 10:45:00',
+      isInPssPeriod: true,
+      additionalLicenceConditions: [{ id: 1, code: 'testCode', uploadSummary: [{ filename: 'testFile' }] }],
+    } as Licence
+
+    const selfLicence = {
+      id: 2,
+      statusCode: LicenceStatus.VARIATION_APPROVED,
+      variationOf: 1,
+      isVariation: true,
+      createdByFullName: 'James Brown',
+      dateLastUpdated: '12/11/2022 10:45:00',
+      isInPssPeriod: true,
+      additionalLicenceConditions: [
+        { id: 2, code: 'testCode', uploadSummary: [{ filename: 'testFile' }] },
+        { id: 3, code: 'testCode', uploadSummary: [{ filename: 'testFile' }] },
+      ],
+    } as Licence
+
+    it('should return parent additional conditions if licence is in PSS period', async () => {
+      licenceApiClient.getLicenceById.mockResolvedValue(parentLicence)
+      const conditionsToDisplay = await licenceService.getParentOrSelfAdditionalLicenceConditions(selfLicence, user)
+      expect(conditionsToDisplay.length).toEqual(parentLicence.additionalLicenceConditions.length)
+      expect(conditionsToDisplay[0].id).toEqual(1)
+    })
+
+    it('should return self additional conditions if licence is in not in PSS period', async () => {
+      selfLicence.isInPssPeriod = false
+      const conditionsToDisplay = await licenceService.getParentOrSelfAdditionalLicenceConditions(selfLicence, user)
+      expect(conditionsToDisplay.length).toEqual(selfLicence.additionalLicenceConditions.length)
+      expect(conditionsToDisplay[0].id).toEqual(2)
+      expect(conditionsToDisplay[1].id).toEqual(3)
+    })
+  })
 })
