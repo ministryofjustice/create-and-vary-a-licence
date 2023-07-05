@@ -1,7 +1,8 @@
 import { PrisonEventMessage } from '../../../@types/events'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
-import { convertDateFormat } from '../../../utils/utils'
+import { convertDateFormat, convertToTitleCase } from '../../../utils/utils'
+import { PrisonEventMessage } from '../../../@types/events'
 
 export default class OffenderDetailsChangedEventHandler {
   constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
@@ -15,9 +16,9 @@ export default class OffenderDetailsChangedEventHandler {
 
     if (prisoner) {
       await this.licenceService.updateOffenderDetails(nomisId, {
-        forename: prisoner.firstName,
-        middleNames: prisoner.middleName,
-        surname: prisoner.lastName,
+        forename: convertToTitleCase(prisoner.firstName),
+        middleNames: convertToTitleCase(prisoner.middleName),
+        surname: convertToTitleCase(prisoner.lastName),
         dateOfBirth: convertDateFormat(prisoner.dateOfBirth),
       })
     }
