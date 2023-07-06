@@ -2,17 +2,17 @@ import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
-import LicenceService from '../../../services/licenceService'
 import ViewActiveLicenceRoutes from './viewActiveLicence'
+import { LicenceApiClient } from '../../../data'
 
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
+const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
 describe('Route Handlers - Vary Licence - View active licence', () => {
-  const handler = new ViewActiveLicenceRoutes(conditionService, licenceService)
+  const handler = new ViewActiveLicenceRoutes(conditionService)
   let req: Request
   let res: Response
 
@@ -32,7 +32,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
   })
 
   beforeEach(() => {
-    licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+    licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
     conditionService.additionalConditionsCollection.mockReturnValue({
       additionalConditions: [],
       conditionsWithUploads: [],

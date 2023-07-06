@@ -34,6 +34,7 @@ import {
   AdditionalCondition,
   AdditionalConditionData,
   AdditionalConditionsResponse,
+  Licence,
   LicencePolicyResponse,
   StandardCondition,
 } from '../@types/licenceApiClientTypes'
@@ -41,6 +42,7 @@ import {
 import ElectronicTagPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicTagPeriod'
 import ConditionFormatter from './conditionFormatter'
 import { AdditionalConditionAp, AdditionalConditionPss, AdditionalConditionsConfig } from '../@types/LicencePolicy'
+import { User } from '../@types/CvlUserDetails'
 
 type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -274,4 +276,13 @@ export default class ConditionService {
     return mappedConditions
   }
   /* eslint-disable no-param-reassign */
+
+  async getParentOrSelfAdditionalLicenceConditions(licence: Licence, user: User): Promise<AdditionalCondition[]> {
+    if (licence.isInPssPeriod) {
+      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))
+        ?.additionalLicenceConditions
+    }
+
+    return licence.additionalLicenceConditions
+  }
 }

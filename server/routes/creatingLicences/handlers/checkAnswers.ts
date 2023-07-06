@@ -7,9 +7,14 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
+import { LicenceApiClient } from '../../../data'
 
 export default class CheckAnswersRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
+  constructor(
+    private readonly licenceApiClient: LicenceApiClient,
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -28,7 +33,7 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    const conditionsToDisplay = await this.licenceService.getParentOrSelfAdditionalLicenceConditions(licence, user)
+    const conditionsToDisplay = await this.conditionService.getParentOrSelfAdditionalLicenceConditions(licence, user)
 
     const { conditionsWithUploads, additionalConditions } =
       this.conditionService.additionalConditionsCollection(conditionsToDisplay)
@@ -58,7 +63,7 @@ export default class CheckAnswersRoutes {
      * licence was created on a previous version.
      */
     if (
-      (await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !==
+      (await this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)).version !==
       (await this.conditionService.getPolicyVersion())
     ) {
       const newStdConditions = {

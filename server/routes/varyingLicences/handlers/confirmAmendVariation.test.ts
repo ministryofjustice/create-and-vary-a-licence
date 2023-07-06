@@ -5,14 +5,20 @@ import ConfirmAmendVariationRoutes from './confirmAmendVariation'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import ConditionFormatter from '../../../services/conditionFormatter'
+import { LicenceApiClient } from '../../../data'
 
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
+const conditionFormatter = new ConditionFormatter()
+const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
+const conditionService = new ConditionService(licenceApiClient, conditionFormatter) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+
 describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
-  const handler = new ConfirmAmendVariationRoutes(licenceService, conditionService)
+  const handler = new ConfirmAmendVariationRoutes(licenceApiClient, licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -53,7 +59,7 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
   describe('POST', () => {
     it('should update status to in progress when answer is yes and the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
-      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
@@ -65,7 +71,7 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
 
     it('should update status to in progress and update the standard conditions when answer is yes and the licence version is out of date', async () => {
       req.body = { answer: 'Yes' }
-      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
+      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       conditionService.getStandardConditions.mockResolvedValue([])
       await handler.POST(req, res)

@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
-import LicenceService from '../../../services/licenceService'
 
 export default class ViewActiveLicenceRoutes {
-  constructor(private readonly conditionService: ConditionService, private readonly licenceService: LicenceService) {}
+  constructor(private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -17,7 +16,7 @@ export default class ViewActiveLicenceRoutes {
 
     const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
 
-    const conditionsToDisplay = await this.licenceService.getParentOrSelfAdditionalLicenceConditions(licence, user)
+    const conditionsToDisplay = await this.conditionService.getParentOrSelfAdditionalLicenceConditions(licence, user)
 
     const { conditionsWithUploads, additionalConditions } =
       this.conditionService.additionalConditionsCollection(conditionsToDisplay)

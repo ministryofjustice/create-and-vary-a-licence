@@ -574,23 +574,6 @@ export default class LicenceService {
     return this.licenceApiClient.deleteOmuEmailAddress(prisonId, user)
   }
 
-  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
-    const licence = await this.licenceApiClient.getLicenceById(licenceId, user)
-    if (!licence.variationOf) {
-      return licence
-    }
-
-    return this.licenceApiClient.getLicenceById(licence.variationOf.toString(), user)
-  }
-
-  async getParentOrSelfAdditionalLicenceConditions(licence: Licence, user: User): Promise<AdditionalCondition[]> {
-    if (licence.isInPssPeriod) {
-      return (await this.getParentLicenceOrSelf(licence.id.toString(), user))?.additionalLicenceConditions
-    }
-
-    return licence.additionalLicenceConditions
-  }
-
   async getIncompleteLicenceVariations(nomisId: string): Promise<LicenceSummary[]> {
     return this.getLicencesByNomisIdsAndStatus(
       [nomisId],
