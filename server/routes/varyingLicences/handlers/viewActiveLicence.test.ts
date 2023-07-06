@@ -8,6 +8,7 @@ import { LicenceApiClient } from '../../../data'
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
 const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
 
+jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
