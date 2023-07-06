@@ -140,8 +140,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         ...res,
         locals: {
           licence: {
-            licenceExpiryDate: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
-            topupSupervisionExpiryDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+            isInPssPeriod: true,
           },
           user: {
             username: 'joebloggs',
@@ -155,15 +154,21 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
-        isInPssPeriod: false,
+        isInPssPeriod: true,
         backLink: req.session.returnToCase,
+      })
+    })
+
+    it('should render view, record audit event (not owner) and PSS period should be false', async () => {
+      conditionService.additionalConditionsCollection.mockReturnValue({
+        additionalConditions: [],
+        conditionsWithUploads: [],
       })
       res = {
         ...res,
         locals: {
           licence: {
-            licenceExpiryDate: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
-            topupSupervisionExpiryDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+            isInPssPeriod: false,
           },
           user: {
             username: 'joebloggs',
