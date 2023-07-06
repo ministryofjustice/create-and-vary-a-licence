@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 
-import { addDays, format, subDays } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
