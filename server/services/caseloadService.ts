@@ -245,7 +245,11 @@ export default class CaseloadService {
 
     return eligibleOffenders.filter(offender => {
       const hdcRecord = hdcStatuses.find(hdc => hdc.bookingId === offender.nomisRecord.bookingId)
-      return !hdcRecord || hdcRecord.approvalStatus !== 'APPROVED'
+      return (
+        !hdcRecord ||
+        hdcRecord.approvalStatus !== 'APPROVED' ||
+        (!offender.nomisRecord.homeDetentionCurfewEligibilityDate && hdcRecord.approvalStatus === 'APPROVED')
+      )
     }, 'approved for HDC')
   }
 
