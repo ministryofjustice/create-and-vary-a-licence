@@ -28,7 +28,7 @@ export default function Index({
       asyncMiddleware(handler)
     )
 
-  const viewCasesHandler = new ViewAndPrintCaseRoutes(caseloadService, prisonerService)
+  const viewCasesHandler = new ViewAndPrintCaseRoutes(caseloadService, prisonerService, licenceService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService, conditionService)
   const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
