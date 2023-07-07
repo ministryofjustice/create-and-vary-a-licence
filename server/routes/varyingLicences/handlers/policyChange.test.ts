@@ -3,14 +3,24 @@ import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import PolicyChangeRoutes from './policyChange'
 import { Licence, LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
+import ConditionFormatter from '../../../services/conditionFormatter'
+import { LicenceApiClient } from '../../../data'
 
+jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
 describe('Route handlers', () => {
-  const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-  const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
-  const handler = new PolicyChangeRoutes(licenceService, conditionService)
+  const conditionFormatter = new ConditionFormatter()
+  const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
+  const conditionService = new ConditionService(licenceApiClient, conditionFormatter) as jest.Mocked<ConditionService>
+  const licenceService = new LicenceService(
+    licenceApiClient,
+    null,
+    null,
+    conditionService
+  ) as jest.Mocked<LicenceService>
+  const handler = new PolicyChangeRoutes(licenceApiClient, licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -54,7 +64,7 @@ describe('Route handlers', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
-    licenceService.getParentLicenceOrSelf.mockResolvedValue({
+    licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({
       id: 1,
       version: 'version',
       typeCode: 'AP_PSS',
