@@ -135,7 +135,7 @@
     "qrcode": "^1.5.3",
     "redis": "^4.6.7",
     "reflect-metadata": "^0.1.13",
-    "sqs-consumer": "^5.8.0",
+    "sqs-consumer": "^7.2.0",
     "superagent": "^8.0.9",
     "uk-bank-holidays": "^0.1.0",
     "uuid": "^9.0.0"
