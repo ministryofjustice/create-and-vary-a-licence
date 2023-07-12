@@ -50,6 +50,7 @@ export default function Index({
   prisonerService,
   ukBankHolidayFeedService,
   conditionService,
+  licenceApiClient,
 }: Services): Router {
   const router = Router()
 
@@ -120,7 +121,7 @@ export default function Index({
   const additionalPssConditionInputHandler = new AdditionalPssConditionInputRoutes(licenceService, conditionService)
   const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
   const bespokeConditionsHandler = new BespokeConditionsRoutes(licenceService)
-  const checkAnswersHandler = new CheckAnswersRoutes(licenceService, conditionService)
+  const checkAnswersHandler = new CheckAnswersRoutes(licenceApiClient, licenceService, conditionService)
   const editQuestionHandler = new EditQuestionRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
 
