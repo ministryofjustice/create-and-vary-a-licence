@@ -248,7 +248,7 @@ export default class CaseloadService {
       return (
         !hdcRecord ||
         hdcRecord.approvalStatus !== 'APPROVED' ||
-        (!offender.nomisRecord.homeDetentionCurfewEligibilityDate && hdcRecord.approvalStatus === 'APPROVED')
+        !offender.nomisRecord.homeDetentionCurfewEligibilityDate
       )
     }, 'approved for HDC')
   }
