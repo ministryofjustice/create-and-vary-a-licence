@@ -4,14 +4,20 @@ import ConditionService from '../../../services/conditionService'
 
 import LicenceService from '../../../services/licenceService'
 import VloDiscussionRoutes from './vloDiscussion'
+import ConditionFormatter from '../../../services/conditionFormatter'
+import { LicenceApiClient } from '../../../data'
 
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
+const conditionFormatter = new ConditionFormatter()
+const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
+const conditionService = new ConditionService(licenceApiClient, conditionFormatter) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(licenceApiClient, null, null, conditionService) as jest.Mocked<LicenceService>
+
 describe('Route Handlers - Vary Licence - Vlo discussion', () => {
-  const handler = new VloDiscussionRoutes(licenceService, conditionService)
+  const handler = new VloDiscussionRoutes(licenceApiClient, licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -45,7 +51,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
   describe('POST', () => {
     it('should save response and redirect to the check your answers page if the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
-      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
@@ -59,7 +65,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
 
     it('should save response and redirect to the policy changes page if the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
-      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
+      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 

@@ -82,7 +82,8 @@
                             text: "Continue",
                             type: "submit",
                             classes: 'govuk-!-margin-top-6',
-                            attributes: { 'data-qa': 'continue' }
+                            attributes: { 'data-qa': 'continue' },
+                            preventDoubleClick: true
                         }) }}
                         
                         {% if fileUploadPresent == true %}
@@ -95,7 +96,8 @@
                                 text: "Delete this condition",
                                 href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReviewQuery,
                                 classes: 'govuk-button--secondary',
-                                attributes: { 'data-qa': 'delete' }
+                                attributes: { 'data-qa': 'delete' },
+                                preventDoubleClick: true
                             }) }}
                         {% endif %}
                     </div>
