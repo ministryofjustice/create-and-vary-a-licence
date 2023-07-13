@@ -789,6 +789,28 @@ describe('Caseload Service', () => {
         comUsername: 'joebloggs',
       },
     ])
+    prisonerService.getHdcStatuses.mockResolvedValue([
+      {
+        bookingId: '1234',
+        checksPassed: true,
+        approvalStatus: 'APPROVED',
+      },
+      {
+        bookingId: '12345',
+        checksPassed: true,
+        approvalStatus: 'PENDING',
+      },
+      {
+        bookingId: '123456',
+        checksPassed: true,
+        approvalStatus: undefined,
+      },
+      {
+        bookingId: '1234567',
+        checksPassed: true,
+        approvalStatus: 'APPROVED',
+      },
+    ] as HdcStatus[])
     getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234F',
@@ -821,6 +843,32 @@ describe('Caseload Service', () => {
         topupSupervisionExpiryDate: '2023-12-26',
         status: 'ACTIVE IN',
       },
+      {
+        prisonerNumber: 'AB1234J',
+        bookingId: '1234',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+        homeDetentionCurfewEligibilityDate: undefined,
+      },
+      {
+        prisonerNumber: 'AB1234K',
+        bookingId: '12345',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+      },
+      {
+        prisonerNumber: 'AB1234L',
+        bookingId: '123456',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+      },
+      {
+        prisonerNumber: 'AB1234M',
+        bookingId: '1234567',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+        homeDetentionCurfewEligibilityDate: nineDaysFromNow,
+      },
     ] as Prisoner[])
 
     communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
@@ -838,6 +886,22 @@ describe('Caseload Service', () => {
       },
       {
         otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234J', crn: 'X12352' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234K', crn: 'X12353' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234L', crn: 'X12354' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' },
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
       },
     ] as OffenderDetail[])
@@ -896,6 +960,22 @@ describe('Caseload Service', () => {
       },
       {
         otherIds: { nomsNumber: 'AB1234I', crn: 'X12351' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234J', crn: 'X12352' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234K', crn: 'X12353' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234L', crn: 'X12354' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' },
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
       },
     ] as OffenderDetail[])
@@ -1088,6 +1168,124 @@ describe('Caseload Service', () => {
           licenceExpiryDate: '2022-12-26',
           topupSupervisionExpiryDate: '2023-12-26',
           prisonerNumber: 'AB1234I',
+          status: 'ACTIVE IN',
+        },
+        probationPractitioner: {
+          name: 'Joe Bloggs',
+          staffCode: 'X1234',
+        },
+      },
+      {
+        deliusRecord: {
+          offenderManagers: [
+            {
+              active: true,
+              staff: {
+                code: 'X1234',
+                forenames: 'Joe',
+                surname: 'Bloggs',
+              },
+            },
+          ],
+          otherIds: {
+            crn: 'X12352',
+            nomsNumber: 'AB1234J',
+          },
+          staff: {
+            code: 'X1234',
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
+        nomisRecord: {
+          bookingId: '1234',
+          conditionalReleaseDate: tenDaysFromNow,
+          prisonerNumber: 'AB1234J',
+          status: 'ACTIVE IN',
+          homeDetentionCurfewEligibilityDate: undefined,
+        },
+        probationPractitioner: {
+          name: 'Joe Bloggs',
+          staffCode: 'X1234',
+        },
+      },
+      {
+        deliusRecord: {
+          offenderManagers: [
+            {
+              active: true,
+              staff: {
+                code: 'X1234',
+                forenames: 'Joe',
+                surname: 'Bloggs',
+              },
+            },
+          ],
+          otherIds: {
+            crn: 'X12353',
+            nomsNumber: 'AB1234K',
+          },
+          staff: {
+            code: 'X1234',
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
+        nomisRecord: {
+          bookingId: '12345',
+          conditionalReleaseDate: tenDaysFromNow,
+          prisonerNumber: 'AB1234K',
+          status: 'ACTIVE IN',
+        },
+        probationPractitioner: {
+          name: 'Joe Bloggs',
+          staffCode: 'X1234',
+        },
+      },
+      {
+        deliusRecord: {
+          offenderManagers: [
+            {
+              active: true,
+              staff: {
+                code: 'X1234',
+                forenames: 'Joe',
+                surname: 'Bloggs',
+              },
+            },
+          ],
+          otherIds: {
+            crn: 'X12354',
+            nomsNumber: 'AB1234L',
+          },
+          staff: {
+            code: 'X1234',
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
+        nomisRecord: {
+          bookingId: '123456',
+          conditionalReleaseDate: tenDaysFromNow,
+          prisonerNumber: 'AB1234L',
           status: 'ACTIVE IN',
         },
         probationPractitioner: {
