@@ -291,7 +291,7 @@ export interface paths {
   '/run-remove-ap-conditions-job': {
     /**
      * Job to remove AP conditions..
-     * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN. Requires ROLE_CVL_ADMIN.
+     * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
      */
     post: operations['runRemoveAPConditionsJob']
   }
