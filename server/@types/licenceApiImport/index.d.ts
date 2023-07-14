@@ -288,6 +288,13 @@ export interface paths {
      */
     post: operations['requestAuditEvents']
   }
+  '/run-remove-ap-conditions-job': {
+    /**
+     * Job to remove AP conditions..
+     * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['runRemoveAPConditionsJob']
+  }
   '/support/licence-statistics': {
     /**
      * Get licence statistics.
@@ -3146,6 +3153,28 @@ export interface operations {
   runLicenceActivationJob: {
     responses: {
       /** @description Activation job executed. */
+      200: never
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Job to remove AP conditions.
+   * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
+   */
+  runRemoveAPConditionsJob: {
+    responses: {
+      /** @description Remove AP conditions job executed. */
       200: never
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
