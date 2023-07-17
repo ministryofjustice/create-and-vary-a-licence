@@ -28,7 +28,9 @@ export default class ChangeLocationRoutes {
       req.session.caseloadsSelected = req.body.caseload
       const returnToUrl = req.query.view ? '/licence/view/cases?view=probation' : '/licence/view/cases'
       const nextPage =
-        role === AuthRole.CASE_ADMIN ? returnToUrl : `/licence/approve/cases?approval=${req.query.approval}`
+        role === AuthRole.CASE_ADMIN
+          ? returnToUrl
+          : `/licence/approve/cases${req.query.approval ? `?approval=${req.query.approval}` : ''}`
       res.redirect(nextPage)
     }
   }
