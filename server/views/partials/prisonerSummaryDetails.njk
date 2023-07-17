@@ -1,0 +1,26 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro prisonerSummaryDetails(licence) %}
+    {{ govukSummaryList({
+        attributes: { id: 'induction-meeting-details' },
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+            {
+                key: { text: "Name" },
+                value: { text: licence.appointmentPerson }
+            },
+            {
+                key: { text: "Date of birth" },
+                value: { text: licence.dateOfBirth | datetimeToDateShort }
+            },
+            {
+                key: { text: "Prison number" },
+                value: { text: licence.prisonCode }
+            },
+            {
+                key: { text: "Location" },
+                value: { text: licence.prisonDescription }
+            }
+        ]
+    }) }}
+{% endmacro %}

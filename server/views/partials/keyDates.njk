@@ -1,0 +1,30 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro keyDates(licence) %}
+    {{ govukSummaryList({
+        attributes: { id: 'induction-meeting-details' },
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+            {
+                key: { text: "Release date" },
+                value: { text: licence.actualReleaseDate | datetimeToDateShort }
+            },
+            {
+                key: { text: "Licence start date" },
+                value: { text: licence.licenceStartDate | datetimeToDateShort }
+            },
+            {
+                key: { text: "Licence expiry date" },
+                value: { text: licence.licenceExpiryDate | datetimeToDateShort }
+            },
+            {
+                key: { text: "Post sentence supervision order start date" },
+                value: { text: licence.topupSupervisionStartDate | datetimeToDateShort }
+            },
+            {
+                key: { text: "Post sentence supervision order end date" },
+                value: { text: licence.topupSupervisionExpiryDate | datetimeToDateShort }
+            }
+        ]
+    }) }}
+{% endmacro %}
