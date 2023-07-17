@@ -15,11 +15,7 @@ export default class ApprovalViewRoutes {
     const { licence, user } = res.locals
     const { comUsername } = res.locals.licence
 
-    const {
-      staff: { forenames, surname },
-      telephoneNumber: telephone,
-      email,
-    } = await this.communityService.getStaffDetailByUsername(comUsername)
+    const comDetails = await this.communityService.getStaffDetailByUsername(comUsername)
 
     // Check whether this licence is still in a SUBMITTED state - back button pressed - avoid re-approval
     if (licence?.statusCode === LicenceStatus.SUBMITTED) {
@@ -40,9 +36,9 @@ export default class ApprovalViewRoutes {
         additionalConditions,
         conditionsWithUploads,
         staffDetails: {
-          name: `${forenames} ${surname}`.trim(),
-          telephone,
-          email,
+          name: `${comDetails?.staff?.forenames} ${comDetails?.staff?.surname}`.trim(),
+          telephone: comDetails?.telephoneNumber,
+          email: comDetails?.email,
         },
       })
     } else {

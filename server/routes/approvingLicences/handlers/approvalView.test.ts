@@ -4,14 +4,18 @@ import ApprovalViewRoutes from './approvalView'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
+import CommunityService from '../../../services/communityService'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
 
+jest.mock('../../../services/communityService')
+
 describe('Route - view and approve a licence', () => {
-  const handler = new ApprovalViewRoutes(licenceService, conditionService)
+  const handler = new ApprovalViewRoutes(licenceService, conditionService, communityService)
   let req: Request
   let res: Response
 
@@ -27,6 +31,16 @@ describe('Route - view and approve a licence', () => {
   })
 
   describe('GET', () => {
+    communityService.getStaffDetailByUsername.mockResolvedValue({
+      staffIdentifier: 3000,
+      username: 'joebloggs',
+      email: 'joebloggs@probation.gov.uk',
+      telephoneNumber: '07777777777',
+      staff: {
+        forenames: 'Joe',
+        surname: 'Bloggs',
+      },
+    })
     it('should render a single licence view for approval', async () => {
       res = {
         render: jest.fn(),
@@ -51,6 +65,11 @@ describe('Route - view and approve a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
         additionalConditions: [],
         conditionsWithUploads: [],
+        staffDetails: {
+          email: 'joebloggs@probation.gov.uk',
+          name: 'Joe Bloggs',
+          telephone: '07777777777',
+        },
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
