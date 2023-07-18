@@ -17,7 +17,7 @@ export default class ChangeLocationPage extends Page {
   }
 
   clickCancelForApprover = (): ApprovalCasesPage => {
-    cy.get('[href="/licence/approve/cases"]').click()
+    cy.get('[href="/licence/approve/cases?approval=needed"]').click()
     return Page.verifyOnPage(ApprovalCasesPage)
   }
 
