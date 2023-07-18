@@ -36,11 +36,19 @@
                     {{ prisonerSummaryDetails(licence) }}
                 </div>
                 <div class="govuk-grid-column-one-quarter">
-                    <img src="{{ '/prisoners/' + licence.prisonNumber + '/image' if licence.prisonNumber else '/assets/images/image-missing.png' }}" 
-                            class="prisoner-image"
-                            alt="{{ licence.lastName }}, {{ licence.firstName }}" 
-                            data-qa="prisoner-image" 
-                    />
+                    {% if imageData %}
+                        <img src="data:image/jpeg;charset-utf8;base64,{{ imageData }}"
+                                class="prisoner-image"
+                                alt="{{ licence.lastName }}, {{ licence.firstName }}" 
+                                data-qa="prisoner-image" 
+                        />
+                    {% else %}
+                    <img src="/assets/images/image-missing.png"
+                                class="prisoner-image"
+                                alt="{{ licence.lastName }}, {{ licence.firstName }}" 
+                                data-qa="prisoner-image" 
+                        />
+                    {% endif %}  
                 </div>
             </div>
         </div>
@@ -48,54 +56,69 @@
         <div class="govuk-grid-row">
             <h2 class="govuk-heading-l">Review details</h2>
 
+                {% set items = [
+                        {
+                        heading: {
+                            text: "Key dates",
+                            class: "govuk-accordion__section--expanded"
+                        },
+                        content: {
+                            html: keyDates(licence)
+                        },
+                        expanded: true
+                        }
+                    ]
+                %}
+
+                {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'AP' %}
+                    {% set items = (items.push(
+                            {
+                                heading: {
+                                    text: "Additional licence conditions (" +  additionalConditions.length + ")"
+                                },
+                                content: {
+                                        html:  
+                                                additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], null, true) 
+                                                if additionalConditions.length else
+                                                "<p>No additional licence conditions added</p>"       
+                                },
+                                expanded: true
+                            }, {
+                                heading: {
+                                    text: "Bespoke licence conditions (" +  licence.bespokeConditions.length + ")"
+                                },
+                                content: {
+                                    html:
+                                            bespokeConditions(licence, null, null, true)
+                                        if licence.bespokeConditions.length else
+                                        "<p>No bespoke licence conditions added</p>"
+                                },
+                                expanded: true
+                            }
+                    ), items) %}
+                {% endif %}
+
+                {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'PSS' %}
+                    {% set dateRows = (dateRows.push(
+                            {
+                                heading: {
+                                    text: "Additional post sentence supervision requirements (" +  licence.additionalPssConditions.length + ")"
+                                },
+                                content: {
+                                    html:
+                                            additionalPssConditions(licence, null, [], null, true)
+                                            if licence.additionalPssConditions.length else
+                                            "<p>No additional post sentence supervision requirements added</p>"
+                                },
+                                expanded: true
+                            }
+                    ), dateRows) %}
+                {% endif %}
+
             {{ govukAccordion({
             id: "accordion-default",
             rememberExpanded: false,
-            items: [
-                {
-                heading: {
-                    text: "Key dates",
-                    class: "govuk-accordion__section--expanded"
-                },
-                content: {
-                    html: keyDates(licence)
-                },
-                expanded: true
-                }, {
-                heading: {
-                    text: "Additional licence conditions (" +  additionalConditions.length + ")"
-                },
-                content: {
-                        html:  
-                                additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], null, true) 
-                                if additionalConditions.length else
-                                "<p>No additional licence conditions added</p>"       
-                },
-                expanded: true
-                }, {
-                heading: {
-                    text: "Bespoke licence conditions (" +  licence.bespokeConditions.length + ")"
-                },
-                content: {
-                    html:
-                            bespokeConditions(licence, null, null, true)
-                            if licence.bespokeConditions.length else
-                            "<p>No bespoke licence conditions added</p>"
-                },
-                expanded: true
-                }, {
-                heading: {
-                    text: "Additional post sentence supervision requirements (" +  licence.additionalPssConditions.length + ")"
-                },
-                content: {
-                    html:
-                            additionalPssConditions(licence, null, [], null, true)
-                            if licence.additionalPssConditions.length else
-                            "<p>No additional post sentence supervision requirements added</p>"
-                },
-                expanded: true
-                }
-            ]
+            items: items
             }) }}
         </div>
 
