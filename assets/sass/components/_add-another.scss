@@ -1,11 +1,29 @@
 //Override style from the MoJ style library
+
 .moj-add-another {
-  &__remove-button {
+  &__remove-button{
     position: relative;
-    margin-bottom: 15px;
+  }
+
+  &__item {
+    margin-top: 65px;
+    margin-bottom: 35px; 
+
+    .govuk-textarea {
+      margin-bottom: 35px;
+    }
   }
 }
 
 .govuk-radios__conditional .govuk-date-input {
   margin-bottom: 15px;
+}
+
+.newest-fieldset {
+  background-color: lightgrey;
+  padding: 20px 20px 15px 20px;
+
+  &.moj-add-another__item {
+    margin-top: 45px;
+  }
 }
