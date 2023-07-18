@@ -12,13 +12,12 @@ export default class ChangeLocationRoutes {
       const caseload = prisonCaseloadFromNomis.map(c => ({ value: c.caseLoadId, text: c.description }))
       const checked = req.session.caseloadsSelected
 
-      let cancelToUrl
-      if (req.query.view) {
-        cancelToUrl = '/licence/view/cases?view=probation'
-      } else {
-        cancelToUrl = `/licence/view/cases${req.query.approval ? `?approval=${req.query.approval}` : ''}`
+      let cancelLink = req.query.view ? '/licence/view/cases?view=probation' : '/licence/view/cases'
+      if (role !== AuthRole.CASE_ADMIN) {
+        cancelLink = req.query.approval
+          ? `/licence/approve/cases?approval=${req.query.approval}`
+          : '/licence/approve/cases'
       }
-      const cancelLink = role === AuthRole.CASE_ADMIN ? cancelToUrl : '/licence/approve/cases'
       res.render('pages/changeLocation', { caseload, checked, cancelLink })
     }
   }
