@@ -238,7 +238,7 @@ export default {
     })
   },
 
-  stubGetCompletedLicence: (statusCode: string): SuperAgentRequest => {
+  stubGetCompletedLicence: (options: { statusCode: string; typeCode: 'AP_PSS' }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -249,7 +249,8 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
-          statusCode, // Overrides licencePlaceHolder status
+          statusCode: options.statusCode, // Overrides licencePlaceHolder status
+          typeCode: options.typeCode, // Overrides licence status code
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',

@@ -20,11 +20,11 @@
     <div class="govuk-grid-column-two-thirds-from-desktop float-none">
         <div class="govuk-grid-row">
             {% if licence.typeCode === 'AP' %}
-                <h1 class="govuk-heading-l">Approve licence</h1>
+                <h1 class="govuk-heading-l" id="approve-licence-heading">Approve licence</h1>
             {% elseif licence.typeCode === 'AP_PSS' %}
-                <h1 class="govuk-heading-l">Approve licence and post sentence supervision order</h1>
+                <h1 class="govuk-heading-l" id="approve-licence-and-pss-heading">Approve licence and post sentence supervision order</h1>
             {% elseif licence.typeCode === 'PSS' %}
-                <h1 class="govuk-heading-l">Approve post sentence supervision order</h1>
+                <h1 class="govuk-heading-l" id="approve-pss-heading">Approve post sentence supervision order</h1>
             {% else %}
                 <h1 class="govuk-heading-l">Approve licence type {{ licence.typeCode }}</h1>
             {% endif %}
@@ -44,9 +44,9 @@
                         />
                     {% else %}
                     <img src="/assets/images/image-missing.png"
-                                class="prisoner-image"
+                                class="prisoner-missing-image"
                                 alt="{{ licence.lastName }}, {{ licence.firstName }}" 
-                                data-qa="prisoner-image" 
+                                data-qa="prisoner-missing-image" 
                         />
                     {% endif %}  
                 </div>
@@ -99,10 +99,11 @@
                 {% endif %}
 
                 {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'PSS' %}
-                    {% set dateRows = (dateRows.push(
+                    {% set items = (items.push(
                             {
                                 heading: {
-                                    text: "Additional post sentence supervision requirements (" +  licence.additionalPssConditions.length + ")"
+                                    text: "Additional post sentence supervision requirements (" +  licence.additionalPssConditions.length + ")",
+                                    visuallyHiddenText: "test"
                                 },
                                 content: {
                                     html:
@@ -112,11 +113,11 @@
                                 },
                                 expanded: true
                             }
-                    ), dateRows) %}
+                    ), items) %}
                 {% endif %}
 
             {{ govukAccordion({
-            id: "accordion-default",
+            id: "accordion-default-details",
             rememberExpanded: false,
             items: items
             }) }}
@@ -125,27 +126,29 @@
         <div class="govuk-grid-row">
             <h2 class="govuk-heading-l">View more information</h2>
             <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">See this person’s full Digital Prison Services profile</a> <br><br></p>
-            {{ govukAccordion({
-            id: "accordion-default",
-            rememberExpanded: false,
-            items: [
-                {
-                heading: {
-                    text: "Initial appointment"
-                },
-                content: {
-                    html: InitialAppointment(licence)
-                }
-                }, {
-                heading: {
-                    text: "Community probation practitioner details"
-                },
-                content: {
-                    html: ProbationPractitionerDetails(staffDetails)
-                }
-                }
-            ]
-            }) }}
+            <div class="govuk-grid-column-full">
+                {# {{ govukAccordion({
+                id: "view-more-information",
+                rememberExpanded: false,
+                items: [
+                    {
+                        heading: {
+                            text: "Initial appointment"
+                        },
+                        content: {
+                            html: InitialAppointment(licence)
+                        }
+                    }, {
+                        heading: {
+                            text: "Community probation practitioner details"
+                        },
+                        content: {
+                            html: ProbationPractitionerDetails(staffDetails)
+                        }
+                    }
+                ]
+                }) }} #}
+            </div>    
         </div>
 
         <div class="govuk-grid-row">

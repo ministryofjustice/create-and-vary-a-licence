@@ -2,7 +2,7 @@
 
 {% macro prisonerSummaryDetails(licence) %}
     {{ govukSummaryList({
-        attributes: { id: 'induction-meeting-details' },
+        attributes: { id: 'prisoner-summary-details' },
         classes: 'govuk-summary-list--no-border',
         rows: [
             {
@@ -15,7 +15,7 @@
             },
             {
                 key: { text: "Prison number" },
-                value: { text: licence.prisonCode }
+                value: { text: licence.nomsId }
             },
             {
                 key: { text: "Location" },
