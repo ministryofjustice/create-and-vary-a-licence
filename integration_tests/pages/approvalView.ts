@@ -10,6 +10,14 @@ export default class ApprovalViewPage extends Page {
 
   private returnToListButtonId = '[data-qa=return-to-case-list]'
 
+  private prisonerImageId = '[data-qa=prisoner-image]'
+
+  private prisonerMissingImageId = '[data-qa=prisoner-missing-image]'
+
+  private viewMoreInformationId = '#view-more-information'
+
+  private AccordionShowAllClass = '.govuk-accordion__show-all'
+
   public approveLicenceId = '#approve-licence-heading'
 
   public approveLicenceAndPssId = '#approve-licence-and-pss-heading'
@@ -17,10 +25,6 @@ export default class ApprovalViewPage extends Page {
   public approvePssId = '#approve-pss-heading'
 
   public accordionSectionHeading = '.govuk-accordion__section-heading-text-focus'
-
-  private prisonerImageId = '[data-qa=prisoner-image]'
-
-  private prisonerMissingImageId = '[data-qa=prisoner-missing-image]'
 
   getHideAllSection = () => {
     return cy.get('.govuk-accordion__show-all-text')
@@ -52,6 +56,10 @@ export default class ApprovalViewPage extends Page {
     // Force: true will click even if a hidden element
     cy.get(this.rejectLicenceButtonId).click({ force: true })
     return Page.verifyOnPage(ConfirmRejectPage)
+  }
+
+  clickAccordionToShowAll = () => {
+    cy.get(this.viewMoreInformationId).get(this.AccordionShowAllClass).click({ multiple: true })
   }
 
   getValue = id => {

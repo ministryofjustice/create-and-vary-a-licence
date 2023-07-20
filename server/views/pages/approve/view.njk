@@ -58,14 +58,13 @@
 
                 {% set items = [
                         {
-                        heading: {
-                            text: "Key dates",
-                            class: "govuk-accordion__section--expanded"
-                        },
-                        content: {
-                            html: keyDates(licence)
-                        },
-                        expanded: true
+                            heading: {
+                                text: "Key dates"
+                            },
+                            content: {
+                                html: keyDates(licence)
+                            },
+                            expanded: true
                         }
                     ]
                 %}
@@ -116,38 +115,44 @@
                     ), items) %}
                 {% endif %}
 
-            {{ govukAccordion({
-            id: "accordion-default-details",
-            rememberExpanded: false,
-            items: items
-            }) }}
+                {{
+                    govukAccordion({
+                        id: "review-details",
+                        rememberExpanded: false,
+                        items: items
+                    })
+                }}
         </div>
-
         <div class="govuk-grid-row">
             <h2 class="govuk-heading-l">View more information</h2>
-            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">See this person’s full Digital Prison Services profile</a> <br><br></p>
+            <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state" href="#">See this person’s full Digital Prison Services profile</a> 
+                <br><br>
+            </p>
             <div class="govuk-grid-column-full">
-                {# {{ govukAccordion({
-                id: "view-more-information",
-                rememberExpanded: false,
-                items: [
-                    {
-                        heading: {
-                            text: "Initial appointment"
-                        },
-                        content: {
-                            html: InitialAppointment(licence)
+                {{ govukAccordion({
+                    id: "view-more-information",
+                    rememberExpanded: false,
+                    items: [
+                        {
+                            heading: {
+                                text: "Initial appointment"
+                            },
+                            content: {
+                                html: InitialAppointment(licence)
+                            },
+                            expanded: true
+                        }, {
+                            heading: {
+                                text: "Community probation practitioner details"
+                            },
+                            content: {
+                                html: ProbationPractitionerDetails(staffDetails)
+                            },
+                            expanded: true
                         }
-                    }, {
-                        heading: {
-                            text: "Community probation practitioner details"
-                        },
-                        content: {
-                            html: ProbationPractitionerDetails(staffDetails)
-                        }
-                    }
-                ]
-                }) }} #}
+                    ]
+                }) }}
             </div>    
         </div>
 
@@ -183,5 +188,6 @@
                 </button>
             </form>
         </div>
+        
     </div>
 {% endblock %}
