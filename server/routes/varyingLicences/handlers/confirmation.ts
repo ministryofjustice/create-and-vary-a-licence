@@ -12,7 +12,7 @@ export default class ConfirmationRoutes {
     switch (licence.typeCode) {
       case LicenceType.AP_PSS:
         licenceType = 'licence and post sentence supervision order'
-        titleText = `Licence conditions variation for ${licence.forename} ${licence.surname} sent`
+        titleText = `Variation for ${licence.forename} ${licence.surname} sent`
         break
       case LicenceType.AP:
         licenceType = 'licence'

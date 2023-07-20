@@ -436,12 +436,6 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async runRemoveAPConditionsJob() {
-    await this.post({
-      path: '/run-remove-ap-conditions-job',
-    })
-  }
-
   async overrideLicenceDates(licenceId: number, request: OverrideLicenceDatesRequest, user: User) {
     await this.put({ path: `/licence/id/${licenceId}/override/dates`, data: request }, { username: user?.username })
   }
@@ -451,14 +445,5 @@ export default class LicenceApiClient extends RestClient {
       path: `/offender/nomisid/${nomisId}/update-offender-details`,
       data: offenderDetails,
     })
-  }
-
-  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
-    const licence = await this.getLicenceById(licenceId, user)
-    if (!licence.variationOf) {
-      return licence
-    }
-
-    return this.getLicenceById(licence.variationOf.toString(), user)
   }
 }
