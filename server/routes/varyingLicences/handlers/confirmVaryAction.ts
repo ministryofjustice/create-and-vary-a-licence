@@ -8,9 +8,7 @@ export default class ConfirmVaryActionRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { licence } = res.locals
-    const { isInPssPeriod = false } = licence
-    res.render('pages/vary/confirmVaryQuestion', { isInPssPeriod, licence })
+    res.render('pages/vary/confirmVaryQuestion')
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

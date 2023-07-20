@@ -40,7 +40,6 @@ export default function Index({
   caseloadService,
   communityService,
   conditionService,
-  licenceApiClient,
 }: Services): Router {
   const router = Router()
 
@@ -73,23 +72,19 @@ export default function Index({
   const caseloadHandler = new CaseloadRoutes(caseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
   const timelineHandler = new TimelineRoutes(licenceService)
-  const viewLicenceHandler = new ViewVariationRoutes(licenceApiClient, licenceService, conditionService)
+  const viewLicenceHandler = new ViewVariationRoutes(licenceService, conditionService)
   const viewActiveLicenceHandler = new ViewActiveLicenceRoutes(conditionService)
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)
   const spoDiscussionHandler = new SpoDiscussionRoutes(licenceService)
-  const vloDiscussionHandler = new VloDiscussionRoutes(licenceApiClient, licenceService, conditionService)
-  const confirmAmendVariationHandler = new ConfirmAmendVariationRoutes(
-    licenceApiClient,
-    licenceService,
-    conditionService
-  )
+  const vloDiscussionHandler = new VloDiscussionRoutes(licenceService, conditionService)
+  const confirmAmendVariationHandler = new ConfirmAmendVariationRoutes(licenceService, conditionService)
   const confirmDiscardVariationHandler = new ConfirmDiscardVariationRoutes(licenceService)
   const reasonForVariationHandler = new ReasonForVariationRoutes(licenceService)
   const variationSummaryHandler = new VariationSummaryRoutes(licenceService, communityService)
   const confirmationHandler = new ConfirmationRoutes()
   const policyChangesNoticeHandler = new PolicyChangesNoticeRoutes(licenceService)
   const policyChangesCallbackHandler = new PolicyChangesCallbackRoutes()
-  const policyChangeHandler = new PolicyChangeRoutes(licenceApiClient, licenceService, conditionService)
+  const policyChangeHandler = new PolicyChangeRoutes(licenceService, conditionService)
   const policyConfirmDeleteHandler = new PolicyConfirmDeleteRoutes()
   const policyChangeInputCallbackHandler = new PolicyChangesInputCallbackRoutes(conditionService)
 
