@@ -1,7 +1,6 @@
 window.onload = function () {
   const oldButtonClick = MOJFrontend.AddAnother.prototype.onAddButtonClick
   const oldRemoveClick = MOJFrontend.AddAnother.prototype.onRemoveButtonClick
-  console.log('Loaded')
 
   MOJFrontend.AddAnother.prototype.createRemoveButton = function (item) {
     item.append(
@@ -10,7 +9,6 @@ window.onload = function () {
   }
 
   MOJFrontend.AddAnother.prototype.onAddButtonClick = function (e) {
-    console.log('Clicked')
     oldButtonClick.call(this, e)
     addBackgroundToNewFieldset()
     changeDeleteButtonTextContent()
