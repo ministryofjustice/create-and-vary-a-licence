@@ -41,6 +41,8 @@ context('Reject a licence', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
+    cy.task('stubMissingPrisonerImage')
+    cy.task('stubGetStaffDetailByUsername')
     cy.signIn()
   })
 
@@ -48,6 +50,7 @@ context('Reject a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage.clickAccordionToShowAll()
     const confirmRejectPage = approvalViewPage.clickReject()
     const approvalCasesPage2 = confirmRejectPage.clickReturnToList()
     approvalCasesPage2.signOut().click()
