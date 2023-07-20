@@ -10,16 +10,16 @@ export default class ConfirmApprovedRoutes {
 
     switch (licence.typeCode) {
       case LicenceType.AP_PSS:
-        titleText = `Licence and post sentence supervision order approved`
-        confirmationMessage = `A case administrator can now print the licence and post sentence supervision order for ${licence.forename} ${licence.surname}.`
+        titleText = `Licence and post sentence supervision order for ${licence.forename} ${licence.surname} approved`
+        confirmationMessage = `You have approved the licence and post sentence supervision order for ${licence.forename} ${licence.surname}.`
         break
       case LicenceType.AP:
-        titleText = `Licence approved`
-        confirmationMessage = `A case administrator can now print the licence for ${licence.forename} ${licence.surname}.`
+        titleText = `Licence conditions for ${licence.forename} ${licence.surname} approved`
+        confirmationMessage = `You have approved the licence conditions for ${licence.forename} ${licence.surname}.`
         break
       case LicenceType.PSS:
-        titleText = `Post sentence supervision order approved`
-        confirmationMessage = `A case administrator can now print the post sentence supervision order for ${licence.forename} ${licence.surname}.`
+        titleText = `Post sentence supervision order for ${licence.forename} ${licence.surname} approved`
+        confirmationMessage = `You have approved the post sentence supervision order for ${licence.forename} ${licence.surname}.`
         break
     }
 

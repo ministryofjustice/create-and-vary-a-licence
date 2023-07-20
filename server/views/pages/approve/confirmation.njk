@@ -9,7 +9,7 @@
 
 {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-thirds">
+        <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
                 titleText: titleText
             }) }}
@@ -18,25 +18,31 @@
             <p class="govuk-body">
                 {{ confirmationMessage }}
             </p>
-
-            <h2 class="govuk-heading-m">If further changes are made</h2>
             <p class="govuk-body">
-                The community probation practitioner will submit another approval request. It will appear in your caselist.
+                A prison administrator can now print the licence
+            </p>
+
+            <h2 class="govuk-heading-m">If a community probation practitioner makes any changes</h2>
+            <p class="govuk-body">
+                A community probation practitioner may edit and re-submit this licence for approval if they need to make a change.
+            </p>
+            <p class="govuk-body">
+                The licence will appear again in your approvals case list.
+            </p>
+
+            <h2 class="govuk-heading-m">Give us your feedback</h2>
+            <p class="govuk-body">
+                <a href="{{ exitSurveyLink }}" rel="noreferrer noopener" target="_blank" id="exit-survey" class="govuk-link">What did you think of this service?</a> (takes 30 seconds)
             </p>
 
             <p class="govuk-body">
                 {{ govukButton({
-                    text: "Approve another licence",
+                    text: "Return to case list",
                     classes: "govuk-button--primary govuk-!-margin-bottom-0 govuk-body",
                     href: '/licence/approve/cases',
                     attributes: { 'data-qa': 'return-to-case-list' }
                 }) }}
             </p>
         </div>
-        <br>
-        <br>
-        <p class="govuk-body">
-            <a href="{{ exitSurveyLink }}" rel="noreferrer noopener" target="_blank" id="exit-survey" class="govuk-link">What did you think of this service?</a> (Takes 30 seconds – opens in a new tab)
-        </p>
     </div>
 {% endblock %}
