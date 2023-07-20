@@ -1845,10 +1845,6 @@ export interface components {
        * @example Gordon Sumner
        */
       createdByFullName?: string
-      /**
-       * @description Is this licence in PSS period?(LED < TODAY <= TUSED)
-       */
-      isInPssPeriod?: boolean
     }
     AddAnother: {
       label: string

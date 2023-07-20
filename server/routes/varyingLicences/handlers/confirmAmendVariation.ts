@@ -4,14 +4,9 @@ import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
-import { LicenceApiClient } from '../../../data'
 
 export default class ConfirmAmendVariationRoutes {
-  constructor(
-    private readonly licenceApiClient: LicenceApiClient,
-    private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
-  ) {}
+  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     res.render('pages/vary/confirmAmendVariation')
@@ -31,7 +26,7 @@ export default class ConfirmAmendVariationRoutes {
        * licence was created on a previous version.
        */
       if (
-        (await this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)).version !==
+        (await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !==
         (await this.conditionService.getPolicyVersion())
       ) {
         const newStdConditions = {

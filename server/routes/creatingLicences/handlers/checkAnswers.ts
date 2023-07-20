@@ -7,19 +7,13 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
-import { LicenceApiClient } from '../../../data'
 
 export default class CheckAnswersRoutes {
-  constructor(
-    private readonly licenceApiClient: LicenceApiClient,
-    private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
-  ) {}
+  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     const backLink = req.session.returnToCase || '/licence/create/caseload'
-    const { isInPssPeriod = false } = licence
 
     // Record the view event only when an officer views a licence which is not their own
     if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
@@ -33,17 +27,11 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    const conditionsToDisplay = await this.conditionService.getParentOrSelfAdditionalLicenceConditions(licence, user)
+    const { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
+      licence.additionalLicenceConditions
+    )
 
-    const { conditionsWithUploads, additionalConditions } =
-      this.conditionService.additionalConditionsCollection(conditionsToDisplay)
-
-    res.render('pages/create/checkAnswers', {
-      additionalConditions,
-      conditionsWithUploads,
-      isInPssPeriod,
-      backLink,
-    })
+    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads, backLink })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
@@ -63,7 +51,7 @@ export default class CheckAnswersRoutes {
      * licence was created on a previous version.
      */
     if (
-      (await this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)).version !==
+      (await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !==
       (await this.conditionService.getPolicyVersion())
     ) {
       const newStdConditions = {
