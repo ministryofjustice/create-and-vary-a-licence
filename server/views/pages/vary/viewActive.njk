@@ -17,7 +17,7 @@
             {% if licence.typeCode === 'AP' %}
                 <h1 class="govuk-heading-l">View licence details</h1>
             {% elseif licence.typeCode === 'AP_PSS' %}
-                <h1 class="govuk-heading-l">View licence and post sentence supervision order details</h1>
+                <h1 class="govuk-heading-l">View licence and post sentence supervision order</h1>
             {% elseif licence.typeCode === 'PSS' %}
                 <h1 class="govuk-heading-l">View post sentence supervision order details</h1>
             {% endif %}
@@ -28,13 +28,32 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
+            {% if not isInPssPeriod and ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
                 {{ bespokeConditions(licence, null, 'Bespoke licence conditions') }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence, null, [], 'Additional post sentence supervision requirements') }}
             {% endif %}
+            {% if isInPssPeriod and licence.typeCode === 'AP_PSS' %}
+                <div>
+                    <h2 class="govuk-heading-m">Conditions from expired licence</h2>
+                    <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 
+                    so the conditions from their standard determinate licence can no longer be varied.</p>
+                    <details class="govuk-details" data-module="govuk-details">
+                        <summary class="govuk-details__summary">
+                            <span class="govuk-details__summary-text">
+                                View conditions from expired licence
+                            </span>
+                        </summary>
+                        <div class="govuk-details__text">
+                            {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
+                            {{ bespokeConditions(licence, null, 'Bespoke licence conditions') }}
+                        </div>
+                    </details>
+                </div>
+            {% endif %}
+            
         </div>
     </div>
 
