@@ -225,7 +225,9 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: { ...licence, typeCode: 'PSS' },
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements')
+    expect($('#additional-pss-conditions-heading').text()).toBe(
+      'Additional post sentence supervision requirements details'
+    )
   })
 
   it('should display additional PSS conditions section if licence type is AP_PSS', () => {
@@ -233,7 +235,9 @@ describe('Create a Licence Views - Check Answers', () => {
       licence,
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements')
+    expect($('#additional-pss-conditions-heading').text()).toBe(
+      'Additional post sentence supervision requirements details'
+    )
   })
 
   it('should not display additional PSS licence conditions section if licence type is AP', () => {

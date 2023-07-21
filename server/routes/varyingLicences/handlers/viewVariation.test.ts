@@ -7,16 +7,21 @@ import LicenceService from '../../../services/licenceService'
 import { VariedConditions } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
 import ConditionService from '../../../services/conditionService'
+import ConditionFormatter from '../../../services/conditionFormatter'
+import { LicenceApiClient } from '../../../data'
 
-const username = 'joebloggs'
-
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
+const username = 'joebloggs'
+const conditionFormatter = new ConditionFormatter()
+const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
+const conditionService = new ConditionService(licenceApiClient, conditionFormatter) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+
 describe('Route - Vary - View variation', () => {
-  const handler = new ViewVariationRoutes(licenceService, conditionService)
+  const handler = new ViewVariationRoutes(licenceApiClient, licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -157,7 +162,7 @@ describe('Route - Vary - View variation', () => {
         },
       } as unknown as Response
 
-      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
 
       await handler.GET(req, res)
@@ -178,7 +183,7 @@ describe('Route - Vary - View variation', () => {
         },
       } as unknown as Response
 
-      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
+      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
 
       await handler.GET(req, res)

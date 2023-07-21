@@ -458,4 +458,13 @@ export default class LicenceApiClient extends RestClient {
       data: offenderDetails,
     })
   }
+
+  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
+    const licence = await this.getLicenceById(licenceId, user)
+    if (!licence.variationOf) {
+      return licence
+    }
+
+    return this.getLicenceById(licence.variationOf.toString(), user)
+  }
 }
