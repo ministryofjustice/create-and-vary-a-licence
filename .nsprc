@@ -1,1 +1,4 @@
-{}
+{
+  "GHSA-p8p7-x288-28g6": "GHSA ID is acceptable for Server-Side Request Forgery in Request",
+  "GHSA-72xf-g2v4-qvf3": "GHSA ID is acceptable for tough-cookie Prototype Pollution vulnerability"
+}
