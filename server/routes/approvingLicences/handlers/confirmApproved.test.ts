@@ -31,8 +31,8 @@ describe('Route - approve licence', () => {
       res.locals.licence.typeCode = 'AP'
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
-        titleText: 'Licence approved',
-        confirmationMessage: 'A case administrator can now print the licence for Joe Bloggs.',
+        titleText: 'Licence conditions for Joe Bloggs approved',
+        confirmationMessage: 'You have approved the licence conditions for Joe Bloggs.',
       })
     })
 
@@ -40,9 +40,8 @@ describe('Route - approve licence', () => {
       res.locals.licence.typeCode = 'AP_PSS'
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
-        titleText: 'Licence and post sentence supervision order approved',
-        confirmationMessage:
-          'A case administrator can now print the licence and post sentence supervision order for Joe Bloggs.',
+        titleText: 'Licence and post sentence supervision order for Joe Bloggs approved',
+        confirmationMessage: 'You have approved the licence and post sentence supervision order for Joe Bloggs.',
       })
     })
 
@@ -50,8 +49,8 @@ describe('Route - approve licence', () => {
       res.locals.licence.typeCode = 'PSS'
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
-        titleText: 'Post sentence supervision order approved',
-        confirmationMessage: 'A case administrator can now print the post sentence supervision order for Joe Bloggs.',
+        titleText: 'Post sentence supervision order for Joe Bloggs approved',
+        confirmationMessage: 'You have approved the post sentence supervision order for Joe Bloggs.',
       })
     })
   })
