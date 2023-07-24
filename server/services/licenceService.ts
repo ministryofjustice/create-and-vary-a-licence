@@ -270,13 +270,7 @@ export default class LicenceService {
         return build(formData[key], sequenceNumber)
       })
 
-    const licence = await this.getLicence(licenceId, user)
     const requestBody = {
-      expandedConditionText: await this.conditionService.expandAdditionalCondition(
-        condition.code,
-        enteredData,
-        licence.version
-      ),
       data: enteredData,
     } as UpdateAdditionalConditionDataRequest
 

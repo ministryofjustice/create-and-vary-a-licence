@@ -808,8 +808,6 @@ export interface components {
     UpdateAdditionalConditionDataRequest: {
       /** @description The list of data inputs associated with this additional condition */
       data: components['schemas']['AdditionalConditionData'][]
-      /** @description The expanded condition with the input data inserted into the template */
-      expandedConditionText: string
     }
     /** @description Describes an audit event request */
     AuditEvent: {

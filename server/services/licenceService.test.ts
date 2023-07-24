@@ -50,7 +50,6 @@ describe('Licence Service', () => {
   const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
   const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
 
-  conditionService.expandAdditionalCondition.mockResolvedValue('condition')
   conditionService.getStandardConditions.mockResolvedValue({} as StandardCondition[])
   conditionService.getAdditionalConditions.mockResolvedValue({} as AdditionalConditionsConfig)
 
@@ -100,7 +99,6 @@ describe('Licence Service', () => {
         } as CommunityApiOffenderManager,
       ])
       conditionService.getAdditionalConditionByCode.mockResolvedValue({} as AdditionalConditionAp)
-      conditionService.expandAdditionalCondition.mockResolvedValue('condition')
       licenceApiClient.getLicencePolicyForVersion.mockResolvedValue({} as LicencePolicyResponse)
       licenceApiClient.getActiveLicencePolicy.mockResolvedValue({} as LicencePolicyResponse)
       licenceApiClient.getPolicyChanges.mockResolvedValue({} as LicenceConditionChange[])
@@ -572,12 +570,7 @@ describe('Licence Service', () => {
         formData,
         user
       )
-      expect(licenceApiClient.updateAdditionalConditionData).toBeCalledWith(
-        '1',
-        '2',
-        { data: [], expandedConditionText: 'condition' },
-        user
-      )
+      expect(licenceApiClient.updateAdditionalConditionData).toBeCalledWith('1', '2', { data: [] }, user)
     })
 
     it('should map form value to a condition', async () => {
@@ -597,7 +590,6 @@ describe('Licence Service', () => {
         '1',
         '2',
         {
-          expandedConditionText: 'condition',
           data: [
             {
               field: 'key1',
@@ -640,7 +632,6 @@ describe('Licence Service', () => {
         '1',
         '2',
         {
-          expandedConditionText: 'condition',
           data: [
             {
               field: 'key1',
