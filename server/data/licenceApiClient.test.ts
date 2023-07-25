@@ -257,6 +257,20 @@ describe('Licence API client tests', () => {
     })
   })
 
+  it('Should get recently approved licences', async () => {
+    await licenceApiClient.getLicencesRecentlyApproved(['PRI'], null, null, { username: 'joebloggs' } as User)
+    expect(post).toHaveBeenCalledWith(
+      {
+        path: '/licence/recently-approved',
+        data: {
+          prisonCodes: ['PRI'],
+        },
+        query: {},
+      },
+      { username: 'joebloggs' }
+    )
+  })
+
   it('Batch activate licences', async () => {
     await licenceApiClient.batchActivateLicences([123, 321])
     expect(post).toHaveBeenCalledWith({ path: '/licence/activate-licences', data: [123, 321] })

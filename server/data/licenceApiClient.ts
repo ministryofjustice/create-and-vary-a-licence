@@ -234,6 +234,27 @@ export default class LicenceApiClient extends RestClient {
     )) as LicenceSummary[]
   }
 
+  async getLicencesRecentlyApproved(
+    prisons?: string[],
+    sortBy?: string,
+    sortOrder?: string,
+    user?: User
+  ): Promise<LicenceSummary[]> {
+    return (await this.post(
+      {
+        path: `/licence/recently-approved`,
+        data: {
+          prisonCodes: prisons,
+        },
+        query: {
+          sortBy: sortBy || undefined,
+          sortOrder: sortOrder || undefined,
+        },
+      },
+      { username: user?.username }
+    )) as LicenceSummary[]
+  }
+
   async batchActivateLicences(licenceIds: number[]): Promise<void> {
     await this.post({ path: `/licence/activate-licences`, data: licenceIds })
   }

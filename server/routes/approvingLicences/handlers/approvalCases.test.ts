@@ -40,7 +40,7 @@ describe('Route Handlers - Approval - case list', () => {
       },
     } as unknown as Response
 
-    caseloadService.getApproverCaseload.mockResolvedValue([
+    const caseLoadData = [
       {
         licences: [
           {
@@ -95,7 +95,8 @@ describe('Route Handlers - Approval - case list', () => {
           name: 'Walter Black',
         },
       },
-    ])
+    ]
+    caseloadService.getApproverCaseload.mockResolvedValue(caseLoadData)
 
     prisonerService.getPrisons.mockResolvedValue([
       {
@@ -123,7 +124,7 @@ describe('Route Handlers - Approval - case list', () => {
   describe('GET', () => {
     it('should render list of licences for approval', async () => {
       await handler.GET(req, res)
-      expect(caseloadService.getApproverCaseload).toHaveBeenCalledWith(res.locals.user, ['BAI'])
+      expect(caseloadService.getApproverCaseload).toHaveBeenCalledWith(res.locals.user, ['BAI'], true)
       expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
         cases: [
           {
@@ -131,7 +132,6 @@ describe('Route Handlers - Approval - case list', () => {
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
             },
@@ -145,7 +145,6 @@ describe('Route Handlers - Approval - case list', () => {
               name: 'Thor',
             },
             releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
             urgentApproval: true,
           },
           {
@@ -156,7 +155,6 @@ describe('Route Handlers - Approval - case list', () => {
               name: 'Walter Black',
             },
             releaseDate: format(nonUrgentReleaseDate, 'dd MMM yyyy'),
-            releaseDateLabel: 'CRD',
             urgentApproval: false,
           },
         ],
@@ -172,6 +170,92 @@ describe('Route Handlers - Approval - case list', () => {
       })
     })
 
+    it('should render list of licences recently approved', async () => {
+      caseloadService.getApproverCaseload.mockResolvedValue([
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.SUBMITTED,
+              approvedBy: 'Bob Carolgees',
+              approvedDate: '15/06/2012 12:34:56',
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+            confirmedReleaseDate: '2022-05-01',
+          } as Prisoner,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+        {
+          licences: [
+            {
+              id: 2,
+              type: LicenceType.AP,
+              status: LicenceStatus.NOT_STARTED,
+              approvedBy: 'Jim Robbins',
+              approvedDate: '25/04/2012 10:45:12',
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Joe',
+            lastName: 'Bloggs',
+            prisonerNumber: 'A1234AB',
+            conditionalReleaseOverrideDate: '2022-05-01',
+          } as Prisoner,
+          probationPractitioner: {
+            name: 'Thor',
+          },
+        },
+      ])
+
+      req.query.approval = 'recently'
+      await handler.GET(req, res)
+      expect(caseloadService.getApproverCaseload).toHaveBeenCalledWith(res.locals.user, ['BAI'], false)
+      expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
+        cases: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: '01 May 2022',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            approvedBy: 'Bob Carolgees',
+            approvedOn: '15 June 2012',
+            urgentApproval: true,
+          },
+          {
+            licenceId: 2,
+            name: 'Joe Bloggs',
+            prisonerNumber: 'A1234AB',
+            probationPractitioner: {
+              name: 'Thor',
+            },
+            approvedBy: 'Jim Robbins',
+            approvedOn: '25 April 2012',
+            releaseDate: '01 May 2022',
+            urgentApproval: true,
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        search: undefined,
+        approvalNeededView: false,
+      })
+    })
+
     it('should successfully search by name', async () => {
       req.query.search = 'bob'
 
@@ -184,7 +268,6 @@ describe('Route Handlers - Approval - case list', () => {
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
             },
@@ -215,7 +298,6 @@ describe('Route Handlers - Approval - case list', () => {
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
             },
@@ -246,7 +328,6 @@ describe('Route Handlers - Approval - case list', () => {
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
             probationPractitioner: {
               name: 'Walter White',
             },

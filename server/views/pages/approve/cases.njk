@@ -10,49 +10,77 @@
 
 {% set licences = [] %}
 
-<!-- approval needed data only for now, recently approved data to be added by CVSL-1169 -->
-{% if approvalNeededView %}
-    {% for case in cases %}
-        {% if case.urgentApproval %}
-            {% set releaseDate = '<span class="approval-overdue">' + case.releaseDate
-                + '</span><span class="approval-overdue approval-overdue-message">Urgent approval required for<br>upcoming release</span>' %}
-        {% else %}
-            {% set releaseDate = case.releaseDate %}
-        {% endif %}
+{% for case in cases %}
+    {% if case.urgentApproval and approvalNeededView %}
+        {% set releaseDate = '<span class="approval-overdue">' + case.releaseDate
+            + '</span><span class="approval-overdue approval-overdue-message">Urgent approval required for<br>upcoming release</span>' %}
+    {% else %}
+        {% set releaseDate = case.releaseDate %}
+    {% endif %}
 
-         {% set licences = (licences.push([
-            {
-                attributes: {
-                    id: 'name-' + loop.index,
-                    "data-sort-value": case.name
-                },
-                html: '<a href="/licence/approve/id/' + case.licenceId + '/view" class="govuk-link govuk-heading-s">' + case.name + '</a>'
+
+    {% if approvalNeededView %}
+        {% set nameLink = '/licence/approve/id/' + case.licenceId + '/view' %}
+        {% set linkTarget = '_self' %}
+    {% else %}
+        {% set nameLink = '/licence/view/id/' + case.licenceId + '/pdf-print' %}
+        {% set linkTarget = '_blank' %}
+    {% endif %}
+
+    {% set caseData = [
+        {
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": case.name
             },
-            {
-                attributes: {
-                    id: 'nomis-id-' + loop.index,
-                    "data-sort-value": case.prisonerNumber
-                },
-                text: case.prisonerNumber
+            html: '<a href="' + nameLink + '" class="govuk-link govuk-heading-s" target="' + linkTarget + '">' + case.name + '</a>'
+        },
+        {
+            attributes: {
+                id: 'nomis-id-' + loop.index,
+                "data-sort-value": case.prisonerNumber
             },
-            {
-                attributes: {
-                    id: 'com-' + loop.index,
-                    "data-sort-value": case.probationPractitioner
-                },
-                html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner.name + '</a>'
+            text: case.prisonerNumber
+        },
+        {
+            attributes: {
+                id: 'com-' + loop.index,
+                "data-sort-value": case.probationPractitioner
             },
+            html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner.name + '</a>'
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": case.releaseDate | dateToUnix
+            },
+            classes: 'approval-due-date',
+            html: releaseDate
+        }
+    ] %}
+
+    {% if not approvalNeededView %}
+        {% set caseData = (caseData.push(
             {
                 attributes: {
-                    id: 'release-date-' + loop.index,
-                    "data-sort-value": case.releaseDate | dateToUnix
+                    id: 'testing-' + loop.index,
+                    "data-sort-value": case.approvedBy
                 },
-                classes: 'approval-due-date',
-                html: releaseDate
-            }
-        ]), licences) %}
-    {% endfor %}
-{% endif %}
+                text: case.approvedBy
+           },
+           {
+               attributes: {
+                   id: 'testing-' + loop.index,
+                   "data-sort-value": case.releaseDate | dateToUnix
+               },
+               text: case.approvedOn
+          }
+
+        ), caseData) %}
+    {% endif %}
+    {% set licences = (licences.push(caseData), licences) %}
+
+{% endfor %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -60,7 +88,6 @@
             <h1 class="govuk-heading-xl">Select someone to approve licences and supervision orders</h1>
         </div>
     </div>
-
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
@@ -118,38 +145,57 @@
     {% endif %}
 
     {% if cases.length > 0 %}
-        {{ govukTable({
-            attributes: {
-                'data-module': 'moj-sortable-table'
+        {% set tableHeadings = [
+            {
+                text: "Name",
+                attributes: {
+                    "aria-sort": "none"
+                }
             },
-            caption: "Cases for approval",
-            captionClasses: "govuk-visually-hidden",
-            head: [
+            {
+                text: "Prison number",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            },
+            {
+                text: "Probation practitioner",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            },
+            {
+                text: "Release date",
+                attributes: {
+                    "aria-sort": "ascending"
+                }
+            }
+        ] %}
+
+        {% if not approvalNeededView %}
+            {% set tableHeadings = (tableHeadings.push(
                 {
-                    text: "Name",
+                    text: "Approved by",
                     attributes: {
-                        "aria-sort": "none"
+                        "aria-sort": "ascending"
                     }
                 },
                 {
-                    text: "Prison number",
-                    attributes: {
-                        "aria-sort": "none"
-                    }
-                },
-                {
-                    text: "Probation practitioner",
-                    attributes: {
-                        "aria-sort": "none"
-                    }
-                },
-                {
-                    text: "Release date",
+                    text: "Approved on",
                     attributes: {
                         "aria-sort": "ascending"
                     }
                 }
-            ],
+            ), tableHeadings) %}
+        {% endif %}
+
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Cases for approval" if approvalNeededView else 'Recently approved',
+            captionClasses: "govuk-visually-hidden",
+            head: tableHeadings,
             rows: licences
         }) }}
     {% else %}
