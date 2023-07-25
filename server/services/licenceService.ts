@@ -270,13 +270,7 @@ export default class LicenceService {
         return build(formData[key], sequenceNumber)
       })
 
-    const licence = await this.getLicence(licenceId, user)
     const requestBody = {
-      expandedConditionText: await this.conditionService.expandAdditionalCondition(
-        condition.code,
-        enteredData,
-        licence.version
-      ),
       data: enteredData,
     } as UpdateAdditionalConditionDataRequest
 
@@ -572,6 +566,15 @@ export default class LicenceService {
 
   async deleteOmuEmailAddress(prisonId: string, user: User): Promise<void> {
     return this.licenceApiClient.deleteOmuEmailAddress(prisonId, user)
+  }
+
+  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
+    const licence = await this.licenceApiClient.getLicenceById(licenceId, user)
+    if (!licence.variationOf) {
+      return licence
+    }
+
+    return this.licenceApiClient.getLicenceById(licence.variationOf.toString(), user)
   }
 
   async getIncompleteLicenceVariations(nomisId: string): Promise<LicenceSummary[]> {

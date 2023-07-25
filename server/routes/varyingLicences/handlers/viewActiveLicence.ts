@@ -6,8 +6,7 @@ export default class ViewActiveLicenceRoutes {
   constructor(private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { licence, user } = res.locals
-    const { isInPssPeriod = false } = licence
+    const { licence } = res.locals
 
     // If not still ACTIVE then redirect back to the vary timeline
     if (licence.statusCode !== LicenceStatus.ACTIVE) {
@@ -16,15 +15,13 @@ export default class ViewActiveLicenceRoutes {
 
     const shouldShowVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
 
-    const conditionsToDisplay = await this.conditionService.getParentOrSelfAdditionalLicenceConditions(licence, user)
-
-    const { conditionsWithUploads, additionalConditions } =
-      this.conditionService.additionalConditionsCollection(conditionsToDisplay)
+    const { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
+      licence.additionalLicenceConditions
+    )
 
     return res.render('pages/vary/viewActive', {
-      additionalConditions,
       conditionsWithUploads,
-      isInPssPeriod,
+      additionalConditions,
       callToActions: { shouldShowVaryButton },
     })
   }
