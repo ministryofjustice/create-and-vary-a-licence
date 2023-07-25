@@ -14,10 +14,6 @@ export default class ApprovalViewPage extends Page {
 
   private prisonerMissingImageId = '[data-qa=prisoner-missing-image]'
 
-  private viewMoreInformationId = '#view-more-information'
-
-  private AccordionShowAllClass = '.govuk-accordion__show-all'
-
   public approveLicenceId = '#approve-licence-heading'
 
   public approveLicenceAndPssId = '#approve-licence-and-pss-heading'
@@ -31,7 +27,7 @@ export default class ApprovalViewPage extends Page {
   }
 
   constructor() {
-    super('approval-view-page')
+    super('approval-view-page', true, { 'aria-allowed-attr': { enabled: false } })
   }
 
   getPrisonerImage = () => {
@@ -56,10 +52,6 @@ export default class ApprovalViewPage extends Page {
     // Force: true will click even if a hidden element
     cy.get(this.rejectLicenceButtonId).click({ force: true })
     return Page.verifyOnPage(ConfirmRejectPage)
-  }
-
-  clickAccordionToShowAll = () => {
-    cy.get(this.viewMoreInformationId).get(this.AccordionShowAllClass).click({ multiple: true })
   }
 
   getValue = id => {

@@ -50,7 +50,6 @@ context('Reject a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.clickAccordionToShowAll()
     const confirmRejectPage = approvalViewPage.clickReject()
     const approvalCasesPage2 = confirmRejectPage.clickReturnToList()
     approvalCasesPage2.signOut().click()

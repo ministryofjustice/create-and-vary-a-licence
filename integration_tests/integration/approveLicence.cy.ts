@@ -79,7 +79,6 @@ context('Approve a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.clickAccordionToShowAll()
     const confirmApprovePage = approvalViewPage.clickApprove()
     const approvalCasesPage2 = confirmApprovePage.clickReturnToList()
     approvalCasesPage2.signOut().click()
@@ -91,7 +90,6 @@ context('Approve a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.clickAccordionToShowAll()
     const approvalCasesPage2 = approvalViewPage.clickReturnToList()
     approvalCasesPage2.getTableRows().should(rows => {
       expect(rows).to.have.length(1)
@@ -104,7 +102,6 @@ context('Approve a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.clickAccordionToShowAll()
     approvalViewPage.getHideAllSection().should('exist')
   })
 
@@ -115,7 +112,6 @@ context('Approve a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.clickAccordionToShowAll()
     approvalViewPage.getValue(approvalViewPage.approveLicenceId).should('have.text', 'Approve licence')
     approvalViewPage
       .getValue(approvalViewPage.accordionSectionHeading)
@@ -129,7 +125,6 @@ context('Approve a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.clickAccordionToShowAll()
     approvalViewPage
       .getValue(approvalViewPage.approveLicenceAndPssId)
       .should('have.text', 'Approve licence and post sentence supervision order')
@@ -145,7 +140,6 @@ context('Approve a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.clickAccordionToShowAll()
     approvalViewPage
       .getValue(approvalViewPage.approvePssId)
       .should('have.text', 'Approve post sentence supervision order')
@@ -162,7 +156,6 @@ context('Approve a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.clickAccordionToShowAll()
     approvalViewPage.getPrisonerImage().should('have.class', 'prisoner-image')
   })
 
@@ -173,7 +166,6 @@ context('Approve a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.clickAccordionToShowAll()
     approvalViewPage.getPrisonerMissingImageId().should('have.class', 'prisoner-missing-image')
   })
 
