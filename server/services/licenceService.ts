@@ -366,7 +366,7 @@ export default class LicenceService {
 
   async getLicencesRecentlyApproved(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
     const filteredPrisons = filterCentralCaseload(prisonCaseload)
-    return this.licenceApiClient.getLicencesRecentlyApproved(filteredPrisons, 'conditionalReleaseDate', null, user)
+    return this.licenceApiClient.getLicencesRecentlyApproved(filteredPrisons, user)
   }
 
   async getLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {

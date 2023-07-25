@@ -63,14 +63,14 @@
         {% set caseData = (caseData.push(
             {
                 attributes: {
-                    id: 'testing-' + loop.index,
+                    id: 'approved-by-' + loop.index,
                     "data-sort-value": case.approvedBy
                 },
                 text: case.approvedBy
            },
            {
                attributes: {
-                   id: 'testing-' + loop.index,
+                   id: 'approved-on-' + loop.index,
                    "data-sort-value": case.releaseDate | dateToUnix
                },
                text: case.approvedOn

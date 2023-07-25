@@ -258,14 +258,13 @@ describe('Licence API client tests', () => {
   })
 
   it('Should get recently approved licences', async () => {
-    await licenceApiClient.getLicencesRecentlyApproved(['PRI'], null, null, { username: 'joebloggs' } as User)
+    await licenceApiClient.getLicencesRecentlyApproved(['PRI'], { username: 'joebloggs' } as User)
     expect(post).toHaveBeenCalledWith(
       {
         path: '/licence/recently-approved',
         data: {
           prisonCodes: ['PRI'],
         },
-        query: {},
       },
       { username: 'joebloggs' }
     )
