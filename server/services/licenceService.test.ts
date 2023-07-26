@@ -705,6 +705,13 @@ describe('Licence Service', () => {
     )
   })
 
+  it('Get licences recently approved', async () => {
+    jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
+
+    await licenceService.getLicencesRecentlyApproved(user, [])
+    expect(licenceApiClient.getLicencesRecentlyApproved).toBeCalledWith(['MDI'], user)
+  })
+
   it('Get licences for variation approval', async () => {
     const approver = { ...user, probationPduCodes: ['A'] }
     await licenceService.getLicencesForVariationApproval(approver)

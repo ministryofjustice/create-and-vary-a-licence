@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { getUnixTime, isAfter, isValid, parse, subDays } from 'date-fns'
+import { format, getUnixTime, isAfter, isValid, parse, subDays } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
@@ -17,12 +17,19 @@ export default class ApprovalCaseRoutes {
     const allPrisons = await this.prisonerService.getPrisons()
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
-    const cases = await this.caseloadService.getApproverCaseload(user, prisonCaseloadToDisplay)
+    const cases = await this.caseloadService.getApproverCaseload(user, prisonCaseloadToDisplay, approvalNeededView)
 
     const caseloadViewModel = cases
       .map(c => {
         const releaseDate = selectReleaseDate(c.nomisRecord)
         const urgentApproval = this.isUrgentApproval(releaseDate)
+        let approvedDate
+        if (_.head(c.licences).approvedDate) {
+          approvedDate = format(
+            parse(_.head(c.licences).approvedDate, 'dd/MM/yyyy HH:mm:ss', new Date()),
+            'dd MMMM yyyy'
+          )
+        }
         return {
           licenceId: _.head(c.licences).id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
@@ -30,7 +37,8 @@ export default class ApprovalCaseRoutes {
           probationPractitioner: c.probationPractitioner,
           releaseDate,
           urgentApproval,
-          releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
+          approvedBy: _.head(c.licences).approvedBy,
+          approvedOn: approvedDate,
         }
       })
       .filter(c => {
