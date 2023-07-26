@@ -20,6 +20,7 @@ import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import trimRequestBody from './middleware/trimBodyMiddleware'
+import phaseNameSetup from './middleware/phaseNameSetup'
 
 const testMode = process.env.NODE_ENV === 'test'
 
@@ -36,6 +37,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
   nunjucksSetup(app, services.conditionService)
+  phaseNameSetup(app, config.phaseName)
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
   app.use(trimRequestBody())
