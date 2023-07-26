@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { getUnixTime } from 'date-fns'
+import { getUnixTime, isAfter, isValid, parse, subDays } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
@@ -10,7 +10,7 @@ export default class ApprovalCaseRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
-
+    const approvalNeededView = req.query.approval !== 'recently'
     const { user } = res.locals
     const { caseloadsSelected = [] } = req.session
     const hasMultipleCaseloadsInNomis = user.prisonCaseload.length > 1
@@ -21,12 +21,15 @@ export default class ApprovalCaseRoutes {
 
     const caseloadViewModel = cases
       .map(c => {
+        const releaseDate = selectReleaseDate(c.nomisRecord)
+        const urgentApproval = this.isUrgentApproval(releaseDate)
         return {
           licenceId: _.head(c.licences).id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: selectReleaseDate(c.nomisRecord),
+          releaseDate,
+          urgentApproval,
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
         }
       })
@@ -52,6 +55,13 @@ export default class ApprovalCaseRoutes {
       search,
       prisonsToDisplay,
       hasMultipleCaseloadsInNomis,
+      approvalNeededView,
     })
+  }
+
+  isUrgentApproval = (releaseDateString: string): boolean => {
+    const releaseDate = parse(releaseDateString, 'dd MMM yyyy', new Date())
+    const isValidDate = isValid(releaseDate)
+    return isValidDate && isAfter(new Date(), subDays(releaseDate, 2))
   }
 }
