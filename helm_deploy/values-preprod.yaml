@@ -10,6 +10,7 @@ generic-service:
     contextColour: green
 
   env:
+    SYSTEM_PHASE: PRE-PRODUCTION
     INGRESS_URL: "https://create-and-vary-a-licence-preprod.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
