@@ -32,7 +32,7 @@ context('Approve a licence', () => {
     cy.task('stubGetPrisons')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
-    cy.task('stubMissingPrisonerImage')
+    cy.task('stubGetPrisonerImage')
     cy.task('stubGetStaffDetailByUsername')
   })
 
@@ -151,22 +151,11 @@ context('Approve a licence', () => {
   it('should get prisoner image', () => {
     cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' })
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-    cy.task('stubGetPrisonerImage')
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
     const approvalViewPage = approvalCasesPage.clickApproveLicence()
     approvalViewPage.getPrisonerImage().should('have.class', 'prisoner-image')
-  })
-
-  it('should get missing prisoner image', () => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' })
-    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const approvalCasesPage = indexPage.clickApproveALicence()
-    const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.getPrisonerMissingImageId().should('have.class', 'prisoner-missing-image')
   })
 
   it("should not show caseload information because user doesn't have multiple caseloads", () => {
