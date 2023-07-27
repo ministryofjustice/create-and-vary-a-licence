@@ -8,6 +8,8 @@
 {% from "partials/varyCallToActions.njk" import cta %}
 
 {% set pageTitle = applicationName + " - Vary a licence - Active licence" %}
+{% set isInVariation = licence.statusCode == 'VARIATION_IN_PROGRESS' or licence.statusCode == 'VARIATION_SUBMITTED' 
+    or licence.statusCode == 'VARIATION_REJECTED' or licence.statusCode == 'VARIATION_APPROVED' %}
 {% set pageId = "view-active-licence-page" %}
 {% set backLinkHref = "/licence/vary/caseload" %}
 
@@ -28,14 +30,15 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if not isInPssPeriod and ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') %}
+            {% if (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation or not licence.isActivatedInPssPeriod))) and
+             ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
                 {{ bespokeConditions(licence, null, 'Bespoke licence conditions') }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence, null, [], 'Additional post sentence supervision requirements') }}
             {% endif %}
-            {% if isInPssPeriod and licence.typeCode === 'AP_PSS' %}
+            {% if licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) and licence.typeCode === 'AP_PSS' and additionalConditions.length %}
                 <div>
                     <h2 class="govuk-heading-m">Conditions from expired licence</h2>
                     <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 
@@ -43,7 +46,7 @@
                     <details class="govuk-details" data-module="govuk-details">
                         <summary class="govuk-details__summary">
                             <span class="govuk-details__summary-text">
-                                View conditions from expired licence
+                                View conditions from expired licence1 {{additionalConditions.length}}
                             </span>
                         </summary>
                         <div class="govuk-details__text">

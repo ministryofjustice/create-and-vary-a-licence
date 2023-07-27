@@ -41,6 +41,7 @@ import {
 import ElectronicTagPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicTagPeriod'
 import { AdditionalConditionAp, AdditionalConditionPss, AdditionalConditionsConfig } from '../@types/LicencePolicy'
 import { User } from '../@types/CvlUserDetails'
+import LicenceStatus from '../enumeration/licenceStatus'
 
 type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -258,11 +259,17 @@ export default class ConditionService {
   /* eslint-disable no-param-reassign */
 
   async getParentOrSelfAdditionalLicenceConditions(licence: Licence, user: User): Promise<AdditionalCondition[]> {
-    if (licence.isInPssPeriod) {
+    const isInVariation = [
+      LicenceStatus.VARIATION_IN_PROGRESS,
+      LicenceStatus.VARIATION_SUBMITTED,
+      LicenceStatus.VARIATION_REJECTED,
+      LicenceStatus.VARIATION_APPROVED,
+    ].includes(<LicenceStatus>licence.statusCode)
+
+    if (licence.isInPssPeriod && isInVariation) {
       return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))
         ?.additionalLicenceConditions
     }
-
     return licence.additionalLicenceConditions
   }
 }

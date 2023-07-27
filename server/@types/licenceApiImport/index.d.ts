@@ -1874,6 +1874,10 @@ export interface components {
        * @description Is this licence in PSS period?(LED < TODAY <= TUSED)
        */
       isInPssPeriod?: boolean
+      /**
+       * @description Is this licence is activated in PSS period?(LED < LAD <= TUSED)
+       */
+      isActivatedInPssPeriod?: boolean
     }
     AddAnother: {
       label: string

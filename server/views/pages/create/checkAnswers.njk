@@ -11,6 +11,8 @@
 {% set pageId = "check-answers-page" %}
 
 {% set isInProgress = licence.statusCode == 'IN_PROGRESS' or licence.statusCode == 'VARIATION_IN_PROGRESS' %}
+{% set isInVariation = licence.statusCode == 'VARIATION_IN_PROGRESS' or licence.statusCode == 'VARIATION_SUBMITTED' 
+    or licence.statusCode == 'VARIATION_REJECTED' or licence.statusCode == 'VARIATION_APPROVED' %}
 {% set canChooseToEdit = licence.statusCode == 'APPROVED' or licence.statusCode == 'SUBMITTED' %}
 {% set canChooseToPrint = licence.statusCode == 'APPROVED' %}
 {% if licence.isVariation %} 
@@ -79,8 +81,8 @@
             {% endif %}
 
 
-
-            {% if not isInPssPeriod and (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) %}
+            {% if (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation or not licence.isActivatedInPssPeriod))) and
+             (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors) }}
                 {{ bespokeConditions(licence, isInProgress) }}
             {% endif %}
@@ -89,7 +91,7 @@
                 {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
             {% endif %}
 
-            {% if isInPssPeriod and licence.typeCode === 'AP_PSS' %}
+            {% if isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) and licence.typeCode === 'AP_PSS' and additionalConditions.length %}
                 <div>
                     <h2 class="govuk-heading-m">Conditions from expired licence</h2>
                     <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 

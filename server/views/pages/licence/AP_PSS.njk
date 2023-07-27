@@ -12,6 +12,7 @@
 
 {% set offenderName = licence.forename + " " + licence.surname %}
 {% set pageTitle = offenderName %}
+{% set isInVariation = licence.statusCode == 'VARIATION_IN_PROGRESS' or licence.statusCode == 'VARIATION_SUBMITTED' or licence.statusCode == 'VARIATION_REJECTED' or licence.statusCode == 'VARIATION_REJECTED' %}
 
 {% block content %}
     <div id="title" class="title">Licence and post sentence supervision order for {{ offenderName }}</div>
@@ -54,45 +55,47 @@
     {% include "pages/licence/partials/pssDates.njk" %}
     {% include "pages/licence/partials/induction.njk" %}
 
-    <div class="section-with-heading">
-        <span class="heading">Licence Period</span>
-        <div class="section">
+    {% if not((isInVariation and licence.isInPssPeriod) or licence.isActivatedInPssPeriod) %}
+        <div class="section-with-heading">
+            <span class="heading">Licence Period</span>
+            <div class="section">
+                <p>
+                    The objectives of this licence period are to:
+                </p>
+                <ul class="bullet-point">
+                    <li>protect the public</li>
+                    <li>prevent re-offending</li>
+                    <li>help you to resettle into the community</li>
+                </ul>
+                <p>
+                    You must place yourself under the supervision of whichever supervising officer or social worker
+                    is nominated for this purpose from time to time.
+                </p>
+            </div>
+        </div>
+
+        {% include "pages/licence/partials/apConditions.njk" %}
+
+        <div id="cancellation-ap" class="section">
             <p>
-                The objectives of this licence period are to:
-            </p>
-            <ul class="bullet-point">
-                <li>protect the public</li>
-                <li>prevent re-offending</li>
-                <li>help you to resettle into the community</li>
-            </ul>
-            <p>
-                You must place yourself under the supervision of whichever supervising officer or social worker
-                is nominated for this purpose from time to time.
+                The Secretary of State may vary or cancel any of the above conditions, in accordance with Section 250(4) of the Criminal Justice Act 2003.
             </p>
         </div>
-    </div>
 
-    {% include "pages/licence/partials/apConditions.njk" %}
+        {% include "pages/licence/partials/recall.njk" %}
 
-    <div id="cancellation-ap" class="section">
-        <p>
-            The Secretary of State may vary or cancel any of the above conditions, in accordance with Section 250(4) of the Criminal Justice Act 2003.
-        </p>
-    </div>
-
-    {% include "pages/licence/partials/recall.njk" %}
-
-    <div id="failure-to-comply-ap" class="section">
-        <p>
-            If you fail to comply with any requirement of your licence period (set out in paragraphs 5 and 6 above) or if
-            you otherwise pose a risk to the public, you will be liable to have this licence revoked and be recalled to custody
-            until the date on which your licence would have otherwise ended.
-        </p>
-        <p>
-            If you are sent back to prison and are re-released before the end of your licence, you will still be subject
-            to licence conditions until the end of your sentence.
-        </p>
-    </div>
+        <div id="failure-to-comply-ap" class="section">
+            <p>
+                If you fail to comply with any requirement of your licence period (set out in paragraphs 5 and 6 above) or if
+                you otherwise pose a risk to the public, you will be liable to have this licence revoked and be recalled to custody
+                until the date on which your licence would have otherwise ended.
+            </p>
+            <p>
+                If you are sent back to prison and are re-released before the end of your licence, you will still be subject
+                to licence conditions until the end of your sentence.
+            </p>
+        </div>
+    {% endif %}
 
     <div class="section-with-heading">
         <div class="heading">Post sentence supervision</div>
