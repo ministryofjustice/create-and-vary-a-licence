@@ -272,18 +272,12 @@ describe('Create a Licence Views - Check Answers', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(3)
-    expect($('#bespoke-conditions-details > div:nth-child(1) > .govuk-summary-list__key').text().trim()).toBe(
-      'Select bespoke conditions'
-    )
-    expect($('#bespoke-conditions-details > div:nth-child(1) > .govuk-summary-list__value').text().trim()).toBe(
-      '2 conditions selected'
-    )
+    expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)
 
-    expect($('#bespoke-conditions-details > div:nth-child(2) > .govuk-summary-list__value').text().trim()).toBe(
+    expect($('#bespoke-conditions-details > div:nth-child(1) > .govuk-summary-list__value').text().trim()).toBe(
       'Bespoke condition 1'
     )
-    expect($('#bespoke-conditions-details > div:nth-child(3) > .govuk-summary-list__value').text().trim()).toBe(
+    expect($('#bespoke-conditions-details > div:nth-child(2) > .govuk-summary-list__value').text().trim()).toBe(
       'Bespoke condition 2'
     )
   })
@@ -329,7 +323,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('.govuk-summary-list__actions').length).toBe(13)
+    expect($('.govuk-summary-list__actions').length).toBe(12)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 

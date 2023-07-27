@@ -129,7 +129,7 @@ describe('View and print - single licence view', () => {
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(2)
 
     // Check the additional licence conditions count is contained in the heading
-    expect($('#additional-licence-conditions-heading').text().trim()).toContain('(2 selected)')
+    expect($('#additional-licence-conditions-heading').text().trim()).toBe('Additional licence conditions (2 selected)')
 
     // Check the actual conditions
     expect($('#additionalLicenceConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
@@ -164,15 +164,14 @@ describe('View and print - single licence view', () => {
     expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
 
     // Check the bespoke conditions are rendered correctly using the macro for them
-    expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(3)
+    expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)
 
-    // Check the bespoke condition count - always the first item
-    expect($('#bespoke-conditions-details > div:nth-child(1) > dt').text().trim()).toBe('Select bespoke conditions')
-    expect($('#bespoke-conditions-details > div:nth-child(1) > dd').text().trim()).toBe('2 conditions selected')
+    // Check the bespoke condition count is contained in the heading
+    expect($('#bespoke-licence-conditions-heading').text().trim()).toBe('Bespoke licence conditions (2 selected)')
 
     // Check the actual bespoke conditions
-    expect($('#bespoke-conditions-details > div:nth-child(2) > dd').text().trim()).toBe('Bespoke condition 1')
-    expect($('#bespoke-conditions-details > div:nth-child(3) > dd').text().trim()).toBe('Bespoke condition 2')
+    expect($('#bespoke-conditions-details > div:nth-child(1) > dd').text().trim()).toBe('Bespoke condition 1')
+    expect($('#bespoke-conditions-details > div:nth-child(2) > dd').text().trim()).toBe('Bespoke condition 2')
 
     // Check the existence of the print and return to case list buttons
     expect($('[data-qa="print-licence"]').length).toBe(2)
