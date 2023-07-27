@@ -1,0 +1,20 @@
+.approval-cases-search {
+  width: 470px;
+}
+
+.approval-due-date span {
+  display: block;
+}
+
+.approval-due-date .approval-overdue {
+  border-left: 5px solid #d4351c;
+  font-weight: bold;
+  padding-left: 5px;
+}
+
+.approval-due-date .approval-overdue-message {
+  color: #0b0c0c;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1.25;
+}
