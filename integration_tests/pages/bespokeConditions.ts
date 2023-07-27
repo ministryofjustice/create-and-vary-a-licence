@@ -22,12 +22,12 @@ export default class BespokeConditionsPage extends Page {
   }
 
   checkDeleteThisCondition = (): BespokeConditionsPage => {
-    cy.get('.delete-condition-button-pluralisable').should('contain.text', 'Delete this condition')
+    cy.get('.delete-condition-button').should('contain.text', 'Delete this condition')
     return this
   }
 
   checkDeleteTheseConditions = (): BespokeConditionsPage => {
-    cy.get('.delete-condition-button-pluralisable').should('contain.text', 'Delete these conditions')
+    cy.get('.delete-condition-button').should('contain.text', 'Delete these conditions')
     return this
   }
 
