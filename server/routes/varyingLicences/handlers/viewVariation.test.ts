@@ -7,7 +7,6 @@ import LicenceService from '../../../services/licenceService'
 import { VariedConditions } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
 import ConditionService from '../../../services/conditionService'
-import ConditionFormatter from '../../../services/conditionFormatter'
 import { LicenceApiClient } from '../../../data'
 
 jest.mock('../../../data/licenceApiClient')
@@ -15,9 +14,8 @@ jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
 const username = 'joebloggs'
-const conditionFormatter = new ConditionFormatter()
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
-const conditionService = new ConditionService(licenceApiClient, conditionFormatter) as jest.Mocked<ConditionService>
+const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
 describe('Route - Vary - View variation', () => {
