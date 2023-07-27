@@ -5,7 +5,6 @@ import ConditionService from '../../../services/conditionService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
 import { LicenceApiClient } from '../../../data'
-import ConditionFormatter from '../../../services/conditionFormatter'
 import PrisonerService from '../../../services/prisonerService'
 import CommunityService from '../../../services/communityService'
 
@@ -13,11 +12,10 @@ jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
-const conditionFormatter = new ConditionFormatter()
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-const conditionService = new ConditionService(licenceApiClient, conditionFormatter) as jest.Mocked<ConditionService>
+const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
 
 describe('Route Handlers - Create Licence - Check Answers', () => {
