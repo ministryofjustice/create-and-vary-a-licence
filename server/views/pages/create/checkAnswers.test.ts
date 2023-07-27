@@ -225,7 +225,9 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: { ...licence, typeCode: 'PSS' },
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements')
+    expect($('#additional-pss-conditions-heading').text()).toBe(
+      'Additional post sentence supervision requirements (2 selected)'
+    )
   })
 
   it('should display additional PSS conditions section if licence type is AP_PSS', () => {
@@ -233,7 +235,9 @@ describe('Create a Licence Views - Check Answers', () => {
       licence,
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
-    expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements')
+    expect($('#additional-pss-conditions-heading').text()).toBe(
+      'Additional post sentence supervision requirements (2 selected)'
+    )
   })
 
   it('should not display additional PSS licence conditions section if licence type is AP', () => {
@@ -249,19 +253,19 @@ describe('Create a Licence Views - Check Answers', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(3)
+    expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(2)
 
-    expect($('#additionalPssConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 1')
-    expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe('Template 1')
-    expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
+    expect($('#additionalPssConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
+    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe('Template 1')
+    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
 
-    expect($('#additionalPssConditions > div:nth-child(3) > dt').text().trim()).toBe('Category 2')
-    expect($('#additionalPssConditions > div:nth-child(3) > dd > div:nth-child(1)').text().trim()).toBe('Template 2')
+    expect($('#additionalPssConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
+    expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe('Template 2')
     expect(
-      $('#additionalPssConditions > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
+      $('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
     ).toBe('Data 2A, Data 2B')
     expect(
-      $('#additionalPssConditions > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
+      $('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
     ).toBe('Data 2C')
   })
 
@@ -323,7 +327,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
 
-    expect($('.govuk-summary-list__actions').length).toBe(12)
+    expect($('.govuk-summary-list__actions').length).toBe(11)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 

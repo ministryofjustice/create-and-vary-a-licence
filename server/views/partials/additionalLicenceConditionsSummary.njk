@@ -1,7 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, title) %}
+{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors) %}
     {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
 
     {% set conditionCount = additionalConditions.length + (1 if conditionsWithUploads.length else 0) %}
@@ -12,20 +12,20 @@
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-two-thirds">
             <h2 id="additional-licence-conditions-heading"
-                class="govuk-heading-m">{{ title or "Additional licence conditions" + " (" + conditionCount + " selected)" }}</h2>
+                class="govuk-heading-m">{{ "Additional licence conditions" + " (" + conditionCount + " selected)" }}</h2>
         </div>
-        <div class="govuk-grid-column-one-third text-align-right">
-            {{ govukButton({
-                href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
-                text: addRemoveBtnText,
-                classes: "govuk-button--secondary"
-            }) }}
-        </div>
+        {% if isEditable %}
+            <div class="govuk-grid-column-one-third text-align-right">
+                {{ govukButton({
+                    href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
+                    text: addRemoveBtnText,
+                    classes: "govuk-button--secondary"
+                }) }}
+            </div>
+        {% endif %}
     </div>
 
     {% set additionalLicenceConditions = [] %}
-
-    {% set conditionWord = "condition" if (conditionCount) === 1 else "conditions" %}
 
     {% for condition in additionalConditions %}
         {% if condition.uploadSummary.length %}

@@ -1,26 +1,26 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{%  macro bespokeConditions(licence, isEditable, title) %}
+{% macro bespokeConditions(licence, isEditable) %}
 
 {% set addRemoveBtnText = "Add conditions" if (licence.bespokeConditions.length) === 0 else "Add or remove conditions" %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-two-thirds">
-            <h2 id="bespoke-licence-conditions-heading" class="govuk-heading-m">{{ title or "Bespoke licence conditions" + " (" + licence.bespokeConditions.length + " selected)" }}</h2>
+            <h2 id="bespoke-licence-conditions-heading" class="govuk-heading-m">{{ "Bespoke licence conditions" + " (" + licence.bespokeConditions.length + " selected)" }}</h2>
         </div>
-        <div class="govuk-grid-column-one-third text-align-right">
-            {{ govukButton({
-                href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
-                text: addRemoveBtnText,
-                classes: "govuk-button--secondary"
-            }) }}
-        </div>
+        {% if isEditable %}
+            <div class="govuk-grid-column-one-third text-align-right">
+                {{ govukButton({
+                    href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
+                    text: addRemoveBtnText,
+                    classes: "govuk-button--secondary"
+                }) }}
+            </div>
+        {% endif %}
     </div>
 
     {% set bespokeConditions = [] %}
-
-    {% set conditionWord = "condition" if licence.bespokeConditions.length === 1 else "conditions" %}
 
     {% for condition in licence.bespokeConditions %}
         {% set bespokeConditions = (bespokeConditions.push({

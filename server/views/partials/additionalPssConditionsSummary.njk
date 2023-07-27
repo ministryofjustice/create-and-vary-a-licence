@@ -1,6 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro additionalPssConditions(licence, isEditable, validationErrors, title) %}
+{% macro additionalPssConditions(licence, isEditable, validationErrors) %}
     {% set errorMessage = validationErrors | findError('additionalPssConditions') %}
     {% macro additionalConditionHtml(expandedConditionText, data) %}
         <div>
@@ -15,30 +16,25 @@
         {% endif %}
     {% endmacro %}
 
+    {% set addRemoveBtnText = "Add requirements" if (licence.additionalPssConditions.length) === 0 else "Add or remove requirements" %}
+    {% set subHeadingClass = "govuk-grid-column-two-thirds" if isEditable else "govuk-grid-column-full" %}
+
     <div class="govuk-grid-row check-answers-header">
-        <div class="govuk-grid-column-three-quarters">
-            <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">{{ title or 'Additional post sentence supervision requirements' }}</h2>
+        <div class="{{ subHeadingClass }}">
+            <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">{{ 'Additional post sentence supervision requirements' + ' (' + licence.additionalPssConditions.length + ' selected)'}}</h2>
         </div>
+        {% if isEditable %}
+            <div class="govuk-grid-column-one-third text-align-right">
+                {{ govukButton({
+                    href: "/licence/create/id/" + licence.id + "/additional-pss-conditions?fromReview=true",
+                    text: addRemoveBtnText,
+                    classes: "govuk-button--secondary"
+                }) }}
+            </div>
+        {% endif %}
     </div>
 
     {% set additionalPssConditions = [] %}
-
-    {# Add select additional PSS requirements + count of existing requirements #}
-    {% set conditionWord = "requirement" if licence.additionalPssConditions.length === 1 else "requirements" %}
-    {% set additionalPssConditions = (additionalPssConditions.push({
-        classes: 'govuk-summary-list__row--error' if errorMessage,
-        key: {  text: "Select additional requirements" },
-        value: { text: "" + licence.additionalPssConditions.length + " " + conditionWord + " selected" },
-        actions: {
-            items: [
-                {
-                    href: "/licence/create/id/" + licence.id + "/additional-pss-conditions?fromReview=true",
-                    text: "Change",
-                    visuallyHiddenText: "Add or remove requirements"
-                }
-            ]
-        } if isEditable
-    }), additionalPssConditions) %}
 
     {% for condition in licence.additionalPssConditions %}
         {% set additionalPssConditions = (additionalPssConditions.push({

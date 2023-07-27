@@ -152,16 +152,17 @@ describe('View and print - single licence view', () => {
     ).toBe('Data 2C')
 
     // Check the additional pss conditions are rendered correctly
-    expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(2)
+    expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(1)
 
-    // Check the additional PSS count - always the first item
-    expect($('#additionalPssConditions > div:nth-child(1) > dt').text().trim()).toBe('Select additional requirements')
-    expect($('#additionalPssConditions > div:nth-child(1) > dd').text().trim()).toBe('1 requirement selected')
+    // Check the additional PSS count is contained in the heading
+    expect($('#additional-pss-conditions-heading').text().trim()).toBe(
+      'Additional post sentence supervision requirements (1 selected)'
+    )
 
     // Check the actual PSS requirement
-    expect($('#additionalPssConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 1')
-    expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe('Template 1')
-    expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
+    expect($('#additionalPssConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
+    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe('Template 1')
+    expect($('#additionalPssConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe('Data 1')
 
     // Check the bespoke conditions are rendered correctly using the macro for them
     expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)

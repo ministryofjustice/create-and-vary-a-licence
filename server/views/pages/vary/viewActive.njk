@@ -29,11 +29,11 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
-                {{ bespokeConditions(licence, null, 'Bespoke licence conditions') }}
+                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, []) }}
+                {{ bespokeConditions(licence, null) }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, null, [], 'Additional post sentence supervision requirements') }}
+                {{ additionalPssConditions(licence, null, []) }}
             {% endif %}
         </div>
     </div>
