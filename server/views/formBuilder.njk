@@ -17,7 +17,7 @@
         {% set validationError = validationErrors | findError(input.name) %}
         {% set formValues = getFormResponses(formResponses, input.name) or getValueFromAdditionalCondition(additionalCondition, input.name) %}
 
-        <div data-module="moj-condition-add-another">
+        <div data-module="moj-add-another">
             {% if input.type == 'text' %}
                 {% for item in formValues %}
                     {{ textInput(input, validationError, item, loop.index0, formValues.length > 1) }}
@@ -286,7 +286,7 @@
 {% macro textInput(input, validationError, value, index, removeButton) %}
     {% if index == 0 or (index > 0 and input.addAnother) %}
         {% call govukFieldset({
-            classes: 'moj-add-another__item govuk-!-width-one-half',
+            classes: 'moj-add-another__item',
             legend: {
                 text: input.label,
                 classes: 'moj-add-another__title govuk-visually-hidden',
@@ -296,6 +296,7 @@
             {{ govukInput({
                 id: input.name if not input.addAnother else input.name + '[' + index + ']',
                 name: input.name if not input.addAnother else input.name + '[' + index + ']',
+                classes: "govuk-!-width-one-half",
                 label: {
                     text: input.label,
                     classes: "govuk-!-font-weight-bold"
@@ -309,7 +310,7 @@
             }) }}
 
             {% if input.addAnother and removeButton %}
-                <button type="button" class="govuk-button govuk-button--warning moj-add-another__remove-button">
+                <button type="button" class="govuk-button govuk-button--secondary moj-add-another__remove-button">
                     Remove
                 </button>
             {% endif %}

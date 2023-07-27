@@ -22,13 +22,13 @@
 
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <div data-module="moj-condition-add-another">
+                <div data-module="moj-custom-add-another">
 
                     {% for c in conditions %}
                         {% call govukFieldset({ classes: 'moj-add-another__item' }) %}
                             {{  bespokeCondition(loop.index0, c) }}
                             {% if conditions.length > 1 %}
-                                <button type="button" class="govuk-button govuk-button--warning moj-add-another__remove-button">Remove</button>
+                                <button type="button" class="govuk-button govuk-button--secondary moj-add-another__remove-button">Remove</button>
                             {% endif %}
                         {% endcall %}
                     {% else %}
@@ -58,7 +58,7 @@
                 {{  govukButton({
                     text: "Delete these conditions" if conditions.length > 1 else "Delete this condition",
                     href: "/licence/create/id/" + licence.id + "/bespoke-conditions/delete?fromReview=true",
-                    classes: 'govuk-button--secondary delete-condition-button-pluralisable',
+                    classes: 'govuk-button--secondary delete-condition-button',
                     attributes: { 'data-qa': 'delete' }
                 }) }}
             </div>
@@ -84,5 +84,5 @@
 {% endmacro %}
 
 {% block pageScripts %}
-    <script src="/assets/js/conditions/addAnother.js"></script>
+    <script src="/assets/js/bespoke.js"></script>
 {% endblock %}
