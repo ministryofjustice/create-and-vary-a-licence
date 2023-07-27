@@ -5,7 +5,7 @@
 
 {% set addRemoveBtnText = "Add conditions" if (licence.bespokeConditions.length) === 0 else "Add or remove conditions" %}
 
-    <div class="govuk-grid-row check-answers-header">
+    <div class="govuk-grid-row check-answers-header sub-heading-margin-top govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-two-thirds">
             <h2 id="bespoke-licence-conditions-heading" class="govuk-heading-m">{{ "Bespoke licence conditions" + " (" + licence.bespokeConditions.length + " selected)" }}</h2>
         </div>
@@ -14,7 +14,7 @@
                 {{ govukButton({
                     href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
                     text: addRemoveBtnText,
-                    classes: "govuk-button--secondary"
+                    classes: "govuk-button--secondary govuk-!-margin-bottom-0"
                 }) }}
             </div>
         {% endif %}
