@@ -1385,7 +1385,7 @@ describe('Caseload Service', () => {
     ])
   })
 
-  it('builds the approver caseload', async () => {
+  it('builds the approval needed caseload', async () => {
     jest.spyOn(licenceService, 'getLicencesForApproval').mockResolvedValue([
       {
         nomisId: 'AB1234E',
@@ -1415,7 +1415,7 @@ describe('Caseload Service', () => {
       },
     ])
 
-    const result = await serviceUnderTest.getApproverCaseload(user, [])
+    const result = await serviceUnderTest.getApproverCaseload(user, [], true)
 
     expect(result).toMatchObject([
       {
@@ -1435,6 +1435,70 @@ describe('Caseload Service', () => {
             type: 'AP',
             status: 'SUBMITTED',
             comUsername: 'joebloggs',
+          },
+        ],
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'Joe Bloggs',
+        },
+      },
+    ])
+  })
+
+  it('builds the recently approved caseload', async () => {
+    jest.spyOn(licenceService, 'getLicencesRecentlyApproved').mockResolvedValue([
+      {
+        nomisId: 'AB1234E',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.SUBMITTED,
+        comUsername: 'joebloggs',
+        approvedByName: 'Jim Smith',
+        approvedDate: '25/04/2014 07:45:59',
+      },
+    ])
+    communityService.getOffendersByNomsNumbers.mockResolvedValue([
+      {
+        otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+    ])
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
+    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+      {
+        username: 'joebloggs',
+        staffCode: 'X1234',
+        staff: {
+          forenames: 'Joe',
+          surname: 'Bloggs',
+        },
+      },
+    ])
+
+    const result = await serviceUnderTest.getApproverCaseload(user, [], false)
+
+    expect(result).toMatchObject([
+      {
+        deliusRecord: {
+          otherIds: {
+            nomsNumber: 'AB1234E',
+            crn: 'X12348',
+          },
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          conditionalReleaseDate: tenDaysFromNow,
+        },
+        licences: [
+          {
+            id: 1,
+            type: 'AP',
+            status: 'SUBMITTED',
+            comUsername: 'joebloggs',
+            approvedBy: 'Jim Smith',
+            approvedDate: '25/04/2014 07:45:59',
           },
         ],
         probationPractitioner: {
