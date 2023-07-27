@@ -1,35 +1,31 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, title) %}
     {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
 
+    {% set conditionCount = additionalConditions.length + (1 if conditionsWithUploads.length else 0) %}
+
+    {% set addRemoveBtnText = "Add conditions" if (conditionCount) === 0 else "Add or remove conditions" %}
+
+
     <div class="govuk-grid-row check-answers-header">
-        <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-two-thirds">
             <h2 id="additional-licence-conditions-heading"
-                class="govuk-heading-m">{{ title or "Additional licence conditions" }}</h2>
+                class="govuk-heading-m">{{ title or "Additional licence conditions" + " (" + conditionCount + " selected)" }}</h2>
+        </div>
+        <div class="govuk-grid-column-one-third text-align-right">
+            {{ govukButton({
+                href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
+                text: addRemoveBtnText,
+                classes: "govuk-button--secondary"
+            }) }}
         </div>
     </div>
 
     {% set additionalLicenceConditions = [] %}
 
-    {% set conditionCount = additionalConditions.length + (1 if conditionsWithUploads.length else 0) %}
-
     {% set conditionWord = "condition" if (conditionCount) === 1 else "conditions" %}
-
-    {% set additionalLicenceConditions = (additionalLicenceConditions.push({
-        classes: 'govuk-summary-list__row--error' if errorMessage,
-        key: {  text: "Select additional conditions" },
-        value: { text: "" + conditionCount  + " " + conditionWord + " selected" },
-        actions: {
-            items: [
-                {
-                    href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
-                    text: "Change",
-                    visuallyHiddenText: "Add or remove conditions"
-                }
-            ]
-        } if isEditable
-    }), additionalLicenceConditions) %}
 
     {% for condition in additionalConditions %}
         {% if condition.uploadSummary.length %}

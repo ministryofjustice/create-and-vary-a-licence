@@ -126,30 +126,29 @@ describe('View and print - single licence view', () => {
     expect($('#induction-meeting-details > .govuk-summary-list__row').length).toBe(5)
 
     // Check the additional conditions count (including the always-present counter
-    expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(3)
+    expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(2)
 
-    // Check the additional licence conditions count - always the first item
-    expect($('#additionalLicenceConditions > div:nth-child(1) > dt').text().trim()).toBe('Select additional conditions')
-    expect($('#additionalLicenceConditions > div:nth-child(1) > dd').text().trim()).toBe('2 conditions selected')
+    // Check the additional licence conditions count is contained in the heading
+    expect($('#additional-licence-conditions-heading').text().trim()).toContain('(2 selected)')
 
     // Check the actual conditions
-    expect($('#additionalLicenceConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 1')
-    expect($('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
+    expect($('#additionalLicenceConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
+    expect($('#additionalLicenceConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe(
       'Template 1'
     )
-    expect($('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span').text().trim()).toBe(
+    expect($('#additionalLicenceConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe(
       'Data 1'
     )
 
-    expect($('#additionalLicenceConditions > div:nth-child(3) > dt').text().trim()).toBe('Category 2')
-    expect($('#additionalLicenceConditions > div:nth-child(3) > dd > div:nth-child(1)').text().trim()).toBe(
+    expect($('#additionalLicenceConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
+    expect($('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
       'Template 2'
     )
     expect(
-      $('#additionalLicenceConditions > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
+      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
     ).toBe('Data 2A, Data 2B')
     expect(
-      $('#additionalLicenceConditions > div:nth-child(3) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
+      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
     ).toBe('Data 2C')
 
     // Check the additional pss conditions are rendered correctly
