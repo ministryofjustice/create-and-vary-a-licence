@@ -89,11 +89,8 @@ context('Approve a licence', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     const approvalCasesPage = indexPage.clickApproveALicence()
-    const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    const approvalCasesPage2 = approvalViewPage.clickReturnToList()
-    approvalCasesPage2.getTableRows().should(rows => {
-      expect(rows).to.have.length(1)
-    })
+    approvalCasesPage.clickApproveLicence()
+    cy.url().should('eq', 'http://localhost:3007/licence/approve/id/1/view')
   })
 
   it('should check if review details accordian is open', () => {

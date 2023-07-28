@@ -3,14 +3,12 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
 import CommunityService from '../../../services/communityService'
-import PrisonerService from '../../../services/prisonerService'
 
 export default class ApprovalViewRoutes {
   constructor(
     private readonly licenceService: LicenceService,
     private readonly conditionService: ConditionService,
-    private readonly communityService: CommunityService,
-    private readonly prisonerService: PrisonerService
+    private readonly communityService: CommunityService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -31,7 +29,6 @@ export default class ApprovalViewRoutes {
       const { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
         licence.additionalLicenceConditions
       )
-      const imageData = await this.prisonerService.getPrisonerImageData(licence.nomsId, user)
 
       const comDetails = await this.communityService.getStaffDetailByUsername(comUsername)
 
@@ -43,7 +40,6 @@ export default class ApprovalViewRoutes {
           telephone: comDetails?.telephoneNumber,
           email: comDetails?.email,
         },
-        imageData,
       })
     } else {
       res.redirect(`/licence/approve/cases`)

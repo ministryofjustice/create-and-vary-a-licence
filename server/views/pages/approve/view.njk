@@ -30,12 +30,12 @@
         </div>
 
         <div class="govuk-grid-row">
-            <div class="prisoner-record-detail flex">
+            <div class="prisoner-record-detail">
                 <div class="govuk-grid-column-three-quarters">
                     {{ prisonerSummaryDetails(licence) }}
                 </div>
                 <div class="govuk-grid-column-one-quarter">
-                    <img src="data:image/jpeg;charset-utf8;base64,{{ imageData }}"
+                    <img src="{{ '/prisoner/' + licence.nomsId + '/image' }}"
                         class="prisoner-image"
                         alt="{{ licence.lastName }}, {{ licence.firstName }}"
                         data-qa="prisoner-image"

@@ -5,12 +5,10 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
 import CommunityService from '../../../services/communityService'
-import PrisonerService from '../../../services/prisonerService'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
@@ -19,7 +17,7 @@ jest.mock('../../../services/communityService')
 jest.mock('../../../services/conditionService')
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ApprovalViewRoutes(licenceService, conditionService, communityService, prisonerService)
+  const handler = new ApprovalViewRoutes(licenceService, conditionService, communityService)
   let req: Request
   let res: Response
 
@@ -32,7 +30,6 @@ describe('Route - view and approve a licence', () => {
 
     licenceService.updateStatus = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
-    prisonerService.getPrisonerImageData = jest.fn()
   })
 
   describe('GET', () => {
@@ -75,7 +72,6 @@ describe('Route - view and approve a licence', () => {
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       expect(conditionService.additionalConditionsCollection).not.toHaveBeenCalled()
       expect(communityService.getStaffDetailByUsername).not.toHaveBeenCalled()
-      expect(prisonerService.getPrisonerImageData).not.toHaveBeenCalled()
     })
 
     it('should render a single licence view for approval', async () => {
@@ -111,7 +107,6 @@ describe('Route - view and approve a licence', () => {
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(conditionService.additionalConditionsCollection).toHaveBeenCalled()
       expect(communityService.getStaffDetailByUsername).toHaveBeenCalled()
-      expect(prisonerService.getPrisonerImageData).toHaveBeenCalled()
     })
   })
 

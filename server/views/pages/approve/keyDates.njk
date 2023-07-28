@@ -5,7 +5,7 @@
     {% set dateRows = [
             {
                 key: { text: "Release date" },
-                value: { text: licence.actualReleaseDate | datetimeToDateShort }
+                value: { text: licence.actualReleaseDate | datetimeToDateShort or licence.conditionalReleaseDate | datetimeToDateShort }
             }
         ]
      %}

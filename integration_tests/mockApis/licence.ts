@@ -238,7 +238,7 @@ export default {
     })
   },
 
-  stubGetCompletedLicence: (options: { statusCode: string; typeCode: 'AP_PSS' }): SuperAgentRequest => {
+  stubGetCompletedLicence: (options: { statusCode: string; typeCode: 'AP_PSS' | 'AP' | 'PSS' }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',

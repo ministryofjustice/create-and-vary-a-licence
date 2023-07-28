@@ -160,6 +160,7 @@
     "@types/qrcode": "^1.5.1",
     "@types/redis-mock": "^0.17.1",
     "@types/superagent": "^4.1.18",
+    "@types/supertest": "^2.0.12",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
@@ -192,6 +193,7 @@
     "prettier": "^2.8.8",
     "redis-mock": "^0.56.3",
     "sass": "^1.63.6",
+    "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
     "typescript": "^5.1.6"
   },
