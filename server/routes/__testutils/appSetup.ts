@@ -24,7 +24,7 @@ const signedCookiesProvider = jest.fn()
 
 export const flashProvider = jest.fn()
 
-function appSetup(services: Services, userSupplier: () => Express.User, roles: AuthRole[]): Express {
+function appSetup(services: Services, userSupplier: () => Express.User): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -50,7 +50,6 @@ function appSetup(services: Services, userSupplier: () => Express.User, roles: A
 export function appWithAllRoutes({
   services = {},
   userSupplier = () => user,
-  roles = [] as AuthRole[],
 }: {
   production?: boolean
   services?: Partial<Services>
@@ -59,5 +58,5 @@ export function appWithAllRoutes({
   signedCookies?: () => Record<string, Record<string, string>>
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(services as Services, userSupplier, roles)
+  return appSetup(services as Services, userSupplier)
 }
