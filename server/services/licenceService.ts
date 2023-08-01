@@ -270,13 +270,7 @@ export default class LicenceService {
         return build(formData[key], sequenceNumber)
       })
 
-    const licence = await this.getLicence(licenceId, user)
     const requestBody = {
-      expandedConditionText: await this.conditionService.expandAdditionalCondition(
-        condition.code,
-        enteredData,
-        licence.version
-      ),
       data: enteredData,
     } as UpdateAdditionalConditionDataRequest
 
@@ -368,6 +362,11 @@ export default class LicenceService {
       null,
       user
     )
+  }
+
+  async getLicencesRecentlyApproved(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
+    const filteredPrisons = filterCentralCaseload(prisonCaseload)
+    return this.licenceApiClient.getLicencesRecentlyApproved(filteredPrisons, user)
   }
 
   async getLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {

@@ -89,6 +89,37 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
         cancelLink: '/licence/view/cases?view=probation',
       })
     })
+    it('Should render cancel link for approve cases page for approver users', async () => {
+      userService.getPrisonUserCaseloads.mockResolvedValue(caseloadsFromNomis)
+      await handler.GET(AuthRole.DECISION_MAKER)(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/changeLocation', {
+        caseload: [
+          { text: 'Belmarsh (HMP)', value: 'BAI' },
+          { text: 'Birmingham (HMP)', value: 'BMI' },
+          { text: 'Brixton (HMP)', value: 'BXI' },
+          { text: 'Moorland (HMP & YOI)', value: 'MDI' },
+        ],
+        checked: [],
+        cancelLink: '/licence/approve/cases',
+      })
+    })
+    it('Should render cancel link with approval param', async () => {
+      userService.getPrisonUserCaseloads.mockResolvedValue(caseloadsFromNomis)
+      req.query.approval = 'recently'
+      await handler.GET(AuthRole.DECISION_MAKER)(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/changeLocation', {
+        caseload: [
+          { text: 'Belmarsh (HMP)', value: 'BAI' },
+          { text: 'Birmingham (HMP)', value: 'BMI' },
+          { text: 'Brixton (HMP)', value: 'BXI' },
+          { text: 'Moorland (HMP & YOI)', value: 'MDI' },
+        ],
+        checked: [],
+        cancelLink: '/licence/approve/cases?approval=recently',
+      })
+    })
   })
 
   describe('POST', () => {

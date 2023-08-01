@@ -1,9 +1,5 @@
 {
   "low": true,
   "package-manager": "auto",
-  "registry": "https://registry.npmjs.org",
-  "allowlist": [
-    "GHSA-p8p7-x288-28g6|request>request-promise>uk-bank-holidays",
-    "GHSA-72xf-g2v4-qvf3|cypress>@cypress/request>tough-cookie"
-  ]
+  "registry": "https://registry.npmjs.org"
 }
