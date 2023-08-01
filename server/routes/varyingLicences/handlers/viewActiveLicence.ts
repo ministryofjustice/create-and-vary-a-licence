@@ -7,7 +7,6 @@ export default class ViewActiveLicenceRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
-    const { isInPssPeriod = false } = licence
 
     // If not still ACTIVE then redirect back to the vary timeline
     if (licence.statusCode !== LicenceStatus.ACTIVE) {
@@ -24,7 +23,6 @@ export default class ViewActiveLicenceRoutes {
     return res.render('pages/vary/viewActive', {
       additionalConditions,
       conditionsWithUploads,
-      isInPssPeriod,
       callToActions: { shouldShowVaryButton },
     })
   }

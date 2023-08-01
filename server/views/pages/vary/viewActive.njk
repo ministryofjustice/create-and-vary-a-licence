@@ -40,13 +40,13 @@
             {% endif %}
             {% if licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) and licence.typeCode === 'AP_PSS' and additionalConditions.length %}
                 <div>
-                    <h2 class="govuk-heading-m">Conditions from expired licence</h2>
+                    <h2 class="govuk-heading-m" id="conditions-expired">Conditions from expired licence</h2>
                     <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 
                     so the conditions from their standard determinate licence can no longer be varied.</p>
                     <details class="govuk-details" data-module="govuk-details">
                         <summary class="govuk-details__summary">
                             <span class="govuk-details__summary-text">
-                                View conditions from expired licence1 {{additionalConditions.length}}
+                                View conditions from expired licence {{additionalConditions.length}}
                             </span>
                         </summary>
                         <div class="govuk-details__text">
