@@ -1,0 +1,45 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro keyDates(licence) %}
+
+    {% set dateRows = [
+            {
+                key: { text: "Release date" },
+                value: { text: licence.actualReleaseDate | datetimeToDateShort or licence.conditionalReleaseDate | datetimeToDateShort }
+            }
+        ]
+     %}
+
+     {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'AP' %}
+        {% set dateRows = (dateRows.push(
+                 {
+                    key: { text: "Licence start date" },
+                    value: { text: licence.licenceStartDate | datetimeToDateShort }
+                },
+                {
+                    key: { text: "Licence expiry date" },
+                    value: { text: licence.licenceExpiryDate | datetimeToDateShort }
+                }
+        ), dateRows) %}
+    {% endif %}
+
+    {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'PSS' %}
+        {% set dateRows = (dateRows.push(
+                {
+                    key: { text: "Post sentence supervision order start date" },
+                    value: { text: licence.topupSupervisionStartDate | datetimeToDateShort }
+                },
+                {
+                    key: { text: "Post sentence supervision order end date" },
+                    value: { text: licence.topupSupervisionExpiryDate | datetimeToDateShort }
+                }
+        ), dateRows) %}
+    {% endif %}
+
+    {{ govukSummaryList({
+        attributes: { id: 'key-dates' },
+        classes: 'govuk-summary-list--no-border',
+        rows: dateRows
+    }) }}
+
+{% endmacro %}

@@ -369,4 +369,18 @@ export default {
       },
     })
   },
+
+  stubGetStaffDetailByUsername: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/secure/staff/username/(.)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [],
+      },
+    })
+  },
 }

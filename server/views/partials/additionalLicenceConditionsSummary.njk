@@ -1,14 +1,16 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, title) %}
+{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, title, hideHeading) %}
     {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
 
-    <div class="govuk-grid-row check-answers-header">
-        <div class="govuk-grid-column-full">
-            <h2 id="additional-licence-conditions-heading"
-                class="govuk-heading-m">{{ title or "Additional licence conditions" }}</h2>
+    {% if hideHeading != true %}
+        <div class="govuk-grid-row check-answers-header">
+            <div class="govuk-grid-column-full">
+                <h2 id="additional-licence-conditions-heading"
+                    class="govuk-heading-m">{{ title or "Additional licence conditions" }}</h2>
+            </div>
         </div>
-    </div>
+    {% endif %}
 
     {% set additionalLicenceConditions = [] %}
 
@@ -16,20 +18,22 @@
 
     {% set conditionWord = "condition" if (conditionCount) === 1 else "conditions" %}
 
-    {% set additionalLicenceConditions = (additionalLicenceConditions.push({
-        classes: 'govuk-summary-list__row--error' if errorMessage,
-        key: {  text: "Select additional conditions" },
-        value: { text: "" + conditionCount  + " " + conditionWord + " selected" },
-        actions: {
-            items: [
-                {
-                    href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
-                    text: "Change",
-                    visuallyHiddenText: "Add or remove conditions"
-                }
-            ]
-        } if isEditable
-    }), additionalLicenceConditions) %}
+    {% if hideHeading != true %}
+        {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+            classes: 'govuk-summary-list__row--error' if errorMessage,
+            key: {  text: "Select additional conditions" },
+            value: { text: "" + conditionCount  + " " + conditionWord + " selected" },
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
+                        text: "Change",
+                        visuallyHiddenText: "Add or remove conditions"
+                    }
+                ]
+            } if isEditable
+        }), additionalLicenceConditions) %}
+    {% endif %}
 
     {% for condition in additionalConditions %}
         {% if condition.uploadSummary.length %}

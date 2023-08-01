@@ -2,12 +2,18 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
+import CommunityService from '../../../services/communityService'
 
 export default class ApprovalViewRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService,
+    private readonly communityService: CommunityService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
+    const { comUsername } = res.locals.licence
 
     // Check whether this licence is still in a SUBMITTED state - back button pressed - avoid re-approval
     if (licence?.statusCode === LicenceStatus.SUBMITTED) {
@@ -24,7 +30,17 @@ export default class ApprovalViewRoutes {
         licence.additionalLicenceConditions
       )
 
-      res.render('pages/approve/view', { additionalConditions, conditionsWithUploads })
+      const comDetails = await this.communityService.getStaffDetailByUsername(comUsername)
+
+      res.render('pages/approve/view', {
+        additionalConditions,
+        conditionsWithUploads,
+        staffDetails: {
+          name: `${comDetails?.staff?.forenames} ${comDetails?.staff?.surname}`.trim(),
+          telephone: comDetails?.telephoneNumber,
+          email: comDetails?.email,
+        },
+      })
     } else {
       res.redirect(`/licence/approve/cases`)
     }
