@@ -103,7 +103,6 @@ export default defineConfig({
         stubGetPrisonUserDetails: prison.stubGetUserDetails,
         stubGetPrisonUserCaseloads: prison.stubGetUserCaseloads,
         stubGetPrisonerImage: prison.stubGetPrisonerImage,
-        stubMissingPrisonerImage: prison.stubMissingPrisonerImage,
         stubGetStaffDetailByUsername: community.stubGetStaffDetailByUsername,
         stubGetPrisonerDetail: prison.stubGetPrisonerDetail,
         stubGetPrisonerSentencesAndOffences: prison.stubGetPrisonerSentencesAndOffences,

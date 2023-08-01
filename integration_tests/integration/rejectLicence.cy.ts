@@ -41,7 +41,6 @@ context('Reject a licence', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
-    cy.task('stubMissingPrisonerImage')
     cy.task('stubGetStaffDetailByUsername')
     cy.signIn()
   })

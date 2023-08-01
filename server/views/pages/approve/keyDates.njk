@@ -13,8 +13,8 @@
      {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'AP' %}
         {% set dateRows = (dateRows.push(
                  {
-                key: { text: "Licence start date" },
-                value: { text: licence.licenceStartDate | datetimeToDateShort }
+                    key: { text: "Licence start date" },
+                    value: { text: licence.licenceStartDate | datetimeToDateShort }
                 },
                 {
                     key: { text: "Licence expiry date" },
@@ -26,8 +26,8 @@
     {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'PSS' %}
         {% set dateRows = (dateRows.push(
                 {
-                key: { text: "Post sentence supervision order start date" },
-                value: { text: licence.topupSupervisionStartDate | datetimeToDateShort }
+                    key: { text: "Post sentence supervision order start date" },
+                    value: { text: licence.topupSupervisionStartDate | datetimeToDateShort }
                 },
                 {
                     key: { text: "Post sentence supervision order end date" },
