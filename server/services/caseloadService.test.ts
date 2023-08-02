@@ -789,6 +789,28 @@ describe('Caseload Service', () => {
         comUsername: 'joebloggs',
       },
     ])
+    prisonerService.getHdcStatuses.mockResolvedValue([
+      {
+        bookingId: '1234',
+        checksPassed: true,
+        approvalStatus: 'APPROVED',
+      },
+      {
+        bookingId: '12345',
+        checksPassed: true,
+        approvalStatus: 'PENDING',
+      },
+      {
+        bookingId: '123456',
+        checksPassed: true,
+        approvalStatus: undefined,
+      },
+      {
+        bookingId: '1234567',
+        checksPassed: true,
+        approvalStatus: 'APPROVED',
+      },
+    ] as HdcStatus[])
     getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234F',
@@ -821,6 +843,32 @@ describe('Caseload Service', () => {
         topupSupervisionExpiryDate: '2023-12-26',
         status: 'ACTIVE IN',
       },
+      {
+        prisonerNumber: 'AB1234J',
+        bookingId: '1234',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+        homeDetentionCurfewEligibilityDate: undefined,
+      },
+      {
+        prisonerNumber: 'AB1234K',
+        bookingId: '12345',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+      },
+      {
+        prisonerNumber: 'AB1234L',
+        bookingId: '123456',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+      },
+      {
+        prisonerNumber: 'AB1234M',
+        bookingId: '1234567',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+        homeDetentionCurfewEligibilityDate: nineDaysFromNow,
+      },
     ] as Prisoner[])
 
     communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
@@ -838,6 +886,22 @@ describe('Caseload Service', () => {
       },
       {
         otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234J', crn: 'X12352' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234K', crn: 'X12353' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234L', crn: 'X12354' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' },
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
       },
     ] as OffenderDetail[])
@@ -896,6 +960,22 @@ describe('Caseload Service', () => {
       },
       {
         otherIds: { nomsNumber: 'AB1234I', crn: 'X12351' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234J', crn: 'X12352' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234K', crn: 'X12353' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234L', crn: 'X12354' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      },
+      {
+        otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' },
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
       },
     ] as OffenderDetail[])
@@ -1095,6 +1175,124 @@ describe('Caseload Service', () => {
           staffCode: 'X1234',
         },
       },
+      {
+        deliusRecord: {
+          offenderManagers: [
+            {
+              active: true,
+              staff: {
+                code: 'X1234',
+                forenames: 'Joe',
+                surname: 'Bloggs',
+              },
+            },
+          ],
+          otherIds: {
+            crn: 'X12352',
+            nomsNumber: 'AB1234J',
+          },
+          staff: {
+            code: 'X1234',
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
+        nomisRecord: {
+          bookingId: '1234',
+          conditionalReleaseDate: tenDaysFromNow,
+          prisonerNumber: 'AB1234J',
+          status: 'ACTIVE IN',
+          homeDetentionCurfewEligibilityDate: undefined,
+        },
+        probationPractitioner: {
+          name: 'Joe Bloggs',
+          staffCode: 'X1234',
+        },
+      },
+      {
+        deliusRecord: {
+          offenderManagers: [
+            {
+              active: true,
+              staff: {
+                code: 'X1234',
+                forenames: 'Joe',
+                surname: 'Bloggs',
+              },
+            },
+          ],
+          otherIds: {
+            crn: 'X12353',
+            nomsNumber: 'AB1234K',
+          },
+          staff: {
+            code: 'X1234',
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
+        nomisRecord: {
+          bookingId: '12345',
+          conditionalReleaseDate: tenDaysFromNow,
+          prisonerNumber: 'AB1234K',
+          status: 'ACTIVE IN',
+        },
+        probationPractitioner: {
+          name: 'Joe Bloggs',
+          staffCode: 'X1234',
+        },
+      },
+      {
+        deliusRecord: {
+          offenderManagers: [
+            {
+              active: true,
+              staff: {
+                code: 'X1234',
+                forenames: 'Joe',
+                surname: 'Bloggs',
+              },
+            },
+          ],
+          otherIds: {
+            crn: 'X12354',
+            nomsNumber: 'AB1234L',
+          },
+          staff: {
+            code: 'X1234',
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
+        nomisRecord: {
+          bookingId: '123456',
+          conditionalReleaseDate: tenDaysFromNow,
+          prisonerNumber: 'AB1234L',
+          status: 'ACTIVE IN',
+        },
+        probationPractitioner: {
+          name: 'Joe Bloggs',
+          staffCode: 'X1234',
+        },
+      },
     ])
   })
 
@@ -1187,7 +1385,7 @@ describe('Caseload Service', () => {
     ])
   })
 
-  it('builds the approver caseload', async () => {
+  it('builds the approval needed caseload', async () => {
     jest.spyOn(licenceService, 'getLicencesForApproval').mockResolvedValue([
       {
         nomisId: 'AB1234E',
@@ -1217,7 +1415,7 @@ describe('Caseload Service', () => {
       },
     ])
 
-    const result = await serviceUnderTest.getApproverCaseload(user, [])
+    const result = await serviceUnderTest.getApproverCaseload(user, [], true)
 
     expect(result).toMatchObject([
       {
@@ -1237,6 +1435,70 @@ describe('Caseload Service', () => {
             type: 'AP',
             status: 'SUBMITTED',
             comUsername: 'joebloggs',
+          },
+        ],
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'Joe Bloggs',
+        },
+      },
+    ])
+  })
+
+  it('builds the recently approved caseload', async () => {
+    jest.spyOn(licenceService, 'getLicencesRecentlyApproved').mockResolvedValue([
+      {
+        nomisId: 'AB1234E',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.SUBMITTED,
+        comUsername: 'joebloggs',
+        approvedByName: 'Jim Smith',
+        approvedDate: '25/04/2014 07:45:59',
+      },
+    ])
+    communityService.getOffendersByNomsNumbers.mockResolvedValue([
+      {
+        otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+    ])
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+      { prisonerNumber: 'AB1234E', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } as Prisoner,
+    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+      {
+        username: 'joebloggs',
+        staffCode: 'X1234',
+        staff: {
+          forenames: 'Joe',
+          surname: 'Bloggs',
+        },
+      },
+    ])
+
+    const result = await serviceUnderTest.getApproverCaseload(user, [], false)
+
+    expect(result).toMatchObject([
+      {
+        deliusRecord: {
+          otherIds: {
+            nomsNumber: 'AB1234E',
+            crn: 'X12348',
+          },
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          conditionalReleaseDate: tenDaysFromNow,
+        },
+        licences: [
+          {
+            id: 1,
+            type: 'AP',
+            status: 'SUBMITTED',
+            comUsername: 'joebloggs',
+            approvedBy: 'Jim Smith',
+            approvedDate: '25/04/2014 07:45:59',
           },
         ],
         probationPractitioner: {

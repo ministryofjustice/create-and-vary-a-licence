@@ -16,10 +16,13 @@ import tokenVerifier from '../data/tokenVerification'
 import populateCurrentUser from '../middleware/populateCurrentUser'
 import flashMessages from '../middleware/flashMessageMiddleware'
 import fromReviewMiddleware from '../middleware/fromReviewMiddleware'
+import PrisonerController from './prisonerController'
 
 export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
+  const prisonerController = new PrisonerController(services.prisonerService)
 
+  router.get('/prisoner/:nomsId/image', prisonerController.getImage())
   router.use(auth.authenticationMiddleware(tokenVerifier))
   router.use(populateCurrentUser(services.userService, services.licenceService))
   router.use(csrf())

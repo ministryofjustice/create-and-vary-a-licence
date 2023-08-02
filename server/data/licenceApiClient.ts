@@ -234,6 +234,18 @@ export default class LicenceApiClient extends RestClient {
     )) as LicenceSummary[]
   }
 
+  async getLicencesRecentlyApproved(prisons?: string[], user?: User): Promise<LicenceSummary[]> {
+    return (await this.post(
+      {
+        path: `/licence/recently-approved`,
+        data: {
+          prisonCodes: prisons,
+        },
+      },
+      { username: user?.username }
+    )) as LicenceSummary[]
+  }
+
   async batchActivateLicences(licenceIds: number[]): Promise<void> {
     await this.post({ path: `/licence/activate-licences`, data: licenceIds })
   }
@@ -445,14 +457,5 @@ export default class LicenceApiClient extends RestClient {
       path: `/offender/nomisid/${nomisId}/update-offender-details`,
       data: offenderDetails,
     })
-  }
-
-  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
-    const licence = await this.getLicenceById(licenceId, user)
-    if (!licence.variationOf) {
-      return licence
-    }
-
-    return this.getLicenceById(licence.variationOf.toString(), user)
   }
 }

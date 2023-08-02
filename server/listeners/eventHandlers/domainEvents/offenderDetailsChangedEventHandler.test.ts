@@ -1,9 +1,8 @@
+import { DomainEventMessage } from '../../../@types/events'
 import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import OffenderDetailsChangedEventHandler from './offenderDetailsChangedEventHandler'
-import { PrisonEventMessage } from '../../../@types/events'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -29,22 +28,12 @@ afterEach(() => {
 describe('offenderDetailsChangedEventHandler', () => {
   const handler = new OffenderDetailsChangedEventHandler(licenceService, prisonerService)
 
-  it('should use bookingId to get the nomisID, if the nomisId is not provided', async () => {
+  it('should fetch the updated prison details using the NOMIS id provided in the event', async () => {
     const event = {
-      bookingId: 1234,
-    } as PrisonEventMessage
-
-    prisonerService.searchPrisonersByBookingIds.mockResolvedValue([{ prisonerNumber: 'ABC123' } as Prisoner])
-
-    await handler.handle(event)
-
-    expect(prisonerService.getPrisonerDetail).toHaveBeenCalledWith('ABC123')
-  })
-
-  it('should use the nomisId if it is provided in the event', async () => {
-    const event = {
-      offenderIdDisplay: 'ABC123',
-    } as PrisonEventMessage
+      additionalInformation: {
+        nomsNumber: 'ABC123',
+      },
+    } as DomainEventMessage
 
     await handler.handle(event)
 
@@ -53,8 +42,10 @@ describe('offenderDetailsChangedEventHandler', () => {
 
   it('should call for the offender details to be updated if the offender is found', async () => {
     const event = {
-      offenderIdDisplay: 'ABC123',
-    } as PrisonEventMessage
+      additionalInformation: {
+        nomsNumber: 'ABC123',
+      },
+    } as DomainEventMessage
 
     await handler.handle(event)
 
@@ -69,8 +60,10 @@ describe('offenderDetailsChangedEventHandler', () => {
   it('should not update if the prisoner cannot be found', async () => {
     prisonerService.getPrisonerDetail.mockResolvedValue(null)
     const event = {
-      offenderIdDisplay: 'ABC123',
-    } as PrisonEventMessage
+      additionalInformation: {
+        nomsNumber: 'ABC123',
+      },
+    } as DomainEventMessage
 
     await handler.handle(event)
 

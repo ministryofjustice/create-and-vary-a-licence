@@ -203,6 +203,13 @@ export interface paths {
      */
     post: operations['notifyProbationOfUnapprovedLicences']
   }
+  '/licence/recently-approved': {
+    /**
+     * Get a list of recently approved licence summaries matching the supplied list of prisons.
+     * @description Get the recently approved licences matching the supplied list of prisons. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['getRecentlyApprovedLicences']
+  }
   '/licence/match': {
     /**
      * Get a list of licence summaries matching the supplied criteria.
@@ -380,6 +387,15 @@ export interface components {
        */
       email: string
     }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     OmuContact: {
       /** Format: int64 */
       id: number
@@ -389,15 +405,6 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string
-    }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** @description Request object for updating an offender's personal details */
     UpdateOffenderDetailsRequest: {
@@ -808,8 +815,6 @@ export interface components {
     UpdateAdditionalConditionDataRequest: {
       /** @description The list of data inputs associated with this additional condition */
       data: components['schemas']['AdditionalConditionData'][]
-      /** @description The expanded condition with the input data inserted into the template */
-      expandedConditionText: string
     }
     /** @description Describes an audit event request */
     AuditEvent: {
@@ -890,48 +895,13 @@ export interface components {
        */
       comEmail?: string
     }
-    /** @description Request object for searching licences by field */
-    MatchLicencesRequest: {
+    /** @description Request object for searching for recently approved licences */
+    RecentlyApprovedLicencesRequest: {
       /**
        * @description A list of prison codes
        * @example ['PVI', 'BAI']
        */
-      prison?: string[]
-      /**
-       * @description A list of licence status codes
-       * @example ['ACTIVE', 'APPROVED']
-       */
-      status?: (
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-      )[]
-      /**
-       * @description A list of staff identifiers - the responsible probation officer
-       * @example [
-       *   1234,
-       *   4321
-       * ]
-       */
-      staffId?: number[]
-      /**
-       * @description A list of NOMIS ID's
-       * @example ['B76546GH', 'Y76499GY']
-       */
-      nomsId?: string[]
-      /**
-       * @description A list of probation delivery unit codes
-       * @example ['N55', 'P66']
-       */
-      pdu?: string[]
+      prisonCodes: string[]
     }
     /** @description Response object which summarises a licence */
     LicenceSummary: {
@@ -1065,6 +1035,59 @@ export interface components {
        * @description The date the licence was created
        */
       dateCreated?: string
+      /**
+       * @description The full name of the person who approved the licence
+       * @example John Smith
+       */
+      approvedByName?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was approved
+       */
+      approvedDate?: string
+    }
+    /** @description Request object for searching licences by field */
+    MatchLicencesRequest: {
+      /**
+       * @description A list of prison codes
+       * @example ['PVI', 'BAI']
+       */
+      prison?: string[]
+      /**
+       * @description A list of licence status codes
+       * @example ['ACTIVE', 'APPROVED']
+       */
+      status?: (
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+      )[]
+      /**
+       * @description A list of staff identifiers - the responsible probation officer
+       * @example [
+       *   1234,
+       *   4321
+       * ]
+       */
+      staffId?: number[]
+      /**
+       * @description A list of NOMIS ID's
+       * @example ['B76546GH', 'Y76499GY']
+       */
+      nomsId?: string[]
+      /**
+       * @description A list of probation delivery unit codes
+       * @example ['N55', 'P66']
+       */
+      pdu?: string[]
     }
     /** @description Request object for overriding a licence status */
     OverrideLicenceStatusRequest: {
@@ -1411,6 +1434,13 @@ export interface components {
       /** @description The list of prisoners for whom the COM should be notified of needing a licence urgently */
       urgentPromptCases: components['schemas']['PrisonerForRelease'][]
     }
+    /** @description A list of fields to sort by along with the sort direction for each */
+    ProbationSearchSortBy: {
+      /** @enum {string} */
+      field: 'FORENAME' | 'SURNAME' | 'CRN' | 'COM_FORENAME' | 'COM_SURNAME'
+      /** @enum {string} */
+      direction: 'ASC' | 'DESC'
+    }
     /** @description Request object for searching for offenders within a set of teams attached to a staff member */
     ProbationUserSearchRequest: {
       /**
@@ -1424,6 +1454,8 @@ export interface components {
        * @example 14829475
        */
       staffIdentifier: number
+      /** @description A list of fields to sort by along with the sort direction for each */
+      sortBy: components['schemas']['ProbationSearchSortBy'][]
     }
     /** @description Describes a probation search result */
     ProbationSearchResult: {
@@ -1838,10 +1870,6 @@ export interface components {
        * @example Gordon Sumner
        */
       createdByFullName?: string
-      /**
-       * @description Is this licence in PSS period?(LED < TODAY <= TUSED)
-       */
-      isInPssPeriod?: boolean
     }
     AddAnother: {
       label: string
@@ -3171,6 +3199,37 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['UnapprovedLicence']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Get a list of recently approved licence summaries matching the supplied list of prisons.
+   * @description Get the recently approved licences matching the supplied list of prisons. Requires ROLE_CVL_ADMIN.
+   */
+  getRecentlyApprovedLicences: {
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RecentlyApprovedLicencesRequest']
+      }
+    }
+    responses: {
+      /** @description Returned matching licence summary details - empty if no matches. */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */

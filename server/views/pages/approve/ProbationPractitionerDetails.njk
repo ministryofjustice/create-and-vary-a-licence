@@ -1,0 +1,22 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro ProbationPractitionerDetails(staffDetails) %}
+    {{ govukSummaryList({
+        attributes: { id: 'probation-practitioner-details' },
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+            {
+                key: { text: "Name" },
+                value: { text: staffDetails.name }
+            },
+            {
+                key: { text: "Email" },
+                value: { text: staffDetails.email }
+            },
+            {
+                key: { text: "Phone number" },
+                value: { text: staffDetails.telephone }
+            }
+        ]
+    }) }}
+{% endmacro %}

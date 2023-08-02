@@ -32,25 +32,18 @@ import AppointmentTimeAndPlaceDuringPss from '../routes/creatingLicences/types/a
 import LicenceType from '../enumeration/licenceType'
 import {
   AdditionalCondition,
-  AdditionalConditionData,
   AdditionalConditionsResponse,
-  Licence,
   LicencePolicyResponse,
   StandardCondition,
 } from '../@types/licenceApiClientTypes'
 
 import ElectronicTagPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicTagPeriod'
-import ConditionFormatter from './conditionFormatter'
 import { AdditionalConditionAp, AdditionalConditionPss, AdditionalConditionsConfig } from '../@types/LicencePolicy'
-import { User } from '../@types/CvlUserDetails'
 
 type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
 export default class ConditionService {
-  constructor(
-    private readonly licenceApiClient: LicenceApiClient,
-    private readonly conditionFormatter = new ConditionFormatter()
-  ) {}
+  constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
   private async getLicencePolicy(version: string = null): Promise<LicencePolicyResponse> {
     let licencePolicy
@@ -124,21 +117,6 @@ export default class ConditionService {
     }
 
     return null
-  }
-
-  /**
-   * Accepts an additional condition and data items for a licence and expands the
-   * placeholders with their matching data to produce a formatted additional condition.
-   * @param conditionCode
-   * @param enteredData
-   */
-  async expandAdditionalCondition(
-    conditionCode: string,
-    enteredData: AdditionalConditionData[],
-    licenceVersion: string
-  ): Promise<string> {
-    const configCondition = await this.getAdditionalConditionByCode(conditionCode, licenceVersion)
-    return this.conditionFormatter.format(configCondition, enteredData)
   }
 
   currentOrNextSequenceForCondition(conditions: AdditionalCondition[], conditionCode: string): number {
@@ -276,13 +254,4 @@ export default class ConditionService {
     return mappedConditions
   }
   /* eslint-disable no-param-reassign */
-
-  async getParentOrSelfAdditionalLicenceConditions(licence: Licence, user: User): Promise<AdditionalCondition[]> {
-    if (licence.isInPssPeriod) {
-      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))
-        ?.additionalLicenceConditions
-    }
-
-    return licence.additionalLicenceConditions
-  }
 }

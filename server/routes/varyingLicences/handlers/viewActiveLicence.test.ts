@@ -1,16 +1,11 @@
 import { Request, Response } from 'express'
+
+import ViewActiveLicenceRoutes from './viewActiveLicence'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
-import ViewActiveLicenceRoutes from './viewActiveLicence'
-import { LicenceApiClient } from '../../../data'
 
-const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
-const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
-
-jest.mock('../../../data/licenceApiClient')
-jest.mock('../../../services/licenceService')
-jest.mock('../../../services/conditionService')
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 
 describe('Route Handlers - Vary Licence - View active licence', () => {
   const handler = new ViewActiveLicenceRoutes(conditionService)
@@ -28,42 +23,32 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
     bespokeConditions: [],
   } as Licence
 
-  afterEach(() => {
-    jest.resetAllMocks()
-  })
-
   beforeEach(() => {
-    licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-    conditionService.additionalConditionsCollection.mockReturnValue({
-      additionalConditions: [],
-      conditionsWithUploads: [],
-    })
     req = {
       params: {
-        licenceId: licence.id,
+        licenceId: 1,
       },
       query: {},
-      flash: jest.fn(),
     } as unknown as Request
-    res = {
-      render: jest.fn(),
-      redirect: jest.fn(),
-      locals: {
-        user: {
-          username: 'joebloggs',
-        },
-        licence,
-      },
-    } as unknown as Response
   })
 
   describe('GET', () => {
     it('should render a licence view for active licence', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: {
+            username: 'joebloggs',
+          },
+          licence,
+        },
+      } as unknown as Response
+
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
         callToActions: { shouldShowVaryButton: true },
-        isInPssPeriod: false,
         additionalConditions: [],
         conditionsWithUploads: [],
       })
@@ -71,9 +56,12 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
 
     it('should show timeline if licence is not active', async () => {
       res = {
-        ...res,
+        render: jest.fn(),
+        redirect: jest.fn(),
         locals: {
-          ...res.locals,
+          user: {
+            username: 'joebloggs',
+          },
           licence: {
             ...licence,
             statusCode: LicenceStatus.INACTIVE,
