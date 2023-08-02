@@ -9,9 +9,17 @@
     margin-top: 65px;
     margin-bottom: 35px; 
 
+    &:first-of-type {
+      margin-bottom: 5px;
+    }
+
     .govuk-textarea {
       margin-bottom: 35px;
     }
+  }
+
+  &__add-button{
+    margin-bottom: 65px !important;
   }
 }
 
@@ -20,7 +28,7 @@
 }
 
 .newest-fieldset {
-  background-color: lightgrey;
+  background-color: govuk-colour("light-grey");
   padding: 20px 20px 15px 20px;
 
   &.moj-add-another__item {
