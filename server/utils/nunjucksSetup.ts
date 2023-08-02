@@ -286,5 +286,7 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
     return `${textToDisplay}: Not available`
   })
 
+  njkEnv.addGlobal('dpsUrl', config.dpsUrl)
+
   return njkEnv
 }

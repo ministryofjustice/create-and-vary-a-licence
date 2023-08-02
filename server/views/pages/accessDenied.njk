@@ -45,7 +45,7 @@
                     <br>
                     <br>
                     {% if user.authSource == 'nomis' %}
-                        <a class="govuk-link" href="https://digital.prison.service.justice.gov.uk">Go to the Digital Prison Services homepage.</a>
+                        <a class="govuk-link" href="{{dpsUrl}}">Go to the Digital Prison Services homepage.</a>
                     {% endif %}
                     {% if user.authSource == 'delius' %}
                         <a class="govuk-link" href="https://sign-in.hmpps.service.justice.gov.uk/auth">Go to the Digital Services homepage.</a>
