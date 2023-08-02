@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
+import path from 'path'
 import nunjucks, { Environment } from 'nunjucks'
 import { isToday, isYesterday, format } from 'date-fns'
 import express from 'express'
-import path from 'path'
 import moment from 'moment'
 import { filesize } from 'filesize'
 import { FieldValidationError } from '../middleware/validationMiddleware'
