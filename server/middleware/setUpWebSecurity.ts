@@ -1,6 +1,6 @@
+import crypto from 'crypto'
 import express, { Router, Response } from 'express'
 import helmet from 'helmet'
-import crypto from 'crypto'
 import config from '../config'
 
 export default function setUpWebSecurity(): Router {

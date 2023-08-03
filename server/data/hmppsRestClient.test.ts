@@ -1,6 +1,6 @@
 import fs from 'fs'
-import nock from 'nock'
 import { Readable } from 'stream'
+import nock from 'nock'
 import HmppsRestClient from './hmppsRestClient'
 import { ApiConfig } from '../config'
 import { InMemoryTokenStore } from './tokenStore'
