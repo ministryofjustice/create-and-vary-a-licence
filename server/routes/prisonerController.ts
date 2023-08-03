@@ -1,5 +1,5 @@
-import type { RequestHandler } from 'express'
 import path from 'path'
+import type { RequestHandler } from 'express'
 
 import PrisonerService from '../services/prisonerService'
 
