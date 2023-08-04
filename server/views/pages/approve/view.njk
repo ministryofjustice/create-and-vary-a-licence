@@ -16,20 +16,20 @@
 {% set hideLicenceBanner = true %}
 
 {% block content %}
-    <div class="govuk-grid-column-two-thirds-from-desktop float-none">
-        <div class="govuk-grid-row">
-            {% if licence.typeCode === 'AP' %}
-                <h1 class="govuk-heading-l" id="approve-licence-heading">Approve licence</h1>
-            {% elseif licence.typeCode === 'AP_PSS' %}
-                <h1 class="govuk-heading-l" id="approve-licence-and-pss-heading">Approve licence and post sentence supervision order</h1>
-            {% elseif licence.typeCode === 'PSS' %}
-                <h1 class="govuk-heading-l" id="approve-pss-heading">Approve post sentence supervision order</h1>
-            {% else %}
-                <h1 class="govuk-heading-l">Approve licence type {{ licence.typeCode }}</h1>
-            {% endif %}
-        </div>
+    <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-padding-left-3">
+        {% if licence.typeCode === 'AP' %}
+            <h1 class="govuk-heading-xl" id="approve-licence-heading">Approve licence</h1>
+        {% elseif licence.typeCode === 'AP_PSS' %}
+            <h1 class="govuk-heading-xl" id="approve-licence-and-pss-heading">Approve licence and post sentence supervision order</h1>
+        {% elseif licence.typeCode === 'PSS' %}
+            <h1 class="govuk-heading-xl" id="approve-pss-heading">Approve post sentence supervision order</h1>
+        {% else %}
+            <h1 class="govuk-heading-xl">Approve licence type {{ licence.typeCode }}</h1>
+        {% endif %}
+    </div>
 
-        <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop float-none">
+        <div class="govuk-grid-row ">
             <div class="prisoner-record-detail">
                 <div class="govuk-grid-column-three-quarters">
                     {{ prisonerSummaryDetails(licence) }}
@@ -44,8 +44,8 @@
             </div>
         </div>
 
-        <div class="govuk-grid-row">
-            <h2 class="govuk-heading-l">Review details</h2>
+        <div class="govuk-grid-row govuk-!-padding-bottom-4">
+            <h2 class="govuk-heading-l govuk-!-margin-top-9">Review details</h2>
 
                 {% set items = [
                         {
@@ -53,7 +53,8 @@
                                 text: "Key dates"
                             },
                             content: {
-                                html: keyDates(licence)
+                                html: keyDates(licence),
+                                class: "govuk-!-padding-bottom-9 govuk-!-padding-top-3"
                             },
                             expanded: true
                         }
@@ -115,41 +116,39 @@
                 }}
         </div>
         <div class="govuk-grid-row">
-            <h2 class="govuk-heading-l">View more information</h2>
+            <h2 class="govuk-heading-l govuk-!-margin-top-9">View more information</h2>
             <p class="govuk-body">
                 <a class="govuk-link govuk-link--no-visited-state" href="{{dpsUrl}}/prisoner/{{licence.nomsId}}">See this person’s full Digital Prison Services profile</a> 
                 <br><br>
             </p>
-            <div class="govuk-grid-column-full">
-                {{ govukAccordion({
-                    id: "view-more-information",
-                    rememberExpanded: false,
-                    items: [
-                        {
-                            heading: {
-                                text: "Initial appointment"
-                            },
-                            content: {
-                                html: InitialAppointment(licence)
-                            }
-                        }, {
-                            heading: {
-                                text: "Community probation practitioner details"
-                            },
-                            content: {
-                                html: ProbationPractitionerDetails(staffDetails)
-                            }
+            {{ govukAccordion({
+                id: "view-more-information",
+                rememberExpanded: false,
+                items: [
+                    {
+                        heading: {
+                            text: "Initial appointment"
+                        },
+                        content: {
+                            html: InitialAppointment(licence)
                         }
-                    ]
-                }) }}
-            </div>    
+                    }, {
+                        heading: {
+                            text: "Community probation practitioner details"
+                        },
+                        content: {
+                            html: ProbationPractitionerDetails(staffDetails)
+                        }
+                    }
+                ]
+            }) }}
         </div>
 
         <div class="govuk-grid-row">
-            <h2 class="govuk-heading-l">Approve this licence</h2>
+            <h2 class="govuk-heading-l govuk-!-padding-top-8">Approve this licence</h2>
             <p>Contact the probation practitioner directly if you need more information about something.</p> 
         </div>
-        <div class="govuk-grid-row govuk-button-group">
+        <div class="govuk-grid-row govuk-button-group govuk-!-padding-top-2">
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <input type="hidden" name="licenceId" value="{{ licence.id }}">
@@ -177,6 +176,5 @@
                 </button>
             </form>
         </div>
-        
     </div>
 {% endblock %}

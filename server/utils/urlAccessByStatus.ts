@@ -30,6 +30,7 @@ const allowedPaths = [
       '/licence/create/id/(\\d)*/edit.*',
       '/licence/approve/id/(\\d)*/confirm-approved.*',
       '/licence/view/id/(\\d)*/.*',
+      '/licence/approve/id/(\\d)*/probation-practitioner.*',
     ],
   },
   {
