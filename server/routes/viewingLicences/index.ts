@@ -23,7 +23,7 @@ export default function Index({
   const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
+      roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO', 'ROLE_LICENCE_DM']),
       fetchLicence(licenceService),
       asyncMiddleware(handler)
     )

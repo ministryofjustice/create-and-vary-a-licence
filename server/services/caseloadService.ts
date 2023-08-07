@@ -106,11 +106,16 @@ export default class CaseloadService {
     return new OmuCaselist(casesWithComs)
   }
 
-  async getApproverCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
-    return this.licenceService
-      .getLicencesForApproval(user, prisonCaseload)
-      .then(licences => this.mapLicencesToOffenders(licences))
-      .then(caseload => this.mapResponsibleComsToCases(caseload))
+  async getApproverCaseload(user: User, prisonCaseload: string[], approvalNeeded: boolean): Promise<ManagedCase[]> {
+    let licences: LicenceSummary[]
+    if (approvalNeeded) {
+      licences = await this.licenceService.getLicencesForApproval(user, prisonCaseload)
+    } else {
+      licences = await this.licenceService.getLicencesRecentlyApproved(user, prisonCaseload)
+    }
+
+    const caseLoad: Container<ManagedCase> = await this.mapLicencesToOffenders(licences)
+    return this.mapResponsibleComsToCases(caseLoad)
   }
 
   async getVaryApproverCaseload(user: User): Promise<ManagedCase[]> {
@@ -337,6 +342,8 @@ export default class CaseloadService {
               status: <LicenceStatus>l.licenceStatus,
               comUsername: l.comUsername,
               dateCreated: l.dateCreated,
+              approvedBy: l.approvedByName,
+              approvedDate: l.approvedDate,
             }
           }),
       }

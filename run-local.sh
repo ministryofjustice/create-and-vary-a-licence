@@ -6,12 +6,12 @@
 # Following this, the script starts the UI locally
 #
 
-# Bring up the front end containers needed for the application
+# Stop the front end containers
 echo "Bringing down current containers ..."
-docker compose down
+docker compose down --remove-orphans
 
 #Prune existing containers
-#Comment in if you wish to perform a fresh install of all containers are removed and deleted
+#Comment in if you wish to perform a fresh install as all containers are removed and deleted
 #You will be prompted to continue with the deletion in the terminal
 #docker system prune --all
 

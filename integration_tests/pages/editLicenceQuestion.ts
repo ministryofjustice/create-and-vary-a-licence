@@ -17,7 +17,7 @@ export default class EditLicenceQuestionPage extends Page {
 
   clickContinue = (): CheckAnswersPage => {
     cy.task('stubUpdateLicenceStatus')
-    cy.task('stubGetCompletedLicence', 'IN_PROGRESS')
+    cy.task('stubGetCompletedLicence', { statusCode: 'IN_PROGRESS', typeCode: 'AP_PSS' })
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
   }

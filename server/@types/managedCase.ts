@@ -18,6 +18,8 @@ export type Licence = {
   type: LicenceType
   comUsername?: string
   dateCreated?: string
+  approvedBy?: string
+  approvedDate?: string
 }
 
 export type ManagedCase = {
