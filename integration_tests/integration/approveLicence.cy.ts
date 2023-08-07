@@ -22,7 +22,7 @@ context('Approve a licence', () => {
       ],
     })
 
-    cy.task('stubGetCompletedLicence', 'SUBMITTED')
+    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
     cy.task('stubGetLicencesForStatus', 'SUBMITTED')
     cy.task('stubGetOffendersByNomsNumber')
     cy.task('searchPrisonersByNomisIds')
@@ -32,6 +32,8 @@ context('Approve a licence', () => {
     cy.task('stubGetPrisons')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
+    cy.task('stubGetPrisonerImage')
+    cy.task('stubGetStaffDetailByUsername')
   })
 
   const singleCaseload = {
@@ -70,6 +72,7 @@ context('Approve a licence', () => {
       },
     ],
   }
+
   it('should click through the approve a licence journey', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
@@ -79,6 +82,77 @@ context('Approve a licence', () => {
     const confirmApprovePage = approvalViewPage.clickApprove()
     const approvalCasesPage2 = confirmApprovePage.clickReturnToList()
     approvalCasesPage2.signOut().click()
+  })
+
+  it('should redirect to approve case page on return to list click', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    approvalCasesPage.clickApproveLicence()
+    cy.url().should('eq', 'http://localhost:3007/licence/approve/id/1/view')
+  })
+
+  it('should check if review details accordian is open', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage.getHideAllSection().should('exist')
+  })
+
+  it('should display Approve licence heading if licence is of type AP', () => {
+    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' })
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage.getValue(approvalViewPage.approveLicenceId).should('have.text', 'Approve licence')
+    approvalViewPage
+      .getValue(approvalViewPage.accordionSectionHeading)
+      .should('contain.text', 'Additional licence conditions')
+  })
+
+  it('should display Approve licence and post sentence supervision order heading if licence is of type AP_PSS', () => {
+    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage
+      .getValue(approvalViewPage.approveLicenceAndPssId)
+      .should('have.text', 'Approve licence and post sentence supervision order')
+    approvalViewPage
+      .getValue(approvalViewPage.accordionSectionHeading)
+      .should('contain.text', 'Additional licence conditions')
+  })
+
+  it('should display Approve post sentence supervision order heading if licence is of type PSS', () => {
+    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'PSS' })
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage
+      .getValue(approvalViewPage.approvePssId)
+      .should('have.text', 'Approve post sentence supervision order')
+    approvalViewPage
+      .getValue(approvalViewPage.accordionSectionHeading)
+      .should('contain.text', 'Additional post sentence supervision requirements')
+  })
+
+  it('should get prisoner image', () => {
+    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP' })
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    const approvalViewPage = approvalCasesPage.clickApproveLicence()
+    approvalViewPage.getPrisonerImage().should('have.class', 'prisoner-image')
   })
 
   it("should not show caseload information because user doesn't have multiple caseloads", () => {

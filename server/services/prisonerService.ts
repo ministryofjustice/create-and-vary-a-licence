@@ -1,6 +1,6 @@
 import { Readable } from 'stream'
-import _ from 'lodash'
 import fs from 'fs'
+import _ from 'lodash'
 import { format, parse } from 'date-fns'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
