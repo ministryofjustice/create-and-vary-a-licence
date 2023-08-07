@@ -1,8 +1,8 @@
+import { Readable } from 'stream'
+import querystring, { ParsedUrlQueryInput } from 'querystring'
 import superagent from 'superagent'
 import Agent, { HttpsAgent } from 'agentkeepalive'
-import { Readable } from 'stream'
 
-import querystring, { ParsedUrlQueryInput } from 'querystring'
 import logger from '../../logger'
 import sanitiseError from '../sanitisedError'
 import { ApiConfig } from '../config'
