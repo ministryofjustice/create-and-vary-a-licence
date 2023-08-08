@@ -6,11 +6,15 @@ import { Services } from '../../services'
 export default function Index({ searchService }: Services): Router {
   const router = Router()
 
-  const get = (path: string, handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const routePrefix = (path: string) => `/search${path}`
 
+  const get = (path: string, handler: RequestHandler) => router.get(routePrefix(path), asyncMiddleware(handler))
+
+  // Handlers
   const probationSearchHandler = new ProbationSearchRoutes(searchService)
 
-  get('/search/probation-search', probationSearchHandler.GET)
+  // Operations
+  get('/probation-search', probationSearchHandler.GET)
 
   return router
 }
