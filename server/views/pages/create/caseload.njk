@@ -82,6 +82,7 @@
     <div class="govuk-grid-row">
         <div class="moj-search govuk-grid-column-two-thirds govuk-!-margin-bottom-8">
             <form method="GET"> 
+                <input type="hidden" name="view" value="{% if teamView %}team{% else %}me{% endif %}">
                 <div class="govuk-form-group">
                     <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
                         Find a case
