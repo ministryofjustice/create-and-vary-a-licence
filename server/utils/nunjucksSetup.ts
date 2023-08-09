@@ -287,6 +287,7 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
   })
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
+  njkEnv.addGlobal('useNewSearch', config.useNewSearch)
 
   return njkEnv
 }
