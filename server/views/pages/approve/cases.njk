@@ -92,7 +92,8 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
             <div class="moj-search govuk-!-margin-bottom-8">
-                <form action="list-search-results-empty" method="post">
+                <form method="GET">
+                    <input type="hidden" name="approval" value="{% if approvalNeededView %}needed{% else %}recently{% endif %}">
                     <div class="govuk-form-group">
                         <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
                             Find a case
