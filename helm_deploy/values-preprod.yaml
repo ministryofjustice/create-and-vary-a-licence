@@ -28,7 +28,7 @@ generic-service:
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: "http://create-and-vary-a-licence"
     DPS_URL: "https://digital-preprod.prison.service.justice.gov.uk"
-    USE_NEW_SEARCH = "false"
+    USE_NEW_SEARCH: "false"
 
 gotenberg:
   replicaCount: 1
