@@ -645,4 +645,8 @@ export default class LicenceService {
     const prisoners = await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user)
     return prisoners?.[0]?.croNumber || ''
   }
+
+  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
+    return this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)
+  }
 }

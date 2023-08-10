@@ -8,11 +8,13 @@ import ConditionService from '../../../services/conditionService'
 import ViewActiveLicenceRoutes from './viewActiveLicence'
 import { LicenceApiClient } from '../../../data'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
+import LicenceService from '../../../services/licenceService'
 
 const snippet = fs.readFileSync('server/views/pages/vary/viewActive.njk')
 
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
 const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
 
 jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
@@ -52,7 +54,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
   })
 
   beforeEach(() => {
-    licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+    licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
     conditionService.additionalConditionsCollection.mockReturnValue({
       additionalConditions: [
         {

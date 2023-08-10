@@ -1,25 +1,20 @@
 import { Request, Response } from 'express'
-
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
 import { LicenceApiClient } from '../../../data'
-import PrisonerService from '../../../services/prisonerService'
-import CommunityService from '../../../services/communityService'
 
 jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
-const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
+const licenceService = new LicenceService(licenceApiClient, null, null, conditionService) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Check Answers', () => {
-  const handler = new CheckAnswersRoutes(licenceApiClient, licenceService, conditionService)
+  const handler = new CheckAnswersRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -212,7 +207,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should call the licence API to submit the licence for approval', async () => {
-      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(licenceService.submitLicence).toHaveBeenCalledWith('1', {
@@ -222,7 +217,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should redirect to the confirmation page', async () => {
-      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/confirmation')

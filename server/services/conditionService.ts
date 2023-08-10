@@ -258,7 +258,7 @@ export default class ConditionService {
   }
   /* eslint-disable no-param-reassign */
 
-  async getParentOrSelfAdditionalLicenceConditions(licence: Licence, user: User): Promise<AdditionalCondition[]> {
+  async getAdditionalAPConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<AdditionalCondition[]> {
     const isInVariation = [
       LicenceStatus.VARIATION_IN_PROGRESS,
       LicenceStatus.VARIATION_SUBMITTED,

@@ -6,14 +6,9 @@ import ConditionService from '../../../services/conditionService'
 import policyChangeHintText from '../../../config/policyChangeHintText'
 import conditionChangeType from '../../../enumeration/conditionChangeType'
 import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/LicencePolicy'
-import { LicenceApiClient } from '../../../data'
 
 export default class PolicyChangeRoutes {
-  constructor(
-    private readonly licenceApiClient: LicenceApiClient,
-    private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
-  ) {}
+  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId, changeCounter } = req.params
@@ -92,7 +87,7 @@ export default class PolicyChangeRoutes {
     const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
       condition.code,
       (
-        await this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)
+        await this.licenceService.getParentLicenceOrSelf(licenceId, user)
       ).version
     )
 
@@ -177,7 +172,7 @@ export default class PolicyChangeRoutes {
       const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
         conditionCode,
         (
-          await this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)
+          await this.licenceService.getParentLicenceOrSelf(licenceId, user)
         ).version
       )
 

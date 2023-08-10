@@ -30,15 +30,15 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation or not licence.isActivatedInPssPeriod))) and
-             ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') %}
+            {% if ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') 
+                and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation or not licence.isActivatedInPssPeriod))) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
                 {{ bespokeConditions(licence, null, 'Bespoke licence conditions') }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence, null, [], 'Additional post sentence supervision requirements') }}
             {% endif %}
-            {% if licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) and licence.typeCode === 'AP_PSS' and additionalConditions.length %}
+            {% if licence.typeCode === 'AP_PSS' and licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) and additionalConditions.length %}
                 <div>
                     <h2 class="govuk-heading-m" id="conditions-expired">Conditions from expired licence</h2>
                     <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 

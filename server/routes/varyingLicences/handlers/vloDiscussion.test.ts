@@ -15,7 +15,7 @@ const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<C
 const licenceService = new LicenceService(licenceApiClient, null, null, conditionService) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Vary Licence - Vlo discussion', () => {
-  const handler = new VloDiscussionRoutes(licenceApiClient, licenceService, conditionService)
+  const handler = new VloDiscussionRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -49,7 +49,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
   describe('POST', () => {
     it('should save response and redirect to the check your answers page if the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
-      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
@@ -63,7 +63,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
 
     it('should save response and redirect to the policy changes page if the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
-      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 

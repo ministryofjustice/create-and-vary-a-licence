@@ -18,7 +18,7 @@ describe('Route handlers', () => {
     null,
     conditionService
   ) as jest.Mocked<LicenceService>
-  const handler = new PolicyChangeRoutes(licenceApiClient, licenceService, conditionService)
+  const handler = new PolicyChangeRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -62,7 +62,7 @@ describe('Route handlers', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
-    licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({
+    licenceService.getParentLicenceOrSelf.mockResolvedValue({
       id: 1,
       version: 'version',
       typeCode: 'AP_PSS',

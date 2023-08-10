@@ -218,14 +218,14 @@ describe('ConditionService', () => {
 
     it('should return parent additional conditions if licence is in PSS period', async () => {
       licenceApiClient.getParentLicenceOrSelf.mockResolvedValue(parentLicence)
-      const conditionsToDisplay = await conditionService.getParentOrSelfAdditionalLicenceConditions(selfLicence, user)
+      const conditionsToDisplay = await conditionService.getAdditionalAPConditionsForSummaryAndPdf(selfLicence, user)
       expect(conditionsToDisplay.length).toEqual(parentLicence.additionalLicenceConditions.length)
       expect(conditionsToDisplay[0].id).toEqual(1)
     })
 
     it('should return self additional conditions if licence is in not in PSS period', async () => {
       selfLicence.isInPssPeriod = false
-      const conditionsToDisplay = await conditionService.getParentOrSelfAdditionalLicenceConditions(selfLicence, user)
+      const conditionsToDisplay = await conditionService.getAdditionalAPConditionsForSummaryAndPdf(selfLicence, user)
       expect(conditionsToDisplay.length).toEqual(selfLicence.additionalLicenceConditions.length)
       expect(conditionsToDisplay[0].id).toEqual(2)
       expect(conditionsToDisplay[1].id).toEqual(3)

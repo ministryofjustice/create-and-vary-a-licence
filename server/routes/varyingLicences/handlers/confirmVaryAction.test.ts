@@ -42,10 +42,7 @@ describe('Route Handlers - Vary Licence - Confirm vary', () => {
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/vary/confirmVaryQuestion', {
-        licence: { nomsId: '150612' },
-        isInPssPeriod: false,
-      })
+      expect(res.render).toHaveBeenCalledWith('pages/vary/confirmVaryQuestion')
     })
   })
 

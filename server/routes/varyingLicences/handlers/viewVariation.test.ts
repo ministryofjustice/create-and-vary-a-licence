@@ -19,7 +19,7 @@ const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<C
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
 describe('Route - Vary - View variation', () => {
-  const handler = new ViewVariationRoutes(licenceApiClient, licenceService, conditionService)
+  const handler = new ViewVariationRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -160,7 +160,7 @@ describe('Route - Vary - View variation', () => {
         },
       } as unknown as Response
 
-      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
 
       await handler.GET(req, res)
@@ -181,7 +181,7 @@ describe('Route - Vary - View variation', () => {
         },
       } as unknown as Response
 
-      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
 
       await handler.GET(req, res)

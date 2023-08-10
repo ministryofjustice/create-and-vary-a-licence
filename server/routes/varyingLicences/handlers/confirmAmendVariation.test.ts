@@ -16,7 +16,7 @@ const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<C
 const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
-  const handler = new ConfirmAmendVariationRoutes(licenceApiClient, licenceService, conditionService)
+  const handler = new ConfirmAmendVariationRoutes(licenceService, conditionService)
   let req: Request
   let res: Response
 
@@ -57,7 +57,7 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
   describe('POST', () => {
     it('should update status to in progress when answer is yes and the licence version is up to date', async () => {
       req.body = { answer: 'Yes' }
-      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
@@ -69,7 +69,7 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
 
     it('should update status to in progress and update the standard conditions when answer is yes and the licence version is out of date', async () => {
       req.body = { answer: 'Yes' }
-      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '1.0' } as Licence)
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       conditionService.getStandardConditions.mockResolvedValue([])
       await handler.POST(req, res)
