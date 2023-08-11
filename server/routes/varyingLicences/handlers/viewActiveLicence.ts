@@ -20,9 +20,12 @@ export default class ViewActiveLicenceRoutes {
     const { conditionsWithUploads, additionalConditions } =
       this.conditionService.additionalConditionsCollection(conditionsToDisplay)
 
+    const parentBespokeConditions = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
+
     return res.render('pages/vary/viewActive', {
       additionalConditions,
       conditionsWithUploads,
+      parentBespokeConditions,
       callToActions: { shouldShowVaryButton },
     })
   }

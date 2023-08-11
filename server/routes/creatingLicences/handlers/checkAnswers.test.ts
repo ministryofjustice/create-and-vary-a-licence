@@ -56,19 +56,20 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         },
       },
     } as unknown as Response
+    conditionService.additionalConditionsCollection.mockReturnValue({
+      additionalConditions: [],
+      conditionsWithUploads: [],
+    })
+    conditionService.getbespokeConditionsForSummaryAndPdf.mockReturnValue(res.locals.licence.bespokeConditions)
   })
 
   describe('GET', () => {
     it('should render view and not record audit event (owner)', async () => {
-      conditionService.additionalConditionsCollection.mockReturnValue({
-        additionalConditions: [],
-        conditionsWithUploads: [],
-      })
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
-        isInPssPeriod: false,
         conditionsWithUploads: [],
+        parentBespokeConditions: [],
         backLink: req.session.returnToCase,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
@@ -82,25 +83,16 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         session: {},
         flash: jest.fn(),
       } as unknown as Request
-
-      conditionService.additionalConditionsCollection.mockReturnValue({
-        additionalConditions: [],
-        conditionsWithUploads: [],
-      })
       await handler.GET(reqWithEmptySession, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
-        isInPssPeriod: false,
+        parentBespokeConditions: [],
         backLink: '/licence/create/caseload',
       })
     })
 
     it('should render view and record audit event (not owner)', async () => {
-      conditionService.additionalConditionsCollection.mockReturnValue({
-        additionalConditions: [],
-        conditionsWithUploads: [],
-      })
       res = {
         ...res,
         locals: {
@@ -117,64 +109,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
-        isInPssPeriod: false,
-        backLink: req.session.returnToCase,
-      })
-      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-    })
-
-    it('should render view, record audit event (not owner) and PSS period should be true', async () => {
-      conditionService.additionalConditionsCollection.mockReturnValue({
-        additionalConditions: [],
-        conditionsWithUploads: [],
-      })
-      res = {
-        ...res,
-        locals: {
-          licence: {
-            isInPssPeriod: true,
-          },
-          user: {
-            username: 'joebloggs',
-            deliusStaffIdentifier: 999,
-          },
-        },
-      } as unknown as Response
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        additionalConditions: [],
-        conditionsWithUploads: [],
-        isInPssPeriod: true,
-        backLink: req.session.returnToCase,
-      })
-    })
-
-    it('should render view, record audit event (not owner) and PSS period should be false', async () => {
-      conditionService.additionalConditionsCollection.mockReturnValue({
-        additionalConditions: [],
-        conditionsWithUploads: [],
-      })
-      res = {
-        ...res,
-        locals: {
-          licence: {
-            isInPssPeriod: false,
-          },
-          user: {
-            username: 'joebloggs',
-            deliusStaffIdentifier: 999,
-          },
-        },
-      } as unknown as Response
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
-        additionalConditions: [],
-        conditionsWithUploads: [],
-        isInPssPeriod: false,
+        parentBespokeConditions: [],
         backLink: req.session.returnToCase,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()

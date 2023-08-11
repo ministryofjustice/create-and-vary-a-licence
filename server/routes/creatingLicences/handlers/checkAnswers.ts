@@ -14,7 +14,6 @@ export default class CheckAnswersRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     const backLink = req.session.returnToCase || '/licence/create/caseload'
-    const { isInPssPeriod = false } = licence
 
     // Record the view event only when an officer views a licence which is not their own
     if (licence?.comStaffId !== user?.deliusStaffIdentifier) {
@@ -33,10 +32,12 @@ export default class CheckAnswersRoutes {
     const { conditionsWithUploads, additionalConditions } =
       this.conditionService.additionalConditionsCollection(conditionsToDisplay)
 
+    const parentBespokeConditions = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
+
     res.render('pages/create/checkAnswers', {
       additionalConditions,
       conditionsWithUploads,
-      isInPssPeriod,
+      parentBespokeConditions,
       backLink,
     })
   }

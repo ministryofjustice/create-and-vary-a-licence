@@ -33,6 +33,7 @@ import LicenceType from '../enumeration/licenceType'
 import {
   AdditionalCondition,
   AdditionalConditionsResponse,
+  BespokeCondition,
   Licence,
   LicencePolicyResponse,
   StandardCondition,
@@ -259,17 +260,26 @@ export default class ConditionService {
   /* eslint-disable no-param-reassign */
 
   async getAdditionalAPConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<AdditionalCondition[]> {
-    const isInVariation = [
+    if (licence.isInPssPeriod && this.isInVariation(licence)) {
+      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))
+        ?.additionalLicenceConditions
+    }
+    return licence.additionalLicenceConditions
+  }
+
+  async getbespokeConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<BespokeCondition[]> {
+    if (licence.isInPssPeriod && this.isInVariation(licence)) {
+      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))?.bespokeConditions
+    }
+    return licence.bespokeConditions
+  }
+
+  isInVariation(licence: Licence): boolean {
+    return [
       LicenceStatus.VARIATION_IN_PROGRESS,
       LicenceStatus.VARIATION_SUBMITTED,
       LicenceStatus.VARIATION_REJECTED,
       LicenceStatus.VARIATION_APPROVED,
     ].includes(<LicenceStatus>licence.statusCode)
-
-    if (licence.isInPssPeriod && isInVariation) {
-      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))
-        ?.additionalLicenceConditions
-    }
-    return licence.additionalLicenceConditions
   }
 }

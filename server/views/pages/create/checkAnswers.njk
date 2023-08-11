@@ -37,9 +37,9 @@
             {% else %}
                 {% if licence.typeCode === 'AP' %}
                     <h1 class="govuk-heading-l">Check licence details</h1>
-                {% elseif not isInPssPeriod and licence.typeCode === 'AP_PSS' %}
+                {% elseif not licence.isInPssPeriod and licence.typeCode === 'AP_PSS' %}
                     <h1 class="govuk-heading-l">Check licence and post sentence supervision order details</h1>
-                {% elseif (isInPssPeriod and licence.typeCode === 'AP_PSS') or licence.typeCode === 'PSS' %}
+                {% elseif (licence.isInPssPeriod and licence.typeCode === 'AP_PSS') or licence.typeCode === 'PSS' %}
                     <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
                 {% endif %}
             {% endif %}
@@ -82,7 +82,7 @@
 
 
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 
-                and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation or not licence.isActivatedInPssPeriod))) %}
+                and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors) }}
                 {{ bespokeConditions(licence, isInProgress) }}
             {% endif %}
@@ -91,7 +91,8 @@
                 {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
             {% endif %}
 
-            {% if licence.typeCode === 'AP_PSS' and isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) and additionalConditions.length %}
+            {% if licence.typeCode === 'AP_PSS' and licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) 
+                and (additionalConditions.length or parentBespokeConditions.length) %}
                 <div>
                     <h2 class="govuk-heading-m">Conditions from expired licence</h2>
                     <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 
@@ -104,7 +105,7 @@
                         </summary>
                         <div class="govuk-details__text">
                             {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, validationErrors) }}
-                            {{ bespokeConditions(licence, null) }}
+                            {{ bespokeConditions(licence, null, null, null, parentBespokeConditions) }}
                         </div>
                     </details>
                 </div>
