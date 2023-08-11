@@ -296,4 +296,5 @@ export default {
       'SLI',
     ],
   },
+  useNewSearch: get('USE_NEW_SEARCH', 'false', requiredInProduction) === 'true',
 }
