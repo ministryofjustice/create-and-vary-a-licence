@@ -39,7 +39,7 @@
                 {{ additionalPssConditions(licence, null, [], 'Additional post sentence supervision requirements') }}
             {% endif %}
             {% if licence.typeCode === 'AP_PSS' and licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) 
-                and (additionalConditions.length or parentBespokeConditions.length)  %}
+                and (additionalConditions.length or bespokeConditionsToDisplay.length)  %}
                 <div>
                     <h2 class="govuk-heading-m" id="conditions-expired">Conditions from expired licence</h2>
                     <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 
@@ -52,7 +52,7 @@
                         </summary>
                         <div class="govuk-details__text">
                             {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
-                            {{ bespokeConditions(licence, null, 'Bespoke licence conditions', null, parentBespokeConditions) }}
+                            {{ bespokeConditions(licence, null, 'Bespoke licence conditions', null, bespokeConditionsToDisplay) }}
                         </div>
                     </details>
                 </div>

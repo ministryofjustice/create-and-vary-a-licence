@@ -448,9 +448,9 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async runRemoveAPConditionsJob() {
+  async runRemoveExpiredConditionsJob() {
     await this.post({
-      path: '/run-remove-ap-conditions-job',
+      path: '/run-remove-expired-conditions-job',
     })
   }
 

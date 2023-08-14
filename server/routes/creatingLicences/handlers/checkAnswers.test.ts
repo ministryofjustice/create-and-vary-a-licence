@@ -69,7 +69,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
-        parentBespokeConditions: [],
+        bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
@@ -87,7 +87,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
-        parentBespokeConditions: [],
+        bespokeConditionsToDisplay: [],
         backLink: '/licence/create/caseload',
       })
     })
@@ -109,7 +109,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
-        parentBespokeConditions: [],
+        bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()

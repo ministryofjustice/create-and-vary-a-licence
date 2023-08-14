@@ -17,7 +17,7 @@ import { getSystemTokenWithRetries } from '../server/data/systemToken'
 const licenceApiClient = new LicenceApiClient(new InMemoryTokenStore(getSystemTokenWithRetries))
 
 licenceApiClient
-  .runRemoveAPConditionsJob()
+  .runRemoveExpiredConditionsJob()
   .then(() => {
     // Flush logs to app insights and only exit when complete
     flush({ callback: () => process.exit() }, 'success')

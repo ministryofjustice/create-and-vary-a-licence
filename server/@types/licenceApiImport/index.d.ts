@@ -3201,7 +3201,7 @@ export interface operations {
    * Job to remove AP conditions.
    * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
    */
-  runRemoveAPConditionsJob: {
+  runRemoveExpiredConditionsJob: {
     responses: {
       /** @description Remove AP conditions job executed. */
       200: never

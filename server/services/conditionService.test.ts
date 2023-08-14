@@ -181,7 +181,7 @@ describe('ConditionService', () => {
     })
   })
 
-  describe('Get parent or self licence additional conditions', () => {
+  describe('Get additional AP Conditions for summary and pdf', () => {
     const parentLicence = {
       id: 2,
       statusCode: LicenceStatus.VARIATION_APPROVED,

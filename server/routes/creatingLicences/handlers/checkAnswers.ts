@@ -32,12 +32,12 @@ export default class CheckAnswersRoutes {
     const { conditionsWithUploads, additionalConditions } =
       this.conditionService.additionalConditionsCollection(conditionsToDisplay)
 
-    const parentBespokeConditions = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
+    const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
 
     res.render('pages/create/checkAnswers', {
       additionalConditions,
       conditionsWithUploads,
-      parentBespokeConditions,
+      bespokeConditionsToDisplay,
       backLink,
     })
   }
