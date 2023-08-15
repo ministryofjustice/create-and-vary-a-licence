@@ -3190,6 +3190,28 @@ export interface operations {
     }
   }
   /**
+   * Job to remove AP conditions.
+   * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
+   */
+  runRemoveAPConditionsJob: {
+    responses: {
+      /** @description Remove AP conditions job executed. */
+      200: never
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
    * Send an email to probation practitioner of any previously approved licences that have been edited but not re-approved by prisoners release date
    * @description Send email to probation practioner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
    */

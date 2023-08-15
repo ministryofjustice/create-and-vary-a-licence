@@ -1,0 +1,26 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro InitialAppointment(licence) %}
+    {{ govukSummaryList({
+        attributes: { id: 'initial-appointment-details' },
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+            {
+                key: { text: "Appointment with" },
+                value: { text: licence.appointmentPerson }
+            },
+            {
+                key: { text: "Address" },
+                value: { text: licence.appointmentAddress }
+            },
+            {
+                key: { text: "Date" },
+                value: { text: licence.appointmentTime | datetimeToDateShort }
+            },
+            {
+                key: { text: "Time" },
+                value: { text: licence.appointmentTime | datetimeTo12HourTime }
+            }
+        ]
+    }) }}
+{% endmacro %}

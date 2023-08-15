@@ -59,7 +59,7 @@ export default class PssConditionsInputPage extends Page {
 
   clickContinue = (): CheckAnswersPage => {
     cy.task('stubPutAdditionalConditionData')
-    cy.task('stubGetCompletedLicence', 'IN_PROGRESS')
+    cy.task('stubGetCompletedLicence', { statusCode: 'IN_PROGRESS', typeCode: 'AP_PSS' })
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
   }

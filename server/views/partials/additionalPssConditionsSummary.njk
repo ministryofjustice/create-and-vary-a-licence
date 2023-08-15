@@ -1,7 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro additionalPssConditions(licence, isEditable, validationErrors) %}
+{% macro additionalPssConditions(licence, isEditable, validationErrors, hideHeading) %}
     {% set errorMessage = validationErrors | findError('additionalPssConditions') %}
     {% macro additionalConditionHtml(expandedConditionText, data) %}
         <div>
@@ -19,20 +19,23 @@
     {% set addRemoveBtnText = "Add requirements" if (licence.additionalPssConditions.length) === 0 else "Add or remove requirements" %}
     {% set subHeadingClass = "govuk-grid-column-two-thirds" if isEditable else "govuk-grid-column-full" %}
 
-    <div class="govuk-grid-row check-answers-header sub-heading-margin-top govuk-!-margin-bottom-6">
-        <div class="{{ subHeadingClass }}">
-            <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">{{ 'Additional post sentence supervision requirements' + ' (' + licence.additionalPssConditions.length + ' selected)'}}</h2>
-        </div>
-        {% if isEditable %}
-            <div class="govuk-grid-column-one-third text-align-right">
-                {{ govukButton({
-                    href: "/licence/create/id/" + licence.id + "/additional-pss-conditions?fromReview=true",
-                    text: addRemoveBtnText,
-                    classes: "govuk-button--secondary govuk-!-margin-bottom-0"
-                }) }}
-            </div>
-        {% endif %}
-    </div>
+    {% if hideHeading != true %}
+      <div class="govuk-grid-row check-answers-header sub-heading-margin-top govuk-!-margin-bottom-6">
+          <div class="{{ subHeadingClass }}">
+              <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">{{ 'Additional post sentence supervision requirements' + ' (' + licence.additionalPssConditions.length + ' selected)'}}</h2>
+          </div>
+          {% if isEditable %}
+              <div class="govuk-grid-column-one-third text-align-right">
+                  {{ govukButton({
+                      href: "/licence/create/id/" + licence.id + "/additional-pss-conditions?fromReview=true",
+                      text: addRemoveBtnText,
+                      classes: "govuk-button--secondary govuk-!-margin-bottom-0"
+                  }) }}
+              </div>
+          {% endif %}
+      </div>
+    {% endif %}
+
 
     {% set additionalPssConditions = [] %}
 

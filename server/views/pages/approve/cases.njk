@@ -33,7 +33,7 @@
                 id: 'name-' + loop.index,
                 "data-sort-value": case.name
             },
-            html: '<a href="' + nameLink + '" class="govuk-link govuk-heading-s" target="' + linkTarget + '">' + case.name + '</a>'
+            html: '<a href="' + nameLink + '" class="govuk-heading-m govuk-!-margin-bottom-3" target="' + linkTarget + '">' + case.name + '</a>'
         },
         {
             attributes: {
@@ -71,7 +71,7 @@
            {
                attributes: {
                    id: 'approved-on-' + loop.index,
-                   "data-sort-value": case.releaseDate | dateToUnix
+                   "data-sort-value": case.approvedOn | dateToUnix
                },
                text: case.approvedOn
           }
@@ -92,7 +92,8 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
             <div class="moj-search govuk-!-margin-bottom-8">
-                <form action="list-search-results-empty" method="post">
+                <form method="GET">
+                    <input type="hidden" name="approval" value="{% if approvalNeededView %}needed{% else %}recently{% endif %}">
                     <div class="govuk-form-group">
                         <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
                             Find a case
@@ -167,7 +168,7 @@
             {
                 text: "Release date",
                 attributes: {
-                    "aria-sort": "ascending"
+                    "aria-sort": "ascending" if approvalNeededView else "none"
                 }
             }
         ] %}
@@ -183,7 +184,7 @@
                 {
                     text: "Approved on",
                     attributes: {
-                        "aria-sort": "none"
+                        "aria-sort": "descending"
                     }
                 }
             ), tableHeadings) %}

@@ -1,30 +1,30 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors) %}
+{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, hideHeading) %}
     {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
 
     {% set conditionCount = additionalConditions.length + (1 if conditionsWithUploads.length else 0) %}
 
     {% set addRemoveBtnText = "Add conditions" if (conditionCount) === 0 else "Add or remove conditions" %}
 
-
-    <div class="govuk-grid-row check-answers-header sub-heading-margin-top govuk-!-margin-bottom-6">
-        <div class="govuk-grid-column-two-thirds">
-            <h2 id="additional-licence-conditions-heading"
-                class="govuk-heading-m">{{ "Additional licence conditions" + " (" + conditionCount + " selected)" }}</h2>
-        </div>
-        {% if isEditable %}
-            <div class="govuk-grid-column-one-third text-align-right">
-                {{ govukButton({
-                    href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
-                    text: addRemoveBtnText,
-                    classes: "govuk-button--secondary govuk-!-margin-bottom-0"
-                }) }}
-            </div>
-        {% endif %}
-    </div>
-
+   {% if hideHeading != true %}
+      <div class="govuk-grid-row check-answers-header sub-heading-margin-top govuk-!-margin-bottom-6">
+          <div class="govuk-grid-column-two-thirds">
+              <h2 id="additional-licence-conditions-heading"
+                  class="govuk-heading-m">{{ "Additional licence conditions" + " (" + conditionCount + " selected)" }}</h2>
+          </div>
+          {% if isEditable %}
+              <div class="govuk-grid-column-one-third text-align-right">
+                  {{ govukButton({
+                      href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
+                      text: addRemoveBtnText,
+                      classes: "govuk-button--secondary govuk-!-margin-bottom-0"
+                  }) }}
+              </div>
+          {% endif %}
+      </div>
+  {% endif %}
     {% set additionalLicenceConditions = [] %}
 
     {% for condition in additionalConditions %}

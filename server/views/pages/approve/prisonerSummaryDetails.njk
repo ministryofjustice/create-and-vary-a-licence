@@ -1,0 +1,27 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro prisonerSummaryDetails(licence) %}
+{% set prisonerName =  [licence.forename, licence.surname] | join(' ') %}
+    {{ govukSummaryList({
+        attributes: { id: 'prisoner-summary-details' },
+        classes: 'govuk-summary-list--no-border',
+        rows: [
+            {
+                key: { text: "Name" },
+                value: { text: prisonerName }
+            },
+            {
+                key: { text: "Date of birth" },
+                value: { text: licence.dateOfBirth | datetimeToDateShort }
+            },
+            {
+                key: { text: "Prison number" },
+                value: { text: licence.nomsId }
+            },
+            {
+                key: { text: "Location" },
+                value: { text: licence.prisonDescription }
+            }
+        ]
+    }) }}
+{% endmacro %}
