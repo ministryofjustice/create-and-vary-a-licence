@@ -32,6 +32,8 @@ import type {
   LicencePolicyResponse,
   OverrideLicenceDatesRequest,
   UpdateOffenderDetailsRequest,
+  ProbationSearchRequest,
+  ProbationSearchResult,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -463,5 +465,12 @@ export default class LicenceApiClient extends RestClient {
       path: `/offender/nomisid/${nomisId}/update-offender-details`,
       data: offenderDetails,
     })
+  }
+
+  async searchForOffenderOnStaffCaseload(searchRequest: ProbationSearchRequest): Promise<ProbationSearchResult> {
+    return (await this.post({
+      path: `/com/case-search`,
+      data: searchRequest,
+    })) as Promise<ProbationSearchResult>
   }
 }

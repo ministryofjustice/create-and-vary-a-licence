@@ -4,9 +4,15 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "partials/statusBadge.njk" import statusBadge %}
+{% from "partials/licenceDescription.njk" import licenceDescription %}
+
+{% set pageTitle = applicationName + " - Probation - Search" %}
+{% set pageId = "probation-search-page" %}
+{% set backLinkHref = "/licence/create/caseload" %}
 
 {% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isClickable, index) %}
-    <div class="caseload-offender-name">
+    <div class="search-offender-name">
         {% set link = "/licence/create/id/" + licenceId + "/check-your-answers" if licenceId else "/licence/create/nomisId/" + prisonerNumber + "/confirm"%}
         {% if isClickable %}
             <a id="name-button-{{ index }}" href="{{ link }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
@@ -16,6 +22,63 @@
         <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
     </div>
 {% endmacro %}
+
+{% set offenders = [] %}
+
+{% for offender in searchResults %}
+    {% if offender.comName %}
+        {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
+    {% else %}
+        {% set comDetailsHtml = 'Unallocated' %}
+    {% endif %}
+
+    {% set offenders = (offenders.push([
+        {
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": offender.name
+            },
+            classes: "max-width max-width-220",
+            html: offenderName(offender.name, offender.crn, offender.nomisId, offender.licenceId, loop.index)
+        },
+        {
+            attributes: {
+                id: 'licence-type-' + loop.index
+            },
+            html:licenceDescription(offender.licenceType)
+        },
+        {
+            attributes: {
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": offender.comName
+            },
+            classes: "max-width max-width-200",
+            html: comDetailsHtml
+        },
+        {
+            attributes: {
+                id: 'team-name-' + loop.index,
+                "data-sort-value": offender.teamName
+            },
+            classes: "max-width max-width-200",
+            html: offender.teamName
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": offender.releaseDate | dateToUnix
+            },
+            text: offender.releaseDate
+        },
+        {
+            attributes: {
+                id: 'licence-status-' + loop.index,
+                "data-sort-value": offender.licenceStatus | getStatusOrder
+            },
+            html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig)
+        }
+    ]), offenders) %}
+{% endfor %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -101,7 +164,8 @@
                             "aria-sort": "none"
                         }
                     }
-                ]
+                ],
+                rows: offenders
             }) }}
         </form>
 
@@ -152,7 +216,8 @@
                             "aria-sort": "none"
                         }
                     }
-                ]
+                ], 
+                rows: offenders
             }) }}
         </form>
 
