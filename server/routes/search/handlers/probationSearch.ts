@@ -15,14 +15,6 @@ export default class ProbationSearch {
     const { onProbationCount } = await searchResponse
     const searchResults = (await searchResponse).results
 
-    // sort by in API is working weirdly as not being registered in the wiremock - need to fix
-    // once retrieved we will need to loop through the list of results and show the names etc based on the list
-    // the counts can be used as well
-    // sort by is being a bit of a pain - how to ascertain sort by - eg aria and set it so the backend knows
-    // nuances re team name columns and any other questions - eg if query is blank and search clicked - display the message or bring back all on team
-    // jest testing
-    // cypress testing
-
     res.render('pages/search/probationSearch', {
       queryTerm,
       deliusStaffIdentifier,

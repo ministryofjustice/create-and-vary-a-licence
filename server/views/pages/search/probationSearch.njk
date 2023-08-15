@@ -23,7 +23,59 @@
     </div>
 {% endmacro %}
 
-{% set offenders = [] %}
+{% macro displayResults(countText, caption, results) %}
+    <h2 class="govuk-heading-l">{{ countText }}</h2>
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ govukTable({
+                attributes: {
+                    'data-module': 'moj-sortable-table'
+                },
+                caption: caption,
+                captionClasses: "govuk-visually-hidden",
+                head: [
+                    {
+                        text: "Name",
+                        attributes: {
+                            "aria-sort": "ascending"
+                        }
+                    },
+                    {
+                        text: "Licence type"
+                    },
+                    {
+                        text: "Probation practitioner",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    },
+                    {
+                        text: "Team name",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    },
+                    {
+                        text: "Release date",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    },
+                    {
+                        text: "Status",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    }
+                ],
+                rows: results
+            }) }}
+        </form>
+{% endmacro %}
+
+
+{% set peopleInPrisonResults = [] %}
+{% set peopleOnProbationResults = [] %}
 
 {% for offender in searchResults %}
     {% if offender.comName %}
@@ -32,7 +84,7 @@
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
 
-    {% set offenders = (offenders.push([
+    {% set result = [
         {
             attributes: {
                 id: 'name-' + loop.index,
@@ -77,7 +129,13 @@
             },
             html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig)
         }
-    ]), offenders) %}
+    ] %}
+
+    {% if offender.isOnProbation %}
+        {% set peopleOnProbationResults = (peopleOnProbationResults.push(result), peopleOnProbationResults) %}
+    {% else %}
+        {% set peopleInPrisonResults = (peopleInPrisonResults.push(result), peopleInPrisonResults) %}
+    {% endif %}
 {% endfor %}
 
 {% block content %}
@@ -119,109 +177,9 @@
         {% set onProbationCountText = "People on probation (" + onProbationCount + " result)" %}
     {% endif %}
 
-    {% set peopleInPrison %}
-        <h2 class="govuk-heading-l">{{ inPrisonCountText }}</h2>
+    {% set peopleInPrison = displayResults(inPrisionCountText, "In Prison Search Results", peopleInPrisonResults) %}
 
-        <form method="POST">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            {{ govukTable({
-                attributes: {
-                    'data-module': 'moj-sortable-table'
-                },
-                caption: "In Prison Search Results",
-                captionClasses: "govuk-visually-hidden",
-                head: [
-                    {
-                        text: "Name",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    },
-                    {
-                        text: "Licence type"
-                    },
-                    {
-                        text: "Probation practitioner",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    },
-                    {
-                        text: "Team name",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    },
-                    {
-                        text: "Release date",
-                        attributes: {
-                            "aria-sort": "ascending"
-                        }
-                    },
-                    {
-                        text: "Status",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    }
-                ],
-                rows: offenders
-            }) }}
-        </form>
-
-    {% endset %}
-
-    {% set peopleOnProbation %}
-        <h2 class="govuk-heading-l">{{ onProbationCountText }}</h2>
-
-        <form method="POST">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            {{ govukTable({
-                attributes: {
-                    'data-module': 'moj-sortable-table'
-                },
-                caption: "On Probation Search Results",
-                captionClasses: "govuk-visually-hidden",
-                head: [
-                    {
-                        text: "Name",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    },
-                    {
-                        text: "Licence type"
-                    },
-                    {
-                        text: "Probation practitioner",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    },
-                    {
-                        text: "Team name",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    },
-                    {
-                        text: "Release date",
-                        attributes: {
-                            "aria-sort": "ascending"
-                        }
-                    },
-                    {
-                        text: "Status",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                    }
-                ], 
-                rows: offenders
-            }) }}
-        </form>
-
-    {% endset %}
+    {% set peopleOnProbation = displayResults(onProbationCountText, "On Probation Search Results", peopleOnProbationResults) %}
 
     {{ govukTabs({
         items: [
@@ -241,7 +199,6 @@
             }
         ]
     }) }}
-
 
 {% endblock %}
 
