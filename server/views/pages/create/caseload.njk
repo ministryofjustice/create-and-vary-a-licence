@@ -79,6 +79,26 @@
         </div>
     </div>
 
+    <div class="govuk-grid-row">
+        <div class="moj-search govuk-grid-column-two-thirds govuk-!-margin-bottom-8">
+            <form method="GET"> 
+                <input type="hidden" name="view" value="{% if teamView %}team{% else %}me{% endif %}">
+                <div class="govuk-form-group">
+                    <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+                        Find a case
+                    </label>
+                    <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
+                    Search by name, CRN or probation practitioner
+                    </div>
+                    <input class="govuk-input moj-search__input" id="search" name="search" aria-describedby="search-hint">
+                </div>
+                <button class="govuk-button moj-search__button " data-module="govuk-button">
+                    Search
+                </button>
+            </form>
+        </div>
+    </div>
+
     <nav class="moj-sub-navigation" aria-label="Sub navigation">
         <ul class="moj-sub-navigation__list">
             <li class="moj-sub-navigation__item">
@@ -86,22 +106,6 @@
             </li>
             <li class="moj-sub-navigation__item">
                 <a class="moj-sub-navigation__link" {% if teamView %}aria-current="page"{% endif %} href="?view=team">Team cases</a>
-            </li>
-            <li class="moj-sub-navigation__item govuk-!-margin-right-0 govuk-!-width-one-half float-right">
-                <div class="moj-search">
-                    <form method="GET">
-                        <input type="hidden" name="view" value="{% if teamView %}team{% else %}me{% endif %}">
-                        <div class="govuk-form-group">
-                            <label class="govuk-visually-hidden" for="search">
-                                Search for a case
-                            </label>
-                            <input class="govuk-input moj-search__input govuk-!-font-size-14" id="search" name="search" placeholder="You can search by name, CRN or probation practitioner" value="{{ search }}">
-                        </div>
-                        <button class="govuk-button moj-search__button" data-module="govuk-button">
-                            Search
-                        </button>
-                    </form>
-                </div>
             </li>
         </ul>
     </nav>
