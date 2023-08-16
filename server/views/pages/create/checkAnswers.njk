@@ -83,7 +83,7 @@
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors, null, showConditionCountSelectedText) }}
-                {{ bespokeConditions(licence, isInProgress) }}
+                {{ bespokeConditions(licence, isInProgress, null, showConditionCountSelectedText) }}
             {% endif %}
 
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}

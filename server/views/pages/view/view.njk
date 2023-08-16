@@ -47,7 +47,7 @@
             {{ inductionMeetingDetails(licence) }}
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], null, showConditionCountSelectedText) }}
-                {{ bespokeConditions(licence) }}
+                {{ bespokeConditions(licence, null, null, showConditionCountSelectedText) }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence) }}

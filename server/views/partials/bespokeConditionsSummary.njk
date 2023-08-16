@@ -1,14 +1,16 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro bespokeConditions(licence, isEditable, hideHeading, bespokeConditionsToDisplay) %}
+{% macro bespokeConditions(licence, isEditable, hideHeading, showConditionCountSelectedText, bespokeConditionsToDisplay) %}
+
+{% set title = "Bespoke licence conditions" + " (" + licence.bespokeConditions.length + " selected)" if showConditionCountSelectedText else "Bespoke licence conditions" + " (" + licence.bespokeConditions.length + ")" %}
 
 {% set addRemoveBtnText = "Add conditions" if (licence.bespokeConditions.length) === 0 else "Add or remove conditions" %}
 
   {% if hideHeading != true %}
       <div class="govuk-grid-row check-answers-header sub-heading-margin-top govuk-!-margin-bottom-6">
           <div class="govuk-grid-column-two-thirds">
-              <h2 id="bespoke-licence-conditions-heading" class="govuk-heading-m">{{ "Bespoke licence conditions" + " (" + licence.bespokeConditions.length + " selected)" }}</h2>
+              <h2 id="bespoke-licence-conditions-heading" class="govuk-heading-m">{{ title }}</h2>
           </div>
           {% if isEditable %}
               <div class="govuk-grid-column-one-third text-align-right">
