@@ -32,6 +32,8 @@ export default class ApprovalViewRoutes {
 
       const comDetails = await this.communityService.getStaffDetailByUsername(comUsername)
 
+      const returnPath = encodeURIComponent(`/licence/approve/id/${licence.id}/view`)
+
       res.render('pages/approve/view', {
         additionalConditions,
         conditionsWithUploads,
@@ -40,6 +42,7 @@ export default class ApprovalViewRoutes {
           telephone: comDetails?.telephoneNumber,
           email: comDetails?.email,
         },
+        returnPath,
       })
     } else {
       res.redirect(`/licence/approve/cases`)
