@@ -27,11 +27,19 @@ export default class CheckAnswersRoutes {
       )
     }
 
-    const { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
-      licence.additionalLicenceConditions
-    )
+    const conditionsToDisplay = await this.conditionService.getAdditionalAPConditionsForSummaryAndPdf(licence, user)
 
-    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads, backLink })
+    const { conditionsWithUploads, additionalConditions } =
+      this.conditionService.additionalConditionsCollection(conditionsToDisplay)
+
+    const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
+
+    res.render('pages/create/checkAnswers', {
+      additionalConditions,
+      conditionsWithUploads,
+      bespokeConditionsToDisplay,
+      backLink,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
