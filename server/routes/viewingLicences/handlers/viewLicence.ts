@@ -2,12 +2,14 @@ import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
 import LicenceService from '../../../services/licenceService'
+import { hasAuthSource } from '../../../utils/utils'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
+    const showConditionCountSelectedText = hasAuthSource(req.user, 'delius')
     if (
       licence?.statusCode === LicenceStatus.APPROVED ||
       licence?.statusCode === LicenceStatus.ACTIVE ||
@@ -30,7 +32,11 @@ export default class ViewAndPrintLicenceRoutes {
         licence.additionalLicenceConditions
       )
 
-      res.render('pages/view/view', { conditionsWithUploads, additionalConditions })
+      res.render('pages/view/view', {
+        conditionsWithUploads,
+        additionalConditions,
+        showConditionCountSelectedText,
+      })
     } else {
       res.redirect(`/licence/view/cases`)
     }

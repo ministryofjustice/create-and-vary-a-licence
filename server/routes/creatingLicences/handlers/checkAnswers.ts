@@ -7,12 +7,14 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
+import { hasAuthSource } from '../../../utils/utils'
 
 export default class CheckAnswersRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
+    const showConditionCountSelectedText = hasAuthSource(req.user, 'delius')
     const backLink = req.session.returnToCase || '/licence/create/caseload'
 
     // Record the view event only when an officer views a licence which is not their own
@@ -31,7 +33,12 @@ export default class CheckAnswersRoutes {
       licence.additionalLicenceConditions
     )
 
-    res.render('pages/create/checkAnswers', { additionalConditions, conditionsWithUploads, backLink })
+    res.render('pages/create/checkAnswers', {
+      additionalConditions,
+      conditionsWithUploads,
+      backLink,
+      showConditionCountSelectedText,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

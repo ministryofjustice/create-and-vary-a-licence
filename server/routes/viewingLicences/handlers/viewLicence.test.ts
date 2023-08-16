@@ -52,6 +52,7 @@ describe('Route - view and approve a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/view', {
         additionalConditions: [],
         conditionsWithUploads: [],
+        showConditionCountSelectedText: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -71,6 +72,7 @@ describe('Route - view and approve a licence', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/view', {
         additionalConditions: [],
         conditionsWithUploads: [],
+        showConditionCountSelectedText: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })

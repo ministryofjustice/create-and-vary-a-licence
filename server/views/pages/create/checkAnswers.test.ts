@@ -149,6 +149,30 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#additional-licence-conditions-heading').text()).toContain('Additional licence conditions')
   })
 
+  it(`should display 'selected' text in additional licence conditions heading to a COM user`, () => {
+    viewContext = {
+      licence,
+      additionalConditions: licence.additionalLicenceConditions,
+      conditionsWithUploads: [],
+      backLink: 'backlink',
+      showConditionCountSelectedText: true,
+    }
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (2 selected)')
+  })
+
+  it(`should display not 'selected' text in additional licence conditions heading to an OMU user`, () => {
+    viewContext = {
+      licence,
+      additionalConditions: licence.additionalLicenceConditions,
+      conditionsWithUploads: [],
+      backLink: 'backlink',
+      showConditionCountSelectedText: false,
+    }
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (2)')
+  })
+
   it('should not display additional licence conditions section if licence type is PSS', () => {
     viewContext = { licence: { ...licence, typeCode: 'PSS' } }
     const $ = cheerio.load(compiledTemplate.render(viewContext))

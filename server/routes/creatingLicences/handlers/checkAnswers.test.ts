@@ -67,6 +67,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         conditionsWithUploads: [],
         backLink: req.session.returnToCase,
+        showConditionCountSelectedText: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -89,6 +90,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         conditionsWithUploads: [],
         backLink: '/licence/create/caseload',
+        showConditionCountSelectedText: false,
       })
     })
 
@@ -114,6 +116,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         conditionsWithUploads: [],
         backLink: req.session.returnToCase,
+        showConditionCountSelectedText: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })

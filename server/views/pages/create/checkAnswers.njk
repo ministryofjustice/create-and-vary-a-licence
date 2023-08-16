@@ -79,7 +79,7 @@
             {% endif %}
 
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors) }}
+                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors, null, showConditionCountSelectedText) }}
                 {{ bespokeConditions(licence, isInProgress) }}
             {% endif %}
 

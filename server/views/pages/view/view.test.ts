@@ -79,7 +79,7 @@ describe('View and print - single licence view', () => {
     bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
   } as Licence
 
-  it('should display a single licence to print', () => {
+  it('should display a single licence to print to COM user', () => {
     viewContext = {
       licence,
       additionalConditions: [
@@ -115,6 +115,8 @@ describe('View and print - single licence view', () => {
         },
       ],
       conditionsWithUploads: [],
+      // should show 'selected' text in additional licence conditions heading when COM user
+      showConditionCountSelectedText: true,
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))
@@ -177,6 +179,52 @@ describe('View and print - single licence view', () => {
     // Check the existence of the print and return to case list buttons
     expect($('[data-qa="print-licence"]').length).toBe(2)
     expect($('[data-qa="return-to-view-list"]').length).toBe(1)
+  })
+
+  it('should display correct heading text to OMU user', () => {
+    viewContext = {
+      licence,
+      additionalConditions: [
+        {
+          code: 'condition1',
+          category: 'Category 1',
+          expandedText: 'Template 1',
+          data: [
+            {
+              field: 'field1',
+              value: 'Data 1',
+            },
+          ],
+        },
+        {
+          code: 'condition2',
+          category: 'Category 2',
+          expandedText: 'Template 2',
+          data: [
+            {
+              field: 'field2',
+              value: 'Data 2A',
+            },
+            {
+              field: 'field2',
+              value: 'Data 2B',
+            },
+            {
+              field: 'field3',
+              value: 'Data 2C',
+            },
+          ],
+        },
+      ],
+      conditionsWithUploads: [],
+      // should not show 'selected' text in additional licence conditions heading when OMU user
+      showConditionCountSelectedText: false,
+    }
+
+    const $ = cheerio.load(compiledTemplate.render(viewContext))
+
+    // Check the additional licence conditions count is contained in the heading
+    expect($('#additional-licence-conditions-heading').text().trim()).toBe('Additional licence conditions (2)')
   })
 
   it('Print buttons are not visible when licence is not approved or active', () => {
