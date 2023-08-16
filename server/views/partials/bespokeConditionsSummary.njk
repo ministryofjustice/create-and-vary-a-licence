@@ -1,7 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro bespokeConditions(licence, isEditable, hideHeading) %}
+{% macro bespokeConditions(licence, isEditable, hideHeading, bespokeConditionsToDisplay) %}
 
 {% set addRemoveBtnText = "Add conditions" if (licence.bespokeConditions.length) === 0 else "Add or remove conditions" %}
 
@@ -23,7 +23,7 @@
     {% endif %}
     {% set bespokeConditions = [] %}
 
-    {% for condition in licence.bespokeConditions %}
+    {% for condition in bespokeConditionsToDisplay or licence.bespokeConditions %}
         {% set bespokeConditions = (bespokeConditions.push({
             key: { text: 'Bespoke condition' },
             value: { text: condition.text },

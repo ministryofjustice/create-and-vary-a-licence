@@ -1,15 +1,17 @@
 import { Request, Response } from 'express'
-
-import CheckAnswersRoutes from './checkAnswers'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import CheckAnswersRoutes from './checkAnswers'
+import { LicenceApiClient } from '../../../data'
 
+jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
+const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(licenceApiClient, null, null, conditionService) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Check Answers', () => {
   const handler = new CheckAnswersRoutes(licenceService, conditionService)
@@ -54,18 +56,20 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         },
       },
     } as unknown as Response
+    conditionService.additionalConditionsCollection.mockReturnValue({
+      additionalConditions: [],
+      conditionsWithUploads: [],
+    })
+    conditionService.getbespokeConditionsForSummaryAndPdf.mockReturnValue(res.locals.licence.bespokeConditions)
   })
 
   describe('GET', () => {
     it('should render view and not record audit event (owner)', async () => {
-      conditionService.additionalConditionsCollection.mockReturnValue({
-        additionalConditions: [],
-        conditionsWithUploads: [],
-      })
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
+        bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
         showConditionCountSelectedText: false,
       })
@@ -80,25 +84,17 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         session: {},
         flash: jest.fn(),
       } as unknown as Request
-
-      conditionService.additionalConditionsCollection.mockReturnValue({
-        additionalConditions: [],
-        conditionsWithUploads: [],
-      })
       await handler.GET(reqWithEmptySession, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
+        bespokeConditionsToDisplay: [],
         backLink: '/licence/create/caseload',
         showConditionCountSelectedText: false,
       })
     })
 
     it('should render view and record audit event (not owner)', async () => {
-      conditionService.additionalConditionsCollection.mockReturnValue({
-        additionalConditions: [],
-        conditionsWithUploads: [],
-      })
       res = {
         ...res,
         locals: {
@@ -115,6 +111,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
         conditionsWithUploads: [],
+        bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
         showConditionCountSelectedText: false,
       })
