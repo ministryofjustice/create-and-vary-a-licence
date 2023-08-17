@@ -226,6 +226,9 @@ describe('View and print - single licence view', () => {
     // Check the additional licence conditions count is contained in the heading
     expect($('#additional-licence-conditions-heading').text().trim()).toBe('Additional licence conditions (2)')
     expect($('#bespoke-licence-conditions-heading').text().trim()).toBe('Bespoke licence conditions (2)')
+    expect($('#additional-pss-conditions-heading').text().trim()).toBe(
+      'Additional post sentence supervision requirements (1)'
+    )
   })
 
   it('Print buttons are not visible when licence is not approved or active', () => {

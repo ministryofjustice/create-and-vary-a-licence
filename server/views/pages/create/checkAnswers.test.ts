@@ -247,6 +247,7 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display additional PSS conditions section if licence type is PSS', () => {
     viewContext = {
       licence: { ...licence, typeCode: 'PSS' },
+      showConditionCountSelectedText: true,
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
     expect($('#additional-pss-conditions-heading').text()).toBe(
@@ -257,6 +258,7 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display additional PSS conditions section if licence type is AP_PSS', () => {
     viewContext = {
       licence,
+      showConditionCountSelectedText: true,
     }
     const $ = cheerio.load(compiledTemplate.render(viewContext))
     expect($('#additional-pss-conditions-heading').text()).toBe(

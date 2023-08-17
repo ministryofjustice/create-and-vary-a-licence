@@ -87,7 +87,7 @@
             {% endif %}
 
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
+                {{ additionalPssConditions(licence, isInProgress, validationErrors, null, showConditionCountSelectedText) }}
             {% endif %}
 
             {% if licence.typeCode === 'AP_PSS' and licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) 
