@@ -1,0 +1,40 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Support - Region selection" %}
+{% set backLinkHref = "/support" %}
+{% set noJsBackLink = true %}
+
+{% block content %}
+    {% set options = []%}
+    {% for regionCode, regionDescription in regions %}
+        {# {% set optionText = %} #}
+        {% set options = (options.push({
+            text: regionCode + " - " + regionDescription,
+            value: regionCode
+        }), options)%}
+    {% endfor %}
+
+    <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        {{ govukRadios({
+            idPrefix: "region",
+            name: "regionCode",
+            fieldset: {
+                legend: {
+                    text: "Select a region",
+                    classes: "govuk-!-font-weight-bold"
+                }
+            },
+            items: options,
+            errorMessage: validationError
+        }) }}
+        <div class="govuk-button-group govuk-!-padding-top-4">
+            {{ govukButton({
+                text: "Continue",
+                type: "submit",
+                attributes: { 'data-qa': 'continue' }
+            }) }}
+        </div>
+    </form>
+{% endblock %}

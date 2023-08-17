@@ -173,7 +173,21 @@ export default {
   },
   rollout: {
     restricted: get('RESTRICT_ROLLOUT', 'false') === 'true',
-    probationAreas: ['N03', 'N53', 'N51', 'N52', 'N54', 'N50', 'N55', 'N58', 'N56', 'N59', 'N07', 'N57', 'N43'],
+    probationAreas: {
+      'N03': 'Wales',
+      'N07': 'London',
+      'N43': 'National Security Division',
+      'N50': 'Greater Manchester', 
+      'N51': 'North West',
+      'N52': 'West Midlands',
+      'N53': 'East Midlands',
+      'N54': 'North East',
+      'N55': 'Yorkshire and Humber',
+      'N56': 'East of England',
+      'N57': 'Kent, Surrey, Sussex', 
+      'N58': 'South West', 
+      'N59': 'South Central'
+    },
     prisons: [
       'CFI',
       'SWI',

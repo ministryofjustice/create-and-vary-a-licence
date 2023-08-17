@@ -5,9 +5,11 @@ import {
   CommunityApiOffenderManager,
   CommunityApiManagedOffender,
   CommunityApiUserDetails,
+  CommunityApiKeyValue,
 } from '../@types/communityClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import type { TokenStore } from './tokenStore'
+import { ProbationTeamSearchRequest } from '../@types/supportProbationTeamSearch'
 
 export default class CommunityApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -82,5 +84,23 @@ export default class CommunityApiClient extends RestClient {
 
   async getOffenderDetails(crn: string): Promise<OffenderDetail> {
     return (await this.get({ path: `/secure/offenders/crn/${crn}/all` })) as Promise<OffenderDetail>
+  }
+
+  async getTeamsInRegion(regionCode: string, searchParams: ProbationTeamSearchRequest): Promise<CommunityApiKeyValue[]> {
+    return [
+        {
+          code: "cvl",
+          description: "Licence Team"
+        },
+        {
+          code: "cvl2",
+          description: "Alpha Team"
+        },
+        {
+          code: "cvl3",
+          description: "Beta Team"
+        }
+      ] as CommunityApiKeyValue[]
+    // return (await this.get({ path: `/secure/probationAreas`})) as Promise<CommunityApiProbationRegion[]>
   }
 }

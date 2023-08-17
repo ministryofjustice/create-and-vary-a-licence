@@ -1,0 +1,121 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Support - Probation Team Search" %}
+{% set backLinkHref = "/support/regions" %}
+{% set noJsBackLink = true%}
+
+{% set matchingTeams = [] %}
+
+{% for team in searchResults %}
+
+    {% set matchingTeams = (matchingTeams.push([
+        {
+            attributes: {
+                "data-sort-value": team.teamCode
+            },
+            classes: "max-width max-width-220",
+            html: '<a href="/support/region/' + regionCode + '/team/' + team.teamCode + '"class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">' + team.teamCode + '</a>'
+        },
+        {
+            attributes: {
+                "data-sort-value": team.teamName
+            },
+            text: team.teamName
+        }
+    ]), matchingTeams) %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl">Search a team</h1>
+        </div>
+    </div>
+
+    <form method="get">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-third">
+                {{ govukInput({
+                    label: {
+                        text: "Team name"
+                    },
+                    id: "team-name",
+                    value: searchValues.teamName,
+                    name: "teamName"
+                }) }}
+            </div>
+            <div class="govuk-grid-column-one-third">
+                {{ govukInput({
+                    label: {
+                        text: "Team code"
+                    },
+                    id: "team-code",
+                    value: searchValues.teamCode,
+                    name: "teamCode"
+                }) }}
+            </div>
+            <div class="govuk-grid-column-one-third">
+                {{ govukInput({
+                    label: {
+                        text: "Staff username"
+                    },
+                    id: "staff-username",
+                    value: searchValues.staffUsername,
+                    name: "staffUsername"
+                }) }}
+            </div>
+        </div>
+
+        <div class="govuk-width-container">
+            <div class="govuk-button-group">
+                {{ govukButton({
+                    classes: "govuk-button--primary",
+                    text: "Search",
+                    preventDoubleClick: true,
+                    attributes: {  'data-qa': 'search-prison' }
+                }) }}
+
+                {{ govukButton({
+                    classes: "govuk-button--secondary",
+                    text: "Clear",
+                    href: '/support/region/' + regionCode + '/teams'
+                }) }}
+            </div>
+        </div>
+    </form>
+
+    {% if matchingTeams.length > 0 %}
+        {{ govukTable({
+            attributes: {
+                'data-module': 'moj-sortable-table'
+            },
+            caption: "Search results",
+            captionClasses: "govuk-visually-hidden",
+            head: [
+                {
+                    text: "Team code",
+                    attributes: {
+                        "aria-sort": "ascending"
+                    }
+                },
+                {
+                    text: "Team name",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                }
+            ],
+            rows: matchingTeams
+        }) }}
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h2 class="govuk-heading-s">There are no teams that match the search criteria.</h2>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

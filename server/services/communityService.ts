@@ -3,11 +3,13 @@ import CommunityApiClient from '../data/communityApiClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
 import { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
 import {
+  CommunityApiKeyValue,
   CommunityApiManagedOffender,
   CommunityApiOffenderManager,
   CommunityApiStaffDetails,
   CommunityApiUserDetails,
 } from '../@types/communityClientTypes'
+import { ProbationTeamSearchRequest } from '../@types/supportProbationTeamSearch'
 
 export default class CommunityService {
   constructor(
@@ -96,5 +98,9 @@ export default class CommunityService {
   // Only to be used when probation offender search api is return outdated information.
   async getSingleOffenderByCrn(crn: string): Promise<OffenderDetail> {
     return this.communityApiClient.getOffenderDetails(crn)
+  }
+
+  async getTeamsInRegion(regionCode: string, searchParams: ProbationTeamSearchRequest): Promise<CommunityApiKeyValue[]> {
+    return (await this.communityApiClient.getTeamsInRegion(regionCode, searchParams))
   }
 }

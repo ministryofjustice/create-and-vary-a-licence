@@ -15,6 +15,11 @@ import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
 import OffenderLicenceStatusRoutes from './handlers/offenderLicenceStatus'
 import OffenderLicenceDatesRoutes from './handlers/offenderLicenceDates'
 import LicenceDatesAndReason from './types/licenceDatesAndReason'
+import RegionSelectorRoutes from './handlers/regionSelector'
+import RegionCode from './types/regionCode'
+import TeamSelectorRoutes from './handlers/teamSelector'
+import TeamCaseloadSelectorRoutes from './handlers/teamCaseloadSelector'
+import TeamCaseloadRoutes from './handlers/teamCaseload'
 
 export default function Index({
   communityService,
@@ -23,6 +28,7 @@ export default function Index({
   prisonRegisterService,
   conditionService,
   licenceOverrideService,
+  caseloadService
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -45,6 +51,10 @@ export default function Index({
   const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
+  const regionSelectorHandler = new RegionSelectorRoutes(communityService)
+  const teamSelectorHandler = new TeamSelectorRoutes(communityService)
+  const teamCaseloadSelectorHandler = new TeamCaseloadSelectorRoutes()
+  const teamCaseloadHandler = new TeamCaseloadRoutes(caseloadService)
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
@@ -59,6 +69,11 @@ export default function Index({
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
   get('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.POST, LicenceDatesAndReason)
+  get('/regions', regionSelectorHandler.GET)
+  post('/regions', regionSelectorHandler.POST, RegionCode)
+  get('/region/:regionCode/teams', teamSelectorHandler.GET)
+  get('/region/:regionCode/team/:teamCode', teamCaseloadSelectorHandler.GET)
+  get('/region/:regionCode/team/:teamCode/caseload', teamCaseloadHandler.GET)
 
   return router
 }

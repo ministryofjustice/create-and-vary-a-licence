@@ -50,7 +50,7 @@ const buildEmailGroups = async (
       const responsibleComStaffCode = prisoner.deliusRecord.offenderManagers.find(manager => manager.active)?.staff.code
       const responsibleCom = staff.find(com => com.staffCode && com.staffCode === responsibleComStaffCode)
 
-      if (!config.rollout.probationAreas.includes(responsibleCom.probationArea.code)) {
+      if (!Object.keys(config.rollout.probationAreas).includes(responsibleCom.probationArea.code)) {
         return null
       }
 

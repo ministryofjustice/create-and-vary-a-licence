@@ -1,0 +1,41 @@
+{% extends "layout.njk" %}
+{% from "partials/card.njk" import card %}
+
+{% set pageTitle = applicationName + " - Support Caseload Selection" %}
+{% set backLinkHref = "/support/region/" + regionCode + "/teams" %}
+{% set noJsBackLink = true %}
+
+{% block content %}
+    <div class="grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">Create and vary a licence</h1>
+            <div class="govuk-grid-row card-group">
+                <div class="govuk-grid-column-one-third card-group__item">
+                    {{ card({
+                        "id": "createLicenceCard",
+                        "href": "/support/region/" + regionCode + "/team/" + teamCode + "/caseload?view=create",
+                        "clickable": "true",
+                        "heading": "Create and edit a licence before a release date",
+                        "description": "Create standard determinate licences and post sentence supervision orders for people in custody and send to prison for approval.",
+                        "data-qa": "create-licence-link"
+                    }) }}
+                </div>
+
+                <div class="govuk-grid-column-one-third card-group__item">
+                    {{ card({
+                        "id": "varyLicenceCard",
+                        "href": "/support/region/" + regionCode + "/team/" + teamCode + "/caseload?view=vary",
+                        "clickable": "true",
+                        "heading": "View and vary a licence after a release date",
+                        "description": "Find standard determinate licences and post sentence supervision orders for people on licence and send variation requests to the PDU head for approval.",
+                        "data-qa": "create-licence-link"
+                    }) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/assets/js/card.js"></script>
+{% endblock %}

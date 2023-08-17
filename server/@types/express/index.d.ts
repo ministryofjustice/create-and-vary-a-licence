@@ -16,6 +16,7 @@ declare module 'express-session' {
     changedConditionsCounter: number
     changedConditionsInputs: string[]
     changedConditionsInputsCounter: number
+    supportTeamName: string
   }
 }
 
