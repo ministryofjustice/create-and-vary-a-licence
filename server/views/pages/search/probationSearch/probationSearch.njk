@@ -24,7 +24,7 @@
 {% endmacro %}
 
 {% macro displayResults(countText, caption, results) %}
-    <h2 class="govuk-heading-l">{{ countText }}</h2>
+    <h2 class="govuk-heading-l" id = "tab-heading">{{ countText }}</h2>
         <form method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             {{ govukTable({
@@ -77,7 +77,7 @@
 {% set peopleInPrisonResults = [] %}
 {% set peopleOnProbationResults = [] %}
 
-{% for offender in searchResults %}
+{% for offender in searchResponse.results %}
     {% if offender.comName %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
     {% else %}
@@ -141,7 +141,7 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">Search results for {{ queryTerm }}</h1>
+            <h1 class="govuk-heading-xl" id="probation-search-heading">Search results for {{ queryTerm }}</h1>
         </div>
     </div>
 
@@ -165,19 +165,19 @@
         </div>
     </div>
 
-    {% if inPrisonCount == 0 or inPrisonCount > 1 %}
-        {% set inPrisonCountText = "People in prison (" + inPrisonCount + " results)" %}
+    {% if searchResponse.inPrisonCount == 0 or searchResponse.inPrisonCount > 1 %}
+        {% set inPrisonCountText = "People in prison (" + searchResponse.inPrisonCount + " results)" %}
     {% else %}
-        {% set inPrisonCountText = "People in prison (" + inPrisonCount + " result)" %}
+        {% set inPrisonCountText = "People in prison (" + searchResponse.inPrisonCount + " result)" %}
     {% endif %}
 
-    {% if onProbationCount == 0 or onProbationCount > 1 %}
-        {% set onProbationCountText = "People on probation (" + onProbationCount + " results)" %}
+    {% if searchResponse.onProbationCount == 0 or searchResponse.onProbationCount > 1 %}
+        {% set onProbationCountText = "People on probation (" + searchResponse.onProbationCount + " results)" %}
     {% else %}
-        {% set onProbationCountText = "People on probation (" + onProbationCount + " result)" %}
+        {% set onProbationCountText = "People on probation (" + searchResponse.onProbationCount + " result)" %}
     {% endif %}
 
-    {% set peopleInPrison = displayResults(inPrisionCountText, "In Prison Search Results", peopleInPrisonResults) %}
+    {% set peopleInPrison = displayResults(inPrisonCountText, "In Prison Search Results", peopleInPrisonResults) %}
 
     {% set peopleOnProbation = displayResults(onProbationCountText, "On Probation Search Results", peopleOnProbationResults) %}
 

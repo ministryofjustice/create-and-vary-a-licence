@@ -9,18 +9,12 @@ export default class ProbationSearch {
     const { queryTerm } = req.body
     const { deliusStaffIdentifier } = res.locals.user
 
-    const searchResponse = this.searchService.getProbationSearchResults(queryTerm, deliusStaffIdentifier)
-
-    const { inPrisonCount } = await searchResponse
-    const { onProbationCount } = await searchResponse
-    const searchResults = (await searchResponse).results
-
-    res.render('pages/search/probationSearch', {
+    const searchResponse = await this.searchService.getProbationSearchResults(queryTerm, deliusStaffIdentifier)
+    req.session.returnToCase = '/search/probation-search'
+    res.render('pages/search/probationSearch/probationSearch', {
       queryTerm,
       deliusStaffIdentifier,
-      inPrisonCount,
-      onProbationCount,
-      searchResults,
+      searchResponse,
       statusConfig,
     })
   }
