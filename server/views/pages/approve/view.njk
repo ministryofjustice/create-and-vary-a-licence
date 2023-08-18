@@ -14,6 +14,8 @@
 {% set pageId = "approval-view-page" %}
 {% set backLinkHref = "/licence/approve/cases" %}
 {% set hideLicenceBanner = true %}
+{% set redirectPath = "/prisoner/" + licence.nomsId %}
+{% set dpsBackLink = dpsUrl+ "/save-backlink?service=" + serviceName + "&returnPath=" + returnPath + "&redirectPath=" + redirectPath %}
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-padding-left-3">
@@ -118,7 +120,9 @@
         <div class="govuk-grid-row">
             <h2 class="govuk-heading-l govuk-!-margin-top-9">View more information</h2>
             <p class="govuk-body">
-                <a class="govuk-link govuk-link--no-visited-state" href="{{dpsUrl}}/prisoner/{{licence.nomsId}}">See this person’s full Digital Prison Services profile</a> 
+                <a class="govuk-link govuk-link--no-visited-state back-link" href={{ dpsBackLink }}>
+                    See this person’s full Digital Prison Services profile
+                </a>
                 <br><br>
             </p>
             {{ govukAccordion({

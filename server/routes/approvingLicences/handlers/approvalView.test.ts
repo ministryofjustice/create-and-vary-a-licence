@@ -103,6 +103,7 @@ describe('Route - view and approve a licence', () => {
           name: 'Joe Bloggs',
           telephone: '07777777777',
         },
+        returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(conditionService.additionalConditionsCollection).toHaveBeenCalled()
