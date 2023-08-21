@@ -1,8 +1,8 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro additionalPssConditions(licence, isEditable, validationErrors, hideHeading, showConditionCountSelectedText) %}
-    {% set errorMessage = validationErrors | findError('additionalPssConditions') %}
+{% macro additionalPssConditions(params) %}
+    {% set errorMessage = params.validationErrors | findError('additionalPssConditions') %}
     {% macro additionalConditionHtml(expandedConditionText, data) %}
         <div>
             {{ expandedConditionText }}
@@ -16,19 +16,19 @@
         {% endif %}
     {% endmacro %}
 
-    {% set title = "Additional post sentence supervision requirements" + " (" + licence.additionalPssConditions.length + " selected)" if showConditionCountSelectedText else "Additional post sentence supervision requirements" + " (" + licence.additionalPssConditions.length + ")" %}
-    {% set addRemoveBtnText = "Add requirements" if (licence.additionalPssConditions.length) === 0 else "Add or remove requirements" %}
-    {% set subHeadingClass = "govuk-grid-column-two-thirds" if isEditable else "govuk-grid-column-full" %}
+    {% set title = "Additional post sentence supervision requirements" + " (" + params.licence.additionalPssConditions.length + " selected)" if params.showConditionCountSelectedText else "Additional post sentence supervision requirements" + " (" + params.licence.additionalPssConditions.length + ")" %}
+    {% set addRemoveBtnText = "Add requirements" if (params.licence.additionalPssConditions.length) === 0 else "Add or remove requirements" %}
+    {% set subHeadingClass = "govuk-grid-column-two-thirds" if params.isEditable else "govuk-grid-column-full" %}
 
-    {% if hideHeading != true %}
+    {% if params.hideHeading != true %}
       <div class="govuk-grid-row check-answers-header sub-heading-margin-top govuk-!-margin-bottom-6">
           <div class="{{ subHeadingClass }}">
               <h2 id="additional-pss-conditions-heading" class="govuk-heading-m">{{ title }}</h2>
           </div>
-          {% if isEditable %}
+          {% if params.isEditable %}
               <div class="govuk-grid-column-one-third text-align-right">
                   {{ govukButton({
-                      href: "/licence/create/id/" + licence.id + "/additional-pss-conditions?fromReview=true",
+                      href: "/licence/create/id/" + params.licence.id + "/additional-pss-conditions?fromReview=true",
                       text: addRemoveBtnText,
                       classes: "govuk-button--secondary govuk-!-margin-bottom-0"
                   }) }}
@@ -39,19 +39,19 @@
 
     {% set additionalPssConditions = [] %}
 
-    {% for condition in licence.additionalPssConditions %}
+    {% for condition in params.licence.additionalPssConditions %}
         {% set additionalPssConditions = (additionalPssConditions.push({
             key: {  text: condition.category },
             value: { html: additionalConditionHtml(condition.expandedText, condition.data) },
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licence.id + "/additional-pss-conditions/condition/" + condition.id + "?fromReview=true",
+                        href: "/licence/create/id/" + params.licence.id + "/additional-pss-conditions/condition/" + condition.id + "?fromReview=true",
                         text: "Change",
                         visuallyHiddenText: "Change requirement"
                     }
                 ]
-            } if condition | checkConditionRequiresInput(licence.version) and isEditable
+            } if condition | checkConditionRequiresInput(params.licence.version) and params.isEditable
         }), additionalPssConditions) %}
     {% endfor %}
 

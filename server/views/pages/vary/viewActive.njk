@@ -32,11 +32,31 @@
         <div class="govuk-grid-column-full">
             {% if ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') 
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
-                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, []) }}
-                {{ bespokeConditions(licence, null) }}
+                {{ additionalLicenceConditions({
+                    licence: licence, 
+                    additionalConditions: additionalConditions, 
+                    conditionsWithUploads: conditionsWithUploads, 
+                    isEditable: null, 
+                    validationErrors: [], 
+                    hideHeading: null, 
+                    showConditionCountSelectedText: null
+                }) }}
+                {{ bespokeConditions({
+                    licence:licence, 
+                    isEditable: null, 
+                    hideHeading: null, 
+                    showConditionCountSelectedText: null, 
+                    bespokeConditionsToDisplay: null
+                }) }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, null, [], null, null) }}
+                {{ additionalPssConditions({
+                    licence: licence, 
+                    isEditable: null, 
+                    validationErrors: [], 
+                    hideHeading: null, 
+                    showConditionCountSelectedText: null
+                }) }}
             {% endif %}
             {% if licence.typeCode === 'AP_PSS' and licence.isInPssPeriod and (isInVariation or licence.isActivatedInPssPeriod) 
                 and (additionalConditions.length or bespokeConditionsToDisplay.length)  %}
@@ -51,8 +71,22 @@
                             </span>
                         </summary>
                         <div class="govuk-details__text">
-                            {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, []) }}
-                            {{ bespokeConditions(licence, null, null, null, bespokeConditionsToDisplay) }}
+                            {{ additionalLicenceConditions({
+                                licence: licence, 
+                                additionalConditions: additionalConditions, 
+                                conditionsWithUploads: conditionsWithUploads, 
+                                isEditable: null, 
+                                validationErrors: [], 
+                                hideHeading: null, 
+                                showConditionCountSelectedText: null
+                            }) }}
+                            {{ bespokeConditions({
+                                licence: licence, 
+                                isEditable: null, 
+                                hideHeading: null, 
+                                showConditionCountSelectedText: null, 
+                                bespokeConditionsToDisplay: bespokeConditionsToDisplay
+                            }) }}
                         </div>
                     </details>
                 </div>

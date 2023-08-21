@@ -46,11 +46,31 @@
         <div class="govuk-grid-column-full">
             {{ inductionMeetingDetails(licence) }}
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], null, showConditionCountSelectedText) }}
-                {{ bespokeConditions(licence, null, null, showConditionCountSelectedText) }}
+                {{ additionalLicenceConditions({
+                    licence: licence, 
+                    additionalConditions: additionalConditions, 
+                    conditionsWithUploads: conditionsWithUploads, 
+                    isEditable: null, 
+                    validationErrors: [], 
+                    hideHeading: null, 
+                    showConditionCountSelectedText: showConditionCountSelectedText
+                }) }}
+                {{ bespokeConditions({
+                    licence: licence, 
+                    isEditable: null, 
+                    hideHeading: null, 
+                    showConditionCountSelectedText: showConditionCountSelectedText, 
+                    bespokeConditionsToDisplay: null
+                }) }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence, null, [], null, showConditionCountSelectedText) }}
+                {{ additionalPssConditions({
+                    licence: licence, 
+                    isEditable: null, 
+                    validationErrors: [], 
+                    hideHeading: null, 
+                    showConditionCountSelectedText: showConditionCountSelectedText
+                }) }}
             {% endif %}
 
             <div class="govuk-button-group">

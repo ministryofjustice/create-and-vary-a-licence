@@ -71,7 +71,15 @@
                                 },
                                 content: {
                                         html:  
-                                                additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], true) 
+                                                additionalLicenceConditions({
+                                                    licence: licence, 
+                                                    additionalConditions: additionalConditions, 
+                                                    conditionsWithUploads: conditionsWithUploads, 
+                                                    isEditable: null, 
+                                                    validationErrors: [], 
+                                                    hideHeading: true, 
+                                                    showConditionCountSelectedText: null
+                                                })
                                                 if additionalConditions.length else
                                                 "<p>No additional licence conditions added</p>"       
                                 },
@@ -82,7 +90,13 @@
                                 },
                                 content: {
                                     html:
-                                            bespokeConditions(licence, null, null, true)
+                                            bespokeConditions({
+                                                licence: licence, 
+                                                isEditable: null, 
+                                                hideHeading: true, 
+                                                showConditionCountSelectedText: null, 
+                                                bespokeConditionsToDisplay: null
+                                            })
                                         if licence.bespokeConditions.length else
                                         "<p>No bespoke licence conditions added</p>"
                                 },
@@ -100,7 +114,13 @@
                                 },
                                 content: {
                                     html:
-                                            additionalPssConditions(licence, null, [], null, true)
+                                            additionalPssConditions({
+                                                licence: licence, 
+                                                isEditable: null, 
+                                                validationErrors: [], 
+                                                hideHeading: true, 
+                                                showConditionCountSelectedText: null
+                                            })
                                             if licence.additionalPssConditions.length else
                                             "<p>No additional post sentence supervision requirements added</p>"
                                 },

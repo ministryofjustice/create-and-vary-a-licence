@@ -1,21 +1,21 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro bespokeConditions(licence, isEditable, hideHeading, showConditionCountSelectedText, bespokeConditionsToDisplay) %}
+{% macro bespokeConditions(params) %}
 
-{% set title = "Bespoke licence conditions" + " (" + licence.bespokeConditions.length + " selected)" if showConditionCountSelectedText else "Bespoke licence conditions" + " (" + licence.bespokeConditions.length + ")" %}
+{% set title = "Bespoke licence conditions" + " (" + params.licence.bespokeConditions.length + " selected)" if params.showConditionCountSelectedText else "Bespoke licence conditions" + " (" + params.licence.bespokeConditions.length + ")" %}
 
-{% set addRemoveBtnText = "Add conditions" if (licence.bespokeConditions.length) === 0 else "Add or remove conditions" %}
+{% set addRemoveBtnText = "Add conditions" if (params.licence.bespokeConditions.length) === 0 else "Add or remove conditions" %}
 
-  {% if hideHeading != true %}
+  {% if params.hideHeading != true %}
       <div class="govuk-grid-row check-answers-header sub-heading-margin-top govuk-!-margin-bottom-6">
           <div class="govuk-grid-column-two-thirds">
               <h2 id="bespoke-licence-conditions-heading" class="govuk-heading-m">{{ title }}</h2>
           </div>
-          {% if isEditable %}
+          {% if params.isEditable %}
               <div class="govuk-grid-column-one-third text-align-right">
                   {{ govukButton({
-                      href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
+                      href: "/licence/create/id/" + params.licence.id + "/bespoke-conditions?fromReview=true",
                       text: addRemoveBtnText,
                       classes: "govuk-button--secondary govuk-!-margin-bottom-0"
                   }) }}
@@ -25,19 +25,19 @@
     {% endif %}
     {% set bespokeConditions = [] %}
 
-    {% for condition in bespokeConditionsToDisplay or licence.bespokeConditions %}
+    {% for condition in params.bespokeConditionsToDisplay or params.licence.bespokeConditions %}
         {% set bespokeConditions = (bespokeConditions.push({
             key: { text: 'Bespoke condition' },
             value: { text: condition.text },
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
+                        href: "/licence/create/id/" + params.licence.id + "/bespoke-conditions?fromReview=true",
                         text: "Change",
                         visuallyHiddenText: "Change bespoke conditions"
                     }
                 ]
-            } if isEditable
+            } if params.isEditable
         }), bespokeConditions) %}
     {% endfor %}
 

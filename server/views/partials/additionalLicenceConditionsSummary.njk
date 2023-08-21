@@ -1,26 +1,26 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, hideHeading, showConditionCountSelectedText) %}
-    {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
+{% macro additionalLicenceConditions(params) %}
+    {% set errorMessage = params.validationErrors | findError('additionalLicenceConditions') %}
 
-    {% set conditionCount = additionalConditions.length + (1 if conditionsWithUploads.length else 0) %}
+    {% set conditionCount = params.additionalConditions.length + (1 if params.conditionsWithUploads.length else 0) %}
 
-    {% set title = "Additional licence conditions" + " (" + conditionCount + " selected)" if showConditionCountSelectedText else "Additional licence conditions" + " (" + conditionCount + ")" %}
+    {% set title = "Additional licence conditions" + " (" + conditionCount + " selected)" if params.showConditionCountSelectedText else "Additional licence conditions" + " (" + conditionCount + ")" %}
     
     {% set addRemoveBtnText = "Add conditions" if (conditionCount) === 0 else "Add or remove conditions" %}
 
 
-    {% if hideHeading != true %}
+    {% if params.hideHeading != true %}
         <div class="govuk-grid-row check-answers-header sub-heading-margin-top govuk-!-margin-bottom-6">
             <div class="govuk-grid-column-two-thirds">
                 <h2 id="additional-licence-conditions-heading"
                     class="govuk-heading-m">{{ title }}</h2>
             </div>
-            {% if isEditable %}
+            {% if params.isEditable %}
                 <div class="govuk-grid-column-one-third text-align-right">
                     {{ govukButton({
-                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
+                        href: "/licence/create/id/" + params.licence.id + "/additional-licence-conditions?fromReview=true",
                         text: addRemoveBtnText,
                         classes: "govuk-button--secondary govuk-!-margin-bottom-0"
                     }) }}
@@ -31,13 +31,13 @@
 
     {% set additionalLicenceConditions = [] %}
 
-    {% for condition in additionalConditions %}
+    {% for condition in params.additionalConditions %}
         {% if condition.uploadSummary.length %}
-            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.code + "/file-uploads" %}
-        {% elseif condition | checkConditionRequiresInput(licence.version) %}
-            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
+            {% set actionLink =  "/licence/create/id/" + params.licence.id + "/additional-licence-conditions/condition/" + condition.code + "/file-uploads" %}
+        {% elseif condition | checkConditionRequiresInput(params.licence.version) %}
+            {% set actionLink =  "/licence/create/id/" + params.licence.id + "/additional-licence-conditions/condition/" + condition.id %}
         {% else %}
-            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+            {% set actionLink =  "/licence/create/id/" + params.licence.id + "/additional-licence-conditions" %}
         {% endif %}
 
         {% set additionalLicenceConditions = (additionalLicenceConditions.push({
@@ -52,12 +52,12 @@
                         visuallyHiddenText: "Change condition"
                     }
                 ]
-            } if isEditable
+            } if params.isEditable
         }), additionalLicenceConditions) %}
     {% endfor %}
 
-    {% if conditionsWithUploads.length %}
-        {% set conditionsWithUploads = conditionsWithUploads | sortConditionsById %}
+    {% if params.conditionsWithUploads.length %}
+        {% set conditionsWithUploads = params.conditionsWithUploads | sortConditionsById %}
         {% set conditionHtml = [] %}
         {% for condition in conditionsWithUploads %}
             {% set conditionHtml = (conditionHtml.push(additionalConditionHtml(condition)), conditionHtml) %}
@@ -70,11 +70,11 @@
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + conditionsWithUploads[0].code + "/file-uploads?fromReview=true",
+                        href: "/licence/create/id/" + params.licence.id + "/additional-licence-conditions/condition/" + conditionsWithUploads[0].code + "/file-uploads?fromReview=true",
                         text: "Change",
                         visuallyHiddenText: "Change condition"
                     }
-                ] if isEditable
+                ] if params.isEditable
             }
         }), additionalLicenceConditions) %}
     {% endif %}
