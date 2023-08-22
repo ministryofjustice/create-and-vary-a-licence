@@ -262,4 +262,18 @@ export default {
       },
     })
   },
+
+  stubGetPrisonerImage: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/bookings/offenderNo/.*?/image/data`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'image/jpeg' },
+        jsonBody: {},
+      },
+    })
+  },
 }

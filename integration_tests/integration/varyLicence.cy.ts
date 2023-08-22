@@ -9,7 +9,7 @@ context('Vary a licence', () => {
     cy.task('stubGetManagedOffenders')
     cy.task('stubGetOffendersByCrn')
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
-    cy.task('stubGetCompletedLicence', 'ACTIVE')
+    cy.task('stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP_PSS' })
     cy.task('stubGetOffendersByNomsNumber')
     cy.task('searchPrisonersByNomisIds')
     cy.task('stubGetStaffDetailsByList')

@@ -17,7 +17,7 @@ export default class CaseloadPage extends Page {
 
   clickNameToEditLicence = (): CheckAnswersPage => {
     cy.task('stubGetExistingLicenceForOffenderWithResult')
-    cy.task('stubGetCompletedLicence', 'APPROVED')
+    cy.task('stubGetCompletedLicence', { statusCode: 'APPROVED', typeCode: 'AP_PSS' })
     cy.get(this.createLicenceButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
   }

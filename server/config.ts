@@ -32,6 +32,8 @@ export interface ApiConfig {
 export default {
   buildNumber: get('BUILD_NUMBER', '1_0_0', requiredInProduction),
   gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
+  dpsUrl: get('DPS_URL', 'http://localhost:3000', requiredInProduction),
+  serviceName: process.env.SERVICE_NAME,
   phaseName: process.env.SYSTEM_PHASE || 'BETA',
   https: production,
   staticResourceCacheDuration: '1h',
@@ -295,4 +297,5 @@ export default {
       'SLI',
     ],
   },
+  useNewSearch: get('USE_NEW_SEARCH', 'false', requiredInProduction) === 'true',
 }

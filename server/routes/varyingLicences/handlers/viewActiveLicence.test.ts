@@ -1,17 +1,23 @@
 import { Request, Response } from 'express'
-
-import ViewActiveLicenceRoutes from './viewActiveLicence'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
+import ViewActiveLicenceRoutes from './viewActiveLicence'
+import { LicenceApiClient } from '../../../data'
+import LicenceService from '../../../services/licenceService'
 
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
+const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+
+jest.mock('../../../data/licenceApiClient')
+jest.mock('../../../services/licenceService')
+jest.mock('../../../services/conditionService')
 
 describe('Route Handlers - Vary Licence - View active licence', () => {
-  const handler = new ViewActiveLicenceRoutes(conditionService)
   let req: Request
   let res: Response
-
+  const handler = new ViewActiveLicenceRoutes(conditionService)
   const licence = {
     id: 1,
     surname: 'Bobson',
@@ -23,45 +29,67 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
     bespokeConditions: [],
   } as Licence
 
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   beforeEach(() => {
+    licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+    conditionService.additionalConditionsCollection.mockReturnValue({
+      additionalConditions: [
+        {
+          text: 'Condition 1',
+          code: 'CON1',
+          data: [],
+          uploadSummary: [],
+        },
+      ],
+      conditionsWithUploads: [],
+    })
     req = {
       params: {
-        licenceId: 1,
+        licenceId: licence.id,
       },
       query: {},
+      flash: jest.fn(),
     } as unknown as Request
+    res = {
+      render: jest.fn(),
+      redirect: jest.fn(),
+      locals: {
+        user: {
+          username: 'joebloggs',
+        },
+        licence,
+      },
+    } as unknown as Response
+    const condition = { code: 'code5', text: 'Conditon 5', category: 'group1', requiresInput: false }
+    conditionService.getAdditionalConditionByCode.mockResolvedValue(condition)
   })
 
   describe('GET', () => {
     it('should render a licence view for active licence', async () => {
-      res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
-        locals: {
-          user: {
-            username: 'joebloggs',
-          },
-          licence,
-        },
-      } as unknown as Response
-
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
         callToActions: { shouldShowVaryButton: true },
-        additionalConditions: [],
+        additionalConditions: [
+          {
+            text: 'Condition 1',
+            code: 'CON1',
+            data: [],
+            uploadSummary: [],
+          },
+        ],
         conditionsWithUploads: [],
       })
     })
 
     it('should show timeline if licence is not active', async () => {
       res = {
-        render: jest.fn(),
-        redirect: jest.fn(),
+        ...res,
         locals: {
-          user: {
-            username: 'joebloggs',
-          },
+          ...res.locals,
           licence: {
             ...licence,
             statusCode: LicenceStatus.INACTIVE,

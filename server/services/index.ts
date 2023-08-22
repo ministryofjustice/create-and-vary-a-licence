@@ -45,6 +45,7 @@ export const services = {
   prisonRegisterService,
   conditionService,
   licenceOverrideService,
+  licenceApiClient,
 }
 
 export type Services = typeof services
