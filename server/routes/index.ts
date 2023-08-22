@@ -17,12 +17,15 @@ import populateCurrentUser from '../middleware/populateCurrentUser'
 import flashMessages from '../middleware/flashMessageMiddleware'
 import fromReviewMiddleware from '../middleware/fromReviewMiddleware'
 import PrisonerController from './prisonerController'
+import WhatsNewPage from './whatsNewPage/whatsNewPage'
 
 export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
   const prisonerController = new PrisonerController(services.prisonerService)
+  const whatsNewPage = new WhatsNewPage()
 
   router.get('/prisoner/:nomsId/image', prisonerController.getImage())
+  router.get('/whats-new-page', whatsNewPage.GET)
   router.use(auth.authenticationMiddleware(tokenVerifier))
   router.use(populateCurrentUser(services.userService, services.licenceService))
   router.use(csrf())
