@@ -1,7 +1,11 @@
 {% extends "layout.njk" %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "../../partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+{% from "./prisonerSummaryDetails.njk" import prisonerSummaryDetails %}
+{% from "./keyDates.njk" import keyDates %}
+{% from "./InitialAppointment.njk" import InitialAppointment %}
+{% from "./ProbationPractitionerDetails.njk" import ProbationPractitionerDetails %}
 {% from "../../partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "../../partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "../../partials/bespokeConditionsSummary.njk" import bespokeConditions %}
@@ -9,46 +13,165 @@
 {% set pageTitle = applicationName + " - Approve a licence" %}
 {% set pageId = "approval-view-page" %}
 {% set backLinkHref = "/licence/approve/cases" %}
+{% set hideLicenceBanner = true %}
+{% set redirectPath = "/prisoner/" + licence.nomsId %}
+{% set dpsBackLink = dpsUrl+ "/save-backlink?service=" + serviceName + "&returnPath=" + returnPath + "&redirectPath=" + redirectPath %}
 
 {% block content %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            {% if licence.typeCode === 'AP' %}
-                <h1 class="govuk-heading-l">Approve licence</h1>
-            {% elseif licence.typeCode === 'AP_PSS' %}
-                <h1 class="govuk-heading-l">Approve licence and post sentence supervision order</h1>
-            {% elseif licence.typeCode === 'PSS' %}
-                <h1 class="govuk-heading-l">Approve post sentence supervision order</h1>
-            {% else %}
-                <h1 class="govuk-heading-l">Approve licence type {{ licence.typeCode }}</h1>
-            {% endif %}
-        </div>
+    <div class="govuk-grid-row govuk-!-margin-bottom-6 govuk-!-padding-left-3">
+        {% if licence.typeCode === 'AP' %}
+            <h1 class="govuk-heading-xl" id="approve-licence-heading">Approve licence</h1>
+        {% elseif licence.typeCode === 'AP_PSS' %}
+            <h1 class="govuk-heading-xl" id="approve-licence-and-pss-heading">Approve licence and post sentence supervision order</h1>
+        {% elseif licence.typeCode === 'PSS' %}
+            <h1 class="govuk-heading-xl" id="approve-pss-heading">Approve post sentence supervision order</h1>
+        {% else %}
+            <h1 class="govuk-heading-xl">Approve licence type {{ licence.typeCode }}</h1>
+        {% endif %}
     </div>
 
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds-from-desktop float-none">
+        <div class="govuk-grid-row ">
+            <div class="prisoner-record-detail">
+                <div class="govuk-grid-column-three-quarters">
+                    {{ prisonerSummaryDetails(licence) }}
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <img src="{{ '/prisoner/' + licence.nomsId + '/image' }}"
+                        class="prisoner-image"
+                        alt="{{ licence.lastName }}, {{ licence.firstName }}"
+                        data-qa="prisoner-image"
+                    />
+                </div>
+            </div>
+        </div>
 
-            {{ inductionMeetingDetails(licence) }}
+        <div class="govuk-grid-row govuk-!-padding-bottom-4">
+            <h2 class="govuk-heading-l govuk-!-margin-top-9">Review details</h2>
 
-            {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads) }}
-                {{ bespokeConditions(licence) }}
-            {% endif %}
-            {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalPssConditions(licence) }}
-            {% endif %}
+                {% set items = [
+                        {
+                            heading: {
+                                text: "Key dates"
+                            },
+                            content: {
+                                html: keyDates(licence),
+                                class: "govuk-!-padding-bottom-9 govuk-!-padding-top-3"
+                            },
+                            expanded: true
+                        }
+                    ]
+                %}
 
+                {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'AP' %}
+                    {% set items = (items.push(
+                            {
+                                heading: {
+                                    text: "Additional licence conditions (" +  additionalConditions.length + ")"
+                                },
+                                content: {
+                                        html:  
+                                                additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], null, true) 
+                                                if additionalConditions.length else
+                                                "<p>No additional licence conditions added</p>"       
+                                },
+                                expanded: true
+                            }, {
+                                heading: {
+                                    text: "Bespoke licence conditions (" +  licence.bespokeConditions.length + ")"
+                                },
+                                content: {
+                                    html:
+                                            bespokeConditions(licence, null, null, true)
+                                        if licence.bespokeConditions.length else
+                                        "<p>No bespoke licence conditions added</p>"
+                                },
+                                expanded: true
+                            }
+                    ), items) %}
+                {% endif %}
+
+                {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'PSS' %}
+                    {% set items = (items.push(
+                            {
+                                heading: {
+                                    text: "Additional post sentence supervision requirements (" +  licence.additionalPssConditions.length + ")",
+                                    visuallyHiddenText: "test"
+                                },
+                                content: {
+                                    html:
+                                            additionalPssConditions(licence, null, [], null, true)
+                                            if licence.additionalPssConditions.length else
+                                            "<p>No additional post sentence supervision requirements added</p>"
+                                },
+                                expanded: true
+                            }
+                    ), items) %}
+                {% endif %}
+
+                {{
+                    govukAccordion({
+                        id: "review-details",
+                        rememberExpanded: false,
+                        items: items
+                    })
+                }}
+        </div>
+        <div class="govuk-grid-row">
+            <h2 class="govuk-heading-l govuk-!-margin-top-9">View more information</h2>
+            <p class="govuk-body">
+                <a class="govuk-link govuk-link--no-visited-state back-link" href={{ dpsBackLink }}>
+                    See this person’s full Digital Prison Services profile
+                </a>
+                <br><br>
+            </p>
+            {{ govukAccordion({
+                id: "view-more-information",
+                rememberExpanded: false,
+                items: [
+                    {
+                        heading: {
+                            text: "Initial appointment"
+                        },
+                        content: {
+                            html: InitialAppointment(licence)
+                        }
+                    }, {
+                        heading: {
+                            text: "Community probation practitioner details"
+                        },
+                        content: {
+                            html: ProbationPractitionerDetails(staffDetails)
+                        }
+                    }
+                ]
+            }) }}
+        </div>
+
+        <div class="govuk-grid-row">
+            <h2 class="govuk-heading-l govuk-!-padding-top-8">Approve this licence</h2>
+            <p>Contact the probation practitioner directly if you need more information about something.</p> 
+        </div>
+        <div class="govuk-grid-row govuk-button-group govuk-!-padding-top-2">
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <input type="hidden" name="licenceId" value="{{ licence.id }}">
 
                 {{ govukButton({
-                    text: "Approve licence",
+                    text: "Approve",
                     classes: "govuk-button--primary",
                     type: "submit",
                     name: "result",
                     value: "approve",
                     attributes: { 'data-qa': 'approve-licence' }
+                }) }}
+
+                
+                {{ govukButton({
+                    text: "Return to case list",
+                    classes: "govuk-button--secondary",
+                    href: '/licence/approve/cases',
+                    attributes: { 'data-qa': 'return-to-case-list' }
                 }) }}
 
                 {#  Visually hidden for now so available to the integration but not shown on screen #}

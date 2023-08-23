@@ -1,31 +1,34 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{%  macro bespokeConditions(licence, isEditable, title) %}
-    <div class="govuk-grid-row check-answers-header">
-        <div class="govuk-grid-column-three-quarters">
-            <h2 class="govuk-heading-m">{{ title or "Bespoke licence conditions" }}</h2>
+{%  macro bespokeConditions(licence, isEditable, title, hideHeading, bespokeConditionsToDisplay) %}
+    {% if hideHeading != true %}
+        <div class="govuk-grid-row check-answers-header">
+            <div class="govuk-grid-column-three-quarters">
+                <h2 class="govuk-heading-m">{{ title or "Bespoke licence conditions" }}</h2>
+            </div>
         </div>
-    </div>
-
+    {% endif %}
     {% set bespokeConditions = [] %}
 
     {% set conditionWord = "condition" if licence.bespokeConditions.length === 1 else "conditions" %}
 
-    {% set bespokeConditions = (bespokeConditions.push({
-        key: {  text: "Select bespoke conditions" },
-        value: { text: "" + licence.bespokeConditions.length + " " + conditionWord + " selected" },
-        actions: {
-            items: [
-                {
-                    href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
-                    text: "Change",
-                    visuallyHiddenText: "Change bespoke conditions"
-                }
-            ]
-        } if isEditable
-    }), bespokeConditions) %}
+    {% if hideHeading != true %}
+        {% set bespokeConditions = (bespokeConditions.push({
+            key: {  text: "Select bespoke conditions" },
+            value: { text: "" + licence.bespokeConditions.length + " " + conditionWord + " selected" },
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
+                        text: "Change",
+                        visuallyHiddenText: "Change bespoke conditions"
+                    }
+                ]
+            } if isEditable
+        }), bespokeConditions) %}
+    {% endif %}
 
-    {% for condition in licence.bespokeConditions %}
+    {% for condition in bespokeConditionsToDisplay or licence.bespokeConditions %}
         {% set bespokeConditions = (bespokeConditions.push({
             key: { text: 'Bespoke condition' },
             value: { text: condition.text },

@@ -1,4 +1,4 @@
-import { AdditionalConditionsResponse } from '../@types/licenceApiClientTypes'
+import { AdditionalConditionsResponse, Licence } from '../@types/licenceApiClientTypes'
 import { AdditionalConditionsConfig } from '../@types/LicencePolicy'
 import LicenceApiClient from '../data/licenceApiClient'
 import ConditionService from './conditionService'
@@ -8,6 +8,8 @@ import policyV2_0 from '../../integration_tests/mockApis/polices/v2-0'
 import policyV2_1 from '../../integration_tests/mockApis/polices/v2-1'
 import NamedIndividuals from '../routes/creatingLicences/types/additionalConditionInputs/namedIndividuals'
 import DrugTestLocation from '../routes/creatingLicences/types/additionalConditionInputs/drugTestLocation'
+import LicenceStatus from '../enumeration/licenceStatus'
+import { User } from '../@types/CvlUserDetails'
 
 jest.mock('../data/licenceApiClient')
 
@@ -176,6 +178,57 @@ describe('ConditionService', () => {
       } as AdditionalConditionsConfig
 
       expect(conditionService.parseResponse(conditionConfig)).toEqual(expectedOutput)
+    })
+  })
+
+  describe('Get additional AP Conditions for summary and pdf', () => {
+    const parentLicence = {
+      id: 2,
+      statusCode: LicenceStatus.VARIATION_APPROVED,
+      variationOf: 1,
+      isVariation: true,
+      createdByFullName: 'James Brown',
+      dateLastUpdated: '12/11/2022 10:45:00',
+      isInPssPeriod: true,
+      additionalLicenceConditions: [{ id: 1, code: 'testCode', uploadSummary: [{ filename: 'testFile' }] }],
+    } as Licence
+
+    const user = {
+      username: 'joebloggs',
+      displayName: 'Joe Bloggs',
+      deliusStaffIdentifier: 2000,
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+      emailAddress: 'jbloggs@probation.gov.uk',
+    } as User
+
+    const selfLicence = {
+      id: 2,
+      statusCode: LicenceStatus.VARIATION_APPROVED,
+      variationOf: 1,
+      isVariation: true,
+      createdByFullName: 'James Brown',
+      dateLastUpdated: '12/11/2022 10:45:00',
+      isInPssPeriod: true,
+      additionalLicenceConditions: [
+        { id: 2, code: 'testCode', uploadSummary: [{ filename: 'testFile' }] },
+        { id: 3, code: 'testCode', uploadSummary: [{ filename: 'testFile' }] },
+      ],
+    } as Licence
+
+    it('should return parent additional conditions if licence is in PSS period', async () => {
+      licenceApiClient.getParentLicenceOrSelf.mockResolvedValue(parentLicence)
+      const conditionsToDisplay = await conditionService.getAdditionalAPConditionsForSummaryAndPdf(selfLicence, user)
+      expect(conditionsToDisplay.length).toEqual(parentLicence.additionalLicenceConditions.length)
+      expect(conditionsToDisplay[0].id).toEqual(1)
+    })
+
+    it('should return self additional conditions if licence is in not in PSS period', async () => {
+      selfLicence.isInPssPeriod = false
+      const conditionsToDisplay = await conditionService.getAdditionalAPConditionsForSummaryAndPdf(selfLicence, user)
+      expect(conditionsToDisplay.length).toEqual(selfLicence.additionalLicenceConditions.length)
+      expect(conditionsToDisplay[0].id).toEqual(2)
+      expect(conditionsToDisplay[1].id).toEqual(3)
     })
   })
 })

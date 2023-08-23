@@ -11,7 +11,7 @@ context('ACO review a licence variation', () => {
       nomisId: 'G9786GC',
       status: 'VARIATION_SUBMITTED',
     })
-    cy.task('stubGetCompletedLicence', 'VARIATION_SUBMITTED')
+    cy.task('stubGetCompletedLicence', { statusCode: 'VARIATION_SUBMITTED', typeCode: 'AP' })
     cy.task('stubGetOffendersByNomsNumber')
     cy.task('searchPrisonersByNomisIds')
     cy.task('stubGetStaffDetailsByList')

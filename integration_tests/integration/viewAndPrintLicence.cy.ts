@@ -15,7 +15,7 @@ context('View and print licence', () => {
     cy.task('searchPrisonersByReleaseDate')
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubGetStaffDetailsByStaffCode')
-    cy.task('stubGetCompletedLicence', 'APPROVED')
+    cy.task('stubGetCompletedLicence', { statusCode: 'APPROVED', typeCode: 'AP_PSS' })
     cy.task('stubGetHdcStatus')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetPrisons')
