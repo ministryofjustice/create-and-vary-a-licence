@@ -26,7 +26,7 @@ export default class ProbationSearch {
     if (searchResponse.onProbationCount === 0 || searchResponse.onProbationCount > 1) {
       onProbationCountText = `People on probation (${searchResponse.onProbationCount} results)`
     } else {
-      onProbationCountText = `People in probation (${searchResponse.onProbationCount} result)`
+      onProbationCountText = `People on probation (${searchResponse.onProbationCount} result)`
     }
 
     return res.render('pages/search/probationSearch/probationSearch', {
