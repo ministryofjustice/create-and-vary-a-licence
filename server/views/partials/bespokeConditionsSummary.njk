@@ -9,13 +9,14 @@
         </div>
     {% endif %}
     {% set bespokeConditions = [] %}
+    {% set bespokeConditionsLength = bespokeConditionsToDisplay and bespokeConditionsToDisplay.length or licence.bespokeConditions.length  %}
 
-    {% set conditionWord = "condition" if licence.bespokeConditions.length === 1 else "conditions" %}
+    {% set conditionWord = "condition" if bespokeConditionsLength === 1 else "conditions" %}
 
     {% if hideHeading != true %}
         {% set bespokeConditions = (bespokeConditions.push({
             key: {  text: "Select bespoke conditions" },
-            value: { text: "" + licence.bespokeConditions.length + " " + conditionWord + " selected" },
+            value: { text: "" + bespokeConditionsLength + " " + conditionWord + " selected" },
             actions: {
                 items: [
                     {
