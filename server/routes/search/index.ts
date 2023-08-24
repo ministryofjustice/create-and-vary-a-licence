@@ -10,14 +10,14 @@ export default function Index({ searchService }: Services): Router {
 
   const routePrefix = (path: string) => `/search${path}`
 
-  const post = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), asyncMiddleware(handler))
+  const get = (path: string, handler: RequestHandler) =>
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), asyncMiddleware(handler))
 
   // Handlers
   const probationSearchHandler = new ProbationSearchRoutes(searchService)
 
   // Operations
-  post('/probation-search', probationSearchHandler.POST)
+  get('/probation-search', probationSearchHandler.GET)
 
   return router
 }

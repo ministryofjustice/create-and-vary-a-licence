@@ -2,9 +2,14 @@ import Page from './page'
 import CheckAnswersPage from './checkAnswers'
 import ComDetailsPage from './comDetails'
 import ConfirmCreatePage from './confirmCreate'
+import SearchPage from './search'
 
 export default class CaseloadPage extends Page {
   private createLicenceButtonId = '#name-button-1'
+
+  private searchTextInput = '#search'
+
+  private searchButtonId = '[data-qa=search-button]'
 
   constructor() {
     super('caseload-page')
@@ -26,5 +31,12 @@ export default class CaseloadPage extends Page {
     cy.task('stubGetStaffDetailsByStaffCode')
     cy.contains('td a', 'John Smith').click()
     return Page.verifyOnPage(ComDetailsPage)
+  }
+
+  clickSearch = (text: string): SearchPage => {
+    cy.task('stubGetProbationSearchResults')
+    cy.get(this.searchTextInput).type(text)
+    cy.get(this.searchButtonId).click()
+    return Page.verifyOnPage(SearchPage)
   }
 }

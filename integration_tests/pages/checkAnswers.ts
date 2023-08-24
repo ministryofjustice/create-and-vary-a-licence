@@ -3,6 +3,8 @@ import ConfirmationPage from './confirmation'
 import EditLicenceQuestionPage from './editLicenceQuestion'
 import ReasonForVariationPage from './reasonForVariationPage'
 import DiscardPage from './discardPage'
+import SearchPage from './search'
+import CaseloadPage from './caseload'
 
 export default class CheckAnswersPage extends Page {
   private sendLicenceConditionsButtonId = '[data-qa=send-licence-conditions]'
@@ -37,5 +39,10 @@ export default class CheckAnswersPage extends Page {
   clickDiscard = (): DiscardPage => {
     cy.get(this.discardButtonId).click()
     return Page.verifyOnPage(DiscardPage)
+  }
+
+  clickBackToCaseload = (): CaseloadPage => {
+    cy.get('.govuk-button-group > .govuk-link').click()
+    return Page.verifyOnPage(CaseloadPage)
   }
 }

@@ -7,7 +7,6 @@
 {% set pageId = "com-details-page" %}
 {% set backLinkHref = returnLink %}
 {% set hideLicenceBanner = true %}
-{% set noJsBackLink = true %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -50,7 +49,7 @@
             {{ govukButton({
                 text: 'Return to case list',
                 href: returnLink,
-                classes: 'govuk-!-margin-top-6 js-backlink',
+                classes: 'govuk-!-margin-top-6',
                 attributes: { 'data-qa': 'return' }
             }) }}
         </div>

@@ -9,12 +9,13 @@
 
 {% set pageTitle = applicationName + " - Probation - Search" %}
 {% set pageId = "probation-search-page" %}
-{% set backLinkHref = "/licence/create/caseload" %}
+{% set backLinkHref = backLink %}
+{% set noJsBackLink = true %}
 
-{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isClickable, index) %}
+{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, comName, index) %}
     <div class="search-offender-name">
         {% set link = "/licence/create/id/" + licenceId + "/check-your-answers" if licenceId else "/licence/create/nomisId/" + prisonerNumber + "/confirm"%}
-        {% if isClickable %}
+        {% if comName %}
             <a id="name-button-{{ index }}" href="{{ link }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
         {% else %}
             <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</span>
@@ -23,10 +24,16 @@
     </div>
 {% endmacro %}
 
-{% macro displayResults(countText, caption, results) %}
-    <h2 class="govuk-heading-l" id = "tab-heading">{{ countText }}</h2>
-        <form method="POST">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+{% macro displayResults(countText, results, inPrisonTab) %}
+    {% if results.length > 0 %}
+        {% if inPrisonTab %}
+            {% set caption = "In Prison Search Results" %}
+            <h2 class="govuk-heading-l" id = "tab-heading-prison">{{ countText }}</h2>
+        {% else %}
+            {% set caption = "On Probation Search Results" %}
+            <h2 class="govuk-heading-l" id = "tab-heading-probation">{{ countText }}</h2>
+        {% endif %}
+        <form method="GET">
             {{ govukTable({
                 attributes: {
                     'data-module': 'moj-sortable-table'
@@ -71,15 +78,61 @@
                 rows: results
             }) }}
         </form>
+    {% else %}
+        {% if inPrisonTab %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <p>Someone's licence will only appear on this service if they:</p>
+                    <ul class = "govuk-list govuk-list--bullet">
+                        <li>are assigned to you or one of your teams on NDelius</li>
+                        <li>are serving a determinate sentence</li>
+                        <li>have a release date</li>
+                        <li>have not been approved for Home Detention Curfew</li>
+                        <li>have not been recalled or breached a post sentence supervision order</li>
+                    </ul>
+                    <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
+                    <p class="govuk-body">
+                        {{ govukButton({
+                            text: "Return to caselist",
+                            classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                            href: backLink,
+                            attributes: { 'data-qa': 'return-to-caselist' }
+                        }) }}
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <p>Someone's licence will only appear on this service if they:</p>
+                    <ul class = "govuk-list govuk-list--bullet">
+                        <li>are assigned to you or one of your teams on NDelius</li>
+                        <li>are serving a determinate sentence or a post sentence supervision order</li>
+                        <li>were not released on Home Detention Curfew</li>
+                        <li>were not released from prison with a licence created using a PD1 form</li>
+                        <li>have not been recalled or breached a post sentence supervision order</li>
+                    </ul>
+                    <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
+                    <p class="govuk-body">
+                        {{ govukButton({
+                            text: "Return to caselist",
+                            classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                            href: backLink,
+                            attributes: { 'data-qa': 'return-to-caselist' }
+                        }) }}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
 {% endmacro %}
-
 
 {% set peopleInPrisonResults = [] %}
 {% set peopleOnProbationResults = [] %}
 
-{% for offender in searchResponse.results %}
+{% for offender in searchResults %}
     {% if offender.comName %}
-        {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
+        {% set comDetailsHtml = '<a class="govuk-link" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
     {% else %}
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
@@ -91,7 +144,7 @@
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crn, offender.nomisId, offender.licenceId, loop.index)
+            html: offenderName(offender.name, offender.crn, offender.nomisId, offender.licenceId, offender.comName, loop.index)
         },
         {
             attributes: {
@@ -147,39 +200,25 @@
 
    <div class="govuk-grid-row">
         <div class="moj-search govuk-grid-column-two-thirds govuk-!-margin-bottom-8">
-            <form method="POST">
-                    <input type="hidden" name="_csrf" value="{{ csrfToken }}"> 
-                    <div class="govuk-form-group">
-                        <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
-                            Find a case
-                        </label>
-                        <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
-                        Search by name, CRN or probation practitioner
-                        </div>
-                        <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint">
+            <form method="GET">
+                <div class="govuk-form-group">
+                    <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+                        Find a case
+                    </label>
+                    <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
+                    Search by name, CRN or probation practitioner
                     </div>
-                    <button class="govuk-button moj-search__button " data-module="govuk-button">
-                        Search
-                    </button>
+                    <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint">
+                </div>
+                <button class="govuk-button moj-search__button " data-module="govuk-button">
+                    Search
+                </button>
             </form>
         </div>
     </div>
 
-    {% if searchResponse.inPrisonCount == 0 or searchResponse.inPrisonCount > 1 %}
-        {% set inPrisonCountText = "People in prison (" + searchResponse.inPrisonCount + " results)" %}
-    {% else %}
-        {% set inPrisonCountText = "People in prison (" + searchResponse.inPrisonCount + " result)" %}
-    {% endif %}
-
-    {% if searchResponse.onProbationCount == 0 or searchResponse.onProbationCount > 1 %}
-        {% set onProbationCountText = "People on probation (" + searchResponse.onProbationCount + " results)" %}
-    {% else %}
-        {% set onProbationCountText = "People on probation (" + searchResponse.onProbationCount + " result)" %}
-    {% endif %}
-
-    {% set peopleInPrison = displayResults(inPrisonCountText, "In Prison Search Results", peopleInPrisonResults) %}
-
-    {% set peopleOnProbation = displayResults(onProbationCountText, "On Probation Search Results", peopleOnProbationResults) %}
+    {% set peopleInPrison = displayResults(inPrisonCountText, peopleInPrisonResults, true) %}
+    {% set peopleOnProbation = displayResults(onProbationCountText, peopleOnProbationResults, false) %}
 
     {{ govukTabs({
         items: [

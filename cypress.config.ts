@@ -115,6 +115,8 @@ export default defineConfig({
         stubGetOffendersByCrn: probationSearch.stubGetOffendersByCrn,
         stubGetOffendersByNomsNumber: probationSearch.stubGetOffendersByNomsNumber,
 
+        stubGetProbationSearchResults: licence.stubSearchForOffenderOnStaffCaseload,
+
         sendDomainEvent: events.sendDomainEvent,
         sendPrisonEvent: events.sendPrisonEvent,
         sendProbationEvent: events.sendProbationEvent,

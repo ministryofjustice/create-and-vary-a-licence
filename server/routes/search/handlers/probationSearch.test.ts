@@ -52,19 +52,21 @@ describe('Route Handlers - Search - Probation Search', () => {
     jest.resetAllMocks()
   })
 
-  describe('POST', () => {
+  describe('GET', () => {
     it('calls the search service with the neccessary parameters', async () => {
-      req.body = { queryTerm: 'Test' }
+      req.query = { queryTerm: 'Test', previousPage: 'create' }
 
-      await handler.POST(req, res)
+      await handler.GET(req, res)
 
       expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('Test', 3000)
+
       expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
-        inPrisonCount: 1,
-        onProbationCount: 0,
         queryTerm: 'Test',
         searchResults: searchResult,
+        backLink: '/licence/create/caseload',
+        inPrisonCountText: 'People in prison (1 result)',
+        onProbationCountText: 'People on probation (0 results)',
         statusConfig,
       })
     })
