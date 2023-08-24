@@ -24,9 +24,9 @@
     </div>
 {% endmacro %}
 
-{% macro displayResults(countText, results, inPrisonTab) %}
+{% macro displayResults(countText, results, setPeopleInPrisonTab) %}
     {% if results.length > 0 %}
-        {% if inPrisonTab %}
+        {% if setPeopleInPrisonTab %}
             {% set caption = "In Prison Search Results" %}
             <h2 class="govuk-heading-l" id = "tab-heading-prison">{{ countText }}</h2>
         {% else %}
@@ -82,6 +82,7 @@
         {% if inPrisonTab %}
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
+                    <h2 class="govuk-heading-l" id = "tab-heading-prison">{{ countText }}</h2>
                     <p>Someone's licence will only appear on this service if they:</p>
                     <ul class = "govuk-list govuk-list--bullet">
                         <li>are assigned to you or one of your teams on NDelius</li>
@@ -104,6 +105,7 @@
         {% else %}
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
+                    <h2 class="govuk-heading-l" id = "tab-heading-probation">{{ countText }}</h2>
                     <p>Someone's licence will only appear on this service if they:</p>
                     <ul class = "govuk-list govuk-list--bullet">
                         <li>are assigned to you or one of your teams on NDelius</li>
