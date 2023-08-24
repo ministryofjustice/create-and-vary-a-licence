@@ -3,7 +3,6 @@ import ConfirmationPage from './confirmation'
 import EditLicenceQuestionPage from './editLicenceQuestion'
 import ReasonForVariationPage from './reasonForVariationPage'
 import DiscardPage from './discardPage'
-import SearchPage from './search'
 import CaseloadPage from './caseload'
 
 export default class CheckAnswersPage extends Page {

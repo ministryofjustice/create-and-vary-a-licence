@@ -3,7 +3,6 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import ProbationSearchRoutes from './handlers/probationSearch'
 import { Services } from '../../services'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
-import validationMiddleware from '../../middleware/validationMiddleware'
 
 export default function Index({ searchService }: Services): Router {
   const router = Router()

@@ -1,4 +1,3 @@
-import { ProbationSearchRequest, ProbationSearchResult } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import SearchService from './searchService'
 
