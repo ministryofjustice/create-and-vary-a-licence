@@ -573,15 +573,6 @@ export default class LicenceService {
     return this.licenceApiClient.deleteOmuEmailAddress(prisonId, user)
   }
 
-  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
-    const licence = await this.licenceApiClient.getLicenceById(licenceId, user)
-    if (!licence.variationOf) {
-      return licence
-    }
-
-    return this.licenceApiClient.getLicenceById(licence.variationOf.toString(), user)
-  }
-
   async getIncompleteLicenceVariations(nomisId: string): Promise<LicenceSummary[]> {
     return this.getLicencesByNomisIdsAndStatus(
       [nomisId],
@@ -653,5 +644,9 @@ export default class LicenceService {
   private async getCroNumberFromNomis(prisonerNumber: string, user: User): Promise<string> {
     const prisoners = await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user)
     return prisoners?.[0]?.croNumber || ''
+  }
+
+  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
+    return this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)
   }
 }

@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{%  macro bespokeConditions(licence, isEditable, title, hideHeading) %}
+{%  macro bespokeConditions(licence, isEditable, title, hideHeading, bespokeConditionsToDisplay) %}
     {% if hideHeading != true %}
         <div class="govuk-grid-row check-answers-header">
             <div class="govuk-grid-column-three-quarters">
@@ -28,7 +28,7 @@
         }), bespokeConditions) %}
     {% endif %}
 
-    {% for condition in licence.bespokeConditions %}
+    {% for condition in bespokeConditionsToDisplay or licence.bespokeConditions %}
         {% set bespokeConditions = (bespokeConditions.push({
             key: { text: 'Bespoke condition' },
             value: { text: condition.text },
