@@ -62,18 +62,20 @@ describe('Create a Licence Views - Check Answers', () => {
     typeCode: 'AP_PSS',
     statusCode: 'IN_PROGRESS',
     additionalLicenceConditions: [
-      {
-        code: 'condition1',
-        category: 'Category 1',
-        expandedText: 'Template 1',
-        uploadSummary: [],
-        data: [
-          {
-            field: 'field1',
-            value: 'Data 1',
-          },
-        ],
-      },
+      [
+        {
+          code: 'condition1',
+          category: 'Category 1',
+          expandedText: 'Template 1',
+          uploadSummary: [],
+          data: [
+            {
+              field: 'field1',
+              value: 'Data 1',
+            },
+          ],
+        },
+      ],
       {
         code: 'condition2',
         category: 'Category 2',
@@ -159,38 +161,42 @@ describe('Create a Licence Views - Check Answers', () => {
     viewContext = {
       licence,
       additionalConditions: [
-        {
-          code: 'condition1',
-          category: 'Category 1',
-          expandedText: 'Template 1',
-          uploadSummary: [],
-          data: [
-            {
-              field: 'field1',
-              value: 'Data 1',
-            },
-          ],
-        },
-        {
-          code: 'condition2',
-          category: 'Category 2',
-          expandedText: 'Template 2',
-          uploadSummary: [],
-          data: [
-            {
-              field: 'field2',
-              value: 'Data 2A',
-            },
-            {
-              field: 'field2',
-              value: 'Data 2B',
-            },
-            {
-              field: 'field3',
-              value: 'Data 2C',
-            },
-          ],
-        },
+        [
+          {
+            code: 'condition1',
+            category: 'Category 1',
+            expandedText: 'Template 1',
+            uploadSummary: [],
+            data: [
+              {
+                field: 'field1',
+                value: 'Data 1',
+              },
+            ],
+          },
+        ],
+        [
+          {
+            code: 'condition2',
+            category: 'Category 2',
+            expandedText: 'Template 2',
+            uploadSummary: [],
+            data: [
+              {
+                field: 'field2',
+                value: 'Data 2A',
+              },
+              {
+                field: 'field2',
+                value: 'Data 2B',
+              },
+              {
+                field: 'field3',
+                value: 'Data 2C',
+              },
+            ],
+          },
+        ],
       ],
     }
 
@@ -292,38 +298,42 @@ describe('Create a Licence Views - Check Answers', () => {
     viewContext = {
       licence: { ...licence, statusCode: 'IN_PROGRESS' },
       additionalConditions: [
-        {
-          code: 'condition1',
-          category: 'Category 1',
-          expandedText: 'Template 1',
-          uploadSummary: [],
-          data: [
-            {
-              field: 'field1',
-              value: 'Data 1',
-            },
-          ],
-        },
-        {
-          code: 'condition2',
-          category: 'Category 2',
-          expandedText: 'Template 2',
-          uploadSummary: [],
-          data: [
-            {
-              field: 'field2',
-              value: 'Data 2A',
-            },
-            {
-              field: 'field2',
-              value: 'Data 2B',
-            },
-            {
-              field: 'field3',
-              value: 'Data 2C',
-            },
-          ],
-        },
+        [
+          {
+            code: 'condition1',
+            category: 'Category 1',
+            expandedText: 'Template 1',
+            uploadSummary: [],
+            data: [
+              {
+                field: 'field1',
+                value: 'Data 1',
+              },
+            ],
+          },
+        ],
+        [
+          {
+            code: 'condition2',
+            category: 'Category 2',
+            expandedText: 'Template 2',
+            uploadSummary: [],
+            data: [
+              {
+                field: 'field2',
+                value: 'Data 2A',
+              },
+              {
+                field: 'field2',
+                value: 'Data 2B',
+              },
+              {
+                field: 'field3',
+                value: 'Data 2C',
+              },
+            ],
+          },
+        ],
       ],
     }
 
