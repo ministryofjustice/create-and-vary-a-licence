@@ -108,6 +108,7 @@ describe('Route - print a licence', () => {
             prisonCode: 'MDI',
             additionalLicenceConditions: [],
             additionalPssConditions: [],
+            licenceVersion: '1.4',
           },
           qrCodesEnabled: false,
         },
@@ -140,6 +141,7 @@ describe('Route - print a licence', () => {
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
+      expect(footerHtml).toMatch(/Version No:.+1.4/)
     })
 
     it('should render a PDF view of an AP licence with exclusion zone data', async () => {
