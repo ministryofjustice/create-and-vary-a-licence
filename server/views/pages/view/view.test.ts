@@ -118,7 +118,6 @@ describe('View and print - single licence view', () => {
           },
         ],
       ],
-      conditionsWithUploads: [],
     }
 
     const $ = cheerio.load(compiledTemplate.render(viewContext))

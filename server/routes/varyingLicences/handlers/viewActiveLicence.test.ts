@@ -44,7 +44,6 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
           uploadSummary: [],
         },
       ],
-      conditionsWithUploads: [],
     })
     req = {
       params: {
@@ -81,7 +80,6 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
             uploadSummary: [],
           },
         ],
-        conditionsWithUploads: [],
       })
     })
 

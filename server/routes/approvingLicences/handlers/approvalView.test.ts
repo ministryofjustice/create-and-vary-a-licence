@@ -45,7 +45,6 @@ describe('Route - view and approve a licence', () => {
     })
     conditionService.additionalConditionsCollection.mockReturnValue({
       additionalConditions: [],
-      conditionsWithUploads: [],
     })
     it('should check status is SUBMITTED else redirect to case list', async () => {
       res = {
@@ -97,7 +96,6 @@ describe('Route - view and approve a licence', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
         additionalConditions: [],
-        conditionsWithUploads: [],
         staffDetails: {
           email: 'joebloggs@probation.gov.uk',
           name: 'Joe Bloggs',

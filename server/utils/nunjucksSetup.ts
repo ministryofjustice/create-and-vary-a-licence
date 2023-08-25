@@ -22,6 +22,7 @@ import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/creatingLicences/types/address'
 import LicenceStatus from '../enumeration/licenceStatus'
 import ConditionService from '../services/conditionService'
+import { getEditConditionHref } from './conditionRoutes'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -210,6 +211,32 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
     return additionalCondition
       ? additionalCondition.data.filter(item => item.field === inputName).map(item => item.value)
       : undefined
+  })
+
+  njkEnv.addGlobal(
+    'additionalCondition',
+    (licence: Licence, condition: AdditionalCondition, html: string, isEditable: boolean) => {
+      return {
+        sequence: condition.sequence,
+        key: { text: condition.category },
+        value: { html },
+        actions: {
+          items: isEditable
+            ? [
+                {
+                  href: getEditConditionHref(licence.id, condition.code, true),
+                  text: 'Change',
+                  visuallyHiddenText: 'Change condition',
+                },
+              ]
+            : [],
+        },
+      }
+    }
+  )
+
+  njkEnv.addFilter('map', (array, f) => {
+    return array.map(f)
   })
 
   njkEnv.addFilter('extractAttr', (array, key) => {

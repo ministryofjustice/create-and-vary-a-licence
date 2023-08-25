@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isEditable, validationErrors, title, hideHeading) %}
+{% macro additionalLicenceConditions(licence, additionalConditions, isEditable, validationErrors, title, hideHeading) %}
     {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
 
     {% if hideHeading != true %}
@@ -12,14 +12,12 @@
         </div>
     {% endif %}
 
-    {% set additionalLicenceConditions = [] %}
-
-    {% set conditionCount = additionalConditions.length + (1 if conditionsWithUploads.length else 0) %}
-
+    {% set conditionCount = additionalConditions.length %}
     {% set conditionWord = "condition" if (conditionCount) === 1 else "conditions" %}
 
+    {% set rows = [] %}
     {% if hideHeading != true %}
-        {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+        {% set rows = (rows.push({
             classes: 'govuk-summary-list__row--error' if errorMessage,
             key: {  text: "Select additional conditions" },
             value: { text: "" + conditionCount  + " " + conditionWord + " selected" },
@@ -32,58 +30,26 @@
                     }
                 ]
             } if isEditable
-        }), additionalLicenceConditions) %}
+        }), rows) %}
     {% endif %}
 
     {% for conditionGroup in additionalConditions %}
         {% if conditionGroup.length == 1 %}
             {% set condition = conditionGroup[0] %}              
-            {% set additionalLicenceConditions = (additionalLicenceConditions.push({
-                sequence: condition.sequence,
-                key: {  text: condition.category },
-                value: { html: additionalConditionHtml(condition) },
-                actions: {
-                    items: [
-                        {
-                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id + "?fromReview=true",
-                            text: "Change",
-                            visuallyHiddenText: "Change condition"
-                        }
-                    ]
-                } if isEditable
-            }), additionalLicenceConditions) %}
+            {% set rows = (rows.push(
+                  additionalCondition(licence, condition, additionalConditionHtml(condition), isEditable )
+                 ), rows) %}
+        {% else %}
+            {% set conditionHtml = conditionGroup | sortConditionsById | map(additionalConditionHtml) | join %}
+            {% set rows = (rows.push(
+                additionalCondition(licence, conditionGroup[0], conditionHtml, isEditable )), rows) %}
         {% endif %}
     {% endfor %}
-
-    {% if conditionsWithUploads.length %}
-        {% set conditionsWithUploads = conditionsWithUploads | sortConditionsById %}
-        {% set conditionHtml = [] %}
-        {% for condition in conditionsWithUploads %}
-            {% set conditionHtml = (conditionHtml.push(additionalConditionHtml(condition)), conditionHtml) %}
-        {% endfor %}
-        {% set conditionHtml = conditionHtml | join %}
-        {% set additionalLicenceConditions = (additionalLicenceConditions.push({
-            sequence: conditionsWithUploads[0].sequence,
-            key: {  text: conditionsWithUploads[0].category },
-            value: { html: conditionHtml },
-            actions: {
-                items: [
-                    {
-                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + conditionsWithUploads[0].code + "/file-uploads?fromReview=true",
-                        text: "Change",
-                        visuallyHiddenText: "Change condition"
-                    }
-                ] if isEditable
-            }
-        }), additionalLicenceConditions) %}
-    {% endif %}
-
-    {% set additionalLicenceConditions = additionalLicenceConditions | sortConditionsBySequence %}
 
     {{ govukSummaryList({
         attributes: { id: 'additionalLicenceConditions' },
         classes: 'govuk-!-margin-bottom-9',
-        rows: additionalLicenceConditions
+        rows: rows | sortConditionsBySequence
     }) }}
 
 {% endmacro %}
