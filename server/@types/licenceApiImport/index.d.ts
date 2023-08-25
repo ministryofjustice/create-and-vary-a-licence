@@ -189,6 +189,13 @@ export interface paths {
      */
     put: operations['recordAuditEvent']
   }
+  '/run-remove-expired-conditions-job': {
+    /**
+     * Job to remove AP conditions.
+     * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['runRemoveExpiredConditionsJob']
+  }
   '/run-activation-job': {
     /**
      * Triggers the licence activation job.
@@ -387,15 +394,6 @@ export interface components {
        */
       email: string
     }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
     OmuContact: {
       /** Format: int64 */
       id: number
@@ -405,6 +403,15 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string
+    }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
     }
     /** @description Request object for updating an offender's personal details */
     UpdateOffenderDetailsRequest: {
@@ -1457,14 +1464,77 @@ export interface components {
       /** @description A list of fields to sort by along with the sort direction for each */
       sortBy: components['schemas']['ProbationSearchSortBy'][]
     }
-    /** @description Describes a probation search result */
-    ProbationSearchResult: {
+    /** @description Describes a search result which has been found and enriched */
+    FoundProbationRecord: {
       /** @description The forename and surname of the offender */
       name: string
+      /**
+       * @description The case reference number (CRN) of the offender,
+       * @example X12344
+       */
+      crn?: string
+      /**
+       * @description The prison nomis number for the offender
+       * @example A1234AA
+       */
+      nomisId?: string
       /** @description The forename and surname of the COM */
       comName: string
-      /** @description The identifier for the COM */
-      comCode?: string
+      /** @description The COM's staff code */
+      comStaffCode?: string
+      /** @description The description of the COM's team */
+      teamName?: string
+      /**
+       * Format: date
+       * @description The release date of the offender
+       */
+      releaseDate?: string
+      /**
+       * Format: int64
+       * @description The ID of the most recent and relevant licence
+       * @example 123344
+       */
+      licenceId?: number
+      /**
+       * @description The type of licence
+       * @enum {string}
+       */
+      licenceType?: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * @description The status of the licence
+       * @enum {string}
+       */
+      licenceStatus?:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+      /** @description Indicates whether the offender is in prison or out on probation */
+      isOnProbation?: boolean
+    }
+    /** @description Describes an enriched probation search result */
+    ProbationSearchResult: {
+      /** @description A list of probation search results */
+      results: components['schemas']['FoundProbationRecord'][]
+      /**
+       * Format: int32
+       * @description Based on the search results, the number of results where an offender is in prison
+       * @example 10
+       */
+      inPrisonCount: number
+      /**
+       * Format: int32
+       * @description Based on the search results, the number of results where an offender is on probation
+       * @example 10
+       */
+      onProbationCount: number
     }
     /** @description Describes an audit event request */
     AuditRequest: {
@@ -1870,13 +1940,9 @@ export interface components {
        * @example Gordon Sumner
        */
       createdByFullName?: string
-      /**
-       * @description Is this licence in PSS period?(LED < TODAY <= TUSED)
-       */
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean
-      /**
-       * @description Is this licence is activated in PSS period?(LED < LAD <= TUSED)
-       */
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
     }
     AddAnother: {
@@ -2062,6 +2128,8 @@ export interface components {
   pathItems: never
 }
 
+export type $defs = Record<string, never>
+
 export type external = Record<string, never>
 
 export interface operations {
@@ -2156,7 +2224,9 @@ export interface operations {
     }
     responses: {
       /** @description The OMU email address was deleted */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {
@@ -2188,7 +2258,9 @@ export interface operations {
     }
     responses: {
       /** @description The offender details were updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2226,7 +2298,9 @@ export interface operations {
     }
     responses: {
       /** @description The responsible COM was updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2264,7 +2338,9 @@ export interface operations {
     }
     responses: {
       /** @description The probation team was updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2302,7 +2378,9 @@ export interface operations {
     }
     responses: {
       /** @description VLO discussion updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2346,7 +2424,9 @@ export interface operations {
     }
     responses: {
       /** @description Licence submitted for approval */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2390,7 +2470,9 @@ export interface operations {
     }
     responses: {
       /** @description Licence status updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2434,7 +2516,9 @@ export interface operations {
     }
     responses: {
       /** @description Standard conditions updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2478,7 +2562,9 @@ export interface operations {
     }
     responses: {
       /** @description SPO discussion updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2522,7 +2608,9 @@ export interface operations {
     }
     responses: {
       /** @description Sentence dates updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2566,7 +2654,9 @@ export interface operations {
     }
     responses: {
       /** @description Licence updated to referred and the referral reason stored */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2610,7 +2700,9 @@ export interface operations {
     }
     responses: {
       /** @description Reason for variation updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2654,7 +2746,9 @@ export interface operations {
     }
     responses: {
       /** @description Prison information updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2698,9 +2792,13 @@ export interface operations {
     }
     responses: {
       /** @description Licence dates have been updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Accepted */
-      202: never
+      202: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2744,7 +2842,9 @@ export interface operations {
     }
     responses: {
       /** @description Contact number updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2788,7 +2888,9 @@ export interface operations {
     }
     responses: {
       /** @description Bespoke conditions added or replaced */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2827,7 +2929,9 @@ export interface operations {
     }
     responses: {
       /** @description Variation approved */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2871,7 +2975,9 @@ export interface operations {
     }
     responses: {
       /** @description Appointment date and time updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2915,7 +3021,9 @@ export interface operations {
     }
     responses: {
       /** @description Appointment person updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -2959,7 +3067,9 @@ export interface operations {
     }
     responses: {
       /** @description Address updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3003,7 +3113,9 @@ export interface operations {
     }
     responses: {
       /** @description Set of additional conditions updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3048,7 +3160,9 @@ export interface operations {
     }
     responses: {
       /** @description Additional condition updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3088,7 +3202,9 @@ export interface operations {
     }
     responses: {
       /** @description The exclusion zone file was removed */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3121,7 +3237,9 @@ export interface operations {
     }
     responses: {
       /** @description The COM was updated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3154,12 +3272,38 @@ export interface operations {
     }
     responses: {
       /** @description The audit event was recorded */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Job to remove AP conditions.
+   * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
+   */
+  runRemoveExpiredConditionsJob: {
+    responses: {
+      /** @description run-remove-ap-conditions-job */
+      200: {
+        content: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
@@ -3182,29 +3326,9 @@ export interface operations {
   runLicenceActivationJob: {
     responses: {
       /** @description Activation job executed. */
-      200: never
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
+      200: {
+        content: never
       }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /**
-   * Job to remove AP conditions.
-   * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
-   */
-  runRemoveExpiredConditionsJob: {
-    responses: {
-      /** @description Remove AP conditions job executed. */
-      200: never
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {
@@ -3325,7 +3449,9 @@ export interface operations {
     }
     responses: {
       /** @description Inactivate Licences */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3363,7 +3489,9 @@ export interface operations {
     }
     responses: {
       /** @description Status has been updated */
-      202: never
+      202: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3563,7 +3691,9 @@ export interface operations {
     }
     responses: {
       /** @description Licences activated */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3605,7 +3735,9 @@ export interface operations {
     }
     responses: {
       /** @description The exclusion zone file was uploaded */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3638,7 +3770,9 @@ export interface operations {
     }
     responses: {
       /** @description The COM was notified */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -3670,10 +3804,10 @@ export interface operations {
       }
     }
     responses: {
-      /** @description The query retrieved a set of results */
+      /** @description The query retrieved a set of enriched results */
       200: {
         content: {
-          'application/json': components['schemas']['ProbationSearchResult'][]
+          'application/json': components['schemas']['ProbationSearchResult']
         }
       }
       /** @description Bad request, request body must be valid */
@@ -4054,7 +4188,9 @@ export interface operations {
     }
     responses: {
       /** @description Licence discarded */
-      200: never
+      200: {
+        content: never
+      }
       /** @description Bad request, request body must be valid */
       400: {
         content: {
@@ -4094,7 +4230,9 @@ export interface operations {
     }
     responses: {
       /** @description Condition has been removed from the licence */
-      204: never
+      204: {
+        content: never
+      }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {
