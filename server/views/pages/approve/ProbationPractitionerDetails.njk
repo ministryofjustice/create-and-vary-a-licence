@@ -3,7 +3,6 @@
 {% macro ProbationPractitionerDetails(staffDetails) %}
     {{ govukSummaryList({
         attributes: { id: 'probation-practitioner-details' },
-        classes: 'govuk-summary-list--no-border',
         rows: [
             {
                 key: { text: "Name" },
@@ -11,11 +10,11 @@
             },
             {
                 key: { text: "Email" },
-                value: { text: staffDetails.email }
+                value: { text: staffDetails.email or 'No email address recorded' }
             },
             {
                 key: { text: "Phone number" },
-                value: { text: staffDetails.telephone }
+                value: { text: staffDetails.telephone or 'No phone number recorded' }
             }
         ]
     }) }}

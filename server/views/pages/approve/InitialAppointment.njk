@@ -3,7 +3,6 @@
 {% macro InitialAppointment(licence) %}
     {{ govukSummaryList({
         attributes: { id: 'initial-appointment-details' },
-        classes: 'govuk-summary-list--no-border',
         rows: [
             {
                 key: { text: "Appointment with" },
