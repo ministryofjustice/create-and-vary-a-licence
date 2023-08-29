@@ -1,45 +1,5 @@
 # Create and vary a licence jobs
 
-## AssignComRoles
-
-This job is intended to be run locally on a developer laptop.
-
-It can be used to grant the Delius Digital Licence Create role (id: LHDCBT002) to a list of users who are
-suitable candidates to have it.
-
-To run this job:
-
-* Set up a .env file to provide the variables which match the intended environment (e.g. DEV, PREPROD, PROD)
-* The .env file requires many of the URLs / secrets required to run the service - check these by accessing any running pod.
-* As a minimum, requires COMMUNITY_API_URL, AUTH_API_URL and client secrets
-* Provide a CSV-formatted input file containing the following data:
-```angular2html
-DeliusUsername, Forename, Surname, Email, StaffCode, StaffGrade
-TestUserNPS,Tom,Test,tom.test@justice.gov.uk,N44003,PSO
-TestUserNPS2,Tony,Test,tony.test@justice.gov.uk,N44004,PSO
-```
-* Do not include the headers
-* Compile the service code `npm run build`
-* Copy the CSV file containing user details into ./dist/jobs
-* Start a local redis in docker (perhaps with `docker-compose up -d`)
-* Redis is required as the API clients need a local redis to cache tokens for clients. 
-* Run the job wth `npm run assign-com-roles`
-
-## AssignAcoRoles
-
-This is a simplified version of the above to assign the Delius role CVLBT001 to PDU heads.
-
-It accepts the same format of input file and relies upon a .env file allowing access to the intended environment.
-
-To run the job
-
-* Compile the service code `npm run build`
-* Copy the CSV file containing ACO user details into ./dist/jobs
-* Start a local redis in docker (perhaps with `docker-compose up -d`)
-* Redis is required as the API clients need a local redis to cache tokens for clients.
-* Run the job wth `npm run assign-aco-roles`
-
-
 ## ActivateLicences
 
 This job is scheduled within Kubernetes to run periodically through the day.

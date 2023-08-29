@@ -286,10 +286,10 @@
 {% macro textInput(input, validationError, value, index, removeButton) %}
     {% if index == 0 or (index > 0 and input.addAnother) %}
         {% call govukFieldset({
-            classes: 'moj-add-another__item govuk-!-width-one-half',
+            classes: 'govuk-!-width-one-half' if not input.addAnother else 'moj-add-another__item govuk-!-width-one-half',
             legend: {
                 text: input.label,
-                classes: 'moj-add-another__title govuk-visually-hidden',
+                classes: 'govuk-visually-hidden' if not input.addAnother else 'moj-add-another__title govuk-visually-hidden',
                 isPageHeading: false
             }
         }) %}

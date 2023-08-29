@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{%  macro bespokeConditions(licence, isEditable, title, hideHeading, bespokeConditionsToDisplay) %}
+{%  macro bespokeConditions(licenceId, isEditable, title, hideHeading, bespokeConditions) %}
     {% if hideHeading != true %}
         <div class="govuk-grid-row check-answers-header">
             <div class="govuk-grid-column-three-quarters">
@@ -8,47 +8,47 @@
             </div>
         </div>
     {% endif %}
-    {% set bespokeConditions = [] %}
+    {% set bespokeConditionRows = [] %}
 
-    {% set conditionWord = "condition" if licence.bespokeConditions.length === 1 else "conditions" %}
+    {% set conditionWord = "condition" if bespokeConditions.length === 1 else "conditions" %}
 
     {% if hideHeading != true %}
-        {% set bespokeConditions = (bespokeConditions.push({
+        {% set bespokeConditionRows = (bespokeConditionRows.push({
             key: {  text: "Select bespoke conditions" },
-            value: { text: "" + licence.bespokeConditions.length + " " + conditionWord + " selected" },
+            value: { text: "" + bespokeConditions.length + " " + conditionWord + " selected" },
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
+                        href: "/licence/create/id/" + licenceId + "/bespoke-conditions?fromReview=true",
                         text: "Change",
                         visuallyHiddenText: "Change bespoke conditions"
                     }
                 ]
             } if isEditable
-        }), bespokeConditions) %}
+        }), bespokeConditionRows) %}
     {% endif %}
 
-    {% for condition in bespokeConditionsToDisplay or licence.bespokeConditions %}
-        {% set bespokeConditions = (bespokeConditions.push({
+    {% for condition in bespokeConditions %}
+        {% set bespokeConditionRows = (bespokeConditionRows.push({
             key: { text: 'Bespoke condition' },
             value: { text: condition.text },
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licence.id + "/bespoke-conditions?fromReview=true",
+                        href: "/licence/create/id/" + licenceId + "/bespoke-conditions?fromReview=true",
                         text: "Change",
                         visuallyHiddenText: "Change bespoke conditions"
                     }
                 ]
             } if isEditable
-        }), bespokeConditions) %}
+        }), bespokeConditionRows) %}
     {% endfor %}
 
 
     {{ govukSummaryList({
         attributes: { id: 'bespoke-conditions-details' },
         classes: 'govuk-!-margin-bottom-9',
-        rows: bespokeConditions
+        rows: bespokeConditionRows
     }) }}
 
 {% endmacro %}

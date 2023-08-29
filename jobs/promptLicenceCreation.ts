@@ -1,7 +1,15 @@
+/* eslint-disable import/first */
+/*
+ * Do appinsights first to instrument the logger
+ */
 import 'reflect-metadata'
 import _ from 'lodash'
 import { add, startOfISOWeek, endOfISOWeek } from 'date-fns'
 import { buildAppInsightsClient, flush, initialiseAppInsights } from '../server/utils/azureAppInsights'
+
+initialiseAppInsights()
+buildAppInsightsClient('create-and-vary-a-licence-prompt-licence-create-job')
+
 import logger from '../logger'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
 import config from '../server/config'
@@ -11,9 +19,6 @@ import LicenceStatus from '../server/enumeration/licenceStatus'
 import { EmailContact } from '../server/@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../server/utils/utils'
 import PromptLicenceCreationService from './promptLicenceCreationService'
-
-initialiseAppInsights()
-buildAppInsightsClient('create-and-vary-a-licence-prompt-licence-create-job')
 
 const { caseloadService, prisonerService, communityService, licenceService } = services
 

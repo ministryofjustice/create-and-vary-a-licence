@@ -33,7 +33,7 @@
             {% if ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') 
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
-                {{ bespokeConditions(licence, null, 'Bespoke licence conditions') }}
+                {{ bespokeConditions(licence.id, null, 'Bespoke licence conditions', null, licence.bespokeConditions) }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalPssConditions(licence, null, [], 'Additional post sentence supervision requirements') }}
@@ -42,7 +42,7 @@
                 and (additionalConditions.length or bespokeConditionsToDisplay.length)  %}
                 <div>
                     <h2 class="govuk-heading-m" id="conditions-expired">Conditions from expired licence</h2>
-                    <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 
+                    <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDateShort }}</span>, 
                     so the conditions from their standard determinate licence can no longer be varied.</p>
                     <details class="govuk-details" data-module="govuk-details">
                         <summary class="govuk-details__summary">
@@ -52,7 +52,7 @@
                         </summary>
                         <div class="govuk-details__text">
                             {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, [], 'Additional licence conditions') }}
-                            {{ bespokeConditions(licence, null, 'Bespoke licence conditions', null, bespokeConditionsToDisplay) }}
+                            {{ bespokeConditions(licence.id, null, 'Bespoke licence conditions', null, bespokeConditionsToDisplay) }}
                         </div>
                     </details>
                 </div>
