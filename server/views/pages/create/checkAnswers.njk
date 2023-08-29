@@ -84,7 +84,7 @@
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
                 {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, isInProgress, validationErrors) }}
-                {{ bespokeConditions(licence, isInProgress) }}
+                {{ bespokeConditions(licence.id, isInProgress, null, null, licence.bespokeConditions) }}
             {% endif %}
 
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
@@ -95,7 +95,7 @@
                 and (additionalConditions.length or bespokeConditionsToDisplay.length) %}
                 <div>
                     <h2 class="govuk-heading-m">Conditions from expired licence</h2>
-                    <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>, 
+                    <p>This person reached their LED on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDateShort }}</span>, 
                     so the conditions from their standard determinate licence can no longer be varied.</p>
                     <details class="govuk-details" data-module="govuk-details">
                         <summary class="govuk-details__summary">
@@ -105,7 +105,7 @@
                         </summary>
                         <div class="govuk-details__text">
                             {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads, null, validationErrors) }}
-                            {{ bespokeConditions(licence, null, null, null, bespokeConditionsToDisplay) }}
+                            {{ bespokeConditions(licence.id, null, null, null, bespokeConditionsToDisplay) }}
                         </div>
                     </details>
                 </div>

@@ -82,7 +82,7 @@
                                 },
                                 content: {
                                     html:
-                                            bespokeConditions(licence, null, null, true)
+                                            bespokeConditions(licence.id, null, null, true, licence.bespokeConditions)
                                         if licence.bespokeConditions.length else
                                         "<p>No bespoke licence conditions added</p>"
                                 },

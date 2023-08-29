@@ -17,15 +17,16 @@ export type VariedConditions = {
 }
 
 const compareLicenceConditions = (originalLicence: Licence, variation: Licence): VariedConditions => {
-  const variedAdditionalLicenceConditions = compareAdditionalConditionSet(
-    originalLicence.additionalLicenceConditions,
-    variation.additionalLicenceConditions,
-    ConditionType.AP
-  )
-  const variedBespokeConditions = compareBespokeConditionSet(
-    originalLicence.bespokeConditions,
-    variation.bespokeConditions
-  )
+  let variedAdditionalLicenceConditions: VariedConditions
+  let variedBespokeConditions: VariedConditions
+  if (!variation.isInPssPeriod) {
+    variedAdditionalLicenceConditions = compareAdditionalConditionSet(
+      originalLicence.additionalLicenceConditions,
+      variation.additionalLicenceConditions,
+      ConditionType.AP
+    )
+    variedBespokeConditions = compareBespokeConditionSet(originalLicence.bespokeConditions, variation.bespokeConditions)
+  }
 
   const variedAdditionalPssConditions = compareAdditionalConditionSet(
     originalLicence.additionalPssConditions,
