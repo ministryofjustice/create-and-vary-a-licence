@@ -104,6 +104,8 @@ generic-service:
     oakwood-old-2: "217.161.76.195/32"
     oakwood-old-3: "217.161.76.186/32"
     oakwood-old-4: "217.161.76.194/32"
+    azure-landing-zone-public-egress-1: "20.26.11.71/32"
+    azure-landing-zone-public-egress-2: "20.26.11.108/32"
 
 gotenberg:
   nameOverride: gotenberg
