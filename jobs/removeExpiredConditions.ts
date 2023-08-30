@@ -24,5 +24,5 @@ licenceApiClient
   })
   .catch((error: Error) => {
     logger.error(error, 'Problem occurred while running job to remove AP conditions for licences in PSS Period')
-    flush({ callback: () => process.exit() }, 'failure')
+    flush({ callback: () => process.exit(1) }, 'failure')
   })
