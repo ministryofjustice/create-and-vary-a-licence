@@ -21,5 +21,5 @@ licenceExpiryService
   })
   .catch((error: Error) => {
     logger.error(error, 'Problem occurred while expiring licences')
-    flush({ callback: () => process.exit() }, 'failure')
+    flush({ callback: () => process.exit(1) }, 'failure')
   })
