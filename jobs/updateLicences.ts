@@ -24,5 +24,5 @@ licenceApiClient
   })
   .catch((error: Error) => {
     logger.error(error, 'Problem occurred while activating licences')
-    flush({ callback: () => process.exit() }, 'failure')
+    flush({ callback: () => process.exit(1) }, 'failure')
   })
