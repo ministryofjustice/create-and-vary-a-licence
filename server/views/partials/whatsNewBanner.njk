@@ -1,0 +1,10 @@
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% if showCommsBanner %}
+    <div class="govuk-inset-text">
+        <h1 class="govuk-heading-l govuk-!-margin-0 govuk-!-padding-bottom-4">What's new</h1>
+        <div>The last approved version of licence will now be saved to your vary case list if you change something
+             without getting the licence reapproved by the prison before someone's release date.</div>
+        <div class="govuk-!-padding-top-4"><a class="govuk-link" href="/whats-new-page">Read more</a></div>
+    </div>
+{% endif %}
