@@ -17,7 +17,7 @@ import populateCurrentUser from '../middleware/populateCurrentUser'
 import flashMessages from '../middleware/flashMessageMiddleware'
 import fromReviewMiddleware from '../middleware/fromReviewMiddleware'
 import PrisonerController from './prisonerController'
-import probationSearchRoutes from './search'
+import searchRoutes from './search'
 
 export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
@@ -40,7 +40,7 @@ export default function Index(services: Services): Router {
   router.use(supportRoutes(services))
   router.use(changeLocationRoutes(services))
   router.use(changeTeamRoutes(services))
-  router.use(probationSearchRoutes(services))
+  router.use(searchRoutes(services))
 
   return router
 }

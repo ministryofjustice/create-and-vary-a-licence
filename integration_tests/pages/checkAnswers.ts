@@ -14,6 +14,8 @@ export default class CheckAnswersPage extends Page {
 
   private editLicenceButtonId = '#edit-licence-button'
 
+  private backToCaseloadLinkId = '[data-qa=back-to-caseload-link]'
+
   constructor() {
     super('check-answers-page')
   }
@@ -41,7 +43,7 @@ export default class CheckAnswersPage extends Page {
   }
 
   clickBackToCaseload = (): CaseloadPage => {
-    cy.get('.govuk-button-group > .govuk-link').click()
+    cy.get(this.backToCaseloadLinkId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
 }
