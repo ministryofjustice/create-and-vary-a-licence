@@ -33,6 +33,7 @@ generic-service:
     LICENCE_WATERMARK: "false"
     APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY);IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
     SERVICE_NAME: "create-and-vary-a-licence"
+    SHOW_WHATS_NEW_BANNER: "false"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -103,6 +104,8 @@ generic-service:
     oakwood-old-2: "217.161.76.195/32"
     oakwood-old-3: "217.161.76.186/32"
     oakwood-old-4: "217.161.76.194/32"
+    azure-landing-zone-public-egress-1: "20.26.11.71/32"
+    azure-landing-zone-public-egress-2: "20.26.11.108/32"
 
 gotenberg:
   nameOverride: gotenberg

@@ -7,24 +7,17 @@ import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import type { Services } from '../../services'
 import AuthRole from '../../enumeration/authRole'
+import { User } from '../../@types/CvlUserDetails'
 
 export const user = {
-  firstName: 'first',
-  lastName: 'last',
-  userId: 'id',
-  token: 'token',
-  username: 'user1',
-  displayName: 'First Last',
-  activeCaseLoadId: 'MDI',
-  authSource: 'NOMIS',
-  userRoles: ['AuthRole'],
+  username: 'Joe Bloggs',
 }
 
 const signedCookiesProvider = jest.fn()
 
 export const flashProvider = jest.fn()
 
-function appSetup(services: Services, userSupplier: () => Express.User): Express {
+function appSetup(services: Services, userSupplier: () => User): Express {
   const app = express()
 
   app.set('view engine', 'njk')
@@ -49,11 +42,11 @@ function appSetup(services: Services, userSupplier: () => Express.User): Express
 
 export function appWithAllRoutes({
   services = {},
-  userSupplier = () => user,
+  userSupplier = () => user as User,
 }: {
   production?: boolean
   services?: Partial<Services>
-  userSupplier?: () => Express.User
+  userSupplier?: () => User
   roles?: AuthRole[]
   signedCookies?: () => Record<string, Record<string, string>>
 }): Express {
