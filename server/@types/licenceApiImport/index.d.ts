@@ -189,12 +189,12 @@ export interface paths {
      */
     put: operations['recordAuditEvent']
   }
-  '/run-remove-ap-conditions-job': {
+  '/run-remove-expired-conditions-job': {
     /**
      * Job to remove AP conditions.
      * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['runRemoveAPConditionsJob']
+    post: operations['runRemoveExpiredConditionsJob']
   }
   '/run-activation-job': {
     /**
@@ -394,15 +394,6 @@ export interface components {
        */
       email: string
     }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
     OmuContact: {
       /** Format: int64 */
       id: number
@@ -412,6 +403,15 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string
+    }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
     }
     /** @description Request object for updating an offender's personal details */
     UpdateOffenderDetailsRequest: {
@@ -1940,13 +1940,9 @@ export interface components {
        * @example Gordon Sumner
        */
       createdByFullName?: string
-      /**
-       * @description Is this licence in PSS period?(LED < TODAY <= TUSED)
-       */
+      /** @description Is this licence in PSS period?(LED < TODAY <= TUSED) */
       isInPssPeriod?: boolean
-      /**
-       * @description Is this licence is activated in PSS period?(LED < LAD <= TUSED)
-       */
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
     }
     AddAnother: {
@@ -2131,6 +2127,8 @@ export interface components {
   headers: never
   pathItems: never
 }
+
+export type $defs = Record<string, never>
 
 export type external = Record<string, never>
 
@@ -3301,7 +3299,7 @@ export interface operations {
    * Job to remove AP conditions.
    * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
    */
-  runRemoveAPConditionsJob: {
+  runRemoveExpiredConditionsJob: {
     responses: {
       /** @description run-remove-ap-conditions-job */
       200: {
@@ -3331,28 +3329,6 @@ export interface operations {
       200: {
         content: never
       }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /**
-   * Job to remove AP conditions.
-   * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
-   */
-  runRemoveExpiredConditionsJob: {
-    responses: {
-      /** @description Remove AP conditions job executed. */
-      200: never
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
         content: {

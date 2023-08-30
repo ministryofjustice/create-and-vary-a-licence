@@ -25,9 +25,6 @@
     "test:ci": "jest --maxWorkers=2 --collectCoverage=true --testPathPattern=/server/.*",
     "integrationTest": "jest --runInBand --testPathPattern=/integration_tests/.*",
     "security_audit": "better-npm-audit audit",
-    "assign-com-roles": "node $NODE_OPTIONS -r dotenv/config dist/jobs/assignComRoles.js | bunyan -o short",
-    "assign-aco-roles": "node $NODE_OPTIONS -r dotenv/config dist/jobs/assignAcoRoles.js | bunyan -o short",
-    "activate-valid-licences": "node $NODE_OPTIONS -r dotenv/config dist/jobs/updateLicences.js | bunyan -o short",
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open",
     "clean": "rm -rf dist build node_modules stylesheets coverage"
@@ -189,6 +186,7 @@
     "mocha-junit-reporter": "^2.2.1",
     "nock": "^13.3.2",
     "nodemon": "^3.0.1",
+    "openapi-typescript": "^6.5.3",
     "pdf-parse": "^1.1.1",
     "prettier": "^2.8.8",
     "redis-mock": "^0.56.3",

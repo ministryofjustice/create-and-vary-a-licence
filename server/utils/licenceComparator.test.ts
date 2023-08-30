@@ -532,4 +532,52 @@ describe('Licence Comparator', () => {
       pssConditionsRemoved: [],
     })
   })
+
+  it('should not return list of removed additional and bespoke licence conditions if licence is in PSS period', () => {
+    const originalLicence = {
+      ...licenceTemplate,
+      additionalLicenceConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'testCondition1',
+          uploadSummary: [],
+        },
+        {
+          code: '2',
+          category: 'category2',
+          expandedText: 'testCondition2',
+          uploadSummary: [],
+        },
+      ],
+      additionalPssConditions: [
+        {
+          code: '1',
+          category: 'category1',
+          expandedText: 'testCondition1',
+          uploadSummary: [],
+        },
+      ],
+      bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
+    } as Licence
+
+    const variedLicence = {
+      ...licenceTemplate,
+      isInPssPeriod: true,
+      additionalLicenceConditions: [],
+      bespokeConditions: [],
+      additionalPssConditions: [],
+    } as Licence
+
+    expect(compareLicenceConditions(originalLicence, variedLicence)).toEqual({
+      pssConditionsAdded: [],
+      pssConditionsAmended: [],
+      pssConditionsRemoved: [
+        {
+          category: 'category1',
+          condition: 'testCondition1',
+        },
+      ],
+    })
+  })
 })
