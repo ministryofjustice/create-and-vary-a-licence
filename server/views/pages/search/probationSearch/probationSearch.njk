@@ -1,0 +1,245 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "partials/statusBadge.njk" import statusBadge %}
+{% from "partials/licenceDescription.njk" import licenceDescription %}
+
+{% set pageTitle = applicationName + " - Probation - Search" %}
+{% set pageId = "probation-search-page" %}
+{% set backLinkHref = backLink %}
+{% set noJsBackLink = true %}
+
+{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, comName, index) %}
+    <div class="search-offender-name">
+        {% set link = "/licence/create/id/" + licenceId + "/check-your-answers" if licenceId else "/licence/create/nomisId/" + prisonerNumber + "/confirm"%}
+        {% if comName %}
+            <a id="name-button-{{ index }}" href="{{ link }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+        {% else %}
+            <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</span>
+        {% endif %}
+        <div class="govuk-hint govuk-!-font-size-16">CRN: {{ crn }}</div>
+    </div>
+{% endmacro %}
+
+{% macro displayResults(countText, results, setPeopleInPrisonTab) %}
+    {% if results.length > 0 %}
+        {% if setPeopleInPrisonTab %}
+            {% set caption = "In Prison Search Results" %}
+            <h2 class="govuk-heading-l" id = "tab-heading-prison">{{ countText }}</h2>
+        {% else %}
+            {% set caption = "On Probation Search Results" %}
+            <h2 class="govuk-heading-l" id = "tab-heading-probation">{{ countText }}</h2>
+        {% endif %}
+        <form method="GET">
+            {{ govukTable({
+                attributes: {
+                    'data-module': 'moj-sortable-table'
+                },
+                caption: caption,
+                captionClasses: "govuk-visually-hidden",
+                head: [
+                    {
+                        text: "Name",
+                        attributes: {
+                            "aria-sort": "ascending"
+                        }
+                    },
+                    {
+                        text: "Licence type"
+                    },
+                    {
+                        text: "Probation practitioner",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    },
+                    {
+                        text: "Team name",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    },
+                    {
+                        text: "Release date",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    },
+                    {
+                        text: "Status",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    }
+                ],
+                rows: results
+            }) }}
+        </form>
+    {% else %}
+        {% if setPeopleInPrisonTab %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <h2 class="govuk-heading-l" id = "tab-heading-prison">{{ countText }}</h2>
+                    <p>Someone's licence will only appear on this service if they:</p>
+                    <ul class = "govuk-list govuk-list--bullet">
+                        <li>are assigned to you or one of your teams on NDelius</li>
+                        <li>are serving a determinate sentence</li>
+                        <li>have a release date</li>
+                        <li>have not been approved for Home Detention Curfew</li>
+                        <li>have not been recalled or breached a post sentence supervision order</li>
+                    </ul>
+                    <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
+                    <p class="govuk-body">
+                        {{ govukButton({
+                            text: "Return to caselist",
+                            classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                            href: backLink,
+                            attributes: { 'data-qa': 'return-to-caselist' }
+                        }) }}
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <h2 class="govuk-heading-l" id = "tab-heading-probation">{{ countText }}</h2>
+                    <p>Someone's licence will only appear on this service if they:</p>
+                    <ul class = "govuk-list govuk-list--bullet">
+                        <li>are assigned to you or one of your teams on NDelius</li>
+                        <li>are serving a determinate sentence or a post sentence supervision order</li>
+                        <li>were not released on Home Detention Curfew</li>
+                        <li>were not released from prison with a licence created using a PD1 form</li>
+                        <li>have not been recalled or breached a post sentence supervision order</li>
+                    </ul>
+                    <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
+                    <p class="govuk-body">
+                        {{ govukButton({
+                            text: "Return to caselist",
+                            classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                            href: backLink,
+                            attributes: { 'data-qa': 'return-to-caselist' }
+                        }) }}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{% set peopleInPrisonResults = [] %}
+{% set peopleOnProbationResults = [] %}
+
+{% for offender in searchResults %}
+    {% if offender.comName %}
+        {% set comDetailsHtml = '<a class="govuk-link" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
+    {% else %}
+        {% set comDetailsHtml = 'Unallocated' %}
+    {% endif %}
+
+    {% set result = [
+        {
+            attributes: {
+                id: 'name-' + loop.index,
+                "data-sort-value": offender.name
+            },
+            classes: "max-width max-width-220",
+            html: offenderName(offender.name, offender.crn, offender.nomisId, offender.licenceId, offender.comName, loop.index)
+        },
+        {
+            attributes: {
+                id: 'licence-type-' + loop.index
+            },
+            html:licenceDescription(offender.licenceType)
+        },
+        {
+            attributes: {
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": offender.comName
+            },
+            classes: "max-width max-width-200",
+            html: comDetailsHtml
+        },
+        {
+            attributes: {
+                id: 'team-name-' + loop.index,
+                "data-sort-value": offender.teamName
+            },
+            classes: "max-width max-width-200",
+            html: offender.teamName
+        },
+        {
+            attributes: {
+                id: 'release-date-' + loop.index,
+                "data-sort-value": offender.releaseDate | dateToUnix
+            },
+            text: offender.releaseDate
+        },
+        {
+            attributes: {
+                id: 'licence-status-' + loop.index,
+                "data-sort-value": offender.licenceStatus | getStatusOrder
+            },
+            html: statusBadge({ status: offender.licenceStatus, size: 'small' }, statusConfig)
+        }
+    ] %}
+
+    {% if offender.isOnProbation %}
+        {% set peopleOnProbationResults = (peopleOnProbationResults.push(result), peopleOnProbationResults) %}
+    {% else %}
+        {% set peopleInPrisonResults = (peopleInPrisonResults.push(result), peopleInPrisonResults) %}
+    {% endif %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-xl" id="probation-search-heading">Search results for {{ queryTerm }}</h1>
+        </div>
+    </div>
+
+   <div class="govuk-grid-row">
+        <div class="moj-search govuk-grid-column-two-thirds govuk-!-margin-bottom-8">
+            <form method="GET">
+                <div class="govuk-form-group">
+                    <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
+                        Find a case
+                    </label>
+                    <div id="search-hint" class="govuk-hint moj-search__hint create-caseload-search">
+                    Search by name, CRN or probation practitioner
+                    </div>
+                    <input class="govuk-input moj-search__input" id="search" name="queryTerm" aria-describedby="search-hint">
+                </div>
+                <button class="govuk-button moj-search__button " data-module="govuk-button">
+                    Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% set peopleInPrison = displayResults(inPrisonCountText, peopleInPrisonResults, true) %}
+    {% set peopleOnProbation = displayResults(onProbationCountText, peopleOnProbationResults, false) %}
+
+    {{ govukTabs({
+        items: [
+            {
+                label: inPrisonCountText,
+                id: "people-in-prison",
+                panel: {
+                    html: peopleInPrison
+                }
+            },
+            {
+                label: onProbationCountText,
+                id: "people-on-probation",
+                panel: {
+                    html: peopleOnProbation
+                }
+            }
+        ]
+    }) }}
+
+{% endblock %}
+
