@@ -132,15 +132,6 @@ export default class ConditionService {
     return conditionsBySequence.length ? conditionsBySequence.pop().sequence + 1 : 1
   }
 
-  additionalConditionsCollection(conditions: AdditionalCondition[]) {
-    const conditionsByCode = conditions.reduce((acc, c) => {
-      acc[c.code] = [...(acc[c.code] || []), c]
-      return acc
-    }, {})
-
-    return { additionalConditions: Object.values(conditionsByCode) }
-  }
-
   /* eslint-disable no-param-reassign */
   parseResponse = (additionalConditionsResponse: AdditionalConditionsResponse): AdditionalConditionsConfig => {
     const mappedConditions: AdditionalConditionsConfig = { AP: [], PSS: [] }
@@ -260,15 +251,14 @@ export default class ConditionService {
 
   async getAdditionalAPConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<AdditionalCondition[]> {
     if (licence.isInPssPeriod && this.isInVariation(licence)) {
-      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))
-        ?.additionalLicenceConditions
+      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id, user))?.additionalLicenceConditions
     }
     return licence.additionalLicenceConditions
   }
 
   async getbespokeConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<BespokeCondition[]> {
     if (licence.isInPssPeriod && this.isInVariation(licence)) {
-      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))?.bespokeConditions
+      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id, user))?.bespokeConditions
     }
     return licence.bespokeConditions
   }

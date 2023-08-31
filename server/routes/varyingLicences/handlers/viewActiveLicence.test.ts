@@ -35,16 +35,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
 
   beforeEach(() => {
     licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-    conditionService.additionalConditionsCollection.mockReturnValue({
-      additionalConditions: [
-        {
-          text: 'Condition 1',
-          code: 'CON1',
-          data: [],
-          uploadSummary: [],
-        },
-      ],
-    })
+
     req = {
       params: {
         licenceId: licence.id,
@@ -68,17 +59,28 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
 
   describe('GET', () => {
     it('should render a licence view for active licence', async () => {
+      conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([
+        {
+          text: 'Condition 1',
+          code: 'CON1',
+          data: [],
+          uploadSummary: [],
+        },
+      ])
+
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
         callToActions: { shouldShowVaryButton: true },
         additionalConditions: [
-          {
-            text: 'Condition 1',
-            code: 'CON1',
-            data: [],
-            uploadSummary: [],
-          },
+          [
+            {
+              text: 'Condition 1',
+              code: 'CON1',
+              data: [],
+              uploadSummary: [],
+            },
+          ],
         ],
       })
     })

@@ -149,7 +149,7 @@ export default class LicenceService {
     return this.licenceApiClient.createLicence(licence, user)
   }
 
-  async getLicence(id: string, user: User): Promise<Licence> {
+  async getLicence(id: number, user: User): Promise<Licence> {
     return this.licenceApiClient.getLicenceById(id, user)
   }
 
@@ -205,7 +205,7 @@ export default class LicenceService {
   }
 
   async updateAdditionalConditions(
-    id: string,
+    id: number,
     conditionType: LicenceType,
     formData: AdditionalConditions,
     user: User,
@@ -315,7 +315,7 @@ export default class LicenceService {
     await this.licenceApiClient.updateStandardConditions(id, data, user)
   }
 
-  async updateStatus(id: string, newStatus: LicenceStatus, user?: User): Promise<void> {
+  async updateStatus(id: number, newStatus: LicenceStatus, user?: User): Promise<void> {
     const requestBody = {
       status: newStatus,
       username: user?.username || 'SYSTEM',
@@ -508,7 +508,7 @@ export default class LicenceService {
 
   async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
     if (variation?.variationOf) {
-      const originalLicence = await this.getLicence(variation.variationOf.toString(), user)
+      const originalLicence = await this.getLicence(variation.variationOf, user)
       return compareLicenceConditions(originalLicence, variation)
     }
     return {} as VariedConditions
@@ -552,7 +552,7 @@ export default class LicenceService {
     // Get the trail of variations back to the original licence
     while (thisLicence?.isVariation) {
       // eslint-disable-next-line no-await-in-loop
-      thisLicence = await this.licenceApiClient.getLicenceById(`${thisLicence?.variationOf}`, user)
+      thisLicence = await this.licenceApiClient.getLicenceById(thisLicence?.variationOf, user)
       if (thisLicence) {
         licences.push(thisLicence)
       }
@@ -646,7 +646,7 @@ export default class LicenceService {
     return prisoners?.[0]?.croNumber || ''
   }
 
-  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
+  async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     return this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)
   }
 }

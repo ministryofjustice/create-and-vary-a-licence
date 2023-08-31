@@ -58,7 +58,7 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
         },
       } as unknown as Request
       await handler.POST(req, res)
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', 'IN_PROGRESS', {
+      expect(licenceService.updateStatus).toHaveBeenCalledWith(1, 'IN_PROGRESS', {
         username: 'joebloggs',
         displayName: 'Joe Bloggs',
       })

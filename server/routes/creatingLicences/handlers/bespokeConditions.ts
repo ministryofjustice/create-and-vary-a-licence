@@ -1,14 +1,15 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
-import BespokeConditions from '../types/bespokeConditions'
+import type BespokeConditions from '../types/bespokeConditions'
+import type { BespokeCondition } from '../../../@types/licenceApiClientTypes'
 
 export default class BespokeConditionsRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const conditionsList = res.locals?.licence?.bespokeConditions || []
-    const conditions = conditionsList?.length > 0 ? conditionsList.map((c: { text: string }) => c.text) : []
+    const conditionsList = res.locals?.licence?.bespokeConditions || ([] as BespokeCondition[])
+    const conditions: string[] = conditionsList?.length > 0 ? conditionsList.map(c => c.text) : []
     res.render('pages/create/bespokeConditions', { conditions })
   }
 

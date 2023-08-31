@@ -19,7 +19,7 @@ export default class AdditionalLicenceConditionRemoveUploadRoutes {
         ? `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
         : `back`
 
-    await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), parseInt(licence.id, 10), user)
+    await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)
     return res.redirect(redirect)
   }
 }

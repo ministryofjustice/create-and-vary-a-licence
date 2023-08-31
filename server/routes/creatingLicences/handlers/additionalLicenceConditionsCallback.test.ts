@@ -1,7 +1,8 @@
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import ConditionService from '../../../services/conditionService'
 
 import AdditionalLicenceConditionsCallbackRoutes from './additionalLicenceConditionsCallback'
+import type { Licence } from '../../../@types/licenceApiClientTypes'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
@@ -39,7 +40,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       res.locals.licence = {
         additionalLicenceConditions: [
           {
-            id: '1',
+            id: 1,
             code: 'code1',
             data: [
               {
@@ -50,25 +51,25 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
             sequence: 1,
           },
           {
-            id: '2',
+            id: 2,
             code: 'code2',
             data: [],
             sequence: 3,
           },
           {
-            id: '3',
+            id: 3,
             code: 'code3',
             data: [],
             sequence: 2,
           },
           {
-            id: '4',
+            id: 4,
             code: 'code4',
             data: [],
             sequence: 4,
           },
         ],
-      }
+      } as Licence
 
       conditionsProviderSpy.mockResolvedValueOnce({
         text: 'Condition 1',
@@ -105,13 +106,13 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       res.locals.licence = {
         additionalLicenceConditions: [
           {
-            id: '1',
+            id: 1,
             code: 'code1',
             data: [],
             sequence: 1,
           },
         ],
-      }
+      } as Licence
 
       conditionsProviderSpy.mockResolvedValueOnce({
         text: 'Condition 1',

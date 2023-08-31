@@ -20,7 +20,13 @@ export default class AdditionalPssConditionsRoutes {
     const { licenceId } = req.params
     const { user, licence } = res.locals
 
-    await this.licenceService.updateAdditionalConditions(licenceId, LicenceType.PSS, req.body, user, licence.version)
+    await this.licenceService.updateAdditionalConditions(
+      parseInt(licenceId, 10),
+      LicenceType.PSS,
+      req.body,
+      user,
+      licence.version
+    )
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-pss-conditions/callback${
