@@ -46,7 +46,7 @@
         <div class="govuk-grid-column-full">
             {{ inductionMeetingDetails(licence) }}
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                {{ additionalLicenceConditions(licence, additionalConditions, conditionsWithUploads) }}
+                {{ additionalLicenceConditions(licence, additionalConditions) }}
                 {{ bespokeConditions(licence.id, null, null, null, licence.bespokeConditions) }}
             {% endif %}
             {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}

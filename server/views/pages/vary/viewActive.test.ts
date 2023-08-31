@@ -31,13 +31,15 @@ describe('ViewActive', () => {
   } as Licence
 
   const additionalConditionInputs = [
-    {
-      text: 'Condition 1',
-      requiresInput: false,
-      code: 'CON1',
-      data: {},
-      uploadSummary: {},
-    },
+    [
+      {
+        text: 'Condition 1',
+        requiresInput: false,
+        code: 'CON1',
+        data: {},
+        uploadSummary: {},
+      },
+    ],
   ]
 
   afterEach(() => {

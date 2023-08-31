@@ -133,20 +133,12 @@ export default class ConditionService {
   }
 
   additionalConditionsCollection(conditions: AdditionalCondition[]) {
-    const conditionsWithUploads = conditions.filter(
-      (condition: AdditionalCondition) => condition?.uploadSummary?.length > 0
-    )
-    const conditionsByCode = conditions
-      // This filter will need to be removed when the frontend handles conditions with uploads transparantly
-      .filter((c: AdditionalCondition) => {
-        return !conditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
-      })
-      .reduce((acc, c) => {
-        acc[c.code] = [...(acc[c.code] || []), c]
-        return acc
-      }, {})
+    const conditionsByCode = conditions.reduce((acc, c) => {
+      acc[c.code] = [...(acc[c.code] || []), c]
+      return acc
+    }, {})
 
-    return { conditionsWithUploads, additionalConditions: Object.values(conditionsByCode) }
+    return { additionalConditions: Object.values(conditionsByCode) }
   }
 
   /* eslint-disable no-param-reassign */
