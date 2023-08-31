@@ -439,8 +439,8 @@ describe('Licence Service', () => {
   })
 
   it('Get Licence', async () => {
-    await licenceService.getLicence('1', user)
-    expect(licenceApiClient.getLicenceById).toBeCalledWith('1', user)
+    await licenceService.getLicence(1, user)
+    expect(licenceApiClient.getLicenceById).toBeCalledWith(1, user)
   })
 
   it('Update appointment person', async () => {
@@ -493,9 +493,9 @@ describe('Licence Service', () => {
 
   describe('Update additional conditions', () => {
     it('should handle undefined list of additional conditions', async () => {
-      await licenceService.updateAdditionalConditions('1', LicenceType.AP, {} as AdditionalConditions, user, 'version')
+      await licenceService.updateAdditionalConditions(1, LicenceType.AP, {} as AdditionalConditions, user, 'version')
       expect(licenceApiClient.updateAdditionalConditions).toBeCalledWith(
-        '1',
+        1,
         { additionalConditions: [], conditionType: 'AP' },
         user
       )
@@ -518,14 +518,14 @@ describe('Licence Service', () => {
         })
 
       await licenceService.updateAdditionalConditions(
-        '1',
+        1,
         LicenceType.AP,
         { additionalConditions: ['code1', 'code2'] },
         user,
         'version'
       )
       expect(licenceApiClient.updateAdditionalConditions).toBeCalledWith(
-        '1',
+        1,
         {
           additionalConditions: [
             {
@@ -656,18 +656,18 @@ describe('Licence Service', () => {
 
   describe('Update status', () => {
     it('should update status successfully with user details', async () => {
-      await licenceService.updateStatus('1', LicenceStatus.APPROVED, user)
+      await licenceService.updateStatus(1, LicenceStatus.APPROVED, user)
       expect(licenceApiClient.updateLicenceStatus).toBeCalledWith(
-        '1',
+        1,
         { status: 'APPROVED', username: 'joebloggs', fullName: 'Joe Bloggs' },
         user
       )
     })
 
     it('should send SYSTEM as user if user is not defined', async () => {
-      await licenceService.updateStatus('1', LicenceStatus.APPROVED)
+      await licenceService.updateStatus(1, LicenceStatus.APPROVED)
       expect(licenceApiClient.updateLicenceStatus).toBeCalledWith(
-        '1',
+        1,
         { status: 'APPROVED', username: 'SYSTEM', fullName: 'SYSTEM' },
         undefined
       )
@@ -1041,7 +1041,7 @@ describe('Licence Service', () => {
       licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
       const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
       expect(timelineEvents).toEqual([variationApproved, ...expectedEvents])
-      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith('1', user)
+      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith(1, user)
     })
 
     it('will return a list of timeline events for a submitted variation', async () => {
@@ -1066,7 +1066,7 @@ describe('Licence Service', () => {
       licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
       const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
       expect(timelineEvents).toEqual([variationSubmitted, ...expectedEvents])
-      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith('1', user)
+      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith(1, user)
     })
     it('will return a list of timeline events for a rejected variation', async () => {
       const licenceVariation = {
@@ -1090,7 +1090,7 @@ describe('Licence Service', () => {
       licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
       const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
       expect(timelineEvents).toEqual([variationRejected, ...expectedEvents])
-      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith('1', user)
+      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith(1, user)
     })
 
     it('will get variations of a licence', async () => {

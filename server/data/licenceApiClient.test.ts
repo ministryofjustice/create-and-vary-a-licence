@@ -67,7 +67,7 @@ describe('Licence API client tests', () => {
   it('Get licence by Id', async () => {
     get.mockResolvedValue({ id: 1, prisonCode: 'MDI' } as Licence)
 
-    const result = await licenceApiClient.getLicenceById('1', { username: 'joebloggs' } as User)
+    const result = await licenceApiClient.getLicenceById(1, { username: 'joebloggs' } as User)
 
     expect(get).toHaveBeenCalledWith({ path: '/licence/id/1' }, { username: 'joebloggs' })
     expect(result).toEqual({ id: 1, prisonCode: 'MDI' })
@@ -140,7 +140,7 @@ describe('Licence API client tests', () => {
 
   it('Update additional conditions', async () => {
     await licenceApiClient.updateAdditionalConditions(
-      '1',
+      1,
       { additionalConditions: [{ code: 'condition1' }] } as AdditionalConditionsRequest,
       { username: 'joebloggs' } as User
     )
@@ -167,7 +167,7 @@ describe('Licence API client tests', () => {
 
   it('Update licence status', async () => {
     await licenceApiClient.updateLicenceStatus(
-      '1',
+      1,
       { status: 'IN_PROGRESS' } as StatusUpdateRequest,
       { username: 'joebloggs' } as User
     )

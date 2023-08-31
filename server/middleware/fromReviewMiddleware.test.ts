@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import type { Locals, Request, Response } from 'express'
 import fromReviewMiddleware from './fromReviewMiddleware'
 
 const req = {} as Request
@@ -13,7 +13,7 @@ beforeEach(() => {
   req.query = {
     fromReview: 'true',
   }
-  res.locals = {}
+  res.locals = {} as Locals
 })
 
 describe('addQueryParameterToViewContext', () => {

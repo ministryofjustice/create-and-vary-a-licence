@@ -21,6 +21,7 @@ import {
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
   isPassedArdOrCrd,
+  groupingBy,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -502,6 +503,41 @@ describe('Get prisoner release date from Nomis', () => {
       const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
 
       expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
+    })
+  })
+
+  describe('groupingBy', () => {
+    type Obj = { name: string; age: number }
+
+    it('empty', () => {
+      expect(groupingBy([] as Obj[], 'name')).toStrictEqual([])
+    })
+    it('one', () => {
+      expect(groupingBy([{ name: 'bob', age: 100 }], 'name')).toStrictEqual([[{ name: 'bob', age: 100 }]])
+    })
+
+    it('many', () => {
+      const items = [
+        { name: 'bob', age: 100 },
+        { name: 'jim', age: 100 },
+        { name: 'bob', age: 10 },
+      ]
+
+      expect(groupingBy(items, 'name')).toStrictEqual([
+        [
+          { name: 'bob', age: 100 },
+          { name: 'bob', age: 10 },
+        ],
+        [{ name: 'jim', age: 100 }],
+      ])
+
+      expect(groupingBy(items, 'age')).toStrictEqual([
+        [{ name: 'bob', age: 10 }],
+        [
+          { name: 'bob', age: 100 },
+          { name: 'jim', age: 100 },
+        ],
+      ])
     })
   })
 })

@@ -53,13 +53,11 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           comStaffId: 123,
           forename: 'Jim',
           surname: 'Jones',
-        },
+        } as Licence,
       },
     } as unknown as Response
-    conditionService.additionalConditionsCollection.mockReturnValue({
-      additionalConditions: [],
-    })
-    conditionService.getbespokeConditionsForSummaryAndPdf.mockReturnValue(res.locals.licence.bespokeConditions)
+    conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([])
+    conditionService.getbespokeConditionsForSummaryAndPdf.mockResolvedValue(res.locals.licence.bespokeConditions)
   })
 
   describe('GET', () => {
@@ -121,7 +119,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         appointmentTime: '',
         additionalLicenceConditions: [],
         additionalPssConditions: [],
-      }
+      } as Licence
 
       await handler.POST(req, res)
 

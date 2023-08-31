@@ -29,6 +29,6 @@ export default class ReleaseEventHandler {
         ? LicenceStatus.INACTIVE
         : LicenceStatus.ACTIVE
 
-    await this.licenceService.updateStatus(licence.licenceId.toString(), newStatus)
+    await this.licenceService.updateStatus(licence.licenceId, newStatus)
   }
 }

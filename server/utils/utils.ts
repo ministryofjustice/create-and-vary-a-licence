@@ -218,6 +218,17 @@ const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonAp
   return false
 }
 
+const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], keyField: K): T[][] => {
+  const results = arr.reduce((acc, c) => {
+    const key = c[keyField]
+    const existingValues = acc[key] || []
+    acc[key] = [...existingValues, c]
+    return acc
+  }, {} as Record<T[K], T[]>)
+
+  return Object.values(results)
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -242,4 +253,5 @@ export {
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
   isPassedArdOrCrd,
+  groupingBy,
 }

@@ -7,6 +7,7 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
+import { groupingBy } from '../../../utils/utils'
 
 export default class CheckAnswersRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
@@ -28,13 +29,10 @@ export default class CheckAnswersRoutes {
     }
 
     const conditionsToDisplay = await this.conditionService.getAdditionalAPConditionsForSummaryAndPdf(licence, user)
-
-    const { additionalConditions } = this.conditionService.additionalConditionsCollection(conditionsToDisplay)
-
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
 
     res.render('pages/create/checkAnswers', {
-      additionalConditions,
+      additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
       backLink,
     })
@@ -57,14 +55,14 @@ export default class CheckAnswersRoutes {
      * licence was created on a previous version.
      */
     if (
-      (await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !==
+      (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version !==
       (await this.conditionService.getPolicyVersion())
     ) {
       const newStdConditions = {
-        standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode)
+        standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode as LicenceType)
           ? await this.conditionService.getStandardConditions(LicenceType.AP)
           : [],
-        standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licence.typeCode)
+        standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licence.typeCode as LicenceType)
           ? await this.conditionService.getStandardConditions(LicenceType.PSS)
           : [],
       }

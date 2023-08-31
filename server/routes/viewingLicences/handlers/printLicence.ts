@@ -58,7 +58,7 @@ export default class PrintLicenceRoutes {
     const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
     const qrCode = qrCodesEnabled ? await this.qrCodeService.getQrCode(licence) : null
     const imageData = await this.prisonerService.getPrisonerImageData(licence.nomsId, user)
-    const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.lastName}.pdf`
+    const filename = licence.nomsId ? `${licence.nomsId}.pdf` : `${licence.surname}.pdf`
     const footerHtml = this.getPdfFooter(licence)
     const additionalConditionsWithUploads = this.getConditionsWithUploads(licence.additionalLicenceConditions)
     const exclusionZoneMapData = await this.getExclusionZones(licence, additionalConditionsWithUploads, user)

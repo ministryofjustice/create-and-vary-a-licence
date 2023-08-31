@@ -87,7 +87,7 @@ export default class PolicyChangeRoutes {
     const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
       condition.code,
       (
-        await this.licenceService.getParentLicenceOrSelf(licenceId, user)
+        await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)
       ).version
     )
 
@@ -172,7 +172,7 @@ export default class PolicyChangeRoutes {
       const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
         conditionCode,
         (
-          await this.licenceService.getParentLicenceOrSelf(licenceId, user)
+          await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)
         ).version
       )
 

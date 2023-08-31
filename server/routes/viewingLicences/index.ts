@@ -15,7 +15,6 @@ export default function Index({
   communityService,
   caseloadService,
   qrCodeService,
-  conditionService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/licence/view${path}`
@@ -29,7 +28,7 @@ export default function Index({
     )
 
   const viewCasesHandler = new ViewAndPrintCaseRoutes(caseloadService, prisonerService)
-  const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService, conditionService)
+  const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService)
   const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
 

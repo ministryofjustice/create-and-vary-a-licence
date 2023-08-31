@@ -1,15 +1,11 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import ConditionService from '../../../services/conditionService'
 import CommunityService from '../../../services/communityService'
+import { groupingBy } from '../../../utils/utils'
 
 export default class ApprovalViewRoutes {
-  constructor(
-    private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService,
-    private readonly communityService: CommunityService
-  ) {}
+  constructor(private readonly licenceService: LicenceService, private readonly communityService: CommunityService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -26,16 +22,12 @@ export default class ApprovalViewRoutes {
         user
       )
 
-      const { additionalConditions } = this.conditionService.additionalConditionsCollection(
-        licence.additionalLicenceConditions
-      )
-
       const comDetails = await this.communityService.getStaffDetailByUsername(comUsername)
 
       const returnPath = encodeURIComponent(`/licence/approve/id/${licence.id}/view`)
 
       res.render('pages/approve/view', {
-        additionalConditions,
+        additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         staffDetails: {
           name: `${comDetails?.staff?.forenames} ${comDetails?.staff?.surname}`.trim(),
           telephone: comDetails?.telephoneNumber,

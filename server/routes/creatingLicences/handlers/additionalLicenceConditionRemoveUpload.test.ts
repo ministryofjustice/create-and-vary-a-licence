@@ -26,7 +26,7 @@ describe('Route Handlers - Create Licence - Remove file upload from condition', 
       status: jest.fn(),
       locals: {
         licence: {
-          id: '2',
+          id: 2,
           additionalLicenceConditions: [
             {
               id: 2,

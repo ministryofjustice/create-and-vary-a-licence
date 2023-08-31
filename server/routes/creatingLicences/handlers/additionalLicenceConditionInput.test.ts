@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import AdditionalLicenceConditionInputRoutes from './additionalLicenceConditionInput'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
+import type { Licence } from '../../../@types/licenceApiClientTypes'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
@@ -70,7 +71,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           },
         ],
         version: 'version',
-      }
+      } as Licence
 
       await handler.GET(req, res)
       expect(conditionsProviderSpy).toHaveBeenCalledWith('code1', 'version')
@@ -100,7 +101,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
             code: 'code1',
           },
         ],
-      }
+      } as Licence
     })
 
     it('should call licence service to update the additional condition data', async () => {
@@ -158,7 +159,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
             expandedText: 'expanded text',
           },
         ],
-      }
+      } as Licence
     })
 
     it('should recognise a file upload', async () => {
@@ -203,7 +204,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
             expandedText: 'more expanded text',
           },
         ],
-      }
+      } as Licence
     })
 
     it('should call licence service to update the additional conditions with the condition removed', async () => {
