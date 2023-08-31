@@ -1136,4 +1136,36 @@ export default {
       },
     })
   },
+
+  stubSearchForOffenderOnStaffCaseload: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/com/case-search`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          results: [
+            {
+              name: 'Test Person',
+              crn: 'A123456',
+              nomisId: 'A1234BC',
+              comName: 'Test Staff',
+              comStaffCode: '3000',
+              teamName: 'Test Team',
+              releaseDate: '2023-08-16',
+              licenceId: 1,
+              licenceType: 'AP',
+              licenceStatus: LicenceStatus.IN_PROGRESS,
+              isOnProbation: false,
+            },
+          ],
+          inPrisonCount: 1,
+          onProbationCount: 0,
+        },
+      },
+    })
+  },
 }

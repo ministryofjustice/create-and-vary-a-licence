@@ -10,6 +10,7 @@ import PrisonRegisterService from './prisonRegisterService'
 import ConditionService from './conditionService'
 import LicenceOverrideService from './licenceOverrideService'
 import { dataAccess } from '../data'
+import SearchService from './searchService'
 
 const {
   hmppsAuthClient,
@@ -32,6 +33,7 @@ const licenceExpiryService = new LicenceExpiryService(prisonerService, licenceAp
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
 const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
+const searchService = new SearchService(licenceApiClient)
 
 export const services = {
   userService,
@@ -45,6 +47,7 @@ export const services = {
   prisonRegisterService,
   conditionService,
   licenceOverrideService,
+  searchService,
   licenceApiClient,
 }
 

@@ -35,29 +35,24 @@
         }), additionalLicenceConditions) %}
     {% endif %}
 
-    {% for condition in additionalConditions %}
-        {% if condition.uploadSummary.length %}
-            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.code + "/file-uploads" %}
-        {% elseif condition | checkConditionRequiresInput(licence.version) %}
-            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id %}
-        {% else %}
-            {% set actionLink =  "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+    {% for conditionGroup in additionalConditions %}
+        {% if conditionGroup.length == 1 %}
+            {% set condition = conditionGroup[0] %}              
+            {% set additionalLicenceConditions = (additionalLicenceConditions.push({
+                sequence: condition.sequence,
+                key: {  text: condition.category },
+                value: { html: additionalConditionHtml(condition) },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + condition.id + "?fromReview=true",
+                            text: "Change",
+                            visuallyHiddenText: "Change condition"
+                        }
+                    ]
+                } if isEditable
+            }), additionalLicenceConditions) %}
         {% endif %}
-
-        {% set additionalLicenceConditions = (additionalLicenceConditions.push({
-            sequence: condition.sequence,
-            key: {  text: condition.category },
-            value: { html: additionalConditionHtml(condition) },
-            actions: {
-                items: [
-                    {
-                        href: actionLink + "?fromReview=true",
-                        text: "Change",
-                        visuallyHiddenText: "Change condition"
-                    }
-                ]
-            } if isEditable
-        }), additionalLicenceConditions) %}
     {% endfor %}
 
     {% if conditionsWithUploads.length %}
