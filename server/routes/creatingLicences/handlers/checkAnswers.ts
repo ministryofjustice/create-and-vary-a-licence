@@ -29,14 +29,12 @@ export default class CheckAnswersRoutes {
 
     const conditionsToDisplay = await this.conditionService.getAdditionalAPConditionsForSummaryAndPdf(licence, user)
 
-    const { conditionsWithUploads, additionalConditions } =
-      this.conditionService.additionalConditionsCollection(conditionsToDisplay)
+    const { additionalConditions } = this.conditionService.additionalConditionsCollection(conditionsToDisplay)
 
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
 
     res.render('pages/create/checkAnswers', {
       additionalConditions,
-      conditionsWithUploads,
       bespokeConditionsToDisplay,
       backLink,
     })

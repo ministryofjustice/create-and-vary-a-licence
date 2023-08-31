@@ -26,7 +26,7 @@ export default class ApprovalViewRoutes {
         user
       )
 
-      const { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
+      const { additionalConditions } = this.conditionService.additionalConditionsCollection(
         licence.additionalLicenceConditions
       )
 
@@ -36,7 +36,6 @@ export default class ApprovalViewRoutes {
 
       res.render('pages/approve/view', {
         additionalConditions,
-        conditionsWithUploads,
         staffDetails: {
           name: `${comDetails?.staff?.forenames} ${comDetails?.staff?.surname}`.trim(),
           telephone: comDetails?.telephoneNumber,

@@ -58,7 +58,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     } as unknown as Response
     conditionService.additionalConditionsCollection.mockReturnValue({
       additionalConditions: [],
-      conditionsWithUploads: [],
     })
     conditionService.getbespokeConditionsForSummaryAndPdf.mockReturnValue(res.locals.licence.bespokeConditions)
   })
@@ -68,7 +67,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
-        conditionsWithUploads: [],
         bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
       })
@@ -86,7 +84,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       await handler.GET(reqWithEmptySession, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
-        conditionsWithUploads: [],
         bespokeConditionsToDisplay: [],
         backLink: '/licence/create/caseload',
       })
@@ -108,7 +105,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
         additionalConditions: [],
-        conditionsWithUploads: [],
         bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
       })

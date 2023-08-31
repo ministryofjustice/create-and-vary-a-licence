@@ -26,11 +26,11 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
-      const { conditionsWithUploads, additionalConditions } = this.conditionService.additionalConditionsCollection(
+      const { additionalConditions } = this.conditionService.additionalConditionsCollection(
         licence.additionalLicenceConditions
       )
 
-      res.render('pages/view/view', { conditionsWithUploads, additionalConditions })
+      res.render('pages/view/view', { additionalConditions })
     } else {
       res.redirect(`/licence/view/cases`)
     }

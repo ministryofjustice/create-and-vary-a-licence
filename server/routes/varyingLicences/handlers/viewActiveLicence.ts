@@ -17,14 +17,12 @@ export default class ViewActiveLicenceRoutes {
 
     const conditionsToDisplay = await this.conditionService.getAdditionalAPConditionsForSummaryAndPdf(licence, user)
 
-    const { conditionsWithUploads, additionalConditions } =
-      this.conditionService.additionalConditionsCollection(conditionsToDisplay)
+    const { additionalConditions } = this.conditionService.additionalConditionsCollection(conditionsToDisplay)
 
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
 
     return res.render('pages/vary/viewActive', {
       additionalConditions,
-      conditionsWithUploads,
       bespokeConditionsToDisplay,
       callToActions: { shouldShowVaryButton },
     })
