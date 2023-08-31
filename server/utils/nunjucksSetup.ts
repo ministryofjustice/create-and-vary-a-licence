@@ -214,7 +214,7 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
   })
 
   njkEnv.addGlobal(
-    'additionalCondition',
+    'additionalConditionRow',
     (licence: Licence, condition: AdditionalCondition, html: string, isEditable: boolean) => {
       return {
         sequence: condition.sequence,

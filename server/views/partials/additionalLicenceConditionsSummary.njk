@@ -35,15 +35,13 @@
 
     {% for conditionGroup in additionalConditions %}
         {% if conditionGroup.length == 1 %}
-            {% set condition = conditionGroup[0] %}              
-            {% set rows = (rows.push(
-                  additionalCondition(licence, condition, additionalConditionHtml(condition), isEditable )
-                 ), rows) %}
+          {% set conditionHtml = additionalConditionHtml(conditionGroup[0]) %}            
         {% else %}
-            {% set conditionHtml = conditionGroup | sortConditionsById | map(additionalConditionHtml) | join %}
-            {% set rows = (rows.push(
-                additionalCondition(licence, conditionGroup[0], conditionHtml, isEditable )), rows) %}
+          {% set conditionHtml = conditionGroup | sortConditionsById | map(additionalConditionHtml) | join %}
         {% endif %}
+        {% set rows = (rows.push(
+        
+        additionalConditionRow(licence, conditionGroup[0], conditionHtml, isEditable )), rows) %} 
     {% endfor %}
 
     {{ govukSummaryList({
