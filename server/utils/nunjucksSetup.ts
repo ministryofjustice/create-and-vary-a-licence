@@ -142,14 +142,6 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
     return addresses[index] ? addresses[index][property] : ''
   })
 
-  njkEnv.addFilter(
-    'checkConditionRequiresInput',
-    async (additionalCondition: AdditionalCondition, licenceVersion: string) => {
-      return (await conditionService.getAdditionalConditionByCode(additionalCondition.code, licenceVersion))
-        .requiresInput
-    }
-  )
-
   njkEnv.addFilter('datetimeToDate', (dt: string) => {
     return jsonDtToDate(dt)
   })
