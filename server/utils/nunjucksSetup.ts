@@ -224,7 +224,12 @@ export function registerNunjucks(conditionService: ConditionService, app?: expre
           items: isEditable
             ? [
                 {
-                  href: getEditConditionHref(licence.id, condition.code, true),
+                  href: getEditConditionHref({
+                    licenceId: licence.id,
+                    conditionId: condition.id,
+                    conditionCode: condition.code,
+                    fromReview: true,
+                  }),
                   text: 'Change',
                   visuallyHiddenText: 'Change condition',
                 },
