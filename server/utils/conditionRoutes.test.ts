@@ -32,7 +32,7 @@ describe('conditionRoutes', () => {
         fromReview: true,
       })
     ).toStrictEqual(
-      '/licence/create/id/1/additional-licence-conditions/condition/0f9a20f4-35c7-4c77-8af8-f200f153fa11/file-uploads?fromReview=true'
+      `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromReview=true`
     )
   })
 
@@ -44,8 +44,6 @@ describe('conditionRoutes', () => {
         conditionCode: MEZ_CONDITION_CODE,
         fromReview: false,
       })
-    ).toStrictEqual(
-      '/licence/create/id/1/additional-licence-conditions/condition/0f9a20f4-35c7-4c77-8af8-f200f153fa11/file-uploads'
-    )
+    ).toStrictEqual(`/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads`)
   })
 })
