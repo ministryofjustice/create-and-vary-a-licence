@@ -1,15 +1,11 @@
 import { Expose, Type } from 'class-transformer'
-import { IsNotEmpty, Validate } from 'class-validator'
-import SimpleDate from '../date'
+import { Validate } from 'class-validator'
+import { SimpleDate } from '..'
 import ValidSimpleDate from '../../../../validators/simpleDateValidator'
 import DateIsBefore from '../../../../validators/dateIsBefore'
 import DateIsAfterExpectedReleaseDate from '../../../../validators/dateIsAfterExpectedReleaseDate'
 
-class AlcoholMonitoringPeriod {
-  @Expose()
-  @IsNotEmpty({ message: 'Enter a timeframe' })
-  timeframe: string
-
+class ElectronicMonitoringPeriod {
   @Expose()
   @Type(() => SimpleDate)
   @Validate(ValidSimpleDate)
@@ -22,4 +18,4 @@ class AlcoholMonitoringPeriod {
   endDate: SimpleDate
 }
 
-export default AlcoholMonitoringPeriod
+export default ElectronicMonitoringPeriod
