@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer'
 import { IsNotEmpty } from 'class-validator'
-import AdditionalConditions from './additionalConditions'
+import AdditionalConditions from '../../manageConditions/types/additionalConditions'
 import ConditionsHaveBeenExpanded from '../../../validators/conditionsHaveBeenExpanded'
 
 class LicenceToSubmit {

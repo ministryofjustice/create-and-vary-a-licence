@@ -12,9 +12,9 @@ import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/creatingLicences/types/address'
 import LicenceType from '../enumeration/licenceType'
-import AdditionalConditions from '../routes/creatingLicences/types/additionalConditions'
+import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
 import SimpleDate from '../routes/creatingLicences/types/date'
-import BespokeConditions from '../routes/creatingLicences/types/bespokeConditions'
+import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import {
   AdditionalCondition,

@@ -1,18 +1,18 @@
 import { Expose, Transform, Type } from 'class-transformer'
 import { IsNotEmpty, Validate, ValidateIf } from 'class-validator'
-import SimpleTime from '../time'
+import { SimpleTime } from '..'
 import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
 
-// eslint-disable-next-line camelcase
-class ReportToApprovedPremisesPolicyV2_0 {
+class CurfewTerms {
   @Expose()
-  @IsNotEmpty({ message: 'Enter name of approved premises' })
-  approvedPremises: string
+  @Type(() => SimpleTime)
+  @Validate(ValidSimpleTime)
+  curfewStart: SimpleTime
 
   @Expose()
   @Type(() => SimpleTime)
   @Validate(ValidSimpleTime)
-  reportingTime: SimpleTime
+  curfewEnd: SimpleTime
 
   @Expose()
   @IsNotEmpty({ message: 'Select a review period' })
@@ -27,5 +27,4 @@ class ReportToApprovedPremisesPolicyV2_0 {
   alternativeReviewPeriod: string
 }
 
-// eslint-disable-next-line camelcase
-export default ReportToApprovedPremisesPolicyV2_0
+export default CurfewTerms

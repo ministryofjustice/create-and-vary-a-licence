@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer'
 import { ValidateNested } from 'class-validator'
-import Address from '../address'
+import { Address } from '..'
 
 class ApprovedAddress {
   @Expose()
