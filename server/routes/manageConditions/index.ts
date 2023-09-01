@@ -6,21 +6,17 @@ import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
 import AdditionalLicenceConditionsRoutes from './handlers/additionalLicenceConditions'
-import BespokeConditionsQuestionRoutes from './handlers/bespokeConditionsQuestion'
 import BespokeConditionsRoutes from './handlers/bespokeConditions'
 import BespokeConditions from './types/bespokeConditions'
 
-import { Services } from '../../services'
+import type { Services } from '../../services'
 import AdditionalConditions from './types/additionalConditions'
 import AdditionalLicenceConditionsCallbackRoutes from './handlers/additionalLicenceConditionsCallback'
 import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceConditionInput'
-import AdditionalPssConditionsQuestionRoutes from './handlers/additionalPssConditionsQuestion'
 import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
 import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
 import AdditionalLicenceConditionRemoveUploadRoutes from './handlers/additionalLicenceConditionRemoveUpload'
-import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
-import PssConditionsYesOrNo from './types/pssConditionsYesOrNo'
 import AdditionalLicenceConditionUploadsRoutes from './handlers/additionalLicenceConditionUploadsHandler'
 import AdditionalLicenceTypesRoutes from './handlers/additionalLicenceTypesHandler'
 import AdditionalLicenceConditionDeletionRoutes from './handlers/additionalLicenceConditionDeletionHandler'
@@ -30,7 +26,7 @@ const upload = multer({ dest: 'uploads/' })
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
 
-  const routePrefix = (path: string) => `/licence/create${path}/id/:licenceId`
+  const routePrefix = (path: string) => `/licence/create/id/:licenceId${path}`
 
   /*
    * The fetchLicence middleware will call the licenceAPI during each GET request on the create a licence journey
@@ -76,39 +72,39 @@ export default function Index({ licenceService, conditionService }: Services): R
     get('/additional-licence-conditions/callback', controller.GET)
   }
 
+  // START MEZ
+  // remove area from map list in form builder without confirmation (delete single conditions) - DELETE NOT USED
   {
     const controller = new AdditionalLicenceConditionRemoveUploadRoutes(licenceService)
     get('/condition/id/:conditionId/remove-upload', controller.GET)
   }
 
   {
+    // View map list / add new map condition
     const controller = new AdditionalLicenceConditionUploadsRoutes(licenceService, conditionService)
     get('/additional-licence-conditions/condition/:conditionCode/file-uploads', controller.GET)
     post('/additional-licence-conditions/condition/:conditionCode/file-uploads', controller.POST)
   }
 
+  // delete MEZ condition (delete all conditions)
+  {
+    const controller = new AdditionalLicenceTypesRoutes(licenceService)
+    get('/additional-licence-types/condition/:conditionCode/delete', controller.DELETE)
+  }
+
+  // remove area from map list with confirmation (delete single conditions)
   {
     const controller = new AdditionalLicenceConditionDeletionRoutes(licenceService)
     get('/additional-licence-conditions/condition/:conditionId/remove', controller.GET)
     post('/additional-licence-conditions/condition/:conditionId/remove', controller.POST)
   }
-
-  {
-    const controller = new AdditionalLicenceTypesRoutes(licenceService)
-    get('/additional-licence-types/condition/:conditionCode/delete', controller.DELETE)
-  }
+  // END MEZ
 
   {
     const controller = new AdditionalLicenceConditionInputRoutes(licenceService, conditionService)
     get('/additional-licence-conditions/condition/:conditionId', controller.GET)
     postWithFileUpload('/additional-licence-conditions/condition/:conditionId', controller.POST)
     get('/additional-licence-conditions/condition/:conditionId/delete', controller.DELETE)
-  }
-
-  {
-    const controller = new AdditionalPssConditionsQuestionRoutes()
-    get('/additional-pss-conditions-question', controller.GET)
-    post('/additional-pss-conditions-question', controller.POST, PssConditionsYesOrNo)
   }
 
   {
@@ -127,12 +123,6 @@ export default function Index({ licenceService, conditionService }: Services): R
     get('/additional-pss-conditions/condition/:conditionId', controller.GET)
     post('/additional-pss-conditions/condition/:conditionId', controller.POST)
     post('/additional-pss-conditions/condition/:conditionId/delete', controller.DELETE)
-  }
-
-  {
-    const controller = new BespokeConditionsQuestionRoutes()
-    get('/bespoke-conditions-question', controller.GET)
-    post('/bespoke-conditions-question', controller.POST, BespokeConditionsYesOrNo)
   }
 
   {

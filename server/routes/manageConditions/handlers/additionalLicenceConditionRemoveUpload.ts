@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 
 export default class AdditionalLicenceConditionRemoveUploadRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -9,9 +8,7 @@ export default class AdditionalLicenceConditionRemoveUploadRoutes {
     const { user, licence } = res.locals
     const { conditionId } = req.params
 
-    const condition = licence.additionalLicenceConditions.find(
-      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10)
-    )
+    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
 
     // when removing file upload, redirect to file-uploads controller
     const redirect =

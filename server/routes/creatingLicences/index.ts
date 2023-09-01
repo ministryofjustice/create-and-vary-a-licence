@@ -23,6 +23,10 @@ import YesOrNoQuestion from './types/yesOrNo'
 import ConfirmCreateRoutes from './handlers/confirmCreate'
 import AdditionalLicenceConditionsQuestionRoutes from './handlers/additionalLicenceConditionsQuestion'
 import AdditionalConditionsYesOrNo from './types/additionalConditionsYesOrNo'
+import AdditionalPssConditionsQuestionRoutes from './handlers/additionalPssConditionsQuestion'
+import BespokeConditionsQuestionRoutes from './handlers/bespokeConditionsQuestion'
+import PssConditionsYesOrNo from './types/pssConditionsYesOrNo'
+import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
 
 export default function Index({
   licenceService,
@@ -59,47 +63,83 @@ export default function Index({
       asyncMiddleware(handler)
     )
 
-  const caseloadHandler = new CaseloadRoutes(caseloadService)
-  const comDetailsHandler = new ComDetailsRoutes(communityService)
-  const confirmCreateHandler = new ConfirmCreateRoutes(
-    communityService,
-    prisonerService,
-    licenceService,
-    ukBankHolidayFeedService
-  )
-  const initialMeetingNameHandler = new InitialMeetingNameRoutes(licenceService, ukBankHolidayFeedService)
-  const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService, ukBankHolidayFeedService)
-  const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService, ukBankHolidayFeedService)
-  const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
-  const additionalLicenceConditionsQuestionRoutes = new AdditionalLicenceConditionsQuestionRoutes()
-  const checkAnswersHandler = new CheckAnswersRoutes(licenceService, conditionService)
-  const editQuestionHandler = new EditQuestionRoutes(licenceService)
-  const confirmationHandler = new ConfirmationRoutes()
+  {
+    const controller = new CaseloadRoutes(caseloadService)
+    get('/caseload', controller.GET)
+  }
 
-  get('/caseload', caseloadHandler.GET)
-  get('/probation-practitioner/staffCode/:staffCode', comDetailsHandler.GET)
-  get('/nomisId/:nomisId/confirm', confirmCreateHandler.GET)
-  post('/nomisId/:nomisId/confirm', confirmCreateHandler.POST, YesOrNoQuestion)
-  get('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.GET)
-  post('/id/:licenceId/initial-meeting-name', initialMeetingNameHandler.POST, PersonName)
-  get('/id/:licenceId/initial-meeting-place', initialMeetingPlaceHandler.GET)
-  post('/id/:licenceId/initial-meeting-place', initialMeetingPlaceHandler.POST, Address)
-  get('/id/:licenceId/initial-meeting-contact', initialMeetingContactHandler.GET)
-  post('/id/:licenceId/initial-meeting-contact', initialMeetingContactHandler.POST, Telephone)
-  get('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.GET)
-  post('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.POST, SimpleDateTime)
-  get('/additional-licence-conditions-question', additionalLicenceConditionsQuestionRoutes.GET)
-  post(
-    '/additional-licence-conditions-question',
-    additionalLicenceConditionsQuestionRoutes.POST,
-    AdditionalConditionsYesOrNo
-  )
+  {
+    const controller = new ComDetailsRoutes(communityService)
+    get('/probation-practitioner/staffCode/:staffCode', controller.GET)
+  }
 
-  get('/id/:licenceId/check-your-answers', checkAnswersHandler.GET)
-  post('/id/:licenceId/check-your-answers', checkAnswersHandler.POST)
-  get('/id/:licenceId/edit', editQuestionHandler.GET)
-  post('/id/:licenceId/edit', editQuestionHandler.POST, YesOrNoQuestion)
-  get('/id/:licenceId/confirmation', confirmationHandler.GET)
+  {
+    const controller = new ConfirmCreateRoutes(
+      communityService,
+      prisonerService,
+      licenceService,
+      ukBankHolidayFeedService
+    )
+    get('/nomisId/:nomisId/confirm', controller.GET)
+    post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
+  }
 
+  {
+    const controller = new InitialMeetingNameRoutes(licenceService, ukBankHolidayFeedService)
+    get('/id/:licenceId/initial-meeting-name', controller.GET)
+    post('/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
+  }
+
+  {
+    const controllr = new InitialMeetingPlaceRoutes(licenceService, ukBankHolidayFeedService)
+    get('/id/:licenceId/initial-meeting-place', controllr.GET)
+    post('/id/:licenceId/initial-meeting-place', controllr.POST, Address)
+  }
+
+  {
+    const controller = new InitialMeetingContactRoutes(licenceService, ukBankHolidayFeedService)
+    get('/id/:licenceId/initial-meeting-contact', controller.GET)
+    post('/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
+  }
+
+  {
+    const controller = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
+    get('/id/:licenceId/initial-meeting-time', controller.GET)
+    post('/id/:licenceId/initial-meeting-time', controller.POST, SimpleDateTime)
+  }
+  {
+    const controller = new AdditionalLicenceConditionsQuestionRoutes()
+    get('/id/:licenceId/additional-licence-conditions-question', controller.GET)
+    post('/id/:licenceId/additional-licence-conditions-question', controller.POST, AdditionalConditionsYesOrNo)
+  }
+
+  {
+    const controller = new AdditionalPssConditionsQuestionRoutes()
+    get('/id/:licenceId/additional-pss-conditions-question', controller.GET)
+    post('/id/:licenceId/additional-pss-conditions-question', controller.POST, PssConditionsYesOrNo)
+  }
+
+  {
+    const controller = new BespokeConditionsQuestionRoutes()
+    get('/id/:licenceId/bespoke-conditions-question', controller.GET)
+    post('/id/:licenceId/bespoke-conditions-question', controller.POST, BespokeConditionsYesOrNo)
+  }
+
+  {
+    const controller = new CheckAnswersRoutes(licenceService, conditionService)
+    get('/id/:licenceId/check-your-answers', controller.GET)
+    post('/id/:licenceId/check-your-answers', controller.POST)
+  }
+
+  {
+    const controller = new EditQuestionRoutes(licenceService)
+    get('/id/:licenceId/edit', controller.GET)
+    post('/id/:licenceId/edit', controller.POST, YesOrNoQuestion)
+  }
+
+  {
+    const controller = new ConfirmationRoutes()
+    get('/id/:licenceId/confirmation', controller.GET)
+  }
   return router
 }
