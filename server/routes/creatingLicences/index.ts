@@ -21,6 +21,8 @@ import EditQuestionRoutes from './handlers/editQuestion'
 import ComDetailsRoutes from './handlers/comDetails'
 import YesOrNoQuestion from './types/yesOrNo'
 import ConfirmCreateRoutes from './handlers/confirmCreate'
+import AdditionalLicenceConditionsQuestionRoutes from './handlers/additionalLicenceConditionsQuestion'
+import AdditionalConditionsYesOrNo from './types/additionalConditionsYesOrNo'
 
 export default function Index({
   licenceService,
@@ -69,6 +71,7 @@ export default function Index({
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService, ukBankHolidayFeedService)
   const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService, ukBankHolidayFeedService)
   const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
+  const additionalLicenceConditionsQuestionRoutes = new AdditionalLicenceConditionsQuestionRoutes()
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService, conditionService)
   const editQuestionHandler = new EditQuestionRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
@@ -85,6 +88,12 @@ export default function Index({
   post('/id/:licenceId/initial-meeting-contact', initialMeetingContactHandler.POST, Telephone)
   get('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.GET)
   post('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.POST, SimpleDateTime)
+  get('/additional-licence-conditions-question', additionalLicenceConditionsQuestionRoutes.GET)
+  post(
+    '/additional-licence-conditions-question',
+    additionalLicenceConditionsQuestionRoutes.POST,
+    AdditionalConditionsYesOrNo
+  )
 
   get('/id/:licenceId/check-your-answers', checkAnswersHandler.GET)
   post('/id/:licenceId/check-your-answers', checkAnswersHandler.POST)
