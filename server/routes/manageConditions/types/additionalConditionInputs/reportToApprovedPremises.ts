@@ -1,12 +1,12 @@
 import { Expose, Transform, Type } from 'class-transformer'
 import { IsNotEmpty, Validate, ValidateIf } from 'class-validator'
-import SimpleTime from '../time'
+import { SimpleTime } from '..'
 import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
 
-class ReportToPoliceStation {
+class ReportToApprovedPremises {
   @Expose()
-  @IsNotEmpty({ message: 'Enter name of police station' })
-  policeStation: string
+  @IsNotEmpty({ message: 'Enter name of approved premises' })
+  approvedPremises: string
 
   @Expose()
   @IsNotEmpty({ message: 'Select when the person needs to report ' })
@@ -64,4 +64,4 @@ class ReportToPoliceStation {
   alternativeReviewPeriod: string
 }
 
-export default ReportToPoliceStation
+export default ReportToApprovedPremises

@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import multer from 'multer'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
@@ -10,11 +9,6 @@ import InitialMeetingNameRoutes from './handlers/initialMeetingName'
 import InitialMeetingPlaceRoutes from './handlers/initialMeetingPlace'
 import InitialMeetingContactRoutes from './handlers/initialMeetingContact'
 import InitialMeetingTimeRoutes from './handlers/initialMeetingTime'
-import AdditionalLicenceConditionsQuestionRoutes from './handlers/additionalLicenceConditionsQuestion'
-import AdditionalLicenceConditionsRoutes from './handlers/additionalLicenceConditions'
-import BespokeConditionsQuestionRoutes from './handlers/bespokeConditionsQuestion'
-import BespokeConditionsRoutes from './handlers/bespokeConditions'
-import BespokeConditions from './types/bespokeConditions'
 import CheckAnswersRoutes from './handlers/checkAnswers'
 import ConfirmationRoutes from './handlers/confirmation'
 import { Services } from '../../services'
@@ -22,26 +16,11 @@ import PersonName from './types/personName'
 import Address from './types/address'
 import Telephone from './types/telephone'
 import SimpleDateTime from './types/simpleDateTime'
-import AdditionalConditions from './types/additionalConditions'
-import AdditionalLicenceConditionsCallbackRoutes from './handlers/additionalLicenceConditionsCallback'
-import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceConditionInput'
-import AdditionalPssConditionsQuestionRoutes from './handlers/additionalPssConditionsQuestion'
-import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
-import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
-import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
-import EditQuestionRoutes from './handlers/editQuestion'
-import AdditionalLicenceConditionRemoveUploadRoutes from './handlers/additionalLicenceConditionRemoveUpload'
-import ComDetailsRoutes from './handlers/comDetails'
-import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
-import PssConditionsYesOrNo from './types/pssConditionsYesOrNo'
-import YesOrNoQuestion from './types/yesOrNo'
-import AdditionalConditionsYesOrNo from './types/additionalConditionsYesOrNo'
-import ConfirmCreateRoutes from './handlers/confirmCreate'
-import AdditionalLicenceConditionUploadsHandler from './handlers/additionalLicenceConditionUploadsHandler'
-import AdditionalLicenceTypesHandler from './handlers/additionalLicenceTypesHandler'
-import AdditionalLicenceConditionDeletionHandler from './handlers/additionalLicenceConditionDeletionHandler'
 
-const upload = multer({ dest: 'uploads/' })
+import EditQuestionRoutes from './handlers/editQuestion'
+import ComDetailsRoutes from './handlers/comDetails'
+import YesOrNoQuestion from './types/yesOrNo'
+import ConfirmCreateRoutes from './handlers/confirmCreate'
 
 export default function Index({
   licenceService,
@@ -78,16 +57,6 @@ export default function Index({
       asyncMiddleware(handler)
     )
 
-  const postWithFileUpload = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      fetchLicence(licenceService),
-      upload.single('outOfBoundFilename'),
-      validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
-    )
-
   const caseloadHandler = new CaseloadRoutes(caseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
   const confirmCreateHandler = new ConfirmCreateRoutes(
@@ -100,26 +69,6 @@ export default function Index({
   const initialMeetingPlaceHandler = new InitialMeetingPlaceRoutes(licenceService, ukBankHolidayFeedService)
   const initialMeetingContactHandler = new InitialMeetingContactRoutes(licenceService, ukBankHolidayFeedService)
   const initialMeetingTimeHandler = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
-  const additionalLicenceConditionsQuestionHandler = new AdditionalLicenceConditionsQuestionRoutes()
-  const additionalLicenceConditionsHandler = new AdditionalLicenceConditionsRoutes(licenceService, conditionService)
-  const additionalLicenceConditionsCallbackHandler = new AdditionalLicenceConditionsCallbackRoutes(conditionService)
-  const additionalLicenceConditionInputHandler = new AdditionalLicenceConditionInputRoutes(
-    licenceService,
-    conditionService
-  )
-  const additionalLicenceConditionUploads = new AdditionalLicenceConditionUploadsHandler(
-    licenceService,
-    conditionService
-  )
-  const additionalLicenceTypesHandler = new AdditionalLicenceTypesHandler(licenceService)
-  const additionalLicenceConditionDeletionHandler = new AdditionalLicenceConditionDeletionHandler(licenceService)
-  const additionalLicenceConditionRemoveUploadHandler = new AdditionalLicenceConditionRemoveUploadRoutes(licenceService)
-  const additionalPssConditionsQuestionHandler = new AdditionalPssConditionsQuestionRoutes()
-  const additionalPssConditionsHandler = new AdditionalPssConditionsRoutes(licenceService, conditionService)
-  const additionalPssConditionsCallbackHandler = new AdditionalPssConditionsCallbackRoutes(conditionService)
-  const additionalPssConditionInputHandler = new AdditionalPssConditionInputRoutes(licenceService, conditionService)
-  const bespokeConditionsQuestionHandler = new BespokeConditionsQuestionRoutes()
-  const bespokeConditionsHandler = new BespokeConditionsRoutes(licenceService)
   const checkAnswersHandler = new CheckAnswersRoutes(licenceService, conditionService)
   const editQuestionHandler = new EditQuestionRoutes(licenceService)
   const confirmationHandler = new ConfirmationRoutes()
@@ -136,66 +85,7 @@ export default function Index({
   post('/id/:licenceId/initial-meeting-contact', initialMeetingContactHandler.POST, Telephone)
   get('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.GET)
   post('/id/:licenceId/initial-meeting-time', initialMeetingTimeHandler.POST, SimpleDateTime)
-  get('/id/:licenceId/additional-licence-conditions-question', additionalLicenceConditionsQuestionHandler.GET)
-  post(
-    '/id/:licenceId/additional-licence-conditions-question',
-    additionalLicenceConditionsQuestionHandler.POST,
-    AdditionalConditionsYesOrNo
-  )
-  get('/id/:licenceId/additional-licence-conditions', additionalLicenceConditionsHandler.GET)
-  post('/id/:licenceId/additional-licence-conditions', additionalLicenceConditionsHandler.POST, AdditionalConditions)
-  get('/id/:licenceId/additional-licence-conditions/callback', additionalLicenceConditionsCallbackHandler.GET)
-  get('/id/:licenceId/additional-licence-conditions/condition/:conditionId', additionalLicenceConditionInputHandler.GET)
 
-  // Additional condition forms can include file uploads which uses `multer` middleware on these routes
-  postWithFileUpload(
-    '/id/:licenceId/additional-licence-conditions/condition/:conditionId',
-    additionalLicenceConditionInputHandler.POST
-  )
-  get('/id/:licenceId/condition/id/:conditionId/remove-upload', additionalLicenceConditionRemoveUploadHandler.GET)
-  get(
-    '/id/:licenceId/additional-licence-conditions/condition/:conditionCode/file-uploads',
-    additionalLicenceConditionUploads.GET
-  )
-  get(
-    '/id/:licenceId/additional-licence-conditions/condition/:conditionId/remove',
-    additionalLicenceConditionDeletionHandler.GET
-  )
-  post(
-    '/id/:licenceId/additional-licence-conditions/condition/:conditionId/remove',
-    additionalLicenceConditionDeletionHandler.POST
-  )
-  post(
-    '/id/:licenceId/additional-licence-conditions/condition/:conditionCode/file-uploads',
-    additionalLicenceConditionUploads.POST
-  )
-
-  get('/id/:licenceId/additional-licence-types/condition/:conditionCode/delete', additionalLicenceTypesHandler.DELETE)
-
-  get(
-    '/id/:licenceId/additional-licence-conditions/condition/:conditionId/delete',
-    additionalLicenceConditionInputHandler.DELETE
-  )
-  get('/id/:licenceId/additional-pss-conditions-question', additionalPssConditionsQuestionHandler.GET)
-  post(
-    '/id/:licenceId/additional-pss-conditions-question',
-    additionalPssConditionsQuestionHandler.POST,
-    PssConditionsYesOrNo
-  )
-  get('/id/:licenceId/additional-pss-conditions', additionalPssConditionsHandler.GET)
-  post('/id/:licenceId/additional-pss-conditions', additionalPssConditionsHandler.POST, AdditionalConditions)
-  get('/id/:licenceId/additional-pss-conditions/callback', additionalPssConditionsCallbackHandler.GET)
-  get('/id/:licenceId/additional-pss-conditions/condition/:conditionId', additionalPssConditionInputHandler.GET)
-  post('/id/:licenceId/additional-pss-conditions/condition/:conditionId', additionalPssConditionInputHandler.POST)
-  post(
-    '/id/:licenceId/additional-pss-conditions/condition/:conditionId/delete',
-    additionalPssConditionInputHandler.DELETE
-  )
-  get('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.GET)
-  post('/id/:licenceId/bespoke-conditions-question', bespokeConditionsQuestionHandler.POST, BespokeConditionsYesOrNo)
-  get('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.GET)
-  post('/id/:licenceId/bespoke-conditions', bespokeConditionsHandler.POST, BespokeConditions)
-  get('/id/:licenceId/bespoke-conditions/delete', bespokeConditionsHandler.DELETE)
   get('/id/:licenceId/check-your-answers', checkAnswersHandler.GET)
   post('/id/:licenceId/check-your-answers', checkAnswersHandler.POST)
   get('/id/:licenceId/edit', editQuestionHandler.GET)

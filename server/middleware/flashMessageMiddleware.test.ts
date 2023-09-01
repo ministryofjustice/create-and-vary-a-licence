@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import type { Locals, Request, Response } from 'express'
 import checkFlashForErrors from './flashMessageMiddleware'
 
 const flashMock = jest.fn()
@@ -12,7 +12,7 @@ const middleware = checkFlashForErrors()
 beforeEach(() => {
   jest.resetAllMocks()
   req.method = 'GET'
-  res.locals = {}
+  res.locals = {} as Locals
 })
 
 describe('flashMessageMiddleware', () => {

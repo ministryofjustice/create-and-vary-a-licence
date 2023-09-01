@@ -203,6 +203,6 @@ describe('Sentence dates changed event handler', () => {
 
     await handler.handle(event)
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
-    expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.INACTIVE)
+    expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.INACTIVE)
   })
 })

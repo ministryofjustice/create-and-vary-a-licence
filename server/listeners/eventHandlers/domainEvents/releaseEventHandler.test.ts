@@ -72,7 +72,7 @@ describe('Release event handler', () => {
       ['ABC1234'],
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
-    expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.ACTIVE)
+    expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.ACTIVE)
   })
 
   it('should update the licence to INACTIVE if the licence for the offender is not APPROVED', async () => {
@@ -100,7 +100,7 @@ describe('Release event handler', () => {
       ['ABC1234'],
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
-    expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.INACTIVE)
+    expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.INACTIVE)
   })
 
   it('should update the licence to INACTIVE if the HDC licence is APPROVED', async () => {
@@ -131,7 +131,7 @@ describe('Release event handler', () => {
       ['ABC1234'],
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
-    expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.INACTIVE)
+    expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.INACTIVE)
   })
 
   it('should update the licence to ACTIVE if the licence for the offender is APPROVED and HDC status is NOT APPROVED', async () => {
@@ -162,6 +162,6 @@ describe('Release event handler', () => {
       ['ABC1234'],
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
-    expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.ACTIVE)
+    expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.ACTIVE)
   })
 })

@@ -1168,7 +1168,7 @@ export interface components {
        * @description Coded value for the additional condition
        * @example meetingAddress
        */
-      code?: string
+      code: string
       /**
        * @description Version number for condition
        * @example 2.1

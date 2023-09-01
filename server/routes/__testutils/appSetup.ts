@@ -1,4 +1,4 @@
-import express, { Express } from 'express'
+import express, { type Express, type Locals } from 'express'
 import createError from 'http-errors'
 
 import wpipRoutes from '../index'
@@ -27,7 +27,7 @@ function appSetup(services: Services, userSupplier: () => User): Express {
     req.user = userSupplier()
     req.flash = flashProvider
     req.signedCookies = signedCookiesProvider()
-    res.locals = {}
+    res.locals = {} as Locals
     res.locals.user = { ...req.user }
     next()
   })

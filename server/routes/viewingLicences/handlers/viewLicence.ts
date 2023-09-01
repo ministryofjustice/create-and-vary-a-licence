@@ -1,10 +1,10 @@
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import ConditionService from '../../../services/conditionService'
-import LicenceService from '../../../services/licenceService'
+import type LicenceService from '../../../services/licenceService'
+import { groupingBy } from '../../../utils/utils'
 
 export default class ViewAndPrintLicenceRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
+  constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -26,11 +26,7 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
-      const { additionalConditions } = this.conditionService.additionalConditionsCollection(
-        licence.additionalLicenceConditions
-      )
-
-      res.render('pages/view/view', { additionalConditions })
+      res.render('pages/view/view', { additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code') })
     } else {
       res.redirect(`/licence/view/cases`)
     }

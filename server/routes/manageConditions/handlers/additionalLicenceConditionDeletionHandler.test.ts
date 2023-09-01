@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import AdditionalLicenceConditionDeletionHandler from './additionalLicenceConditionDeletionHandler'
+import { MEZ_CONDITION_CODE } from '../../../utils/conditionRoutes'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 describe('Route Handlers - Create Licence - Additional Licence Condition Deletion Handler', () => {
@@ -58,7 +59,9 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Deletio
         locals: {
           licence: {
             id: 1,
-            additionalLicenceConditions: [{ id: 1, code: 'testCode', uploadSummary: [{ filename: 'testFile' }] }],
+            additionalLicenceConditions: [
+              { id: 1, code: MEZ_CONDITION_CODE, uploadSummary: [{ filename: 'testFile' }] },
+            ],
           },
           user: {
             username: 'joebloggs',
@@ -77,6 +80,20 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Deletio
       } as unknown as Request
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(1, 1, { username: 'joebloggs' })
+    })
+
+    it('should redirect to the MEZ page', async () => {
+      req = {
+        params: {
+          licenceId: '1',
+          conditionId: '1',
+        },
+        body: { confirmRemoval: 'Yes' },
+      } as unknown as Request
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromReview=true`
+      )
     })
 
     it('should not call delete condition for submitted conditionId', async () => {
@@ -103,7 +120,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Deletio
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledTimes(0)
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmUploadDeletion', {
         conditionId: '1',
-        conditionCode: 'testCode',
+        conditionCode: MEZ_CONDITION_CODE,
         displayMessage: { text: 'Select yes or no' },
         fileName: 'testFile',
       })

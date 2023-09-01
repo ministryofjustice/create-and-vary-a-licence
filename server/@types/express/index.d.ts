@@ -1,5 +1,5 @@
 import CvlUserDetails from '../CvlUserDetails'
-import { LicenceConditionChange } from '../licenceApiClientTypes'
+import { LicenceConditionChange, Licence } from '../licenceApiClientTypes'
 
 export default {}
 
@@ -32,6 +32,7 @@ export declare global {
 
     interface Locals {
       user?: LocalsUser
+      licence: Licence
     }
 
     interface Request {

@@ -90,7 +90,7 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<LicenceSummary>
   }
 
-  async getLicenceById(licenceId: string, user: User): Promise<Licence> {
+  async getLicenceById(licenceId: number, user: User): Promise<Licence> {
     return (await this.get({ path: `/licence/id/${licenceId}` }, { username: user.username })) as Promise<Licence>
   }
 
@@ -161,7 +161,7 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async updateAdditionalConditions(
-    licenceId: string,
+    licenceId: number,
     additionalConditions: AdditionalConditionsRequest,
     user: User
   ): Promise<void> {
@@ -197,7 +197,7 @@ export default class LicenceApiClient extends RestClient {
     )
   }
 
-  async updateLicenceStatus(licenceId: string, statusRequest: StatusUpdateRequest, user?: User): Promise<void> {
+  async updateLicenceStatus(licenceId: number, statusRequest: StatusUpdateRequest, user?: User): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/status`, data: statusRequest }, { username: user?.username })
   }
 
@@ -474,12 +474,12 @@ export default class LicenceApiClient extends RestClient {
     })) as Promise<ProbationSearchResult>
   }
 
-  async getParentLicenceOrSelf(licenceId: string, user: User): Promise<Licence> {
+  async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     const licence = await this.getLicenceById(licenceId, user)
     if (!licence.variationOf) {
       return licence
     }
 
-    return this.getLicenceById(licence.variationOf.toString(), user)
+    return this.getLicenceById(licence.variationOf, user)
   }
 }

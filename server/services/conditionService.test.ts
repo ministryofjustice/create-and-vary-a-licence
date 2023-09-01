@@ -6,8 +6,8 @@ import ConditionService from './conditionService'
 import policyV2_0 from '../../integration_tests/mockApis/polices/v2-0'
 // eslint-disable-next-line camelcase
 import policyV2_1 from '../../integration_tests/mockApis/polices/v2-1'
-import NamedIndividuals from '../routes/creatingLicences/types/additionalConditionInputs/namedIndividuals'
-import DrugTestLocation from '../routes/creatingLicences/types/additionalConditionInputs/drugTestLocation'
+import NamedIndividuals from '../routes/manageConditions/types/additionalConditionInputs/namedIndividuals'
+import DrugTestLocation from '../routes/manageConditions/types/additionalConditionInputs/drugTestLocation'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { User } from '../@types/CvlUserDetails'
 

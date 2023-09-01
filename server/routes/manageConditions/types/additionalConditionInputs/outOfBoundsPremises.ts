@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer'
 import { IsNotEmpty, ValidateNested } from 'class-validator'
-import Address from '../address'
+import { Address } from '..'
 import Either from '../../../../validators/either'
 
 class OutOfBoundsPremises {

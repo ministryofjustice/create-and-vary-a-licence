@@ -57,7 +57,7 @@ export default class DatesChangedEventHandler {
           logger.info(
             `new sentence start date: ${ssd} is after licence crd: ${crd} so deactivating current licence with id: ${licence.licenceId}`
           )
-          await this.licenceService.updateStatus(licence.licenceId.toString(), LicenceStatus.INACTIVE)
+          await this.licenceService.updateStatus(licence.licenceId, LicenceStatus.INACTIVE)
         }
       })
     )
