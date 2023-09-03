@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 
-export default class AdditionalLicenceTypesHandler {
+export default class DeleteConditionsByCodeHandler {
   constructor(private readonly licenceService: LicenceService) {}
 
   DELETE = async (req: Request, res: Response): Promise<void> => {

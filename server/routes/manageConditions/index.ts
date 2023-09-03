@@ -16,10 +16,9 @@ import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceC
 import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
 import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
-import AdditionalLicenceConditionRemoveUploadRoutes from './handlers/additionalLicenceConditionRemoveUpload'
 import AdditionalLicenceConditionUploadsRoutes from './handlers/additionalLicenceConditionUploadsHandler'
-import AdditionalLicenceTypesRoutes from './handlers/additionalLicenceTypesHandler'
-import AdditionalLicenceConditionDeletionRoutes from './handlers/additionalLicenceConditionDeletionHandler'
+import DeleteConditionsByCodeRoutes from './handlers/deleteConditionsByCodeHandler'
+import AdditionalLicenceConditionUploadsRemovalRoutes from './handlers/additionalLicenceConditionUploadsRemovalHandler'
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -73,12 +72,6 @@ export default function Index({ licenceService, conditionService }: Services): R
   }
 
   // START MEZ
-  // remove area from map list in form builder without confirmation (delete single conditions) - DELETE NOT USED
-  {
-    const controller = new AdditionalLicenceConditionRemoveUploadRoutes(licenceService)
-    get('/condition/id/:conditionId/remove-upload', controller.GET)
-  }
-
   {
     // View map list / add new map condition
     const controller = new AdditionalLicenceConditionUploadsRoutes(licenceService, conditionService)
@@ -86,17 +79,11 @@ export default function Index({ licenceService, conditionService }: Services): R
     post('/additional-licence-conditions/condition/:conditionCode/file-uploads', controller.POST)
   }
 
-  // delete MEZ condition (delete all conditions)
-  {
-    const controller = new AdditionalLicenceTypesRoutes(licenceService)
-    get('/additional-licence-types/condition/:conditionCode/delete', controller.DELETE)
-  }
-
   // remove area from map list with confirmation (delete single conditions)
   {
-    const controller = new AdditionalLicenceConditionDeletionRoutes(licenceService)
-    get('/additional-licence-conditions/condition/:conditionId/remove', controller.GET)
-    post('/additional-licence-conditions/condition/:conditionId/remove', controller.POST)
+    const controller = new AdditionalLicenceConditionUploadsRemovalRoutes(licenceService)
+    get('/additional-licence-conditions/condition/:conditionId/file-upload-removal', controller.GET)
+    post('/additional-licence-conditions/condition/:conditionId/file-upload-removal', controller.POST)
   }
   // END MEZ
 
@@ -105,6 +92,11 @@ export default function Index({ licenceService, conditionService }: Services): R
     get('/additional-licence-conditions/condition/:conditionId', controller.GET)
     postWithFileUpload('/additional-licence-conditions/condition/:conditionId', controller.POST)
     get('/additional-licence-conditions/condition/:conditionId/delete', controller.DELETE)
+  }
+
+  {
+    const controller = new DeleteConditionsByCodeRoutes(licenceService)
+    get('/additional-licence-conditions/condition/code/:conditionCode/delete', controller.DELETE)
   }
 
   {

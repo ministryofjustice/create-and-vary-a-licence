@@ -30,7 +30,7 @@
                         visuallyHiddenText: condition.uploadSummary[0].fileName
                     },
                     {
-                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/remove",
+                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/file-upload-removal",
                         text: "Delete",
                         visuallyHiddenText: condition.uploadSummary[0].filename
                     }
@@ -83,7 +83,7 @@
                     }) }}
                     {{ govukButton({
                         text: "Delete this condition",
-                        href: "/licence/create/id/" + licence.id + "/additional-licence-types/condition/" + conditions[0].code + "/delete",
+                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + conditions[0].code + "/delete",
                         classes: 'govuk-button--secondary',
                         attributes: { 'data-qa': 'delete' }
                     }) }}
