@@ -256,11 +256,6 @@
         </div>
     </div>
     <div class="govuk-body">
-        <div>
-            {% set removeFileUploadLink = "/licence/create/id/"+ licenceId +"/condition/id/" + condition.id + "/remove-upload?_csrf=" + csrfToken %}
-        </div>
-    </div>
-    <div class="govuk-body">
         {{ condition.uploadSummary[0].description }}
     </div>
     <br/>

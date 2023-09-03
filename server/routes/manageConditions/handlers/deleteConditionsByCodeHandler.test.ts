@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import AdditionalLicenceTypesHandler from './additionalLicenceTypesHandler'
+import DeleteConditionsByCodeHandler from './deleteConditionsByCodeHandler'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-describe('Route Handlers - Create Licence - Additional Licence Types Handler', () => {
-  const handler = new AdditionalLicenceTypesHandler(licenceService)
+describe('Route Handlers - Create Licence - Delete Conditions By Code Handler Handler', () => {
+  const handler = new DeleteConditionsByCodeHandler(licenceService)
   let req: Request
   let res: Response
 
@@ -21,6 +21,7 @@ describe('Route Handlers - Create Licence - Additional Licence Types Handler', (
       status: jest.fn(),
       locals: {
         licence: {
+          id: 123,
           additionalLicenceConditions: [
             { id: 1, code: 'abc' },
             { id: 2, code: 'abc' },
@@ -48,6 +49,8 @@ describe('Route Handlers - Create Licence - Additional Licence Types Handler', (
         },
         { username: 'joebloggs' }
       )
+
+      expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/123/check-your-answers`)
     })
   })
 })
