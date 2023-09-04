@@ -1,15 +1,13 @@
 import { Expose, Type } from 'class-transformer'
 import { Validate, ValidateNested } from 'class-validator'
-import SimpleTime from '../time'
+import { SimpleTime, SimpleDate, Address } from '..'
 import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
-import SimpleDate from '../date'
 import ValidSimpleDate from '../../../../validators/simpleDateValidator'
-import Address from '../address'
 import IsOptional from '../../../../validators/isOptional'
+import DateIsAfter from '../../../../validators/dateIsAfter'
 import DateIsBefore from '../../../../validators/dateIsBefore'
-import DateIsAfterExpectedReleaseDate from '../../../../validators/dateIsAfterExpectedReleaseDate'
 
-class AppointmentTimeAndPlace {
+class AppointmentTimeAndPlaceDuringPss {
   @Expose()
   @Type(() => SimpleTime)
   @Validate(ValidSimpleTime)
@@ -20,11 +18,11 @@ class AppointmentTimeAndPlace {
   @Type(() => SimpleDate)
   @Validate(ValidSimpleDate)
   @IsOptional()
-  @DateIsBefore('licence.licenceExpiryDate', {
-    message: 'Appointment date must be before the end of the licence date',
+  @DateIsBefore('licence.topupSupervisionExpiryDate', {
+    message: 'Appointment date must be before the end of the supervision period',
   })
-  @DateIsAfterExpectedReleaseDate({
-    message: 'Appointment date must be on or after the release date',
+  @DateIsAfter('licence.topupSupervisionStartDate', {
+    message: 'Appointment date must be after the supervision start date',
   })
   appointmentDate: SimpleDate
 
@@ -34,4 +32,4 @@ class AppointmentTimeAndPlace {
   appointmentAddress: Address
 }
 
-export default AppointmentTimeAndPlace
+export default AppointmentTimeAndPlaceDuringPss

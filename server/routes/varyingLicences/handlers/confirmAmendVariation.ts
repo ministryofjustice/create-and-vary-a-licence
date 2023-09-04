@@ -18,7 +18,7 @@ export default class ConfirmAmendVariationRoutes {
     const { user, licence } = res.locals
 
     if (answer === YesOrNo.YES) {
-      await this.licenceService.updateStatus(licenceId, LicenceStatus.VARIATION_IN_PROGRESS, user)
+      await this.licenceService.updateStatus(parseInt(licenceId, 10), LicenceStatus.VARIATION_IN_PROGRESS, user)
       /**
        * TODO
        * replace when proper versioning functionality is ready.
@@ -26,14 +26,14 @@ export default class ConfirmAmendVariationRoutes {
        * licence was created on a previous version.
        */
       if (
-        (await this.licenceService.getParentLicenceOrSelf(licenceId, user)).version !==
+        (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version !==
         (await this.conditionService.getPolicyVersion())
       ) {
         const newStdConditions = {
-          standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode)
+          standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licence.typeCode as LicenceType)
             ? await this.conditionService.getStandardConditions(LicenceType.AP)
             : [],
-          standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licence.typeCode)
+          standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licence.typeCode as LicenceType)
             ? await this.conditionService.getStandardConditions(LicenceType.PSS)
             : [],
         }

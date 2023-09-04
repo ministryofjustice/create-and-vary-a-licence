@@ -3,6 +3,7 @@ import ConditionService from '../../../services/conditionService'
 
 import LicenceService from '../../../services/licenceService'
 import AdditionalPssConditionInputRoutes from './additionalPssConditionInput'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
@@ -56,7 +57,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
             code: 'code1',
           },
         ],
-      }
+      } as Licence
 
       await handler.GET(req, res)
       expect(conditionsProviderSpy).toHaveBeenCalledWith('code1', 'version')
@@ -86,7 +87,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
             code: 'code1',
           },
         ],
-      }
+      } as Licence
     })
 
     it('should call licence service to update the additional condition data', async () => {
@@ -131,7 +132,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
           },
         ],
         version: 'version',
-      }
+      } as Licence
     })
 
     it('should call licence service to update the additional conditions with the condition removed', async () => {

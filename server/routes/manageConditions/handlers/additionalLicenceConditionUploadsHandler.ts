@@ -11,7 +11,8 @@ export default class AdditionalLicenceConditionUploadsHandler {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId, conditionCode } = req.params
     const { user } = res.locals
-    const licence = await this.licenceService.getLicence(licenceId, user)
+    // TODO: move to get licence from res.locals?
+    const licence = await this.licenceService.getLicence(parseInt(licenceId, 10), user)
 
     const conditions = licence.additionalLicenceConditions.filter((c: AdditionalCondition) => c.code === conditionCode)
 
@@ -85,19 +86,5 @@ export default class AdditionalLicenceConditionUploadsHandler {
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${conditionResult.id}?fromReview=true`
     )
-  }
-
-  DELETE = async (req: Request, res: Response): Promise<void> => {
-    const { user, licence } = res.locals
-    const { conditionCode } = req.body
-    await this.licenceService.deleteAdditionalCondition(conditionCode, licence, user)
-    if (req.query?.fromPolicyReview) {
-      return res.redirect(
-        `/licence/vary/id/${licence.id}/policy-changes/input/callback/${
-          +req.session.changedConditionsInputsCounter + 1
-        }`
-      )
-    }
-    return res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
   }
 }

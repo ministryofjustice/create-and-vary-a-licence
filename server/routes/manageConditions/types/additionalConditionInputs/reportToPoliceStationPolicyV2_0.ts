@@ -1,6 +1,6 @@
 import { Expose, Transform, Type } from 'class-transformer'
 import { IsNotEmpty, Validate, ValidateIf } from 'class-validator'
-import SimpleTime from '../time'
+import { SimpleTime } from '..'
 import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
 
 // eslint-disable-next-line camelcase

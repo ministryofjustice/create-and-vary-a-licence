@@ -1,8 +1,7 @@
 import { Expose, Type } from 'class-transformer'
 import { Validate, ValidateNested } from 'class-validator'
-import SimpleTime from '../time'
+import { SimpleTime, Address } from '..'
 import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
-import Address from '../address'
 
 class CurfewAddress {
   @Expose()

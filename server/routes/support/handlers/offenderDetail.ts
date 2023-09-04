@@ -53,9 +53,7 @@ export default class OffenderDetailRoutes {
     const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
 
     const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
-    const licence = licenceSummary
-      ? await this.licenceServer.getLicence(licenceSummary.licenceId.toString(), user)
-      : null
+    const licence = licenceSummary ? await this.licenceServer.getLicence(licenceSummary.licenceId, user) : null
 
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {

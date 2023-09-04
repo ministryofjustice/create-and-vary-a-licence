@@ -3,21 +3,18 @@ import { Request, Response } from 'express'
 import ApprovalViewRoutes from './approvalView'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import ConditionService from '../../../services/conditionService'
 import CommunityService from '../../../services/communityService'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
 
 jest.mock('../../../services/communityService')
-jest.mock('../../../services/conditionService')
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ApprovalViewRoutes(licenceService, conditionService, communityService)
+  const handler = new ApprovalViewRoutes(licenceService, communityService)
   let req: Request
   let res: Response
 
@@ -43,9 +40,6 @@ describe('Route - view and approve a licence', () => {
         surname: 'Bloggs',
       },
     })
-    conditionService.additionalConditionsCollection.mockReturnValue({
-      additionalConditions: [],
-    })
     it('should check status is SUBMITTED else redirect to case list', async () => {
       res = {
         render: jest.fn(),
@@ -69,7 +63,6 @@ describe('Route - view and approve a licence', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/cases')
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
-      expect(conditionService.additionalConditionsCollection).not.toHaveBeenCalled()
       expect(communityService.getStaffDetailByUsername).not.toHaveBeenCalled()
     })
 
@@ -104,7 +97,6 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(conditionService.additionalConditionsCollection).toHaveBeenCalled()
       expect(communityService.getStaffDetailByUsername).toHaveBeenCalled()
     })
   })

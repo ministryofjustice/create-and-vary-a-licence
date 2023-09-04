@@ -1,34 +1,34 @@
 import LicenceApiClient from '../data/licenceApiClient'
-import RegionOfResidence from '../routes/creatingLicences/types/additionalConditionInputs/regionOfResidence'
-import RestrictionOfResidency from '../routes/creatingLicences/types/additionalConditionInputs/restrictionOfResidency'
-import MedicalAppointmentType from '../routes/creatingLicences/types/additionalConditionInputs/medicalAppointmentType'
-import UnsupervisedContact from '../routes/creatingLicences/types/additionalConditionInputs/unsupervisedContact'
-import WorkingWithChildren from '../routes/creatingLicences/types/additionalConditionInputs/workingWithChildren'
-import IntimateRelationshipWithGender from '../routes/creatingLicences/types/additionalConditionInputs/intimateRelationshipWithGender'
-import BehaviourProblems from '../routes/creatingLicences/types/additionalConditionInputs/behaviourProblems'
-import AppointmentTimeAndPlace from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlace'
-import OutOfBoundsRegion from '../routes/creatingLicences/types/additionalConditionInputs/outOfBoundsRegion'
-import OutOfBoundsPremises from '../routes/creatingLicences/types/additionalConditionInputs/outOfBoundsPremises'
-import OutOfBoundsPremisesType from '../routes/creatingLicences/types/additionalConditionInputs/outOfBoundsPremisesType'
-import DrugTestLocation from '../routes/creatingLicences/types/additionalConditionInputs/drugTestLocation'
-import ElectronicMonitoringTypes from '../routes/creatingLicences/types/additionalConditionInputs/electronicMonitoringTypes'
-import ElectronicMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicMonitoringPeriod'
-import ApprovedAddress from '../routes/creatingLicences/types/additionalConditionInputs/approvedAddress'
-import AlcoholMonitoringPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholMonitoringPeriod'
-import AlcoholRestrictionPeriod from '../routes/creatingLicences/types/additionalConditionInputs/alcoholRestrictionPeriod'
-import CurfewTerms from '../routes/creatingLicences/types/additionalConditionInputs/curfewTerms'
-import CurfewAddress from '../routes/creatingLicences/types/additionalConditionInputs/curfewAddress'
-import NoContactWithVictim from '../routes/creatingLicences/types/additionalConditionInputs/noContactWithVictim'
-import ReportToApprovedPremises from '../routes/creatingLicences/types/additionalConditionInputs/reportToApprovedPremises'
+import RegionOfResidence from '../routes/manageConditions/types/additionalConditionInputs/regionOfResidence'
+import RestrictionOfResidency from '../routes/manageConditions/types/additionalConditionInputs/restrictionOfResidency'
+import MedicalAppointmentType from '../routes/manageConditions/types/additionalConditionInputs/medicalAppointmentType'
+import UnsupervisedContact from '../routes/manageConditions/types/additionalConditionInputs/unsupervisedContact'
+import WorkingWithChildren from '../routes/manageConditions/types/additionalConditionInputs/workingWithChildren'
+import IntimateRelationshipWithGender from '../routes/manageConditions/types/additionalConditionInputs/intimateRelationshipWithGender'
+import BehaviourProblems from '../routes/manageConditions/types/additionalConditionInputs/behaviourProblems'
+import AppointmentTimeAndPlace from '../routes/manageConditions/types/additionalConditionInputs/appointmentTimeAndPlace'
+import OutOfBoundsRegion from '../routes/manageConditions/types/additionalConditionInputs/outOfBoundsRegion'
+import OutOfBoundsPremises from '../routes/manageConditions/types/additionalConditionInputs/outOfBoundsPremises'
+import OutOfBoundsPremisesType from '../routes/manageConditions/types/additionalConditionInputs/outOfBoundsPremisesType'
+import DrugTestLocation from '../routes/manageConditions/types/additionalConditionInputs/drugTestLocation'
+import ElectronicMonitoringTypes from '../routes/manageConditions/types/additionalConditionInputs/electronicMonitoringTypes'
+import ElectronicMonitoringPeriod from '../routes/manageConditions/types/additionalConditionInputs/electronicMonitoringPeriod'
+import ApprovedAddress from '../routes/manageConditions/types/additionalConditionInputs/approvedAddress'
+import AlcoholMonitoringPeriod from '../routes/manageConditions/types/additionalConditionInputs/alcoholMonitoringPeriod'
+import AlcoholRestrictionPeriod from '../routes/manageConditions/types/additionalConditionInputs/alcoholRestrictionPeriod'
+import CurfewTerms from '../routes/manageConditions/types/additionalConditionInputs/curfewTerms'
+import CurfewAddress from '../routes/manageConditions/types/additionalConditionInputs/curfewAddress'
+import NoContactWithVictim from '../routes/manageConditions/types/additionalConditionInputs/noContactWithVictim'
+import ReportToApprovedPremises from '../routes/manageConditions/types/additionalConditionInputs/reportToApprovedPremises'
 // eslint-disable-next-line camelcase
-import ReportToApprovedPremisesPolicyV2_0 from '../routes/creatingLicences/types/additionalConditionInputs/reportToApprovedPremisesPolicyV2_0'
-import SpecifiedItem from '../routes/creatingLicences/types/additionalConditionInputs/specifiedItem'
-import NamedIndividuals from '../routes/creatingLicences/types/additionalConditionInputs/namedIndividuals'
-import NamedOrganisation from '../routes/creatingLicences/types/additionalConditionInputs/namedOrganisation'
-import ReportToPoliceStation from '../routes/creatingLicences/types/additionalConditionInputs/reportToPoliceStation'
+import ReportToApprovedPremisesPolicyV2_0 from '../routes/manageConditions/types/additionalConditionInputs/reportToApprovedPremisesPolicyV2_0'
+import SpecifiedItem from '../routes/manageConditions/types/additionalConditionInputs/specifiedItem'
+import NamedIndividuals from '../routes/manageConditions/types/additionalConditionInputs/namedIndividuals'
+import NamedOrganisation from '../routes/manageConditions/types/additionalConditionInputs/namedOrganisation'
+import ReportToPoliceStation from '../routes/manageConditions/types/additionalConditionInputs/reportToPoliceStation'
 // eslint-disable-next-line camelcase
-import ReportToPoliceStationPolicyV2_0 from '../routes/creatingLicences/types/additionalConditionInputs/reportToPoliceStationPolicyV2_0'
-import AppointmentTimeAndPlaceDuringPss from '../routes/creatingLicences/types/additionalConditionInputs/appointmentTimeAndPlaceDuringPss'
+import ReportToPoliceStationPolicyV2_0 from '../routes/manageConditions/types/additionalConditionInputs/reportToPoliceStationPolicyV2_0'
+import AppointmentTimeAndPlaceDuringPss from '../routes/manageConditions/types/additionalConditionInputs/appointmentTimeAndPlaceDuringPss'
 import LicenceType from '../enumeration/licenceType'
 import {
   AdditionalCondition,
@@ -39,7 +39,7 @@ import {
   StandardCondition,
 } from '../@types/licenceApiClientTypes'
 
-import ElectronicTagPeriod from '../routes/creatingLicences/types/additionalConditionInputs/electronicTagPeriod'
+import ElectronicTagPeriod from '../routes/manageConditions/types/additionalConditionInputs/electronicTagPeriod'
 import { AdditionalConditionAp, AdditionalConditionPss, AdditionalConditionsConfig } from '../@types/LicencePolicy'
 import { User } from '../@types/CvlUserDetails'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -130,15 +130,6 @@ export default class ConditionService {
     }
     const conditionsBySequence = conditions.sort((a, b) => a.sequence - b.sequence)
     return conditionsBySequence.length ? conditionsBySequence.pop().sequence + 1 : 1
-  }
-
-  additionalConditionsCollection(conditions: AdditionalCondition[]) {
-    const conditionsByCode = conditions.reduce((acc, c) => {
-      acc[c.code] = [...(acc[c.code] || []), c]
-      return acc
-    }, {})
-
-    return { additionalConditions: Object.values(conditionsByCode) }
   }
 
   /* eslint-disable no-param-reassign */
@@ -260,15 +251,14 @@ export default class ConditionService {
 
   async getAdditionalAPConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<AdditionalCondition[]> {
     if (licence.isInPssPeriod && this.isInVariation(licence)) {
-      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))
-        ?.additionalLicenceConditions
+      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id, user))?.additionalLicenceConditions
     }
     return licence.additionalLicenceConditions
   }
 
   async getbespokeConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<BespokeCondition[]> {
     if (licence.isInPssPeriod && this.isInVariation(licence)) {
-      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id.toString(), user))?.bespokeConditions
+      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id, user))?.bespokeConditions
     }
     return licence.bespokeConditions
   }

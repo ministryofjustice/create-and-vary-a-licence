@@ -13,8 +13,8 @@ export default class OffenderLicenceDatesRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId } = req.params
-
-    const licence = await this.licenceService.getLicence(licenceId, user)
+    // TODO, get licence from res.locals?
+    const licence = await this.licenceService.getLicence(parseInt(licenceId, 10), user)
     const licenceDates = await this.getLicenceSimpleDates(licence)
     res.render('pages/support/offenderLicenceDates', {
       licence,
@@ -38,7 +38,8 @@ export default class OffenderLicenceDatesRoutes {
       return
     }
 
-    const licence = await this.licenceService.getLicence(licenceId, user)
+    // TODO looks at getting licence from res.locals?
+    const licence = await this.licenceService.getLicence(parseInt(licenceId, 10), user)
     const licenceDates = await this.getLicenceSimpleDates(licence)
     res.render('pages/support/offenderLicenceDates', {
       licence,

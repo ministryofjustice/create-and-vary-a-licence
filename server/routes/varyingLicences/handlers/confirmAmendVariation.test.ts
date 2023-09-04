@@ -61,7 +61,7 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
 
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.VARIATION_IN_PROGRESS, {
+      expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.VARIATION_IN_PROGRESS, {
         username: 'joebloggs',
       })
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
@@ -74,7 +74,7 @@ describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
       conditionService.getStandardConditions.mockResolvedValue([])
       await handler.POST(req, res)
 
-      expect(licenceService.updateStatus).toHaveBeenCalledWith('1', LicenceStatus.VARIATION_IN_PROGRESS, {
+      expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.VARIATION_IN_PROGRESS, {
         username: 'joebloggs',
       })
 
