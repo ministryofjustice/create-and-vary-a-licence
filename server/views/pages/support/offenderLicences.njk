@@ -48,6 +48,9 @@
                 {
                     classes: "max-width max-width-220",
                     html: '<a href="/support/offender/' + prisonerDetail.id + '/licence/' + licence.licenceId + '/audit" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">view</a>'
+                },
+                {
+                    html: linkHtml(licence)
                 }
             ]), licenceList) %}
 
@@ -86,6 +89,9 @@
                 },
                 {
                     text: "Audit"
+                },
+                {
+                    text: "Licence version"
                 }
             ],
             rows: licenceList
@@ -107,3 +113,11 @@
     </div>
 
 {% endblock %}
+
+{% macro linkHtml(licence) %}
+    {% if licence.viewable %}
+        <a href="/licence/view/id/{{ licence.licenceId }}/pdf-print" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0"> {{ licence.licenceVersion }} </a>
+    {% else %}
+        {{ licence.licenceVersion }}
+    {% endif %}
+{% endmacro %}

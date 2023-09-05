@@ -394,6 +394,15 @@ export interface components {
        */
       email: string
     }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     OmuContact: {
       /** Format: int64 */
       id: number
@@ -403,15 +412,6 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string
-    }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** @description Request object for updating an offender's personal details */
     UpdateOffenderDetailsRequest: {
@@ -1052,6 +1052,11 @@ export interface components {
        * @description The date and time that this licence was approved
        */
       approvedDate?: string
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
     }
     /** @description Request object for searching licences by field */
     MatchLicencesRequest: {
@@ -1944,6 +1949,11 @@ export interface components {
       isInPssPeriod?: boolean
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
     }
     AddAnother: {
       label: string
@@ -2094,6 +2104,7 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'INACTIVE'
         | 'RECALLED'
+        | 'VERSION_CREATED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -4150,6 +4161,7 @@ export interface operations {
           | 'VARIATION_APPROVED'
           | 'INACTIVE'
           | 'RECALLED'
+          | 'VERSION_CREATED'
         )[]
         sortBy?: string
         sortOrder?: string
