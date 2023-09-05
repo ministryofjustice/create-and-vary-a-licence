@@ -22,7 +22,7 @@ const DEFAULT_CONDITION_CONFIG: ConditionConfig = {
 
 const conditions: Record<string, ConditionConfig> = {
   [MEZ_CONDITION_CODE]: {
-    inputTemplate: 'pages/create/additionalLicenceConditionInput',
+    inputTemplate: 'pages/create/additionalLicenceConditionMapInput',
     getEditConditionHref: (args: EditConditionHrefArgs) =>
       `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionCode}/file-uploads${
         args.fromReview ? '?fromReview=true' : ''

@@ -128,64 +128,6 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
     })
   })
 
-  describe('POST with file upload', () => {
-    beforeEach(() => {
-      const uploadFile = {
-        path: 'test-file',
-        originalname: 'test.txt',
-        fieldname: 'outOfBoundFilename',
-        mimetype: 'application/pdf',
-        size: 100,
-      } as Express.Multer.File
-
-      req = {
-        params: {
-          licenceId: '1',
-          conditionId: '1',
-        },
-        file: uploadFile,
-        query: {},
-        body: { outOfBoundFilename: 'test.txt' },
-      } as unknown as Request
-
-      licenceService.uploadExclusionZoneFile = jest.fn()
-      licenceService.updateAdditionalConditionData = jest.fn()
-
-      res.locals.licence = {
-        additionalLicenceConditions: [
-          {
-            id: 1,
-            code: 'outOfBoundsRegion',
-            expandedText: 'expanded text',
-          },
-        ],
-      } as Licence
-    })
-
-    it('should recognise a file upload', async () => {
-      await handler.POST(req, res)
-      expect(licenceService.uploadExclusionZoneFile).toHaveBeenCalledWith('1', '1', req.file, { username: 'joebloggs' })
-      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
-        '1',
-        { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
-        { outOfBoundFilename: 'test.txt' },
-        { username: 'joebloggs' }
-      )
-    })
-
-    it('should ignore file uploads with for conditions other than out of bounds', async () => {
-      req.file = { ...req.file, fieldname: 'WRONG' }
-      await handler.POST(req, res)
-      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
-        '1',
-        { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
-        { outOfBoundFilename: 'test.txt' },
-        { username: 'joebloggs' }
-      )
-      expect(licenceService.uploadExclusionZoneFile).not.toHaveBeenCalled()
-    })
-  })
-
   describe('DELETE', () => {
     beforeEach(() => {
       licenceService.updateAdditionalConditions = jest.fn()

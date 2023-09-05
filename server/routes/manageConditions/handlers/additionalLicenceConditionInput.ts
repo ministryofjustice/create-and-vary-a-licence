@@ -42,20 +42,9 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { licenceId } = req.params
     const { conditionId } = req.params
     const { user, licence } = res.locals
-    const isFileUploadRequest = req.file && req.file.fieldname === 'outOfBoundFilename'
 
-    const { code } = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
-
-    // if the update involves a file or updating a data element for exclusion zone name outOfBoundArea
     let redirect
-    if (isFileUploadRequest || 'outOfBoundArea' in req.body) {
-      redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads`
-      if (req.query?.fromPolicyReview) {
-        redirect += '?fromPolicyReview=true'
-      } else if (req.query?.fromReview) {
-        redirect += '?fromReview=true'
-      }
-    } else if (req.query?.fromPolicyReview) {
+    if (req.query?.fromPolicyReview) {
       redirect = `/licence/vary/id/${licenceId}/policy-changes/input/callback/${
         +req.session.changedConditionsInputsCounter + 1
       }`
@@ -63,11 +52,6 @@ export default class AdditionalLicenceConditionInputRoutes {
       redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
       }`
-    }
-
-    // Check for file uploads on specific forms
-    if (isFileUploadRequest) {
-      await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
     }
 
     const condition = licence.additionalLicenceConditions.find(c => c.id === +conditionId)
@@ -81,13 +65,8 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
-    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
-
-    // if the exclusion zone name outOfBoundArea is present, redirect to file uploads dialog
     let redirect
-    if (condition.expandedText.indexOf('{outOfBoundArea}') > 1) {
-      redirect = `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
-    } else if (req.query?.fromPolicyReview) {
+    if (req.query?.fromPolicyReview) {
       redirect = `/licence/vary/id/${licence.id}/policy-changes/input/callback/${
         +req.session.changedConditionsInputsCounter + 1
       }`
