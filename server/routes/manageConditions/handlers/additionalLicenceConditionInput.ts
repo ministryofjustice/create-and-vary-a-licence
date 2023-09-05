@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
+import { getConfigForCondition } from '../../../utils/conditionRoutes'
 
 export default class AdditionalLicenceConditionInputRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
@@ -11,9 +11,7 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { licence } = res.locals
     const { conditionId } = req.params
 
-    const additionalCondition = licence.additionalLicenceConditions.find(
-      (condition: AdditionalCondition) => condition.id === +conditionId
-    )
+    const additionalCondition = licence.additionalLicenceConditions.find(condition => condition.id === +conditionId)
 
     if (!additionalCondition) {
       return res.redirect(
@@ -25,20 +23,19 @@ export default class AdditionalLicenceConditionInputRoutes {
 
     const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code, licence.version)
 
+    const policyReview = this.getPolicyReviewState(req)
+    const conditionConfg = getConfigForCondition(additionalCondition.code)
+    return res.render(conditionConfg.inputTemplate, { additionalCondition, config, policyReview })
+  }
+
+  private getPolicyReviewState = (req: Request) => {
     if (req.query?.fromPolicyReview) {
       const policyChangeInputCounter = +req.session.changedConditionsInputsCounter
       const conditionCounter = req.session.changedConditionsCounter
       const policyChangesCount = req.session.changedConditions.length
-      return res.render('pages/create/additionalLicenceConditionInput', {
-        additionalCondition,
-        config,
-        policyChangeInputCounter,
-        conditionCounter,
-        policyChangesCount,
-      })
+      return { policyChangeInputCounter, conditionCounter, policyChangesCount }
     }
-
-    return res.render('pages/create/additionalLicenceConditionInput', { additionalCondition, config })
+    return undefined
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
@@ -47,9 +44,7 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { user, licence } = res.locals
     const isFileUploadRequest = req.file && req.file.fieldname === 'outOfBoundFilename'
 
-    const { code } = licence.additionalLicenceConditions.find(
-      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10)
-    )
+    const { code } = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
 
     // if the update involves a file or updating a data element for exclusion zone name outOfBoundArea
     let redirect
@@ -75,7 +70,7 @@ export default class AdditionalLicenceConditionInputRoutes {
       await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
     }
 
-    const condition = licence.additionalLicenceConditions.find((c: AdditionalCondition) => c.id === +conditionId)
+    const condition = licence.additionalLicenceConditions.find(c => c.id === +conditionId)
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
     return res.redirect(redirect)
@@ -86,13 +81,11 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
-    const condition = licence.additionalLicenceConditions.find(
-      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10)
-    ) as AdditionalCondition
+    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
 
     // if the exclusion zone name outOfBoundArea is present, redirect to file uploads dialog
     let redirect
-    if (condition.expandedText.indexOf('{outOfBoundsArea}') > 1) {
+    if (condition.expandedText.indexOf('{outOfBoundArea}') > 1) {
       redirect = `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
     } else if (req.query?.fromPolicyReview) {
       redirect = `/licence/vary/id/${licence.id}/policy-changes/input/callback/${
