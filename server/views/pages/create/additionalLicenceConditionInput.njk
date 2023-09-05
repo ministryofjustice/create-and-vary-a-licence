@@ -13,7 +13,7 @@
 {% set fromPolicyReviewAppend = "&fromPolicyReview=true" if fromPolicyReview %}
 
 {% if fromPolicyReview %}
-  {% set backLinkHref = "/licence/vary/id/" + licence.id + "/policy-changes/input/callback/"+ (policyChangeInputCounter - 1)%}
+  {% set backLinkHref = "/licence/vary/id/" + licence.id + "/policy-changes/input/callback/"+ (policyReview.policyChangeInputCounter - 1)%}
   {% set noJsBackLink = true%}
 {% else %}
   {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
@@ -21,7 +21,7 @@
 
 {% block content %}
     {% if fromPolicyReview %}
-        <span class="govuk-caption-l">Change {{conditionCounter}} of {{policyChangesCount}}</span>
+        <span class="govuk-caption-l">Change {{policyReview.conditionCounter}} of {{policyReview.policyChangesCount}}</span>
     {% endif %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-three-quarters">
