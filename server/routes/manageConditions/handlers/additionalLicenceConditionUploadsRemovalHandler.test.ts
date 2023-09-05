@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import AdditionalLicenceConditionDeletionHandler from './additionalLicenceConditionDeletionHandler'
+import AdditionalLicenceConditionUploadsRemovalHandler from './additionalLicenceConditionUploadsRemovalHandler'
 import { MEZ_CONDITION_CODE } from '../../../utils/conditionRoutes'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-describe('Route Handlers - Create Licence - Additional Licence Condition Deletion Handler', () => {
-  const handler = new AdditionalLicenceConditionDeletionHandler(licenceService)
+describe('Route Handlers - Create Licence - Additional Licence Condition Uploads Removal Handler', () => {
+  const handler = new AdditionalLicenceConditionUploadsRemovalHandler(licenceService)
   let req: Request
   let res: Response
 
