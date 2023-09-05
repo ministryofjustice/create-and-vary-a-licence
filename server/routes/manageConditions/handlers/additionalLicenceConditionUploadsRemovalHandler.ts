@@ -3,7 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 
-export default class AdditionalLicenceConditionDeletionHandler {
+export default class AdditionalLicenceConditionUploadsRemovalHandler {
   constructor(private readonly licenceService: LicenceService) {}
 
   private getLicenceCondition = (conditionId: number, licence: Licence): AdditionalCondition | null => {
