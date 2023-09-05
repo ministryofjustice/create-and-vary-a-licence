@@ -10,6 +10,7 @@ const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerS
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/licenceService')
+jest.mock('../../../utils/urlAccessByStatus', () => jest.fn().mockReturnValue(true))
 
 describe('Route Handlers - Offender licences', () => {
   const handler = new OffenderLicencesRoutes(licenceService, prisonerService)
@@ -66,6 +67,7 @@ describe('Route Handlers - Offender licences', () => {
         crn: 'test crn',
         dateOfBirth: '2000-02-05',
         comUsername: 'Kate Jones',
+        viewable: true,
       } as LicenceSummary
 
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([expectedLicences])
