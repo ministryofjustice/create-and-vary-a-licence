@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import LicenceService from '../../../services/licenceService'
+import LicenceService from '../../../../services/licenceService'
 
-export default class AdditionalLicenceConditionUploadInputRoutes {
+export default class fileUploadInputRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   POST = async (req: Request, res: Response): Promise<void> => {
@@ -21,7 +21,7 @@ export default class AdditionalLicenceConditionUploadInputRoutes {
     if (req.file) {
       await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
     }
-    const condition = licence.additionalLicenceConditions.find(c => c.id === +conditionId)
+    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
     return res.redirect(redirect)

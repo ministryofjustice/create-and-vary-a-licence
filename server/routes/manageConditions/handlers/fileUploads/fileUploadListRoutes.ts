@@ -1,18 +1,16 @@
 import { Request, Response } from 'express'
-import LicenceService from '../../../services/licenceService'
-import { AddAdditionalConditionRequest } from '../../../@types/licenceApiClientTypes'
-import conditionType from '../../../enumeration/conditionType'
-import YesOrNo from '../../../enumeration/yesOrNo'
-import ConditionService from '../../../services/conditionService'
+import LicenceService from '../../../../services/licenceService'
+import { AddAdditionalConditionRequest } from '../../../../@types/licenceApiClientTypes'
+import conditionType from '../../../../enumeration/conditionType'
+import YesOrNo from '../../../../enumeration/yesOrNo'
+import ConditionService from '../../../../services/conditionService'
 
-export default class AdditionalLicenceConditionUploadsHandler {
+export default class FileUploadListRoutes {
   constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId, conditionCode } = req.params
-    const { user } = res.locals
-    // TODO: move to get licence from res.locals?
-    const licence = await this.licenceService.getLicence(parseInt(licenceId, 10), user)
+    const { licence } = res.locals
 
     const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)
 

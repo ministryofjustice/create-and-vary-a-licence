@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import multer from 'multer'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
@@ -13,18 +12,15 @@ import type { Services } from '../../services'
 import AdditionalConditions from './types/additionalConditions'
 import AdditionalLicenceConditionsCallbackRoutes from './handlers/additionalLicenceConditionsCallback'
 import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceConditionInput'
-import AdditionalLicenceConditionUploadInputRoutes from './handlers/additionalLicenceConditionUploadInput'
+import fileUploadRoutes from './handlers/fileUploads'
 import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
 import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
-import AdditionalLicenceConditionUploadsRoutes from './handlers/additionalLicenceConditionUploadsHandler'
 import DeleteConditionsByCodeRoutes from './handlers/deleteConditionsByCodeHandler'
-import AdditionalLicenceConditionUploadsRemovalRoutes from './handlers/additionalLicenceConditionUploadsRemovalHandler'
 
-const upload = multer({ dest: 'uploads/' })
-
-export default function Index({ licenceService, conditionService }: Services): Router {
+export default function Index(services: Services): Router {
   const router = Router()
+  const { licenceService, conditionService } = services
 
   const routePrefix = (path: string) => `/licence/create/id/:licenceId${path}`
 
@@ -51,16 +47,6 @@ export default function Index({ licenceService, conditionService }: Services): R
       asyncMiddleware(handler)
     )
 
-  const postWithFileUpload = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      fetchLicence(licenceService),
-      upload.single('outOfBoundFilename'),
-      validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
-    )
-
   {
     const controller = new AdditionalLicenceConditionsRoutes(licenceService, conditionService)
     get('/additional-licence-conditions', controller.GET)
@@ -71,29 +57,6 @@ export default function Index({ licenceService, conditionService }: Services): R
     const controller = new AdditionalLicenceConditionsCallbackRoutes(conditionService)
     get('/additional-licence-conditions/callback', controller.GET)
   }
-
-  // START MEZ
-  {
-    // View map list / add new map condition
-    const controller = new AdditionalLicenceConditionUploadsRoutes(licenceService, conditionService)
-    get('/additional-licence-conditions/condition/:conditionCode/file-uploads', controller.GET)
-    post('/additional-licence-conditions/condition/:conditionCode/file-uploads', controller.POST)
-  }
-
-  {
-    // upload/delete files from input page
-    const controller = new AdditionalLicenceConditionUploadInputRoutes(licenceService)
-    postWithFileUpload('/additional-licence-conditions/condition/:conditionId/file-upload-input', controller.POST)
-    get('/additional-licence-conditions/condition/:conditionId/file-upload-delete', controller.DELETE)
-  }
-
-  // remove area from map list with confirmation (delete single conditions)
-  {
-    const controller = new AdditionalLicenceConditionUploadsRemovalRoutes(licenceService)
-    get('/additional-licence-conditions/condition/:conditionId/file-upload-removal', controller.GET)
-    post('/additional-licence-conditions/condition/:conditionId/file-upload-removal', controller.POST)
-  }
-  // END MEZ
 
   {
     const controller = new AdditionalLicenceConditionInputRoutes(licenceService, conditionService)
@@ -131,6 +94,8 @@ export default function Index({ licenceService, conditionService }: Services): R
     post('/bespoke-conditions', controller.POST, BespokeConditions)
     get('/bespoke-conditions/delete', controller.DELETE)
   }
+
+  router.use(fileUploadRoutes(services))
 
   return router
 }
