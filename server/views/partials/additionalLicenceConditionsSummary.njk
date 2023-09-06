@@ -1,36 +1,29 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% macro additionalLicenceConditions(licence, additionalConditions, isEditable, validationErrors, title, hideHeading) %}
     {% set errorMessage = validationErrors | findError('additionalLicenceConditions') %}
+    {% set conditionCount = additionalConditions.length or 0 %}
+    {% set rows = [] %}
+    {% set buttonText = "Add or remove conditions" if conditionCount else "Add conditions" %}
 
     {% if hideHeading != true %}
-        <div class="govuk-grid-row check-answers-header">
-            <div class="govuk-grid-column-full">
+        <div class="govuk-grid-row check-answers-header govuk-!-padding-top-7">
+            <div class="govuk-grid-column-three-quarters">
                 <h2 id="additional-licence-conditions-heading"
-                    class="govuk-heading-m">{{ title or "Additional licence conditions" }}</h2>
+                    class="govuk-heading-m">{{ title or "Additional licence conditions" }} ({{conditionCount}})</h2>
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+                {% if isEditable %}
+                    {{ govukButton({
+                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
+                        text: buttonText,
+                        classes: 'govuk-button moj-button-menu__item govuk-button--secondary moj-page-header-actions__action float-right',
+                        visuallyHiddenText: buttonText
+                    }) }}
+                {% endif %}
             </div>
         </div>
-    {% endif %}
-
-    {% set conditionCount = additionalConditions.length %}
-    {% set conditionWord = "condition" if (conditionCount) === 1 else "conditions" %}
-
-    {% set rows = [] %}
-    {% if hideHeading != true %}
-        {% set rows = (rows.push({
-            classes: 'govuk-summary-list__row--error' if errorMessage,
-            key: {  text: "Select additional conditions" },
-            value: { text: "" + conditionCount  + " " + conditionWord + " selected" },
-            actions: {
-                items: [
-                    {
-                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions?fromReview=true",
-                        text: "Change",
-                        visuallyHiddenText: "Add or remove conditions"
-                    }
-                ]
-            } if isEditable
-        }), rows) %}
     {% endif %}
 
     {% for conditionGroup in additionalConditions %}
@@ -46,8 +39,9 @@
 
     {{ govukSummaryList({
         attributes: { id: 'additionalLicenceConditions' },
-        classes: 'govuk-!-margin-bottom-9',
+        classes: 'govuk-!-margin-top-7' if conditionCount,
         rows: rows | sortConditionsBySequence
+
     }) }}
 
 {% endmacro %}
