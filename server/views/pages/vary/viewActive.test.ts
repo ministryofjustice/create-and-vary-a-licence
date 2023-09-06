@@ -3,21 +3,14 @@ import * as cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
-import ConditionService from '../../../services/conditionService'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
-import LicenceService from '../../../services/licenceService'
 
 const snippet = fs.readFileSync('server/views/pages/vary/viewActive.njk')
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-
-jest.mock('../../../services/licenceService')
-jest.mock('../../../services/conditionService')
 
 describe('ViewActive', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
-  const njkEnv = registerNunjucks(conditionService)
+  const njkEnv = registerNunjucks()
 
   const licence = {
     id: 1,
@@ -47,11 +40,8 @@ describe('ViewActive', () => {
   })
 
   beforeEach(() => {
-    licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
     viewContext = {}
-    const condition = { code: 'code5', text: 'Conditon 5', category: 'group1', requiresInput: false }
-    conditionService.getAdditionalConditionByCode.mockResolvedValue(condition)
   })
 
   it('should display expired section if licence type is AP_PSS, is in pss period, isActivatedInPssPeriod with additional conditions', () => {

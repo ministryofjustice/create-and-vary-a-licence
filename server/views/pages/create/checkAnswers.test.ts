@@ -4,50 +4,7 @@ import { addDays } from 'date-fns'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-import { Licence, StandardConditions } from '../../../@types/licenceApiClientTypes'
-import ConditionService from '../../../services/conditionService'
-import { LicencePolicy } from '../../../@types/LicencePolicy'
-
-const activeConditions = {
-  version: '1.0',
-  standardConditions: {} as StandardConditions,
-  additionalConditions: {
-    AP: [
-      {
-        text: 'Condition 1',
-        code: 'condition1',
-        requiresInput: true,
-        category: 'category1',
-      },
-      {
-        text: 'Condition 2',
-        code: 'condition2',
-        requiresInput: true,
-        category: 'category2',
-      },
-    ],
-    PSS: [
-      {
-        text: 'Condition 1',
-        code: 'condition1',
-        requiresInput: true,
-        category: 'category1',
-      },
-      {
-        text: 'Condition 2',
-        code: 'condition2',
-        requiresInput: true,
-        category: 'category1',
-      },
-    ],
-    bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
-  },
-  changeHints: [],
-} as LicencePolicy
-
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-
-jest.spyOn(conditionService, 'getAdditionalConditions').mockResolvedValue(activeConditions.additionalConditions)
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const snippet = fs.readFileSync('server/views/pages/create/checkAnswers.njk')
 
@@ -55,7 +12,7 @@ describe('Create a Licence Views - Check Answers', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const njkEnv = registerNunjucks(conditionService)
+  const njkEnv = registerNunjucks()
 
   const licence = {
     id: 1,

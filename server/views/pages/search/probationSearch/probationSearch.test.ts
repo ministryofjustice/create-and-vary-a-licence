@@ -2,7 +2,6 @@ import fs from 'fs'
 import * as cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../../utils/nunjucksSetup'
-import ConditionService from '../../../../services/conditionService'
 import LicenceStatus from '../../../../enumeration/licenceStatus'
 import statusConfig from '../../../../licences/licenceStatus'
 
@@ -12,8 +11,7 @@ describe('View Probation Search Results', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-  const njkEnv = registerNunjucks(conditionService)
+  const njkEnv = registerNunjucks()
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)

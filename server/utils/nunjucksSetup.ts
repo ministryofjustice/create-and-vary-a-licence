@@ -21,12 +21,11 @@ import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/creatingLicences/types/address'
 import LicenceStatus from '../enumeration/licenceStatus'
-import ConditionService from '../services/conditionService'
 import { getEditConditionHref } from './conditionRoutes'
 
 const production = process.env.NODE_ENV === 'production'
 
-export default function nunjucksSetup(app: express.Express, conditionService: ConditionService): void {
+export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
@@ -54,10 +53,10 @@ export default function nunjucksSetup(app: express.Express, conditionService: Co
     })
   }
 
-  registerNunjucks(conditionService, app)
+  registerNunjucks(app)
 }
 
-export function registerNunjucks(conditionService: ConditionService, app?: express.Express): Environment {
+export function registerNunjucks(app?: express.Express): Environment {
   const njkEnv = nunjucks.configure(
     [
       path.join(__dirname, '../views'),

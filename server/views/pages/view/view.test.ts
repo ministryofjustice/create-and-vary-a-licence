@@ -4,11 +4,6 @@ import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
 import { Licence } from '../../../@types/licenceApiClientTypes'
-import ConditionService from '../../../services/conditionService'
-
-const additionalCondition = { text: 'Condition 1', code: 'condition1', requiresInput: true, category: 'group1' }
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-jest.spyOn(conditionService, 'getAdditionalConditionByCode').mockResolvedValue(additionalCondition)
 
 const snippet = fs.readFileSync('server/views/pages/view/view.njk')
 
@@ -16,7 +11,7 @@ describe('View and print - single licence view', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const njkEnv = registerNunjucks(conditionService)
+  const njkEnv = registerNunjucks()
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)

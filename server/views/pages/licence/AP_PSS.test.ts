@@ -2,15 +2,13 @@ import fs from 'fs'
 import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
-import ConditionService from '../../../services/conditionService'
 
 const snippet = fs.readFileSync('server/views/pages/licence/AP_PSS.njk')
 
 describe('Print an AP_PSS licence', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
-  const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-  const njkEnv = registerNunjucks(conditionService)
+  const njkEnv = registerNunjucks()
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)

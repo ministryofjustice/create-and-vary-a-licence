@@ -1,14 +1,12 @@
 import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
-import ConditionService from '../../services/conditionService'
 import { registerNunjucks } from '../../utils/nunjucksSetup'
 
 describe('View Partials - Licence details banner', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-  const njkEnv = registerNunjucks(conditionService)
+  const njkEnv = registerNunjucks()
 
   it('should not render anything if licence is not available', () => {
     viewContext = {}

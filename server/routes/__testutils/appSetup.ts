@@ -22,7 +22,7 @@ function appSetup(services: Services, userSupplier: () => User): Express {
 
   app.set('view engine', 'njk')
 
-  nunjucksSetup(app, services.conditionService)
+  nunjucksSetup(app)
   app.use((req, res, next) => {
     req.user = userSupplier()
     req.flash = flashProvider

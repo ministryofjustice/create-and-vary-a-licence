@@ -1,7 +1,6 @@
 import fs from 'fs'
 import cheerio from 'cheerio'
 import nunjucks, { Template } from 'nunjucks'
-import ConditionService from '../../services/conditionService'
 import { registerNunjucks } from '../../utils/nunjucksSetup'
 
 const snippet = fs.readFileSync('server/views/partials/whatsNewBanner.njk')
@@ -10,8 +9,7 @@ describe('Whats new banner', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-  const njkEnv = registerNunjucks(conditionService)
+  const njkEnv = registerNunjucks()
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
