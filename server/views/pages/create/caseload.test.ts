@@ -4,7 +4,6 @@ import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
-import ConditionService from '../../../services/conditionService'
 
 const snippet = fs.readFileSync('server/views/pages/create/caseload.njk')
 
@@ -12,8 +11,7 @@ describe('Create a Licence Views - Caseload', () => {
   let compiledTemplate: Template
   let viewContext: Record<string, unknown>
 
-  const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-  const njkEnv = registerNunjucks(conditionService)
+  const njkEnv = registerNunjucks()
 
   beforeEach(() => {
     compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
