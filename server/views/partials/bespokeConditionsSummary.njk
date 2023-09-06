@@ -1,31 +1,27 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {%  macro bespokeConditions(licenceId, isEditable, title, hideHeading, bespokeConditions) %}
+    {% set bespokeConditionRows = [] %}
+    {% set conditionCount = bespokeConditions.length or 0 %}
+    {% set buttonText = "Add or remove conditions" if conditionCount else "Add conditions" %}
     {% if hideHeading != true %}
-        <div class="govuk-grid-row check-answers-header">
+        <div class="govuk-grid-row check-answers-header govuk-!-padding-top-9">
             <div class="govuk-grid-column-three-quarters">
-                <h2 class="govuk-heading-m">{{ title or "Bespoke licence conditions" }}</h2>
+                <h2 id="bespoke-conditions-heading"
+                    class="govuk-heading-m">{{ title or "Bespoke licence conditions" }} ({{conditionCount}})</h2>
+            </div>
+            <div class="govuk-grid-column-one-quarter">
+                {% if isEditable %}
+                    {{ govukButton({
+                        href: "/licence/create/id/" + licenceId + "/bespoke-conditions?fromReview=true",
+                        text: buttonText,
+                        classes: 'govuk-button moj-button-menu__item govuk-button--secondary moj-page-header-actions__action float-right',
+                        visuallyHiddenText: buttonText
+                    }) }}
+                {% endif %}
             </div>
         </div>
-    {% endif %}
-    {% set bespokeConditionRows = [] %}
-
-    {% set conditionWord = "condition" if bespokeConditions.length === 1 else "conditions" %}
-
-    {% if hideHeading != true %}
-        {% set bespokeConditionRows = (bespokeConditionRows.push({
-            key: {  text: "Select bespoke conditions" },
-            value: { text: "" + bespokeConditions.length + " " + conditionWord + " selected" },
-            actions: {
-                items: [
-                    {
-                        href: "/licence/create/id/" + licenceId + "/bespoke-conditions?fromReview=true",
-                        text: "Change",
-                        visuallyHiddenText: "Change bespoke conditions"
-                    }
-                ]
-            } if isEditable
-        }), bespokeConditionRows) %}
     {% endif %}
 
     {% for condition in bespokeConditions %}
@@ -47,7 +43,7 @@
 
     {{ govukSummaryList({
         attributes: { id: 'bespoke-conditions-details' },
-        classes: 'govuk-!-margin-bottom-9',
+        classes: 'govuk-!-margin-bottom-9 govuk-!-margin-top-7',
         rows: bespokeConditionRows
     }) }}
 
