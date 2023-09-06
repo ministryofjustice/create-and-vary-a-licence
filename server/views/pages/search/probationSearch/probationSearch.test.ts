@@ -1,25 +1,17 @@
 import fs from 'fs'
-import * as cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../../../utils/nunjucksSetup'
+
 import LicenceStatus from '../../../../enumeration/licenceStatus'
 import statusConfig from '../../../../licences/licenceStatus'
 
-const snippet = fs.readFileSync('server/views/pages/search/probationSearch/probationSearch.njk')
+import { templateRenderer } from '../../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(
+  fs.readFileSync('server/views/pages/search/probationSearch/probationSearch.njk').toString()
+)
 
 describe('View Probation Search Results', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
-  const njkEnv = registerNunjucks()
-
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   it('should display the results in a table with links to the licence and COM details page', () => {
-    viewContext = {
+    const $ = render({
       statusConfig,
       searchResults: [
         {
@@ -39,9 +31,7 @@ describe('View Probation Search Results', () => {
       inPrisonCountText: 'People in prison (1 result)',
       onProbationCountText: 'People on probation (0 results)',
       queryTerm: 'Test',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#probation-search-heading').text()).toBe('Search results for Test')
     expect($('.govuk-tabs__list a').text()).toContain('People in prison (1 result)')
     expect($('.govuk-tabs__list a').text()).toContain('People on probation (0 results)')

@@ -1,23 +1,12 @@
 import fs from 'fs'
-import * as cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-const snippet = fs.readFileSync('server/views/pages/approve/cases.njk')
+import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(fs.readFileSync('server/views/pages/approve/cases.njk').toString())
 
 describe('View and print a licence - case list', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
-  const njkEnv = registerNunjucks()
-
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   it('should display a table containing licences to print', () => {
-    viewContext = {
+    const $ = render({
       cases: [
         {
           name: 'Adam Balasaravika',
@@ -33,8 +22,8 @@ describe('View and print a licence - case list', () => {
         },
       ],
       approvalNeededView: true,
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
+
     expect($('tbody .govuk-table__row').length).toBe(2)
     expect($('#name-1').text()).toBe('Adam Balasaravika')
     expect($('#nomis-id-1').text()).toBe('A1234AA')

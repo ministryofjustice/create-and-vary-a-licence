@@ -1,22 +1,12 @@
 import fs from 'fs'
-import cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-const snippet = fs.readFileSync('server/views/pages/licence/AP_PSS.njk')
+import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(fs.readFileSync('server/views/pages/licence/AP_PSS.njk').toString())
 
 describe('Print an AP_PSS licence', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-  const njkEnv = registerNunjucks()
-
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   it('verify render of an AP_PSS licence', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         id: 1,
         forename: 'John',
@@ -53,9 +43,7 @@ describe('Print an AP_PSS licence', () => {
         },
       ],
       conditionsWithUploads: [],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     // Check the page title contains the offender name
     expect($('title').text()).toContain('John Smith')
@@ -94,76 +82,64 @@ describe('Print an AP_PSS licence', () => {
   })
 
   it('Should load Licence Period section if licence is in PSS and isActivatedInPssPeriod is false and not in variation', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         isInPssPeriod: true,
         isActivatedInPssPeriod: false,
       },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#licence-period').text().trim()).toBe('Licence Period')
   })
 
   it('Should load Licence Period section if licence is not in PSS and isActivatedInPssPeriod is false and not in variation', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         isInPssPeriod: false,
         isActivatedInPssPeriod: false,
       },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#licence-period').text().trim()).toBe('Licence Period')
   })
 
   it('Should load Licence Period section if licence is not in PSS and isActivatedInPssPeriod is false and in variation', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         isInPssPeriod: false,
         isActivatedInPssPeriod: false,
         statusCode: 'VARIATION_IN_PROGRESS',
       },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#licence-period').text().trim()).toBe('Licence Period')
   })
 
   it('Should not load Licence Period section if isActivatedInPssPeriod is true', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         isActivatedInPssPeriod: true,
       },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#licence-period').text().trim()).not.toBe('Licence Period')
   })
 
   it('Should not load Licence Period section if licence is in PSS period and status varied', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         isInPssPeriod: true,
         isActivatedInPssPeriod: false,
         statusCode: 'VARIATION_IN_PROGRESS',
       },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#licence-period').text().trim()).not.toBe('Licence Period')
   })
 
   it('Should not load Licence Period section if licence is in PSS period and status not varied', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         isInPssPeriod: true,
         isActivatedInPssPeriod: false,
         statusCode: 'APPROVED',
       },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#licence-period').text().trim()).toBe('Licence Period')
   })
 })
