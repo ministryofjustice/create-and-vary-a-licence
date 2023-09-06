@@ -43,7 +43,7 @@
 
     {{ govukSummaryList({
         attributes: { id: 'bespoke-conditions-details' },
-        classes: 'govuk-!-margin-bottom-9 govuk-!-margin-top-7',
+        classes: 'govuk-!-margin-top-7' if conditionCount,
         rows: bespokeConditionRows
     }) }}
 
