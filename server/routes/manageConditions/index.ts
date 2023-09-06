@@ -13,6 +13,7 @@ import type { Services } from '../../services'
 import AdditionalConditions from './types/additionalConditions'
 import AdditionalLicenceConditionsCallbackRoutes from './handlers/additionalLicenceConditionsCallback'
 import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceConditionInput'
+import AdditionalLicenceConditionUploadInputRoutes from './handlers/additionalLicenceConditionUploadInput'
 import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
 import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
@@ -79,6 +80,13 @@ export default function Index({ licenceService, conditionService }: Services): R
     post('/additional-licence-conditions/condition/:conditionCode/file-uploads', controller.POST)
   }
 
+  {
+    // upload/delete files from input page
+    const controller = new AdditionalLicenceConditionUploadInputRoutes(licenceService)
+    postWithFileUpload('/additional-licence-conditions/condition/:conditionId/file-upload-input', controller.POST)
+    get('/additional-licence-conditions/condition/:conditionId/file-upload-delete', controller.DELETE)
+  }
+
   // remove area from map list with confirmation (delete single conditions)
   {
     const controller = new AdditionalLicenceConditionUploadsRemovalRoutes(licenceService)
@@ -90,7 +98,7 @@ export default function Index({ licenceService, conditionService }: Services): R
   {
     const controller = new AdditionalLicenceConditionInputRoutes(licenceService, conditionService)
     get('/additional-licence-conditions/condition/:conditionId', controller.GET)
-    postWithFileUpload('/additional-licence-conditions/condition/:conditionId', controller.POST)
+    post('/additional-licence-conditions/condition/:conditionId', controller.POST)
     get('/additional-licence-conditions/condition/:conditionId/delete', controller.DELETE)
   }
 

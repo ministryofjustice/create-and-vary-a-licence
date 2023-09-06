@@ -29,9 +29,15 @@
         </div>
     </div>
 
+
+    {% set fileUploadPresent = additionalCondition.uploadSummary.length > 0 %}
+    
     {# Alter the form encoding to multi-part formdata and supply csrf token in query params for file upload conditions #}
     <div class="govuk-button-group">
-        <form method="POST">
+        <form method="POST"
+            encType="multipart/form-data"
+            action="/licence/create/id/{{licence.id}}/additional-licence-conditions/condition/{{additionalCondition.id}}/file-upload-input?_csrf={{ csrfToken }}{{ fromReviewAppend }}{{ fromPolicyReviewAppend }}">
+
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             <input type="hidden" name="code" value="{{ config.code }}">
 
@@ -45,6 +51,19 @@
                     {% endif %}
 
                     {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+                    {% if not fileUploadPresent %}
+                        <h2 class="govuk-heading-m govuk-!-padding-top-8">Help with this licence condition</h2>
+                        {{ govukDetails({
+                            summaryText: "If you need to add more than one map",
+                            text: "Add your first map on this page. You can add more from the next page.",
+                            classes: 'govuk-!-margin-bottom-3'
+                        }) }}
+                        {{ govukDetails({
+                            summaryText: "If you do not have a map",
+                            html: "You can create one on <a class='govuk-link govuk-link--no-visited-state govuk-!-margin-right-0' href='https://mapmaker.field-dynamics.co.uk/moj/map/default' target='_blank'>Map Maker</a>.",
+                            classes: 'govuk-!-margin-bottom-3'
+                        }) }}
+                    {% endif %}
                     <div class="govuk-button-group">
                         {{ govukButton({
                             text: "Continue",
@@ -53,13 +72,19 @@
                             attributes: { 'data-qa': 'continue' },
                             preventDoubleClick: true
                         }) }}
-                        {{ govukButton({
-                            text: "Delete this condition",
-                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReviewQuery,
-                            classes: 'govuk-button--secondary',
-                            attributes: { 'data-qa': 'delete' },
-                            preventDoubleClick: true
-                        }) }}
+                        
+                        {% if fileUploadPresent %}
+                            <a class="govuk-link govuk-link--no-visited-state"
+                                href={{ "/licence/create/id/" + licence.id +"/additional-licence-conditions/condition/"+additionalCondition.code+"/file-uploads?fromReview=true" }}>Cancel</a>
+                        {% else %}
+                            {{ govukButton({
+                                text: "Delete this condition",
+                                href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/file-upload-delete" + fromReview + fromPolicyReviewQuery,
+                                classes: 'govuk-button--secondary',
+                                attributes: { 'data-qa': 'delete' },
+                                preventDoubleClick: true
+                            }) }}
+                        {% endif %}
                     </div>
                 </div>
             </div>
