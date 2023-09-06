@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import LicenceService from '../../../services/licenceService'
-import YesOrNo from '../../../enumeration/yesOrNo'
-import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
+import LicenceService from '../../../../services/licenceService'
+import YesOrNo from '../../../../enumeration/yesOrNo'
+import { AdditionalCondition, Licence } from '../../../../@types/licenceApiClientTypes'
 
-export default class AdditionalLicenceConditionUploadsRemovalHandler {
+export default class FileUploadRemovalRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   private getLicenceCondition = (conditionId: number, licence: Licence): AdditionalCondition | null => {

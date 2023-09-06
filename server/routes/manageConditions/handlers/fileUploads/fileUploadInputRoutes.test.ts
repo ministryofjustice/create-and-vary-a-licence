@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
 
-import AdditionalLicenceConditionUploadInputRoutes from './additionalLicenceConditionUploadInput'
-import LicenceService from '../../../services/licenceService'
-import type { Licence } from '../../../@types/licenceApiClientTypes'
+import FileUploadInputRoutes from './fileUploadInputRoutes'
+import LicenceService from '../../../../services/licenceService'
+import type { Licence } from '../../../../@types/licenceApiClientTypes'
 
-jest.mock('../../../services/licenceService')
+jest.mock('../../../../services/licenceService')
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
-describe('Route Handlers - Create Licence - Additional Licence Condition Input for upload areas', () => {
-  const handler = new AdditionalLicenceConditionUploadInputRoutes(licenceService)
+describe('Route Handlers - Create Licence - file upload input routes', () => {
+  const handler = new FileUploadInputRoutes(licenceService)
   let req: Request
   let res: Response
 
