@@ -122,6 +122,19 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input f
         { username: 'joebloggs' }
       )
     })
+
+    it('does not upload file if no file present on request', async () => {
+      const { file, ...reqWithoutFile } = req
+
+      await handler.POST(reqWithoutFile as Request, res)
+      expect(licenceService.uploadExclusionZoneFile).not.toHaveBeenCalledWith()
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
+        '1',
+        { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
+        { outOfBoundFilename: 'test.txt' },
+        { username: 'joebloggs' }
+      )
+    })
   })
 
   describe('DELETE', () => {

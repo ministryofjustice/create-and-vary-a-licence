@@ -18,8 +18,9 @@ export default class AdditionalLicenceConditionUploadInputRoutes {
       redirect += '?fromReview=true'
     }
 
-    await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
-
+    if (req.file) {
+      await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
+    }
     const condition = licence.additionalLicenceConditions.find(c => c.id === +conditionId)
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
