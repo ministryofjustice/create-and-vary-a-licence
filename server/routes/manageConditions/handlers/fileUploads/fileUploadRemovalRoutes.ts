@@ -17,7 +17,7 @@ export default class FileUploadRemovalRoutes {
 
     const condition = this.getLicenceCondition(parseInt(conditionId, 10), licence)
 
-    res.render('pages/create/confirmUploadDeletion', {
+    res.render('pages/manageConditions/fileUploads/confirmUploadDeletion', {
       conditionId,
       conditionCode: condition.code,
       displayMessage: null,
@@ -34,7 +34,7 @@ export default class FileUploadRemovalRoutes {
     if (!confirmRemoval) {
       const condition = this.getLicenceCondition(parseInt(conditionId, 10), licence)
       const displayMessage = { text: 'Select yes or no' }
-      return res.render('pages/create/confirmUploadDeletion', {
+      return res.render('pages/manageConditions/fileUploads/confirmUploadDeletion', {
         conditionId,
         conditionCode: condition.code,
         displayMessage,

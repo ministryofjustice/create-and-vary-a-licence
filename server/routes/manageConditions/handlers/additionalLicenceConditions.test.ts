@@ -49,7 +49,7 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditions', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/additionalLicenceConditions', {
         additionalConditions: [
           {
             category: 'group1',

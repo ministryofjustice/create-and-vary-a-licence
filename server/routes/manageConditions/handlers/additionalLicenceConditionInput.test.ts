@@ -75,7 +75,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
       await handler.GET(req, res)
       expect(conditionsProviderSpy).toHaveBeenCalledWith('code1', 'version')
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalLicenceConditionInput', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/additionalLicenceConditionInput', {
         additionalCondition: {
           id: 1,
           code: 'code1',

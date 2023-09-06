@@ -15,7 +15,7 @@ export default class AdditionalPssConditionInputRoutes {
     )
 
     const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code, licence.version)
-    return res.render('pages/create/additionalPssConditionInput', { additionalCondition, config })
+    return res.render('pages/manageConditions/additionalPssConditionInput', { additionalCondition, config })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
