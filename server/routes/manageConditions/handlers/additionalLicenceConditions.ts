@@ -12,7 +12,7 @@ export default class AdditionalLicenceConditionsRoutes {
       LicenceType.AP,
       licence.version
     )
-    return res.render('pages/create/additionalLicenceConditions', { additionalConditions })
+    return res.render('pages/manageConditions/additionalLicenceConditions', { additionalConditions })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

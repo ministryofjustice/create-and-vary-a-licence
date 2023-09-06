@@ -13,7 +13,7 @@ export default class AdditionalPssConditionsRoutes {
       LicenceType.PSS,
       licence.version
     )
-    return res.render('pages/create/additionalPssConditions', { additionalConditions })
+    return res.render('pages/manageConditions/additionalPssConditions', { additionalConditions })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

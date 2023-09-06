@@ -48,7 +48,7 @@ describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
   describe('GET', () => {
     it('should render licence with bespoke conditions view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/bespokeConditions', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/bespokeConditions', {
         conditions: formBespokeConditions.conditions,
       })
     })

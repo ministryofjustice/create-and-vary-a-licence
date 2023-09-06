@@ -4,7 +4,7 @@ import nunjucks, { Template } from 'nunjucks'
 import { registerNunjucks } from '../../../utils/nunjucksSetup'
 import ConditionService from '../../../services/conditionService'
 
-const snippet = fs.readFileSync('server/views/pages/create/additionalLicenceConditions.njk')
+const snippet = fs.readFileSync('server/views/pages/manageConditions/additionalLicenceConditions.njk')
 
 describe('Create a Licence Views - Additional Conditions', () => {
   let compiledTemplate: Template

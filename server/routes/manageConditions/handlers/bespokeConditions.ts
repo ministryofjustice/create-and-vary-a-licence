@@ -10,7 +10,7 @@ export default class BespokeConditionsRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const conditionsList = res.locals?.licence?.bespokeConditions || ([] as BespokeCondition[])
     const conditions: string[] = conditionsList?.length > 0 ? conditionsList.map(c => c.text) : []
-    res.render('pages/create/bespokeConditions', { conditions })
+    res.render('pages/manageConditions/bespokeConditions', { conditions })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

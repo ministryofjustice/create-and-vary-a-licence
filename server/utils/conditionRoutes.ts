@@ -13,7 +13,7 @@ type ConditionConfig = {
 }
 
 const DEFAULT_CONDITION_CONFIG: ConditionConfig = {
-  inputTemplate: 'pages/create/additionalLicenceConditionInput',
+  inputTemplate: 'pages/manageConditions/additionalLicenceConditionInput',
   getEditConditionHref: (args: EditConditionHrefArgs) =>
     `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionId}${
       args.fromReview ? '?fromReview=true' : ''
@@ -22,7 +22,7 @@ const DEFAULT_CONDITION_CONFIG: ConditionConfig = {
 
 const conditions: Record<string, ConditionConfig> = {
   [MEZ_CONDITION_CODE]: {
-    inputTemplate: 'pages/create/additionalLicenceConditionMapInput',
+    inputTemplate: 'pages/manageConditions/fileUploads/input',
     getEditConditionHref: (args: EditConditionHrefArgs) =>
       `/licence/create/id/${args.licenceId}/additional-licence-conditions/condition/${args.conditionCode}/file-uploads${
         args.fromReview ? '?fromReview=true' : ''

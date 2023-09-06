@@ -39,7 +39,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
   describe('GET', () => {
     it('should display confirmation page to delete condition', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/confirmUploadDeletion', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/fileUploads/confirmUploadDeletion', {
         conditionId: '1',
         conditionCode: 'testCode',
         displayMessage: null,
@@ -118,7 +118,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       } as unknown as Request
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledTimes(0)
-      expect(res.render).toHaveBeenCalledWith('pages/create/confirmUploadDeletion', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/fileUploads/confirmUploadDeletion', {
         conditionId: '1',
         conditionCode: MEZ_CONDITION_CODE,
         displayMessage: { text: 'Select yes or no' },

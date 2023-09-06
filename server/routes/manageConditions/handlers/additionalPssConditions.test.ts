@@ -47,7 +47,7 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions', () => {
   describe('GET', () => {
     it('should render view', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/additionalPssConditions', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/additionalPssConditions', {
         additionalConditions: [
           {
             category: 'group1',

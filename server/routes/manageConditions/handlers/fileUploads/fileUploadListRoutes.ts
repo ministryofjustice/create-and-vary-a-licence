@@ -25,7 +25,12 @@ export default class FileUploadListRoutes {
       return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions/callback?fromReview=true`)
     }
 
-    return res.render('pages/create/fileUploads', { conditions, licenceId, conditionType, displayMessage: null })
+    return res.render('pages/manageConditions/fileUploads/list', {
+      conditions,
+      licenceId,
+      conditionType,
+      displayMessage: null,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
@@ -39,7 +44,12 @@ export default class FileUploadListRoutes {
     if (!uploadFile) {
       const displayMessage = { text: 'Select yes or no' }
       const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)
-      return res.render('pages/create/fileUploads', { conditions, licenceId, conditionType, displayMessage })
+      return res.render('pages/manageConditions/fileUploads/list', {
+        conditions,
+        licenceId,
+        conditionType,
+        displayMessage,
+      })
     }
 
     if (uploadFile !== YesOrNo.YES) {
