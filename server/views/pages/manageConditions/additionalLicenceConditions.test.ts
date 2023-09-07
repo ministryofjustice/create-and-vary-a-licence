@@ -1,23 +1,14 @@
 import fs from 'fs'
-import * as cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-const snippet = fs.readFileSync('server/views/pages/manageConditions/additionalLicenceConditions.njk')
+import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(
+  fs.readFileSync('server/views/pages/manageConditions/additionalLicenceConditions.njk').toString()
+)
 
 describe('Create a Licence Views - Additional Conditions', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
-  const njkEnv = registerNunjucks()
-
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   it('should display a heading for each condition group', () => {
-    viewContext = {
+    const $ = render({
       additionalConditions: [
         {
           category: 'Group 1',
@@ -28,9 +19,7 @@ describe('Create a Licence Views - Additional Conditions', () => {
           conditions: [],
         },
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group > fieldset > legend').length).toBe(2)
     expect($('.govuk-form-group:nth-child(1) > fieldset > legend').text().trim()).toBe('Group 1')
@@ -38,7 +27,7 @@ describe('Create a Licence Views - Additional Conditions', () => {
   })
 
   it('should display a checkbox for each condition in a group', () => {
-    viewContext = {
+    const $ = render({
       additionalConditions: [
         {
           category: 'Group 1',
@@ -63,16 +52,14 @@ describe('Create a Licence Views - Additional Conditions', () => {
           ],
         },
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group:nth-child(1) input').length).toBe(2)
     expect($('.govuk-form-group:nth-child(2) input').length).toBe(1)
   })
 
   it('should check the checkboxes if they are present on the licence', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         additionalLicenceConditions: [
           {
@@ -104,9 +91,7 @@ describe('Create a Licence Views - Additional Conditions', () => {
           ],
         },
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group:nth-child(1) input:nth-child(1)').attr('checked')).toBe('checked')
     expect($('.govuk-form-group:nth-child(1) input:nth-child(2)').attr('checked')).toBeUndefined()

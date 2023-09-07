@@ -1,24 +1,16 @@
-import cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../utils/nunjucksSetup'
+import { templateRenderer } from '../../utils/__testutils/templateTestUtils'
 
 describe('View Partials - Licence details banner', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
-  const njkEnv = registerNunjucks()
+  const render = templateRenderer('{% include "partials/licenceDetailsBanner.njk" %}')
 
   it('should not render anything if licence is not available', () => {
-    viewContext = {}
-    const nunjucksString = '{% include "partials/licenceDetailsBanner.njk" %}'
-    compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    const $ = render({})
 
     expect($('body').text().length).toBe(0)
   })
 
   it('should not render anything if hideLicenceBanner is true', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         crn: '123',
         nomsId: 'ABC',
@@ -27,16 +19,13 @@ describe('View Partials - Licence details banner', () => {
       user: {
         authSource: 'delius',
       },
-    }
-    const nunjucksString = '{% include "partials/licenceDetailsBanner.njk" %}'
-    compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('body').text().length).toBe(0)
   })
 
   it('should render CRN instead of nomisId if user is delius user', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         crn: '123',
         nomsId: 'ABC',
@@ -44,16 +33,13 @@ describe('View Partials - Licence details banner', () => {
       user: {
         authSource: 'delius',
       },
-    }
-    const nunjucksString = '{% include "partials/licenceDetailsBanner.njk" %}'
-    compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.pipe-separated__item:first').text()).toBe('CRN: 123')
   })
 
   it('should render nomisId instead of CRN if user is nomis user', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         crn: '123',
         nomsId: 'ABC',
@@ -61,10 +47,7 @@ describe('View Partials - Licence details banner', () => {
       user: {
         authSource: 'nomis',
       },
-    }
-    const nunjucksString = '{% include "partials/licenceDetailsBanner.njk" %}'
-    compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.pipe-separated__item:first').text()).toBe('Prison number: ABC')
   })

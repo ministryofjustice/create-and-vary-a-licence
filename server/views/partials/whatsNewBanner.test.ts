@@ -1,34 +1,21 @@
 import fs from 'fs'
-import cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../utils/nunjucksSetup'
 
-const snippet = fs.readFileSync('server/views/partials/whatsNewBanner.njk')
+import { templateRenderer } from '../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(fs.readFileSync('server/views/partials/whatsNewBanner.njk').toString())
 
 describe('Whats new banner', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
-  const njkEnv = registerNunjucks()
-
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   it('Show whats new banner if showCommsBanner is true', () => {
-    viewContext = {
+    const $ = render({
       showCommsBanner: true,
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('body').text()).toContain("What's new")
   })
 
   it('Hide whats new banner if showCommsBanner is true', () => {
-    viewContext = {
+    const $ = render({
       showCommsBanner: false,
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('body').text()).not.toContain("What's new")
   })
 })

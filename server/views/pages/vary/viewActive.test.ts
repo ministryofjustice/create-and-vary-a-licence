@@ -1,17 +1,11 @@
 import fs from 'fs'
-import * as cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
+import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 
-const snippet = fs.readFileSync('server/views/pages/vary/viewActive.njk')
+const render = templateRenderer(fs.readFileSync('server/views/pages/vary/viewActive.njk').toString())
 
 describe('ViewActive', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-  const njkEnv = registerNunjucks()
-
   const licence = {
     id: 1,
     surname: 'Bobson',
@@ -39,13 +33,8 @@ describe('ViewActive', () => {
     jest.resetAllMocks()
   })
 
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   it('should display expired section if licence type is AP_PSS, is in pss period, isActivatedInPssPeriod with additional conditions', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         ...licence,
         typeCode: 'AP_PSS',
@@ -53,13 +42,12 @@ describe('ViewActive', () => {
         isActivatedInPssPeriod: true,
       },
       additionalConditions: additionalConditionInputs,
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#conditions-expired').text()).toBe('Conditions from expired licence')
   })
 
   it('should display expired section if licence type is AP_PSS, is in pss period, in variation with additional conditions', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         ...licence,
         typeCode: 'AP_PSS',
@@ -68,13 +56,12 @@ describe('ViewActive', () => {
         statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
       },
       additionalConditions: additionalConditionInputs,
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#conditions-expired').text()).toBe('Conditions from expired licence')
   })
 
   it('should not display expired section if licence type is AP_PSS, is not in pss period, in variation with additional conditions', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         ...licence,
         typeCode: 'AP_PSS',
@@ -83,13 +70,12 @@ describe('ViewActive', () => {
         statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
       },
       additionalConditions: additionalConditionInputs,
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
   })
 
   it('should not display expired section if licence type is AP_PSS, is in pss period, not in variation and not activated in pss period with additional conditions', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         ...licence,
         typeCode: 'AP_PSS',
@@ -98,13 +84,12 @@ describe('ViewActive', () => {
         statusCode: LicenceStatus.ACTIVE,
       },
       additionalConditions: additionalConditionInputs,
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
   })
 
   it('should not display expired section if licence type is AP_PSS, is in pss period, not in variation and is activated in pss period with no additional conditions', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         ...licence,
         typeCode: 'AP_PSS',
@@ -112,13 +97,12 @@ describe('ViewActive', () => {
         isActivatedInPssPeriod: true,
         statusCode: LicenceStatus.ACTIVE,
       },
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
   })
 
   it('should not display expired section if licence type is not AP_PSS, is in pss period, not in variation and is activated in pss period with additional conditions', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         ...licence,
         typeCode: 'AP',
@@ -127,8 +111,7 @@ describe('ViewActive', () => {
         statusCode: LicenceStatus.ACTIVE,
       },
       additionalConditions: additionalConditionInputs,
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
   })
 })
