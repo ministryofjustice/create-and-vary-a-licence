@@ -422,6 +422,10 @@ export default class LicenceService {
     return this.licenceApiClient.updateComDetails(comDetails)
   }
 
+  async editApprovedLicence(licenceId: string, user: User): Promise<LicenceSummary> {
+    return this.licenceApiClient.editLicence(licenceId, user)
+  }
+
   async createVariation(licenceId: string, user: User): Promise<LicenceSummary> {
     return this.licenceApiClient.createVariation(licenceId, user)
   }

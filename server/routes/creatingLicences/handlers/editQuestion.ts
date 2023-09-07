@@ -25,9 +25,17 @@ export default class EditQuestionRoutes {
     const { licenceId } = req.params
     const { user } = res.locals
     const { answer } = req.body
+    const { statusCode } = res.locals.licence
+
+    let licenceIdToEdit = licenceId
     if (answer === YesOrNo.YES) {
-      await this.licenceService.updateStatus(parseInt(licenceId, 10), LicenceStatus.IN_PROGRESS, user)
+      if (LicenceStatus.APPROVED === statusCode) {
+        const newLicenceVersion = await this.licenceService.editApprovedLicence(licenceId, user)
+        licenceIdToEdit = newLicenceVersion.licenceId.toString()
+      } else {
+        await this.licenceService.updateStatus(parseInt(licenceId, 10), LicenceStatus.IN_PROGRESS, user)
+      }
     }
-    return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
+    return res.redirect(`/licence/create/id/${licenceIdToEdit}/check-your-answers`)
   }
 }
