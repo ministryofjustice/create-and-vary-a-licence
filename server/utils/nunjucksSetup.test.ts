@@ -212,6 +212,37 @@ describe('Nunjucks Filters', () => {
     })
   })
 
+  describe('addQueryParam', () => {
+    it('does not add param when value undefined', () => {
+      const result = registerNunjucks().getFilter('addQueryParam')('/some-funky/path', 'query', undefined)
+      expect(result).toEqual('/some-funky/path')
+    })
+
+    it('does not add param when value is false', () => {
+      const result = registerNunjucks().getFilter('addQueryParam')('/some-funky/path', 'query', false)
+      expect(result).toEqual('/some-funky/path?query=false')
+    })
+
+    it('adds param when present and no existing query params', () => {
+      const result = registerNunjucks().getFilter('addQueryParam')('/some-funky/path', 'query', 'some-string')
+      expect(result).toEqual('/some-funky/path?query=some-string')
+    })
+
+    it('adds param when present and query params exist', () => {
+      const result = registerNunjucks().getFilter('addQueryParam')(
+        '/some-funky/path?query=some-string',
+        'another-query',
+        'some-other-string'
+      )
+      expect(result).toEqual('/some-funky/path?query=some-string&another-query=some-other-string')
+    })
+
+    it('both name and value are encoded properly', () => {
+      const result = registerNunjucks().getFilter('addQueryParam')('/some-funky/path', 'some&query', 'some?string')
+      expect(result).toEqual('/some-funky/path?some%26query=some%3Fstring')
+    })
+  })
+
   describe('Extract specified value from object array', () => {
     it('extractAttr', () => {
       const model = [

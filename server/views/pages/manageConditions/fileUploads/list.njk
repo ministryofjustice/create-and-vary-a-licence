@@ -25,12 +25,12 @@
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" + fromReviewAppend,
+                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" | addQueryParam('fromReview', fromReview),
                         text: "Change details",
                         visuallyHiddenText: condition.uploadSummary[0].fileName
                     },
                     {
-                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/file-upload-removal",
+                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/file-upload-removal" | addQueryParam('fromReview', fromReview),
                         text: "Delete",
                         visuallyHiddenText: condition.uploadSummary[0].filename
                     }
@@ -83,7 +83,7 @@
                     }) }}
                     {{ govukButton({
                         text: "Delete this condition",
-                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + conditions[0].code + "/delete",
+                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + conditions[0].code + "/delete" | addQueryParam('fromReview', fromReview),
                         classes: 'govuk-button--secondary',
                         attributes: { 'data-qa': 'delete' }
                     }) }}

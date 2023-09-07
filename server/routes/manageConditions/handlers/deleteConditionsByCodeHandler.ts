@@ -8,6 +8,18 @@ export default class DeleteConditionsByCodeHandler {
     const { user, licence } = res.locals
     const { conditionCode } = req.params
     await this.licenceService.deleteAdditionalConditionsByCode(conditionCode, licence, user)
-    return res.redirect(`/licence/create/id/${licence.id}/check-your-answers`)
+    if (req.query?.fromPolicyReview) {
+      return res.redirect(
+        `/licence/vary/id/${licence.id}/policy-changes/input/callback/${
+          +req.session.changedConditionsInputsCounter + 1
+        }`
+      )
+    }
+
+    return res.redirect(
+      `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
+        req.query?.fromReview ? '?fromReview=true' : ''
+      }`
+    )
   }
 }
