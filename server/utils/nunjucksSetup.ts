@@ -243,6 +243,11 @@ export function registerNunjucks(app?: express.Express): Environment {
     return array.map(f)
   })
 
+  njkEnv.addFilter('addQueryParam', (url: string, name: string, value: string) => {
+    if (value === undefined) return url
+    return `${url}${url.includes('?') ? '&' : '?'}${encodeURIComponent(name)}=${encodeURIComponent(value)}`
+  })
+
   njkEnv.addFilter('extractAttr', (array, key) => {
     return array.map((item: string) => {
       return item[key]

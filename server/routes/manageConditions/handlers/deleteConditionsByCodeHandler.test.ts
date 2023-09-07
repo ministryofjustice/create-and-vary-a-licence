@@ -11,6 +11,7 @@ describe('Route Handlers - Create Licence - Delete Conditions By Code Handler Ha
   beforeEach(() => {
     req = {
       params: { conditionCode: 'abc' },
+      query: {},
     } as unknown as Request
 
     licenceService.deleteAdditionalConditionsByCode = jest.fn()
@@ -51,7 +52,28 @@ describe('Route Handlers - Create Licence - Delete Conditions By Code Handler Ha
         { username: 'joebloggs' }
       )
 
-      expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/123/check-your-answers`)
+      expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/123/additional-licence-conditions/callback`)
+    })
+
+    it('should propagate fromReview query param', async () => {
+      req.query.fromReview = 'true'
+      await handler.DELETE(req, res)
+      expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledWith(
+        'abc',
+        {
+          id: 123,
+          additionalLicenceConditions: [
+            { id: 1, code: 'abc' },
+            { id: 2, code: 'abc' },
+            { id: 3, code: 'cba' },
+          ],
+        },
+        { username: 'joebloggs' }
+      )
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/create/id/123/additional-licence-conditions/callback?fromReview=true`
+      )
     })
   })
 })
