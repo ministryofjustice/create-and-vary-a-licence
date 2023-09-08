@@ -1,23 +1,12 @@
 import fs from 'fs'
-import * as cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
-const snippet = fs.readFileSync('server/views/pages/vary/caseload.njk')
+import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(fs.readFileSync('server/views/pages/vary/caseload.njk').toString())
 
 describe('Caseload', () => {
-  let compiledTemplate: Template
-
-  const njkEnv = registerNunjucks()
-
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-  })
-
-  let viewContext = {} as unknown as Record<string, unknown>
-
   it('should display Active badge', () => {
-    viewContext = {
+    const $ = render({
       caseload: [
         {
           licenceId: 3,
@@ -41,13 +30,12 @@ describe('Caseload', () => {
           colour: 'blue',
         },
       },
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('.status-badge').text().toString()).toContain('Active')
   })
 
   it('should display badge', () => {
-    viewContext = {
+    const $ = render({
       caseload: [
         {
           licenceId: 3,
@@ -71,9 +59,7 @@ describe('Caseload', () => {
           colour: 'blue',
         },
       },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('.status-badge').text().toString()).toContain('Variation in progress')
   })
 })

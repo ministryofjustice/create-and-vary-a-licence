@@ -1,22 +1,11 @@
 import fs from 'fs'
-import cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
+import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 
-const snippet = fs.readFileSync('server/views/pages/licence/AP.njk')
+const render = templateRenderer(fs.readFileSync('server/views/pages/licence/AP.njk').toString())
 
 describe('Print an AP licence', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-  const njkEnv = registerNunjucks()
-
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   it('verify render of an AP licence', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         id: 1,
         forename: 'John',
@@ -53,9 +42,7 @@ describe('Print an AP licence', () => {
         },
       ],
       conditionsWithUploads: [],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     // Check the page title contains the offender name
     expect($('title').text()).toContain('John Smith')
@@ -96,14 +83,12 @@ describe('Print an AP licence', () => {
   })
 
   it('SED and LED render together on one line if they are the same', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         licenceExpiryDate: '09/02/2022',
         sentenceEndDate: '09/02/2022',
       },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#offender > div > p:nth-child(2)').text().trim()).toBe(
       'Your licence and sentence expire on 9th February 2022'
@@ -111,14 +96,12 @@ describe('Print an AP licence', () => {
   })
 
   it('SED and LED render separately on different lines if they are different', () => {
-    viewContext = {
+    const $ = render({
       licence: {
         licenceExpiryDate: '08/02/2022',
         sentenceEndDate: '09/02/2022',
       },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#offender > div > p:nth-child(2)').text().trim()).toBe('Your licence expires on 8th February 2022')
     expect($('#offender > div > p:nth-child(3)').text().trim()).toBe('Your sentence expires on 9th February 2022')

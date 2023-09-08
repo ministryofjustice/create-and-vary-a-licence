@@ -1,22 +1,13 @@
-import cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../utils/nunjucksSetup'
+import { templateRenderer } from '../utils/__testutils/templateTestUtils'
 
 describe('View Partials - Form builder', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
-  const njkEnv = registerNunjucks()
-  const nunjucksString =
+  const template =
     '{% from "formBuilder.njk" import formBuilder %}{{ formBuilder(licenceId, config, additionalCondition, validationErrors, formResponses, csrfToken)}}'
 
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(nunjucksString, njkEnv)
-    viewContext = {}
-  })
+  const render = templateRenderer(template)
 
   it('should build a text input correctly', () => {
-    viewContext = {
+    const $ = render({
       additionalCondition: {
         data: [],
       },
@@ -30,9 +21,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group').length).toBe(1)
     expect($('.govuk-label').text().trim()).toBe('label for textbox')
@@ -40,7 +29,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should build Add Another fieldsets correctly for text input', () => {
-    viewContext = {
+    const $ = render({
       additionalCondition: {
         data: [
           {
@@ -70,9 +59,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group').length).toBe(3)
     expect($('#textbox\\[0\\]').attr('value')).toBe('Data 1')
@@ -83,7 +70,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should only build the first occurring input value if field is not addAnother enabled', () => {
-    viewContext = {
+    const $ = render({
       additionalCondition: {
         data: [
           {
@@ -110,9 +97,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group').length).toBe(1)
     expect($('#textbox').attr('value')).toBe('Data 1')
@@ -121,7 +106,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should build a dropdown input correctly', () => {
-    viewContext = {
+    const $ = render({
       additionalCondition: {
         data: [],
       },
@@ -143,9 +128,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group').length).toBe(1)
     expect($('.govuk-label').text().trim()).toBe('label for dropdown')
@@ -158,7 +141,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should build a radio input correctly', () => {
-    viewContext = {
+    const $ = render({
       formResponses: [],
       additionalCondition: {
         data: [],
@@ -181,9 +164,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group').length).toBe(1)
     expect($('.govuk-fieldset__legend').text().trim()).toBe('label for radio')
@@ -193,7 +174,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should build a conditional reveal input correctly', () => {
-    viewContext = {
+    const $ = render({
       formResponses: [],
       additionalCondition: {
         data: [],
@@ -225,9 +206,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group').length).toBe(2)
     expect($('.govuk-fieldset__legend').first().text().trim()).toBe('label for radio')
@@ -238,7 +217,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should build a date picker input correctly', () => {
-    viewContext = {
+    const $ = render({
       formResponses: [],
       additionalCondition: {
         data: [],
@@ -253,9 +232,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-date-input').length).toBe(1)
     expect($('#datePicker1').length).toBe(1)
@@ -267,7 +244,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should build a time picker input correctly', () => {
-    viewContext = {
+    const $ = render({
       formResponses: [],
       additionalCondition: {
         data: [],
@@ -282,9 +259,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-date-input').length).toBe(1)
     expect($('#timePicker1').length).toBe(1)
@@ -296,7 +271,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should build an address input correctly', () => {
-    viewContext = {
+    const $ = render({
       formResponses: [],
       additionalCondition: {
         data: [],
@@ -310,9 +285,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#addressLine1').length).toBe(1)
     expect($('#addressLine2').length).toBe(1)
@@ -322,7 +295,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should build a checkbox input correctly', () => {
-    viewContext = {
+    const $ = render({
       formResponses: [],
       additionalCondition: {
         data: [],
@@ -344,9 +317,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#check').length).toBe(1)
     expect($('#check-2').length).toBe(1)
@@ -355,7 +326,7 @@ describe('View Partials - Form builder', () => {
   })
 
   it('should build a file upload type correctly', () => {
-    viewContext = {
+    const $ = render({
       formResponses: [],
       additionalCondition: {
         data: [],
@@ -370,9 +341,7 @@ describe('View Partials - Form builder', () => {
         ],
       },
       csrfToken: 'not-real',
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-form-group').length).toBe(1)
     expect($('.govuk-label').text().trim()).toBe('label for file upload')

@@ -1,23 +1,12 @@
 import fs from 'fs'
-import cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
-const snippet = fs.readFileSync('server/views/pages/view/view.njk')
+import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(fs.readFileSync('server/views/pages/view/view.njk').toString())
 
 describe('View and print - single licence view', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
-  const njkEnv = registerNunjucks()
-
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   const licence = {
     id: 1,
     statusCode: 'APPROVED',
@@ -75,7 +64,7 @@ describe('View and print - single licence view', () => {
   } as Licence
 
   it('should display a single licence to print', () => {
-    viewContext = {
+    const $ = render({
       licence,
       additionalConditions: [
         [
@@ -113,9 +102,7 @@ describe('View and print - single licence view', () => {
           },
         ],
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     // Check the appropriate title is used
     expect($('h1').text()).toContain('Print licence and post sentence supervision order for John Smith')
@@ -167,27 +154,21 @@ describe('View and print - single licence view', () => {
   })
 
   it('Print buttons are not visible when licence is not approved or active', () => {
-    viewContext = { licence: { ...licence, statusCode: 'SUBMITTED' } }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
 
     expect($('[data-qa="print-licence"]').length).toBe(0)
   })
 
   it('Title changes to view when licence is not printable', () => {
-    viewContext = { licence: { ...licence, statusCode: 'SUBMITTED' } }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
 
     expect($('h1').text()).toContain('View licence and post sentence supervision order for John Smith')
   })
 
   it('Title changes depending on licence type', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'PSS' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('h1').text()).toContain('Print post sentence supervision order for John Smith')
   })

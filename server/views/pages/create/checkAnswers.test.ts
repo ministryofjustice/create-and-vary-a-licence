@@ -1,19 +1,13 @@
 import fs from 'fs'
-import * as cheerio from 'cheerio'
 import { addDays } from 'date-fns'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
 
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
-const snippet = fs.readFileSync('server/views/pages/create/checkAnswers.njk')
+import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(fs.readFileSync('server/views/pages/create/checkAnswers.njk').toString())
 
 describe('Create a Licence Views - Check Answers', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
-  const njkEnv = registerNunjucks()
-
   const licence = {
     id: 1,
     typeCode: 'AP_PSS',
@@ -91,31 +85,23 @@ describe('Create a Licence Views - Check Answers', () => {
     bespokeConditions: [{ text: 'Bespoke condition 1' }, { text: 'Bespoke condition 2' }],
   } as Licence
 
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   it('should display additional licence conditions section if licence type is AP', () => {
-    viewContext = { licence: { ...licence, typeCode: 'AP' } }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    const $ = render({ licence: { ...licence, typeCode: 'AP' } })
     expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (0)')
   })
 
   it('should display additional licence conditions section if licence type is AP_PSS', () => {
-    viewContext = { licence }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    const $ = render({ licence })
     expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (0)')
   })
 
   it('should not display additional licence conditions section if licence type is PSS', () => {
-    viewContext = { licence: { ...licence, typeCode: 'PSS' } }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    const $ = render({ licence: { ...licence, typeCode: 'PSS' } })
     expect($('#additional-licence-conditions-heading').length).toBe(0)
   })
 
   it('should display a table containing the additional licence conditions', () => {
-    viewContext = {
+    const $ = render({
       licence,
       additionalConditions: [
         [
@@ -155,9 +141,7 @@ describe('Create a Licence Views - Check Answers', () => {
           },
         ],
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#additionalLicenceConditions > .govuk-summary-list__row').length).toBe(2)
     expect($('#additional-licence-conditions-heading').text()).toBe('Additional licence conditions (2)')
@@ -185,33 +169,28 @@ describe('Create a Licence Views - Check Answers', () => {
   })
 
   it('should display additional PSS conditions section if licence type is PSS', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, typeCode: 'PSS' },
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements (2)')
   })
 
   it('should display additional PSS conditions section if licence type is AP_PSS', () => {
-    viewContext = {
+    const $ = render({
       licence,
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements (2)')
   })
 
   it('should not display additional PSS licence conditions section if licence type is AP', () => {
-    viewContext = { licence: { ...licence, typeCode: 'AP' } }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    const $ = render({ licence: { ...licence, typeCode: 'AP' } })
     expect($('#additional-pss-conditions-heading').length).toBe(0)
   })
 
   it('should display a table containing the additional PSS conditions', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, typeCode: 'PSS' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(2)
     expect($('#additional-pss-conditions-heading').text()).toBe('Additional post sentence supervision requirements (2)')
@@ -231,11 +210,9 @@ describe('Create a Licence Views - Check Answers', () => {
   })
 
   it('should display a table containing the bespoke conditions for AP licences', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, typeCode: 'AP' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#bespoke-conditions-details > .govuk-summary-list__row').length).toBe(2)
     expect($('#bespoke-conditions-heading').text()).toBe('Bespoke licence conditions (2)')
@@ -249,7 +226,7 @@ describe('Create a Licence Views - Check Answers', () => {
   })
 
   it('should show change links and submit button when licence status is IN_PROGRESS', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, statusCode: 'IN_PROGRESS' },
       additionalConditions: [
         [
@@ -289,86 +266,70 @@ describe('Create a Licence Views - Check Answers', () => {
           },
         ],
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-summary-list__actions').length).toBe(11)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 
   it('should hide edit licence button when status is IN_PROGRESS', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, statusCode: 'IN_PROGRESS' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#edit-licence-button').length).toBe(0)
     expect($('#edit-licence-button-2').length).toBe(0)
   })
 
   it('should hide edit licence button when status is ACTIVE', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, statusCode: 'ACTIVE' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#edit-licence-button').length).toBe(0)
     expect($('#edit-licence-button-2').length).toBe(0)
   })
 
   it('should show edit licence button when status is APPROVED', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, statusCode: 'APPROVED' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#edit-licence-button').length).toBe(1)
     expect($('#edit-licence-button-2').length).toBe(1)
   })
 
   it('should show edit licence button when status is SUBMITTED', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, statusCode: 'SUBMITTED' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#edit-licence-button').length).toBe(1)
     expect($('#edit-licence-button-2').length).toBe(1)
   })
 
   it('should show print licence button when status is APPROVED', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, statusCode: 'APPROVED' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#print-licence-button').length).toBe(1)
     expect($('#print-licence-button-2').length).toBe(1)
   })
 
   it('should hide print licence button when status is SUBMITTED', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, statusCode: 'SUBMITTED' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('#print-licence-button').length).toBe(0)
     expect($('#print-licence-button-2').length).toBe(0)
   })
 
   it('should hide change links and submit button when licence status is not IN_PROGRESS', () => {
-    viewContext = {
+    const $ = render({
       licence: { ...licence, statusCode: 'SUBMITTED' },
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('.govuk-summary-list__actions').length).toBe(0)
     expect($('.check-answers-header__change-link').length).toBe(0)
@@ -378,11 +339,10 @@ describe('Create a Licence Views - Check Answers', () => {
   it('should display correct date description for "non-vary" routes ', () => {
     const tomorrow = addDays(new Date(), 1)
 
-    viewContext = {
+    const $ = render({
       isVaryJourney: false,
       licence: { typeCode: 'AP', licenceExpiryDate: tomorrow },
-    }
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
     expect($('[data-qa=date]').text()).toContain('Release date')
     expect($('[data-qa=date]').text()).not.toContain('Licence end date')
   })

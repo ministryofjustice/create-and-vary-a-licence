@@ -1,25 +1,15 @@
 import fs from 'fs'
-import cheerio from 'cheerio'
-import nunjucks, { Template } from 'nunjucks'
-import { registerNunjucks } from '../../../utils/nunjucksSetup'
+
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
 
-const snippet = fs.readFileSync('server/views/pages/create/caseload.njk')
+import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+
+const render = templateRenderer(fs.readFileSync('server/views/pages/create/caseload.njk').toString())
 
 describe('Create a Licence Views - Caseload', () => {
-  let compiledTemplate: Template
-  let viewContext: Record<string, unknown>
-
-  const njkEnv = registerNunjucks()
-
-  beforeEach(() => {
-    compiledTemplate = nunjucks.compile(snippet.toString(), njkEnv)
-    viewContext = {}
-  })
-
   it('should display a table containing the caseload', () => {
-    viewContext = {
+    const $ = render({
       caseload: [
         {
           name: 'Adam Balasaravika',
@@ -36,9 +26,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('tbody .govuk-table__row').length).toBe(2)
     expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
@@ -50,7 +38,7 @@ describe('Create a Licence Views - Caseload', () => {
   })
 
   it('should display probation practitioner in the table or unallocated', () => {
-    viewContext = {
+    const $ = render({
       caseload: [
         {
           name: 'Adam Balasaravika',
@@ -71,9 +59,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.NOT_STARTED,
         },
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('tbody .govuk-table__row').length).toBe(2)
     expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
@@ -88,7 +74,7 @@ describe('Create a Licence Views - Caseload', () => {
   })
 
   it('should display the caseload with a case outside the pilot area', () => {
-    viewContext = {
+    const $ = render({
       statusConfig,
       caseload: [
         {
@@ -114,9 +100,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.NOT_IN_PILOT,
         },
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
@@ -132,7 +116,7 @@ describe('Create a Licence Views - Caseload', () => {
   })
 
   it('should display the caseload with a case as a recall', () => {
-    viewContext = {
+    const $ = render({
       statusConfig,
       caseload: [
         {
@@ -158,9 +142,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.OOS_RECALL,
         },
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
@@ -176,7 +158,7 @@ describe('Create a Licence Views - Caseload', () => {
   })
 
   it('should display the caseload with a case as a breach of supervision', () => {
-    viewContext = {
+    const $ = render({
       statusConfig,
       caseload: [
         {
@@ -202,9 +184,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.OOS_BOTUS,
         },
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
@@ -220,7 +200,7 @@ describe('Create a Licence Views - Caseload', () => {
   })
 
   it('should display the caseload with links to the licence or confirm create page', () => {
-    viewContext = {
+    const $ = render({
       statusConfig,
       caseload: [
         {
@@ -249,9 +229,7 @@ describe('Create a Licence Views - Caseload', () => {
           licenceStatus: LicenceStatus.IN_PROGRESS,
         },
       ],
-    }
-
-    const $ = cheerio.load(compiledTemplate.render(viewContext))
+    })
 
     expect($('tbody .govuk-table__row').length).toBe(2)
 
