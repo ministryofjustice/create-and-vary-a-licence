@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { format, isAfter, parse } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
@@ -32,16 +31,16 @@ export default class DatesChangedEventHandler {
     if (activeAndVariationLicences.length) {
       await this.deactivateLicencesIfPrisonerResentenced(activeAndVariationLicences, bookingId)
     } else {
-      const licence = _.head(
-        await this.licenceService.getLicencesByNomisIdsAndStatus(
-          [nomisId],
-          [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED]
-        )
+      const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+        [nomisId],
+        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED]
       )
 
-      if (licence) {
-        await this.updateLicenceSentenceDates(licence, nomisId)
-      }
+      await Promise.all(
+        licences.map(licence => {
+          return this.updateLicenceSentenceDates(licence, nomisId)
+        })
+      )
     }
   }
 
