@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import moment from 'moment'
 import CommunityService from '../../../services/communityService'
 import PrisonerService from '../../../services/prisonerService'
-import { convertToTitleCase, isBankHolidayOrWeekend } from '../../../utils/utils'
+import { convertToTitleCase } from '../../../utils/utils'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
@@ -37,9 +37,8 @@ export default class ConfirmCreateRoutes {
         forename: convertToTitleCase(nomisRecord.firstName),
         surname: convertToTitleCase(nomisRecord.lastName),
       },
-      releaseIsOnBankHolidayOrWeekend: isBankHolidayOrWeekend(
-        moment(nomisRecord.sentenceDetail.confirmedReleaseDate || nomisRecord.sentenceDetail.conditionalReleaseDate),
-        bankHolidays
+      releaseIsOnBankHolidayOrWeekend: bankHolidays.isBankHolidayOrWeekend(
+        moment(nomisRecord.sentenceDetail.confirmedReleaseDate || nomisRecord.sentenceDetail.conditionalReleaseDate)
       ),
       backLink,
     })
