@@ -7,7 +7,7 @@ const createEnvelope = (properties: Record<string, string | boolean>, baseType =
       baseType,
       baseData: { properties },
     } as DataTelemetry,
-  } as EnvelopeTelemetry)
+  }) as EnvelopeTelemetry
 
 const createContext = (user: Record<string, unknown>) => ({
   'http.ServerRequest': {

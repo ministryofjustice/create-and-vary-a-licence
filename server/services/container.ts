@@ -3,7 +3,10 @@ type MapParams<T, R> = (t: T, index: number, array: T[]) => R
 type ExcludedItem = [item: unknown, reason: string]
 
 export default class Container<T> {
-  constructor(private readonly items: T[], private readonly excludedItems: ExcludedItem[] = []) {}
+  constructor(
+    private readonly items: T[],
+    private readonly excludedItems: ExcludedItem[] = []
+  ) {}
 
   filter(filterParams: FilterParams<T>, exclusionReason: string): Container<T> {
     const included: T[] = []

@@ -6,7 +6,10 @@ import { convertToTitleCase } from '../../../utils/utils'
 import getUrlAccessByStatus from '../../../utils/urlAccessByStatus'
 
 export default class OffenderLicencesRoutes {
-  constructor(private readonly licenceServer: LicenceService, private readonly prisonerService: PrisonerService) {}
+  constructor(
+    private readonly licenceServer: LicenceService,
+    private readonly prisonerService: PrisonerService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals

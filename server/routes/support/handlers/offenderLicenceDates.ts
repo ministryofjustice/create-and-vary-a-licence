@@ -8,7 +8,10 @@ import SimpleDate from '../../creatingLicences/types/date'
 import LicenceDatesAndReason from '../types/licenceDatesAndReason'
 
 export default class OffenderLicenceDatesRoutes {
-  constructor(private licenceService: LicenceService, private licenceOverrideService: LicenceOverrideService) {}
+  constructor(
+    private licenceService: LicenceService,
+    private licenceOverrideService: LicenceOverrideService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
