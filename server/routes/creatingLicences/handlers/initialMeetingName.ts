@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import LicenceService from '../../../services/licenceService'
-import { isBankHolidayOrWeekend } from '../../../utils/utils'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 export default class InitialMeetingNameRoutes {
@@ -16,9 +15,8 @@ export default class InitialMeetingNameRoutes {
     const bankHolidays = await this.ukBankHolidayFeedService.getEnglishAndWelshHolidays()
 
     res.render('pages/create/initialMeetingPerson', {
-      releaseIsOnBankHolidayOrWeekend: isBankHolidayOrWeekend(
-        moment(licence.actualReleaseDate || licence.conditionalReleaseDate, 'DD/MM/YYYY'),
-        bankHolidays
+      releaseIsOnBankHolidayOrWeekend: bankHolidays.isBankHolidayOrWeekend(
+        moment(licence.actualReleaseDate || licence.conditionalReleaseDate, 'DD/MM/YYYY')
       ),
     })
   }

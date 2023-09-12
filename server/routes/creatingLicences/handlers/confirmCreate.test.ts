@@ -7,16 +7,18 @@ import PrisonerService from '../../../services/prisonerService'
 import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
-import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
+import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-const ukBankHolidayFeedService = new UkBankHolidayFeedService() as jest.Mocked<UkBankHolidayFeedService>
+
+const bankHolidayRetriever: BankHolidayRetriever = async () => []
+const ukBankHolidayFeedService = new UkBankHolidayFeedService(bankHolidayRetriever)
+
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/communityService')
 jest.mock('../../../services/prisonerService')
-jest.mock('../../../services/ukBankHolidayFeedService')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
   const handler = new ConfirmCreateRoutes(communityService, prisonerService, licenceService, ukBankHolidayFeedService)

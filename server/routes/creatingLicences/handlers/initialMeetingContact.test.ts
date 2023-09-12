@@ -6,7 +6,7 @@ import Telephone from '../types/telephone'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-const ukBankHolidayFeedService = new UkBankHolidayFeedService() as jest.Mocked<UkBankHolidayFeedService>
+const ukBankHolidayFeedService = new UkBankHolidayFeedService(async () => [])
 
 describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
   const handler = new InitialMeetingContactRoutes(licenceService, ukBankHolidayFeedService)
@@ -41,7 +41,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
     } as unknown as Response
 
     licenceService.updateContactNumber = jest.fn()
-    ukBankHolidayFeedService.getEnglishAndWelshHolidays = jest.fn()
   })
 
   describe('GET', () => {

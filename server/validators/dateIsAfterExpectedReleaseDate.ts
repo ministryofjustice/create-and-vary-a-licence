@@ -3,14 +3,15 @@ import moment, { Moment } from 'moment'
 import _ from 'lodash'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import UkBankHolidayFeedService from '../services/ukBankHolidayFeedService'
-import { isBankHolidayOrWeekend } from '../utils/utils'
 
 export default function DateIsAfterExpectedReleaseDate(validationOptions?: ValidationOptions) {
+  const bankHolidayService = new UkBankHolidayFeedService()
+
   const dateIsAfterExpectedReleaseDate = async (date: SimpleDate, { object }: ValidationArguments) => {
-    const bankHolidays = await new UkBankHolidayFeedService().getEnglishAndWelshHolidays()
+    const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
 
     const getWorkingDayOnOrBefore = (d: Moment): Moment => {
-      return isBankHolidayOrWeekend(d, bankHolidays) ? getWorkingDayOnOrBefore(d.subtract(1, 'day')) : d
+      return bankHolidays.isBankHolidayOrWeekend(d) ? getWorkingDayOnOrBefore(d.subtract(1, 'day')) : d
     }
 
     const dateAsMoment = date.toMoment()

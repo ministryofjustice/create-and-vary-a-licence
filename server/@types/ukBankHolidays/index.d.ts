@@ -12,7 +12,6 @@ declare module 'uk-bank-holidays' {
   }
 
   export interface Holiday {
-    title: string
     date: string
   }
 }

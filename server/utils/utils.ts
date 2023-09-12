@@ -1,5 +1,4 @@
-import moment, { Moment } from 'moment'
-import { Holiday } from 'uk-bank-holidays'
+import moment from 'moment'
 import { format, isBefore, parse } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
@@ -167,14 +166,6 @@ const formatAddress = (address?: string) => {
     : undefined
 }
 
-const isBankHolidayOrWeekend = (date: Moment, bankHolidays: Holiday[]) => {
-  return (
-    date.isoWeekday() === 6 ||
-    date.isoWeekday() === 7 ||
-    bankHolidays.find(hol => moment(hol.date).isSame(date, 'day')) !== undefined
-  )
-}
-
 const licenceIsTwoDaysToRelease = (licence: Licence) =>
   moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
 
@@ -249,7 +240,6 @@ export {
   filterCentralCaseload,
   objectIsEmpty,
   formatAddress,
-  isBankHolidayOrWeekend,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
   isPassedArdOrCrd,
