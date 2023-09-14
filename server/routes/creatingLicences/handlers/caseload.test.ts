@@ -5,7 +5,8 @@ import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
-import { ManagedCase } from '../../../@types/managedCase'
+import { DeliusRecord, ManagedCase } from '../../../@types/managedCase'
+import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
@@ -268,6 +269,63 @@ describe('Route Handlers - Create Licence - Caseload', () => {
 
       await handler.GET(req, res)
       expect(res.redirect).toBeCalledTimes(0)
+    })
+
+    it('should render the non-approved licence if 2 exist', async () => {
+      caseloadService.getStaffCreateCaseload.mockResolvedValue([
+        {
+          deliusRecord: {
+            offenderCrn: 'X381306',
+          },
+          nomisRecord: {
+            firstName: 'John',
+            lastName: 'Roberts',
+            conditionalReleaseDate: '2022-10-12',
+            prisonerNumber: '123',
+            prisonId: 'MDI',
+          },
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.APPROVED,
+            },
+            {
+              id: 2,
+              type: LicenceType.AP,
+              status: LicenceStatus.IN_PROGRESS,
+            },
+          ],
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+          },
+        },
+      ] as unknown as ManagedCase[])
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
+        caseload: [
+          {
+            licenceId: 2,
+            name: 'John Roberts',
+            crnNumber: 'X381306',
+            prisonerNumber: '123',
+            releaseDate: '12 Oct 2022',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Joe Bloggs',
+            },
+            isClickable: true,
+          },
+        ],
+        multipleTeams: false,
+        search: undefined,
+        statusConfig,
+        teamName: null,
+        teamView: false,
+      })
+      expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
     })
 
     it('should successfully search by CRN', async () => {
