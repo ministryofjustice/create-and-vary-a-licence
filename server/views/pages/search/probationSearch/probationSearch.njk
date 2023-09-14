@@ -224,20 +224,23 @@
         </div>
     </div>
 
-    {% set peopleInPrison = displayResults(tabParameters.inPrisonCountText, tabParameters.prisonTabCaption, tabParameters.prisonTabId, peopleInPrisonResults, true) %}
-    {% set peopleOnProbation = displayResults(tabParameters.onProbationCountText, tabParameters.probationTabCaption, tabParameters.probationTabId, peopleOnProbationResults, false) %}
+    {% set inPrisonCountText = "People in prison ("  + searchResponse.inPrisonCount + searchResponse.inPrisonCount | pluralise(" result") + ")" %}
+    {% set onProbationCountText = "People on probation (" + searchResponse.onProbationCount + searchResponse.onProbationCount | pluralise(" result") + ")" %}
+
+    {% set peopleInPrison = displayResults(inPrisonCountText, tabParameters.prisonTabCaption, tabParameters.prisonTabId, peopleInPrisonResults, true) %}
+    {% set peopleOnProbation = displayResults(onProbationCountText, tabParameters.probationTabCaption, tabParameters.probationTabId, peopleOnProbationResults, false) %}
 
     {{ govukTabs({
         items: [
             {
-                label: "People in prison ("  + searchResponse.inPrisonCount + searchResponse.inPrisonCount | pluralise(" result") + ")",
+                label: inPrisonCountText,
                 id: "people-in-prison",
                 panel: {
                     html: peopleInPrison
                 }
             },
             {
-                label: "People on probation (" + searchResponse.onProbationCount + searchResponse.onProbationCount | pluralise(" result") + ")",
+                label: onProbationCountText,
                 id: "people-on-probation",
                 panel: {
                     html: peopleOnProbation

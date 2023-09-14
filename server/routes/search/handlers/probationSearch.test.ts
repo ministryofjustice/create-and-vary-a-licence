@@ -13,28 +13,38 @@ describe('Route Handlers - Search - Probation Search', () => {
   let req: Request
   let res: Response
 
-  const searchResult = [
-    {
-      name: 'Test Person',
-      crn: 'A123456',
-      nomisId: 'A1234BC',
-      comName: 'Test Staff',
-      comStaffCode: '3000',
-      teamName: 'Test Team',
-      releaseDate: '2023-08-16',
-      licenceId: 1,
-      licenceType: 'AP',
-      licenceStatus: 'IN_PROGRESS',
-      isOnProbation: false,
-    },
-  ]
+  const searchResponse = {
+    results: [
+      {
+        name: 'Test Person',
+        crn: 'A123456',
+        nomisId: 'A1234BC',
+        comName: 'Test Staff',
+        comStaffCode: '3000',
+        teamName: 'Test Team',
+        releaseDate: '2023-08-16',
+        licenceId: 1,
+        licenceType: 'AP',
+        licenceStatus: 'IN_PROGRESS',
+        isOnProbation: false,
+      },
+    ],
+    inPrisonCount: 1,
+    onProbationCount: 0,
+  }
+
+  const tabParameters = {
+    activeTab: '#people-in-prison',
+    prisonTabCaption: 'In Prison Search Results',
+    probationTabCaption: 'On Probation Search Results',
+    prisonTabId: 'tab-heading-prison',
+    probationTabId: 'tab-heading-probation',
+  }
+
+  const previousCaseloadPage = 'create'
 
   beforeEach(() => {
-    searchService.getProbationSearchResults.mockResolvedValue({
-      results: searchResult,
-      inPrisonCount: 1,
-      onProbationCount: 0,
-    } as ProbationSearchResult)
+    searchService.getProbationSearchResults.mockResolvedValue(searchResponse as ProbationSearchResult)
 
     req = {} as Request
 
@@ -63,11 +73,11 @@ describe('Route Handlers - Search - Probation Search', () => {
       expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'Test',
-        searchResults: searchResult,
+        searchResponse,
         backLink: '/licence/create/caseload',
-        inPrisonCountText: 'People in prison (1 result)',
-        onProbationCountText: 'People on probation (0 results)',
+        tabParameters,
         statusConfig,
+        previousCaseloadPage,
       })
     })
   })

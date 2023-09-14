@@ -13,23 +13,30 @@ describe('View Probation Search Results', () => {
   it('should display the results in a table with links to the licence and COM details page', () => {
     const $ = render({
       statusConfig,
-      searchResults: [
-        {
-          name: 'Test Person',
-          crn: 'A123456',
-          nomisId: 'A1234BC',
-          comName: 'Test Staff',
-          comStaffCode: '3000',
-          teamName: 'Test Team',
-          releaseDate: '2023-08-16',
-          licenceId: 1,
-          licenceType: 'AP',
-          licenceStatus: LicenceStatus.IN_PROGRESS,
-          isOnProbation: false,
-        },
-      ],
-      inPrisonCountText: 'People in prison (1 result)',
-      onProbationCountText: 'People on probation (0 results)',
+      searchResponse: {
+        results: [
+          {
+            name: 'Test Person',
+            crn: 'A123456',
+            nomisId: 'A1234BC',
+            comName: 'Test Staff',
+            comStaffCode: '3000',
+            teamName: 'Test Team',
+            releaseDate: '2023-08-16',
+            licenceId: 1,
+            licenceType: 'AP',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            isOnProbation: false,
+          },
+        ],
+        inPrisonCount: 1,
+        onProbationCount: 0,
+      },
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
       queryTerm: 'Test',
     })
     expect($('#probation-search-heading').text()).toBe('Search results for Test')

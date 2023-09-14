@@ -23,10 +23,10 @@ export default class ProbationSearch {
       searchResponse = await this.searchService.getProbationSearchResults(queryTerm, deliusStaffIdentifier)
     }
 
+    console.log(searchResponse)
+
     const backLink = this.getBackLink(previousCaseloadPage)
 
-    let inPrisonCountText: string
-    let onProbationCountText: string
     let activeTab: string
 
     if (searchResponse.onProbationCount === 0 || searchResponse.inPrisonCount >= searchResponse.onProbationCount) {
@@ -36,8 +36,6 @@ export default class ProbationSearch {
     }
 
     const tabParameters = {
-      inPrisonCountText,
-      onProbationCountText,
       activeTab,
       prisonTabCaption: 'In Prison Search Results',
       probationTabCaption: 'On Probation Search Results',
