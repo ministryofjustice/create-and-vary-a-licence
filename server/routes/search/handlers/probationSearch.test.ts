@@ -13,7 +13,7 @@ describe('Route Handlers - Search - Probation Search', () => {
   let req: Request
   let res: Response
 
-  const searchResponse = {
+  let searchResponse = {
     results: [
       {
         name: 'Test Person',
@@ -33,6 +33,8 @@ describe('Route Handlers - Search - Probation Search', () => {
     onProbationCount: 0,
   }
 
+  let previousCaseloadPage = 'create'
+
   const tabParameters = {
     activeTab: '#people-in-prison',
     prisonTabCaption: 'In Prison Search Results',
@@ -40,8 +42,6 @@ describe('Route Handlers - Search - Probation Search', () => {
     prisonTabId: 'tab-heading-prison',
     probationTabId: 'tab-heading-probation',
   }
-
-  const previousCaseloadPage = 'create'
 
   beforeEach(() => {
     searchService.getProbationSearchResults.mockResolvedValue(searchResponse as ProbationSearchResult)
@@ -63,7 +63,7 @@ describe('Route Handlers - Search - Probation Search', () => {
   })
 
   describe('GET', () => {
-    it('calls the search service with the neccessary parameters', async () => {
+    it('calls the search service to search by name', async () => {
       req.query = { queryTerm: 'Test', previousPage: 'create' }
 
       await handler.GET(req, res)
@@ -75,6 +75,91 @@ describe('Route Handlers - Search - Probation Search', () => {
         queryTerm: 'Test',
         searchResponse,
         backLink: '/licence/create/caseload',
+        tabParameters,
+        statusConfig,
+        previousCaseloadPage,
+      })
+    })
+
+    it('calls the search service to search by CRN', async () => {
+      req.query = { queryTerm: 'A123456', previousPage: 'create' }
+
+      await handler.GET(req, res)
+
+      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('A123456', 3000)
+
+      expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
+        deliusStaffIdentifier: 3000,
+        queryTerm: 'A123456',
+        searchResponse,
+        backLink: '/licence/create/caseload',
+        tabParameters,
+        statusConfig,
+        previousCaseloadPage,
+      })
+    })
+
+    it('calls the search service to search by probation practioner', async () => {
+      req.query = { queryTerm: 'staff', previousPage: 'create' }
+
+      await handler.GET(req, res)
+
+      expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('staff', 3000)
+
+      expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
+        deliusStaffIdentifier: 3000,
+        queryTerm: 'staff',
+        searchResponse,
+        backLink: '/licence/create/caseload',
+        tabParameters,
+        statusConfig,
+        previousCaseloadPage,
+      })
+    })
+
+    it('does not call the search service for a blank query', async () => {
+      req.query = { queryTerm: '', previousPage: 'create' }
+
+      searchResponse = {
+        results: [],
+        inPrisonCount: 0,
+        onProbationCount: 0,
+      }
+
+      await handler.GET(req, res)
+
+      expect(searchService.getProbationSearchResults).not.toHaveBeenCalled()
+
+      expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
+        deliusStaffIdentifier: 3000,
+        queryTerm: '',
+        searchResponse,
+        backLink: '/licence/create/caseload',
+        tabParameters,
+        statusConfig,
+        previousCaseloadPage,
+      })
+    })
+
+    it('sets the correct back link dependent on the previous page visited', async () => {
+      req.query = { queryTerm: '', previousPage: 'vary' }
+      previousCaseloadPage = 'vary'
+
+      searchResponse = {
+        results: [],
+        inPrisonCount: 0,
+        onProbationCount: 0,
+      }
+
+      await handler.GET(req, res)
+
+      expect(searchService.getProbationSearchResults).not.toHaveBeenCalled()
+
+      expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
+        deliusStaffIdentifier: 3000,
+        queryTerm: '',
+        searchResponse,
+        backLink: '/licence/vary/caseload',
         tabParameters,
         statusConfig,
         previousCaseloadPage,
