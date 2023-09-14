@@ -23,8 +23,6 @@ export default class ProbationSearch {
       searchResponse = await this.searchService.getProbationSearchResults(queryTerm, deliusStaffIdentifier)
     }
 
-    console.log(searchResponse)
-
     const backLink = this.getBackLink(previousCaseloadPage)
 
     let activeTab: string
