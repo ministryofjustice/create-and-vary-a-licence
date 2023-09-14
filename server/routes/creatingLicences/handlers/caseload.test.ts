@@ -5,8 +5,7 @@ import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
-import { DeliusRecord, ManagedCase } from '../../../@types/managedCase'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
+import { ManagedCase } from '../../../@types/managedCase'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
