@@ -16,7 +16,7 @@ window.onload = function () {
 }
 
 function caseInsensitiveHighlighting(html, searchTerm) {
-  var reg = new RegExp(searchTerm, 'gi')
+  const reg = new RegExp(searchTerm, 'gi')
   return html.replace(reg, function (str) {
     return '<mark>' + str + '</mark>'
   })

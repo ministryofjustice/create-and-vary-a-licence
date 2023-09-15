@@ -32,16 +32,21 @@
     {% set caption = caption %}
     <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
     {% if results.length == 0 %}
-        {% if setPeopleInPrisonTab %}
-            <div class="govuk-grid-row">
+        <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
                     <p>Someone's licence will only appear on this service if they:</p>
                     <ul class = "govuk-list govuk-list--bullet">
                         <li>are assigned to you or one of your teams on NDelius</li>
-                        <li>are serving a determinate sentence</li>
-                        <li>have a release date</li>
-                        <li>have not been approved for Home Detention Curfew</li>
-                        <li>have not been recalled or breached a post sentence supervision order</li>
+                        {% if setPeopleInPrisonTab %}
+                            <li>are serving a determinate sentence</li>
+                            <li>have a release date</li>
+                            <li>have not been approved for Home Detention Curfew</li>
+                        {% else %}
+                            <li>are serving a determinate sentence or a post sentence supervision order</li>
+                            <li>were not released on Home Detention Curfew</li>
+                            <li>were not released from prison with a licence created using a PD1 form</li>
+                        {% endif %}
+                            <li>have not been recalled or breached a post sentence supervision order</li>
                     </ul>
                     <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
                     <p class="govuk-body">
@@ -54,29 +59,6 @@
                     </p>
                 </div>
             </div>
-        {% else %}
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    <p>Someone's licence will only appear on this service if they:</p>
-                    <ul class = "govuk-list govuk-list--bullet">
-                        <li>are assigned to you or one of your teams on NDelius</li>
-                        <li>are serving a determinate sentence or a post sentence supervision order</li>
-                        <li>were not released on Home Detention Curfew</li>
-                        <li>were not released from prison with a licence created using a PD1 form</li>
-                        <li>have not been recalled or breached a post sentence supervision order</li>
-                    </ul>
-                    <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
-                    <p class="govuk-body">
-                        {{ govukButton({
-                            text: "Return to caselist",
-                            classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
-                            href: backLink,
-                            attributes: { 'data-qa': 'return-to-caselist' }
-                        }) }}
-                    </p>
-                </div>
-            </div>
-        {% endif %}
     {% else %}
         <form method="GET">
             {{ govukTable({
