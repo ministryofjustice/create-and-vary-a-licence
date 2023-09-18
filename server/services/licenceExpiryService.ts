@@ -4,7 +4,10 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceApiClient from '../data/licenceApiClient'
 
 export default class LicenceExpiryService {
-  constructor(private readonly licenceApiClient: LicenceApiClient, private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceApiClient: LicenceApiClient,
+    private readonly licenceService: LicenceService
+  ) {}
 
   /**
    * Expire ACTIVE licences where the

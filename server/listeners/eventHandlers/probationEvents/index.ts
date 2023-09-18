@@ -23,6 +23,10 @@ export default function buildEventHandler({ communityService, licenceService }: 
             .catch(error =>
               logger.error(`${error} OFFENDER_MANAGER_CHANGED event unsuccessful for crn: ${eventMessage.crn}`)
             )
+          break
+        default: {
+          // silently ignore
+        }
       }
     })
   }

@@ -27,7 +27,7 @@ export default class ApprovalViewPage extends Page {
   }
 
   constructor() {
-    super('approval-view-page', true, { 'aria-allowed-attr': { enabled: false } })
+    super('approval-view-page', true, { 'aria-prohibited-attr': { enabled: false } })
   }
 
   getPrisonerImage = () => {

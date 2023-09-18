@@ -6,7 +6,10 @@ import { User } from '../../../@types/CvlUserDetails'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
 
 export default class OffenderLicenceStatusRoutes {
-  constructor(private licenceService: LicenceService, private licenceOverrideService: LicenceOverrideService) {}
+  constructor(
+    private licenceService: LicenceService,
+    private licenceOverrideService: LicenceOverrideService
+  ) {}
 
   private async getLicenceData(nomsId: string, licenceId: string, user: User) {
     const licences = await this.licenceService.getLicencesByNomisIdsAndStatus([nomsId], [], user)

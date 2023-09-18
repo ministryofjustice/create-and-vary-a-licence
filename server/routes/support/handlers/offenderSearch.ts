@@ -7,7 +7,10 @@ import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { convertToTitleCase } from '../../../utils/utils'
 
 export default class OffenderSearchRoutes {
-  constructor(private readonly prisonerService: PrisonerService, private readonly communityService: CommunityService) {}
+  constructor(
+    private readonly prisonerService: PrisonerService,
+    private readonly communityService: CommunityService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { firstName, lastName, nomisId, crn } = req.query as Record<string, string>

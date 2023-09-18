@@ -8,7 +8,10 @@ import PrisonerService from '../server/services/prisonerService'
 import CaseloadService from '../server/services/caseloadService'
 
 export default class PromptLicenceCreationService {
-  constructor(private readonly prisonerService: PrisonerService, private readonly caseloadService: CaseloadService) {}
+  constructor(
+    private readonly prisonerService: PrisonerService,
+    private readonly caseloadService: CaseloadService
+  ) {}
 
   pollPrisonersDueForLicence = async (
     earliestReleaseDate: Date,
