@@ -22,6 +22,9 @@ export default class ConfirmationRoutes {
         titleText = `Post sentence supervision order for ${licence.forename} ${licence.surname} sent`
         confirmationMessage = `We have sent the post sentence supervision order to ${licence.prisonDescription} for approval.`
         break
+      default: {
+        // silently ignore
+      }
     }
 
     res.render('pages/create/confirmation', { titleText, confirmationMessage, backLink })

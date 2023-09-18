@@ -25,7 +25,10 @@ export abstract class TokenStore {
 export class RedisTokenStore extends TokenStore {
   private readonly prefix = 'systemToken:'
 
-  constructor(systemTokenSupplier: SystemTokenSupplier, private readonly client: RedisClient) {
+  constructor(
+    systemTokenSupplier: SystemTokenSupplier,
+    private readonly client: RedisClient
+  ) {
     super(systemTokenSupplier)
     client.on('error', error => {
       logger.error(error, `Redis error`)
@@ -50,7 +53,10 @@ export class RedisTokenStore extends TokenStore {
 }
 
 export class InMemoryTokenStore extends TokenStore {
-  constructor(systemTokenSupplier: SystemTokenSupplier, private readonly tokenMap: Map<string, string> = new Map()) {
+  constructor(
+    systemTokenSupplier: SystemTokenSupplier,
+    private readonly tokenMap: Map<string, string> = new Map()
+  ) {
     super(systemTokenSupplier)
   }
 
