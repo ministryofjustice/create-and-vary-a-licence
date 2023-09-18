@@ -6,7 +6,10 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 
 export default class TransferredEventHandler {
-  constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly prisonerService: PrisonerService
+  ) {}
 
   handle = async (event: DomainEventMessage): Promise<void> => {
     if (event.additionalInformation?.reason === 'TRANSFERRED') {

@@ -4,11 +4,11 @@ import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
-import Address from '../routes/creatingLicences/types/address'
-import { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
-import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
+import type Address from '../routes/creatingLicences/types/address'
+import type { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
+import type { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
-import { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
+import type { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -210,12 +210,15 @@ const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonAp
 }
 
 const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], keyField: K): T[][] => {
-  const results = arr.reduce((acc, c) => {
-    const key = c[keyField]
-    const existingValues = acc[key] || []
-    acc[key] = [...existingValues, c]
-    return acc
-  }, {} as Record<T[K], T[]>)
+  const results = arr.reduce(
+    (acc, c) => {
+      const key = c[keyField] as string
+      const existingValues = acc[key] || []
+      acc[key] = [...existingValues, c]
+      return acc
+    },
+    {} as Record<string, T[]>
+  )
 
   return Object.values(results)
 }

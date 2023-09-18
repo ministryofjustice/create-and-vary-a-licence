@@ -21,6 +21,9 @@ export default class ConfirmApprovedRoutes {
         titleText = `Post sentence supervision order approved`
         confirmationMessage = `A case administrator can now print the post sentence supervision order for ${licence.forename} ${licence.surname}.`
         break
+      default: {
+        // silently ignore
+      }
     }
 
     res.render('pages/approve/confirmation', { titleText, confirmationMessage })

@@ -4,7 +4,10 @@ import ConditionService from '../../../services/conditionService'
 import LicenceService from '../../../services/licenceService'
 
 export default class ViewVariationRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user, licence } = res.locals

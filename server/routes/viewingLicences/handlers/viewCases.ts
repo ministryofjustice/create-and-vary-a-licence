@@ -8,7 +8,10 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 
 export default class ViewAndPrintCaseRoutes {
-  constructor(private readonly caseloadService: CaseloadService, private readonly prisonerService: PrisonerService) {}
+  constructor(
+    private readonly caseloadService: CaseloadService,
+    private readonly prisonerService: PrisonerService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string

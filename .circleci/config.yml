@@ -15,7 +15,7 @@ parameters:
 
   node-version:
     type: string
-    default: 18.16-browsers
+    default: 18.17-browsers
 
 executors:
   integration-tests:
@@ -40,8 +40,7 @@ jobs:
       - checkout
       - run:
           name: Update npm
-          # temporary hard code version until we move to v10
-          command: 'sudo npm install -g npm@9.8.1'
+          command: 'sudo npm install -g npm@10'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -68,7 +67,6 @@ jobs:
             - assets/stylesheets
             - build
             - dist
-            - .cache/Cypress
 
   unit_test:
     executor:

@@ -32,6 +32,9 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
             offenderDetailsChangedEventHandler.handle(eventMessage).catch(error => logger.error(error))
           }
           break
+        default: {
+          // silently ignore
+        }
       }
     })
   }

@@ -6,7 +6,10 @@ import LicenceService from '../../../services/licenceService'
 const COM_ROLE_ID = 'LHDCBT002'
 
 export default class OffenderManagerChangedEventHandler {
-  constructor(private readonly communityService: CommunityService, private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly communityService: CommunityService,
+    private readonly licenceService: LicenceService
+  ) {}
 
   handle = async (event: ProbationEventMessage): Promise<void> => {
     const { crn } = event
