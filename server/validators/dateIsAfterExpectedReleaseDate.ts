@@ -1,7 +1,7 @@
 import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator'
 import moment, { Moment } from 'moment'
 import _ from 'lodash'
-import SimpleDate from '../routes/creatingLicences/types/date'
+import type SimpleDate from '../routes/creatingLicences/types/date'
 import UkBankHolidayFeedService from '../services/ukBankHolidayFeedService'
 
 export default function DateIsAfterExpectedReleaseDate(validationOptions?: ValidationOptions) {

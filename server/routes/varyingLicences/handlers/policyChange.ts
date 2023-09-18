@@ -8,7 +8,10 @@ import conditionChangeType from '../../../enumeration/conditionChangeType'
 import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/LicencePolicy'
 
 export default class PolicyChangeRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId, changeCounter } = req.params
@@ -86,9 +89,7 @@ export default class PolicyChangeRoutes {
     const condition = req.session.changedConditions[conditionCounter - 1]
     const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
       condition.code,
-      (
-        await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)
-      ).version
+      (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version
     )
 
     let additionalLicenceConditions: AdditionalCondition[] = []
@@ -171,9 +172,7 @@ export default class PolicyChangeRoutes {
       const conditionCode = req.session.changedConditions[counter - 1].code
       const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
         conditionCode,
-        (
-          await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)
-        ).version
+        (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version
       )
 
       let additionalConditionCodes: string[] = []

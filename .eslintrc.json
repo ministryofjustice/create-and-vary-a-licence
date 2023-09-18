@@ -5,7 +5,7 @@
     "jest": true
   },
 
-  "plugins": ["import"],
+  "plugins": ["import", "no-only-tests"],
 
   "settings": {
     "import/parsers": {
@@ -33,14 +33,9 @@
         "plugin:prettier/recommended"
       ],
       "rules": {
-        "no-shadow": "off",
-        "max-classes-per-file": "off",
-        "@typescript-eslint/no-shadow": "error",
         "@typescript-eslint/no-use-before-define": 0,
         "class-methods-use-this": 0,
         "no-useless-constructor": 0,
-        "import/no-cycle": 0,
-        "default-case": 0,
         "@typescript-eslint/no-unused-vars": [
           1,
           {
@@ -74,8 +69,9 @@
         "ignoreRestSiblings": true
       }
     ],
-    "no-use-before-define": 0,
-    "semi": 0,
+    "no-use-before-define": "off",
+    "no-shadow": "off",
+    "semi": "off",
     "import/no-unresolved": "error",
     "import/extensions": [
       "error",
@@ -100,8 +96,9 @@
     ],
     "import/no-extraneous-dependencies": [
       "error",
-      { "devDependencies": ["**/*.test.js", "**/*.test.ts", "**/__testutils/*.ts"] }
+      { "devDependencies": ["**/*.test.js", "**/*.test.ts", "**/__testutils/**", "cypress.config.ts"] }
     ],
+    "no-only-tests/no-only-tests": "error",
     "prettier/prettier": [
       "error",
       {
@@ -111,6 +108,8 @@
         "semi": false,
         "arrowParens": "avoid"
       }
-    ]
+    ],
+    "max-classes-per-file": "off",
+    "no-empty-function": ["error", { "allow": ["constructors", "arrowFunctions"] }]
   }
 }

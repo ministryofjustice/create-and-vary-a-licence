@@ -22,6 +22,9 @@ export default class ConfirmationRoutes {
         licenceType = 'post sentence supervision order'
         titleText = `Post sentence supervision order variation for ${licence.forename} ${licence.surname} sent`
         break
+      default: {
+        // silently ignore
+      }
     }
 
     res.render('pages/vary/confirmation', { titleText, licenceType, backLink })
