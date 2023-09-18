@@ -6,7 +6,10 @@ import YesOrNo from '../../../../enumeration/yesOrNo'
 import ConditionService from '../../../../services/conditionService'
 
 export default class FileUploadListRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId, conditionCode } = req.params

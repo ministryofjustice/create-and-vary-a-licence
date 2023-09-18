@@ -12,7 +12,6 @@ import prison from './integration_tests/mockApis/prison'
 import probationSearch from './integration_tests/mockApis/probationSearch'
 import events from './integration_tests/support/events'
 import UkBankHolidayFeedService from './server/services/ukBankHolidayFeedService'
-import { isBankHolidayOrWeekend } from './server/utils/utils'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -23,7 +22,6 @@ export default defineConfig({
   reporterOptions: {
     configFile: 'reporter-config.json',
   },
-  videoUploadOnPasses: false,
   taskTimeout: 60000,
   viewportHeight: 1200,
   viewportWidth: 1300,
@@ -124,7 +122,7 @@ export default defineConfig({
         getNextWorkingDay: (): Promise<Moment> =>
           new UkBankHolidayFeedService().getEnglishAndWelshHolidays().then(ukHolidays => {
             const appointmentDate = moment().add(1, 'year').add(1, 'week').day(7)
-            while (isBankHolidayOrWeekend(appointmentDate, ukHolidays)) {
+            while (ukHolidays.isBankHolidayOrWeekend(appointmentDate)) {
               appointmentDate.add(1, 'day')
             }
             return appointmentDate

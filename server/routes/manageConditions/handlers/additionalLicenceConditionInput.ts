@@ -4,7 +4,10 @@ import ConditionService from '../../../services/conditionService'
 import { getConfigForCondition } from '../../../utils/conditionRoutes'
 
 export default class AdditionalLicenceConditionInputRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params

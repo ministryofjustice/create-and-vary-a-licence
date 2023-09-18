@@ -21,6 +21,9 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
         case 'CONFIRMED_RELEASE_DATE-CHANGED':
           datesChangedEventHandler.handle(eventMessage).catch(error => logger.error(error))
           break
+        default: {
+          // silently ignore
+        }
       }
     })
   }

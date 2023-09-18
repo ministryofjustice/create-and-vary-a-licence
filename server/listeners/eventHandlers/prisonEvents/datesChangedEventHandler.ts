@@ -8,7 +8,10 @@ import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import { PrisonEventMessage } from '../../../@types/events'
 
 export default class DatesChangedEventHandler {
-  constructor(private readonly licenceService: LicenceService, private readonly prisonerService: PrisonerService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly prisonerService: PrisonerService
+  ) {}
 
   handle = async (event: PrisonEventMessage): Promise<void> => {
     const { bookingId, offenderIdDisplay } = event

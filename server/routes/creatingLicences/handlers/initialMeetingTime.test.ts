@@ -6,7 +6,7 @@ import SimpleDateTime from '../types/simpleDateTime'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-const ukBankHolidayFeedService = new UkBankHolidayFeedService() as jest.Mocked<UkBankHolidayFeedService>
+const ukBankHolidayFeedService = new UkBankHolidayFeedService(async () => [])
 
 describe('Route - create licence - initial meeting date and time', () => {
   const handler = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
@@ -51,7 +51,6 @@ describe('Route - create licence - initial meeting date and time', () => {
     } as unknown as Response
 
     licenceService.updateAppointmentTime = jest.fn()
-    ukBankHolidayFeedService.getEnglishAndWelshHolidays = jest.fn()
   })
 
   describe('GET', () => {

@@ -227,6 +227,9 @@ export default class ConditionService {
         case 'ElectronicTagPeriod':
           validator = ElectronicTagPeriod
           break
+        default: {
+          // silently ignore
+        }
       }
       return { ...condition, validatorType: validator }
     })
@@ -242,6 +245,9 @@ export default class ConditionService {
         case 'DrugTestLocation':
           validator = DrugTestLocation
           break
+        default: {
+          // silently ignore
+        }
       }
       return { ...condition, validatorType: validator }
     })

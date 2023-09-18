@@ -6,7 +6,10 @@ import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
 
 export default class ConfirmAmendVariationRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     res.render('pages/vary/confirmAmendVariation')

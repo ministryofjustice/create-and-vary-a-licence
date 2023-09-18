@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import { isBankHolidayOrWeekend, stringToAddressObject } from '../../../utils/utils'
+import { stringToAddressObject } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
@@ -18,9 +18,8 @@ export default class InitialMeetingPlaceRoutes {
     const formAddress = stringToAddressObject(licence.appointmentAddress)
     res.render('pages/create/initialMeetingPlace', {
       formAddress,
-      releaseIsOnBankHolidayOrWeekend: isBankHolidayOrWeekend(
-        moment(licence.actualReleaseDate || licence.conditionalReleaseDate, 'DD/MM/YYYY'),
-        bankHolidays
+      releaseIsOnBankHolidayOrWeekend: bankHolidays.isBankHolidayOrWeekend(
+        moment(licence.actualReleaseDate || licence.conditionalReleaseDate, 'DD/MM/YYYY')
       ),
     })
   }

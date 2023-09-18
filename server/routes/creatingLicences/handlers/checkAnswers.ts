@@ -10,7 +10,10 @@ import ConditionService from '../../../services/conditionService'
 import { groupingBy } from '../../../utils/utils'
 
 export default class CheckAnswersRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly conditionService: ConditionService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals

@@ -3,7 +3,10 @@ import LicenceService from '../../../services/licenceService'
 import CommunityService from '../../../services/communityService'
 
 export default class VariationSummaryRoutes {
-  constructor(private readonly licenceService: LicenceService, private readonly communityService: CommunityService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly communityService: CommunityService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
