@@ -25,13 +25,8 @@ export default class ProbationSearch {
 
     const backLink = this.getBackLink(previousCaseloadPage)
 
-    let activeTab: string
-
-    if (searchResponse.onProbationCount === 0 || searchResponse.inPrisonCount >= searchResponse.onProbationCount) {
-      activeTab = '#people-in-prison'
-    } else {
-      activeTab = '#people-on-probation'
-    }
+    const activeTab =
+      searchResponse.inPrisonCount >= searchResponse.onProbationCount ? '#people-in-prison' : '#people-on-probation'
 
     const tabParameters = {
       activeTab,
