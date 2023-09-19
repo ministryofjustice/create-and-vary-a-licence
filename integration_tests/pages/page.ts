@@ -25,7 +25,11 @@ export default abstract class Page {
     cy.checkA11y(null, { rules: this.rules })
   }
 
-  headerUserName = (): Cypress.Chainable<JQuery> => cy.get('[data-qa=header-user-name]')
+  fallbackHeaderUserName = (): Cypress.Chainable<JQuery> => cy.get('[data-qa=header-user-name]')
+
+  commonComponentsHeader = (): Cypress.Chainable<JQuery> => cy.get('h1').contains('Common Components Header')
+
+  commonComponentsFooter = (): Cypress.Chainable<JQuery> => cy.get('h1').contains('Common Components Footer')
 
   signOut = (): Cypress.Chainable<JQuery> => cy.get('[data-qa=signOut]')
 }

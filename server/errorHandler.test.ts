@@ -32,7 +32,7 @@ describe('Error Handler', () => {
 
     handler(error, req, res, jest.fn)
 
-    expect(res.redirect).toHaveBeenCalledWith('/logout')
+    expect(res.redirect).toHaveBeenCalledWith('/sign-out')
   })
 
   it('should log user out if error is 403', () => {
@@ -44,7 +44,7 @@ describe('Error Handler', () => {
 
     handler(error, req, res, jest.fn)
 
-    expect(res.redirect).toHaveBeenCalledWith('/logout')
+    expect(res.redirect).toHaveBeenCalledWith('/sign-out')
   })
 
   it('should set status to 500 if status not supplied in error', () => {
