@@ -314,6 +314,13 @@ export function registerNunjucks(app?: express.Express): Environment {
     return `${textToDisplay}: Not available`
   })
 
+  njkEnv.addFilter('pluralise', (number: number, word: string, singular = '', plural = 's') => {
+    if (number === 1) {
+      return word + singular
+    }
+    return word + plural
+  })
+
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('serviceName', config.serviceName)
   njkEnv.addGlobal('useNewSearch', config.useNewSearch)

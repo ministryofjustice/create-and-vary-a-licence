@@ -11,6 +11,12 @@ describe('Route Handlers - COM Details', () => {
   let res: Response
 
   beforeEach(() => {
+    req = {
+      session: {
+        returnToCase: '/licence/view/cases',
+      },
+    } as unknown as Request
+
     res = {
       render: jest.fn(),
       locals: {
@@ -37,7 +43,7 @@ describe('Route Handlers - COM Details', () => {
       await handler.GET(req, res)
       expect(communityService.getStaffDetailByUsername).toHaveBeenCalledWith('jrogan')
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
-        returnLink: '/licence/view/cases',
+        returnLink: req.session.returnToCase,
         name: 'Joe Rogan',
         telephone: '07892387162',
         email: 'jrogan@probation.gov.uk',
