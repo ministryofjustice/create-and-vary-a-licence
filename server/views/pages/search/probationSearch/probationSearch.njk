@@ -12,9 +12,13 @@
 {% set backLinkHref = backLink %}
 {% set noJsBackLink = true %}
 
-{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, comName, index) %}
+{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, comName, isOnProbation, index) %}
     <div class="search-offender-name">
-        {% set link = "/licence/create/id/" + licenceId + "/check-your-answers" if licenceId else "/licence/create/nomisId/" + prisonerNumber + "/confirm"%}
+        {% if isOnProbation %}
+            {% set link = "/licence/vary/id/" + licenceId + "/timeline" %}
+        {% else %}
+            {% set link = "/licence/create/id/" + licenceId + "/check-your-answers" if licenceId else "/licence/create/nomisId/" + prisonerNumber + "/confirm"%}
+        {% endif %}
         {% if comName %}
             <a id="name-button-{{ index }}" href="{{ link }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
         {% else %}
@@ -24,19 +28,43 @@
     </div>
 {% endmacro %}
 
-{% macro displayResults(countText, results, setPeopleInPrisonTab) %}
-    {% if results.length > 0 %}
-        {% if setPeopleInPrisonTab %}
-            {% set caption = "In Prison Search Results" %}
-            <h2 class="govuk-heading-l" id = "tab-heading-prison">{{ countText }}</h2>
-        {% else %}
-            {% set caption = "On Probation Search Results" %}
-            <h2 class="govuk-heading-l" id = "tab-heading-probation">{{ countText }}</h2>
-        {% endif %}
+{% macro displayResults(countText, caption, tabId, results, setPeopleInPrisonTab) %}
+    {% set caption = caption %}
+    <h2 class="govuk-heading-l" id = "{{ tabId }}">{{ countText }}</h2>
+    {% if results.length == 0 %}
+        <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <p>Someone's licence will only appear on this service if they:</p>
+                    <ul class = "govuk-list govuk-list--bullet">
+                        <li>are assigned to you or one of your teams on NDelius</li>
+                        {% if setPeopleInPrisonTab %}
+                            <li>are serving a determinate sentence</li>
+                            <li>have a release date</li>
+                            <li>have not been approved for Home Detention Curfew</li>
+                        {% else %}
+                            <li>are serving a determinate sentence or a post sentence supervision order</li>
+                            <li>were not released on Home Detention Curfew</li>
+                            <li>were not released from prison with a licence created using a PD1 form</li>
+                        {% endif %}
+                            <li>have not been recalled or breached a post sentence supervision order</li>
+                    </ul>
+                    <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
+                    <p class="govuk-body">
+                        {{ govukButton({
+                            text: "Return to caselist",
+                            classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
+                            href: backLink,
+                            attributes: { 'data-qa': 'return-to-caselist' }
+                        }) }}
+                    </p>
+                </div>
+            </div>
+    {% else %}
         <form method="GET">
             {{ govukTable({
                 attributes: {
-                    'data-module': 'moj-sortable-table'
+                    'data-module': 'moj-sortable-table',
+                    'id': 'searchResults'
                 },
                 caption: caption,
                 captionClasses: "govuk-visually-hidden",
@@ -44,7 +72,7 @@
                     {
                         text: "Name",
                         attributes: {
-                            "aria-sort": "ascending"
+                            "aria-sort": "none"
                         }
                     },
                     {
@@ -78,63 +106,19 @@
                 rows: results
             }) }}
         </form>
-    {% else %}
-        {% if setPeopleInPrisonTab %}
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    <h2 class="govuk-heading-l" id = "tab-heading-prison">{{ countText }}</h2>
-                    <p>Someone's licence will only appear on this service if they:</p>
-                    <ul class = "govuk-list govuk-list--bullet">
-                        <li>are assigned to you or one of your teams on NDelius</li>
-                        <li>are serving a determinate sentence</li>
-                        <li>have a release date</li>
-                        <li>have not been approved for Home Detention Curfew</li>
-                        <li>have not been recalled or breached a post sentence supervision order</li>
-                    </ul>
-                    <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
-                    <p class="govuk-body">
-                        {{ govukButton({
-                            text: "Return to caselist",
-                            classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
-                            href: backLink,
-                            attributes: { 'data-qa': 'return-to-caselist' }
-                        }) }}
-                    </p>
-                </div>
-            </div>
-        {% else %}
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    <h2 class="govuk-heading-l" id = "tab-heading-probation">{{ countText }}</h2>
-                    <p>Someone's licence will only appear on this service if they:</p>
-                    <ul class = "govuk-list govuk-list--bullet">
-                        <li>are assigned to you or one of your teams on NDelius</li>
-                        <li>are serving a determinate sentence or a post sentence supervision order</li>
-                        <li>were not released on Home Detention Curfew</li>
-                        <li>were not released from prison with a licence created using a PD1 form</li>
-                        <li>have not been recalled or breached a post sentence supervision order</li>
-                    </ul>
-                    <p>If you think someone’s licence is missing, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
-                    <p class="govuk-body">
-                        {{ govukButton({
-                            text: "Return to caselist",
-                            classes: "govuk-button--secondary govuk-!-margin-bottom-0 govuk-body",
-                            href: backLink,
-                            attributes: { 'data-qa': 'return-to-caselist' }
-                        }) }}
-                    </p>
-                </div>
-            </div>
-        {% endif %}
     {% endif %}
 {% endmacro %}
 
 {% set peopleInPrisonResults = [] %}
 {% set peopleOnProbationResults = [] %}
 
-{% for offender in searchResults %}
+{% for offender in searchResponse.results %}
     {% if offender.comName %}
-        {% set comDetailsHtml = '<a class="govuk-link" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
+        {% if offender.isOnProbation %}
+            {% set comDetailsHtml = '<a class="govuk-link" data-qa="comLink" href="/licence/vary/id/' + offender.licenceId + '/probation-practitioner">' + offender.comName + '</a>' %}
+        {% else %}
+            {% set comDetailsHtml = '<a class="govuk-link" data-qa="comLink" href="/licence/create/probation-practitioner/staffCode/' + offender.comStaffCode + '">' + offender.comName + '</a>' %}
+        {% endif %}
     {% else %}
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
@@ -146,7 +130,7 @@
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crn, offender.nomisId, offender.licenceId, offender.comName, loop.index)
+            html: offenderName(offender.name, offender.crn, offender.nomisId, offender.licenceId, offender.comName, offender.isOnProbation, loop.index)
         },
         {
             attributes: {
@@ -196,13 +180,16 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
+            <input type="hidden" id="searchTerm" value="{{ queryTerm }}">
+            <input type="hidden" id="activeTab" value="{{ tabParameters.activeTab }}">
             <h1 class="govuk-heading-xl" id="probation-search-heading">Search results for {{ queryTerm }}</h1>
         </div>
     </div>
 
    <div class="govuk-grid-row">
-        <div class="moj-search govuk-grid-column-two-thirds govuk-!-margin-bottom-8">
+        <div class="moj-search govuk-grid-column-one-half govuk-!-margin-bottom-8">
             <form method="GET">
+                <input type="hidden" name="previousPage" value="{{ previousCaseloadPage }}">
                 <div class="govuk-form-group">
                     <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
                         Find a case
@@ -219,8 +206,11 @@
         </div>
     </div>
 
-    {% set peopleInPrison = displayResults(inPrisonCountText, peopleInPrisonResults, true) %}
-    {% set peopleOnProbation = displayResults(onProbationCountText, peopleOnProbationResults, false) %}
+    {% set inPrisonCountText = "People in prison ("  + searchResponse.inPrisonCount + searchResponse.inPrisonCount | pluralise(" result") + ")" %}
+    {% set onProbationCountText = "People on probation (" + searchResponse.onProbationCount + searchResponse.onProbationCount | pluralise(" result") + ")" %}
+
+    {% set peopleInPrison = displayResults(inPrisonCountText, tabParameters.prisonTabCaption, tabParameters.prisonTabId, peopleInPrisonResults, true) %}
+    {% set peopleOnProbation = displayResults(onProbationCountText, tabParameters.probationTabCaption, tabParameters.probationTabId, peopleOnProbationResults, false) %}
 
     {{ govukTabs({
         items: [
@@ -243,3 +233,7 @@
 
 {% endblock %}
 
+{% block pageScripts %}
+    <script src="/assets/js/search/highlightSearchTerm.js"></script>
+    <script src="/assets/js/search/setActiveTab.js"></script>
+{% endblock %}
