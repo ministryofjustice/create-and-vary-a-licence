@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import LicenceService from '../../../services/licenceService'
 import { DomainEventMessage } from '../../../@types/events'
 import LicenceStatus from '../../../enumeration/licenceStatus'
@@ -14,28 +12,30 @@ export default class TransferredEventHandler {
   handle = async (event: DomainEventMessage): Promise<void> => {
     if (event.additionalInformation?.reason === 'TRANSFERRED') {
       const nomisId = event.additionalInformation.nomsNumber
-      const licence = _.head(
-        await this.licenceService.getLicencesByNomisIdsAndStatus(
-          [nomisId],
-          [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED]
-        )
+      const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+        [nomisId],
+        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED]
       )
 
-      if (!licence) return
+      if (!licences.length) return
 
       const prisonCode = event.additionalInformation.prisonId
       const prisonInformation = await this.prisonerService.getPrisonInformation(prisonCode)
 
-      await this.licenceService.updatePrisonInformation(licence.licenceId.toString(), {
-        prisonCode,
-        prisonDescription: prisonInformation.formattedDescription || 'Not known',
-        prisonTelephone: [
-          prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
-          prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
-        ]
-          .filter(n => n)
-          .join(' '),
-      })
+      await Promise.all(
+        licences.map(licence => {
+          return this.licenceService.updatePrisonInformation(licence.licenceId.toString(), {
+            prisonCode,
+            prisonDescription: prisonInformation.formattedDescription || 'Not known',
+            prisonTelephone: [
+              prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
+              prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
+            ]
+              .filter(n => n)
+              .join(' '),
+          })
+        })
+      )
     }
   }
 }
