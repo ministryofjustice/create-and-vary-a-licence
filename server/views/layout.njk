@@ -40,9 +40,21 @@
     <!-- End Google Tag Manager -->
   {% endif %}
 
+  {% if feComponents.jsInclude %}
+    {% for js in feComponents.jsIncludes %}
+      <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
+    {% endfor %}
+  {% endif %}
+
   <!--[if !IE 8]><!-->
   <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
   <!--<![endif]-->
+
+  {% if feComponents.cssIncludes %}
+    {% for css in feComponents.cssIncludes %}
+      <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
+    {% endfor %}
+  {% endif %}
 
   <!--[if lt IE 9]>
   <link href="/assets/stylesheets/application-ie8.css?{{ version }}" rel="stylesheet"/>
@@ -58,7 +70,11 @@
 {% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
 
 {% block header %}
-  {% include "partials/header.njk" %}
+  {% if feComponents.header %}
+    {{ feComponents.header | safe }}
+  {% else %}
+    {% include "partials/header.njk" %}
+  {% endif %}
 {% endblock %}
 
 {% block bodyStart %}
@@ -98,27 +114,11 @@
 {% endblock %}
 
 {% block footer %}
-  {{ govukFooter({
-    meta: {
-      items: [
-        {
-          href: "/about",
-          text: "About",
-          attributes: { 'target': '_blank' }
-        },
-        {
-          href: "/contact",
-          text: "Contact",
-          attributes: { 'target': '_blank' }
-        },
-        {
-          href: "/accessibility-statement",
-          text: "Accessibility statement",
-          attributes: { 'target': '_blank' }
-        }
-      ]
-    }
-  }) }}
+  {% if feComponents.footer %}
+    {{ feComponents.footer | safe }}
+  {% else %}
+    {% include "partials/footer.njk" %}
+  {% endif %}
 {% endblock %}
 
 {% block bodyEnd %}
