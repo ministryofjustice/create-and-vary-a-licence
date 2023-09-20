@@ -36,7 +36,7 @@ generic-service:
     SHOW_WHATS_NEW_BANNER: "false"
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
-    COMMON_COMPONENTS_ENABLED: 'false'
+    COMMON_COMPONENTS_ENABLED: 'true'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
