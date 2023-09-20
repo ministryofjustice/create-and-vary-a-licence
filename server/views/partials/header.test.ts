@@ -10,12 +10,12 @@ describe('View Partials - Header', () => {
       },
     })
 
-    expect($('#user-block > div:nth-child(1)').text().trim()).toBe('J. Smith')
+    expect($('[data-qa="header-user-name"]').text().trim()).toBe('J. Smith')
   })
 
   it('should not include user information when user is not provided in context', () => {
     const $ = render({})
 
-    expect($('#user-block').length).toBe(0)
+    expect($('[data-qa="header-user-name"]').text().trim()).toBe('')
   })
 })
