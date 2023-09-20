@@ -1,0 +1,107 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Create a licence - Locations" %}
+{% set pageId = "licence-locations-list-page" %}
+{% set fromReviewAppend = "&fromReview=true" if fromReview %}
+{% block content %}
+
+    {% set locationCount = conditions.length %}
+
+    <!-- TODO : check govuk-summary-list__row--file-upload class -->
+    <!-- TODO : check fromUpload param -->
+    <!-- TODO : what should this be visuallyHiddenText: condition.uploadSummary[0].fileName -->
+    <h1 class="govuk-heading-l">You have added {% if locationCount == 1 %}one{% else %}{{ locationCount }}{% endif %} location{% if locationCount > 1 %}s{% endif %}</h1>
+
+    {% set items = [] %}
+    {% for condition in conditions %}
+        {% if condition.data.length === 2 %}
+            {% set keyHtml = 'Name or type of premises:<br/> Address:' %}
+            {% set valueHtml = condition.data[0].value + "<br/>" + condition.data[1].value %}
+        {% elseif condition.data[0].field === 'nameOfPremises' %}
+            {% set keyHtml = 'Name or type of premises:' %}
+            {% set valueHtml = condition.data[0].value %}
+        {% else %}
+            {% set keyHtml = 'Address:' %}
+            {% set valueHtml = condition.data[0].value | formatAddress %}
+        {% endif %}
+        {% set items = (items.push({
+            key: {
+                html: keyHtml
+            },
+            value: {
+                html:  valueHtml
+            },
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" | addQueryParam('fromReview', fromReview),
+                        text: "Change details",
+                        visuallyHiddenText: condition.uploadSummary[0].fileName
+                    },
+                    {
+                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/outofbounds-premises-removal" | addQueryParam('fromReview', fromReview),
+                        text: "Delete",
+                        visuallyHiddenText: condition.uploadSummary[0].filename
+                    }
+                ]
+            }
+        }), items) %}
+    {% endfor %}
+
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {{ govukSummaryList({
+                rows: items
+            }) }}
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <input type="hidden" name="conditionCode" value="{{ conditions[0].code}}">
+                {{ govukRadios({
+                    name: "addAnotherLocation",
+                    classes: "govuk-radios--inline",
+                    fieldset: {
+                        legend: {
+                            text: "Do you need to add another location?",
+                            classes: "govuk-fieldset__legend--m"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "Yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "No",
+                            text: "No"
+                        }
+                    ],
+                    errorMessage: displayMessage
+                }) }}
+
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: "Continue",
+                        type: "submit",
+                        classes: 'govuk-!-margin-top-6',
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+                    {{ govukButton({
+                        text: "Delete this condition",
+                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + conditions[0].code + "/delete" | addQueryParam('fromReview', fromReview),
+                        classes: 'govuk-button--secondary',
+                        attributes: { 'data-qa': 'delete' }
+                    }) }}
+                </div>
+            </div>
+        </div>
+    </form>
+    
+{% endblock %}
