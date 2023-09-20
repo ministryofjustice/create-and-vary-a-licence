@@ -589,6 +589,11 @@ export default class LicenceService {
     return this.licenceApiClient.updateOffenderDetails(nomisId, offenderDetails)
   }
 
+  async deactivateLicences(licences: LicenceSummary[]): Promise<void> {
+    const licenceIds = licences.map(l => l.licenceId)
+    return this.licenceApiClient.batchInActivateLicences(licenceIds)
+  }
+
   public static getLicenceType = (sentenceDetail: Prisoner): LicenceType => {
     const tused = sentenceDetail?.topupSupervisionExpiryDate
     const led = sentenceDetail?.licenceExpiryDate
