@@ -99,6 +99,50 @@ describe('Hmpps Rest Client tests', () => {
       expect(error.message).toBe('Not Found')
       expect(nock.isDone()).toBe(true)
     })
+
+    it('Should not throw an error should return null on 404 if allow404 is true', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
+      })
+        .get('/test?query1=value1')
+        .reply(404, { success: false })
+
+      let error
+      let result
+
+      try {
+        result = await restClient.get({
+          path: '/test',
+          query: { query1: 'value1' },
+          headers: { header1: 'headerValue1' },
+          return404: true,
+        })
+      } catch (e) {
+        error = e
+      }
+
+      expect(result).toBe(null)
+      expect(error).toBe(undefined)
+      expect(nock.isDone()).toBe(true)
+    })
+
+    it('Should retry twice if request fails', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
+      })
+        .get('/test')
+        .reply(500, { failure: 'one' })
+        .get('/test')
+        .reply(500, { failure: 'two' })
+        .get('/test')
+        .reply(200, { testData1: 'testValue1' })
+
+      const response = await restClient.get({
+        path: '/test',
+        headers: { header1: 'headerValue1' },
+      })
+      expect(response).toEqual({ testData1: 'testValue1' })
+    })
   })
 
   describe('POST', () => {
