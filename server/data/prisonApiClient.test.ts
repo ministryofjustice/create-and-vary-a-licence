@@ -87,10 +87,22 @@ describe('Prison Api client tests', () => {
     const result = await prisonApiClient.getLatestHdcStatus('1234', { username: 'joebloggs' } as User)
 
     expect(get).toHaveBeenCalledWith(
-      { path: '/api/offender-sentences/booking/1234/home-detention-curfews/latest' },
+      { path: '/api/offender-sentences/booking/1234/home-detention-curfews/latest', return404: true },
       { username: 'joebloggs' }
     )
     expect(result).toEqual({ approvalStatus: 'APPROVED' })
+  })
+
+  it('Get latest HDC status handles null responses', async () => {
+    get.mockResolvedValue(null)
+
+    const result = await prisonApiClient.getLatestHdcStatus('1234', { username: 'joebloggs' } as User)
+
+    expect(get).toHaveBeenCalledWith(
+      { path: '/api/offender-sentences/booking/1234/home-detention-curfews/latest', return404: true },
+      { username: 'joebloggs' }
+    )
+    expect(result).toEqual(null)
   })
 
   it('Get latest HDC status batch', async () => {
