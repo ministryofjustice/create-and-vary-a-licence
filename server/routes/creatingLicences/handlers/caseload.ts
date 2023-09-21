@@ -44,21 +44,26 @@ export default class CaseloadRoutes {
     }
 
     const caseloadViewModel = caseload
-      .map(c => ({
-        name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
-        crnNumber: c.deliusRecord.offenderCrn,
-        prisonerNumber: c.nomisRecord.prisonerNumber,
-        releaseDate: moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'),
-        licenceId: _.head(c.licences).id,
-        licenceStatus: _.head(c.licences).status,
-        licenceType: _.head(c.licences).type,
-        probationPractitioner: c.probationPractitioner,
-        isClickable:
-          c.probationPractitioner !== undefined &&
-          _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
-          _.head(c.licences).status !== LicenceStatus.OOS_RECALL &&
-          _.head(c.licences).status !== LicenceStatus.OOS_BOTUS,
-      }))
+      .map(c => {
+        const licence =
+          c.licences.length > 1 ? c.licences.find(l => l.status !== LicenceStatus.APPROVED) : _.head(c.licences)
+
+        return {
+          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+          crnNumber: c.deliusRecord.offenderCrn,
+          prisonerNumber: c.nomisRecord.prisonerNumber,
+          releaseDate: moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'),
+          licenceId: licence.id,
+          licenceStatus: licence.status,
+          licenceType: licence.type,
+          probationPractitioner: c.probationPractitioner,
+          isClickable:
+            c.probationPractitioner !== undefined &&
+            licence.status !== LicenceStatus.NOT_IN_PILOT &&
+            licence.status !== LicenceStatus.OOS_RECALL &&
+            licence.status !== LicenceStatus.OOS_BOTUS,
+        }
+      })
       .filter(c => {
         const searchString = search?.toLowerCase().trim()
         if (!searchString) return true

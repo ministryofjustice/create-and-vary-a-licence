@@ -81,7 +81,7 @@ describe('Transferred event handler', () => {
     expect(licenceService.updateStatus).not.toHaveBeenCalled()
   })
 
-  it('should update the prison information on the licence', async () => {
+  it('should update the prison information on all pre-active licences', async () => {
     const event = {
       additionalInformation: {
         reason: 'TRANSFERRED',
@@ -92,13 +92,40 @@ describe('Transferred event handler', () => {
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         licenceId: 1,
+        licenceStatus: 'IN_PROGRESS',
+      },
+      {
+        licenceId: 2,
         licenceStatus: 'SUBMITTED',
-      } as LicenceSummary,
-    ])
+      },
+      {
+        licenceId: 3,
+        licenceStatus: 'APPROVED',
+      },
+      {
+        licenceId: 4,
+        licenceStatus: 'REJECTED',
+      },
+    ] as LicenceSummary[])
 
     await handler.handle(event)
 
     expect(licenceService.updatePrisonInformation).toHaveBeenCalledWith('1', {
+      prisonCode: 'PVI',
+      prisonDescription: 'Pentonville (HMP)',
+      prisonTelephone: '+44 276 54545',
+    })
+    expect(licenceService.updatePrisonInformation).toHaveBeenCalledWith('2', {
+      prisonCode: 'PVI',
+      prisonDescription: 'Pentonville (HMP)',
+      prisonTelephone: '+44 276 54545',
+    })
+    expect(licenceService.updatePrisonInformation).toHaveBeenCalledWith('3', {
+      prisonCode: 'PVI',
+      prisonDescription: 'Pentonville (HMP)',
+      prisonTelephone: '+44 276 54545',
+    })
+    expect(licenceService.updatePrisonInformation).toHaveBeenCalledWith('4', {
       prisonCode: 'PVI',
       prisonDescription: 'Pentonville (HMP)',
       prisonTelephone: '+44 276 54545',

@@ -192,7 +192,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         {
           licences: [
             {
-              id: 1,
+              id: 2,
               type: LicenceType.AP,
               status: LicenceStatus.VARIATION_IN_PROGRESS,
             },
@@ -223,7 +223,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
           {
-            licenceId: 1,
+            licenceId: 2,
             name: 'Bob Smith',
             crnNumber: 'X12345',
             releaseDate: '01 May 2022',
