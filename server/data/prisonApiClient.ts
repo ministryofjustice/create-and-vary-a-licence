@@ -68,6 +68,7 @@ export default class PrisonApiClient extends RestClient {
     return (await this.get(
       {
         path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,
+        return404: true,
       },
       { username: user?.username }
     )) as Promise<HomeDetentionCurfew>
