@@ -6,33 +6,35 @@
 {% set hideLicenceBanner = true %}
 
 {% block content %}
-    <div>
-        <h1 class="govuk-heading-l">What's new</h1>
-        <h2 class="govuk-heading-m">Access the last approved version of an edited licence from your vary case list</h2>
-        <p class="govuk-body">The last approved version of a licence will now be saved to your vary case list if you change something without getting the 
-            licence reapproved by the prison before someone’s release date. <br><br>
-            For example, you might have needed to change something at the last minute after a late request from the victim liaison officer or MAPPA.<br><br>
-            Previously, approved licences that were changed without being reapproved in time were removed from the Create and vary a licence service.<br><br>
-            You can now find them on the case list you see when you select the “View and vary” tile after you sign in. 
-        </p>
-        <div class="govuk-grid-column-three-thirds govuk-!-padding-top-4">
-            <img src="assets/images/create_vary_licence.jpg" alt="Create and vary a licence dashboard" height="480">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">What's new</h1>
+            <h2 class="govuk-heading-m">Access the last approved version of an edited licence from your vary case list</h2>
+            <p class="govuk-body">The last approved version of a licence will now be saved to your vary case list if you change something without getting the 
+                licence reapproved by the prison before someone’s release date. <br><br>
+                For example, you might have needed to change something at the last minute after a late request from the victim liaison officer or MAPPA.<br><br>
+                Previously, approved licences that were changed without being reapproved in time were removed from the Create and vary a licence service.<br><br>
+                You can now find them on the case list you see when you select the “View and vary” tile after you sign in. 
+            </p>
+            <div class="govuk-grid-column-three-thirds govuk-!-padding-top-4">
+                <img src="assets/images/create_vary_licence.jpg" alt="Create and vary a licence dashboard" height="480" width="750">
+            </div>
+            <br><br>
+            <h3 class="govuk-heading-s">Reviewing a saved licence</h3>
+            <p class="govuk-body">Because the version of the licence saved to this case list will not contain your most recent changes,
+                you should review it and then vary it to add any missing information needed. You can then submit a variation request to your PDU head.<br><br>
+                Once approved, you must make the licence active and then print it for the person on probation to sign at their next appointment.<br><br>
+                To help you keep track of changes you make to a licence, a version number will now be shown at the bottom of each page. Each change made to a 
+                licence before release will be recorded as 1.1, then 1.2, 1.3. Each variation made after release will be shown as 2, 3 and 4.<br><br></p>
+            <h3 class="govuk-heading-s">Making last-minute changes to a licence </h3>
+            <p class="govuk-body">Licences should be sent to the prison for approval in plenty of time before someone’s release date. <br><br>
+                You should only make last-minute changes to an approved licence when it is absolutely necessary. <br><br>
+                If you need to make a last-minute change to someone’s licence before their release, you should consider either:
+            </p>
+            <ul class="govuk-body">
+                <li>contacting the prison’s Offender Management Unit directly and ensuring they approve the changes before release</li>
+                <li>waiting until after someone has been released and then varying the licence with approval from your PDU head</li>
+            </ul>
         </div>
-        <br><br>
-        <h3 class="govuk-heading-s">Reviewing a saved licence</h3>
-        <p class="govuk-body">Because the version of the licence saved to this case list will not contain your most recent changes,
-            you should review it and then vary it to add any missing information needed. You can then submit a variation request to your PDU head.<br><br>
-            Once approved, you must make the licence active and then print it for the person on probation to sign at their next appointment.<br><br>
-            To help you keep track of changes you make to a licence, a version number will now be shown at the bottom of each page. Each change made to a 
-            licence before release will be recorded as 1.1, then 1.2, 1.3. Each variation made after release will be shown as 2, 3 and 4.<br><br></p>
-        <h3 class="govuk-heading-s">Making last-minute changes to a licence </h3>
-        <p class="govuk-body">Licences should be sent to the prison for approval in plenty of time before someone’s release date. <br><br>
-            You should only make last-minute changes to an approved licence when it is absolutely necessary. <br><br>
-            If you need to make a last-minute change to someone’s licence before their release, you should consider either:
-        </p>
-        <ul class="govuk-body">
-            <li>contacting the prison’s Offender Management Unit directly and ensuring they approve the changes before release</li>
-            <li>waiting until after someone has been released and then varying the licence with approval from your PDU head</li>
-        </ul>
     </div>
 {% endblock %}
