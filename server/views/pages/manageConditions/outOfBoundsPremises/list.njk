@@ -7,12 +7,8 @@
 {% set pageId = "licence-locations-list-page" %}
 {% set fromReviewAppend = "&fromReview=true" if fromReview %}
 {% block content %}
-
     {% set locationCount = conditions.length %}
 
-    <!-- TODO : check govuk-summary-list__row--file-upload class -->
-    <!-- TODO : check fromUpload param -->
-    <!-- TODO : what should this be visuallyHiddenText: condition.uploadSummary[0].fileName -->
     <h1 class="govuk-heading-l">You have added {% if locationCount == 1 %}one{% else %}{{ locationCount }}{% endif %} location{% if locationCount > 1 %}s{% endif %}</h1>
 
     {% set items = [] %}

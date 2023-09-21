@@ -44,6 +44,7 @@ export default class OutOfBoundsPremisesListRoutes {
     const condition = await this.conditionService.getAdditionalConditionByCode(conditionCode, licence.version)
     const type = await this.conditionService.getAdditionalConditionType(conditionCode, licence.version)
 
+    // TODO check visuallyHiddenText: condition.uploadSummary[0].fileName
     if (!addAnotherLocation) {
       const displayMessage = { text: 'Select yes or no' }
       const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)

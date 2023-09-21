@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
-import FileUploadRemovalRoutes from './outOfBoundsPremisesRemovalRoutes'
-import { MEZ_CONDITION_CODE } from '../../../../utils/conditionRoutes'
+import OutOfBoundsPremisesRemovalRoutes from './outOfBoundsPremisesRemovalRoutes'
+import { OUT_OF_BOUNDS_PREMISES_CONDITION_CODE } from '../../../../utils/conditionRoutes'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 describe('Route Handlers - Create Licence - File Upload Removal Routes Handler', () => {
-  const handler = new FileUploadRemovalRoutes(licenceService)
+  const handler = new OutOfBoundsPremisesRemovalRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -26,7 +26,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       locals: {
         licence: {
           additionalLicenceConditions: [
-            { id: 1, code: 'testCode', uploadSummary: [{ filename: 'testFile' }], data: [{ value: 'an area' }] },
+            { id: 1, code: 'outOfBoundsPremises', data: [{ field: 'nameOfPremises', value: 'The Dolphin' }] },
           ],
         },
         user: {
@@ -39,12 +39,11 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
   describe('GET', () => {
     it('should display confirmation page to delete condition', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/fileUploads/confirmUploadDeletion', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/outOfBoundsPremises/confirmUploadDeletion', {
         conditionId: '1',
-        conditionCode: 'testCode',
+        conditionCode: 'outOfBoundsPremises',
         displayMessage: null,
-        description: 'an area',
-        fileName: 'testFile',
+        description: 'The Dolphin',
       })
     })
   })
@@ -60,7 +59,11 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
           licence: {
             id: 1,
             additionalLicenceConditions: [
-              { id: 1, code: MEZ_CONDITION_CODE, uploadSummary: [{ filename: 'testFile' }] },
+              {
+                id: 1,
+                code: OUT_OF_BOUNDS_PREMISES_CONDITION_CODE,
+                data: [{ field: 'nameOfPremises', value: 'The Dolphin' }],
+              },
             ],
           },
           user: {
@@ -82,7 +85,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledWith(1, 1, { username: 'joebloggs' })
     })
 
-    it('should redirect to the MEZ page', async () => {
+    it('should redirect to the out of bounds premises page', async () => {
       req = {
         params: {
           licenceId: '1',
@@ -92,7 +95,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromReview=true`
+        `/licence/create/id/1/additional-licence-conditions/condition/${OUT_OF_BOUNDS_PREMISES_CONDITION_CODE}/outofbounds-premises?fromReview=true`
       )
     })
 
@@ -118,11 +121,11 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       } as unknown as Request
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledTimes(0)
-      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/fileUploads/confirmUploadDeletion', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/outOfBoundsPremises/confirmUploadDeletion', {
         conditionId: '1',
-        conditionCode: MEZ_CONDITION_CODE,
+        conditionCode: OUT_OF_BOUNDS_PREMISES_CONDITION_CODE,
         displayMessage: { text: 'Select yes or no' },
-        fileName: 'testFile',
+        description: 'The Dolphin',
       })
     })
   })
