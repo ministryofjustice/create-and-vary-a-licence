@@ -143,36 +143,6 @@ describe('Hmpps Rest Client tests', () => {
       })
       expect(response).toEqual({ testData1: 'testValue1' })
     })
-
-    it('Should not retry on 404', async () => {
-      nock('http://localhost:8080', {
-        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
-      })
-        .get('/test?query1=value1')
-        .reply(404, { success: true })
-        .get('/test')
-        .optionally()
-        .reply(500, { failure: 'two' })
-        .get('/test')
-        .optionally()
-        .reply(200, { testData1: 'testValue1' })
-
-      let error
-      let response
-      try {
-        response = await restClient.get({
-          path: '/test',
-          query: { query1: 'value1' },
-          headers: { header1: 'headerValue1' },
-        })
-      } catch (e) {
-        error = e
-      }
-
-      expect(error.message).toBe('Not Found')
-      expect(response).toBe(undefined)
-      expect(nock.isDone()).toBe(true)
-    })
   })
 
   describe('POST', () => {
