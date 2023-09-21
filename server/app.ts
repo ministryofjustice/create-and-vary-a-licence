@@ -21,7 +21,6 @@ import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import trimRequestBody from './middleware/trimBodyMiddleware'
 import phaseNameSetup from './middleware/phaseNameSetup'
-import getFrontendComponents from './middleware/getFeComponents'
 
 const testMode = process.env.NODE_ENV === 'test'
 
@@ -49,7 +48,6 @@ export default function createApp(services: Services): express.Application {
   }
 
   app.use(authorisationMiddleware)
-  app.get('*', getFrontendComponents(services))
   app.use(setupRoutes(services))
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler())

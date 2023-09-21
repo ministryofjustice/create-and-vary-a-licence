@@ -107,9 +107,8 @@
                     <span class="govuk-body govuk-!-font-weight-bold" data-qa="caseload-names">
                         {{prisonsToDisplay | extractAttr('description') | join(', ')}} 
                     </span>
-                    <a class="govuk-link govuk-!-margin-left-3" href="/licence/view/change-location{{probationViewUrlQuery}}" data-qa="change-location-link">
-                        Licences for other establishments
-                    </a>
+                    <a class="govuk-link govuk-!-margin-left-3" href="/licence/view/change-location{{probationViewUrlQuery}}" data-qa="change-location-link">Change
+                        location</a>
                 </p>
             </div>
         {% endif %}
