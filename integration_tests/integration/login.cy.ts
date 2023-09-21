@@ -2,12 +2,13 @@ import IndexPage from '../pages'
 import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
 
-context('SignIn', () => {
+context('SignIn with fallback header', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
     cy.task('stubAuthUser')
+    cy.task('stubFeComponentsFail')
   })
 
   it('Unauthenticated user directed to auth', () => {
@@ -15,10 +16,17 @@ context('SignIn', () => {
     Page.verifyOnPage(AuthSignInPage)
   })
 
-  it('User name visible in header', () => {
+  it('Commmon components header and footer should not display', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
-    indexPage.headerUserName().should('contain.text', 'J. Smith')
+    indexPage.commonComponentsHeader().should('not.exist')
+    indexPage.commonComponentsFooter().should('not.exist')
+  })
+
+  it('User name visible in fallback header', () => {
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    indexPage.fallbackHeaderUserName().should('contain.text', 'J. Smith')
   })
 
   it('User can log out', () => {
