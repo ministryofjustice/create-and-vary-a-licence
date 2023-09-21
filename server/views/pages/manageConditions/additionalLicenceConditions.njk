@@ -9,7 +9,7 @@
 
 {% block content %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Select additional licence conditions</h1>
             <p class="govuk-body">Select all relevant conditions</p>
         </div>
@@ -18,7 +18,7 @@
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
+            <div class="govuk-grid-column-three-quarters">
 
                 {% for group in additionalConditions %}
                     {% set items = [] %}
