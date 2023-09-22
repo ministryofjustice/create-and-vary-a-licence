@@ -36,6 +36,8 @@ export default {
   dpsUrl: get('DPS_URL', 'http://localhost:3000', requiredInProduction),
   serviceName: process.env.SERVICE_NAME,
   phaseName: process.env.SYSTEM_PHASE || 'BETA',
+  branchName: get('GIT_BRANCH', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
+  production,
   https: production,
   staticResourceCacheDuration: '1h',
   redis: {
