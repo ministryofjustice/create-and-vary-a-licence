@@ -9,8 +9,10 @@ export default class ComDetailsRoutes {
 
     const staffDetails = await this.communityService.getStaffDetailByUsername(comUsername)
 
+    const backLink = req.session.returnToCase
+
     res.render('pages/comDetails', {
-      returnLink: '/licence/view/cases',
+      returnLink: backLink,
       name: `${staffDetails.staff?.forenames} ${staffDetails.staff?.surname}`.trim(),
       telephone: staffDetails.telephoneNumber,
       email: staffDetails.email,

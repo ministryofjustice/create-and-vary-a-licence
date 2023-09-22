@@ -16,6 +16,7 @@ interface GetRequest {
   headers?: Record<string, string>
   responseType?: string
   raw?: boolean
+  return404?: boolean
 }
 
 interface PostRequest {
@@ -72,7 +73,7 @@ export default class HmppsRestClient {
   }
 
   async get(
-    { path = null, query = {}, headers = {}, responseType = '', raw = false }: GetRequest,
+    { path = null, query = {}, headers = {}, responseType = '', raw = false, return404 = false }: GetRequest,
     signedWithMethod?: SignedWithMethod
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
@@ -95,6 +96,9 @@ export default class HmppsRestClient {
         return raw ? response : response.body
       })
       .catch(error => {
+        if (return404 && error.status === 404) {
+          return null
+        }
         const sanitisedError = sanitiseError(error)
         logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
         throw sanitisedError
