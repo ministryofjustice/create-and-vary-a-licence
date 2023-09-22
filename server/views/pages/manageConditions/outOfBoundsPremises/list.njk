@@ -12,16 +12,31 @@
     <h1 class="govuk-heading-l">You have added {% if locationCount == 1 %}one{% else %}{{ locationCount }}{% endif %} location{% if locationCount > 1 %}s{% endif %}</h1>
 
     {% set items = [] %}
-    {% for condition in conditions %}
-        {% if condition.data.length === 2 %}
-            {% set keyHtml = 'Name or type of premises:<br/> Address:' %}
-            {% set valueHtml = condition.data[0].value + "<br/>" + condition.data[1].value %}
-        {% elseif condition.data[0].field === 'nameOfPremises' %}
+    {% for condition in conditionsData %}
+        {% if condition.name and condition.address %}
+            {% set keyHtml = 'Name or type of premises:<br/>Building and street:<br/>Town:</br>'%}
+            {% set valueHtml = condition.name + "<br/>" + condition.address['addressLine1']
+            +  ((", " + condition.address['addressLine2']) if condition.address['addressLine2'] else '')
+            + "<br/>" + condition.address['addressTown'] + "<br/>" %}
+            {% if condition.address['addressCounty'] %}
+                {% set keyHtml = keyHtml + "County:<br/>" %}
+                {% set valueHtml = valueHtml + condition.address['addressCounty'] + "<br/>" %}
+            {% endif %}
+            {% set keyHtml = keyHtml + "Postcode" %}
+            {% set valueHtml = valueHtml + condition.address['addressPostcode'] %}
+        {% elseif condition.name %}
             {% set keyHtml = 'Name or type of premises:' %}
-            {% set valueHtml = condition.data[0].value %}
+            {% set valueHtml = condition.name %}
         {% else %}
-            {% set keyHtml = 'Address:' %}
-            {% set valueHtml = condition.data[0].value | formatAddress %}
+            {% set keyHtml = 'Building and street:<br/>Town:</br>' %}
+            {% set valueHtml = condition.address['addressLine1'] + "<br/>" + condition.address['addressTown']  + "<br/>" %}
+            {% if condition.address['addressCounty'] %}
+                {% set keyHtml = keyHtml + "County:<br/>" %}
+                {% set valueHtml = valueHtml + condition.address['addressCounty'] + "<br/>" %}
+            {% endif %}
+            {% set keyHtml = keyHtml + "Postcode" %}
+            {% set valueHtml = valueHtml + condition.address['addressPostcode'] %}
+
         {% endif %}
         {% set items = (items.push({
             key: {
@@ -47,7 +62,6 @@
         }), items) %}
     {% endfor %}
 
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {{ govukSummaryList({
@@ -55,6 +69,7 @@
             }) }}
         </div>
     </div>
+
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">

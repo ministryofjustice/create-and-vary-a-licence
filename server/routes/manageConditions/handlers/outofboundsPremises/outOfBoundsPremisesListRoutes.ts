@@ -4,6 +4,7 @@ import { AddAdditionalConditionRequest } from '../../../../@types/licenceApiClie
 import conditionType from '../../../../enumeration/conditionType'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import ConditionService from '../../../../services/conditionService'
+import { stringToAddressObject } from '../../../../utils/utils'
 
 export default class OutOfBoundsPremisesListRoutes {
   constructor(
@@ -28,8 +29,33 @@ export default class OutOfBoundsPremisesListRoutes {
       return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions/callback?fromReview=true`)
     }
 
+    const conditionsData = conditions.map(condition => {
+      const conditionData = {
+        id: condition.id,
+        code: condition.code,
+      }
+      if (condition.data.length === 2) {
+        return {
+          ...conditionData,
+          name: condition.data[0].value,
+          address: stringToAddressObject(condition.data[1].value),
+        }
+      }
+      if (condition.data[0].field === 'nameOfPremises') {
+        return {
+          ...conditionData,
+          name: condition.data[0].value,
+        }
+      }
+      return {
+        ...conditionData,
+        address: stringToAddressObject(condition.data[0].value),
+      }
+    })
+
     return res.render('pages/manageConditions/outOfBoundsPremises/list', {
       conditions,
+      conditionsData,
       licenceId,
       conditionType,
       displayMessage: null,
