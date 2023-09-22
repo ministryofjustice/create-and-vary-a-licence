@@ -4,17 +4,21 @@ import { DomainEventMessage } from '../../../@types/events'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
+import { LicenceApiClient } from '../../../data'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
+const licenceService = new LicenceService(licenceApiClient, null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 describe('Release event handler', () => {
   const handler = new ReleaseEventHandler(licenceService, prisonerService)
   beforeEach(() => {
-    licenceService.getLatestLicenceByNomisIdsAndStatus = jest.fn()
+    licenceService.getLicencesByNomisIdsAndStatus = jest.fn()
     licenceService.updateStatus = jest.fn()
+    licenceService.deactivateLicences = jest.fn()
     prisonerService.searchPrisoners = jest.fn()
     prisonerService.getActiveHdcStatus = jest.fn()
+    licenceApiClient.batchInActivateLicences = jest.fn()
   })
 
   it('should skip the event if release reason is not RELEASED', async () => {
@@ -26,7 +30,7 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.getLatestLicenceByNomisIdsAndStatus).not.toHaveBeenCalled()
+    expect(licenceService.getLicencesByNomisIdsAndStatus).not.toHaveBeenCalled()
   })
 
   it('should not update any licences if the offender does not have a licence', async () => {
@@ -36,28 +40,45 @@ describe('Release event handler', () => {
         nomsNumber: 'ABC1234',
       },
     } as DomainEventMessage
-    licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue(undefined)
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(undefined)
 
     await handler.handle(event)
 
-    expect(licenceService.getLatestLicenceByNomisIdsAndStatus).toHaveBeenCalledWith(
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC1234'],
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
     expect(licenceService.updateStatus).not.toHaveBeenCalled()
   })
 
-  it('should update the licence to ACTIVE if the licence for the offender is APPROVED', async () => {
+  it('should activated an APPROVED licence and deactivate any others', async () => {
     const event = {
       additionalInformation: {
         reason: 'RELEASED',
         nomsNumber: 'ABC1234',
       },
     } as DomainEventMessage
-    licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
-      licenceId: 1,
-      licenceStatus: 'APPROVED',
-    } as LicenceSummary)
+    const unapprovedLicences = [
+      {
+        licenceId: 2,
+        licenceStatus: 'IN_PROGRESS',
+      },
+      {
+        licenceId: 3,
+        licenceStatus: 'SUBMITTED',
+      },
+      {
+        licenceId: 4,
+        licenceStatus: 'REJECTED',
+      },
+    ]
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'APPROVED',
+      },
+      ...unapprovedLicences,
+    ] as LicenceSummary[])
     prisonerService.searchPrisoners.mockResolvedValue([
       {
         bookingId: '111',
@@ -68,11 +89,12 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.getLatestLicenceByNomisIdsAndStatus).toHaveBeenCalledWith(
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC1234'],
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
     expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.ACTIVE)
+    expect(licenceService.deactivateLicences).toHaveBeenCalledWith(unapprovedLicences)
   })
 
   it('should update the licence to INACTIVE if the licence for the offender is not APPROVED', async () => {
@@ -82,10 +104,12 @@ describe('Release event handler', () => {
         nomsNumber: 'ABC1234',
       },
     } as DomainEventMessage
-    licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
-      licenceId: 1,
-      licenceStatus: 'IN_PROGRESS',
-    } as LicenceSummary)
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'IN_PROGRESS',
+      },
+    ] as LicenceSummary[])
     prisonerService.searchPrisoners.mockResolvedValue([
       {
         bookingId: '111',
@@ -96,11 +120,16 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.getLatestLicenceByNomisIdsAndStatus).toHaveBeenCalledWith(
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC1234'],
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
-    expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.INACTIVE)
+    expect(licenceService.deactivateLicences).toHaveBeenCalledWith([
+      {
+        licenceId: 1,
+        licenceStatus: 'IN_PROGRESS',
+      },
+    ])
   })
 
   it('should update the licence to INACTIVE if the HDC licence is APPROVED', async () => {
@@ -110,10 +139,12 @@ describe('Release event handler', () => {
         nomsNumber: 'ABC1234',
       },
     } as DomainEventMessage
-    licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
-      licenceId: 1,
-      licenceStatus: 'APPROVED',
-    } as LicenceSummary)
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'APPROVED',
+      },
+    ] as LicenceSummary[])
     prisonerService.searchPrisoners.mockResolvedValue([
       {
         bookingId: '111',
@@ -127,7 +158,7 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.getLatestLicenceByNomisIdsAndStatus).toHaveBeenCalledWith(
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC1234'],
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
@@ -141,10 +172,12 @@ describe('Release event handler', () => {
         nomsNumber: 'ABC1234',
       },
     } as DomainEventMessage
-    licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
-      licenceId: 1,
-      licenceStatus: 'APPROVED',
-    } as LicenceSummary)
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'APPROVED',
+      },
+    ] as LicenceSummary[])
     prisonerService.searchPrisoners.mockResolvedValue([
       {
         bookingId: '111',
@@ -158,10 +191,40 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.getLatestLicenceByNomisIdsAndStatus).toHaveBeenCalledWith(
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC1234'],
       ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
     )
     expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.ACTIVE)
+  })
+
+  it('should raise an error if there are multiple APPROVED licences', async () => {
+    const event = {
+      additionalInformation: {
+        reason: 'RELEASED',
+        nomsNumber: 'ABC1234',
+      },
+    } as DomainEventMessage
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'APPROVED',
+      },
+      {
+        licenceId: 2,
+        licenceStatus: 'APPROVED',
+      },
+    ] as LicenceSummary[])
+    prisonerService.searchPrisoners.mockResolvedValue([
+      {
+        bookingId: '111',
+        restrictedPatient: false,
+      },
+    ])
+    prisonerService.getActiveHdcStatus.mockResolvedValue(null)
+
+    expect(async () => {
+      await handler.handle(event)
+    }).rejects.toThrowError('Multiple approved licences found, unable to automatically activate')
   })
 })

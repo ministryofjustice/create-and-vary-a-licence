@@ -30,7 +30,7 @@ export default class OffenderDetailRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly communityService: CommunityService,
-    private readonly licenceServer: LicenceService
+    private readonly licenceService: LicenceService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -52,8 +52,8 @@ export default class OffenderDetailRoutes {
     const licenceExpiryDate = this.formatNomisDate(prisonerDetail.licenceExpiryDate)
     const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
 
-    const licenceSummary = await this.licenceServer.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
-    const licence = licenceSummary ? await this.licenceServer.getLicence(licenceSummary.licenceId, user) : null
+    const licenceSummary = await this.licenceService.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
+    const licence = licenceSummary ? await this.licenceService.getLicence(licenceSummary.licenceId, user) : null
 
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
