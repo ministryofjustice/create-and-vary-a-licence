@@ -144,6 +144,23 @@ describe('Route - print a licence', () => {
       expect(footerHtml).toMatch(/Version No:.+1.4/)
     })
 
+    it('should strip the minor version number off a varied licence', async () => {
+      res = {
+        locals: {
+          licence: {
+            id: 1,
+            typeCode: 'AP',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            licenceVersion: '3.0',
+          },
+        },
+      } as unknown as Response
+
+      const footerHtml = handler.getPdfFooter(res.locals.licence)
+      expect(footerHtml).toMatch(/Version No:.+<\/span>/)
+    })
+
     it('should render a PDF view of an AP licence with exclusion zone data', async () => {
       const additionalLicenceConditions = [
         {
@@ -170,6 +187,7 @@ describe('Route - print a licence', () => {
             pnc: 'PNC',
             version: '1.0',
             prisonCode: 'MDI',
+            licenceVersion: '1.0',
             additionalLicenceConditions,
           },
           qrCodesEnabled: false,
@@ -252,6 +270,7 @@ describe('Route - print a licence', () => {
             prisonCode: 'MDI',
             additionalLicenceConditions: [],
             additionalPssConditions: [],
+            licenceVersion: '1.0',
           },
           qrCodesEnabled: true,
         },

@@ -93,6 +93,11 @@ export default class PrintLicenceRoutes {
   }
 
   getPdfFooter = (licence: Licence): string => {
+    let printVersion = licence.licenceVersion
+    const majorVersion = licence.licenceVersion.split('.')[0]
+    if (parseInt(majorVersion, 10) > 1) {
+      printVersion = majorVersion
+    }
     return `
       <div style="${pdfHeaderFooterStyle}">
         <table style="width: 100%; padding-left: 15px; padding-right: 15px;">
@@ -104,7 +109,7 @@ export default class PrintLicenceRoutes {
           </tr>
           <tr>
             <td style="text-align: left;">Prison: <span style="font-weight: bold;">${licence.prisonDescription}</span></td>
-            <td style="text-align: left;">Version No: <span style="font-weight: bold">${licence.licenceVersion}</span></td>
+            <td style="text-align: left;">Version No: <span style="font-weight: bold">${printVersion}</span></td>
           </tr>
         </table>
         <p>
