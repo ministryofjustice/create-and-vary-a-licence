@@ -34,6 +34,7 @@ export default class OutOfBoundsPremisesListRoutes {
         id: condition.id,
         code: condition.code,
       }
+
       if (condition.data.length === 2) {
         return {
           ...conditionData,
@@ -41,12 +42,14 @@ export default class OutOfBoundsPremisesListRoutes {
           address: stringToAddressObject(condition.data[1].value),
         }
       }
+
       if (condition.data[0].field === 'nameOfPremises') {
         return {
           ...conditionData,
           name: condition.data[0].value,
         }
       }
+
       return {
         ...conditionData,
         address: stringToAddressObject(condition.data[0].value),
