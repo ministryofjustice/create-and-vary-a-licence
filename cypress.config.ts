@@ -82,6 +82,7 @@ export default defineConfig({
         stubGetActivePolicyConditions: licence.stubGetActivePolicyConditions,
         stubGetPolicyChanges: licence.stubGetPolicyChanges,
         stubUpdateOffenderDetails: licence.stubUpdateOffenderDetails,
+        stubGetBankHolidays: licence.stubGetBankHolidays,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
@@ -119,14 +120,6 @@ export default defineConfig({
         sendPrisonEvent: events.sendPrisonEvent,
         sendProbationEvent: events.sendProbationEvent,
         purgeQueues: events.purgeQueues,
-        getNextWorkingDay: (): Promise<Moment> =>
-          new UkBankHolidayFeedService().getEnglishAndWelshHolidays().then(ukHolidays => {
-            const appointmentDate = moment().add(1, 'year').add(1, 'week').day(7)
-            while (ukHolidays.isBankHolidayOrWeekend(appointmentDate)) {
-              appointmentDate.add(1, 'day')
-            }
-            return appointmentDate
-          }),
       })
     },
     baseUrl: 'http://localhost:3007',
