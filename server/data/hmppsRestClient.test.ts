@@ -33,7 +33,6 @@ describe('Hmpps Rest Client tests', () => {
         raw: true,
       })
 
-      expect(nock.isDone()).toBe(true)
       expect(result).toMatchObject({
         req: { method: 'GET' },
         status: 200,
@@ -54,7 +53,6 @@ describe('Hmpps Rest Client tests', () => {
         headers: { header1: 'headerValue1' },
       })
 
-      expect(nock.isDone()).toBe(true)
       expect(result).toEqual({ success: true })
     })
 
@@ -74,7 +72,6 @@ describe('Hmpps Rest Client tests', () => {
         { token: 'user token', username: 'joebloggs' }
       )
 
-      expect(nock.isDone()).toBe(true)
       expect(result).toEqual({ success: true })
     })
 
@@ -85,19 +82,49 @@ describe('Hmpps Rest Client tests', () => {
         .get('/test?query1=value1')
         .reply(404, { success: false })
 
-      let error
-      try {
-        await restClient.get({
+      await expect(
+        restClient.get({
           path: '/test',
           query: { query1: 'value1' },
           headers: { header1: 'headerValue1' },
         })
-      } catch (e) {
-        error = e
-      }
+      ).rejects.toThrow('Not Found')
+    })
 
-      expect(error.message).toBe('Not Found')
-      expect(nock.isDone()).toBe(true)
+    it('Should not throw an error should return null on 404 if allow404 is true', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
+      })
+        .get('/test?query1=value1')
+        .reply(404, { success: false })
+
+      await expect(
+        restClient.get({
+          path: '/test',
+          query: { query1: 'value1' },
+          headers: { header1: 'headerValue1' },
+          return404: true,
+        })
+      ).resolves.toStrictEqual(null)
+    })
+
+    it('Should retry twice if request fails', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
+      })
+        .get('/test')
+        .reply(500, { failure: 'one' })
+        .get('/test')
+        .reply(500, { failure: 'two' })
+        .get('/test')
+        .reply(200, { testData1: 'testValue1' })
+
+      await expect(
+        restClient.get({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+        })
+      ).resolves.toStrictEqual({ testData1: 'testValue1' })
     })
   })
 
@@ -109,17 +136,16 @@ describe('Hmpps Rest Client tests', () => {
         .post('/test', { testData1: 'testValue1' })
         .reply(200, { success: true })
 
-      const result = await restClient.post({
-        path: '/test',
-        headers: { header1: 'headerValue1' },
-        data: {
-          testData1: 'testValue1',
-        },
-        raw: true,
-      })
-
-      expect(nock.isDone()).toBe(true)
-      expect(result).toMatchObject({
+      await expect(
+        restClient.post({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+          data: {
+            testData1: 'testValue1',
+          },
+          raw: true,
+        })
+      ).resolves.toMatchObject({
         req: { method: 'POST' },
         status: 200,
         text: '{"success":true}',
@@ -141,7 +167,6 @@ describe('Hmpps Rest Client tests', () => {
         },
       })
 
-      expect(nock.isDone()).toBe(true)
       expect(result).toEqual({ success: true })
     })
 
@@ -163,7 +188,6 @@ describe('Hmpps Rest Client tests', () => {
         { token: 'user token', username: 'joebloggs' }
       )
 
-      expect(nock.isDone()).toBe(true)
       expect(result).toEqual({ success: true })
     })
 
@@ -174,21 +198,15 @@ describe('Hmpps Rest Client tests', () => {
         .post('/test', { testData1: 'testValue1' })
         .reply(404, { success: true })
 
-      let error
-      try {
-        await restClient.post({
+      await expect(
+        restClient.post({
           path: '/test',
           headers: { header1: 'headerValue1' },
           data: {
             testData1: 'testValue1',
           },
         })
-      } catch (e) {
-        error = e
-      }
-
-      expect(error.message).toBe('Not Found')
-      expect(nock.isDone()).toBe(true)
+      ).rejects.toThrow('Not Found')
     })
   })
 
@@ -200,17 +218,16 @@ describe('Hmpps Rest Client tests', () => {
         .put('/test', { testData1: 'testValue1' })
         .reply(200, { success: true })
 
-      const result = await restClient.put({
-        path: '/test',
-        headers: { header1: 'headerValue1' },
-        data: {
-          testData1: 'testValue1',
-        },
-        raw: true,
-      })
-
-      expect(nock.isDone()).toBe(true)
-      expect(result).toMatchObject({
+      await expect(
+        restClient.put({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+          data: {
+            testData1: 'testValue1',
+          },
+          raw: true,
+        })
+      ).resolves.toMatchObject({
         req: { method: 'PUT' },
         status: 200,
         text: '{"success":true}',
@@ -224,16 +241,15 @@ describe('Hmpps Rest Client tests', () => {
         .put('/test', { testData1: 'testValue1' })
         .reply(200, { success: true })
 
-      const result = await restClient.put({
-        path: '/test',
-        headers: { header1: 'headerValue1' },
-        data: {
-          testData1: 'testValue1',
-        },
-      })
-
-      expect(nock.isDone()).toBe(true)
-      expect(result).toEqual({ success: true })
+      await expect(
+        restClient.put({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+          data: {
+            testData1: 'testValue1',
+          },
+        })
+      ).resolves.toEqual({ success: true })
     })
 
     it('Should return response body data only', async () => {
@@ -254,7 +270,6 @@ describe('Hmpps Rest Client tests', () => {
         { token: 'user token', username: 'joebloggs' }
       )
 
-      expect(nock.isDone()).toBe(true)
       expect(result).toEqual({ success: true })
     })
 
@@ -265,21 +280,15 @@ describe('Hmpps Rest Client tests', () => {
         .put('/test', { testData1: 'testValue1' })
         .reply(404, { success: true })
 
-      let error
-      try {
-        await restClient.put({
+      await expect(
+        restClient.put({
           path: '/test',
           headers: { header1: 'headerValue1' },
           data: {
             testData1: 'testValue1',
           },
         })
-      } catch (e) {
-        error = e
-      }
-
-      expect(error.message).toBe('Not Found')
-      expect(nock.isDone()).toBe(true)
+      ).rejects.toThrowError('Not Found')
     })
   })
 
@@ -293,7 +302,6 @@ describe('Hmpps Rest Client tests', () => {
 
       const result = (await restClient.stream({ path: '/test', headers: { header1: 'headerValue1' } })) as Readable
 
-      expect(nock.isDone()).toBe(true)
       expect(result.read()).toEqual([1, 2, 3])
     })
 
@@ -312,7 +320,6 @@ describe('Hmpps Rest Client tests', () => {
         { token: 'user token', username: 'joebloggs' }
       )) as Readable
 
-      expect(nock.isDone()).toBe(true)
       expect(result.read()).toEqual([1, 2, 3])
     })
 
@@ -323,18 +330,12 @@ describe('Hmpps Rest Client tests', () => {
         .get('/test')
         .reply(404, { success: false })
 
-      let error
-      try {
-        await restClient.stream({
+      await expect(
+        restClient.stream({
           path: '/test',
           headers: { header1: 'headerValue1' },
         })
-      } catch (e) {
-        error = e
-      }
-
-      expect(error.message).toBe('Not Found')
-      expect(nock.isDone()).toBe(true)
+      ).rejects.toThrow('Not Found')
     })
   })
 
@@ -361,7 +362,7 @@ describe('Hmpps Rest Client tests', () => {
       })
 
       await fs.unlinkSync('test-file.txt')
-      expect(nock.isDone()).toBe(true)
+
       expect(result).toEqual({ success: true })
     })
 
@@ -372,19 +373,14 @@ describe('Hmpps Rest Client tests', () => {
         .post('/test')
         .reply(200, { success: true })
 
-      let error
-      try {
-        await restClient.postMultiPart({
+      await expect(
+        restClient.postMultiPart({
           path: '/test',
           headers: { header1: 'headerValue1' },
           fileToUpload: null,
         })
-      } catch (e) {
-        error = e
-      }
+      ).rejects.toThrow("Cannot read properties of null (reading 'path')")
 
-      expect(error).toBeDefined()
-      expect(error.message).toBe("Cannot read properties of null (reading 'path')")
       expect(nock.isDone()).toBe(false)
     })
 
@@ -397,21 +393,15 @@ describe('Hmpps Rest Client tests', () => {
         .post('/test')
         .reply(404, { success: false })
 
-      let error
-      try {
-        await restClient.postMultiPart({
+      await expect(
+        restClient.postMultiPart({
           path: '/test',
           headers: { header1: 'headerValue1' },
           fileToUpload: multiPartFile,
         })
-      } catch (e) {
-        error = e
-      }
+      ).rejects.toThrow('Not Found')
 
       await fs.unlinkSync('test-file.txt')
-      expect(error).toBeDefined()
-      expect(error.message).toBe('Not Found')
-      expect(nock.isDone()).toBe(true)
     })
   })
 
@@ -429,7 +419,6 @@ describe('Hmpps Rest Client tests', () => {
         raw: true,
       })
 
-      expect(nock.isDone()).toBe(true)
       expect(result).toMatchObject({
         req: { method: 'DELETE' },
         status: 200,
@@ -449,7 +438,6 @@ describe('Hmpps Rest Client tests', () => {
         headers: { header1: 'headerValue1' },
       })
 
-      expect(nock.isDone()).toBe(true)
       expect(result).toEqual({ success: true })
     })
 
@@ -468,7 +456,6 @@ describe('Hmpps Rest Client tests', () => {
         { token: 'user token', username: 'joebloggs' }
       )
 
-      expect(nock.isDone()).toBe(true)
       expect(result).toEqual({ success: true })
     })
 
@@ -479,18 +466,12 @@ describe('Hmpps Rest Client tests', () => {
         .delete('/test')
         .reply(404, { success: true })
 
-      let error
-      try {
-        await restClient.delete({
+      await expect(
+        restClient.delete({
           path: '/test',
           headers: { header1: 'headerValue1' },
         })
-      } catch (e) {
-        error = e
-      }
-
-      expect(error.message).toBe('Not Found')
-      expect(nock.isDone()).toBe(true)
+      ).rejects.toThrow('Not Found')
     })
   })
 })

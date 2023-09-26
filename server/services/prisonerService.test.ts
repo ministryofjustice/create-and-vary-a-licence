@@ -227,6 +227,16 @@ describe('Prisoner Service', () => {
   })
 
   describe('Get Latest HDC Status', () => {
+    it('Should return NULL if no HDC status is found', async () => {
+      prisonApiClient.getLatestHdcStatus.mockResolvedValue(null)
+
+      const actualResult = await prisonerService.getActiveHdcStatus('123')
+
+      expect(actualResult).toBeNull()
+
+      expect(prisonApiClient.getLatestHdcStatus).toBeCalledWith('123')
+    })
+
     it('Should return NULL if no bookingId is found', async () => {
       prisonApiClient.getLatestHdcStatus.mockResolvedValue({
         bookingId: null,
