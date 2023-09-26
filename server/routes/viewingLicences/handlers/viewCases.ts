@@ -30,23 +30,26 @@ export default class ViewAndPrintCaseRoutes {
     const caseloadViewModel = casesToView
       .unwrap()
       .map(c => {
+        const licence =
+          c.licences.length > 1 ? c.licences.find(l => l.status === LicenceStatus.APPROVED) : _.head(c.licences)
+
         return {
-          licenceId: _.head(c.licences).id,
+          licenceId: licence.id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
           releaseDate: selectReleaseDate(c.nomisRecord),
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
-          licenceStatus: _.head(c.licences).status,
+          licenceStatus: licence.status,
           isClickable:
-            _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&
-            _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
-            _.head(c.licences).status !== LicenceStatus.OOS_RECALL &&
-            _.head(c.licences).status !== LicenceStatus.OOS_BOTUS &&
-            _.head(c.licences).status !== LicenceStatus.IN_PROGRESS &&
-            _.head(c.licences).status !== LicenceStatus.VARIATION_IN_PROGRESS &&
-            _.head(c.licences).status !== LicenceStatus.VARIATION_APPROVED &&
-            _.head(c.licences).status !== LicenceStatus.VARIATION_SUBMITTED,
+            licence.status !== LicenceStatus.NOT_STARTED &&
+            licence.status !== LicenceStatus.NOT_IN_PILOT &&
+            licence.status !== LicenceStatus.OOS_RECALL &&
+            licence.status !== LicenceStatus.OOS_BOTUS &&
+            licence.status !== LicenceStatus.IN_PROGRESS &&
+            licence.status !== LicenceStatus.VARIATION_IN_PROGRESS &&
+            licence.status !== LicenceStatus.VARIATION_APPROVED &&
+            licence.status !== LicenceStatus.VARIATION_SUBMITTED,
         }
       })
       .filter(c => {
