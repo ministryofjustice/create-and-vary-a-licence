@@ -1,4 +1,4 @@
-import { SQSMessage } from 'sqs-consumer'
+import { Message } from '@aws-sdk/client-sqs'
 import logger from '../../../../logger'
 import DatesChangedEventHandler from './datesChangedEventHandler'
 import { Services } from '../../../services'
@@ -7,7 +7,7 @@ import { PrisonEventMessage } from '../../../@types/events'
 export default function buildEventHandler({ licenceService, prisonerService }: Services) {
   const datesChangedEventHandler = new DatesChangedEventHandler(licenceService, prisonerService)
 
-  return async (messages: SQSMessage[]) => {
+  return async (messages: Message[]) => {
     messages.forEach(message => {
       const prisonEvent = JSON.parse(message.Body)
 

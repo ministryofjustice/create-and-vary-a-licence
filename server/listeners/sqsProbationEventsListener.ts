@@ -1,12 +1,13 @@
-import AWS from 'aws-sdk'
+import { SQSClient } from '@aws-sdk/client-sqs'
 import { Consumer } from 'sqs-consumer'
 import config from '../config'
 import logger from '../../logger'
 import buildEventHandler from './eventHandlers/probationEvents'
 import { Services } from '../services'
 
-const sqs = new AWS.SQS({
+const sqs = new SQSClient({
   region: 'eu-west-2',
+  endpoint: config.sqs.endpoint,
 })
 
 export default function createSqsListener(services: Services) {

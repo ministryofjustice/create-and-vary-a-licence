@@ -1,13 +1,18 @@
-import AWS from 'aws-sdk'
-import { SendMessageRequest } from 'aws-sdk/clients/sqs'
+import * as AWS_SQS from '@aws-sdk/client-sqs'
+import config from '../../server/config'
 
-const sqs = new AWS.SQS({
+const { SQS } = AWS_SQS
+
+const sqs = new SQS({
   region: 'eu-west-2',
-  accessKeyId: 'foo',
-  secretAccessKey: 'bar',
+  credentials: {
+    accessKeyId: 'foo',
+    secretAccessKey: 'bar',
+  },
+  endpoint: config.sqs.endpoint,
 })
 
-const sendMessage = (message: SendMessageRequest): void => {
+const sendMessage = (message: AWS_SQS.SendMessageCommandInput): void => {
   sqs.sendMessage(message, (err, data) => {
     if (err) {
       // eslint-disable-next-line no-console
