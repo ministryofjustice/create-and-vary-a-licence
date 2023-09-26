@@ -1,4 +1,5 @@
 import { Readable } from 'stream'
+import { Holiday } from 'uk-bank-holidays'
 import RestClient from './hmppsRestClient'
 import type {
   ContactNumberRequest,
@@ -481,5 +482,11 @@ export default class LicenceApiClient extends RestClient {
     }
 
     return this.getLicenceById(licence.variationOf, user)
+  }
+
+  async getBankHolidaysForEnglandAndWales(): Promise<Holiday[]> {
+    return (await this.get({
+      path: '/bank-holidays',
+    })) as Promise<Holiday[]>
   }
 }

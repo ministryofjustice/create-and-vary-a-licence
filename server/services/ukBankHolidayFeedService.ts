@@ -1,15 +1,17 @@
 import moment, { type Moment } from 'moment'
-import HolidayFeed, { type Holiday } from 'uk-bank-holidays'
+import { Holiday } from 'uk-bank-holidays'
+import { LicenceApiClient } from '../data'
+import { InMemoryTokenStore } from '../data/tokenStore'
+import { getSystemTokenWithRetries } from '../data/systemToken'
 
-const A_DAY_IN_MS = 24 * 60 * 60 * 1000
+const AN_HOUR_IN_MS = 1 * 60 * 60 * 1000
 
 export type BankHolidayRetriever = () => Promise<Holiday[]>
 
 const bankHolidayRetriever = () => {
-  const feed = new HolidayFeed()
   return async (): Promise<Holiday[]> => {
-    await feed.load()
-    return feed.divisions('england-and-wales').holidays()
+    const licenceApiClient = new LicenceApiClient(new InMemoryTokenStore(getSystemTokenWithRetries))
+    return licenceApiClient.getBankHolidaysForEnglandAndWales()
   }
 }
 
@@ -38,8 +40,8 @@ export default class UkBankHolidayFeedService {
   }
 
   private async refreshFeed() {
-    // Refresh the feed every 24 hours
-    if (this.holidays.length === 0 || this.lastUpdated <= Date.now() - A_DAY_IN_MS) {
+    // Refresh the feed every hour
+    if (this.holidays.length === 0 || this.lastUpdated <= Date.now() - AN_HOUR_IN_MS) {
       this.holidays = await this.getBankHolidays()
       this.lastUpdated = Date.now()
     }
