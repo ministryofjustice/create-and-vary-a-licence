@@ -70,6 +70,7 @@ export default {
       ),
     },
     pollingWaitTimeMs: Number(get('SQS_POLLING_WAIT_TIME_MS', 10000)),
+    endpoint: production ? null : 'http://127.0.0.1:4566',
   },
   apis: {
     hmppsAuth: {
