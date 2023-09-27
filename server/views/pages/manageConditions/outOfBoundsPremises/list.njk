@@ -14,6 +14,7 @@
     {% set items = [] %}
     {% for condition in conditionsData %}
         {% if condition.name and condition.address %}
+            {% set hiddenText = condition.name %}
             {% set keyHtml = 'Name or type of premises:<br/>Building and street:<br/>Town:</br>'%}
             {% set valueHtml = condition.name + "<br/>" + condition.address['addressLine1']
             +  ((", " + condition.address['addressLine2']) if condition.address['addressLine2'] else '')
@@ -25,9 +26,11 @@
             {% set keyHtml = keyHtml + "Postcode" %}
             {% set valueHtml = valueHtml + condition.address['addressPostcode'] %}
         {% elseif condition.name %}
+            {% set hiddenText = condition.name %}
             {% set keyHtml = 'Name or type of premises:' %}
             {% set valueHtml = condition.name %}
         {% else %}
+            {% set hiddenText = condition.address['addressLine1'] %}
             {% set keyHtml = 'Building and street:<br/>Town:</br>' %}
             {% set valueHtml = condition.address['addressLine1'] + "<br/>" + condition.address['addressTown']  + "<br/>" %}
             {% if condition.address['addressCounty'] %}
@@ -50,12 +53,12 @@
                     {
                         href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" | addQueryParam('fromReview', fromReview),
                         text: "Change details",
-                        visuallyHiddenText: condition.uploadSummary[0].fileName
+                        visuallyHiddenText: hiddenText
                     },
                     {
                         href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/outofbounds-premises-removal" | addQueryParam('fromReview', fromReview),
                         text: "Delete",
-                        visuallyHiddenText: condition.uploadSummary[0].filename
+                        visuallyHiddenText: hiddenText
                     }
                 ]
             }
