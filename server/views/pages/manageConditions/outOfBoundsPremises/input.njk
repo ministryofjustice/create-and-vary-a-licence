@@ -56,18 +56,13 @@
                             preventDoubleClick: true
                         }) }}
                         
-                        {% if fileUploadPresent %}
-                            <a class="govuk-link govuk-link--no-visited-state"
-                                href={{ "/licence/create/id/" + licence.id +"/additional-licence-conditions/condition/"+additionalCondition.code+"/outofbounds-premises?fromReview=true" }}>Cancel</a>
-                        {% else %}
-                            {{ govukButton({
-                                text: "Delete this condition",
-                                href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/outofbounds-premises-delete" + fromReview + fromPolicyReviewQuery,
-                                classes: 'govuk-button--secondary',
-                                attributes: { 'data-qa': 'delete' },
-                                preventDoubleClick: true
-                            }) }}
-                        {% endif %}
+                        {{ govukButton({
+                            text: "Delete this condition",
+                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/outofbounds-premises-delete" + fromReview + fromPolicyReviewQuery,
+                            classes: 'govuk-button--secondary',
+                            attributes: { 'data-qa': 'delete' },
+                            preventDoubleClick: true
+                        }) }}
                     </div>
                 </div>
             </div>

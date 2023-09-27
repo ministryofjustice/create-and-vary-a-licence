@@ -39,7 +39,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
   describe('GET', () => {
     it('should display confirmation page to delete condition', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/outOfBoundsPremises/confirmUploadDeletion', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/outOfBoundsPremises/confirmPremiseDeletion', {
         conditionId: '1',
         conditionCode: 'outOfBoundsPremises',
         displayMessage: null,
@@ -121,7 +121,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       } as unknown as Request
       await handler.POST(req, res)
       expect(licenceService.deleteAdditionalCondition).toHaveBeenCalledTimes(0)
-      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/outOfBoundsPremises/confirmUploadDeletion', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/outOfBoundsPremises/confirmPremisesDeletion', {
         conditionId: '1',
         conditionCode: OUT_OF_BOUNDS_PREMISES_CONDITION_CODE,
         displayMessage: { text: 'Select yes or no' },
