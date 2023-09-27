@@ -313,6 +313,13 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/com/update`, data: updateComRequest })
   }
 
+  async editLicence(licenceId: string, user: User) {
+    return (await this.post(
+      { path: `/licence/id/${licenceId}/edit` },
+      { username: user?.username }
+    )) as Promise<LicenceSummary>
+  }
+
   async createVariation(licenceId: string, user: User): Promise<LicenceSummary> {
     return (await this.post(
       { path: `/licence/id/${licenceId}/create-variation` },

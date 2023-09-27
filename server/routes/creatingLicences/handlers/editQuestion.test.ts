@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import EditQuestionRoutes from './editQuestion'
 import LicenceService from '../../../services/licenceService'
+import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
@@ -33,6 +34,7 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
     } as unknown as Response
 
     licenceService.updateStatus = jest.fn()
+    licenceService.editApprovedLicence = jest.fn()
   })
 
   describe('GET', () => {
@@ -76,5 +78,25 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
       expect(licenceService.updateStatus).not.toBeCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
+  })
+
+  it('should call edit licence to create a new licence version if status is APPROVED and answer is yes', async () => {
+    const editedLicence = { licenceId: 2 } as unknown as LicenceSummary
+    licenceService.editApprovedLicence.mockReturnValue(Promise.resolve(editedLicence))
+
+    req = {
+      ...req,
+      body: {
+        answer: 'Yes',
+      },
+    } as unknown as Request
+    res.locals.licence.statusCode = 'APPROVED'
+
+    await handler.POST(req, res)
+    expect(licenceService.editApprovedLicence).toHaveBeenCalledWith('1', {
+      username: 'joebloggs',
+      displayName: 'Joe Bloggs',
+    })
+    expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/2/check-your-answers')
   })
 })

@@ -336,6 +336,15 @@ describe('Licence API client tests', () => {
     })
   })
 
+  it('should edit a licence', async () => {
+    post.mockResolvedValue({ id: 1, prisonCode: 'MDI' } as Licence)
+
+    const result = await licenceApiClient.editLicence('1', { username: 'joebloggs' } as User)
+
+    expect(post).toHaveBeenCalledWith({ path: '/licence/id/1/edit' }, { username: 'joebloggs' })
+    expect(result).toEqual({ id: 1, prisonCode: 'MDI' })
+  })
+
   it('Create variation', async () => {
     post.mockResolvedValue({ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary)
 
