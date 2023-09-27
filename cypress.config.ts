@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { defineConfig } from 'cypress'
+import moment, { Moment } from 'moment/moment'
 import 'reflect-metadata'
 import { resetStubs, verifyEndpointCalled } from './integration_tests/wiremock'
 import auth from './integration_tests/mockApis/auth'
@@ -118,6 +119,13 @@ export default defineConfig({
         sendPrisonEvent: events.sendPrisonEvent,
         sendProbationEvent: events.sendProbationEvent,
         purgeQueues: events.purgeQueues,
+        getNextWorkingDay: (): Moment => {
+          const appointmentDate = moment().add(1, 'year').add(1, 'week').day(7)
+          while (appointmentDate.isoWeekday() === 6 || appointmentDate.isoWeekday() === 7) {
+            appointmentDate.add(1, 'day')
+          }
+          return appointmentDate
+        },
       })
     },
     baseUrl: 'http://localhost:3007',
