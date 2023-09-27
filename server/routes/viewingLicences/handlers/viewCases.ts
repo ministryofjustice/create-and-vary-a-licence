@@ -30,8 +30,15 @@ export default class ViewAndPrintCaseRoutes {
     const caseloadViewModel = casesToView
       .unwrap()
       .map(c => {
-        const licence =
-          c.licences.length > 1 ? c.licences.find(l => l.status === LicenceStatus.APPROVED) : _.head(c.licences)
+        let licence
+        if (c.licences.length) {
+          licence =
+            view === 'prison'
+              ? c.licences.find(l => l.status === LicenceStatus.APPROVED)
+              : c.licences.find(l => l.status === LicenceStatus.ACTIVE)
+        } else {
+          licence = _.head(c.licences)
+        }
 
         return {
           licenceId: licence.id,
