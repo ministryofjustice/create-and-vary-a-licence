@@ -39,7 +39,7 @@ export default class OutOfBoundsPremisesRemovalRoutes {
     if (!confirmRemoval) {
       const condition = this.getLicenceCondition(parseInt(conditionId, 10), licence)
       const displayMessage = { text: 'Select yes or no' }
-      return res.render('pages/manageConditions/outOfBoundsPremises/confirmPremiseDeletion', {
+      return res.render('pages/manageConditions/outOfBoundsPremises/confirmPremisesDeletion', {
         conditionId,
         conditionCode: condition.code,
         displayMessage,

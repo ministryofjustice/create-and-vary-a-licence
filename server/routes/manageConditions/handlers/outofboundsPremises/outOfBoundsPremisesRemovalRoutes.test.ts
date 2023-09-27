@@ -4,7 +4,7 @@ import OutOfBoundsPremisesRemovalRoutes from './outOfBoundsPremisesRemovalRoutes
 import { OUT_OF_BOUNDS_PREMISES_CONDITION_CODE } from '../../../../utils/conditionRoutes'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-describe('Route Handlers - Create Licence - File Upload Removal Routes Handler', () => {
+describe('Route Handlers - Create Licence - Out Of Bounds Premises Removal Routes Handler', () => {
   const handler = new OutOfBoundsPremisesRemovalRoutes(licenceService)
   let req: Request
   let res: Response
@@ -39,7 +39,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
   describe('GET', () => {
     it('should display confirmation page to delete condition', async () => {
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/outOfBoundsPremises/confirmPremiseDeletion', {
+      expect(res.render).toHaveBeenCalledWith('pages/manageConditions/outOfBoundsPremises/confirmPremisesDeletion', {
         conditionId: '1',
         conditionCode: 'outOfBoundsPremises',
         displayMessage: null,
