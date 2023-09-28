@@ -1,26 +1,27 @@
 import moment, { type Moment } from 'moment'
-import HolidayFeed, { type Holiday } from 'uk-bank-holidays'
+import { LicenceApiClient } from '../data'
+import { InMemoryTokenStore } from '../data/tokenStore'
+import { getSystemTokenWithRetries } from '../data/systemToken'
 
-const A_DAY_IN_MS = 24 * 60 * 60 * 1000
+const AN_HOUR_IN_MS = 1 * 60 * 60 * 1000
 
-export type BankHolidayRetriever = () => Promise<Holiday[]>
+export type BankHolidayRetriever = () => Promise<string[]>
 
 const bankHolidayRetriever = () => {
-  const feed = new HolidayFeed()
-  return async (): Promise<Holiday[]> => {
-    await feed.load()
-    return feed.divisions('england-and-wales').holidays()
+  return async (): Promise<string[]> => {
+    const licenceApiClient = new LicenceApiClient(new InMemoryTokenStore(getSystemTokenWithRetries))
+    return licenceApiClient.getBankHolidaysForEnglandAndWales()
   }
 }
 
 class BankHolidays {
-  constructor(readonly bankHolidays: Holiday[]) {}
+  constructor(readonly bankHolidays: string[]) {}
 
   isBankHolidayOrWeekend = (date: Moment) => {
     return (
       date.isoWeekday() === 6 ||
       date.isoWeekday() === 7 ||
-      this.bankHolidays.find(hol => moment(hol.date).isSame(date, 'day')) !== undefined
+      this.bankHolidays.find(hol => moment(hol).isSame(date, 'day')) !== undefined
     )
   }
 }
@@ -28,7 +29,7 @@ class BankHolidays {
 export default class UkBankHolidayFeedService {
   private lastUpdated = 0
 
-  private holidays: Holiday[] = []
+  private holidays: string[] = []
 
   constructor(private readonly getBankHolidays: BankHolidayRetriever = bankHolidayRetriever()) {}
 
@@ -38,8 +39,8 @@ export default class UkBankHolidayFeedService {
   }
 
   private async refreshFeed() {
-    // Refresh the feed every 24 hours
-    if (this.holidays.length === 0 || this.lastUpdated <= Date.now() - A_DAY_IN_MS) {
+    // Refresh the feed every hour
+    if (this.holidays.length === 0 || this.lastUpdated <= Date.now() - AN_HOUR_IN_MS) {
       this.holidays = await this.getBankHolidays()
       this.lastUpdated = Date.now()
     }

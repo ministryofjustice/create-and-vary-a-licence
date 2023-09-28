@@ -1168,4 +1168,18 @@ export default {
       },
     })
   },
+
+  stubGetBankHolidays: (dates: string[]): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/bank-holidays`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: dates,
+      },
+    })
+  },
 }
