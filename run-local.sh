@@ -13,7 +13,7 @@ docker compose down --remove-orphans
 #Prune existing containers
 #Comment in if you wish to perform a fresh install as all containers are removed and deleted
 #You will be prompted to continue with the deletion in the terminal
-docker system prune --all
+#docker system prune --all
 
 #Install npm and relevant dependencies for the service
 echo "Installing npm ..."
