@@ -28,7 +28,6 @@ generic-service:
     LICENCES_URL: "http://create-and-vary-a-licence"
     RESTRICT_ROLLOUT: "false"
     DPS_URL: "https://digital.prison.service.justice.gov.uk"
-    USE_NEW_SEARCH: "false"
     SHOW_WHATS_NEW_BANNER: "true"
 
 gotenberg:

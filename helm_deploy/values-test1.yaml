@@ -36,7 +36,6 @@ generic-service:
     LICENCE_WATERMARK: "true"
     DPS_URL: "https://digital-dev.prison.service.justice.gov.uk"
     SHOW_WHATS_NEW_BANNER: "true"
-    USE_NEW_SEARCH: "true"
 
 gotenberg:
   replicaCount: 1
