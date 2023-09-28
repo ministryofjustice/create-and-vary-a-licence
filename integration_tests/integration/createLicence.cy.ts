@@ -3,7 +3,7 @@ import Page from '../pages/page'
 import IndexPage from '../pages'
 
 context('Create a licence', () => {
-  const dates = []
+  const dates: string[] = []
 
   beforeEach(() => {
     cy.task('reset')
