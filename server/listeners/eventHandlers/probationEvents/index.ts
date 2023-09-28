@@ -1,4 +1,4 @@
-import { SQSMessage } from 'sqs-consumer'
+import { Message } from '@aws-sdk/client-sqs'
 import logger from '../../../../logger'
 import { ProbationEventMessage } from '../../../@types/events'
 import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHandler'
@@ -7,7 +7,7 @@ import { Services } from '../../../services'
 export default function buildEventHandler({ communityService, licenceService }: Services) {
   const offenderManagerChangedHandler = new OffenderManagerChangedEventHandler(communityService, licenceService)
 
-  return async (messages: SQSMessage[]) => {
+  return async (messages: Message[]) => {
     messages.forEach(message => {
       const probationEvent = JSON.parse(message.Body)
 
