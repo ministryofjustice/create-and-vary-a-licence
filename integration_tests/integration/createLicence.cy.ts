@@ -3,6 +3,8 @@ import Page from '../pages/page'
 import IndexPage from '../pages'
 
 context('Create a licence', () => {
+  const dates: string[] = []
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
@@ -13,6 +15,7 @@ context('Create a licence', () => {
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
+    cy.task('stubGetBankHolidays', dates)
     cy.signIn()
   })
 
@@ -34,7 +37,7 @@ context('Create a licence', () => {
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
 
-    cy.task('getNextWorkingDay').then(appointmentDate => {
+    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
         .enterDate(moment(appointmentDate))
         .enterTime(moment())
