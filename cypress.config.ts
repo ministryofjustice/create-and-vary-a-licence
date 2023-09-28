@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { defineConfig } from 'cypress'
 import 'reflect-metadata'
-
 import moment, { Moment } from 'moment/moment'
 import { resetStubs, verifyEndpointCalled } from './integration_tests/wiremock'
 import auth from './integration_tests/mockApis/auth'
