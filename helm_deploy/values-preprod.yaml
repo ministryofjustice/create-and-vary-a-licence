@@ -32,7 +32,7 @@ generic-service:
 
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
-    COMMON_COMPONENTS_ENABLED: 'false'
+    COMMON_COMPONENTS_ENABLED: 'true'
 
 gotenberg:
   replicaCount: 1
