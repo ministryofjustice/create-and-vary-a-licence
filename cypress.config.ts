@@ -11,8 +11,6 @@ import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import prison from './integration_tests/mockApis/prison'
 import probationSearch from './integration_tests/mockApis/probationSearch'
 import events from './integration_tests/support/events'
-import UkBankHolidayFeedService from './server/services/ukBankHolidayFeedService'
-import feComponent from './integration_tests/mockApis/feComponent'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -39,9 +37,6 @@ export default defineConfig({
         stubAuthUser: auth.stubUser,
         stubAuthPing: auth.stubPing,
         stubSystemToken: auth.systemToken,
-
-        stubFeComponents: feComponent.stubFeComponents,
-        stubFeComponentsFail: feComponent.stubFeComponentsFail,
 
         stubTokenVerificationPing: tokenVerification.stubPing,
 
@@ -86,6 +81,7 @@ export default defineConfig({
         stubGetActivePolicyConditions: licence.stubGetActivePolicyConditions,
         stubGetPolicyChanges: licence.stubGetPolicyChanges,
         stubUpdateOffenderDetails: licence.stubUpdateOffenderDetails,
+        stubGetBankHolidays: licence.stubGetBankHolidays,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
@@ -123,14 +119,17 @@ export default defineConfig({
         sendPrisonEvent: events.sendPrisonEvent,
         sendProbationEvent: events.sendProbationEvent,
         purgeQueues: events.purgeQueues,
-        getNextWorkingDay: (): Promise<Moment> =>
-          new UkBankHolidayFeedService().getEnglishAndWelshHolidays().then(ukHolidays => {
-            const appointmentDate = moment().add(1, 'year').add(1, 'week').day(7)
-            while (ukHolidays.isBankHolidayOrWeekend(appointmentDate)) {
-              appointmentDate.add(1, 'day')
-            }
-            return appointmentDate
-          }),
+        getNextWorkingDay: (dates: string[]): Moment => {
+          const appointmentDate = moment().add(1, 'year').add(1, 'week').day(7)
+          while (
+            appointmentDate.isoWeekday() === 6 ||
+            appointmentDate.isoWeekday() === 7 ||
+            dates.find(date => moment(date).isSame(appointmentDate, 'day')) !== undefined
+          ) {
+            appointmentDate.add(1, 'day')
+          }
+          return appointmentDate
+        },
       })
     },
     baseUrl: 'http://localhost:3007',

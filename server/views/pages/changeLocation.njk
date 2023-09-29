@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
-{% set pageTitle = applicationName + " - View a licence - Select establishments to view licences for" %}
+{% set pageTitle = applicationName + " - View a licence - Select locations to view licences for" %}
 {% set pageId = "change-location-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-conditions-question" %}
 
@@ -18,7 +18,7 @@
                     idPrefix: "caseload", 
                     fieldset: {
                         legend: {
-                            text: 'Select establishments to view licences for',
+                            text: 'Select locations to view licences for',
                             isPageHeading: true,
                             classes: "govuk-fieldset__legend--l"
                         }

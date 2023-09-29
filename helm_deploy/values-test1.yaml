@@ -36,10 +36,7 @@ generic-service:
     LICENCE_WATERMARK: "true"
     DPS_URL: "https://digital-dev.prison.service.justice.gov.uk"
     SHOW_WHATS_NEW_BANNER: "true"
-    USE_NEW_SEARCH: "true"
-
-    # To enable common front-end components
-    COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
+    USE_NEW_SEARCH: "true"    COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
 
 gotenberg:
   replicaCount: 1

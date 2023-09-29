@@ -795,6 +795,11 @@ describe('Licence Service', () => {
     })
   })
 
+  it('should edit a licence', async () => {
+    await licenceService.editApprovedLicence('1', user)
+    expect(licenceApiClient.editLicence).toBeCalledWith('1', user)
+  })
+
   it('should create licence variation', async () => {
     await licenceService.createVariation('1', user)
     expect(licenceApiClient.createVariation).toBeCalledWith('1', user)

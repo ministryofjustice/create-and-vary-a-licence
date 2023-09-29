@@ -11,7 +11,7 @@ const pdfHeaderFooterStyle =
   'font-size: 10px; ' +
   'font-weight: normal; ' +
   'width: 100%; ' +
-  'height: 35px; ' +
+  'height: 55px; ' +
   'text-align: center; ' +
   'padding: 20px;'
 
@@ -93,22 +93,30 @@ export default class PrintLicenceRoutes {
   }
 
   getPdfFooter = (licence: Licence): string => {
+    let printVersion = licence.licenceVersion
+    const majorVersion = licence.licenceVersion.split('.')[0]
+    if (parseInt(majorVersion, 10) > 1) {
+      printVersion = majorVersion
+    }
     return `
-      <span style="${pdfHeaderFooterStyle}">
+      <div style="${pdfHeaderFooterStyle}">
         <table style="width: 100%; padding-left: 15px; padding-right: 15px;">
           <tr>
-            <td style="text-align: center;">NOMS No: <span style="font-weight: bold;">${licence.nomsId}</span></td>
-            <td style="text-align: center;">Booking No: <span style="font-weight: bold;">${licence.bookingNo}</span></td>
-            <td style="text-align: center;">CRO No: <span style="font-weight: bold;">${licence.cro}</span></td>
-            <td style="text-align: center;">PNC ID: <span style="font-weight: bold;">${licence.pnc}</span></td>
-            <td style="text-align: center;">Prison: <span style="font-weight: bold;">${licence.prisonDescription}</span></td>
+            <td style="text-align: left;">Prison No: <span style="font-weight: bold;">${licence.nomsId}</span></td>
+            <td style="text-align: left;">Booking No: <span style="font-weight: bold;">${licence.bookingNo}</span></td>
+            <td style="text-align: left;">CRO No: <span style="font-weight: bold;">${licence.cro}</span></td>
+            <td style="text-align: left;">PNC ID: <span style="font-weight: bold;">${licence.pnc}</span></td>
+          </tr>
+          <tr>
+            <td style="text-align: left;">Prison: <span style="font-weight: bold;">${licence.prisonDescription}</span></td>
+            <td style="text-align: left;">Version No: <span style="font-weight: bold">${printVersion}</span></td>
           </tr>
         </table>
         <p>
         Page <span class="pageNumber"></span> of <span class="totalPages"></span><br/>
              <span style="font-size: 6px;">[${licence.typeCode}/${licence.id}/${licence.version}/${licence.prisonCode}]</span>
         </p>
-     </span>`
+     </div>`
   }
 
   getConditionsWithUploads = (additionalConditions: AdditionalCondition[]): AdditionalCondition[] => {

@@ -70,6 +70,7 @@ export default {
       ),
     },
     pollingWaitTimeMs: Number(get('SQS_POLLING_WAIT_TIME_MS', 10000)),
+    endpoint: production ? null : 'http://127.0.0.1:4566',
   },
   apis: {
     hmppsAuth: {
@@ -163,15 +164,6 @@ export default {
          $ curl http://host.docker.internal:3000  (should show redirect /login)
        */
       licencesUrl: get('LICENCES_URL', 'http://host.docker.internal:3000', requiredInProduction),
-    },
-    frontendComponents: {
-      url: get('COMPONENT_API_URL', 'http://localhost:3000', requiredInProduction),
-      timeout: {
-        response: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000)),
-        deadline: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000)),
-      },
-      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000))),
-      enabled: get('COMMON_COMPONENTS_ENABLED', 'true') === 'true',
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
