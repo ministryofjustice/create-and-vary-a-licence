@@ -19,6 +19,7 @@ import ProbationSearchApiClient from './probationSearchApiClient'
 import LicenceApiClient from './licenceApiClient'
 import PrisonRegisterApiClient from './prisonRegisterApiClient'
 import { getSystemToken } from './systemToken'
+import FeComponentsClient from './feComponentsClient'
 
 type RestClientBuilder<T> = (token: string) => T
 
@@ -33,6 +34,7 @@ export const dataAccess = () => {
   const probationSearchApiClient = new ProbationSearchApiClient(tokenStore)
   const licenceApiClient = new LicenceApiClient(tokenStore)
   const prisonRegisterApiClient = new PrisonRegisterApiClient(tokenStore)
+  const feComponentsClient = new FeComponentsClient(tokenStore)
 
   return {
     redisClient,
@@ -43,6 +45,7 @@ export const dataAccess = () => {
     probationSearchApiClient,
     licenceApiClient,
     prisonRegisterApiClient,
+    feComponentsClient,
   }
 }
 export type DataAccess = ReturnType<typeof dataAccess>

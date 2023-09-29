@@ -165,6 +165,15 @@ export default {
        */
       licencesUrl: get('LICENCES_URL', 'http://host.docker.internal:3000', requiredInProduction),
     },
+    frontendComponents: {
+      url: get('COMPONENT_API_URL', 'http://localhost:3000', requiredInProduction),
+      timeout: {
+        response: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 2000)),
+        deadline: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 2000)),
+      },
+      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_SECONDS', 2000))),
+      enabled: get('COMMON_COMPONENTS_ENABLED', 'true') === 'true',
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   exitSurveyLink: get('EXIT_SURVEY_LINK', 'https://exit-survey-placeholder-link', requiredInProduction),

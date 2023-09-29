@@ -11,6 +11,7 @@ import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import prison from './integration_tests/mockApis/prison'
 import probationSearch from './integration_tests/mockApis/probationSearch'
 import events from './integration_tests/support/events'
+import feComponent from './integration_tests/mockApis/feComponent'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -37,6 +38,9 @@ export default defineConfig({
         stubAuthUser: auth.stubUser,
         stubAuthPing: auth.stubPing,
         stubSystemToken: auth.systemToken,
+
+        stubFeComponents: feComponent.stubFeComponents,
+        stubFeComponentsFail: feComponent.stubFeComponentsFail,
 
         stubTokenVerificationPing: tokenVerification.stubPing,
 
