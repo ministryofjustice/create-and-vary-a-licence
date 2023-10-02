@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import { AdditionalCondition, Licence } from '../../../../@types/licenceApiClientTypes'
-import { formatAddress } from '../../../../utils/utils'
 
 export default class OutOfBoundsPremisesRemovalRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -22,7 +21,7 @@ export default class OutOfBoundsPremisesRemovalRoutes {
     if (condition.data && condition.data.length) {
       description = condition.data[0].value
       if (condition.data[0].field === 'premisesAddress') {
-        description = formatAddress(condition.data[0].value)
+        ;[description] = condition.data[0].value.split(',')
       }
     }
 
