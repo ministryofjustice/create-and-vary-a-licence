@@ -489,4 +489,10 @@ export default class LicenceApiClient extends RestClient {
 
     return this.getLicenceById(licence.variationOf, user)
   }
+
+  async getBankHolidaysForEnglandAndWales(): Promise<string[]> {
+    return (await this.get({
+      path: '/bank-holidays',
+    })) as Promise<string[]>
+  }
 }

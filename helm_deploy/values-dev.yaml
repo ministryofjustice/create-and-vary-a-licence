@@ -16,7 +16,7 @@ generic-service:
     # COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
     PRISON_API_URL: "https://prison-api-dev.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-dev.hmpps.service.justice.gov.uk"
-    PRISONER_SEARCH_API_URL: "https://prisoner-offender-search-dev.prison.service.justice.gov.uk"
+    PRISONER_SEARCH_API_URL: "https://prisoner-search-dev.prison.service.justice.gov.uk"
     # PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
     EXIT_SURVEY_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
@@ -34,7 +34,10 @@ generic-service:
 
     LICENCE_WATERMARK: "true"
     DPS_URL: "https://digital-dev.prison.service.justice.gov.uk"
-    USE_NEW_SEARCH: "false"
+
+    # To enable common front-end components
+    COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
+    COMMON_COMPONENTS_ENABLED: 'true'
 
 gotenberg:
   replicaCount: 1

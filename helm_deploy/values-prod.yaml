@@ -28,8 +28,11 @@ generic-service:
     LICENCES_URL: "http://create-and-vary-a-licence"
     RESTRICT_ROLLOUT: "false"
     DPS_URL: "https://digital.prison.service.justice.gov.uk"
-    USE_NEW_SEARCH: "false"
     SHOW_WHATS_NEW_BANNER: "true"
+
+    # To enable common front-end components
+    COMPONENT_API_URL: "https://frontend-components.hmpps.service.justice.gov.uk"
+    COMMON_COMPONENTS_ENABLED: 'false'
 
 gotenberg:
   replicaCount: 2

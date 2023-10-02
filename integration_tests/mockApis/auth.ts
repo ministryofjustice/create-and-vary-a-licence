@@ -68,7 +68,7 @@ const signOut = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/auth/logout.*',
+      urlPattern: '/auth/sign-out.*',
     },
     response: {
       status: 200,

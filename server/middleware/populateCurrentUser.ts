@@ -114,6 +114,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
           res.locals.user = { ...res.locals.user, ...req.session.currentUser }
         }
       }
+      res.locals.isPrisonUser = res.locals.user.authSource === 'nomis'
       next()
     } catch (error) {
       logger.error(error, `Failed to get user details for: ${res.locals.user?.username}`)
