@@ -26,7 +26,7 @@ describe('Print an AP_PSS licence', () => {
           { code: '6', text: 'Standard 6' },
           { code: '7', text: 'Standard 7' },
         ],
-        additionalLicenceConditions: [
+        additionalConditions: [
           {
             expandedText:
               'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohold problems.',
@@ -35,14 +35,14 @@ describe('Print an AP_PSS licence', () => {
         bespokeConditions: [{ text: 'Bespoke condition 1' }],
       },
       qrCodesEnabled: false,
-      additionalConditions: [
+      singleItemConditions: [
         {
           expandedText:
             'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohol problems.',
           uploadSummary: [],
         },
       ],
-      conditionsWithUploads: [],
+      multipleItemConditions: [],
     })
 
     // Check the page title contains the offender name

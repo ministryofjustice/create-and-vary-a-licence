@@ -298,7 +298,7 @@ export default {
             },
             {
               id: 3,
-              code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+              code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
               category: 'Programmes or activities',
               sequence: 2,
               text: 'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your [ALCOHOL / DRUG / SEXUAL / VIOLENT / GAMBLING / SOLVENT ABUSE / ANGER / DEBT / PROLIFIC / OFFENDING BEHAVIOUR] problems.',
@@ -320,7 +320,7 @@ export default {
             },
             {
               id: 4,
-              code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+              code: '0a370862-5426-49c1-b6d4-3d074d78a81a',
               category: 'Programmes or activities',
               sequence: 3,
               text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',

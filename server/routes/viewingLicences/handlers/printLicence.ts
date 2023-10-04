@@ -39,16 +39,24 @@ export default class PrintLicenceRoutes {
       user
     )
 
-    const additionalConditions = licence.additionalLicenceConditions.filter(
-      (c: AdditionalCondition) => !additionalConditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
-    )
+    const getGroupedAdditionalConditions: Map<string, AdditionalCondition[]> =
+      this.getGroupedAdditionalConditions(licence)
+    const singleItemConditions: AdditionalCondition[] = []
+    const multipleItemConditions: AdditionalCondition[][] = []
+    getGroupedAdditionalConditions.forEach(value => {
+      if (value.length > 1) {
+        multipleItemConditions.push([...value])
+      } else {
+        singleItemConditions.push(...value)
+      }
+    })
 
     res.render(`pages/licence/${licence.typeCode}`, {
       qrCode,
       htmlPrint,
       exclusionZoneMapData,
-      additionalConditions,
-      additionalConditionsWithUploads,
+      singleItemConditions,
+      multipleItemConditions,
     })
   }
 
@@ -72,9 +80,17 @@ export default class PrintLicenceRoutes {
       user
     )
 
-    const additionalConditions = licence.additionalLicenceConditions.filter(
-      (c: AdditionalCondition) => !additionalConditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
-    )
+    const getGroupedAdditionalConditions: Map<string, AdditionalCondition[]> =
+      this.getGroupedAdditionalConditions(licence)
+    const singleItemConditions: AdditionalCondition[] = []
+    const multipleItemConditions: AdditionalCondition[][] = []
+    getGroupedAdditionalConditions.forEach(value => {
+      if (value.length > 1) {
+        multipleItemConditions.push([...value])
+      } else {
+        singleItemConditions.push(...value)
+      }
+    })
 
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
@@ -84,8 +100,8 @@ export default class PrintLicenceRoutes {
         qrCode,
         htmlPrint: false,
         watermark,
-        additionalConditions,
-        additionalConditionsWithUploads,
+        singleItemConditions,
+        multipleItemConditions,
         exclusionZoneMapData,
       },
       { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
@@ -136,5 +152,19 @@ export default class PrintLicenceRoutes {
         }
       })
     )
+  }
+
+  getGroupedAdditionalConditions(licence: Licence): Map<string, AdditionalCondition[]> {
+    const additionalConditions = licence.additionalLicenceConditions
+    const map = new Map<string, AdditionalCondition[]>()
+    additionalConditions.forEach((condition: AdditionalCondition) => {
+      const collection = map.get(condition.code)
+      if (!collection) {
+        map.set(condition.code, [condition])
+      } else {
+        collection.push(condition)
+      }
+    })
+    return map
   }
 }

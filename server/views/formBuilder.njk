@@ -114,7 +114,7 @@
                 {% call govukFieldset({
                     legend: {
                         text: input.label,
-                        classes: "govuk-!-font-weight-bold"
+                        classes: "govuk-!-font-weight-bold " + input.name + "-legend-" + loop.index0
                     }
                 }) %}
                     {{ govukInput({
