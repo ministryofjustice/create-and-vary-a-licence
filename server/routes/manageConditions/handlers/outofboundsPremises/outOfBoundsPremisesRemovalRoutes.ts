@@ -18,11 +18,9 @@ export default class OutOfBoundsPremisesRemovalRoutes {
     const condition = this.getLicenceCondition(parseInt(conditionId, 10), licence)
 
     let description = ''
-    if (condition.data && condition.data.length) {
-      description = condition.data[0].value
-      if (condition.data[0].field === 'premisesAddress') {
-        ;[description] = condition.data[0].value.split(',')
-      }
+    if (condition?.data?.length) {
+      const { field, value } = condition.data[0]
+      description = field !== 'premisesAddress' ? value : value.split(',')[0]
     }
 
     res.render('pages/manageConditions/outOfBoundsPremises/confirmPremisesDeletion', {

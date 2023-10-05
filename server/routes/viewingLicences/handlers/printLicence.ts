@@ -39,18 +39,7 @@ export default class PrintLicenceRoutes {
       user
     )
 
-    const getGroupedAdditionalConditions: Map<string, AdditionalCondition[]> =
-      this.getGroupedAdditionalConditions(licence)
-    const singleItemConditions: AdditionalCondition[] = []
-    const multipleItemConditions: AdditionalCondition[][] = []
-    getGroupedAdditionalConditions.forEach(value => {
-      if (value.length > 1) {
-        multipleItemConditions.push([...value])
-      } else {
-        singleItemConditions.push(...value)
-      }
-    })
-
+    const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
     res.render(`pages/licence/${licence.typeCode}`, {
       qrCode,
       htmlPrint,
@@ -80,18 +69,7 @@ export default class PrintLicenceRoutes {
       user
     )
 
-    const getGroupedAdditionalConditions: Map<string, AdditionalCondition[]> =
-      this.getGroupedAdditionalConditions(licence)
-    const singleItemConditions: AdditionalCondition[] = []
-    const multipleItemConditions: AdditionalCondition[][] = []
-    getGroupedAdditionalConditions.forEach(value => {
-      if (value.length > 1) {
-        multipleItemConditions.push([...value])
-      } else {
-        singleItemConditions.push(...value)
-      }
-    })
-
+    const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
       {
@@ -106,6 +84,14 @@ export default class PrintLicenceRoutes {
       },
       { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
     )
+  }
+
+  private groupConditions(licence: Licence) {
+    const groupedAdditionalConditions: Map<string, AdditionalCondition[]> = this.getGroupedAdditionalConditions(licence)
+    const additionalConditions = Array.from(groupedAdditionalConditions, ([code, conditions]) => ({ code, conditions }))
+    const singleItemConditions = additionalConditions.filter(v => v.conditions.length === 1).flatMap(v => v.conditions)
+    const multipleItemConditions = additionalConditions.filter(v => v.conditions.length > 1).map(v => v.conditions)
+    return { singleItemConditions, multipleItemConditions }
   }
 
   getPdfFooter = (licence: Licence): string => {
