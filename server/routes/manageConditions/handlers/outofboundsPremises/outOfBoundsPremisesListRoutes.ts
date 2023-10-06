@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
-import { AddAdditionalConditionRequest } from '../../../../@types/licenceApiClientTypes'
+import { AddAdditionalConditionRequest, AdditionalCondition } from '../../../../@types/licenceApiClientTypes'
 import conditionType from '../../../../enumeration/conditionType'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import ConditionService from '../../../../services/conditionService'
@@ -29,37 +29,7 @@ export default class OutOfBoundsPremisesListRoutes {
       return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions/callback?fromReview=true`)
     }
 
-    const conditionsData = conditions.map(condition => {
-      const conditionData = {
-        id: condition.id,
-        code: condition.code,
-      }
-
-      if (!condition.data.length) {
-        return conditionData
-      }
-
-      if (condition.data.length === 2) {
-        return {
-          ...conditionData,
-          name: condition.data[0].value,
-          address: stringToAddressObject(condition.data[1].value),
-        }
-      }
-
-      if (condition.data[0].field === 'nameOfPremises') {
-        return {
-          ...conditionData,
-          name: condition.data[0].value,
-        }
-      }
-
-      return {
-        ...conditionData,
-        address: stringToAddressObject(condition.data[0].value),
-      }
-    })
-
+    const conditionsData = this.getConditionsData(conditions)
     return res.render('pages/manageConditions/outOfBoundsPremises/list', {
       conditions,
       conditionsData,
@@ -80,8 +50,10 @@ export default class OutOfBoundsPremisesListRoutes {
     if (!addAnotherLocation) {
       const displayMessage = { text: 'Select yes or no' }
       const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)
-      return res.render('pages/manageConditions/outofBoundsPremises/list', {
+      const conditionsData = this.getConditionsData(conditions)
+      return res.render('pages/manageConditions/outOfBoundsPremises/list', {
         conditions,
+        conditionsData,
         licenceId,
         conditionType,
         displayMessage,
@@ -128,5 +100,38 @@ export default class OutOfBoundsPremisesListRoutes {
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${conditionResult.id}?fromReview=true`
     )
+  }
+
+  getConditionsData = (conditions: AdditionalCondition[]) => {
+    return conditions.map(condition => {
+      const conditionData = {
+        id: condition.id,
+        code: condition.code,
+      }
+
+      if (!condition.data.length) {
+        return conditionData
+      }
+
+      if (condition.data.length === 2) {
+        return {
+          ...conditionData,
+          name: condition.data[0].value,
+          address: stringToAddressObject(condition.data[1].value),
+        }
+      }
+
+      if (condition.data[0].field === 'nameOfPremises') {
+        return {
+          ...conditionData,
+          name: condition.data[0].value,
+        }
+      }
+
+      return {
+        ...conditionData,
+        address: stringToAddressObject(condition.data[0].value),
+      }
+    })
   }
 }
