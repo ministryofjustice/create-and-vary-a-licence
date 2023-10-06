@@ -13,33 +13,39 @@
 
     {% set items = [] %}
     {% for condition in conditionsData %}
-        {% if condition.name and condition.address %}
-            {% set hiddenText = condition.name %}
-            {% set keyHtml = 'Name or type of premises:<br/>Building and street:<br/>Town:</br>'%}
-            {% set valueHtml = condition.name + "<br/>" + condition.address['addressLine1']
-            +  ((", " + condition.address['addressLine2']) if condition.address['addressLine2'] else '')
-            + "<br/>" + condition.address['addressTown'] + "<br/>" %}
-            {% if condition.address['addressCounty'] %}
-                {% set keyHtml = keyHtml + "County:<br/>" %}
-                {% set valueHtml = valueHtml + condition.address['addressCounty'] + "<br/>" %}
-            {% endif %}
-            {% set keyHtml = keyHtml + "Postcode" %}
-            {% set valueHtml = valueHtml + condition.address['addressPostcode'] %}
-        {% elseif condition.name %}
-            {% set hiddenText = condition.name %}
-            {% set keyHtml = 'Name or type of premises:' %}
-            {% set valueHtml = condition.name %}
-        {% else %}
-            {% set hiddenText = condition.address['addressLine1'] %}
-            {% set keyHtml = 'Building and street:<br/>Town:</br>' %}
-            {% set valueHtml = condition.address['addressLine1'] + "<br/>" + condition.address['addressTown']  + "<br/>" %}
-            {% if condition.address['addressCounty'] %}
-                {% set keyHtml = keyHtml + "County:<br/>" %}
-                {% set valueHtml = valueHtml + condition.address['addressCounty'] + "<br/>" %}
-            {% endif %}
-            {% set keyHtml = keyHtml + "Postcode" %}
-            {% set valueHtml = valueHtml + condition.address['addressPostcode'] %}
+        {% set premisesName = condition.name | escape %}
+        {% set addressLine1 =  condition.address['addressLine1'] | escape %}
+        {% set addressLine2 =  condition.address['addressLine2'] | escape %}
+        {% set town =  condition.address['addressTown'] | escape %}
+        {% set county =  condition.address['addressCounty'] | escape %}
+        {% set postcode =  condition.address['addressPostcode'] | escape %}
 
+        {% if condition.name and condition.address %}
+            {% set hiddenText = premisesName %}
+            {% set keyHtml = 'Name or type of premises:<br/>Building and street:<br/>Town:</br>'%}
+            {% set valueHtml = premisesName + "<br/>" + addressLine1
+            +  ((", " + addressLine2) if condition.address['addressLine2'] else '')
+            + "<br/>" + town + "<br/>" %}
+            {% if county %}
+                {% set keyHtml = keyHtml + "County:<br/>" %}
+                {% set valueHtml = valueHtml + county + "<br/>" %}
+            {% endif %}
+            {% set keyHtml = keyHtml + "Postcode" %}
+            {% set valueHtml = valueHtml + postcode %}
+        {% elseif condition.name %}
+            {% set hiddenText = premisesName %}
+            {% set keyHtml = 'Name or type of premises:' %}
+            {% set valueHtml = premisesName %}
+        {% else %}
+            {% set hiddenText = addressLine1 %}
+            {% set keyHtml = 'Building and street:<br/>Town:</br>' %}
+            {% set valueHtml = addressLine1 +  ((", " + addressLine2) if condition.address['addressLine2'] else '') + "<br/>" + town  + "<br/>" %}
+            {% if county %}
+                {% set keyHtml = keyHtml + "County:<br/>" %}
+                {% set valueHtml = valueHtml + county + "<br/>" %}
+            {% endif %}
+            {% set keyHtml = keyHtml + "Postcode" %}
+            {% set valueHtml = valueHtml + postcode %}
         {% endif %}
         {% set items = (items.push({
             key: {
