@@ -20,14 +20,14 @@ export type AuthUserRole = {
 
 export default class HmppsAuthClient extends RestClient {
   constructor(tokenStore: TokenStore) {
-    super(tokenStore, 'HMPPS Auth Client', config.apis.hmppsAuth as ApiConfig)
+    super(tokenStore, 'HMPPS Auth Client', config.apis.manageUsersApi as ApiConfig)
   }
 
   async getUser(user: User): Promise<AuthUserDetails> {
-    return (await this.get({ path: '/api/user/me' }, { token: user.token })) as Promise<AuthUserDetails>
+    return (await this.get({ path: '/users/me' }, { token: user.token })) as Promise<AuthUserDetails>
   }
 
   async getUserEmail(user: User): Promise<AuthUserEmail> {
-    return (await this.get({ path: '/api/me/email' }, { token: user.token })) as Promise<AuthUserEmail>
+    return (await this.get({ path: '/users/me/email' }, { token: user.token })) as Promise<AuthUserEmail>
   }
 }
