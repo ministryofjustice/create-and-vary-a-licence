@@ -23,7 +23,7 @@ describe('Auth Api client tests', () => {
 
     const result = await authClient.getUser({ token: 'token' } as User)
 
-    expect(get).toHaveBeenCalledWith({ path: '/api/user/me' }, { token: 'token' })
+    expect(get).toHaveBeenCalledWith({ path: '/users/me' }, { token: 'token' })
     expect(result).toEqual({ name: 'Joe Bloggs' })
   })
 
@@ -32,7 +32,7 @@ describe('Auth Api client tests', () => {
 
     const result = await authClient.getUserEmail({ token: 'token' } as User)
 
-    expect(get).toHaveBeenCalledWith({ path: '/api/me/email' }, { token: 'token' })
+    expect(get).toHaveBeenCalledWith({ path: '/users/me/email' }, { token: 'token' })
     expect(result).toEqual({ email: 'jbloggs@justice.gov.uk' })
   })
 })
