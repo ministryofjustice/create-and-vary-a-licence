@@ -19,7 +19,11 @@ export default class OutOfBoundsPremisesRemovalRoutes {
 
     let description = ''
     if (condition?.data?.length) {
-      const { field, value } = condition.data[0]
+      let nameOrAddressIndex = 0
+      if (condition.data[0].field === 'nameTypeAndOrAddress') {
+        nameOrAddressIndex = 1
+      }
+      const { field, value } = condition.data[nameOrAddressIndex]
       description = field !== 'premisesAddress' ? value : value.split(',')[0]
     }
 

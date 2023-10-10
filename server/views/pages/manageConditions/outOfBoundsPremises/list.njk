@@ -26,7 +26,7 @@
             {% set valueHtml = premisesName + "<br/>" + addressLine1
             +  ((", " + addressLine2) if condition.address['addressLine2'] else '')
             + "<br/>" + town + "<br/>" %}
-            {% if county %}
+            {% if condition.address['addressCounty'] %}
                 {% set keyHtml = keyHtml + "County:<br/>" %}
                 {% set valueHtml = valueHtml + county + "<br/>" %}
             {% endif %}
@@ -40,7 +40,7 @@
             {% set hiddenText = addressLine1 %}
             {% set keyHtml = 'Building and street:<br/>Town:</br>' %}
             {% set valueHtml = addressLine1 +  ((", " + addressLine2) if condition.address['addressLine2'] else '') + "<br/>" + town  + "<br/>" %}
-            {% if county %}
+            {% if condition.address['addressCounty'] %}
                 {% set keyHtml = keyHtml + "County:<br/>" %}
                 {% set valueHtml = valueHtml + county + "<br/>" %}
             {% endif %}

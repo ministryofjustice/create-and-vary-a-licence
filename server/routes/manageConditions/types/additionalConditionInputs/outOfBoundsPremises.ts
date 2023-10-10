@@ -3,6 +3,7 @@ import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator'
 import { Address } from '..'
 
 class OutOfBoundsPremises {
+  @Expose()
   @IsNotEmpty({ message: 'Select the information you need' })
   nameTypeAndOrAddress: string
 
