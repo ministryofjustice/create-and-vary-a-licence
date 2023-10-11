@@ -14,5 +14,13 @@
         width: 23%;
       }
     }
+    &--outofbounds-premises {
+      .govuk-summary-list__key {
+        width: 15%;
+      }
+      .govuk-summary-list__actions {
+        width: 23%;
+      }
+    }
   }
 }
