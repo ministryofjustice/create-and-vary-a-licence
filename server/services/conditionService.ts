@@ -258,12 +258,16 @@ export default class ConditionService {
   async getAdditionalAPConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<AdditionalCondition[]> {
     const conditionDataToExcludeFromSummary = ['nameTypeAndOrAddress']
 
+    let additionalConditions: AdditionalCondition[]
     if (licence.isInPssPeriod && this.isInVariation(licence)) {
-      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id, user))?.additionalLicenceConditions
+      additionalConditions = (await this.licenceApiClient.getParentLicenceOrSelf(licence.id, user))
+        ?.additionalLicenceConditions
+    } else {
+      additionalConditions = licence.additionalLicenceConditions
     }
 
     const conditionDataToDisplay: AdditionalCondition[] = []
-    licence.additionalLicenceConditions.forEach(condition => {
+    additionalConditions.forEach(condition => {
       const displayData = condition.data
         ? condition.data.filter(data => !conditionDataToExcludeFromSummary.includes(data.field))
         : condition.data
@@ -272,6 +276,7 @@ export default class ConditionService {
         data: displayData,
       })
     })
+
     return conditionDataToDisplay
   }
 
