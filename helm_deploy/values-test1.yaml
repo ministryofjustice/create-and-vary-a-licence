@@ -35,7 +35,7 @@ generic-service:
 
     LICENCE_WATERMARK: "true"
     DPS_URL: "https://digital-dev.prison.service.justice.gov.uk"
-    SHOW_WHATS_NEW_BANNER: "true"
+    SHOW_WHATS_NEW_BANNER: "false"
 
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
