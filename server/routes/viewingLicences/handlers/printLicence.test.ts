@@ -51,8 +51,8 @@ describe('Route - print a licence', () => {
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
-        additionalConditions: [],
-        additionalConditionsWithUploads: [],
+        singleItemConditions: [],
+        multipleItemConditions: [],
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
@@ -82,8 +82,8 @@ describe('Route - print a licence', () => {
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
-        additionalConditions: [],
-        additionalConditionsWithUploads: [],
+        singleItemConditions: [],
+        multipleItemConditions: [],
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
@@ -132,8 +132,8 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
-          additionalConditions: [],
-          additionalConditionsWithUploads: [],
+          singleItemConditions: [],
+          multipleItemConditions: [],
           exclusionZoneMapData: [],
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
@@ -213,8 +213,7 @@ describe('Route - print a licence', () => {
           qrCode: null,
           htmlPrint: false,
           watermark,
-          additionalConditions: [],
-          additionalConditionsWithUploads: [
+          singleItemConditions: [
             {
               code: 'code',
               data: [
@@ -234,6 +233,7 @@ describe('Route - print a licence', () => {
               ],
             },
           ],
+          multipleItemConditions: [],
           exclusionZoneMapData: [
             {
               dataValue: {
@@ -294,8 +294,8 @@ describe('Route - print a licence', () => {
           qrCode: 'a QR code',
           htmlPrint: false,
           watermark,
-          additionalConditions: [],
-          additionalConditionsWithUploads: [],
+          singleItemConditions: [],
+          multipleItemConditions: [],
           exclusionZoneMapData: [],
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }

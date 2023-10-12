@@ -39,16 +39,13 @@ export default class PrintLicenceRoutes {
       user
     )
 
-    const additionalConditions = licence.additionalLicenceConditions.filter(
-      (c: AdditionalCondition) => !additionalConditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
-    )
-
+    const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
     res.render(`pages/licence/${licence.typeCode}`, {
       qrCode,
       htmlPrint,
       exclusionZoneMapData,
-      additionalConditions,
-      additionalConditionsWithUploads,
+      singleItemConditions,
+      multipleItemConditions,
     })
   }
 
@@ -72,10 +69,7 @@ export default class PrintLicenceRoutes {
       user
     )
 
-    const additionalConditions = licence.additionalLicenceConditions.filter(
-      (c: AdditionalCondition) => !additionalConditionsWithUploads.find((c2: AdditionalCondition) => c.id === c2.id)
-    )
-
+    const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
     res.renderPDF(
       `pages/licence/${licence.typeCode}`,
       {
@@ -84,12 +78,20 @@ export default class PrintLicenceRoutes {
         qrCode,
         htmlPrint: false,
         watermark,
-        additionalConditions,
-        additionalConditionsWithUploads,
+        singleItemConditions,
+        multipleItemConditions,
         exclusionZoneMapData,
       },
       { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
     )
+  }
+
+  private groupConditions(licence: Licence) {
+    const groupedAdditionalConditions: Map<string, AdditionalCondition[]> = this.getGroupedAdditionalConditions(licence)
+    const additionalConditions = Array.from(groupedAdditionalConditions, ([code, conditions]) => ({ code, conditions }))
+    const singleItemConditions = additionalConditions.filter(v => v.conditions.length === 1).flatMap(v => v.conditions)
+    const multipleItemConditions = additionalConditions.filter(v => v.conditions.length > 1).map(v => v.conditions)
+    return { singleItemConditions, multipleItemConditions }
   }
 
   getPdfFooter = (licence: Licence): string => {
@@ -136,5 +138,19 @@ export default class PrintLicenceRoutes {
         }
       })
     )
+  }
+
+  getGroupedAdditionalConditions(licence: Licence): Map<string, AdditionalCondition[]> {
+    const additionalConditions = licence.additionalLicenceConditions
+    const map = new Map<string, AdditionalCondition[]>()
+    additionalConditions.forEach((condition: AdditionalCondition) => {
+      const collection = map.get(condition.code)
+      if (!collection) {
+        map.set(condition.code, [condition])
+      } else {
+        collection.push(condition)
+      }
+    })
+    return map
   }
 }

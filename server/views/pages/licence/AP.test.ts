@@ -34,14 +34,14 @@ describe('Print an AP licence', () => {
         bespokeConditions: [{ text: 'Bespoke condition 1' }],
       },
       qrCodesEnabled: false,
-      additionalConditions: [
+      singleItemConditions: [
         {
           expandedText:
             'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohol problems.',
           uploadSummary: [],
         },
       ],
-      conditionsWithUploads: [],
+      multipleItemConditions: [],
     })
 
     // Check the page title contains the offender name
