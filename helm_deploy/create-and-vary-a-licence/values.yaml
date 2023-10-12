@@ -1,4 +1,3 @@
----
 generic-service:
   nameOverride: create-and-vary-a-licence
   replicaCount: 4
@@ -6,13 +5,13 @@ generic-service:
 
   image:
     repository: quay.io/hmpps/create-and-vary-a-licence
-    tag: app_version    # override at deployment time
+    tag: app_version # override at deployment time
     port: 3000
 
   ingress:
     enabled: true
-    hosts: 
-     - app-hostname.local    # override per environment
+    hosts:
+      - app-hostname.local # override per environment
     tlsSecretName: create-and-vary-a-licence-cert
     v1_2_enabled: true
     v0_47_enabled: false
@@ -31,7 +30,10 @@ generic-service:
     REDIS_TLS_ENABLED: "true"
     TOKEN_VERIFICATION_ENABLED: "true"
     LICENCE_WATERMARK: "false"
-    APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY);IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+    APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRU\
+      MENTATIONKEY);IngestionEndpoint=https://northeurope-0.in.applicationinsig\
+      hts.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.a\
+      zure.com/"
     SERVICE_NAME: "create-and-vary-a-licence"
     SHOW_WHATS_NEW_BANNER: "false"
     USE_NEW_SEARCH: "true"
@@ -65,52 +67,29 @@ generic-service:
       SQS_DOMAIN_EVENTS_QUEUE_URL: "sqs_id"
 
   allowlist:
-    office: "217.33.148.210/32"
-    petty_france_wifi: "213.121.161.112/28"
-    mojvpn: "81.134.202.29/32"
-    global-protect: "35.176.93.186/32"
-    quantum1: "62.25.109.197/32"
-    quantum2: "212.137.36.230/32"
-    quantum3: "195.92.38.16/28"
-    ark-nps-hmcts-ttp1: "195.59.75.0/24"
-    ark-nps-hmcts-ttp2: "194.33.192.0/25"
-    ark-nps-hmcts-ttp3: "194.33.193.0/25"
-    ark-nps-hmcts-ttp4: "194.33.196.0/25"
-    ark-nps-hmcts-ttp5: "194.33.197.0/25"
-    sodexo-peterborough: "51.155.55.241/32"
-    moj-official-ark-c-vodafone: "194.33.248.0/29"
-    moj-official-ark-f-vodafone: "194.33.249.0/29"
-    dxc_webproxy1: "195.92.38.20/32"
-    dxc_webproxy2: "195.92.38.21/32"
-    dxc_webproxy3: "195.92.38.22/32"
-    dxc_webproxy4: "195.92.38.23/32"
-    moj-official-ark-c-expo-e: "51.149.249.0/29"
-    moj-official-ark-f-expo-e: "51.149.249.32/29"
-    moj-official-tgw-prod: "51.149.250.0/24"
-    moj-official-tgw-preprod: "51.149.251.0/24"
-    fivewells-pttp-desktop1: "20.49.214.199/32"
-    fivewells-pttp-desktop2: "20.49.214.228/32"
-    fivewells-g4s-1: "195.89.157.56/29"
-    fivewells-g4s-2: "195.59.215.184/29"
-    health-kick: "35.177.252.195/32"
-    cloudplatform-live1-1: "35.178.209.113/32"
-    cloudplatform-live1-2: "3.8.51.207/32"
-    cloudplatform-live1-3: "35.177.252.54/32"
-    hmp-parc-1: "217.161.76.162/32"
-    hmp-parc-2: "217.161.76.154/32"
-    serco-external-ips: "217.22.14.0/24"
-    sodexo-northumberland-01: "88.98.48.10/32"
-    sodexo-northumberland-02: "51.148.47.137/32"
-    sodoxeo-forest-bank: "51.155.85.249/32"
-    altcourse-g4s: 217.161.76.184/29
-    oakwood-01: "217.161.76.184/29"
-    oakwood-02: "217.161.76.192/29"
-    oakwood-old-1: "217.161.76.187/32"
-    oakwood-old-2: "217.161.76.195/32"
-    oakwood-old-3: "217.161.76.186/32"
-    oakwood-old-4: "217.161.76.194/32"
-    azure-landing-zone-public-egress-1: "20.26.11.71/32"
-    azure-landing-zone-public-egress-2: "20.26.11.108/32"
+    quantum3: 195.92.38.16/28
+    sodexo-peterborough: 51.155.55.241/32
+    fivewells-1: 20.49.214.199/32
+    fivewells-2: 20.49.214.228/32
+    fivewells-3: 195.89.157.56/29
+    fivewells-4: 195.59.215.184/29
+    hmp-parc-1: 217.161.76.162/32
+    hmp-parc-2: 217.161.76.154/32
+    serco: 217.22.14.0/24
+    sodexo-northumberland: 88.98.48.10/32
+    sodexo-northumberland2: 51.148.47.137/32
+    sodoxeo-forest-bank: 51.155.85.249/32
+    oakwood-01: 217.161.76.184/29
+    oakwood-02: 217.161.76.192/29
+    oakwood-1: 217.161.76.187/32
+    oakwood-2: 217.161.76.195/32
+    oakwood-3: 217.161.76.186/32
+    oakwood-4: 217.161.76.194/32
+    azure-landing-zone-public-egress-1: 20.26.11.71/32
+    azure-landing-zone-public-egress-2: 20.26.11.108/32
+    groups:
+      - internal
+      - prisons
 
 gotenberg:
   nameOverride: gotenberg
