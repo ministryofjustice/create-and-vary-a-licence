@@ -32,6 +32,62 @@ describe('Route Handlers - Offender detail', () => {
   })
 
   describe('GET', () => {
+    it('Should not call searchPrisoners API if nomisId is null', async () => {
+      req.params = {
+        nomsId: null,
+      }
+
+      await handler.GET(req, res)
+      expect(prisonerService.searchPrisonersByNomisIds).not.toHaveBeenCalled()
+      expect(communityService.searchProbationers).not.toHaveBeenCalled()
+      expect(licenceService.getLatestLicenceByNomisIdsAndStatus).not.toHaveBeenCalled()
+
+      expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
+        prisonerDetail: {
+          conditionalReleaseDate: 'Not found',
+          confirmedReleaseDate: 'Not found',
+          crn: undefined,
+          determinate: 'Yes',
+          dob: '',
+          hdcStatus: 'Not found',
+          hdced: 'Not found',
+          licenceExpiryDate: 'Not found',
+          name: '',
+          paroleEligibilityDate: 'Not found',
+          postRecallReleaseDate: 'Not found',
+          recall: 'No',
+          sentenceExpiryDate: 'Not found',
+          tused: 'Not found',
+        },
+        probationPractitioner: {
+          email: undefined,
+          lau: undefined,
+          ldu: undefined,
+          name: '',
+          pdu: undefined,
+          region: undefined,
+          team: undefined,
+          telephone: undefined,
+        },
+        cvlCom: {
+          email: 'Not found',
+          username: 'Not found',
+          team: 'Not found',
+          lau: 'Not found',
+          pdu: 'Not found',
+          region: 'Not found',
+        },
+        licence: {
+          led: 'Not found',
+          ssd: 'Not found',
+          crd: 'Not found',
+          ard: 'Not found',
+          sed: 'Not found',
+          tused: 'Not found',
+          tussd: 'Not found',
+        },
+      })
+    })
     it('Should render all offender information', async () => {
       req.params = {
         nomsId: 'ABC123',

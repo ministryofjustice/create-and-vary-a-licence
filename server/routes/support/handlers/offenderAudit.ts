@@ -15,7 +15,8 @@ export default class OffenderAuditRoutes {
     const { user } = res.locals
     const { nomsId, licenceId } = req.params
 
-    const prisonerDetail = _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))
+    const prisonerDetail =
+      (!!nomsId && _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))) || null
     const audit = await this.licenceServer.getAuditEvents(
       parseInt(licenceId, 10),
       null,
@@ -27,7 +28,7 @@ export default class OffenderAuditRoutes {
     res.render('pages/support/offenderAudit', {
       prisonerDetail: {
         id: nomsId,
-        name: convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`),
+        name: (!!prisonerDetail && convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`)) || '',
       },
       audit,
     })

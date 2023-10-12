@@ -36,6 +36,19 @@ afterEach(() => {
 describe('Sentence dates changed event handler', () => {
   const handler = new SentenceDatesChangedEventHandler(licenceService, prisonerService)
 
+  it('should not call searchPrisoner API if bookingId is null', async () => {
+    const event = {
+      bookingId: null,
+    } as PrisonEventMessage
+
+    await handler.handle(event)
+
+    expect(prisonerService.searchPrisonersByBookingIds).not.toHaveBeenCalled()
+    expect(licenceService.getLicencesByNomisIdsAndStatus).not.toHaveBeenCalled()
+    expect(licenceService.getLicencesByNomisIdsAndStatus).not.toHaveBeenCalled()
+    expect(prisonerService.getPrisonerDetail).not.toHaveBeenCalled()
+  })
+
   it('should use bookingId to get the nomisID, if the nomisId is not provided', async () => {
     const event = {
       bookingId: 1234,
