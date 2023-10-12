@@ -157,13 +157,5 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       expect(licenceService.createLicence).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
     })
-
-    it('should not create licence and should redirect even if answer is YES and nomisId is null', async () => {
-      req.params.nomisId = null
-      req.body.answer = 'Yes'
-      await handler.POST(req, res)
-      expect(licenceService.createLicence).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
-    })
   })
 })

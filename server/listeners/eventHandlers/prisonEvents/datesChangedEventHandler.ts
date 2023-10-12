@@ -18,38 +18,27 @@ export default class DatesChangedEventHandler {
 
     const nomisId =
       offenderIdDisplay ||
-      (!!bookingId &&
-        (await this.prisonerService.searchPrisonersByBookingIds([bookingId])).map(o => o.prisonerNumber).pop()) ||
-      ''
+      (await this.prisonerService.searchPrisonersByBookingIds([bookingId])).map(o => o.prisonerNumber).pop()
 
-    const activeAndVariationLicences =
-      (!!nomisId &&
-        (await this.licenceService.getLicencesByNomisIdsAndStatus(
-          [nomisId],
-          [
-            LicenceStatus.ACTIVE,
-            LicenceStatus.VARIATION_IN_PROGRESS,
-            LicenceStatus.VARIATION_SUBMITTED,
-            LicenceStatus.VARIATION_REJECTED,
-            LicenceStatus.VARIATION_APPROVED,
-          ]
-        ))) ||
-      []
+    const activeAndVariationLicences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+      [nomisId],
+      [
+        LicenceStatus.ACTIVE,
+        LicenceStatus.VARIATION_IN_PROGRESS,
+        LicenceStatus.VARIATION_SUBMITTED,
+        LicenceStatus.VARIATION_REJECTED,
+        LicenceStatus.VARIATION_APPROVED,
+      ]
+    )
 
     if (activeAndVariationLicences.length) {
       await this.deactivateLicencesIfPrisonerResentenced(activeAndVariationLicences, bookingId)
     } else {
-      const licences =
-        (!!nomisId &&
-          (await this.licenceService.getLicencesByNomisIdsAndStatus(
-            [nomisId],
-            [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED]
-          ))) ||
-        null
+      const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+        [nomisId],
+        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED]
+      )
 
-      if (!licences) {
-        return
-      }
       await Promise.all(
         licences.map(licence => {
           return this.updateLicenceSentenceDates(licence, nomisId)

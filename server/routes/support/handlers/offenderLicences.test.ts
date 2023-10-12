@@ -29,25 +29,6 @@ describe('Route Handlers - Offender licences', () => {
   })
 
   describe('GET', () => {
-    it('Should should return empty licences if nomisId is null', async () => {
-      req.params = {
-        nomsId: null,
-        licenceId: '1',
-      }
-
-      await handler.GET(req, res)
-
-      expect(prisonerService.searchPrisonersByNomisIds).not.toHaveBeenCalled()
-      expect(licenceService.getLicencesByNomisIdsAndStatus).not.toHaveBeenCalled()
-
-      expect(res.render).toHaveBeenCalledWith('pages/support/offenderLicences', {
-        prisonerDetail: {
-          id: null,
-          name: '',
-        },
-        licences: [],
-      })
-    })
     it('Should render all audit information', async () => {
       req.params = {
         nomsId: 'ABC123',

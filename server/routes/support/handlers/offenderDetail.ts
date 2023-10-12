@@ -36,26 +36,23 @@ export default class OffenderDetailRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { nomsId } = req.params
-    const prisonerDetail =
-      (!!nomsId && _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))) || null
-    const deliusRecord =
-      (!!nomsId && _.head(await this.communityService.searchProbationers({ nomsNumber: nomsId }))) || null
+    const prisonerDetail = _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))
+    const deliusRecord = _.head(await this.communityService.searchProbationers({ nomsNumber: nomsId }))
     const probationPractitioner = deliusRecord?.offenderManagers.find(com => com.active)
     const probationPractitionerContact = probationPractitioner
       ? await this.communityService.getStaffDetailByStaffCode(probationPractitioner?.staff.code)
       : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
-    const conditionalReleaseDate = this.formatNomisDate(prisonerDetail?.conditionalReleaseDate)
-    const confirmedReleaseDate = this.formatNomisDate(prisonerDetail?.confirmedReleaseDate)
-    const postRecallReleaseDate = this.formatNomisDate(prisonerDetail?.postRecallReleaseDate)
-    const tused = this.formatNomisDate(prisonerDetail?.topupSupervisionExpiryDate)
-    const hdced = this.formatNomisDate(prisonerDetail?.homeDetentionCurfewEligibilityDate)
-    const sentenceExpiryDate = this.formatNomisDate(prisonerDetail?.sentenceExpiryDate)
-    const licenceExpiryDate = this.formatNomisDate(prisonerDetail?.licenceExpiryDate)
-    const paroleEligibilityDate = this.formatNomisDate(prisonerDetail?.paroleEligibilityDate)
+    const conditionalReleaseDate = this.formatNomisDate(prisonerDetail.conditionalReleaseDate)
+    const confirmedReleaseDate = this.formatNomisDate(prisonerDetail.confirmedReleaseDate)
+    const postRecallReleaseDate = this.formatNomisDate(prisonerDetail.postRecallReleaseDate)
+    const tused = this.formatNomisDate(prisonerDetail.topupSupervisionExpiryDate)
+    const hdced = this.formatNomisDate(prisonerDetail.homeDetentionCurfewEligibilityDate)
+    const sentenceExpiryDate = this.formatNomisDate(prisonerDetail.sentenceExpiryDate)
+    const licenceExpiryDate = this.formatNomisDate(prisonerDetail.licenceExpiryDate)
+    const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
 
-    const licenceSummary =
-      (!!nomsId && (await this.licenceService.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user))) || null
+    const licenceSummary = await this.licenceService.getLatestLicenceByNomisIdsAndStatus([nomsId], [], user)
     const licence = licenceSummary ? await this.licenceService.getLicence(licenceSummary.licenceId, user) : null
 
     res.render('pages/support/offenderDetail', {
@@ -71,10 +68,10 @@ export default class OffenderDetailRoutes {
         sentenceExpiryDate,
         licenceExpiryDate,
         paroleEligibilityDate,
-        determinate: prisonerDetail?.indeterminateSentence ? 'No' : 'Yes',
+        determinate: prisonerDetail.indeterminateSentence ? 'No' : 'Yes',
         dob: (!!prisonerDetail && moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY')) || '',
         hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',
-        recall: prisonerDetail?.recall ? 'Yes' : 'No',
+        recall: prisonerDetail.recall ? 'Yes' : 'No',
       },
       probationPractitioner: {
         name: probationPractitioner

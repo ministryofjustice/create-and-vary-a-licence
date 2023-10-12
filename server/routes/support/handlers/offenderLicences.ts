@@ -15,10 +15,8 @@ export default class OffenderLicencesRoutes {
     const { user } = res.locals
     const { nomsId } = req.params
 
-    const prisonerDetail =
-      (!!nomsId && _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))) || ''
-    const licenceSummaries =
-      (!!nomsId && (await this.licenceServer.getLicencesByNomisIdsAndStatus([nomsId], [], user))) || []
+    const prisonerDetail = _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))
+    const licenceSummaries = await this.licenceServer.getLicencesByNomisIdsAndStatus([nomsId], [], user)
 
     const licences = licenceSummaries.map(licence => {
       const viewable = getUrlAccessByStatus(

@@ -50,7 +50,7 @@ export default class ConfirmCreateRoutes {
     const { answer } = req.body
     const backLink = req.session.returnToCase
 
-    if (answer === YesOrNo.YES && !!nomisId) {
+    if (answer === YesOrNo.YES) {
       const { licenceId } = await this.licenceService.createLicence(nomisId, user)
       return res.redirect(`/licence/create/id/${licenceId}/initial-meeting-name`)
     }

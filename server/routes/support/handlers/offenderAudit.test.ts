@@ -27,24 +27,6 @@ describe('Route Handlers - Offender audit', () => {
   })
 
   describe('GET', () => {
-    it('Should not call searchPrisoners API if nomisId is null', async () => {
-      req.params = {
-        nomsId: null,
-        licenceId: '1',
-      }
-
-      await handler.GET(req, res)
-      expect(prisonerService.searchPrisonersByNomisIds).not.toHaveBeenCalled()
-      expect(licenceService.getAuditEvents).toHaveBeenCalled()
-
-      expect(res.render).toHaveBeenCalledWith('pages/support/offenderAudit', {
-        prisonerDetail: {
-          id: null,
-          name: '',
-        },
-        audit: undefined,
-      })
-    })
     it('Should render all audit information', async () => {
       req.params = {
         nomsId: 'ABC123',

@@ -15,8 +15,7 @@ export default class OffenderAuditRoutes {
     const { user } = res.locals
     const { nomsId, licenceId } = req.params
 
-    const prisonerDetail =
-      (!!nomsId && _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))) || null
+    const prisonerDetail = _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))
     const audit = await this.licenceServer.getAuditEvents(
       parseInt(licenceId, 10),
       null,
