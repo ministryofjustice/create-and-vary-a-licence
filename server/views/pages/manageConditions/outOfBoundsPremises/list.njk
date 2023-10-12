@@ -1,0 +1,128 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Create a licence - Locations" %}
+{% set pageId = "licence-locations-list-page" %}
+{% set fromReviewAppend = "&fromReview=true" if fromReview %}
+{% block content %}
+    {% set locationCount = conditions.length %}
+
+    <h1 class="govuk-heading-l">You have added {% if locationCount == 1 %}one{% else %}{{ locationCount }}{% endif %} location{% if locationCount > 1 %}s{% endif %}</h1>
+
+    {% set items = [] %}
+    {% for condition in conditionsData %}
+        {% set premisesName = condition.name | escape %}
+        {% set addressLine1 =  condition.address['addressLine1'] | escape %}
+        {% set addressLine2 =  condition.address['addressLine2'] | escape %}
+        {% set town =  condition.address['addressTown'] | escape %}
+        {% set county =  condition.address['addressCounty'] | escape %}
+        {% set postcode =  condition.address['addressPostcode'] | escape %}
+
+        {% if condition.name and condition.address %}
+            {% set hiddenText = premisesName %}
+            {% set keyHtml = 'Name or type of premises:<br/>Building and street:<br/>Town:</br>'%}
+            {% set valueHtml = premisesName + "<br/>" + addressLine1
+            +  ((", " + addressLine2) if condition.address['addressLine2'] else '')
+            + "<br/>" + town + "<br/>" %}
+            {% if condition.address['addressCounty'] %}
+                {% set keyHtml = keyHtml + "County:<br/>" %}
+                {% set valueHtml = valueHtml + county + "<br/>" %}
+            {% endif %}
+            {% set keyHtml = keyHtml + "Postcode" %}
+            {% set valueHtml = valueHtml + postcode %}
+        {% elseif condition.name %}
+            {% set hiddenText = premisesName %}
+            {% set keyHtml = 'Name or type of premises:' %}
+            {% set valueHtml = premisesName %}
+        {% else %}
+            {% set hiddenText = addressLine1 %}
+            {% set keyHtml = 'Building and street:<br/>Town:</br>' %}
+            {% set valueHtml = addressLine1 +  ((", " + addressLine2) if condition.address['addressLine2'] else '') + "<br/>" + town  + "<br/>" %}
+            {% if condition.address['addressCounty'] %}
+                {% set keyHtml = keyHtml + "County:<br/>" %}
+                {% set valueHtml = valueHtml + county + "<br/>" %}
+            {% endif %}
+            {% set keyHtml = keyHtml + "Postcode" %}
+            {% set valueHtml = valueHtml + postcode %}
+        {% endif %}
+        {% set items = (items.push({
+            key: {
+                html: keyHtml
+            },
+            value: {
+                html:  valueHtml
+            },
+            classes: 'govuk-summary-list__row--outofbounds-premises',
+            actions: {
+                items: [
+                    {
+                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" | addQueryParam('fromReview', fromReview),
+                        text: "Change details",
+                        visuallyHiddenText: hiddenText
+                    },
+                    {
+                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/outofbounds-premises-removal" | addQueryParam('fromReview', fromReview),
+                        text: "Delete",
+                        visuallyHiddenText: hiddenText
+                    }
+                ]
+            }
+        }), items) %}
+    {% endfor %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            {{ govukSummaryList({
+                rows: items
+            }) }}
+        </div>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <input type="hidden" name="conditionCode" value="{{ conditions[0].code}}">
+                {{ govukRadios({
+                    name: "addAnotherLocation",
+                    classes: "govuk-radios--inline",
+                    fieldset: {
+                        legend: {
+                            text: "Do you need to add another location?",
+                            classes: "govuk-fieldset__legend--m"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "Yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "No",
+                            text: "No"
+                        }
+                    ],
+                    errorMessage: displayMessage
+                }) }}
+
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: "Continue",
+                        type: "submit",
+                        classes: 'govuk-!-margin-top-6',
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+                    {{ govukButton({
+                        text: "Delete this condition",
+                        href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + conditions[0].code + "/delete" | addQueryParam('fromReview', fromReview),
+                        classes: 'govuk-button--secondary',
+                        attributes: { 'data-qa': 'delete' }
+                    }) }}
+                </div>
+            </div>
+        </div>
+    </form>
+    
+{% endblock %}

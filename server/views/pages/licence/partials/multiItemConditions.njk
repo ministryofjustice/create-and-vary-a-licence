@@ -1,0 +1,13 @@
+{% macro multiItemConditions(multipleItemConditions) %}
+    {% if multipleItemConditions.length %}
+        {% for condition in multipleItemConditions %}
+            {% set c = condition.shift() %}
+            <div class="condition">
+                <span>{{ c.expandedText or c.text }}</span>
+                {% for subItem in condition %}
+                    <p> {{ subItem.expandedText or subItem.text }} </p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endmacro %}

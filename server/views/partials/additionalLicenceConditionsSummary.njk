@@ -47,7 +47,7 @@
 {% endmacro %}
 
 {% macro additionalConditionHtml(condition) %}
-    <div>
+    <div class="additional-condition-summary">
         {{ condition.expandedText }}
     </div>
     {% if condition.data.length %}
