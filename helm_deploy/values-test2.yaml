@@ -1,0 +1,54 @@
+---
+# Per environment values which override defaults in create-and-vary-a-licence/values.yaml
+
+generic-service:
+  replicaCount: 2
+  
+  ingress:
+    hosts:
+     - create-and-vary-a-licence-test2.hmpps.service.justice.gov.uk
+    contextColour: green
+    tlsSecretName: create-and-vary-a-licence-ui-cert
+  
+  env:
+    INGRESS_URL: "https://create-and-vary-a-licence-test2.hmpps.service.justice.gov.uk"
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    # COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
+    PRISON_API_URL: "https://prison-api-dev.prison.service.justice.gov.uk"
+    LICENCE_API_URL: "https://create-and-vary-a-licence-api-test2.hmpps.service.justice.gov.uk"
+    PRISONER_SEARCH_API_URL: "https://prisoner-search-dev.prison.service.justice.gov.uk"
+    # PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
+    PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
+    EXIT_SURVEY_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
+    PHASE_BANNER_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
+
+    # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
+    GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
+
+    # A temporary reference to a local container which provides a stubbed Delius caseload
+    COMMUNITY_API_URL: "https://cvl-probation-mock.hmpps.service.justice.gov.uk"
+    PROBATION_SEARCH_API_URL: "https://cvl-probation-mock.hmpps.service.justice.gov.uk"
+
+    # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
+    LICENCES_URL: "http://create-and-vary-a-licence"
+
+    LICENCE_WATERMARK: "true"
+    DPS_URL: "https://digital-dev.prison.service.justice.gov.uk"
+    SHOW_WHATS_NEW_BANNER: "true"
+
+    # To enable common front-end components
+    COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
+    COMMON_COMPONENTS_ENABLED: "true"
+    MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
+
+gotenberg:
+  replicaCount: 1
+
+  env:
+    GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS: 1
+    DISABLE_UNOCONV: 1
+    DEFAULT_WAIT_TIMEOUT: 30
+
+generic-prometheus-alerts:
+  alertSeverity: cvl-alerts-non-prod
