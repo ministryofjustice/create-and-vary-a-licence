@@ -34,6 +34,18 @@ describe('Prisoner Search Api client tests', () => {
     expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
   })
 
+  it('Search Prisoner should return empty array if no nomis id is provided', async () => {
+    const result = await prisonerSearchApiClient.searchPrisonersByNomsIds({ prisonerNumbers: [] }, {
+      username: 'joebloggs',
+    } as User)
+
+    expect(post).not.toHaveBeenCalledWith(
+      { path: '/prisoner-search/prisoner-numbers', data: { prisonerNumbers: [] } },
+      { username: 'joebloggs' }
+    )
+    expect(result).toEqual([])
+  })
+
   it('Search Prisoner by nomis ids', async () => {
     post.mockResolvedValue([{ firstName: 'Joe', lastName: 'Bloggs' } as Prisoner])
 
@@ -46,6 +58,18 @@ describe('Prisoner Search Api client tests', () => {
       { username: 'joebloggs' }
     )
     expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
+  })
+
+  it('Search Prisoner should return empty array if no booking id is provided', async () => {
+    const result = await prisonerSearchApiClient.searchPrisonersByBookingIds({ bookingIds: [] }, {
+      username: 'joebloggs',
+    } as User)
+
+    expect(post).not.toHaveBeenCalledWith(
+      { path: '/prisoner-search/booking-ids', data: { bookingIds: [] } },
+      { username: 'joebloggs' }
+    )
+    expect(result).toEqual([])
   })
 
   it('Search Prisoner by booking ids', async () => {
