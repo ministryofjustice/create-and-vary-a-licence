@@ -71,7 +71,7 @@
                     fieldset: {
                         legend: {
                             text: input.label,
-                            classes: "govuk-!-font-weight-bold"
+                            classes: "govuk-fieldset__legend govuk-fieldset__legend--m radio-" + input.name + "-legend"
                         }
                     },
                     items: options,
@@ -114,7 +114,7 @@
                 {% call govukFieldset({
                     legend: {
                         text: input.label,
-                        classes: "govuk-!-font-weight-bold"
+                        classes: "govuk-!-font-weight-bold " + input.name + "-legend-" + loop.index0
                     }
                 }) %}
                     {{ govukInput({

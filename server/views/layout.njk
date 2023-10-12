@@ -20,8 +20,6 @@
           'user': {
             'authSource': '{{ user.authSource }}',
             'roles': {{ user.userRoles | formatListAsString | safe }},
-            'username': '{{ user.username }}',
-            'displayName': '{{ user.displayName }}',
             'prisons': {{ user.prisonCaseload | formatListAsString | safe }},
             'probationAreaCode': '{{ user.probationAreaCode }}',
             'probationAreaDesc': '{{ user.probationAreaDescription }}',

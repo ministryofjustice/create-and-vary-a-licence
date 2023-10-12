@@ -256,10 +256,28 @@ export default class ConditionService {
   /* eslint-disable no-param-reassign */
 
   async getAdditionalAPConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<AdditionalCondition[]> {
+    const conditionDataToExcludeFromSummary = ['nameTypeAndOrAddress']
+
+    let additionalConditions: AdditionalCondition[]
     if (licence.isInPssPeriod && this.isInVariation(licence)) {
-      return (await this.licenceApiClient.getParentLicenceOrSelf(licence.id, user))?.additionalLicenceConditions
+      additionalConditions = (await this.licenceApiClient.getParentLicenceOrSelf(licence.id, user))
+        ?.additionalLicenceConditions
+    } else {
+      additionalConditions = licence.additionalLicenceConditions
     }
-    return licence.additionalLicenceConditions
+
+    const conditionDataToDisplay: AdditionalCondition[] = []
+    additionalConditions.forEach(condition => {
+      const displayData = condition.data
+        ? condition.data.filter(data => !conditionDataToExcludeFromSummary.includes(data.field))
+        : condition.data
+      conditionDataToDisplay.push({
+        ...condition,
+        data: displayData,
+      })
+    })
+
+    return conditionDataToDisplay
   }
 
   async getbespokeConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<BespokeCondition[]> {

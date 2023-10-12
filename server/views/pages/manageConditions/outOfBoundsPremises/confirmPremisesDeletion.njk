@@ -1,0 +1,43 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + conditionCode + "/outofbounds-premises?fromReview=true" %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <form method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" name="conditionId" value="{{ conditionId }}">
+            <div class="govuk-grid-column-three-quarters">
+                {{ govukRadios({
+                    classes: "govuk-radios--inline",
+                    name: "confirmRemoval",
+                    fieldset: {
+                        legend: {
+                            text: "Are you sure you want to delete the restriction against entering " + description + "?",
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    items: [
+                        {
+                            value: "Yes",
+                            text: "Yes"
+                        },
+                        {
+                            value: "No",
+                            text: "No"
+                        }
+                    ],
+                    errorMessage: displayMessage
+                }) }}
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+            </div>
+        </form>
+    </div>
+{% endblock %}
