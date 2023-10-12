@@ -14,6 +14,7 @@ import AdditionalLicenceConditionsCallbackRoutes from './handlers/additionalLice
 import AdditionalLicenceConditionInputRoutes from './handlers/additionalLicenceConditionInput'
 import fileUploadRoutes from './handlers/fileUploads'
 import outOfBoundsPremisesRoutes from './handlers/outofboundsPremises'
+import curfewRoutes from './handlers/curfew'
 import AdditionalPssConditionsRoutes from './handlers/additionalPssConditions'
 import AdditionalPssConditionsCallbackRoutes from './handlers/additionalPssConditionsCallback'
 import AdditionalPssConditionInputRoutes from './handlers/additionalPssConditionInput'
@@ -98,6 +99,7 @@ export default function Index(services: Services): Router {
 
   router.use(fileUploadRoutes(services))
   router.use(outOfBoundsPremisesRoutes(services))
+  router.use(curfewRoutes(services))
 
   return router
 }

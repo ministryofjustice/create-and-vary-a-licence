@@ -1,4 +1,5 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator'
+import { toInteger } from 'lodash'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 
 @ValidatorConstraint()
@@ -23,7 +24,10 @@ export default class ValidSimpleTime implements ValidatorConstraintInterface {
   }
 
   private isValidHour(): boolean {
-    const hour = this.time.hour as unknown as number
+    let hour = this.time.hour as unknown as number
+    if (typeof hour === 'string') {
+      hour = toInteger(hour)
+    }
     return this.time.hour !== '' && hour >= 1 && hour <= 12
   }
 

@@ -1,0 +1,74 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "formBuilder.njk" import formBuilder %}
+
+{% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
+{% set pageId = "additional-condition-input-page" %}
+{% set fromReview = "?fromReview=true" if fromReview %}
+{% set fromReviewAppend = "&fromReview=true" if fromReview %}
+
+{% set fromPolicyReviewQuery = "?fromPolicyReview=true" if fromPolicyReview %}
+{% set fromPolicyReviewAppend = "&fromPolicyReview=true" if fromPolicyReview %}
+
+{% if fromPolicyReview %}
+  {% set backLinkHref = "/licence/vary/id/" + licence.id + "/policy-changes/input/callback/"+ (policyReview.policyChangeInputCounter - 1)%}
+  {% set noJsBackLink = true%}
+{% else %}
+  {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+{% endif %}
+
+{% block content %}
+    {% if fromPolicyReview %}
+        <span class="govuk-caption-l">Change {{policyReview.conditionCounter}} of {{policyReview.policyChangesCount}}</span>
+    {% endif %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Complete the licence condition</h1>
+        </div>
+    </div>
+    
+    <div class="govuk-button-group">
+        <form method="POST"
+            id="additionConditionInputs"
+        >
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" name="code" value="{{ config.code }}">
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <p class="govuk-body">
+                        {{ config.text }}
+                    </p>
+                    {% if config.subtext %}
+                        <div class="govuk-hint">{{ config.subtext }}</div>
+                    {% endif %}
+
+                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            text: "Continue",
+                            type: "submit",
+                            classes: 'govuk-!-margin-top-6',
+                            attributes: { 'data-qa': 'continue' },
+                            preventDoubleClick: true
+                        }) }}
+                        {{ govukButton({
+                            text: "Delete this condition",
+                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + additionalCondition.code + "/delete" + fromReview + fromPolicyReviewQuery,
+                            classes: 'govuk-button--secondary',
+                            attributes: { 'data-qa': 'delete' },
+                            preventDoubleClick: true
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/assets/js/conditions/addAnother.js"></script>
+{% endblock %}
+
