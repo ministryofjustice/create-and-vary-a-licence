@@ -34,7 +34,7 @@ export default class OffenderLicencesRoutes {
     res.render('pages/support/offenderLicences', {
       prisonerDetail: {
         id: nomsId,
-        name: convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`),
+        name: (!!prisonerDetail && convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`)) || '',
       },
       licences,
     })
