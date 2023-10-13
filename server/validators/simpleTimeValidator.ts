@@ -1,5 +1,4 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator'
-import { toInteger } from 'lodash'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 
 @ValidatorConstraint()
