@@ -24,10 +24,7 @@ export default class ValidSimpleTime implements ValidatorConstraintInterface {
   }
 
   private isValidHour(): boolean {
-    let hour = this.time.hour as unknown as number
-    if (typeof hour === 'string') {
-      hour = toInteger(hour)
-    }
+    const hour = this.time.hour as unknown as number
     return this.time.hour !== '' && hour >= 1 && hour <= 12
   }
 
