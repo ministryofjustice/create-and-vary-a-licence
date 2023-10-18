@@ -46,14 +46,14 @@ export default class ViewAndPrintCaseRoutes {
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: latestLicence.status,
           isClickable:
-            _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&
-            _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
-            _.head(c.licences).status !== LicenceStatus.OOS_RECALL &&
-            _.head(c.licences).status !== LicenceStatus.OOS_BOTUS &&
-            _.head(c.licences).status !== LicenceStatus.IN_PROGRESS &&
-            _.head(c.licences).status !== LicenceStatus.VARIATION_IN_PROGRESS &&
-            _.head(c.licences).status !== LicenceStatus.VARIATION_APPROVED &&
-            _.head(c.licences).status !== LicenceStatus.VARIATION_SUBMITTED,
+            latestLicence.status !== LicenceStatus.NOT_STARTED &&
+            latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
+            latestLicence.status !== LicenceStatus.OOS_RECALL &&
+            latestLicence.status !== LicenceStatus.OOS_BOTUS &&
+            latestLicence.status !== LicenceStatus.IN_PROGRESS &&
+            latestLicence.status !== LicenceStatus.VARIATION_IN_PROGRESS &&
+            latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
+            latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
         }
       })
       .filter(c => {

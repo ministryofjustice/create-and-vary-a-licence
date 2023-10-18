@@ -861,7 +861,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: true,
+            isClickable: false,
             licenceId: 67,
             licenceVersionOf: 45,
             licenceStatus: 'IN_PROGRESS',
