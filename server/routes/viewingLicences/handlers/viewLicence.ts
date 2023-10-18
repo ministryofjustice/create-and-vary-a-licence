@@ -1,13 +1,38 @@
 import type { Request, Response } from 'express'
+import { format, parse } from 'date-fns'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
 import { groupingBy } from '../../../utils/utils'
+import { Licence } from '../../../@types/licenceApiClientTypes'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
+
+    let warningMessage
+    if (req.query?.latestVersion) {
+      const latestLicenceVersion = req.query.latestVersion as string
+      const latestLicence = await this.licenceService.getLicence(parseInt(latestLicenceVersion, 10), user)
+      const statusMessage = latestLicence.statusCode === LicenceStatus.IN_PROGRESS ? 'started' : 'submitted'
+      warningMessage =
+        "This is the last approved version of this person's licence.<br />" +
+        `Another version was ${statusMessage} on ${this.getFormattedLicenceDate(latestLicence)}.<br />` +
+        'You can print the most recent version once it has been approved.'
+    }
+
+    if (req.query?.lastApprovedVersion) {
+      const lastApprovedLicenceVersion = req.query.lastApprovedVersion as string
+      const lastApprovedLicence = await this.licenceService.getLicence(parseInt(lastApprovedLicenceVersion, 10), user)
+      warningMessage =
+        `This is the most recent version of this licence that was submitted on ${this.getFormattedLicenceDate(
+          licence
+        )}.<br />` +
+        'Once this version is approved, you can print it.<br />' +
+        `<a href="/licence/view/id/${lastApprovedLicence.id}/pdf-print" target="_blank">You can also view and print the last approved version of this licence</a>.`
+    }
+
     if (
       licence?.statusCode === LicenceStatus.APPROVED ||
       licence?.statusCode === LicenceStatus.ACTIVE ||
@@ -26,9 +51,28 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
-      res.render('pages/view/view', { additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code') })
+      res.render('pages/view/view', {
+        additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
+        warningMessage,
+      })
     } else {
       res.redirect(`/licence/view/cases`)
     }
+  }
+
+  getFormattedLicenceDate(licence: Licence): string {
+    let licenceDate
+    switch (licence.statusCode) {
+      case LicenceStatus.IN_PROGRESS:
+        licenceDate = licence.dateCreated
+        break
+      case LicenceStatus.APPROVED:
+        licenceDate = licence.approvedDate
+        break
+      default:
+        licenceDate = licence.dateLastUpdated
+        break
+    }
+    return format(parse(licenceDate, 'dd/MM/yyyy HH:mm:ss', new Date()), 'd LLLL yyyy')
   }
 }

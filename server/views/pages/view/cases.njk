@@ -6,10 +6,14 @@
 {% set pageId = "view-cases-page" %}
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
-{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, index) %}
+{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, index) %}
     <div class="caseload-offender-name">
         {% if isClickable %}
-            <a id="name-button-{{ index }}" href="/licence/view/id/{{ licenceId }}/show" class="govuk-link govuk-heading-s">{{ offenderName }}</a>
+            {% set link = "/licence/view/id/" + licenceId + "/show" %}
+            {% if versionOfId %}
+                {% set link = link + "?lastApprovedVersion=" + versionOfId %}
+            {% endif %}
+            <a id="name-button-{{ index }}" href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
         {% else %}
             <span id="name-button-{{ index }}" class="govuk-heading-s">{{ offenderName }}</span>
         {% endif %}
@@ -22,13 +26,25 @@
     {% else %}
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
+
+    {% if case.licenceVersionOf %}
+        {% set licenceStatusHtml = statusBadge({ status: case.licenceStatus, size: 'small' }, statusConfig) +
+                                   "<div class='govuk-!-margin-top-2'><svg class='moj-banner__icon' fill='currentColor' role='presentation'" +
+                                   "focusable='false' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 25' height='25' width='25'>" +
+                                   "<path d='M13.7,18.5h-2.4v-2.4h2.4V18.5z M12.5,13.7c-0.7,0-1.2-0.5-1.2-1.2V7.7c0-0.7,0.5-1.2,1.2-1.2s1.2,0.5,1.2,1.2v4.8C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12S19.1,0.5,12.5,0.5z' /></svg>" +
+                                   "<a href='/licence/view/id/" + case.licenceVersionOf + "/show" + "?latestVersion=" + case.licenceId
+                                   + "' class='govuk-link'>View last approved licence</a></div>" %}
+    {% else %}
+        {% set licenceStatusHtml =  statusBadge({ status: case.licenceStatus, size: 'small' }, statusConfig) %}
+    {% endif %}
+
     {% set licences = (licences.push([
         {
             attributes: {
                 id: 'name-' + loop.index,
                 "data-sort-value": case.name
             },
-            html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, loop.index),
+            html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, loop.index),
             classes: "max-width max-width-220"
         },
         {
@@ -59,7 +75,7 @@
                 id: 'licence-status-' + loop.index,
                 "data-sort-value": case.licenceStatus | getStatusOrder
             },
-            html: statusBadge({ status: case.licenceStatus, size: 'small' }, statusConfig)
+            html: licenceStatusHtml
         }
     ]), licences) %}
 {% endfor %}

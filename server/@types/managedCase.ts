@@ -20,6 +20,7 @@ export type Licence = {
   dateCreated?: string
   approvedBy?: string
   approvedDate?: string
+  versionOf?: number
 }
 
 export type ManagedCase = {

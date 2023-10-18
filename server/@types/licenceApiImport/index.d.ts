@@ -302,13 +302,33 @@ export interface paths {
      */
     post: operations['requestAuditEvents']
   }
-  '/support/licence-statistics': {
+  '/public/policy/latest': {
     /**
-     * Get licence statistics.
-     * @deprecated
-     * @description Licence statistics data required by the support staff. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * Get a policy by its version number
+     * @description Returns a policy by its version number. Requires ROLE_VIEW_LICENCES.
      */
-    get: operations['getLicenceStatistics']
+    get: operations['getLatestPolicy']
+  }
+  '/public/licences/id/{licenceId}': {
+    /**
+     * Get a licence by its licence id
+     * @description Returns a single licence detail by its unique identifier. Requires ROLE_VIEW_LICENCES.
+     */
+    get: operations['getLicenceById']
+  }
+  '/public/licence-summaries/prison-number/{prisonNumber}': {
+    /**
+     * Get a list of licences by prison number
+     * @description Returns a list of licence summaries by a person's prison number. Requires ROLE_VIEW_LICENCES.
+     */
+    get: operations['getLicencesByPrisonNumber']
+  }
+  '/public/licence-summaries/crn/{crn}': {
+    /**
+     * Get a list of licences by CRN
+     * @description Returns a list of licence summaries by a person's CRN. Requires ROLE_VIEW_LICENCES.
+     */
+    get: operations['getLicenceByCrn']
   }
   '/licence/variations/submitted/area/{areaCode}': {
     /**
@@ -322,7 +342,7 @@ export interface paths {
      * Get a licence by its licence id
      * @description Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
-    get: operations['getLicenceById']
+    get: operations['getLicenceById_1']
   }
   '/licence-policy/version/{version}': {
     /**
@@ -366,6 +386,13 @@ export interface paths {
      */
     get: operations['getEventsMatchingCriteria']
   }
+  '/bank-holidays': {
+    /**
+     * Get the bank holiday dates for England and Wales
+     * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    get: operations['getBankHolidaysForEnglandAndWales']
+  }
   '/licence/id/{licenceId}/discard': {
     /**
      * Discards a licence record.
@@ -394,15 +421,6 @@ export interface components {
        */
       email: string
     }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
     OmuContact: {
       /** Format: int64 */
       id: number
@@ -412,6 +430,15 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string
+    }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
     }
     /** @description Request object for updating an offender's personal details */
     UpdateOffenderDetailsRequest: {
@@ -548,6 +575,7 @@ export interface components {
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
       /**
        * @description The username of the person who is updating this status
        * @example X12333
@@ -817,6 +845,8 @@ export interface components {
        * @example 1
        */
       sequence: number
+      /** @description Whether this data item contributes to the licence or whether it is just used for rendering purposes */
+      contributesToLicence: boolean
     }
     /** @description Request object for updating the list of additional conditions on a licence */
     UpdateAdditionalConditionDataRequest: {
@@ -941,6 +971,7 @@ export interface components {
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
       /**
        * @description The prison nomis identifier for this offender
        * @example A1234AA
@@ -1087,6 +1118,12 @@ export interface components {
        * @example 1.3
        */
       licenceVersion?: string
+      /**
+       * Format: int64
+       * @description The licence Id which this licence is a version of
+       * @example 86
+       */
+      versionOf?: number
     }
     /** @description Request object for searching licences by field */
     MatchLicencesRequest: {
@@ -1111,6 +1148,7 @@ export interface components {
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
       )[]
       /**
        * @description A list of staff identifiers - the responsible probation officer
@@ -1149,6 +1187,7 @@ export interface components {
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
       /** @description Reason for overriding the licence status */
       reason: string
     }
@@ -1514,7 +1553,7 @@ export interface components {
        */
       nomisId?: string
       /** @description The forename and surname of the COM */
-      comName: string
+      comName?: string
       /** @description The COM's staff code */
       comStaffCode?: string
       /** @description The description of the COM's team */
@@ -1551,6 +1590,7 @@ export interface components {
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
       /** @description Indicates whether the offender is in prison or out on probation */
       isOnProbation?: boolean
     }
@@ -1595,75 +1635,11 @@ export interface components {
        */
       endTime: string
     }
-    /** @description Management stats */
-    LicenceStatistics: {
-      /** @description Prison ID */
-      prison?: string
-      /**
-       * @description Type of licence
-       * @example AP, PSS, APPSS
-       */
-      licenceType?: string
-      /**
-       * Format: int32
-       * @description Number eligible for CVL within timeframe
-       * @example 10
-       */
-      eligibleForCvl?: number
-      /**
-       * Format: int32
-       * @description Status of In progress
-       * @example 2
-       */
-      inProgress?: number
-      /**
-       * Format: int32
-       * @description Status of Submitted
-       * @example 2
-       */
-      submitted?: number
-      /**
-       * Format: int32
-       * @description Status of Approved
-       * @example 8
-       */
-      approved?: number
-      /**
-       * Format: int32
-       * @description Status of Active
-       * @example 5
-       */
-      active?: number
-      /**
-       * Format: int32
-       * @description Total inactive
-       * @example 5
-       */
-      inactiveTotal?: number
-      /**
-       * Format: int32
-       * @description Status of Inactive not approved
-       * @example 6
-       */
-      inactiveNotApproved?: number
-      /**
-       * Format: int32
-       * @description Status of Inactive aprroved
-       * @example 3
-       */
-      inactiveApproved?: number
-      /**
-       * Format: int32
-       * @description Inactive because HDC approved
-       * @example 2
-       */
-      inactiveHdcApproved?: number
-      /**
-       * Format: int32
-       * @description Approved but never printed
-       * @example 1
-       */
-      approvedNotPrinted?: number
+    LicencePolicy: {
+      version: string
+      standardConditions: components['schemas']['StandardConditions']
+      additionalConditions: components['schemas']['AdditionalConditions']
+      changeHints: components['schemas']['ChangeHint'][]
     }
     /** @description Describes a bespoke condition on a licence */
     BespokeCondition: {
@@ -1721,6 +1697,7 @@ export interface components {
         | 'VARIATION_SUBMITTED'
         | 'VARIATION_REJECTED'
         | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
       /**
        * @description The prison identifier for the person on this licence
        * @example A9999AA
@@ -2046,12 +2023,6 @@ export interface components {
       includeBefore?: string
       subtext?: string
     }
-    LicencePolicy: {
-      version: string
-      standardConditions: components['schemas']['StandardConditions']
-      additionalConditions: components['schemas']['AdditionalConditions']
-      changeHints: components['schemas']['ChangeHint'][]
-    }
     Option: {
       value: string
       conditional?: components['schemas']['Conditional']
@@ -2135,6 +2106,7 @@ export interface components {
         | 'INACTIVE'
         | 'RECALLED'
         | 'VERSION_CREATED'
+        | 'NOT_STARTED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -3909,22 +3881,15 @@ export interface operations {
     }
   }
   /**
-   * Get licence statistics.
-   * @deprecated
-   * @description Licence statistics data required by the support staff. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+   * Get a policy by its version number
+   * @description Returns a policy by its version number. Requires ROLE_VIEW_LICENCES.
    */
-  getLicenceStatistics: {
-    parameters: {
-      query: {
-        startDate: string
-        endDate: string
-      }
-    }
+  getLatestPolicy: {
     responses: {
-      /** @description Licence statistics found */
+      /** @description Policy found */
       200: {
         content: {
-          'application/json': components['schemas']['LicenceStatistics']
+          'application/json': components['schemas']['LicencePolicy']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
@@ -3939,8 +3904,102 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** @description Licence statistics not found */
+      /** @description The policy for this version was not found. */
       404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Get a licence by its licence id
+   * @description Returns a single licence detail by its unique identifier. Requires ROLE_VIEW_LICENCES.
+   */
+  getLicenceById: {
+    responses: {
+      /** @description Licence found */
+      200: {
+        content: {
+          'application/json': components['schemas']['Licence']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Get a list of licences by prison number
+   * @description Returns a list of licence summaries by a person's prison number. Requires ROLE_VIEW_LICENCES.
+   */
+  getLicencesByPrisonNumber: {
+    parameters: {
+      path: {
+        prisonNumber: string
+      }
+    }
+    responses: {
+      /** @description A list of found licences */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary'][]
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Get a list of licences by CRN
+   * @description Returns a list of licence summaries by a person's CRN. Requires ROLE_VIEW_LICENCES.
+   */
+  getLicenceByCrn: {
+    parameters: {
+      path: {
+        crn: string
+      }
+    }
+    responses: {
+      /** @description A list of found licences */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary'][]
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
@@ -3982,7 +4041,7 @@ export interface operations {
    * Get a licence by its licence id
    * @description Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
    */
-  getLicenceById: {
+  getLicenceById_1: {
     parameters: {
       path: {
         licenceId: number
@@ -4192,6 +4251,7 @@ export interface operations {
           | 'INACTIVE'
           | 'RECALLED'
           | 'VERSION_CREATED'
+          | 'NOT_STARTED'
         )[]
         sortBy?: string
         sortOrder?: string
@@ -4212,6 +4272,38 @@ export interface operations {
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Get the bank holiday dates for England and Wales
+   * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+   */
+  getBankHolidaysForEnglandAndWales: {
+    responses: {
+      /** @description Bank Holidays retrieved */
+      200: {
+        content: {
+          'application/json': string[]
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Bank holidays were not found. */
+      404: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }

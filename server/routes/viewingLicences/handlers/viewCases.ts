@@ -30,14 +30,21 @@ export default class ViewAndPrintCaseRoutes {
     const caseloadViewModel = casesToView
       .unwrap()
       .map(c => {
+        let latestLicence = _.head(c.licences)
+        if (!probationView && c.licences.length > 1) {
+          latestLicence = c.licences.find(
+            l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS
+          )
+        }
         return {
-          licenceId: _.head(c.licences).id,
+          licenceId: latestLicence.id,
+          licenceVersionOf: latestLicence.versionOf,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
           releaseDate: selectReleaseDate(c.nomisRecord),
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
-          licenceStatus: _.head(c.licences).status,
+          licenceStatus: latestLicence.status,
           isClickable:
             _.head(c.licences).status !== LicenceStatus.NOT_STARTED &&
             _.head(c.licences).status !== LicenceStatus.NOT_IN_PILOT &&
