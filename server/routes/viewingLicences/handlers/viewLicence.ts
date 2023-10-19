@@ -16,10 +16,12 @@ export default class ViewAndPrintLicenceRoutes {
       const latestLicenceVersion = req.query.latestVersion as string
       const latestLicence = await this.licenceService.getLicence(parseInt(latestLicenceVersion, 10), user)
       const statusMessage = latestLicence.statusCode === LicenceStatus.IN_PROGRESS ? 'started' : 'submitted'
-      warningMessage =
-        "This is the last approved version of this person's licence.<br />" +
-        `Another version was ${statusMessage} on ${this.getFormattedLicenceDate(latestLicence)}.<br />` +
-        'You can print the most recent version once it has been approved.'
+      const date = this.getFormattedLicenceDate(latestLicence)
+      warningMessage = "This is the last approved version of this person's licence.<br />"
+      if (date) {
+        warningMessage += `Another version was ${statusMessage} on ${date}.<br />`
+      }
+      warningMessage += 'You can print the most recent version once it has been approved.'
     }
 
     if (req.query?.lastApprovedVersion) {
@@ -69,10 +71,13 @@ export default class ViewAndPrintLicenceRoutes {
       case LicenceStatus.APPROVED:
         licenceDate = licence.approvedDate
         break
+      case LicenceStatus.SUBMITTED:
+        licenceDate = licence.submittedDate
+        break
       default:
         licenceDate = licence.dateLastUpdated
         break
     }
-    return format(parse(licenceDate, 'dd/MM/yyyy HH:mm:ss', new Date()), 'd LLLL yyyy')
+    return licenceDate ? format(parse(licenceDate, 'dd/MM/yyyy HH:mm:ss', new Date()), 'd LLLL yyyy') : null
   }
 }

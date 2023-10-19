@@ -27,7 +27,7 @@
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
 
-    {% if case.licenceVersionOf %}
+    {% if case.licenceVersionOf and (case.licenceStatus === 'IN_PROGRESS' or case.licenceStatus === 'SUBMITTED') %}
         {% set licenceStatusHtml = statusBadge({ status: case.licenceStatus, size: 'small' }, statusConfig) +
                                    "<div class='govuk-!-margin-top-2'><svg class='moj-banner__icon' fill='currentColor' role='presentation'" +
                                    "focusable='false' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 25' height='25' width='25'>" +
