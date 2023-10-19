@@ -27,7 +27,7 @@ export default class OffenderAuditRoutes {
     res.render('pages/support/offenderAudit', {
       prisonerDetail: {
         id: nomsId,
-        name: convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`),
+        name: (!!prisonerDetail && convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`)) || '',
       },
       audit,
     })

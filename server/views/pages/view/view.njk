@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
@@ -33,17 +34,14 @@
         </div>
     </div>
 
-    {% if isPrintable %}
-        {{ govukButton({
-            text: "View and print licence PDF",
-            classes: "govuk-button--primary",
-            href: '/licence/view/id/' + licence.id + '/pdf-print',
-            attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
-        }) }}
-    {% endif %}
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
+            {% if warningMessage %}
+                {{ govukWarningText({
+                   html: warningMessage
+                }) }}
+            {% endif %}
+
             {{ inductionMeetingDetails(licence) }}
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalLicenceConditions(licence, additionalConditions) }}

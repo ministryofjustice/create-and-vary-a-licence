@@ -22,6 +22,10 @@ export default class PrisonerSearchApiClient extends RestClient {
   }
 
   async searchPrisonersByNomsIds(nomisIdsToSearch: PrisonerSearchByNomisIds, user?: User): Promise<Prisoner[]> {
+    const { prisonerNumbers } = nomisIdsToSearch
+    if (prisonerNumbers.length < 1) {
+      return []
+    }
     return (await this.post(
       {
         path: '/prisoner-search/prisoner-numbers',
@@ -32,6 +36,10 @@ export default class PrisonerSearchApiClient extends RestClient {
   }
 
   async searchPrisonersByBookingIds(bookingIdsToSearch: PrisonerSearchByBookingIds, user?: User): Promise<Prisoner[]> {
+    const { bookingIds } = bookingIdsToSearch
+    if (bookingIds.length < 1) {
+      return []
+    }
     return (await this.post(
       {
         path: '/prisoner-search/booking-ids',
