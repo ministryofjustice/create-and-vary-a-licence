@@ -421,6 +421,15 @@ export interface components {
        */
       email: string
     }
+    ErrorResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     OmuContact: {
       /** Format: int64 */
       id: number
@@ -430,15 +439,6 @@ export interface components {
       dateCreated: string
       /** Format: date-time */
       dateLastUpdated?: string
-    }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** @description Request object for updating an offender's personal details */
     UpdateOffenderDetailsRequest: {
@@ -1113,6 +1113,11 @@ export interface components {
        * @description The date and time that this licence was approved
        */
       approvedDate?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was submitted for approval
+       */
+      submittedDate?: string
       /**
        * @description The version number of this licence
        * @example 1.3
@@ -1900,6 +1905,11 @@ export interface components {
        * @example X33221
        */
       approvedByUsername?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was submitted for approval
+       */
+      submittedDate?: string
       /**
        * @description The full name of the person who approved the licence on behalf of the prison governor
        * @example John Smith
