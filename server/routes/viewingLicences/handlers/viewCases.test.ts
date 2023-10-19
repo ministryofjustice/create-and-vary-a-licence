@@ -821,6 +821,72 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
+    it('should render in progress licence if an offender has an approved and in progress version', async () => {
+      const multipleLicencesCaseList = new Container([
+        {
+          licences: [
+            {
+              id: 45,
+              type: LicenceType.AP,
+              status: LicenceStatus.APPROVED,
+            },
+            {
+              id: 67,
+              type: LicenceType.AP,
+              status: LicenceStatus.IN_PROGRESS,
+              versionOf: 45,
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+            confirmedReleaseDate: '2022-05-01',
+          } as Prisoner,
+          probationPractitioner: {
+            name: 'Sherlock Holmes',
+          },
+        },
+      ])
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(multipleLicencesCaseList))
+      res.locals.prisonCaseload = ['BAI']
+      await handler.GET(req, res)
+
+      expect(prisonerService.getPrisons).toHaveBeenCalled()
+
+      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+        { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
+        ['BAI']
+      )
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isClickable: false,
+            licenceId: 67,
+            licenceVersionOf: 45,
+            licenceStatus: 'IN_PROGRESS',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
     describe('GET_WITH_EXCLUSIONS', () => {
       it('should render list of licences and display the currently active caseload prison', async () => {
         res.locals.prisonCaseload = ['BAI']
