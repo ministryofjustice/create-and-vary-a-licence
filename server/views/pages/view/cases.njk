@@ -10,7 +10,7 @@
     <div class="caseload-offender-name">
         {% if isClickable %}
             {% set link = "/licence/view/id/" + licenceId + "/show" %}
-            {% if versionOfId %}
+            {% if versionOfId and case.licenceStatus === 'SUBMITTED' %}
                 {% set link = link + "?lastApprovedVersion=" + versionOfId %}
             {% endif %}
             <a id="name-button-{{ index }}" href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
