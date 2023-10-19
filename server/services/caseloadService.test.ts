@@ -787,6 +787,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.SUBMITTED,
         comUsername: 'joebloggs',
+        versionOf: 2,
       },
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
@@ -818,6 +819,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.SUBMITTED,
         comUsername: 'joebloggs',
+        versionOf: 2,
       },
     ])
     prisonerService.searchPrisonersByReleaseDate.mockResolvedValue([
@@ -1085,6 +1087,7 @@ describe('Caseload Service', () => {
             id: 4,
             status: 'SUBMITTED',
             type: 'AP',
+            versionOf: 2,
           },
         ],
         nomisRecord: {
