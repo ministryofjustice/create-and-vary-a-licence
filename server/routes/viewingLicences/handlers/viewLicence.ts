@@ -27,10 +27,14 @@ export default class ViewAndPrintLicenceRoutes {
     if (req.query?.lastApprovedVersion) {
       const lastApprovedLicenceVersion = req.query.lastApprovedVersion as string
       const lastApprovedLicence = await this.licenceService.getLicence(parseInt(lastApprovedLicenceVersion, 10), user)
-      warningMessage =
-        `This is the most recent version of this licence that was submitted on ${this.getFormattedLicenceDate(
-          licence
-        )}.<br />` +
+      const date = this.getFormattedLicenceDate(licence)
+      warningMessage = 'This is the most recent version of this licence'
+      if (date) {
+        warningMessage += ` that was submitted on ${date}.<br />`
+      } else {
+        warningMessage += '.<br />'
+      }
+      warningMessage +=
         'Once this version is approved, you can print it.<br />' +
         `<a href="/licence/view/id/${lastApprovedLicence.id}/pdf-print" target="_blank">You can also view and print the last approved version of this licence</a>.`
     }
