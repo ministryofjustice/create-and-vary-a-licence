@@ -6,11 +6,11 @@
 {% set pageId = "view-cases-page" %}
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
-{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, index) %}
+{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, licenceStatus, index) %}
     <div class="caseload-offender-name">
         {% if isClickable %}
             {% set link = "/licence/view/id/" + licenceId + "/show" %}
-            {% if versionOfId and case.licenceStatus === 'SUBMITTED' %}
+            {% if versionOfId and licenceStatus === 'SUBMITTED' %}
                 {% set link = link + "?lastApprovedVersion=" + versionOfId %}
             {% endif %}
             <a id="name-button-{{ index }}" href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
@@ -44,7 +44,7 @@
                 id: 'name-' + loop.index,
                 "data-sort-value": case.name
             },
-            html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, loop.index),
+            html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, case.licenceStatus, loop.index),
             classes: "max-width max-width-220"
         },
         {
