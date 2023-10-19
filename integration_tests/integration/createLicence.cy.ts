@@ -61,6 +61,7 @@ context('Create a licence', () => {
         .nextCondition()
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
+        .selectRadio('One curfew')
         .enterTime('10', '30', 'curfewStart')
         .enterTime('11', '30', 'curfewEnd')
         .selectRadio('Other')

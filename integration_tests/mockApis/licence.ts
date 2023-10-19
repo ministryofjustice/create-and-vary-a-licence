@@ -328,24 +328,30 @@ export default {
                 {
                   id: 6,
                   sequence: 0,
-                  field: 'curfewStart',
-                  value: '7:30pm',
+                  field: 'numberOfCurfews',
+                  value: 'One curfew',
                 },
                 {
                   id: 7,
                   sequence: 1,
-                  field: 'curfewEnd',
-                  value: '7:30am',
+                  field: 'curfewStart',
+                  value: '7:30pm',
                 },
                 {
                   id: 8,
                   sequence: 2,
-                  field: 'reviewPeriod',
-                  value: 'Other',
+                  field: 'curfewEnd',
+                  value: '7:30am',
                 },
                 {
                   id: 9,
                   sequence: 3,
+                  field: 'reviewPeriod',
+                  value: 'Other',
+                },
+                {
+                  id: 10,
+                  sequence: 4,
                   field: 'alternativeReviewPeriod',
                   value: 'Annually',
                 },
@@ -360,13 +366,13 @@ export default {
               text: 'Not to own or possess a [SPECIFIED ITEM] without the prior approval of your supervising officer.',
               data: [
                 {
-                  id: 10,
+                  id: 11,
                   sequence: 0,
                   field: 'item',
                   value: 'Knives',
                 },
                 {
-                  id: 11,
+                  id: 12,
                   sequence: 1,
                   field: 'item',
                   value: 'Needles',
