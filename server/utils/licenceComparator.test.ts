@@ -18,13 +18,11 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
-            uploadSummary: [],
           },
           {
             code: '2',
             category: 'category2',
             expandedText: 'testCondition2',
-            uploadSummary: [],
           },
         ],
         bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
@@ -75,13 +73,11 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
-            uploadSummary: [],
           },
           {
             code: '2',
             category: 'category2',
             expandedText: 'testCondition2',
-            uploadSummary: [],
           },
         ],
         bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
@@ -122,7 +118,6 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
-            uploadSummary: [],
           },
         ],
       } as Licence
@@ -134,7 +129,6 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'amendedTestCondition1',
-            uploadSummary: [],
           },
         ],
       } as Licence
@@ -164,7 +158,6 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
-            uploadSummary: [],
           },
         ],
       } as Licence
@@ -202,7 +195,6 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
-            uploadSummary: [],
           },
         ],
       } as Licence
@@ -230,7 +222,6 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'testCondition1',
-            uploadSummary: [],
           },
         ],
       } as Licence
@@ -242,7 +233,6 @@ describe('Licence Comparator', () => {
             code: '1',
             category: 'category1',
             expandedText: 'amendedTestCondition1',
-            uploadSummary: [],
           },
         ],
       } as Licence
@@ -271,7 +261,6 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'testCondition1',
-          uploadSummary: [],
         },
       ],
       bespokeConditions: [{ text: 'bespoke1' }],
@@ -295,19 +284,16 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'testCondition1',
-          uploadSummary: [],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'Wales',
-          uploadSummary: [{}],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'England',
-          uploadSummary: [{}],
         },
       ],
     } as Licence
@@ -319,19 +305,16 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'amendedTestCondition1',
-          uploadSummary: [],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'Wales',
-          uploadSummary: [{}],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'Scotland',
-          uploadSummary: [{}],
         },
       ],
     } as Licence
@@ -363,19 +346,16 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'testCondition1',
-          uploadSummary: [],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'Wales',
-          uploadSummary: [{}],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'England',
-          uploadSummary: [{}],
         },
       ],
     } as Licence
@@ -387,19 +367,16 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'amendedTestCondition1',
-          uploadSummary: [],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'Wales',
-          uploadSummary: [{}],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'England',
-          uploadSummary: [{}],
         },
       ],
     } as Licence
@@ -427,19 +404,16 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'testCondition1',
-          uploadSummary: [],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'Wales',
-          uploadSummary: [{}],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'England',
-          uploadSummary: [{}],
         },
       ],
     } as Licence
@@ -451,7 +425,6 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'amendedTestCondition1',
-          uploadSummary: [],
         },
       ],
     } as Licence
@@ -467,7 +440,7 @@ describe('Licence Comparator', () => {
       licenceConditionsRemoved: [
         {
           category: 'Freedom of movement',
-          condition: 'Exclusion zones have been removed',
+          condition: 'Wales\n\nEngland',
         },
       ],
       pssConditionsAdded: [],
@@ -484,7 +457,6 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'testCondition1',
-          uploadSummary: [],
         },
       ],
     } as Licence
@@ -496,19 +468,16 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'amendedTestCondition1',
-          uploadSummary: [],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'Wales',
-          uploadSummary: [{}],
         },
         {
           code: '2',
           category: 'Freedom of movement',
           expandedText: 'England',
-          uploadSummary: [{}],
         },
       ],
     } as Licence
@@ -541,13 +510,11 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'testCondition1',
-          uploadSummary: [],
         },
         {
           code: '2',
           category: 'category2',
           expandedText: 'testCondition2',
-          uploadSummary: [],
         },
       ],
       additionalPssConditions: [
@@ -555,7 +522,6 @@ describe('Licence Comparator', () => {
           code: '1',
           category: 'category1',
           expandedText: 'testCondition1',
-          uploadSummary: [],
         },
       ],
       bespokeConditions: [{ text: 'bespoke1' }, { text: 'bespoke2' }],
