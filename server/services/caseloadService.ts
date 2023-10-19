@@ -344,6 +344,7 @@ export default class CaseloadService {
               dateCreated: l.dateCreated,
               approvedBy: l.approvedByName,
               approvedDate: l.approvedDate,
+              versionOf: l.versionOf,
             }
           }),
       }

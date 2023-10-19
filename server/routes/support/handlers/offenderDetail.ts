@@ -58,7 +58,7 @@ export default class OffenderDetailRoutes {
     res.render('pages/support/offenderDetail', {
       prisonerDetail: {
         ...prisonerDetail,
-        name: convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`),
+        name: (!!prisonerDetail && convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`)) || '',
         crn: deliusRecord?.otherIds.crn,
         conditionalReleaseDate,
         confirmedReleaseDate,
@@ -69,7 +69,7 @@ export default class OffenderDetailRoutes {
         licenceExpiryDate,
         paroleEligibilityDate,
         determinate: prisonerDetail.indeterminateSentence ? 'No' : 'Yes',
-        dob: moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY'),
+        dob: (!!prisonerDetail && moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY')) || '',
         hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',
         recall: prisonerDetail.recall ? 'Yes' : 'No',
       },
