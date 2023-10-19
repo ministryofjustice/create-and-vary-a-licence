@@ -24,6 +24,7 @@ describe('View and print - single licence view', () => {
           {
             field: 'field1',
             value: 'Data 1',
+            contributesToLicence: true,
           },
         ],
       },
@@ -35,14 +36,17 @@ describe('View and print - single licence view', () => {
           {
             field: 'field2',
             value: 'Data 2A',
+            contributesToLicence: true,
           },
           {
             field: 'field2',
             value: 'Data 2B',
+            contributesToLicence: true,
           },
           {
             field: 'field3',
             value: 'Data 2C',
+            contributesToLicence: false,
           },
         ],
       },
@@ -56,6 +60,7 @@ describe('View and print - single licence view', () => {
           {
             field: 'field1',
             value: 'Data 1',
+            contributesToLicence: true,
           },
         ],
       },
@@ -76,6 +81,7 @@ describe('View and print - single licence view', () => {
               {
                 field: 'field1',
                 value: 'Data 1',
+                contributesToLicence: true,
               },
             ],
           },
@@ -89,14 +95,17 @@ describe('View and print - single licence view', () => {
               {
                 field: 'field2',
                 value: 'Data 2A',
+                contributesToLicence: true,
               },
               {
                 field: 'field2',
                 value: 'Data 2B',
+                contributesToLicence: true,
               },
               {
                 field: 'field3',
                 value: 'Data 2C',
+                contributesToLicence: false,
               },
             ],
           },
@@ -129,9 +138,11 @@ describe('View and print - single licence view', () => {
     expect(
       $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
     ).toBe('Data 2A, Data 2B')
+
+    // Check contributesToLicence filters out false values from rendering
     expect(
       $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
-    ).toBe('Data 2C')
+    ).not.toBe('Data 2C')
 
     // Check the additional pss conditions are rendered correctly
     expect($('#additionalPssConditions > .govuk-summary-list__row').length).toBe(1)
