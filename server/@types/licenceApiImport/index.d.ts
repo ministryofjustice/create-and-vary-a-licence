@@ -817,6 +817,8 @@ export interface components {
        * @example 1
        */
       sequence: number
+      /** @description Whether this data item contributes to the licence or whether it is just used for rendering purposes */
+      contributesToLicence: boolean
     }
     /** @description Request object for updating the list of additional conditions on a licence */
     UpdateAdditionalConditionDataRequest: {
