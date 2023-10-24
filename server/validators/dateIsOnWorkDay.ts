@@ -1,4 +1,5 @@
 import { registerDecorator, ValidationOptions } from 'class-validator'
+import _ from 'lodash'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import UkBankHolidayFeedService from '../services/ukBankHolidayFeedService'
 
@@ -8,7 +9,7 @@ export default function DateIsOnWorkDay(validationOptions?: ValidationOptions) {
 
     const dateAsMoment = date.toMoment()
 
-    return !bankHolidays.isBankHolidayOrWeekend(dateAsMoment)
+    return !bankHolidays.isBankHolidayOrWeekend(dateAsMoment, false)
   }
 
   return (object: unknown, propertyName: string) => {

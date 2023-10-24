@@ -1971,6 +1971,8 @@ export interface components {
        * @example 1.3
        */
       licenceVersion?: string
+      /** @description If CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or CRD */
+      earliestReleaseDate?: string
     }
     AddAnother: {
       label: string

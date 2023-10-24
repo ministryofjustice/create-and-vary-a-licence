@@ -5,7 +5,7 @@ import ValidSimpleDate from '../../../validators/simpleDateValidator'
 import SimpleTime from './time'
 import ValidSimpleTime from '../../../validators/simpleTimeValidator'
 import DateIsBefore from '../../../validators/dateIsBefore'
-import DateIsAfterExpectedReleaseDate from '../../../validators/dateIsAfterExpectedReleaseDate'
+import DateIsBeforeEarliestReleaseDate from '../../../validators/dateIsBeforeEarliestReleaseDate'
 import DateIsOnWorkDay from '../../../validators/dateIsOnWorkDay'
 
 class SimpleDateTime {
@@ -25,8 +25,8 @@ class SimpleDateTime {
   @DateIsOnWorkDay({
     message: 'The date you entered is on a weekend or bank holiday',
   })
-  @DateIsAfterExpectedReleaseDate({
-    message: 'Appointment date must be on or after the last working day before the release date',
+  @DateIsBeforeEarliestReleaseDate({
+    message: 'Appointment date cannot be more than 3 working days before release date',
   })
   date: SimpleDate
 

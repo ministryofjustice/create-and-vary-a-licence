@@ -22,7 +22,8 @@ describe('Uk bank holiday feed service', () => {
 
     it('Should say when weekends are', async () => {
       const result = await ukBankHolidayFeedService.getEnglishAndWelshHolidays()
-      expect(result.isBankHolidayOrWeekend(moment('2023-09-15'))).toBeFalsy()
+      expect(result.isBankHolidayOrWeekend(moment('2023-09-15'), false)).toBeFalsy()
+      expect(result.isBankHolidayOrWeekend(moment('2023-09-15'), true)).toBeTruthy()
       expect(result.isBankHolidayOrWeekend(moment('2023-09-16'))).toBeTruthy()
       expect(result.isBankHolidayOrWeekend(moment('2023-09-17'))).toBeTruthy()
       expect(result.isBankHolidayOrWeekend(moment('2023-09-18'))).toBeFalsy()
