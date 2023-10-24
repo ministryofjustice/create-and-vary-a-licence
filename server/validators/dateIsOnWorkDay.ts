@@ -1,5 +1,4 @@
 import { registerDecorator, ValidationOptions } from 'class-validator'
-import _ from 'lodash'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import UkBankHolidayFeedService from '../services/ukBankHolidayFeedService'
 
