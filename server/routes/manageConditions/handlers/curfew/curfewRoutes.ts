@@ -29,14 +29,14 @@ export default class CurfewRoutes {
       )
     }
 
-    const formResponses = conditionInstances.reduce((acc, instance, index) => {
-      instance.data.map(conditionData => {
-        const key = index === 0 ? conditionData.field : `${conditionData.field}${index + 1}`
-        acc[key] = conditionData.value
-        return conditionData.value
-      })
-      return acc
-    }, {})
+    const formResponses = Object.fromEntries(
+      conditionInstances.flatMap((instance, index) =>
+        instance.data.map(conditionData => {
+          const key = index === 0 ? conditionData.field : `${conditionData.field}${index + 1}`
+          return [key, conditionData.value]
+        })
+      )
+    )
 
     return res.render('pages/manageConditions/curfew/input', { additionalCondition, config, formResponses })
   }
@@ -48,15 +48,12 @@ export default class CurfewRoutes {
 
     await this.licenceService.deleteAdditionalConditionsByCode(conditionCode, licence, user)
 
-    if (inputs.numberOfCurfews === 'Two curfews') {
-      await this.addCurfewCondition(licence, user, conditionCode, inputs.curfewStart, inputs.curfewEnd, inputs)
+    await this.addCurfewCondition(licence, user, conditionCode, inputs.curfewStart, inputs.curfewEnd, inputs)
+    if (inputs.numberOfCurfews === 'Two curfews' || inputs.numberOfCurfews === 'Three curfews') {
       await this.addCurfewCondition(licence, user, conditionCode, inputs.curfewStart2, inputs.curfewEnd2, inputs)
-    } else if (inputs.numberOfCurfews === 'Three curfews') {
-      await this.addCurfewCondition(licence, user, conditionCode, inputs.curfewStart, inputs.curfewEnd, inputs)
-      await this.addCurfewCondition(licence, user, conditionCode, inputs.curfewStart2, inputs.curfewEnd2, inputs)
+    }
+    if (inputs.numberOfCurfews === 'Three curfews') {
       await this.addCurfewCondition(licence, user, conditionCode, inputs.curfewStart3, inputs.curfewEnd3, inputs)
-    } else {
-      await this.addCurfewCondition(licence, user, conditionCode, inputs.curfewStart, inputs.curfewEnd, inputs)
     }
 
     return res.redirect(

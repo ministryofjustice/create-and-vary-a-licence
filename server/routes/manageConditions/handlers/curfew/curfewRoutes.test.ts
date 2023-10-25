@@ -163,12 +163,12 @@ describe('Route handlers - Curfew routes', () => {
     })
 
     it('adds a number of instances of the curfew condition equal to the user-selection', async () => {
-      jest.spyOn(handler, 'addCurfewCondition')
       req.body = { numberOfCurfews: 'Three curfews' }
 
       await handler.POST(req, res)
 
-      expect(handler.addCurfewCondition).toHaveBeenCalledTimes(3)
+      expect(licenceService.addAdditionalCondition).toHaveBeenCalledTimes(3)
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledTimes(3)
     })
 
     it('should redirect to the callback function', async () => {
@@ -186,8 +186,10 @@ describe('Route handlers - Curfew routes', () => {
   })
 
   describe('addCurfewCondition', () => {
-    conditionService.getAdditionalConditionType.mockResolvedValue(LicenceType.AP)
-    conditionService.currentOrNextSequenceForCondition.mockReturnValue(0)
+    beforeEach(() => {
+      conditionService.getAdditionalConditionType.mockResolvedValue(LicenceType.AP)
+      conditionService.currentOrNextSequenceForCondition.mockReturnValue(0)
+    })
 
     const inputs = {
       numberOfCurfews: 'Two curfews',
