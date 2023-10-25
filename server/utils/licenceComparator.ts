@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { AdditionalCondition, BespokeCondition, Licence } from '../@types/licenceApiClientTypes'
 import ConditionType from '../enumeration/conditionType'
+import { groupingBy } from './utils'
 
 type Condition = {
   category: string
@@ -50,31 +51,15 @@ const compareAdditionalConditionSet = (
 ): VariedConditions => {
   const variedConditionsBuilder = new VariedConditionsBuilder(conditionType)
 
-  const originalConditions = originalConditionSet.reduce(
-    (acc, c) => {
-      const existingValues = acc[c.code]
-      if (existingValues) {
-        acc[c.code] = { ...existingValues, expandedText: `${existingValues.expandedText}\n\n${c.expandedText}` }
-      } else {
-        acc[c.code] = c
-      }
-      return acc
-    },
-    {} as Record<string, AdditionalCondition>
-  )
+  const originalConditions = groupingBy(originalConditionSet, 'code').map(([first, ...rest]) => {
+    const texts = [first.expandedText, ...rest.map(r => r.expandedText)]
+    return { ...first, expandedText: texts.join('\n\n') }
+  })
 
-  const variedConditions = variedConditionSet.reduce(
-    (acc, c) => {
-      const existingValues = acc[c.code]
-      if (existingValues) {
-        acc[c.code] = { ...existingValues, expandedText: `${existingValues.expandedText}\n\n${c.expandedText}` }
-      } else {
-        acc[c.code] = c
-      }
-      return acc
-    },
-    {} as Record<string, AdditionalCondition>
-  )
+  const variedConditions = groupingBy(variedConditionSet, 'code').map(([first, ...rest]) => {
+    const texts = [first.expandedText, ...rest.map(r => r.expandedText)]
+    return { ...first, expandedText: texts.join('\n\n') }
+  })
 
   const sortedOriginalConditions = sortConditionSet(Object.values(originalConditions))
   const sortedVariedConditions = sortConditionSet(Object.values(variedConditions))
