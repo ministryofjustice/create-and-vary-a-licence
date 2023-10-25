@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { AdditionalCondition, BespokeCondition, Licence } from '../@types/licenceApiClientTypes'
 import ConditionType from '../enumeration/conditionType'
+import { groupingBy } from './utils'
 
 type Condition = {
   category: string
@@ -50,16 +51,21 @@ const compareAdditionalConditionSet = (
 ): VariedConditions => {
   const variedConditionsBuilder = new VariedConditionsBuilder(conditionType)
 
-  const originalExclusionsZoneConditionsSet = originalConditionSet.filter(c => c.uploadSummary.length)
-  const originalConditionsSet = originalConditionSet.filter(c => c.uploadSummary.length === 0)
-  const variedExclusionZoneConditionsSet = variedConditionSet.filter(c => c.uploadSummary.length)
-  const variedConditionsSet = variedConditionSet.filter(c => c.uploadSummary.length === 0)
+  const originalConditions = groupingBy(originalConditionSet, 'code').map(([first, ...rest]) => {
+    const texts = [first.expandedText, ...rest.map(r => r.expandedText)]
+    return { ...first, expandedText: texts.join('\n\n') }
+  })
 
-  const sortedOriginalConditionSet = sortConditionSet(originalConditionsSet)
-  const sortedVariedConditionSet = sortConditionSet(variedConditionsSet)
+  const variedConditions = groupingBy(variedConditionSet, 'code').map(([first, ...rest]) => {
+    const texts = [first.expandedText, ...rest.map(r => r.expandedText)]
+    return { ...first, expandedText: texts.join('\n\n') }
+  })
 
-  let originalCondition = sortedOriginalConditionSet.shift()
-  let variedCondition = sortedVariedConditionSet.shift()
+  const sortedOriginalConditions = sortConditionSet(Object.values(originalConditions))
+  const sortedVariedConditions = sortConditionSet(Object.values(variedConditions))
+
+  let originalCondition = sortedOriginalConditions.shift()
+  let variedCondition = sortedVariedConditions.shift()
 
   while (originalCondition !== undefined || variedCondition !== undefined) {
     if (originalCondition?.code < variedCondition?.code || variedCondition === undefined) {
@@ -67,13 +73,13 @@ const compareAdditionalConditionSet = (
         category: originalCondition.category,
         condition: originalCondition.expandedText,
       })
-      originalCondition = sortedOriginalConditionSet.shift()
+      originalCondition = sortedOriginalConditions.shift()
     } else if (originalCondition?.code > variedCondition?.code || originalCondition === undefined) {
       variedConditionsBuilder.recordConditionAdded({
         category: variedCondition.category,
         condition: variedCondition.expandedText,
       })
-      variedCondition = sortedVariedConditionSet.shift()
+      variedCondition = sortedVariedConditions.shift()
     } else {
       if (originalCondition.expandedText !== variedCondition.expandedText) {
         variedConditionsBuilder.recordConditionAmended({
@@ -82,66 +88,12 @@ const compareAdditionalConditionSet = (
         })
       }
 
-      originalCondition = sortedOriginalConditionSet.shift()
-      variedCondition = sortedVariedConditionSet.shift()
-    }
-  }
-
-  const newZones = variedExclusionZoneConditionsSet.map(c => c.expandedText).join('\n\n')
-
-  if (originalExclusionsZoneConditionsSet.length === 0 && variedExclusionZoneConditionsSet.length > 0) {
-    variedConditionsBuilder.recordConditionAdded({
-      category: 'Freedom of movement',
-      condition: `${newZones}`,
-    })
-  } else if (changesToMultipleExclusionZones(variedExclusionZoneConditionsSet, originalExclusionsZoneConditionsSet)) {
-    if (newZones.length === 0) {
-      variedConditionsBuilder.recordConditionRemoved({
-        category: 'Freedom of movement',
-        condition: `Exclusion zones have been removed`,
-      })
-    } else {
-      variedConditionsBuilder.recordConditionAmended({
-        category: 'Freedom of movement',
-        condition: `${newZones}`,
-      })
+      originalCondition = sortedOriginalConditions.shift()
+      variedCondition = sortedVariedConditions.shift()
     }
   }
 
   return variedConditionsBuilder.buildVariedConditions()
-}
-
-/**
- * Check if there are differences between the original and varied conditions. Check differences
- * both ways to find removed conditions
- */
-const changesToMultipleExclusionZones = (
-  VariedExclusionZoneConditionsSet: AdditionalCondition[],
-  OriginalExclusionsZoneConditionsSet: AdditionalCondition[]
-): boolean => {
-  return (
-    VariedExclusionZoneConditionsSet.filter(
-      c =>
-        !OriginalExclusionsZoneConditionsSet.find(
-          c2 =>
-            c2.expandedText === c.expandedText &&
-            c2.category === c.category &&
-            c2.uploadSummary.length &&
-            c.uploadSummary.length
-        )
-    ).concat(
-      OriginalExclusionsZoneConditionsSet.filter(
-        c =>
-          !VariedExclusionZoneConditionsSet.find(
-            c2 =>
-              c2.expandedText === c.expandedText &&
-              c2.category === c.category &&
-              c2.uploadSummary.length &&
-              c.uploadSummary.length
-          )
-      )
-    ).length > 0
-  )
 }
 
 const compareBespokeConditionSet = (
