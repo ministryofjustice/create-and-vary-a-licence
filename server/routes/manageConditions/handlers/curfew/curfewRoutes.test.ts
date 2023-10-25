@@ -116,6 +116,10 @@ describe('Route handlers - Curfew routes', () => {
     conditionService.getAdditionalConditionByCode.mockResolvedValue(conditionConfig)
   })
 
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   describe('GET', () => {
     it('should redirect to additional conditions list page if the additional condition is not found on the licence', async () => {
       await handler.GET(req, res)
