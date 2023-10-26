@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
-import { CURFEW_CONDITION_CODE } from '../../../utils/conditionRoutes'
+import { getConditionCallbackHref } from '../../../utils/conditionRoutes'
 
 export default class AdditionalLicenceConditionsCallbackRoutes {
   constructor(private readonly conditionService: ConditionService) {}
@@ -25,17 +25,13 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
       .find((condition: AdditionalCondition) => condition.data.length === 0)
 
     if (requiringInput) {
-      if (requiringInput.code === CURFEW_CONDITION_CODE) {
-        return res.redirect(
-          `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${requiringInput.code}/curfew${
-            req.query.fromReview ? '?fromReview=true' : ''
-          }`
-        )
-      }
       return res.redirect(
-        `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${requiringInput.id}${
-          req.query?.fromReview ? '?fromReview=true' : ''
-        }`
+        getConditionCallbackHref({
+          licenceId,
+          conditionId: requiringInput.id,
+          conditionCode: requiringInput.code,
+          fromReview: !!req.query?.fromReview,
+        })
       )
     }
 
