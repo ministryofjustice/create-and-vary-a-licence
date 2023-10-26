@@ -270,6 +270,68 @@ describe('Prisoner Service', () => {
     })
   })
 
+  describe('is HDC approved', () => {
+    it('Should return false if no HDCED', async () => {
+      const expectedResult = [{ firstName: 'Joe', lastName: 'Bloggs' }] as Prisoner[]
+
+      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
+
+      const actualResult = await prisonerService.isHdcApproved(123)
+
+      expect(actualResult).toStrictEqual(false)
+    })
+
+    it('Should return true if approved for HDC', async () => {
+      const expectedResult = [
+        { firstName: 'Joe', lastName: 'Bloggs', homeDetentionCurfewActualDate: '2023-01-02' },
+      ] as Prisoner[]
+
+      prisonApiClient.getLatestHdcStatus.mockResolvedValue({
+        bookingId: 123,
+        approvalStatus: 'APPROVED',
+        passed: true,
+      } as HomeDetentionCurfew)
+
+      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
+
+      const actualResult = await prisonerService.isHdcApproved(123)
+
+      expect(actualResult).toStrictEqual(true)
+    })
+
+    it('Should return false if no latest HDC status', async () => {
+      const expectedResult = [
+        { firstName: 'Joe', lastName: 'Bloggs', homeDetentionCurfewActualDate: '2023-01-02' },
+      ] as Prisoner[]
+
+      prisonApiClient.getLatestHdcStatus.mockResolvedValue(null)
+
+      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
+
+      const actualResult = await prisonerService.isHdcApproved(123)
+
+      expect(actualResult).toStrictEqual(false)
+    })
+
+    it('Should return true if not approved for HDC', async () => {
+      const expectedResult = [
+        { firstName: 'Joe', lastName: 'Bloggs', homeDetentionCurfewActualDate: '2023-01-02' },
+      ] as Prisoner[]
+
+      prisonApiClient.getLatestHdcStatus.mockResolvedValue({
+        bookingId: 123,
+        approvalStatus: 'REFUSED',
+        passed: true,
+      } as HomeDetentionCurfew)
+
+      prisonerSearchApiClient.searchPrisonersByBookingIds.mockResolvedValue(expectedResult)
+
+      const actualResult = await prisonerService.isHdcApproved(123)
+
+      expect(actualResult).toStrictEqual(false)
+    })
+  })
+
   it('Search prisoners by release date', async () => {
     const expectedResult = [{ firstName: 'Joe', lastName: 'Bloggs' }]
 

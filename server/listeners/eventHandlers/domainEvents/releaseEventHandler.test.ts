@@ -4,21 +4,17 @@ import { DomainEventMessage } from '../../../@types/events'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
-import { LicenceApiClient } from '../../../data'
 
-const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
-const licenceService = new LicenceService(licenceApiClient, null, null, null) as jest.Mocked<LicenceService>
+jest.mock('../../../services/prisonerService')
+jest.mock('../../../services/licenceService')
+
+const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 describe('Release event handler', () => {
   const handler = new ReleaseEventHandler(licenceService, prisonerService)
   beforeEach(() => {
-    licenceService.getLicencesByNomisIdsAndStatus = jest.fn()
-    licenceService.updateStatus = jest.fn()
-    licenceService.deactivateLicences = jest.fn()
-    prisonerService.searchPrisoners = jest.fn()
-    prisonerService.getActiveHdcStatus = jest.fn()
-    licenceApiClient.batchInActivateLicences = jest.fn()
+    jest.resetAllMocks()
   })
 
   it('should skip the event if release reason is not RELEASED', async () => {
@@ -151,10 +147,7 @@ describe('Release event handler', () => {
         restrictedPatient: false,
       },
     ])
-    prisonerService.getActiveHdcStatus.mockResolvedValue({
-      approvalStatus: 'APPROVED',
-      bookingId: '111',
-    })
+    prisonerService.isHdcApproved.mockResolvedValue(true)
 
     await handler.handle(event)
 

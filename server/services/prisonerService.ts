@@ -85,10 +85,8 @@ export default class PrisonerService {
     if (bookingIds.length < 1) {
       return []
     }
-    const prisonerSearchCriteria = {
-      bookingIds,
-    }
-    return this.prisonerSearchApiClient.searchPrisonersByBookingIds(prisonerSearchCriteria, user)
+
+    return this.prisonerSearchApiClient.searchPrisonersByBookingIds({ bookingIds }, user)
   }
 
   async getActiveHdcStatus(bookingId: string): Promise<HdcStatus | null> {
@@ -127,8 +125,12 @@ export default class PrisonerService {
     )
   }
 
-  async hdcLicenceIsApproved(bookingId: string): Promise<boolean> {
-    const hdcLicence = await this.getActiveHdcStatus(bookingId)
+  async isHdcApproved(bookingId: number): Promise<boolean> {
+    const prisoners = await this.prisonerSearchApiClient.searchPrisonersByBookingIds({ bookingIds: [bookingId] })
+    if (!prisoners.length || !prisoners[0].homeDetentionCurfewActualDate) {
+      return false
+    }
+    const hdcLicence = await this.getActiveHdcStatus(bookingId.toString())
     return !!hdcLicence && hdcLicence.approvalStatus === 'APPROVED'
   }
 

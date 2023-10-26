@@ -38,7 +38,7 @@ export default class ReleaseEventHandler {
      */
     if (approvedLicences.length) {
       const licenceToActivate = _.head(approvedLicences)
-      const newStatus = (await this.prisonerService.hdcLicenceIsApproved(licenceToActivate.bookingId?.toString()))
+      const newStatus = (await this.prisonerService.isHdcApproved(licenceToActivate.bookingId))
         ? LicenceStatus.INACTIVE
         : LicenceStatus.ACTIVE
 
