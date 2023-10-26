@@ -86,8 +86,8 @@ export default class AdditionalConditionsInputPage extends Page {
   }
 
   nextCondition = (runAxe = true): AdditionalConditionsInputPage => {
-    cy.get(this.continueButtonId).click()
     cy.task('stubGetLicenceWithConditionToComplete', this.additionalConditionsToInput.shift())
+    cy.get(this.continueButtonId).click()
     cy.reload()
     this.checkOnPage()
     if (runAxe) {

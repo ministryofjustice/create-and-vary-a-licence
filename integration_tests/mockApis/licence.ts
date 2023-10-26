@@ -1188,4 +1188,27 @@ export default {
       },
     })
   },
+
+  stubAddAdditionalCondition: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licence/id/(\\d*)/additional-condition/([A-Z]{2,3})`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          id: 1,
+          code: 'abc123',
+          category: 'category1',
+          sequence: 1,
+          text: 'Condition text',
+          expandedText: 'Expanded text',
+          data: [{}],
+          uploadSummary: [],
+        },
+      },
+    })
+  },
 }

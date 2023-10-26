@@ -16,6 +16,7 @@ context('Create a licence', () => {
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetBankHolidays', dates)
+    cy.task('stubAddAdditionalCondition')
     cy.signIn()
   })
 
