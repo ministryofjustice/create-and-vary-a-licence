@@ -12,9 +12,7 @@ class AlcoholRestrictionPeriod {
   @DateIsBefore('licence.licenceExpiryDate', {
     message: 'The monitoring end date must be before the licence expiry date',
   })
-  @DateIsBeforeEarliestReleaseDate({
-    message: 'The monitoring end date must be on or after the release date',
-  })
+  @DateIsBeforeEarliestReleaseDate()
   endDate: SimpleDate
 }
 

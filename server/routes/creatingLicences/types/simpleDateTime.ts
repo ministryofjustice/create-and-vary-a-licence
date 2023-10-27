@@ -25,9 +25,7 @@ class SimpleDateTime {
   @DateIsOnWorkDay({
     message: 'The date you entered is on a weekend or bank holiday',
   })
-  @DateIsBeforeEarliestReleaseDate({
-    message: 'Appointment date cannot be more than 3 working days before release date',
-  })
+  @DateIsBeforeEarliestReleaseDate()
   date: SimpleDate
 
   @Expose()
