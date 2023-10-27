@@ -248,10 +248,6 @@ export default class LicenceApiClient extends RestClient {
     )) as LicenceSummary[]
   }
 
-  async batchActivateLicences(licenceIds: number[]): Promise<void> {
-    await this.post({ path: `/licence/activate-licences`, data: licenceIds })
-  }
-
   async batchInActivateLicences(licenceIds: number[]): Promise<void> {
     await this.post({ path: `/licence/inactivate-licences`, data: licenceIds })
   }
