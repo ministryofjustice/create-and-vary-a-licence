@@ -1,23 +1,14 @@
 import { Request, Response } from 'express'
-import moment from 'moment'
 import LicenceService from '../../../services/licenceService'
-import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 export default class InitialMeetingContactRoutes {
-  constructor(
-    private readonly licenceService: LicenceService,
-    private readonly ukBankHolidayFeedService: UkBankHolidayFeedService
-  ) {}
+  constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
 
-    const bankHolidays = await this.ukBankHolidayFeedService.getEnglishAndWelshHolidays()
-
     res.render('pages/create/initialMeetingContact', {
-      releaseIsOnBankHolidayOrWeekend: bankHolidays.isBankHolidayOrWeekend(
-        moment(licence.actualReleaseDate || licence.conditionalReleaseDate, 'DD/MM/YYYY')
-      ),
+      releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
     })
   }
 

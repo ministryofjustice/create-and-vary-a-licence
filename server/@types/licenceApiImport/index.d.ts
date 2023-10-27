@@ -1973,6 +1973,8 @@ export interface components {
       licenceVersion?: string
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date, otherwise contains ARD||CRD */
       earliestReleaseDate?: string
+      /** If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release */
+      isEligibleForEarlyRelease: boolean
     }
     AddAnother: {
       label: string

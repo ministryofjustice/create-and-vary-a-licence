@@ -20,12 +20,7 @@ export default function DateIsBeforeEarliestReleaseDate(validationOptions?: Vali
       validator: {
         validate: dateIsBeforeEarliestReleaseDate,
         defaultMessage({ object }: ValidationArguments) {
-          const actualReleaseDate = moment(_.get(object, 'licence.actualReleaseDate'), 'DD/MM/YYYY')
-          const conditionalReleaseDate = moment(_.get(object, 'licence.conditionalReleaseDate'), 'DD/MM/YYYY')
-          const earliestReleaseDate = moment(_.get(object, 'licence.earliestReleaseDate'), 'DD/MM/YYYY')
-          const isEligibleForEarlyRelease = !moment(actualReleaseDate || conditionalReleaseDate).isSame(
-            earliestReleaseDate
-          )
+          const isEligibleForEarlyRelease = _.get(object, 'licence.isEligibleForEarlyRelease') || false
 
           if (isEligibleForEarlyRelease) {
             return 'Date cannot be more than 3 working days before release date'
