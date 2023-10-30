@@ -22,6 +22,30 @@ export default class OmuEmailAddressRoutes {
     })
   }
 
+  GET_IN_CONTEXT = async (req: Request, res: Response): Promise<void> => {
+    const { user } = res.locals
+    const { prisonId } = req.params
+
+    let emailCurrent
+
+    const prisonExists = await this.checkPrisonExists(prisonId, user)
+
+    if (prisonExists) {
+      const result = await this.licenceService.getOmuEmail(prisonId, user)
+      emailCurrent = result?.email || `Email for ${prisonId} does not exist`
+    } else {
+      emailCurrent = `Prison ID ${prisonId} does not exist`
+    }
+
+    return res.render('pages/support/manageOmuEmailAddress', {
+      prisonIdCurrent: prisonId,
+      prisonIdEdit: prisonId,
+      prisonIdDelete: prisonId,
+      emailCurrent,
+      email: emailCurrent,
+    })
+  }
+
   CURRENT = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { prisonIdCurrent } = req.body
