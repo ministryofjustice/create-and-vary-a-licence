@@ -63,6 +63,7 @@ export default class OffenderDetailRoutes {
         conditionalReleaseDate,
         confirmedReleaseDate,
         postRecallReleaseDate,
+        prisonId: prisonerDetail.prisonId !== 'OUT' ? prisonerDetail.prisonId : licence?.prisonCode,
         tused,
         hdced,
         sentenceExpiryDate,
