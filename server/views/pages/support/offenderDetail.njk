@@ -36,7 +36,15 @@
                     </tr>
                     <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">Location</th>
-                        <td class="govuk-table__cell">{{ prisonerDetail.locationDescription }}</td>
+                        <td class="govuk-table__cell">
+                          {% if prisonerDetail.prisonId %}
+                            <a class="govuk-link--no-visited-state" href="/support/manage-omu-email-address/{{ prisonerDetail.prisonId }}">
+                                {{ prisonerDetail.locationDescription }}
+                            </a>
+                          {% else %}
+                            {{ prisonerDetail.locationDescription }}
+                          {% endif %}
+                        </td>
                     </tr>
                 </tbody>
             </table>
