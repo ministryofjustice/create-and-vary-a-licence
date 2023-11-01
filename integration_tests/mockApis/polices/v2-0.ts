@@ -579,25 +579,100 @@ const policy: LicencePolicyResponse = {
         category: 'Curfew arrangement',
         text: 'Confine yourself to an address approved by your supervising officer between the hours of [TIME] and [TIME] daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
         tpl: 'Confine yourself to an address approved by your supervising officer between the hours of {curfewStart} and {curfewEnd} daily unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on {alternativeReviewPeriod || reviewPeriod} basis and may be amended or removed if it is felt that the level of risk that you present has reduced appropriately.',
-        subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
         requiresInput: true,
         inputs: [
           {
-            type: 'timePicker',
-            label: 'Enter the curfew start time',
-            name: 'curfewStart',
-          },
-          {
-            type: 'timePicker',
-            label: 'Enter the curfew end time',
-            name: 'curfewEnd',
+            type: 'radio',
+            label: 'Select the number of curfews needed',
+            name: 'numberOfCurfews',
+            options: [
+              {
+                value: 'One curfew',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'timePicker',
+                      label: 'Enter the curfew start time',
+                      name: 'curfewStart',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Enter the curfew end time',
+                      name: 'curfewEnd',
+                    },
+                  ],
+                },
+              },
+              {
+                value: 'Two curfews',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'timePicker',
+                      label: 'First curfew – enter the start time',
+                      name: 'curfewStart',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'First curfew – enter the end time',
+                      name: 'curfewEnd',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Second curfew – enter the start time',
+                      name: 'curfewStart2',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Second curfew – enter the end time',
+                      name: 'curfewEnd2',
+                    },
+                  ],
+                },
+              },
+              {
+                value: 'Three curfews',
+                conditional: {
+                  inputs: [
+                    {
+                      type: 'timePicker',
+                      label: 'First curfew – enter the start time',
+                      name: 'curfewStart',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'First curfew – enter the end time',
+                      name: 'curfewEnd',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Second curfew – enter the start time',
+                      name: 'curfewStart2',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Second curfew – enter the end time',
+                      name: 'curfewEnd2',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Third curfew – enter the start time',
+                      name: 'curfewStart3',
+                    },
+                    {
+                      type: 'timePicker',
+                      label: 'Third curfew – enter the end time',
+                      name: 'curfewEnd3',
+                    },
+                  ],
+                },
+              },
+            ],
           },
           {
             type: 'radio',
             label: 'Select a review period',
             name: 'reviewPeriod',
-            case: 'lower',
-            handleIndefiniteArticle: true,
             options: [
               {
                 value: 'Weekly',
@@ -620,6 +695,8 @@ const policy: LicencePolicyResponse = {
                 },
               },
             ],
+            case: 'lower',
+            handleIndefiniteArticle: true,
           },
         ],
         type: 'CurfewTerms',

@@ -645,7 +645,6 @@ const policy: LicencePolicyResponse = {
             handleIndefiniteArticle: true,
           },
         ],
-        subtext: 'You must have PPCS approval if the curfew time is longer than 12 hours.',
         type: 'CurfewTerms',
       },
       {
