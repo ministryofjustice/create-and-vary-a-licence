@@ -7,6 +7,7 @@
 
 {% set pageTitle = applicationName + " - licence status" %}
 {% set backLinkHref = "/support/offender-search" %}
+{% set cancelLinkHref = "/support/offender/"+ nomsId +"/licences" %}
 
 {% block content %}
 
@@ -84,7 +85,7 @@
                 {{ govukButton({
                     classes: "govuk-button--secondary",
                     text: "Cancel",
-                    href: '/support/offender-search'
+                    href: cancelLinkHref
                 }) }}
             </div>
         </div>

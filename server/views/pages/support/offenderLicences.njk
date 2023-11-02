@@ -5,6 +5,7 @@
 
 {% set pageTitle = applicationName + " - prisoner audit" %}
 {% set backLinkHref = "/support/offender-search" %}
+{% set returnLinkHref = "/support/offender/"+ prisonerDetail.id +"/detail" %}
 
 {% block content %}
 
@@ -108,7 +109,7 @@
     <div class="govuk-button-group">
         {{ govukButton({
             text: "Return to offender details",
-            classes: 'js-backlink'
+            href: returnLinkHref
         }) }}
     </div>
 
