@@ -44,6 +44,7 @@ export default class OffenderLicenceStatusRoutes {
       availableStatusCodes: data.statusCodes,
       licenceId,
       statusConfig,
+      nomsId,
     })
   }
 
