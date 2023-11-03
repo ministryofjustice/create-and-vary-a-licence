@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: activate-licences
 spec:
-  schedule: {{ .Values.cronjobs.activate_licence }}
+  schedule: {{ .Values.cronjobs.activate_licences }}
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200
