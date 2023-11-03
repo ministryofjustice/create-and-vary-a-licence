@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: expire-licences
 spec:
-  schedule: "0 4 * * *" # 4am every day
+  schedule: {{ .Values.cronjobs.expire_active_licences }}
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200
