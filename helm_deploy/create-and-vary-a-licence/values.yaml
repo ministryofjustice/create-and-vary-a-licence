@@ -1,3 +1,11 @@
+---
+cronjobs:
+  activate_licence: "0 3,9,12,15,18 * * *" # 3am, 9am, 12pm, 3pm, and 6pm every day
+  email_probation_practioner: "0 2 * * *" # 2am every day
+  expire_active_licences: "0 4 * * *" # 4am every day
+  prompt_licence_creation: "0 7 * * 1" # 7am UTC every monday
+  remove_expired_conditions: "0 3 * * *" # 3am every day
+
 generic-service:
   nameOverride: create-and-vary-a-licence
   replicaCount: 4
@@ -35,9 +43,9 @@ generic-service:
     SHOW_WHATS_NEW_BANNER: "false"
     USE_NEW_SEARCH: "false"
     # To enable common front-end components
-    COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
-    COMMON_COMPONENTS_ENABLED: "true"
-    MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
+    COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
+    COMMON_COMPONENTS_ENABLED: 'true'
+    MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -46,22 +54,22 @@ generic-service:
 
   namespace_secrets:
     create-and-vary-a-licence:
-      APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
-      API_CLIENT_ID: "API_CLIENT_ID"
-      API_CLIENT_SECRET: "API_CLIENT_SECRET"
-      SYSTEM_CLIENT_ID: "SYSTEM_CLIENT_ID"
-      SYSTEM_CLIENT_SECRET: "SYSTEM_CLIENT_SECRET"
-      SESSION_SECRET: "SESSION_SECRET"
-      TAG_MANAGER_CONTAINER_ID: "TAG_MANAGER_CONTAINER_ID"
+      APPINSIGHTS_INSTRUMENTATIONKEY: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+      API_CLIENT_ID: 'API_CLIENT_ID'
+      API_CLIENT_SECRET: 'API_CLIENT_SECRET'
+      SYSTEM_CLIENT_ID: 'SYSTEM_CLIENT_ID'
+      SYSTEM_CLIENT_SECRET: 'SYSTEM_CLIENT_SECRET'
+      SESSION_SECRET: 'SESSION_SECRET'
+      TAG_MANAGER_CONTAINER_ID: 'TAG_MANAGER_CONTAINER_ID'
     elasticache-redis:
-      REDIS_HOST: "primary_endpoint_address"
-      REDIS_AUTH_TOKEN: "auth_token"
+      REDIS_HOST: 'primary_endpoint_address'
+      REDIS_AUTH_TOKEN: 'auth_token'
     create-and-vary-a-licence-prison-events-sqs-instance-output:
-      SQS_PRISON_EVENTS_QUEUE_URL: "sqs_id"
+      SQS_PRISON_EVENTS_QUEUE_URL: 'sqs_id'
     create-and-vary-a-licence-probation-events-sqs-instance-output:
-      SQS_PROBATION_EVENTS_QUEUE_URL: "sqs_id"
+      SQS_PROBATION_EVENTS_QUEUE_URL: 'sqs_id'
     create-and-vary-a-licence-domain-events-sqs-instance-output:
-      SQS_DOMAIN_EVENTS_QUEUE_URL: "sqs_id"
+      SQS_DOMAIN_EVENTS_QUEUE_URL: 'sqs_id'
 
   allowlist:
     hmp-parc-1: 217.161.76.162/32
