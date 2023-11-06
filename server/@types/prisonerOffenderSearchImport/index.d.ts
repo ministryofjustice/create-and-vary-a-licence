@@ -278,6 +278,8 @@ export interface components {
       dischargeDate?: string
       /** Any additional discharge details */
       dischargeDetails?: string
+      /** Case reference number */
+      crn?: string
     }
     /** Alerts */
     PrisonerAlert: {
