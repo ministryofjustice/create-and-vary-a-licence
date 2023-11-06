@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: prompt-licence-creation
 spec:
-  schedule: "0 7 * * 1" # 7am UTC every monday
+  schedule: {{ .Values.cronjobs.prompt_licence_creation }}
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200

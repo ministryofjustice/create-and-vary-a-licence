@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: remove-ap-conditions
 spec:
-  schedule: "0 3 * * *" # 3am every day
+  schedule: {{ .Values.cronjobs.remove_expired_conditions }}
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200
