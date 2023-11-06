@@ -1,6 +1,6 @@
 ---
 cronjobs:
-  activate_licence: "9,12,15,18 * * 1-5" # 9am, 12pm, 3pm, and 6pm UTC, Monday - Friday
+  activate_licences: "0 9,12,15,18 * * 1-5" # 9am, 12pm, 3pm, and 6pm UTC, Monday - Friday
   email_probation_practioner: "0 11 * * 1-5" # 11am UTC, Monday - Friday
   expire_active_licences: "0 10 * * 1-5" # 10am UTC, Monday - Friday
   prompt_licence_creation: "0 8 * * 1" # 8am UTC, every monday
