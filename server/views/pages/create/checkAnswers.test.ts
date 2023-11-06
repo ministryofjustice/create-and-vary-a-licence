@@ -23,6 +23,7 @@ describe('Create a Licence Views - Check Answers', () => {
             {
               field: 'field1',
               value: 'Data 1',
+              contributesToLicence: true,
             },
           ],
         },
@@ -36,14 +37,17 @@ describe('Create a Licence Views - Check Answers', () => {
           {
             field: 'field2',
             value: 'Data 2A',
+            contributesToLicence: true,
           },
           {
             field: 'field2',
             value: 'Data 2B',
+            contributesToLicence: true,
           },
           {
             field: 'field3',
             value: 'Data 2C',
+            contributesToLicence: false,
           },
         ],
       },
@@ -58,6 +62,7 @@ describe('Create a Licence Views - Check Answers', () => {
           {
             field: 'field1',
             value: 'Data 1',
+            contributesToLicence: true,
           },
         ],
       },
@@ -70,14 +75,17 @@ describe('Create a Licence Views - Check Answers', () => {
           {
             field: 'field2',
             value: 'Data 2A',
+            contributesToLicence: true,
           },
           {
             field: 'field2',
             value: 'Data 2B',
+            contributesToLicence: true,
           },
           {
             field: 'field3',
             value: 'Data 2C',
+            contributesToLicence: true,
           },
         ],
       },
@@ -114,6 +122,7 @@ describe('Create a Licence Views - Check Answers', () => {
               {
                 field: 'field1',
                 value: 'Data 1',
+                contributesToLicence: true,
               },
             ],
           },
@@ -128,14 +137,17 @@ describe('Create a Licence Views - Check Answers', () => {
               {
                 field: 'field2',
                 value: 'Data 2A',
+                contributesToLicence: true,
               },
               {
                 field: 'field2',
                 value: 'Data 2B',
+                contributesToLicence: true,
               },
               {
                 field: 'field3',
                 value: 'Data 2C',
+                contributesToLicence: false,
               },
             ],
           },
@@ -163,9 +175,11 @@ describe('Create a Licence Views - Check Answers', () => {
     expect(
       $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
     ).toBe('Data 2A, Data 2B')
+
+    // Check contributesToLicence filters out false values from rendering
     expect(
       $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
-    ).toBe('Data 2C')
+    ).not.toBe('Data 2C')
   })
 
   it('should display additional PSS conditions section if licence type is PSS', () => {
@@ -239,6 +253,7 @@ describe('Create a Licence Views - Check Answers', () => {
               {
                 field: 'field1',
                 value: 'Data 1',
+                contributesToLicence: true,
               },
             ],
           },
@@ -253,14 +268,17 @@ describe('Create a Licence Views - Check Answers', () => {
               {
                 field: 'field2',
                 value: 'Data 2A',
+                contributesToLicence: true,
               },
               {
                 field: 'field2',
                 value: 'Data 2B',
+                contributesToLicence: true,
               },
               {
                 field: 'field3',
                 value: 'Data 2C',
+                contributesToLicence: true,
               },
             ],
           },

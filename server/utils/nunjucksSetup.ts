@@ -174,6 +174,9 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('separatedDataByFieldName', (data: AdditionalConditionData[]) => {
     const map = new Map()
     data.forEach(item => {
+      if (!item.contributesToLicence) {
+        return
+      }
       const collection = map.get(item.field)
       if (!collection) {
         map.set(item.field, [item])
