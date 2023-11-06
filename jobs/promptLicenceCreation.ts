@@ -59,8 +59,7 @@ const buildEmailGroups = async (
       if (!config.rollout.probationAreas.includes(responsibleCom.probationArea.code)) {
         return null
       }
-      const prisonerWithCRN = prisoner.nomisRecord
-      prisonerWithCRN.crn = prisoner.deliusRecord.offenderCrn
+      const prisonerWithCRN = { ...prisoner.nomisRecord, crn: prisoner.deliusRecord.offenderCrn }
 
       return {
         prisoner: prisonerWithCRN,
