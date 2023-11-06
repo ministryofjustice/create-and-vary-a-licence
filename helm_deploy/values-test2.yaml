@@ -1,46 +1,51 @@
 ---
-# Per environment values which override defaults in create-and-vary-a-licence/values.yaml
+cronjobs:
+  activate_licences: "0 9,12,15,18 * * 1-5" # 9am, 12pm, 3pm, and 6pm UTC, Monday - Friday
+  email_probation_practioner: "0 11 * * 1-5" # 11am UTC, Monday - Friday
+  expire_active_licences: "0 10 * * 1-5" # 10am UTC, Monday - Friday
+  prompt_licence_creation: "0 8 * * 1" # 8am UTC, every monday
+  remove_expired_conditions: "0 7 * * 1-5" # 7am UTC, Monday - Friday
 
 generic-service:
   replicaCount: 2
-  
+
   ingress:
     hosts:
-     - create-and-vary-a-licence-test2.hmpps.service.justice.gov.uk
+      - create-and-vary-a-licence-test2.hmpps.service.justice.gov.uk
     contextColour: green
     tlsSecretName: create-and-vary-a-licence-ui-cert
-  
+
   env:
-    INGRESS_URL: "https://create-and-vary-a-licence-test2.hmpps.service.justice.gov.uk"
-    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
-    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    INGRESS_URL: 'https://create-and-vary-a-licence-test2.hmpps.service.justice.gov.uk'
+    HMPPS_AUTH_URL: 'https://sign-in-dev.hmpps.service.justice.gov.uk/auth'
+    TOKEN_VERIFICATION_API_URL: 'https://token-verification-api-dev.prison.service.justice.gov.uk'
     # COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
-    PRISON_API_URL: "https://prison-api-dev.prison.service.justice.gov.uk"
-    LICENCE_API_URL: "https://create-and-vary-a-licence-api-test2.hmpps.service.justice.gov.uk"
-    PRISONER_SEARCH_API_URL: "https://prisoner-search-dev.prison.service.justice.gov.uk"
+    PRISON_API_URL: 'https://prison-api-dev.prison.service.justice.gov.uk'
+    LICENCE_API_URL: 'https://create-and-vary-a-licence-api-test2.hmpps.service.justice.gov.uk'
+    PRISONER_SEARCH_API_URL: 'https://prisoner-search-dev.prison.service.justice.gov.uk'
     # PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
-    PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
-    EXIT_SURVEY_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
-    PHASE_BANNER_LINK: "https://eu.surveymonkey.com/r/V9JSHL3"
+    PRISON_REGISTER_API_URL: 'https://prison-register-dev.hmpps.service.justice.gov.uk'
+    EXIT_SURVEY_LINK: 'https://eu.surveymonkey.com/r/V9JSHL3'
+    PHASE_BANNER_LINK: 'https://eu.surveymonkey.com/r/V9JSHL3'
 
     # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
-    GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
+    GOTENBERG_API_URL: 'http://create-and-vary-a-licence-gotenberg'
 
     # A temporary reference to a local container which provides a stubbed Delius caseload
-    COMMUNITY_API_URL: "https://community-api-secure.test.delius.probation.hmpps.dsd.io"
-    PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
+    COMMUNITY_API_URL: 'https://community-api-secure.test.delius.probation.hmpps.dsd.io'
+    PROBATION_SEARCH_API_URL: 'https://probation-offender-search-dev.hmpps.service.justice.gov.uk'
 
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
-    LICENCES_URL: "http://create-and-vary-a-licence"
+    LICENCES_URL: 'http://create-and-vary-a-licence'
 
-    LICENCE_WATERMARK: "true"
-    DPS_URL: "https://digital-dev.prison.service.justice.gov.uk"
-    SHOW_WHATS_NEW_BANNER: "true"
+    LICENCE_WATERMARK: 'true'
+    DPS_URL: 'https://digital-dev.prison.service.justice.gov.uk'
+    SHOW_WHATS_NEW_BANNER: 'true'
 
     # To enable common front-end components
-    COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
-    COMMON_COMPONENTS_ENABLED: "true"
-    MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
+    COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
+    COMMON_COMPONENTS_ENABLED: 'true'
+    MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
 
 gotenberg:
   replicaCount: 1

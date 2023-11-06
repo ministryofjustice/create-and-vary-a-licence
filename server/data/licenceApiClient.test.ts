@@ -270,11 +270,6 @@ describe('Licence API client tests', () => {
     )
   })
 
-  it('Batch activate licences', async () => {
-    await licenceApiClient.batchActivateLicences([123, 321])
-    expect(post).toHaveBeenCalledWith({ path: '/licence/activate-licences', data: [123, 321] })
-  })
-
   it('should update responsible COM for an offender', async () => {
     await licenceApiClient.updateResponsibleCom('X1234', {
       staffIdentifier: 2000,
