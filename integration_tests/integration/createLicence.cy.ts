@@ -16,6 +16,7 @@ context('Create a licence', () => {
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetBankHolidays', dates)
+    cy.task('stubAddAdditionalCondition')
     cy.signIn()
   })
 
@@ -61,8 +62,9 @@ context('Create a licence', () => {
         .nextCondition()
         .checkBoxes()
         .nextCondition(false) // aria-expanded attribute causes issues with Axe
-        .enterTime('10', '30', 'curfewStart')
-        .enterTime('11', '30', 'curfewEnd')
+        .selectRadio('Two curfews')
+        .addFirstCurfew(2)
+        .addSecondCurfew(2)
         .selectRadio('Other')
         .enterText('Annually', 'alternativeReviewPeriod')
         .nextCondition()

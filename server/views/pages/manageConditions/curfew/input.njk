@@ -1,0 +1,89 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "formBuilder.njk" import formBuilder %}
+
+{% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
+{% set pageId = "additional-condition-input-page" %}
+{% set fromReview = "?fromReview=true" if fromReview %}
+{% set fromReviewAppend = "&fromReview=true" if fromReview %}
+
+{% set fromPolicyReviewQuery = "?fromPolicyReview=true" if fromPolicyReview %}
+{% set fromPolicyReviewAppend = "&fromPolicyReview=true" if fromPolicyReview %}
+
+{% if fromPolicyReview %}
+  {% set backLinkHref = "/licence/vary/id/" + licence.id + "/policy-changes/input/callback/"+ (policyReview.policyChangeInputCounter - 1)%}
+  {% set noJsBackLink = true%}
+{% else %}
+  {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+{% endif %}
+
+{% block content %}
+    {% if fromPolicyReview %}
+        <span class="govuk-caption-l">Change {{policyReview.conditionCounter}} of {{policyReview.policyChangesCount}}</span>
+    {% endif %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Complete the licence condition</h1>
+        </div>
+    </div>
+    
+    <div class="govuk-button-group">
+        <form method="POST"
+            id="additionConditionInputs"
+        >
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" name="code" value="{{ config.code }}">
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <p class="govuk-body">
+                        {{ config.text }}
+                    </p>
+                    {% if config.subtext %}
+                        <div class="govuk-hint">{{ config.subtext }}</div>
+                    {% endif %}
+
+                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+
+                    <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Help with this licence condition</h2>
+
+                    {{ govukDetails({
+                        summaryText: "If curfews are longer than 12 hours",
+                        html: "You must use a bespoke licence condition approved by PPCS if: <ul class='govuk-list--bullet'><li>the total length of someone's curfews is more than 12 hours</li><li>they need more than 3 curfews</li></ul>",
+                        classes: "govuk-!-margin-1"
+                    }) }}
+
+                    {{ govukDetails({
+                        summaryText: "If you are also adding reporting instructions",
+                        html: "Add an hour to the total length of someone's curfews each time you ask them to report to a police station or approved premises in an additional licence condition.</br></br>If this total is more than 12 hours, you must use a bespoke condition approved by PPCS.</br></br>For example, if someone had an 11-hour curfew and had to report to a police station twice a day, the total length of their curfews would be 13 hours. This would need PPCS approval.",
+                        classes: "govuk-!-margin-1"
+                    }) }}
+
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            text: "Continue",
+                            type: "submit",
+                            classes: 'govuk-!-margin-top-6',
+                            attributes: { 'data-qa': 'continue' },
+                            preventDoubleClick: true
+                        }) }}
+                        {{ govukButton({
+                            text: "Delete this condition",
+                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/code/" + additionalCondition.code + "/delete" + fromReview + fromPolicyReviewQuery,
+                            classes: 'govuk-button--secondary',
+                            attributes: { 'data-qa': 'delete' },
+                            preventDoubleClick: true
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/assets/js/conditions/addAnother.js"></script>
+{% endblock %}
+

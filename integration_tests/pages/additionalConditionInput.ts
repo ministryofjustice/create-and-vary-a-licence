@@ -86,8 +86,8 @@ export default class AdditionalConditionsInputPage extends Page {
   }
 
   nextCondition = (runAxe = true): AdditionalConditionsInputPage => {
-    cy.get(this.continueButtonId).click()
     cy.task('stubGetLicenceWithConditionToComplete', this.additionalConditionsToInput.shift())
+    cy.get(this.continueButtonId).click()
     cy.reload()
     this.checkOnPage()
     if (runAxe) {
@@ -117,5 +117,33 @@ export default class AdditionalConditionsInputPage extends Page {
     this.checkOnPage()
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
+  }
+
+  addFirstCurfew = (numberOfCurfews: number): AdditionalConditionsInputPage => {
+    const parentSelector = `#conditional-numberOfCurfews${numberOfCurfews === 1 ? '' : `-${numberOfCurfews}`}`
+
+    cy.get(parentSelector).find(`#curfewStart-hour`).type('7')
+    cy.get(parentSelector).find(`#curfewStart-minute`).type('30')
+    cy.get(parentSelector).find(`#curfewStart-ampm`).select('am')
+
+    cy.get(parentSelector).find(`#curfewEnd-hour`).type('8')
+    cy.get(parentSelector).find(`#curfewEnd-minute`).type('30')
+    cy.get(parentSelector).find(`#curfewEnd-ampm`).select('am')
+
+    return this
+  }
+
+  addSecondCurfew = (numberOfCurfews: number): AdditionalConditionsInputPage => {
+    const parentSelector = `#conditional-numberOfCurfews${numberOfCurfews === 1 ? '' : `-${numberOfCurfews}`}`
+
+    cy.get(parentSelector).find(`#curfewStart2-hour`).type('5')
+    cy.get(parentSelector).find(`#curfewStart2-minute`).type('30')
+    cy.get(parentSelector).find(`#curfewStart2-ampm`).select('pm')
+
+    cy.get(parentSelector).find(`#curfewEnd2-hour`).type('6')
+    cy.get(parentSelector).find(`#curfewEnd2-minute`).type('30')
+    cy.get(parentSelector).find(`#curfewEnd2-ampm`).select('pm')
+
+    return this
   }
 }

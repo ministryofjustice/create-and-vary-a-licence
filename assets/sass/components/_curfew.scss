@@ -1,0 +1,10 @@
+#conditional-numberOfCurfews-2,
+#conditional-numberOfCurfews-3 {
+  div[data-module="moj-condition-add-another"]:nth-of-type(odd){
+    padding-top: govuk-spacing(7);
+  }
+
+  div[data-module="moj-condition-add-another"]:nth-of-type(1){
+    padding-top: 0;
+  }
+}

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
+import { getConditionCallbackHref } from '../../../utils/conditionRoutes'
 
 export default class AdditionalLicenceConditionsCallbackRoutes {
   constructor(private readonly conditionService: ConditionService) {}
@@ -25,9 +26,12 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
 
     if (requiringInput) {
       return res.redirect(
-        `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${requiringInput.id}${
-          req.query?.fromReview ? '?fromReview=true' : ''
-        }`
+        getConditionCallbackHref({
+          licenceId,
+          conditionId: requiringInput.id,
+          conditionCode: requiringInput.code,
+          fromReview: !!req.query?.fromReview,
+        })
       )
     }
 
