@@ -10,6 +10,7 @@ import * as licenceComparator from '../utils/licenceComparator'
 import { PrisonInformation } from '../@types/prisonApiClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
+import DateTime from '../routes/creatingLicences/types/dateTime'
 import Address from '../routes/creatingLicences/types/address'
 import LicenceType from '../enumeration/licenceType'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
@@ -449,20 +450,17 @@ describe('Licence Service', () => {
   })
 
   it('Update appointment time', async () => {
-    const timeConverter = jest.spyOn(utils, 'simpleDateTimeToJson').mockReturnValue('22/12/2022 12:20')
+    const timeConverter = jest.spyOn(utils, 'dateTimeToJson').mockReturnValue('22/12/2022 12:20')
     await licenceService.updateAppointmentTime(
       '1',
-      {
-        date: { day: '22', month: '12', year: '2022' },
-        time: { hour: '12', minute: '20', ampm: 'pm' },
-      } as SimpleDateTime,
+      { date: '22/12/2022', time: { hour: '12', minute: '20', ampm: 'pm' } } as DateTime,
       user
     )
     expect(licenceApiClient.updateAppointmentTime).toBeCalledWith('1', { appointmentTime: '22/12/2022 12:20' }, user)
     expect(timeConverter).toBeCalledWith({
-      date: { day: '22', month: '12', year: '2022' },
+      date: '22/12/2022',
       time: { hour: '12', minute: '20', ampm: 'pm' },
-    } as SimpleDateTime)
+    } as DateTime)
   })
 
   it('Update appointment address', async () => {
