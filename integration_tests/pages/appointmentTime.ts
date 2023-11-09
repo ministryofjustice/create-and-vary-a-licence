@@ -3,11 +3,7 @@ import Page from './page'
 import AdditionalConditionsQuestionPage from './additionalConditionsQuestion'
 
 export default class AppointmentTimePage extends Page {
-  private inductionDateDayId = '#date-day'
-
-  private inductionDateMonthId = '#date-month'
-
-  private inductionDateYearId = '#date-year'
+  private inductionDateId = '#date'
 
   private inductionTimeHourId = '#time-hour'
 
@@ -22,9 +18,8 @@ export default class AppointmentTimePage extends Page {
   }
 
   enterDate = (moment: Moment): AppointmentTimePage => {
-    cy.get(this.inductionDateDayId).type(moment.date().toString())
-    cy.get(this.inductionDateMonthId).type((moment.month() + 1).toString())
-    cy.get(this.inductionDateYearId).type(moment.year().toString())
+    const date = moment.format('DD/MM/YYYY')
+    cy.get(this.inductionDateId).type(date)
     return this
   }
 
