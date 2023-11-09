@@ -7,7 +7,7 @@
 #}
 
 {% from "../../partials/timePicker.njk" import timePicker %}
-{% from "customComponents/datepicker/macro.njk" import hmppsDatepicker %}
+{% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
 
 
 {% set pageTitle = applicationName + " - Create a licence - When is the initial appointment?" %}
@@ -35,7 +35,7 @@
                         }) }}
                     {% endif %}
 
-                    {{ hmppsDatepicker({
+                    {{ hmppsDatePicker({
                         id: "date",
                         name: "date",
                         label: {
