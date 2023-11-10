@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import CaseloadService from '../../../services/caseloadService'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
+import statusConfig from '../../../licences/licenceStatus'
 
 export default class ProbationTeamRoutes {
   constructor(private readonly caseloadService: CaseloadService) {}
@@ -13,6 +14,6 @@ export default class ProbationTeamRoutes {
 
     const caseload = await this.caseloadService.getTeamCreateCaseload(user, [teamCode])
     const caseloadViewModel = createCaseloadViewModel(caseload, search)
-    res.json(caseloadViewModel)
+    res.render('pages/support/probationTeam', { caseload: caseloadViewModel, statusConfig, teamCode })
   }
 }
