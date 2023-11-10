@@ -5,11 +5,11 @@
 {% from "partials/statusBadge.njk" import statusBadge %}
 {% from "partials/licenceDescription.njk" import licenceDescription %}
 
-{% set pageTitle = applicationName + " - Support - Probation Team Case List" %}
+{% set pageTitle = applicationName + " - Support - Staff Case List" %}
 {% set pageId = "caseload-page" %}
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
-{% set showCommsBanner = showWhatsNewBanner %}
+{% set showCommsBanner = false %}
 
 {% macro offenderName(offenderName, crn, prisonerNumber, licenceId, index) %}
     <div class="caseload-offender-name">
@@ -71,17 +71,17 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">Team caseload for: {{ teamCode }}</h1>
+            <h1 class="govuk-heading-xl">User caseload for: {{ id }}</h1>
         </div>
     </div>
 
     <nav class="moj-sub-navigation" aria-label="Sub navigation">
         <ul class="moj-sub-navigation__list">
             <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if view == 'prison' %}aria-current="page"{% endif %} href="?view=prison">In Prison</a>
+                <a class="moj-sub-navigation__link" {% if view == 'prison' %}aria-current="page"{% endif %} href="?view=prison&id={{id}}">In Prison</a>
             </li>
             <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if view == 'released' %}aria-current="page"{% endif %} href="?view=released">Released</a>
+                <a class="moj-sub-navigation__link" {% if view == 'released' %}aria-current="page"{% endif %} href="?view=released&id={{id}}">Released</a>
             </li>
         </ul>
     </nav>
@@ -129,7 +129,7 @@
     {% else %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                <h3 class="govuk-heading-s">There are no offenders in the teams caseload.</h3>
+                <h3 class="govuk-heading-s">There are no offenders in this person's case list.</h3>
             </div>
         </div>
     {% endif %}
