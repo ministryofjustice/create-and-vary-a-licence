@@ -14,6 +14,7 @@ import prisonIdDelete from './types/prisonIdDelete'
 import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
 import OffenderLicenceStatusRoutes from './handlers/offenderLicenceStatus'
 import OffenderLicenceDatesRoutes from './handlers/offenderLicenceDates'
+import ProbationTeamRoutes from './handlers/probationTeam'
 import LicenceDatesAndReason from './types/licenceDatesAndReason'
 
 export default function Index({
@@ -23,6 +24,7 @@ export default function Index({
   prisonRegisterService,
   conditionService,
   licenceOverrideService,
+  caseloadService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -45,6 +47,7 @@ export default function Index({
   const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
+  const probationTeamHandler = new ProbationTeamRoutes(caseloadService)
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
@@ -60,6 +63,7 @@ export default function Index({
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
   get('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.POST, LicenceDatesAndReason)
+  get('/probation/teams/:teamCode', probationTeamHandler.GET)
 
   return router
 }
