@@ -49,7 +49,7 @@ export default function Index({
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
   const probationTeamHandler = new ProbationTeamRoutes(caseloadService)
-  const probationStaffHandler = new ProbationUserRoutes(caseloadService)
+  const probationStaffHandler = new ProbationUserRoutes(caseloadService, communityService)
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
