@@ -7,7 +7,7 @@ import CommunityService from '../../../services/communityService'
 export default class ProbationTeamRoutes {
   constructor(
     private readonly caseloadService: CaseloadService,
-    private communityService: CommunityService
+    private readonly communityService: CommunityService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
