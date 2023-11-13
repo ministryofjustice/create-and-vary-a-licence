@@ -22,12 +22,11 @@ executors:
     docker:
       - image: 'cimg/node:<<pipeline.parameters.node-version>>'
       - image: 'circleci/redis:buster'
-      - image: 'localstack/localstack:0.13.2'
+      - image: 'localstack/localstack:latest'
         environment:
           SERVICES: sqs
-          DATA_DIR: /tmp/localstack/data
+          PERSISTENCE: /tmp/localstack/data
           TMP_DIR: /private
-          DEFAULT_REGION: eu-west-2
     working_directory: ~/app
     resource_class: medium
 
