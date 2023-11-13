@@ -24,7 +24,7 @@
 {% for offender in caseload %}
 
     {% if offender.probationPractitioner %}
-        {% set comDetailsHtml = '<a class="govuk-link" href="/licence/create/probation-practitioner/staffCode/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
+        {% set comDetailsHtml = '<a class="govuk-link govuk-link--no-visited-state" href="/support/probation-practitioner/' + offender.probationPractitioner.staffCode + '">' + offender.probationPractitioner.name + '</a>' %}
     {% else %}
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
@@ -78,10 +78,10 @@
     <nav class="moj-sub-navigation" aria-label="Sub navigation">
         <ul class="moj-sub-navigation__list">
             <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if view == 'prison' %}aria-current="page"{% endif %} href="?view=prison&id={{id}}">In Prison</a>
+                <a class="moj-sub-navigation__link" {% if view == 'prison' %}aria-current="page"{% endif %} href="?view=prison">In Prison</a>
             </li>
             <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if view == 'released' %}aria-current="page"{% endif %} href="?view=released&id={{id}}">Released</a>
+                <a class="moj-sub-navigation__link" {% if view == 'released' %}aria-current="page"{% endif %} href="?view=released">Released</a>
             </li>
         </ul>
     </nav>
