@@ -11,7 +11,7 @@ export default class ProbationTeamRoutes {
     const { teamCode } = req.params
 
     if (!view) {
-      return res.redirect(`/support/probation/teams/${teamCode}?view=prison`)
+      return res.redirect(`/support/probation-teams/${teamCode}/caseload?view=prison`)
     }
 
     const { user } = res.locals
