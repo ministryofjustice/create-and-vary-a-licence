@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import LicenceService from '../../../services/licenceService'
-import { jsonToSimpleDateTime } from '../../../utils/utils'
+import { jsonToDateTime } from '../../../utils/utils'
 import LicenceType from '../../../enumeration/licenceType'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
@@ -16,7 +16,7 @@ export default class InitialMeetingTimeRoutes {
 
     const bankHolidays = await this.ukBankHolidayFeedService.getEnglishAndWelshHolidays()
 
-    const formDate = jsonToSimpleDateTime(licence.appointmentTime)
+    const formDate = jsonToDateTime(licence.appointmentTime)
     res.render('pages/create/initialMeetingTime', {
       formDate,
       releaseIsOnBankHolidayOrWeekend: bankHolidays.isBankHolidayOrWeekend(
