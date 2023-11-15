@@ -5,7 +5,6 @@ import {
   convertDateFormat,
   convertToTitleCase,
   hasRole,
-  jsonToDateTime,
   jsonToSimpleDateTime,
   simpleDateTimeToJson,
   stringToAddressObject,
@@ -159,28 +158,6 @@ describe('Create date from string', () => {
     const dateString = '25/12/2022'
     expect(toDate(dateString)).toStrictEqual(new Date('2022-12-25'))
   })
-})
-
-test.each`
-  jsonDateTime          | stringDate      | hour      | min       | ampm
-  ${'12/12/2021 23:15'} | ${'12/12/2021'} | ${'11'}   | ${'15'}   | ${'pm'}
-  ${'31/01/2022 12:01'} | ${'31/01/2022'} | ${'12'}   | ${'01'}   | ${'pm'}
-  ${'31/01/2022 00:00'} | ${'31/01/2022'} | ${'12'}   | ${'00'}   | ${'am'}
-  ${'01/01/2022 00:01'} | ${'01/01/2022'} | ${'12'}   | ${'01'}   | ${'am'}
-  ${'22/10/2024 14:23'} | ${'22/10/2024'} | ${'02'}   | ${'23'}   | ${'pm'}
-  ${'30/12/2024 21:59'} | ${'30/12/2024'} | ${'09'}   | ${'59'}   | ${'pm'}
-  ${'32/01/2025 00:00'} | ${'null'}       | ${'null'} | ${'null'} | ${'null'}
-`('convert JSON datetime to DateTime', ({ jsonDateTime, stringDate, hour, min, ampm }) => {
-  const dateTime = jsonToDateTime(jsonDateTime)
-  if (isDefined(dateTime)) {
-    const { date, time } = dateTime
-    expect(date).toEqual(stringDate)
-    expect(time?.hour).toEqual(hour)
-    expect(time?.minute).toEqual(min)
-    expect(time?.ampm).toEqual(ampm)
-  } else {
-    expect(dateTime).toBeUndefined()
-  }
 })
 
 test.each`

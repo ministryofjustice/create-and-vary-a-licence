@@ -2,7 +2,6 @@ import moment from 'moment'
 import { format, isBefore, parse } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
-import DateTime from '../routes/creatingLicences/types/dateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/creatingLicences/types/address'
@@ -38,21 +37,6 @@ const hasAuthSource = (user: Express.User, source: string): boolean => user?.aut
  * @returns date converted to format DD/MM/YYYY.
  */
 const convertDateFormat = (date: string): string => (date ? moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY') : undefined)
-
-/**
- * Converts a JSON date time `dd/mm/yyyy hh:mm` to a DateTime for display
- * @param dt: string
- */
-const jsonToDateTime = (dt: string): DateTime | undefined => {
-  const momentDt = moment(dt, 'D/MM/YYYY HHmm')
-  if (!momentDt.isValid()) {
-    return undefined
-  }
-  const dateString = momentDt.format('DD/MM/YYYY')
-  const ampm = momentDt.format('a') === 'am' ? AmPm.AM : AmPm.PM
-  const simpleTime = new SimpleTime(momentDt.format('hh'), momentDt.format('mm'), ampm)
-  return DateTime.fromDateAndTime(dateString, simpleTime)
-}
 
 /**
  * Converts a SimpleDateTime display value to a JSON string format dd/mm/yyyy hh:mm
@@ -245,7 +229,6 @@ export {
   hasAuthSource,
   isBlank,
   simpleDateTimeToJson,
-  jsonToDateTime,
   dateStringToSimpleDate,
   jsonToSimpleDateTime,
   addressObjectToString,
