@@ -60,6 +60,15 @@
                             attributes: { 'data-qa': 'delete' },
                             preventDoubleClick: true
                         }) }}
+                        {% if config.skipable and not licence.isVariation %}
+                            {{ govukButton({
+                                text: "Skip for now",
+                                href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/skip" + fromReview + fromPolicyReviewQuery,
+                                classes: 'govuk-button--secondary',
+                                attributes: { 'data-qa': 'skip' },
+                                preventDoubleClick: true
+                            }) }}
+                        {% endif %}
                     </div>
                 </div>
             </div>

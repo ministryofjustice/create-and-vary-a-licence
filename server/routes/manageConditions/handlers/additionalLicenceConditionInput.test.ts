@@ -9,6 +9,8 @@ const conditionService = new ConditionService(null) as jest.Mocked<ConditionServ
 const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
 const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
 
+jest.mock('../../../services/licenceService')
+
 describe('Route Handlers - Create Licence - Additional Licence Condition Input', () => {
   const handler = new AdditionalLicenceConditionInputRoutes(licenceService, conditionService)
   let req: Request
@@ -93,7 +95,6 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
   describe('POST', () => {
     beforeEach(() => {
-      licenceService.updateAdditionalConditionData = jest.fn()
       res.locals.licence = {
         additionalLicenceConditions: [
           {
@@ -130,8 +131,6 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
 
   describe('DELETE', () => {
     beforeEach(() => {
-      licenceService.updateAdditionalConditions = jest.fn()
-      licenceService.deleteAdditionalCondition = jest.fn()
       res.locals.licence = {
         id: 1,
         additionalLicenceConditions: [
@@ -162,6 +161,43 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
     it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
       req.query.fromReview = 'true'
       await handler.DELETE(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+      )
+    })
+  })
+
+  describe('SKIP', () => {
+    beforeEach(() => {
+      res.locals.licence = {
+        id: 1,
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: 'code1',
+          },
+        ],
+      } as Licence
+    })
+
+    it('should call licence service to update the additional condition data with the skipped placeholder value', async () => {
+      await handler.SKIP(req, res)
+      expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
+        '1',
+        { code: 'code1', id: 1 },
+        { conditionSkipped: '[DATE REQUIRED]' },
+        { username: 'joebloggs' }
+      )
+    })
+
+    it('should redirect to the callback function', async () => {
+      await handler.SKIP(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions/callback')
+    })
+
+    it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
+      req.query.fromReview = 'true'
+      await handler.SKIP(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
         '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
       )

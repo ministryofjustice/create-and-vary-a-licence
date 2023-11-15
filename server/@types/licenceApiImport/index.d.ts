@@ -266,14 +266,6 @@ export interface paths {
      */
     post: operations['createLicence']
   }
-  '/licence/activate-licences': {
-    /**
-     * Activate licences in bulk
-     * @deprecated
-     * @description Set licence statuses to ACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-     */
-    post: operations['activateLicences']
-  }
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/file-upload': {
     /**
      * Upload a multipart/form-data request containing a PDF exclusion zone file.
@@ -302,12 +294,19 @@ export interface paths {
      */
     post: operations['requestAuditEvents']
   }
-  '/public/policy/latest': {
+  '/public/policy/{version}': {
     /**
      * Get a policy by its version number
      * @description Returns a policy by its version number. Requires ROLE_VIEW_LICENCES.
      */
-    get: operations['getLatestPolicy']
+    get: operations['getPolicyByVersionNumber']
+  }
+  '/public/licences/{licenceId}/conditions/{conditionId}/image-upload': {
+    /**
+     * Get an associated image upload for a specific licence and condition
+     * @description Returns an associated image upload for a specified licence and condition. Requires ROLE_VIEW_LICENCES.
+     */
+    get: operations['getImageUpload']
   }
   '/public/licences/id/{licenceId}': {
     /**
@@ -1273,6 +1272,8 @@ export interface components {
       data: components['schemas']['AdditionalConditionData'][]
       /** @description The list of file upload summary for this additional condition */
       uploadSummary: components['schemas']['AdditionalConditionUploadSummary'][]
+      /** @description Whether the condition is ready to submit for approval */
+      readyToSubmit?: boolean
     }
     /** @description Describes the files uploaded for an additional condition */
     AdditionalConditionUploadSummary: {
@@ -1971,6 +1972,13 @@ export interface components {
        * @example 1.3
        */
       licenceVersion?: string
+      /**
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       */
+      earliestReleaseDate?: string
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
     }
     AddAnother: {
       label: string
@@ -1985,6 +1993,7 @@ export interface components {
       categoryShort?: string
       subtext?: string
       type?: string
+      skipable?: boolean
     }
     AdditionalConditionPss: {
       code: string
@@ -1996,6 +2005,7 @@ export interface components {
       pssDates?: boolean
       inputs?: components['schemas']['Input'][]
       type?: string
+      skipable?: boolean
     }
     AdditionalConditions: {
       AP: components['schemas']['AdditionalConditionAp'][]
@@ -2010,7 +2020,7 @@ export interface components {
     }
     ConditionalInput: {
       /** @enum {string} */
-      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check'
+      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check' | 'skipable'
       label: string
       name: string
       /** @enum {string} */
@@ -2021,7 +2031,7 @@ export interface components {
     }
     Input: {
       /** @enum {string} */
-      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check'
+      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check' | 'skipable'
       label: string
       name: string
       listType?: string
@@ -3702,42 +3712,6 @@ export interface operations {
     }
   }
   /**
-   * Activate licences in bulk
-   * @deprecated
-   * @description Set licence statuses to ACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
-  activateLicences: {
-    requestBody: {
-      content: {
-        'application/json': number[]
-      }
-    }
-    responses: {
-      /** @description Licences activated */
-      200: {
-        content: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /**
    * Upload a multipart/form-data request containing a PDF exclusion zone file.
    * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
    */
@@ -3894,7 +3868,12 @@ export interface operations {
    * Get a policy by its version number
    * @description Returns a policy by its version number. Requires ROLE_VIEW_LICENCES.
    */
-  getLatestPolicy: {
+  getPolicyByVersionNumber: {
+    parameters: {
+      path: {
+        version: string
+      }
+    }
     responses: {
       /** @description Policy found */
       200: {
@@ -3915,6 +3894,44 @@ export interface operations {
         }
       }
       /** @description The policy for this version was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Get an associated image upload for a specific licence and condition
+   * @description Returns an associated image upload for a specified licence and condition. Requires ROLE_VIEW_LICENCES.
+   */
+  getImageUpload: {
+    parameters: {
+      path: {
+        licenceId: number
+        conditionId: number
+      }
+    }
+    responses: {
+      /** @description Image returned */
+      200: {
+        content: {
+          'image/jpeg': unknown
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description No image was found. */
       404: {
         content: {
           'application/json': components['schemas']['ErrorResponse']

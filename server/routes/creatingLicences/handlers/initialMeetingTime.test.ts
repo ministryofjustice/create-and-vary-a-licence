@@ -40,6 +40,7 @@ describe('Route - create licence - initial meeting date and time', () => {
           username: 'joebloggs',
         },
         licence: {
+          id: 1,
           appointmentTime: '21/10/2022 14:15',
           conditionalReleaseDate: '14/05/2022',
         },
@@ -55,39 +56,48 @@ describe('Route - create licence - initial meeting date and time', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
         formDate,
         releaseIsOnBankHolidayOrWeekend: true,
+        skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
       })
     })
   })
 
   describe('POST', () => {
-    it('should redirect to the additional licence conditions question page if licence type is AP', async () => {
-      res.locals.licence.typeCode = 'AP'
-
+    it('should update the appointment address', async () => {
       await handler.POST(req, res)
       expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
+    })
+
+    it('should redirect to the next page', async () => {
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
+    })
+  })
+
+  describe('getNextPage', () => {
+    it('should redirect to the additional licence conditions question page if licence type is AP', async () => {
+      res.locals.licence.typeCode = 'AP'
+      expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
+        '/licence/create/id/1/additional-licence-conditions-question'
+      )
     })
 
     it('should redirect to the additional licence conditions question page if licence type is AP_PSS', async () => {
       res.locals.licence.typeCode = 'AP_PSS'
-
-      await handler.POST(req, res)
-      expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-licence-conditions-question')
+      expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
+        '/licence/create/id/1/additional-licence-conditions-question'
+      )
     })
 
     it('should redirect to the additional pss conditions question page if licence type is PSS', async () => {
       res.locals.licence.typeCode = 'PSS'
-
-      await handler.POST(req, res)
-      expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
+      expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
+        '/licence/create/id/1/additional-pss-conditions-question'
+      )
     })
 
     it('should redirect to the check your answers page if fromReview flag is set', async () => {
       req.query.fromReview = 'true'
-      await handler.POST(req, res)
-      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
+      expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe('/licence/create/id/1/check-your-answers')
     })
   })
 })

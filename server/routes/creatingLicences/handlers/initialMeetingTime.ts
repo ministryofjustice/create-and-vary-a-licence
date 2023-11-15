@@ -22,6 +22,7 @@ export default class InitialMeetingTimeRoutes {
       releaseIsOnBankHolidayOrWeekend: bankHolidays.isBankHolidayOrWeekend(
         moment(licence.actualReleaseDate || licence.conditionalReleaseDate, 'DD/MM/YYYY')
       ),
+      skipUrl: this.getNextPage(licence.id.toString(), licence.typeCode, req),
     })
   }
 
@@ -32,14 +33,16 @@ export default class InitialMeetingTimeRoutes {
 
     await this.licenceService.updateAppointmentTime(licenceId, req.body, user)
 
-    if (req.query?.fromReview) {
-      return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
-    }
+    return res.redirect(this.getNextPage(licenceId, licence.typeCode, req))
+  }
 
-    if (licence.typeCode === LicenceType.AP || licence.typeCode === LicenceType.AP_PSS) {
-      return res.redirect(`/licence/create/id/${licenceId}/additional-licence-conditions-question`)
+  getNextPage = (licenceId: string, typeCode: string, request: Request): string => {
+    if (request.query?.fromReview) {
+      return `/licence/create/id/${licenceId}/check-your-answers`
     }
-
-    return res.redirect(`/licence/create/id/${licenceId}/additional-pss-conditions-question`)
+    if (typeCode === LicenceType.AP || typeCode === LicenceType.AP_PSS) {
+      return `/licence/create/id/${licenceId}/additional-licence-conditions-question`
+    }
+    return `/licence/create/id/${licenceId}/additional-pss-conditions-question`
   }
 }

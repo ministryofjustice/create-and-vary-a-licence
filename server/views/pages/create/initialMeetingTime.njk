@@ -74,11 +74,18 @@
                     }) }}
                 {% endcall %}
 
-                {{ govukButton({
-                    text: continueOrReturnToCheckAnswers,
-                    type: "submit",
-                    attributes: { 'data-qa': 'continue' }
-                }) }}
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: continueOrReturnToCheckAnswers,
+                        type: "submit",
+                        attributes: { 'data-qa': 'continue' }
+                    }) }}
+                    {{ govukButton({
+                        text: 'Skip this for now',
+                        href: skipUrl,
+                        classes: "govuk-button--secondary"
+                    }) }}
+                </div>
             </div>
         </div>
     </form>

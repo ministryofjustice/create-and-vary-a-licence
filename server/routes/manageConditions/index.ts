@@ -65,6 +65,7 @@ export default function Index(services: Services): Router {
     get('/additional-licence-conditions/condition/:conditionId', controller.GET)
     post('/additional-licence-conditions/condition/:conditionId', controller.POST)
     get('/additional-licence-conditions/condition/:conditionId/delete', controller.DELETE)
+    get('/additional-licence-conditions/condition/:conditionId/skip', controller.SKIP)
   }
 
   {
@@ -88,6 +89,7 @@ export default function Index(services: Services): Router {
     get('/additional-pss-conditions/condition/:conditionId', controller.GET)
     post('/additional-pss-conditions/condition/:conditionId', controller.POST)
     post('/additional-pss-conditions/condition/:conditionId/delete', controller.DELETE)
+    get('/additional-licence-conditions/condition/:conditionId/skip', controller.SKIP)
   }
 
   {
