@@ -1,4 +1,5 @@
 import { Expose, Type } from 'class-transformer'
+import moment from 'moment'
 import { Validate } from 'class-validator'
 import type { DateString } from './dateString'
 import ValidDateString from '../../../validators/dateStringValidator'
@@ -33,6 +34,14 @@ class DateTime {
   @Type(() => SimpleTime)
   @Validate(ValidSimpleTime)
   time: SimpleTime
+
+  static toJson(dt: DateTime): string | undefined {
+    const { date, time } = dt
+    const dateString = date.toString().split('/').reverse().join(' ')
+    const dateTimeString = [dateString, time.hour, time.minute, time.ampm].join(' ')
+    const momentDt = moment(dateTimeString, 'YYYY MM DD hh mm a')
+    return momentDt.isValid() ? momentDt.format('DD/MM/YYYY HH:mm') : undefined
+  }
 }
 
 export default DateTime

@@ -6,7 +6,6 @@ import {
   convertToTitleCase,
   hasRole,
   jsonToDateTime,
-  dateTimeToJson,
   jsonToSimpleDateTime,
   simpleDateTimeToJson,
   stringToAddressObject,
@@ -182,28 +181,6 @@ test.each`
     expect(time?.ampm).toEqual(ampm)
   } else {
     expect(dateTime).toBeUndefined()
-  }
-})
-
-test.each`
-  stringDate      | hour    | min     | ampm    | jsonDateTime
-  ${'12/12/2021'} | ${'11'} | ${'15'} | ${'pm'} | ${'12/12/2021 23:15'}
-  ${'31/01/2022'} | ${'12'} | ${'01'} | ${'pm'} | ${'31/01/2022 12:01'}
-  ${'31/12/2022'} | ${'12'} | ${'00'} | ${'pm'} | ${'31/12/2022 12:00'}
-  ${'31/12/2022'} | ${'12'} | ${'00'} | ${'am'} | ${'31/12/2022 00:00'}
-  ${'1/1/2022'}   | ${'1'}  | ${'1'}  | ${'am'} | ${'01/01/2022 01:01'}
-  ${'22/10/2024'} | ${'2'}  | ${'23'} | ${'pm'} | ${'22/10/2024 14:23'}
-  ${'30/12/2024'} | ${'09'} | ${'59'} | ${'pm'} | ${'30/12/2024 21:59'}
-  ${'30/12/24'}   | ${'09'} | ${'59'} | ${'pm'} | ${'30/12/2024 21:59'}
-  ${'32/01/2025'} | ${'00'} | ${'00'} | ${'am'} | ${'null'}
-`('convert DateTime to JSON datetime', ({ stringDate, hour, min, ampm, jsonDateTime }) => {
-  const inductionDate = stringDate
-  const inductionTime = new SimpleTime(hour, min, ampm === 'am' ? AmPm.AM : AmPm.PM)
-  const jsonDt = dateTimeToJson(DateTime.fromDateAndTime(inductionDate, inductionTime))
-  if (isDefined(jsonDt)) {
-    expect(jsonDt).toEqual(jsonDateTime)
-  } else {
-    expect(jsonDt).toBeUndefined()
   }
 })
 

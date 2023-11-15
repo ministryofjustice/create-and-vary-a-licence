@@ -449,7 +449,7 @@ describe('Licence Service', () => {
   })
 
   it('Update appointment time', async () => {
-    const timeConverter = jest.spyOn(utils, 'dateTimeToJson').mockReturnValue('22/12/2022 12:20')
+    const timeConverter = jest.spyOn(DateTime, 'toJson').mockReturnValue('22/12/2022 12:20')
     await licenceService.updateAppointmentTime(
       '1',
       { date: '22/12/2022', time: { hour: '12', minute: '20', ampm: 'pm' } } as DateTime,

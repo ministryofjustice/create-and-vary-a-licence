@@ -55,18 +55,6 @@ const jsonToDateTime = (dt: string): DateTime | undefined => {
 }
 
 /**
- * Converts a DateTime display value to a JSON string format dd/mm/yyyy hh:mm
- * @param dt: DateTime
- */
-const dateTimeToJson = (dt: DateTime): string | undefined => {
-  const { date, time } = dt
-  const dateString = date.toString().split('/').reverse().join(' ')
-  const dateTimeString = [dateString, time.hour, time.minute, time.ampm].join(' ')
-  const momentDt = moment(dateTimeString, 'YYYY MM DD hh mm a')
-  return momentDt.isValid() ? momentDt.format('DD/MM/YYYY HH:mm') : undefined
-}
-
-/**
  * Converts a SimpleDateTime display value to a JSON string format dd/mm/yyyy hh:mm
  * @param dt: SimpleDateTime
  */
@@ -257,7 +245,6 @@ export {
   hasAuthSource,
   isBlank,
   simpleDateTimeToJson,
-  dateTimeToJson,
   jsonToDateTime,
   dateStringToSimpleDate,
   jsonToSimpleDateTime,
