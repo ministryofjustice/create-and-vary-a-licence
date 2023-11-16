@@ -3,6 +3,7 @@ import ConditionService from '../../../services/conditionService'
 
 import AdditionalLicenceConditionsCallbackRoutes from './additionalLicenceConditionsCallback'
 import type { Licence } from '../../../@types/licenceApiClientTypes'
+import { CURFEW_CONDITION_CODE } from '../../../utils/conditionRoutes'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
@@ -125,6 +126,32 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
 
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/create/id/1/additional-licence-conditions/condition/1?fromReview=true`
+      )
+    })
+
+    it('should redirect to the curfew-specific page if the curfew condition is selected', async () => {
+      res.locals.licence = {
+        additionalLicenceConditions: [
+          {
+            id: 1,
+            code: CURFEW_CONDITION_CODE,
+            data: [],
+            sequence: 1,
+          },
+        ],
+      } as Licence
+
+      conditionsProviderSpy.mockResolvedValueOnce({
+        text: 'Condition 1',
+        requiresInput: true,
+        code: CURFEW_CONDITION_CODE,
+        category: 'group1',
+      })
+
+      await handler.GET(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/create/id/1/additional-licence-conditions/condition/${CURFEW_CONDITION_CODE}/curfew`
       )
     })
 

@@ -40,19 +40,20 @@ describe('Route Handlers - Licence Status Override', () => {
       render: jest.fn(),
       redirect: jest.fn(),
     } as unknown as Response
-    req = {} as Request
+    req = {
+      params: {
+        nomsId: 'ABC123',
+        licenceId: '1',
+      },
+    } as unknown as Request
   })
 
   describe('GET', () => {
     it('Returns valid list of status codes', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
 
-      req.params = {
-        nomsId: 'ABC123',
-        licenceId: '1',
-      }
-
       await handler.GET(req, res)
+      const { nomsId } = req.params
 
       expect(res.render).toBeCalledWith('pages/support/offenderLicenceStatus', {
         availableStatusCodes: [
@@ -70,6 +71,7 @@ describe('Route Handlers - Licence Status Override', () => {
         currentStatus: 'IN_PROGRESS',
         licenceId: '1',
         statusConfig,
+        nomsId,
       })
     })
   })
@@ -77,11 +79,6 @@ describe('Route Handlers - Licence Status Override', () => {
   describe('POST', () => {
     it('Update licence status from IN_PROGRESS to APPROVED', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
-
-      req.params = {
-        nomsId: 'ABC123',
-        licenceId: '1',
-      }
 
       const reason = 'Test Reason'
 
@@ -98,11 +95,6 @@ describe('Route Handlers - Licence Status Override', () => {
 
     it('Update licence status from IN_PROGRESS fails if no reason is given', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
-
-      req.params = {
-        nomsId: 'ABC123',
-        licenceId: '1',
-      }
 
       req.body = { status: LicenceStatus.APPROVED.toString(), statusChangeReason: null }
 
@@ -135,11 +127,6 @@ describe('Route Handlers - Licence Status Override', () => {
 
     it('Update licence status from IN_PROGRESS fails if no status is given', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
-
-      req.params = {
-        nomsId: 'ABC123',
-        licenceId: '1',
-      }
 
       const reason = 'Test Reason'
 
@@ -174,11 +161,6 @@ describe('Route Handlers - Licence Status Override', () => {
 
     it('Update licence status from IN_PROGRESS fails if no status and reason is given', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(mockLicences)
-
-      req.params = {
-        nomsId: 'ABC123',
-        licenceId: '1',
-      }
 
       req.body = { status: null, statusChangeReason: null }
 

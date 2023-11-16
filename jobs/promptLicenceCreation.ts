@@ -33,6 +33,7 @@ const buildEmailGroups = async (
   const mapPrisonerToReleaseCase = (prisoner: Prisoner) => {
     return {
       name: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
+      crn: prisoner.crn,
       releaseDate: prisoner.confirmedReleaseDate || prisoner.conditionalReleaseDate,
     }
   }
@@ -58,9 +59,10 @@ const buildEmailGroups = async (
       if (!config.rollout.probationAreas.includes(responsibleCom.probationArea.code)) {
         return null
       }
+      const prisonerWithCRN = { ...prisoner.nomisRecord, crn: prisoner.deliusRecord.offenderCrn }
 
       return {
-        prisoner: prisoner.nomisRecord,
+        prisoner: prisonerWithCRN,
         email: responsibleCom.email,
         comName: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`,
       }
