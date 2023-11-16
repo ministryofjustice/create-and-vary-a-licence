@@ -3,7 +3,7 @@ import Page from './page'
 import AdditionalConditionsQuestionPage from './additionalConditionsQuestion'
 
 export default class AppointmentTimePage extends Page {
-  private inductionDateId = '#date'
+  private inductionDateId = '#date-calendarDate'
 
   private inductionTimeHourId = '#time-hour'
 
