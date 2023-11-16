@@ -1,7 +1,7 @@
 import { Expose, Type } from 'class-transformer'
 import moment from 'moment'
 import { Validate } from 'class-validator'
-import type { DateString } from './dateString'
+import DateString from './dateString'
 import ValidDateString from '../../../validators/dateStringValidator'
 import SimpleTime, { AmPm } from './time'
 import ValidSimpleTime from '../../../validators/simpleTimeValidator'
@@ -18,6 +18,7 @@ class DateTime {
   }
 
   @Expose()
+  @Type(() => DateString)
   @Validate(ValidDateString)
   @DateIsBefore('licence.licenceExpiryDate', {
     message: 'Appointment date must be before the end of the licence date',
@@ -37,7 +38,7 @@ class DateTime {
 
   static toJson(dt: DateTime): string | undefined {
     const { date, time } = dt
-    const dateString = date.toString().split('/').reverse().join(' ')
+    const dateString = date.calendarDate.toString().split('/').reverse().join(' ')
     const dateTimeString = [dateString, time.hour, time.minute, time.ampm].join(' ')
     const momentDt = moment(dateTimeString, 'YYYY MM DD hh mm a')
     return momentDt.isValid() ? momentDt.format('DD/MM/YYYY HH:mm') : undefined
@@ -48,7 +49,7 @@ class DateTime {
     if (!momentDt.isValid()) {
       return undefined
     }
-    const dateString = momentDt.format('DD/MM/YYYY')
+    const dateString = new DateString(momentDt.format('DD/MM/YYYY'))
     const ampm = momentDt.format('a') === 'am' ? AmPm.AM : AmPm.PM
     const simpleTime = new SimpleTime(momentDt.format('hh'), momentDt.format('mm'), ampm)
     return DateTime.fromDateAndTime(dateString, simpleTime)

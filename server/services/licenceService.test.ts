@@ -452,12 +452,12 @@ describe('Licence Service', () => {
     const timeConverter = jest.spyOn(DateTime, 'toJson').mockReturnValue('22/12/2022 12:20')
     await licenceService.updateAppointmentTime(
       '1',
-      { date: '22/12/2022', time: { hour: '12', minute: '20', ampm: 'pm' } } as DateTime,
+      { date: { calendarDate: '22/12/2022' }, time: { hour: '12', minute: '20', ampm: 'pm' } } as DateTime,
       user
     )
     expect(licenceApiClient.updateAppointmentTime).toBeCalledWith('1', { appointmentTime: '22/12/2022 12:20' }, user)
     expect(timeConverter).toBeCalledWith({
-      date: '22/12/2022',
+      date: { calendarDate: '22/12/2022' },
       time: { hour: '12', minute: '20', ampm: 'pm' },
     } as DateTime)
   })
