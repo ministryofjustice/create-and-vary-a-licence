@@ -301,6 +301,13 @@ export interface paths {
      */
     get: operations['getPolicyByVersionNumber']
   }
+  '/public/policy/latest': {
+    /**
+     * Get latest policy.
+     * @description Returns latest policy.Requires ROLE_VIEW_LICENCES.
+     */
+    get: operations['getLatestPolicy']
+  }
   '/public/licences/{licenceId}/conditions/{conditionId}/image-upload': {
     /**
      * Get an associated image upload for a specific licence and condition
@@ -1499,6 +1506,11 @@ export interface components {
        */
       name: string
       /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn: string
+      /**
        * Format: date
        * @description The date on which the prisoner leaves custody
        */
@@ -1993,7 +2005,7 @@ export interface components {
       categoryShort?: string
       subtext?: string
       type?: string
-      skipable?: boolean
+      skippable?: boolean
     }
     AdditionalConditionPss: {
       code: string
@@ -2005,7 +2017,7 @@ export interface components {
       pssDates?: boolean
       inputs?: components['schemas']['Input'][]
       type?: string
-      skipable?: boolean
+      skippable?: boolean
     }
     AdditionalConditions: {
       AP: components['schemas']['AdditionalConditionAp'][]
@@ -2020,7 +2032,7 @@ export interface components {
     }
     ConditionalInput: {
       /** @enum {string} */
-      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check' | 'skipable'
+      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check'
       label: string
       name: string
       /** @enum {string} */
@@ -2031,7 +2043,7 @@ export interface components {
     }
     Input: {
       /** @enum {string} */
-      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check' | 'skipable'
+      type: 'radio' | 'address' | 'timePicker' | 'datePicker' | 'fileUpload' | 'text' | 'check'
       label: string
       name: string
       listType?: string
@@ -3895,6 +3907,32 @@ export interface operations {
       }
       /** @description The policy for this version was not found. */
       404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Get latest policy.
+   * @description Returns latest policy.Requires ROLE_VIEW_LICENCES.
+   */
+  getLatestPolicy: {
+    responses: {
+      /** @description Policy found */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicencePolicy']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token. */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role. */
+      403: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
