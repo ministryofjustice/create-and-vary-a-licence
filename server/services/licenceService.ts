@@ -41,7 +41,6 @@ import {
   convertToTitleCase,
   filterCentralCaseload,
   objectIsEmpty,
-  dateTimeToJson,
 } from '../utils/utils'
 import PersonName from '../routes/creatingLicences/types/personName'
 import DateTime from '../routes/creatingLicences/types/dateTime'
@@ -168,7 +167,7 @@ export default class LicenceService {
   }
 
   async updateAppointmentTime(id: string, formData: DateTime, user: User): Promise<void> {
-    const appointmentTime = dateTimeToJson(formData)
+    const appointmentTime = DateTime.toJson(formData)
     const requestBody = { appointmentTime } as AppointmentTimeRequest
     return this.licenceApiClient.updateAppointmentTime(id, requestBody, user)
   }
