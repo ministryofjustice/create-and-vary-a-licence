@@ -78,6 +78,7 @@ const licencePlaceholder = {
         },
       ],
       uploadSummary: [],
+      readyToSubmit: true,
     },
     {
       id: 2,
@@ -89,6 +90,7 @@ const licencePlaceholder = {
         'Report to staff at The Approved Premises at 9:30AM Daily, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a Monthly basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
       data: [{}],
       uploadSummary: [],
+      readyToSubmit: true,
     },
   ],
   bespokeConditions: [],
@@ -273,6 +275,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
             {
               id: 2,
@@ -295,6 +298,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
             {
               id: 3,
@@ -317,6 +321,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
             {
               id: 4,
@@ -357,6 +362,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
             {
               id: 5,
@@ -379,6 +385,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
           ],
           bespokeConditions: [
@@ -410,6 +417,7 @@ export default {
                   value: '123 Fake Street, , Fakestown, London, SW2 5XF',
                 },
               ],
+              readyToSubmit: true,
             },
             {
               id: 2,
@@ -425,6 +433,7 @@ export default {
                   value: '123 Fake Street, , Fakestown, London, SW2 5XF',
                 },
               ],
+              readyToSubmit: true,
             },
           ],
         },
