@@ -162,28 +162,28 @@ Datepicker.prototype.createDialogMarkup = function (titleId) {
                   <span class="govuk-visually-hidden">Previous year</span>
                   <svg focusable="false" class="hmpps-datepicker-icon" aria-hidden="true" role="img"><use href="/assets/images/icons.stack.svg#double_chevron_left"></use></svg>
               </button>
-  
+
               <button class="js-datepicker-prev-month" aria-label="previous month" data-button="button-datepicker-prevmonth">
                   <span class="govuk-visually-hidden">Previous month</span>
                   <svg focusable="false" class="hmpps-datepicker-icon" aria-hidden="true" role="img"><use href="/assets/images/icons.stack.svg#chevron_left"></use></svg>
               </button>
           </div>
-  
+
           <h2 id="${titleId}" class="hmpps-datepicker__dialog__title  js-datepicker-month-year" aria-live="polite">June 2020</h2>
-  
+
           <div class="hmpps-datepicker__dialog__navbuttons">
               <button class="js-datepicker-next-month" aria-label="next month" data-button="button-datepicker-nextmonth">
                   <span class="govuk-visually-hidden">Next month</span>
                   <svg focusable="false" class="hmpps-datepicker-icon" aria-hidden="true" role="img"><use href="/assets/images/icons.stack.svg#chevron_right"></use></svg>
               </button>
-  
+
               <button class="js-datepicker-next-year" aria-label="next year" data-button="button-datepicker-nextyear">
                   <span class="govuk-visually-hidden">Next year</span>
                   <svg focusable="false" class="hmpps-datepicker-icon" aria-hidden="true" role="img"><use href="/assets/images/icons.stack.svg#double_chevron_right"></use></svg>
               </button>
           </div>
         </div>
-  
+
         <table class="hmpps-datepicker__dialog__table  js-datepicker-grid" role="grid" aria-labelledby="${titleId}">
         <caption class="hmpps-datepicker__dialog__table-caption">You can use the arrow keys to select a date</caption>
         <thead>
@@ -197,10 +197,10 @@ Datepicker.prototype.createDialogMarkup = function (titleId) {
             <th scope="col" abbr="Sunday">Su</th>
             </tr>
         </thead>
-  
+
         <tbody></tbody>
         </table>
-  
+
         <div class="hmpps-datepicker__dialog__buttongroup">
         <button type="button" class="govuk-button js-datepicker-ok" value="ok" data-button="button-datepicker-ok">Select</button>
         <button type="button" class="govuk-button govuk-button--secondary js-datepicker-cancel" value="cancel" data-button="button-datepicker-cancel">Cancel</button>
@@ -293,9 +293,9 @@ Datepicker.prototype.updateCalendar = function () {
   const day = this.currentDate
 
   const firstOfMonth = new Date(day.getFullYear(), day.getMonth(), 1)
-  const dayOfWeek = firstOfMonth.getDay()
+  const dayOfWeek = firstOfMonth.getDay() === 0 ? 6 : firstOfMonth.getDay() - 1 // Change logic to make Monday first day of week, i.e. 0
 
-  firstOfMonth.setDate(firstOfMonth.getDate() - dayOfWeek + 1)
+  firstOfMonth.setDate(firstOfMonth.getDate() - dayOfWeek)
 
   const thisDay = new Date(firstOfMonth)
 
@@ -474,14 +474,14 @@ Datepicker.prototype.focusLastDayOfWeek = function () {
 Datepicker.prototype.focusNextMonth = function (event, focus = true) {
   event.preventDefault()
   const date = new Date(this.currentDate)
-  date.setMonth(date.getMonth() + 1)
+  date.setMonth(date.getMonth() + 1, 1)
   this.goToDate(date, focus)
 }
 
 Datepicker.prototype.focusPreviousMonth = function (event, focus = true) {
   event.preventDefault()
   const date = new Date(this.currentDate)
-  date.setMonth(date.getMonth() - 1)
+  date.setMonth(date.getMonth() - 1, 1)
   this.goToDate(date, focus)
 }
 
@@ -489,14 +489,14 @@ Datepicker.prototype.focusPreviousMonth = function (event, focus = true) {
 Datepicker.prototype.focusNextYear = function (event, focus = true) {
   event.preventDefault()
   const date = new Date(this.currentDate)
-  date.setFullYear(date.getFullYear() + 1)
+  date.setFullYear(date.getFullYear() + 1, date.getMonth(), 1)
   this.goToDate(date, focus)
 }
 
 Datepicker.prototype.focusPreviousYear = function (event, focus = true) {
   event.preventDefault()
   const date = new Date(this.currentDate)
-  date.setFullYear(date.getFullYear() - 1)
+  date.setFullYear(date.getFullYear() - 1, date.getMonth(), 1)
   this.goToDate(date, focus)
 }
 
