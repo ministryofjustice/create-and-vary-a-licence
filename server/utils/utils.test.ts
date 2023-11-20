@@ -5,8 +5,6 @@ import {
   convertDateFormat,
   convertToTitleCase,
   hasRole,
-  jsonToDateTime,
-  dateTimeToJson,
   jsonToSimpleDateTime,
   simpleDateTimeToJson,
   stringToAddressObject,
@@ -27,7 +25,6 @@ import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
-import DateTime from '../routes/creatingLicences/types/dateTime'
 import Address from '../routes/creatingLicences/types/address'
 import { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -161,50 +158,6 @@ describe('Create date from string', () => {
     const dateString = '25/12/2022'
     expect(toDate(dateString)).toStrictEqual(new Date('2022-12-25'))
   })
-})
-
-test.each`
-  jsonDateTime          | stringDate      | hour      | min       | ampm
-  ${'12/12/2021 23:15'} | ${'12/12/2021'} | ${'11'}   | ${'15'}   | ${'pm'}
-  ${'31/01/2022 12:01'} | ${'31/01/2022'} | ${'12'}   | ${'01'}   | ${'pm'}
-  ${'31/01/2022 00:00'} | ${'31/01/2022'} | ${'12'}   | ${'00'}   | ${'am'}
-  ${'01/01/2022 00:01'} | ${'01/01/2022'} | ${'12'}   | ${'01'}   | ${'am'}
-  ${'22/10/2024 14:23'} | ${'22/10/2024'} | ${'02'}   | ${'23'}   | ${'pm'}
-  ${'30/12/2024 21:59'} | ${'30/12/2024'} | ${'09'}   | ${'59'}   | ${'pm'}
-  ${'32/01/2025 00:00'} | ${'null'}       | ${'null'} | ${'null'} | ${'null'}
-`('convert JSON datetime to DateTime', ({ jsonDateTime, stringDate, hour, min, ampm }) => {
-  const dateTime = jsonToDateTime(jsonDateTime)
-  if (isDefined(dateTime)) {
-    const { date, time } = dateTime
-    expect(date).toEqual(stringDate)
-    expect(time?.hour).toEqual(hour)
-    expect(time?.minute).toEqual(min)
-    expect(time?.ampm).toEqual(ampm)
-  } else {
-    expect(dateTime).toBeUndefined()
-  }
-})
-
-test.each`
-  stringDate      | hour    | min     | ampm    | jsonDateTime
-  ${'12/12/2021'} | ${'11'} | ${'15'} | ${'pm'} | ${'12/12/2021 23:15'}
-  ${'31/01/2022'} | ${'12'} | ${'01'} | ${'pm'} | ${'31/01/2022 12:01'}
-  ${'31/12/2022'} | ${'12'} | ${'00'} | ${'pm'} | ${'31/12/2022 12:00'}
-  ${'31/12/2022'} | ${'12'} | ${'00'} | ${'am'} | ${'31/12/2022 00:00'}
-  ${'1/1/2022'}   | ${'1'}  | ${'1'}  | ${'am'} | ${'01/01/2022 01:01'}
-  ${'22/10/2024'} | ${'2'}  | ${'23'} | ${'pm'} | ${'22/10/2024 14:23'}
-  ${'30/12/2024'} | ${'09'} | ${'59'} | ${'pm'} | ${'30/12/2024 21:59'}
-  ${'30/12/24'}   | ${'09'} | ${'59'} | ${'pm'} | ${'30/12/2024 21:59'}
-  ${'32/01/2025'} | ${'00'} | ${'00'} | ${'am'} | ${'null'}
-`('convert DateTime to JSON datetime', ({ stringDate, hour, min, ampm, jsonDateTime }) => {
-  const inductionDate = stringDate
-  const inductionTime = new SimpleTime(hour, min, ampm === 'am' ? AmPm.AM : AmPm.PM)
-  const jsonDt = dateTimeToJson(DateTime.fromDateAndTime(inductionDate, inductionTime))
-  if (isDefined(jsonDt)) {
-    expect(jsonDt).toEqual(jsonDateTime)
-  } else {
-    expect(jsonDt).toBeUndefined()
-  }
 })
 
 test.each`

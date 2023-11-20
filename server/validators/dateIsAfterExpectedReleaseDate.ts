@@ -2,7 +2,7 @@ import { registerDecorator, ValidationArguments, ValidationOptions } from 'class
 import moment, { Moment } from 'moment'
 import _ from 'lodash'
 import type SimpleDate from '../routes/creatingLicences/types/date'
-import type { DateString } from '../routes/creatingLicences/types/dateString'
+import type DateString from '../routes/creatingLicences/types/dateString'
 import UkBankHolidayFeedService from '../services/ukBankHolidayFeedService'
 
 export default function DateIsAfterExpectedReleaseDate(validationOptions?: ValidationOptions) {
@@ -15,7 +15,7 @@ export default function DateIsAfterExpectedReleaseDate(validationOptions?: Valid
       return bankHolidays.isBankHolidayOrWeekend(d) ? getWorkingDayOnOrBefore(d.subtract(1, 'day')) : d
     }
 
-    const dateAsMoment = typeof date === 'string' ? moment(date, 'DD/MM/YYYY') : date.toMoment()
+    const dateAsMoment = date.toMoment()
 
     const dateToCompare = moment(
       _.get(object, 'licence.actualReleaseDate') || _.get(object, 'licence.conditionalReleaseDate'),

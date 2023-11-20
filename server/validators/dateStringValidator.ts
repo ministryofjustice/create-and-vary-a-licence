@@ -1,6 +1,6 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator'
 import moment from 'moment'
-import type { DateString } from '../routes/creatingLicences/types/dateString'
+import type DateString from '../routes/creatingLicences/types/dateString'
 
 @ValidatorConstraint()
 export default class ValidDateString implements ValidatorConstraintInterface {
@@ -29,25 +29,25 @@ export default class ValidDateString implements ValidatorConstraintInterface {
   }
 
   private toMoment() {
-    return moment(this.date, 'DD/MM/YYYY')
+    return moment(this.date.calendarDate, 'DD/MM/YYYY')
   }
 
   private isBlank(): boolean {
-    return this.date.length === 0
+    return this.date.calendarDate.length === 0
   }
 
   private isValidDay(): boolean {
-    const day = this.date.split('/')[0] as undefined as number
+    const day = this.date.calendarDate.split('/')[0] as undefined as number
     return day >= 1 && day <= 31
   }
 
   private isValidMonth(): boolean {
-    const month = this.date.split('/')[1] as undefined as number
+    const month = this.date.calendarDate.split('/')[1] as undefined as number
     return month >= 1 && month <= 12
   }
 
   private isValidYear(): boolean {
-    const year = this.date.split('/')[2]
+    const year = this.date.calendarDate.split('/')[2]
     return year.length === 2 || year.length === 4
   }
 

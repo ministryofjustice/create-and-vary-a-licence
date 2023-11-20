@@ -36,18 +36,18 @@
                     {% endif %}
 
                     {{ hmppsDatePicker({
-                        id: "date",
-                        name: "date",
+                        id: "date-calendarDate",
+                        name: "date[calendarDate]",
                         label: {
                             text: "Date"
                         },
                         hint: {
                             id: "date-hint",
-                            text: "For example, 12/11/2022"
+                            text: "For example, 12/11/2024"
                         },
                         errorMessage: validationErrors | findError('date'),
                         classes: 'hmpps-datepicker--fixed-width',
-                        value: formResponses.date or formDate.date
+                        value: formResponses.date.calendarDate or formDate.date.calendarDate
                     }) }}
                 {% endcall %}
                 
