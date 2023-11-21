@@ -1036,6 +1036,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'ElectronicMonitoringPeriod',
+        skippable: true,
       },
       {
         code: '86e6f2a9-bb60-40f8-9ac4-310ebc72ac2f',
@@ -1066,6 +1067,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'AlcoholRestrictionPeriod',
+        skippable: true,
       },
       {
         code: '2F8A5418-C6E4-4F32-9E58-64B23550E504',
@@ -1081,6 +1083,7 @@ const policy: LicencePolicyResponse = {
           },
         ],
         type: 'ElectronicTagPeriod',
+        skippable: true,
       },
       {
         code: '9678FD9E-F80D-423A-A6FB-B79909094887',
