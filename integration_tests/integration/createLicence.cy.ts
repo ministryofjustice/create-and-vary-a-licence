@@ -124,7 +124,7 @@ context('Create a licence', () => {
 
     const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
 
-    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
+    cy.task('getNextWorkingDay', dates).then(() => {
       const checkAnswersPage = appointmentTimePage
         .clickSkip()
         .selectNo()

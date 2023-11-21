@@ -1,7 +1,6 @@
 import Page from './page'
 import AdditionalConditionsPage from './additionalConditions'
 import BespokeConditionsQuestionPage from './bespokeConditionsQuestion'
-import PssConditionsQuestionPage from './pssConditionsQuestion'
 
 export default class AdditionalConditionsQuestionPage extends Page {
   private yesRadioButtonId = '[value=Yes]'
