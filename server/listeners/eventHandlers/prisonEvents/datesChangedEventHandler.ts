@@ -75,14 +75,29 @@ export default class DatesChangedEventHandler {
         convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseDate),
       actualReleaseDate: convertDateFormat(prisoner.sentenceDetail?.confirmedReleaseDate),
       sentenceStartDate: format(sentenceStartDate, 'dd/MM/yyyy'),
-      sentenceEndDate: convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryDate),
+      sentenceEndDate:
+        convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryOverrideDate) ||
+        convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryDate),
       licenceStartDate:
         convertDateFormat(prisoner.sentenceDetail?.confirmedReleaseDate) ||
         convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
         convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseDate),
-      licenceExpiryDate: convertDateFormat(prisoner.sentenceDetail?.licenceExpiryDate),
+      licenceExpiryDate:
+        convertDateFormat(prisoner.sentenceDetail?.licenceExpiryOverrideDate) ||
+        convertDateFormat(prisoner.sentenceDetail?.licenceExpiryDate),
       topupSupervisionStartDate: convertDateFormat(prisoner.sentenceDetail?.topupSupervisionStartDate),
-      topupSupervisionExpiryDate: convertDateFormat(prisoner.sentenceDetail?.topupSupervisionExpiryDate),
+      topupSupervisionExpiryDate:
+        convertDateFormat(prisoner.sentenceDetail?.topupSupervisionExpiryOverrideDate) ||
+        convertDateFormat(prisoner.sentenceDetail?.topupSupervisionExpiryDate),
+      postRecallReleaseDate:
+        convertDateFormat(prisoner.sentenceDetail?.postRecallReleaseOverrideDate) ||
+        convertDateFormat(prisoner.sentenceDetail?.postRecallReleaseDate),
+      paroleEligibilityDate:
+        convertDateFormat(prisoner.sentenceDetail?.paroleEligibilityOverrideDate) ||
+        convertDateFormat(prisoner.sentenceDetail?.paroleEligibilityDate),
+      nonParoleDate:
+        convertDateFormat(prisoner.sentenceDetail?.nonParoleOverrideDate) ||
+        convertDateFormat(prisoner.sentenceDetail?.nonParoleDate),
     })
   }
 }
