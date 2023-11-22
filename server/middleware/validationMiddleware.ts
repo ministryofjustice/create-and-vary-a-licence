@@ -2,7 +2,6 @@ import { plainToInstance } from 'class-transformer'
 import { validate, ValidationError } from 'class-validator'
 import { RequestHandler } from 'express'
 import ConditionService from '../services/conditionService'
-import logger from '../../logger'
 
 export type FieldValidationError = {
   field: string
@@ -63,8 +62,11 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
 
       return res.redirect('back')
     } catch (error) {
-      logger.error(error, `Failed to validate licence details for: ${req.params.nomisId}`)
-      return next(error)
+      return next(
+        new Error(`Failed to validate licence details for: ${req.params.nomisId}`, {
+          cause: error,
+        })
+      )
     }
   }
 }
