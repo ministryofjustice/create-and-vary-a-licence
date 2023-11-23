@@ -7,25 +7,13 @@ export default class ProbationTeamRoutes {
   constructor(private readonly caseloadService: CaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const view = req.query.view as string
+    const search = req.query.search as string
     const { teamCode } = req.params
-
-    if (!view) {
-      return res.redirect(`/support/probation/teams/${teamCode}?view=prison`)
-    }
 
     const { user } = res.locals
 
-    const caseload =
-      view === 'prison'
-        ? await this.caseloadService.getTeamCreateCaseload(user, [teamCode])
-        : await this.caseloadService.getTeamVaryCaseload(user, [teamCode])
-
-    return res.render('pages/support/probationTeam', {
-      caseload: createCaseloadViewModel(caseload, undefined),
-      statusConfig,
-      teamCode,
-      view,
-    })
+    const caseload = await this.caseloadService.getTeamCreateCaseload(user, [teamCode])
+    const caseloadViewModel = createCaseloadViewModel(caseload, search)
+    res.render('pages/support/probationTeam', { caseload: caseloadViewModel, statusConfig, teamCode })
   }
 }
