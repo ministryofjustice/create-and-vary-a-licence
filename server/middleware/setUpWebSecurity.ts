@@ -29,7 +29,7 @@ export default function setUpWebSecurity(): Router {
     'https://code.jquery.com',
     'data:',
   ]
-  const formAction = [`'self' ${config.apis.hmppsAuth.externalUrl} ${config.dpsUrl}`]
+  const formAction = [`'self' ${config.apis.hmppsAuth.externalUrl}`]
 
   if (config.apis.frontendComponents.url) {
     scriptSrc.push(config.apis.frontendComponents.url)
