@@ -7,8 +7,7 @@
 #}
 
 {% from "../../partials/timePicker.njk" import timePicker %}
-{% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
-
+{% from "../../partials/datePicker.njk" import datePicker %}
 
 {% set pageTitle = applicationName + " - Create a licence - When is the initial appointment?" %}
 {% set pageId = "appointment-time-page" %}
@@ -35,19 +34,17 @@
                         }) }}
                     {% endif %}
 
-                    {{ hmppsDatePicker({
+                    {{ datePicker({
                         id: "date",
-                        name: "date",
                         label: {
                             text: "Date"
                         },
                         hint: {
                             id: "date-hint",
-                            text: "For example, 12/11/2022"
+                            text: "For example, 12 11 2022"
                         },
                         errorMessage: validationErrors | findError('date'),
-                        classes: 'hmpps-datepicker--fixed-width',
-                        value: formResponses.date or formDate.date
+                        formResponses: formResponses.date or formDate.date
                     }) }}
                 {% endcall %}
                 
@@ -83,8 +80,3 @@
         </div>
     </form>
 {% endblock %}
-
-{% block pageScripts %}
-   <script src="/assets/js/datePicker.js"></script>
-{% endblock %}
-

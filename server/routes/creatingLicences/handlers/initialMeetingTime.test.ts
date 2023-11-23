@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import InitialMeetingTimeRoutes from './initialMeetingTime'
 import LicenceService from '../../../services/licenceService'
-import DateTime from '../types/dateTime'
+import SimpleDateTime from '../types/simpleDateTime'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
 
@@ -10,17 +10,21 @@ describe('Route - create licence - initial meeting date and time', () => {
   const handler = new InitialMeetingTimeRoutes(licenceService)
   let req: Request
   let res: Response
-  let formDate: DateTime
+  let formDate: SimpleDateTime
 
   beforeEach(() => {
     formDate = {
-      date: '21/10/2022',
+      date: {
+        day: '21',
+        month: '10',
+        year: '2022',
+      },
       time: {
         hour: '02',
         minute: '15',
         ampm: 'pm',
       },
-    } as unknown as DateTime
+    } as unknown as SimpleDateTime
 
     req = {
       params: {

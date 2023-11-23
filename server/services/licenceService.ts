@@ -41,10 +41,10 @@ import {
   convertToTitleCase,
   filterCentralCaseload,
   objectIsEmpty,
-  dateTimeToJson,
+  simpleDateTimeToJson,
 } from '../utils/utils'
 import PersonName from '../routes/creatingLicences/types/personName'
-import DateTime from '../routes/creatingLicences/types/dateTime'
+import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Telephone from '../routes/creatingLicences/types/telephone'
 import Address from '../routes/creatingLicences/types/address'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
@@ -167,8 +167,8 @@ export default class LicenceService {
     return this.licenceApiClient.updateAppointmentPerson(id, requestBody, user)
   }
 
-  async updateAppointmentTime(id: string, formData: DateTime, user: User): Promise<void> {
-    const appointmentTime = dateTimeToJson(formData)
+  async updateAppointmentTime(id: string, formData: SimpleDateTime, user: User): Promise<void> {
+    const appointmentTime = simpleDateTimeToJson(formData)
     const requestBody = { appointmentTime } as AppointmentTimeRequest
     return this.licenceApiClient.updateAppointmentTime(id, requestBody, user)
   }

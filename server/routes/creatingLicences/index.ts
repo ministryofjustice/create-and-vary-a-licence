@@ -15,7 +15,7 @@ import { Services } from '../../services'
 import PersonName from './types/personName'
 import Address from './types/address'
 import Telephone from './types/telephone'
-import DateTime from './types/dateTime'
+import SimpleDateTime from './types/simpleDateTime'
 
 import EditQuestionRoutes from './handlers/editQuestion'
 import ComDetailsRoutes from './handlers/comDetails'
@@ -105,7 +105,7 @@ export default function Index({
   {
     const controller = new InitialMeetingTimeRoutes(licenceService)
     get('/id/:licenceId/initial-meeting-time', controller.GET)
-    post('/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
+    post('/id/:licenceId/initial-meeting-time', controller.POST, SimpleDateTime)
   }
   {
     const controller = new AdditionalLicenceConditionsQuestionRoutes()

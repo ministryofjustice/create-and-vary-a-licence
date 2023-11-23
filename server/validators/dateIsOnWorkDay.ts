@@ -1,14 +1,12 @@
 import { registerDecorator, ValidationOptions } from 'class-validator'
-import moment from 'moment'
 import SimpleDate from '../routes/creatingLicences/types/date'
-import type { DateString } from '../routes/creatingLicences/types/dateString'
 import UkBankHolidayFeedService from '../services/ukBankHolidayFeedService'
 
 export default function DateIsOnWorkDay(validationOptions?: ValidationOptions) {
-  const dateIsOnWorkDay = async (date: SimpleDate | DateString) => {
+  const dateIsOnWorkDay = async (date: SimpleDate) => {
     const bankHolidays = await new UkBankHolidayFeedService().getEnglishAndWelshHolidays()
 
-    const dateAsMoment = typeof date === 'string' ? moment(date, 'DD/MM/YYYY') : date.toMoment()
+    const dateAsMoment = date.toMoment()
 
     return !bankHolidays.isBankHolidayOrWeekend(dateAsMoment, false)
   }
