@@ -7,29 +7,30 @@ import CommunityService from '../../../services/communityService'
 export default class ProbationTeamRoutes {
   constructor(
     private readonly caseloadService: CaseloadService,
-    private readonly communityService: CommunityService
+    private communityService: CommunityService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const view = req.query.view as string
-    const { staffCode } = req.params
+    const id = parseInt(req.query.id as string, 10)
 
     if (!view) {
-      return res.redirect(`/support/probation-practitioner/${staffCode}/caseload?view=prison`)
+      return res.redirect(`/support/probation/staff?id=${id}&view=prison`)
     }
 
     const { user } = res.locals
 
-    const staff = await this.communityService.getStaffDetailByStaffCode(staffCode)
+    const staff = await this.communityService.getStaffDetailByStaffIdentifier(id)
 
     const caseload =
       view === 'prison'
-        ? await this.caseloadService.getStaffCreateCaseload({ ...user, deliusStaffIdentifier: staff.staffIdentifier })
-        : await this.caseloadService.getStaffVaryCaseload({ ...user, deliusStaffIdentifier: staff.staffIdentifier })
+        ? await this.caseloadService.getStaffCreateCaseload({ ...user, deliusStaffIdentifier: id })
+        : await this.caseloadService.getStaffVaryCaseload({ ...user, deliusStaffIdentifier: id })
 
     return res.render('pages/support/probationStaff', {
       caseload: createCaseloadViewModel(caseload, undefined),
       statusConfig,
+      id,
       view,
       staffName: `${staff.staff.forenames} ${staff.staff.surname} (${staff.staffCode})`,
     })

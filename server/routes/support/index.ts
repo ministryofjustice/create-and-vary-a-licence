@@ -11,14 +11,12 @@ import validationMiddleware from '../../middleware/validationMiddleware'
 import prisonIdCurrent from './types/prisonIdCurrent'
 import prisonIdAndEmail from './types/prisonIdAndEmail'
 import prisonIdDelete from './types/prisonIdDelete'
-import LicenceDatesAndReason from './types/licenceDatesAndReason'
-
 import ManageOmuEmailAddressHandler from './handlers/omuEmailAddress'
 import OffenderLicenceStatusRoutes from './handlers/offenderLicenceStatus'
 import OffenderLicenceDatesRoutes from './handlers/offenderLicenceDates'
 import ProbationTeamRoutes from './handlers/probationTeam'
 import ProbationUserRoutes from './handlers/probationStaff'
-import ComDetailsRoutes from './handlers/comDetails'
+import LicenceDatesAndReason from './types/licenceDatesAndReason'
 
 export default function Index({
   communityService,
@@ -52,7 +50,6 @@ export default function Index({
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
   const probationTeamHandler = new ProbationTeamRoutes(caseloadService)
   const probationStaffHandler = new ProbationUserRoutes(caseloadService, communityService)
-  const comDetailsHandler = new ComDetailsRoutes(communityService)
 
   get('/', supportHomeHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
@@ -68,9 +65,8 @@ export default function Index({
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
   get('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.POST, LicenceDatesAndReason)
-  get('/probation-teams/:teamCode/caseload', probationTeamHandler.GET)
-  get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
-  get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
+  get('/probation/teams/:teamCode', probationTeamHandler.GET)
+  get('/probation/staff', probationStaffHandler.GET)
 
   return router
 }

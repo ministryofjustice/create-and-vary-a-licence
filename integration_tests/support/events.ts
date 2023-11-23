@@ -25,39 +25,30 @@ const sendMessage = (message: AWS_SQS.SendMessageCommandInput): void => {
 }
 
 const purgeQueues = (): unknown => {
-  sqs.purgeQueue(
-    { QueueUrl: 'http://localhost:4566/000000000000/create_and_vary_a_licence_domain_events_queue' },
-    err => {
-      if (err) {
-        // eslint-disable-next-line no-console
-        console.log('Error', err)
-      }
+  sqs.purgeQueue({ QueueUrl: 'http://localhost:4566/queue/create_and_vary_a_licence_domain_events_queue' }, err => {
+    if (err) {
+      // eslint-disable-next-line no-console
+      console.log('Error', err)
     }
-  )
-  sqs.purgeQueue(
-    { QueueUrl: 'http://localhost:4566/000000000000/create_and_vary_a_licence_prison_events_queue' },
-    err => {
-      if (err) {
-        // eslint-disable-next-line no-console
-        console.log('Error', err)
-      }
+  })
+  sqs.purgeQueue({ QueueUrl: 'http://localhost:4566/queue/create_and_vary_a_licence_prison_events_queue' }, err => {
+    if (err) {
+      // eslint-disable-next-line no-console
+      console.log('Error', err)
     }
-  )
-  sqs.purgeQueue(
-    { QueueUrl: 'http://localhost:4566/000000000000/create_and_vary_a_licence_probation_events_queue' },
-    err => {
-      if (err) {
-        // eslint-disable-next-line no-console
-        console.log('Error', err)
-      }
+  })
+  sqs.purgeQueue({ QueueUrl: 'http://localhost:4566/queue/create_and_vary_a_licence_probation_events_queue' }, err => {
+    if (err) {
+      // eslint-disable-next-line no-console
+      console.log('Error', err)
     }
-  )
+  })
   return null
 }
 
 const sendDomainEvent = async (body: string): Promise<unknown> => {
   sendMessage({
-    QueueUrl: 'http://localhost:4566/000000000000/create_and_vary_a_licence_domain_events_queue',
+    QueueUrl: 'http://localhost:4566/queue/create_and_vary_a_licence_domain_events_queue',
     MessageBody: body,
   })
   // Wait for the event listener to clear the queue
@@ -69,7 +60,7 @@ const sendDomainEvent = async (body: string): Promise<unknown> => {
 
 const sendPrisonEvent = async (body: string): Promise<unknown> => {
   sendMessage({
-    QueueUrl: 'http://localhost:4566/000000000000/create_and_vary_a_licence_prison_events_queue',
+    QueueUrl: 'http://localhost:4566/queue/create_and_vary_a_licence_prison_events_queue',
     MessageBody: body,
   })
   // Wait for the event listener to clear the queue
@@ -81,7 +72,7 @@ const sendPrisonEvent = async (body: string): Promise<unknown> => {
 
 const sendProbationEvent = async (body: string): Promise<unknown> => {
   sendMessage({
-    QueueUrl: 'http://localhost:4566/000000000000/create_and_vary_a_licence_probation_events_queue',
+    QueueUrl: 'http://localhost:4566/queue/create_and_vary_a_licence_probation_events_queue',
     MessageBody: body,
   })
   // Wait for the event listener to clear the queue
