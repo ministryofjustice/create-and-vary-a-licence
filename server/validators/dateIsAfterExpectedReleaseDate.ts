@@ -21,6 +21,14 @@ export default function DateIsAfterExpectedReleaseDate(validationOptions?: Valid
       _.get(object, 'licence.actualReleaseDate') || _.get(object, 'licence.conditionalReleaseDate'),
       'DD/MM/YYYY'
     )
+    if (!dateToCompare.isValid()) {
+      throw new Error(
+        `Date to compare is not in a valid date format: ActualReleaseDate - ${_.get(
+          object,
+          'licence.actualReleaseDate'
+        )}, conditionalReleaseDate - ${_.get(object, 'licence.conditionalReleaseDate')}`
+      )
+    }
 
     return dateAsMoment.isSameOrAfter(getWorkingDayOnOrBefore(dateToCompare))
   }
