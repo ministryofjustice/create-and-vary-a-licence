@@ -78,7 +78,6 @@ export default class OffenderDetailRoutes {
         name: probationPractitioner
           ? `${probationPractitioner.staff.forenames} ${probationPractitioner.staff.surname}`
           : '',
-        deliusStaffIdentifier: probationPractitionerContact.staffIdentifier,
         email: probationPractitionerContact?.email,
         telephone: probationPractitionerContact?.telephoneNumber,
         team: probationPractitioner?.team?.description,
