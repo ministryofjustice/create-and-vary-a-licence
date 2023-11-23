@@ -36,8 +36,8 @@
                     {% endif %}
 
                     {{ hmppsDatePicker({
-                        id: "date-calendarDate",
-                        name: "date[calendarDate]",
+                        id: "date",
+                        name: "date",
                         label: {
                             text: "Date"
                         },
@@ -47,7 +47,7 @@
                         },
                         errorMessage: validationErrors | findError('date'),
                         classes: 'hmpps-datepicker--fixed-width',
-                        value: formResponses.date.calendarDate or formDate.date.calendarDate
+                        value: formResponses.date or formDate.date
                     }) }}
                 {% endcall %}
                 

@@ -2,11 +2,11 @@ import { registerDecorator, ValidationArguments, ValidationOptions } from 'class
 import moment from 'moment'
 import _ from 'lodash'
 import SimpleDate from '../routes/creatingLicences/types/date'
-import type DateString from '../routes/creatingLicences/types/dateString'
+import type { DateString } from '../routes/creatingLicences/types/dateString'
 
 export default function DateIsBefore(fieldToCompare: string, validationOptions?: ValidationOptions) {
   const dateIsBefore = (date: SimpleDate | DateString, { object }: ValidationArguments) => {
-    const dateAsMoment = date.toMoment()
+    const dateAsMoment = typeof date === 'string' ? moment(date, 'DD/MM/YYYY') : date.toMoment()
     const dateToCompare = moment(_.get(object, fieldToCompare), 'DD/MM/YYYY')
 
     if (!dateToCompare.isValid()) {

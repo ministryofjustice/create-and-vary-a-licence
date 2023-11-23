@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import DateTime from '../types/dateTime'
+import { jsonToDateTime } from '../../../utils/utils'
 import LicenceType from '../../../enumeration/licenceType'
 
 export default class InitialMeetingTimeRoutes {
@@ -9,7 +9,7 @@ export default class InitialMeetingTimeRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
 
-    const formDate = DateTime.toDateTime(licence.appointmentTime)
+    const formDate = jsonToDateTime(licence.appointmentTime)
     res.render('pages/create/initialMeetingTime', {
       formDate,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,

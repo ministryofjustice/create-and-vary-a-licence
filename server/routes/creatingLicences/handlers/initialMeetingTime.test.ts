@@ -14,7 +14,7 @@ describe('Route - create licence - initial meeting date and time', () => {
 
   beforeEach(() => {
     formDate = {
-      date: { calendarDate: '21/10/2022' },
+      date: '21/10/2022',
       time: {
         hour: '02',
         minute: '15',
