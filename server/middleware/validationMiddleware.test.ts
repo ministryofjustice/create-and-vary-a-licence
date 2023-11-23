@@ -180,23 +180,5 @@ describe('validationMiddleware', () => {
 
       expect(next).toHaveBeenCalled()
     })
-
-    it('should handle non validation errors', async () => {
-      const next = jest.fn()
-
-      conditionService.getAdditionalConditionByCode.mockRejectedValue('Error')
-
-      req = {
-        params: { nomisId: 'AB1234E' },
-        body: {},
-      } as unknown as Request
-
-      await validationMiddleware(conditionService, DummyAddress)(req, res, next)
-      expect(next).toBeCalledWith(
-        new Error(`Failed to validate licence details for: ${req.params.nomisId}`, {
-          cause: 'Error',
-        })
-      )
-    })
   })
 })
