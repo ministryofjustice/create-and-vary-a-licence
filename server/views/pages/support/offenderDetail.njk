@@ -75,7 +75,7 @@
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Team</th>
-                    <td class="govuk-table__cell">{{ probationPractitioner.team }}</td>
+                    <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-teams/{{probationPractitioner.teamCode}}/caseload">{{ probationPractitioner.team }}</a></td>
                 </tr>
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">LDU</th>
@@ -92,6 +92,10 @@
                 <tr class="govuk-table__row">
                     <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Region</th>
                     <td class="govuk-table__cell">{{ probationPractitioner.region }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header govuk-!-font-weight-bold">Caseload</th>
+                    <td class="govuk-table__cell"><a class="govuk-link--no-visited-state" href="/support/probation-practitioner/{{ probationPractitioner.staffCode }}/caseload">link</a></td>
                 </tr>
                 </tbody>
             </table>
