@@ -20,7 +20,7 @@
             <div class="govuk-grid-column-full">
                 {% if releaseIsOnBankHolidayOrWeekend %}
                     {{ govukWarningText({
-                        html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the &lt;link&gt;Friday or pre-bank holiday release policy framework&lt;/link&gt;",
+                        html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
                         iconFallbackText: "Warning"
                     }) }}
                 {% endif %}
