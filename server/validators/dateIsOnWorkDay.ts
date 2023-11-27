@@ -9,7 +9,7 @@ export default function DateIsOnWorkDay(validationOptions?: ValidationOptions) {
 
     const dateAsMoment = date.toMoment()
 
-    return !bankHolidays.isBankHolidayOrWeekend(dateAsMoment)
+    return !bankHolidays.isBankHolidayOrWeekend(dateAsMoment, false)
   }
 
   return (object: unknown, propertyName: string) => {

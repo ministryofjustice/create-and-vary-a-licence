@@ -17,8 +17,9 @@ const bankHolidayRetriever = () => {
 class BankHolidays {
   constructor(readonly bankHolidays: string[]) {}
 
-  isBankHolidayOrWeekend = (date: Moment) => {
+  isBankHolidayOrWeekend = (date: Moment, addFriday: boolean = true) => {
     return (
+      (addFriday && date.isoWeekday() === 5) ||
       date.isoWeekday() === 6 ||
       date.isoWeekday() === 7 ||
       this.bankHolidays.find(hol => moment(hol).isSame(date, 'day')) !== undefined

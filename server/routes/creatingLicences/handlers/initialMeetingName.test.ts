@@ -2,13 +2,11 @@ import { Request, Response } from 'express'
 
 import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../services/licenceService'
-import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-const ukBankHolidayFeedService = new UkBankHolidayFeedService(async () => [])
 
 describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
-  const handler = new InitialMeetingNameRoutes(licenceService, ukBankHolidayFeedService)
+  const handler = new InitialMeetingNameRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -30,6 +28,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name', () => {
         },
         licence: {
           conditionalReleaseDate: '14/05/2022',
+          isEligibleForEarlyRelease: true,
         },
       },
     } as unknown as Response

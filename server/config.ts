@@ -317,4 +317,9 @@ export default {
   },
   useNewSearch: get('USE_NEW_SEARCH', 'false', requiredInProduction) === 'true',
   showWhatsNewBanner: get('SHOW_WHATS_NEW_BANNER', 'false', requiredInProduction) === 'true',
+  fridayReleasePolicy: get(
+    'FRIDAY_RELEASE_POLICY',
+    'https://www.gov.uk/government/publications/discretionary-fridaypre-bank-holiday-release-scheme-policy-framework',
+    requiredInProduction
+  ),
 }
