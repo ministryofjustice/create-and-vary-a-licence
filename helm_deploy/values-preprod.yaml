@@ -34,7 +34,6 @@ generic-service:
     COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
     COMMON_COMPONENTS_ENABLED: "true"
     MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"
-    FRIDAY_RELEASE_POLICY: "https://www.gov.uk/government/publications/discretionary-fridaypre-bank-holiday-release-scheme-policy-framework"
 
 gotenberg:
   replicaCount: 1

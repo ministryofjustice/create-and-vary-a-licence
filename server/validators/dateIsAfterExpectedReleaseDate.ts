@@ -4,8 +4,8 @@ import _ from 'lodash'
 import type SimpleDate from '../routes/creatingLicences/types/date'
 import DateString from '../routes/creatingLicences/types/dateString'
 
-export default function DateIsBeforeEarliestReleaseDate(validationOptions?: ValidationOptions) {
-  const dateIsBeforeEarliestReleaseDate = async (date: SimpleDate | DateString, { object }: ValidationArguments) => {
+export default function DateIsAfterExpectedReleaseDate(validationOptions?: ValidationOptions) {
+  const DateIsAfterExpectedReleaseDate = async (date: SimpleDate | DateString, { object }: ValidationArguments) => {
     const dateAsMoment = date.toMoment()
     const dateToCompare = moment(_.get(object, 'licence.earliestReleaseDate'), 'DD/MM/YYYY')
     if (!dateToCompare.isValid()) {
@@ -22,12 +22,12 @@ export default function DateIsBeforeEarliestReleaseDate(validationOptions?: Vali
 
   return (object: unknown, propertyName: string) => {
     registerDecorator({
-      name: 'dateIsBeforeEarliestReleaseDate',
+      name: 'DateIsAfterExpectedReleaseDate',
       target: object.constructor,
       propertyName,
       options: validationOptions,
       validator: {
-        validate: dateIsBeforeEarliestReleaseDate,
+        validate: DateIsAfterExpectedReleaseDate,
         defaultMessage({ object }: ValidationArguments) {
           const isEligibleForEarlyRelease = _.get(object, 'licence.isEligibleForEarlyRelease') || false
 

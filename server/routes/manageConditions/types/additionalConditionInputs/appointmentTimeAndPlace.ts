@@ -5,7 +5,7 @@ import ValidSimpleTime from '../../../../validators/simpleTimeValidator'
 import ValidSimpleDate from '../../../../validators/simpleDateValidator'
 import IsOptional from '../../../../validators/isOptional'
 import DateIsBefore from '../../../../validators/dateIsBefore'
-import DateIsBeforeEarliestReleaseDate from '../../../../validators/dateIsBeforeEarliestReleaseDate'
+import DateIsAfterExpectedReleaseDate from '../../../../validators/dateIsAfterExpectedReleaseDate'
 
 class AppointmentTimeAndPlace {
   @Expose()
@@ -21,7 +21,7 @@ class AppointmentTimeAndPlace {
   @DateIsBefore('licence.licenceExpiryDate', {
     message: 'Appointment date must be before the end of the licence date',
   })
-  @DateIsBeforeEarliestReleaseDate()
+  @DateIsAfterExpectedReleaseDate()
   appointmentDate: SimpleDate
 
   @Expose()

@@ -6,7 +6,7 @@ import ValidDateString from '../../../validators/dateStringValidator'
 import SimpleTime, { AmPm } from './time'
 import ValidSimpleTime from '../../../validators/simpleTimeValidator'
 import DateIsBefore from '../../../validators/dateIsBefore'
-import DateIsBeforeEarliestReleaseDate from '../../../validators/dateIsBeforeEarliestReleaseDate'
+import DateIsAfterExpectedReleaseDate from '../../../validators/dateIsAfterExpectedReleaseDate'
 import DateIsOnWorkDay from '../../../validators/dateIsOnWorkDay'
 
 class DateTime {
@@ -26,7 +26,7 @@ class DateTime {
   @DateIsOnWorkDay({
     message: 'The date you entered is on a weekend or bank holiday',
   })
-  @DateIsBeforeEarliestReleaseDate()
+  @DateIsAfterExpectedReleaseDate()
   date: DateString
 
   @Expose()
