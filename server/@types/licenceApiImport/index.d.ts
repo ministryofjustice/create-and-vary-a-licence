@@ -196,6 +196,13 @@ export interface paths {
      */
     post: operations['runRemoveExpiredConditionsJob']
   }
+  '/run-timed-out-job': {
+    /**
+     * Triggers the licence timedout job.
+     * @description Triggers a job that causes licences with a status of IN_PROGRESS and a CRD or ARD less than two working days to be updated to TIMED_OUT. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['runTimedOutLicencesJob']
+  }
   '/run-activation-job': {
     /**
      * Triggers the licence activation job.
@@ -3329,6 +3336,30 @@ export interface operations {
   runRemoveExpiredConditionsJob: {
     responses: {
       /** @description run-remove-ap-conditions-job */
+      200: {
+        content: never
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Job to remove AP conditions.
+   * @description Triggers a job that causes licences with a status of IN_PROGRESS and a CRD or ARD less than two working days to be updated to TIMED_OUT status. Requires ROLE_CVL_ADMIN.
+   */
+  runTimedOutLicencesJob: {
+    responses: {
+      /** @description run-timed-out-licences-job */
       200: {
         content: never
       }
