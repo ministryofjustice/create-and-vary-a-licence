@@ -22,7 +22,7 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full-from-desktop">
                     {{ govukWarningText({
-                        text: "The release date is on a weekend or bank holiday. Check the release date with the prison OMU.",
+                        html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
                         iconFallbackText: "Warning"
                     }) }}
 
@@ -61,16 +61,16 @@
                 <div class="govuk-grid-column-two-thirds">
                     <div class="govuk-button-group">
                         {{ govukButton({
-                            text: 'Return to case list',
-                            href: backLink
-                        }) }}
-
-                        {{ govukButton({
                             text: 'Continue and create licence',
                             type: 'submit',
                             name: 'answer',
                             value: 'Yes',
-                            preventDoubleClick: true,
+                            preventDoubleClick: true
+                        }) }}
+
+                        {{ govukButton({
+                            text: 'Return to case list',
+                            href: backLink,
                             classes: "govuk-button--secondary"
                         }) }}
                     </div>

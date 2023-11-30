@@ -85,25 +85,25 @@ export default function Index({
   }
 
   {
-    const controller = new InitialMeetingNameRoutes(licenceService, ukBankHolidayFeedService)
+    const controller = new InitialMeetingNameRoutes(licenceService)
     get('/id/:licenceId/initial-meeting-name', controller.GET)
     post('/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
 
   {
-    const controllr = new InitialMeetingPlaceRoutes(licenceService, ukBankHolidayFeedService)
+    const controllr = new InitialMeetingPlaceRoutes(licenceService)
     get('/id/:licenceId/initial-meeting-place', controllr.GET)
     post('/id/:licenceId/initial-meeting-place', controllr.POST, Address)
   }
 
   {
-    const controller = new InitialMeetingContactRoutes(licenceService, ukBankHolidayFeedService)
+    const controller = new InitialMeetingContactRoutes(licenceService)
     get('/id/:licenceId/initial-meeting-contact', controller.GET)
     post('/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
   }
 
   {
-    const controller = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
+    const controller = new InitialMeetingTimeRoutes(licenceService)
     get('/id/:licenceId/initial-meeting-time', controller.GET)
     post('/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }

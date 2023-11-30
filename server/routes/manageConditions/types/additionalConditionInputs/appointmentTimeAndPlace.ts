@@ -21,9 +21,7 @@ class AppointmentTimeAndPlace {
   @DateIsBefore('licence.licenceExpiryDate', {
     message: 'Appointment date must be before the end of the licence date',
   })
-  @DateIsAfterExpectedReleaseDate({
-    message: 'Appointment date must be on or after the release date',
-  })
+  @DateIsAfterExpectedReleaseDate()
   appointmentDate: SimpleDate
 
   @Expose()
