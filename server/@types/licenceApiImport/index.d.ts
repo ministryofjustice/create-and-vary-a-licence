@@ -673,16 +673,6 @@ export interface components {
        * @description The date when a person is recalled to prison, after being released on a license
        */
       postRecallReleaseDate?: string
-      /**
-       * Format: date
-       * @description The date when a person is eligible for parole
-       */
-      paroleEligibilityDate?: string
-      /**
-       * Format: date
-       * @description NPD - non-parole date for offender (relating to the 1991 act)
-       */
-      nonParoleDate?: string
     }
     /** @description Request object for referring a licence variation */
     ReferVariationRequest: {
