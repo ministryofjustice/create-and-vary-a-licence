@@ -41,7 +41,7 @@ generic-service:
     APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY);IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
     SERVICE_NAME: "create-and-vary-a-licence"
     SHOW_WHATS_NEW_BANNER: "false"
-    USE_NEW_SEARCH: "true"
+    USE_NEW_SEARCH: "false"
     # To enable common front-end components
     COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
     COMMON_COMPONENTS_ENABLED: 'true'
