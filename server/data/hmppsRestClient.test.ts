@@ -208,6 +208,23 @@ describe('Hmpps Rest Client tests', () => {
         })
       ).rejects.toThrow('Not Found')
     })
+
+    it('Should not retry if request fails', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
+      })
+        .post('/test')
+        .reply(500)
+
+      await expect(
+        restClient.post({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+        })
+      ).rejects.toThrow('Internal Server Error')
+
+      expect(nock.isDone()).toBe(true)
+    })
   })
 
   describe('PUT', () => {
