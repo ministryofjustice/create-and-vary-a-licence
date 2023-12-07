@@ -118,10 +118,6 @@ export default class HmppsRestClient {
       .set('Content-Type', 'application/json')
       .agent(this.agent)
       .query(query)
-      .retry(2, err => {
-        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-        return undefined // retry handler only for logging retries, not to influence retry logic
-      })
       .auth(signedWith, { type: 'bearer' })
       .set(headers)
       .responseType(responseType)
