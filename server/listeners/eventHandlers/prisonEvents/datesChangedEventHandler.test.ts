@@ -117,12 +117,15 @@ describe('Sentence dates changed event handler', () => {
     expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('4', newDates)
   })
 
-  it('should use conditional release override date', async () => {
+  it('should use conditional release override date, sentence expiry override date, licence expiry override date, topup supervision expiry override date', async () => {
     prisonerService.getPrisonerDetail.mockResolvedValue({
       ...prisoner,
       sentenceDetail: {
         ...prisoner.sentenceDetail,
         conditionalReleaseOverrideDate: '2022-09-10',
+        sentenceExpiryOverrideDate: '2022-09-11',
+        licenceExpiryOverrideDate: '2022-09-12',
+        topupSupervisionExpiryOverrideDate: '2022-09-13',
       },
     } as PrisonApiPrisoner)
 
@@ -144,8 +147,46 @@ describe('Sentence dates changed event handler', () => {
       conditionalReleaseDate: '10/09/2022',
       actualReleaseDate: undefined,
       sentenceStartDate: '09/09/2021',
-      sentenceEndDate: '09/09/2023',
+      sentenceEndDate: '11/09/2022',
       licenceStartDate: '10/09/2022',
+      licenceExpiryDate: '12/09/2022',
+      topupSupervisionStartDate: '09/09/2023',
+      topupSupervisionExpiryDate: '13/09/2022',
+    })
+  })
+
+  it('should not use override dates, if they are null', async () => {
+    prisonerService.getPrisonerDetail.mockResolvedValue({
+      ...prisoner,
+      sentenceDetail: {
+        ...prisoner.sentenceDetail,
+        conditionalReleaseOverrideDate: null,
+        sentenceExpiryOverrideDate: null,
+        licenceExpiryOverrideDate: null,
+        topupSupervisionExpiryOverrideDate: null,
+      },
+    } as PrisonApiPrisoner)
+
+    const event = {
+      offenderIdDisplay: 'ABC123',
+    } as PrisonEventMessage
+
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValueOnce([])
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'SUBMITTED',
+      } as LicenceSummary,
+    ])
+
+    await handler.handle(event)
+
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1', {
+      conditionalReleaseDate: '09/09/2022',
+      actualReleaseDate: undefined,
+      sentenceStartDate: '09/09/2021',
+      sentenceEndDate: '09/09/2023',
+      licenceStartDate: '09/09/2022',
       licenceExpiryDate: '09/09/2023',
       topupSupervisionStartDate: '09/09/2023',
       topupSupervisionExpiryDate: '09/09/2024',
