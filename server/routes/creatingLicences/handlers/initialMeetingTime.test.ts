@@ -3,13 +3,11 @@ import { Request, Response } from 'express'
 import InitialMeetingTimeRoutes from './initialMeetingTime'
 import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
-import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
-const ukBankHolidayFeedService = new UkBankHolidayFeedService(async () => [])
 
 describe('Route - create licence - initial meeting date and time', () => {
-  const handler = new InitialMeetingTimeRoutes(licenceService, ukBankHolidayFeedService)
+  const handler = new InitialMeetingTimeRoutes(licenceService)
   let req: Request
   let res: Response
   let formDate: DateTime
@@ -43,6 +41,7 @@ describe('Route - create licence - initial meeting date and time', () => {
           id: 1,
           appointmentTime: '21/10/2022 14:15',
           conditionalReleaseDate: '14/05/2022',
+          isEligibleForEarlyRelease: true,
         },
       },
     } as unknown as Response

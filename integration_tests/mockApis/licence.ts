@@ -26,6 +26,7 @@ const licencePlaceholder = {
   dateOfBirth: '12/02/1980',
   conditionalReleaseDate: '13/03/2021',
   actualReleaseDate: '01/04/2021',
+  earliestReleaseDate: '01/04/2021',
   sentenceStartDate: '10/01/2019',
   sentenceEndDate: '26/04/2022',
   licenceStartDate: '01/04/2021',

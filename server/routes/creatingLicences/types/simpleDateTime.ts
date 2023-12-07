@@ -25,10 +25,7 @@ class SimpleDateTime {
   @DateIsOnWorkDay({
     message: 'The date you entered is on a weekend or bank holiday',
   })
-  @DateIsAfterExpectedReleaseDate({
-    message:
-      'Appointment date must be on or after the last working day before the release date or choose to skip this step if the release date has not been confirmed',
-  })
+  @DateIsAfterExpectedReleaseDate()
   date: SimpleDate
 
   @Expose()
