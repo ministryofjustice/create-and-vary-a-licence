@@ -22,7 +22,7 @@ executors:
     docker:
       - image: 'cimg/node:<<pipeline.parameters.node-version>>'
       - image: 'circleci/redis:buster'
-      - image: 'localstack/localstack:2.2.0'
+      - image: 'localstack/localstack:latest'
         environment:
           PERSISTENCE: /tmp/localstack/data
           TMP_DIR: /private
