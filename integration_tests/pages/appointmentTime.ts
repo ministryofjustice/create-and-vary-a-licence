@@ -13,6 +13,8 @@ export default class AppointmentTimePage extends Page {
 
   private continueButtonId = '[data-qa=continue]'
 
+  private skipButtonId = '[data-qa=skip]'
+
   constructor() {
     super('appointment-time-page')
   }
@@ -34,6 +36,11 @@ export default class AppointmentTimePage extends Page {
   clickContinue = (): AdditionalConditionsQuestionPage => {
     cy.task('stubPutAppointmentTime')
     cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(AdditionalConditionsQuestionPage)
+  }
+
+  clickSkip = (): AdditionalConditionsQuestionPage => {
+    cy.get(this.skipButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsQuestionPage)
   }
 }

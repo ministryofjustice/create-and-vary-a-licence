@@ -107,4 +107,78 @@ context('Create a licence', () => {
       caseloadPageExit.signOut().click()
     })
   })
+
+  it('should not allow a licence to be submitted without initial appointment details', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicence()
+    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+
+    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentContactPage = appointmentPlacePage
+      .enterAddressLine1('123 Fake Street')
+      .enterTown('Fakestown')
+      .enterCounty('Durham')
+      .enterPostcode('DH11AF')
+      .clickContinue()
+
+    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+
+    cy.task('getNextWorkingDay', dates).then(() => {
+      const checkAnswersPage = appointmentTimePage
+        .clickSkip()
+        .selectNo()
+        .clickContinueAfterNo()
+        .selectNo()
+        .clickContinueAfterNo()
+        .selectNo()
+        .clickContinueAfterNo()
+
+      checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
+    })
+  })
+
+  it('should not allow a licence to be submitted if any input pages have been skipped', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicence()
+    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+
+    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentContactPage = appointmentPlacePage
+      .enterAddressLine1('123 Fake Street')
+      .enterTown('Fakestown')
+      .enterCounty('Durham')
+      .enterPostcode('DH11AF')
+      .clickContinue()
+
+    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+
+    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
+      const additionalConditionsPage = appointmentTimePage
+        .enterDate(moment(appointmentDate))
+        .enterTime(moment())
+        .clickContinue()
+        .selectYes()
+        .clickContinue()
+
+      const additionalConditionsInputPage = additionalConditionsPage
+        .selectCondition('d36a3b77-30ba-40ce-8953-83e761d3b487')
+        .clickContinue()
+
+      const bespokeConditionsQuestionPage = additionalConditionsInputPage
+        .withContext(additionalConditionsPage.getContext())
+        .clickSkip()
+
+      cy.task('stubGetLicenceWithSkippedInputs')
+
+      const checkAnswersPage = bespokeConditionsQuestionPage
+        .selectNo()
+        .clickContinueAfterNo()
+        .selectNo()
+        .clickContinueAfterNo()
+
+      checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
+    })
+  })
 })

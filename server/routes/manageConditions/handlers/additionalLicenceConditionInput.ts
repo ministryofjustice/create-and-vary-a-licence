@@ -83,4 +83,19 @@ export default class AdditionalLicenceConditionInputRoutes {
 
     return res.redirect(redirect)
   }
+
+  SKIP = async (req: Request, res: Response): Promise<void> => {
+    const { user, licence } = res.locals
+    const { conditionId } = req.params
+
+    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
+    const conditionData = { conditionSkipped: '[DATE REQUIRED]' }
+    await this.licenceService.updateAdditionalConditionData(licence.id.toString(), condition, conditionData, user)
+
+    return res.redirect(
+      `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
+        req.query?.fromReview ? '?fromReview=true' : ''
+      }`
+    )
+  }
 }

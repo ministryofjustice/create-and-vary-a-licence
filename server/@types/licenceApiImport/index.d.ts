@@ -266,14 +266,6 @@ export interface paths {
      */
     post: operations['createLicence']
   }
-  '/licence/activate-licences': {
-    /**
-     * Activate licences in bulk
-     * @deprecated
-     * @description Set licence statuses to ACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-     */
-    post: operations['activateLicences']
-  }
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/file-upload': {
     /**
      * Upload a multipart/form-data request containing a PDF exclusion zone file.
@@ -302,12 +294,26 @@ export interface paths {
      */
     post: operations['requestAuditEvents']
   }
-  '/public/policy/latest': {
+  '/public/policy/{version}': {
     /**
      * Get a policy by its version number
      * @description Returns a policy by its version number. Requires ROLE_VIEW_LICENCES.
      */
+    get: operations['getPolicyByVersionNumber']
+  }
+  '/public/policy/latest': {
+    /**
+     * Get latest policy.
+     * @description Returns latest policy. Requires ROLE_VIEW_LICENCES.
+     */
     get: operations['getLatestPolicy']
+  }
+  '/public/licences/{licenceId}/conditions/{conditionId}/image-upload': {
+    /**
+     * Get an associated image upload for a specific licence and condition
+     * @description Returns an associated image upload for a specified licence and condition. Requires ROLE_VIEW_LICENCES.
+     */
+    get: operations['getImageUpload']
   }
   '/public/licences/id/{licenceId}': {
     /**
@@ -318,17 +324,24 @@ export interface paths {
   }
   '/public/licence-summaries/prison-number/{prisonNumber}': {
     /**
-     * Get a list of licences by prison number
+     * Get a list of in flight licences by prison number
      * @description Returns a list of licence summaries by a person's prison number. Requires ROLE_VIEW_LICENCES.
      */
     get: operations['getLicencesByPrisonNumber']
   }
   '/public/licence-summaries/crn/{crn}': {
     /**
-     * Get a list of licences by CRN
+     * Get a list of in flight licences by CRN
      * @description Returns a list of licence summaries by a person's CRN. Requires ROLE_VIEW_LICENCES.
      */
     get: operations['getLicenceByCrn']
+  }
+  '/offender/nomisid/{nomsId}/ineligibility-reasons': {
+    /**
+     * Retrieve ineligibility reasons for offender
+     * @description Returns ineligibility reasons for creating a licence for a specific prisoner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    get: operations['getIneligibilityReasons']
   }
   '/licence/variations/submitted/area/{areaCode}': {
     /**
@@ -1273,6 +1286,8 @@ export interface components {
       data: components['schemas']['AdditionalConditionData'][]
       /** @description The list of file upload summary for this additional condition */
       uploadSummary: components['schemas']['AdditionalConditionUploadSummary'][]
+      /** @description Whether the condition is ready to submit for approval */
+      readyToSubmit?: boolean
     }
     /** @description Describes the files uploaded for an additional condition */
     AdditionalConditionUploadSummary: {
@@ -1497,6 +1512,11 @@ export interface components {
        * @example John Smith
        */
       name: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn: string
       /**
        * Format: date
        * @description The date on which the prisoner leaves custody
@@ -1971,9 +1991,12 @@ export interface components {
        * @example 1.3
        */
       licenceVersion?: string
-      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date, otherwise contains ARD||CRD */
+      /**
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       */
       earliestReleaseDate?: string
-      /** If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release */
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
       isEligibleForEarlyRelease: boolean
     }
     AddAnother: {
@@ -1989,6 +2012,7 @@ export interface components {
       categoryShort?: string
       subtext?: string
       type?: string
+      skippable?: boolean
     }
     AdditionalConditionPss: {
       code: string
@@ -2000,6 +2024,7 @@ export interface components {
       pssDates?: boolean
       inputs?: components['schemas']['Input'][]
       type?: string
+      skippable?: boolean
     }
     AdditionalConditions: {
       AP: components['schemas']['AdditionalConditionAp'][]
@@ -3706,42 +3731,6 @@ export interface operations {
     }
   }
   /**
-   * Activate licences in bulk
-   * @deprecated
-   * @description Set licence statuses to ACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
-  activateLicences: {
-    requestBody: {
-      content: {
-        'application/json': number[]
-      }
-    }
-    responses: {
-      /** @description Licences activated */
-      200: {
-        content: never
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /**
    * Upload a multipart/form-data request containing a PDF exclusion zone file.
    * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
    */
@@ -3898,7 +3887,16 @@ export interface operations {
    * Get a policy by its version number
    * @description Returns a policy by its version number. Requires ROLE_VIEW_LICENCES.
    */
-  getLatestPolicy: {
+  getPolicyByVersionNumber: {
+    parameters: {
+      path: {
+        /**
+         * @description The version of the licence policy
+         * @example 2.1
+         */
+        version: string
+      }
+    }
     responses: {
       /** @description Policy found */
       200: {
@@ -3927,10 +3925,82 @@ export interface operations {
     }
   }
   /**
+   * Get latest policy.
+   * @description Returns latest policy. Requires ROLE_VIEW_LICENCES.
+   */
+  getLatestPolicy: {
+    responses: {
+      /** @description Policy found */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicencePolicy']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token. */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role. */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Get an associated image upload for a specific licence and condition
+   * @description Returns an associated image upload for a specified licence and condition. Requires ROLE_VIEW_LICENCES.
+   */
+  getImageUpload: {
+    parameters: {
+      path: {
+        /** @description This is the identifier for a licence */
+        licenceId: number
+        /** @description This is the internal identifier for a condition */
+        conditionId: number
+      }
+    }
+    responses: {
+      /** @description Image returned */
+      200: {
+        content: {
+          'image/jpeg': unknown
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description No image was found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
    * Get a licence by its licence id
    * @description Returns a single licence detail by its unique identifier. Requires ROLE_VIEW_LICENCES.
    */
   getLicenceById: {
+    parameters: {
+      path: {
+        /** @description This is the identifier for a licence */
+        licenceId: number
+      }
+    }
     responses: {
       /** @description Licence found */
       200: {
@@ -3959,17 +4029,21 @@ export interface operations {
     }
   }
   /**
-   * Get a list of licences by prison number
+   * Get a list of in flight licences by prison number
    * @description Returns a list of licence summaries by a person's prison number. Requires ROLE_VIEW_LICENCES.
    */
   getLicencesByPrisonNumber: {
     parameters: {
       path: {
+        /**
+         * @description The prison identifier for the person on the licence (also known as NOMS id)
+         * @example A1234BC
+         */
         prisonNumber: string
       }
     }
     responses: {
-      /** @description A list of found licences */
+      /** @description A list of found licence summaries */
       200: {
         content: {
           'application/json': components['schemas']['LicenceSummary'][]
@@ -3990,17 +4064,21 @@ export interface operations {
     }
   }
   /**
-   * Get a list of licences by CRN
+   * Get a list of in flight licences by CRN
    * @description Returns a list of licence summaries by a person's CRN. Requires ROLE_VIEW_LICENCES.
    */
   getLicenceByCrn: {
     parameters: {
       path: {
+        /**
+         * @description The case reference number (CRN) for the person on the licence
+         * @example A123456
+         */
         crn: string
       }
     }
     responses: {
-      /** @description A list of found licences */
+      /** @description A list of found licence summaries */
       200: {
         content: {
           'application/json': components['schemas']['LicenceSummary'][]
@@ -4014,6 +4092,49 @@ export interface operations {
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Retrieve ineligibility reasons for offender
+   * @description Returns ineligibility reasons for creating a licence for a specific prisoner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+   */
+  getIneligibilityReasons: {
+    parameters: {
+      path: {
+        nomsId: string
+      }
+    }
+    responses: {
+      /** @description a list of ineligibility reasons */
+      200: {
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Could not find prisoner */
+      404: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }

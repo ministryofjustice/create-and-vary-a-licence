@@ -32,9 +32,9 @@ export default function DateIsAfterExpectedReleaseDate(validationOptions?: Valid
           const isEligibleForEarlyRelease = _.get(object, 'licence.isEligibleForEarlyRelease') || false
 
           if (isEligibleForEarlyRelease) {
-            return 'Date cannot be more than 3 working days before release date'
+            return 'Date cannot be more than 3 working days before release. Choose to skip this step if the release date has not been confirmed'
           }
-          return 'Date must be on or after the release date'
+          return 'Date must be on or after release. Choose to skip this step if the release date has not been confirmed'
         },
       },
     })
