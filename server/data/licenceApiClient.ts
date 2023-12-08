@@ -459,9 +459,9 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async runLicenceTimedOutJob() {
+  async runLicenceTimeOutJob() {
     await this.post({
-      path: '/run-timed-out-job',
+      path: '/run-time-out-job',
     })
   }
 

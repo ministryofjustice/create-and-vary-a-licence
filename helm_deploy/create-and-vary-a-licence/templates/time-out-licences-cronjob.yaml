@@ -1,7 +1,8 @@
+{{- if .Values.TIME_OUT_JOB_ENABLED -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: timed-out-licences
+  name: time-out-licences
 spec:
   schedule: {{ .Values.cronjobs.timed_out_licences }}
   concurrencyPolicy: Replace
@@ -21,3 +22,4 @@ spec:
 {{- include "deployment.envs" (index .Values "generic-service") | nindent 12 }}
           restartPolicy: Never
           activeDeadlineSeconds: 3600
+{{- end }}

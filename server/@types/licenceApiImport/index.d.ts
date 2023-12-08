@@ -196,12 +196,12 @@ export interface paths {
      */
     post: operations['runRemoveExpiredConditionsJob']
   }
-  '/run-timed-out-job': {
+  '/run-time-out-job': {
     /**
      * Triggers the licence timedout job.
      * @description Triggers a job that causes licences with a status of IN_PROGRESS and a CRD or ARD less than two working days to be updated to TIMED_OUT. Requires ROLE_CVL_ADMIN.
      */
-    post: operations['runTimedOutLicencesJob']
+    post: operations['runTimeOutLicencesJob']
   }
   '/run-activation-job': {
     /**

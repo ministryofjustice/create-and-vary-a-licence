@@ -17,12 +17,12 @@ import { getSystemTokenWithRetries } from '../server/data/systemToken'
 const licenceApiClient = new LicenceApiClient(new InMemoryTokenStore(getSystemTokenWithRetries))
 
 licenceApiClient
-  .runLicenceTimedOutJob()
+  .runLicenceTimeOutJob()
   .then(() => {
     // Flush logs to app insights and only exit when complete
     flush({ callback: () => process.exit() }, 'success')
   })
   .catch((error: Error) => {
-    logger.error(error, 'Problem occurred while updating licence status to timed out')
+    logger.error(error, 'Problem occurred while updating licence status to time out')
     flush({ callback: () => process.exit(1) }, 'failure')
   })
