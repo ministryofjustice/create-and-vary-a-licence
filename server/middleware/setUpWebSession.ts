@@ -13,6 +13,7 @@ export default function setUpWebSession(): Router {
   const router = express.Router()
   router.use(
     session({
+      name: 'create-and-vary-a-licence.session',
       store: new RedisStore({ client }),
       cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
       secret: config.session.secret,

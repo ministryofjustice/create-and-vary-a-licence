@@ -79,6 +79,7 @@ const licencePlaceholder = {
         },
       ],
       uploadSummary: [],
+      readyToSubmit: true,
     },
     {
       id: 2,
@@ -90,6 +91,7 @@ const licencePlaceholder = {
         'Report to staff at The Approved Premises at 9:30AM Daily, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a Monthly basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
       data: [{}],
       uploadSummary: [],
+      readyToSubmit: true,
     },
   ],
   bespokeConditions: [],
@@ -274,6 +276,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
             {
               id: 2,
@@ -296,6 +299,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
             {
               id: 3,
@@ -318,6 +322,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
             {
               id: 4,
@@ -358,6 +363,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
             {
               id: 5,
@@ -380,6 +386,7 @@ export default {
                 },
               ],
               uploadSummary: [],
+              readyToSubmit: true,
             },
           ],
           bespokeConditions: [
@@ -411,6 +418,7 @@ export default {
                   value: '123 Fake Street, , Fakestown, London, SW2 5XF',
                 },
               ],
+              readyToSubmit: true,
             },
             {
               id: 2,
@@ -426,6 +434,7 @@ export default {
                   value: '123 Fake Street, , Fakestown, London, SW2 5XF',
                 },
               ],
+              readyToSubmit: true,
             },
           ],
         },
@@ -1208,6 +1217,40 @@ export default {
           expandedText: 'Expanded text',
           data: [{}],
           uploadSummary: [],
+        },
+      },
+    })
+  },
+
+  stubGetLicenceWithSkippedInputs: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/id/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          appointmentPerson: 'Isaac Newton',
+          appointmentAddress: 'Down the road, over there',
+          appointmentContact: '07891245678',
+          appointmentTime: '01/12/2021 00:34',
+          additionalLicenceConditions: [
+            {
+              id: 1,
+              code: 'd36a3b77-30ba-40ce-8953-83e761d3b487',
+              category: 'Electronic monitoring',
+              sequence: 1,
+              text: 'You must not drink any alcohol until [END DATE] unless your probation officer says you can. You will need to wear an electronic tag all the time so we can check this.',
+              expandedText:
+                'You must not drink any alcohol until unless your probation officer says you can. You will need to wear an electronic tag all the time so we can check this.',
+              data: [{ conditionSkipped: '[DATE REQUIRED]' }],
+              uploadSummary: [],
+              readyToSubmit: false,
+            },
+          ],
         },
       },
     })

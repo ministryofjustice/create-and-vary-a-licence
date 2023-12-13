@@ -8,6 +8,8 @@ import PolicyChangesPage from './policyChangesPage'
 export default class AdditionalConditionsInputPage extends Page {
   private continueButtonId = '[data-qa=continue]'
 
+  private skipButtonId = '[data-qa=skip]'
+
   private additionalConditionsToInput = []
 
   constructor(runAxe = true) {
@@ -99,6 +101,13 @@ export default class AdditionalConditionsInputPage extends Page {
   clickContinue = (): BespokeConditionsQuestionPage => {
     cy.get(this.continueButtonId).click()
     cy.task('stubGetLicence')
+    cy.visit('/licence/create/id/1/bespoke-conditions-question')
+    return Page.verifyOnPage(BespokeConditionsQuestionPage)
+  }
+
+  clickSkip = (): BespokeConditionsQuestionPage => {
+    cy.task('stubGetLicenceWithConditionToComplete', this.additionalConditionsToInput.shift())
+    cy.get(this.skipButtonId).click()
     cy.visit('/licence/create/id/1/bespoke-conditions-question')
     return Page.verifyOnPage(BespokeConditionsQuestionPage)
   }

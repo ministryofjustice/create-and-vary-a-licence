@@ -31,6 +31,11 @@ export default class CheckAnswersPage extends Page {
     return Page.verifyOnPage(ConfirmationPage)
   }
 
+  clickSubmitLicenceWithErrors = (): CheckAnswersPage => {
+    cy.get(this.sendLicenceConditionsButtonId).click()
+    return Page.verifyOnPage(CheckAnswersPage)
+  }
+
   clickAddVariationNotes = (): ReasonForVariationPage => {
     cy.task('stubGetLicenceVariationInProgress')
     cy.get(this.addNotesButtonId).click()
@@ -45,5 +50,9 @@ export default class CheckAnswersPage extends Page {
   clickBackToCaseload = (): CaseloadPage => {
     cy.get(this.backToCaseloadLinkId).click()
     return Page.verifyOnPage(CaseloadPage)
+  }
+
+  getErrorSummary = () => {
+    return cy.get('.govuk-error-summary__body')
   }
 }
