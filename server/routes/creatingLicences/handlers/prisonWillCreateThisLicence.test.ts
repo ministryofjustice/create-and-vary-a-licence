@@ -93,7 +93,6 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           licenceId: '1',
         },
         session: {},
-        flash: jest.fn(),
       } as unknown as Request
 
       await handler.GET(reqWithEmptySession, res)
