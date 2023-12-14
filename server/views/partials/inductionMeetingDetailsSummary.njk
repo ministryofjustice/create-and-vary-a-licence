@@ -1,13 +1,16 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro inductionMeetingDetails(licence, isEditable, validationErrors) %}
+{% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText) %}
     {% set apptDateTimeEntered = licence.appointmentTime | length > 0 %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
-            <h2 class="govuk-heading-m">Initial appointment details</h2>
+            <h2 class="govuk-!-margin-bottom-3 govuk-heading-m">Initial appointment details</h2>
         </div>
     </div>
+    {% if contactForChangeText %}
+        <p class="govuk-!-margin-bottom-3 govuk-body">{{contactForChangeText}}</p>
+    {% endif %}
 
     {{ govukSummaryList({
         attributes: { id: 'induction-meeting-details' },

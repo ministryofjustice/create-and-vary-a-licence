@@ -14,7 +14,7 @@ jest.mock('../../../services/licenceService')
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/communityService')
 
-describe('Route Handlers - Create Licence - Confirm Create', () => {
+describe('Route Handlers - Create Licence - Prison will create licence', () => {
   const handler = new PrisonWillCreateThisLicenceRoutes(licenceService, prisonerService, communityService)
   let req: Request
   let res: Response
