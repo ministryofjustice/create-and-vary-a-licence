@@ -1,0 +1,45 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Create licence - Prison will create this licence" %}
+{% set backLinkHref = backLink %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Prison will create this licence</h1>
+
+            <p class="govuk-body">
+                You can no longer create a licence for this person as you did not get one approved in time for the prison's final release checks.
+            </p>
+            <p class="govuk-body">
+                The prison will now create a licence. You will need to review it once this person is released.
+            </p>
+
+            <h1 class="govuk-heading-m">Initial appointment</h2>
+            <ul class="govuk-body">
+                <li>The prison can tell this person to report immediately after release or by 2pm the next working day</li>
+                <li>Or they can set a specific date and time, for example if you request this by contacting {{omuEmail}}</li>
+            </ul>
+            <h1 class="govuk-heading-m">Licence conditions</h2>
+            <p class="govuk-body">By default, the licence will contain:</p>
+            <ul class="govuk-body">
+                <li>standard conditions</li>
+                <li>the following additional condition:</li>
+                {{ govukInsetText({
+                    text: "Not to approach or communicate with any victims of your main offences without the prior approval of your supervising officer."
+                }) }}
+            </ul>
+            <p class="govuk-body">The prison <strong>cannot</strong>  add any other additional or bespoke conditions.</p>
+            <p class="govuk-body">If you need to add any additional or bespoke licence conditions, you can do so after release.</p>
+            <p class="govuk-body">
+                {{ govukButton({
+                    text: "Return to caselist",
+                    classes: "govuk-!-margin-bottom-0 govuk-body",
+                    href: backLink,
+                    attributes: { 'data-qa': 'return-to-caselist' }
+                }) }}
+            </p>
+        </div>
+    </div>
+{% endblock %}
