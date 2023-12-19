@@ -5,6 +5,7 @@ cronjobs:
   expire_active_licences: "0 4 * * *" # 4am every day
   prompt_licence_creation: "0 7 * * 1" # 7am UTC every monday
   remove_expired_conditions: "0 3 * * *" # 3am every day
+  timed_out_licences: "30 1 * * 1-5" # 1:30am UTC Monday - Friday
 
 generic-service:
   nameOverride: create-and-vary-a-licence
@@ -47,6 +48,7 @@ generic-service:
     COMMON_COMPONENTS_ENABLED: 'true'
     MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
     FRIDAY_RELEASE_POLICY: 'https://www.gov.uk/government/publications/discretionary-fridaypre-bank-holiday-release-scheme-policy-framework'
+    TIME_OUT_JOB_ENABLED: false
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
