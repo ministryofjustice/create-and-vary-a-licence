@@ -18,7 +18,7 @@ spec:
             image: {{ with index .Values "generic-service" }}{{ .image.repository }}:{{ .image.tag }}{{ end }}
             args:
             - node
-            - dist/jobs/timedOutLicences
+            - dist/jobs/timeOutLicences
 {{- include "deployment.envs" (index .Values "generic-service") | nindent 12 }}
           restartPolicy: Never
           activeDeadlineSeconds: 3600

@@ -3382,7 +3382,7 @@ export interface operations {
    * Job to remove AP conditions.
    * @description Triggers a job that causes licences with a status of IN_PROGRESS and a CRD or ARD less than two working days to be updated to TIMED_OUT status. Requires ROLE_CVL_ADMIN.
    */
-  runTimedOutLicencesJob: {
+  runTimeOutLicencesJob: {
     responses: {
       /** @description run-timed-out-licences-job */
       200: {
