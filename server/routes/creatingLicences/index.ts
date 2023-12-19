@@ -29,6 +29,7 @@ import PssConditionsYesOrNo from './types/pssConditionsYesOrNo'
 import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
 import PrisonWillCreateThisLicenceRoutes from './handlers/prisonWillCreateThisLicence'
 import LicenceCreatedByPrisonRoutes from './handlers/licenceCreatedByPrison'
+import LicenceChangesNotApprovedInTimeRoutes from './handlers/licenceChangesNotApprovedInTime'
 
 export default function Index({
   licenceService,
@@ -152,6 +153,11 @@ export default function Index({
   {
     const controller = new LicenceCreatedByPrisonRoutes(licenceService)
     get('/id/:licenceId/licence-created-by-prison', controller.GET)
+  }
+
+  {
+    const controller = new LicenceChangesNotApprovedInTimeRoutes(licenceService, conditionService)
+    get('/id/:licenceId/licence-changes-not-approved-in-time', controller.GET)
   }
   return router
 }
