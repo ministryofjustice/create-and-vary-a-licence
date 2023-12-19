@@ -5,6 +5,9 @@ cronjobs:
   expire_active_licences: "0 10 * * 1-5" # 10am UTC, Monday - Friday
   prompt_licence_creation: "0 8 * * 1" # 8am UTC, every monday
   remove_expired_conditions: "0 7 * * 1-5" # 7am UTC, Monday - Friday
+  time_out_licences:
+    enabled: true
+    schedule: "30 1 * * 1-5" # 1:30am UTC Monday - Friday
 
 generic-service:
   replicaCount: 2
@@ -44,7 +47,6 @@ generic-service:
     COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
     COMMON_COMPONENTS_ENABLED: "true"
     MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
-    TIME_OUT_JOB_ENABLED: "true"
 
 gotenberg:
   replicaCount: 1

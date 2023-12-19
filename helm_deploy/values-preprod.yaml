@@ -1,6 +1,11 @@
 ---
 # Per environment values which override defaults in create-and-vary-a-licence/values.yaml
 
+cronjobs:
+  time_out_licences:
+    enabled: true
+    schedule: "30 1 * * 1-5" # 1:30am UTC Monday - Friday
+
 generic-service:
   replicaCount: 2
   
@@ -29,7 +34,6 @@ generic-service:
     LICENCES_URL: "http://create-and-vary-a-licence"
     DPS_URL: "https://digital-preprod.prison.service.justice.gov.uk"
     SHOW_WHATS_NEW_BANNER: "false"
-    TIME_OUT_JOB_ENABLED: "true"
 
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
@@ -45,3 +49,5 @@ gotenberg:
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts-non-prod
+
+TIME_OUT_JOB_ENABLED: "true"

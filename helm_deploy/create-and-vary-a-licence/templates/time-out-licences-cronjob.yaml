@@ -1,10 +1,10 @@
-{{- if .Values.TIME_OUT_JOB_ENABLED -}}
+{{- if .Values.cronjobs.time_out_licences.enabled -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: time-out-licences
 spec:
-  schedule: {{ .Values.cronjobs.timed_out_licences }}
+  schedule: {{ .Values.cronjobs.time_out_licences.schedule }}
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200
