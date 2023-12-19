@@ -1,0 +1,49 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
+{% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
+{% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
+{% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
+
+{% set pageTitle = applicationName + " - Create licence - Licence changes not approved in time for release checks" %}
+{% set backLinkHref = backLink %}
+{% set contactForChangeText = "To request a change to this person’s appointment, contact " + licence.prisonDescription + " at " + omuEmail + "." %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">Licence changes not approved in time for release checks</h1>
+
+            <p class="govuk-body">
+                You can no longer work on this licence because changes you made were not approved in time for the prison’s final release checks.
+            </p>
+            <p class="govuk-body">
+                This person will be released with the last approved version of the licence instead.
+            </p>
+            <p class="govuk-body">
+                Because this version of the licence will not contain your most recent changes, you should review it and then vary it to add any missing information needed. You can then submit a variation request to your PDU head.
+            </p>
+            
+            {{ inductionMeetingDetails(licence, isInProgress, validationErrors, contactForChangeText) }}
+
+            {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 
+                and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
+                {{ additionalLicenceConditions(licence, additionalConditions, isInProgress, validationErrors) }}
+                {{ bespokeConditions(licence.id, isInProgress, null, null, licence.bespokeConditions) }}
+            {% endif %}
+
+            {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
+                {{ additionalPssConditions(licence, isInProgress, validationErrors) }}
+            {% endif %}
+
+            <p class="govuk-body">
+                {{ govukButton({
+                    text: "Return to caselist",
+                    classes: "govuk-!-margin-bottom-0 govuk-body",
+                    href: backLink,
+                    attributes: { 'data-qa': 'return-to-caselist' }
+                }) }}
+            </p>
+        </div>
+    </div>
+{% endblock %}
