@@ -49,5 +49,3 @@ gotenberg:
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts-non-prod
-
-TIME_OUT_JOB_ENABLED: "true"
