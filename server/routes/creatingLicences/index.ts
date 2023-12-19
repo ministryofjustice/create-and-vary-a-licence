@@ -28,6 +28,7 @@ import BespokeConditionsQuestionRoutes from './handlers/bespokeConditionsQuestio
 import PssConditionsYesOrNo from './types/pssConditionsYesOrNo'
 import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
 import PrisonWillCreateThisLicenceRoutes from './handlers/prisonWillCreateThisLicence'
+import LicenceCreatedByPrisonRoutes from './handlers/licenceCreatedByPrison'
 
 export default function Index({
   licenceService,
@@ -146,6 +147,11 @@ export default function Index({
   {
     const controller = new PrisonWillCreateThisLicenceRoutes(licenceService, prisonerService, communityService)
     get('/nomisId/:nomisId/prison-will-create-this-licence', controller.GET)
+  }
+
+  {
+    const controller = new LicenceCreatedByPrisonRoutes(licenceService)
+    get('/id/:licenceId/licence-created-by-prison', controller.GET)
   }
   return router
 }
