@@ -61,6 +61,7 @@ import TimelineEvent from '../@types/TimelineEvent'
 import TimelineEventType from '../enumeration/TimelineEventType'
 import ConditionService from './conditionService'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
+import AppointmentTimeType from '../enumeration/appointmentTimeType'
 
 export default class LicenceService {
   constructor(
@@ -168,7 +169,8 @@ export default class LicenceService {
 
   async updateAppointmentTime(id: string, formData: DateTime, user: User): Promise<void> {
     const appointmentTime = DateTime.toJson(formData)
-    const requestBody = { appointmentTime } as AppointmentTimeRequest
+    const appointmentTimeType = AppointmentTimeType.SPECIFIC_DATE_TIME
+    const requestBody = { appointmentTime, appointmentTimeType } as AppointmentTimeRequest
     return this.licenceApiClient.updateAppointmentTime(id, requestBody, user)
   }
 

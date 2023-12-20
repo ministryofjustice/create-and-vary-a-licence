@@ -1,0 +1,7 @@
+enum AppointmentTimeType {
+  IMMEDIATE_UPON_RELEASE = 'IMMEDIATE_UPON_RELEASE',
+  NEXT_WORKING_DAY_2PM = 'NEXT_WORKING_DAY_2PM',
+  SPECIFIC_DATE_TIME = 'SPECIFIC_DATE_TIME',
+}
+
+export default AppointmentTimeType

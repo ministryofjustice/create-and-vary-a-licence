@@ -789,7 +789,12 @@ export interface components {
        * Format: date-time
        * @description The date and time of the initial appointment
        */
-      appointmentTime: string
+      appointmentTime?: string
+      /**
+       * @description The type of appointment time at the initial appointment
+       * @enum {string}
+       */
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
     }
     /** @description Request object for updating the person the person on probation will meet at the initial appointment */
     AppointmentPersonRequest: {
@@ -1902,6 +1907,11 @@ export interface components {
        * @description The date and time of the initial appointment
        */
       appointmentTime?: string
+      /**
+       * @description The type of appointment time at the initial appointment
+       * @enum {string}
+       */
+      appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
