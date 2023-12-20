@@ -25,6 +25,7 @@ import {
   LicenceSummary,
   StandardCondition,
   UpdateComRequest,
+  UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateSentenceDatesRequest,
@@ -761,6 +762,22 @@ describe('Licence Service', () => {
 
     expect(licenceApiClient.updateResponsibleCom).toBeCalledWith('X1234', {
       staffIdentifier: 2000,
+      staffUsername: 'joebloggs',
+      staffEmail: 'joebloggs@probation.gov.uk',
+      firstName: 'Joseph',
+      lastName: 'Bloggs',
+    })
+  })
+
+  it('should update prison user responsible for an offender', async () => {
+    await licenceService.updatePrisonUserDetails({
+      staffUsername: 'joebloggs',
+      staffEmail: 'joebloggs@probation.gov.uk',
+      firstName: 'Joseph',
+      lastName: 'Bloggs',
+    } as UpdatePrisonUserRequest)
+
+    expect(licenceApiClient.updatePrisonUserDetails).toBeCalledWith({
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
       firstName: 'Joseph',
