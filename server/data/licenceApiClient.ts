@@ -37,7 +37,7 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-import { UpdateComRequest } from '../@types/licenceApiClientTypes'
+import { UpdateComRequest, UpdatePrisonUserRequest } from '../@types/licenceApiClientTypes'
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
@@ -307,6 +307,10 @@ export default class LicenceApiClient extends RestClient {
 
   async updateComDetails(updateComRequest: UpdateComRequest): Promise<void> {
     await this.put({ path: `/com/update`, data: updateComRequest })
+  }
+
+  async updatePrisonUserDetails(updatePrisonUserRequest: UpdatePrisonUserRequest): Promise<void> {
+    await this.put({ path: `/prison-case-administrator/update`, data: updatePrisonUserRequest })
   }
 
   async editLicence(licenceId: string, user: User) {
