@@ -455,7 +455,11 @@ describe('Licence Service', () => {
       { date: { calendarDate: '22/12/2022' }, time: { hour: '12', minute: '20', ampm: 'pm' } } as DateTime,
       user
     )
-    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith('1', { appointmentTime: '22/12/2022 12:20' }, user)
+    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith(
+      '1',
+      { appointmentTime: '22/12/2022 12:20', appointmentTimeType: 'SPECIFIC_DATE_TIME' },
+      user
+    )
     expect(timeConverter).toBeCalledWith({
       date: { calendarDate: '22/12/2022' },
       time: { hour: '12', minute: '20', ampm: 'pm' },
