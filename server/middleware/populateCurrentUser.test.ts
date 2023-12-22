@@ -7,6 +7,7 @@ import { AuthUserDetails, AuthUserEmail } from '../data/hmppsAuthClient'
 import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
 import LicenceService from '../services/licenceService'
 import { User } from '../@types/CvlUserDetails'
+import AuthRole from '../enumeration/authRole'
 
 jest.mock('../services/userService')
 jest.mock('../services/licenceService')
@@ -33,7 +34,7 @@ beforeEach(() => {
     },
   } as unknown as Response
 
-  req = { session: {} } as Request
+  req = { session: {}, user: { userRoles: [] } } as Request
 })
 
 afterEach(() => {
@@ -79,13 +80,21 @@ describe('populateCurrentUser', () => {
 
   it('should populate nomis user details', async () => {
     res.locals.user.authSource = 'nomis'
+    req.user.userRoles = [AuthRole.CASE_ADMIN]
 
     userServiceMock.getPrisonUser.mockResolvedValue({
       firstName: 'Joe',
       lastName: 'Bloggs',
-      activeCaseLoadId: '1',
+      username: 'joebloggs',
+      activeCaseLoadId: 'MDI',
       staffId: 3000,
     } as PrisonApiUserDetail)
+
+    userServiceMock.getAuthUserEmail.mockResolvedValue({
+      username: 'joebloggs',
+      email: 'jbloggs@prison.gov.uk',
+      verified: true,
+    } as AuthUserEmail)
 
     userServiceMock.getPrisonUserCaseloads.mockResolvedValue([
       {
@@ -96,21 +105,54 @@ describe('populateCurrentUser', () => {
       },
     ] as unknown as PrisonApiCaseload[])
 
-    userServiceMock.getAuthUserEmail.mockResolvedValue({
-      email: 'jbloggs@prison.gov.uk',
-    } as AuthUserEmail)
-
     await middleware(req, res, next)
 
     expect(req.session.currentUser).toMatchObject({
-      activeCaseload: '1',
+      activeCaseload: 'MDI',
       displayName: 'Joe Bloggs',
-      emailAddress: 'jbloggs@prison.gov.uk',
       firstName: 'Joe',
       lastName: 'Bloggs',
       nomisStaffId: 3000,
       prisonCaseload: ['MDI', 'BMI'],
     })
+    expect(licenceServiceMock.updatePrisonUserDetails).toHaveBeenCalledWith({
+      staffUsername: 'joebloggs',
+      staffEmail: 'jbloggs@prison.gov.uk',
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+    })
+    expect(next).toBeCalled()
+  })
+
+  it('should throw error and not call updatePrisonUserDetails when email of a nomis user is not found', async () => {
+    res.locals.user.authSource = 'nomis'
+    req.user.userRoles = [AuthRole.CASE_ADMIN]
+
+    userServiceMock.getPrisonUser.mockResolvedValue({
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+      username: 'joebloggs',
+      activeCaseLoadId: 'MDI',
+      staffId: 3000,
+    } as PrisonApiUserDetail)
+
+    userServiceMock.getAuthUserEmail.mockResolvedValue({
+      username: 'joebloggs',
+      verified: true,
+    } as AuthUserEmail)
+
+    userServiceMock.getPrisonUserCaseloads.mockResolvedValue([
+      {
+        caseLoadId: 'MDI',
+      },
+      {
+        caseLoadId: 'BMI',
+      },
+    ] as unknown as PrisonApiCaseload[])
+
+    await middleware(req, res, next)
+
+    expect(licenceServiceMock.updatePrisonUserDetails).not.toHaveBeenCalled()
     expect(next).toBeCalled()
   })
 

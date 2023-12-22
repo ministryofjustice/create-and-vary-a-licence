@@ -1,10 +1,11 @@
 import { RequestHandler } from 'express'
 import logger from '../../logger'
-import { convertToTitleCase, removeDuplicates } from '../utils/utils'
+import { convertToTitleCase, hasRole, removeDuplicates } from '../utils/utils'
 import CvlUserDetails from '../@types/CvlUserDetails'
 import config from '../config'
 import LicenceService from '../services/licenceService'
 import UserService from '../services/userService'
+import AuthRole from '../enumeration/authRole'
 
 /**
  * This middleware checks whether a token is present and if user information is populated in the session.
@@ -49,6 +50,17 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             logger.info(
               `Prison user session : username ${prisonUser?.username} name ${cvlUser?.displayName} caseload ${cvlUser?.prisonCaseload}`
             )
+
+            if (hasRole(req.user, AuthRole.CASE_ADMIN)) {
+              const { email } = await userService.getAuthUserEmail(user)
+              if (!email) throw new Error(`Failed to get email for: ${user.username}`)
+              await licenceService.updatePrisonUserDetails({
+                staffUsername: prisonUser.username,
+                staffEmail: email,
+                firstName: prisonUser.firstName,
+                lastName: prisonUser.lastName,
+              })
+            }
           } else if (user.authSource === 'delius') {
             // Assemble user information from Delius via community API
             const probationUser = await userService.getProbationUser(user)
