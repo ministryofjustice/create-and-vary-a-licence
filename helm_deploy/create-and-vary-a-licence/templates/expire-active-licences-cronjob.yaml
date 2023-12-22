@@ -1,3 +1,4 @@
+{{- if .Values.EXPIRE_LICENCES_JOB_ENABLED -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -21,3 +22,4 @@ spec:
 {{- include "deployment.envs" (index .Values "generic-service") | nindent 12 }}
           restartPolicy: Never
           activeDeadlineSeconds: 3600
+{{- end }}
