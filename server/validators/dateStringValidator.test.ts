@@ -9,7 +9,11 @@ describe('Validators - ValidDateString', () => {
 
   beforeEach(() => {
     validator = new ValidDateString()
-    date = plainToInstance(DateString, { calendarDate: '31/12/2023' }, { excludeExtraneousValues: true })
+    date = plainToInstance(
+      DateString,
+      { calendarDate: `31/12/${new Date().getFullYear()}` },
+      { excludeExtraneousValues: true }
+    )
   })
 
   it('should pass validation with well formed data', () => {
