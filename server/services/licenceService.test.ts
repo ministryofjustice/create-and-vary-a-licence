@@ -890,13 +890,13 @@ describe('Licence Service', () => {
       id: 1,
     } as Licence)
 
-    await licenceService.compareVariationToOriginal({ id: 2, variationOf: 1 } as Licence, user)
+    await licenceService.compareVariationToOriginal({ id: 2, kind: 'VARIATION', variationOf: 1 } as Licence, user)
 
     expect(licenceCompatatorSpy).toBeCalledWith(
       {
         id: 1,
       },
-      { id: 2, variationOf: 1 }
+      { id: 2, kind: 'VARIATION', variationOf: 1 }
     )
   })
 
@@ -1003,9 +1003,8 @@ describe('Licence Service', () => {
   describe('Get timeline events', () => {
     const originalLicence = {
       id: 1,
+      kind: 'CRD',
       statusCode: LicenceStatus.ACTIVE,
-      variationOf: null,
-      isVariation: false,
       createdByFullName: 'Jackson Browne',
       dateLastUpdated: '10/11/2022 11:00:00',
     } as Licence
@@ -1024,9 +1023,9 @@ describe('Licence Service', () => {
     it('will return a list of timeline events for an approved variation', async () => {
       const licenceVariation = {
         id: 2,
+        kind: 'VARIATION',
         statusCode: LicenceStatus.VARIATION_APPROVED,
         variationOf: 1,
-        isVariation: true,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:45:00',
       } as Licence
@@ -1049,9 +1048,9 @@ describe('Licence Service', () => {
     it('will return a list of timeline events for a submitted variation', async () => {
       const licenceVariation = {
         id: 2,
+        kind: 'VARIATION',
         statusCode: LicenceStatus.VARIATION_SUBMITTED,
         variationOf: 1,
-        isVariation: true,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:45:00',
       } as Licence
@@ -1073,9 +1072,9 @@ describe('Licence Service', () => {
     it('will return a list of timeline events for a rejected variation', async () => {
       const licenceVariation = {
         id: 2,
+        kind: 'VARIATION',
         statusCode: LicenceStatus.VARIATION_REJECTED,
         variationOf: 1,
-        isVariation: true,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:45:00',
       } as Licence

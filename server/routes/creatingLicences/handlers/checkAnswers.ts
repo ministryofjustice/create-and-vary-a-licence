@@ -72,7 +72,7 @@ export default class CheckAnswersRoutes {
       await this.licenceService.updateStandardConditions(licenceId, newStdConditions, user)
     }
 
-    if (licence.isVariation) {
+    if (licence.kind === 'VARIATION') {
       return res.redirect(`/licence/vary/id/${licence.id}/reason-for-variation`)
     }
 

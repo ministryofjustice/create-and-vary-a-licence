@@ -510,7 +510,7 @@ export default class LicenceService {
   }
 
   async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
-    if (variation?.variationOf) {
+    if (variation.kind === 'VARIATION') {
       const originalLicence = await this.getLicence(variation.variationOf, user)
       return compareLicenceConditions(originalLicence, variation)
     }
@@ -553,7 +553,7 @@ export default class LicenceService {
     licences.push(thisLicence)
 
     // Get the trail of variations back to the original licence
-    while (thisLicence?.isVariation) {
+    while (thisLicence.kind === 'VARIATION') {
       // eslint-disable-next-line no-await-in-loop
       thisLicence = await this.licenceApiClient.getLicenceById(thisLicence?.variationOf, user)
       if (thisLicence) {
@@ -614,7 +614,8 @@ export default class LicenceService {
 
   private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {
     return licences.map(licence => {
-      const { title, eventType } = LicenceService.getTimelineEventType(licence.variationOf, licence.statusCode)
+      const varyOf = licence.kind === 'VARIATION' ? licence.variationOf : undefined
+      const { title, eventType } = LicenceService.getTimelineEventType(varyOf, licence.statusCode)
       return new TimelineEvent(
         eventType,
         title,

@@ -55,6 +55,7 @@ describe('Route Handlers - Offender licences', () => {
 
       const expectedLicences = {
         licenceId: 1,
+        kind: 'CRD',
         licenceType: 'PSS',
         licenceStatus: 'SUBMITTED',
         probationPduDescription: null,

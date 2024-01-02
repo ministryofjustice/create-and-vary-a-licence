@@ -15,7 +15,7 @@
     or licence.statusCode == 'VARIATION_REJECTED' or licence.statusCode == 'VARIATION_APPROVED' %}
 {% set canChooseToEdit = licence.statusCode == 'APPROVED' or licence.statusCode == 'SUBMITTED' %}
 {% set canChooseToPrint = licence.statusCode == 'APPROVED' %}
-{% if licence.isVariation %} 
+{% if licence.kind === 'VARIATION' %} 
   {% set submitButtonText = 'View summary and add notes' %}
   {% set submitButtonAttrs = { 'data-qa': 'add-notes' } %}
 {% else %} 
@@ -26,7 +26,7 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if licence.isVariation %}
+            {% if licence.kind === 'VARIATION' %}
                 {% if licence.typeCode === 'AP' %}
                     <h1 class="govuk-heading-l">Vary licence details</h1>
                 {% elseif licence.typeCode === 'AP_PSS' %}
@@ -74,7 +74,7 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if licence.isVariation %}
+            {% if licence.kind === 'VARIATION' %}
                 {{ variationSummary(licence, isInProgress) }}
             {% else %}
                 {{ inductionMeetingDetails(licence, isInProgress, validationErrors) }}
@@ -146,7 +146,7 @@
                     {% endif %}
                
 
-                    {% if isInProgress and licence.isVariation %}
+                    {% if isInProgress and licence.kind === 'VARIATION' %}
                             {{ govukButton({
                                 text: "Discard changes",
                                 classes: "govuk-button--secondary",
