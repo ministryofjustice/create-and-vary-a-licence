@@ -5,7 +5,6 @@ import CommunityService from './communityService'
 import QrCodeService from './qrCodeService'
 import CaseloadService from './caseloadService'
 import UkBankHolidayFeedService from './ukBankHolidayFeedService'
-import LicenceExpiryService from './licenceExpiryService'
 import PrisonRegisterService from './prisonRegisterService'
 import ConditionService from './conditionService'
 import LicenceOverrideService from './licenceOverrideService'
@@ -31,7 +30,6 @@ const userService = new UserService(hmppsAuthClient, prisonApiClient, communityS
 const conditionService = new ConditionService(licenceApiClient)
 const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
 const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
-const licenceExpiryService = new LicenceExpiryService(licenceApiClient, licenceService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
 const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
@@ -46,7 +44,6 @@ export const services = {
   communityService,
   qrCodeService,
   ukBankHolidayFeedService,
-  licenceExpiryService,
   prisonRegisterService,
   conditionService,
   licenceOverrideService,

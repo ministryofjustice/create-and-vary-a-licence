@@ -497,4 +497,10 @@ export default class LicenceApiClient extends RestClient {
       path: '/bank-holidays',
     })) as Promise<string[]>
   }
+
+  async runLicenceExpiryJob(): Promise<void> {
+    await this.post({
+      path: '/run-expire-licences-job',
+    })
+  }
 }

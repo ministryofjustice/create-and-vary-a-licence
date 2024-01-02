@@ -8,13 +8,15 @@ import { initialiseAppInsights, buildAppInsightsClient, flush } from '../server/
 initialiseAppInsights()
 buildAppInsightsClient('create-and-vary-a-licence-expire-licences-job')
 
-import { services } from '../server/services'
+import LicenceApiClient from '../server/data/licenceApiClient'
 import logger from '../logger'
+import { InMemoryTokenStore } from '../server/data/tokenStore'
+import { getSystemTokenWithRetries } from '../server/data/systemToken'
 
-const { licenceExpiryService } = services
+const licenceApiClient = new LicenceApiClient(new InMemoryTokenStore(getSystemTokenWithRetries))
 
-licenceExpiryService
-  .expireLicences()
+licenceApiClient
+  .runLicenceExpiryJob()
   .then(results => {
     logger.info(results)
     flush({ callback: () => process.exit() }, 'success')
