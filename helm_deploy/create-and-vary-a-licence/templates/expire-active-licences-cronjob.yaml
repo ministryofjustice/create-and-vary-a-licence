@@ -1,10 +1,10 @@
-{{- if .Values.EXPIRE_LICENCES_JOB_ENABLED -}}
+{{- if .Values.cronjobs.expire_licences.enabled -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: expire-licences
 spec:
-  schedule: {{ .Values.cronjobs.expire_active_licences }}
+  schedule: {{ .Values.cronjobs.expire_licences.schedule }}
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200
