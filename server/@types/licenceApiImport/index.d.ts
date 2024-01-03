@@ -208,7 +208,7 @@ export interface paths {
      * Triggers the deactivate release date passed licence job.
      * @description Triggers a job that causes licences with a status of IN_PROGRESS or SUBMITTED and release date already passed, to be updated to INACTIVE. Requires ROLE_CVL_ADMIN.
      */
-    patch: operations['runDeactivateReleaseDatePassedLicencesJob']
+    post: operations['runDeactivateReleaseDatePassedLicencesJob']
   }
   '/run-activation-job': {
     /**
