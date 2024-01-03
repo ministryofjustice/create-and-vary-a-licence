@@ -43,6 +43,14 @@ interface PutRequest {
   raw?: boolean
 }
 
+interface PatchRequest {
+  path?: string
+  headers?: Record<string, string>
+  responseType?: string
+  data?: Record<string, unknown> | number[] | string[] | Record<string, unknown>[]
+  raw?: boolean
+}
+
 interface DeleteRequest {
   path?: string
   headers?: Record<string, string>
@@ -134,6 +142,36 @@ export default class HmppsRestClient {
 
   async put(
     { path = null, headers = {}, responseType = '', data = {}, raw = false }: PutRequest,
+    signedWithMethod?: SignedWithMethod
+  ): Promise<unknown> {
+    const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
+
+    logger.info(`Put using admin client credentials: calling ${this.name}: ${path}`)
+    return superagent
+      .put(`${this.apiConfig.url}${path}`)
+      .send(data)
+      .set('Content-Type', 'application/json')
+      .agent(this.agent)
+      .retry(2, err => {
+        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+        return undefined // retry handler only for logging retries, not to influence retry logic
+      })
+      .auth(signedWith, { type: 'bearer' })
+      .set(headers)
+      .responseType(responseType)
+      .timeout(this.apiConfig.timeout)
+      .then(response => {
+        return raw ? response : response.body
+      })
+      .catch(error => {
+        const sanitisedError = sanitiseError(error)
+        logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'PUT'`)
+        throw sanitisedError
+      })
+  }
+
+  async patch(
+    { path = null, headers = {}, responseType = '', data = {}, raw = false }: PatchRequest,
     signedWithMethod?: SignedWithMethod
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
