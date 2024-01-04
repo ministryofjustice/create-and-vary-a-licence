@@ -11,7 +11,7 @@ cronjobs:
     enabled: true
     schedule: "0 4 * * *" # 4am every day
   deactivate_release_date_passed_licences:
-    enabled: false
+    enabled: true
     schedule: "0 2 * * 1-5" # 2am UTC Monday - Friday
 generic-service:
   nameOverride: create-and-vary-a-licence
