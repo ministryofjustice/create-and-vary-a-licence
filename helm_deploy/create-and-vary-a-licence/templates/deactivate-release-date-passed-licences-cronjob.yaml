@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: time-out-licences
+  name: deactivate_release_date_passed_licences_cronjob
 spec:
   schedule: {{ .Values.cronjobs.deactivate_release_date_passed_licences.schedule }}
   concurrencyPolicy: Replace
