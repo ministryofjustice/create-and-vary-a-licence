@@ -3,7 +3,7 @@ import LicenceService from '../../../../services/licenceService'
 import OutOfBoundsPremisesRemovalRoutes from './outOfBoundsPremisesRemovalRoutes'
 import { OUT_OF_BOUNDS_PREMISES_CONDITION_CODE } from '../../../../utils/conditionRoutes'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 describe('Route Handlers - Create Licence - Out Of Bounds Premises Removal Routes Handler', () => {
   const handler = new OutOfBoundsPremisesRemovalRoutes(licenceService)
   let req: Request

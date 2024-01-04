@@ -4,7 +4,7 @@ import InitialMeetingTimeRoutes from './initialMeetingTime'
 import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route - create licence - initial meeting date and time', () => {
   const handler = new InitialMeetingTimeRoutes(licenceService)

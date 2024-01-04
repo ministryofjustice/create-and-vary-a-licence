@@ -5,7 +5,7 @@ import TimelineRoutes from './timeline'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import TimelineEvent from '../../../@types/TimelineEvent'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Timeline', () => {

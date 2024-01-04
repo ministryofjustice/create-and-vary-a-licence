@@ -22,7 +22,7 @@ describe('Caseload Service', () => {
   const yesterday = format(addDays(new Date(), -1), 'yyyy-MM-dd')
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-  const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+  const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
   const serviceUnderTest = new CaseloadService(prisonerService, communityService, licenceService)
   const user = {
     deliusStaffIdentifier: 2000,
