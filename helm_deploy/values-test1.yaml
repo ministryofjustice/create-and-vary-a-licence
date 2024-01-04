@@ -7,7 +7,9 @@ cronjobs:
   expire_licences:
     enabled: false
     schedule: "0 10 * * 1-5" # 10am UTC, Monday - Friday
-
+  deactivate_release_date_passed_licences:
+    enabled: true
+    schedule: "0 2 * * 1-5" # 2am UTC Monday - Friday
 generic-service:
   replicaCount: 2
 
