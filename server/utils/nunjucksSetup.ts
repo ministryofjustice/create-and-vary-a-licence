@@ -19,7 +19,7 @@ import {
 import { AdditionalCondition, AdditionalConditionData, Licence } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
-import Address from '../routes/creatingLicences/types/address'
+import Address from '../routes/initialAppointment/types/address'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { getEditConditionHref } from './conditionRoutes'
 

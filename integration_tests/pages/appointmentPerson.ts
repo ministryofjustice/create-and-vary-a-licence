@@ -1,5 +1,6 @@
 import Page from './page'
 import AppointmentPlacePage from './appointmentPlace'
+import ViewALicencePage from './viewALicence'
 
 export default class AppointmentPersonPage extends Page {
   private personTextInputId = '#contactName'
@@ -19,5 +20,11 @@ export default class AppointmentPersonPage extends Page {
     cy.task('stubPutAppointmentPerson')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AppointmentPlacePage)
+  }
+
+  clickContinueToReturn = (): ViewALicencePage => {
+    cy.task('stubPutAppointmentPerson')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(ViewALicencePage)
   }
 }

@@ -1,6 +1,7 @@
 import { Moment } from 'moment'
 import Page from './page'
 import AdditionalConditionsQuestionPage from './additionalConditionsQuestion'
+import ViewALicencePage from './viewALicence'
 
 export default class AppointmentTimePage extends Page {
   private inductionDateId = '#date-calendarDate'
@@ -37,6 +38,12 @@ export default class AppointmentTimePage extends Page {
     cy.task('stubPutAppointmentTime')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsQuestionPage)
+  }
+
+  clickContinueToReturn = (): ViewALicencePage => {
+    cy.task('stubPutAppointmentTime')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(ViewALicencePage)
   }
 
   clickSkip = (): AdditionalConditionsQuestionPage => {

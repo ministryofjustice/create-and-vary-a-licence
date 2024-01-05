@@ -88,6 +88,7 @@ export default defineConfig({
         stubGetBankHolidays: licence.stubGetBankHolidays,
         stubAddAdditionalCondition: licence.stubAddAdditionalCondition,
         stubGetLicenceWithSkippedInputs: licence.stubGetLicenceWithSkippedInputs,
+        stubGetLicenceInHardStop: licence.stubGetLicenceInHardStop,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,

@@ -1,9 +1,13 @@
+import moment from 'moment'
 import Page from '../pages/page'
 import IndexPage from '../pages'
 import ChangeLocationPage from '../pages/changeLocationPage'
 import ViewCasesPage from '../pages/viewCasesPage'
+import ViewALicencePage from '../pages/viewALicence'
 
 context('View and print licence', () => {
+  const dates: string[] = []
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
@@ -21,6 +25,7 @@ context('View and print licence', () => {
     cy.task('stubGetPrisons')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
+    cy.task('stubGetBankHolidays', dates)
   })
   const singleCaseload = {
     details: [
@@ -143,6 +148,7 @@ context('View and print licence', () => {
     changeLocationPage.clickContinue()
     changeLocationPage.getErrorSummary().should('exist')
   })
+
   it('verify prison and probation views only display licences with appropriate statuses', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
@@ -161,5 +167,30 @@ context('View and print licence', () => {
     viewCasesList.getRow(0).contains('Active')
     viewCasesList.clickLinkWithDataQa('prison-view-link')
     cy.get('[data-qa=no-match-message]').contains('There are no licences to print which match the search criteria.')
+  })
+
+  it('should allow prison CAs to change initial appointment information in the hard-stop window', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetLicenceInHardStop')
+    cy.signIn()
+
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const viewCasesList = indexPage.clickViewAndPrintALicence()
+    let viewLicencePage: ViewALicencePage = viewCasesList.clickALicence()
+    viewLicencePage = viewLicencePage.clickChangePersonLink().enterPerson('Joe Bloggs').clickContinueToReturn()
+    viewLicencePage = viewLicencePage.clickChangeAddressLink().enterDefaultAddress().clickContinueToReturn()
+    viewLicencePage = viewLicencePage.clickChangeTelephoneLink().enterTelephone('01234567890').clickContinueToReturn()
+    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
+      viewLicencePage = viewLicencePage
+        .clickChangeDateLink()
+        .enterDate(moment(appointmentDate))
+        .enterTime(moment())
+        .clickContinueToReturn()
+      viewLicencePage = viewLicencePage
+        .clickChangeTimeLink()
+        .enterDate(moment(appointmentDate))
+        .enterTime(moment())
+        .clickContinueToReturn()
+    })
   })
 })

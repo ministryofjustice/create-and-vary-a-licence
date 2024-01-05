@@ -1,8 +1,12 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
+import UserType from '../../../enumeration/userType'
 
 export default class InitialMeetingContactRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly userType: UserType
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
@@ -17,7 +21,9 @@ export default class InitialMeetingContactRoutes {
     const { user } = res.locals
     await this.licenceService.updateContactNumber(licenceId, req.body, user)
 
-    if (req.query?.fromReview) {
+    if (this.userType === UserType.PRISON) {
+      res.redirect(`/licence/view/id/${licenceId}/show`)
+    } else if (req.query?.fromReview) {
       res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     } else {
       res.redirect(`/licence/create/id/${licenceId}/initial-meeting-time`)

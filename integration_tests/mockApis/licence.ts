@@ -1,4 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
+import { addDays, format } from 'date-fns'
 import { stubFor } from '../wiremock'
 import LicenceStatus from '../../server/licences/licenceStatus'
 // eslint-disable-next-line camelcase
@@ -1251,6 +1252,23 @@ export default {
               readyToSubmit: false,
             },
           ],
+        },
+      },
+    })
+  },
+
+  stubGetLicenceInHardStop: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/id/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          actualReleaseDate: format(addDays(Date.now(), 1), 'dd/MM/yyyy'),
         },
       },
     })

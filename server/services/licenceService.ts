@@ -42,10 +42,10 @@ import {
   filterCentralCaseload,
   objectIsEmpty,
 } from '../utils/utils'
-import PersonName from '../routes/creatingLicences/types/personName'
-import DateTime from '../routes/creatingLicences/types/dateTime'
-import Telephone from '../routes/creatingLicences/types/telephone'
-import Address from '../routes/creatingLicences/types/address'
+import PersonName from '../routes/initialAppointment/types/personName'
+import DateTime from '../routes/initialAppointment/types/dateTime'
+import Telephone from '../routes/initialAppointment/types/telephone'
+import Address from '../routes/initialAppointment/types/address'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import PrisonerService from './prisonerService'

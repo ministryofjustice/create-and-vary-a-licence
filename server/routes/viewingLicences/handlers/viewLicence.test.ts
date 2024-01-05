@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { addDays, format } from 'date-fns'
 import ViewAndPrintLicenceRoutes from './viewLicence'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
@@ -24,7 +25,14 @@ describe('Route - view and approve a licence', () => {
     additionalPssConditions: [],
     bespokeConditions: [],
     comStaffId: 123,
+    actualReleaseDate: format(addDays(new Date(), 2), 'dd/MM/yyyy'),
   } as Licence
+
+  const user = {
+    username,
+    deliusStaffIdentifier: 123,
+    authSource: 'nomis',
+  }
 
   beforeEach(() => {
     req = {
@@ -42,7 +50,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username, deliusStaffIdentifier: 123 },
+          user,
           licence,
         },
       } as unknown as Response
@@ -51,6 +59,8 @@ describe('Route - view and approve a licence', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/view/view', {
         additionalConditions: [],
+        isEditableByPrison: true,
+        isPrisonUser: true,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -60,7 +70,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username, deliusStaffIdentifier: 999 },
+          user: { ...user, deliusStaffIdentifier: 999 },
           licence: { ...licence, statusCode: LicenceStatus.APPROVED },
         },
       } as unknown as Response
@@ -69,6 +79,8 @@ describe('Route - view and approve a licence', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/view/view', {
         additionalConditions: [],
+        isEditableByPrison: true,
+        isPrisonUser: true,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -78,7 +90,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username, deliusStaffIdentifier: 999 },
+          user,
           licence: { ...licence, statusCode: LicenceStatus.NOT_STARTED },
         },
       } as unknown as Response
@@ -94,7 +106,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username, deliusStaffIdentifier: 123 },
+          user,
           licence,
         },
       } as unknown as Response
@@ -109,6 +121,8 @@ describe('Route - view and approve a licence', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/view/view', {
         additionalConditions: [],
+        isEditableByPrison: true,
+        isPrisonUser: true,
         warningMessage:
           "This is the last approved version of this person's licence.<br />Another version was started on 15 December 2022.<br />" +
           'You can print the most recent version once it has been approved.',
@@ -127,7 +141,7 @@ describe('Route - view and approve a licence', () => {
         render: jest.fn(),
         redirect: jest.fn(),
         locals: {
-          user: { username, deliusStaffIdentifier: 123 },
+          user,
           licence: inProgressLicence,
         },
       } as unknown as Response
@@ -142,10 +156,52 @@ describe('Route - view and approve a licence', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/view/view', {
         additionalConditions: [],
+        isEditableByPrison: true,
+        isPrisonUser: true,
         warningMessage:
           'This is the most recent version of this licence that was submitted on 15 June 2012.<br />' +
           'Once this version is approved, you can print it.<br /><a href="/licence/view/id/1/pdf-print" target="_blank">' +
           'You can also view and print the last approved version of this licence</a>.',
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
+
+    it('should not be editable by prison when the release date is more than two days in the future', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user,
+          licence: { ...licence, actualReleaseDate: format(addDays(new Date(), 3), 'dd/MM/yyyy') },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+        additionalConditions: [],
+        isEditableByPrison: false,
+        isPrisonUser: true,
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
+
+    it('should set isPrisonUser to false when the auth source is not nomis', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username, deliusStaffIdentifier: 123, authSource: 'something_else' },
+          licence,
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+        additionalConditions: [],
+        isEditableByPrison: true,
+        isPrisonUser: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })

@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express'
-import { format, parse } from 'date-fns'
+import { format, isWithinInterval, parse, startOfDay, sub } from 'date-fns'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
 import { groupingBy } from '../../../utils/utils'
@@ -10,8 +10,15 @@ export default class ViewAndPrintLicenceRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
-
     let warningMessage
+
+    const releaseDateString = licence.actualReleaseDate || licence.conditionalReleaseDate
+    const releaseDate = parse(releaseDateString, 'dd/MM/yyyy', new Date())
+    const isInHardStopWindow = isWithinInterval(startOfDay(new Date()), {
+      start: sub(releaseDate, { days: 2 }),
+      end: releaseDate,
+    })
+
     if (req.query?.latestVersion) {
       const latestLicenceVersion = req.query.latestVersion as string
       const latestLicence = await this.licenceService.getLicence(parseInt(latestLicenceVersion, 10), user)
@@ -60,6 +67,8 @@ export default class ViewAndPrintLicenceRoutes {
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         warningMessage,
+        isEditableByPrison: isInHardStopWindow,
+        isPrisonUser: user.authSource === 'nomis',
       })
     } else {
       res.redirect(`/licence/view/cases`)

@@ -1,5 +1,6 @@
 import Page from './page'
 import AppointmentContactPage from './appointmentContact'
+import ViewALicencePage from './viewALicence'
 
 export default class AppointmentPlacePage extends Page {
   private addressTextInputId = '#addressLine1'
@@ -36,9 +37,23 @@ export default class AppointmentPlacePage extends Page {
     return this
   }
 
+  enterDefaultAddress = (): AppointmentPlacePage => {
+    cy.get(this.addressTextInputId).type('123 Fake St')
+    cy.get(this.addressTownTextInputId).type('Faketown')
+    cy.get(this.addressCountyTextInputId).type('Fakesbury')
+    cy.get(this.addressPostcodeTextInputId).type('FA1 1KE')
+    return this
+  }
+
   clickContinue = (): AppointmentContactPage => {
     cy.task('stubPutAppointmentAddress')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AppointmentContactPage)
+  }
+
+  clickContinueToReturn = (): ViewALicencePage => {
+    cy.task('stubPutAppointmentAddress')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(ViewALicencePage)
   }
 }
