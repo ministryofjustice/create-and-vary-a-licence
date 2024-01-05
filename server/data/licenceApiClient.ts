@@ -503,4 +503,10 @@ export default class LicenceApiClient extends RestClient {
       path: '/run-expire-licences-job',
     })
   }
+
+  async runDeactivateReleaseDatePassedLicencesJob() {
+    await this.post({
+      path: '/run-deactivate-licences-past-release-date',
+    })
+  }
 }
