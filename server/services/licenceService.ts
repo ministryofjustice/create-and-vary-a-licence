@@ -161,6 +161,8 @@ export default class LicenceService {
   async updateAppointmentPerson(id: string, formData: PersonName, user: User): Promise<void> {
     const requestBody = {
       appointmentPerson: formData.contactName,
+      forename: user.firstName,
+      surname: user.lastName,
     } as AppointmentPersonRequest
 
     return this.licenceApiClient.updateAppointmentPerson(id, requestBody, user)
@@ -168,18 +170,26 @@ export default class LicenceService {
 
   async updateAppointmentTime(id: string, formData: DateTime, user: User): Promise<void> {
     const appointmentTime = DateTime.toJson(formData)
-    const requestBody = { appointmentTime } as AppointmentTimeRequest
+    const requestBody = { appointmentTime, forename: user.firstName, surname: user.lastName } as AppointmentTimeRequest
     return this.licenceApiClient.updateAppointmentTime(id, requestBody, user)
   }
 
   async updateAppointmentAddress(id: string, formData: Address, user: User): Promise<void> {
     const appointmentAddress = addressObjectToString(formData)
-    const requestBody = { appointmentAddress } as AppointmentAddressRequest
+    const requestBody = {
+      appointmentAddress,
+      forename: user.firstName,
+      surname: user.lastName,
+    } as AppointmentAddressRequest
     return this.licenceApiClient.updateAppointmentAddress(id, requestBody, user)
   }
 
   async updateContactNumber(id: string, formData: Telephone, user: User): Promise<void> {
-    const requestBody = { telephone: formData.telephone } as ContactNumberRequest
+    const requestBody = {
+      telephone: formData.telephone,
+      forename: user.firstName,
+      surname: user.lastName,
+    } as ContactNumberRequest
     return this.licenceApiClient.updateContactNumber(id, requestBody, user)
   }
 

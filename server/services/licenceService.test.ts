@@ -445,7 +445,11 @@ describe('Licence Service', () => {
 
   it('Update appointment person', async () => {
     await licenceService.updateAppointmentPerson('1', { contactName: 'Joe Bloggs' }, user)
-    expect(licenceApiClient.updateAppointmentPerson).toBeCalledWith('1', { appointmentPerson: 'Joe Bloggs' }, user)
+    expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
+      '1',
+      { appointmentPerson: 'Joe Bloggs', forename: 'Joe', surname: 'Bloggs' },
+      user
+    )
   })
 
   it('Update appointment time', async () => {
@@ -455,7 +459,11 @@ describe('Licence Service', () => {
       { date: { calendarDate: '22/12/2022' }, time: { hour: '12', minute: '20', ampm: 'pm' } } as DateTime,
       user
     )
-    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith('1', { appointmentTime: '22/12/2022 12:20' }, user)
+    expect(licenceApiClient.updateAppointmentTime).toHaveBeenCalledWith(
+      '1',
+      { appointmentTime: '22/12/2022 12:20', forename: 'Joe', surname: 'Bloggs' },
+      user
+    )
     expect(timeConverter).toBeCalledWith({
       date: { calendarDate: '22/12/2022' },
       time: { hour: '12', minute: '20', ampm: 'pm' },
@@ -472,9 +480,9 @@ describe('Licence Service', () => {
       } as Address,
       user
     )
-    expect(licenceApiClient.updateAppointmentAddress).toBeCalledWith(
+    expect(licenceApiClient.updateAppointmentAddress).toHaveBeenCalledWith(
       '1',
-      { appointmentAddress: '123 Fake Street, Fakestown' },
+      { appointmentAddress: '123 Fake Street, Fakestown', forename: 'Joe', surname: 'Bloggs' },
       user
     )
     expect(addressConverter).toBeCalledWith({
@@ -485,7 +493,11 @@ describe('Licence Service', () => {
 
   it('Update contact number', async () => {
     await licenceService.updateContactNumber('1', { telephone: '07624726976' }, user)
-    expect(licenceApiClient.updateContactNumber).toBeCalledWith('1', { telephone: '07624726976' }, user)
+    expect(licenceApiClient.updateContactNumber).toHaveBeenCalledWith(
+      '1',
+      { telephone: '07624726976', forename: 'Joe', surname: 'Bloggs' },
+      user
+    )
   })
 
   describe('Update additional conditions', () => {
