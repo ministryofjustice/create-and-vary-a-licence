@@ -34,6 +34,10 @@ class DateTime {
   @Validate(ValidSimpleTime)
   time: SimpleTime
 
+  @Expose()
+  @Type(() => String)
+  appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
+
   static toJson(dt: DateTime): string | undefined {
     const { date, time } = dt
     const dateString = date.calendarDate.toString().split('/').reverse().join(' ')

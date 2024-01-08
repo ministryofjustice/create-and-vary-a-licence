@@ -22,6 +22,7 @@ import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/creatingLicences/types/address'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { getEditConditionHref } from './conditionRoutes'
+import AppointmentTimeType from '../enumeration/appointmentTimeType'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -111,6 +112,11 @@ export function registerNunjucks(app?: express.Express): Environment {
       }
     }
     return null
+  })
+
+  njkEnv.addFilter('getAppointmentTimeType', (type: string) => {
+    const appointmentTimeType: Record<string, string> = AppointmentTimeType
+    return appointmentTimeType[type]
   })
 
   njkEnv.addFilter('fillFormResponse', (defaultValue: unknown, overrideValue: unknown) => {
