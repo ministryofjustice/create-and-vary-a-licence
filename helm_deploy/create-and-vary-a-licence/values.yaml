@@ -2,13 +2,17 @@
 cronjobs:
   activate_licences: "0 3,9,12,15,18 * * *" # 3am, 9am, 12pm, 3pm, and 6pm every day
   email_probation_practioner: "0 2 * * *" # 2am every day
-  expire_active_licences: "0 4 * * *" # 4am every day
   prompt_licence_creation: "0 7 * * 1" # 7am UTC every monday
   remove_expired_conditions: "0 3 * * *" # 3am every day
   time_out_licences:
     enabled: false
     schedule: "30 1 * * 1-5" # 1:30am UTC Monday - Friday
-
+  expire_licences:
+    enabled: true
+    schedule: "0 4 * * *" # 4am every day
+  deactivate_release_date_passed_licences:
+    enabled: true
+    schedule: "0 2 * * 1-5" # 2am UTC Monday - Friday
 generic-service:
   nameOverride: create-and-vary-a-licence
   replicaCount: 4

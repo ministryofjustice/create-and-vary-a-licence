@@ -217,6 +217,13 @@ export interface paths {
      */
     post: operations['runLicenceExpiryJob']
   }
+  '/run-deactivate-release-date-passed-licences-job': {
+    /**
+     * Triggers the deactivate release date passed licence job.
+     * @description Triggers a job that causes licences with a status of IN_PROGRESS or SUBMITTED and release date already passed, to be updated to INACTIVE. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['runDeactivateReleaseDatePassedLicencesJob']
+  }
   '/run-activation-job': {
     /**
      * Triggers the licence activation job.
@@ -4445,6 +4452,30 @@ export interface operations {
   runLicenceActivationJob: {
     responses: {
       /** @description Activation job executed. */
+      200: {
+        content: never
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Triggers the job to deactivate licences which are passed release date.
+   * @description Triggers a job that causes licences with a status of IN_PROGRESS or SUBMITTED and release date already passed, to be updated to INACTIVE. Requires ROLE_CVL_ADMIN.
+   */
+  runDeactivateReleaseDatePassedLicencesJob: {
+    responses: {
+      /** @description job executed. */
       200: {
         content: never
       }
