@@ -55,4 +55,8 @@ export default class CheckAnswersPage extends Page {
   getErrorSummary = () => {
     return cy.get('.govuk-error-summary__body')
   }
+
+  dateTimeType = () => {
+    return cy.get('.govuk-summary-list__key')
+  }
 }

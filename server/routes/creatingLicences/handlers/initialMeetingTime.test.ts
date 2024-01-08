@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import InitialMeetingTimeRoutes from './initialMeetingTime'
 import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
+import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -11,6 +12,7 @@ describe('Route - create licence - initial meeting date and time', () => {
   let req: Request
   let res: Response
   let formDate: DateTime
+  const appointmentTimeType: Record<string, string> = AppointmentTimeType
 
   beforeEach(() => {
     formDate = {
@@ -54,8 +56,8 @@ describe('Route - create licence - initial meeting date and time', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
         formDate,
+        appointmentTimeType,
         releaseIsOnBankHolidayOrWeekend: true,
-        skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
       })
     })
   })

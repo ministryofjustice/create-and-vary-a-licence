@@ -11,7 +11,6 @@ export default class ChangeLocationRoutes {
       const prisonCaseloadFromNomis = await this.userService.getPrisonUserCaseloads(user)
       const caseload = prisonCaseloadFromNomis.map(c => ({ value: c.caseLoadId, text: c.description }))
       const checked = req.session.caseloadsSelected
-      console.log('checked:------>', checked)
 
       let cancelLink = req.query.view ? '/licence/view/cases?view=probation' : '/licence/view/cases'
       if (role !== AuthRole.CASE_ADMIN) {

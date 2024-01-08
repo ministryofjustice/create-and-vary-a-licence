@@ -23,7 +23,6 @@ export default class InitialMeetingTimeRoutes {
     const { licenceId } = req.params
     const { licence } = res.locals
     const { user } = res.locals
-    console.log('req.body;', req.body)
     await this.licenceService.updateAppointmentTime(licenceId, req.body, user)
 
     return res.redirect(this.getNextPage(licenceId, licence.typeCode, req))

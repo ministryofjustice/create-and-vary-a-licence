@@ -44,7 +44,7 @@
                     {% set dateTimeHtml %}
                         {% call govukFieldset({
                             legend: {
-                                text: "Time",
+                                text: "Date",
                                 classes: "govuk-visually-hidden",
                                 isPageHeading: false}
                             }) %}
@@ -100,18 +100,9 @@
                     {% endfor %}
 
                     {{ govukRadios({
-                    idPrefix: "radio-option",
+                    id: "appointment-time-type",
                     name: "appointmentTimeType",
                     value: formResponses.appointmentTimeType or licence.appointmentTimeType,
-                    fieldset: {
-                        attributes: {
-                            id: 'appointment-time-type'
-                        },
-                        legend: {
-                            text: "When do they need to go to their initial appointment",
-                            classes: "govuk-visually-hidden"
-                        }
-                    },
                     items: appointmentTimeTypeOptions
                 }) }}
 

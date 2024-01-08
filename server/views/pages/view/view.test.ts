@@ -13,6 +13,7 @@ describe('View and print - single licence view', () => {
     typeCode: 'AP_PSS',
     forename: 'John',
     surname: 'Smith',
+    appointmentTimeType: 'SPECIFIC_DATE_TIME',
     appointmentPerson: 'Jack Frost',
     appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
     additionalLicenceConditions: [
@@ -162,6 +163,13 @@ describe('View and print - single licence view', () => {
     // Check the existence of the print and return to case list buttons
     expect($('[data-qa="print-licence"]').length).toBe(1)
     expect($('[data-qa="return-to-view-list"]').length).toBe(1)
+
+    const $1 = render({
+      ...licence,
+      appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
+    })
+    // Check the initial meeting details are populated
+    expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(4)
   })
 
   it('Print buttons are not visible when licence is not approved or active', () => {

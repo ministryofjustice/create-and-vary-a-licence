@@ -40,6 +40,7 @@ context('Create a licence', () => {
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
+        .selectType('SPECIFIC_DATE_TIME')
         .enterDate(moment(appointmentDate))
         .enterTime(moment())
         .clickContinue()
@@ -108,7 +109,92 @@ context('Create a licence', () => {
     })
   })
 
-  it('should not allow a licence to be submitted without initial appointment details', () => {
+  it('should allow a licence to be submitted without initial appointment date and time if appointment type selected is not SPECIFIC_DATE_TIME', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicence()
+    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+
+    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentContactPage = appointmentPlacePage
+      .enterAddressLine1('123 Fake Street')
+      .enterTown('Fakestown')
+      .enterCounty('Durham')
+      .enterPostcode('DH11AF')
+      .clickContinue()
+
+    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+
+    cy.task('getNextWorkingDay', dates).then(() => {
+      const additionalConditionsPage = appointmentTimePage
+        .selectType('IMMEDIATE_UPON_RELEASE')
+        .clickContinue()
+        .selectYes()
+        .clickContinue()
+
+      const additionalConditionsInputPage = additionalConditionsPage
+        .selectCondition('5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd')
+        .selectCondition('fce34fb2-02f4-4eb0-9b8d-d091e11451fa')
+        .selectCondition('89e656ec-77e8-4832-acc4-6ec05d3e9a98')
+        .selectCondition('0a370862-5426-49c1-b6d4-3d074d78a81a')
+        .selectCondition('3932e5c9-4d21-4251-a747-ce6dc52dc9c0')
+        .clickContinue()
+
+      const bespokeConditionsQuestionPage = additionalConditionsInputPage
+        .withContext(additionalConditionsPage.getContext())
+        .selectRadio('London')
+        .nextCondition()
+        .selectRadio()
+        .nextCondition()
+        .checkBoxes()
+        .nextCondition(false) // aria-expanded attribute causes issues with Axe
+        .selectRadio('Two curfews')
+        .addFirstCurfew(2)
+        .addSecondCurfew(2)
+        .selectRadio('Other')
+        .enterText('Annually', 'alternativeReviewPeriod')
+        .nextCondition()
+        .enterText('Knives', 'item[0]')
+        .clickAddAnother()
+        .enterText('Needles', 'item[1]')
+        .clickContinue()
+
+      const bespokeConditionsPage = bespokeConditionsQuestionPage.selectYes().clickContinue()
+
+      const pssConditionsQuestionPage = bespokeConditionsPage
+        .enterBespokeCondition(0, 'An unusual bespoke condition to be approved.')
+        .checkDeleteThisCondition() // for single Bespoke Condition
+        .clickAddAnother()
+        .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
+        .checkDeleteTheseConditions() // for multiple Bespoke Condition
+        .clickAddAnother()
+        .enterBespokeCondition(2, 'A third bespoke condition must surely be be a mistake')
+        .checkDeleteTheseConditions() // for multiple Bespoke Condition
+        .clickContinue()
+
+      const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
+
+      const pssConditionsInputPage = pssConditionsPage
+        .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
+        .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
+        .clickContinue()
+
+      const checkAnswersPage = pssConditionsInputPage
+        .withContext(pssConditionsPage.getContext())
+        .enterTime()
+        .enterDate()
+        .enterAddress()
+        .nextInput()
+        .enterAddress()
+        .clickContinue()
+
+      const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
+      const caseloadPageExit = confirmationPage.clickReturn()
+      caseloadPageExit.signOut().click()
+    })
+  })
+
+  it('should have only one Date/time field if appointment time type is other than SPECIFIC_DATE_TIME', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
@@ -126,7 +212,8 @@ context('Create a licence', () => {
 
     cy.task('getNextWorkingDay', dates).then(() => {
       const checkAnswersPage = appointmentTimePage
-        .clickSkip()
+        .selectType('NEXT_WORKING_DAY_2PM')
+        .clickContinue()
         .selectNo()
         .clickContinueAfterNo()
         .selectNo()
@@ -134,7 +221,41 @@ context('Create a licence', () => {
         .selectNo()
         .clickContinueAfterNo()
 
-      checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
+      checkAnswersPage.dateTimeType().should('contain.text', 'Date/time')
+    })
+  })
+
+  it('should have separate Date and time field if appointment time type is SPECIFIC_DATE_TIME', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicence()
+    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+
+    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentContactPage = appointmentPlacePage
+      .enterAddressLine1('123 Fake Street')
+      .enterTown('Fakestown')
+      .enterCounty('Durham')
+      .enterPostcode('DH11AF')
+      .clickContinue()
+
+    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+
+    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
+      const checkAnswersPage = appointmentTimePage
+        .selectType('SPECIFIC_DATE_TIME')
+        .enterDate(moment(appointmentDate))
+        .enterTime(moment())
+        .clickContinue()
+        .selectNo()
+        .clickContinueAfterNo()
+        .selectNo()
+        .clickContinueAfterNo()
+        .selectNo()
+        .clickContinueAfterNo()
+
+      checkAnswersPage.dateTimeType().should('contain.text', 'Date')
+      checkAnswersPage.dateTimeType().should('contain.text', 'Time')
     })
   })
 
@@ -156,6 +277,7 @@ context('Create a licence', () => {
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
+        .selectType('SPECIFIC_DATE_TIME')
         .enterDate(moment(appointmentDate))
         .enterTime(moment())
         .clickContinue()

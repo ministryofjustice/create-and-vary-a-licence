@@ -12,6 +12,7 @@ describe('Create a Licence Views - Check Answers', () => {
     id: 1,
     typeCode: 'AP_PSS',
     statusCode: 'IN_PROGRESS',
+    appointmentTimeType: 'SPECIFIC_DATE_TIME',
     additionalLicenceConditions: [
       [
         {
@@ -288,6 +289,55 @@ describe('Create a Licence Views - Check Answers', () => {
 
     expect($('.govuk-summary-list__actions').length).toBe(11)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
+
+    const $2 = render({
+      licence: { ...licence, statusCode: 'IN_PROGRESS', appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' },
+      additionalConditions: [
+        [
+          {
+            code: 'condition1',
+            category: 'Category 1',
+            expandedText: 'Template 1',
+            uploadSummary: [],
+            data: [
+              {
+                field: 'field1',
+                value: 'Data 1',
+                contributesToLicence: true,
+              },
+            ],
+          },
+        ],
+        [
+          {
+            code: 'condition2',
+            category: 'Category 2',
+            expandedText: 'Template 2',
+            uploadSummary: [],
+            data: [
+              {
+                field: 'field2',
+                value: 'Data 2A',
+                contributesToLicence: true,
+              },
+              {
+                field: 'field2',
+                value: 'Data 2B',
+                contributesToLicence: true,
+              },
+              {
+                field: 'field3',
+                value: 'Data 2C',
+                contributesToLicence: true,
+              },
+            ],
+          },
+        ],
+      ],
+    })
+
+    expect($2('.govuk-summary-list__actions').length).toBe(10)
+    expect($2('[data-qa="send-licence-conditions"]').length).toBe(1)
   })
 
   it('should hide edit licence button when status is IN_PROGRESS', () => {

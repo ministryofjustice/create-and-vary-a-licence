@@ -73,18 +73,46 @@ describe('Licence Service', () => {
     expect(licenceApiClient.updateAppointmentPerson).toBeCalledWith('1', { appointmentPerson: 'Joe Bloggs' }, user)
   })
 
-  it('Update appointment time', async () => {
+  it('Update appointment time when appointment time type is SPECIFIC_DATE_TIME', async () => {
     const timeConverter = jest.spyOn(DateTime, 'toJson').mockReturnValue('22/12/2022 12:20')
     await licenceService.updateAppointmentTime(
       '1',
-      { date: { calendarDate: '22/12/2022' }, time: { hour: '12', minute: '20', ampm: 'pm' } } as DateTime,
+      {
+        date: { calendarDate: '22/12/2022' },
+        time: { hour: '12', minute: '20', ampm: 'pm' },
+        appointmentTimeType: 'SPECIFIC_DATE_TIME',
+      } as DateTime,
       user
     )
-    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith('1', { appointmentTime: '22/12/2022 12:20' }, user)
+    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith(
+      '1',
+      { appointmentTime: '22/12/2022 12:20', appointmentTimeType: 'SPECIFIC_DATE_TIME' },
+      user
+    )
     expect(timeConverter).toBeCalledWith({
       date: { calendarDate: '22/12/2022' },
       time: { hour: '12', minute: '20', ampm: 'pm' },
+      appointmentTimeType: 'SPECIFIC_DATE_TIME',
     } as DateTime)
+  })
+
+  it('Update appointment time when appointment time type is IMMEDIATE_UPON_RELEASE', async () => {
+    const timeConverter = jest.spyOn(DateTime, 'toJson').mockReturnValue('22/12/2022 12:20')
+    await licenceService.updateAppointmentTime(
+      '1',
+      {
+        date: null,
+        time: null,
+        appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
+      } as DateTime,
+      user
+    )
+    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith(
+      '1',
+      { appointmentTime: null, appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' },
+      user
+    )
+    expect(timeConverter).not.toHaveBeenCalled()
   })
 
   it('Update appointment address', async () => {
