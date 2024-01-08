@@ -21,7 +21,7 @@ services:
       - "9091:8080"
 
   gotenberg:
-    image: thecodingmachine/gotenberg:7.5.0
+    image: thecodingmachine/gotenberg:7.10.2
     networks:
       - hmpps_int
     container_name: gotenberg
