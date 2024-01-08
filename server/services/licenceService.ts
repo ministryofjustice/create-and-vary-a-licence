@@ -53,7 +53,6 @@ import TimelineEvent from '../@types/TimelineEvent'
 import TimelineEventType from '../enumeration/TimelineEventType'
 import ConditionService from './conditionService'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
-import AppointmentTimeType from '../enumeration/appointmentTimeType'
 
 export default class LicenceService {
   constructor(

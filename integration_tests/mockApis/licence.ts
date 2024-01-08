@@ -263,7 +263,7 @@ export default {
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
-          appointmentTimeType: options.appointmentTimeType,
+          appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
           additionalLicenceConditions: [
             {
               id: 1,
@@ -969,6 +969,7 @@ export default {
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
+          appointmentTimeType: 'SPECIFIC_DATE_TIME',
         },
       },
     })

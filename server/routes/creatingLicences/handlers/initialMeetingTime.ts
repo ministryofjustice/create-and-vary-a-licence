@@ -16,6 +16,7 @@ export default class InitialMeetingTimeRoutes {
       formDate,
       appointmentTimeType,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
+      skipUrl: this.getNextPage(licence.id.toString(), licence.typeCode, req),
     })
   }
 

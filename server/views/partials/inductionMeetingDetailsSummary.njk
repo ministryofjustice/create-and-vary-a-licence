@@ -1,7 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText) %}
-    {% set apptDateTimeEntered = licence.appointmentTime | length > 0 %}
+    {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
@@ -61,7 +61,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTimeType'),
                 key: { text: "Date/time" },
-                value: { text: licence.appointmentTimeType | getAppointmentTimeType },
+                value: { text: licence.appointmentTimeType | getAppointmentTimeType if apptDateTimeEntered else "Not yet entered" },
                 actions: {
                     items: [
                         {

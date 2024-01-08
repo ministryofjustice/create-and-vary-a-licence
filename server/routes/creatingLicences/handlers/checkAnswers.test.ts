@@ -44,6 +44,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
+          appointmentTimeType: 'SPECIFIC_DATE_TIME',
           additionalLicenceConditions: [],
           additionalPssConditions: [],
           bespokeConditions: [],
@@ -126,7 +127,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           { field: 'appointmentPerson', message: "Select 'Change' to go back and add who to meet" },
           { field: 'appointmentAddress', message: "Select 'Change' to go back and add appointment address" },
           { field: 'appointmentContact', message: "Select 'Change' to go back and add appointment telephone number" },
-          { field: 'appointmentTime', message: "Select 'Change' to go back and add appointment date and time" },
+          { field: 'appointmentTimeType', message: "Select 'Change' to go back and add appointment date and time" },
         ])
       )
       expect(res.redirect).toHaveBeenCalledWith('back')

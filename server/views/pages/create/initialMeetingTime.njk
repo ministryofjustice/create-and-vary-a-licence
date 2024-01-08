@@ -113,6 +113,12 @@
                         type: "submit",
                         attributes: { 'data-qa': 'continue' }
                     }) }}
+                    {{ govukButton({
+                        text: 'Skip this for now',
+                        href: skipUrl,
+                        classes: "govuk-button--secondary",
+                        attributes: { 'data-qa': 'skip' }
+                    }) }}
                 </div>
             </div>
         </div>

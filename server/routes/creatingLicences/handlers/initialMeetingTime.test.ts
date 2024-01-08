@@ -58,6 +58,7 @@ describe('Route - create licence - initial meeting date and time', () => {
         formDate,
         appointmentTimeType,
         releaseIsOnBankHolidayOrWeekend: true,
+        skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
       })
     })
   })
