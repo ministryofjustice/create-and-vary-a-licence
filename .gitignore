@@ -124,6 +124,8 @@ dist/
 test_results/
 integration_tests/videos/
 integration_tests/screenshots/
+*.iml
 */*.iml
 **/Chart.lock
 .localstack
+

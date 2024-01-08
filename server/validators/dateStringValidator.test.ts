@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { plainToInstance } from 'class-transformer'
+import { format, addDays } from 'date-fns'
 import DateString from '../routes/creatingLicences/types/dateString'
 import ValidDateString from './dateStringValidator'
 
@@ -9,7 +10,11 @@ describe('Validators - ValidDateString', () => {
 
   beforeEach(() => {
     validator = new ValidDateString()
-    date = plainToInstance(DateString, { calendarDate: '31/12/2023' }, { excludeExtraneousValues: true })
+    date = plainToInstance(
+      DateString,
+      { calendarDate: format(addDays(new Date(), 1), 'dd/MM/yyyy') },
+      { excludeExtraneousValues: true }
+    )
   })
 
   it('should pass validation with well formed data', () => {
