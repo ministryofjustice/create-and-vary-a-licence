@@ -485,7 +485,7 @@ export default class LicenceApiClient extends RestClient {
 
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     const licence = await this.getLicenceById(licenceId, user)
-    if (!licence.variationOf) {
+    if (licence.kind !== 'VARIATION') {
       return licence
     }
 
