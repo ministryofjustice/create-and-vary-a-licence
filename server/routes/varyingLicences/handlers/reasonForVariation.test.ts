@@ -5,7 +5,7 @@ import ReasonForVariationRoutes from './reasonForVariation'
 import { VariedConditions } from '../../../utils/licenceComparator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Vary Licence - Reason for variation', () => {

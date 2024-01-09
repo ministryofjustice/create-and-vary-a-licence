@@ -5,7 +5,7 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import CommunityService from '../../../services/communityService'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 
 const username = 'joebloggs'

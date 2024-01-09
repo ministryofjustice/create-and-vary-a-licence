@@ -5,15 +5,12 @@ import ConfirmAmendVariationRoutes from './confirmAmendVariation'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ConditionService from '../../../services/conditionService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
-import { LicenceApiClient } from '../../../data'
 
-jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
-const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
-const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Vary Licence - Confirm amend variation', () => {
   const handler = new ConfirmAmendVariationRoutes(licenceService, conditionService)

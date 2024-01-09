@@ -6,7 +6,7 @@ import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { CommunityApiOffenderManager, CommunityApiUserDetails } from '../../../@types/communityClientTypes'
 
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/communityService')

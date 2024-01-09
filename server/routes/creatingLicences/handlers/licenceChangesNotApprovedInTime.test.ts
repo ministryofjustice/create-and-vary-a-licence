@@ -4,7 +4,7 @@ import LicenceChangesNotApprovedInTimeRoutes from './licenceChangesNotApprovedIn
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')

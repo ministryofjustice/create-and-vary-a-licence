@@ -17,7 +17,7 @@ let req = {} as Request
 const next = jest.fn()
 
 const userServiceMock = new UserService(null, null, null) as jest.Mocked<UserService>
-const licenceServiceMock = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceServiceMock = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 const middleware = populateCurrentUser(userServiceMock, licenceServiceMock)
 

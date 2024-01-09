@@ -6,7 +6,7 @@ import type { Licence } from '../../../../@types/licenceApiClientTypes'
 
 jest.mock('../../../../services/licenceService')
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - file upload input routes', () => {
   const handler = new FileUploadInputRoutes(licenceService)

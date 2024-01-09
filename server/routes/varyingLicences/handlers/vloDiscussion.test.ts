@@ -4,15 +4,12 @@ import ConditionService from '../../../services/conditionService'
 
 import LicenceService from '../../../services/licenceService'
 import VloDiscussionRoutes from './vloDiscussion'
-import { LicenceApiClient } from '../../../data'
 
-jest.mock('../../../data/licenceApiClient')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
-const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
-const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(licenceApiClient, null, null, conditionService) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
+const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Vary Licence - Vlo discussion', () => {
   const handler = new VloDiscussionRoutes(licenceService, conditionService)

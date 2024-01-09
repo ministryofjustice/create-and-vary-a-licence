@@ -3,7 +3,7 @@ import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceCreatedByPrisonRoutes from './licenceCreatedByPrison'
 import LicenceService from '../../../services/licenceService'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Create Licence - Licence created by prison', () => {

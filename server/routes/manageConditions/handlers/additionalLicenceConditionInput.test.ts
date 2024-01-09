@@ -6,7 +6,7 @@ import ConditionService from '../../../services/conditionService'
 import type { Licence } from '../../../@types/licenceApiClientTypes'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
 const conditionsProviderSpy = jest.spyOn(conditionService, 'getAdditionalConditionByCode')
 
 jest.mock('../../../services/licenceService')

@@ -7,7 +7,7 @@ import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { PrisonEventMessage } from '../../../@types/events'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../../../services/licenceService')

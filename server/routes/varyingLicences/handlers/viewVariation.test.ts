@@ -16,7 +16,7 @@ jest.mock('../../../services/conditionService')
 const username = 'joebloggs'
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
 const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route - Vary - View variation', () => {
   const handler = new ViewVariationRoutes(licenceService, conditionService)
