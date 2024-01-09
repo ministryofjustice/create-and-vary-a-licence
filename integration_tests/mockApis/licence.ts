@@ -11,6 +11,7 @@ const ACTIVE_POLICY_VERSION = '2.1'
 const licencePlaceholder = {
   id: 1,
   typeCode: 'AP_PSS',
+  kind: 'CRD',
   version: ACTIVE_POLICY_VERSION,
   statusCode: 'IN_PROGRESS',
   nomsId: 'G9786GC',
@@ -546,7 +547,12 @@ export default {
     })
   },
 
-  stubGetLicencesForOffender: (options: { nomisId: string; status: string; bookingId: number }): SuperAgentRequest => {
+  stubGetLicencesForOffender: (options: {
+    kind: 'CRD' | 'VARIATION' | 'HARD_STOP'
+    nomisId: string
+    status: string
+    bookingId: number
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -557,6 +563,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
+            kind: options.kind || 'CRD',
             licenceId: 1,
             nomisId: options.nomisId,
             licenceStatus: options.status,
@@ -947,9 +954,9 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           id: 2,
+          kind: 'VARIATION',
           version: licenceVersion,
           variationOf: 1,
-          isVariation: true,
           statusCode: 'VARIATION_IN_PROGRESS',
           spoDiscussion: 'Yes',
           vloDiscussion: 'Yes',

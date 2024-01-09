@@ -189,6 +189,7 @@ describe('Route Handlers - Timeline', () => {
         locals: {
           licence: {
             id: 2,
+            kind: 'VARIATION',
             statusCode: LicenceStatus.VARIATION_APPROVED,
             variationOf: 1,
           },

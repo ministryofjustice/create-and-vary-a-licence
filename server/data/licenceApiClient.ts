@@ -485,7 +485,7 @@ export default class LicenceApiClient extends RestClient {
 
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     const licence = await this.getLicenceById(licenceId, user)
-    if (!licence.variationOf) {
+    if (licence.kind !== 'VARIATION') {
       return licence
     }
 
@@ -501,6 +501,12 @@ export default class LicenceApiClient extends RestClient {
   async runLicenceExpiryJob(): Promise<void> {
     await this.post({
       path: '/run-expire-licences-job',
+    })
+  }
+
+  async runDeactivateReleaseDatePassedLicencesJob() {
+    await this.post({
+      path: '/run-deactivate-licences-past-release-date',
     })
   }
 }

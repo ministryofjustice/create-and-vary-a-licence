@@ -39,7 +39,12 @@ export default defineConfig({
         stubAuthPing: auth.stubPing,
         stubSystemToken: auth.systemToken,
 
-        stubFeComponents: feComponent.stubFeComponents,
+        stubFeComponents: () =>
+          Promise.all([
+            feComponent.stubFeComponents(),
+            feComponent.stubFeComponentsJs(),
+            feComponent.stubFeComponentsCss(),
+          ]),
         stubFeComponentsFail: feComponent.stubFeComponentsFail,
 
         stubTokenVerificationPing: tokenVerification.stubPing,
