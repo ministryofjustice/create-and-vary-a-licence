@@ -7,7 +7,6 @@ context('SignIn with fallback header', () => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
-    cy.task('stubAuthUser')
     cy.task('stubFeComponentsFail')
   })
 

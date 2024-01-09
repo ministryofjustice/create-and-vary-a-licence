@@ -7,7 +7,6 @@ context('View and print licence', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
-    cy.task('stubAuthUser')
     cy.task('stubGetPrisonUserDetails')
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
     cy.task('stubGetOffendersByNomsNumber')
