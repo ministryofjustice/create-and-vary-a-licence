@@ -5,7 +5,7 @@ import type { Licence } from '../../../@types/licenceApiClientTypes'
 import OffenderLicenceDatesRoutes from './offenderLicenceDates'
 import { dateStringToSimpleDate } from '../../../utils/utils'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const overrideService = new LicenceOverrideService(null) as jest.Mocked<LicenceOverrideService>
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/licenceOverrideService')

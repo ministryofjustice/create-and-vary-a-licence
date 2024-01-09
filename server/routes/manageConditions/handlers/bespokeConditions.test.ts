@@ -4,7 +4,7 @@ import BespokeConditions from '../types/bespokeConditions'
 import BespokeConditionsRoutes from './bespokeConditions'
 import LicenceService from '../../../services/licenceService'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Bespoke Conditions', () => {
   const handler = new BespokeConditionsRoutes(licenceService)

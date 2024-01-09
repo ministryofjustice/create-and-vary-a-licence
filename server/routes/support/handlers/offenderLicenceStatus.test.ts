@@ -6,7 +6,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import statusConfig from '../../../licences/licenceStatus'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const overrideService = new LicenceOverrideService(null) as jest.Mocked<LicenceOverrideService>
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/licenceOverrideService')

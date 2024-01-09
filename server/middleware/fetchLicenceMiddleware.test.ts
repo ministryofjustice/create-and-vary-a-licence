@@ -46,7 +46,7 @@ const licence = {
   probationTeamCode: 'N55A',
 } as unknown as Licence
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 const middleware = fetchLicence(licenceService)
 

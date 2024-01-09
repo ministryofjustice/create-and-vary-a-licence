@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import DeleteConditionsByCodeHandler from './deleteConditionsByCodeHandler'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 describe('Route Handlers - Create Licence - Delete Conditions By Code Handler Handler', () => {
   const handler = new DeleteConditionsByCodeHandler(licenceService)
   let req: Request

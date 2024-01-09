@@ -3,7 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import PolicyChangesNoticeRoutes from './policyChangesNotice'
 import { LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 jest.mock('../../../services/licenceService')
 

@@ -4,7 +4,7 @@ import EditQuestionRoutes from './editQuestion'
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Edit Licence Question', () => {
   const handler = new EditQuestionRoutes(licenceService)
