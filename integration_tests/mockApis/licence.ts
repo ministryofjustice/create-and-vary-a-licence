@@ -113,6 +113,19 @@ export default {
     })
   },
 
+  stubUpdatePrisonUserDetails: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/prison-case-administrator/update`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      },
+    })
+  },
+
   stubUpdateResponsibleCom: (): SuperAgentRequest => {
     return stubFor({
       request: {

@@ -6,7 +6,6 @@ context('Edit a licence before release', () => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
-    cy.task('stubAuthUser')
     cy.task('stubGetLicence')
     cy.task('stubUpdateStandardConditions')
     cy.task('stubRecordAuditEvent')

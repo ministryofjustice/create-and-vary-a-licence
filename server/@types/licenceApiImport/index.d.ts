@@ -189,6 +189,13 @@ export interface paths {
      */
     put: operations['updateComDetails']
   }
+  '/prison-case-administrator/update': {
+    /**
+     * Updates the details of a prison case administrator.
+     * @description Updates the details of a prison case administrator (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    put: operations['updatePrisonUserDetails']
+  }
   '/audit/save': {
     /**
      * Records an auditable event.
@@ -552,6 +559,29 @@ export interface components {
       firstName?: string
       /**
        * @description The last name of the COM
+       * @example Bloggs
+       */
+      lastName?: string
+    }
+    /** @description Request object for updating the Prison Case Administrator responsible for an offender */
+    UpdatePrisonUserRequest: {
+      /**
+       * @description The Nomis username for the Prison User
+       * @example jbloggs
+       */
+      staffUsername: string
+      /**
+       * @description The email address of the Prison User
+       * @example jbloggs@prison.gov.uk
+       */
+      staffEmail?: string
+      /**
+       * @description The first name of the Prison User
+       * @example Joseph
+       */
+      firstName?: string
+      /**
+       * @description The last name of the Prison User
        * @example Bloggs
        */
       lastName?: string
@@ -4330,6 +4360,41 @@ export interface operations {
     }
     responses: {
       /** @description The COM was create/updated */
+      200: {
+        content: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Updates the details of a prison case administrator.
+   * @description Updates the details of a prison case administrator (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+   */
+  updatePrisonUserDetails: {
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdatePrisonUserRequest']
+      }
+    }
+    responses: {
+      /** @description The Prison User was updated */
       200: {
         content: never
       }

@@ -1,4 +1,4 @@
-import HmppsAuthClient, { AuthUserDetails, AuthUserEmail } from '../data/hmppsAuthClient'
+import ManageUsersApiClient, { PrisonUserDetails, PrisonUserEmail } from '../data/manageUsersApiClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
 import CommunityService from './communityService'
@@ -7,17 +7,17 @@ import { User } from '../@types/CvlUserDetails'
 
 export default class UserService {
   constructor(
-    private readonly hmppsAuthClient: HmppsAuthClient,
+    private readonly manageUsersApiClient: ManageUsersApiClient,
     private readonly prisonApiClient: PrisonApiClient,
     private readonly communityService: CommunityService
   ) {}
 
-  async getAuthUser(user: User): Promise<AuthUserDetails> {
-    return this.hmppsAuthClient.getUser(user)
+  async getUser(user: User): Promise<PrisonUserDetails> {
+    return this.manageUsersApiClient.getUser(user)
   }
 
-  async getAuthUserEmail(user: User): Promise<AuthUserEmail> {
-    return this.hmppsAuthClient.getUserEmail(user)
+  async getUserEmail(user: User): Promise<PrisonUserEmail> {
+    return this.manageUsersApiClient.getUserEmail(user)
   }
 
   async getPrisonUser(user: User): Promise<PrisonApiUserDetail> {

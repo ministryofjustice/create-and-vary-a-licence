@@ -114,7 +114,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     return null
   })
 
-  njkEnv.addFilter('getAppointmentTimeType', (type: string) => {
+  njkEnv.addFilter('getAppointmentTimeTypeDescription', (type: string) => {
     const appointmentTimeType: Record<string, string> = AppointmentTimeType
     return appointmentTimeType[type]
   })

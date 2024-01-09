@@ -8,7 +8,7 @@ import { initialiseAppInsights, buildAppInsightsClient } from '../utils/azureApp
 initialiseAppInsights()
 buildAppInsightsClient()
 
-import HmppsAuthClient from './hmppsAuthClient'
+import ManageUsersApiClient from './manageUsersApiClient'
 import { createRedisClient } from './redisClient'
 
 import { RedisTokenStore } from './tokenStore'
@@ -27,7 +27,7 @@ export const dataAccess = () => {
   const redisClient = createRedisClient()
 
   const tokenStore = new RedisTokenStore(getSystemToken, redisClient)
-  const hmppsAuthClient = new HmppsAuthClient(tokenStore)
+  const manageUsersApiClient = new ManageUsersApiClient(tokenStore)
   const prisonApiClient = new PrisonApiClient(tokenStore)
   const prisonerSearchApiClient = new PrisonerSearchApiClient(tokenStore)
   const communityApiClient = new CommunityApiClient(tokenStore)
@@ -38,7 +38,7 @@ export const dataAccess = () => {
 
   return {
     redisClient,
-    hmppsAuthClient,
+    manageUsersApiClient,
     prisonApiClient,
     prisonerSearchApiClient,
     communityApiClient,
@@ -57,6 +57,6 @@ export {
   ProbationSearchApiClient,
   PrisonRegisterApiClient,
   CommunityApiClient,
-  HmppsAuthClient,
+  ManageUsersApiClient,
   RestClientBuilder,
 }

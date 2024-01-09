@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer'
 import moment from 'moment'
-import { Validate } from 'class-validator'
+import { Validate, ValidateIf } from 'class-validator'
 import DateString from './dateString'
 import ValidDateString from '../../../validators/dateStringValidator'
 import SimpleTime, { AmPm } from './time'
@@ -20,6 +20,7 @@ class DateTime {
   @Expose()
   @Type(() => DateString)
   @Validate(ValidDateString)
+  @ValidateIf(o => o.appointmentTimeType === 'SPECIFIC_DATE_TIME')
   @DateIsBefore('licence.licenceExpiryDate', {
     message: 'Appointment date must be before the end of the licence date',
   })
@@ -32,6 +33,7 @@ class DateTime {
   @Expose()
   @Type(() => SimpleTime)
   @Validate(ValidSimpleTime)
+  @ValidateIf(o => o.appointmentTimeType === 'SPECIFIC_DATE_TIME')
   time: SimpleTime
 
   @Expose()

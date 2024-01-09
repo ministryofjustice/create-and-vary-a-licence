@@ -61,7 +61,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTimeType'),
                 key: { text: "Date/time" },
-                value: { text: licence.appointmentTimeType | getAppointmentTimeType if apptDateTimeEntered else "Not yet entered" },
+                value: { text: licence.appointmentTimeType | getAppointmentTimeTypeDescription if apptDateTimeEntered else "Not yet entered" },
                 actions: {
                     items: [
                         {

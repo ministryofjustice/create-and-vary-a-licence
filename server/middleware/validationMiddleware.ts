@@ -32,11 +32,6 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         { excludeExtraneousValues: false }
       )
 
-      const { appointmentTimeType } = req.body
-      if (!!appointmentTimeType && appointmentTimeType !== 'SPECIFIC_DATE_TIME') {
-        req.body = plainToInstance(classType, req.body, { excludeExtraneousValues: true })
-        return next()
-      }
       const errors: ValidationError[] = await validate(validationScope)
 
       if (errors.length === 0) {
