@@ -52,7 +52,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             )
 
             if (hasRole(req.user, AuthRole.CASE_ADMIN)) {
-              const { email } = await userService.getAuthUserEmail(user)
+              const { email } = await userService.getUserEmail(user)
               if (!email) throw new Error(`Failed to get email for: ${user.username}`)
               await licenceService.updatePrisonUserDetails({
                 staffUsername: prisonUser.username,
@@ -96,7 +96,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             })
           } else {
             // Assemble basic user information from hmpps-auth
-            const authUser = await userService.getAuthUser(user)
+            const authUser = await userService.getUser(user)
             if (authUser) {
               cvlUser.displayName = convertToTitleCase(authUser?.name)
             }
@@ -108,7 +108,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
           if (!cvlUser?.emailAddress) {
             try {
               // Get the user's email, which may fail (unverified returns a 204) - catch and swallow the error
-              const authEmail = await userService.getAuthUserEmail(user)
+              const authEmail = await userService.getUserEmail(user)
               cvlUser.emailAddress = authEmail ? authEmail.email : null
               logger.info(`Auth user email : username ${user?.username} email ${authEmail?.email}`)
             } catch (error) {

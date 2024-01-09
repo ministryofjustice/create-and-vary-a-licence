@@ -1,62 +1,65 @@
 import UserService from './userService'
-import HmppsAuthClient, { AuthUserEmail, AuthUserDetails } from '../data/hmppsAuthClient'
+import ManageUsersApiClient, { PrisonUserEmail, PrisonUserDetails } from '../data/manageUsersApiClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
 import CommunityService from './communityService'
 import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
 import { User } from '../@types/CvlUserDetails'
 
-jest.mock('../data/hmppsAuthClient')
+jest.mock('../data/manageUsersApiClient')
 jest.mock('../data/prisonApiClient')
 jest.mock('./communityService')
 
 const user = { token: 'some token' } as User
 
 describe('User service', () => {
-  let hmppsAuthClient: jest.Mocked<HmppsAuthClient>
+  let manageUsersApiClient: jest.Mocked<ManageUsersApiClient>
   let prisonApiClient: jest.Mocked<PrisonApiClient>
   let communityService: jest.Mocked<CommunityService>
   let userService: UserService
 
   beforeEach(() => {
-    hmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+    manageUsersApiClient = new ManageUsersApiClient(null) as jest.Mocked<ManageUsersApiClient>
     prisonApiClient = new PrisonApiClient(null) as jest.Mocked<PrisonApiClient>
     communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-    userService = new UserService(hmppsAuthClient, prisonApiClient, communityService)
+    userService = new UserService(manageUsersApiClient, prisonApiClient, communityService)
   })
 
-  describe('getAuthUser', () => {
+  describe('getUser', () => {
     it('Retrieves user name and active caseload', async () => {
-      hmppsAuthClient.getUser.mockResolvedValue({ name: 'john smith', activeCaseLoadId: 'MDI' } as AuthUserDetails)
-      const result = await userService.getAuthUser(user)
+      manageUsersApiClient.getUser.mockResolvedValue({
+        name: 'john smith',
+        activeCaseLoadId: 'MDI',
+      } as PrisonUserDetails)
+      const result = await userService.getUser(user)
       expect(result.name).toEqual('john smith')
       expect(result.activeCaseLoadId).toEqual('MDI')
-      expect(hmppsAuthClient.getUser).toBeCalled()
+      expect(manageUsersApiClient.getUser).toBeCalled()
     })
 
     it('Propagates any errors', async () => {
-      hmppsAuthClient.getUser.mockRejectedValue(new Error('some error'))
-      await expect(() => userService.getAuthUser(user)).rejects.toThrow('some error')
-      expect(hmppsAuthClient.getUser).toBeCalled()
+      manageUsersApiClient.getUser.mockRejectedValue(new Error('some error'))
+      await expect(() => userService.getUser(user)).rejects.toThrow('some error')
+      expect(manageUsersApiClient.getUser).toBeCalled()
     })
   })
 
-  describe('getAuthUserEmail', () => {
+  describe('getUserEmail', () => {
     it('Retrieves user email', async () => {
-      hmppsAuthClient.getUserEmail.mockResolvedValue({
+      manageUsersApiClient.getUserEmail.mockResolvedValue({
         username: 'JSMITH',
         email: 'js@prison.com',
         verified: true,
-      } as AuthUserEmail)
-      const result = await userService.getAuthUserEmail(user)
+      } as PrisonUserEmail)
+      const result = await userService.getUserEmail(user)
       expect(result.email).toEqual('js@prison.com')
-      expect(hmppsAuthClient.getUserEmail).toBeCalled()
+      expect(manageUsersApiClient.getUserEmail).toBeCalled()
     })
 
     it('Propagates any errors', async () => {
-      hmppsAuthClient.getUserEmail.mockRejectedValue(new Error('some error'))
-      await expect(() => userService.getAuthUserEmail(user)).rejects.toThrow('some error')
-      expect(hmppsAuthClient.getUserEmail).toBeCalled()
+      manageUsersApiClient.getUserEmail.mockRejectedValue(new Error('some error'))
+      await expect(() => userService.getUserEmail(user)).rejects.toThrow('some error')
+      expect(manageUsersApiClient.getUserEmail).toBeCalled()
     })
   })
 
