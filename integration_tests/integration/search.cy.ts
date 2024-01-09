@@ -6,7 +6,6 @@ context('Search for a person', () => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
-    cy.task('stubAuthUser')
     cy.task('stubGetLicence')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetLicencePolicyConditions')

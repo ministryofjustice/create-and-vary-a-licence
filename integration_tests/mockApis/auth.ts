@@ -104,31 +104,11 @@ const token = (authorities: string[], authSource: string) =>
     },
   })
 
-const stubUser = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/auth/api/user/me',
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: {
-        staffId: 231232,
-        username: 'USER1',
-        active: true,
-        name: 'john smith',
-      },
-    },
-  })
-
 const stubUserEmail = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/auth/api/me/email',
+      urlPattern: '/manage-users/users/me/email',
     },
     response: {
       status: 200,
@@ -143,25 +123,10 @@ const stubUserEmail = () =>
     },
   })
 
-const stubUserRoles = (role: string) =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/auth/api/user/me/roles',
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: [{ roleId: role }],
-    },
-  })
-
 export default {
   getSignInUrl,
   stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubPing()]),
-  stubProbationSignIn: (): Promise<[Response, Response, Response, Response, Response, Response]> =>
+  stubProbationSignIn: (): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
       redirect(),
@@ -169,8 +134,9 @@ export default {
       token(['ROLE_LICENCE_RO'], 'delius'),
       tokenVerification.stubVerifyToken(),
       licence.updateComDetails(),
+      stubUserEmail(),
     ]),
-  stubProbationAcoSignIn: (): Promise<[Response, Response, Response, Response, Response, Response]> =>
+  stubProbationAcoSignIn: (): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
       redirect(),
@@ -178,16 +144,17 @@ export default {
       token(['ROLE_LICENCE_ACO'], 'delius'),
       tokenVerification.stubVerifyToken(),
       licence.updateComDetails(),
+      stubUserEmail(),
     ]),
   systemToken: () => token(null, 'auth'),
-  stubPrisonSignIn: (): Promise<[Response, Response, Response, Response, Response]> =>
+  stubPrisonSignIn: (): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
       redirect(),
       signOut(),
       token(['ROLE_LICENCE_DM', 'ROLE_LICENCE_CA'], 'nomis'),
       tokenVerification.stubVerifyToken(),
+      licence.stubUpdatePrisonUserDetails(),
+      stubUserEmail(),
     ]),
-  stubUser: (): Promise<[Response, Response, Response]> =>
-    Promise.all([stubUser(), stubUserEmail(), stubUserRoles('ROLE_LICENCE_RO')]),
 }

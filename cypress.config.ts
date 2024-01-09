@@ -35,7 +35,6 @@ export default defineConfig({
         stubPrisonSignIn: auth.stubPrisonSignIn,
         stubProbationSignIn: auth.stubProbationSignIn,
         stubProbationAcoSignIn: auth.stubProbationAcoSignIn,
-        stubAuthUser: auth.stubUser,
         stubAuthPing: auth.stubPing,
         stubSystemToken: auth.systemToken,
 
@@ -51,6 +50,7 @@ export default defineConfig({
 
         stubUpdateResponsibleCom: licence.stubUpdateResponsibleCom,
         stubUpdateProbationTeam: licence.stubUpdateProbationTeam,
+        stubUpdatePrisonUserDetails: licence.stubUpdatePrisonUserDetails,
         stubGetLicence: licence.stubGetLicence,
         stubPostLicence: licence.stubPostLicence,
         stubGetExistingLicenceForOffenderWithResult: licence.stubGetExistingLicenceForOffenderWithResult,
