@@ -8,11 +8,13 @@
 
 {% from "../../partials/timePicker.njk" import timePicker %}
 {% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 
 {% set pageTitle = applicationName + " - Create a licence - When is the initial appointment?" %}
 {% set pageId = "appointment-time-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-contact" %}
+{% set SPECIFIC_DATE_TIME = "SPECIFIC_DATE_TIME" %}
 
 {% block content %}
     <form method="POST">
@@ -22,11 +24,15 @@
 
                 {% call govukFieldset({
                     legend: {
-                        text: "When is the initial appointment?",
+                        text: "When do they need to go to their initial appointment?",
                         classes: "govuk-fieldset__legend--l",
                         isPageHeading: true
                     }
                     }) %}
+                    <br>
+                    <div class="govuk-hint">
+                    Only enter a specific date and time if you have confirmed one with this person’s probation practitioner.
+                    </div>
 
                     {% if releaseIsOnBankHolidayOrWeekend %}
                         {{ govukWarningText({
@@ -35,45 +41,72 @@
                         }) }}
                     {% endif %}
 
-                    {{ hmppsDatePicker({
-                        id: "date-calendarDate",
-                        name: "date[calendarDate]",
-                        label: {
-                            text: "Date"
-                        },
-                        hint: {
-                            id: "date-hint",
-                            text: "For example, 12/11/2024"
-                        },
-                        errorMessage: validationErrors | findError('date'),
-                        classes: 'hmpps-datepicker--fixed-width',
-                        value: formResponses.date.calendarDate or formDate.date.calendarDate
-                    }) }}
-                {% endcall %}
-                
-                {% call govukFieldset({
-                    classes:"govuk-!-margin-top-7",
+                    {% set dateTimeHtml %}
+                        {% call govukFieldset({
+                            legend: {
+                                text: "Date",
+                                classes: "govuk-visually-hidden",
+                                isPageHeading: false}
+                            }) %}
 
-                    legend: {
-                        text: "Time",
-                        classes: "govuk-visually-hidden",
-                        isPageHeading: false}
-                    }) %}
-                
-                    {{ timePicker({
-                        id: "time",
-                        label: {
-                            text: "Time"
-                        },
-                        hint: {
-                            id: "time-hint",
-                            text: "For example, 9:30am or 2:55pm"
-                        },
-                        errorMessage: validationErrors | findError('time'),
-                        formResponses: formResponses.time or formDate.time
-                    }) }}
-                {% endcall %}
+                            {{ hmppsDatePicker({
+                                id: "date-calendarDate",
+                                name: "date[calendarDate]",
+                                label: {
+                                    text: "Date"
+                                },
+                                hint: {
+                                    id: "date-hint",
+                                    text: "For example, 12/11/2024"
+                                },
+                                errorMessage: validationErrors | findError('date'),
+                                classes: 'hmpps-datepicker--fixed-width',
+                                value: formResponses.date.calendarDate or formDate.date.calendarDate
+                            }) }}
+                        {% endcall %}
+                        {% call govukFieldset({
+                            classes:"govuk-!-margin-top-7",
 
+                            legend: {
+                                text: "Time",
+                                classes: "govuk-visually-hidden",
+                                isPageHeading: false}
+                            }) %}
+                        
+                            {{ timePicker({
+                                id: "time",
+                                label: {
+                                    text: "Time"
+                                },
+                                hint: {
+                                    id: "time-hint",
+                                    text: "For example, 9:30am or 2:55pm"
+                                },
+                                errorMessage: validationErrors | findError('time'),
+                                formResponses: formResponses.time or formDate.time
+                            }) }}
+                        {% endcall %}
+                    {% endset %}
+
+                    {% set appointmentTimeTypeOptions = [] %}
+                    {% for value, text in appointmentTimeType %}
+                        {% set appointmentTimeTypeOptions = (appointmentTimeTypeOptions.push(
+                            {   value: value, 
+                                text: text,
+                                conditional: {
+                                html: dateTimeHtml
+                                } if value === SPECIFIC_DATE_TIME
+                            }), appointmentTimeTypeOptions) %}
+                    {% endfor %}
+
+                    {{ govukRadios({
+                    id: "appointment-time-type",
+                    name: "appointmentTimeType",
+                    value: formResponses.appointmentTimeType or licence.appointmentTimeType,
+                    items: appointmentTimeTypeOptions
+                }) }}
+
+                {% endcall %}
                 <div class="govuk-button-group">
                     {{ govukButton({
                         text: continueOrReturnToCheckAnswers,

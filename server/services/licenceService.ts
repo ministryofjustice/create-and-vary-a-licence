@@ -85,8 +85,9 @@ export default class LicenceService {
   }
 
   async updateAppointmentTime(id: string, formData: DateTime, user: User): Promise<void> {
-    const appointmentTime = DateTime.toJson(formData)
-    const requestBody = { appointmentTime } as AppointmentTimeRequest
+    const { appointmentTimeType } = formData
+    const appointmentTime = (appointmentTimeType === 'SPECIFIC_DATE_TIME' && DateTime.toJson(formData)) || null
+    const requestBody = { appointmentTime, appointmentTimeType } as AppointmentTimeRequest
     return this.licenceApiClient.updateAppointmentTime(id, requestBody, user)
   }
 

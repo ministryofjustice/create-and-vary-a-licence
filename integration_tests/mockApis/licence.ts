@@ -255,7 +255,11 @@ export default {
     })
   },
 
-  stubGetCompletedLicence: (options: { statusCode: string; typeCode: 'AP_PSS' | 'AP' | 'PSS' }): SuperAgentRequest => {
+  stubGetCompletedLicence: (options: {
+    statusCode: string
+    typeCode: 'AP_PSS' | 'AP' | 'PSS'
+    appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
+  }): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
@@ -272,6 +276,7 @@ export default {
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
+          appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
           additionalLicenceConditions: [
             {
               id: 1,
@@ -977,6 +982,7 @@ export default {
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
+          appointmentTimeType: 'SPECIFIC_DATE_TIME',
         },
       },
     })

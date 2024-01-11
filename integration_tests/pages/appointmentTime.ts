@@ -16,7 +16,13 @@ export default class AppointmentTimePage extends Page {
   private skipButtonId = '[data-qa=skip]'
 
   constructor() {
-    super('appointment-time-page')
+    super('appointment-time-page', true, { 'aria-allowed-attr': { enabled: false } })
+  }
+
+  selectType = (value: string): AppointmentTimePage => {
+    cy.task('stubGetCompletedLicence', { statusCode: 'IN_PROGRESS', typeCode: 'AP_PSS', appointmentTimeType: value })
+    cy.get(`input[value="${value}"]`).click()
+    return this
   }
 
   enterDate = (moment: Moment): AppointmentTimePage => {
