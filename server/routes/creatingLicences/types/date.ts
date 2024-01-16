@@ -20,7 +20,11 @@ class SimpleDate extends Stringable {
   year: string
 
   toMoment(): Moment {
-    return moment([this.year, this.month, this.day].join('-'), ['YYYY-M-D', 'YY-M-D'], true)
+    return moment(
+      [this.year, this.month, this.day].join('-'),
+      ['YY-MM-D', 'YYYY-MM-D', 'YYYY-M-DD', 'YYYY-MM-DD', 'YY-M-D'],
+      true
+    )
   }
 
   stringify(): string {
