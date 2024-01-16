@@ -27,7 +27,8 @@
                 <div class="govuk-button-group">
                     {{ govukButton({
                         text: "Send for approval",
-                        attributes: { 'data-qa': 'send-for-approval' }
+                        attributes: { 'data-qa': 'send-for-approval' },
+                        preventDoubleClick: true
                     }) }}
 
                     {{ govukButton({
