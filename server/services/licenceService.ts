@@ -54,6 +54,7 @@ import TimelineEvent from '../@types/TimelineEvent'
 import TimelineEventType from '../enumeration/TimelineEventType'
 import ConditionService from './conditionService'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
+import HardStopCutoffDate from '../@types/hardstopCutoffDate'
 
 export default class LicenceService {
   constructor(
@@ -308,6 +309,10 @@ export default class LicenceService {
       null,
       user
     )
+  }
+
+  async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
+    return this.licenceApiClient.getCutOffDateForLicenceTimeOut(user)
   }
 
   async getLicencesForVariationApproval(user: User): Promise<LicenceSummary[]> {

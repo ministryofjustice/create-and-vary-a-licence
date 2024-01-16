@@ -14,6 +14,7 @@ import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import { LicenceSummary } from '../@types/licenceApiClientTypes'
 import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
+import HardStopCutoffDate from '../@types/hardstopCutoffDate'
 
 export default class CaseloadService {
   constructor(
@@ -104,6 +105,10 @@ export default class CaseloadService {
     const casesWithComs = await this.mapResponsibleComsToCasesWithExclusions(withLicence.concat(pending))
 
     return new OmuCaselist(casesWithComs)
+  }
+
+  async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
+    return this.licenceService.getCutOffDateForLicenceTimeOut(user)
   }
 
   async getApproverCaseload(user: User, prisonCaseload: string[], approvalNeeded: boolean): Promise<ManagedCase[]> {

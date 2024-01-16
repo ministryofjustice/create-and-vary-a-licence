@@ -41,6 +41,7 @@ import { UpdateComRequest, UpdatePrisonCaseAdminRequest } from '../@types/licenc
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
+import HardStopCutoffDate from '../@types/hardstopCutoffDate'
 
 export default class LicenceApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -234,6 +235,15 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username }
     )) as LicenceSummary[]
+  }
+
+  async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
+    return (await this.get(
+      {
+        path: `/licence/getCutOffDate`,
+      },
+      { username: user?.username }
+    )) as HardStopCutoffDate
   }
 
   async getLicencesRecentlyApproved(prisons?: string[], user?: User): Promise<LicenceSummary[]> {

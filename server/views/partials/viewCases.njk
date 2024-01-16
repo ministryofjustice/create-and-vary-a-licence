@@ -1,0 +1,130 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "./statusBadge.njk" import statusBadge %}
+
+{% set pageTitle = applicationName + " - view an approved licence hardstop" %}
+{% set pageId = 'view-hardstop-cases-page' %}
+
+{% macro viewCases(cases, isHardstop, statusConfig) %}
+    {% set cases = cases | beforeOrAfterHardStop(isHardstop) %}
+    {% set licences = [] %}
+    {% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, licenceStatus, index) %}
+        <div class="caseload-offender-name">
+            {% if isClickable %}
+                {% set link = "/licence/view/id/" + licenceId + "/show" %}
+                {% if versionOfId and licenceStatus === 'SUBMITTED' %}
+                    {% set link = link + "?lastApprovedVersion=" + versionOfId %}
+                {% endif %}
+                <a id="name-button-{{ index }}" href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
+            {% else %}
+                <span id="name-button-{{ index }}" class="govuk-heading-s">{{ offenderName }}</span>
+            {% endif %}
+        </div>
+    {% endmacro %}
+    {% for case in cases %}
+        {% if case.probationPractitioner %}
+            {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
+        {% else %}
+            {% set comDetailsHtml = 'Unallocated' %}
+        {% endif %}
+        {% if case.licenceVersionOf and (case.licenceStatus === 'IN_PROGRESS' or case.licenceStatus === 'SUBMITTED') %}
+            {% set licenceStatusHtml = statusBadge({ status: case.licenceStatus, size: 'small' }, statusConfig) +
+                                    "<div class='govuk-!-margin-top-2'><svg class='moj-banner__icon' fill='currentColor' role='presentation'" +
+                                    "focusable='false' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 25 25' height='25' width='25'>" +
+                                    "<path d='M13.7,18.5h-2.4v-2.4h2.4V18.5z M12.5,13.7c-0.7,0-1.2-0.5-1.2-1.2V7.7c0-0.7,0.5-1.2,1.2-1.2s1.2,0.5,1.2,1.2v4.8C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12S19.1,0.5,12.5,0.5z' /></svg>" +
+                                    "<a href='/licence/view/id/" + case.licenceVersionOf + "/show" + "?latestVersion=" + case.licenceId
+                                    + "' class='govuk-link'>View last approved licence</a></div>" %}
+        {% else %}
+            {% set licenceStatusHtml =  statusBadge({ status: case.licenceStatus, size: 'small' }, statusConfig) %}
+        {% endif %}
+        {% set licences = (licences.push([
+            {
+                attributes: {
+                    id: 'name-' + loop.index,
+                    "data-sort-value": case.name
+                },
+                html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, case.licenceStatus, loop.index),
+                classes: "max-width max-width-220"
+            },
+            {
+                attributes: {
+                    id: 'nomis-id-' + loop.index,
+                    "data-sort-value": case.prisonerNumber
+                },
+                text: case.prisonerNumber,
+                classes: "max-width max-width-120"
+            },
+            {
+                attributes: {
+                    id: 'com-' + loop.index,
+                    "data-sort-value": case.probationPractitioner
+                },
+                html: comDetailsHtml,
+                classes: "max-width max-width-200"
+            },
+            {
+                attributes: {
+                    id: 'release-date-' + loop.index,
+                    "data-sort-value": case.releaseDate | dateToUnix
+                },
+                html: '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' 
+            },
+            {
+                attributes: {
+                    id: 'licence-status-' + loop.index,
+                    "data-sort-value": case.licenceStatus | getStatusOrder
+                },
+                html: licenceStatusHtml
+            }
+        ]), licences) %}
+    {% endfor %}
+    {% if cases.length > 0 %}
+        {{ govukTable({
+        attributes: {
+            'data-module': 'moj-sortable-table'
+        },
+        caption: "Print an approved licence",
+        captionClasses: "govuk-visually-hidden",
+        head: [
+            {
+                text: "Name",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            },
+            {
+                text: "Prison number",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            },
+            {
+                text: "Probation practitioner",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            },
+            {
+                text: "Release date",
+                attributes: {
+                    "aria-sort":  "descending"  if probationView else  "ascending" 
+                }
+            },
+            {
+                text: "Status",
+                attributes: {
+                    "aria-sort": "none"
+                }
+            }
+        ],
+        rows: licences
+    }) }}
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h3 class="govuk-heading-s" data-qa="no-match-message">There are no licences to print which match the search criteria.</h3>
+            </div>
+        </div>
+    {% endif %}
+
+{% endmacro %}

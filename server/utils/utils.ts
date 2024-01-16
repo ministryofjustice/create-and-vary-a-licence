@@ -195,6 +195,10 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
   return dateString
 }
 
+const isReleaseDateBeforeCutOffDate = (cutOffDate: string, releaseDate: string): boolean => {
+  return isBefore(new Date(releaseDate), parse(cutOffDate, 'dd/MM/yyyy', new Date()))
+}
+
 const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonApiPrisoner): boolean => {
   const releaseDate =
     prisoner.legalStatus !== 'IMMIGRATION_DETAINEE'
@@ -247,4 +251,5 @@ export {
   selectReleaseDate,
   isPassedArdOrCrd,
   groupingBy,
+  isReleaseDateBeforeCutOffDate,
 }

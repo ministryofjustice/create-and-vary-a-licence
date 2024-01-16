@@ -45,7 +45,7 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   NOT_STARTED: {
     label: 'Not started',
     description: 'Not started',
-    colour: 'grey',
+    colour: 'yellow',
   },
   VARIATION_IN_PROGRESS: {
     label: 'Variation in progress',
@@ -80,6 +80,11 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   OOS_RECALL: {
     label: 'Recall',
     description: 'Recall',
+    colour: 'grey',
+  },
+  TIMED_OUT: {
+    label: 'Timed Out',
+    description: 'Timed Out',
     colour: 'grey',
   },
 }
