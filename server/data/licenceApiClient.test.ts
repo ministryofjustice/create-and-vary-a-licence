@@ -644,4 +644,16 @@ describe('Licence API client tests', () => {
       expect(post).toHaveBeenCalledWith({ path: '/notify-probation-of-unapproved-licences' })
     })
   })
+
+  describe('Hardstop CutoffDate: ', () => {
+    it('Should get cutoff date for hardstop', async () => {
+      await licenceApiClient.getCutOffDateForLicenceTimeOut({ username: 'joebloggs' } as User)
+      expect(get).toHaveBeenCalledWith(
+        {
+          path: '/licence/getCutOffDate',
+        },
+        { username: 'joebloggs' }
+      )
+    })
+  })
 })

@@ -383,4 +383,18 @@ export default {
       },
     })
   },
+
+  stubGetCutOffDateForLicenceTimeOut: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/getCutOffDate`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
 }
