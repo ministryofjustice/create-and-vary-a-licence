@@ -3,12 +3,8 @@ import { format, parse } from 'date-fns'
 import { User } from '../@types/CvlUserDetails'
 import LicenceApiClient from '../data/licenceApiClient'
 import LicenceService from './licenceService'
-import PrisonerService from './prisonerService'
-import CommunityService from './communityService'
 import * as utils from '../utils/utils'
 import * as licenceComparator from '../utils/licenceComparator'
-import { PrisonInformation } from '../@types/prisonApiClientTypes'
-import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import DateTime from '../routes/initialAppointment/types/dateTime'
 import Address from '../routes/initialAppointment/types/address'
 import LicenceType from '../enumeration/licenceType'
@@ -20,35 +16,28 @@ import {
   AdditionalCondition,
   EmailContact,
   Licence,
-  LicenceConditionChange,
-  LicencePolicyResponse,
   LicenceSummary,
   StandardCondition,
   UpdateComRequest,
+  UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateSentenceDatesRequest,
 } from '../@types/licenceApiClientTypes'
-import { CommunityApiOffenderManager } from '../@types/communityClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
 import ConditionService from './conditionService'
-import { AdditionalConditionAp, AdditionalConditionsConfig } from '../@types/LicencePolicy'
-import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
+import { AdditionalConditionsConfig } from '../@types/LicencePolicy'
 
 jest.mock('../data/licenceApiClient')
-jest.mock('./communityService')
-jest.mock('./prisonerService')
 jest.mock('./conditionService')
 jest.spyOn(utils, 'convertDateFormat').mockImplementation((value: string) => value)
 
 describe('Licence Service', () => {
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
-  const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-  const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
-  const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
+  const licenceService = new LicenceService(licenceApiClient, conditionService)
 
   conditionService.getStandardConditions.mockResolvedValue({} as StandardCondition[])
   conditionService.getAdditionalConditions.mockResolvedValue({} as AdditionalConditionsConfig)
@@ -69,372 +58,9 @@ describe('Licence Service', () => {
   })
 
   describe('Create Licence', () => {
-    beforeEach(() => {
-      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([{}] as Prisoner[])
-      communityService.getProbationer.mockResolvedValue({
-        offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
-      } as OffenderDetail)
-      prisonerService.getPrisonInformation.mockResolvedValue({ phones: [] } as PrisonInformation)
-      communityService.getAnOffendersManagers.mockResolvedValue([
-        {
-          isResponsibleOfficer: true,
-          staffId: 2000,
-          staffCode: 'X12345',
-          probationArea: {
-            code: 'Area',
-            description: 'AreaDesc',
-          },
-          team: {
-            code: 'Team',
-            description: 'TeamDesc',
-            borough: {
-              code: 'PDU',
-              description: 'PDUDesc',
-            },
-            district: {
-              code: 'LAU',
-              description: 'LAUDesc',
-            },
-          },
-        } as CommunityApiOffenderManager,
-      ])
-      conditionService.getAdditionalConditionByCode.mockResolvedValue({} as AdditionalConditionAp)
-      licenceApiClient.getLicencePolicyForVersion.mockResolvedValue({} as LicencePolicyResponse)
-      licenceApiClient.getActiveLicencePolicy.mockResolvedValue({} as LicencePolicyResponse)
-      licenceApiClient.getPolicyChanges.mockResolvedValue({} as LicenceConditionChange[])
-      licenceApiClient.updateAdditionalConditions.mockImplementation()
-    })
-
-    describe('Licence Types', () => {
-      it('Should create an AP licence when a TUSED is not set but a LED is set in NOMIS', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            licenceExpiryDate: '26/12/2022',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({ typeCode: 'AP' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should create an AP licence when TUSED is less than LED', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            licenceExpiryDate: '2022-12-26',
-            topupSupervisionExpiryDate: '2022-12-20',
-          },
-        ] as Prisoner[])
-
-        const expectedLicence = expect.objectContaining({ typeCode: 'AP' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should create an AP licence when TUSED is equal to LED', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            licenceExpiryDate: '2022-12-26',
-            topupSupervisionExpiryDate: '2022-12-26',
-          },
-        ] as Prisoner[])
-
-        const expectedLicence = expect.objectContaining({ typeCode: 'AP' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should create a PSS licence when LED is not set but TUSED is set', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            topupSupervisionExpiryDate: '2022-12-26',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({ typeCode: 'PSS' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should create a AP_PSS licence when both TUSED is after LED', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            topupSupervisionExpiryDate: '2023-12-26',
-            licenceExpiryDate: '2022-12-26',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({ typeCode: 'AP_PSS' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-    })
-
-    describe('Conditional release date', () => {
-      it('Should set CRD using the override date from NOMIS if it exists', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            conditionalReleaseOverrideDate: '26/12/2022',
-            conditionalReleaseDate: '17/06/2023',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({ conditionalReleaseDate: '26/12/2022' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should set CRD when override date does not exist', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            conditionalReleaseDate: '17/06/2023',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({ conditionalReleaseDate: '17/06/2023' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-    })
-
-    describe('Licence start date', () => {
-      it('Should set start date using the release date from NOMIS if it exists', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            confirmedReleaseDate: '26/12/2022',
-            conditionalReleaseDate: '1/03/2023',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({ licenceStartDate: '26/12/2022' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should set start date using the conditional release date if release date and CRD override do not exist', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            prisonId: 'AAA',
-            conditionalReleaseDate: '1/03/2023',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({ licenceStartDate: '1/03/2023' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-    })
-
-    describe('Prison description', () => {
-      it('Should get prison description from NOMIS if it exists', async () => {
-        prisonerService.getPrisonInformation.mockResolvedValue({
-          phones: [],
-          formattedDescription: 'Leeds (HMP)',
-        } as PrisonInformation)
-        const expectedLicence = expect.objectContaining({ prisonDescription: 'Leeds (HMP)' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should set prison description to Not Known if it doesnt exist in NOMIS', async () => {
-        prisonerService.getPrisonInformation.mockResolvedValue({ phones: [] } as PrisonInformation)
-        const expectedLicence = expect.objectContaining({ prisonDescription: 'Not known' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-    })
-
-    describe('Probation locations are populated', () => {
-      it('Should populate probation locations from DELIUS', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([{}] as Prisoner[])
-        const expectedLicence = expect.objectContaining({
-          typeCode: 'PSS',
-          probationAreaCode: 'Area',
-          probationAreaDescription: 'AreaDesc',
-          probationPduCode: 'PDU',
-          probationPduDescription: 'PDUDesc',
-          probationLauCode: 'LAU',
-          probationLauDescription: 'LAUDesc',
-          probationTeamCode: 'Team',
-          probationTeamDescription: 'TeamDesc',
-        })
-
-        await licenceService.createLicence('ABC1234', user)
-
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-    })
-
-    describe('Prison telephone', () => {
-      it('Should build telephone from extension and number', async () => {
-        prisonerService.getPrisonInformation.mockResolvedValue({
-          phones: [
-            {
-              type: 'BUS',
-              ext: '+44',
-              number: '7864284926',
-            },
-            {
-              type: 'FAX',
-              ext: '+44',
-              number: '800284729',
-            },
-          ],
-        } as PrisonInformation)
-        const expectedLicence = expect.objectContaining({ prisonTelephone: '+44 7864284926' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should build telephone from number where extension is not given', async () => {
-        prisonerService.getPrisonInformation.mockResolvedValue({
-          phones: [
-            {
-              type: 'BUS',
-              number: '7864284926',
-            },
-          ],
-        } as PrisonInformation)
-        const expectedLicence = expect.objectContaining({ prisonTelephone: '7864284926' })
-
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-    })
-
-    describe('Standard conditions', () => {
-      it('Should get standard licence conditions only if licence type is AP', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            licenceExpiryDate: '26/12/2022',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({
-          standardLicenceConditions: [{ code: 'fake1', text: 'fake standard condition' }],
-          standardPssConditions: [],
-        })
-
-        await licenceService.createLicence('ABC1234', user)
-
-        expect(conditionService.getStandardConditions).toBeCalledTimes(1)
-        expect(conditionService.getStandardConditions).toBeCalledWith('AP')
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should get standard PSS conditions only if licence type is PSS', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            topupSupervisionExpiryDate: '26/12/2022',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({
-          standardLicenceConditions: [],
-          standardPssConditions: [{ code: 'fake1', text: 'fake standard condition' }],
-        })
-
-        await licenceService.createLicence('ABC1234', user)
-
-        expect(conditionService.getStandardConditions).toBeCalledTimes(1)
-        expect(conditionService.getStandardConditions).toBeCalledWith('PSS')
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('Should get both standard licence and PSS conditions if licence type is AP_PSS', async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            topupSupervisionExpiryDate: '27/12/2022',
-            licenceExpiryDate: '26/12/2023',
-            sentenceExpiryDate: '26/12/2023',
-          },
-        ] as Prisoner[])
-        const expectedLicence = expect.objectContaining({
-          standardLicenceConditions: [{ code: 'fake1', text: 'fake standard condition' }],
-          standardPssConditions: [{ code: 'fake1', text: 'fake standard condition' }],
-        })
-
-        await licenceService.createLicence('ABC1234', user)
-
-        expect(conditionService.getStandardConditions).toBeCalledTimes(2)
-        expect(conditionService.getStandardConditions).toHaveBeenNthCalledWith(1, 'AP')
-        expect(conditionService.getStandardConditions).toHaveBeenNthCalledWith(2, 'PSS')
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-    })
-
-    describe('CRO number', () => {
-      it('is set to blank if neither Delius nor NOMIS have a CRO for the offender', async () => {
-        const expectedLicence = expect.objectContaining({ cro: '' })
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('returns the CRO number from Delius', async () => {
-        communityService.getProbationer.mockResolvedValue({
-          otherIds: { croNumber: '12345' },
-          offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
-        } as OffenderDetail)
-
-        const expectedLicence = expect.objectContaining({ cro: '12345' })
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it("returns the CRO number from NOMIS if it's not in Delius", async () => {
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            croNumber: '09876',
-          },
-        ] as Prisoner[])
-
-        const expectedLicence = expect.objectContaining({ cro: '09876' })
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it("returns the CRO number from Delius if it's in Delius and NOMIS", async () => {
-        communityService.getProbationer.mockResolvedValue({
-          otherIds: { croNumber: '12345' },
-          offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
-        } as OffenderDetail)
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            croNumber: '09876',
-          },
-        ] as Prisoner[])
-
-        const expectedLicence = expect.objectContaining({ cro: '12345' })
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
-
-      it('returns empty string when no value in Delius and NOMIS systems', async () => {
-        communityService.getProbationer.mockResolvedValue({
-          otherIds: { croNumber: undefined },
-          offenderManagers: [{ active: true, staff: { code: 'X12345' } }],
-        } as OffenderDetail)
-        prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
-          {
-            croNumber: undefined,
-          },
-        ] as Prisoner[])
-
-        const expectedLicence = expect.objectContaining({ cro: '' })
-        await licenceService.createLicence('ABC1234', user)
-        expect(licenceApiClient.createLicence).toBeCalledWith(expectedLicence, user)
-      })
+    it('Should create a licence in the backend API', async () => {
+      await licenceService.createLicence('ABC1234', user)
+      expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1234' }, user)
     })
   })
 
@@ -448,18 +74,46 @@ describe('Licence Service', () => {
     expect(licenceApiClient.updateAppointmentPerson).toBeCalledWith('1', { appointmentPerson: 'Joe Bloggs' }, user)
   })
 
-  it('Update appointment time', async () => {
+  it('Update appointment time when appointment time type is SPECIFIC_DATE_TIME', async () => {
     const timeConverter = jest.spyOn(DateTime, 'toJson').mockReturnValue('22/12/2022 12:20')
     await licenceService.updateAppointmentTime(
       '1',
-      { date: { calendarDate: '22/12/2022' }, time: { hour: '12', minute: '20', ampm: 'pm' } } as DateTime,
+      {
+        date: { calendarDate: '22/12/2022' },
+        time: { hour: '12', minute: '20', ampm: 'pm' },
+        appointmentTimeType: 'SPECIFIC_DATE_TIME',
+      } as DateTime,
       user
     )
-    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith('1', { appointmentTime: '22/12/2022 12:20' }, user)
+    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith(
+      '1',
+      { appointmentTime: '22/12/2022 12:20', appointmentTimeType: 'SPECIFIC_DATE_TIME' },
+      user
+    )
     expect(timeConverter).toBeCalledWith({
       date: { calendarDate: '22/12/2022' },
       time: { hour: '12', minute: '20', ampm: 'pm' },
+      appointmentTimeType: 'SPECIFIC_DATE_TIME',
     } as DateTime)
+  })
+
+  it('Update appointment time when appointment time type is IMMEDIATE_UPON_RELEASE', async () => {
+    const timeConverter = jest.spyOn(DateTime, 'toJson').mockReturnValue('22/12/2022 12:20')
+    await licenceService.updateAppointmentTime(
+      '1',
+      {
+        date: null,
+        time: null,
+        appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
+      } as DateTime,
+      user
+    )
+    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith(
+      '1',
+      { appointmentTime: null, appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' },
+      user
+    )
+    expect(timeConverter).not.toHaveBeenCalled()
   })
 
   it('Update appointment address', async () => {
@@ -768,6 +422,22 @@ describe('Licence Service', () => {
     })
   })
 
+  it('should update prison user responsible for an offender', async () => {
+    await licenceService.updatePrisonUserDetails({
+      staffUsername: 'joebloggs',
+      staffEmail: 'joebloggs@probation.gov.uk',
+      firstName: 'Joseph',
+      lastName: 'Bloggs',
+    } as UpdatePrisonUserRequest)
+
+    expect(licenceApiClient.updatePrisonUserDetails).toBeCalledWith({
+      staffUsername: 'joebloggs',
+      staffEmail: 'joebloggs@probation.gov.uk',
+      firstName: 'Joseph',
+      lastName: 'Bloggs',
+    })
+  })
+
   it('should update the probation team for an offender', async () => {
     await licenceService.updateProbationTeam('X1234', {
       probationAreaCode: 'N02',
@@ -890,13 +560,13 @@ describe('Licence Service', () => {
       id: 1,
     } as Licence)
 
-    await licenceService.compareVariationToOriginal({ id: 2, variationOf: 1 } as Licence, user)
+    await licenceService.compareVariationToOriginal({ id: 2, kind: 'VARIATION', variationOf: 1 } as Licence, user)
 
     expect(licenceCompatatorSpy).toBeCalledWith(
       {
         id: 1,
       },
-      { id: 2, variationOf: 1 }
+      { id: 2, kind: 'VARIATION', variationOf: 1 }
     )
   })
 
@@ -1003,9 +673,8 @@ describe('Licence Service', () => {
   describe('Get timeline events', () => {
     const originalLicence = {
       id: 1,
+      kind: 'CRD',
       statusCode: LicenceStatus.ACTIVE,
-      variationOf: null,
-      isVariation: false,
       createdByFullName: 'Jackson Browne',
       dateLastUpdated: '10/11/2022 11:00:00',
     } as Licence
@@ -1024,9 +693,9 @@ describe('Licence Service', () => {
     it('will return a list of timeline events for an approved variation', async () => {
       const licenceVariation = {
         id: 2,
+        kind: 'VARIATION',
         statusCode: LicenceStatus.VARIATION_APPROVED,
         variationOf: 1,
-        isVariation: true,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:45:00',
       } as Licence
@@ -1049,9 +718,9 @@ describe('Licence Service', () => {
     it('will return a list of timeline events for a submitted variation', async () => {
       const licenceVariation = {
         id: 2,
+        kind: 'VARIATION',
         statusCode: LicenceStatus.VARIATION_SUBMITTED,
         variationOf: 1,
-        isVariation: true,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:45:00',
       } as Licence
@@ -1073,9 +742,9 @@ describe('Licence Service', () => {
     it('will return a list of timeline events for a rejected variation', async () => {
       const licenceVariation = {
         id: 2,
+        kind: 'VARIATION',
         statusCode: LicenceStatus.VARIATION_REJECTED,
         variationOf: 1,
-        isVariation: true,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:45:00',
       } as Licence

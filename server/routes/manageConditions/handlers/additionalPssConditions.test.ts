@@ -6,7 +6,7 @@ import AdditionalPssConditionsRoutes from './additionalPssConditions'
 import ConditionService from '../../../services/conditionService'
 
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
 
 jest.spyOn(conditionService, 'getGroupedAdditionalConditions').mockResolvedValue([
   {

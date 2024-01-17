@@ -13,7 +13,7 @@ import SearchService from './searchService'
 import FeComponentsService from './feComponentsService'
 
 const {
-  hmppsAuthClient,
+  manageUsersApiClient,
   prisonApiClient,
   prisonerSearchApiClient,
   communityApiClient,
@@ -26,9 +26,9 @@ const {
 const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
 const communityService = new CommunityService(communityApiClient, probationSearchApiClient)
-const userService = new UserService(hmppsAuthClient, prisonApiClient, communityService)
+const userService = new UserService(manageUsersApiClient, prisonApiClient, communityService)
 const conditionService = new ConditionService(licenceApiClient)
-const licenceService = new LicenceService(licenceApiClient, prisonerService, communityService, conditionService)
+const licenceService = new LicenceService(licenceApiClient, conditionService)
 const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)

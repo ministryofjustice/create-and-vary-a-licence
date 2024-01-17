@@ -2,6 +2,7 @@ import { Expose } from 'class-transformer'
 import { IsNotEmpty } from 'class-validator'
 import AdditionalConditions from '../../manageConditions/types/additionalConditions'
 import ConditionsHaveBeenExpanded from '../../../validators/conditionsHaveBeenExpanded'
+import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
 
 class LicenceToSubmit {
   @Expose()
@@ -18,7 +19,7 @@ class LicenceToSubmit {
 
   @Expose()
   @IsNotEmpty({ message: "Select 'Change' to go back and add appointment date and time" })
-  appointmentTime: string
+  appointmentTimeType: AppointmentTimeType
 
   @Expose()
   @ConditionsHaveBeenExpanded({

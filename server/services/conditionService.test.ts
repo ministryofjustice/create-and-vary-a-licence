@@ -184,9 +184,9 @@ describe('ConditionService', () => {
   describe('Get additional AP Conditions for summary and pdf', () => {
     const parentLicence = {
       id: 2,
+      kind: 'VARIATION',
       statusCode: LicenceStatus.VARIATION_APPROVED,
       variationOf: 1,
-      isVariation: true,
       createdByFullName: 'James Brown',
       dateLastUpdated: '12/11/2022 10:45:00',
       isInPssPeriod: true,
@@ -204,9 +204,9 @@ describe('ConditionService', () => {
 
     const selfLicence = {
       id: 2,
+      kind: 'VARIATION',
       statusCode: LicenceStatus.VARIATION_APPROVED,
       variationOf: 1,
-      isVariation: true,
       createdByFullName: 'James Brown',
       dateLastUpdated: '12/11/2022 10:45:00',
       isInPssPeriod: true,

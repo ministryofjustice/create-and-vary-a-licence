@@ -35,17 +35,22 @@ export default defineConfig({
         stubPrisonSignIn: auth.stubPrisonSignIn,
         stubProbationSignIn: auth.stubProbationSignIn,
         stubProbationAcoSignIn: auth.stubProbationAcoSignIn,
-        stubAuthUser: auth.stubUser,
         stubAuthPing: auth.stubPing,
         stubSystemToken: auth.systemToken,
 
-        stubFeComponents: feComponent.stubFeComponents,
+        stubFeComponents: () =>
+          Promise.all([
+            feComponent.stubFeComponents(),
+            feComponent.stubFeComponentsJs(),
+            feComponent.stubFeComponentsCss(),
+          ]),
         stubFeComponentsFail: feComponent.stubFeComponentsFail,
 
         stubTokenVerificationPing: tokenVerification.stubPing,
 
         stubUpdateResponsibleCom: licence.stubUpdateResponsibleCom,
         stubUpdateProbationTeam: licence.stubUpdateProbationTeam,
+        stubUpdatePrisonUserDetails: licence.stubUpdatePrisonUserDetails,
         stubGetLicence: licence.stubGetLicence,
         stubPostLicence: licence.stubPostLicence,
         stubGetExistingLicenceForOffenderWithResult: licence.stubGetExistingLicenceForOffenderWithResult,

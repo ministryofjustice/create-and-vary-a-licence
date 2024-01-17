@@ -22,6 +22,7 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
+  UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
@@ -35,21 +36,13 @@ import {
   UpdateOffenderDetailsRequest,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
-import {
-  addressObjectToString,
-  convertDateFormat,
-  convertToTitleCase,
-  filterCentralCaseload,
-  objectIsEmpty,
-} from '../utils/utils'
 import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
 import Telephone from '../routes/initialAppointment/types/telephone'
 import Address from '../routes/initialAppointment/types/address'
+import { addressObjectToString, filterCentralCaseload, objectIsEmpty } from '../utils/utils'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
-import PrisonerService from './prisonerService'
-import CommunityService from './communityService'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
 import Stringable from '../routes/creatingLicences/types/abstract/stringable'
 import LicenceType from '../enumeration/licenceType'
@@ -65,86 +58,11 @@ import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 export default class LicenceService {
   constructor(
     private readonly licenceApiClient: LicenceApiClient,
-    private readonly prisonerService: PrisonerService,
-    private readonly communityService: CommunityService,
     private readonly conditionService: ConditionService
   ) {}
 
   async createLicence(prisonerNumber: string, user: User): Promise<LicenceSummary> {
-    const nomisRecord = _.head(await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user))
-    const deliusRecord = await this.communityService.getProbationer({ nomsNumber: prisonerNumber })
-
-    const [prisonInformation, offenderManagers] = await Promise.all([
-      this.prisonerService.getPrisonInformation(nomisRecord.prisonId, user),
-      this.communityService.getAnOffendersManagers(deliusRecord.otherIds?.crn),
-    ])
-
-    const responsibleOfficer = deliusRecord.offenderManagers.find(om => om.active)
-    const responsibleOfficerDetails = offenderManagers.find(om => om.staffCode === responsibleOfficer.staff.code)
-
-    const licenceType = LicenceService.getLicenceType(nomisRecord)
-
-    const licence = {
-      typeCode: licenceType,
-      version: await this.conditionService.getPolicyVersion(),
-      nomsId: prisonerNumber,
-      bookingNo: nomisRecord.bookNumber,
-      bookingId: parseInt(nomisRecord.bookingId, 10),
-      prisonCode: nomisRecord.prisonId,
-      forename: convertToTitleCase(nomisRecord.firstName),
-      middleNames: convertToTitleCase(nomisRecord.middleNames),
-      surname: convertToTitleCase(nomisRecord.lastName),
-      dateOfBirth: convertDateFormat(nomisRecord.dateOfBirth),
-      conditionalReleaseDate:
-        convertDateFormat(nomisRecord.conditionalReleaseOverrideDate) ||
-        convertDateFormat(nomisRecord.conditionalReleaseDate),
-      actualReleaseDate: convertDateFormat(nomisRecord.confirmedReleaseDate),
-      sentenceStartDate: convertDateFormat(nomisRecord.sentenceStartDate),
-      sentenceEndDate: convertDateFormat(nomisRecord.sentenceExpiryDate),
-      licenceStartDate:
-        convertDateFormat(nomisRecord.confirmedReleaseDate) || convertDateFormat(nomisRecord.conditionalReleaseDate),
-      licenceExpiryDate: convertDateFormat(nomisRecord.licenceExpiryDate),
-      topupSupervisionStartDate: convertDateFormat(nomisRecord.topupSupervisionStartDate),
-      topupSupervisionExpiryDate: convertDateFormat(nomisRecord.topupSupervisionExpiryDate),
-      prisonDescription: prisonInformation.formattedDescription || 'Not known',
-      prisonTelephone: [
-        prisonInformation.phones.find(phone => phone.type === 'BUS')?.ext,
-        prisonInformation.phones.find(phone => phone.type === 'BUS')?.number,
-      ]
-        .filter(n => n)
-        .join(' '),
-      probationAreaCode: responsibleOfficerDetails.probationArea?.code,
-      probationAreaDescription: responsibleOfficerDetails.probationArea?.description,
-      probationPduCode: responsibleOfficerDetails.team?.borough?.code,
-      probationPduDescription: responsibleOfficerDetails.team?.borough?.description,
-      probationLauCode: responsibleOfficerDetails.team?.district?.code,
-      probationLauDescription: responsibleOfficerDetails.team?.district?.description,
-      probationTeamCode: responsibleOfficerDetails.team?.code,
-      probationTeamDescription: responsibleOfficerDetails.team?.description,
-      crn: deliusRecord.otherIds?.crn,
-      pnc: deliusRecord.otherIds?.pncNumber,
-      cro: deliusRecord.otherIds?.croNumber || (await this.getCroNumberFromNomis(prisonerNumber, user)),
-      standardLicenceConditions: [LicenceType.AP, LicenceType.AP_PSS].includes(licenceType)
-        ? await this.conditionService.getStandardConditions(LicenceType.AP)
-        : [],
-      standardPssConditions: [LicenceType.PSS, LicenceType.AP_PSS].includes(licenceType)
-        ? await this.conditionService.getStandardConditions(LicenceType.PSS)
-        : [],
-      responsibleComStaffId: responsibleOfficerDetails.staffId,
-    } as CreateLicenceRequest
-
-    // TODO: This section can be removed after having been live in production for some time. This is only needed initially because some
-    //  COM records will not be saved in our database initially. Over time, the OFFENDER_MANAGER_CHANGED event, and logins will have populated
-    //  staff details into the database, and this call will have become redundant
-    const comDetails = await this.communityService.getStaffDetailByStaffIdentifier(responsibleOfficerDetails.staffId)
-    await this.updateComDetails({
-      staffIdentifier: comDetails?.staffIdentifier,
-      staffUsername: comDetails?.username,
-      staffEmail: comDetails?.email,
-      firstName: comDetails?.staff?.forenames,
-      lastName: comDetails?.staff?.surname,
-    })
-
+    const licence = { nomsId: prisonerNumber } as CreateLicenceRequest
     return this.licenceApiClient.createLicence(licence, user)
   }
 
@@ -167,8 +85,9 @@ export default class LicenceService {
   }
 
   async updateAppointmentTime(id: string, formData: DateTime, user: User): Promise<void> {
-    const appointmentTime = DateTime.toJson(formData)
-    const requestBody = { appointmentTime } as AppointmentTimeRequest
+    const { appointmentTimeType } = formData
+    const appointmentTime = (appointmentTimeType === 'SPECIFIC_DATE_TIME' && DateTime.toJson(formData)) || null
+    const requestBody = { appointmentTime, appointmentTimeType } as AppointmentTimeRequest
     return this.licenceApiClient.updateAppointmentTime(id, requestBody, user)
   }
 
@@ -421,6 +340,10 @@ export default class LicenceService {
     return this.licenceApiClient.updateComDetails(comDetails)
   }
 
+  async updatePrisonUserDetails(prisonUserDetails: UpdatePrisonUserRequest): Promise<void> {
+    return this.licenceApiClient.updatePrisonUserDetails(prisonUserDetails)
+  }
+
   async editApprovedLicence(licenceId: string, user: User): Promise<LicenceSummary> {
     return this.licenceApiClient.editLicence(licenceId, user)
   }
@@ -510,7 +433,7 @@ export default class LicenceService {
   }
 
   async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
-    if (variation?.variationOf) {
+    if (variation.kind === 'VARIATION') {
       const originalLicence = await this.getLicence(variation.variationOf, user)
       return compareLicenceConditions(originalLicence, variation)
     }
@@ -553,7 +476,7 @@ export default class LicenceService {
     licences.push(thisLicence)
 
     // Get the trail of variations back to the original licence
-    while (thisLicence?.isVariation) {
+    while (thisLicence.kind === 'VARIATION') {
       // eslint-disable-next-line no-await-in-loop
       thisLicence = await this.licenceApiClient.getLicenceById(thisLicence?.variationOf, user)
       if (thisLicence) {
@@ -614,7 +537,8 @@ export default class LicenceService {
 
   private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {
     return licences.map(licence => {
-      const { title, eventType } = LicenceService.getTimelineEventType(licence.variationOf, licence.statusCode)
+      const varyOf = licence.kind === 'VARIATION' ? licence.variationOf : undefined
+      const { title, eventType } = LicenceService.getTimelineEventType(varyOf, licence.statusCode)
       return new TimelineEvent(
         eventType,
         title,
@@ -647,11 +571,6 @@ export default class LicenceService {
           ? { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }
           : { eventType: TimelineEventType.CREATION, title: 'Licence created' }
     }
-  }
-
-  private async getCroNumberFromNomis(prisonerNumber: string, user: User): Promise<string> {
-    const prisoners = await this.prisonerService.searchPrisonersByNomisIds([prisonerNumber], user)
-    return prisoners?.[0]?.croNumber || ''
   }
 
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {

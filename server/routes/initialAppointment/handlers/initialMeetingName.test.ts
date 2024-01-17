@@ -4,7 +4,7 @@ import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Name - Probation users', () => {
   let req: Request

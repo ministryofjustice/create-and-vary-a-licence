@@ -7,7 +7,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const username = 'joebloggs'
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
 describe('Route - view and approve a licence', () => {

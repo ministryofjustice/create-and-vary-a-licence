@@ -1,7 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
-    {% set apptDateTimeEntered = licence.appointmentTime | length > 0 %}
+    {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
     {% set routePath = 'view' if isPrisonUser else 'create'%}
     {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
 
@@ -64,6 +64,20 @@
                 } if isEditable
             },
             {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTimeType'),
+                key: { text: "Date/time" },
+                value: { text: licence.appointmentTimeType | getAppointmentTimeTypeDescription if apptDateTimeEntered else "Not yet entered" },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/create/id/" + licence.id + "/initial-meeting-time?fromReview=true",
+                            text: "Change",
+                            visuallyHiddenText: "date"
+                        }
+                    ]
+                } if isEditable
+            }if licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME',
+            {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Date" },
                 value: { text: licence.appointmentTime | datetimeToDateShort if apptDateTimeEntered else "Not yet entered" },
@@ -77,7 +91,7 @@
                         }
                     ]
                 } if isEditable
-            },
+            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME',
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
                 key: { text: "Time" },
@@ -92,7 +106,7 @@
                         }
                     ]
                 } if isEditable
-            }
+            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME'
         ]
     }) }}
 {% endmacro %}

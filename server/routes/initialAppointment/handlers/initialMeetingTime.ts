@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
 import LicenceType from '../../../enumeration/licenceType'
 import UserType from '../../../enumeration/userType'
+import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
 
 export default class InitialMeetingTimeRoutes {
   constructor(
@@ -13,9 +14,11 @@ export default class InitialMeetingTimeRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
     const formDate = DateTime.toDateTime(licence.appointmentTime)
+    const appointmentTimeType: Record<string, string> = AppointmentTimeType
 
     res.render('pages/create/initialMeetingTime', {
       formDate,
+      appointmentTimeType,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
       skipUrl: this.getNextPage(licence.id.toString(), licence.typeCode, req),
       canSkip: this.userType === UserType.PROBATION,
@@ -26,7 +29,6 @@ export default class InitialMeetingTimeRoutes {
     const { licenceId } = req.params
     const { licence } = res.locals
     const { user } = res.locals
-
     await this.licenceService.updateAppointmentTime(licenceId, req.body, user)
 
     return res.redirect(this.getNextPage(licenceId, licence.typeCode, req))

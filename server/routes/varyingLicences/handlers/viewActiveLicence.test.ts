@@ -3,15 +3,9 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import ConditionService from '../../../services/conditionService'
 import ViewActiveLicenceRoutes from './viewActiveLicence'
-import { LicenceApiClient } from '../../../data'
-import LicenceService from '../../../services/licenceService'
 
-const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
-const conditionService = new ConditionService(licenceApiClient) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, null, null, conditionService) as jest.Mocked<LicenceService>
+const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 
-jest.mock('../../../data/licenceApiClient')
-jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
 
 describe('Route Handlers - Vary Licence - View active licence', () => {
@@ -34,8 +28,6 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
   })
 
   beforeEach(() => {
-    licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
-
     req = {
       params: {
         licenceId: licence.id,

@@ -7,7 +7,7 @@ import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../../../utils/utils'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/licenceService')
 jest.mock('../../../utils/urlAccessByStatus', () => jest.fn().mockReturnValue(true))
@@ -55,6 +55,7 @@ describe('Route Handlers - Offender licences', () => {
 
       const expectedLicences = {
         licenceId: 1,
+        kind: 'CRD',
         licenceType: 'PSS',
         licenceStatus: 'SUBMITTED',
         probationPduDescription: null,

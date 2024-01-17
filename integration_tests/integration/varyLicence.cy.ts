@@ -8,7 +8,7 @@ context('Vary a licence', () => {
     cy.task('stubGetStaffDetails')
     cy.task('stubGetManagedOffenders')
     cy.task('stubGetOffendersByCrn')
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
+    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'VARIATION', status: 'ACTIVE' })
     cy.task('stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP_PSS' })
     cy.task('stubGetOffendersByNomsNumber')
     cy.task('searchPrisonersByNomisIds')
@@ -19,6 +19,7 @@ context('Vary a licence', () => {
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetPolicyChanges')
     cy.task('stubUpdateStandardConditions')
+    cy.task('stubFeComponents')
     cy.signIn()
   })
 

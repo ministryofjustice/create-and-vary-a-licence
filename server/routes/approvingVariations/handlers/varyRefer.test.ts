@@ -5,7 +5,7 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { VariedConditions } from '../../../utils/licenceComparator'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
 

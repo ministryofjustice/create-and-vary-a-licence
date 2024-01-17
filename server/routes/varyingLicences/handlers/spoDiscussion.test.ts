@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import SpoDiscussionRoutes from './spoDiscussion'
 
-const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Vary Licence - Spo discussion', () => {

@@ -22,7 +22,7 @@ describe('Caseload Service', () => {
   const yesterday = format(addDays(new Date(), -1), 'yyyy-MM-dd')
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-  const licenceService = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+  const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
   const serviceUnderTest = new CaseloadService(prisonerService, communityService, licenceService)
   const user = {
     deliusStaffIdentifier: 2000,
@@ -354,6 +354,7 @@ describe('Caseload Service', () => {
     ])
     getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
+        kind: 'CRD',
         nomisId: 'AB1234I',
         licenceId: 1,
         licenceType: LicenceType.AP_PSS,
@@ -598,6 +599,7 @@ describe('Caseload Service', () => {
       {
         nomisId: 'AB1234E',
         licenceId: 1,
+        kind: 'CRD',
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
         comUsername: 'sherlockholmes',
@@ -659,6 +661,7 @@ describe('Caseload Service', () => {
       ])
       getLicencesByNomisIdsAndStatus.mockResolvedValue([
         {
+          kind: 'VARIATION',
           nomisId: 'AB1234E',
           licenceId: 1,
           licenceType: LicenceType.PSS,
@@ -666,6 +669,7 @@ describe('Caseload Service', () => {
           comUsername: 'joebloggs',
         },
         {
+          kind: 'VARIATION',
           nomisId: 'AB1234F',
           licenceId: 2,
           licenceType: LicenceType.AP,
@@ -761,6 +765,7 @@ describe('Caseload Service', () => {
   it('OMU caseload', async () => {
     getLicencesForOmu.mockResolvedValue([
       {
+        kind: 'CRD',
         nomisId: 'AB1234D',
         licenceId: 1,
         licenceType: LicenceType.PSS,
@@ -768,6 +773,7 @@ describe('Caseload Service', () => {
         comUsername: 'joebloggs',
       },
       {
+        kind: 'CRD',
         nomisId: 'AB1234E',
         licenceId: 2,
         licenceType: LicenceType.PSS,
@@ -775,6 +781,7 @@ describe('Caseload Service', () => {
         comUsername: 'joebloggs',
       },
       {
+        kind: 'CRD',
         nomisId: 'AB1234G',
         licenceId: 3,
         licenceType: LicenceType.AP,
@@ -782,6 +789,7 @@ describe('Caseload Service', () => {
         comUsername: 'joebloggs',
       },
       {
+        kind: 'CRD',
         nomisId: 'AB1234F',
         licenceId: 4,
         licenceType: LicenceType.AP,
@@ -814,6 +822,7 @@ describe('Caseload Service', () => {
     ] as HdcStatus[])
     getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
+        kind: 'CRD',
         nomisId: 'AB1234F',
         licenceId: 4,
         licenceType: LicenceType.AP,
@@ -1302,6 +1311,7 @@ describe('Caseload Service', () => {
   it('returns exclusions', async () => {
     getLicencesForOmu.mockResolvedValue([
       {
+        kind: 'CRD',
         nomisId: 'AB1234D',
         licenceId: 1,
         licenceType: LicenceType.AP,
@@ -1309,6 +1319,7 @@ describe('Caseload Service', () => {
         comUsername: 'joebloggs',
       },
       {
+        kind: 'CRD',
         nomisId: 'AB1234E',
         licenceId: 2,
         licenceType: LicenceType.AP,
@@ -1368,6 +1379,7 @@ describe('Caseload Service', () => {
     ])
     getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
+        kind: 'CRD',
         nomisId: 'AB1234E',
         licenceId: 2,
         licenceType: LicenceType.PSS,
@@ -1391,6 +1403,7 @@ describe('Caseload Service', () => {
   it('builds the approval needed caseload', async () => {
     jest.spyOn(licenceService, 'getLicencesForApproval').mockResolvedValue([
       {
+        kind: 'CRD',
         nomisId: 'AB1234E',
         licenceId: 1,
         licenceType: LicenceType.AP,
@@ -1451,6 +1464,7 @@ describe('Caseload Service', () => {
   it('builds the recently approved caseload', async () => {
     jest.spyOn(licenceService, 'getLicencesRecentlyApproved').mockResolvedValue([
       {
+        kind: 'CRD',
         nomisId: 'AB1234E',
         licenceId: 1,
         licenceType: LicenceType.AP,
@@ -1515,6 +1529,7 @@ describe('Caseload Service', () => {
   it('builds the vary approver caseload', async () => {
     jest.spyOn(licenceService, 'getLicencesForVariationApproval').mockResolvedValue([
       {
+        kind: 'VARIATION',
         nomisId: 'AB1234E',
         licenceId: 1,
         licenceType: LicenceType.PSS,

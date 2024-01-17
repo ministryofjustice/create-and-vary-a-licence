@@ -3,10 +3,11 @@ import { Session } from 'express-session'
 import populateCurrentUser from './populateCurrentUser'
 import UserService from '../services/userService'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
-import { AuthUserDetails, AuthUserEmail } from '../data/hmppsAuthClient'
+import { PrisonUserDetails, PrisonUserEmail } from '../data/manageUsersApiClient'
 import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
 import LicenceService from '../services/licenceService'
 import { User } from '../@types/CvlUserDetails'
+import AuthRole from '../enumeration/authRole'
 
 jest.mock('../services/userService')
 jest.mock('../services/licenceService')
@@ -16,7 +17,7 @@ let req = {} as Request
 const next = jest.fn()
 
 const userServiceMock = new UserService(null, null, null) as jest.Mocked<UserService>
-const licenceServiceMock = new LicenceService(null, null, null, null) as jest.Mocked<LicenceService>
+const licenceServiceMock = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 const middleware = populateCurrentUser(userServiceMock, licenceServiceMock)
 
@@ -33,7 +34,7 @@ beforeEach(() => {
     },
   } as unknown as Response
 
-  req = { session: {} } as Request
+  req = { session: {}, user: { userRoles: [] } } as Request
 })
 
 afterEach(() => {
@@ -64,13 +65,13 @@ describe('populateCurrentUser', () => {
 
     expect(userServiceMock.getPrisonUser).not.toHaveBeenCalled()
     expect(userServiceMock.getProbationUser).not.toHaveBeenCalled()
-    expect(userServiceMock.getAuthUser).not.toHaveBeenCalled()
+    expect(userServiceMock.getUser).not.toHaveBeenCalled()
     expect(next).toBeCalled()
   })
 
   // Causes an error to appear in the console with message 'Failed to get user details for: joebloggs' (expected)
   it('should catch error from user service and persist it to next', async () => {
-    userServiceMock.getAuthUser.mockRejectedValue(new Error('Some error'))
+    userServiceMock.getUser.mockRejectedValue(new Error('Some error'))
 
     await middleware(req, res, next)
 
@@ -79,13 +80,21 @@ describe('populateCurrentUser', () => {
 
   it('should populate nomis user details', async () => {
     res.locals.user.authSource = 'nomis'
+    req.user.userRoles = [AuthRole.CASE_ADMIN]
 
     userServiceMock.getPrisonUser.mockResolvedValue({
       firstName: 'Joe',
       lastName: 'Bloggs',
-      activeCaseLoadId: '1',
+      username: 'joebloggs',
+      activeCaseLoadId: 'MDI',
       staffId: 3000,
     } as PrisonApiUserDetail)
+
+    userServiceMock.getUserEmail.mockResolvedValue({
+      username: 'joebloggs',
+      email: 'jbloggs@prison.gov.uk',
+      verified: true,
+    } as PrisonUserEmail)
 
     userServiceMock.getPrisonUserCaseloads.mockResolvedValue([
       {
@@ -96,21 +105,54 @@ describe('populateCurrentUser', () => {
       },
     ] as unknown as PrisonApiCaseload[])
 
-    userServiceMock.getAuthUserEmail.mockResolvedValue({
-      email: 'jbloggs@prison.gov.uk',
-    } as AuthUserEmail)
-
     await middleware(req, res, next)
 
     expect(req.session.currentUser).toMatchObject({
-      activeCaseload: '1',
+      activeCaseload: 'MDI',
       displayName: 'Joe Bloggs',
-      emailAddress: 'jbloggs@prison.gov.uk',
       firstName: 'Joe',
       lastName: 'Bloggs',
       nomisStaffId: 3000,
       prisonCaseload: ['MDI', 'BMI'],
     })
+    expect(licenceServiceMock.updatePrisonUserDetails).toHaveBeenCalledWith({
+      staffUsername: 'joebloggs',
+      staffEmail: 'jbloggs@prison.gov.uk',
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+    })
+    expect(next).toBeCalled()
+  })
+
+  it('should throw error and not call updatePrisonUserDetails when email of a nomis user is not found', async () => {
+    res.locals.user.authSource = 'nomis'
+    req.user.userRoles = [AuthRole.CASE_ADMIN]
+
+    userServiceMock.getPrisonUser.mockResolvedValue({
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+      username: 'joebloggs',
+      activeCaseLoadId: 'MDI',
+      staffId: 3000,
+    } as PrisonApiUserDetail)
+
+    userServiceMock.getUserEmail.mockResolvedValue({
+      username: 'joebloggs',
+      verified: true,
+    } as PrisonUserEmail)
+
+    userServiceMock.getPrisonUserCaseloads.mockResolvedValue([
+      {
+        caseLoadId: 'MDI',
+      },
+      {
+        caseLoadId: 'BMI',
+      },
+    ] as unknown as PrisonApiCaseload[])
+
+    await middleware(req, res, next)
+
+    expect(licenceServiceMock.updatePrisonUserDetails).not.toHaveBeenCalled()
     expect(next).toBeCalled()
   })
 
@@ -158,19 +200,19 @@ describe('populateCurrentUser', () => {
       firstName: 'Joseph',
       lastName: 'Bloggs',
     })
-    expect(userServiceMock.getAuthUserEmail).not.toHaveBeenCalled()
+    expect(userServiceMock.getUserEmail).not.toHaveBeenCalled()
     expect(next).toBeCalled()
   })
 
   it('should populate auth user details', async () => {
     res.locals.user.authSource = 'auth'
 
-    userServiceMock.getAuthUser.mockResolvedValue({
+    userServiceMock.getUser.mockResolvedValue({
       name: 'Joe Bloggs',
-    } as AuthUserDetails)
-    userServiceMock.getAuthUserEmail.mockResolvedValue({
+    } as PrisonUserDetails)
+    userServiceMock.getUserEmail.mockResolvedValue({
       email: 'jbloggs@prison.gov.uk',
-    } as AuthUserEmail)
+    } as PrisonUserEmail)
 
     await middleware(req, res, next)
 
@@ -181,10 +223,10 @@ describe('populateCurrentUser', () => {
     expect(next).toBeCalled()
   })
 
-  it('should swallow error when calling authUserEmail', async () => {
+  it('should swallow error when calling getUserEmail', async () => {
     res.locals.user.authSource = 'auth'
 
-    userServiceMock.getAuthUserEmail.mockRejectedValue({})
+    userServiceMock.getUserEmail.mockRejectedValue({})
 
     await middleware(req, res, next)
 

@@ -17,7 +17,6 @@ context('Reject a licence', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
-    cy.task('stubAuthUser')
     cy.task('stubGetPrisonUserDetails')
     cy.task('stubGetPrisonUserCaseloads', {
       details: [
