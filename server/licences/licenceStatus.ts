@@ -46,7 +46,11 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   NOT_STARTED: {
     label: 'Not started',
     description: 'Not started',
+<<<<<<< HEAD
     colour: config.hardStopEnabled ? 'yellow' : 'grey',
+=======
+    colour: (!!config.HardStopEnabled && 'yellow') || 'grey',
+>>>>>>> 3fd5145 (fixes)
   },
   VARIATION_IN_PROGRESS: {
     label: 'Variation in progress',
