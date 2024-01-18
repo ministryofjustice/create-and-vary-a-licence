@@ -339,7 +339,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('useNewSearch', config.useNewSearch)
   njkEnv.addGlobal('showWhatsNewBanner', config.showWhatsNewBanner)
   njkEnv.addGlobal('fridayReleasePolicy', config.fridayReleasePolicy)
-  njkEnv.addGlobal('UseNewCaseloadViewForHardStop', config.UseNewCaseloadViewForHardStop)
+  njkEnv.addGlobal('HardStopEnabled', config.HardStopEnabled)
 
   return njkEnv
 }

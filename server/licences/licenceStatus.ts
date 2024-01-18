@@ -1,4 +1,5 @@
 import LicenceStatus from '../enumeration/licenceStatus'
+import config from '../config'
 
 type LicenceStatusConfig = {
   label: string
@@ -45,7 +46,7 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
   NOT_STARTED: {
     label: 'Not started',
     description: 'Not started',
-    colour: 'yellow',
+    colour: (!!config.HardStopEnabled && 'yellow') || 'grey',
   },
   VARIATION_IN_PROGRESS: {
     label: 'Variation in progress',

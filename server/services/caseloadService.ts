@@ -11,10 +11,9 @@ import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
 import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
-import { LicenceSummary } from '../@types/licenceApiClientTypes'
+import { LicenceSummary, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
 import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
-import HardStopCutoffDate from '../@types/hardstopCutoffDate'
 
 export default class CaseloadService {
   constructor(

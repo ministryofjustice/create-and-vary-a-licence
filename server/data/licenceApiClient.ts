@@ -37,11 +37,10 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-import { UpdateComRequest, UpdatePrisonCaseAdminRequest } from '../@types/licenceApiClientTypes'
+import { UpdateComRequest, UpdatePrisonCaseAdminRequest, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
-import HardStopCutoffDate from '../@types/hardstopCutoffDate'
 
 export default class LicenceApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -240,7 +239,7 @@ export default class LicenceApiClient extends RestClient {
   async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
     return (await this.get(
       {
-        path: `/licence/getCutOffDate`,
+        path: `/current-hard-stop-cutoff-date`,
       },
       { username: user?.username }
     )) as HardStopCutoffDate

@@ -388,12 +388,12 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/getCutOffDate`,
+        urlPattern: `/current-hard-stop-cutoff-date`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
+        jsonBody: { cutoffDate: '05/12/2023' },
       },
     })
   },

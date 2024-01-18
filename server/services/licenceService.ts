@@ -34,6 +34,7 @@ import {
   AddAdditionalConditionRequest,
   LicenceConditionChange,
   UpdateOffenderDetailsRequest,
+  HardStopCutoffDate,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { addressObjectToString, filterCentralCaseload, objectIsEmpty } from '../utils/utils'
@@ -54,7 +55,6 @@ import TimelineEvent from '../@types/TimelineEvent'
 import TimelineEventType from '../enumeration/TimelineEventType'
 import ConditionService from './conditionService'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
-import HardStopCutoffDate from '../@types/hardstopCutoffDate'
 
 export default class LicenceService {
   constructor(

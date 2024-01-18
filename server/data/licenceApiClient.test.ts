@@ -650,7 +650,7 @@ describe('Licence API client tests', () => {
       await licenceApiClient.getCutOffDateForLicenceTimeOut({ username: 'joebloggs' } as User)
       expect(get).toHaveBeenCalledWith(
         {
-          path: '/licence/getCutOffDate',
+          path: '/current-hard-stop-cutoff-date',
         },
         { username: 'joebloggs' }
       )

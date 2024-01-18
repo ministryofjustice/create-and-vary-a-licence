@@ -87,7 +87,7 @@
 {% if probationView %} {% set probationViewUrlQuery = '?view=probation' %} {% endif %}
 
 {% block content %}
-    {% if UseNewCaseloadViewForHardStop %}
+    {% if HardStopEnabled %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
                 <h1 class="govuk-heading-xl">Select someone to view or print licences and supervision orders</h1>
@@ -185,7 +185,7 @@
     {% else %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-three-quarters">
-                <h1 class="govuk-heading-xl">Select a person to view or print licences and supervision orders{{UseNewCaseloadViewForHardStop}}</h1>
+                <h1 class="govuk-heading-xl">Select a person to view or print licences and supervision orders</h1>
             </div>
         </div>
         <div class="moj-search govuk-!-margin-bottom-6">
