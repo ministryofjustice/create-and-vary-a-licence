@@ -166,7 +166,7 @@
                                 <li>you can generate a standard licence if a probation practitioner has not submitted one for approval.<br> This includes time-served releases
                                 </li>
                             </ul>
-                        {{ viewCases(cases, true, statusConfig) }}
+                        {{ viewCases({ cases: cases, isHardStop: true, config: statusConfig}) }}
                         <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden">
                         </div>
                     </div>
@@ -174,7 +174,7 @@
                     <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="before-hardstop" role="tabpanel" aria-labelledby="tab_before-hardstop">
                         <h2 class="govuk-heading-l">Future releases</h2>
                         <p class="govuk-body">Licences for people within 4 weeks of release or that have been started before then.</p>
-                        {{ viewCases(cases, false, statusConfig) }}
+                        {{ viewCases({ cases: cases, isHardStop: false, config: statusConfig}) }}
                         <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden">
                         </div>
                     </div>

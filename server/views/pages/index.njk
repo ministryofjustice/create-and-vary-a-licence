@@ -41,8 +41,8 @@
                             "id": "viewLicenceCard",
                             "href": "/licence/view/cases",
                             "clickable": "true",
-                            "heading": "Print or generate a licence",
-                            "description": "Print licences and post sentence supervision orders or generate standard licences.",
+                            "heading": "Print or generate a licence" if HardStopEnabled else "Print a licence",
+                            "description": "Print licences and post sentence supervision orders or generate standard licences." if HardStopEnabled else "Print standard determinate licences and post sentence supervision orders created by community offender managers.",
                             "data-qa": "view-print-licence-link"
                         }) }}
                     </div>
