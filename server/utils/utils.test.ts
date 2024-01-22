@@ -520,4 +520,8 @@ describe('Check if release date before cutoff date', () => {
   it('should return false if release date is after cutoff date', () => {
     expect(isReleaseDateBeforeCutOffDate('04/12/2023', '05/12/2023')).toBeFalsy()
   })
+
+  it('should return true if release date is equal to cutoff date', () => {
+    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '04/12/2023')).toBeFalsy()
+  })
 })

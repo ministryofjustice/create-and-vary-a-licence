@@ -322,5 +322,5 @@ export default {
     'https://www.gov.uk/government/publications/discretionary-fridaypre-bank-holiday-release-scheme-policy-framework',
     requiredInProduction
   ),
-  HardStopEnabled: get('HARD_STOP_ENABLED', 'false', requiredInProduction) === 'true',
+  hardStopEnabled: get('HARD_STOP_ENABLED', 'false', requiredInProduction) === 'true',
 }
