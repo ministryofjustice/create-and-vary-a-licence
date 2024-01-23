@@ -5,6 +5,7 @@ import type LicenceService from '../../../services/licenceService'
 import { groupingBy } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import config from '../../../config'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -12,9 +13,6 @@ export default class ViewAndPrintLicenceRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
     let warningMessage
-
-    const releaseDateString = licence.actualReleaseDate || licence.conditionalReleaseDate
-    const releaseDate = parse(releaseDateString, 'dd/MM/yyyy', new Date())
 
     if (req.query?.latestVersion) {
       const latestLicenceVersion = req.query.latestVersion as string
@@ -64,7 +62,8 @@ export default class ViewAndPrintLicenceRoutes {
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         warningMessage,
-        isEditableByPrison: config.hardStopEnabled && licence.isInHardStopPeriod,
+        isEditableByPrison:
+          config.hardStopEnabled && licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod,
         isPrisonUser: user.authSource === 'nomis',
       })
     } else {
