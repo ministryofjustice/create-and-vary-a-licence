@@ -18,7 +18,7 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
-  UpdatePrisonUserRequest,
+  UpdatePrisonCaseAdminRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
@@ -336,7 +336,7 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updatePrisonUserDetails({
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
-    } as UpdatePrisonUserRequest)
+    } as UpdatePrisonCaseAdminRequest)
 
     expect(put).toHaveBeenCalledWith({
       path: '/prison-case-administrator/update',
