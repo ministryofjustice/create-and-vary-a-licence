@@ -37,15 +37,7 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-<<<<<<< HEAD
 import { UpdateComRequest, UpdatePrisonCaseAdminRequest, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
-=======
-<<<<<<< HEAD
-import { UpdateComRequest, UpdatePrisonCaseAdminRequest } from '../@types/licenceApiClientTypes'
-=======
-import { UpdateComRequest, UpdatePrisonUserRequest, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
->>>>>>> b82fbc0 (fixes)
->>>>>>> 3fd5145 (fixes)
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
