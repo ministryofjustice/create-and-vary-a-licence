@@ -22,7 +22,7 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
-  UpdatePrisonUserRequest,
+  UpdatePrisonCaseAdminRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
@@ -340,7 +340,7 @@ export default class LicenceService {
     return this.licenceApiClient.updateComDetails(comDetails)
   }
 
-  async updatePrisonUserDetails(prisonUserDetails: UpdatePrisonUserRequest): Promise<void> {
+  async updatePrisonUserDetails(prisonUserDetails: UpdatePrisonCaseAdminRequest): Promise<void> {
     return this.licenceApiClient.updatePrisonUserDetails(prisonUserDetails)
   }
 

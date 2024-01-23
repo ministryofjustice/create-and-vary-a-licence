@@ -16,7 +16,8 @@
                     text: "Set licence to active",
                     classes: "govuk-button--primary govuk-!-margin-right-1",
                     type: "submit",
-                    attributes: { 'data-qa': 'view-and-print' }
+                    attributes: { 'data-qa': 'view-and-print' },
+                    preventDoubleClick: true
                 }) }}
             {% endif %}
             {% if callToActions.shouldShowPrintButton %}

@@ -20,7 +20,7 @@ generic-service:
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     COMMUNITY_API_URL: "https://community-api.pre-prod.delius.probation.hmpps.dsd.io"
-    PRISON_API_URL: "https://api-preprod.prison.service.justice.gov.uk"
+    PRISON_API_URL: "https://prison-api-preprod.prison.service.justice.gov.uk"
     LICENCE_API_URL: "https://create-and-vary-a-licence-api-preprod.hmpps.service.justice.gov.uk"
     PRISONER_SEARCH_API_URL: "https://prisoner-search-preprod.prison.service.justice.gov.uk"
     PROBATION_SEARCH_API_URL: "https://probation-offender-search-preprod.hmpps.service.justice.gov.uk"

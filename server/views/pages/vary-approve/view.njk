@@ -30,7 +30,8 @@
                 <div class="govuk-button-group">
                     {{ govukButton({
                         text: "Approve variation",
-                        attributes: { 'data-qa': 'approve-variation' }
+                        attributes: { 'data-qa': 'approve-variation' },
+                        preventDoubleClick: true
                     }) }}
 
                     {{ govukButton({
