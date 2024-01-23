@@ -1,9 +1,10 @@
 import type { Request, Response } from 'express'
-import { format, isWithinInterval, parse, startOfDay, sub } from 'date-fns'
+import { format, parse } from 'date-fns'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
 import { groupingBy } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import config from '../../../config'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -14,10 +15,6 @@ export default class ViewAndPrintLicenceRoutes {
 
     const releaseDateString = licence.actualReleaseDate || licence.conditionalReleaseDate
     const releaseDate = parse(releaseDateString, 'dd/MM/yyyy', new Date())
-    const isInHardStopWindow = isWithinInterval(startOfDay(new Date()), {
-      start: sub(releaseDate, { days: 2 }),
-      end: releaseDate,
-    })
 
     if (req.query?.latestVersion) {
       const latestLicenceVersion = req.query.latestVersion as string
@@ -67,7 +64,7 @@ export default class ViewAndPrintLicenceRoutes {
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         warningMessage,
-        isEditableByPrison: isInHardStopWindow,
+        isEditableByPrison: config.hardStopEnabled && licence.isInHardStopPeriod,
         isPrisonUser: user.authSource === 'nomis',
       })
     } else {
