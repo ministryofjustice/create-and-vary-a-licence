@@ -43,3 +43,4 @@ export type OverrideLicenceDatesRequest = components['schemas']['OverrideLicence
 export type UpdateOffenderDetailsRequest = components['schemas']['UpdateOffenderDetailsRequest']
 export type ProbationSearchRequest = components['schemas']['ProbationUserSearchRequest']
 export type ProbationSearchResult = components['schemas']['ProbationSearchResult']
+export type HardStopCutoffDate = components['schemas']['HardStopCutoffDate']

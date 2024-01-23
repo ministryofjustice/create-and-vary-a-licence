@@ -36,13 +36,13 @@
                 {% endif %}
 
                 {% if shouldShowViewOrPrintCard %}
-                    <div class="govuk-grid-column-one-third card-group__item">
+                    <div class="govuk-grid-column-one-third card-group__item govuk-grid-column-one-third card-group__item">
                         {{ card({
                             "id": "viewLicenceCard",
                             "href": "/licence/view/cases",
                             "clickable": "true",
-                            "heading": "Print a licence",
-                            "description": "Print standard determinate licences and post sentence supervision orders created by community offender managers.",
+                            "heading": "Print or generate a licence" if hardStopEnabled else "Print a licence",
+                            "description": "Print licences and post sentence supervision orders or generate standard licences." if hardStopEnabled else "Print standard determinate licences and post sentence supervision orders created by community offender managers.",
                             "data-qa": "view-print-licence-link"
                         }) }}
                     </div>

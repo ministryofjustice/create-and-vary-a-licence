@@ -34,6 +34,7 @@ import {
   AddAdditionalConditionRequest,
   LicenceConditionChange,
   UpdateOffenderDetailsRequest,
+  HardStopCutoffDate,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { addressObjectToString, filterCentralCaseload, objectIsEmpty } from '../utils/utils'
@@ -308,6 +309,10 @@ export default class LicenceService {
       null,
       user
     )
+  }
+
+  async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
+    return this.licenceApiClient.getCutOffDateForLicenceTimeOut(user)
   }
 
   async getLicencesForVariationApproval(user: User): Promise<LicenceSummary[]> {

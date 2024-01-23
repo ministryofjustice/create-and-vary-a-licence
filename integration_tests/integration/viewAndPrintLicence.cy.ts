@@ -20,6 +20,7 @@ context('View and print licence', () => {
     cy.task('stubGetPrisons')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
+    cy.task('stubGetCutOffDateForLicenceTimeOut')
   })
   const singleCaseload = {
     details: [
@@ -142,6 +143,7 @@ context('View and print licence', () => {
     changeLocationPage.clickContinue()
     changeLocationPage.getErrorSummary().should('exist')
   })
+
   it('verify prison and probation views only display licences with appropriate statuses', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()

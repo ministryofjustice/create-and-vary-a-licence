@@ -1,0 +1,137 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "./statusBadge.njk" import statusBadge %}
+
+{% set pageTitle = applicationName + " - view an approved licence hardstop" %}
+{% set pageId = 'view-hardstop-cases-page' %}
+
+{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, licenceStatus, index) %}
+    <div class="caseload-offender-name">
+        {% if isClickable %}
+            {% set link = "/licence/view/id/" + licenceId + "/show" %}
+            {% if versionOfId and licenceStatus === 'SUBMITTED' %}
+                {% set link = link + "?lastApprovedVersion=" + versionOfId %}
+            {% endif %}
+            <a id="name-button-{{ index }}" href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
+        {% else %}
+            <span id="name-button-{{ index }}" class="govuk-heading-s">{{ offenderName }}</span>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro casesTable(licences) %}
+    {% if licences.length > 0 %}
+        {{ govukTable({
+                attributes: {
+                    'data-module': 'moj-sortable-table'
+                },
+                caption: "Print an approved licence",
+                captionClasses: "govuk-visually-hidden",
+                head: [
+                    {
+                        text: "Name",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    },
+                    {
+                        text: "Prison number",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    },
+                    {
+                        text: "Probation practitioner",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    },
+                    {
+                        text: "Release date",
+                        attributes: {
+                            "aria-sort":  "descending"  if probationView else  "ascending" 
+                        }
+                    },
+                    {
+                        text: "Status",
+                        attributes: {
+                            "aria-sort": "none"
+                        }
+                    }
+                ],
+                rows: licences
+            }) }}
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <h3 class="govuk-heading-s" data-qa="no-match-message">There are no licences to print which match the search criteria.</h3>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro viewCases(params) %}
+    {% set cases = params.cases | hardStop if params.isHardStop else 
+        params.cases | beforeHardStop %}
+    {% set licences = [] %}
+
+    {% for case in cases %}
+        {% if case.probationPractitioner %}
+            {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
+        {% else %}
+            {% set comDetailsHtml = 'Unallocated' %}
+        {% endif %}
+        {% if case.licenceVersionOf and(case.licenceStatus === 'IN_PROGRESS' or case.licenceStatus === 'SUBMITTED') %}
+            {% set licenceStatusHtml = statusBadge({ status: case.licenceStatus, size: 'small' }, params.config) +
+                                    "<div class='govuk-!-margin-top-2'> <img class='moj-banner__icon' src='/assets/images/statusBadge.svg'>" +
+                                    "<a href='/licence/view/id/" + case.licenceVersionOf + "/show" + "?latestVersion=" + case.licenceId + "' class='govuk-link'>View last approved licence</a></div>" %}
+        {% else %}
+            {% set licenceStatusHtml = statusBadge({
+                status: case.licenceStatus,
+                size: 'small'
+            }, params.config) %}
+        {% endif %}
+        {% set licences = (licences.push([
+            {
+                attributes: {
+                    id: 'name-' + loop.index,
+                    "data-sort-value": case.name
+                },
+                html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, case.licenceStatus, loop.index),
+                classes: "max-width max-width-220"
+            },
+            {
+                attributes: {
+                    id: 'nomis-id-' + loop.index,
+                    "data-sort-value": case.prisonerNumber
+                },
+                text: case.prisonerNumber,
+                classes: "max-width max-width-120"
+            },
+            {
+                attributes: {
+                    id: 'com-' + loop.index,
+                    "data-sort-value": case.probationPractitioner
+                },
+                html: comDetailsHtml,
+                classes: "max-width max-width-200"
+            },
+            {
+                attributes: {
+                    id: 'release-date-' + loop.index,
+                    "data-sort-value": case.releaseDate | dateToUnix
+                },
+                html: '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' 
+            },
+            {
+                attributes: {
+                    id: 'licence-status-' + loop.index,
+                    "data-sort-value": case.licenceStatus | getStatusOrder
+                },
+                html: licenceStatusHtml
+            }
+        ]), licences) %}
+    {% endfor %}
+    {{ casesTable(licences) }}
+
+{% endmacro %}
