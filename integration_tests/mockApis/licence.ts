@@ -1,5 +1,4 @@
 import { SuperAgentRequest } from 'superagent'
-import { addDays, format } from 'date-fns'
 import { stubFor } from '../wiremock'
 import LicenceStatus from '../../server/licences/licenceStatus'
 // eslint-disable-next-line camelcase
@@ -260,6 +259,7 @@ export default {
     statusCode: string
     typeCode: 'AP_PSS' | 'AP' | 'PSS'
     appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
+    isInHardStopPeriod: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -278,6 +278,7 @@ export default {
           appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
           appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
+          isInHardStopPeriod: options.isInHardStopPeriod || false,
           additionalLicenceConditions: [
             {
               id: 1,
@@ -1294,7 +1295,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
-          actualReleaseDate: format(addDays(Date.now(), 1), 'dd/MM/yyyy'),
+          isInHardStopPeriod: true,
         },
       },
     })

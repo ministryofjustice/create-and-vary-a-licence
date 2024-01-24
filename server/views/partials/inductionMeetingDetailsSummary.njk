@@ -70,9 +70,10 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/create/id/" + licence.id + "/initial-meeting-time?fromReview=true",
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
                             text: "Change",
-                            visuallyHiddenText: "date"
+                            visuallyHiddenText: "date",
+                            attributes: { "data-qa": "date-change-link" }
                         }
                     ]
                 } if isEditable

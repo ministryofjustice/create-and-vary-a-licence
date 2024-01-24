@@ -182,6 +182,7 @@ context('View and print licence', () => {
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       viewLicencePage = viewLicencePage
         .clickChangeDateLink()
+        .selectTypeInHardStop('SPECIFIC_DATE_TIME')
         .enterDate(moment(appointmentDate))
         .enterTime(moment())
         .clickContinueToReturn()

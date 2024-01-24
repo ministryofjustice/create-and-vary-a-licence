@@ -26,8 +26,20 @@ export default class AppointmentTimePage extends Page {
     return this
   }
 
+  selectTypeInHardStop = (value: string): AppointmentTimePage => {
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'IN_PROGRESS',
+      typeCode: 'AP_PSS',
+      appointmentTimeType: value,
+      isInHardStopPeriod: true,
+    })
+    cy.get(`input[value="${value}"]`).click()
+    return this
+  }
+
   enterDate = (moment: Moment): AppointmentTimePage => {
     const date = moment.format('DD/MM/YYYY')
+    cy.get(this.inductionDateId).clear()
     cy.get(this.inductionDateId).type(date)
     return this
   }
