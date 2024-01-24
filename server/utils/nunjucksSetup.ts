@@ -119,6 +119,14 @@ export function registerNunjucks(app?: express.Express): Environment {
     return appointmentTimeType[type]
   })
 
+  njkEnv.addFilter('hardStop', (licences: Record<string, unknown>[]) => {
+    return licences.filter(c => c.hardStop)
+  })
+
+  njkEnv.addFilter('beforeHardStop', (licences: Record<string, unknown>[]) => {
+    return licences.filter(c => !c.hardStop)
+  })
+
   njkEnv.addFilter('fillFormResponse', (defaultValue: unknown, overrideValue: unknown) => {
     if (overrideValue !== undefined) {
       return overrideValue
@@ -335,7 +343,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('useNewSearch', config.useNewSearch)
   njkEnv.addGlobal('showWhatsNewBanner', config.showWhatsNewBanner)
   njkEnv.addGlobal('fridayReleasePolicy', config.fridayReleasePolicy)
-  njkEnv.addGlobal('HardStopEnabled', config.hardStopEnabled)
+  njkEnv.addGlobal('hardStopEnabled', config.hardStopEnabled)
 
   return njkEnv
 }

@@ -105,6 +105,7 @@ export default defineConfig({
         stubGetUserDetailsByUsername: community.stubGetUserDetailsByUsername,
         stubAssignRole: community.stubAssignRole,
         stubGetSingleOffenderByCrn: community.stubGetSingleOffenderByCrn,
+        stubGetCutOffDateForLicenceTimeOut: community.stubGetCutOffDateForLicenceTimeOut,
 
         searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
         searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
