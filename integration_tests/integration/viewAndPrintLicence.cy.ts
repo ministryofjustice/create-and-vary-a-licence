@@ -70,8 +70,10 @@ context('View and print licence', () => {
 
     const indexPage = Page.verifyOnPage(IndexPage)
     let viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
     const comDetails = viewCasesList.clickComDetails()
     viewCasesList = comDetails.clickReturn()
+    viewCasesList.clickFutureReleasesTab()
     const viewLicencePage = viewCasesList.clickALicence()
     const printALicencePage = viewLicencePage.printALicence()
     printALicencePage.checkPrintTemplate()
@@ -176,6 +178,7 @@ context('View and print licence', () => {
 
     const indexPage = Page.verifyOnPage(IndexPage)
     const viewCasesList = indexPage.clickViewAndPrintALicence()
+    viewCasesList.clickFutureReleasesTab()
     let viewLicencePage: ViewALicencePage = viewCasesList.clickALicence()
     viewLicencePage = viewLicencePage.clickChangePersonLink().enterPerson('Joe Bloggs').clickContinueToReturn()
     viewLicencePage = viewLicencePage.clickChangeAddressLink().enterDefaultAddress().clickContinueToReturn()
