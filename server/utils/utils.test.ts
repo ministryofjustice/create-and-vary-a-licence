@@ -514,14 +514,14 @@ describe('Get prisoner release date from Nomis', () => {
 
 describe('Check if release date before cutoff date', () => {
   it('should return true if release date is before cutoff date', () => {
-    expect(isReleaseDateBeforeCutOffDate('06/12/2023', '05/12/2023')).toBeTruthy()
+    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '03 Dec 2023')).toBeTruthy()
   })
 
   it('should return false if release date is after cutoff date', () => {
-    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '05/12/2023')).toBeFalsy()
+    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '05 Dec 2023')).toBeFalsy()
   })
 
   it('should return true if release date is equal to cutoff date', () => {
-    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '04/12/2023')).toBeFalsy()
+    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '04 Dec 2023')).toBeTruthy()
   })
 })
