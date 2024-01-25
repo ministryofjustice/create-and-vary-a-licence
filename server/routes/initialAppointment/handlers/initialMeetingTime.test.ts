@@ -5,6 +5,10 @@ import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
+import LicenceKind from '../../../enumeration/LicenceKind'
+import config from '../../../config'
+
+jest.mock('./initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -79,6 +83,73 @@ describe('Route - create licence - initial meeting date and time', () => {
           releaseIsOnBankHolidayOrWeekend: true,
           skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
           canSkip: true,
+        })
+
+        it('should not let the PP skip the date input on variations', async () => {
+          res.locals.licence = {
+            ...res.locals.licence,
+            appointmentTime: null,
+            appointmentTimeType: null,
+            kind: LicenceKind.VARIATION,
+          }
+
+          await handler.GET(req, res)
+          expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
+            formDate: undefined,
+            appointmentTimeType,
+            releaseIsOnBankHolidayOrWeekend: true,
+            skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
+            canSkip: false,
+          })
+        })
+
+        describe('when hard stop is enabled', () => {
+          const existingConfig = config
+          beforeAll(() => {
+            config.hardStopEnabled = true
+          })
+
+          afterAll(() => {
+            config.hardStopEnabled = existingConfig.hardStopEnabled
+          })
+
+          it('should let the PP skip the date input outside of the hard stop period', async () => {
+            res.locals.licence = {
+              ...res.locals.licence,
+              appointmentTime: null,
+              appointmentTimeType: null,
+              kind: LicenceKind.CRD,
+              isInHardStopPeriod: false,
+            }
+
+            await handler.GET(req, res)
+            expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
+              formDate: undefined,
+              appointmentTimeType,
+              releaseIsOnBankHolidayOrWeekend: true,
+              skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
+              canSkip: true,
+            })
+          })
+
+          it('should not let the PP skip the date input in the hard stop period', async () => {
+            res.locals.licence = {
+              ...res.locals.licence,
+              appointmentTime: null,
+              appointmentTimeType: null,
+              kind: LicenceKind.CRD,
+              isInHardStopPeriod: true,
+            }
+
+            await handler.GET(req, res)
+            expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
+              formDate: undefined,
+              appointmentTimeType,
+              releaseIsOnBankHolidayOrWeekend: true,
+              skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
+              canSkip: false,
+            })
+          })
         })
       })
     })

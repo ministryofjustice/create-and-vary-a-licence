@@ -4,6 +4,8 @@ import DateTime from '../types/dateTime'
 import LicenceType from '../../../enumeration/licenceType'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
+import config from '../../../config'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class InitialMeetingTimeRoutes {
   constructor(
@@ -21,7 +23,11 @@ export default class InitialMeetingTimeRoutes {
       appointmentTimeType,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
       skipUrl: this.getNextPage(licence.id.toString(), licence.typeCode, req),
-      canSkip: this.userType === UserType.PROBATION && !licence.appointmentTimeType,
+      canSkip:
+        this.userType === UserType.PROBATION &&
+        !licence.appointmentTimeType &&
+        licence.kind !== LicenceKind.VARIATION &&
+        !(config.hardStopEnabled && licence.isInHardStopPeriod),
     })
   }
 
