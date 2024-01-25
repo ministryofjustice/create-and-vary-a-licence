@@ -5,6 +5,9 @@ import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
+import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
+
+jest.mock('./initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -93,6 +96,11 @@ describe('Route - create licence - initial meeting date and time', () => {
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/additional-pss-conditions-question')
       })
+
+      it('should call to generate a flash message', async () => {
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PROBATION)
+      })
     })
 
     describe('getNextPage', () => {
@@ -147,6 +155,11 @@ describe('Route - create licence - initial meeting date and time', () => {
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')
+      })
+
+      it('should call to generate a flash message', async () => {
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
       })
     })
 

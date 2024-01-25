@@ -6,6 +6,7 @@
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/variationSummary.njk" import variationSummary %}
+{% from "moj/components/banner/macro.njk" import mojBanner %}
 
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
@@ -24,6 +25,13 @@
 {% endif %}
 
 {% block content %}
+    {% if initialApptUpdatedMessage | length > 0%}
+        {{ mojBanner({
+            type: 'success',
+            text: initialApptUpdatedMessage,
+            iconFallbackText: 'Success'
+        }) }}
+    {% endif %}  
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if licence.kind === 'VARIATION' %}
@@ -77,7 +85,7 @@
             {% if licence.kind === 'VARIATION' %}
                 {{ variationSummary(licence, isInProgress) }}
             {% else %}
-                {{ inductionMeetingDetails(licence, isInProgress, validationErrors) }}
+                {{ inductionMeetingDetails(licence, canEditInitialAppt, validationErrors) }}
             {% endif %}
 
 

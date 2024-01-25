@@ -4,6 +4,9 @@ import InitialMeetingPlaceRoutes from './initialMeetingPlace'
 import LicenceService from '../../../services/licenceService'
 import Address from '../types/address'
 import UserType from '../../../enumeration/userType'
+import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
+
+jest.mock('./initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -73,6 +76,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
       })
+
+      it('should call to generate a flash message', async () => {
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PROBATION)
+      })
     })
   })
 
@@ -94,6 +102,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')
+      })
+
+      it('should call to generate a flash message', async () => {
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
       })
     })
   })
