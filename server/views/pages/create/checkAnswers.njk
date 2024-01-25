@@ -50,7 +50,7 @@
         <div class="govuk-button-group">
             {% if canChooseToEdit %}
                 {{ govukButton({
-                    text: "Edit licence",
+                    text: "Edit licence conditions",
                     href: '/licence/create/id/' + licence.id + '/edit',
                     attributes: {
                         id: 'edit-licence-button'
@@ -125,7 +125,7 @@
 
                     {% if canChooseToEdit %}
                         {{ govukButton({
-                            text: "Edit licence",
+                            text: "Edit licence conditions",
                             href: '/licence/create/id/' + licence.id + '/edit',
                             attributes: {
                                 id: 'edit-licence-button-2'
