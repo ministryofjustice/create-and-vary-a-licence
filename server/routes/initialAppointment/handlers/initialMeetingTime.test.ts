@@ -8,8 +8,6 @@ import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import config from '../../../config'
 
-jest.mock('./initialMeetingUpdatedFlashMessage')
-
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route - create licence - initial meeting date and time', () => {
