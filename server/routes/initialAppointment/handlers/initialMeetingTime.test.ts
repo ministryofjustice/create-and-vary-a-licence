@@ -42,6 +42,7 @@ describe('Route - create licence - initial meeting date and time', () => {
         licence: {
           id: 1,
           appointmentTime: '21/10/2022 14:15',
+          appointmentTimeType: 'SPECIFIC_DATE_TIME',
           conditionalReleaseDate: '14/05/2022',
           isEligibleForEarlyRelease: true,
         },
@@ -58,8 +59,22 @@ describe('Route - create licence - initial meeting date and time', () => {
     describe('GET', () => {
       it('should render initial meeting time view', async () => {
         await handler.GET(req, res)
+
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
           formDate,
+          appointmentTimeType,
+          releaseIsOnBankHolidayOrWeekend: true,
+          skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
+          canSkip: false,
+        })
+      })
+
+      it('should let the PP skip the date input if one has not be entered previously', async () => {
+        res.locals.licence = { ...res.locals.licence, appointmentTime: null, appointmentTimeType: null }
+
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
+          formDate: undefined,
           appointmentTimeType,
           releaseIsOnBankHolidayOrWeekend: true,
           skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
