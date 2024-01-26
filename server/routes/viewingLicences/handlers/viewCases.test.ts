@@ -921,7 +921,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the hardstop flag of cases', async () => {
-      caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate: '02 May 2022' })
+      caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate: '02/05/2022' })
       caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
