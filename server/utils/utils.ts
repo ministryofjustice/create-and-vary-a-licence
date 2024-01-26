@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { format, isBefore, parse } from 'date-fns'
+import { format, isBefore, parse, isEqual } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -196,7 +196,9 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
 }
 
 const isReleaseDateBeforeCutOffDate = (cutOffDate: string, releaseDate: string): boolean => {
-  return moment(releaseDate, 'DD/MM/YYYY').diff(moment(cutOffDate, 'DD/MM/YYYY')) <= 0
+  const rDate = parse(releaseDate, 'dd/MM/yyyy', new Date())
+  const cDate = parse(cutOffDate, 'dd/MM/yyyy', new Date())
+  return isBefore(rDate, cDate) || isEqual(rDate, cDate)
 }
 
 const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonApiPrisoner): boolean => {
