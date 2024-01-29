@@ -46,10 +46,13 @@ export default class ViewAndPrintCaseRoutes {
           releaseDate,
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: latestLicence.status,
-          hardStop: isReleaseDateBeforeCutOffDate(
-            cutoffDate,
-            format(parse(releaseDate, 'dd MMM yyyy', new Date()), 'dd/MM/yyyy')
-          ),
+          hardStop:
+            releaseDate === 'not found'
+              ? false
+              : isReleaseDateBeforeCutOffDate(
+                  cutoffDate,
+                  format(parse(releaseDate, 'dd MMM yyyy', new Date()), 'dd/MM/yyyy')
+                ),
           isClickable:
             latestLicence.status !== LicenceStatus.NOT_STARTED &&
             latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
