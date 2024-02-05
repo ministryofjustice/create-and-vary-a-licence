@@ -42,7 +42,7 @@
                 }) }}
             {% endif %}
 
-            {{ inductionMeetingDetails(licence) }}
+            {{ inductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
             {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
                 {{ additionalLicenceConditions(licence, additionalConditions) }}
                 {{ bespokeConditions(licence.id, null, null, null, licence.bespokeConditions) }}
