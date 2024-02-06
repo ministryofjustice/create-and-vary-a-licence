@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class InitialMeetingContactRoutes {
   constructor(
@@ -11,7 +12,18 @@ export default class InitialMeetingContactRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
 
-    res.render('pages/create/initialMeetingContact', {
+    // Prison should only be able to access this page in hard stop, and probation should only be able to access
+    // outside of hard stop
+    if (licence.kind !== LicenceKind.VARIATION) {
+      if (!licence.isInHardStopPeriod && this.userType === UserType.PRISON) {
+        return res.redirect('/access-denied')
+      }
+      if (licence.isInHardStopPeriod && this.userType === UserType.PROBATION) {
+        return res.redirect('/access-denied')
+      }
+    }
+
+    return res.render('pages/create/initialMeetingContact', {
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
     })
   }

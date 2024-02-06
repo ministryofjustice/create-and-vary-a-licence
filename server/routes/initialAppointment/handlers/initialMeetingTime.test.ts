@@ -5,6 +5,7 @@ import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -44,7 +45,9 @@ describe('Route - create licence - initial meeting date and time', () => {
           appointmentTime: '21/10/2022 14:15',
           appointmentTimeType: 'SPECIFIC_DATE_TIME',
           conditionalReleaseDate: '14/05/2022',
+          kind: LicenceKind.CRD,
           isEligibleForEarlyRelease: true,
+          isInHardStopPeriod: false,
         },
       },
     } as unknown as Response
@@ -57,7 +60,7 @@ describe('Route - create licence - initial meeting date and time', () => {
     const handler = new InitialMeetingTimeRoutes(licenceService, UserType.PROBATION)
 
     describe('GET', () => {
-      it('should render initial meeting time view', async () => {
+      it('should render initial meeting time view when not in the hard stop period', async () => {
         await handler.GET(req, res)
 
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
@@ -67,6 +70,13 @@ describe('Route - create licence - initial meeting date and time', () => {
           skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
           canSkip: false,
         })
+      })
+
+      it('should redirect to access-denied when in the hard stop period', async () => {
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
+        await handler.GET(req, res)
+        expect(res.render).not.toHaveBeenCalled()
+        expect(res.redirect).toHaveBeenCalledWith('/access-denied')
       })
 
       it('should let the PP skip the date input if one has not be entered previously', async () => {
@@ -130,7 +140,14 @@ describe('Route - create licence - initial meeting date and time', () => {
     const handler = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON)
 
     describe('GET', () => {
-      it('should render initial meeting time view', async () => {
+      it('should redirect to access-denied when the licence is not in the hard stop period', async () => {
+        await handler.GET(req, res)
+        expect(res.render).not.toHaveBeenCalled()
+        expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+      })
+
+      it('should render view when the licence is in the hard stop period', async () => {
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
           formDate,

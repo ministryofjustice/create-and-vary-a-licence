@@ -4,6 +4,7 @@ import DateTime from '../types/dateTime'
 import LicenceType from '../../../enumeration/licenceType'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class InitialMeetingTimeRoutes {
   constructor(
@@ -16,7 +17,18 @@ export default class InitialMeetingTimeRoutes {
     const formDate = DateTime.toDateTime(licence.appointmentTime)
     const appointmentTimeType: Record<string, string> = AppointmentTimeType
 
-    res.render('pages/create/initialMeetingTime', {
+    // Prison should only be able to access this page in hard stop, and probation should only be able to access
+    // outside of hard stop
+    if (licence.kind !== LicenceKind.VARIATION) {
+      if (!licence.isInHardStopPeriod && this.userType === UserType.PRISON) {
+        return res.redirect('/access-denied')
+      }
+      if (licence.isInHardStopPeriod && this.userType === UserType.PROBATION) {
+        return res.redirect('/access-denied')
+      }
+    }
+
+    return res.render('pages/create/initialMeetingTime', {
       formDate,
       appointmentTimeType,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,

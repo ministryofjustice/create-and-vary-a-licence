@@ -4,6 +4,7 @@ import InitialMeetingContactRoutes from './initialMeetingContact'
 import LicenceService from '../../../services/licenceService'
 import Telephone from '../types/telephone'
 import UserType from '../../../enumeration/userType'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -34,7 +35,9 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         },
         licence: {
           conditionalReleaseDate: '14/05/2022',
+          kind: LicenceKind.CRD,
           isEligibleForEarlyRelease: true,
+          isInHardStopPeriod: false,
         },
       },
     } as unknown as Response
@@ -47,11 +50,18 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
     const handler = new InitialMeetingContactRoutes(licenceService, UserType.PROBATION)
 
     describe('GET', () => {
-      it('should render view', async () => {
+      it('should render view when not in the hard stop period', async () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingContact', {
           releaseIsOnBankHolidayOrWeekend: true,
         })
+      })
+
+      it('should redirect to access-denied when in the hard stop period', async () => {
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
+        await handler.GET(req, res)
+        expect(res.render).not.toHaveBeenCalled()
+        expect(res.redirect).toHaveBeenCalledWith('/access-denied')
       })
     })
 
@@ -78,7 +88,14 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
     const handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON)
 
     describe('GET', () => {
-      it('should render view', async () => {
+      it('should redirect to access-denied when the licence is not in the hard stop period', async () => {
+        await handler.GET(req, res)
+        expect(res.render).not.toHaveBeenCalled()
+        expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+      })
+
+      it('should render view when the licence is in the hard stop period', async () => {
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingContact', {
           releaseIsOnBankHolidayOrWeekend: true,
