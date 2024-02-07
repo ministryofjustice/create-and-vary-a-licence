@@ -68,4 +68,8 @@ export default class AppointmentTimePage extends Page {
     cy.get(this.skipButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsQuestionPage)
   }
+
+  getRadioByValue = (type: string) => {
+    return cy.get(`input[value="${type}"]`)
+  }
 }
