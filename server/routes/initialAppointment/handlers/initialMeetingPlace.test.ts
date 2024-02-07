@@ -62,13 +62,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
           releaseIsOnBankHolidayOrWeekend: true,
         })
       })
-
-      it('should redirect to access-denied when in the hard stop period', async () => {
-        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
-        await handler.GET(req, res)
-        expect(res.render).not.toHaveBeenCalled()
-        expect(res.redirect).toHaveBeenCalledWith('/access-denied')
-      })
     })
 
     describe('POST', () => {
@@ -90,14 +83,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
 
     describe('GET', () => {
-      it('should redirect to access-denied when the licence is not in the hard stop period', async () => {
-        await handler.GET(req, res)
-        expect(res.render).not.toHaveBeenCalled()
-        expect(res.redirect).toHaveBeenCalledWith('/access-denied')
-      })
-
       it('should render view when the licence is in the hard stop period', async () => {
-        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,

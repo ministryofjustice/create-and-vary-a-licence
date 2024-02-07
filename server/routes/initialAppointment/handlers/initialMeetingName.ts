@@ -12,17 +12,6 @@ export default class InitialMeetingNameRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
 
-    // Prison should only be able to access this page in hard stop, and probation should only be able to access
-    // outside of hard stop
-    if (licence.kind !== LicenceKind.VARIATION) {
-      if (!licence.isInHardStopPeriod && this.userType === UserType.PRISON) {
-        return res.redirect('/access-denied')
-      }
-      if (licence.isInHardStopPeriod && this.userType === UserType.PROBATION) {
-        return res.redirect('/access-denied')
-      }
-    }
-
     return res.render('pages/create/initialMeetingPerson', {
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
     })
