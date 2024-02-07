@@ -16,7 +16,7 @@ export default class InitialMeetingTimeRoutes {
     const formDate = DateTime.toDateTime(licence.appointmentTime)
     const appointmentTimeType: Record<string, string> = AppointmentTimeType
 
-    res.render('pages/create/initialMeetingTime', {
+    return res.render('pages/create/initialMeetingTime', {
       formDate,
       appointmentTimeType,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
