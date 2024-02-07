@@ -377,4 +377,24 @@ context('Create a licence', () => {
       checkAnswersPage.clickSubmitLicenceWithErrors().getErrorSummary().should('exist')
     })
   })
+
+  it('should select specific date time option default on initial appointment details', () => {
+    const indexPage = Page.verifyOnPage(IndexPage)
+    let caseloadPage = indexPage.clickCreateALicence()
+    const comDetailsPage = caseloadPage.clickComName()
+    caseloadPage = comDetailsPage.clickReturnToCaseload()
+    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+
+    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentContactPage = appointmentPlacePage
+      .enterAddressLine1('123 Fake Street')
+      .enterTown('Fakestown')
+      .enterCounty('Durham')
+      .enterPostcode('DH11AF')
+      .clickContinue()
+
+    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    appointmentTimePage.getRadioByValue('SPECIFIC_DATE_TIME').should('be.checked')
+  })
 })

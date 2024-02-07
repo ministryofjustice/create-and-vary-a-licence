@@ -12,11 +12,11 @@
             {% endfor %}
         </p>
         {% if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' %}
-            <p>On <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}</span> at <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime }}</span></p>
+            <p data-qa="appointment-time">On <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}</span> at <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime }}</span></p>
         {% elif licence.appointmentTimeType === 'NEXT_WORKING_DAY_2PM' %}
-            <p><span class="bold">By 2pm on the next working day after your release</span></p>
+            <p data-qa="appointment-time"><span class="bold">By 2pm on the next working day after your release</span></p>
         {% elif licence.appointmentTimeType === 'IMMEDIATE_UPON_RELEASE' %}
-            <p><span class="bold">Immediately after release</span></p>
+            <p data-qa="appointment-time"><span class="bold">Immediately after release</span></p>
         {% else %}
             <p></p>
         {% endif %}
