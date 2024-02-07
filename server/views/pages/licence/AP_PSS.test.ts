@@ -1,6 +1,7 @@
 import fs from 'fs'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import type { Licence } from '../../../@types/licenceApiClientTypes'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/licence/AP_PSS.njk').toString())
 
@@ -141,5 +142,34 @@ describe('Print an AP_PSS licence', () => {
       },
     })
     expect($('#licence-period').text().trim()).toBe('Licence Period')
+  })
+  describe('Appointment date rendering', () => {
+    it('Should render specific date time', () => {
+      const $ = render({
+        licence: {
+          appointmentTimeType: 'SPECIFIC_DATE_TIME',
+          appointmentTime: '28/01/2023 10:30',
+        } as Licence,
+      })
+      expect($('[data-qa="appointment-time"]').text().trim()).toBe('On Saturday 28th January 2023 at 10:30 am')
+    })
+    it('Should render next working day', () => {
+      const $ = render({
+        licence: {
+          appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
+          appointmentTime: undefined,
+        } as Licence,
+      })
+      expect($('[data-qa="appointment-time"]').text().trim()).toBe('By 2pm on the next working day after your release')
+    })
+    it('Should render immediate upon release', () => {
+      const $ = render({
+        licence: {
+          appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
+          appointmentTime: undefined,
+        } as Licence,
+      })
+      expect($('[data-qa="appointment-time"]').text().trim()).toBe('Immediately after release')
+    })
   })
 })
