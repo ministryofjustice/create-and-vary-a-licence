@@ -5,7 +5,6 @@ import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -45,9 +44,7 @@ describe('Route - create licence - initial meeting date and time', () => {
           appointmentTime: '21/10/2022 14:15',
           appointmentTimeType: 'SPECIFIC_DATE_TIME',
           conditionalReleaseDate: '14/05/2022',
-          kind: LicenceKind.CRD,
           isEligibleForEarlyRelease: true,
-          isInHardStopPeriod: false,
         },
       },
     } as unknown as Response
@@ -60,7 +57,7 @@ describe('Route - create licence - initial meeting date and time', () => {
     const handler = new InitialMeetingTimeRoutes(licenceService, UserType.PROBATION)
 
     describe('GET', () => {
-      it('should render initial meeting time view when not in the hard stop period', async () => {
+      it('should render initial meeting time view', async () => {
         await handler.GET(req, res)
 
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
@@ -133,7 +130,7 @@ describe('Route - create licence - initial meeting date and time', () => {
     const handler = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON)
 
     describe('GET', () => {
-      it('should render view', async () => {
+      it('should render initial meeting time view', async () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
           formDate,

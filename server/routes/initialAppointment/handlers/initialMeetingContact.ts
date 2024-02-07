@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class InitialMeetingContactRoutes {
   constructor(

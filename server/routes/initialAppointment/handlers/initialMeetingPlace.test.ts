@@ -4,7 +4,6 @@ import InitialMeetingPlaceRoutes from './initialMeetingPlace'
 import LicenceService from '../../../services/licenceService'
 import Address from '../types/address'
 import UserType from '../../../enumeration/userType'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -40,9 +39,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         licence: {
           appointmentAddress: 'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
           conditionalReleaseDate: '14/05/2022',
-          kind: LicenceKind.CRD,
           isEligibleForEarlyRelease: true,
-          isInHardStopPeriod: false,
         },
       },
     } as unknown as Response
@@ -55,7 +52,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PROBATION)
 
     describe('GET', () => {
-      it('should render view when not in the hard stop period', async () => {
+      it('should render view', async () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
@@ -83,7 +80,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
 
     describe('GET', () => {
-      it('should render view when the licence is in the hard stop period', async () => {
+      it('should render view', async () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,

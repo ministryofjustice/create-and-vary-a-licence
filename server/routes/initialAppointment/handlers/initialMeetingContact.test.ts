@@ -4,7 +4,6 @@ import InitialMeetingContactRoutes from './initialMeetingContact'
 import LicenceService from '../../../services/licenceService'
 import Telephone from '../types/telephone'
 import UserType from '../../../enumeration/userType'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -35,9 +34,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         },
         licence: {
           conditionalReleaseDate: '14/05/2022',
-          kind: LicenceKind.CRD,
           isEligibleForEarlyRelease: true,
-          isInHardStopPeriod: false,
         },
       },
     } as unknown as Response

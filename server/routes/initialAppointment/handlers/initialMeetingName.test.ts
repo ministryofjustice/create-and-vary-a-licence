@@ -3,7 +3,6 @@ import { Request, Response } from 'express'
 import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -29,9 +28,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         },
         licence: {
           conditionalReleaseDate: '14/05/2022',
-          kind: LicenceKind.CRD,
           isEligibleForEarlyRelease: true,
-          isInHardStopPeriod: false,
         },
       },
     } as unknown as Response
@@ -43,7 +40,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     const handler = new InitialMeetingNameRoutes(licenceService, UserType.PROBATION)
 
     describe('GET', () => {
-      it('should render view when not in the hard stop period', async () => {
+      it('should render view', async () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPerson', {
           releaseIsOnBankHolidayOrWeekend: true,

@@ -3,7 +3,6 @@ import LicenceKind from '../enumeration/LicenceKind'
 import LicenceService from '../services/licenceService'
 import hardStopCheckMiddleware from './hardStopCheckMiddleware'
 import UserType from '../enumeration/userType'
-import { user } from '../routes/__testutils/appSetup'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 

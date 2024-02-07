@@ -4,7 +4,6 @@ import DateTime from '../types/dateTime'
 import LicenceType from '../../../enumeration/licenceType'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class InitialMeetingTimeRoutes {
   constructor(
