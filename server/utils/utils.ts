@@ -1,10 +1,10 @@
 import moment from 'moment'
-import { format, isBefore, parse } from 'date-fns'
+import { format, isBefore, parse, isEqual } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
-import type Address from '../routes/creatingLicences/types/address'
+import type Address from '../routes/initialAppointment/types/address'
 import type { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
 import type { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
@@ -195,6 +195,12 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
   return dateString
 }
 
+const isReleaseDateBeforeCutOffDate = (cutOffDate: string, releaseDate: string): boolean => {
+  const rDate = parse(releaseDate, 'dd/MM/yyyy', new Date())
+  const cDate = parse(cutOffDate, 'dd/MM/yyyy', new Date())
+  return isBefore(rDate, cDate) || isEqual(rDate, cDate)
+}
+
 const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonApiPrisoner): boolean => {
   const releaseDate =
     prisoner.legalStatus !== 'IMMIGRATION_DETAINEE'
@@ -247,4 +253,5 @@ export {
   selectReleaseDate,
   isPassedArdOrCrd,
   groupingBy,
+  isReleaseDateBeforeCutOffDate,
 }

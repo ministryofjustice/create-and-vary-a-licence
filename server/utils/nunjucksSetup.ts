@@ -19,7 +19,7 @@ import {
 import { AdditionalCondition, AdditionalConditionData, Licence } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
-import Address from '../routes/creatingLicences/types/address'
+import Address from '../routes/initialAppointment/types/address'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { getEditConditionHref } from './conditionRoutes'
 import AppointmentTimeType from '../enumeration/appointmentTimeType'
@@ -117,6 +117,14 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('getAppointmentTimeTypeDescription', (type: string) => {
     const appointmentTimeType: Record<string, string> = AppointmentTimeType
     return appointmentTimeType[type]
+  })
+
+  njkEnv.addFilter('hardStop', (licences: Record<string, unknown>[]) => {
+    return licences.filter(c => c.hardStop)
+  })
+
+  njkEnv.addFilter('beforeHardStop', (licences: Record<string, unknown>[]) => {
+    return licences.filter(c => !c.hardStop)
   })
 
   njkEnv.addFilter('fillFormResponse', (defaultValue: unknown, overrideValue: unknown) => {
@@ -335,6 +343,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('useNewSearch', config.useNewSearch)
   njkEnv.addGlobal('showWhatsNewBanner', config.showWhatsNewBanner)
   njkEnv.addGlobal('fridayReleasePolicy', config.fridayReleasePolicy)
+  njkEnv.addGlobal('hardStopEnabled', config.hardStopEnabled)
 
   return njkEnv
 }

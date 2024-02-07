@@ -20,12 +20,13 @@ import {
   selectReleaseDate,
   isPassedArdOrCrd,
   groupingBy,
+  isReleaseDateBeforeCutOffDate,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
-import Address from '../routes/creatingLicences/types/address'
+import Address from '../routes/initialAppointment/types/address'
 import { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
@@ -508,5 +509,19 @@ describe('Get prisoner release date from Nomis', () => {
         ],
       ])
     })
+  })
+})
+
+describe('Check if release date before cutoff date', () => {
+  it('should return true if release date is before cutoff date', () => {
+    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '03/12/2023')).toBeTruthy()
+  })
+
+  it('should return false if release date is after cutoff date', () => {
+    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '05/12/2023')).toBeFalsy()
+  })
+
+  it('should return true if release date is equal to cutoff date', () => {
+    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '04/12/2023')).toBeTruthy()
   })
 })

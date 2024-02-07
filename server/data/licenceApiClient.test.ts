@@ -18,7 +18,7 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
-  UpdatePrisonUserRequest,
+  UpdatePrisonCaseAdminRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
@@ -336,7 +336,7 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updatePrisonUserDetails({
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
-    } as UpdatePrisonUserRequest)
+    } as UpdatePrisonCaseAdminRequest)
 
     expect(put).toHaveBeenCalledWith({
       path: '/prison-case-administrator/update',
@@ -642,6 +642,18 @@ describe('Licence API client tests', () => {
     it('should call the api', async () => {
       await licenceApiClient.notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd()
       expect(post).toHaveBeenCalledWith({ path: '/notify-probation-of-unapproved-licences' })
+    })
+  })
+
+  describe('Hardstop CutoffDate: ', () => {
+    it('Should get cutoff date for hardstop', async () => {
+      await licenceApiClient.getCutOffDateForLicenceTimeOut({ username: 'joebloggs' } as User)
+      expect(get).toHaveBeenCalledWith(
+        {
+          path: '/current-hard-stop-cutoff-date',
+        },
+        { username: 'joebloggs' }
+      )
     })
   })
 })

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import { getUnixTime } from 'date-fns'
+import { getUnixTime, parse, format } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
-import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
+import { convertToTitleCase, selectReleaseDate, isReleaseDateBeforeCutOffDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 
@@ -24,7 +24,7 @@ export default class ViewAndPrintCaseRoutes {
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
     const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
-
+    const { cutoffDate } = await this.caseloadService.getCutOffDateForLicenceTimeOut(user)
     const casesToView = view === 'prison' ? caselist.getPrisonView() : caselist.getProbationView()
 
     const caseloadViewModel = casesToView
@@ -36,15 +36,23 @@ export default class ViewAndPrintCaseRoutes {
             l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS
           )
         }
+        const releaseDate = selectReleaseDate(c.nomisRecord)
         return {
           licenceId: latestLicence.id,
           licenceVersionOf: latestLicence.versionOf,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: selectReleaseDate(c.nomisRecord),
+          releaseDate,
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: latestLicence.status,
+          hardStop:
+            releaseDate === 'not found'
+              ? false
+              : isReleaseDateBeforeCutOffDate(
+                  cutoffDate,
+                  format(parse(releaseDate, 'dd MMM yyyy', new Date()), 'dd/MM/yyyy')
+                ),
           isClickable:
             latestLicence.status !== LicenceStatus.NOT_STARTED &&
             latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&

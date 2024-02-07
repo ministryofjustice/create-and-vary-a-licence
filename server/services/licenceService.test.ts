@@ -5,8 +5,8 @@ import LicenceApiClient from '../data/licenceApiClient'
 import LicenceService from './licenceService'
 import * as utils from '../utils/utils'
 import * as licenceComparator from '../utils/licenceComparator'
-import DateTime from '../routes/creatingLicences/types/dateTime'
-import Address from '../routes/creatingLicences/types/address'
+import DateTime from '../routes/initialAppointment/types/dateTime'
+import Address from '../routes/initialAppointment/types/address'
 import LicenceType from '../enumeration/licenceType'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -19,7 +19,7 @@ import {
   LicenceSummary,
   StandardCondition,
   UpdateComRequest,
-  UpdatePrisonUserRequest,
+  UpdatePrisonCaseAdminRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateSentenceDatesRequest,
@@ -428,7 +428,7 @@ describe('Licence Service', () => {
       staffEmail: 'joebloggs@probation.gov.uk',
       firstName: 'Joseph',
       lastName: 'Bloggs',
-    } as UpdatePrisonUserRequest)
+    } as UpdatePrisonCaseAdminRequest)
 
     expect(licenceApiClient.updatePrisonUserDetails).toBeCalledWith({
       staffUsername: 'joebloggs',

@@ -1,4 +1,4 @@
-import Address from '../../creatingLicences/types/address'
+import Address from '../../initialAppointment/types/address'
 import SimpleDate from '../../creatingLicences/types/date'
 import SimpleTime from '../../creatingLicences/types/time'
 

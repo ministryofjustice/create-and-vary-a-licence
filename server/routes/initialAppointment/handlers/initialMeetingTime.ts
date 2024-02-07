@@ -2,10 +2,14 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
 import LicenceType from '../../../enumeration/licenceType'
+import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
 
 export default class InitialMeetingTimeRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly userType: UserType
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
@@ -17,6 +21,7 @@ export default class InitialMeetingTimeRoutes {
       appointmentTimeType,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
       skipUrl: this.getNextPage(licence.id.toString(), licence.typeCode, req),
+      canSkip: this.userType === UserType.PROBATION && !licence.appointmentTimeType,
     })
   }
 
@@ -30,6 +35,9 @@ export default class InitialMeetingTimeRoutes {
   }
 
   getNextPage = (licenceId: string, typeCode: string, request: Request): string => {
+    if (this.userType === UserType.PRISON) {
+      return `/licence/view/id/${licenceId}/show`
+    }
     if (request.query?.fromReview) {
       return `/licence/create/id/${licenceId}/check-your-answers`
     }

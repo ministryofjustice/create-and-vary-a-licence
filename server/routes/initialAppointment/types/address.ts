@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer'
 import { IsNotEmpty, IsOptional } from 'class-validator'
-import Stringable from './abstract/stringable'
+import Stringable from '../../creatingLicences/types/abstract/stringable'
 
 class Address extends Stringable {
   @Expose()

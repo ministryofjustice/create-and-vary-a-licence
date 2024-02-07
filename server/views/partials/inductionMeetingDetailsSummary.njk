@@ -1,7 +1,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText) %}
+{% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
+    {% set routePath = 'view' if isPrisonUser else 'create'%}
+    {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
@@ -23,9 +25,10 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/create/id/" + licence.id + "/initial-meeting-name?fromReview=true",
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-name" + routeAppend,
                             text: "Change",
-                            visuallyHiddenText: "name"
+                            visuallyHiddenText: "name",
+                            attributes: { "data-qa": "person-change-link" }
                         }
                     ]
                 } if isEditable
@@ -37,9 +40,10 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/create/id/" + licence.id + "/initial-meeting-place?fromReview=true",
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-place" + routeAppend,
                             text: "Change",
-                            visuallyHiddenText: "address"
+                            visuallyHiddenText: "address",
+                            attributes: { "data-qa": "address-change-link" }
                         }
                     ]
                 } if isEditable
@@ -51,9 +55,10 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/create/id/" + licence.id + "/initial-meeting-contact?fromReview=true",
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-contact" + routeAppend,
                             text: "Change",
-                            visuallyHiddenText: "telephone"
+                            visuallyHiddenText: "telephone",
+                            attributes: { "data-qa": "telephone-change-link" }
                         }
                     ]
                 } if isEditable
@@ -65,9 +70,10 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/create/id/" + licence.id + "/initial-meeting-time?fromReview=true",
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
                             text: "Change",
-                            visuallyHiddenText: "date"
+                            visuallyHiddenText: "date",
+                            attributes: { "data-qa": "date-change-link" }
                         }
                     ]
                 } if isEditable
@@ -79,9 +85,10 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/create/id/" + licence.id + "/initial-meeting-time?fromReview=true",
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
                             text: "Change",
-                            visuallyHiddenText: "date"
+                            visuallyHiddenText: "date",
+                            attributes: { "data-qa": "date-change-link" }
                         }
                     ]
                 } if isEditable
@@ -93,9 +100,10 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/create/id/" + licence.id + "/initial-meeting-time?fromReview=true",
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
                             text: "Change",
-                            visuallyHiddenText: "time"
+                            visuallyHiddenText: "time",
+                            attributes: { "data-qa": "time-change-link" }
                         }
                     ]
                 } if isEditable

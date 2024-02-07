@@ -22,7 +22,7 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
-  UpdatePrisonUserRequest,
+  UpdatePrisonCaseAdminRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
@@ -34,13 +34,14 @@ import {
   AddAdditionalConditionRequest,
   LicenceConditionChange,
   UpdateOffenderDetailsRequest,
+  HardStopCutoffDate,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
+import PersonName from '../routes/initialAppointment/types/personName'
+import DateTime from '../routes/initialAppointment/types/dateTime'
+import Telephone from '../routes/initialAppointment/types/telephone'
+import Address from '../routes/initialAppointment/types/address'
 import { addressObjectToString, filterCentralCaseload, objectIsEmpty } from '../utils/utils'
-import PersonName from '../routes/creatingLicences/types/personName'
-import DateTime from '../routes/creatingLicences/types/dateTime'
-import Telephone from '../routes/creatingLicences/types/telephone'
-import Address from '../routes/creatingLicences/types/address'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
@@ -310,6 +311,10 @@ export default class LicenceService {
     )
   }
 
+  async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
+    return this.licenceApiClient.getCutOffDateForLicenceTimeOut(user)
+  }
+
   async getLicencesForVariationApproval(user: User): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.VARIATION_SUBMITTED.valueOf()]
     return this.licenceApiClient.matchLicences(
@@ -340,7 +345,7 @@ export default class LicenceService {
     return this.licenceApiClient.updateComDetails(comDetails)
   }
 
-  async updatePrisonUserDetails(prisonUserDetails: UpdatePrisonUserRequest): Promise<void> {
+  async updatePrisonUserDetails(prisonUserDetails: UpdatePrisonCaseAdminRequest): Promise<void> {
     return this.licenceApiClient.updatePrisonUserDetails(prisonUserDetails)
   }
 
