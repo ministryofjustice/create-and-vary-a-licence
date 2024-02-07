@@ -98,14 +98,14 @@
                     {{ govukRadios({
                     id: "appointment-time-type",
                     name: "appointmentTimeType",
-                    value: formResponses.appointmentTimeType or licence.appointmentTimeType,
+                    value: (formResponses.appointmentTimeType or licence.appointmentTimeType) or SPECIFIC_DATE_TIME,
                     items: appointmentTimeTypeOptions
                 }) }}
 
                 {% endcall %}
                 <div class="govuk-button-group">
                     {{ govukButton({
-                        text: continueOrReturnToCheckAnswers,
+                        text: continueOrSave,
                         type: "submit",
                         attributes: { 'data-qa': 'continue' }
                     }) }}

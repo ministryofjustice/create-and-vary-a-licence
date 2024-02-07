@@ -13,7 +13,7 @@ export default class InitialMeetingPlaceRoutes {
     const { licence } = res.locals
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
-    res.render('pages/create/initialMeetingPlace', {
+    return res.render('pages/create/initialMeetingPlace', {
       formAddress,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
     })

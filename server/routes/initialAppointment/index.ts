@@ -14,6 +14,7 @@ import Address from './types/address'
 import Telephone from './types/telephone'
 import DateTime from './types/dateTime'
 import UserType from '../../enumeration/userType'
+import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
@@ -26,11 +27,12 @@ export default function Index({ licenceService, conditionService }: Services): R
    * This means that for each page, the licence will already exist in context, and so the handlers will not need
    * to explicitly inject the licence data into their individual view contexts.
    */
-  const get = (path: string, handler: RequestHandler) =>
+  const get = (path: string, handler: RequestHandler, userType: UserType) =>
     router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
+      hardStopCheckMiddleware(userType),
       asyncMiddleware(handler)
     )
 
@@ -45,49 +47,49 @@ export default function Index({ licenceService, conditionService }: Services): R
 
   {
     const controller = new InitialMeetingNameRoutes(licenceService, UserType.PROBATION)
-    get('/create/id/:licenceId/initial-meeting-name', controller.GET)
+    get('/create/id/:licenceId/initial-meeting-name', controller.GET, UserType.PROBATION)
     post('/create/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
 
   {
     const controller = new InitialMeetingNameRoutes(licenceService, UserType.PRISON)
-    get('/view/id/:licenceId/initial-meeting-name', controller.GET)
+    get('/view/id/:licenceId/initial-meeting-name', controller.GET, UserType.PRISON)
     post('/view/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
 
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PROBATION)
-    get('/create/id/:licenceId/initial-meeting-place', controller.GET)
+    get('/create/id/:licenceId/initial-meeting-place', controller.GET, UserType.PROBATION)
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, Address)
   }
 
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
-    get('/view/id/:licenceId/initial-meeting-place', controller.GET)
+    get('/view/id/:licenceId/initial-meeting-place', controller.GET, UserType.PRISON)
     post('/view/id/:licenceId/initial-meeting-place', controller.POST, Address)
   }
 
   {
     const controller = new InitialMeetingContactRoutes(licenceService, UserType.PROBATION)
-    get('/create/id/:licenceId/initial-meeting-contact', controller.GET)
+    get('/create/id/:licenceId/initial-meeting-contact', controller.GET, UserType.PROBATION)
     post('/create/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
   }
 
   {
     const controller = new InitialMeetingContactRoutes(licenceService, UserType.PRISON)
-    get('/view/id/:licenceId/initial-meeting-contact', controller.GET)
+    get('/view/id/:licenceId/initial-meeting-contact', controller.GET, UserType.PRISON)
     post('/view/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
   }
 
   {
     const controller = new InitialMeetingTimeRoutes(licenceService, UserType.PROBATION)
-    get('/create/id/:licenceId/initial-meeting-time', controller.GET)
+    get('/create/id/:licenceId/initial-meeting-time', controller.GET, UserType.PROBATION)
     post('/create/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }
 
   {
     const controller = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON)
-    get('/view/id/:licenceId/initial-meeting-time', controller.GET)
+    get('/view/id/:licenceId/initial-meeting-time', controller.GET, UserType.PRISON)
     post('/view/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }
   return router
