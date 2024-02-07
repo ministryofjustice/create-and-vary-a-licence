@@ -5,17 +5,9 @@ import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
 import CaseloadRoutes from './handlers/caseload'
-import InitialMeetingNameRoutes from './handlers/initialMeetingName'
-import InitialMeetingPlaceRoutes from './handlers/initialMeetingPlace'
-import InitialMeetingContactRoutes from './handlers/initialMeetingContact'
-import InitialMeetingTimeRoutes from './handlers/initialMeetingTime'
 import CheckAnswersRoutes from './handlers/checkAnswers'
 import ConfirmationRoutes from './handlers/confirmation'
 import { Services } from '../../services'
-import PersonName from './types/personName'
-import Address from './types/address'
-import Telephone from './types/telephone'
-import DateTime from './types/dateTime'
 
 import EditQuestionRoutes from './handlers/editQuestion'
 import ComDetailsRoutes from './handlers/comDetails'
@@ -87,29 +79,6 @@ export default function Index({
     post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
   }
 
-  {
-    const controller = new InitialMeetingNameRoutes(licenceService)
-    get('/id/:licenceId/initial-meeting-name', controller.GET)
-    post('/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
-  }
-
-  {
-    const controllr = new InitialMeetingPlaceRoutes(licenceService)
-    get('/id/:licenceId/initial-meeting-place', controllr.GET)
-    post('/id/:licenceId/initial-meeting-place', controllr.POST, Address)
-  }
-
-  {
-    const controller = new InitialMeetingContactRoutes(licenceService)
-    get('/id/:licenceId/initial-meeting-contact', controller.GET)
-    post('/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
-  }
-
-  {
-    const controller = new InitialMeetingTimeRoutes(licenceService)
-    get('/id/:licenceId/initial-meeting-time', controller.GET)
-    post('/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
-  }
   {
     const controller = new AdditionalLicenceConditionsQuestionRoutes()
     get('/id/:licenceId/additional-licence-conditions-question', controller.GET)

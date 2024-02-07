@@ -98,7 +98,7 @@
                     {{ govukRadios({
                     id: "appointment-time-type",
                     name: "appointmentTimeType",
-                    value: formResponses.appointmentTimeType or licence.appointmentTimeType,
+                    value: (formResponses.appointmentTimeType or licence.appointmentTimeType) or SPECIFIC_DATE_TIME,
                     items: appointmentTimeTypeOptions
                 }) }}
 
@@ -109,12 +109,14 @@
                         type: "submit",
                         attributes: { 'data-qa': 'continue' }
                     }) }}
-                    {{ govukButton({
-                        text: 'Skip this for now',
-                        href: skipUrl,
-                        classes: "govuk-button--secondary",
-                        attributes: { 'data-qa': 'skip' }
-                    }) }}
+                    {% if (canSkip)%}
+                        {{ govukButton({
+                            text: 'Skip this for now',
+                            href: skipUrl,
+                            classes: "govuk-button--secondary",
+                            attributes: { 'data-qa': 'skip' }
+                        }) }}
+                    {% endif %}
                 </div>
             </div>
         </div>

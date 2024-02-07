@@ -12,6 +12,11 @@ export default class ViewCasesPage extends Page {
     super('view-cases-page')
   }
 
+  clickFutureReleasesTab = (): ViewCasesPage => {
+    cy.get('#tab_before-hardstop').click()
+    return this
+  }
+
   clickALicence = (): ViewALicencePage => {
     cy.get(this.viewLicenceLinkId).click()
     return Page.verifyOnPage(ViewALicencePage)

@@ -1,6 +1,7 @@
 import { Moment } from 'moment'
 import Page from './page'
 import AdditionalConditionsQuestionPage from './additionalConditionsQuestion'
+import ViewALicencePage from './viewALicence'
 
 export default class AppointmentTimePage extends Page {
   private inductionDateId = '#date-calendarDate'
@@ -25,8 +26,20 @@ export default class AppointmentTimePage extends Page {
     return this
   }
 
+  selectTypeInHardStop = (value: string): AppointmentTimePage => {
+    cy.task('stubGetCompletedLicence', {
+      statusCode: 'IN_PROGRESS',
+      typeCode: 'AP_PSS',
+      appointmentTimeType: value,
+      isInHardStopPeriod: true,
+    })
+    cy.get(`input[value="${value}"]`).click()
+    return this
+  }
+
   enterDate = (moment: Moment): AppointmentTimePage => {
     const date = moment.format('DD/MM/YYYY')
+    cy.get(this.inductionDateId).clear()
     cy.get(this.inductionDateId).type(date)
     return this
   }
@@ -45,8 +58,18 @@ export default class AppointmentTimePage extends Page {
     return Page.verifyOnPage(AdditionalConditionsQuestionPage)
   }
 
+  clickContinueToReturn = (): ViewALicencePage => {
+    cy.task('stubPutAppointmentTime')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(ViewALicencePage)
+  }
+
   clickSkip = (): AdditionalConditionsQuestionPage => {
     cy.get(this.skipButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsQuestionPage)
+  }
+
+  getRadioByValue = (type: string) => {
+    return cy.get(`input[value="${type}"]`)
   }
 }
