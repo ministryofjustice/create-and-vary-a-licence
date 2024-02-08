@@ -12,7 +12,7 @@ export default class InitialMeetingNameRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
 
-    res.render('pages/create/initialMeetingPerson', {
+    return res.render('pages/create/initialMeetingPerson', {
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
     })
   }
