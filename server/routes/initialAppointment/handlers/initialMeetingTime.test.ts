@@ -5,8 +5,6 @@ import LicenceService from '../../../services/licenceService'
 import DateTime from '../types/dateTime'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
-import LicenceKind from '../../../enumeration/LicenceKind'
-import config from '../../../config'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
