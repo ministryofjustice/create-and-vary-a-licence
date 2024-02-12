@@ -341,6 +341,13 @@ export interface paths {
   '/queue-admin/get-dlq-messages/{dlqName}': {
     get: operations['getDlqMessages']
   }
+  '/public/subject-access-request': {
+    /**
+     * Get a list of licences and audits summaries matching the nomis Prison Reference Number(prn).
+     * @description Returns a list of licences and audit details for the Prison Reference Number(prn). Requires ROLE_SAR_DATA_ACCESS or ROLE_CVL_ADMIN.
+     */
+    get: operations['getSarRecordsById']
+  }
   '/public/policy/{version}': {
     /**
      * Get a policy by its version number
@@ -2571,6 +2578,16 @@ export interface components {
       version?: string
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      /**
+       * @description The probation area description
+       * @example Wales
+       */
+      probationAreaDescription?: string
+      /**
+       * @description The team description
+       * @example Cardiff South
+       */
+      probationTeamDescription?: string
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
       /**
@@ -2584,33 +2601,38 @@ export interface components {
        */
       topupSupervisionExpiryDate?: string
       /**
-       * @description The probation area description
-       * @example Wales
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
        */
-      probationAreaDescription?: string
+      comUsername?: string
       /**
-       * @description The team description
-       * @example Cardiff South
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
        */
-      probationTeamDescription?: string
+      comStaffId?: number
       /**
-       * @description The family name of the person on licence
-       * @example Smith
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
        */
-      surname?: string
+      responsibleComFullName?: string
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
        */
-      crn?: string
+      updatedByFullName?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * @description The username which created this licence
+       * @example X12333
        */
-      nomsId?: string
-      kind: string
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
+      createdByUsername?: string
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Gordon Sumner
+       */
+      createdByFullName?: string
       /** @description The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition_SubjectAccessRequest'][]
       /**
@@ -2735,12 +2757,6 @@ export interface components {
        */
       dateOfBirth?: string
       /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
@@ -2777,6 +2793,8 @@ export interface components {
        * @example 989898
        */
       bookingId?: number
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
@@ -2829,38 +2847,21 @@ export interface components {
         | 'NOT_STARTED'
         | 'TIMED_OUT'
       /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
+       * @description The family name of the person on licence
+       * @example Smith
        */
-      comStaffId?: number
+      surname?: string
       /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
        */
-      responsibleComFullName?: string
+      crn?: string
       /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
        */
-      updatedByFullName?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Gordon Sumner
-       */
-      createdByFullName?: string
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
+      nomsId?: string
+      kind: string
       /**
        * @description The police national computer number (PNC) for the person on this licence
        * @example 2015/12444
@@ -3247,12 +3248,14 @@ export interface components {
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
       isEligibleForEarlyRelease: boolean
     }
-    GetDlqResult: {
+    ErrorResponse_SubjectAccessRequest: {
       /** Format: int32 */
-      messagesFoundCount: number
+      status: number
       /** Format: int32 */
-      messagesReturnedCount: number
-      messages: components['schemas']['DlqMessage'][]
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
     }
     LicencePolicy: {
       version: string
@@ -3301,6 +3304,16 @@ export interface components {
       version?: string
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The probation area description
+       * @example Wales
+       */
+      probationAreaDescription?: string
+      /**
+       * @description The team description
+       * @example Cardiff South
+       */
+      probationTeamDescription?: string
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /**
@@ -3314,33 +3327,38 @@ export interface components {
        */
       topupSupervisionExpiryDate?: string
       /**
-       * @description The probation area description
-       * @example Wales
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
        */
-      probationAreaDescription?: string
+      comUsername?: string
       /**
-       * @description The team description
-       * @example Cardiff South
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
        */
-      probationTeamDescription?: string
+      comStaffId?: number
       /**
-       * @description The family name of the person on licence
-       * @example Smith
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
        */
-      surname?: string
+      responsibleComFullName?: string
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
        */
-      crn?: string
+      updatedByFullName?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * @description The username which created this licence
+       * @example X12333
        */
-      nomsId?: string
-      kind: string
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][]
+      createdByUsername?: string
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Gordon Sumner
+       */
+      createdByFullName?: string
       /** @description The list of bespoke conditions on this licence */
       bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
@@ -3465,12 +3483,6 @@ export interface components {
        */
       dateOfBirth?: string
       /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
@@ -3507,6 +3519,8 @@ export interface components {
        * @example 989898
        */
       bookingId?: number
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
@@ -3559,38 +3573,21 @@ export interface components {
         | 'NOT_STARTED'
         | 'TIMED_OUT'
       /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
+       * @description The family name of the person on licence
+       * @example Smith
        */
-      comStaffId?: number
+      surname?: string
       /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
        */
-      responsibleComFullName?: string
+      crn?: string
       /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
        */
-      updatedByFullName?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Gordon Sumner
-       */
-      createdByFullName?: string
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
+      nomsId?: string
+      kind: string
       /**
        * @description The police national computer number (PNC) for the person on this licence
        * @example 2015/12444
@@ -5712,6 +5709,56 @@ export interface operations {
       200: {
         content: {
           '*/*': components['schemas']['GetDlqResult']
+        }
+      }
+    }
+  }
+  /**
+   * Get a list of licences and audits summaries matching the nomis Prison Reference Number(prn).
+   * @description Returns a list of licences and audit details for the Prison Reference Number(prn). Requires ROLE_SAR_DATA_ACCESS or ROLE_CVL_ADMIN.
+   */
+  getSarRecordsById: {
+    parameters: {
+      query?: {
+        prn?: string
+        crn?: string
+      }
+    }
+    responses: {
+      /** @description Records found */
+      200: {
+        content: {
+          'application/json': components['schemas']['SarContent_SubjectAccessRequest']
+        }
+      }
+      /** @description Records for this prn was not found. */
+      204: {
+        content: {
+          'application/json': Record<string, never>
+        }
+      }
+      /** @description Search by crn is not supported. */
+      209: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+        }
+      }
+      /** @description Unexpected error occurred */
+      500: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
         }
       }
     }

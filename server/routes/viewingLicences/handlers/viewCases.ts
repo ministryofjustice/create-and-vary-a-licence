@@ -55,7 +55,7 @@ export default class ViewAndPrintCaseRoutes {
           licenceStatus: latestLicence.status,
           hardStop,
           isClickable:
-            latestLicence.status !== LicenceStatus.NOT_STARTED &&
+            (hardStop || latestLicence.status !== LicenceStatus.NOT_STARTED) &&
             latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
             latestLicence.status !== LicenceStatus.OOS_RECALL &&
             latestLicence.status !== LicenceStatus.OOS_BOTUS &&
