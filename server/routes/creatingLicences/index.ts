@@ -22,6 +22,8 @@ import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
 import PrisonWillCreateThisLicenceRoutes from './handlers/prisonWillCreateThisLicence'
 import LicenceCreatedByPrisonRoutes from './handlers/licenceCreatedByPrison'
 import LicenceChangesNotApprovedInTimeRoutes from './handlers/licenceChangesNotApprovedInTime'
+import HardStopConfirmCreateRoutes from './handlers/hardStop/confirmCreate'
+import AuthRole from '../../enumeration/authRole'
 
 export default function Index({
   licenceService,
@@ -41,18 +43,18 @@ export default function Index({
    * This means that for each page, the licence will already exist in context, and so the handlers will not need
    * to explicitly inject the licence data into their individual view contexts.
    */
-  const get = (path: string, handler: RequestHandler) =>
+  const get = (path: string, handler: RequestHandler, role?: AuthRole) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware([role, 'ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       asyncMiddleware(handler)
     )
 
-  const post = (path: string, handler: RequestHandler, type?: new () => object) =>
+  const post = (path: string, handler: RequestHandler, type?: new () => object, role?: AuthRole) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      roleCheckMiddleware([role, 'ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
@@ -77,6 +79,12 @@ export default function Index({
     )
     get('/nomisId/:nomisId/confirm', controller.GET)
     post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
+  }
+
+  {
+    const controller = new HardStopConfirmCreateRoutes(licenceService)
+    get('/hardstop/nomisId/:nomisId/confirm', controller.GET, AuthRole.CASE_ADMIN)
+    post('/hardstop/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion, AuthRole.CASE_ADMIN)
   }
 
   {

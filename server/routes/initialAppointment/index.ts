@@ -5,6 +5,7 @@ import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
 import InitialMeetingNameRoutes from './handlers/initialMeetingName'
+import HardStopInitialMeetingNameRoutes from './handlers/hardStop/initialMeetingName'
 import InitialMeetingPlaceRoutes from './handlers/initialMeetingPlace'
 import InitialMeetingContactRoutes from './handlers/initialMeetingContact'
 import InitialMeetingTimeRoutes from './handlers/initialMeetingTime'
@@ -47,6 +48,12 @@ export default function Index({ licenceService, conditionService }: Services): R
     const controller = new InitialMeetingNameRoutes(licenceService, UserType.PROBATION)
     get('/create/id/:licenceId/initial-meeting-name', controller.GET)
     post('/create/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
+  }
+
+  {
+    const controller = new HardStopInitialMeetingNameRoutes(licenceService)
+    get('/hardstop/create/id/:licenceId/initial-meeting-name', controller.GET)
+    post('/hardstop/create/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
 
   {

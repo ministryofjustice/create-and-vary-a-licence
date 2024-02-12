@@ -79,7 +79,7 @@ export default class CaseloadService {
 
     // Get cases due for release soon which do not have a submitted licence
     const today = startOfDay(new Date())
-    const todayPlusFourWeeks = endOfDay(add(new Date(), { weeks: 4 }))
+    const todayPlusFourWeeks = endOfDay(add(new Date(), { weeks: 40 }))
     const casesPendingLicence = this.prisonerService
       .searchPrisonersByReleaseDate(today, todayPlusFourWeeks, prisonCaseload, user)
       .then(caseload => this.wrap(caseload))
@@ -92,11 +92,12 @@ export default class CaseloadService {
           c =>
             [
               LicenceStatus.NOT_STARTED,
+              LicenceStatus.TIMED_OUT,
               LicenceStatus.NOT_IN_PILOT,
               LicenceStatus.OOS_RECALL,
               LicenceStatus.OOS_BOTUS,
             ].some(status => c.licences.find(l => l.status === status)),
-          'Has no licence in NOT_STARTED, NOT_IN_PILOT, OOS_RECALL, OOS_BOTUS'
+          'Has no licence in NOT_STARTED, TIMED_OUT, NOT_IN_PILOT, OOS_RECALL, OOS_BOTUS'
         )
       })
 
@@ -184,6 +185,7 @@ export default class CaseloadService {
               LicenceStatus.VARIATION_SUBMITTED,
               LicenceStatus.VARIATION_APPROVED,
               LicenceStatus.VARIATION_REJECTED,
+              LicenceStatus.TIMED_OUT,
             ],
             user
           )

@@ -9,7 +9,7 @@ type AllowedPathByStatusConfig = {
 const allowedPaths = [
   {
     status: 'IN_PROGRESS',
-    allowed: ['/licence/create/.*', '/licence/view/.*'],
+    allowed: ['/licence/hardstop/create/.*', '/licence/create/.*', '/licence/view/.*'],
     disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
   {

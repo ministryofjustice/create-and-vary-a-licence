@@ -59,7 +59,7 @@ describe('Licence Service', () => {
 
   describe('Create Licence', () => {
     it('Should create a licence in the backend API', async () => {
-      await licenceService.createLicence('ABC1234', user)
+      await licenceService.createLicence({ nomsId: 'ABC1234', type: 'CRD' }, user)
       expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1234' }, user)
     })
   })
@@ -70,7 +70,14 @@ describe('Licence Service', () => {
   })
 
   it('Update appointment person', async () => {
-    await licenceService.updateAppointmentPerson('1', { contactName: 'Joe Bloggs' }, user)
+    await licenceService.updateAppointmentPerson(
+      '1',
+      {
+        contactName: 'Joe Bloggs',
+        appointmentWithType: 'SOMEONE_ELSE',
+      },
+      user
+    )
     expect(licenceApiClient.updateAppointmentPerson).toBeCalledWith('1', { appointmentPerson: 'Joe Bloggs' }, user)
   })
 

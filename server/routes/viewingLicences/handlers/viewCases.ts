@@ -37,6 +37,13 @@ export default class ViewAndPrintCaseRoutes {
           )
         }
         const releaseDate = selectReleaseDate(c.nomisRecord)
+        const hardStop =
+          releaseDate === 'not found'
+            ? false
+            : isReleaseDateBeforeCutOffDate(
+                cutoffDate,
+                format(parse(releaseDate, 'dd MMM yyyy', new Date()), 'dd/MM/yyyy')
+              )
         return {
           licenceId: latestLicence.id,
           licenceVersionOf: latestLicence.versionOf,
@@ -46,15 +53,9 @@ export default class ViewAndPrintCaseRoutes {
           releaseDate,
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: latestLicence.status,
-          hardStop:
-            releaseDate === 'not found'
-              ? false
-              : isReleaseDateBeforeCutOffDate(
-                  cutoffDate,
-                  format(parse(releaseDate, 'dd MMM yyyy', new Date()), 'dd/MM/yyyy')
-                ),
+          hardStop,
           isClickable:
-            latestLicence.status !== LicenceStatus.NOT_STARTED &&
+            (hardStop || latestLicence.status !== LicenceStatus.NOT_STARTED) &&
             latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
             latestLicence.status !== LicenceStatus.OOS_RECALL &&
             latestLicence.status !== LicenceStatus.OOS_BOTUS &&
@@ -62,6 +63,7 @@ export default class ViewAndPrintCaseRoutes {
             latestLicence.status !== LicenceStatus.VARIATION_IN_PROGRESS &&
             latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
             latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
+          lastWorkedOnBy: latestLicence.updatedByFullName,
         }
       })
       .filter(c => {

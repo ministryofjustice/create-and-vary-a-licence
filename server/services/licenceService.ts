@@ -62,8 +62,7 @@ export default class LicenceService {
     private readonly conditionService: ConditionService
   ) {}
 
-  async createLicence(prisonerNumber: string, user: User): Promise<LicenceSummary> {
-    const licence = { nomsId: prisonerNumber } as CreateLicenceRequest
+  async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceSummary> {
     return this.licenceApiClient.createLicence(licence, user)
   }
 
@@ -78,7 +77,9 @@ export default class LicenceService {
   }
 
   async updateAppointmentPerson(id: string, formData: PersonName, user: User): Promise<void> {
+    console.log('formData--->:', formData)
     const requestBody = {
+      appointmentWithType: formData.appointmentWithType || 'SOMEONE_ELSE',
       appointmentPerson: formData.contactName,
     } as AppointmentPersonRequest
 
