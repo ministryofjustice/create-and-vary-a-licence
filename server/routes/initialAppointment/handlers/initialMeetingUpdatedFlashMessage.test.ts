@@ -42,7 +42,7 @@ describe('Initial appointment updated flash message', () => {
     })
 
     it('sends the expected message for APPROVED licences', () => {
-      const expectedMessage = `Initial appointment details updated. You must now tell the community probation team. <a target="_blank" href='/licence/view/id/1/pdf-print>View and print new licence PDF</a>`
+      const expectedMessage = `Initial appointment details updated. You must now tell the community probation team. <a target="_blank" href='/licence/view/id/1/pdf-print'>View and print new licence PDF</a>`
       flashInitialApptUpdatedMessage(req, licence, userType)
 
       expect(req.flash).toHaveBeenCalledWith(messageKey, expectedMessage)
