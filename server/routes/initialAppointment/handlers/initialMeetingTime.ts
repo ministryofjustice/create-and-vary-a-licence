@@ -22,7 +22,7 @@ export default class InitialMeetingTimeRoutes {
       appointmentTimeType,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
       skipUrl: this.getNextPage(licence.id.toString(), licence.typeCode, req),
-      canSkip: this.userType === UserType.PROBATION && !licence.appointmentTimeType,
+      canSkip: !licence.appointmentTimeType,
     })
   }
 
