@@ -18,6 +18,7 @@ const allowedPaths = [
       '/licence/create/id/(\\d)*/check-your-answers.*',
       '/licence/create/id/(\\d)*/edit.*',
       '/licence/create/id/(\\d)*/confirmation.*',
+      '/licence/create/id/(\\d)*/initial-meeting.*',
       '/licence/view/id/(\\d)*/.*',
       '/licence/approve/id/(\\d)*/.*',
     ],
@@ -28,6 +29,7 @@ const allowedPaths = [
     allowed: [
       '/licence/create/id/(\\d)*/check-your-answers.*',
       '/licence/create/id/(\\d)*/edit.*',
+      '/licence/create/id/(\\d)*/initial-meeting.*',
       '/licence/approve/id/(\\d)*/confirm-approved.*',
       '/licence/view/id/(\\d)*/.*',
       '/licence/approve/id/(\\d)*/probation-practitioner.*',

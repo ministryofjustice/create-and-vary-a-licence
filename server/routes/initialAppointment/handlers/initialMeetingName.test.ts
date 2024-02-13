@@ -3,6 +3,9 @@ import { Request, Response } from 'express'
 import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
+import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
+
+jest.mock('./initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -60,6 +63,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
       })
+
+      it('should call to generate a flash message', async () => {
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PROBATION)
+      })
     })
   })
 
@@ -80,6 +88,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', {}, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')
+      })
+
+      it('should call to generate a flash message', async () => {
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
       })
     })
   })

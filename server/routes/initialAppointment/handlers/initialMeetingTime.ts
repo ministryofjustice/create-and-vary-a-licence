@@ -4,6 +4,7 @@ import DateTime from '../types/dateTime'
 import LicenceType from '../../../enumeration/licenceType'
 import UserType from '../../../enumeration/userType'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
+import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 
 export default class InitialMeetingTimeRoutes {
   constructor(
@@ -27,9 +28,10 @@ export default class InitialMeetingTimeRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { licence } = res.locals
-    const { user } = res.locals
+    const { user, licence } = res.locals
     await this.licenceService.updateAppointmentTime(licenceId, req.body, user)
+
+    flashInitialApptUpdatedMessage(req, licence, this.userType)
 
     return res.redirect(this.getNextPage(licenceId, licence.typeCode, req))
   }
