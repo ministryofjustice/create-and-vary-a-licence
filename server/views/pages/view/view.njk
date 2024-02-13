@@ -6,6 +6,7 @@
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
+{% from "moj/components/banner/macro.njk" import mojBanner %}
 
 {% if licence.statusCode === "APPROVED" or licence.statusCode === "ACTIVE" %}
   {% set actionWord = "Print" %}
@@ -20,6 +21,14 @@
 {% set backLinkHref = "/licence/view/cases" %}
 
 {% block content %}
+    {% if initialApptUpdatedMessage | length > 0%}
+        {{ mojBanner({
+            type: 'success',
+            html: initialApptUpdatedMessage,
+            iconFallbackText: 'Success'
+        }) }}
+    {% endif %}  
+    
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if licence.typeCode === 'AP' %}

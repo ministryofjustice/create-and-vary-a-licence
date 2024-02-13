@@ -240,7 +240,7 @@ describe('Create a Licence Views - Check Answers', () => {
     )
   })
 
-  it('should show change links and submit button when licence status is IN_PROGRESS', () => {
+  it('should show change links and submit button when licence status is IN_PROGRESS and canEditInitialAppt is true', () => {
     const $ = render({
       licence: { ...licence, statusCode: 'IN_PROGRESS' },
       additionalConditions: [
@@ -285,6 +285,7 @@ describe('Create a Licence Views - Check Answers', () => {
           },
         ],
       ],
+      canEditInitialAppt: true,
     })
 
     expect($('.govuk-summary-list__actions').length).toBe(11)
@@ -334,10 +335,62 @@ describe('Create a Licence Views - Check Answers', () => {
           },
         ],
       ],
+      canEditInitialAppt: true,
     })
 
     expect($2('.govuk-summary-list__actions').length).toBe(10)
     expect($2('[data-qa="send-licence-conditions"]').length).toBe(1)
+  })
+
+  it('should hide edit initial appointment buttons when canEditInitialAppt is false', () => {
+    const $ = render({
+      licence: { ...licence, statusCode: 'IN_PROGRESS' },
+      additionalConditions: [
+        [
+          {
+            code: 'condition1',
+            category: 'Category 1',
+            expandedText: 'Template 1',
+            uploadSummary: [],
+            data: [
+              {
+                field: 'field1',
+                value: 'Data 1',
+                contributesToLicence: true,
+              },
+            ],
+          },
+        ],
+        [
+          {
+            code: 'condition2',
+            category: 'Category 2',
+            expandedText: 'Template 2',
+            uploadSummary: [],
+            data: [
+              {
+                field: 'field2',
+                value: 'Data 2A',
+                contributesToLicence: true,
+              },
+              {
+                field: 'field2',
+                value: 'Data 2B',
+                contributesToLicence: true,
+              },
+              {
+                field: 'field3',
+                value: 'Data 2C',
+                contributesToLicence: true,
+              },
+            ],
+          },
+        ],
+      ],
+      canEditInitialAppt: false,
+    })
+
+    expect($('.govuk-summary-list__actions').length).toBe(6)
   })
 
   it('should hide edit licence button when status is IN_PROGRESS', () => {

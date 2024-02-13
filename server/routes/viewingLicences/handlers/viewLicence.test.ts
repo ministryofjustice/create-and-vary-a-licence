@@ -41,6 +41,7 @@ describe('Route - view and approve a licence', () => {
         licenceId: '1',
       },
       query: {},
+      flash: jest.fn(),
     } as unknown as Request
     licenceService.recordAuditEvent = jest.fn()
   })
@@ -165,6 +166,21 @@ describe('Route - view and approve a licence', () => {
           'You can also view and print the last approved version of this licence</a>.',
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
+
+    it('should read flash message for initial appointment updates', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user,
+          licence,
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('initialApptUpdated')
     })
 
     describe('when hard stop is enabled', () => {
