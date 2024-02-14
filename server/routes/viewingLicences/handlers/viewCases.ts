@@ -63,7 +63,7 @@ export default class ViewAndPrintCaseRoutes {
             latestLicence.status !== LicenceStatus.VARIATION_IN_PROGRESS &&
             latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
             latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
-          lastWorkedOnBy: latestLicence.updatedByFullName,
+          lastWorkedOnBy: latestLicence?.updatedByFullName,
         }
       })
       .filter(c => {

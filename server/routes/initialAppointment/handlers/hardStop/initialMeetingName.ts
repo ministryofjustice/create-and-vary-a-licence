@@ -6,16 +6,13 @@ export default class InitialMeetingNameRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
-    const appointmentWithType = {
+    const appointmentPersonType = {
       DUTY_OFFICER: 'Duty Officer',
       RESPONSIBLE_COM: `${licence.responsibleComFullName}, this person’s probation practitioner`,
-      SOMEONE_ELSE: 'Someone else',
+      SPECIFIC_PERSON: 'Someone else',
     }
 
-    res.render('pages/create/hardStop/initialMeetingPerson', {
-      releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
-      appointmentWithType,
-    })
+    res.render('pages/create/hardStop/initialMeetingPerson', { appointmentPersonType })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

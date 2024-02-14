@@ -12,7 +12,8 @@
 {% set contactName = licence.appointmentPerson | fillFormResponse(formResponses.contactName) %}
 {% set errorMessage = validationErrors | findError('contactName') %}
 {% set isError = errorMessage.text %}
-{% set SOMEONE_ELSE = "SOMEONE_ELSE" %}
+{% set DUTY_OFFICER = "DUTY_OFFICER" %}
+{% set SPECIFIC_PERSON = "SPECIFIC_PERSON" %}
 
 {% block content %}
     <form method="POST">
@@ -54,23 +55,23 @@
                     {% endset %}
 
                     {% set initialMeetingPersonOptions = [] %}
-                    {% for value, text in appointmentWithType %}
+                    {% for value, text in appointmentPersonType %}
                         {% set initialMeetingPersonOptions = (initialMeetingPersonOptions.push(
                             {   value: value, 
                                 text: text,
                                 hint: {
                                     text: "For example, someone at an approved premises or a different probation practitioner."
-                                } if value === SOMEONE_ELSE,
+                                } if value === SPECIFIC_PERSON,
                                 conditional: {
                                 html: contactNameHtml
-                                } if value === SOMEONE_ELSE
+                                } if value === SPECIFIC_PERSON
                             }), initialMeetingPersonOptions) %}
                     {% endfor %}
 
                     {{ govukRadios({
                     id: "appointment-with-type",
-                    name: "appointmentWithType",
-                    value: (formResponses.appointmentWithType or licence.appointmentWithType) ,
+                    name: "appointmentPersonType",
+                    value: (formResponses.appointmentPersonType or licence.appointmentPersonType) or DUTY_OFFICER,
                     items: initialMeetingPersonOptions
                     }) }}
                 </div>

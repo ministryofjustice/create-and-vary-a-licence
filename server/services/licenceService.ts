@@ -77,9 +77,8 @@ export default class LicenceService {
   }
 
   async updateAppointmentPerson(id: string, formData: PersonName, user: User): Promise<void> {
-    console.log('formData--->:', formData)
     const requestBody = {
-      appointmentWithType: formData.appointmentWithType || 'SOMEONE_ELSE',
+      appointmentPersonType: formData.appointmentPersonType || 'SPECIFIC_PERSON',
       appointmentPerson: formData.contactName,
     } as AppointmentPersonRequest
 
