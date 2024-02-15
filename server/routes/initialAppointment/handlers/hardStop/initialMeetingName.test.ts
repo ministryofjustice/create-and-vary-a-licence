@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../../services/licenceService'
-import UserType from '../../../../enumeration/userType'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
