@@ -54,7 +54,7 @@ export default function Index({ licenceService, conditionService }: Services): R
 
   {
     const controller = new HardStopInitialMeetingNameRoutes(licenceService)
-    get('/hardstop/create/id/:licenceId/initial-meeting-name', controller.GET)
+    get('/hardstop/create/id/:licenceId/initial-meeting-name', controller.GET, UserType.PRISON)
     post('/hardstop/create/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
 
