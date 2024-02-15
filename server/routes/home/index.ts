@@ -5,7 +5,7 @@ import AboutRoutes from './handlers/about'
 import ContactUsRoutes from './handlers/contactUs'
 import AccessibilityStatementRoutes from './handlers/accessibilityStatement'
 import WhatsNewController from '../whatsNewController/whatsNewController'
-import ActivatingLicenceAfterVariationReminderController from '../activatingLicenceAfterVariationReminderController/activatingLicenceAfterVariationReminderController'
+import ActivateVaryLicenceReminderController from '../activateVaryLicenceReminderController/activateVaryLicenceReminderController'
 
 export default function Index(): Router {
   const router = Router()
@@ -17,14 +17,14 @@ export default function Index(): Router {
   const contactUsHandler = new ContactUsRoutes()
   const accessibilityStatementHandler = new AccessibilityStatementRoutes()
   const whatsNewController = new WhatsNewController()
-  const activatingLicenceAfterVariationReminderController = new ActivatingLicenceAfterVariationReminderController()
+  const activateVaryLicenceReminderController = new ActivateVaryLicenceReminderController()
 
   get('/', homeHandler.GET)
   get('/about', aboutHandler.GET)
   get('/contact', contactUsHandler.GET)
   get('/accessibility-statement', accessibilityStatementHandler.GET)
   get('/whats-new-page', whatsNewController.GET)
-  get('/activating-a-licence-after-a-variation', activatingLicenceAfterVariationReminderController.GET)
+  get('/activating-a-licence-after-a-variation', activateVaryLicenceReminderController.GET)
 
   return router
 }
