@@ -930,7 +930,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: true,
+            isClickable: false,
             licenceId: undefined,
             licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
