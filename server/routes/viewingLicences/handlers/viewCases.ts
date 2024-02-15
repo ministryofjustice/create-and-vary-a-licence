@@ -6,6 +6,7 @@ import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase, selectReleaseDate, isReleaseDateBeforeCutOffDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
+import config from '../../../config'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(
@@ -55,7 +56,7 @@ export default class ViewAndPrintCaseRoutes {
           licenceStatus: latestLicence.status,
           hardStop,
           isClickable:
-            (hardStop || latestLicence.status !== LicenceStatus.NOT_STARTED) &&
+            ((config.hardStopEnabled && hardStop) || latestLicence.status !== LicenceStatus.NOT_STARTED) &&
             latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
             latestLicence.status !== LicenceStatus.OOS_RECALL &&
             latestLicence.status !== LicenceStatus.OOS_BOTUS &&
