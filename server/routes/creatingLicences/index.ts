@@ -22,7 +22,6 @@ import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
 import PrisonWillCreateThisLicenceRoutes from './handlers/prisonWillCreateThisLicence'
 import LicenceCreatedByPrisonRoutes from './handlers/licenceCreatedByPrison'
 import LicenceChangesNotApprovedInTimeRoutes from './handlers/licenceChangesNotApprovedInTime'
-import HardStopConfirmCreateRoutes from './handlers/hardStop/confirmCreate'
 import AuthRole from '../../enumeration/authRole'
 
 export default function Index({
@@ -79,12 +78,6 @@ export default function Index({
     )
     get('/nomisId/:nomisId/confirm', controller.GET)
     post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
-  }
-
-  {
-    const controller = new HardStopConfirmCreateRoutes(licenceService)
-    get('/hardstop/nomisId/:nomisId/confirm', controller.GET, AuthRole.CASE_ADMIN)
-    post('/hardstop/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion, AuthRole.CASE_ADMIN)
   }
 
   {

@@ -6,9 +6,13 @@ export default class InitialMeetingNameRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
+    const isProbationPractionerAllocated = !!licence.responsibleComFullName
+    const probationPractionerOption = {
+      RESPONSIBLE_COM: `${licence.responsibleComFullName}, this person’s probation practitioner`,
+    }
     const appointmentPersonType = {
       DUTY_OFFICER: 'Duty Officer',
-      RESPONSIBLE_COM: `${licence.responsibleComFullName}, this person’s probation practitioner`,
+      ...(isProbationPractionerAllocated && probationPractionerOption),
       SPECIFIC_PERSON: 'Someone else',
     }
 

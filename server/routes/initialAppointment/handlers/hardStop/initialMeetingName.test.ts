@@ -48,6 +48,16 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPerson', {
           appointmentPersonType,
         })
+
+        res.locals.licence.responsibleComFullName = null
+        const appointmentPersonTypeWithOutPP = {
+          DUTY_OFFICER: 'Duty Officer',
+          SPECIFIC_PERSON: 'Someone else',
+        }
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPerson', {
+          appointmentPersonType: appointmentPersonTypeWithOutPP,
+        })
       })
     })
 
