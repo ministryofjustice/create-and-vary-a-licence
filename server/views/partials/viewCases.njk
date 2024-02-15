@@ -9,7 +9,7 @@
     <div class="caseload-offender-name">
         {% if isClickable %}
             {% if isHardStop %}
-                {% set link = "/licence/create/hardstop/id/" + licenceId + "/check-your-answers" if licenceId else "/licence/create/hardstop/nomisId/" + prisonerNumber + "/confirm"%}
+                {% set link = "/licence/hardstop/create/id/" + licenceId + "/check-your-answers" if licenceId else "/licence/hardstop/create/nomisId/" + prisonerNumber + "/confirm"%}
             {% else %}
                 {% set link = "/licence/view/id/" + licenceId + "/show" %}
                 {% if versionOfId and licenceStatus === 'SUBMITTED' %}
