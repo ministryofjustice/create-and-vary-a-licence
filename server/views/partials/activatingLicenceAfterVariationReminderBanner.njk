@@ -1,0 +1,14 @@
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% if shouldShowActivateVaryLicenceReminderBanner %}
+    <div class="govuk-inset-text govuk-grid-column-three-quarters">
+        <h2 class="govuk-heading-l govuk-!-margin-0 govuk-!-padding-bottom-4">Varying and reviewing licences</h2>
+        <div>When using this service, you must remember to:
+            <ul>
+                <li>review a licence after someone has left prison prison if you change something without getting it reapproved in time for their release</li>
+                <li>make any licence you vary active after your changes have been approved by your PDU head</li>
+            </ul>
+        </div>
+        <div class="govuk-!-padding-top-4"><a class="govuk-link" href="/activating-a-licence-after-a-variation">More information</a></div>
+    </div>
+{% endif %}
