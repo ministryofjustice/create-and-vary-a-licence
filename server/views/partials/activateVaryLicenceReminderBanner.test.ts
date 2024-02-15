@@ -3,7 +3,7 @@ import fs from 'fs'
 import { templateRenderer } from '../../utils/__testutils/templateTestUtils'
 
 const render = templateRenderer(
-  fs.readFileSync('server/views/partials/activatingLicenceAfterVariationReminderBanner.njk').toString()
+  fs.readFileSync('server/views/partials/activateVaryLicenceReminderBanner.njk').toString()
 )
 
 describe('Activating licence after variation reminder banner', () => {
