@@ -3,6 +3,8 @@ import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
+import config from '../../../config'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -65,6 +67,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -82,6 +86,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
         backLink: '/licence/create/caseload',
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
       })
     })
 
@@ -103,8 +109,83 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         additionalConditions: [],
         bespokeConditionsToDisplay: [],
         backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+    })
+
+    it('should allow PPs to edit initial appointment details for non-variations', async () => {
+      res.locals.licence.kind = LicenceKind.CRD
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
+      })
+    })
+
+    it('should not allow PPs to edit initial appointment details for variations', async () => {
+      res.locals.licence.kind = LicenceKind.VARIATION
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: false,
+      })
+    })
+
+    it('should read flash message for initial appointment updates', async () => {
+      await handler.GET(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('initialApptUpdated')
+    })
+
+    describe('when hard stop is enabled', () => {
+      const existingConfig = config
+      beforeAll(() => {
+        config.hardStopEnabled = true
+      })
+
+      afterAll(() => {
+        config.hardStopEnabled = existingConfig.hardStopEnabled
+      })
+
+      it('should allow PPs to edit initial appointment details for non-variations that are not in the hard stop period', async () => {
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: false }
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+          additionalConditions: [],
+          bespokeConditionsToDisplay: [],
+          backLink: req.session.returnToCase,
+          initialApptUpdatedMessage: undefined,
+          canEditInitialAppt: true,
+        })
+      })
+
+      it('should not allow PPs to edit initial appointment details for non-variations in the hard stop period', async () => {
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+          additionalConditions: [],
+          bespokeConditionsToDisplay: [],
+          backLink: req.session.returnToCase,
+          initialApptUpdatedMessage: undefined,
+          canEditInitialAppt: false,
+        })
+      })
     })
   })
 

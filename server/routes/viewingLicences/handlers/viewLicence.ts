@@ -63,8 +63,9 @@ export default class ViewAndPrintLicenceRoutes {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         warningMessage,
         isEditableByPrison:
-          config.hardStopEnabled && licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod,
+          licence.kind !== LicenceKind.VARIATION && config.hardStopEnabled && licence.isInHardStopPeriod,
         isPrisonUser: user.authSource === 'nomis',
+        initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
       })
     } else {
       res.redirect(`/licence/view/cases`)

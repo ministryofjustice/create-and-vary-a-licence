@@ -42,9 +42,9 @@ describe('URL access checks for licence statuses', () => {
       expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
     })
 
-    it('should deny access to creation forms', () => {
+    it('should allow access to editing initial appointment information', () => {
       path = '/licence/create/id/1/initial-meeting-name'
-      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(false)
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
     })
 
     it('should deny access to pdf print', () => {
@@ -59,8 +59,13 @@ describe('URL access checks for licence statuses', () => {
       expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
     })
 
-    it('should deny access to other creation forms', () => {
+    it('should allow access to editing initial appointment information', () => {
       path = '/licence/create/id/1/initial-meeting-name'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
+    it('should deny access to other creation forms', () => {
+      path = '/licence/create/id/1//additional-licence-conditions-question'
       expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(false)
     })
 

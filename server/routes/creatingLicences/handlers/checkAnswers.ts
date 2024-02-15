@@ -8,6 +8,8 @@ import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
 import { groupingBy } from '../../../utils/utils'
+import config from '../../../config'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class CheckAnswersRoutes {
   constructor(
@@ -38,6 +40,9 @@ export default class CheckAnswersRoutes {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
       backLink,
+      initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
+      canEditInitialAppt:
+        licence.kind !== LicenceKind.VARIATION && !(config.hardStopEnabled && licence.isInHardStopPeriod),
     })
   }
 

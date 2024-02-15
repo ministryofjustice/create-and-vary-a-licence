@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { stringToAddressObject } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
+import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 
 export default class InitialMeetingPlaceRoutes {
   constructor(
@@ -13,7 +14,7 @@ export default class InitialMeetingPlaceRoutes {
     const { licence } = res.locals
 
     const formAddress = stringToAddressObject(licence.appointmentAddress)
-    res.render('pages/create/initialMeetingPlace', {
+    return res.render('pages/create/initialMeetingPlace', {
       formAddress,
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
     })
@@ -21,8 +22,10 @@ export default class InitialMeetingPlaceRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
     await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
+
+    flashInitialApptUpdatedMessage(req, licence, this.userType)
 
     if (this.userType === UserType.PRISON) {
       res.redirect(`/licence/view/id/${licenceId}/show`)

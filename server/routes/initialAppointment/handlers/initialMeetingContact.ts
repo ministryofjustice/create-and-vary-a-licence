@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import UserType from '../../../enumeration/userType'
+import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 
 export default class InitialMeetingContactRoutes {
   constructor(
@@ -11,15 +12,17 @@ export default class InitialMeetingContactRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
 
-    res.render('pages/create/initialMeetingContact', {
+    return res.render('pages/create/initialMeetingContact', {
       releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
     })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
     await this.licenceService.updateContactNumber(licenceId, req.body, user)
+
+    flashInitialApptUpdatedMessage(req, licence, this.userType)
 
     if (this.userType === UserType.PRISON) {
       res.redirect(`/licence/view/id/${licenceId}/show`)
