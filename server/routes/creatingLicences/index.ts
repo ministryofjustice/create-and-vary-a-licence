@@ -22,7 +22,6 @@ import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
 import PrisonWillCreateThisLicenceRoutes from './handlers/prisonWillCreateThisLicence'
 import LicenceCreatedByPrisonRoutes from './handlers/licenceCreatedByPrison'
 import LicenceChangesNotApprovedInTimeRoutes from './handlers/licenceChangesNotApprovedInTime'
-import AuthRole from '../../enumeration/authRole'
 
 export default function Index({
   licenceService,
