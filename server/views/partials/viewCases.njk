@@ -19,15 +19,9 @@
     </div>
 {% endmacro %}
 
-{% macro casesTable(licences) %}
-    {% if licences.length > 0 %}
-        {{ govukTable({
-                attributes: {
-                    'data-module': 'moj-sortable-table'
-                },
-                caption: "Print an approved licence",
-                captionClasses: "govuk-visually-hidden",
-                head: [
+{% macro casesTable(params) %}
+    {% if params.licences.length > 0 %}
+        {% set licencesHeader = [
                     {
                         text: "Name",
                         attributes: {
@@ -51,15 +45,33 @@
                         attributes: {
                             "aria-sort":  "descending"  if probationView else  "ascending" 
                         }
-                    },
-                    {
+                    }
+                ]
+        %}
+        {% if params.isHardStop %}
+            {% set licencesHeader = (licencesHeader.push({
+                        text: "Last worked on by",
+                        attributes: {
+                            "aria-sort":  "none" 
+                        }
+                }), licencesHeader)
+            %}
+        {% endif %}
+        {% set licencesHeader = (licencesHeader.push({
                         text: "Status",
                         attributes: {
                             "aria-sort": "none"
                         }
-                    }
-                ],
-                rows: licences
+                }), licencesHeader)
+        %}
+        {{ govukTable({
+                attributes: {
+                    'data-module': 'moj-sortable-table'
+                },
+                caption: "Print an approved licence",
+                captionClasses: "govuk-visually-hidden",
+                head: licencesHeader,
+                rows: params.licences
             }) }}
     {% else %}
         <div class="govuk-grid-row">
@@ -74,6 +86,7 @@
     {% set cases = params.cases | hardStop if params.isHardStop else 
         params.cases | beforeHardStop %}
     {% set licences = [] %}
+    {% set caseData = [] %}
 
     {% for case in cases %}
         {% if case.probationPractitioner %}
@@ -91,7 +104,7 @@
                 size: 'small'
             }, params.config) %}
         {% endif %}
-        {% set licences = (licences.push([
+        {% set caseData = [
             {
                 attributes: {
                     id: 'name-' + loop.index,
@@ -122,16 +135,28 @@
                     "data-sort-value": case.releaseDate | dateToUnix
                 },
                 html: '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' 
-            },
-            {
-                attributes: {
-                    id: 'licence-status-' + loop.index,
-                    "data-sort-value": case.licenceStatus | getStatusOrder
-                },
-                html: licenceStatusHtml
             }
-        ]), licences) %}
+        ] %}
+        {% if params.isHardStop %}
+            {% set caseData = (caseData.push({
+                        attributes: {
+                            id: 'licence-last-worked-on-by-' + loop.index,
+                            "data-sort-value": case.lastWorkedOnBy
+                        },
+                        text: case.lastWorkedOnBy
+                    }), caseData) 
+            %}
+        {% endif %}
+        {% set caseData = (caseData.push({
+                    attributes: {
+                        id: 'licence-status-' + loop.index,
+                        "data-sort-value": case.licenceStatus | getStatusOrder
+                    },
+                    html: licenceStatusHtml
+                }), caseData) 
+        %}
+        {% set licences = (licences.push(caseData), licences) %}
     {% endfor %}
-    {{ casesTable(licences) }}
+    {{ casesTable({licences: licences, isHardStop: params.isHardStop}) }}
 
 {% endmacro %}
