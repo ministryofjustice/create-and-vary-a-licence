@@ -21,6 +21,7 @@ import {
   isPassedArdOrCrd,
   groupingBy,
   isReleaseDateBeforeCutOffDate,
+  isInHardStopPeriod,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -30,6 +31,8 @@ import Address from '../routes/initialAppointment/types/address'
 import { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
+import config from '../config'
+import LicenceKind from '../enumeration/LicenceKind'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -523,5 +526,39 @@ describe('Check if release date before cutoff date', () => {
 
   it('should return true if release date is equal to cutoff date', () => {
     expect(isReleaseDateBeforeCutOffDate('04/12/2023', '04/12/2023')).toBeTruthy()
+  })
+})
+
+describe('isInHardStopPeriod', () => {
+  let licence: Licence
+  const existingConfig = config
+  beforeEach(() => {
+    config.hardStopEnabled = true
+    licence = {
+      kind: LicenceKind.CRD,
+      isInHardStopPeriod: true,
+    } as Licence
+  })
+  afterAll(() => {
+    config.hardStopEnabled = existingConfig.hardStopEnabled
+  })
+
+  it('returns false if the hard stop feature flag is false', () => {
+    config.hardStopEnabled = false
+    expect(isInHardStopPeriod(licence)).toBe(false)
+  })
+
+  it('returns false if the licence is a variation', () => {
+    licence.kind = LicenceKind.VARIATION
+    expect(isInHardStopPeriod(licence)).toBe(false)
+  })
+
+  it('returns false if the licence is not in the hard stop period', () => {
+    licence = { kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
+    expect(isInHardStopPeriod(licence)).toBe(false)
+  })
+
+  it('returns true for non-variations in the hard stop period when the feature is enabled', () => {
+    expect(isInHardStopPeriod(licence)).toBe(true)
   })
 })

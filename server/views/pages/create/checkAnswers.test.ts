@@ -242,7 +242,7 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should show change links and submit button when licence status is IN_PROGRESS and canEditInitialAppt is true', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'IN_PROGRESS' },
+      licence,
       additionalConditions: [
         [
           {
@@ -286,13 +286,15 @@ describe('Create a Licence Views - Check Answers', () => {
         ],
       ],
       canEditInitialAppt: true,
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
     })
 
     expect($('.govuk-summary-list__actions').length).toBe(11)
     expect($('[data-qa="send-licence-conditions"]').length).toBe(1)
 
     const $2 = render({
-      licence: { ...licence, statusCode: 'IN_PROGRESS', appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' },
+      licence: { ...licence, appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' },
       additionalConditions: [
         [
           {
@@ -336,6 +338,8 @@ describe('Create a Licence Views - Check Answers', () => {
         ],
       ],
       canEditInitialAppt: true,
+      statusCode: 'IN_PROGRESS',
+      isInHardStopPeriod: false,
     })
 
     expect($2('.govuk-summary-list__actions').length).toBe(10)
@@ -388,6 +392,8 @@ describe('Create a Licence Views - Check Answers', () => {
         ],
       ],
       canEditInitialAppt: false,
+      statusCode: licence.statusCode,
+      isInHardStopPeriod: false,
     })
 
     expect($('.govuk-summary-list__actions').length).toBe(6)
@@ -395,7 +401,8 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should hide edit licence button when status is IN_PROGRESS', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'IN_PROGRESS' },
+      licence,
+      statusCode: 'IN_PROGRESS',
     })
 
     expect($('#edit-licence-button').length).toBe(0)
@@ -404,7 +411,8 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should hide edit licence button when status is ACTIVE', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'ACTIVE' },
+      licence,
+      statusCode: 'ACTIVE',
     })
 
     expect($('#edit-licence-button').length).toBe(0)
@@ -413,7 +421,9 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should show edit licence button when status is APPROVED', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'APPROVED' },
+      licence,
+      statusCode: 'APPROVED',
+      isInHardStopPeriod: false,
     })
 
     expect($('#edit-licence-button').length).toBe(1)
@@ -422,7 +432,9 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should show edit licence button when status is SUBMITTED', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'SUBMITTED' },
+      licence,
+      statusCode: 'SUBMITTED',
+      isInHardStopPeriod: false,
     })
 
     expect($('#edit-licence-button').length).toBe(1)
@@ -431,7 +443,8 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should show print licence button when status is APPROVED', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'APPROVED' },
+      licence,
+      statusCode: 'APPROVED',
     })
 
     expect($('#print-licence-button').length).toBe(1)
@@ -440,7 +453,8 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should hide print licence button when status is SUBMITTED', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'SUBMITTED' },
+      licence,
+      statusCode: 'SUBMITTED',
     })
 
     expect($('#print-licence-button').length).toBe(0)
@@ -449,7 +463,8 @@ describe('Create a Licence Views - Check Answers', () => {
 
   it('should hide change links and submit button when licence status is not IN_PROGRESS', () => {
     const $ = render({
-      licence: { ...licence, statusCode: 'SUBMITTED' },
+      licence,
+      statusCode: 'SUBMITTED',
     })
 
     expect($('.govuk-summary-list__actions').length).toBe(0)
@@ -466,5 +481,16 @@ describe('Create a Licence Views - Check Answers', () => {
     })
     expect($('[data-qa=date]').text()).toContain('Release date')
     expect($('[data-qa=date]').text()).not.toContain('Licence end date')
+  })
+
+  it('should hide edit licence button in the hard stop period', () => {
+    const $ = render({
+      licence,
+      statusCode: 'SUBMITTED',
+      isInHardStopPeriod: true,
+    })
+
+    expect($('#edit-licence-button').length).toBe(0)
+    expect($('#edit-licence-button-2').length).toBe(0)
   })
 })
