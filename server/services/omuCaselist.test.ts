@@ -22,14 +22,14 @@ describe('omu caselist', () => {
       const omuCaselist = createCaselist(LicenceStatus.ACTIVE, futureDate, '2022-10-19')
       expect(omuCaselist.getPrisonView().unwrap()).toHaveLength(0)
       expect(omuCaselist.getPrisonView().exclusions()[0][1]).toStrictEqual(
-        'invalid status for prison view, not one NOT_STARTED,IN_PROGRESS,APPROVED,SUBMITTED'
+        'invalid status for prison view, not one NOT_STARTED,IN_PROGRESS,APPROVED,SUBMITTED,TIMED_OUT'
       )
     })
     it('should return exclusion for probation status and past CRD', () => {
       const omuCaselist = createCaselist(LicenceStatus.ACTIVE, pastDate, '2022-10-19')
       expect(omuCaselist.getPrisonView().unwrap()).toHaveLength(0)
       expect(omuCaselist.getPrisonView().exclusions()[0][1]).toStrictEqual(
-        'invalid status for prison view, not one NOT_STARTED,IN_PROGRESS,APPROVED,SUBMITTED'
+        'invalid status for prison view, not one NOT_STARTED,IN_PROGRESS,APPROVED,SUBMITTED,TIMED_OUT'
       )
     })
     it('should return case for out-of-scope status and future CRD', () => {

@@ -8,6 +8,7 @@ const PRISON_VIEW_STATUSES = [
   LicenceStatus.IN_PROGRESS,
   LicenceStatus.APPROVED,
   LicenceStatus.SUBMITTED,
+  LicenceStatus.TIMED_OUT,
 ]
 
 const OUT_OF_SCOPE_PRISON_VIEW_STATUSES = [

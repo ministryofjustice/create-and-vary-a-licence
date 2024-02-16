@@ -1326,6 +1326,14 @@ describe('Caseload Service', () => {
         licenceStatus: LicenceStatus.IN_PROGRESS,
         comUsername: 'joebloggs',
       },
+      {
+        kind: 'HARD_STOP',
+        nomisId: 'AB1234H',
+        licenceId: 2,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        comUsername: 'joebloggs',
+      },
     ])
     prisonerService.searchPrisonersByReleaseDate.mockResolvedValueOnce([
       {
@@ -1342,6 +1350,10 @@ describe('Caseload Service', () => {
       } as OffenderDetail,
       {
         otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+      {
+        otherIds: { nomsNumber: 'AB1234H', crn: 'X12349' },
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
       } as OffenderDetail,
     ])
@@ -1363,6 +1375,11 @@ describe('Caseload Service', () => {
       } as Prisoner,
       {
         prisonerNumber: 'AB1234E',
+        conditionalReleaseDate: tenDaysFromNow,
+        status: 'ACTIVE IN',
+      } as Prisoner,
+      {
+        prisonerNumber: 'AB1234H',
         conditionalReleaseDate: tenDaysFromNow,
         status: 'ACTIVE IN',
       } as Prisoner,
@@ -1397,6 +1414,7 @@ describe('Caseload Service', () => {
     expect(result.cases.unwrap()).toMatchObject([
       { deliusRecord: { otherIds: { crn: 'X12347', nomsNumber: 'AB1234D' } } },
       { deliusRecord: { otherIds: { crn: 'X12348', nomsNumber: 'AB1234E' } } },
+      { deliusRecord: { otherIds: { crn: 'X12349', nomsNumber: 'AB1234H' } } },
     ])
   })
 
