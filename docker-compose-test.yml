@@ -38,7 +38,7 @@ services:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
   localstack:
-    image: localstack/localstack:0.13.2
+    image: localstack/localstack:3.0.2
     networks:
       - hmpps_int
     container_name: localstack
@@ -55,7 +55,7 @@ services:
       - DEFAULT_REGION=eu-west-2
       - HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL-localstack}
     volumes:
-      - './.localstack:/tmp/localstack'
+      - './.localstack:/var/lib/localstack'
       - $PWD/localstack:/docker-entrypoint-initaws.d
 
 networks:
