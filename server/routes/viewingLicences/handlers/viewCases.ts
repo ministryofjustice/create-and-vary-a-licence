@@ -6,7 +6,6 @@ import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase, selectReleaseDate, isReleaseDateBeforeCutOffDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
-import config from '../../../config'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(
