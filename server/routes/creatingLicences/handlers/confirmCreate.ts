@@ -6,6 +6,7 @@ import { convertToTitleCase } from '../../../utils/utils'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ConfirmCreateRoutes {
   constructor(
@@ -51,7 +52,7 @@ export default class ConfirmCreateRoutes {
     const backLink = req.session.returnToCase
 
     if (answer === YesOrNo.YES) {
-      const { licenceId } = await this.licenceService.createLicence(nomisId, user)
+      const { licenceId } = await this.licenceService.createLicence({ nomsId: nomisId, type: LicenceKind.CRD }, user)
       return res.redirect(`/licence/create/id/${licenceId}/initial-meeting-name`)
     }
     return res.redirect(backLink)

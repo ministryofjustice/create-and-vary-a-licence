@@ -145,9 +145,12 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       req.body.answer = 'Yes'
       licenceService.createLicence.mockResolvedValue({ licenceId: 1 } as LicenceSummary)
       await handler.POST(req, res)
-      expect(licenceService.createLicence).toHaveBeenCalledWith('ABC123', {
-        username: 'joebloggs',
-      })
+      expect(licenceService.createLicence).toHaveBeenCalledWith(
+        { nomsId: 'ABC123', type: 'CRD' },
+        {
+          username: 'joebloggs',
+        }
+      )
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-name')
     })
 
