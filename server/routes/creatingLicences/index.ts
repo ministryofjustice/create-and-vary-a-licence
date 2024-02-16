@@ -42,18 +42,18 @@ export default function Index({
    * This means that for each page, the licence will already exist in context, and so the handlers will not need
    * to explicitly inject the licence data into their individual view contexts.
    */
-  const get = (path: string, handler: RequestHandler, role?: AuthRole) =>
+  const get = (path: string, handler: RequestHandler) =>
     router.get(
       routePrefix(path),
-      roleCheckMiddleware([role, 'ROLE_LICENCE_RO']),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       asyncMiddleware(handler)
     )
 
-  const post = (path: string, handler: RequestHandler, type?: new () => object, role?: AuthRole) =>
+  const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
-      roleCheckMiddleware([role, 'ROLE_LICENCE_RO']),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       asyncMiddleware(handler)

@@ -61,7 +61,9 @@ describe('Licence Service', () => {
     it('Should create a CRD licence in the backend API', async () => {
       await licenceService.createLicence({ nomsId: 'ABC1234', type: 'CRD' }, user)
       expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1234', type: 'CRD' }, user)
+    })
 
+    it('Should create a HARD_STOP licence in the backend API', async () => {
       await licenceService.createLicence({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
       expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
     })
@@ -91,6 +93,9 @@ describe('Licence Service', () => {
       { appointmentPerson: 'Joe Bloggs', appointmentPersonType: 'SPECIFIC_PERSON' },
       user
     )
+  })
+
+  it('Update appointment person with type DUTY_OFFICER', async () => {
     await licenceService.updateAppointmentPerson(
       '1',
       {
