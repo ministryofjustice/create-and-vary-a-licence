@@ -5,16 +5,12 @@
 {% set pageTitle = applicationName + " - view an approved licence hardstop" %}
 {% set pageId = 'view-hardstop-cases-page' %}
 
-{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, licenceStatus, index, isHardStop) %}
+{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, licenceStatus, index) %}
     <div class="caseload-offender-name">
         {% if isClickable %}
-            {% if isHardStop %}
-                {% set link = "/licence/hardstop/create/id/" + licenceId + "/check-your-answers" if licenceId else "/licence/hardstop/create/nomisId/" + prisonerNumber + "/confirm"%}
-            {% else %}
-                {% set link = "/licence/view/id/" + licenceId + "/show" %}
-                {% if versionOfId and licenceStatus === 'SUBMITTED' %}
-                    {% set link = link + "?lastApprovedVersion=" + versionOfId %}
-                {% endif %}
+            {% set link = "/licence/view/id/" + licenceId + "/show" %}
+            {% if versionOfId and licenceStatus === 'SUBMITTED' %}
+                {% set link = link + "?lastApprovedVersion=" + versionOfId %}
             {% endif %}
             <a id="name-button-{{ index }}" href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
         {% else %}
@@ -114,7 +110,7 @@
                     id: 'name-' + loop.index,
                     "data-sort-value": case.name
                 },
-                html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, case.licenceStatus, loop.index, params.isHardStop),
+                html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, case.licenceStatus, loop.index),
                 classes: "max-width max-width-220"
             },
             {
