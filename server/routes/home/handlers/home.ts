@@ -5,6 +5,8 @@ import { hasAuthSource, hasRole } from '../../../utils/utils'
 export default class HomeRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const viewContext = {
+      shouldShowActivateVaryLicenceReminderBanner:
+        hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) && hasAuthSource(req.user, 'delius'),
       shouldShowCreateLicenceCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) && hasAuthSource(req.user, 'delius'),
       shouldShowVaryLicenceCard: hasRole(req.user, AuthRole.RESPONSIBLE_OFFICER) && hasAuthSource(req.user, 'delius'),
       shouldShowApproveLicenceCard: hasRole(req.user, AuthRole.DECISION_MAKER) && hasAuthSource(req.user, 'nomis'),
