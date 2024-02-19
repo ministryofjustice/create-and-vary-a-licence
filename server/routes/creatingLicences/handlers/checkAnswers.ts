@@ -7,8 +7,7 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
-import { groupingBy } from '../../../utils/utils'
-import config from '../../../config'
+import { groupingBy, isInHardStopPeriod } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class CheckAnswersRoutes {
@@ -41,8 +40,9 @@ export default class CheckAnswersRoutes {
       bespokeConditionsToDisplay,
       backLink,
       initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
-      canEditInitialAppt:
-        licence.kind !== LicenceKind.VARIATION && !(config.hardStopEnabled && licence.isInHardStopPeriod),
+      canEditInitialAppt: licence.kind !== LicenceKind.VARIATION && !isInHardStopPeriod(licence),
+      statusCode: licence.statusCode,
+      isInHardStopPeriod: isInHardStopPeriod(licence),
     })
   }
 

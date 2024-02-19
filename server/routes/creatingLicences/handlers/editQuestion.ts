@@ -2,21 +2,24 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import YesOrNo from '../../../enumeration/yesOrNo'
-import { licenceIsTwoDaysToRelease } from '../../../utils/utils'
+import { isInHardStopPeriod, licenceIsTwoDaysToRelease } from '../../../utils/utils'
 
 export default class EditQuestionRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { statusCode } = res.locals.licence
+    const { licence } = res.locals
     const { licenceId } = req.params
     if (
-      ![LicenceStatus.APPROVED, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED].includes(statusCode as LicenceStatus)
+      isInHardStopPeriod(licence) ||
+      ![LicenceStatus.APPROVED, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED].includes(
+        licence.statusCode as LicenceStatus
+      )
     ) {
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
     }
     res.locals.closeToRelease =
-      [LicenceStatus.APPROVED, LicenceStatus.SUBMITTED].includes(statusCode as LicenceStatus) &&
+      [LicenceStatus.APPROVED, LicenceStatus.SUBMITTED].includes(licence.statusCode as LicenceStatus) &&
       licenceIsTwoDaysToRelease(res.locals.licence)
     return res.render('pages/create/editQuestion')
   }

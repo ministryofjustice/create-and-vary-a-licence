@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express'
 import LicenceKind from '../enumeration/LicenceKind'
 import UserType from '../enumeration/userType'
+import { isInHardStopPeriod } from '../utils/utils'
 
 export default function hardStopCheckMiddleware(userType: UserType): RequestHandler {
   return async (req, res, next) => {
@@ -10,10 +11,10 @@ export default function hardStopCheckMiddleware(userType: UserType): RequestHand
     if (licence.kind === LicenceKind.VARIATION) {
       return res.redirect('/access-denied')
     }
-    if (!licence.isInHardStopPeriod && userType === UserType.PRISON) {
+    if (!isInHardStopPeriod(licence) && userType === UserType.PRISON) {
       return res.redirect('/access-denied')
     }
-    if (licence.isInHardStopPeriod && userType === UserType.PROBATION) {
+    if (isInHardStopPeriod(licence) && userType === UserType.PROBATION) {
       return res.redirect('/access-denied')
     }
 

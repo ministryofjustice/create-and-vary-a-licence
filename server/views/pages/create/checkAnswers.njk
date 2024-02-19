@@ -11,11 +11,11 @@
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
 
-{% set isInProgress = licence.statusCode == 'IN_PROGRESS' or licence.statusCode == 'VARIATION_IN_PROGRESS' %}
-{% set isInVariation = licence.statusCode == 'VARIATION_IN_PROGRESS' or licence.statusCode == 'VARIATION_SUBMITTED' 
-    or licence.statusCode == 'VARIATION_REJECTED' or licence.statusCode == 'VARIATION_APPROVED' %}
-{% set canChooseToEdit = licence.statusCode == 'APPROVED' or licence.statusCode == 'SUBMITTED' %}
-{% set canChooseToPrint = licence.statusCode == 'APPROVED' %}
+{% set isInProgress = statusCode == 'IN_PROGRESS' or statusCode == 'VARIATION_IN_PROGRESS' %}
+{% set isInVariation = statusCode == 'VARIATION_IN_PROGRESS' or statusCode == 'VARIATION_SUBMITTED' 
+    or statusCode == 'VARIATION_REJECTED' or statusCode == 'VARIATION_APPROVED' %}
+{% set canChooseToEdit = (statusCode == 'APPROVED' or statusCode == 'SUBMITTED') and (not isInHardStopPeriod) %}
+{% set canChooseToPrint = statusCode == 'APPROVED' %}
 {% if licence.kind === 'VARIATION' %} 
   {% set submitButtonText = 'View summary and add notes' %}
   {% set submitButtonAttrs = { 'data-qa': 'add-notes' } %}
