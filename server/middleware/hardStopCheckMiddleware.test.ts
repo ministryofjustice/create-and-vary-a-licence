@@ -3,6 +3,7 @@ import LicenceKind from '../enumeration/LicenceKind'
 import LicenceService from '../services/licenceService'
 import hardStopCheckMiddleware from './hardStopCheckMiddleware'
 import UserType from '../enumeration/userType'
+import config from '../config'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -10,6 +11,7 @@ describe('hardStopCheckMiddleware', () => {
   let req: Request
   let res: Response
   const next = jest.fn()
+  const existingConfig = config
 
   beforeEach(() => {
     req = {
@@ -37,10 +39,12 @@ describe('hardStopCheckMiddleware', () => {
     } as unknown as Response
     licenceService.updateAppointmentPerson = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
+    config.hardStopEnabled = true
   })
 
   afterEach(() => {
     jest.resetAllMocks()
+    config.hardStopEnabled = existingConfig.hardStopEnabled
   })
 
   describe('Probation users', () => {
@@ -60,6 +64,14 @@ describe('hardStopCheckMiddleware', () => {
     })
 
     it('should call next if the licence is not a variation and is outside of the hard stop window', () => {
+      hardStopCheckMiddleware(userType)(req, res, next)
+      expect(res.redirect).not.toHaveBeenCalled()
+      expect(next).toHaveBeenCalled()
+    })
+
+    it('should not redirect if the hard stop feature flag is disabled', () => {
+      config.hardStopEnabled = false
+      res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
       hardStopCheckMiddleware(userType)(req, res, next)
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalled()
@@ -85,6 +97,14 @@ describe('hardStopCheckMiddleware', () => {
       hardStopCheckMiddleware(userType)(req, res, next)
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalled()
+    })
+
+    it('should redirect to access-denied if the hard stop feature flag is disabled', () => {
+      config.hardStopEnabled = false
+      res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
+      hardStopCheckMiddleware(userType)(req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+      expect(next).not.toHaveBeenCalled()
     })
   })
 })
