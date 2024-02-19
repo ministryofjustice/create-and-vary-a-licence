@@ -5,6 +5,7 @@ import { Licence } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
 import config from '../../../config'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import LicenceStatus from '../../../enumeration/licenceStatus'
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/conditionService')
@@ -53,6 +54,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           comStaffId: 123,
           forename: 'Jim',
           surname: 'Jones',
+          statusCode: LicenceStatus.IN_PROGRESS,
         } as Licence,
       },
     } as unknown as Response
@@ -69,6 +71,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         backLink: req.session.returnToCase,
         initialApptUpdatedMessage: undefined,
         canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -88,6 +92,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         backLink: '/licence/create/caseload',
         initialApptUpdatedMessage: undefined,
         canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
       })
     })
 
@@ -111,6 +117,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         backLink: req.session.returnToCase,
         initialApptUpdatedMessage: undefined,
         canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -126,6 +134,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         backLink: req.session.returnToCase,
         initialApptUpdatedMessage: undefined,
         canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
       })
     })
 
@@ -140,6 +150,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         backLink: req.session.returnToCase,
         initialApptUpdatedMessage: undefined,
         canEditInitialAppt: false,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
       })
     })
 
@@ -170,6 +182,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           backLink: req.session.returnToCase,
           initialApptUpdatedMessage: undefined,
           canEditInitialAppt: true,
+          isInHardStopPeriod: false,
+          statusCode: 'IN_PROGRESS',
         })
       })
 
@@ -184,6 +198,8 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           backLink: req.session.returnToCase,
           initialApptUpdatedMessage: undefined,
           canEditInitialAppt: false,
+          isInHardStopPeriod: true,
+          statusCode: 'IN_PROGRESS',
         })
       })
     })

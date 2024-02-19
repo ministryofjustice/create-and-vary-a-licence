@@ -9,6 +9,8 @@ import type { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
 import type { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import logger from '../../logger'
 import type { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
+import LicenceKind from '../enumeration/LicenceKind'
+import config from '../config'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -229,6 +231,10 @@ const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], k
   return Object.values(results)
 }
 
+const isInHardStopPeriod = (licence: Licence): boolean => {
+  return config.hardStopEnabled && licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -254,4 +260,5 @@ export {
   isPassedArdOrCrd,
   groupingBy,
   isReleaseDateBeforeCutOffDate,
+  isInHardStopPeriod,
 }

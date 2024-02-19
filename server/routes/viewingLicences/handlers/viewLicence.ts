@@ -2,10 +2,8 @@ import type { Request, Response } from 'express'
 import { format, parse } from 'date-fns'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
-import { groupingBy } from '../../../utils/utils'
+import { groupingBy, isInHardStopPeriod } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
-import config from '../../../config'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -62,8 +60,7 @@ export default class ViewAndPrintLicenceRoutes {
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         warningMessage,
-        isEditableByPrison:
-          licence.kind !== LicenceKind.VARIATION && config.hardStopEnabled && licence.isInHardStopPeriod,
+        isEditableByPrison: isInHardStopPeriod(licence),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
       })
