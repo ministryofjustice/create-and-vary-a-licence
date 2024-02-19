@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import DateTime from '../../types/dateTime'
-import LicenceType from '../../../../enumeration/licenceType'
 import UserType from '../../../../enumeration/userType'
 import AppointmentTimeType from '../../../../enumeration/appointmentTimeType'
 import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
