@@ -1,0 +1,47 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Create a licence - What is the contact phone number for the initial appointment?" %}
+{% set pageId = "appointment-contact-page" %}
+{% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-place" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">What is the contact phone number for the initial appointment?</h1>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {% if licence.isEligibleForEarlyRelease %}
+                    {{ govukWarningText({
+                        html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
+                        iconFallbackText: "Warning"
+                    }) }}
+                {% endif %}
+
+                {{ govukInput({
+                    label: {
+                        text: "UK telephone number"
+                    },
+                    id: "telephone",
+                    name: "telephone",
+                    classes: "govuk-input--width-20",
+                    errorMessage: validationErrors | findError('telephone'),
+                    value: licence.appointmentContact | fillFormResponse(formResponses.telephone)
+                }) }}
+
+                {{ govukButton({
+                    text: continueOrSave,
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' }
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}

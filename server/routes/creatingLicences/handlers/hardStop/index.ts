@@ -12,7 +12,7 @@ import ConfirmCreateRoutes from './confirmCreate'
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
 
-  const routePrefix = (path: string) => `/licence/hardstop${path}`
+  const routePrefix = (path: string) => `/licence/hard-stop${path}`
 
   /*
    * The fetchLicence middleware will call the licenceAPI during each GET request on the create a licence journey
