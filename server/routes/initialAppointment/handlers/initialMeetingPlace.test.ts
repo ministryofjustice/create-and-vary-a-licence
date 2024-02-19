@@ -59,7 +59,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
-          releaseIsOnBankHolidayOrWeekend: true,
         })
       })
     })
@@ -92,7 +91,6 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
           formAddress,
-          releaseIsOnBankHolidayOrWeekend: true,
         })
       })
     })

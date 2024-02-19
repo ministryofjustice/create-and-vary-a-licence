@@ -66,7 +66,6 @@ describe('Route - create licence - initial meeting date and time', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
           formDate,
           appointmentTimeType,
-          releaseIsOnBankHolidayOrWeekend: true,
           skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
           canSkip: false,
         })
@@ -79,7 +78,6 @@ describe('Route - create licence - initial meeting date and time', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
           formDate: undefined,
           appointmentTimeType,
-          releaseIsOnBankHolidayOrWeekend: true,
           skipUrl: '/licence/create/id/1/additional-pss-conditions-question',
           canSkip: true,
         })
@@ -143,7 +141,6 @@ describe('Route - create licence - initial meeting date and time', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingTime', {
           formDate,
           appointmentTimeType,
-          releaseIsOnBankHolidayOrWeekend: true,
           skipUrl: '/licence/view/id/1/show',
           canSkip: false,
         })

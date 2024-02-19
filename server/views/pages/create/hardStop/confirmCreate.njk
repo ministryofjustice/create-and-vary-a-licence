@@ -15,6 +15,12 @@
             <h1 class="govuk-heading-l">
               Are you sure you want to generate a standard licence for this person?
             </h1>
+            {% if licence.isEligibleForEarlyRelease %}
+                {{ govukWarningText({
+                    html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
+                    iconFallbackText: "Warning"
+                }) }}
+            {% endif %}
             <p class="govuk-body">By default, the licence will automatically contain the following restrictions:</p>
             <ul class="govuk-list govuk-list--bullet">
                 <li>standard conditions</li>

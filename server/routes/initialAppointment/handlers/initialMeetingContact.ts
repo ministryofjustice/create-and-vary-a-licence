@@ -10,11 +10,7 @@ export default class InitialMeetingContactRoutes {
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { licence } = res.locals
-
-    return res.render('pages/create/initialMeetingContact', {
-      releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
-    })
+    return res.render('pages/create/initialMeetingContact')
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {

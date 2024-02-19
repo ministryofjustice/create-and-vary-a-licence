@@ -20,7 +20,6 @@ export default class InitialMeetingTimeRoutes {
     return res.render('pages/create/initialMeetingTime', {
       formDate,
       appointmentTimeType,
-      releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
       skipUrl: this.getNextPage(licence.id.toString(), licence.typeCode, req),
       canSkip: !licence.appointmentTimeType,
     })

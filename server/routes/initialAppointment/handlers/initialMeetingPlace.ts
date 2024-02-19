@@ -16,7 +16,6 @@ export default class InitialMeetingPlaceRoutes {
     const formAddress = stringToAddressObject(licence.appointmentAddress)
     return res.render('pages/create/initialMeetingPlace', {
       formAddress,
-      releaseIsOnBankHolidayOrWeekend: licence.isEligibleForEarlyRelease,
     })
   }
 
