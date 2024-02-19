@@ -8,8 +8,7 @@ export default abstract class Page {
   protected constructor(
     private readonly pageId: string,
     private readonly axeTest = true,
-    // disables checkA11y All page content must be contained by landmarks rule for activateVaryLicenceReminderBanner content to pass integration tests
-    private readonly rules: RuleObject = { region: { enabled: false } }
+    private readonly rules: RuleObject = {}
   ) {
     this.checkOnPage()
     if (axeTest) {
