@@ -21,7 +21,7 @@ export default class ConfirmCreateRoutes {
         { nomsId: nomisId, type: LicenceKind.HARD_STOP },
         user
       )
-      return res.redirect(`/licence/hardstop/create/id/${licenceId}/initial-meeting-name`)
+      return res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-name`)
     }
     return res.redirect(backLink)
   }

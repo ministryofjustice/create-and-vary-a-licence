@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 
 import InitialMeetingPlaceRoutes from './initialMeetingPlace'
-import LicenceService from '../../../services/licenceService'
-import Address from '../types/address'
-import UserType from '../../../enumeration/userType'
-import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
+import LicenceService from '../../../../services/licenceService'
+import Address from '../../types/address'
+import UserType from '../../../../enumeration/userType'
+import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
 
-jest.mock('./initialMeetingUpdatedFlashMessage')
+jest.mock('../initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -50,56 +50,21 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     licenceService.updateAppointmentAddress = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
   })
-
-  describe('Probation user journey', () => {
-    const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PROBATION)
-
-    describe('GET', () => {
-      it('should render view', async () => {
-        await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
-          formAddress,
-        })
-      })
-    })
-
-    describe('POST', () => {
-      it('should redirect to the contact page', async () => {
-        await handler.POST(req, res)
-        expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
-        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-contact')
-      })
-
-      it('should redirect to the check your answers page if fromReview flag is set', async () => {
-        req.query.fromReview = 'true'
-        await handler.POST(req, res)
-        expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
-      })
-
-      it('should call to generate a flash message', async () => {
-        await handler.POST(req, res)
-        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PROBATION)
-      })
-    })
-  })
-
-  describe('Prison user journey', () => {
+  describe('Hardstop licence prison user journey', () => {
     const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
 
     describe('GET', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/initialMeetingPlace', {
-          formAddress,
-        })
+        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', { formAddress })
       })
     })
 
     describe('POST', () => {
-      it('should redirect to the show page', async () => {
+      it('should redirect to the initial meeting contact page', async () => {
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
-        expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')
+        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-contact')
       })
 
       it('should call to generate a flash message', async () => {
