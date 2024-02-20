@@ -62,7 +62,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           username: 'joebloggs',
         }
       )
-      expect(res.redirect).toHaveBeenCalledWith('/licence/hardstop/create/id/1/initial-meeting-name')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-name')
     })
 
     it('should not create licence and should redirect when answer is NO', async () => {

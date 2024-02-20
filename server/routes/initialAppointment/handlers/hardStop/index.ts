@@ -7,11 +7,18 @@ import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
 import { Services } from '../../../../services'
 import PersonName from '../../types/personName'
 import InitialMeetingNameRoutes from './initialMeetingName'
+import Address from '../../types/address'
+import InitialMeetingPlaceRoutes from './initialMeetingPlace'
+import UserType from '../../../../enumeration/userType'
+import InitialMeetingContactRoutes from './initialMeetingContact'
+import Telephone from '../../types/telephone'
+import InitialMeetingTimeRoutes from './initialMeetingTime'
+import DateTime from '../../types/dateTime'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
 
-  const routePrefix = (path: string) => `/licence/hardstop${path}`
+  const routePrefix = (path: string) => `/licence/hard-stop${path}`
 
   /*
    * The fetchLicence middleware will call the licenceAPI during each GET request on the create a licence journey
@@ -39,6 +46,21 @@ export default function Index({ licenceService, conditionService }: Services): R
     const controller = new InitialMeetingNameRoutes(licenceService)
     get('/create/id/:licenceId/initial-meeting-name', controller.GET)
     post('/create/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
+  }
+  {
+    const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
+    get('/create/id/:licenceId/initial-meeting-place', controller.GET)
+    post('/create/id/:licenceId/initial-meeting-place', controller.POST, Address)
+  }
+  {
+    const controller = new InitialMeetingContactRoutes(licenceService, UserType.PRISON)
+    get('/create/id/:licenceId/initial-meeting-contact', controller.GET)
+    post('/create/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
+  }
+  {
+    const controller = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON)
+    get('/create/id/:licenceId/initial-meeting-time', controller.GET)
+    post('/create/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }
   return router
 }

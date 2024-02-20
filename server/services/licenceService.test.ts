@@ -67,6 +67,11 @@ describe('Licence Service', () => {
       await licenceService.createLicence({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
       expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
     })
+
+    it('Should create a HARD_STOP licence in the backend API', async () => {
+      await licenceService.createLicence({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
+      expect(licenceApiClient.createLicence).toHaveBeenCalledWith({ nomsId: 'ABC1235', type: 'HARD_STOP' }, user)
+    })
   })
 
   it('Get Licence', async () => {
@@ -86,6 +91,22 @@ describe('Licence Service', () => {
     expect(licenceApiClient.updateAppointmentPerson).toBeCalledWith(
       '1',
       { appointmentPerson: 'Joe Bloggs', appointmentPersonType: 'SPECIFIC_PERSON' },
+      user
+    )
+  })
+
+  it('Update appointment person with type DUTY_OFFICER', async () => {
+    await licenceService.updateAppointmentPerson(
+      '1',
+      {
+        contactName: '',
+        appointmentPersonType: 'DUTY_OFFICER',
+      },
+      user
+    )
+    expect(licenceApiClient.updateAppointmentPerson).toBeCalledWith(
+      '1',
+      { appointmentPerson: '', appointmentPersonType: 'DUTY_OFFICER' },
       user
     )
   })

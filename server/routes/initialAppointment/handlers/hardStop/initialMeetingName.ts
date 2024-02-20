@@ -23,5 +23,6 @@ export default class InitialMeetingNameRoutes {
     const { licenceId } = req.params
     const { user } = res.locals
     await this.licenceService.updateAppointmentPerson(licenceId, req.body, user)
+    res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-place`)
   }
 }

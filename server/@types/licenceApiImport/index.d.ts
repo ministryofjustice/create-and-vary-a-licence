@@ -341,6 +341,16 @@ export interface paths {
   '/queue-admin/get-dlq-messages/{dlqName}': {
     get: operations['getDlqMessages']
   }
+  '/public/subject-access-request': {
+    /**
+     * Get a list of licences and audits summaries matching the nomis Prison Reference Number(prn).
+     * @description Returns a list of licences and audit details for the Prison Reference Number(prn). Requires ROLE_SAR_DATA_ACCESS or ROLE_CVL_ADMIN.
+     */
+    get: operations['getSarRecordsById']
+  }
+  '/queue-admin/get-dlq-messages/{dlqName}': {
+    get: operations['getDlqMessages']
+  }
   '/public/policy/{version}': {
     /**
      * Get a policy by its version number
@@ -1619,15 +1629,6 @@ export interface components {
        */
       endTime: string
     }
-    ErrorResponse_SubjectAccessRequest: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
     /** @description Describes the data entered for an additional condition */
     AdditionalConditionData_SubjectAccessRequest: {
       /**
@@ -2569,8 +2570,6 @@ export interface components {
        * @example 1.4
        */
       version?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
       /**
@@ -2593,22 +2592,59 @@ export interface components {
        * @example Cardiff South
        */
       probationTeamDescription?: string
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
       /**
-       * @description The family name of the person on licence
-       * @example Smith
+       * @description The prison booking number for the person on this licence
+       * @example F12333
        */
-      surname?: string
+      bookingNo?: string
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
        */
-      crn?: string
+      supersededDate?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * Format: date-time
+       * @description The date and time that this licence was first created
        */
-      nomsId?: string
-      kind: string
+      dateCreated?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       */
+      dateLastUpdated?: string
+      /**
+       * @description The username of the person who last updated this licence
+       * @example X34433
+       */
+      updatedByUsername?: string
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean
+      /**
+       * @description The current status code for this licence
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      statusCode?:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
       /** @description The list of standard post sentence supervision conditions on this licence */
       standardPssConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
       /** @description The list of bespoke conditions on this licence */
@@ -2777,57 +2813,37 @@ export interface components {
        * @example 989898
        */
       bookingId?: number
+      kind: string
       /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
        */
-      bookingNo?: string
+      cro?: string
       /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
        */
-      supersededDate?: string
+      pnc?: string
       /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
+       * @description The family name of the person on licence
+       * @example Smith
        */
-      dateCreated?: string
+      surname?: string
       /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
        */
-      dateLastUpdated?: string
+      crn?: string
       /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
        */
-      updatedByUsername?: string
+      nomsId?: string
       /**
-       * @description The version number of this licence
-       * @example 1.3
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
        */
-      licenceVersion?: string
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean
-      /**
-       * @description The current status code for this licence
-       * @example IN_PROGRESS
-       * @enum {string}
-       */
-      statusCode?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
+      comUsername?: string
       /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
@@ -2856,21 +2872,6 @@ export interface components {
        * @example Gordon Sumner
        */
       createdByFullName?: string
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string
     } & (
       | components['schemas']['CrdLicence']
       | components['schemas']['VariationLicence']
@@ -3247,6 +3248,15 @@ export interface components {
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
       isEligibleForEarlyRelease: boolean
     }
+    ErrorResponse_SubjectAccessRequest: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     GetDlqResult: {
       /** Format: int32 */
       messagesFoundCount: number
@@ -3299,8 +3309,6 @@ export interface components {
        * @example 1.4
        */
       version?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /**
@@ -3323,22 +3331,59 @@ export interface components {
        * @example Cardiff South
        */
       probationTeamDescription?: string
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /**
-       * @description The family name of the person on licence
-       * @example Smith
+       * @description The prison booking number for the person on this licence
+       * @example F12333
        */
-      surname?: string
+      bookingNo?: string
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
        */
-      crn?: string
+      supersededDate?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * Format: date-time
+       * @description The date and time that this licence was first created
        */
-      nomsId?: string
-      kind: string
+      dateCreated?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       */
+      dateLastUpdated?: string
+      /**
+       * @description The username of the person who last updated this licence
+       * @example X34433
+       */
+      updatedByUsername?: string
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean
+      /**
+       * @description The current status code for this licence
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      statusCode?:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
       /** @description The list of standard post sentence supervision conditions on this licence */
       standardPssConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of bespoke conditions on this licence */
@@ -3507,57 +3552,37 @@ export interface components {
        * @example 989898
        */
       bookingId?: number
+      kind: string
       /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
        */
-      bookingNo?: string
+      cro?: string
       /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
        */
-      supersededDate?: string
+      pnc?: string
       /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
+       * @description The family name of the person on licence
+       * @example Smith
        */
-      dateCreated?: string
+      surname?: string
       /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
        */
-      dateLastUpdated?: string
+      crn?: string
       /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
        */
-      updatedByUsername?: string
+      nomsId?: string
       /**
-       * @description The version number of this licence
-       * @example 1.3
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
        */
-      licenceVersion?: string
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean
-      /**
-       * @description The current status code for this licence
-       * @example IN_PROGRESS
-       * @enum {string}
-       */
-      statusCode?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
+      comUsername?: string
       /**
        * Format: int64
        * @description The nDELIUS staff identifier for the supervising probation officer
@@ -3586,21 +3611,6 @@ export interface components {
        * @example Gordon Sumner
        */
       createdByFullName?: string
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string
     } & (
       | components['schemas']['CrdLicence']
       | components['schemas']['VariationLicence']
@@ -5644,6 +5654,74 @@ export interface operations {
       403: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Get a list of licences and audits summaries matching the nomis Prison Reference Number(prn).
+   * @description Returns a list of licences and audit details for the Prison Reference Number(prn). Requires ROLE_SAR_DATA_ACCESS or ROLE_CVL_ADMIN.
+   */
+  getSarRecordsById: {
+    parameters: {
+      query?: {
+        prn?: string
+        crn?: string
+      }
+    }
+    responses: {
+      /** @description Records found */
+      200: {
+        content: {
+          'application/json': components['schemas']['SarContent_SubjectAccessRequest']
+        }
+      }
+      /** @description Records for this prn was not found. */
+      204: {
+        content: {
+          'application/json': Record<string, never>
+        }
+      }
+      /** @description Search by crn is not supported. */
+      209: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+        }
+      }
+      /** @description Unexpected error occurred */
+      500: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
+        }
+      }
+    }
+  }
+  getDlqMessages: {
+    parameters: {
+      query?: {
+        maxMessages?: number
+      }
+      path: {
+        dlqName: string
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          '*/*': components['schemas']['GetDlqResult']
         }
       }
     }
