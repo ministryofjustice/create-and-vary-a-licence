@@ -24,7 +24,11 @@
 
             <h2 class="govuk-heading-m">If you need to make any changes</h2>
             <p class="govuk-body">
-                You can return to the service to edit this licence after it has been sent or approved.
+                {% if hardStopEnabled %}
+                    You can do so up to 2 days before release. From this point, you can only ask the prison to change the initial appointment details. Other changes must be made after release.
+                {% else %}
+                    You can return to the service to edit this licence after it has been sent or approved.
+                {% endif %}
             </p>
 
             <h2 class="govuk-heading-m">Give us your feedback</h2>
