@@ -232,7 +232,8 @@ const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], k
 }
 
 const isInHardStopPeriod = (licence: Licence): boolean => {
-  return config.hardStopEnabled && licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod
+  return true
+  // return config.hardStopEnabled && licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod
 }
 
 export {

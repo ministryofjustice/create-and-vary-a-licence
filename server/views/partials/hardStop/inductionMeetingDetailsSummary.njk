@@ -1,0 +1,121 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro hardStopInductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
+    {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
+    {% set routePath = 'view' if isPrisonUser else 'create'%}
+    {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
+    {% switch licence.appointmentPersonType %}
+        {% case 'DUTY_OFFICER' %}
+            {% set appointmentPerson = 'Duty Officer' %}
+        {% case 'RESPONSIBLE_COM' %}
+            {% set appointmentPerson = licence.responsibleComFullName + ", this person’s probation practitioner" %}
+        {% default %}
+            {% set appointmentPerson = licence.appointmentPerson %}
+    {% endswitch %}
+
+    <div class="govuk-grid-row check-answers-header">
+        <div class="govuk-grid-column-three-quarters">
+            <h2 class="govuk-!-margin-bottom-3 govuk-heading-m">Initial appointment details1</h2>
+        </div>
+    </div>
+    {% if contactForChangeText %}
+        <p class="govuk-!-margin-bottom-3 govuk-body">{{contactForChangeText}}</p>
+    {% endif %}
+
+    {{ govukSummaryList({
+        attributes: { id: 'induction-meeting-details' },
+        classes: 'govuk-!-margin-bottom-9',
+        rows: [
+            {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentPerson'),
+                key: { text: "Name" },
+                value: { text: appointmentPerson },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-name" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "name",
+                            attributes: { "data-qa": "person-change-link" }
+                        }
+                    ]
+                } if isEditable
+            },
+            {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentAddress'),
+                key: { text: "Address" },
+                value: { text: licence.appointmentAddress | formatAddress },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-place" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "address",
+                            attributes: { "data-qa": "address-change-link" }
+                        }
+                    ]
+                } if isEditable
+            },
+            {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentContact'),
+                key: { text: "Contact phone number" },
+                value: { text: licence.appointmentContact },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-contact" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "telephone",
+                            attributes: { "data-qa": "telephone-change-link" }
+                        }
+                    ]
+                } if isEditable
+            },
+            {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTimeType'),
+                key: { text: "Date/time" },
+                value: { text: licence.appointmentTimeType | getAppointmentTimeTypeDescription if apptDateTimeEntered else "Not yet entered" },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "date",
+                            attributes: { "data-qa": "date-change-link" }
+                        }
+                    ]
+                } if isEditable
+            }if licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME',
+            {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
+                key: { text: "Date" },
+                value: { text: licence.appointmentTime | datetimeToDateShort if apptDateTimeEntered else "Not yet entered" },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "date",
+                            attributes: { "data-qa": "date-change-link" }
+                        }
+                    ]
+                } if isEditable
+            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME',
+            {
+                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentTime'),
+                key: { text: "Time" },
+                value: { text: licence.appointmentTime | datetimeTo12HourTime if apptDateTimeEntered else "Not yet entered" },
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
+                            text: "Change",
+                            visuallyHiddenText: "time",
+                            attributes: { "data-qa": "time-change-link" }
+                        }
+                    ]
+                } if isEditable
+            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME'
+        ]
+    }) }}
+{% endmacro %}
