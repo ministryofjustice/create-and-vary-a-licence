@@ -29,80 +29,81 @@
             iconFallbackText: 'Success'
         }) }}
     {% endif %}  
-    
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            {% if licence.typeCode === 'AP' %}
-               <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ licence.forename }} {{ licence.surname }}</h1>
-            {% elseif licence.typeCode === 'AP_PSS' %}
-                <h1 class="govuk-heading-l">{{ actionWord }} licence and post sentence supervision order for {{ licence.forename }} {{ licence.surname }}</h1>
-            {% elseif licence.typeCode === 'PSS' %}
-                <h1 class="govuk-heading-l">{{ actionWord }} post sentence supervision order for {{ licence.forename }} {{ licence.surname }}</h1>
-            {% else %}
-                <h1 class="govuk-heading-l">{{ actionWord }} licence type {{ licence.typeCode }} for {{ licence.forename }} {{ licence.surname }}</h1>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-            {% if warningMessage %}
-                {{ govukWarningText({
-                   html: warningMessage
-                }) }}
-            {% endif %}
-
-            {% if not licence.kind === 'HARD_STOP' %}
-                {{ hardStopInductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
-            {% else %}
-                {{ inductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
-            {% endif %}
-
-            {% if not licence.isInHardStopPeriod and licence.statusCode === 'IN_PROGRESS' %}
-                <h2 class="govuk-heading-m">Licence conditions</h2>
-                <p class="govuk-body">By default, the licence will automatically contain the following restrictions:</p>
-                <ul class="govuk-list govuk-list--bullet">
-                    <li>standard conditions</li>
-                    <li>the following additional condition:</li>
-                    <p class="govuk-inset-text">Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer.</p>
-                </ul>
-            {% else %}
-                {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
-                    {{ additionalLicenceConditions(licence, additionalConditions) }}
-                    {{ bespokeConditions(licence.id, null, null, null, licence.bespokeConditions) }}
+    <form method="POST">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}">  
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {% if licence.typeCode === 'AP' %}
+                <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ licence.forename }} {{ licence.surname }}</h1>
+                {% elseif licence.typeCode === 'AP_PSS' %}
+                    <h1 class="govuk-heading-l">{{ actionWord }} licence and post sentence supervision order for {{ licence.forename }} {{ licence.surname }}</h1>
+                {% elseif licence.typeCode === 'PSS' %}
+                    <h1 class="govuk-heading-l">{{ actionWord }} post sentence supervision order for {{ licence.forename }} {{ licence.surname }}</h1>
+                {% else %}
+                    <h1 class="govuk-heading-l">{{ actionWord }} licence type {{ licence.typeCode }} for {{ licence.forename }} {{ licence.surname }}</h1>
                 {% endif %}
-                {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
-                    {{ additionalPssConditions(licence) }}
-                {% endif %}
-            {% endif %}    
-
-            <div class="govuk-button-group govuk-!-margin-top-8">
-                {% if (not licence.isInHardStopPeriod) and licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP' %}
-                    {{ govukButton({
-                        text: "Send for approval",
-                        classes: "govuk-button--primary govuk-!-margin-right-1",
-                        href: '',
-                        attributes: { 'data-qa': 'approve-standard-licence', 'target': "_blank" }
-                    }) }}
-                {% endif %}
-
-                {% if isPrintable %}
-                    {{ govukButton({
-                        text: "View and print licence PDF",
-                        classes: "govuk-button--primary govuk-!-margin-right-1",
-                        href: '/licence/view/id/' + licence.id + '/pdf-print',
-                        attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
-                    }) }}
-                {% endif %}
-
-                {{ govukButton({
-                   text: "Return to case list",
-                   classes: "govuk-button--secondary" if isPrintable or ((not licence.isInHardStopPeriod) and licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP'),
-                   href: '/licence/view/cases',
-                   attributes: { 'data-qa': 'return-to-view-list' }
-                }) }}
             </div>
         </div>
-    </div>
 
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {% if warningMessage %}
+                    {{ govukWarningText({
+                    html: warningMessage
+                    }) }}
+                {% endif %}
+
+                {% if licence.kind === 'HARD_STOP' %}
+                    {{ hardStopInductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
+                {% else %}
+                    {{ inductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
+                {% endif %}
+
+                {% if licence.kind === 'HARD_STOP' %}
+                    <h2 class="govuk-heading-m">Licence conditions</h2>
+                    <p class="govuk-body">By default, the licence will automatically contain the following restrictions:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>standard conditions</li>
+                        <li>the following additional condition:</li>
+                        <p class="govuk-inset-text">Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer.</p>
+                    </ul>
+                {% else %}
+                    {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
+                        {{ additionalLicenceConditions(licence, additionalConditions) }}
+                        {{ bespokeConditions(licence.id, null, null, null, licence.bespokeConditions) }}
+                    {% endif %}
+                    {% if licence.typeCode === 'PSS' or licence.typeCode === 'AP_PSS' %}
+                        {{ additionalPssConditions(licence) }}
+                    {% endif %}
+                {% endif %}    
+
+                    <div class="govuk-button-group govuk-!-margin-top-8">
+                        {% if licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP' %}
+                            {{ govukButton({
+                                text: "Send for approval",
+                                classes: "govuk-button--primary govuk-!-margin-right-1",
+                                preventDoubleClick: true,
+                                attributes: { 'data-qa': 'approve-standard-licence'}
+                            }) }}
+                        {% endif %}
+
+                        {% if isPrintable %}
+                            {{ govukButton({
+                                text: "View and print licence PDF",
+                                classes: "govuk-button--primary govuk-!-margin-right-1",
+                                href: '/licence/view/id/' + licence.id + '/pdf-print',
+                                attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+                            }) }}
+                        {% endif %}
+
+                        {{ govukButton({
+                            text: "Return to case list",
+                            classes: "govuk-button--secondary" if isPrintable or (licence.statusCode === 'IN_PROGRESS' and licence.kind === 'HARD_STOP'),
+                            href: '/licence/view/cases',
+                            attributes: { 'data-qa': 'return-to-view-list' }
+                        }) }}
+                    </div>
+            </div>
+        </div>
+    </form>
 {% endblock %}

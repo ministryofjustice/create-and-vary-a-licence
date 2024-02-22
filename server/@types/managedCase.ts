@@ -3,6 +3,7 @@ import { OffenderDetail } from './probationSearchApiClientTypes'
 import { CommunityApiManagedOffender } from './communityClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
+import LicenceKind from '../enumeration/LicenceKind'
 
 export type DeliusRecord = OffenderDetail & CommunityApiManagedOffender
 
@@ -15,6 +16,7 @@ export type ProbationPractitioner = {
 export type Licence = {
   id?: number
   status: LicenceStatus
+  kind?: LicenceKind
   type: LicenceType
   comUsername?: string
   dateCreated?: string

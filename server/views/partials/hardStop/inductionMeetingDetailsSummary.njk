@@ -2,8 +2,7 @@
 
 {% macro hardStopInductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
-    {% set routePath = 'view' if isPrisonUser else 'create'%}
-    {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
+    {% set routepath = "/licence/hard-stop/edit/id/" + licence.id %}
     {% switch licence.appointmentPersonType %}
         {% case 'DUTY_OFFICER' %}
             {% set appointmentPerson = 'Duty Officer' %}
@@ -33,7 +32,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-name" + routeAppend,
+                            href: routepath + "/initial-meeting-name",
                             text: "Change",
                             visuallyHiddenText: "name",
                             attributes: { "data-qa": "person-change-link" }
@@ -48,7 +47,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-place" + routeAppend,
+                            href: routepath + "/initial-meeting-place",
                             text: "Change",
                             visuallyHiddenText: "address",
                             attributes: { "data-qa": "address-change-link" }
@@ -63,7 +62,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-contact" + routeAppend,
+                            href: routepath + "/initial-meeting-contact",
                             text: "Change",
                             visuallyHiddenText: "telephone",
                             attributes: { "data-qa": "telephone-change-link" }
@@ -78,7 +77,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
+                            href: routepath + "/initial-meeting-time",
                             text: "Change",
                             visuallyHiddenText: "date",
                             attributes: { "data-qa": "date-change-link" }
@@ -93,7 +92,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
+                            href: routepath + "/initial-meeting-time",
                             text: "Change",
                             visuallyHiddenText: "date",
                             attributes: { "data-qa": "date-change-link" }
@@ -108,7 +107,7 @@
                 actions: {
                     items: [
                         {
-                            href: "/licence/" + routePath + "/id/" + licence.id + "/initial-meeting-time" + routeAppend,
+                            href: routepath + "/initial-meeting-time",
                             text: "Change",
                             visuallyHiddenText: "time",
                             attributes: { "data-qa": "time-change-link" }

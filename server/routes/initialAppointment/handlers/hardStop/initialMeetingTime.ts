@@ -29,6 +29,6 @@ export default class InitialMeetingTimeRoutes {
 
     flashInitialApptUpdatedMessage(req, licence, this.userType)
 
-    return res.redirect(`/licence/view/id/${licenceId}/show`)
+    return res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
   }
 }

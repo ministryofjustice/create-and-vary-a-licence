@@ -14,8 +14,10 @@ import InitialMeetingContactRoutes from './initialMeetingContact'
 import Telephone from '../../types/telephone'
 import InitialMeetingTimeRoutes from './initialMeetingTime'
 import DateTime from '../../types/dateTime'
+import ViewAndPrintLicenceRoutes from '../../../viewingLicences/handlers/viewLicence'
+import ConfirmationRoutes from '../../../creatingLicences/handlers/confirmation'
 
-export default function Index({ licenceService, conditionService }: Services): Router {
+export default function Index({ licenceService, conditionService, communityService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hard-stop${path}`
@@ -48,9 +50,19 @@ export default function Index({ licenceService, conditionService }: Services): R
     post('/create/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
   {
+    const controller = new InitialMeetingNameRoutes(licenceService)
+    get('/edit/id/:licenceId/initial-meeting-name', controller.GET)
+    post('/edit/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
+  }
+  {
     const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET)
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, Address)
+  }
+  {
+    const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
+    get('/edit/id/:licenceId/initial-meeting-place', controller.GET)
+    post('/edit/id/:licenceId/initial-meeting-place', controller.POST, Address)
   }
   {
     const controller = new InitialMeetingContactRoutes(licenceService, UserType.PRISON)
@@ -58,9 +70,28 @@ export default function Index({ licenceService, conditionService }: Services): R
     post('/create/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
   }
   {
+    const controller = new InitialMeetingContactRoutes(licenceService, UserType.PRISON)
+    get('/edit/id/:licenceId/initial-meeting-contact', controller.GET)
+    post('/edit/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
+  }
+  {
     const controller = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON)
     get('/create/id/:licenceId/initial-meeting-time', controller.GET)
     post('/create/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
+  }
+  {
+    const controller = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON)
+    get('/edit/id/:licenceId/initial-meeting-time', controller.GET)
+    post('/edit/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
+  }
+  {
+    const controller = new ViewAndPrintLicenceRoutes(licenceService, communityService)
+    get('/id/:licenceId/check-your-answers', controller.GET)
+    post('/id/:licenceId/check-your-answers', controller.POST)
+  }
+  {
+    const controller = new ConfirmationRoutes()
+    get('/id/:licenceId/confirmation', controller.GET)
   }
   return router
 }

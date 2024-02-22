@@ -5,13 +5,15 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import config from '../../../config'
+import CommunityService from '../../../services/communityService'
 
 const username = 'joebloggs'
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
+const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 jest.mock('../../../services/licenceService')
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ViewAndPrintLicenceRoutes(licenceService)
+  const handler = new ViewAndPrintLicenceRoutes(licenceService, communityService)
   let req: Request
   let res: Response
 
