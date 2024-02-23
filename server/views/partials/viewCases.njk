@@ -5,10 +5,10 @@
 {% set pageTitle = applicationName + " - view an approved licence hardstop" %}
 {% set pageId = 'view-hardstop-cases-page' %}
 
-{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, licenceStatus, kind, index) %}
+{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, licenceStatus, index) %}
     <div class="caseload-offender-name">
         {% if isClickable %}
-            {% set link = "/licence/hard-stop/id/" + licenceId + "/check-your-answers" if kind === "HARD_STOP" else "/licence/view/id/" + licenceId + "/show" %}
+            {% set link = "/licence/view/id/" + licenceId + "/show" %}
             {% if versionOfId and licenceStatus === 'SUBMITTED' %}
                 {% set link = link + "?lastApprovedVersion=" + versionOfId %}
             {% endif %}
@@ -110,7 +110,7 @@
                     id: 'name-' + loop.index,
                     "data-sort-value": case.name
                 },
-                html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, case.licenceStatus, case.kind, loop.index),
+                html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, case.licenceStatus, loop.index),
                 classes: "max-width max-width-220"
             },
             {

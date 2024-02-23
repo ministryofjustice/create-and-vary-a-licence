@@ -11,7 +11,6 @@ import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import Container from '../../../services/container'
 import OmuCaselist from '../../../services/omuCaselist'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
@@ -75,7 +74,6 @@ describe('Route handlers - View and print case list', () => {
           {
             type: LicenceType.AP,
             status: LicenceStatus.NOT_STARTED,
-            kind: LicenceKind.CRD,
           },
         ],
         nomisRecord: {
@@ -234,7 +232,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             hardStop: false,
-            kind: 'CRD',
           },
           {
             isClickable: false,
@@ -319,7 +316,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             hardStop: false,
-            kind: 'CRD',
           },
           {
             isClickable: false,
@@ -398,7 +394,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             hardStop: false,
-            kind: 'CRD',
           },
           {
             isClickable: false,
@@ -477,7 +472,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             hardStop: false,
-            kind: 'CRD',
           },
           {
             isClickable: false,
@@ -626,7 +620,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             hardStop: false,
-            kind: 'CRD',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -661,7 +654,6 @@ describe('Route handlers - View and print case list', () => {
             licenceStatus: LicenceStatus.NOT_STARTED,
             isClickable: false,
             hardStop: false,
-            kind: 'CRD',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -696,7 +688,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             hardStop: false,
-            kind: 'CRD',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -807,7 +798,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             hardStop: false,
-            kind: 'CRD',
           },
           {
             isClickable: false,
@@ -951,7 +941,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             hardStop: true,
-            kind: 'CRD',
           },
           {
             isClickable: false,
@@ -1028,7 +1017,6 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             hardStop: false,
-            kind: 'CRD',
           },
           {
             isClickable: false,

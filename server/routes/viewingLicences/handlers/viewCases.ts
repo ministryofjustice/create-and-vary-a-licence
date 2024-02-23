@@ -46,7 +46,6 @@ export default class ViewAndPrintCaseRoutes {
               )
         return {
           licenceId: latestLicence.id,
-          kind: latestLicence?.kind,
           licenceVersionOf: latestLicence.versionOf,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,

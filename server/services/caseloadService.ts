@@ -14,7 +14,6 @@ import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import { LicenceSummary, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
 import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
-import LicenceKind from '../enumeration/LicenceKind'
 
 export default class CaseloadService {
   constructor(
@@ -200,7 +199,6 @@ export default class CaseloadService {
           licences: licences.map(licence => {
             return {
               id: licence.licenceId,
-              kind: <LicenceKind>licence.kind,
               status: <LicenceStatus>licence.licenceStatus,
               type: <LicenceType>licence.licenceType,
               comUsername: licence.comUsername,
@@ -346,7 +344,6 @@ export default class CaseloadService {
           .map(l => {
             return {
               id: l.licenceId,
-              kind: <LicenceKind>l.kind,
               type: <LicenceType>l.licenceType,
               status: <LicenceStatus>l.licenceStatus,
               comUsername: l.comUsername,

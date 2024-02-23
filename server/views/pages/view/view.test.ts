@@ -339,23 +339,23 @@ describe('View and print - single standard licence view', () => {
     expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(4)
   })
 
-  // it('Print buttons are not visible when licence is not approved or active', () => {
-  //   const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
+  it('Print buttons are not visible when licence is not approved or active', () => {
+    const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
 
-  //   expect($('[data-qa="print-licence"]').length).toBe(0)
-  // })
+    expect($('[data-qa="print-licence"]').length).toBe(0)
+  })
 
-  // it('Title changes to view when licence is not printable', () => {
-  //   const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
+  it('Title changes to view when licence is not printable', () => {
+    const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
 
-  //   expect($('h1').text()).toContain('View licence and post sentence supervision order for John Smith')
-  // })
+    expect($('h1').text()).toContain('View licence and post sentence supervision order for John Smith')
+  })
 
-  // it('Title changes depending on licence type', () => {
-  //   const $ = render({
-  //     licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'PSS' },
-  //   })
+  it('Title changes depending on licence type', () => {
+    const $ = render({
+      licence: { ...licence, statusCode: 'ACTIVE', typeCode: 'PSS' },
+    })
 
-  //   expect($('h1').text()).toContain('Print post sentence supervision order for John Smith')
-  // })
+    expect($('h1').text()).toContain('Print post sentence supervision order for John Smith')
+  })
 })
