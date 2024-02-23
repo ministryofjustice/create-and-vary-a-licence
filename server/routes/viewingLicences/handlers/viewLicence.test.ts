@@ -11,6 +11,7 @@ const username = 'joebloggs'
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 jest.mock('../../../services/licenceService')
+jest.mock('../../../services/communityService')
 
 describe('Route - view and approve a licence', () => {
   const handler = new ViewAndPrintLicenceRoutes(licenceService, communityService)
@@ -254,6 +255,49 @@ describe('Route - view and approve a licence', () => {
         isPrisonUser: false,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('POST', () => {
+    it('should submit the variation response and redirect to the confirmation page', async () => {
+      req = {
+        params: {
+          licenceId: 1,
+        },
+        query: {},
+      } as unknown as Request
+
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: {
+            username: 'joebloggs',
+          },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
+          },
+        },
+      } as unknown as Response
+      communityService.getPduHeads.mockResolvedValue([
+        {
+          email: 'jbloggs@probation.gov.uk',
+          staff: {
+            forenames: 'Joe',
+            surname: 'Bloggs',
+          },
+        },
+      ])
+
+      await handler.POST(req, res)
+
+      expect(licenceService.submitVariation).toHaveBeenCalledWith(
+        1,
+        [{ name: 'Joe Bloggs', email: 'jbloggs@probation.gov.uk' }],
+        { username: 'joebloggs' }
+      )
+      expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/confirmation')
     })
   })
 })

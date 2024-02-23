@@ -73,7 +73,7 @@ describe('Route - create licence - initial meeting date and time', () => {
       it('should redirect to the next page', async () => {
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
-        expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')
+        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
       })
 
       it('should call to generate a flash message', async () => {

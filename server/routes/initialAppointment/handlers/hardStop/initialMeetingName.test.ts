@@ -2,19 +2,24 @@ import { Request, Response } from 'express'
 
 import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../../services/licenceService'
+import { AppointmentPersonRequest } from '../../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - Initial Meeting Name - Probation users', () => {
   let req: Request
   let res: Response
+  const contactPerson = {
+    appointmentPersonType: 'SPECIFIC_PERSON',
+    appointmentPerson: 'specific person',
+  } as AppointmentPersonRequest
 
   beforeEach(() => {
     req = {
       params: {
         licenceId: '1',
       },
-      body: {},
+      body: contactPerson,
       query: {},
     } as unknown as Request
 
@@ -62,6 +67,30 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     })
 
     /** To be added */
-    describe('POST', () => {})
+    describe('POST', () => {
+      it('should redirect to the meeting time page', async () => {
+        await handler.POST(req, res)
+        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
+          username: 'joebloggs',
+        })
+        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-place')
+      })
+
+      it('should redirect to the check your answers page', async () => {
+        req = {
+          params: {
+            licenceId: '1',
+          },
+          body: contactPerson,
+          query: {},
+          originalUrl: 'edit',
+        } as unknown as Request
+        await handler.POST(req, res)
+        expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
+          username: 'joebloggs',
+        })
+        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
+      })
+    })
   })
 })

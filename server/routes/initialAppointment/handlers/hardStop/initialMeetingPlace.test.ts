@@ -67,6 +67,20 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-contact')
       })
 
+      it('should redirect to the check your answers page page', async () => {
+        req = {
+          params: {
+            licenceId: 1,
+          },
+          body: formAddress,
+          query: {},
+          originalUrl: 'edit',
+        } as unknown as Request
+        await handler.POST(req, res)
+        expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
+        expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
+      })
+
       it('should call to generate a flash message', async () => {
         await handler.POST(req, res)
         expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
