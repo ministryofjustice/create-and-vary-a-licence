@@ -24,6 +24,21 @@ describe('URL access checks for licence statuses', () => {
       path = '/licence/view/id/1/pdf-print'
       expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(false)
     })
+
+    it('should allow access to standard licence creation', () => {
+      path = '/licence/hard-stop/create/id/1/initial-meeting-name'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
+
+    it('should allow access to edit standard licence', () => {
+      path = '/licence/hard-stop/edit/id/1/initial-meeting-name'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
+
+    it('should allow access to check your answers', () => {
+      path = '/licence/hard-stop/id/1/check-your-answers'
+      expect(getUrlAccessByStatus(path, 1, 'IN_PROGRESS', username)).toEqual(true)
+    })
   })
 
   describe('URL access checks for SUBMITTED', () => {
@@ -50,6 +65,21 @@ describe('URL access checks for licence statuses', () => {
     it('should deny access to pdf print', () => {
       path = '/licence/view/id/1/pdf-print'
       expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(false)
+    })
+
+    it('should allow access to standard licence edit', () => {
+      path = '/licence/hard-stop/edit/id/1/initial-meeting-name'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
+    })
+
+    it('should allow access to standard licence confirm', () => {
+      path = '/licence/hard-stop/id/1/confirmation'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
+    })
+
+    it('should allow access to check your answers', () => {
+      path = '/licence/hard-stop/id/1/check-your-answers'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
     })
   })
 
@@ -87,6 +117,16 @@ describe('URL access checks for licence statuses', () => {
     it('should deny access to approval flow', () => {
       path = '/licence/approve/id/1/view'
       expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(false)
+    })
+
+    it('should allow access to standard licence edit', () => {
+      path = '/licence/hard-stop/edit/id/1/initial-meeting-name'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
+    it('should allow access to standard licence check your answers', () => {
+      path = '/licence/hard-stop/id/1/check-your-answers'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
     })
   })
 

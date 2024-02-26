@@ -9,12 +9,21 @@ type AllowedPathByStatusConfig = {
 const allowedPaths = [
   {
     status: 'IN_PROGRESS',
-    allowed: ['/licence/hard-stop/create/.*', '/licence/create/.*', '/licence/view/.*'],
+    allowed: [
+      '/licence/hard-stop/id/(\\d)*/check-your-answers.*',
+      '/licence/hard-stop/create/.*',
+      '/licence/hard-stop/edit/.*',
+      '/licence/create/.*',
+      '/licence/view/.*',
+    ],
     disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
   {
     status: 'SUBMITTED',
     allowed: [
+      '/licence/hard-stop/edit/.*',
+      '/licence/hard-stop/id/(\\d)*/confirmation.*',
+      '/licence/hard-stop/id/(\\d)*/check-your-answers.*',
       '/licence/create/id/(\\d)*/check-your-answers.*',
       '/licence/create/id/(\\d)*/edit.*',
       '/licence/create/id/(\\d)*/confirmation.*',
@@ -27,6 +36,8 @@ const allowedPaths = [
   {
     status: 'APPROVED',
     allowed: [
+      '/licence/hard-stop/edit/.*',
+      '/licence/hard-stop/id/(\\d)*/check-your-answers.*',
       '/licence/create/id/(\\d)*/check-your-answers.*',
       '/licence/create/id/(\\d)*/edit.*',
       '/licence/create/id/(\\d)*/initial-meeting.*',

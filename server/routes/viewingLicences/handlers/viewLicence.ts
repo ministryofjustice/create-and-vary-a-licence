@@ -4,9 +4,13 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
 import { groupingBy, isInHardStopPeriod } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import CommunityService from '../../../services/communityService'
 
 export default class ViewAndPrintLicenceRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly communityService: CommunityService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -67,6 +71,15 @@ export default class ViewAndPrintLicenceRoutes {
     } else {
       res.redirect(`/licence/view/cases`)
     }
+  }
+
+  POST = async (req: Request, res: Response): Promise<void> => {
+    const { licenceId } = req.params
+    const { user } = res.locals
+
+    await this.licenceService.submitLicence(licenceId, user)
+
+    return res.redirect(`/licence/hard-stop/id/${licenceId}/confirmation`)
   }
 
   getFormattedLicenceDate(licence: Licence): string {
