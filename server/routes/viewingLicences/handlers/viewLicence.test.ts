@@ -292,11 +292,7 @@ describe('Route - view and approve a licence', () => {
 
       await handler.POST(req, res)
 
-      expect(licenceService.submitVariation).toHaveBeenCalledWith(
-        1,
-        [{ name: 'Joe Bloggs', email: 'jbloggs@probation.gov.uk' }],
-        { username: 'joebloggs' }
-      )
+      expect(licenceService.submitLicence).toHaveBeenCalledWith(1, { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/confirmation')
     })
   })

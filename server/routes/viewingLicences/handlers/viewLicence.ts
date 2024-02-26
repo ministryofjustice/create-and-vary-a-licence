@@ -75,17 +75,9 @@ export default class ViewAndPrintLicenceRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user, licence } = res.locals
+    const { user } = res.locals
 
-    const pduHeads = await this.communityService.getPduHeads(licence.probationPduCode).then(p =>
-      p.map(c => {
-        return {
-          name: `${c.staff.forenames} ${c.staff.surname}`,
-          email: c.email,
-        }
-      })
-    )
-    await this.licenceService.submitVariation(licenceId, pduHeads, user)
+    await this.licenceService.submitLicence(licenceId, user)
 
     return res.redirect(`/licence/hard-stop/id/${licenceId}/confirmation`)
   }
