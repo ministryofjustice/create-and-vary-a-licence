@@ -23,7 +23,7 @@ export default class InitialMeetingPlaceRoutes {
     await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
 
     flashInitialApptUpdatedMessage(req, licence, this.userType)
-    if (req.originalUrl?.includes('edit')) {
+    if (req.path?.includes('edit')) {
       res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
     } else {
       res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-contact`)

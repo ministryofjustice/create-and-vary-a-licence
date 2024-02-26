@@ -323,7 +323,7 @@ describe('View and print - single standard licence view', () => {
     // Check the licence conditions
     expect($('ul.standard-conditions li:nth-child(1)').text().trim()).toBe('standard conditions')
     expect($('ul.standard-conditions li:nth-child(2)').text().trim()).toBe('the following additional condition:')
-    expect($('ul.standard-conditions p').text().trim()).toBe(
+    expect($('ul.standard-conditions div').text().trim()).toBe(
       'Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer.'
     )
 

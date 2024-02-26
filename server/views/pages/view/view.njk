@@ -8,6 +8,7 @@
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "moj/components/banner/macro.njk" import mojBanner %}
+{% from "pages/standardLicenceConditions.njk" import standardLicenceConditions %}
 
 {% if licence.statusCode === "APPROVED" or licence.statusCode === "ACTIVE" %}
   {% set actionWord = "Print" %}
@@ -61,12 +62,7 @@
 
                 {% if licence.kind === 'HARD_STOP' %}
                     <h2 class="govuk-heading-m">Licence conditions</h2>
-                    <p class="govuk-body">By default, the licence will automatically contain the following restrictions:</p>
-                    <ul class="govuk-list govuk-list--bullet standard-conditions">
-                        <li>standard conditions</li>
-                        <li>the following additional condition:</li>
-                        <p class="govuk-inset-text">Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer.</p>
-                    </ul>
+                    {{ standardLicenceConditions() }}
                 {% else %}
                     {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
                         {{ additionalLicenceConditions(licence, additionalConditions) }}

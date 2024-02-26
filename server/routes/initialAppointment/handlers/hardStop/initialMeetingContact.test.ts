@@ -74,7 +74,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
           },
           body: contactNumber,
           query: {},
-          originalUrl: 'edit',
+          path: 'edit',
         } as unknown as Request
         await handler.POST(req, res)
         expect(licenceService.updateContactNumber).toHaveBeenCalledWith(
