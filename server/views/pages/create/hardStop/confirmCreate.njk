@@ -4,7 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "pages/standardLicenceConditions.njk" import standardLicenceConditions %}
+{% from "pages/immediateReleaseConditions.njk" import immediateReleaseConditions %}
 
 {% set pageTitle = applicationName + " - Create a hardstop licence - Are you sure?" %}
 {% set pageId = "hardstop-confirm-create-page" %}
@@ -22,7 +22,7 @@
                     iconFallbackText: "Warning"
                 }) }}
             {% endif %}
-            {{ standardLicenceConditions() }}
+            {{ immediateReleaseConditions() }}
             <p class="govuk-body">You cannot add any other additional or bespoke licence conditions.<br> <br> A community probation practitioner can do this after release.</p>
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
