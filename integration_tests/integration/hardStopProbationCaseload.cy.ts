@@ -15,7 +15,7 @@ context('Create a licence', () => {
     cy.task('stubGetLicencesForStatus', { status: 'TIMED_OUT' })
     cy.task('stubGetTimedOutLicence')
     const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicenceWithHardStop()
+    const caseloadPage = indexPage.clickCreateALicenceWithoutLicencesStub()
     caseloadPage.clickNameOfTimedOutLicence()
   })
 
@@ -23,7 +23,7 @@ context('Create a licence', () => {
     cy.task('stubGetLicencesForStatus', { status: 'TIMED_OUT', versionOf: 1 })
     cy.task('stubGetTimedOutEditLicence')
     const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicenceWithHardStop()
+    const caseloadPage = indexPage.clickCreateALicenceWithoutLicencesStub()
     caseloadPage.clickNameOfTimedOutEdit()
   })
 
@@ -31,7 +31,7 @@ context('Create a licence', () => {
     cy.task('stubGetLicencesForStatus', { status: 'SUBMITTED', kind: 'HARD_STOP' })
     cy.task('stubGetHardStopLicence')
     const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicenceWithHardStop()
+    const caseloadPage = indexPage.clickCreateALicenceWithoutLicencesStub()
     caseloadPage.clickNameOfHardStopLicence()
   })
 })
