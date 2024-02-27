@@ -94,6 +94,10 @@ export default defineConfig({
         stubAddAdditionalCondition: licence.stubAddAdditionalCondition,
         stubGetLicenceWithSkippedInputs: licence.stubGetLicenceWithSkippedInputs,
         stubGetLicenceInHardStop: licence.stubGetLicenceInHardStop,
+        stubGetTimedOutLicence: licence.stubGetTimedOutLicence,
+        stubGetTimedOutEditLicence: licence.stubGetTimedOutEditLicence,
+        stubGetHardStopLicence: licence.stubGetHardStopLicence,
+        stubGetOmuEmail: licence.stubGetOmuEmail,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,

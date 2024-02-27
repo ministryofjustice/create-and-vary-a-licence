@@ -97,6 +97,13 @@ const allowedPaths = [
     allowed: ['/licence/vary/.*', '/licence/vary-approve/.*'],
     disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
+  {
+    status: 'TIMED_OUT',
+    allowed: [
+      '/licence/create/id/(\\d)*/licence-changes-not-approved-in-time',
+      '/licence/create/nomisId/.*/prison-will-create-this-licence',
+    ],
+  },
 ] as AllowedPathByStatusConfig[]
 
 /*

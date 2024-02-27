@@ -1,8 +1,9 @@
 import moment from 'moment'
 import _ from 'lodash'
-import { ManagedCase } from '../../@types/managedCase'
+import { Licence, ManagedCase } from '../../@types/managedCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import { convertToTitleCase } from '../../utils/utils'
+import LicenceKind from '../../enumeration/LicenceKind'
 
 export default (caseload: ManagedCase[], search: string) => {
   return caseload
@@ -19,6 +20,7 @@ export default (caseload: ManagedCase[], search: string) => {
         licenceStatus: licence.status,
         licenceType: licence.type,
         probationPractitioner: c.probationPractitioner,
+        createLink: buildCreateLink(c.nomisRecord.prisonerNumber, licence),
         isClickable:
           c.probationPractitioner !== undefined &&
           licence.status !== LicenceStatus.NOT_IN_PILOT &&
@@ -40,4 +42,23 @@ export default (caseload: ManagedCase[], search: string) => {
       const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
       return crd1 - crd2
     })
+}
+
+const buildCreateLink = (prisonerNumber: string, licence: Licence) => {
+  if (licence.status === LicenceStatus.TIMED_OUT) {
+    if (licence.versionOf) {
+      return `/licence/create/id/${licence.id}/licence-changes-not-approved-in-time`
+    }
+    return `/licence/create/nomisId/${prisonerNumber}/prison-will-create-this-licence`
+  }
+
+  if (!licence.id) {
+    return `/licence/create/nomisId/${prisonerNumber}/confirm`
+  }
+
+  if (licence.kind === LicenceKind.HARD_STOP) {
+    return `/licence/create/id/${licence.id}/licence-created-by-prison`
+  }
+
+  return `/licence/create/id/${licence.id}/check-your-answers`
 }

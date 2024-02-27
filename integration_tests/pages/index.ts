@@ -51,6 +51,20 @@ export default class IndexPage extends Page {
     return Page.verifyOnPage(CaseloadPage)
   }
 
+  clickCreateALicenceWithHardStop = (): CaseloadPage => {
+    cy.task('stubGetManagedOffenders')
+    cy.task('stubGetOffendersByCrn')
+    cy.task('searchPrisonersByNomisIds')
+    cy.task('stubGetPrisonerDetail')
+    cy.task('stubGetProbationer')
+    cy.task('stubGetPrisonInformation')
+    cy.task('stubGetHdcStatus')
+    cy.task('stubGetAnOffendersManagers')
+    cy.task('stubGetCutOffDateForLicenceTimeOut')
+    cy.get(this.createLicenceTileId).click()
+    return Page.verifyOnPage(CaseloadPage)
+  }
+
   clickVaryALicence = (): VaryCasesPage => {
     cy.get(this.varyLicenceTileId).click()
     return Page.verifyOnPage(VaryCasesPage)

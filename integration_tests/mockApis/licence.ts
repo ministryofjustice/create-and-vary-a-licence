@@ -831,7 +831,13 @@ export default {
     })
   },
 
-  stubGetLicencesForStatus: (status: string): SuperAgentRequest => {
+  stubGetLicencesForStatus: (
+    options: { status: string; versionOf?: number; kind?: string } = {
+      status: 'IN_PROGRESS',
+      versionOf: null,
+      kind: 'CRD',
+    }
+  ): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'POST',
@@ -844,7 +850,7 @@ export default {
           {
             licenceId: licencePlaceholder.id,
             licenceType: licencePlaceholder.typeCode,
-            licenceStatus: status,
+            licenceStatus: options.status,
             nomisId: licencePlaceholder.nomsId,
             surname: licencePlaceholder.surname,
             forename: licencePlaceholder.forename,
@@ -855,7 +861,9 @@ export default {
             crn: licencePlaceholder.crn,
             dateOfBirth: licencePlaceholder.dateOfBirth,
             comUsername: licencePlaceholder.comUsername,
-            variationOf: status === 'VARIATION_SUBMITTED' ? 2 : null,
+            variationOf: options.status === 'VARIATION_SUBMITTED' ? 2 : null,
+            versionOf: options.versionOf,
+            kind: options.kind,
           },
         ],
       },
@@ -1296,6 +1304,82 @@ export default {
         jsonBody: {
           ...licencePlaceholder,
           isInHardStopPeriod: true,
+        },
+      },
+    })
+  },
+
+  stubGetTimedOutLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/id/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          statusCode: 'TIMED_OUT',
+          isInHardStopPeriod: true,
+        },
+      },
+    })
+  },
+
+  stubGetTimedOutEditLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/id/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          statusCode: 'TIMED_OUT',
+          versionOf: 1,
+          isInHardStopPeriod: true,
+        },
+      },
+    })
+  },
+
+  stubGetHardStopLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licence/id/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          kind: 'HARD_STOP',
+          isInHardStopPeriod: true,
+          appointmentPerson: 'Isaac Newton',
+          appointmentAddress: 'Down the road, over there',
+          appointmentContact: '07891245678',
+          appointmentTime: '01/12/2021 00:34',
+          appointmentTimeType: 'SPECIFIC_DATE_TIME',
+        },
+      },
+    })
+  },
+
+  stubGetOmuEmail: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/omu/[A-Z]{3}/contact/email`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          email: 'test@test.test',
         },
       },
     })

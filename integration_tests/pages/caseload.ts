@@ -3,6 +3,9 @@ import CheckAnswersPage from './checkAnswers'
 import ComDetailsPage from './comDetails'
 import ConfirmCreatePage from './confirmCreate'
 import SearchPage from './search'
+import PrisonWillCreateLicencePage from './prisonWillCreateLicencePage'
+import LicenceNotApprovedInTimePage from './licenceNotApprovedInTimePage'
+import HardStopLicencePage from './hardStopLicencePage'
 
 export default class CaseloadPage extends Page {
   private createLicenceButtonId = '#name-button-1'
@@ -25,6 +28,21 @@ export default class CaseloadPage extends Page {
     cy.task('stubGetCompletedLicence', { statusCode: 'APPROVED', typeCode: 'AP_PSS' })
     cy.get(this.createLicenceButtonId).click()
     return Page.verifyOnPage(CheckAnswersPage)
+  }
+
+  clickNameOfTimedOutLicence = (): PrisonWillCreateLicencePage => {
+    cy.get(this.createLicenceButtonId).click()
+    return Page.verifyOnPage(PrisonWillCreateLicencePage)
+  }
+
+  clickNameOfTimedOutEdit = (): LicenceNotApprovedInTimePage => {
+    cy.get(this.createLicenceButtonId).click()
+    return Page.verifyOnPage(LicenceNotApprovedInTimePage)
+  }
+
+  clickNameOfHardStopLicence = (): HardStopLicencePage => {
+    cy.get(this.createLicenceButtonId).click()
+    return Page.verifyOnPage(HardStopLicencePage)
   }
 
   clickComName = (): ComDetailsPage => {
