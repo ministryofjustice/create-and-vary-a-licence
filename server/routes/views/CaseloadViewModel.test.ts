@@ -242,9 +242,12 @@ describe('CaseloadViewModel', () => {
 
     it('returns created-by-prison link if the licence kind is HARD_STOP', () => {
       licence = { ...licence, kind: LicenceKind.HARD_STOP }
+      const licence2 = { ...licence, status: LicenceStatus.TIMED_OUT }
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .createLink
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence, licence2] }],
+          null
+        )[0].createLink
       ).toEqual('/licence/create/id/1/licence-created-by-prison')
     })
 
