@@ -42,6 +42,29 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           name: 'Walter White',
         },
       },
+      {
+        licences: [
+          {
+            id: 2,
+            type: LicenceType.AP,
+            status: LicenceStatus.REVIEW_NEEDED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'John',
+          lastName: 'Deer',
+          prisonerNumber: 'A1234AR',
+          releaseDate: '2022-05-02',
+        } as Prisoner,
+        deliusRecord: {
+          otherIds: {
+            crn: 'X12346',
+          },
+        } as DeliusRecord,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
+      },
     ])
 
     caseloadService.getTeamVaryCaseload.mockResolvedValue([
@@ -91,6 +114,29 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           name: 'Sherlock Holmes',
         },
       },
+      {
+        licences: [
+          {
+            id: 3,
+            type: LicenceType.AP,
+            status: LicenceStatus.REVIEW_NEEDED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'John',
+          lastName: 'Deer',
+          prisonerNumber: 'A1234AR',
+          releaseDate: '2022-05-02',
+        } as Prisoner,
+        deliusRecord: {
+          otherIds: {
+            crn: 'X12346',
+          },
+        } as DeliusRecord,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
+      },
     ])
   })
 
@@ -130,6 +176,17 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
           {
+            licenceId: 2,
+            name: 'John Deer',
+            crnNumber: 'X12346',
+            releaseDate: '02 May 2022',
+            licenceStatus: LicenceStatus.REVIEW_NEEDED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+          {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
@@ -155,6 +212,17 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
+          {
+            licenceId: 3,
+            name: 'John Deer',
+            crnNumber: 'X12346',
+            releaseDate: '02 May 2022',
+            licenceStatus: LicenceStatus.REVIEW_NEEDED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
           {
             licenceId: 1,
             name: 'Bob Smith',
@@ -278,6 +346,17 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
+          {
+            licenceId: 3,
+            name: 'John Deer',
+            crnNumber: 'X12346',
+            releaseDate: '02 May 2022',
+            licenceStatus: LicenceStatus.REVIEW_NEEDED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
           {
             licenceId: 1,
             name: 'Bob Smith',

@@ -11,6 +11,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { ManagedCase } from '../@types/managedCase'
 import Container from './container'
+import config from '../config'
 
 jest.mock('./prisonerService')
 jest.mock('./communityService')
@@ -32,6 +33,7 @@ describe('Caseload Service', () => {
 
   const getLicencesForOmu = jest.spyOn(licenceService, 'getLicencesForOmu')
   const getLicencesByNomisIdsAndStatus = jest.spyOn(licenceService, 'getLicencesByNomisIdsAndStatus')
+  const existingConfig = config
 
   beforeEach(() => {
     communityService.getManagedOffenders.mockResolvedValue([])
@@ -41,9 +43,11 @@ describe('Caseload Service', () => {
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([])
     prisonerService.getHdcStatuses.mockResolvedValue([])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
+    config.hardStopEnabled = true
   })
 
   afterEach(() => {
+    config.hardStopEnabled = existingConfig.hardStopEnabled
     jest.resetAllMocks()
   })
 
@@ -644,6 +648,113 @@ describe('Caseload Service', () => {
     ])
   })
 
+  it('builds the staff vary caseload with Review Needed status if hardStopEnabled flag is true', async () => {
+    config.hardStopEnabled = true
+    communityService.getManagedOffenders.mockResolvedValue([
+      { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
+    ])
+    communityService.getOffendersByCrn.mockResolvedValue([
+      { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
+    ])
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+      {
+        prisonerNumber: 'AB1234E',
+        confirmedReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
+        status: 'INACTIVE OUT',
+      } as Prisoner,
+    ])
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        nomisId: 'AB1234E',
+        licenceId: 1,
+        kind: 'HARD_STOP',
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.REVIEW_NEEDED,
+        comUsername: 'sherlockholmes',
+      },
+    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+      {
+        username: 'sherlockholmes',
+        staffCode: 'X54321',
+        staff: {
+          forenames: 'Sherlock',
+          surname: 'Holmes',
+        },
+      },
+    ])
+
+    const result = await serviceUnderTest.getStaffVaryCaseload(user)
+
+    expect(result).toMatchObject([
+      {
+        deliusRecord: {
+          offenderCrn: 'X12348',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          confirmedReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
+        },
+        licences: [
+          {
+            id: 1,
+            status: 'REVIEW_NEEDED',
+            type: 'AP',
+            comUsername: 'sherlockholmes',
+          },
+        ],
+        probationPractitioner: {
+          staffCode: 'X54321',
+          name: 'Sherlock Holmes',
+        },
+      },
+    ])
+  })
+
+  it('builds the staff vary caseload with out Review Needed status if hardStopEnabled flag is false', async () => {
+    config.hardStopEnabled = false
+    communityService.getManagedOffenders.mockResolvedValue([
+      { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
+    ])
+    communityService.getOffendersByCrn.mockResolvedValue([
+      { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
+    ])
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+      {
+        prisonerNumber: 'AB1234E',
+        confirmedReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
+        status: 'INACTIVE OUT',
+      } as Prisoner,
+    ])
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        nomisId: 'AB1234E',
+        licenceId: 1,
+        kind: 'HARD_STOP',
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.REVIEW_NEEDED,
+        comUsername: 'sherlockholmes',
+      },
+    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+      {
+        username: 'sherlockholmes',
+        staffCode: 'X54321',
+        staff: {
+          forenames: 'Sherlock',
+          surname: 'Holmes',
+        },
+      },
+    ])
+
+    const result = await serviceUnderTest.getStaffVaryCaseload(user)
+
+    expect(result).toMatchObject([])
+  })
+
   describe('#getTeamVaryCaseload', () => {
     beforeEach(() => {
       communityService.getOffendersByCrn.mockResolvedValue([
@@ -750,6 +861,113 @@ describe('Caseload Service', () => {
           },
         },
       ])
+    })
+
+    it('builds the team vary caseload with Review Needed status if hardStopEnabled flag is true', async () => {
+      config.hardStopEnabled = true
+      communityService.getManagedOffenders.mockResolvedValue([
+        { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
+      ])
+      communityService.getOffendersByCrn.mockResolvedValue([
+        { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
+      ])
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: 'AB1234E',
+          confirmedReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
+          status: 'INACTIVE OUT',
+        } as Prisoner,
+      ])
+      getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        {
+          nomisId: 'AB1234E',
+          licenceId: 1,
+          kind: 'HARD_STOP',
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.REVIEW_NEEDED,
+          comUsername: 'sherlockholmes',
+        },
+      ])
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+        {
+          username: 'sherlockholmes',
+          staffCode: 'X54321',
+          staff: {
+            forenames: 'Sherlock',
+            surname: 'Holmes',
+          },
+        },
+      ])
+
+      const result = await serviceUnderTest.getStaffVaryCaseload(user)
+
+      expect(result).toMatchObject([
+        {
+          deliusRecord: {
+            offenderCrn: 'X12348',
+          },
+          nomisRecord: {
+            prisonerNumber: 'AB1234E',
+            confirmedReleaseDate: tenDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+          },
+          licences: [
+            {
+              id: 1,
+              status: 'REVIEW_NEEDED',
+              type: 'AP',
+              comUsername: 'sherlockholmes',
+            },
+          ],
+          probationPractitioner: {
+            staffCode: 'X54321',
+            name: 'Sherlock Holmes',
+          },
+        },
+      ])
+    })
+
+    it('builds the team vary caseload with out Review Needed status if hardStopEnabled flag is false', async () => {
+      config.hardStopEnabled = false
+      communityService.getManagedOffenders.mockResolvedValue([
+        { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
+      ])
+      communityService.getOffendersByCrn.mockResolvedValue([
+        { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
+      ])
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: 'AB1234E',
+          confirmedReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
+          status: 'INACTIVE OUT',
+        } as Prisoner,
+      ])
+      getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        {
+          nomisId: 'AB1234E',
+          licenceId: 1,
+          kind: 'HARD_STOP',
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.REVIEW_NEEDED,
+          comUsername: 'sherlockholmes',
+        },
+      ])
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+        {
+          username: 'sherlockholmes',
+          staffCode: 'X54321',
+          staff: {
+            forenames: 'Sherlock',
+            surname: 'Holmes',
+          },
+        },
+      ])
+
+      const result = await serviceUnderTest.getStaffVaryCaseload(user)
+
+      expect(result).toMatchObject([])
     })
 
     it('batches calls to the community CRN endpoint', async () => {

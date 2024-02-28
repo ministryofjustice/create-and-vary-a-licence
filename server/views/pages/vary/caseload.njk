@@ -21,6 +21,11 @@
 {% set licences = [] %}
 
 {% for offender in caseload %}
+    {% if offender.licenceStatus === "REVIEW_NEEDED" %}
+        {% set releaseDate = '<span class="approval-overdue">' + offender.releaseDate + '</span><span class="approval-overdue approval-overdue-message"><br>Timed out</span>' %}
+    {% else %}
+        {% set releaseDate = offender.releaseDate %}
+    {% endif %}
     {% set licences = (licences.push([
         {
             attributes: {
@@ -49,7 +54,8 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": offender.releaseDate | dateToUnix
             },
-            text: offender.releaseDate
+            classes: 'approval-due-date',
+            html: releaseDate
         },
         {
             attributes: {
@@ -156,7 +162,7 @@
                 {
                     text: "Release date",
                     attributes: {
-                    "aria-sort": "ascending"
+                    "aria-sort": "none"
                 }
                 },
                 {

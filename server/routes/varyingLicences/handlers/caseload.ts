@@ -70,6 +70,11 @@ export default class CaseloadRoutes {
         return crd1 - crd2
       })
 
+    caseloadViewModel.forEach((curr, i) => {
+      if (curr.licenceStatus === LicenceStatus.REVIEW_NEEDED)
+        caseloadViewModel.splice(0, 0, caseloadViewModel.splice(i, 1)[0])
+    })
+
     res.render('pages/vary/caseload', {
       caseload: caseloadViewModel,
       statusConfig,

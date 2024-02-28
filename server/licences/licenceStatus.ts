@@ -88,6 +88,11 @@ const statusConfig: Record<LicenceStatus, LicenceStatusConfig> = {
     description: 'Timed Out',
     colour: 'grey',
   },
+  REVIEW_NEEDED: {
+    label: 'Review needed',
+    description: 'Review needed',
+    colour: 'red',
+  },
 }
 
 export default statusConfig
