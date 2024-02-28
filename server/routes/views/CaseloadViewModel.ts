@@ -9,7 +9,9 @@ export default (caseload: ManagedCase[], search: string) => {
   return caseload
     .map(c => {
       const licence =
-        c.licences.length > 1 ? c.licences.find(l => l.status !== LicenceStatus.APPROVED) : _.head(c.licences)
+        c.licences.length > 1
+          ? c.licences.find(l => l.kind === LicenceKind.HARD_STOP || l.status !== LicenceStatus.APPROVED)
+          : _.head(c.licences)
 
       return {
         name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
