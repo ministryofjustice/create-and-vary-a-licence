@@ -10,7 +10,7 @@ export default (caseload: ManagedCase[], search: string) => {
     .map(c => {
       const licence =
         c.licences.length > 1
-          ? c.licences.find(l => l.kind === LicenceKind.HARD_STOP || l.status !== LicenceStatus.APPROVED)
+          ? c.licences.find(l => l.status === LicenceStatus.TIMED_OUT || l.status !== LicenceStatus.APPROVED)
           : _.head(c.licences)
 
       return {
@@ -22,7 +22,7 @@ export default (caseload: ManagedCase[], search: string) => {
         licenceStatus: licence.status,
         licenceType: licence.type,
         probationPractitioner: c.probationPractitioner,
-        createLink: buildCreateLink(c.nomisRecord.prisonerNumber, licence),
+        createLink: buildCreateLink(c.nomisRecord.prisonerNumber, c.licences),
         isClickable:
           c.probationPractitioner !== undefined &&
           licence.status !== LicenceStatus.NOT_IN_PILOT &&
@@ -46,20 +46,26 @@ export default (caseload: ManagedCase[], search: string) => {
     })
 }
 
-const buildCreateLink = (prisonerNumber: string, licence: Licence) => {
-  if (licence.status === LicenceStatus.TIMED_OUT) {
-    if (licence.versionOf) {
-      return `/licence/create/id/${licence.id}/licence-changes-not-approved-in-time`
+const buildCreateLink = (prisonerNumber: string, licences: Licence[]) => {
+  const timedOutLicence = licences.find(l => l.status === LicenceStatus.TIMED_OUT)
+
+  if (timedOutLicence) {
+    const hardStopLicence = licences.find(l => l.kind === LicenceKind.HARD_STOP)
+    if (timedOutLicence.versionOf) {
+      return `/licence/create/id/${timedOutLicence.id}/licence-changes-not-approved-in-time`
     }
-    return `/licence/create/nomisId/${prisonerNumber}/prison-will-create-this-licence`
+    if (!hardStopLicence || hardStopLicence.status === LicenceStatus.IN_PROGRESS) {
+      return `/licence/create/nomisId/${prisonerNumber}/prison-will-create-this-licence`
+    }
+    if (hardStopLicence) {
+      return `/licence/create/id/${hardStopLicence.id}/licence-created-by-prison`
+    }
   }
+
+  const licence = licences.length > 1 ? licences.find(l => l.status !== LicenceStatus.APPROVED) : _.head(licences)
 
   if (!licence.id) {
     return `/licence/create/nomisId/${prisonerNumber}/confirm`
-  }
-
-  if (licence.kind === LicenceKind.HARD_STOP) {
-    return `/licence/create/id/${licence.id}/licence-created-by-prison`
   }
 
   return `/licence/create/id/${licence.id}/check-your-answers`
