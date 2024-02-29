@@ -69,11 +69,7 @@ export default class CaseloadRoutes {
         const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
         return crd1 - crd2
       })
-
-    caseloadViewModel.forEach((curr, i) => {
-      if (curr.licenceStatus === LicenceStatus.REVIEW_NEEDED)
-        caseloadViewModel.splice(0, 0, caseloadViewModel.splice(i, 1)[0])
-    })
+      .sort(this.getReviewNeededCasesToTop)
 
     res.render('pages/vary/caseload', {
       caseload: caseloadViewModel,
@@ -83,5 +79,15 @@ export default class CaseloadRoutes {
       multipleTeams,
       search,
     })
+  }
+
+  getReviewNeededCasesToTop(a: { licenceStatus: LicenceStatus }, b: { licenceStatus: LicenceStatus }) {
+    if (a.licenceStatus === LicenceStatus.REVIEW_NEEDED && b.licenceStatus !== LicenceStatus.REVIEW_NEEDED) {
+      return -1
+    }
+    if (a.licenceStatus !== LicenceStatus.REVIEW_NEEDED && b.licenceStatus !== LicenceStatus.REVIEW_NEEDED) {
+      return 1
+    }
+    return 0
   }
 }

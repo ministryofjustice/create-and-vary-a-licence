@@ -13,9 +13,7 @@ import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import { LicenceSummary, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
 import Container from './container'
-import config from '../config'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
-import LicenceKind from '../enumeration/LicenceKind'
 
 export default class CaseloadService {
   constructor(
@@ -188,7 +186,6 @@ export default class CaseloadService {
               LicenceStatus.VARIATION_APPROVED,
               LicenceStatus.VARIATION_REJECTED,
               LicenceStatus.TIMED_OUT,
-              config.hardStopEnabled && LicenceStatus.REVIEW_NEEDED,
             ],
             user
           )
@@ -202,11 +199,12 @@ export default class CaseloadService {
           licences: licences.map(licence => {
             return {
               id: licence.licenceId,
-              status: <LicenceStatus>licence.licenceStatus,
+              status:
+                licence.kind === 'HARD_STOP' && licence.isReviewNeeded
+                  ? LicenceStatus.REVIEW_NEEDED
+                  : <LicenceStatus>licence.licenceStatus,
               type: <LicenceType>licence.licenceType,
               comUsername: licence.comUsername,
-              kind: <LicenceKind>licence.kind,
-              reviewDate: null,
             }
           }),
         }
@@ -312,7 +310,7 @@ export default class CaseloadService {
           LicenceStatus.VARIATION_APPROVED,
           LicenceStatus.VARIATION_REJECTED,
           LicenceStatus.IN_PROGRESS,
-          config.hardStopEnabled && LicenceStatus.REVIEW_NEEDED,
+          LicenceStatus.REVIEW_NEEDED,
         ].some(status => offender.licences.find(l => l.status === status)),
       'licence status is not one of ACTIVE, VARIATION_IN_PROGRESS, VARIATION_SUBMITTED, VARIATION_APPROVED, VARIATION_REJECTED, REVIEW_NEEDED'
     )
