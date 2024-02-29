@@ -98,6 +98,7 @@ export default defineConfig({
         stubGetTimedOutEditLicence: licence.stubGetTimedOutEditLicence,
         stubGetHardStopLicence: licence.stubGetHardStopLicence,
         stubGetOmuEmail: licence.stubGetOmuEmail,
+        stubGetHardStopAndTimedOutLicences: licence.stubGetHardStopAndTimedOutLicences,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,

@@ -870,6 +870,51 @@ export default {
     })
   },
 
+  stubGetHardStopAndTimedOutLicences: (hardStopLicenceStatus: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPathPattern: `/licence/match`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: 1,
+            licenceStatus: 'TIMED_OUT',
+            nomisId: licencePlaceholder.nomsId,
+            surname: licencePlaceholder.surname,
+            forename: licencePlaceholder.forename,
+            prisonCode: licencePlaceholder.prisonCode,
+            prisonDescription: licencePlaceholder.prisonDescription,
+            conditionalReleaseDate: licencePlaceholder.conditionalReleaseDate,
+            actualReleaseDate: licencePlaceholder.actualReleaseDate,
+            crn: licencePlaceholder.crn,
+            dateOfBirth: licencePlaceholder.dateOfBirth,
+            comUsername: licencePlaceholder.comUsername,
+            kind: 'CRD',
+          },
+          {
+            licenceId: 2,
+            licenceStatus: hardStopLicenceStatus,
+            nomisId: licencePlaceholder.nomsId,
+            surname: licencePlaceholder.surname,
+            forename: licencePlaceholder.forename,
+            prisonCode: licencePlaceholder.prisonCode,
+            prisonDescription: licencePlaceholder.prisonDescription,
+            conditionalReleaseDate: licencePlaceholder.conditionalReleaseDate,
+            actualReleaseDate: licencePlaceholder.actualReleaseDate,
+            crn: licencePlaceholder.crn,
+            dateOfBirth: licencePlaceholder.dateOfBirth,
+            comUsername: licencePlaceholder.comUsername,
+            kind: 'HARD_STOP',
+          },
+        ],
+      },
+    })
+  },
+
   stubSubmitStatus: (): SuperAgentRequest => {
     return stubFor({
       request: {

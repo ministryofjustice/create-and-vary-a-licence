@@ -27,8 +27,16 @@ context('Create a licence', () => {
     caseloadPage.clickNameOfTimedOutEdit()
   })
 
-  it('should redirect to licence-created-by-prison if the licence was created by prison', () => {
-    cy.task('stubGetLicencesForStatus', { status: 'SUBMITTED', kind: 'HARD_STOP' })
+  it('should redirect to prison-will-create-this-licence if the prison-created licence is yet to be submitted', () => {
+    cy.task('stubGetHardStopAndTimedOutLicences', 'IN_PROGRESS')
+    cy.task('stubGetHardStopLicence')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicenceWithoutLicencesStub()
+    caseloadPage.clickNameOfTimedOutLicence()
+  })
+
+  it('should redirect to licence-created-by-prison if the licence was created by prison and has been submitted', () => {
+    cy.task('stubGetHardStopAndTimedOutLicences', 'SUBMITTED')
     cy.task('stubGetHardStopLicence')
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicenceWithoutLicencesStub()
