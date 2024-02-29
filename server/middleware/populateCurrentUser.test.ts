@@ -75,7 +75,7 @@ describe('populateCurrentUser', () => {
 
     await middleware(req, res, next)
 
-    expect(next).toBeCalledWith(new Error('Some error'))
+    expect(next).toHaveBeenCalledWith(new Error('Some error'))
   })
 
   it('should populate nomis user details', async () => {
@@ -230,6 +230,6 @@ describe('populateCurrentUser', () => {
 
     await middleware(req, res, next)
 
-    expect(next).toBeCalledWith()
+    expect(next).toHaveBeenCalledWith()
   })
 })

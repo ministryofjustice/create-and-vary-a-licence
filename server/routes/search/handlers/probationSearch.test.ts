@@ -70,7 +70,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('Test', 3000)
 
-      expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'Test',
         searchResponse,
@@ -88,7 +88,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('A123456', 3000)
 
-      expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'A123456',
         searchResponse,
@@ -106,7 +106,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       expect(searchService.getProbationSearchResults).toHaveBeenCalledWith('staff', 3000)
 
-      expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: 'staff',
         searchResponse,
@@ -130,7 +130,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       expect(searchService.getProbationSearchResults).not.toHaveBeenCalled()
 
-      expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: '',
         searchResponse,
@@ -155,7 +155,7 @@ describe('Route Handlers - Search - Probation Search', () => {
 
       expect(searchService.getProbationSearchResults).not.toHaveBeenCalled()
 
-      expect(res.render).toBeCalledWith('pages/search/probationSearch/probationSearch', {
+      expect(res.render).toHaveBeenCalledWith('pages/search/probationSearch/probationSearch', {
         deliusStaffIdentifier: 3000,
         queryTerm: '',
         searchResponse,

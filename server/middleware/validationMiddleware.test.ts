@@ -192,7 +192,7 @@ describe('validationMiddleware', () => {
       } as unknown as Request
 
       await validationMiddleware(conditionService, DummyAddress)(req, res, next)
-      expect(next).toBeCalledWith(
+      expect(next).toHaveBeenCalledWith(
         new Error(`Failed to validate licence details for: ${req.params.nomisId}`, {
           cause: 'Error',
         })

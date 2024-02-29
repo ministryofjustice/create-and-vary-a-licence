@@ -20,6 +20,6 @@ describe('Prison Register Service', () => {
     const actualResult = await prisonRegisterService.getPrisonDescription('MDI', user)
 
     expect(actualResult).toEqual(actualResult)
-    expect(prisonRegisterApiClient.getPrisonDescription).toBeCalledWith('MDI', user)
+    expect(prisonRegisterApiClient.getPrisonDescription).toHaveBeenCalledWith('MDI', user)
   })
 })

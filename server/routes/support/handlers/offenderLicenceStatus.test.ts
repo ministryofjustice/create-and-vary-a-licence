@@ -55,7 +55,7 @@ describe('Route Handlers - Licence Status Override', () => {
       await handler.GET(req, res)
       const { nomsId } = req.params
 
-      expect(res.render).toBeCalledWith('pages/support/offenderLicenceStatus', {
+      expect(res.render).toHaveBeenCalledWith('pages/support/offenderLicenceStatus', {
         availableStatusCodes: [
           'APPROVED',
           'INACTIVE',
