@@ -69,7 +69,7 @@ export default class CaseloadRoutes {
         const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
         return crd1 - crd2
       })
-      .sort(this.getReviewNeededCasesToTop)
+      .sort(this.prioritiseReviewNeeded)
 
     res.render('pages/vary/caseload', {
       caseload: caseloadViewModel,
@@ -81,7 +81,7 @@ export default class CaseloadRoutes {
     })
   }
 
-  getReviewNeededCasesToTop(a: { licenceStatus: LicenceStatus }, b: { licenceStatus: LicenceStatus }) {
+  prioritiseReviewNeeded(a: { licenceStatus: LicenceStatus }, b: { licenceStatus: LicenceStatus }) {
     if (a.licenceStatus === LicenceStatus.REVIEW_NEEDED && b.licenceStatus !== LicenceStatus.REVIEW_NEEDED) {
       return -1
     }

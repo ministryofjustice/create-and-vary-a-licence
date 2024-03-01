@@ -516,7 +516,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
         },
       ]
-      expect(caseload.sort(handler.getReviewNeededCasesToTop)).toEqual(sortedCaseload)
+      expect(caseload.sort(handler.prioritiseReviewNeeded)).toEqual(sortedCaseload)
     })
   })
 })

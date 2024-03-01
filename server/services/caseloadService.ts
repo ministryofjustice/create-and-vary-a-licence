@@ -309,7 +309,6 @@ export default class CaseloadService {
           LicenceStatus.VARIATION_SUBMITTED,
           LicenceStatus.VARIATION_APPROVED,
           LicenceStatus.VARIATION_REJECTED,
-          LicenceStatus.IN_PROGRESS,
           LicenceStatus.REVIEW_NEEDED,
         ].some(status => offender.licences.find(l => l.status === status)),
       'licence status is not one of ACTIVE, VARIATION_IN_PROGRESS, VARIATION_SUBMITTED, VARIATION_APPROVED, VARIATION_REJECTED, REVIEW_NEEDED'
