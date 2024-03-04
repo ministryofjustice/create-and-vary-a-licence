@@ -3,7 +3,7 @@
 {% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
     {% set routePath = 'view' if isPrisonUser else 'create' %}
-    {% set routeAppend = '?fromReview=true' if hardStopEnabled or not isPrisonUser %}
+    {% set routeAppend = '?fromReview=true' if not isPrisonUser %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
