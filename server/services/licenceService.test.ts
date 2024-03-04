@@ -76,7 +76,7 @@ describe('Licence Service', () => {
 
   it('Get Licence', async () => {
     await licenceService.getLicence(1, user)
-    expect(licenceApiClient.getLicenceById).toBeCalledWith(1, user)
+    expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith(1, user)
   })
 
   it('Update appointment person with type SPECIFIC_PERSON', async () => {
@@ -88,7 +88,7 @@ describe('Licence Service', () => {
       },
       user
     )
-    expect(licenceApiClient.updateAppointmentPerson).toBeCalledWith(
+    expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
       '1',
       { appointmentPerson: 'Joe Bloggs', appointmentPersonType: 'SPECIFIC_PERSON' },
       user
@@ -104,7 +104,7 @@ describe('Licence Service', () => {
       },
       user
     )
-    expect(licenceApiClient.updateAppointmentPerson).toBeCalledWith(
+    expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
       '1',
       { appointmentPerson: '', appointmentPersonType: 'DUTY_OFFICER' },
       user
@@ -120,7 +120,7 @@ describe('Licence Service', () => {
       },
       user
     )
-    expect(licenceApiClient.updateAppointmentPerson).toBeCalledWith(
+    expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
       '1',
       { appointmentPerson: '', appointmentPersonType: 'DUTY_OFFICER' },
       user
@@ -138,12 +138,12 @@ describe('Licence Service', () => {
       } as DateTime,
       user
     )
-    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith(
+    expect(licenceApiClient.updateAppointmentTime).toHaveBeenCalledWith(
       '1',
       { appointmentTime: '22/12/2022 12:20', appointmentTimeType: 'SPECIFIC_DATE_TIME' },
       user
     )
-    expect(timeConverter).toBeCalledWith({
+    expect(timeConverter).toHaveBeenCalledWith({
       date: { calendarDate: '22/12/2022' },
       time: { hour: '12', minute: '20', ampm: 'pm' },
       appointmentTimeType: 'SPECIFIC_DATE_TIME',
@@ -161,7 +161,7 @@ describe('Licence Service', () => {
       } as DateTime,
       user
     )
-    expect(licenceApiClient.updateAppointmentTime).toBeCalledWith(
+    expect(licenceApiClient.updateAppointmentTime).toHaveBeenCalledWith(
       '1',
       { appointmentTime: null, appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' },
       user
@@ -179,12 +179,12 @@ describe('Licence Service', () => {
       } as Address,
       user
     )
-    expect(licenceApiClient.updateAppointmentAddress).toBeCalledWith(
+    expect(licenceApiClient.updateAppointmentAddress).toHaveBeenCalledWith(
       '1',
       { appointmentAddress: '123 Fake Street, Fakestown' },
       user
     )
-    expect(addressConverter).toBeCalledWith({
+    expect(addressConverter).toHaveBeenCalledWith({
       addressLine1: '123 Fake Street',
       addressTown: 'Fakestown',
     } as Address)
@@ -192,13 +192,13 @@ describe('Licence Service', () => {
 
   it('Update contact number', async () => {
     await licenceService.updateContactNumber('1', { telephone: '07624726976' }, user)
-    expect(licenceApiClient.updateContactNumber).toBeCalledWith('1', { telephone: '07624726976' }, user)
+    expect(licenceApiClient.updateContactNumber).toHaveBeenCalledWith('1', { telephone: '07624726976' }, user)
   })
 
   describe('Update additional conditions', () => {
     it('should handle undefined list of additional conditions', async () => {
       await licenceService.updateAdditionalConditions(1, LicenceType.AP, {} as AdditionalConditions, user, 'version')
-      expect(licenceApiClient.updateAdditionalConditions).toBeCalledWith(
+      expect(licenceApiClient.updateAdditionalConditions).toHaveBeenCalledWith(
         1,
         { additionalConditions: [], conditionType: 'AP' },
         user
@@ -228,7 +228,7 @@ describe('Licence Service', () => {
         user,
         'version'
       )
-      expect(licenceApiClient.updateAdditionalConditions).toBeCalledWith(
+      expect(licenceApiClient.updateAdditionalConditions).toHaveBeenCalledWith(
         1,
         {
           additionalConditions: [
@@ -274,7 +274,7 @@ describe('Licence Service', () => {
         formData,
         user
       )
-      expect(licenceApiClient.updateAdditionalConditionData).toBeCalledWith('1', '2', { data: [] }, user)
+      expect(licenceApiClient.updateAdditionalConditionData).toHaveBeenCalledWith('1', '2', { data: [] }, user)
     })
 
     it('should map form value to a condition', async () => {
@@ -290,7 +290,7 @@ describe('Licence Service', () => {
         formData,
         user
       )
-      expect(licenceApiClient.updateAdditionalConditionData).toBeCalledWith(
+      expect(licenceApiClient.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
         '2',
         {
@@ -332,7 +332,7 @@ describe('Licence Service', () => {
         formData,
         user
       )
-      expect(licenceApiClient.updateAdditionalConditionData).toBeCalledWith(
+      expect(licenceApiClient.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
         '2',
         {
@@ -355,13 +355,13 @@ describe('Licence Service', () => {
       { conditions: [undefined, null, '', 'condition1'] } as BespokeConditions,
       user
     )
-    expect(licenceApiClient.updateBespokeConditions).toBeCalledWith('1', { conditions: ['condition1'] }, user)
+    expect(licenceApiClient.updateBespokeConditions).toHaveBeenCalledWith('1', { conditions: ['condition1'] }, user)
   })
 
   describe('Update status', () => {
     it('should update status successfully with user details', async () => {
       await licenceService.updateStatus(1, LicenceStatus.APPROVED, user)
-      expect(licenceApiClient.updateLicenceStatus).toBeCalledWith(
+      expect(licenceApiClient.updateLicenceStatus).toHaveBeenCalledWith(
         1,
         { status: 'APPROVED', username: 'joebloggs', fullName: 'Joe Bloggs' },
         user
@@ -370,7 +370,7 @@ describe('Licence Service', () => {
 
     it('should send SYSTEM as user if user is not defined', async () => {
       await licenceService.updateStatus(1, LicenceStatus.APPROVED)
-      expect(licenceApiClient.updateLicenceStatus).toBeCalledWith(
+      expect(licenceApiClient.updateLicenceStatus).toHaveBeenCalledWith(
         1,
         { status: 'APPROVED', username: 'SYSTEM', fullName: 'SYSTEM' },
         undefined
@@ -380,24 +380,33 @@ describe('Licence Service', () => {
 
   it('Submit licence', async () => {
     await licenceService.submitLicence('1', user)
-    expect(licenceApiClient.submitLicence).toBeCalledWith('1', [], user)
+    expect(licenceApiClient.submitLicence).toHaveBeenCalledWith('1', [], user)
   })
 
   it('Submit variation', async () => {
     await licenceService.submitVariation('1', [{ name: 'Joe Bloggs', email: 'Email' }], user)
-    expect(licenceApiClient.submitLicence).toBeCalledWith('1', [{ name: 'Joe Bloggs', email: 'Email' }], user)
+    expect(licenceApiClient.submitLicence).toHaveBeenCalledWith('1', [{ name: 'Joe Bloggs', email: 'Email' }], user)
   })
 
   it('Get licences by nomis ids and statuses', async () => {
     await licenceService.getLicencesByNomisIdsAndStatus(['ABC1234'], [LicenceStatus.APPROVED], user)
-    expect(licenceApiClient.matchLicences).toBeCalledWith(['APPROVED'], null, null, ['ABC1234'], null, null, null, user)
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
+      ['APPROVED'],
+      null,
+      null,
+      ['ABC1234'],
+      null,
+      null,
+      null,
+      user
+    )
   })
 
   it('Get licences for approval', async () => {
     jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
 
     await licenceService.getLicencesForApproval(user, [])
-    expect(licenceApiClient.matchLicences).toBeCalledWith(
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
       ['SUBMITTED'],
       ['MDI'],
       null,
@@ -413,13 +422,13 @@ describe('Licence Service', () => {
     jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
 
     await licenceService.getLicencesRecentlyApproved(user, [])
-    expect(licenceApiClient.getLicencesRecentlyApproved).toBeCalledWith(['MDI'], user)
+    expect(licenceApiClient.getLicencesRecentlyApproved).toHaveBeenCalledWith(['MDI'], user)
   })
 
   it('Get licences for variation approval', async () => {
     const approver = { ...user, probationPduCodes: ['A'] }
     await licenceService.getLicencesForVariationApproval(approver)
-    expect(licenceApiClient.matchLicences).toBeCalledWith(
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
       ['VARIATION_SUBMITTED'],
       null,
       null,
@@ -436,7 +445,7 @@ describe('Licence Service', () => {
     licenceApiClient.matchLicences.mockResolvedValue([{ licenceId: 1 } as LicenceSummary])
 
     const result = await licenceService.getLicencesForOmu(user, [])
-    expect(licenceApiClient.matchLicences).toBeCalledWith(
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
       [
         'ACTIVE',
         'APPROVED',
@@ -466,7 +475,7 @@ describe('Licence Service', () => {
       lastName: 'Bloggs',
     } as UpdateComRequest)
 
-    expect(licenceApiClient.updateResponsibleCom).toBeCalledWith('X1234', {
+    expect(licenceApiClient.updateResponsibleCom).toHaveBeenCalledWith('X1234', {
       staffIdentifier: 2000,
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
@@ -483,7 +492,7 @@ describe('Licence Service', () => {
       lastName: 'Bloggs',
     } as UpdatePrisonCaseAdminRequest)
 
-    expect(licenceApiClient.updatePrisonUserDetails).toBeCalledWith({
+    expect(licenceApiClient.updatePrisonUserDetails).toHaveBeenCalledWith({
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
       firstName: 'Joseph',
@@ -503,7 +512,7 @@ describe('Licence Service', () => {
       probationTeamDescription: 'Team2 Description',
     } as UpdateProbationTeamRequest)
 
-    expect(licenceApiClient.updateProbationTeam).toBeCalledWith('X1234', {
+    expect(licenceApiClient.updateProbationTeam).toHaveBeenCalledWith('X1234', {
       probationAreaCode: 'N02',
       probationAreaDescription: 'N02 Region',
       probationPduCode: 'PDU2',
@@ -517,32 +526,32 @@ describe('Licence Service', () => {
 
   it('should edit a licence', async () => {
     await licenceService.editApprovedLicence('1', user)
-    expect(licenceApiClient.editLicence).toBeCalledWith('1', user)
+    expect(licenceApiClient.editLicence).toHaveBeenCalledWith('1', user)
   })
 
   it('should create licence variation', async () => {
     await licenceService.createVariation('1', user)
-    expect(licenceApiClient.createVariation).toBeCalledWith('1', user)
+    expect(licenceApiClient.createVariation).toHaveBeenCalledWith('1', user)
   })
 
   it('should update spo discussion', async () => {
     await licenceService.updateSpoDiscussion('1', { spoDiscussion: 'Yes' }, user)
-    expect(licenceApiClient.updateSpoDiscussion).toBeCalledWith('1', { spoDiscussion: 'Yes' }, user)
+    expect(licenceApiClient.updateSpoDiscussion).toHaveBeenCalledWith('1', { spoDiscussion: 'Yes' }, user)
   })
 
   it('should update vlo discussion', async () => {
     await licenceService.updateVloDiscussion('1', { vloDiscussion: 'Yes' }, user)
-    expect(licenceApiClient.updateVloDiscussion).toBeCalledWith('1', { vloDiscussion: 'Yes' }, user)
+    expect(licenceApiClient.updateVloDiscussion).toHaveBeenCalledWith('1', { vloDiscussion: 'Yes' }, user)
   })
 
   it('should update reason for variation', async () => {
     await licenceService.updateReasonForVariation('1', { reasonForVariation: 'Reason' }, user)
-    expect(licenceApiClient.updateReasonForVariation).toBeCalledWith('1', { reasonForVariation: 'Reason' }, user)
+    expect(licenceApiClient.updateReasonForVariation).toHaveBeenCalledWith('1', { reasonForVariation: 'Reason' }, user)
   })
 
   it('should discard licence', async () => {
     await licenceService.discard('1', user)
-    expect(licenceApiClient.discard).toBeCalledWith('1', user)
+    expect(licenceApiClient.discard).toHaveBeenCalledWith('1', user)
   })
 
   it('should update prison information', async () => {
@@ -555,7 +564,7 @@ describe('Licence Service', () => {
       },
       user
     )
-    expect(licenceApiClient.updatePrisonInformation).toBeCalledWith(
+    expect(licenceApiClient.updatePrisonInformation).toHaveBeenCalledWith(
       '1',
       {
         prisonCode: 'PVI',
@@ -581,7 +590,7 @@ describe('Licence Service', () => {
       },
       user
     )
-    expect(licenceApiClient.updateSentenceDates).toBeCalledWith(
+    expect(licenceApiClient.updateSentenceDates).toHaveBeenCalledWith(
       '1',
       {
         conditionalReleaseDate: '09/09/2022',
@@ -599,12 +608,12 @@ describe('Licence Service', () => {
 
   it('should approve a licence variation', async () => {
     await licenceService.approveVariation('1', user)
-    expect(licenceApiClient.approveVariation).toBeCalledWith('1', user)
+    expect(licenceApiClient.approveVariation).toHaveBeenCalledWith('1', user)
   })
 
   it('should refer a licence variation', async () => {
     await licenceService.referVariation('1', { reasonForReferral: 'Reason' }, user)
-    expect(licenceApiClient.referVariation).toBeCalledWith('1', { reasonForReferral: 'Reason' }, user)
+    expect(licenceApiClient.referVariation).toHaveBeenCalledWith('1', { reasonForReferral: 'Reason' }, user)
   })
 
   it('should compare variation with its original licence', async () => {
@@ -615,7 +624,7 @@ describe('Licence Service', () => {
 
     await licenceService.compareVariationToOriginal({ id: 2, kind: 'VARIATION', variationOf: 1 } as Licence, user)
 
-    expect(licenceCompatatorSpy).toBeCalledWith(
+    expect(licenceCompatatorSpy).toHaveBeenCalledWith(
       {
         id: 1,
       },
@@ -625,7 +634,7 @@ describe('Licence Service', () => {
 
   it('should get variation approval conversation', async () => {
     await licenceService.getApprovalConversation({ id: 1 } as Licence, user)
-    expect(licenceApiClient.matchLicenceEvents).toBeCalledWith(
+    expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith(
       '1',
       [LicenceEventType.VARIATION_SUBMITTED_REASON.valueOf(), LicenceEventType.VARIATION_REFERRED.valueOf()],
       'eventTime',
@@ -720,7 +729,7 @@ describe('Licence Service', () => {
       { email: 'joe.bloggs@probation.gov.uk', comName: 'Joe Bloggs', initialPromptCases: [], urgentPromptCases: [] },
     ] as EmailContact[]
     await licenceService.notifyComsToPromptLicenceCreation(expectedRequest)
-    expect(licenceApiClient.notifyComsToPromptEmailCreation).toBeCalledWith(expectedRequest)
+    expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
   })
 
   describe('Get timeline events', () => {

@@ -82,7 +82,7 @@ describe('fetchLicenceMiddleware', () => {
     licenceService.getLicence.mockRejectedValue('Error')
 
     await middleware(req, res, next)
-    expect(next).toBeCalledWith('Error')
+    expect(next).toHaveBeenCalledWith('Error')
   })
 
   it('should allow access for a prison user based on caseload', async () => {
@@ -97,7 +97,7 @@ describe('fetchLicenceMiddleware', () => {
     await middleware(req, res, next)
     expect(res.locals.licence).toBeUndefined()
     expect(licenceService.getLicence).toBeCalledTimes(1)
-    expect(res.redirect).toBeCalledWith('/access-denied')
+    expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     expect(next).not.toBeCalled()
   })
 
@@ -117,7 +117,7 @@ describe('fetchLicenceMiddleware', () => {
     await middleware(req, res, next)
     expect(res.locals.licence).toBeUndefined()
     expect(licenceService.getLicence).toBeCalledTimes(1)
-    expect(res.redirect).toBeCalledWith('/access-denied')
+    expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     expect(next).not.toBeCalled()
   })
 

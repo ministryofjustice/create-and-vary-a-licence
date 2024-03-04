@@ -38,7 +38,7 @@ services:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
   localstack:
-    image: localstack/localstack:0.13.2
+    image: localstack/localstack:3.0.2
     networks:
       - hmpps_int
     container_name: localstack
@@ -46,7 +46,6 @@ services:
       - "4566-4597:4566-4597"
       - 8999:8080
     environment:
-      - SERVICES=${SERVICES-sqs}
       - DEBUG=${DEBUG- }
       - DATA_DIR=${DATA_DIR- }
       - PORT_WEB_UI=${PORT_WEB_UI-8088}
@@ -55,8 +54,13 @@ services:
       - DEFAULT_REGION=eu-west-2
       - HOSTNAME_EXTERNAL=${HOSTNAME_EXTERNAL-localstack}
     volumes:
-      - './.localstack:/tmp/localstack'
+      - './.localstack:/tmp/localstack-ui'
       - $PWD/localstack:/docker-entrypoint-initaws.d
+    healthcheck:
+      test: awslocal sqs list-queues
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
 networks:
   hmpps_int:
