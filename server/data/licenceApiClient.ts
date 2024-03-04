@@ -398,6 +398,10 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/approve-variation` }, { username: user?.username })
   }
 
+  async activateVariation(licenceId: number, user?: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/activate-variation` }, { username: user?.username })
+  }
+
   async referVariation(licenceId: string, request: ReferVariationRequest, user: User): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/refer-variation`, data: request }, { username: user?.username })
   }

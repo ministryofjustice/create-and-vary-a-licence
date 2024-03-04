@@ -388,6 +388,11 @@ describe('Licence Service', () => {
     expect(licenceApiClient.submitLicence).toHaveBeenCalledWith('1', [{ name: 'Joe Bloggs', email: 'Email' }], user)
   })
 
+  it('Activate variation', async () => {
+    await licenceService.activateVariation(1, user)
+    expect(licenceApiClient.activateVariation).toHaveBeenCalledWith(1, user)
+  })
+
   it('Get licences by nomis ids and statuses', async () => {
     await licenceService.getLicencesByNomisIdsAndStatus(['ABC1234'], [LicenceStatus.APPROVED], user)
     expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
