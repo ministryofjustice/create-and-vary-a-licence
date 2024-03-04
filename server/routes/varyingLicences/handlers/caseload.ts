@@ -82,26 +82,11 @@ export default class CaseloadRoutes {
   ) {
     const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
     const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
-    if (
-      a.licenceStatus === LicenceStatus.REVIEW_NEEDED &&
-      b.licenceStatus !== LicenceStatus.REVIEW_NEEDED &&
-      crd1 - crd2
-    ) {
+    if (a.licenceStatus === LicenceStatus.REVIEW_NEEDED && b.licenceStatus !== LicenceStatus.REVIEW_NEEDED) {
       return -1
     }
-    if (
-      a.licenceStatus !== LicenceStatus.REVIEW_NEEDED &&
-      b.licenceStatus === LicenceStatus.REVIEW_NEEDED &&
-      crd1 - crd2
-    ) {
+    if (a.licenceStatus !== LicenceStatus.REVIEW_NEEDED && b.licenceStatus === LicenceStatus.REVIEW_NEEDED) {
       return 1
-    }
-    if (
-      a.licenceStatus === LicenceStatus.REVIEW_NEEDED &&
-      b.licenceStatus === LicenceStatus.REVIEW_NEEDED &&
-      crd1 - crd2
-    ) {
-      return -1
     }
     return crd1 - crd2
   }
