@@ -19,7 +19,6 @@ describe('Route Handlers - Home', () => {
         req = getReqWithRolesAndSource(['ROLE_LICENCE_CA'], 'nomis')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
-          shouldShowActivateVaryLicenceReminderBanner: false,
           shouldShowCreateLicenceCard: false,
           shouldShowVaryLicenceCard: false,
           shouldShowApproveLicenceCard: false,
@@ -34,7 +33,6 @@ describe('Route Handlers - Home', () => {
         req = getReqWithRolesAndSource(['ROLE_LICENCE_CA'], 'delius')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
-          shouldShowActivateVaryLicenceReminderBanner: false,
           shouldShowCreateLicenceCard: false,
           shouldShowVaryLicenceCard: false,
           shouldShowApproveLicenceCard: false,
@@ -51,7 +49,6 @@ describe('Route Handlers - Home', () => {
         req = getReqWithRolesAndSource(['ROLE_LICENCE_RO'], 'delius')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
-          shouldShowActivateVaryLicenceReminderBanner: true,
           shouldShowCreateLicenceCard: true,
           shouldShowVaryLicenceCard: true,
           shouldShowApproveLicenceCard: false,
@@ -66,7 +63,6 @@ describe('Route Handlers - Home', () => {
         req = getReqWithRolesAndSource(['ROLE_LICENCE_RO'], 'nomis')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
-          shouldShowActivateVaryLicenceReminderBanner: false,
           shouldShowCreateLicenceCard: false,
           shouldShowVaryLicenceCard: false,
           shouldShowApproveLicenceCard: false,
@@ -82,7 +78,6 @@ describe('Route Handlers - Home', () => {
       req = getReqWithRolesAndSource(['ROLE_LICENCE_READONLY'], 'nomis')
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
-        shouldShowActivateVaryLicenceReminderBanner: false,
         shouldShowCreateLicenceCard: false,
         shouldShowVaryLicenceCard: false,
         shouldShowApproveLicenceCard: false,
@@ -98,7 +93,6 @@ describe('Route Handlers - Home', () => {
         req = getReqWithRolesAndSource(['ROLE_LICENCE_DM'], 'nomis')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
-          shouldShowActivateVaryLicenceReminderBanner: false,
           shouldShowCreateLicenceCard: false,
           shouldShowVaryLicenceCard: false,
           shouldShowApproveLicenceCard: true,
@@ -113,7 +107,6 @@ describe('Route Handlers - Home', () => {
         req = getReqWithRolesAndSource(['ROLE_LICENCE_DM'], 'delius')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
-          shouldShowActivateVaryLicenceReminderBanner: false,
           shouldShowCreateLicenceCard: false,
           shouldShowVaryLicenceCard: false,
           shouldShowApproveLicenceCard: false,
@@ -130,7 +123,6 @@ describe('Route Handlers - Home', () => {
         req = getReqWithRolesAndSource(['ROLE_LICENCE_ACO'], 'delius')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
-          shouldShowActivateVaryLicenceReminderBanner: false,
           shouldShowCreateLicenceCard: false,
           shouldShowVaryLicenceCard: false,
           shouldShowApproveLicenceCard: false,
@@ -145,7 +137,6 @@ describe('Route Handlers - Home', () => {
         req = getReqWithRolesAndSource(['ROLE_LICENCE_ACO'], 'nomis')
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/index', {
-          shouldShowActivateVaryLicenceReminderBanner: false,
           shouldShowCreateLicenceCard: false,
           shouldShowVaryLicenceCard: false,
           shouldShowApproveLicenceCard: false,
@@ -161,7 +152,6 @@ describe('Route Handlers - Home', () => {
       req = getReqWithRolesAndSource(['ROLE_NOMIS_BATCHLOAD'], 'nomis')
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/index', {
-        shouldShowActivateVaryLicenceReminderBanner: false,
         shouldShowCreateLicenceCard: false,
         shouldShowVaryLicenceCard: false,
         shouldShowApproveLicenceCard: false,
