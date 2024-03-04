@@ -365,6 +365,12 @@ describe('Licence API client tests', () => {
     expect(result).toEqual({ licenceId: 1, prisonCode: 'MDI' })
   })
 
+  it('Activate variation', async () => {
+    await licenceApiClient.activateVariation(1, { username: 'joebloggs' } as User)
+
+    expect(put).toHaveBeenCalledWith({ path: '/licence/id/1/activate-variation' }, { username: 'joebloggs' })
+  })
+
   it('Update spo discussion', async () => {
     await licenceApiClient.updateSpoDiscussion(
       '1',

@@ -243,6 +243,10 @@ export default class LicenceService {
     return this.licenceApiClient.updateLicenceStatus(id, requestBody, user)
   }
 
+  async activateVariation(id: number, user?: User): Promise<void> {
+    return this.licenceApiClient.activateVariation(id, user)
+  }
+
   async submitLicence(id: string, user: User): Promise<void> {
     return this.licenceApiClient.submitLicence(id, [], user)
   }
