@@ -46,23 +46,23 @@ export default function Index({ licenceService, conditionService, communityServi
     )
   {
     const controller = new InitialMeetingNameRoutes(licenceService)
-    get('/create|edit/id/:licenceId/initial-meeting-name', controller.GET)
-    post('/create|edit/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
+    get('(/create|/edit)/id/:licenceId/initial-meeting-name', controller.GET)
+    post('(/create|/edit)/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
   {
     const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
-    get('/create|edit/id/:licenceId/initial-meeting-place', controller.GET)
-    post('/create|edit/id/:licenceId/initial-meeting-place', controller.POST, Address)
+    get('(/create|/edit)/id/:licenceId/initial-meeting-place', controller.GET)
+    post('(/create|/edit)/id/:licenceId/initial-meeting-place', controller.POST, Address)
   }
   {
     const controller = new InitialMeetingContactRoutes(licenceService, UserType.PRISON)
-    get('/create|edit/id/:licenceId/initial-meeting-contact', controller.GET)
-    post('/create|edit/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
+    get('(/create|/edit)/id/:licenceId/initial-meeting-contact', controller.GET)
+    post('(/create|/edit)/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
   }
   {
     const controller = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON)
-    get('/create|edit/id/:licenceId/initial-meeting-time', controller.GET)
-    post('/create|edit/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
+    get('(/create|/edit)/id/:licenceId/initial-meeting-time', controller.GET)
+    post('(/create|/edit)/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }
   {
     const controller = new ViewAndPrintLicenceRoutes(licenceService, communityService)
