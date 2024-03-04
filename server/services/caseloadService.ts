@@ -199,10 +199,7 @@ export default class CaseloadService {
           licences: licences.map(licence => {
             return {
               id: licence.licenceId,
-              status:
-                licence.kind === 'HARD_STOP' && licence.isReviewNeeded
-                  ? LicenceStatus.REVIEW_NEEDED
-                  : <LicenceStatus>licence.licenceStatus,
+              status: licence.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : <LicenceStatus>licence.licenceStatus,
               type: <LicenceType>licence.licenceType,
               comUsername: licence.comUsername,
             }
