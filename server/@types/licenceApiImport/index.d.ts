@@ -2718,17 +2718,10 @@ export interface components {
        */
       supersededDate?: string
       /**
-<<<<<<< HEAD
        * Format: date-time
        * @description The date and time that this licence was last updated
        */
       dateLastUpdated?: string
-=======
-       * Format: date
-       * @description The date of birth of the person on licence
-       */
-      dateOfBirth?: string
->>>>>>> 6681ea1 (updated types)
       /**
        * @description The username of the person who last updated this licence
        * @example X34433
@@ -2742,33 +2735,33 @@ export interface components {
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
       /**
-       * @description The agency description of the detaining prison
-       * @example Leeds (HMP)
+       * @description The team code that is supervising this licence
+       * @example Cardiff-A
        */
-      prisonDescription?: string
+      probationTeamCode?: string
       /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
+       * @description The probation area code where this licence is supervised from
+       * @example N01
        */
-      prisonTelephone?: string
+      probationAreaCode?: string
       /**
        * @description The Probation Delivery Unit (PDU or borough) supervising this licence
        * @example PDU01
        */
-      updatedByFullName?: string
+      probationPduCode?: string
       /**
        * @description The Local Administrative Unit (LAU or district) supervising this licence
        * @example LAU01
        */
-      createdByUsername?: string
+      probationLauCode?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
-      createdByFullName?: string
+      appointmentPerson?: string
       /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
+       * @description The type of appointment time of the initial appointment
+       * @example SPECIFIC_DATE_TIME
        * @enum {string}
        */
       appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
@@ -2860,33 +2853,6 @@ export interface components {
        */
       createdByUsername?: string
       /**
-<<<<<<< HEAD
-=======
-       * @description The LAU description
-       * @example North Wales
-       */
-      probationLauDescription?: string
-      /**
-       * @description The team description
-       * @example Cardiff South
-       */
-      probationTeamDescription?: string
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
-      /**
->>>>>>> 6681ea1 (updated types)
        * @description The full name of the person who created licence or variation
        * @example Gordon Sumner
        */
@@ -2896,7 +2862,6 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string}
        */
-<<<<<<< HEAD
       appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
@@ -2943,8 +2908,6 @@ export interface components {
        * @description The full name of the supervising probation officer
        * @example Jane Jones
        */
-=======
->>>>>>> 6681ea1 (updated types)
       responsibleComFullName?: string
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
@@ -3506,17 +3469,10 @@ export interface components {
        */
       supersededDate?: string
       /**
-<<<<<<< HEAD
        * Format: date-time
        * @description The date and time that this licence was last updated
        */
       dateLastUpdated?: string
-=======
-       * Format: date
-       * @description The date of birth of the person on licence
-       */
-      dateOfBirth?: string
->>>>>>> 6681ea1 (updated types)
       /**
        * @description The username of the person who last updated this licence
        * @example X34433
@@ -3530,33 +3486,33 @@ export interface components {
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
       /**
-       * @description The agency description of the detaining prison
-       * @example Leeds (HMP)
+       * @description The team code that is supervising this licence
+       * @example Cardiff-A
        */
-      prisonDescription?: string
+      probationTeamCode?: string
       /**
-       * @description The telephone number to contact the prison
-       * @example 0161 234 4747
+       * @description The probation area code where this licence is supervised from
+       * @example N01
        */
-      prisonTelephone?: string
+      probationAreaCode?: string
       /**
        * @description The Probation Delivery Unit (PDU or borough) supervising this licence
        * @example PDU01
        */
-      updatedByFullName?: string
+      probationPduCode?: string
       /**
        * @description The Local Administrative Unit (LAU or district) supervising this licence
        * @example LAU01
        */
-      createdByUsername?: string
+      probationLauCode?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
-      createdByFullName?: string
+      appointmentPerson?: string
       /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
+       * @description The type of appointment time of the initial appointment
+       * @example SPECIFIC_DATE_TIME
        * @enum {string}
        */
       appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
@@ -3648,33 +3604,6 @@ export interface components {
        */
       createdByUsername?: string
       /**
-<<<<<<< HEAD
-=======
-       * @description The LAU description
-       * @example North Wales
-       */
-      probationLauDescription?: string
-      /**
-       * @description The team description
-       * @example Cardiff South
-       */
-      probationTeamDescription?: string
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
-      /**
->>>>>>> 6681ea1 (updated types)
        * @description The full name of the person who created licence or variation
        * @example Gordon Sumner
        */
@@ -3684,7 +3613,6 @@ export interface components {
        * @example SPECIFIC_PERSON
        * @enum {string}
        */
-<<<<<<< HEAD
       appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
@@ -3731,8 +3659,6 @@ export interface components {
        * @description The full name of the supervising probation officer
        * @example Jane Jones
        */
-=======
->>>>>>> 6681ea1 (updated types)
       responsibleComFullName?: string
       /** @description The list of additional licence conditions on this licence */
       additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
