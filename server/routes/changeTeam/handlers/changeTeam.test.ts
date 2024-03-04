@@ -37,7 +37,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
   describe('GET', () => {
     it('Should list all teams with no selected team', async () => {
       await handler.GET()(req, res, next)
-      expect(res.render).toBeCalledWith('pages/changeTeam', {
+      expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
         probationTeams,
         checked: null,
         backLinkHref: '/licence/create/caseload',
@@ -48,7 +48,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     it('Should list all teams with active team', async () => {
       req.session.teamSelection = ['ABCD']
       await handler.GET()(req, res, next)
-      expect(res.render).toBeCalledWith('pages/changeTeam', {
+      expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
         backLinkHref: '/licence/create/caseload?view=team',
         probationTeams,
         checked: ['ABCD'],
@@ -59,7 +59,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     it('Should redirect to caseload page if number of user teams is one', async () => {
       res.locals.user.probationTeams = [{ code: 'ABC', label: 'Team One' }]
       await handler.GET()(req, res, next)
-      expect(res.redirect).toBeCalledWith('/licence/create/caseload')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/caseload')
     })
   })
 
@@ -68,13 +68,13 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       req.body.teams = ['ABCDE']
       await handler.POST()(req, res, next)
       expect(req.session.teamSelection).toEqual(['ABCDE'])
-      expect(res.redirect).toBeCalledWith('/licence/create/caseload?view=team')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/caseload?view=team')
     })
 
     it('Should not accept invalid Team Code and display error message', async () => {
       await handler.POST()(req, res, next)
       expect(req.session.teamSelection).toEqual(null)
-      expect(res.render).toBeCalledWith('pages/changeTeam', {
+      expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
         probationTeams,
         backLinkHref: '/licence/create/caseload',
         checked: null,

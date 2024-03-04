@@ -222,7 +222,7 @@ describe('Prisoner Service', () => {
           checksPassed: true,
         },
       ])
-      expect(prisonApiClient.getLatestHdcStatusBatch).toBeCalledWith([123], user)
+      expect(prisonApiClient.getLatestHdcStatusBatch).toHaveBeenCalledWith([123], user)
     })
   })
 
@@ -234,7 +234,7 @@ describe('Prisoner Service', () => {
 
       expect(actualResult).toBeNull()
 
-      expect(prisonApiClient.getLatestHdcStatus).toBeCalledWith('123')
+      expect(prisonApiClient.getLatestHdcStatus).toHaveBeenCalledWith('123')
     })
 
     it('Should return NULL if no bookingId is found', async () => {
@@ -248,7 +248,7 @@ describe('Prisoner Service', () => {
 
       expect(actualResult).toBeNull()
 
-      expect(prisonApiClient.getLatestHdcStatus).toBeCalledWith('123')
+      expect(prisonApiClient.getLatestHdcStatus).toHaveBeenCalledWith('123')
     })
 
     it('Should return PASSED approval status', async () => {
@@ -266,7 +266,7 @@ describe('Prisoner Service', () => {
         checksPassed: true,
       })
 
-      expect(prisonApiClient.getLatestHdcStatus).toBeCalledWith('123')
+      expect(prisonApiClient.getLatestHdcStatus).toHaveBeenCalledWith('123')
     })
   })
 
