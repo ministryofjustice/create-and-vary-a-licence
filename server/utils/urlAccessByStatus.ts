@@ -30,6 +30,7 @@ const allowedPaths = [
       '/licence/create/id/(\\d)*/initial-meeting.*',
       '/licence/view/id/(\\d)*/.*',
       '/licence/approve/id/(\\d)*/.*',
+      '/licence/create/id/(\\d)*/licence-created-by-prison',
     ],
     disallowed: ['/licence/view/id/(\\d)/pdf-print'],
   },
@@ -44,6 +45,7 @@ const allowedPaths = [
       '/licence/approve/id/(\\d)*/confirm-approved.*',
       '/licence/view/id/(\\d)*/.*',
       '/licence/approve/id/(\\d)*/probation-practitioner.*',
+      '/licence/create/id/(\\d)*/licence-created-by-prison',
     ],
   },
   {
@@ -96,6 +98,13 @@ const allowedPaths = [
     status: 'VARIATION_REJECTED',
     allowed: ['/licence/vary/.*', '/licence/vary-approve/.*'],
     disallowed: ['/licence/view/id/(\\d)/pdf-print'],
+  },
+  {
+    status: 'TIMED_OUT',
+    allowed: [
+      '/licence/create/id/(\\d)*/licence-changes-not-approved-in-time',
+      '/licence/create/nomisId/.*/prison-will-create-this-licence',
+    ],
   },
 ] as AllowedPathByStatusConfig[]
 

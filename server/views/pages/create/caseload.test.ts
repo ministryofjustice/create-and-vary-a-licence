@@ -214,6 +214,7 @@ describe('Create a Licence Views - Caseload', () => {
           },
           isClickable: true,
           licenceStatus: LicenceStatus.NOT_STARTED,
+          createLink: '/licence/create/nomisId/ABC123/confirm',
         },
         {
           name: 'John Smith',
@@ -227,6 +228,7 @@ describe('Create a Licence Views - Caseload', () => {
           isClickable: true,
           licenceId: 1,
           licenceStatus: LicenceStatus.IN_PROGRESS,
+          createLink: '/licence/create/id/1/check-your-answers',
         },
       ],
     })

@@ -14,6 +14,7 @@ import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import { LicenceSummary, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
 import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
+import LicenceKind from '../enumeration/LicenceKind'
 
 export default class CaseloadService {
   constructor(
@@ -202,6 +203,8 @@ export default class CaseloadService {
               status: licence.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : <LicenceStatus>licence.licenceStatus,
               type: <LicenceType>licence.licenceType,
               comUsername: licence.comUsername,
+              kind: <LicenceKind>licence.kind,
+              versionOf: licence.versionOf,
             }
           }),
         }
@@ -292,6 +295,7 @@ export default class CaseloadService {
             LicenceStatus.IN_PROGRESS,
             LicenceStatus.SUBMITTED,
             LicenceStatus.APPROVED,
+            LicenceStatus.TIMED_OUT,
           ].some(status => offender.licences.find(l => l.status === status)),
         'licence status is not one of OOS_RECALL, OOS_BOTUS, NOT_IN_PILOT, NOT_STARTED, IN_PROGRESS, SUBMITTED, APPROVED,'
       )
@@ -352,6 +356,7 @@ export default class CaseloadService {
               approvedBy: l.approvedByName,
               approvedDate: l.approvedDate,
               versionOf: l.versionOf,
+              kind: <LicenceKind>l.kind,
             }
           }),
       }

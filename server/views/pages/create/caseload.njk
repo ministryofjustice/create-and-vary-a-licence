@@ -11,11 +11,10 @@
 {% set noJsBackLink = true %}
 {% set showCommsBanner = showWhatsNewBanner %}
 
-{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isClickable, index) %}
+{% macro offenderName(offenderName, crn, prisonerNumber, licenceId, isClickable, index, createLink) %}
     <div class="caseload-offender-name">
-        {% set link = "/licence/create/id/" + licenceId + "/check-your-answers" if licenceId else "/licence/create/nomisId/" + prisonerNumber + "/confirm"%}
         {% if isClickable %}
-            <a id="name-button-{{ index }}" href="{{ link }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
+            <a id="name-button-{{ index }}" href="{{ createLink }}" class="govuk-link govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</a>
         {% else %}
             <span id="name-button-{{ index }}" class="govuk-heading-s govuk-!-padding-left-0 govuk-!-margin-bottom-0">{{ offenderName }}</span>
         {% endif %}
@@ -40,7 +39,7 @@
                 "data-sort-value": offender.name
             },
             classes: "max-width max-width-220",
-            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, offender.licenceId, offender.isClickable, loop.index)
+            html: offenderName(offender.name, offender.crnNumber, offender.prisonerNumber, offender.licenceId, offender.isClickable, loop.index, offender.createLink)
         },
         {
             attributes: {

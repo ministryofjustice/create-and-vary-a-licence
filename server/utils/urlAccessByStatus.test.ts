@@ -81,6 +81,11 @@ describe('URL access checks for licence statuses', () => {
       path = '/licence/hard-stop/id/1/check-your-answers'
       expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
     })
+
+    it('should allow access to licence-created-by-prison page', () => {
+      path = '/licence/create/id/1/licence-created-by-prison'
+      expect(getUrlAccessByStatus(path, 1, 'SUBMITTED', username)).toEqual(true)
+    })
   })
 
   describe('URL access checks for APPROVED', () => {
@@ -126,6 +131,11 @@ describe('URL access checks for licence statuses', () => {
 
     it('should allow access to standard licence check your answers', () => {
       path = '/licence/hard-stop/id/1/check-your-answers'
+      expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
+    })
+
+    it('should allow access to licence-created-by-prison page', () => {
+      path = '/licence/create/id/1/licence-created-by-prison'
       expect(getUrlAccessByStatus(path, 1, 'APPROVED', username)).toEqual(true)
     })
   })
