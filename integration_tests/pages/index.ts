@@ -16,9 +16,8 @@ export default class IndexPage extends Page {
 
   private approveVariationTiledId = '#approveVariationCard'
 
-  // region checkA11y rule disabled (All page content must be contained by landmarks) for activateVaryLicenceReminderBanner content to pass integration tests
   constructor() {
-    super('index-page', true, { region: { enabled: false } })
+    super('index-page')
   }
 
   clickCreateALicence = (): CaseloadPage => {

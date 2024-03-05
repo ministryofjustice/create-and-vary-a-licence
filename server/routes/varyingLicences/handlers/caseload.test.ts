@@ -42,6 +42,29 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           name: 'Walter White',
         },
       },
+      {
+        licences: [
+          {
+            id: 2,
+            type: LicenceType.AP,
+            status: LicenceStatus.REVIEW_NEEDED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'John',
+          lastName: 'Deer',
+          prisonerNumber: 'A1234AR',
+          releaseDate: '2022-05-02',
+        } as Prisoner,
+        deliusRecord: {
+          otherIds: {
+            crn: 'X12346',
+          },
+        } as DeliusRecord,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
+      },
     ])
 
     caseloadService.getTeamVaryCaseload.mockResolvedValue([
@@ -91,6 +114,29 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           name: 'Sherlock Holmes',
         },
       },
+      {
+        licences: [
+          {
+            id: 3,
+            type: LicenceType.AP,
+            status: LicenceStatus.REVIEW_NEEDED,
+          },
+        ],
+        nomisRecord: {
+          firstName: 'John',
+          lastName: 'Deer',
+          prisonerNumber: 'A1234AR',
+          releaseDate: '2022-05-02',
+        } as Prisoner,
+        deliusRecord: {
+          otherIds: {
+            crn: 'X12346',
+          },
+        } as DeliusRecord,
+        probationPractitioner: {
+          name: 'Walter White',
+        },
+      },
     ])
   })
 
@@ -130,6 +176,17 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
           {
+            licenceId: 2,
+            name: 'John Deer',
+            crnNumber: 'X12346',
+            releaseDate: '02 May 2022',
+            licenceStatus: LicenceStatus.REVIEW_NEEDED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+          {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
@@ -155,6 +212,17 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
+          {
+            licenceId: 3,
+            name: 'John Deer',
+            crnNumber: 'X12346',
+            releaseDate: '02 May 2022',
+            licenceStatus: LicenceStatus.REVIEW_NEEDED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
           {
             licenceId: 1,
             name: 'Bob Smith',
@@ -279,6 +347,17 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
         caseload: [
           {
+            licenceId: 3,
+            name: 'John Deer',
+            crnNumber: 'X12346',
+            releaseDate: '02 May 2022',
+            licenceStatus: LicenceStatus.REVIEW_NEEDED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+          {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
@@ -325,6 +404,182 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         search: 'x12345',
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
+    })
+
+    it('should return REVIEW NEEDED cases to top of caseload', () => {
+      const caseload = [
+        {
+          licenceId: 1,
+          name: 'Dat Kia',
+          crnNumber: 'L258123',
+          licenceType: 'AP',
+          releaseDate: '21 Oct 2024',
+          licenceStatus: LicenceStatus.REVIEW_NEEDED,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+          },
+        },
+        {
+          licenceId: 2,
+          name: 'Ema Ely',
+          crnNumber: 'Z265291',
+          licenceType: 'AP',
+          releaseDate: '17 Jul 2024',
+          licenceStatus: LicenceStatus.ACTIVE,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+          },
+        },
+        {
+          licenceId: 3,
+          name: 'Emaj Elys',
+          crnNumber: 'Z265292',
+          licenceType: 'AP',
+          releaseDate: '23 Jul 2024',
+          licenceStatus: LicenceStatus.INACTIVE,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+          },
+        },
+        {
+          licenceId: 4,
+          name: 'Emajinhany Elysasha',
+          crnNumber: 'Z265290',
+          licenceType: 'AP',
+          releaseDate: '16 Jul 2024',
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+          },
+        },
+        {
+          licenceId: 5,
+          name: 'Datessdu Kiarerick',
+          crnNumber: 'L258122',
+          licenceType: 'AP',
+          releaseDate: '20 Oct 2024',
+          licenceStatus: LicenceStatus.REVIEW_NEEDED,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+          },
+        },
+        {
+          licenceId: 6,
+          name: 'Emajin Elysa',
+          crnNumber: 'Z265294',
+          licenceType: 'AP',
+          releaseDate: '30 Nov 2024',
+          licenceStatus: LicenceStatus.ACTIVE,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+          },
+        },
+        {
+          licenceId: 7,
+          name: 'Datessdu Kiarerick',
+          crnNumber: 'L258122',
+          licenceType: 'AP',
+          releaseDate: '5 Dec 2023',
+          licenceStatus: LicenceStatus.REVIEW_NEEDED,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+          },
+        },
+        {
+          licenceId: 8,
+          name: 'Datessdu Kiarerick',
+          crnNumber: 'L258122',
+          licenceType: 'AP',
+          releaseDate: '5 Dec 2024',
+          licenceStatus: LicenceStatus.ACTIVE,
+          probationPractitioner: {
+            staffCode: 'X12342',
+            name: 'CVL COM',
+          },
+        },
+      ]
+      const sortedCaseload = [
+        {
+          licenceId: 7,
+          name: 'Datessdu Kiarerick',
+          crnNumber: 'L258122',
+          licenceType: 'AP',
+          releaseDate: '5 Dec 2023',
+          licenceStatus: 'REVIEW_NEEDED',
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        },
+        {
+          licenceId: 5,
+          name: 'Datessdu Kiarerick',
+          crnNumber: 'L258122',
+          licenceType: 'AP',
+          releaseDate: '20 Oct 2024',
+          licenceStatus: 'REVIEW_NEEDED',
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        },
+        {
+          licenceId: 1,
+          name: 'Dat Kia',
+          crnNumber: 'L258123',
+          licenceType: 'AP',
+          releaseDate: '21 Oct 2024',
+          licenceStatus: 'REVIEW_NEEDED',
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        },
+        {
+          licenceId: 4,
+          name: 'Emajinhany Elysasha',
+          crnNumber: 'Z265290',
+          licenceType: 'AP',
+          releaseDate: '16 Jul 2024',
+          licenceStatus: 'IN_PROGRESS',
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        },
+        {
+          licenceId: 2,
+          name: 'Ema Ely',
+          crnNumber: 'Z265291',
+          licenceType: 'AP',
+          releaseDate: '17 Jul 2024',
+          licenceStatus: 'ACTIVE',
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        },
+        {
+          licenceId: 3,
+          name: 'Emaj Elys',
+          crnNumber: 'Z265292',
+          licenceType: 'AP',
+          releaseDate: '23 Jul 2024',
+          licenceStatus: 'INACTIVE',
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        },
+        {
+          licenceId: 6,
+          name: 'Emajin Elysa',
+          crnNumber: 'Z265294',
+          licenceType: 'AP',
+          releaseDate: '30 Nov 2024',
+          licenceStatus: 'ACTIVE',
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        },
+        {
+          licenceId: 8,
+          name: 'Datessdu Kiarerick',
+          crnNumber: 'L258122',
+          licenceType: 'AP',
+          releaseDate: '5 Dec 2024',
+          licenceStatus: 'ACTIVE',
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+        },
+      ]
+      expect(caseload.sort(handler.prioritiseReviewNeeded)).toEqual(sortedCaseload)
     })
   })
 })

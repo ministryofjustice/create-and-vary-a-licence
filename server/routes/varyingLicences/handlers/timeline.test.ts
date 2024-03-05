@@ -199,10 +199,7 @@ describe('Route Handlers - Timeline', () => {
 
       await handler.POST(req, res)
 
-      expect(licenceService.updateStatus).toHaveBeenNthCalledWith(1, 2, LicenceStatus.ACTIVE, { username: 'joebloggs' })
-      expect(licenceService.updateStatus).toHaveBeenNthCalledWith(2, 1, LicenceStatus.INACTIVE, {
-        username: 'joebloggs',
-      })
+      expect(licenceService.activateVariation).toHaveBeenCalledWith(2, { username: 'joebloggs' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/timeline')
     })
   })

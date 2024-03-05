@@ -360,6 +360,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP_PSS,
         licenceStatus: LicenceStatus.SUBMITTED,
         comUsername: 'sherlockholmes',
+        isReviewNeeded: false,
       },
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -603,6 +604,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
         comUsername: 'sherlockholmes',
+        isReviewNeeded: false,
       },
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -644,6 +646,71 @@ describe('Caseload Service', () => {
     ])
   })
 
+  it('builds the staff vary caseload with Review Needed status', async () => {
+    communityService.getManagedOffenders.mockResolvedValue([
+      { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
+    ])
+    communityService.getOffendersByCrn.mockResolvedValue([
+      { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
+    ])
+    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+      {
+        prisonerNumber: 'AB1234E',
+        confirmedReleaseDate: tenDaysFromNow,
+        licenceExpiryDate: '2022-12-26',
+        status: 'INACTIVE OUT',
+      } as Prisoner,
+    ])
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        nomisId: 'AB1234E',
+        licenceId: 1,
+        kind: 'HARD_STOP',
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.ACTIVE,
+        comUsername: 'sherlockholmes',
+        isReviewNeeded: true,
+      },
+    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+      {
+        username: 'sherlockholmes',
+        staffCode: 'X54321',
+        staff: {
+          forenames: 'Sherlock',
+          surname: 'Holmes',
+        },
+      },
+    ])
+
+    const result = await serviceUnderTest.getStaffVaryCaseload(user)
+
+    expect(result).toMatchObject([
+      {
+        deliusRecord: {
+          offenderCrn: 'X12348',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          confirmedReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
+        },
+        licences: [
+          {
+            id: 1,
+            status: 'REVIEW_NEEDED',
+            type: 'AP',
+            comUsername: 'sherlockholmes',
+          },
+        ],
+        probationPractitioner: {
+          staffCode: 'X54321',
+          name: 'Sherlock Holmes',
+        },
+      },
+    ])
+  })
+
   describe('#getTeamVaryCaseload', () => {
     beforeEach(() => {
       communityService.getOffendersByCrn.mockResolvedValue([
@@ -667,6 +734,7 @@ describe('Caseload Service', () => {
           licenceType: LicenceType.PSS,
           licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
           comUsername: 'joebloggs',
+          isReviewNeeded: false,
         },
         {
           kind: 'VARIATION',
@@ -675,6 +743,7 @@ describe('Caseload Service', () => {
           licenceType: LicenceType.AP,
           licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
           comUsername: 'sherlockholmes',
+          isReviewNeeded: false,
         },
       ])
       communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -752,6 +821,71 @@ describe('Caseload Service', () => {
       ])
     })
 
+    it('builds the team vary caseload with Review Needed status', async () => {
+      communityService.getManagedOffenders.mockResolvedValue([
+        { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
+      ])
+      communityService.getOffendersByCrn.mockResolvedValue([
+        { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
+      ])
+      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([
+        {
+          prisonerNumber: 'AB1234E',
+          confirmedReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
+          status: 'INACTIVE OUT',
+        } as Prisoner,
+      ])
+      getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        {
+          nomisId: 'AB1234E',
+          licenceId: 1,
+          kind: 'HARD_STOP',
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.ACTIVE,
+          comUsername: 'sherlockholmes',
+          isReviewNeeded: true,
+        },
+      ])
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+        {
+          username: 'sherlockholmes',
+          staffCode: 'X54321',
+          staff: {
+            forenames: 'Sherlock',
+            surname: 'Holmes',
+          },
+        },
+      ])
+
+      const result = await serviceUnderTest.getStaffVaryCaseload(user)
+
+      expect(result).toMatchObject([
+        {
+          deliusRecord: {
+            offenderCrn: 'X12348',
+          },
+          nomisRecord: {
+            prisonerNumber: 'AB1234E',
+            confirmedReleaseDate: tenDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+          },
+          licences: [
+            {
+              id: 1,
+              status: 'REVIEW_NEEDED',
+              type: 'AP',
+              comUsername: 'sherlockholmes',
+            },
+          ],
+          probationPractitioner: {
+            staffCode: 'X54321',
+            name: 'Sherlock Holmes',
+          },
+        },
+      ])
+    })
+
     it('batches calls to the community CRN endpoint', async () => {
       communityService.getManagedOffendersByTeam.mockResolvedValue(
         Array(600).fill({ offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } })
@@ -771,6 +905,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.APPROVED,
         comUsername: 'joebloggs',
+        isReviewNeeded: false,
       },
       {
         kind: 'CRD',
@@ -779,6 +914,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.IN_PROGRESS,
         comUsername: 'joebloggs',
+        isReviewNeeded: false,
       },
       {
         kind: 'CRD',
@@ -787,6 +923,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.ACTIVE,
         comUsername: 'joebloggs',
+        isReviewNeeded: false,
       },
       {
         kind: 'CRD',
@@ -796,6 +933,7 @@ describe('Caseload Service', () => {
         licenceStatus: LicenceStatus.SUBMITTED,
         comUsername: 'joebloggs',
         versionOf: 2,
+        isReviewNeeded: false,
       },
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
@@ -829,6 +967,7 @@ describe('Caseload Service', () => {
         licenceStatus: LicenceStatus.SUBMITTED,
         comUsername: 'joebloggs',
         versionOf: 2,
+        isReviewNeeded: false,
       },
     ])
     prisonerService.searchPrisonersByReleaseDate.mockResolvedValue([
@@ -1317,6 +1456,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.APPROVED,
         comUsername: 'joebloggs',
+        isReviewNeeded: false,
       },
       {
         kind: 'CRD',
@@ -1325,6 +1465,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.IN_PROGRESS,
         comUsername: 'joebloggs',
+        isReviewNeeded: false,
       },
       {
         kind: 'HARD_STOP',
@@ -1333,6 +1474,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.IN_PROGRESS,
         comUsername: 'joebloggs',
+        isReviewNeeded: false,
       },
     ])
     prisonerService.searchPrisonersByReleaseDate.mockResolvedValueOnce([
@@ -1402,6 +1544,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.IN_PROGRESS,
         comUsername: 'joebloggs',
+        isReviewNeeded: false,
       },
     ])
 
@@ -1427,6 +1570,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.SUBMITTED,
         comUsername: 'joebloggs',
+        isReviewNeeded: false,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValue([
@@ -1490,6 +1634,7 @@ describe('Caseload Service', () => {
         comUsername: 'joebloggs',
         approvedByName: 'Jim Smith',
         approvedDate: '25/04/2014 07:45:59',
+        isReviewNeeded: false,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValue([
@@ -1553,6 +1698,7 @@ describe('Caseload Service', () => {
         licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
         comUsername: 'joebloggs',
+        isReviewNeeded: false,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValue([

@@ -262,7 +262,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       req.query = { view: 'team' }
       req.session.teamSelection = null
       await handler.GET(req, res)
-      expect(res.redirect).toBeCalledWith('caseload/change-team')
+      expect(res.redirect).toHaveBeenCalledWith('caseload/change-team')
     })
 
     it('should use default team if user has only one assigned', async () => {

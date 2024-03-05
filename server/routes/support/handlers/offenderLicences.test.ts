@@ -69,6 +69,7 @@ describe('Route Handlers - Offender licences', () => {
         dateOfBirth: '2000-02-05',
         comUsername: 'Kate Jones',
         viewable: true,
+        isReviewNeeded: false,
       } as LicenceSummary
 
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([expectedLicences])

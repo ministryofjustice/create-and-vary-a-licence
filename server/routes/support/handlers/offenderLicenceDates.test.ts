@@ -65,7 +65,7 @@ describe('Route handlers - Licence dates override', () => {
 
       await handler.GET(req, res)
 
-      expect(res.render).toBeCalledWith('pages/support/offenderLicenceDates', {
+      expect(res.render).toHaveBeenCalledWith('pages/support/offenderLicenceDates', {
         licence,
         licenceDates: licenceSimpleDates,
       })
@@ -108,7 +108,7 @@ describe('Route handlers - Licence dates override', () => {
       await handler.POST(req, res)
 
       expect(overrideService.overrideDates).toBeCalledTimes(0)
-      expect(res.render).toBeCalledWith('pages/support/offenderLicenceDates', {
+      expect(res.render).toHaveBeenCalledWith('pages/support/offenderLicenceDates', {
         licence,
         licenceDates: licenceSimpleDates,
       })
