@@ -17,6 +17,7 @@ generic-service:
   nameOverride: create-and-vary-a-licence
   replicaCount: 4
   serviceAccountName: create-and-vary-a-licence
+  productId: "DPS011"
 
   image:
     repository: quay.io/hmpps/create-and-vary-a-licence
