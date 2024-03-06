@@ -8,6 +8,15 @@ import * as auth from '../../authentication/auth'
 import type { Services } from '../../services'
 import AuthRole from '../../enumeration/authRole'
 import { User } from '../../@types/CvlUserDetails'
+import type { ApplicationInfo } from '../../applicationInfo'
+
+const testAppInfo: ApplicationInfo = {
+  applicationName: 'test',
+  buildNumber: '1',
+  gitRef: 'long ref',
+  gitShortHash: 'short ref',
+  branchName: 'main',
+}
 
 export const user = {
   username: 'Joe Bloggs',
@@ -22,7 +31,7 @@ function appSetup(services: Services, userSupplier: () => User): Express {
 
   app.set('view engine', 'njk')
 
-  nunjucksSetup(app)
+  nunjucksSetup(app, testAppInfo)
   app.use((req, res, next) => {
     req.user = userSupplier()
     req.flash = flashProvider

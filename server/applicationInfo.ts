@@ -13,8 +13,19 @@ export type ApplicationInfo = {
   branchName: string
 }
 
-export default (): ApplicationInfo => {
+const getNameFromPackageJson = () => {
   const packageJson = path.join(__dirname, '../../package.json')
-  const { name: applicationName } = JSON.parse(fs.readFileSync(packageJson).toString())
-  return { applicationName, buildNumber, gitRef, gitShortHash: gitRef.substring(0, 7), productId, branchName }
+  const { name } = JSON.parse(fs.readFileSync(packageJson).toString())
+  return name
+}
+
+export default (overrideName?: string): ApplicationInfo => {
+  return {
+    applicationName: overrideName || getNameFromPackageJson(),
+    buildNumber,
+    gitRef,
+    gitShortHash: gitRef.substring(0, 7),
+    productId,
+    branchName,
+  }
 }

@@ -3,10 +3,10 @@
  * Do appinsights first to instrument the logger
  */
 import 'reflect-metadata'
-import { initialiseAppInsights, buildAppInsightsClient, flush } from '../server/utils/azureAppInsights'
+import { initialiseAppInsights, flush } from '../server/utils/azureAppInsights'
+import applicationInfo from '../server/applicationInfo'
 
-initialiseAppInsights()
-buildAppInsightsClient('create-and-vary-a-licence-remove-ap-conditions-job')
+initialiseAppInsights(applicationInfo('create-and-vary-a-licence-remove-ap-conditions-job'))
 
 import logger from '../logger'
 

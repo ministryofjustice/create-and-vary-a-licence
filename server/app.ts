@@ -22,22 +22,23 @@ import authorisationMiddleware from './middleware/authorisationMiddleware'
 import trimRequestBody from './middleware/trimBodyMiddleware'
 import phaseNameSetup from './middleware/phaseNameSetup'
 import getFrontendComponents from './middleware/getFeComponents'
+import { ApplicationInfo } from './applicationInfo'
 
 const testMode = process.env.NODE_ENV === 'test'
 
-export default function createApp(services: Services): express.Application {
+export default function createApp(services: Services, applicationInfo: ApplicationInfo): express.Application {
   const app = express()
 
   app.set('json spaces', 2)
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
-  app.use(setUpHealthChecks())
+  app.use(setUpHealthChecks(applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
-  nunjucksSetup(app)
+  nunjucksSetup(app, applicationInfo)
   phaseNameSetup(app, config.phaseName)
   app.use(setUpAuthentication())
   app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))

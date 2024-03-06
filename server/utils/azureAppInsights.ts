@@ -1,31 +1,18 @@
 import { setup, defaultClient, TelemetryClient, DistributedTracingModes, Contracts } from 'applicationinsights'
-import FlushOptions from 'applicationinsights/out/Library/FlushOptions'
-import { User } from '../@types/CvlUserDetails'
-import applicationInfo from '../applicationInfo'
+import type FlushOptions from 'applicationinsights/out/Library/FlushOptions'
+import type { User } from '../@types/CvlUserDetails'
+import type { ApplicationInfo } from '../applicationInfo'
 
 type TelemetryProcessor = Parameters<typeof TelemetryClient.prototype.addTelemetryProcessor>[0]
 
-function defaultName(): string {
-  return applicationInfo.applicationName
-}
-
-function version(): string {
-  return applicationInfo.buildNumber
-}
-
-export function initialiseAppInsights(): void {
+export function initialiseAppInsights(applicationInfo: ApplicationInfo): TelemetryClient {
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
     // eslint-disable-next-line no-console
     console.log('Enabling azure application insights')
 
     setup().setDistributedTracingMode(DistributedTracingModes.AI_AND_W3C).start()
-  }
-}
-
-export function buildAppInsightsClient(name = defaultName()): TelemetryClient {
-  if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
-    defaultClient.context.tags['ai.cloud.role'] = name
-    defaultClient.context.tags['ai.application.ver'] = version()
+    defaultClient.context.tags['ai.cloud.role'] = applicationInfo.applicationName
+    defaultClient.context.tags['ai.application.ver'] = applicationInfo.buildNumber
     defaultClient.addTelemetryProcessor(addUserDataToRequests)
     return defaultClient
   }
