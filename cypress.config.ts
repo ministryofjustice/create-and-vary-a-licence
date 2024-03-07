@@ -12,6 +12,7 @@ import prison from './integration_tests/mockApis/prison'
 import probationSearch from './integration_tests/mockApis/probationSearch'
 import events from './integration_tests/support/events'
 import feComponent from './integration_tests/mockApis/feComponent'
+import manageUsersApi from './integration_tests/mockApis/manageUsers'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -28,6 +29,8 @@ export default defineConfig({
   e2e: {
     setupNodeEvents(on) {
       on('task', {
+        ...manageUsersApi,
+        ...tokenVerification,
         reset: resetStubs,
         verifyEndpointCalled,
 
@@ -45,9 +48,6 @@ export default defineConfig({
             feComponent.stubFeComponentsCss(),
           ]),
         stubFeComponentsFail: feComponent.stubFeComponentsFail,
-
-        stubTokenVerificationPing: tokenVerification.stubPing,
-
         stubUpdateResponsibleCom: licence.stubUpdateResponsibleCom,
         stubUpdateProbationTeam: licence.stubUpdateProbationTeam,
         stubUpdatePrisonUserDetails: licence.stubUpdatePrisonUserDetails,

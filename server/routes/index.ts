@@ -22,7 +22,6 @@ import PrisonerController from './prisonerController'
 import searchRoutes from './search'
 import initialAppointmentRoutes from './initialAppointment'
 import hardStopInitialAppointmentRoutes from './initialAppointment/handlers/hardStop'
-import config from '../config'
 
 export default function Index(services: Services): Router {
   const router = Router({ mergeParams: true })
@@ -51,12 +50,6 @@ export default function Index(services: Services): Router {
   router.use(hardStopInitialAppointmentRoutes(services))
 
   router.get('/prisoner/:nomsId/image', prisonerController.getImage())
-
-  router.get('/info', (req, res) =>
-    res.send({
-      productId: config.productId,
-    })
-  )
 
   return router
 }

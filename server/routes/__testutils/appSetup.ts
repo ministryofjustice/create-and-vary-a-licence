@@ -1,7 +1,7 @@
 import express, { type Express, type Locals } from 'express'
 import createError from 'http-errors'
 
-import wpipRoutes from '../index'
+import cvlRoutes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
@@ -9,6 +9,7 @@ import type { Services } from '../../services'
 import AuthRole from '../../enumeration/authRole'
 import { User } from '../../@types/CvlUserDetails'
 import type { ApplicationInfo } from '../../applicationInfo'
+import setUpHealthChecks from '../../middleware/setUpHealthChecks'
 
 const testAppInfo: ApplicationInfo = {
   applicationName: 'test',
@@ -16,6 +17,7 @@ const testAppInfo: ApplicationInfo = {
   gitRef: 'long ref',
   gitShortHash: 'short ref',
   branchName: 'main',
+  productId: 'DPS01',
 }
 
 export const user = {
@@ -32,6 +34,7 @@ function appSetup(services: Services, userSupplier: () => User): Express {
   app.set('view engine', 'njk')
 
   nunjucksSetup(app, testAppInfo)
+  app.use(setUpHealthChecks(testAppInfo))
   app.use((req, res, next) => {
     req.user = userSupplier()
     req.flash = flashProvider
@@ -42,7 +45,7 @@ function appSetup(services: Services, userSupplier: () => User): Express {
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
-  app.use(wpipRoutes(services))
+  app.use(cvlRoutes(services))
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler())
 

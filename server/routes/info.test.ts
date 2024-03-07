@@ -18,7 +18,17 @@ describe('GET /info', () => {
       .get('/info')
       .expect('Content-Type', /application\/json/)
       .expect(res => {
-        expect(res.text).toContain('productId')
+        expect(res.body).toStrictEqual({
+          build: {
+            artifact: 'test',
+            name: 'test',
+            version: '1',
+          },
+          git: {
+            branch: 'main',
+          },
+          productId: 'DPS01',
+        })
       })
   })
 })
