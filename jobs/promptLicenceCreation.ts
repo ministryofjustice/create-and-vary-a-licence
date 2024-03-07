@@ -5,10 +5,9 @@
 import 'reflect-metadata'
 import _ from 'lodash'
 import { add, startOfISOWeek, endOfISOWeek } from 'date-fns'
-import { buildAppInsightsClient, flush, initialiseAppInsights } from '../server/utils/azureAppInsights'
+import { flush, initialiseAppInsights } from '../server/utils/azureAppInsights'
 
-initialiseAppInsights()
-buildAppInsightsClient('create-and-vary-a-licence-prompt-licence-create-job')
+initialiseAppInsights(applicationInfo('create-and-vary-a-licence-prompt-licence-create-job'))
 
 import logger from '../logger'
 import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
@@ -19,6 +18,7 @@ import LicenceStatus from '../server/enumeration/licenceStatus'
 import { EmailContact } from '../server/@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../server/utils/utils'
 import PromptLicenceCreationService from './promptLicenceCreationService'
+import applicationInfo from '../server/applicationInfo'
 
 const { caseloadService, prisonerService, communityService, licenceService } = services
 

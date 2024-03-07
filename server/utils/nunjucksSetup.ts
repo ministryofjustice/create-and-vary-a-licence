@@ -7,7 +7,7 @@ import moment from 'moment'
 import { filesize } from 'filesize'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
-import applicationVersion from '../applicationInfo'
+import type { ApplicationInfo } from '../applicationInfo'
 import {
   formatAddress,
   jsonDtTo12HourTime,
@@ -26,7 +26,7 @@ import AppointmentTimeType from '../enumeration/appointmentTimeType'
 
 const production = process.env.NODE_ENV === 'production'
 
-export default function nunjucksSetup(app: express.Express): void {
+export default function nunjucksSetup(app: express.Express, applicationInfo: ApplicationInfo): void {
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
@@ -45,7 +45,7 @@ export default function nunjucksSetup(app: express.Express): void {
   // Cachebusting version string
   if (production) {
     // Version only changes with each commit
-    app.locals.version = applicationVersion.gitShortHash
+    app.locals.version = applicationInfo.gitShortHash
   } else {
     // Version changes every request
     app.use((req, res, next) => {
