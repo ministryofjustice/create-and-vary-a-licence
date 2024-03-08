@@ -4,6 +4,7 @@ import { Response } from 'superagent'
 import { stubFor, getRequests } from '../wiremock'
 import licence from './licence'
 import tokenVerification from './tokenVerification'
+import manageUsers from './manageUsers'
 
 const createToken = (authorities: string[], authSource: string) => {
   const payload = {
@@ -103,29 +104,9 @@ const token = (authorities: string[], authSource: string) =>
       },
     },
   })
-
-const stubUserEmail = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/manage-users/users/me/email',
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: {
-        username: 'USER1',
-        email: 'john.smith@not-a-valid-domain.com',
-        verified: true,
-      },
-    },
-  })
-
 export default {
   getSignInUrl,
-  stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubPing()]),
+  stubPing: (): Promise<[Response, Response]> => Promise.all([ping(), tokenVerification.stubTokenVerificationPing()]),
   stubProbationSignIn: (): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
@@ -134,7 +115,7 @@ export default {
       token(['ROLE_LICENCE_RO'], 'delius'),
       tokenVerification.stubVerifyToken(),
       licence.updateComDetails(),
-      stubUserEmail(),
+      manageUsers.stubUserEmail(),
     ]),
   stubProbationAcoSignIn: (): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
@@ -144,7 +125,7 @@ export default {
       token(['ROLE_LICENCE_ACO'], 'delius'),
       tokenVerification.stubVerifyToken(),
       licence.updateComDetails(),
-      stubUserEmail(),
+      manageUsers.stubUserEmail(),
     ]),
   systemToken: () => token(null, 'auth'),
   stubPrisonSignIn: (): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
@@ -155,6 +136,6 @@ export default {
       token(['ROLE_LICENCE_DM', 'ROLE_LICENCE_CA'], 'nomis'),
       tokenVerification.stubVerifyToken(),
       licence.stubUpdatePrisonUserDetails(),
-      stubUserEmail(),
+      manageUsers.stubUserEmail(),
     ]),
 }

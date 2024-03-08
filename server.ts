@@ -3,16 +3,20 @@
  * Do appinsights first as it does some magic instrumentation work, i.e. it affects other 'require's
  * In particular, applicationinsights automatically collects bunyan logs
  */
-import { initialiseAppInsights, buildAppInsightsClient } from './server/utils/azureAppInsights'
+import { initialiseAppInsights } from './server/utils/azureAppInsights'
+import createApplicationInfo from './server/applicationInfo'
 
-initialiseAppInsights()
-buildAppInsightsClient()
+const applicationInfo = createApplicationInfo()
+initialiseAppInsights(applicationInfo)
 
-import { app, sqsPrisonEventsListener, sqsProbationEventsListener, sqsDomainEventsListener } from './server/index'
 import logger from './logger'
 
-app.listen(app.get('port'), () => {
-  logger.info(`Server listening on port ${app.get('port')}`)
+import { app, sqsPrisonEventsListener, sqsProbationEventsListener, sqsDomainEventsListener } from './server/index'
+
+const server = app(applicationInfo)
+
+server.listen(server.get('port'), () => {
+  logger.info(`Server listening on port ${server.get('port')}`)
 })
 sqsPrisonEventsListener.app.start()
 sqsProbationEventsListener.app.start()
