@@ -9,11 +9,9 @@ export default class TimelineRoutes {
     const { user, licence } = res.locals
 
     // Set up call to action buttons based on current licence status
-    const shouldShowPrintToActivateButton = [LicenceStatus.VARIATION_APPROVED].includes(
-      <LicenceStatus>licence.statusCode
-    )
+    const shouldShowPrintToActivateButton = licence.statusCode === LicenceStatus.VARIATION_APPROVED
 
-    const shouldShowViewOrVaryButton = [LicenceStatus.ACTIVE].includes(<LicenceStatus>licence.statusCode)
+    const shouldShowViewOrVaryButton = licence.statusCode === LicenceStatus.ACTIVE && !licence.isReviewNeeded
 
     const shouldShowEditButton = [
       LicenceStatus.VARIATION_IN_PROGRESS,
@@ -25,7 +23,12 @@ export default class TimelineRoutes {
 
     return res.render(`pages/vary/timeline`, {
       timelineEvents,
-      callToActions: { shouldShowViewOrVaryButton, shouldShowPrintToActivateButton, shouldShowEditButton },
+      callToActions: {
+        shouldShowViewOrVaryButton,
+        shouldShowPrintToActivateButton,
+        shouldShowEditButton,
+        shouldShowReviewButton: licence.isReviewNeeded,
+      },
     })
   }
 

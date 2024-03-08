@@ -38,6 +38,7 @@ describe('Route Handlers - Timeline', () => {
           licence: {
             id: 1,
             statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
+            isReviewNeeded: false,
           },
           user: commonUser,
         },
@@ -67,7 +68,7 @@ describe('Route Handlers - Timeline', () => {
       await handler.GET(req, res)
 
       expect(licenceService.getTimelineEvents).toHaveBeenCalledWith(
-        { id: 1, statusCode: LicenceStatus.VARIATION_IN_PROGRESS },
+        { id: 1, statusCode: LicenceStatus.VARIATION_IN_PROGRESS, isReviewNeeded: false },
         { username: 'joebloggs' }
       )
 
@@ -77,17 +78,19 @@ describe('Route Handlers - Timeline', () => {
           shouldShowViewOrVaryButton: false,
           shouldShowPrintToActivateButton: false,
           shouldShowEditButton: true,
+          shouldShowReviewButton: false,
         },
       })
     })
 
-    it('should render a view of an approved approved', async () => {
+    it('should render a view of an approved variation', async () => {
       res = {
         ...commonRes,
         locals: {
           licence: {
             id: 1,
             statusCode: LicenceStatus.VARIATION_APPROVED,
+            isReviewNeeded: false,
           },
           user: commonUser,
         },
@@ -117,7 +120,7 @@ describe('Route Handlers - Timeline', () => {
       await handler.GET(req, res)
 
       expect(licenceService.getTimelineEvents).toHaveBeenCalledWith(
-        { id: 1, statusCode: LicenceStatus.VARIATION_APPROVED },
+        { id: 1, statusCode: LicenceStatus.VARIATION_APPROVED, isReviewNeeded: false },
         { username: 'joebloggs' }
       )
 
@@ -127,6 +130,7 @@ describe('Route Handlers - Timeline', () => {
           shouldShowViewOrVaryButton: false,
           shouldShowPrintToActivateButton: true,
           shouldShowEditButton: false,
+          shouldShowReviewButton: false,
         },
       })
     })
@@ -138,6 +142,7 @@ describe('Route Handlers - Timeline', () => {
           licence: {
             id: 1,
             statusCode: LicenceStatus.VARIATION_REJECTED,
+            isReviewNeeded: false,
           },
           user: commonUser,
         },
@@ -167,7 +172,7 @@ describe('Route Handlers - Timeline', () => {
       await handler.GET(req, res)
 
       expect(licenceService.getTimelineEvents).toHaveBeenCalledWith(
-        { id: 1, statusCode: LicenceStatus.VARIATION_REJECTED },
+        { id: 1, statusCode: LicenceStatus.VARIATION_REJECTED, isReviewNeeded: false },
         { username: 'joebloggs' }
       )
 
@@ -177,6 +182,51 @@ describe('Route Handlers - Timeline', () => {
           shouldShowViewOrVaryButton: false,
           shouldShowPrintToActivateButton: false,
           shouldShowEditButton: true,
+          shouldShowReviewButton: false,
+        },
+      })
+    })
+
+    it('should render a view of a review needed licence', async () => {
+      res = {
+        ...commonRes,
+        locals: {
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.REVIEW_NEEDED,
+            isReviewNeeded: true,
+          },
+          user: commonUser,
+        },
+      } as unknown as Response
+
+      const timelineEvents = [
+        {
+          eventType: 'CREATION',
+          title: 'Licence created',
+          statusCode: 'ACTIVE',
+          createdBy: 'X Y',
+          licenceId: 1,
+          lastUpdate: '12/11/2022 10:04:00',
+        },
+      ] as unknown as TimelineEvent[]
+
+      licenceService.getTimelineEvents.mockResolvedValue(timelineEvents)
+
+      await handler.GET(req, res)
+
+      expect(licenceService.getTimelineEvents).toHaveBeenCalledWith(
+        { id: 1, statusCode: LicenceStatus.REVIEW_NEEDED, isReviewNeeded: true },
+        { username: 'joebloggs' }
+      )
+
+      expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
+        timelineEvents,
+        callToActions: {
+          shouldShowViewOrVaryButton: false,
+          shouldShowPrintToActivateButton: false,
+          shouldShowEditButton: false,
+          shouldShowReviewButton: true,
         },
       })
     })

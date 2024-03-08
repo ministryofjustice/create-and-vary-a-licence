@@ -27,6 +27,7 @@ import PolicyChangesCallbackRoutes from './handlers/policyChangesCallback'
 import PolicyChangeRoutes from './handlers/policyChange'
 import PolicyChangesInputCallbackRoutes from './handlers/policyChangesInputCallback'
 import PolicyConfirmDeleteRoutes from './handlers/policyConfirmDelete'
+import ReviewLicenceRoutes from './handlers/reviewLicence'
 
 function alterResObject() {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -79,6 +80,7 @@ export default function Index({
   const vloDiscussionHandler = new VloDiscussionRoutes(licenceService, conditionService)
   const confirmAmendVariationHandler = new ConfirmAmendVariationRoutes(licenceService, conditionService)
   const confirmDiscardVariationHandler = new ConfirmDiscardVariationRoutes(licenceService)
+  const reviewLicenceHandler = new ReviewLicenceRoutes(licenceService)
   const reasonForVariationHandler = new ReasonForVariationRoutes(licenceService)
   const variationSummaryHandler = new VariationSummaryRoutes(licenceService, communityService)
   const confirmationHandler = new ConfirmationRoutes()
@@ -104,6 +106,8 @@ export default function Index({
   post('/id/:licenceId/confirm-amend-variation', confirmAmendVariationHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/confirm-discard-variation', confirmDiscardVariationHandler.GET)
   post('/id/:licenceId/confirm-discard-variation', confirmDiscardVariationHandler.POST, DeleteVariation)
+  get('/id/:licenceId/have-you-reviewed-this-licence', reviewLicenceHandler.GET)
+  post('/id/:licenceId/have-you-reviewed-this-licence', reviewLicenceHandler.POST, YesOrNoQuestion)
   get('/id/:licenceId/reason-for-variation', reasonForVariationHandler.GET)
   post('/id/:licenceId/reason-for-variation', reasonForVariationHandler.POST, ReasonForVariation)
   get('/id/:licenceId/summary', variationSummaryHandler.GET)
