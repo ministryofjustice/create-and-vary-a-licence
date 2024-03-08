@@ -38,6 +38,7 @@ export default class ApprovalCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
+          submittedBy: '',
           releaseDate,
           urgentApproval,
           approvedBy: _.head(c.licences).approvedBy,

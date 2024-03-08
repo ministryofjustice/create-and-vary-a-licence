@@ -16,12 +16,17 @@
 
             <h2 class="govuk-heading-m">What happens next</h2>
             <p class="govuk-body">
-                {{ confirmationMessage }}
+                {{ confirmationMessage | striptags(true) | escape | nl2br }}
             </p>
 
             <h2 class="govuk-heading-m">If further changes are made</h2>
             <p class="govuk-body">
-                The community probation practitioner will submit another approval request. It will appear in your caselist.
+                {% if hardStopEnabled %}
+                    Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details. 
+                    Other changes must be made after release. Probation practitioners can continue to work on licences for people being released early after the 2-day point.
+                {% else %}
+                    The community probation practitioner will submit another approval request. It will appear in your caselist.
+                {% endif %}
             </p>
 
             <p class="govuk-body">

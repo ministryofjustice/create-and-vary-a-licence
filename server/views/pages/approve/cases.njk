@@ -48,7 +48,22 @@
                 "data-sort-value": case.probationPractitioner
             },
             html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner.name + '</a>'
-        },
+        }
+    ] %}
+
+    {% if hardStopEnabled and approvalNeededView %}
+        {% set caseData = (caseData.push(
+            {
+                attributes: {
+                    id: 'approved-by-' + loop.index,
+                    "data-sort-value": case.submittedBy
+                },
+                text: case.submittedBy
+            }
+        ), caseData) %}
+    {% endif %}
+
+    {% set caseData = (caseData.push(
         {
             attributes: {
                 id: 'release-date-' + loop.index,
@@ -57,7 +72,7 @@
             classes: 'approval-due-date',
             html: releaseDate
         }
-    ] %}
+    ), caseData) %}
 
     {% if not approvalNeededView %}
         {% set caseData = (caseData.push(
@@ -165,14 +180,28 @@
                 attributes: {
                     "aria-sort": "none"
                 }
-            },
-            {
+            }
+        ] %}
+
+        {% if hardStopEnabled and approvalNeededView %}
+            {% set tableHeadings = (tableHeadings.push(
+                {
+                    text: "Submitted by",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                }
+            ), tableHeadings) %}
+        {% endif %}
+
+         {% set tableHeadings = (tableHeadings.push(
+              {
                 text: "Release date",
                 attributes: {
                     "aria-sort": "ascending" if approvalNeededView else "none"
                 }
             }
-        ] %}
+        ), tableHeadings) %}
 
         {% if not approvalNeededView %}
             {% set tableHeadings = (tableHeadings.push(

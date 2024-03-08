@@ -62,7 +62,7 @@
 
                 {% if licence.kind === 'HARD_STOP' %}
                     <h2 class="govuk-heading-m">Licence conditions</h2>
-                    {{ immediateReleaseConditions() }}
+                    {{ immediateReleaseConditions({}) }}
                 {% else %}
                     {% if licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' %}
                         {{ additionalLicenceConditions(licence, additionalConditions) }}

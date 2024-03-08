@@ -135,6 +135,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+            submittedBy: '',
             urgentApproval: true,
           },
           {
@@ -144,6 +145,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Thor',
             },
+            submittedBy: '',
             releaseDate: '01 May 2022',
             urgentApproval: true,
           },
@@ -154,6 +156,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter Black',
             },
+            submittedBy: '',
             releaseDate: format(nonUrgentReleaseDate, 'dd MMM yyyy'),
             urgentApproval: false,
           },
@@ -227,6 +230,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+            submittedBy: '',
             approvedBy: 'Bob Carolgees',
             approvedOn: '15 June 2012',
             urgentApproval: true,
@@ -238,6 +242,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Thor',
             },
+            submittedBy: '',
             approvedBy: 'Jim Robbins',
             approvedOn: '25 April 2012',
             releaseDate: '01 May 2022',
@@ -271,6 +276,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+            submittedBy: '',
             urgentApproval: true,
           },
         ],
@@ -301,6 +307,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+            submittedBy: '',
             urgentApproval: true,
           },
         ],
@@ -331,6 +338,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+            submittedBy: '',
             urgentApproval: true,
           },
         ],
