@@ -48,22 +48,7 @@
                 "data-sort-value": case.probationPractitioner
             },
             html: '<a href="/licence/approve/id/' + case.licenceId + '/probation-practitioner" class="govuk-link">' + case.probationPractitioner.name + '</a>'
-        }
-    ] %}
-
-    {% if hardStopEnabled and approvalNeededView %}
-        {% set caseData = (caseData.push(
-            {
-                attributes: {
-                    id: 'approved-by-' + loop.index,
-                    "data-sort-value": case.submittedBy
-                },
-                text: case.submittedBy
-            }
-        ), caseData) %}
-    {% endif %}
-
-    {% set caseData = (caseData.push(
+        },
         {
             attributes: {
                 id: 'release-date-' + loop.index,
@@ -72,7 +57,7 @@
             classes: 'approval-due-date',
             html: releaseDate
         }
-    ), caseData) %}
+    ] %}
 
     {% if not approvalNeededView %}
         {% set caseData = (caseData.push(
@@ -93,6 +78,19 @@
 
         ), caseData) %}
     {% endif %}
+
+    {% if hardStopEnabled and approvalNeededView %}
+        {% set caseData = (caseData.splice(3, 0,
+            {
+                attributes: {
+                    id: 'approved-by-' + loop.index,
+                    "data-sort-value": case.submittedBy
+                },
+                text: case.submittedBy
+            }
+        ), caseData) %}
+    {% endif %}
+
     {% set licences = (licences.push(caseData), licences) %}
 
 {% endfor %}
@@ -180,28 +178,14 @@
                 attributes: {
                     "aria-sort": "none"
                 }
-            }
-        ] %}
-
-        {% if hardStopEnabled and approvalNeededView %}
-            {% set tableHeadings = (tableHeadings.push(
-                {
-                    text: "Submitted by",
-                    attributes: {
-                        "aria-sort": "none"
-                    }
-                }
-            ), tableHeadings) %}
-        {% endif %}
-
-         {% set tableHeadings = (tableHeadings.push(
-              {
+            },
+            {
                 text: "Release date",
                 attributes: {
                     "aria-sort": "ascending" if approvalNeededView else "none"
                 }
             }
-        ), tableHeadings) %}
+        ] %}
 
         {% if not approvalNeededView %}
             {% set tableHeadings = (tableHeadings.push(
@@ -215,6 +199,16 @@
                     text: "Approved on",
                     attributes: {
                         "aria-sort": "descending"
+                    }
+                }
+            ), tableHeadings) %}
+        {% endif %}
+
+        {% if hardStopEnabled and approvalNeededView %}
+            {% set tableHeadings = (tableHeadings.splice(3, 0, {
+                    text: "Submitted by",
+                    attributes: {
+                        "aria-sort": "none"
                     }
                 }
             ), tableHeadings) %}
