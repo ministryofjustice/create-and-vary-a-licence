@@ -13,13 +13,18 @@
                 value: { text: licence.appointmentAddress }
             },
             {
-                key: { text: "Date" },
-                value: { text: licence.appointmentTime | datetimeToDateShort }
-            },
+                key: { text: "Date/time", id: "date-time" },
+                value: { text: licence.appointmentTimeType | getAppointmentTimeTypeDescription }
+            } if licence.appointmentTimeType !== 'SPECIFIC_DATE_TIME',
             {
-                key: { text: "Time" },
+                key: { text: "Date", id: "date" },
+                id: "date",
+                value: { text: licence.appointmentTime | datetimeToDateShort }
+            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME',
+            {
+                key: { text: "Time", id: "time" },
                 value: { text: licence.appointmentTime | datetimeTo12HourTime }
-            }
+            } if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME'
         ]
     }) }}
 {% endmacro %}

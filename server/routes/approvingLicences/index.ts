@@ -42,7 +42,7 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(communityService)
   const approvalCasesHandler = new ApprovalCaseRoutes(caseloadService, prisonerService)
   const approvalViewHandler = new ApprovalViewRoutes(licenceService, communityService)
-  const approvalConfirmedHandler = new ConfirmApprovedRoutes()
+  const approvalConfirmedHandler = new ConfirmApprovedRoutes(communityService)
   const approvalRejectedHandler = new ConfirmRejectedRoutes()
 
   get('/cases', approvalCasesHandler.GET)
