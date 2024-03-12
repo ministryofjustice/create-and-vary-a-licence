@@ -115,17 +115,6 @@ context('Approve a licence', () => {
       .should('contain.text', 'Additional licence conditions')
   })
 
-  it('should display Licence conditions heading if licence kind is HARD_STOP', () => {
-    cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP', kind: 'HARD_STOP' })
-    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
-    cy.signIn()
-    const indexPage = Page.verifyOnPage(IndexPage)
-    const approvalCasesPage = indexPage.clickApproveALicence()
-    const approvalViewPage = approvalCasesPage.clickApproveLicence()
-    approvalViewPage.getValue(approvalViewPage.approveLicenceId).should('have.text', 'Approve licence')
-    approvalViewPage.getValue(approvalViewPage.accordionSectionHeading).should('contain.text', 'Licence conditions')
-  })
-
   it('should display Approve licence and post sentence supervision order heading if licence is of type AP_PSS', () => {
     cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)

@@ -260,7 +260,6 @@ export default {
     typeCode: 'AP_PSS' | 'AP' | 'PSS'
     appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
     isInHardStopPeriod: boolean
-    kind: 'CRD' | 'VARIATION' | 'HARD_STOP'
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -272,7 +271,6 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
-          kind: options.kind,
           statusCode: options.statusCode, // Overrides licencePlaceHolder status
           typeCode: options.typeCode, // Overrides licence status code
           appointmentPerson: 'Isaac Newton',

@@ -9,7 +9,6 @@
 {% from "../../partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "../../partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "../../partials/bespokeConditionsSummary.njk" import bespokeConditions %}
-{% from "pages/approverImmediateReleaseConditions.njk" import approverImmediateReleaseConditions %}
 
 {% set pageTitle = applicationName + " - Approve a licence" %}
 {% set pageId = "approval-view-page" %}
@@ -64,64 +63,50 @@
                     ]
                 %}
 
-                {% if licence.kind === 'HARD_STOP' %}
+                {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'AP' %}
                     {% set items = (items.push(
-                        {
-                            heading: {
-                                text: "Licence conditions"
-                            },
-                            content: {
-                                    html: approverImmediateReleaseConditions({ submittedByFullName: licence.submittedByFullName, prison: licence.prisonDescription })       
-                            },
-                            expanded: true
-                        }
+                            {
+                                heading: {
+                                    text: "Additional licence conditions (" +  additionalConditions.length + ")"
+                                },
+                                content: {
+                                        html:  
+                                                additionalLicenceConditions(licence, additionalConditions, null, [], null, true) 
+                                                if additionalConditions.length else
+                                                "<p>No additional licence conditions added</p>"       
+                                },
+                                expanded: true
+                            }, {
+                                heading: {
+                                    text: "Bespoke licence conditions (" +  licence.bespokeConditions.length + ")"
+                                },
+                                content: {
+                                    html:
+                                            bespokeConditions(licence.id, null, null, true, licence.bespokeConditions)
+                                        if licence.bespokeConditions.length else
+                                        "<p>No bespoke licence conditions added</p>"
+                                },
+                                expanded: true
+                            }
                     ), items) %}
-                {% else %}
-                    {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'AP' %}
-                        {% set items = (items.push(
-                                {
-                                    heading: {
-                                        text: "Additional licence conditions (" +  additionalConditions.length + ")"
-                                    },
-                                    content: {
-                                            html:  
-                                                    additionalLicenceConditions(licence, additionalConditions, null, [], null, true) 
-                                                    if additionalConditions.length else
-                                                    "<p>No additional licence conditions added</p>"       
-                                    },
-                                    expanded: true
-                                }, {
-                                    heading: {
-                                        text: "Bespoke licence conditions (" +  licence.bespokeConditions.length + ")"
-                                    },
-                                    content: {
-                                        html:
-                                                bespokeConditions(licence.id, null, null, true, licence.bespokeConditions)
-                                            if licence.bespokeConditions.length else
-                                            "<p>No bespoke licence conditions added</p>"
-                                    },
-                                    expanded: true
-                                }
-                        ), items) %}
-                    {% endif %}
+                {% endif %}
 
-                    {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'PSS' %}
-                        {% set items = (items.push(
-                                {
-                                    heading: {
-                                        text: "Additional post sentence supervision requirements (" +  licence.additionalPssConditions.length + ")",
-                                        visuallyHiddenText: "test"
-                                    },
-                                    content: {
-                                        html:
-                                                additionalPssConditions(licence, null, [], null, true)
-                                                if licence.additionalPssConditions.length else
-                                                "<p>No additional post sentence supervision requirements added</p>"
-                                    },
-                                    expanded: true
-                                }
-                        ), items) %}
-                    {% endif %}
+                {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'PSS' %}
+                    {% set items = (items.push(
+                            {
+                                heading: {
+                                    text: "Additional post sentence supervision requirements (" +  licence.additionalPssConditions.length + ")",
+                                    visuallyHiddenText: "test"
+                                },
+                                content: {
+                                    html:
+                                            additionalPssConditions(licence, null, [], null, true)
+                                            if licence.additionalPssConditions.length else
+                                            "<p>No additional post sentence supervision requirements added</p>"
+                                },
+                                expanded: true
+                            }
+                    ), items) %}
                 {% endif %}
 
                 {{
@@ -165,11 +150,7 @@
 
         <div class="govuk-grid-row">
             <h2 class="govuk-heading-l govuk-!-padding-top-8">Approve this licence</h2>
-            {% if licence.kind === "HARD_STOP" %}
-                <p>Contact {{ licence.submittedByFullName }} if you need more information about something.<br>They will only be able to change the initial appointment.</p>
-            {% else %}    
-                <p>Contact the probation practitioner directly if you need more information about something.</p>
-            {% endif %}
+            <p>Contact the probation practitioner directly if you need more information about something.</p> 
         </div>
         <div class="govuk-grid-row govuk-button-group govuk-!-padding-top-2">
             <form method="POST">

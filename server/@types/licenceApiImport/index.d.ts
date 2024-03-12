@@ -1253,11 +1253,6 @@ export interface components {
        * @example true
        */
       isReviewNeeded: boolean
-      /**
-       * @description The full name of the person who submitted the licence
-       * @example John Smith
-       */
-      submittedByFullName?: string
     }
     /** @description Request object for searching licences by field */
     MatchLicencesRequest: {
