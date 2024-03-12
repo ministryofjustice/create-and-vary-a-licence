@@ -16,7 +16,12 @@
 
             <h2 class="govuk-heading-m">What happens next</h2>
             <p class="govuk-body">
-                {{ confirmationMessage | striptags(true) | escape | nl2br }}
+                {{ confirmationMessage }}
+                {% if isComEmailAvailable %}
+                    <br>We will email the probation practitioner automatically to tell them this licence has been approved.
+                {% else %}
+                    <br>A case administrator still needs to notify the probation team that this licence has been approved. We do not have their contact details to do this automatically.
+                {% endif %}
             </p>
 
             <h2 class="govuk-heading-m">If further changes are made</h2>

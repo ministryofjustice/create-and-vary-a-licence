@@ -32,16 +32,10 @@ export default class ConfirmApprovedRoutes {
       }
     }
 
-    if (config.hardStopEnabled) {
-      if (comDetails?.email != null) {
-        confirmationMessage +=
-          '\nWe will email the probation practitioner automatically to tell them this licence has been approved.'
-      } else {
-        confirmationMessage +=
-          '\nA case administrator still needs to notify the probation team that this licence has been approved. We do not have their contact details to do this automatically.'
-      }
-    }
-
-    res.render('pages/approve/confirmation', { titleText, confirmationMessage })
+    res.render('pages/approve/confirmation', {
+      titleText,
+      confirmationMessage,
+      isComEmailAvailable: config.hardStopEnabled && comDetails?.email != null,
+    })
   }
 }

@@ -84,9 +84,9 @@
             {
                 attributes: {
                     id: 'approved-by-' + loop.index,
-                    "data-sort-value": case.submittedBy
+                    "data-sort-value": case.submittedByFullName
                 },
-                text: case.submittedBy
+                text: case.submittedByFullName
             }
         ), caseData) %}
     {% endif %}

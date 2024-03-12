@@ -40,38 +40,39 @@ describe('Route - approve licence', () => {
   })
 
   describe('GET', () => {
-    communityService.getStaffDetailByUsername.mockResolvedValue({
-      staffIdentifier: 3000,
-      username: 'joebloggs',
-      email: 'joebloggs@probation.gov.uk',
-      telephoneNumber: '07777777777',
-      staff: {
-        forenames: 'Joe',
-        surname: 'Bloggs',
-      },
+    it('should render confirmation page for AP with isComEmailAvailable true', async () => {
+      communityService.getStaffDetailByUsername.mockResolvedValue({
+        staffIdentifier: 3000,
+        username: 'joebloggs',
+        email: 'joebloggs@probation.gov.uk',
+        telephoneNumber: '07777777777',
+        staff: {
+          forenames: 'Joe',
+          surname: 'Bloggs',
+        },
+      })
+      config.hardStopEnabled = true
+      res.locals.licence.typeCode = 'AP'
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
+        titleText: 'Licence approved',
+        confirmationMessage: 'A case administrator can now print the licence for Joe Bloggs.',
+        isComEmailAvailable: true,
+      })
     })
 
-    it('should render confirmation page for AP', async () => {
+    it('should render confirmation page for AP with isComEmailAvailable false', async () => {
       config.hardStopEnabled = false
       res.locals.licence.typeCode = 'AP'
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
         titleText: 'Licence approved',
         confirmationMessage: 'A case administrator can now print the licence for Joe Bloggs.',
-      })
-    })
-    it('should render confirmation page for AP and email PP', async () => {
-      config.hardStopEnabled = true
-      res.locals.licence.typeCode = 'AP'
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
-        titleText: 'Licence approved',
-        confirmationMessage:
-          'A case administrator can now print the licence for Joe Bloggs.\nWe will email the probation practitioner automatically to tell them this licence has been approved.',
+        isComEmailAvailable: false,
       })
     })
 
-    it('should render confirmation page for AP and notify PP manually', async () => {
+    it('should render confirmation page for AP with isComEmailAvailable false', async () => {
       communityService.getStaffDetailByUsername.mockResolvedValue({
         staffIdentifier: 3000,
         username: 'joebloggs',
@@ -85,12 +86,34 @@ describe('Route - approve licence', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
         titleText: 'Licence approved',
-        confirmationMessage:
-          'A case administrator can now print the licence for Joe Bloggs.\nA case administrator still needs to notify the probation team that this licence has been approved. We do not have their contact details to do this automatically.',
+        confirmationMessage: 'A case administrator can now print the licence for Joe Bloggs.',
+        isComEmailAvailable: false,
       })
     })
 
-    it('should render confirmation page for AP_PSS', async () => {
+    it('should render confirmation page for AP_PSS with isComEmailAvailable true', async () => {
+      config.hardStopEnabled = true
+      communityService.getStaffDetailByUsername.mockResolvedValue({
+        staffIdentifier: 3000,
+        username: 'joebloggs',
+        email: 'joebloggs@probation.gov.uk',
+        telephoneNumber: '07777777777',
+        staff: {
+          forenames: 'Joe',
+          surname: 'Bloggs',
+        },
+      })
+      res.locals.licence.typeCode = 'AP_PSS'
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
+        titleText: 'Licence and post sentence supervision order approved',
+        confirmationMessage:
+          'A case administrator can now print the licence and post sentence supervision order for Joe Bloggs.',
+        isComEmailAvailable: true,
+      })
+    })
+
+    it('should render confirmation page for AP_PSS with isComEmailAvailable false', async () => {
       config.hardStopEnabled = false
       res.locals.licence.typeCode = 'AP_PSS'
       await handler.GET(req, res)
@@ -98,10 +121,32 @@ describe('Route - approve licence', () => {
         titleText: 'Licence and post sentence supervision order approved',
         confirmationMessage:
           'A case administrator can now print the licence and post sentence supervision order for Joe Bloggs.',
+        isComEmailAvailable: false,
       })
     })
 
-    it('should render confirmation page for AP_PSS and email PP', async () => {
+    it('should render confirmation page for AP_PSS with isComEmailAvailable false', async () => {
+      config.hardStopEnabled = true
+      communityService.getStaffDetailByUsername.mockResolvedValue({
+        staffIdentifier: 3000,
+        username: 'joebloggs',
+        telephoneNumber: '07777777777',
+        staff: {
+          forenames: 'Joe',
+          surname: 'Bloggs',
+        },
+      })
+      res.locals.licence.typeCode = 'AP_PSS'
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
+        titleText: 'Licence and post sentence supervision order approved',
+        confirmationMessage:
+          'A case administrator can now print the licence and post sentence supervision order for Joe Bloggs.',
+        isComEmailAvailable: false,
+      })
+    })
+
+    it('should render confirmation page for PSS with isComEmailAvailable true', async () => {
       config.hardStopEnabled = true
       communityService.getStaffDetailByUsername.mockResolvedValue({
         staffIdentifier: 3000,
@@ -113,50 +158,31 @@ describe('Route - approve licence', () => {
           surname: 'Bloggs',
         },
       })
-      res.locals.licence.typeCode = 'AP_PSS'
+      res.locals.licence.typeCode = 'PSS'
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
-        titleText: 'Licence and post sentence supervision order approved',
-        confirmationMessage:
-          'A case administrator can now print the licence and post sentence supervision order for Joe Bloggs.\nWe will email the probation practitioner automatically to tell them this licence has been approved.',
+        titleText: 'Post sentence supervision order approved',
+        confirmationMessage: 'A case administrator can now print the post sentence supervision order for Joe Bloggs.',
+        isComEmailAvailable: true,
       })
     })
 
-    it('should render confirmation page for AP_PSS and notify PP manually', async () => {
-      communityService.getStaffDetailByUsername.mockResolvedValue({
-        staffIdentifier: 3000,
-        username: 'joebloggs',
-        telephoneNumber: '07777777777',
-        staff: {
-          forenames: 'Joe',
-          surname: 'Bloggs',
-        },
-      })
-      res.locals.licence.typeCode = 'AP_PSS'
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
-        titleText: 'Licence and post sentence supervision order approved',
-        confirmationMessage:
-          'A case administrator can now print the licence and post sentence supervision order for Joe Bloggs.\nA case administrator still needs to notify the probation team that this licence has been approved. We do not have their contact details to do this automatically.',
-      })
-    })
-
-    it('should render confirmation page for PSS', async () => {
+    it('should render confirmation page for PSS with isComEmailAvailable false', async () => {
       config.hardStopEnabled = false
       res.locals.licence.typeCode = 'PSS'
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
         titleText: 'Post sentence supervision order approved',
         confirmationMessage: 'A case administrator can now print the post sentence supervision order for Joe Bloggs.',
+        isComEmailAvailable: false,
       })
     })
 
-    it('should render confirmation page for PSS and email PP', async () => {
+    it('should render confirmation page for PSS with isComEmailAvailable false', async () => {
       config.hardStopEnabled = true
       communityService.getStaffDetailByUsername.mockResolvedValue({
         staffIdentifier: 3000,
         username: 'joebloggs',
-        email: 'joebloggs@probation.gov.uk',
         telephoneNumber: '07777777777',
         staff: {
           forenames: 'Joe',
@@ -167,27 +193,8 @@ describe('Route - approve licence', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
         titleText: 'Post sentence supervision order approved',
-        confirmationMessage:
-          'A case administrator can now print the post sentence supervision order for Joe Bloggs.\nWe will email the probation practitioner automatically to tell them this licence has been approved.',
-      })
-    })
-
-    it('should render confirmation page for PSS and notify PP manually', async () => {
-      communityService.getStaffDetailByUsername.mockResolvedValue({
-        staffIdentifier: 3000,
-        username: 'joebloggs',
-        telephoneNumber: '07777777777',
-        staff: {
-          forenames: 'Joe',
-          surname: 'Bloggs',
-        },
-      })
-      res.locals.licence.typeCode = 'PSS'
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/approve/confirmation', {
-        titleText: 'Post sentence supervision order approved',
-        confirmationMessage:
-          'A case administrator can now print the post sentence supervision order for Joe Bloggs.\nA case administrator still needs to notify the probation team that this licence has been approved. We do not have their contact details to do this automatically.',
+        confirmationMessage: 'A case administrator can now print the post sentence supervision order for Joe Bloggs.',
+        isComEmailAvailable: false,
       })
     })
   })
