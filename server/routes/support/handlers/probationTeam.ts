@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { parse, subDays } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import statusConfig from '../../../licences/licenceStatus'
@@ -21,8 +22,17 @@ export default class ProbationTeamRoutes {
         ? await this.caseloadService.getTeamCreateCaseload(user, [teamCode])
         : await this.caseloadService.getTeamVaryCaseload(user, [teamCode])
 
+    const hardStopCutoffDate = parse(
+      (await this.caseloadService.getCutOffDateForLicenceTimeOut(user)).cutoffDate,
+      'dd/MM/yyyy',
+      new Date()
+    )
+    const hardStopWarningDate = subDays(hardStopCutoffDate, 2)
+
+    const hardStopDates = { hardStopCutoffDate, hardStopWarningDate }
+
     return res.render('pages/support/probationTeam', {
-      caseload: createCaseloadViewModel(caseload, undefined),
+      caseload: createCaseloadViewModel(caseload, undefined, hardStopDates),
       statusConfig,
       teamCode,
       view,

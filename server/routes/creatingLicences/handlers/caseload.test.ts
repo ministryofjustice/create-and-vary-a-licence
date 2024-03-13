@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import moment from 'moment'
 import CaseloadRoutes from './caseload'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
@@ -15,6 +16,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
   const handler = new CaseloadRoutes(caseloadService)
   let req: Request
   let res: Response
+
+  let cutoffDate: string
 
   beforeEach(() => {
     caseloadService.getStaffCreateCaseload.mockResolvedValue([
@@ -123,6 +126,9 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         ],
       },
     ] as unknown as ManagedCase[])
+
+    cutoffDate = moment().add(3, 'days').format('DD/MM/yyyy')
+    caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate })
   })
 
   afterEach(() => {
@@ -178,6 +184,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             isClickable: true,
             createLink: '/licence/create/id/1/check-your-answers',
+            showHardStopWarning: false,
           },
         ],
         search: undefined,
@@ -185,6 +192,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         statusConfig,
         teamView: false,
         teamName: null,
+        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
       expect(caseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
@@ -210,6 +218,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             isClickable: true,
             createLink: '/licence/create/id/1/check-your-answers',
+            showHardStopWarning: false,
           },
           {
             name: 'Dr Who',
@@ -222,6 +231,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP_PSS,
             isClickable: false,
             createLink: '/licence/create/id/2/check-your-answers',
+            showHardStopWarning: false,
           },
           {
             name: 'Mabel Moorhouse',
@@ -234,6 +244,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP_PSS,
             isClickable: false,
             createLink: '/licence/create/nomisId/125/confirm',
+            showHardStopWarning: false,
           },
           {
             name: 'Ronald Recall',
@@ -246,6 +257,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP_PSS,
             isClickable: false,
             createLink: '/licence/create/nomisId/126/confirm',
+            showHardStopWarning: false,
           },
         ],
         statusConfig,
@@ -253,6 +265,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         search: undefined,
         teamName: 'teamA',
         teamView: true,
+        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
@@ -322,6 +335,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             isClickable: true,
             createLink: '/licence/create/id/2/check-your-answers',
+            showHardStopWarning: false,
           },
         ],
         multipleTeams: false,
@@ -329,6 +343,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         statusConfig,
         teamName: null,
         teamView: false,
+        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
     })
@@ -350,6 +365,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP_PSS,
             isClickable: false,
             createLink: '/licence/create/id/2/check-your-answers',
+            showHardStopWarning: false,
           },
         ],
         statusConfig,
@@ -357,6 +373,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamName: 'teamA',
         teamView: true,
         search: 'x381307',
+        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
@@ -377,6 +394,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceType: LicenceType.AP_PSS,
             isClickable: false,
             createLink: '/licence/create/nomisId/126/confirm',
+            showHardStopWarning: false,
           },
         ],
         statusConfig,
@@ -384,6 +402,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: true,
         teamName: 'teamA',
         search: 'x381309',
+        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
@@ -409,6 +428,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             isClickable: true,
             createLink: '/licence/create/id/1/check-your-answers',
+            showHardStopWarning: false,
           },
         ],
         statusConfig,
@@ -416,6 +436,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: true,
         teamName: 'teamA',
         search: 'holmes',
+        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
@@ -441,6 +462,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             isClickable: true,
             createLink: '/licence/create/id/1/check-your-answers',
+            showHardStopWarning: false,
           },
         ],
         statusConfig,
@@ -448,6 +470,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: true,
         teamName: 'teamA',
         search: 'roberts',
+        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()

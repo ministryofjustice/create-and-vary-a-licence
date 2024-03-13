@@ -4,17 +4,23 @@ import { Licence, ManagedCase } from '../../@types/managedCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import { convertToTitleCase } from '../../utils/utils'
 import LicenceKind from '../../enumeration/LicenceKind'
+import config from '../../config'
 
-export default (caseload: ManagedCase[], search: string) => {
+export default (
+  caseload: ManagedCase[],
+  search: string,
+  hardStopDates: { hardStopCutoffDate: Date; hardStopWarningDate: Date }
+) => {
   return caseload
     .map(c => {
       const { licence, createLink } = findLicenceAndCreateLinkToDisplay(c)
+      const releaseDate = moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate)
 
       return {
         name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
         crnNumber: c.deliusRecord.offenderCrn,
         prisonerNumber: c.nomisRecord.prisonerNumber,
-        releaseDate: moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'),
+        releaseDate: releaseDate.format('DD MMM YYYY'),
         licenceId: licence.id,
         licenceStatus: licence.status,
         licenceType: licence.type,
@@ -25,6 +31,10 @@ export default (caseload: ManagedCase[], search: string) => {
           licence.status !== LicenceStatus.NOT_IN_PILOT &&
           licence.status !== LicenceStatus.OOS_RECALL &&
           licence.status !== LicenceStatus.OOS_BOTUS,
+        showHardStopWarning:
+          config.hardStopEnabled &&
+          releaseDate.toDate() >= hardStopDates.hardStopWarningDate &&
+          releaseDate.toDate() <= hardStopDates.hardStopCutoffDate,
       }
     })
     .filter(c => {

@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
+import { parse, subDays } from 'date-fns'
+import moment from 'moment'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import logger from '../../../../logger'
@@ -41,7 +43,16 @@ export default class CaseloadRoutes {
       ? await this.caseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
       : await this.caseloadService.getStaffCreateCaseload(user)
 
-    const caseloadViewModel = createCaseloadViewModel(caseload, search)
+    const hardStopCutoffDate = parse(
+      (await this.caseloadService.getCutOffDateForLicenceTimeOut(user)).cutoffDate,
+      'dd/MM/yyyy',
+      new Date()
+    )
+    const hardStopWarningDate = subDays(hardStopCutoffDate, 2)
+
+    const hardStopDates = { hardStopCutoffDate, hardStopWarningDate }
+
+    const caseloadViewModel = createCaseloadViewModel(caseload, search, hardStopDates)
     res.render('pages/create/caseload', {
       caseload: caseloadViewModel,
       statusConfig,
@@ -49,6 +60,7 @@ export default class CaseloadRoutes {
       teamName,
       multipleTeams,
       search,
+      hardStopCutoffDate: moment(hardStopCutoffDate).format('DD MMM YYYY'),
     })
   }
 }
