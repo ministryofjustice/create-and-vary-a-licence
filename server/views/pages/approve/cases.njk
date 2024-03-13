@@ -78,6 +78,19 @@
 
         ), caseData) %}
     {% endif %}
+
+    {% if hardStopEnabled and approvalNeededView %}
+        {% set caseData = (caseData.splice(3, 0,
+            {
+                attributes: {
+                    id: 'approved-by-' + loop.index,
+                    "data-sort-value": case.submittedByFullName
+                },
+                text: case.submittedByFullName
+            }
+        ), caseData) %}
+    {% endif %}
+
     {% set licences = (licences.push(caseData), licences) %}
 
 {% endfor %}
@@ -186,6 +199,16 @@
                     text: "Approved on",
                     attributes: {
                         "aria-sort": "descending"
+                    }
+                }
+            ), tableHeadings) %}
+        {% endif %}
+
+        {% if hardStopEnabled and approvalNeededView %}
+            {% set tableHeadings = (tableHeadings.splice(3, 0, {
+                    text: "Submitted by",
+                    attributes: {
+                        "aria-sort": "none"
                     }
                 }
             ), tableHeadings) %}

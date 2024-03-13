@@ -47,6 +47,7 @@ describe('Route Handlers - Approval - case list', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.SUBMITTED,
+            submittedByFullName: 'John Smith',
           },
         ],
         nomisRecord: {
@@ -65,6 +66,7 @@ describe('Route Handlers - Approval - case list', () => {
             id: 2,
             type: LicenceType.AP,
             status: LicenceStatus.NOT_STARTED,
+            submittedByFullName: 'John Smith',
           },
         ],
         nomisRecord: {
@@ -83,6 +85,7 @@ describe('Route Handlers - Approval - case list', () => {
             id: 3,
             type: LicenceType.AP,
             status: LicenceStatus.NOT_IN_PILOT,
+            submittedByFullName: 'John Smith',
           },
         ],
         nomisRecord: {
@@ -135,6 +138,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+            submittedByFullName: 'John Smith',
             urgentApproval: true,
           },
           {
@@ -144,6 +148,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Thor',
             },
+            submittedByFullName: 'John Smith',
             releaseDate: '01 May 2022',
             urgentApproval: true,
           },
@@ -154,6 +159,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter Black',
             },
+            submittedByFullName: 'John Smith',
             releaseDate: format(nonUrgentReleaseDate, 'dd MMM yyyy'),
             urgentApproval: false,
           },
@@ -271,6 +277,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+            submittedByFullName: 'John Smith',
             urgentApproval: true,
           },
         ],
@@ -301,6 +308,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+            submittedByFullName: 'John Smith',
             urgentApproval: true,
           },
         ],
@@ -331,6 +339,7 @@ describe('Route Handlers - Approval - case list', () => {
             probationPractitioner: {
               name: 'Walter White',
             },
+            submittedByFullName: 'John Smith',
             urgentApproval: true,
           },
         ],
