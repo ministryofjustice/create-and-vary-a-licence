@@ -78,6 +78,7 @@ export default {
   apis: {
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
+      healthPath: '/health/ping',
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
       timeout: {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
@@ -91,6 +92,7 @@ export default {
     },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
         deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
@@ -100,6 +102,7 @@ export default {
     },
     licenceApi: {
       url: get('LICENCE_API_URL', 'http://localhost:8089', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('LICENCE_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('LICENCE_API_TIMEOUT_DEADLINE', 30000)),
@@ -108,6 +111,7 @@ export default {
     },
     prisonApi: {
       url: get('PRISON_API_URL', 'http://localhost:8080', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('PRISON_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('PRISON_API_TIMEOUT_DEADLINE', 30000)),
@@ -116,6 +120,7 @@ export default {
     },
     prisonerSearchApi: {
       url: get('PRISONER_SEARCH_API_URL', 'http://localhost:8090', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('PRISONER_SEARCH_API_TIMEOUT_DEADLINE', 30000)),
@@ -124,6 +129,7 @@ export default {
     },
     prisonRegisterApi: {
       url: get('PRISON_REGISTER_API_URL', 'http://localhost:8092', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('PRISON_REGISTER_API_TIMEOUT_DEADLINE', 30000)),
@@ -132,6 +138,7 @@ export default {
     },
     probationSearchApi: {
       url: get('PROBATION_SEARCH_API_URL', 'http://localhost:8091', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 30000)),
@@ -140,6 +147,7 @@ export default {
     },
     communityApi: {
       url: get('COMMUNITY_API_URL', 'http://localhost:8088', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('COMMUNITY_API_TIMEOUT_RESPONSE', 30000)),
         deadline: Number(get('COMMUNITY_API_TIMEOUT_DEADLINE', 30000)),
@@ -147,13 +155,15 @@ export default {
       agent: new AgentConfig(Number(get('COMMUNITY_API_TIMEOUT_RESPONSE', 30000))),
     },
     gotenberg: {
-      apiUrl: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
+      url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
+      healthPath: '/health',
       pdfOptions: {
         marginTop: '0.8',
         marginBottom: '0.7',
         marginLeft: '0.55',
         marginRight: '0.35',
       },
+      agent: new AgentConfig(Number(get('GOTENBERG_API_TIMEOUT_RESPONSE', 30000))),
       watermark: get('LICENCE_WATERMARK', 'false') === 'true',
 
       /*
@@ -170,6 +180,7 @@ export default {
     },
     frontendComponents: {
       url: get('COMPONENT_API_URL', 'http://localhost:3000', requiredInProduction),
+      healthPath: '/ping',
       timeout: {
         response: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 2000)),
         deadline: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 2000)),
@@ -179,6 +190,7 @@ export default {
     },
     manageUsersApi: {
       url: get('MANAGE_USERS_API_URL', 'http://localhost:8080', requiredInProduction),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('MANAGE_USERS_API_TIMEOUT_DEADLINE', 10000)),

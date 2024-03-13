@@ -5,6 +5,13 @@ context('Healthcheck', () => {
       cy.task('stubAuthPing')
       cy.task('stubManageUsersPing')
       cy.task('stubTokenVerificationPing')
+      cy.task('stubFeComponentsPing')
+      cy.task('stubPrisonerSearchApiPing')
+      cy.task('stubCommunityApiPing')
+      cy.task('stubPrisonApiPing')
+      cy.task('stubProbationSearchPing')
+      cy.task('stubLicencesPing')
+      cy.task('stubPrisonRegisterApiPing')
     })
 
     it('Health check page is visible and UP', () => {

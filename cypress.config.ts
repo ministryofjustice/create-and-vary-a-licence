@@ -13,6 +13,7 @@ import probationSearch from './integration_tests/mockApis/probationSearch'
 import events from './integration_tests/support/events'
 import feComponent from './integration_tests/mockApis/feComponent'
 import manageUsersApi from './integration_tests/mockApis/manageUsers'
+import prisonRegister from './integration_tests/mockApis/prisonRegister'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -48,6 +49,7 @@ export default defineConfig({
             feComponent.stubFeComponentsCss(),
           ]),
         stubFeComponentsFail: feComponent.stubFeComponentsFail,
+        stubFeComponentsPing: feComponent.stubFeComponentsPing,
         stubUpdateResponsibleCom: licence.stubUpdateResponsibleCom,
         stubUpdateProbationTeam: licence.stubUpdateProbationTeam,
         stubUpdatePrisonUserDetails: licence.stubUpdatePrisonUserDetails,
@@ -99,6 +101,9 @@ export default defineConfig({
         stubGetHardStopLicence: licence.stubGetHardStopLicence,
         stubGetOmuEmail: licence.stubGetOmuEmail,
         stubGetHardStopAndTimedOutLicences: licence.stubGetHardStopAndTimedOutLicences,
+        stubGetCutOffDateForLicenceTimeOut: licence.stubGetCutOffDateForLicenceTimeOut,
+        stubGetProbationSearchResults: licence.stubSearchForOffenderOnStaffCaseload,
+        stubLicencesPing: licence.stubPing,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
@@ -110,11 +115,12 @@ export default defineConfig({
         stubGetUserDetailsByUsername: community.stubGetUserDetailsByUsername,
         stubAssignRole: community.stubAssignRole,
         stubGetSingleOffenderByCrn: community.stubGetSingleOffenderByCrn,
-        stubGetCutOffDateForLicenceTimeOut: community.stubGetCutOffDateForLicenceTimeOut,
+        stubCommunityApiPing: community.stubPing,
 
         searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
         searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
         searchPrisonersByReleaseDate: prisonerSearch.searchPrisonersByReleaseDate,
+        stubPrisonerSearchApiPing: prisonerSearch.stubPing,
 
         stubGetPrisonUserDetails: prison.stubGetUserDetails,
         stubGetPrisonUserCaseloads: prison.stubGetUserCaseloads,
@@ -122,16 +128,17 @@ export default defineConfig({
         stubGetStaffDetailByUsername: community.stubGetStaffDetailByUsername,
         stubGetPrisonerDetail: prison.stubGetPrisonerDetail,
         stubGetPrisonerSentencesAndOffences: prison.stubGetPrisonerSentencesAndOffences,
-
         stubGetPrisonInformation: prison.stubGetPrisonInformation,
         stubGetHdcStatus: prison.stubGetHdcStatus,
         stubGetPrisons: prison.stubGetPrisons,
+        stubPrisonApiPing: prison.stubPing,
+
+        stubPrisonRegisterApiPing: prisonRegister.stubPing,
 
         stubGetProbationer: probationSearch.stubGetProbationer,
         stubGetOffendersByCrn: probationSearch.stubGetOffendersByCrn,
         stubGetOffendersByNomsNumber: probationSearch.stubGetOffendersByNomsNumber,
-
-        stubGetProbationSearchResults: licence.stubSearchForOffenderOnStaffCaseload,
+        stubProbationSearchPing: probationSearch.stubPing,
 
         sendDomainEvent: events.sendDomainEvent,
         sendPrisonEvent: events.sendPrisonEvent,
