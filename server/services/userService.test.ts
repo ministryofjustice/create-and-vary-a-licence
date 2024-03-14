@@ -34,13 +34,13 @@ describe('User service', () => {
       const result = await userService.getUser(user)
       expect(result.name).toEqual('john smith')
       expect(result.activeCaseLoadId).toEqual('MDI')
-      expect(manageUsersApiClient.getUser).toBeCalled()
+      expect(manageUsersApiClient.getUser).toHaveBeenCalled()
     })
 
     it('Propagates any errors', async () => {
       manageUsersApiClient.getUser.mockRejectedValue(new Error('some error'))
       await expect(() => userService.getUser(user)).rejects.toThrow('some error')
-      expect(manageUsersApiClient.getUser).toBeCalled()
+      expect(manageUsersApiClient.getUser).toHaveBeenCalled()
     })
   })
 
@@ -53,13 +53,13 @@ describe('User service', () => {
       } as PrisonUserEmail)
       const result = await userService.getUserEmail(user)
       expect(result.email).toEqual('js@prison.com')
-      expect(manageUsersApiClient.getUserEmail).toBeCalled()
+      expect(manageUsersApiClient.getUserEmail).toHaveBeenCalled()
     })
 
     it('Propagates any errors', async () => {
       manageUsersApiClient.getUserEmail.mockRejectedValue(new Error('some error'))
       await expect(() => userService.getUserEmail(user)).rejects.toThrow('some error')
-      expect(manageUsersApiClient.getUserEmail).toBeCalled()
+      expect(manageUsersApiClient.getUserEmail).toHaveBeenCalled()
     })
   })
 
@@ -81,7 +81,7 @@ describe('User service', () => {
       expect(result.lastName).toEqual('Charles')
       expect(result.staffId).toEqual(123)
       expect(result.activeCaseLoadId).toEqual('MDI')
-      expect(prisonApiClient.getUser).toBeCalled()
+      expect(prisonApiClient.getUser).toHaveBeenCalled()
     })
 
     it('Propagates any errors', async () => {
@@ -123,7 +123,7 @@ describe('User service', () => {
       expect(activeCaseload[0]).toEqual('MDI')
       expect(activeCaseload[1]).toEqual('LEI')
       expect(activeCaseload[2]).toEqual('BMI')
-      expect(prisonApiClient.getUserCaseloads).toBeCalled()
+      expect(prisonApiClient.getUserCaseloads).toHaveBeenCalled()
     })
 
     it('Propagates any errors', async () => {
@@ -150,7 +150,7 @@ describe('User service', () => {
       expect(result.staff.surname).toEqual('Test')
       expect(result.staffIdentifier).toEqual(1234)
       expect(result.username).toEqual('TestUserNPS')
-      expect(communityService.getStaffDetailByUsername).toBeCalled()
+      expect(communityService.getStaffDetailByUsername).toHaveBeenCalled()
     })
 
     it('Propagates any errors', async () => {

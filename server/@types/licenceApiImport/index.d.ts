@@ -4,10 +4,10 @@
  */
 
 export interface paths {
-  '/prison-case-administrator/update': {
+  '/prison-user/update': {
     /**
-     * Create/updates the details of a prison case administrator.
-     * @description Create/updates the details of a prison case administrator (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     * Create/updates the details of a prison user.
+     * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateCaDetails']
   }
@@ -489,25 +489,25 @@ export type webhooks = Record<string, never>
 
 export interface components {
   schemas: {
-    /** @description Request object for updating a prison case administrator */
-    UpdatePrisonCaseAdminRequest: {
+    /** @description Request object for updating a prison user */
+    UpdatePrisonUserRequest: {
       /**
-       * @description The NOMIS username of the case administrator
+       * @description The NOMIS username of the prison user
        * @example jbloggs
        */
       staffUsername: string
       /**
-       * @description The email address of the case administrator
+       * @description The email address of the prison user
        * @example jbloggs@probation.gov.uk
        */
       staffEmail?: string
       /**
-       * @description The first name of the case administrator
+       * @description The first name of the user
        * @example Joseph
        */
       firstName?: string
       /**
-       * @description The last name of the case administrator
+       * @description The last name of the user
        * @example Bloggs
        */
       lastName?: string
@@ -3853,17 +3853,17 @@ export type external = Record<string, never>
 
 export interface operations {
   /**
-   * Create/updates the details of a prison case administrator.
-   * @description Create/updates the details of a prison case administrator (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+   * Create/updates the details of a prison user.
+   * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
    */
   updateCaDetails: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdatePrisonCaseAdminRequest']
+        'application/json': components['schemas']['UpdatePrisonUserRequest']
       }
     }
     responses: {
-      /** @description The Case Administrator was created/updated */
+      /** @description The user was created/updated */
       200: {
         content: never
       }
