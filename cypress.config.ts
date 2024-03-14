@@ -14,6 +14,7 @@ import events from './integration_tests/support/events'
 import feComponent from './integration_tests/mockApis/feComponent'
 import manageUsersApi from './integration_tests/mockApis/manageUsers'
 import prisonRegister from './integration_tests/mockApis/prisonRegister'
+import gotenbergApi from './integration_tests/mockApis/gotenberg'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -139,6 +140,8 @@ export default defineConfig({
         stubGetOffendersByCrn: probationSearch.stubGetOffendersByCrn,
         stubGetOffendersByNomsNumber: probationSearch.stubGetOffendersByNomsNumber,
         stubProbationSearchPing: probationSearch.stubPing,
+
+        stubGotenbergApiPing: gotenbergApi.stubPing,
 
         sendDomainEvent: events.sendDomainEvent,
         sendPrisonEvent: events.sendPrisonEvent,

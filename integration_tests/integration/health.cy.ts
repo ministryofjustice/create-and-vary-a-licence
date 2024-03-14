@@ -12,6 +12,7 @@ context('Healthcheck', () => {
       cy.task('stubProbationSearchPing')
       cy.task('stubLicencesPing')
       cy.task('stubPrisonRegisterApiPing')
+      cy.task('stubGotenbergApiPing')
     })
 
     it('Health check page is visible and UP', () => {
