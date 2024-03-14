@@ -22,6 +22,8 @@ import BespokeConditionsYesOrNo from './types/bespokeConditionsYesOrNo'
 import PrisonWillCreateThisLicenceRoutes from './handlers/prisonWillCreateThisLicence'
 import LicenceCreatedByPrisonRoutes from './handlers/licenceCreatedByPrison'
 import LicenceChangesNotApprovedInTimeRoutes from './handlers/licenceChangesNotApprovedInTime'
+import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
+import UserType from '../../enumeration/userType'
 
 export default function Index({
   licenceService,
@@ -46,7 +48,8 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
+      hardStopCheckMiddleware(UserType.PROBATION)
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
