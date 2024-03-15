@@ -54,7 +54,7 @@ describe('Caseload Service', () => {
       } as ManagedCase,
     ])
     serviceUnderTest.mapOffendersToLicences(offenders)
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toBeCalledTimes(0)
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(0)
   })
 
   it('Calls Licence API when no Nomis records are found', () => {
@@ -64,7 +64,7 @@ describe('Caseload Service', () => {
       } as ManagedCase,
     ])
     serviceUnderTest.mapOffendersToLicences(offenders)
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toBeCalledTimes(1)
+    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(1)
   })
 
   it('filters invalid data due to mismatch between delius and nomis', async () => {
@@ -498,7 +498,7 @@ describe('Caseload Service', () => {
         },
       },
     ])
-    expect(communityService.getManagedOffendersByTeam).toBeCalledTimes(1)
+    expect(communityService.getManagedOffendersByTeam).toHaveBeenCalledTimes(1)
   })
 
   it('check licence status for recalls and breach of supervision on team create caseload', async () => {
@@ -578,7 +578,7 @@ describe('Caseload Service', () => {
         },
       },
     ])
-    expect(communityService.getManagedOffendersByTeam).toBeCalledTimes(1)
+    expect(communityService.getManagedOffendersByTeam).toHaveBeenCalledTimes(1)
   })
 
   it('builds the staff vary caseload', async () => {

@@ -117,7 +117,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licences-api/prison-case-administrator/update`,
+        urlPattern: `/licences-api/prison-user/update`,
       },
       response: {
         status: 200,

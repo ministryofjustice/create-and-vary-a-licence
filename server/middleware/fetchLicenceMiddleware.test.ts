@@ -66,15 +66,15 @@ describe('fetchLicenceMiddleware', () => {
     req.params = {}
     await middleware(req, res, next)
     expect(res.locals.licence).toBeUndefined()
-    expect(licenceService.getLicence).not.toBeCalled()
-    expect(next).toBeCalledTimes(1)
+    expect(licenceService.getLicence).not.toHaveBeenCalled()
+    expect(next).toHaveBeenCalledTimes(1)
   })
 
   it('should populate licence from the API', async () => {
     await middleware(req, res, next)
     expect(res.locals.licence).toEqual(licence)
-    expect(licenceService.getLicence).toBeCalledTimes(1)
-    expect(next).toBeCalledTimes(1)
+    expect(licenceService.getLicence).toHaveBeenCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
   })
 
   // Causes an error to appear in the console with message 'Failed to get licence details for licence Id: 1' (expected)
@@ -88,17 +88,17 @@ describe('fetchLicenceMiddleware', () => {
   it('should allow access for a prison user based on caseload', async () => {
     await middleware(req, res, next)
     expect(res.locals.licence).toEqual(licence)
-    expect(licenceService.getLicence).toBeCalledTimes(1)
-    expect(next).toBeCalledTimes(1)
+    expect(licenceService.getLicence).toHaveBeenCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
   })
 
   it('should deny access for a prison user based on caseload', async () => {
     res.locals.user.prisonCaseload = ['WRONG', 'STILL-WRONG']
     await middleware(req, res, next)
     expect(res.locals.licence).toBeUndefined()
-    expect(licenceService.getLicence).toBeCalledTimes(1)
+    expect(licenceService.getLicence).toHaveBeenCalledTimes(1)
     expect(res.redirect).toHaveBeenCalledWith('/access-denied')
-    expect(next).not.toBeCalled()
+    expect(next).not.toHaveBeenCalled()
   })
 
   it('should allow access for a probation user based on teams', async () => {
@@ -106,8 +106,8 @@ describe('fetchLicenceMiddleware', () => {
     res.locals.licence = undefined
     await middleware(req, res, next)
     expect(res.locals.licence).toEqual(licence)
-    expect(licenceService.getLicence).toBeCalledTimes(1)
-    expect(next).toBeCalledTimes(1)
+    expect(licenceService.getLicence).toHaveBeenCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
   })
 
   it('should deny access for a probation user based on teams', async () => {
@@ -116,9 +116,9 @@ describe('fetchLicenceMiddleware', () => {
     res.locals.user.probationTeamCodes = ['WRONG', 'WRONG-AGAIN']
     await middleware(req, res, next)
     expect(res.locals.licence).toBeUndefined()
-    expect(licenceService.getLicence).toBeCalledTimes(1)
+    expect(licenceService.getLicence).toHaveBeenCalledTimes(1)
     expect(res.redirect).toHaveBeenCalledWith('/access-denied')
-    expect(next).not.toBeCalled()
+    expect(next).not.toHaveBeenCalled()
   })
 
   it('should allow access for PDUH regardless of teams', async () => {
@@ -128,7 +128,7 @@ describe('fetchLicenceMiddleware', () => {
     res.locals.user.userRoles = ['ROLE_LICENCE_ACO'] // PDU role
     await middleware(req, res, next)
     expect(res.locals.licence).toEqual(licence)
-    expect(licenceService.getLicence).toBeCalledTimes(1)
-    expect(next).toBeCalledTimes(1)
+    expect(licenceService.getLicence).toHaveBeenCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
   })
 })
