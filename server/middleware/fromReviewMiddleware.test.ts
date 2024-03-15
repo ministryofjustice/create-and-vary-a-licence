@@ -22,14 +22,14 @@ describe('addQueryParameterToViewContext', () => {
     expect(res.locals).toEqual({
       fromReview: 'true',
     })
-    expect(next).toBeCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
   })
 
   it('should not add fromReview to context if query object is undefined', async () => {
     req.query = undefined
     middleware(req, res, next)
     expect(res.locals).toEqual({})
-    expect(next).toBeCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
   })
 
   it('should not add fromReview to context if request method is not GET', async () => {
@@ -37,6 +37,6 @@ describe('addQueryParameterToViewContext', () => {
 
     middleware(req, res, next)
     expect(res.locals).toEqual({})
-    expect(next).toBeCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
   })
 })

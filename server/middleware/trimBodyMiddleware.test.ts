@@ -16,7 +16,7 @@ describe('trimRequestBody', () => {
   it('should pass over a GET request unchanged', async () => {
     req.method = 'GET'
     middleware(req, res, next)
-    expect(next).toBeCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
     expect(req.body).toBeUndefined()
   })
 
@@ -26,7 +26,7 @@ describe('trimRequestBody', () => {
       test2: '  value2   ',
     }
     middleware(req, res, next)
-    expect(next).toBeCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
     expect(req.body).toEqual({
       test1: 'value1',
       test2: 'value2',
@@ -41,7 +41,7 @@ describe('trimRequestBody', () => {
       },
     }
     middleware(req, res, next)
-    expect(next).toBeCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
     expect(req.body).toEqual({
       test1: {
         test1: 'value1',
@@ -61,7 +61,7 @@ describe('trimRequestBody', () => {
       ],
     }
     middleware(req, res, next)
-    expect(next).toBeCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
     expect(req.body).toEqual({
       test1: ['value1', 'value2'],
       test2: [
@@ -79,7 +79,7 @@ describe('trimRequestBody', () => {
       test2: 2,
     }
     middleware(req, res, next)
-    expect(next).toBeCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
     expect(req.body).toEqual({
       test1: true,
       test2: 2,
@@ -92,7 +92,7 @@ describe('trimRequestBody', () => {
       test2: undefined,
     }
     middleware(req, res, next)
-    expect(next).toBeCalledTimes(1)
+    expect(next).toHaveBeenCalledTimes(1)
     expect(req.body).toEqual({
       test1: null,
       test2: undefined,
