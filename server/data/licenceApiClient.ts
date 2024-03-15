@@ -521,9 +521,15 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async runDeactivateReleaseDatePassedLicencesJob() {
+  async runDeactivateReleaseDatePassedLicencesJob(): Promise<void> {
     await this.post({
       path: '/run-deactivate-licences-past-release-date',
+    })
+  }
+
+  async reviewWithoutVariation(licenceId: number): Promise<void> {
+    await this.post({
+      path: `/licence/id/${licenceId}/review-with-no-variation-required`,
     })
   }
 }

@@ -648,6 +648,11 @@ describe('Licence Service', () => {
     )
   })
 
+  it('should review a licence with no variation required', async () => {
+    await licenceService.reviewWithoutVariation(1)
+    expect(licenceApiClient.reviewWithoutVariation).toHaveBeenCalledWith(1)
+  })
+
   describe('Exclusion zone file', () => {
     const myUploadFile = {
       path: 'test-file.txt',

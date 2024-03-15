@@ -539,6 +539,13 @@ describe('Licence API client tests', () => {
     )
   })
 
+  it('should call to set a licence as reviewed', async () => {
+    await licenceApiClient.reviewWithoutVariation(1)
+    expect(post).toHaveBeenCalledWith({
+      path: `/licence/id/1/review-with-no-variation-required`,
+    })
+  })
+
   describe('Exclusion zone file', () => {
     it('Upload an exclusion zone PDF file', async () => {
       const myUpload = { path: 'test-file' } as Express.Multer.File

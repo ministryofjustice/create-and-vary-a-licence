@@ -585,4 +585,8 @@ export default class LicenceService {
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     return this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)
   }
+
+  async reviewWithoutVariation(licenceId: number): Promise<void> {
+    return this.licenceApiClient.reviewWithoutVariation(licenceId)
+  }
 }
