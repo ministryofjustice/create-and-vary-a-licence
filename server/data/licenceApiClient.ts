@@ -37,7 +37,12 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-import { UpdateComRequest, UpdatePrisonUserRequest, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
+import {
+  UpdateComRequest,
+  UpdatePrisonUserRequest,
+  HardStopCutoffDate,
+  ComReviewCount,
+} from '../@types/licenceApiClientTypes'
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
@@ -243,6 +248,15 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username }
     )) as HardStopCutoffDate
+  }
+
+  async getComReviewCount(user: User): Promise<ComReviewCount> {
+    return (await this.get(
+      {
+        path: `/com/${user.deliusStaffIdentifier}/review-counts`,
+      },
+      { username: user?.username }
+    )) as ComReviewCount
   }
 
   async getLicencesRecentlyApproved(prisons?: string[], user?: User): Promise<LicenceSummary[]> {

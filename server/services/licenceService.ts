@@ -35,6 +35,7 @@ import {
   LicenceConditionChange,
   UpdateOffenderDetailsRequest,
   HardStopCutoffDate,
+  ComReviewCount,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
@@ -317,6 +318,10 @@ export default class LicenceService {
 
   async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
     return this.licenceApiClient.getCutOffDateForLicenceTimeOut(user)
+  }
+
+  async getComReviewCount(user: User): Promise<ComReviewCount> {
+    return this.licenceApiClient.getComReviewCount(user)
   }
 
   async getLicencesForVariationApproval(user: User): Promise<LicenceSummary[]> {

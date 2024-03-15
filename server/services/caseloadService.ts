@@ -11,7 +11,7 @@ import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
 import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
-import { LicenceSummary, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
+import { LicenceSummary, HardStopCutoffDate, ComReviewCount } from '../@types/licenceApiClientTypes'
 import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
@@ -106,6 +106,10 @@ export default class CaseloadService {
     const casesWithComs = await this.mapResponsibleComsToCasesWithExclusions(withLicence.concat(pending))
 
     return new OmuCaselist(casesWithComs)
+  }
+
+  async getComReviewCount(user: User): Promise<ComReviewCount> {
+    return this.licenceService.getComReviewCount(user)
   }
 
   async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {

@@ -115,7 +115,11 @@
     <nav class="moj-sub-navigation" aria-label="Sub navigation">
         <ul class="moj-sub-navigation__list">
             <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if not teamView %}aria-current="page"{% endif %} href="?view=me">My cases</a>
+                <a class="moj-sub-navigation__link" {% if not teamView %}aria-current="page"{% endif %} href="?view=me">My cases
+                    {% if myCount %}
+                        <span id="notifications" class="moj-notification-badge">{{ myCount }}</span>
+                    {% endif %}
+                </a>
             </li>
             <li class="moj-sub-navigation__item">
                 <a class="moj-sub-navigation__link" {% if teamView %}aria-current="page"{% endif %} href="?view=team">Team cases</a>
