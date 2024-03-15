@@ -104,7 +104,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/com/update`,
+        urlPattern: `/licences-api/com/update`,
       },
       response: {
         status: 200,
@@ -117,7 +117,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/prison-user/update`,
+        urlPattern: `/licences-api/prison-user/update`,
       },
       response: {
         status: 200,
@@ -130,7 +130,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/offender/crn/.*/responsible-com`,
+        urlPattern: `/licences-api/offender/crn/.*/responsible-com`,
       },
       response: {
         status: 200,
@@ -143,7 +143,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/offender/crn/.*/probation-team`,
+        urlPattern: `/licences-api/offender/crn/.*/probation-team`,
       },
       response: {
         status: 200,
@@ -156,7 +156,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d)*`,
+        urlPattern: `/licences-api/licence/id/(\\d)*`,
       },
       response: {
         status: 200,
@@ -170,7 +170,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence-policy/compare/(\\d.\\d)/licence/((\\d))`,
+        urlPattern: `/licences-api/licence-policy/compare/(\\d.\\d)/licence/((\\d))`,
       },
       response: {
         status: 200,
@@ -245,7 +245,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `licence/vary/id/(\\d)/policy-changes/condition/(\\d)`,
+        urlPattern: `/licences-apilicence/vary/id/(\\d)/policy-changes/condition/(\\d)`,
       },
       response: {
         status: 200,
@@ -265,7 +265,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d)*`,
+        urlPattern: `/licences-api/licence/id/(\\d)*`,
       },
       response: {
         status: 200,
@@ -469,7 +469,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/licence/create',
+        urlPattern: '/licences-api/licence/create',
       },
       response: {
         status: 200,
@@ -487,7 +487,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/licence/match`,
+        urlPathPattern: `/licences-api/licence/match`,
       },
       response: {
         status: 200,
@@ -510,7 +510,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/licence/match`,
+        urlPathPattern: `/licences-api/licence/match`,
         bodyPatterns: [
           {
             matchesJsonPath: {
@@ -578,7 +578,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/licence/match`,
+        urlPathPattern: `/licences-api/licence/match`,
       },
       response: {
         status: 200,
@@ -610,7 +610,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/licence/variations/submitted/area/(\\w)*`,
+        urlPathPattern: `/licences-api/licence/variations/submitted/area/(\\w)*`,
       },
       response: {
         status: 200,
@@ -638,7 +638,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: '/api/offender-sentences/booking/(\\d)*/home-detention-curfews/latest',
+        urlPathPattern: '/licences-api/api/offender-sentences/booking/(\\d)*/home-detention-curfews/latest',
       },
       response: {
         status: 200,
@@ -659,7 +659,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d)*/appointmentPerson`,
+        urlPattern: `/licences-api/licence/id/(\\d)*/appointmentPerson`,
       },
       response: {
         status: 200,
@@ -673,7 +673,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d)*/appointmentTime`,
+        urlPattern: `/licences-api/licence/id/(\\d)*/appointmentTime`,
       },
       response: {
         status: 200,
@@ -687,7 +687,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d)*/appointment-address`,
+        urlPattern: `/licences-api/licence/id/(\\d)*/appointment-address`,
       },
       response: {
         status: 200,
@@ -701,7 +701,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d)*/contact-number`,
+        urlPattern: `/licences-api/licence/id/(\\d)*/contact-number`,
       },
       response: {
         status: 200,
@@ -715,7 +715,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d)*/bespoke-conditions`,
+        urlPattern: `/licences-api/licence/id/(\\d)*/bespoke-conditions`,
       },
       response: {
         status: 200,
@@ -729,7 +729,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d)*/additional-conditions`,
+        urlPattern: `/licences-api/licence/id/(\\d)*/additional-conditions`,
       },
       response: {
         status: 200,
@@ -743,7 +743,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d)*`,
+        urlPattern: `/licences-api/licence/id/(\\d)*`,
       },
       response: {
         status: 200,
@@ -766,7 +766,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d)*`,
+        urlPattern: `/licences-api/licence/id/(\\d)*`,
       },
       response: {
         status: 200,
@@ -789,7 +789,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d)*/additional-conditions/condition/(\\d)*`,
+        urlPattern: `/licences-api/licence/id/(\\d)*/additional-conditions/condition/(\\d)*`,
       },
       response: {
         status: 200,
@@ -803,7 +803,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/licence/match`,
+        urlPathPattern: `/licences-api/licence/match`,
       },
       response: {
         status: 200,
@@ -823,7 +823,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/licence/match`,
+        urlPathPattern: `/licences-api/licence/match`,
       },
       response: {
         status: 200,
@@ -843,7 +843,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/licence/match`,
+        urlPathPattern: `/licences-api/licence/match`,
       },
       response: {
         status: 200,
@@ -876,7 +876,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/licence/match`,
+        urlPathPattern: `/licences-api/licence/match`,
       },
       response: {
         status: 200,
@@ -921,7 +921,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/submit`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/submit`,
       },
       response: {
         status: 200,
@@ -935,7 +935,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/status`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/status`,
       },
       response: {
         status: 200,
@@ -949,7 +949,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/audit/save`,
+        urlPattern: `/licences-api/audit/save`,
       },
       response: {
         status: 200,
@@ -963,7 +963,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/licence/id/(\\d*)/create-variation`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/create-variation`,
       },
       response: {
         status: 200,
@@ -979,7 +979,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/spo-discussion`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/spo-discussion`,
       },
       response: {
         status: 200,
@@ -993,7 +993,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/vlo-discussion`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/vlo-discussion`,
       },
       response: {
         status: 200,
@@ -1007,7 +1007,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/reason-for-variation`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/reason-for-variation`,
       },
       response: {
         status: 200,
@@ -1021,7 +1021,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d*)`,
+        urlPattern: `/licences-api/licence/id/(\\d*)`,
       },
       response: {
         status: 200,
@@ -1049,7 +1049,7 @@ export default {
     return stubFor({
       request: {
         method: 'DELETE',
-        urlPattern: `/licence/id/(\\d*)/discard`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/discard`,
       },
       response: {
         status: 200,
@@ -1063,7 +1063,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/prison-information`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/prison-information`,
       },
       response: {
         status: 200,
@@ -1077,7 +1077,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/sentence-dates`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/sentence-dates`,
       },
       response: {
         status: 200,
@@ -1091,7 +1091,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/events/match`,
+        urlPathPattern: `/licences-api/events/match`,
         queryParameters: {
           licenceId: {
             matches: '.*',
@@ -1140,7 +1140,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/approve-variation`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/approve-variation`,
       },
       response: {
         status: 200,
@@ -1154,7 +1154,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/refer-variation`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/refer-variation`,
       },
       response: {
         status: 200,
@@ -1168,7 +1168,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/licence/id/(\\d*)/standard-conditions`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/standard-conditions`,
       },
       response: {
         status: 200,
@@ -1197,7 +1197,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence-policy/version/([0-9]+[.]+[0-9])`,
+        urlPattern: `/licences-api/licence-policy/version/([0-9]+[.]+[0-9])`,
       },
       response: {
         status: 200,
@@ -1211,7 +1211,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence-policy/active`,
+        urlPattern: `/licences-api/licence-policy/active`,
       },
       response: {
         status: 200,
@@ -1226,7 +1226,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/offender/nomisid/.*/update-offender-details`,
+        urlPattern: `/licences-api/offender/nomisid/.*/update-offender-details`,
       },
       response: {
         status: 200,
@@ -1240,7 +1240,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/com/case-search`,
+        urlPattern: `/licences-api/com/case-search`,
       },
       response: {
         status: 200,
@@ -1272,7 +1272,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/bank-holidays`,
+        urlPattern: `/licences-api/bank-holidays`,
       },
       response: {
         status: 200,
@@ -1286,7 +1286,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/licence/id/(\\d*)/additional-condition/([A-Z]{2,3})`,
+        urlPattern: `/licences-api/licence/id/(\\d*)/additional-condition/([A-Z]{2,3})`,
       },
       response: {
         status: 200,
@@ -1309,7 +1309,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d*)`,
+        urlPattern: `/licences-api/licence/id/(\\d*)`,
       },
       response: {
         status: 200,
@@ -1343,7 +1343,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d*)`,
+        urlPattern: `/licences-api/licence/id/(\\d*)`,
       },
       response: {
         status: 200,
@@ -1360,7 +1360,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d*)`,
+        urlPattern: `/licences-api/licence/id/(\\d*)`,
       },
       response: {
         status: 200,
@@ -1378,7 +1378,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d*)`,
+        urlPattern: `/licences-api/licence/id/(\\d*)`,
       },
       response: {
         status: 200,
@@ -1397,7 +1397,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/licence/id/(\\d*)`,
+        urlPattern: `/licences-api/licence/id/(\\d*)`,
       },
       response: {
         status: 200,
@@ -1420,7 +1420,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/omu/[A-Z]{3}/contact/email`,
+        urlPattern: `/licences-api/omu/[A-Z]{3}/contact/email`,
       },
       response: {
         status: 200,
@@ -1431,4 +1431,29 @@ export default {
       },
     })
   },
+
+  stubGetCutOffDateForLicenceTimeOut: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/current-hard-stop-cutoff-date`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: { cutoffDate: '05/12/2023' },
+      },
+    })
+  },
+
+  stubPing: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/licences-api/health/ping',
+      },
+      response: {
+        status: 200,
+      },
+    }),
 }

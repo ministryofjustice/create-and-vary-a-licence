@@ -42,19 +42,9 @@ function gatherCheckInfo(aggregateStatus: Record<string, unknown>, currentStatus
   return { ...aggregateStatus, [currentStatus.name]: { status: currentStatus.status, details: currentStatus.message } }
 }
 
-const apiChecks = [
-  service('hmppsAuth', `${config.apis.hmppsAuth.url}/health/ping`, config.apis.hmppsAuth.agent),
-  service('manageUsersApi', `${config.apis.manageUsersApi.url}/health/ping`, config.apis.manageUsersApi.agent),
-  ...(config.apis.tokenVerification.enabled
-    ? [
-        service(
-          'tokenVerification',
-          `${config.apis.tokenVerification.url}/health/ping`,
-          config.apis.tokenVerification.agent
-        ),
-      ]
-    : []),
-]
+const apiChecks = Object.entries(config.apis).map(([name, api]) =>
+  service(name, `${api.url}${api.healthPath}`, api.agent)
+)
 
 export default function healthCheck(
   applicationInfo: ApplicationInfo,

@@ -25,7 +25,7 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
     })
 
     it('should listen to the offender updated event and call the prison API endpoint to update offender details', () => {
@@ -47,7 +47,7 @@ context('Event handlers', () => {
 
       cy.task('verifyEndpointCalled', {
         verb: 'PUT',
-        path: '/offender/nomisid/G9786GC/update-offender-details',
+        path: '/licences-api/offender/nomisid/G9786GC/update-offender-details',
         times: 1,
       })
     })
@@ -71,7 +71,7 @@ context('Event handlers', () => {
 
       cy.task('verifyEndpointCalled', {
         verb: 'PUT',
-        path: '/offender/nomisid/G9786GC/update-offender-details',
+        path: '/licences-api/offender/nomisid/G9786GC/update-offender-details',
         times: 0,
       })
     })
@@ -100,9 +100,21 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/secure/users/JSMITH/roles/LHDCBT002', times: 1 })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X2345/responsible-com', times: 1 })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/offender/crn/X2345/probation-team', times: 1 })
+      cy.task('verifyEndpointCalled', {
+        verb: 'PUT',
+        path: '/community-api/secure/users/JSMITH/roles/LHDCBT002',
+        times: 1,
+      })
+      cy.task('verifyEndpointCalled', {
+        verb: 'PUT',
+        path: '/licences-api/offender/crn/X2345/responsible-com',
+        times: 1,
+      })
+      cy.task('verifyEndpointCalled', {
+        verb: 'PUT',
+        path: '/licences-api/offender/crn/X2345/probation-team',
+        times: 1,
+      })
     })
   })
 
@@ -127,7 +139,7 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 1 })
     })
 
     it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to deactivate licence with status ACTIVE if prisoner has been re-sentenced', () => {
@@ -150,8 +162,8 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 0 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
     })
 
     it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to deactivate licence with status VARIATION_IN_PROGRESS if prisoner has been re-sentenced', () => {
@@ -174,8 +186,8 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/status', times: 1 })
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 0 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
     })
 
     it('should listen to the CONFIRMED_RELEASE_DATE-CHANGED event and call endpoint to update sentence dates', () => {
@@ -199,7 +211,7 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licence/id/1/sentence-dates', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 1 })
     })
   })
 })
