@@ -65,6 +65,7 @@ export default class IndexPage extends Page {
   }
 
   clickVaryALicence = (): VaryCasesPage => {
+    cy.task('stubGetComReviewCount')
     cy.get(this.varyLicenceTileId).click()
     return Page.verifyOnPage(VaryCasesPage)
   }
