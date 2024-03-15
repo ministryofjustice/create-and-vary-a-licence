@@ -394,24 +394,4 @@ export default {
         status: 200,
       },
     }),
-
-  stubGetComReviewCount: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/com/(.)*/review-counts`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          myCount: 1,
-          teams: [
-            { teamCode: 'teamA', count: 1 },
-            { teamCode: 'teamB', count: 1 },
-          ],
-        },
-      },
-    })
-  },
 }
