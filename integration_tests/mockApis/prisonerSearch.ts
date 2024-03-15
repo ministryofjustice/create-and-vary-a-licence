@@ -10,7 +10,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/prisoner-search/prisoner-numbers`,
+        urlPattern: `/prisoner-search-api/prisoner-search/prisoner-numbers`,
       },
       response: {
         status: 200,
@@ -68,7 +68,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/prisoner-search/booking-ids`,
+        urlPattern: `/prisoner-search-api/prisoner-search/booking-ids`,
       },
       response: {
         status: 200,
@@ -125,7 +125,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/prisoner-search/release-date-by-prison`,
+        urlPathPattern: `/prisoner-search-api/prisoner-search/release-date-by-prison`,
         queryParameters: {
           size: {
             equalTo: '2000',
@@ -184,4 +184,15 @@ export default {
       },
     })
   },
+
+  stubPing: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/prisoner-search-api/health/ping',
+      },
+      response: {
+        status: 200,
+      },
+    }),
 }

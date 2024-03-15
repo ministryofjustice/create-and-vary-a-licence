@@ -6,7 +6,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/offenders/G9786GC`,
+        urlPattern: `/prison-api/api/offenders/G9786GC`,
       },
       response: {
         status: 200,
@@ -32,7 +32,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/offender-sentences/booking/1234/sentences-and-offences`,
+        urlPattern: `/prison-api/api/offender-sentences/booking/1234/sentences-and-offences`,
       },
       response: {
         status: 200,
@@ -140,7 +140,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/agencies/prison/.*`,
+        urlPattern: `/prison-api/api/agencies/prison/.*`,
       },
       response: {
         status: 200,
@@ -162,7 +162,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/users/me`,
+        urlPattern: `/prison-api/api/users/me`,
       },
       response: {
         status: 200,
@@ -186,7 +186,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/api/offender-sentences/home-detention-curfews/latest`,
+        urlPattern: `/prison-api/api/offender-sentences/home-detention-curfews/latest`,
       },
       response: {
         status: 200,
@@ -208,7 +208,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/users/me/caseLoads`,
+        urlPattern: `/prison-api/api/users/me/caseLoads`,
       },
       response: {
         status: 200,
@@ -222,7 +222,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/agencies/type/INST\\?active=true',
+        urlPattern: '/prison-api/api/agencies/type/INST\\?active=true',
       },
       response: {
         status: 200,
@@ -263,11 +263,22 @@ export default {
     })
   },
 
+  stubPing: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/prison-api/health/ping',
+      },
+      response: {
+        status: 200,
+      },
+    }),
+
   stubGetPrisonerImage: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/bookings/offenderNo/.*?/image/data`,
+        urlPattern: `/prison-api/api/bookings/offenderNo/.*?/image/data`,
       },
       response: {
         status: 200,

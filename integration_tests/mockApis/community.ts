@@ -6,7 +6,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/secure/staff/username/(.)*`,
+        urlPattern: `/community-api/secure/staff/username/(.)*`,
       },
       response: {
         status: 200,
@@ -59,7 +59,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/secure/users/(.)*/details`,
+        urlPattern: `/community-api/secure/users/(.)*/details`,
       },
       response: {
         status: 200,
@@ -75,7 +75,7 @@ export default {
     return stubFor({
       request: {
         method: 'PUT',
-        urlPattern: `/secure/users/(.)*/roles/(.)*`,
+        urlPattern: `/community-api/secure/users/(.)*/roles/(.)*`,
       },
       response: {
         status: 200,
@@ -89,7 +89,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/secure/staff/staffIdentifier/(\\d)*`,
+        urlPattern: `/community-api/secure/staff/staffIdentifier/(\\d)*`,
       },
       response: {
         status: 200,
@@ -143,7 +143,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/secure/staff/staffCode/(.)*`,
+        urlPattern: `/community-api/secure/staff/staffCode/(.)*`,
       },
       response: {
         status: 200,
@@ -197,7 +197,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/secure/staff/list`,
+        urlPattern: `/community-api/secure/staff/list`,
       },
       response: {
         status: 200,
@@ -253,7 +253,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/secure/staff/staffIdentifier/2000/caseload/managedOffenders`,
+        urlPathPattern: `/community-api/secure/staff/staffIdentifier/2000/caseload/managedOffenders`,
       },
       response: {
         status: 200,
@@ -278,7 +278,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/secure/staff/pduHeads/(.)*`,
+        urlPathPattern: `/community-api/secure/staff/pduHeads/(.)*`,
       },
       response: {
         status: 200,
@@ -292,7 +292,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/secure/offenders/crn/(.)*/allOffenderManagers`,
+        urlPathPattern: `/community-api/secure/offenders/crn/(.)*/allOffenderManagers`,
       },
       response: {
         status: 200,
@@ -328,7 +328,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/secure/offenders/crn/(.)*/all`,
+        urlPattern: `/community-api/secure/offenders/crn/(.)*/all`,
       },
       response: {
         status: 200,
@@ -374,7 +374,7 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/secure/staff/username/(.)*`,
+        urlPattern: `/community-api/secure/staff/username/(.)*`,
       },
       response: {
         status: 200,
@@ -384,17 +384,14 @@ export default {
     })
   },
 
-  stubGetCutOffDateForLicenceTimeOut: (): SuperAgentRequest => {
-    return stubFor({
+  stubPing: () =>
+    stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/current-hard-stop-cutoff-date`,
+        urlPattern: '/community-api/health/ping',
       },
       response: {
         status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { cutoffDate: '05/12/2023' },
       },
-    })
-  },
+    }),
 }
