@@ -55,7 +55,7 @@ describe('populateCurrentUser', () => {
       displayName: 'Joe Bloggs',
       username: 'joebloggs',
     })
-    expect(next).toBeCalled()
+    expect(next).toHaveBeenCalled()
   })
 
   it('should skip calling the user service and call next if no token is available', async () => {
@@ -66,7 +66,7 @@ describe('populateCurrentUser', () => {
     expect(userServiceMock.getPrisonUser).not.toHaveBeenCalled()
     expect(userServiceMock.getProbationUser).not.toHaveBeenCalled()
     expect(userServiceMock.getUser).not.toHaveBeenCalled()
-    expect(next).toBeCalled()
+    expect(next).toHaveBeenCalled()
   })
 
   // Causes an error to appear in the console with message 'Failed to get user details for: joebloggs' (expected)
@@ -121,7 +121,53 @@ describe('populateCurrentUser', () => {
       firstName: 'Joe',
       lastName: 'Bloggs',
     })
-    expect(next).toBeCalled()
+    expect(next).toHaveBeenCalled()
+  })
+
+  it('should populate nomis user details', async () => {
+    res.locals.user.authSource = 'nomis'
+    req.user.userRoles = [AuthRole.DECISION_MAKER]
+
+    userServiceMock.getPrisonUser.mockResolvedValue({
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+      username: 'joebloggs',
+      activeCaseLoadId: 'MDI',
+      staffId: 3000,
+    } as PrisonApiUserDetail)
+
+    userServiceMock.getUserEmail.mockResolvedValue({
+      username: 'joebloggs',
+      email: 'jbloggs@prison.gov.uk',
+      verified: true,
+    } as PrisonUserEmail)
+
+    userServiceMock.getPrisonUserCaseloads.mockResolvedValue([
+      {
+        caseLoadId: 'MDI',
+      },
+      {
+        caseLoadId: 'BMI',
+      },
+    ] as unknown as PrisonApiCaseload[])
+
+    await middleware(req, res, next)
+
+    expect(req.session.currentUser).toMatchObject({
+      activeCaseload: 'MDI',
+      displayName: 'Joe Bloggs',
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+      nomisStaffId: 3000,
+      prisonCaseload: ['MDI', 'BMI'],
+    })
+    expect(licenceServiceMock.updatePrisonUserDetails).toHaveBeenCalledWith({
+      staffUsername: 'joebloggs',
+      staffEmail: 'jbloggs@prison.gov.uk',
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+    })
+    expect(next).toHaveBeenCalled()
   })
 
   it('should throw error and not call updatePrisonUserDetails when email of a nomis user is not found', async () => {
@@ -153,7 +199,7 @@ describe('populateCurrentUser', () => {
     await middleware(req, res, next)
 
     expect(licenceServiceMock.updatePrisonUserDetails).not.toHaveBeenCalled()
-    expect(next).toBeCalled()
+    expect(next).toHaveBeenCalled()
   })
 
   it('should populate delius user details', async () => {
@@ -201,7 +247,7 @@ describe('populateCurrentUser', () => {
       lastName: 'Bloggs',
     })
     expect(userServiceMock.getUserEmail).not.toHaveBeenCalled()
-    expect(next).toBeCalled()
+    expect(next).toHaveBeenCalled()
   })
 
   it('should populate auth user details', async () => {
@@ -220,7 +266,7 @@ describe('populateCurrentUser', () => {
       displayName: 'Joe Bloggs',
       emailAddress: 'jbloggs@prison.gov.uk',
     })
-    expect(next).toBeCalled()
+    expect(next).toHaveBeenCalled()
   })
 
   it('should swallow error when calling getUserEmail', async () => {

@@ -4,7 +4,7 @@ const stubFeComponents = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/components/components\\?component=header&component=footer',
+      urlPattern: '/components-api/components\\?component=header&component=footer',
     },
     response: {
       status: 200,
@@ -30,7 +30,7 @@ const stubFeComponentsCss = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/components/.+css',
+      urlPattern: '/components-api/components/.+css',
     },
     response: {
       status: 200,
@@ -45,7 +45,7 @@ const stubFeComponentsJs = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/components/.+js',
+      urlPattern: '/components-api/components/§.+js',
     },
     response: {
       status: 200,
@@ -60,7 +60,7 @@ const stubFeComponentsFail = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/components/header',
+      urlPattern: '/components-api/components/header',
     },
     response: {
       status: 500,
@@ -70,9 +70,21 @@ const stubFeComponentsFail = () =>
     },
   })
 
+const stubFeComponentsPing = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/components-api/ping',
+    },
+    response: {
+      status: 200,
+    },
+  })
+
 export default {
   stubFeComponents,
   stubFeComponentsCss,
   stubFeComponentsJs,
   stubFeComponentsFail,
+  stubFeComponentsPing,
 }

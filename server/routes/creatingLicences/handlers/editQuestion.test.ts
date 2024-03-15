@@ -75,7 +75,7 @@ describe('Route Handlers - Create Licence - Edit Licence Question', () => {
         },
       } as unknown as Request
       await handler.POST(req, res)
-      expect(licenceService.updateStatus).not.toBeCalled()
+      expect(licenceService.updateStatus).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })

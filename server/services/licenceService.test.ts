@@ -19,7 +19,7 @@ import {
   LicenceSummary,
   StandardCondition,
   UpdateComRequest,
-  UpdatePrisonCaseAdminRequest,
+  UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateSentenceDatesRequest,
@@ -249,7 +249,7 @@ describe('Licence Service', () => {
         },
         user
       )
-      expect(conditionService.getAdditionalConditionByCode).toBeCalledTimes(2)
+      expect(conditionService.getAdditionalConditionByCode).toHaveBeenCalledTimes(2)
       expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(1, 'code1', 'version')
       expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(2, 'code2', 'version')
     })
@@ -495,7 +495,7 @@ describe('Licence Service', () => {
       staffEmail: 'joebloggs@probation.gov.uk',
       firstName: 'Joseph',
       lastName: 'Bloggs',
-    } as UpdatePrisonCaseAdminRequest)
+    } as UpdatePrisonUserRequest)
 
     expect(licenceApiClient.updatePrisonUserDetails).toHaveBeenCalledWith({
       staffUsername: 'joebloggs',

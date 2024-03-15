@@ -41,7 +41,7 @@ export default function createApp(services: Services, applicationInfo: Applicati
   nunjucksSetup(app, applicationInfo)
   phaseNameSetup(app, config.phaseName)
   app.use(setUpAuthentication())
-  app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.apiUrl)))
+  app.use(pdfRenderer(new GotenbergClient(config.apis.gotenberg.url)))
   app.use(trimRequestBody())
 
   // CSRF protection

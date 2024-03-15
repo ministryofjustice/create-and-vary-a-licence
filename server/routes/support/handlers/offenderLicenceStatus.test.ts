@@ -102,7 +102,7 @@ describe('Route Handlers - Licence Status Override', () => {
 
       await handler.POST(req, res)
 
-      expect(overrideService.overrideStatusCode).toBeCalledTimes(0)
+      expect(overrideService.overrideStatusCode).toHaveBeenCalledTimes(0)
 
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderLicenceStatus', {
         availableStatusCodes: [
@@ -138,7 +138,7 @@ describe('Route Handlers - Licence Status Override', () => {
 
       await handler.POST(req, res)
 
-      expect(overrideService.overrideStatusCode).toBeCalledTimes(0)
+      expect(overrideService.overrideStatusCode).toHaveBeenCalledTimes(0)
 
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderLicenceStatus', {
         availableStatusCodes: [
@@ -172,7 +172,7 @@ describe('Route Handlers - Licence Status Override', () => {
 
       await handler.POST(req, res)
 
-      expect(overrideService.overrideStatusCode).toBeCalledTimes(0)
+      expect(overrideService.overrideStatusCode).toHaveBeenCalledTimes(0)
 
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderLicenceStatus', {
         availableStatusCodes: [

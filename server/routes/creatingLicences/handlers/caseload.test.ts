@@ -272,7 +272,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       res.locals.user.probationTeamCodes = ['ABC']
 
       await handler.GET(req, res)
-      expect(res.redirect).toBeCalledTimes(0)
+      expect(res.redirect).toHaveBeenCalledTimes(0)
     })
 
     it('should render the non-approved licence if 2 exist', async () => {
