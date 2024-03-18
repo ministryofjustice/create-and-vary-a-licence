@@ -138,6 +138,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
       },
     ])
+
+    caseloadService.getComReviewCount.mockResolvedValue({
+      myCount: 1,
+      teams: [
+        { teamCode: 'teamA', count: 1 },
+        { teamCode: 'teamB', count: 1 },
+      ],
+    })
   })
 
   describe('GET', () => {
@@ -203,6 +211,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         statusConfig,
         teamName: null,
         teamView: false,
+        myCount: 1,
       })
       expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
@@ -251,6 +260,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         statusConfig,
         teamName: 'teamA',
         teamView: true,
+        myCount: 1,
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -307,6 +317,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         statusConfig,
         teamName: null,
         teamView: false,
+        myCount: 1,
       })
       expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
@@ -335,6 +346,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamName: 'teamA',
         teamView: true,
         search: 'smith',
+        myCount: 1,
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -374,6 +386,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamName: 'teamA',
         teamView: true,
         search: 'white',
+        myCount: 1,
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -402,6 +415,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamName: 'teamA',
         teamView: true,
         search: 'x12345',
+        myCount: 1,
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })

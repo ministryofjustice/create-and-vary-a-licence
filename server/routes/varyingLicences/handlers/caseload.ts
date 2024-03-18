@@ -18,6 +18,8 @@ export default class CaseloadRoutes {
       ? await this.caseloadService.getTeamVaryCaseload(user, req.session.teamSelection)
       : await this.caseloadService.getStaffVaryCaseload(user)
 
+    const { myCount } = await this.caseloadService.getComReviewCount(user)
+
     let teamName = null
     let multipleTeams = false
 
@@ -73,6 +75,7 @@ export default class CaseloadRoutes {
       teamName,
       multipleTeams,
       search,
+      myCount,
     })
   }
 

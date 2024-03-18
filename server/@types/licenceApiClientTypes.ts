@@ -44,3 +44,4 @@ export type UpdateOffenderDetailsRequest = components['schemas']['UpdateOffender
 export type ProbationSearchRequest = components['schemas']['ProbationUserSearchRequest']
 export type ProbationSearchResult = components['schemas']['ProbationSearchResult']
 export type HardStopCutoffDate = components['schemas']['HardStopCutoffDate']
+export type ComReviewCount = components['schemas']['ComReviewCount']
