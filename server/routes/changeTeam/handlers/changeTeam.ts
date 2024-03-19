@@ -1,6 +1,9 @@
 import { RequestHandler, Request, Response } from 'express'
+import CaseloadService from '../../../services/caseloadService'
 
 export default class ChangeTeamRoutes {
+  constructor(private readonly caseloadService: CaseloadService) {}
+
   public GET(): RequestHandler {
     return async (req, res) => {
       this.render(req, res, [])
@@ -21,10 +24,17 @@ export default class ChangeTeamRoutes {
     }
   }
 
-  private render(req: Request, res: Response, validationErrors?: [{ field: string; message: string }] | []) {
+  private async render(req: Request, res: Response, validationErrors?: [{ field: string; message: string }] | []) {
     const { user } = res.locals
     const { probationTeams } = user
+    const { teams } = await this.caseloadService.getComReviewCount(user)
 
+    const probationTeamsWithCount = probationTeams.map(probationTeam => {
+      return {
+        ...probationTeam,
+        count: teams.filter(t => t.teamCode === probationTeam.code).map(t => t.count)[0] || 0,
+      }
+    })
     /*
      * Not a valid page if user has only one team. Redirect to users caseload page.
      * Avoid redirect to team page, just in case a redirect loop is introduced from the team page to here.
@@ -36,8 +46,15 @@ export default class ChangeTeamRoutes {
 
     const checked = req.session.teamSelection
     const backLinkHref = this.getBackLink(req.route.path, !!checked)
+    const showTeamsCount = probationTeamsWithCount.some(t => t.count)
 
-    res.render('pages/changeTeam', { probationTeams, checked, validationErrors, backLinkHref })
+    res.render('pages/changeTeam', {
+      probationTeamsWithCount,
+      checked,
+      validationErrors,
+      backLinkHref,
+      showTeamsCount,
+    })
   }
 
   private getBackLink = (route: string, hasSelectedTeam: boolean) => {

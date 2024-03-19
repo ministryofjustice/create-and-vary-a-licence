@@ -6,6 +6,8 @@ export default class VaryCasesPage extends Page {
 
   public myCount = '#my-count'
 
+  public teamCount = '#team-count'
+
   constructor() {
     super('vary-cases-page')
   }

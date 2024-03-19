@@ -5,7 +5,7 @@ import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import ChangeTeamsLocation from './handlers/changeTeam'
 import { Services } from '../../services'
 
-export default function Index({ conditionService }: Services): Router {
+export default function Index({ conditionService, caseloadService }: Services): Router {
   const createPrefix = (path: string) => `/licence/create/caseload${path}`
   const varyPrefix = (path: string) => `/licence/vary/caseload${path}`
 
@@ -21,7 +21,7 @@ export default function Index({ conditionService }: Services): Router {
       asyncMiddleware(handler)
     )
 
-  const teamHandler = new ChangeTeamsLocation()
+  const teamHandler = new ChangeTeamsLocation(caseloadService)
 
   get(createPrefix('/change-team'), teamHandler.GET())
   get(varyPrefix('/change-team'), teamHandler.GET())
