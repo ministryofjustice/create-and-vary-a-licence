@@ -11,6 +11,13 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
+                {% set probationTeamOptions = [] %}
+                {% for team in probationTeamsWithCount %}
+                    {% set probationTeamOptions = (probationTeamOptions.push(
+                        {   value: team.code, 
+                            html: '<p class="govuk-!-margin-0">'+ team.label  +' (<b>'+ team.count +'</b> licences to review)</p>' if showTeamsCount else '<p class="govuk-!-margin-0">'+ team.label +'</p>'
+                        }), probationTeamOptions) %}
+                {% endfor %}
                 {{ govukRadios({
                     name: "teams[]",
                     idPrefix: "teams",
@@ -25,7 +32,7 @@
                         text: ""
                     },
                     errorMessage: validationErrors | findError('teams'),
-                    items: probationTeams | toChecked('code', 'label', checked)
+                    items: probationTeamOptions
                 }) }}
 
                 <div class="govuk-button-group govuk-!-padding-top-4">

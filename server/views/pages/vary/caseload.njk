@@ -122,7 +122,11 @@
                 </a>
             </li>
             <li class="moj-sub-navigation__item">
-                <a class="moj-sub-navigation__link" {% if teamView %}aria-current="page"{% endif %} href="?view=team">Team cases</a>
+                <a class="moj-sub-navigation__link" {% if teamView %}aria-current="page"{% endif %} href="?view=team">Team cases
+                    {% if teamCount %}
+                        <span id="team-count" class="moj-notification-badge">{{ teamCount }}</span>
+                    {% endif %}
+                </a>
             </li>
         </ul>
     </nav>

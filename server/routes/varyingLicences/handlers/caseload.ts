@@ -18,7 +18,9 @@ export default class CaseloadRoutes {
       ? await this.caseloadService.getTeamVaryCaseload(user, req.session.teamSelection)
       : await this.caseloadService.getStaffVaryCaseload(user)
 
-    const { myCount } = await this.caseloadService.getComReviewCount(user)
+    const reviewCount = await this.caseloadService.getComReviewCount(user)
+    const { myCount } = reviewCount
+    let { teams } = reviewCount
 
     let teamName = null
     let multipleTeams = false
@@ -35,6 +37,7 @@ export default class CaseloadRoutes {
 
       // selectedTeam and probationTeamCodes are both arrays
       const teamCode = _.head(selectedTeam || user.probationTeamCodes)
+      teams = teams.filter(t => t.teamCode === teamCode)
       teamName = user.probationTeams.find((t: { code: string }) => t.code === teamCode)?.label
 
       req.session.returnToCase = '/licence/vary/caseload?view=team'
@@ -76,6 +79,7 @@ export default class CaseloadRoutes {
       multipleTeams,
       search,
       myCount,
+      teamCount: teams.reduce((totalCount, teams) => totalCount + teams.count, 0),
     })
   }
 

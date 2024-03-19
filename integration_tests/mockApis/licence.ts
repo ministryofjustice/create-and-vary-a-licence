@@ -1469,8 +1469,8 @@ export default {
         jsonBody: {
           myCount: 1,
           teams: [
-            { teamCode: 'teamA', count: 1 },
-            { teamCode: 'teamB', count: 1 },
+            { teamCode: 'teamA', count: 2 },
+            { teamCode: 'teamB', count: 3 },
           ],
         },
       },

@@ -212,6 +212,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamName: null,
         teamView: false,
         myCount: 1,
+        teamCount: 2,
       })
       expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
@@ -261,6 +262,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamName: 'teamA',
         teamView: true,
         myCount: 1,
+        teamCount: 1,
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -318,6 +320,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamName: null,
         teamView: false,
         myCount: 1,
+        teamCount: 2,
       })
       expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
@@ -347,6 +350,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamView: true,
         search: 'smith',
         myCount: 1,
+        teamCount: 1,
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -387,6 +391,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamView: true,
         search: 'white',
         myCount: 1,
+        teamCount: 1,
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -416,6 +421,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         teamView: true,
         search: 'x12345',
         myCount: 1,
+        teamCount: 1,
       })
       expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
@@ -594,6 +600,112 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         },
       ]
       expect(caseload.sort(handler.prioritiseReviewNeeded)).toEqual(sortedCaseload)
+    })
+
+    it('should render view with my count 2 and team count 5 with My Cases tab selected', async () => {
+      caseloadService.getComReviewCount.mockResolvedValue({
+        myCount: 2,
+        teams: [
+          { teamCode: 'teamA', count: 2 },
+          { teamCode: 'teamB', count: 3 },
+        ],
+      })
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
+        caseload: [
+          {
+            licenceId: 2,
+            name: 'John Deer',
+            crnNumber: 'X12346',
+            releaseDate: '02 May 2022',
+            licenceStatus: LicenceStatus.REVIEW_NEEDED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.ACTIVE,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+        ],
+        multipleTeams: false,
+        search: undefined,
+        statusConfig,
+        teamName: null,
+        teamView: false,
+        myCount: 2,
+        teamCount: 5,
+      })
+    })
+
+    it('should render view with my count 2 and team count 3 with Team Cases tab selected', async () => {
+      req = {
+        query: {},
+        session: {
+          teamSelection: ['teamB'],
+        },
+      } as Request
+      caseloadService.getComReviewCount.mockResolvedValue({
+        myCount: 2,
+        teams: [
+          { teamCode: 'teamA', count: 2 },
+          { teamCode: 'teamB', count: 3 },
+        ],
+      })
+      req.query.view = 'team'
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
+        caseload: [
+          {
+            licenceId: 3,
+            name: 'John Deer',
+            crnNumber: 'X12346',
+            releaseDate: '02 May 2022',
+            licenceStatus: LicenceStatus.REVIEW_NEEDED,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.ACTIVE,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+          {
+            licenceId: 2,
+            name: 'Dr Who',
+            crnNumber: 'X12346',
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.ACTIVE,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+          },
+        ],
+        multipleTeams: true,
+        search: undefined,
+        statusConfig,
+        teamName: 'teamB',
+        teamView: true,
+        myCount: 2,
+        teamCount: 3,
+      })
     })
   })
 })
