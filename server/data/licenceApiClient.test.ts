@@ -669,4 +669,16 @@ describe('Licence API client tests', () => {
       )
     })
   })
+
+  describe('Com review count: ', () => {
+    it('Should get mycount and teams individual count for Com', async () => {
+      await licenceApiClient.getComReviewCount({ username: 'joebloggs', deliusStaffIdentifier: 2000 } as User)
+      expect(get).toHaveBeenCalledWith(
+        {
+          path: `/com/2000/review-counts`,
+        },
+        { username: 'joebloggs' }
+      )
+    })
+  })
 })

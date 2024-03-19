@@ -105,6 +105,7 @@ export default defineConfig({
         stubGetCutOffDateForLicenceTimeOut: licence.stubGetCutOffDateForLicenceTimeOut,
         stubGetProbationSearchResults: licence.stubSearchForOffenderOnStaffCaseload,
         stubLicencesPing: licence.stubPing,
+        stubGetComReviewCount: licence.stubGetComReviewCount,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
