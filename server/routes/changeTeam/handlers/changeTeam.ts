@@ -6,7 +6,7 @@ export default class ChangeTeamRoutes {
 
   public GET(): RequestHandler {
     return async (req, res) => {
-      this.render(req, res, [])
+      await this.render(req, res, [])
     }
   }
 
@@ -20,7 +20,7 @@ export default class ChangeTeamRoutes {
         return
       }
 
-      this.render(req, res, [{ field: 'teams', message: 'Select the team you wish to view cases for' }])
+      await this.render(req, res, [{ field: 'teams', message: 'Select the team you wish to view cases for' }])
     }
   }
 
