@@ -46,8 +46,8 @@ describe('CaseloadViewModel', () => {
     ] as ManagedCase[]
 
     hardStopDates = {
-      hardStopCutoffDate: addDays(new Date(), 4),
-      hardStopWarningDate: addDays(new Date(), 2),
+      hardStopCutoffDate: addDays(new Date(), 2),
+      hardStopWarningDate: addDays(new Date(), 4),
     }
   })
 
@@ -104,7 +104,7 @@ describe('CaseloadViewModel', () => {
 
     it('sets showHardStopWarning to true if the release date is between the warning and cutoff dates', () => {
       const releaseDate = parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
-      hardStopDates = { hardStopWarningDate: subDays(releaseDate, 1), hardStopCutoffDate: addDays(releaseDate, 1) }
+      hardStopDates = { hardStopWarningDate: addDays(releaseDate, 1), hardStopCutoffDate: subDays(releaseDate, 1) }
 
       expect(
         createCaseloadViewModel(
@@ -117,7 +117,7 @@ describe('CaseloadViewModel', () => {
 
     it('sets showHardStopWarning to true if the release date is equal to the warning date', () => {
       const releaseDate = parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
-      hardStopDates = { hardStopWarningDate: releaseDate, hardStopCutoffDate: addDays(releaseDate, 2) }
+      hardStopDates = { hardStopWarningDate: releaseDate, hardStopCutoffDate: subDays(releaseDate, 2) }
 
       expect(
         createCaseloadViewModel(
@@ -126,6 +126,19 @@ describe('CaseloadViewModel', () => {
           hardStopDates
         )[0].showHardStopWarning
       ).toEqual(true)
+    })
+
+    it('sets showHardStopWarning to false if the release date is equal to the cutoff date', () => {
+      const releaseDate = parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
+      hardStopDates = { hardStopWarningDate: addDays(releaseDate, 2), hardStopCutoffDate: releaseDate }
+
+      expect(
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
+          null,
+          hardStopDates
+        )[0].showHardStopWarning
+      ).toEqual(false)
     })
 
     it('sets showHardStopWarning to false if the release date is outside of the window', () => {

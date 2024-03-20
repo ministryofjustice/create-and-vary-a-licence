@@ -1,5 +1,5 @@
 import moment, { type Moment } from 'moment'
-import { subDays } from 'date-fns'
+import { addDays } from 'date-fns'
 import { LicenceApiClient } from '../data'
 import { InMemoryTokenStore } from '../data/tokenStore'
 import { getSystemTokenWithRetries } from '../data/systemToken'
@@ -27,13 +27,13 @@ class BankHolidays {
     )
   }
 
-  getTwoWorkingDaysBeforeDate = (date: Date): Date => {
+  getTwoWorkingDaysAfterDate = (date: Date): Date => {
     const workingDays: Date[] = []
-    let dayBefore = date
+    let dayAfter = date
     while (workingDays.length < 2) {
-      dayBefore = subDays(dayBefore, 1)
-      if (!this.isBankHolidayOrWeekend(moment(dayBefore), false)) {
-        workingDays.push(dayBefore)
+      dayAfter = addDays(dayAfter, 1)
+      if (!this.isBankHolidayOrWeekend(moment(dayAfter), false)) {
+        workingDays.push(dayAfter)
       }
     }
     return workingDays[1]

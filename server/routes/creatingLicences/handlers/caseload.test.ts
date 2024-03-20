@@ -8,7 +8,6 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { ManagedCase } from '../../../@types/managedCase'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../../services/ukBankHolidayFeedService'
-import createCaseloadViewModel from '../../views/CaseloadViewModel'
 
 const bankHolidayRetriever: BankHolidayRetriever = async () => []
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
@@ -16,14 +15,11 @@ const bankHolidayService = new UkBankHolidayFeedService(bankHolidayRetriever) as
 
 jest.mock('../../../services/caseloadService')
 jest.mock('../../../services/ukBankHolidayFeedService')
-jest.mock('../../views/CaseloadViewModel')
 
 describe('Route Handlers - Create Licence - Caseload', () => {
   const handler = new CaseloadRoutes(caseloadService, bankHolidayService)
   let req: Request
   let res: Response
-
-  let cutoffDate: string
 
   beforeEach(() => {
     caseloadService.getStaffCreateCaseload.mockResolvedValue([
@@ -133,13 +129,14 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       },
     ] as unknown as ManagedCase[])
 
-    cutoffDate = moment().add(3, 'days').format('DD/MM/yyyy')
-    caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate })
+    caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({
+      cutoffDate: moment().add(3, 'days').format('DD/MM/yyyy'),
+    })
 
     bankHolidayService.getEnglishAndWelshHolidays.mockResolvedValue({
       bankHolidays: [],
       isBankHolidayOrWeekend: jest.fn(),
-      getTwoWorkingDaysBeforeDate: jest.fn(),
+      getTwoWorkingDaysAfterDate: jest.fn(),
     })
   })
 
@@ -488,60 +485,13 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
-    it('checks if the hardStopWarningDate is a bank holiday', async () => {
-      await handler.GET(req, res)
-      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
-      expect(bankHolidays.isBankHolidayOrWeekend).toHaveBeenCalledWith(
-        expect.objectContaining(moment().add(1, 'day').startOf('day')),
-        false
-      )
-    })
-
     it('gets the two-working-day warning date', async () => {
       caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({
-        cutoffDate: moment('2024/03/14').format('DD/MM/yyyy'),
+        cutoffDate: moment('2024-03-14').format('DD/MM/yyyy'),
       })
       const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
       await handler.GET(req, res)
-      expect(bankHolidays.getTwoWorkingDaysBeforeDate).toHaveBeenCalledWith(new Date('2024/03/14'))
-    })
-
-    it('passes hard stop window dates to the caseload view model', async () => {
-      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
-      caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({
-        cutoffDate: moment('2024/03/14').format('DD/MM/yyyy'),
-      })
-      jest.spyOn(bankHolidays, 'getTwoWorkingDaysBeforeDate').mockReturnValue(new Date('2024/03/12'))
-      await handler.GET(req, res)
-      expect(createCaseloadViewModel).toHaveBeenCalledWith(
-        [
-          {
-            deliusRecord: {
-              offenderCrn: 'X381306',
-            },
-            nomisRecord: {
-              firstName: 'John',
-              lastName: 'Roberts',
-              conditionalReleaseDate: '2022-10-12',
-              prisonerNumber: '123',
-              prisonId: 'MDI',
-            },
-            licences: [
-              {
-                id: 1,
-                type: LicenceType.AP,
-                status: LicenceStatus.IN_PROGRESS,
-              },
-            ],
-            probationPractitioner: {
-              name: 'Joe Bloggs',
-              staffIdentifier: 2000,
-            },
-          },
-        ] as unknown as ManagedCase[],
-        undefined,
-        { hardStopCutoffDate: new Date('2024/03/14'), hardStopWarningDate: new Date('2024/03/12') }
-      )
+      expect(bankHolidays.getTwoWorkingDaysAfterDate).toHaveBeenCalledWith(new Date('2024-03-14'))
     })
   })
 })

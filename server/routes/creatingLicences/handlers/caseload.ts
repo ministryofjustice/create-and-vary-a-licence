@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { parse, subDays } from 'date-fns'
+import { parse } from 'date-fns'
 import moment from 'moment'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
@@ -55,7 +55,7 @@ export default class CaseloadRoutes {
 
     const bankHolidays = await this.bankHolidayService.getEnglishAndWelshHolidays()
 
-    const hardStopWarningDate = bankHolidays.getTwoWorkingDaysBeforeDate(hardStopCutoffDate)
+    const hardStopWarningDate = bankHolidays.getTwoWorkingDaysAfterDate(hardStopCutoffDate)
 
     const hardStopDates = { hardStopCutoffDate, hardStopWarningDate }
 
