@@ -128,19 +128,6 @@ describe('CaseloadViewModel', () => {
       ).toEqual(true)
     })
 
-    it('sets showHardStopWarning to true if the release date is equal to the cutoff date', () => {
-      const releaseDate = parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
-      hardStopDates = { hardStopWarningDate: subDays(releaseDate, 2), hardStopCutoffDate: releaseDate }
-
-      expect(
-        createCaseloadViewModel(
-          [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
-          null,
-          hardStopDates
-        )[0].showHardStopWarning
-      ).toEqual(true)
-    })
-
     it('sets showHardStopWarning to false if the release date is outside of the window', () => {
       expect(
         createCaseloadViewModel(

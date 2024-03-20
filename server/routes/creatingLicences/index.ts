@@ -59,7 +59,7 @@ export default function Index({
     )
 
   {
-    const controller = new CaseloadRoutes(caseloadService)
+    const controller = new CaseloadRoutes(caseloadService, ukBankHolidayFeedService)
     get('/caseload', controller.GET)
   }
 

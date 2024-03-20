@@ -1,4 +1,5 @@
 import moment, { type Moment } from 'moment'
+import { subDays } from 'date-fns'
 import { LicenceApiClient } from '../data'
 import { InMemoryTokenStore } from '../data/tokenStore'
 import { getSystemTokenWithRetries } from '../data/systemToken'
@@ -24,6 +25,18 @@ class BankHolidays {
       date.isoWeekday() === 7 ||
       this.bankHolidays.find(hol => moment(hol).isSame(date, 'day')) !== undefined
     )
+  }
+
+  getTwoWorkingDaysBeforeDate = (date: Date): Date => {
+    const workingDays: Date[] = []
+    let dayBefore = date
+    while (workingDays.length < 2) {
+      dayBefore = subDays(dayBefore, 1)
+      if (!this.isBankHolidayOrWeekend(moment(dayBefore), false)) {
+        workingDays.push(dayBefore)
+      }
+    }
+    return workingDays[1]
   }
 }
 

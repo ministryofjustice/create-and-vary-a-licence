@@ -6,9 +6,13 @@ import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import logger from '../../../../logger'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 export default class CaseloadRoutes {
-  constructor(private readonly caseloadService: CaseloadService) {}
+  constructor(
+    private readonly caseloadService: CaseloadService,
+    private readonly bankHolidayService: UkBankHolidayFeedService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const teamView = req.query.view === 'team'
@@ -48,7 +52,10 @@ export default class CaseloadRoutes {
       'dd/MM/yyyy',
       new Date()
     )
-    const hardStopWarningDate = subDays(hardStopCutoffDate, 2)
+
+    const bankHolidays = await this.bankHolidayService.getEnglishAndWelshHolidays()
+
+    const hardStopWarningDate = bankHolidays.getTwoWorkingDaysBeforeDate(hardStopCutoffDate)
 
     const hardStopDates = { hardStopCutoffDate, hardStopWarningDate }
 
