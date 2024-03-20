@@ -32,7 +32,7 @@ export default class ChangeTeamRoutes {
     const probationTeamsWithCount = probationTeams.map(probationTeam => {
       return {
         ...probationTeam,
-        count: teams.filter(t => t.teamCode === probationTeam.code).map(t => t.count)[0] || 0,
+        count: teams.find(t => t.teamCode === probationTeam.code)?.count || 0,
       }
     })
     /*
