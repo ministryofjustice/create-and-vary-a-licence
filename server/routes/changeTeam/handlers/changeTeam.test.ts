@@ -1,16 +1,21 @@
 import { NextFunction, Request, Response } from 'express'
 import ChangeTeamRoutes from './changeTeam'
+import CaseloadService from '../../../services/caseloadService'
+
+const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+
+jest.mock('../../../services/caseloadService')
 
 describe('Route Handlers - ChangeLocationRoutes', () => {
-  const handler = new ChangeTeamRoutes()
+  const handler = new ChangeTeamRoutes(caseloadService)
   let req: Request
   let res: Response
   let next: NextFunction
 
   const probationTeams = [
-    { code: 'ABC', label: 'Team One' },
-    { code: 'ABCD', label: 'Team Two' },
-    { code: 'ABCDE', label: 'Team Three' },
+    { code: 'ABC', label: 'Team One', count: 3 },
+    { code: 'ABCD', label: 'Team Two', count: 0 },
+    { code: 'ABCDE', label: 'Team Three', count: 0 },
   ]
 
   beforeEach(() => {
@@ -32,16 +37,25 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
         path: '/licence/create/caseload/change-team',
       },
     } as unknown as Request
+
+    caseloadService.getComReviewCount.mockResolvedValue({
+      myCount: 1,
+      teams: [
+        { teamCode: 'ABC', count: 3 },
+        { teamCode: 'teamB', count: 1 },
+      ],
+    })
   })
 
   describe('GET', () => {
     it('Should list all teams with no selected team', async () => {
       await handler.GET()(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
-        probationTeams,
+        probationTeamsWithCount: probationTeams,
         checked: null,
         backLinkHref: '/licence/create/caseload',
         validationErrors: [],
+        showTeamsCount: true,
       })
     })
 
@@ -50,9 +64,10 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       await handler.GET()(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
         backLinkHref: '/licence/create/caseload?view=team',
-        probationTeams,
+        probationTeamsWithCount: probationTeams,
         checked: ['ABCD'],
         validationErrors: [],
+        showTeamsCount: true,
       })
     })
 
@@ -60,6 +75,29 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       res.locals.user.probationTeams = [{ code: 'ABC', label: 'Team One' }]
       await handler.GET()(req, res, next)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/caseload')
+    })
+
+    it('Should list all teams with no selected team and showTeamsCount false', async () => {
+      const probationTeams = [
+        { code: 'ABC', label: 'Team One', count: 0 },
+        { code: 'ABCD', label: 'Team Two', count: 0 },
+        { code: 'ABCDE', label: 'Team Three', count: 0 },
+      ]
+      caseloadService.getComReviewCount.mockResolvedValue({
+        myCount: 1,
+        teams: [
+          { teamCode: 'teamA', count: 3 },
+          { teamCode: 'teamB', count: 1 },
+        ],
+      })
+      await handler.GET()(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
+        probationTeamsWithCount: probationTeams,
+        checked: null,
+        backLinkHref: '/licence/create/caseload',
+        validationErrors: [],
+        showTeamsCount: false,
+      })
     })
   })
 
@@ -75,10 +113,11 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       await handler.POST()(req, res, next)
       expect(req.session.teamSelection).toEqual(null)
       expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
-        probationTeams,
+        probationTeamsWithCount: probationTeams,
         backLinkHref: '/licence/create/caseload',
         checked: null,
         validationErrors: [{ field: 'teams', message: 'Select the team you wish to view cases for' }],
+        showTeamsCount: true,
       })
     })
   })

@@ -27,6 +27,7 @@ context('Vary a licence', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const varyCasesPage = indexPage.clickVaryALicence()
     varyCasesPage.getValue(varyCasesPage.myCount).should('contain.text', '1')
+    varyCasesPage.getValue(varyCasesPage.teamCount).should('contain.text', '5')
     const timelinePage = varyCasesPage.selectCase()
     const viewActiveLicencePage = timelinePage.checkTimelineContent().selectVary()
     const confirmVaryPage = viewActiveLicencePage.selectVary()
