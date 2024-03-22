@@ -100,4 +100,35 @@ describe('Print a PSS licence', () => {
       expect($('[data-qa="appointment-time"]').text().trim()).toBe('Immediately after release')
     })
   })
+
+  describe('Appointment person rendering', () => {
+    it('should render Duty officer', () => {
+      const $ = render({
+        licence: {
+          appointmentPersonType: 'DUTY_OFFICER',
+        },
+      })
+      expect($('[data-qa="appointment-person"]').text().trim()).toBe('Duty officer')
+    })
+
+    it('should render Responsible Com', () => {
+      const $ = render({
+        licence: {
+          appointmentPersonType: 'RESPONSIBLE_COM',
+          responsibleComFullName: 'test user1',
+        },
+      })
+      expect($('[data-qa="appointment-person"]').text().trim()).toBe('test user1')
+    })
+
+    it('should render someone at an approved premises or a different probation practitioner', () => {
+      const $ = render({
+        licence: {
+          appointmentPersonType: 'SPECIFIC_PERSON',
+          appointmentPerson: 'test user2',
+        },
+      })
+      expect($('[data-qa="appointment-person"]').text().trim()).toBe('test user2')
+    })
+  })
 })

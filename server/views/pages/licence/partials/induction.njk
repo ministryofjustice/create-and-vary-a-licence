@@ -1,3 +1,11 @@
+{% switch licence.appointmentPersonType %}
+    {% case 'DUTY_OFFICER' %}
+        {% set appointmentPerson = "Duty officer" %}
+    {% case 'RESPONSIBLE_COM' %}
+        {% set appointmentPerson = licence.responsibleComFullName %}
+    {% default %}
+        {% set appointmentPerson = licence.appointmentPerson  %}
+{% endswitch %}
 <div id="induction" class="section">
     <p>
         On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
@@ -6,7 +14,7 @@
     </p>
     <div id="meeting-details">
         <p>
-            <span class="bold line-space-after">{{ licence.appointmentPerson or "Duty officer" }}</span>
+            <span data-qa="appointment-person" class="bold line-space-after">{{ appointmentPerson }}</span>
             {% for a in (licence.appointmentAddress | formatAddressAsList) %}
                 <span class="bold line-space-after">{{ a }}</span>
             {% endfor %}
