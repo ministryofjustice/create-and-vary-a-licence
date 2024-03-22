@@ -51,7 +51,6 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             )
 
             const { email } = await userService.getUserEmail(user)
-            if (!email) throw new Error(`Failed to get email for: ${user.username}`)
             await licenceService.updatePrisonUserDetails({
               staffUsername: prisonUser.username,
               staffEmail: email,
