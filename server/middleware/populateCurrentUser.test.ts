@@ -170,7 +170,7 @@ describe('populateCurrentUser', () => {
     expect(next).toHaveBeenCalled()
   })
 
-  it('should throw error and not call updatePrisonUserDetails when email of a nomis user is not found', async () => {
+  it('should call updatePrisonUserDetails when email of a nomis user is not found or is unverified', async () => {
     res.locals.user.authSource = 'nomis'
     req.user.userRoles = [AuthRole.CASE_ADMIN]
 
@@ -198,7 +198,12 @@ describe('populateCurrentUser', () => {
 
     await middleware(req, res, next)
 
-    expect(licenceServiceMock.updatePrisonUserDetails).not.toHaveBeenCalled()
+    expect(licenceServiceMock.updatePrisonUserDetails).toHaveBeenCalledWith({
+      staffUsername: 'joebloggs',
+      staffEmail: undefined,
+      firstName: 'Joe',
+      lastName: 'Bloggs',
+    })
     expect(next).toHaveBeenCalled()
   })
 
