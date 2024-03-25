@@ -30,6 +30,7 @@ describe('Route Handlers - Vary Licence - Confirm vary', () => {
         },
         licence: {
           nomsId: '150612',
+          isReviewNeeded: false,
         },
       },
     } as unknown as Response
@@ -47,11 +48,19 @@ describe('Route Handlers - Vary Licence - Confirm vary', () => {
   })
 
   describe('POST', () => {
-    it('should redirect to view variation if answer is no', async () => {
+    it('should redirect to view variation if answer is no and review is not required', async () => {
       req.body = { answer: 'No' }
       await handler.POST(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/view-active')
+    })
+
+    it('should redirect to view variation if answer is no and review is required', async () => {
+      req.body = { answer: 'No' }
+      res.locals.licence.isReviewNeeded = true
+      await handler.POST(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/have-you-reviewed-this-licence')
     })
 
     it('should create licence variation when answer is yes', async () => {

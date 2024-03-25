@@ -37,7 +37,12 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-import { UpdateComRequest, UpdatePrisonCaseAdminRequest, HardStopCutoffDate } from '../@types/licenceApiClientTypes'
+import {
+  UpdateComRequest,
+  UpdatePrisonUserRequest,
+  HardStopCutoffDate,
+  ComReviewCount,
+} from '../@types/licenceApiClientTypes'
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
@@ -245,6 +250,15 @@ export default class LicenceApiClient extends RestClient {
     )) as HardStopCutoffDate
   }
 
+  async getComReviewCount(user: User): Promise<ComReviewCount> {
+    return (await this.get(
+      {
+        path: `/com/${user.deliusStaffIdentifier}/review-counts`,
+      },
+      { username: user?.username }
+    )) as ComReviewCount
+  }
+
   async getLicencesRecentlyApproved(prisons?: string[], user?: User): Promise<LicenceSummary[]> {
     return (await this.post(
       {
@@ -318,8 +332,8 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/com/update`, data: updateComRequest })
   }
 
-  async updatePrisonUserDetails(UpdatePrisonCaseAdminRequest: UpdatePrisonCaseAdminRequest): Promise<void> {
-    await this.put({ path: `/prison-case-administrator/update`, data: UpdatePrisonCaseAdminRequest })
+  async updatePrisonUserDetails(updatePrisonCaseAdminRequest: UpdatePrisonUserRequest): Promise<void> {
+    await this.put({ path: `/prison-user/update`, data: updatePrisonCaseAdminRequest })
   }
 
   async editLicence(licenceId: string, user: User) {
@@ -521,9 +535,15 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async runDeactivateReleaseDatePassedLicencesJob() {
+  async runDeactivateReleaseDatePassedLicencesJob(): Promise<void> {
     await this.post({
       path: '/run-deactivate-licences-past-release-date',
+    })
+  }
+
+  async reviewWithoutVariation(licenceId: number): Promise<void> {
+    await this.post({
+      path: `/licence/id/${licenceId}/review-with-no-variation-required`,
     })
   }
 }

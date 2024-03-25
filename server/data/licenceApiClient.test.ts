@@ -18,7 +18,7 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
-  UpdatePrisonCaseAdminRequest,
+  UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
@@ -336,10 +336,10 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updatePrisonUserDetails({
       staffUsername: 'joebloggs',
       staffEmail: 'joebloggs@probation.gov.uk',
-    } as UpdatePrisonCaseAdminRequest)
+    } as UpdatePrisonUserRequest)
 
     expect(put).toHaveBeenCalledWith({
-      path: '/prison-case-administrator/update',
+      path: '/prison-user/update',
       data: {
         staffUsername: 'joebloggs',
         staffEmail: 'joebloggs@probation.gov.uk',
@@ -539,6 +539,13 @@ describe('Licence API client tests', () => {
     )
   })
 
+  it('should call to set a licence as reviewed', async () => {
+    await licenceApiClient.reviewWithoutVariation(1)
+    expect(post).toHaveBeenCalledWith({
+      path: `/licence/id/1/review-with-no-variation-required`,
+    })
+  })
+
   describe('Exclusion zone file', () => {
     it('Upload an exclusion zone PDF file', async () => {
       const myUpload = { path: 'test-file' } as Express.Multer.File
@@ -657,6 +664,18 @@ describe('Licence API client tests', () => {
       expect(get).toHaveBeenCalledWith(
         {
           path: '/current-hard-stop-cutoff-date',
+        },
+        { username: 'joebloggs' }
+      )
+    })
+  })
+
+  describe('Com review count: ', () => {
+    it('Should get mycount and teams individual count for Com', async () => {
+      await licenceApiClient.getComReviewCount({ username: 'joebloggs', deliusStaffIdentifier: 2000 } as User)
+      expect(get).toHaveBeenCalledWith(
+        {
+          path: `/com/2000/review-counts`,
         },
         { username: 'joebloggs' }
       )

@@ -1,0 +1,68 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% set pageTitle = applicationName + "– Vary a licence – Have you reviewed this licence?" %}
+{% set pageId = "review-licence-question-page" %}
+{% set backLinkHref = "/licence/vary/id/" + licence.id + "/timeline" %}
+{% set printLink = '/licence/view/id/' + licence.id + '/pdf-print' %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">
+                {{ "Does anything on this licence need changing?" }}
+            </h1>
+            <p class="govuk-body">
+              You can vary this licence to add information such as additional licence conditions or leave it unchanged if you are happy with it.
+            </p>
+        </div>
+    </div>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ govukRadios({
+                    classes: "govuk-radios",
+                    idPrefix: "radio-option",
+                    name: "answer",
+                    fieldset: {
+                        attributes: {
+                            id: 'answer'
+                        },
+                        legend: {
+                            text: "Does anything on this licence need changing?",
+                            classes: "govuk-visually-hidden"
+                        }
+                    },
+                    errorMessage: validationErrors | findError('answer'),
+                    items: [
+                        {
+                            value: "Yes",
+                            text: "Yes - vary this licence now"
+                        },
+                        {
+                            value: "No",
+                            text: "No - return to licence history"
+                        }
+                    ]
+                }) }}
+
+                {{ govukButton({
+                    text: "Submit",
+                    type: "submit",
+                    attributes: { 'data-qa': 'continue' },
+                    preventDoubleClick: true
+                }) }}
+            </div>
+        </div>
+    </form>
+
+    {{ govukDetails({
+        summaryText: "What does this licence contain?",
+        html: "This licence contains:<ul><li>standard conditions</li><li>the following additional condition:</li></ul><p class='govuk-inset-text'>Not to approach or communicate with any victims of your main offences without the prior approval of your supervising officer.</p><br><a href="+ printLink + " target='_blank'>View or print this licence PDF</a>",
+        classes: ""
+    }) }}
+{% endblock %}

@@ -148,7 +148,7 @@ describe('Prisoner Service', () => {
       const actualResult = await prisonerService.searchPrisonersByNomisIds([], user)
 
       expect(actualResult).toEqual(expectedResult)
-      expect(prisonerSearchApiClient.searchPrisonersByNomsIds).not.toBeCalled()
+      expect(prisonerSearchApiClient.searchPrisonersByNomsIds).not.toHaveBeenCalled()
     })
 
     it('should return a list of matching prisoners', async () => {
@@ -173,7 +173,7 @@ describe('Prisoner Service', () => {
       const actualResult = await prisonerService.searchPrisonersByBookingIds([], user)
 
       expect(actualResult).toEqual(expectedResult)
-      expect(prisonerSearchApiClient.searchPrisonersByBookingIds).not.toBeCalled()
+      expect(prisonerSearchApiClient.searchPrisonersByBookingIds).not.toHaveBeenCalled()
     })
 
     it('should return a list of matching prisoners', async () => {
@@ -195,7 +195,7 @@ describe('Prisoner Service', () => {
         user
       )
       expect(actualResult).toEqual([])
-      expect(prisonApiClient.getLatestHdcStatusBatch).not.toBeCalled()
+      expect(prisonApiClient.getLatestHdcStatusBatch).not.toHaveBeenCalled()
     })
 
     it('should return list of HDC statuses', async () => {

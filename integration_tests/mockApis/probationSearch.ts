@@ -6,7 +6,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/search`,
+        urlPattern: `/probation-search-api/search`,
       },
       response: {
         status: 200,
@@ -54,7 +54,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/crns`,
+        urlPattern: `/probation-search-api/crns`,
       },
       response: {
         status: 200,
@@ -102,7 +102,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/nomsNumbers`,
+        urlPattern: `/probation-search-api/nomsNumbers`,
       },
       response: {
         status: 200,
@@ -145,4 +145,15 @@ export default {
       },
     })
   },
+
+  stubPing: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/probation-search-api/health/ping',
+      },
+      response: {
+        status: 200,
+      },
+    }),
 }

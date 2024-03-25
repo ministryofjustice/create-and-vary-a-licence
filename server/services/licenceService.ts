@@ -22,7 +22,7 @@ import {
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
-  UpdatePrisonCaseAdminRequest,
+  UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
@@ -35,6 +35,7 @@ import {
   LicenceConditionChange,
   UpdateOffenderDetailsRequest,
   HardStopCutoffDate,
+  ComReviewCount,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
@@ -319,6 +320,10 @@ export default class LicenceService {
     return this.licenceApiClient.getCutOffDateForLicenceTimeOut(user)
   }
 
+  async getComReviewCount(user: User): Promise<ComReviewCount> {
+    return this.licenceApiClient.getComReviewCount(user)
+  }
+
   async getLicencesForVariationApproval(user: User): Promise<LicenceSummary[]> {
     const statuses = [LicenceStatus.VARIATION_SUBMITTED.valueOf()]
     return this.licenceApiClient.matchLicences(
@@ -349,7 +354,7 @@ export default class LicenceService {
     return this.licenceApiClient.updateComDetails(comDetails)
   }
 
-  async updatePrisonUserDetails(prisonUserDetails: UpdatePrisonCaseAdminRequest): Promise<void> {
+  async updatePrisonUserDetails(prisonUserDetails: UpdatePrisonUserRequest): Promise<void> {
     return this.licenceApiClient.updatePrisonUserDetails(prisonUserDetails)
   }
 
@@ -584,5 +589,9 @@ export default class LicenceService {
 
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     return this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)
+  }
+
+  async reviewWithoutVariation(licenceId: number): Promise<void> {
+    return this.licenceApiClient.reviewWithoutVariation(licenceId)
   }
 }

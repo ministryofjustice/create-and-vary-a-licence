@@ -17,6 +17,9 @@ export default class ConfirmVaryActionRoutes {
     const { user, licence } = res.locals
 
     if (answer === YesOrNo.NO) {
+      if (licence.isReviewNeeded) {
+        return res.redirect(`/licence/vary/id/${licenceId}/have-you-reviewed-this-licence`)
+      }
       return res.redirect(`/licence/vary/id/${licenceId}/view-active`)
     }
 

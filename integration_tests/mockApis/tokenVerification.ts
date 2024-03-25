@@ -6,7 +6,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/verification/health/ping',
+        urlPattern: '/verification-api/health/ping',
       },
       response: {
         status: httpStatus,
@@ -18,7 +18,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/verification/token/verify',
+        urlPattern: '/verification-api/token/verify',
       },
       response: {
         status: 200,
