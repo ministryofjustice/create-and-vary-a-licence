@@ -2,12 +2,16 @@ import IndexPage from '../pages'
 import Page from '../pages/page'
 
 context('Create a licence', () => {
+  const dates: string[] = []
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubGetOmuEmail')
+    cy.task('stubGetBankHolidays', dates)
+    cy.task('stubGetCutOffDateForLicenceTimeOut')
     cy.signIn()
   })
 
