@@ -4,11 +4,13 @@ import CaseloadService from '../../../services/caseloadService'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import statusConfig from '../../../licences/licenceStatus'
 import CommunityService from '../../../services/communityService'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 export default class ProbationTeamRoutes {
   constructor(
     private readonly caseloadService: CaseloadService,
-    private readonly communityService: CommunityService
+    private readonly communityService: CommunityService,
+    private readonly bankHolidayService: UkBankHolidayFeedService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -33,7 +35,8 @@ export default class ProbationTeamRoutes {
       'dd/MM/yyyy',
       new Date()
     )
-    const hardStopWarningDate = subDays(hardStopCutoffDate, 2)
+    const bankHolidays = await this.bankHolidayService.getEnglishAndWelshHolidays()
+    const hardStopWarningDate = bankHolidays.getTwoWorkingDaysAfterDate(hardStopCutoffDate)
 
     const hardStopDates = { hardStopCutoffDate, hardStopWarningDate }
 

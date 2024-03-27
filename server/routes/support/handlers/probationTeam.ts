@@ -3,9 +3,13 @@ import { parse, subDays } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import statusConfig from '../../../licences/licenceStatus'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 export default class ProbationTeamRoutes {
-  constructor(private readonly caseloadService: CaseloadService) {}
+  constructor(
+    private readonly caseloadService: CaseloadService,
+    private readonly bankHolidayService: UkBankHolidayFeedService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const view = req.query.view as string
@@ -27,7 +31,8 @@ export default class ProbationTeamRoutes {
       'dd/MM/yyyy',
       new Date()
     )
-    const hardStopWarningDate = subDays(hardStopCutoffDate, 2)
+    const bankHolidays = await this.bankHolidayService.getEnglishAndWelshHolidays()
+    const hardStopWarningDate = bankHolidays.getTwoWorkingDaysAfterDate(hardStopCutoffDate)
 
     const hardStopDates = { hardStopCutoffDate, hardStopWarningDate }
 
