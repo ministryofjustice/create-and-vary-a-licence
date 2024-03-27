@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import ChangeTeamRoutes from './changeTeam'
 import CaseloadService from '../../../services/caseloadService'
 
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
 
 jest.mock('../../../services/caseloadService')
 

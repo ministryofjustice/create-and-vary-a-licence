@@ -11,9 +11,11 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { ManagedCase } from '../@types/managedCase'
 import Container from './container'
+import UkBankHolidayFeedService, { BankHolidayRetriever } from './ukBankHolidayFeedService'
 
 jest.mock('./prisonerService')
 jest.mock('./communityService')
+jest.mock('./ukBankHolidayFeedService')
 
 describe('Caseload Service', () => {
   const elevenDaysFromNow = format(addDays(new Date(), 11), 'yyyy-MM-dd')
@@ -23,7 +25,9 @@ describe('Caseload Service', () => {
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-  const serviceUnderTest = new CaseloadService(prisonerService, communityService, licenceService)
+  const bankHolidayRetriever: BankHolidayRetriever = async () => []
+  const bankHolidayService = new UkBankHolidayFeedService(bankHolidayRetriever) as jest.Mocked<UkBankHolidayFeedService>
+  const serviceUnderTest = new CaseloadService(prisonerService, communityService, licenceService, bankHolidayService)
   const user = {
     deliusStaffIdentifier: 2000,
     probationTeamCodes: ['teamA', 'teamB'],
@@ -40,31 +44,37 @@ describe('Caseload Service', () => {
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([])
     prisonerService.searchPrisonersByNomisIds.mockResolvedValue([])
     prisonerService.getHdcStatuses.mockResolvedValue([])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
+    getLicencesByNomisIdsAndStatus.mockResolvedValue([])
+    bankHolidayService.getEnglishAndWelshHolidays.mockResolvedValue({
+      bankHolidays: [],
+      isBankHolidayOrWeekend: jest.fn(),
+      getTwoWorkingDaysAfterDate: jest.fn(),
+      getXWorkingDaysBeforeDate: jest.fn(),
+    })
   })
 
   afterEach(() => {
     jest.resetAllMocks()
   })
 
-  it('Does not call Licence API when no Nomis records are found', () => {
+  it('Does not call Licence API when no Nomis records are found', async () => {
     const offenders = new Container([
       {
         nomisRecord: { prisonerNumber: null },
       } as ManagedCase,
     ])
-    serviceUnderTest.mapOffendersToLicences(offenders)
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(0)
+    await serviceUnderTest.mapOffendersToLicences(offenders)
+    expect(getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(0)
   })
 
-  it('Calls Licence API when no Nomis records are found', () => {
+  it('Calls Licence API when Nomis records are found', async () => {
     const offenders = new Container([
       {
         nomisRecord: { prisonerNumber: 'ABC123' },
       } as ManagedCase,
     ])
-    serviceUnderTest.mapOffendersToLicences(offenders)
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(1)
+    await serviceUnderTest.mapOffendersToLicences(offenders)
+    expect(getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(1)
   })
 
   it('filters invalid data due to mismatch between delius and nomis', async () => {
@@ -1794,6 +1804,68 @@ describe('Caseload Service', () => {
     })
     it('returns false if APD is set', () => {
       expect(CaseloadService.isEligibleEDS(yesterday, tenDaysFromNow, tenDaysFromNow, nineDaysFromNow)).toBe(false)
+    })
+  })
+
+  describe('getHardStopReferenceDate', () => {
+    it('uses ARD as hard stop reference date when it is within one working day of CRD', async () => {
+      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
+      bankHolidays.getXWorkingDaysBeforeDate = jest.fn(() => {
+        return new Date('2024-03-20')
+      })
+
+      const nomisRecord: Prisoner = {
+        prisonerNumber: 'ABC123',
+        releaseDate: '2024-03-20',
+        conditionalReleaseDate: '2024-03-21',
+      } as Prisoner
+
+      expect(serviceUnderTest.getHardStopReferenceDate(nomisRecord, bankHolidays)).toEqual(new Date('2024-03-20'))
+    })
+
+    it('uses ARD as hard stop reference date when it is equal to CRD', async () => {
+      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
+      bankHolidays.getXWorkingDaysBeforeDate = jest.fn(() => {
+        return new Date('2024-03-20')
+      })
+
+      const nomisRecord: Prisoner = {
+        prisonerNumber: 'ABC123',
+        releaseDate: '2024-03-21',
+        conditionalReleaseDate: '2024-03-21',
+      } as Prisoner
+
+      expect(serviceUnderTest.getHardStopReferenceDate(nomisRecord, bankHolidays)).toEqual(new Date('2024-03-21'))
+    })
+
+    it('uses CRD as hard stop reference date when ARD is more than one working day before CRD', async () => {
+      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
+      bankHolidays.getXWorkingDaysBeforeDate = jest.fn(() => {
+        return new Date('2024-03-20')
+      })
+
+      const nomisRecord: Prisoner = {
+        prisonerNumber: 'ABC123',
+        releaseDate: '2024-03-19',
+        conditionalReleaseDate: '2024-03-21',
+      } as Prisoner
+
+      expect(serviceUnderTest.getHardStopReferenceDate(nomisRecord, bankHolidays)).toEqual(new Date('2024-03-21'))
+    })
+
+    it('uses CRD as hard stop reference date when ARD is after CRD', async () => {
+      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
+      bankHolidays.getXWorkingDaysBeforeDate = jest.fn(() => {
+        return new Date('2024-03-20')
+      })
+
+      const nomisRecord: Prisoner = {
+        prisonerNumber: 'ABC123',
+        releaseDate: '2024-03-22',
+        conditionalReleaseDate: '2024-03-21',
+      } as Prisoner
+
+      expect(serviceUnderTest.getHardStopReferenceDate(nomisRecord, bankHolidays)).toEqual(new Date('2024-03-21'))
     })
   })
 })
