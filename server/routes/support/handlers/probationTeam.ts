@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { parse, subDays } from 'date-fns'
+import { parse } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import statusConfig from '../../../licences/licenceStatus'
