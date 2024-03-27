@@ -25,6 +25,8 @@ export type Licence = {
   versionOf?: number
   updatedByFullName?: string
   submittedByFullName?: string
+  hardStopWarningDate?: Date
+  hardStopCutoffDate?: Date
 }
 
 export type ManagedCase = {
