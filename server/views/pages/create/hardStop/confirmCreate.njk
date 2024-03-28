@@ -22,7 +22,9 @@
                     iconFallbackText: "Warning"
                 }) }}
             {% endif %}
-            {{ immediateReleaseConditions(licenceType) }}
+            <div class="licence-conditions">
+                {{ immediateReleaseConditions(licenceType) }}
+            </div>
             {% if licenceType === 'AP_PSS' or licenceType === 'AP' %}
                 <p class="govuk-body">You cannot add any other additional or bespoke licence conditions.<br> <br> A community probation practitioner can do this after release.</p>
             {% endif %}
