@@ -33,8 +33,8 @@ export default (
           licence.status !== LicenceStatus.OOS_BOTUS,
         showHardStopWarning:
           config.hardStopEnabled &&
-          releaseDate.toDate() <= hardStopDates.hardStopWarningDate &&
-          releaseDate.toDate() > hardStopDates.hardStopCutoffDate,
+          releaseDate <= moment(hardStopDates.hardStopWarningDate) &&
+          releaseDate > moment(hardStopDates.hardStopCutoffDate),
       }
     })
     .filter(c => {
