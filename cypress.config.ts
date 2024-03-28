@@ -106,6 +106,7 @@ export default defineConfig({
         stubGetProbationSearchResults: licence.stubSearchForOffenderOnStaffCaseload,
         stubLicencesPing: licence.stubPing,
         stubGetComReviewCount: licence.stubGetComReviewCount,
+        stubGetCaseloadItem: licence.stubGetCaseloadItem,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,

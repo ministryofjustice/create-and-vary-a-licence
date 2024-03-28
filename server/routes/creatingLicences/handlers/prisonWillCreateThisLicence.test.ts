@@ -1,21 +1,18 @@
 import { Request, Response } from 'express'
-import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 
 import PrisonWillCreateThisLicenceRoutes from './prisonWillCreateThisLicence'
 import LicenceService from '../../../services/licenceService'
-import PrisonerService from '../../../services/prisonerService'
 import CommunityService from '../../../services/communityService'
+import { CaseloadItem } from '../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/communityService')
 
 describe('Route Handlers - Create Licence - Prison will create licence', () => {
-  const handler = new PrisonWillCreateThisLicenceRoutes(licenceService, prisonerService, communityService)
+  const handler = new PrisonWillCreateThisLicenceRoutes(licenceService, communityService)
   let req: Request
   let res: Response
 
@@ -48,15 +45,23 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
 
   describe('GET', () => {
     beforeEach(() => {
-      prisonerService.getPrisonerDetail.mockResolvedValue({
-        sentenceDetail: {
+      licenceService.getPrisonerDetail.mockResolvedValue({
+        prisoner: {
+          prisonerNumber: 'G4169UO',
+          firstName: 'Patrick',
+          lastName: 'Holmes',
+          dateOfBirth: '1960-11-10',
+          status: 'ACTIVE IN',
+          prisonId: 'BAI',
+          sentenceStartDate: '2017-03-01',
+          releaseDate: '2024-07-19',
           confirmedReleaseDate: '2022-11-20',
+          sentenceExpiryDate: '2028-08-31',
+          licenceExpiryDate: '2028-08-31',
           conditionalReleaseDate: '2022-11-21',
         },
-        dateOfBirth: '1960-11-10',
-        firstName: 'Patrick',
-        lastName: 'Holmes',
-      } as PrisonApiPrisoner)
+        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+      } as CaseloadItem)
       communityService.getProbationer.mockResolvedValue({
         otherIds: {
           crn: 'X1234',
@@ -84,6 +89,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
         },
         omuEmail: 'moorland@prison.gov.uk',
         backLink: req.session.returnToCase,
+        licenceType: 'AP',
       })
     })
 
@@ -107,18 +113,20 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
         },
         omuEmail: 'moorland@prison.gov.uk',
         backLink: '/licence/create/caseload',
+        licenceType: 'AP',
       })
     })
 
     it('actualReleaseDate should be undefined if confirmedReleaseDate does not exist', async () => {
-      prisonerService.getPrisonerDetail.mockResolvedValue({
-        sentenceDetail: {
+      licenceService.getPrisonerDetail.mockResolvedValue({
+        prisoner: {
+          firstName: 'Patrick',
+          lastName: 'Holmes',
+          dateOfBirth: '1960-11-10',
           conditionalReleaseDate: '2022-11-20',
         },
-        dateOfBirth: '1960-11-10',
-        firstName: 'Patrick',
-        lastName: 'Holmes',
-      } as PrisonApiPrisoner)
+        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+      } as CaseloadItem)
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/prisonWillCreateThisLicence', {
@@ -132,6 +140,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
         },
         omuEmail: 'moorland@prison.gov.uk',
         backLink: req.session.returnToCase,
+        licenceType: 'AP',
       })
     })
   })

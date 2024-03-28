@@ -1475,4 +1475,33 @@ export default {
         },
       },
     }),
+
+  stubGetCaseloadItem: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/prisoner-search/nomisid/.*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          prisoner: {
+            prisonerNumber: 'G4169UO',
+            firstName: 'Patrick',
+            lastName: 'Holmes',
+            dateOfBirth: '1960-11-10',
+            status: 'ACTIVE IN',
+            prisonId: 'BAI',
+            sentenceStartDate: '2017-03-01',
+            releaseDate: '2024-07-19',
+            confirmedReleaseDate: '2022-11-20',
+            sentenceExpiryDate: '2028-08-31',
+            licenceExpiryDate: '2028-08-31',
+            conditionalReleaseDate: '2022-11-21',
+          },
+          cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+        },
+      },
+    }),
 }

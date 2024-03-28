@@ -546,6 +546,11 @@ describe('Licence API client tests', () => {
     })
   })
 
+  it('should get prisoner details', async () => {
+    await licenceApiClient.getPrisonerDetail('G4169UO', { username: 'bob' } as User)
+    expect(get).toHaveBeenCalledWith({ path: '/prisoner-search/nomisid/G4169UO' }, { username: 'bob' })
+  })
+
   describe('Exclusion zone file', () => {
     it('Upload an exclusion zone PDF file', async () => {
       const myUpload = { path: 'test-file' } as Express.Multer.File
