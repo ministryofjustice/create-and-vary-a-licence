@@ -15,7 +15,7 @@ parameters:
 
   node-version:
     type: string
-    default: 18.17-browsers
+    default: 20.11-browsers
 
 executors:
   integration-tests:
