@@ -1,6 +1,5 @@
 import { Readable } from 'stream'
 import { Buffer } from 'buffer'
-import { use } from 'passport'
 import LicenceApiClient from './licenceApiClient'
 import {
   AdditionalConditionsRequest,
@@ -32,7 +31,6 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import { User } from '../@types/CvlUserDetails'
 import LicenceEventType from '../enumeration/licenceEventType'
 import { InMemoryTokenStore } from './tokenStore'
-import { user } from '../routes/__testutils/appSetup'
 
 const licenceApiClient = new LicenceApiClient(
   new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))

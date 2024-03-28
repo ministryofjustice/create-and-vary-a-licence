@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 
 import PrisonWillCreateThisLicenceRoutes from './prisonWillCreateThisLicence'

@@ -1,7 +1,6 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {%  macro immediateReleaseConditions(typeCode) %}
-    {{ typeCode }}
     {% if typeCode === 'AP_PSS' or typeCode === 'AP' %}
         <p class="govuk-body">By default, the licence will automatically contain the following restrictions:</p>
         <ul class="govuk-list govuk-list--bullet standard-conditions">
