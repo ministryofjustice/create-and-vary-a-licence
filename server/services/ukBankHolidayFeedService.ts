@@ -1,5 +1,5 @@
 import moment, { type Moment } from 'moment'
-import { addDays } from 'date-fns'
+import { addDays, subDays } from 'date-fns'
 import { LicenceApiClient } from '../data'
 import { InMemoryTokenStore } from '../data/tokenStore'
 import { getSystemTokenWithRetries } from '../data/systemToken'
@@ -15,7 +15,7 @@ const bankHolidayRetriever = () => {
   }
 }
 
-class BankHolidays {
+export class BankHolidays {
   constructor(readonly bankHolidays: string[]) {}
 
   isBankHolidayOrWeekend = (date: Moment, addFriday: boolean = true) => {
@@ -37,6 +37,18 @@ class BankHolidays {
       }
     }
     return workingDays[1]
+  }
+
+  getXWorkingDaysBeforeDate = (date: Date, numberOfDays: number): Date => {
+    const workingDays: Date[] = []
+    let dayBefore = date
+    while (workingDays.length < numberOfDays) {
+      dayBefore = subDays(dayBefore, 1)
+      if (!this.isBankHolidayOrWeekend(moment(dayBefore), false)) {
+        workingDays.push(dayBefore)
+      }
+    }
+    return workingDays[workingDays.length - 1]
   }
 }
 

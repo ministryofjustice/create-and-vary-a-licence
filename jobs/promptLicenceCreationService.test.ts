@@ -10,7 +10,7 @@ import LicenceType from '../server/enumeration/licenceType'
 jest.mock('../server/services/caseloadService')
 jest.mock('../server/services/prisonerService')
 
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 const promptLicenceCreationService = new PromptLicenceCreationService(prisonerService, caseloadService)

@@ -10,8 +10,8 @@ import { ManagedCase } from '../../../@types/managedCase'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../../services/ukBankHolidayFeedService'
 
 const bankHolidayRetriever: BankHolidayRetriever = async () => []
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 const bankHolidayService = new UkBankHolidayFeedService(bankHolidayRetriever) as jest.Mocked<UkBankHolidayFeedService>
+const caseloadService = new CaseloadService(null, null, null, bankHolidayService) as jest.Mocked<CaseloadService>
 
 jest.mock('../../../services/caseloadService')
 jest.mock('../../../services/ukBankHolidayFeedService')
@@ -137,6 +137,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       bankHolidays: [],
       isBankHolidayOrWeekend: jest.fn(),
       getTwoWorkingDaysAfterDate: jest.fn(),
+      getXWorkingDaysBeforeDate: jest.fn(),
     })
   })
 
