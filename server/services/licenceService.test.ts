@@ -23,6 +23,7 @@ import {
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateSentenceDatesRequest,
+  CaseloadItem,
 } from '../@types/licenceApiClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
@@ -864,5 +865,30 @@ describe('Licence Service', () => {
         undefined
       )
     })
+  })
+
+  it('Get prisoner details', async () => {
+    const prisonerDetails = {
+      prisoner: {
+        prisonerNumber: 'G4169UO',
+        firstName: 'EMAJINHANY',
+        lastName: 'ELYSASHA',
+        dateOfBirth: '1962-04-26',
+        status: 'ACTIVE IN',
+        prisonId: 'BAI',
+        sentenceStartDate: '2017-03-01',
+        releaseDate: '2024-07-19',
+        confirmedReleaseDate: '2024-07-19',
+        sentenceExpiryDate: '2028-08-31',
+        licenceExpiryDate: '2028-08-31',
+        conditionalReleaseDate: '2022-09-01',
+      },
+      cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+    } as CaseloadItem
+    licenceApiClient.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+    const nomsId = 'G4169UO'
+    const callToGetPrisonerDetails = await licenceService.getPrisonerDetail(nomsId, user)
+    expect(licenceApiClient.getPrisonerDetail).toHaveBeenCalledWith(nomsId, user)
+    expect(callToGetPrisonerDetails).toEqual(prisonerDetails)
   })
 })

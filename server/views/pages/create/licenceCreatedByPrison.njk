@@ -23,7 +23,7 @@
             {{ inductionMeetingDetails(licence, isInProgress, validationErrors, contactForChangeText) }}
 
             <h1 class="govuk-heading-m">Licence conditions</h2>
-            {{ immediateReleaseConditions() }}
+            {{ immediateReleaseConditions(licence.typeCode) }}
             <p class="govuk-body">The prison <strong>cannot</strong>  add any other additional or bespoke conditions.</p>
             <p class="govuk-body">If you need to add any additional or bespoke licence conditions, you can do so after release.</p>
             <p class="govuk-body">

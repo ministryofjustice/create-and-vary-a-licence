@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
-import { LicenceSummary } from '../../../../@types/licenceApiClientTypes'
+import { CaseloadItem, LicenceSummary } from '../../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -46,8 +46,19 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
 
   describe('GET', () => {
     it('should render view', async () => {
+      const prisonerDetails = {
+        prisoner: {
+          prisonerNumber: 'G4169UO',
+          firstName: 'EMAJINHANY',
+          lastName: 'ELYSASHA',
+          confirmedReleaseDate: '2024-07-19',
+          conditionalReleaseDate: '2022-09-01',
+        },
+        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+      } as CaseloadItem
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmCreate')
+      expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmCreate', { licenceType: 'AP' })
     })
   })
 

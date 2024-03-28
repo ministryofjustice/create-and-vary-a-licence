@@ -1,5 +1,6 @@
 import { Readable } from 'stream'
 import { Buffer } from 'buffer'
+import { use } from 'passport'
 import LicenceApiClient from './licenceApiClient'
 import {
   AdditionalConditionsRequest,
@@ -31,6 +32,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import { User } from '../@types/CvlUserDetails'
 import LicenceEventType from '../enumeration/licenceEventType'
 import { InMemoryTokenStore } from './tokenStore'
+import { user } from '../routes/__testutils/appSetup'
 
 const licenceApiClient = new LicenceApiClient(
   new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
@@ -544,6 +546,11 @@ describe('Licence API client tests', () => {
     expect(post).toHaveBeenCalledWith({
       path: `/licence/id/1/review-with-no-variation-required`,
     })
+  })
+
+  it('should get prisoner details', async () => {
+    await licenceApiClient.getPrisonerDetail('G4169UO', { username: 'bob' } as User)
+    expect(get).toHaveBeenCalledWith({ path: '/prisoner-search/nomisid/G4169UO' }, { username: 'bob' })
   })
 
   describe('Exclusion zone file', () => {

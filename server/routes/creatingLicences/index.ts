@@ -118,7 +118,7 @@ export default function Index({
   }
 
   {
-    const controller = new PrisonWillCreateThisLicenceRoutes(licenceService, prisonerService, communityService)
+    const controller = new PrisonWillCreateThisLicenceRoutes(licenceService, communityService)
     get('/nomisId/:nomisId/prison-will-create-this-licence', controller.GET)
   }
 

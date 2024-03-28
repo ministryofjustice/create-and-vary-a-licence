@@ -22,8 +22,10 @@
                     iconFallbackText: "Warning"
                 }) }}
             {% endif %}
-            {{ immediateReleaseConditions() }}
-            <p class="govuk-body">You cannot add any other additional or bespoke licence conditions.<br> <br> A community probation practitioner can do this after release.</p>
+            {{ immediateReleaseConditions(licenceType) }}
+            {% if licenceType === 'AP_PSS' or licenceType === 'AP' %}
+                <p class="govuk-body">You cannot add any other additional or bespoke licence conditions.<br> <br> A community probation practitioner can do this after release.</p>
+            {% endif %}
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <div class="govuk-grid-row">

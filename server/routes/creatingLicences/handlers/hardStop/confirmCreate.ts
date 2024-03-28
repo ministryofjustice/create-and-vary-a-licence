@@ -7,7 +7,12 @@ export default class ConfirmCreateRoutes {
   constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    return res.render('pages/create/hardStop/confirmCreate')
+    const { nomisId } = req.params
+    const { user } = res.locals
+    const {
+      cvl: { licenceType },
+    } = await this.licenceService.getPrisonerDetail(nomisId, user)
+    return res.render('pages/create/hardStop/confirmCreate', { licenceType })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
