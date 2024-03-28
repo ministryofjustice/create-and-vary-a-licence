@@ -28,6 +28,7 @@ export default function Index({
   conditionService,
   licenceOverrideService,
   caseloadService,
+  ukBankHolidayFeedService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -50,8 +51,8 @@ export default function Index({
   const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
-  const probationTeamHandler = new ProbationTeamRoutes(caseloadService)
-  const probationStaffHandler = new ProbationUserRoutes(caseloadService, communityService)
+  const probationTeamHandler = new ProbationTeamRoutes(caseloadService, ukBankHolidayFeedService)
+  const probationStaffHandler = new ProbationUserRoutes(caseloadService, communityService, ukBankHolidayFeedService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
 
   get('/', supportHomeHandler.GET)

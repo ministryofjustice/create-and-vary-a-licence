@@ -2,6 +2,8 @@ import Page from '../pages/page'
 import IndexPage from '../pages'
 
 context('Edit a licence before release', () => {
+  const dates: string[] = []
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
@@ -11,6 +13,8 @@ context('Edit a licence before release', () => {
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
+    cy.task('stubGetBankHolidays', dates)
+    cy.task('stubGetCutOffDateForLicenceTimeOut')
     cy.signIn()
   })
 

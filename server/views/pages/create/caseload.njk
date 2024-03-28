@@ -32,6 +32,12 @@
         {% set comDetailsHtml = 'Unallocated' %}
     {% endif %}
 
+    {% if offender.showHardStopWarning %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + hardStopCutoffDate +'</span>' %}
+    {% else %}
+        {% set releaseDate = offender.releaseDate %}
+    {% endif %}
+
     {% set offenders = (offenders.push([
         {
             attributes: {
@@ -60,7 +66,7 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": offender.releaseDate | dateToUnix
             },
-            text: offender.releaseDate
+            html: releaseDate
         },
         {
             attributes: {
