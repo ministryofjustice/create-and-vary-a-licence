@@ -55,26 +55,27 @@ export default (
 
 const findLicenceAndCreateLinkToDisplay = (c: ManagedCase): { licence: Licence; createLink: string } => {
   const timedOutLicence = c.licences.find(l => l.status === LicenceStatus.TIMED_OUT)
+  const hardStopLicence = c.licences.find(l => l.kind === LicenceKind.HARD_STOP)
 
-  if (timedOutLicence) {
-    const hardStopLicence = c.licences.find(l => l.kind === LicenceKind.HARD_STOP)
-    if (timedOutLicence.versionOf) {
-      return {
-        licence: timedOutLicence,
-        createLink: `/licence/create/id/${timedOutLicence.id}/licence-changes-not-approved-in-time`,
-      }
+  if (timedOutLicence && timedOutLicence.versionOf) {
+    return {
+      licence: timedOutLicence,
+      createLink: `/licence/create/id/${timedOutLicence.id}/licence-changes-not-approved-in-time`,
     }
-    if (!hardStopLicence || hardStopLicence.status === LicenceStatus.IN_PROGRESS) {
-      return {
-        licence: timedOutLicence,
-        createLink: `/licence/create/nomisId/${c.nomisRecord.prisonerNumber}/prison-will-create-this-licence`,
-      }
+  }
+  if (
+    (timedOutLicence && !hardStopLicence) ||
+    (hardStopLicence && hardStopLicence.status === LicenceStatus.IN_PROGRESS)
+  ) {
+    return {
+      licence: timedOutLicence || { ...hardStopLicence, status: LicenceStatus.TIMED_OUT },
+      createLink: `/licence/create/nomisId/${c.nomisRecord.prisonerNumber}/prison-will-create-this-licence`,
     }
-    if (hardStopLicence) {
-      return {
-        licence: timedOutLicence,
-        createLink: `/licence/create/id/${hardStopLicence.id}/licence-created-by-prison`,
-      }
+  }
+  if (hardStopLicence) {
+    return {
+      licence: { ...hardStopLicence, status: LicenceStatus.TIMED_OUT },
+      createLink: `/licence/create/id/${hardStopLicence.id}/licence-created-by-prison`,
     }
   }
 

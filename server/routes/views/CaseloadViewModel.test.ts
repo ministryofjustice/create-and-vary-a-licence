@@ -326,12 +326,12 @@ describe('CaseloadViewModel', () => {
     ])
   })
 
-  describe('buildCreateLink', () => {
+  describe('findLicenceAndCreateLinkToDisplay', () => {
     it('returns not approved in time link if the licence is timed out and is an edit of an existing approved licence', () => {
-      const licence1 = { ...licence, id: 2, status: LicenceStatus.TIMED_OUT, versionOf: 1 }
-      const licence2 = { ...licence, id: 1, status: LicenceStatus.APPROVED }
+      const licence1 = { ...licence, id: 1, status: LicenceStatus.APPROVED }
+      const licence2 = { ...licence, id: 2, status: LicenceStatus.TIMED_OUT, versionOf: 1 }
       const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence1, licence2] }],
+        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence2, licence1] }],
         null,
         hardStopDates
       )[0]
@@ -339,7 +339,7 @@ describe('CaseloadViewModel', () => {
       expect(licenceViewModel.licenceStatus).toEqual('TIMED_OUT')
     })
 
-    it('returns prison prison-will-create link if the licence is timed out and is not an edit', () => {
+    it('returns prison-will-create link if the licence is timed out, it is not an edit, and a hard stop licence has not been started', () => {
       licence = { ...licence, status: LicenceStatus.TIMED_OUT }
       const licenceViewModel = createCaseloadViewModel(
         [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
@@ -350,18 +350,7 @@ describe('CaseloadViewModel', () => {
       expect(licenceViewModel.licenceStatus).toEqual('TIMED_OUT')
     })
 
-    it('returns the create licence link if the licence has not been started', () => {
-      licence = { status: LicenceStatus.NOT_STARTED, type: LicenceType.AP }
-      const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
-        null,
-        hardStopDates
-      )[0]
-      expect(licenceViewModel.createLink).toEqual('/licence/create/nomisId/A1234BC/confirm')
-      expect(licenceViewModel.licenceStatus).toEqual('NOT_STARTED')
-    })
-
-    it('returns prison-will-create link if the licence kind is HARD_STOP but is still IN_PROGRESS', () => {
+    it('returns prison-will-create link if the licence timed out and a hard stop licence is IN_PROGRESS', () => {
       const licence1 = {
         ...licence,
         id: 2,
@@ -379,6 +368,17 @@ describe('CaseloadViewModel', () => {
       expect(licenceViewModel.licenceStatus).toEqual('TIMED_OUT')
     })
 
+    it('returns prison-will-create link if the licence was not started and the hard-stop licence is IN_PROGRESS', () => {
+      licence = { ...licence, kind: LicenceKind.HARD_STOP, status: LicenceStatus.IN_PROGRESS }
+      const licenceViewModel = createCaseloadViewModel(
+        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
+        null,
+        hardStopDates
+      )[0]
+      expect(licenceViewModel.createLink).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
+      expect(licenceViewModel.licenceStatus).toEqual('TIMED_OUT')
+    })
+
     it('returns created-by-prison link if the licence kind is HARD_STOP and the licence status is not IN_PROGRESS', () => {
       const licence1 = { ...licence, id: 2, kind: LicenceKind.HARD_STOP, status: LicenceStatus.SUBMITTED, versionOf: 1 }
       const licence2 = { ...licence, status: LicenceStatus.TIMED_OUT }
@@ -389,6 +389,28 @@ describe('CaseloadViewModel', () => {
       )[0]
       expect(licenceViewModel.createLink).toEqual('/licence/create/id/2/licence-created-by-prison')
       expect(licenceViewModel.licenceStatus).toEqual('TIMED_OUT')
+    })
+
+    it('returns created-by-prison link if the licence kind is HARD_STOP and the licence status is not IN_PROGRESS, when the original licence was NOT_STARTED', () => {
+      const licence1 = { ...licence, id: 2, kind: LicenceKind.HARD_STOP, status: LicenceStatus.SUBMITTED }
+      const licenceViewModel = createCaseloadViewModel(
+        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence1] }],
+        null,
+        hardStopDates
+      )[0]
+      expect(licenceViewModel.createLink).toEqual('/licence/create/id/2/licence-created-by-prison')
+      expect(licenceViewModel.licenceStatus).toEqual('TIMED_OUT')
+    })
+
+    it('returns the create licence link if the licence has not been started', () => {
+      licence = { status: LicenceStatus.NOT_STARTED, type: LicenceType.AP }
+      const licenceViewModel = createCaseloadViewModel(
+        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
+        null,
+        hardStopDates
+      )[0]
+      expect(licenceViewModel.createLink).toEqual('/licence/create/nomisId/A1234BC/confirm')
+      expect(licenceViewModel.licenceStatus).toEqual('NOT_STARTED')
     })
 
     it('returns check-your-answers link if the licence is in any other state', () => {
