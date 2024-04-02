@@ -3839,6 +3839,233 @@ export interface components {
        */
       count: number
     }
+    /** @description An item in the caseload */
+    CaseloadItem: {
+      prisoner: components['schemas']['Prisoner']
+      cvl: components['schemas']['CvlFields']
+    }
+    /** @description Additional information pertinent to CVL */
+    CvlFields: {
+      /**
+       * @description The type of licence this person should have based on their current dates, NB: this may differ from the current licence type if sentence dates have changed since any licence has been created
+       * @example AP_PSS
+       * @enum {string}
+       */
+      licenceType: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * Format: date
+       * @description Date which the hard stop period will start
+       * @example 2023-05-01
+       */
+      hardStopDate?: string
+      /**
+       * Format: date
+       * @description Date which to show the hard stop warning
+       * @example 2023-05-01
+       */
+      hardStopWarningDate?: string
+    }
+    /** @description Details about a prisoner */
+    Prisoner: {
+      /**
+       * @description Prisoner Number
+       * @example A1234AA
+       */
+      prisonerNumber: string
+      /**
+       * @description PNC Number
+       * @example 12/394773H
+       */
+      pncNumber?: string
+      /**
+       * @description CRO Number
+       * @example 29906/12J
+       */
+      croNumber?: string
+      /**
+       * @description Booking No.
+       * @example 0001200924
+       */
+      bookingId?: string
+      /**
+       * @description Book Number
+       * @example 38412A
+       */
+      bookNumber?: string
+      /**
+       * @description First Name
+       * @example Robert
+       */
+      firstName: string
+      /**
+       * @description Middle Names
+       * @example John James
+       */
+      middleNames?: string
+      /**
+       * @description Last name
+       * @example Larsen
+       */
+      lastName: string
+      /**
+       * Format: date
+       * @description Date of Birth
+       * @example 1975-04-02
+       */
+      dateOfBirth: string
+      /**
+       * @description Status of the prisoner
+       * @example ACTIVE IN
+       */
+      status: string
+      /**
+       * @description In/Out Status
+       * @example IN
+       * @enum {string}
+       */
+      inOutStatus?: 'IN' | 'OUT' | 'TRN'
+      /**
+       * @description Prison ID
+       * @example MDI
+       */
+      prisonId?: string
+      /**
+       * @description Prison Name
+       * @example HMP Leeds
+       */
+      prisonName?: string
+      /**
+       * @description Legal Status
+       * @example SENTENCED
+       * @enum {string}
+       */
+      legalStatus?:
+        | 'RECALL'
+        | 'DEAD'
+        | 'INDETERMINATE_SENTENCE'
+        | 'SENTENCED'
+        | 'CONVICTED_UNSENTENCED'
+        | 'CIVIL_PRISONER'
+        | 'IMMIGRATION_DETAINEE'
+        | 'REMAND'
+        | 'UNKNOWN'
+        | 'OTHER'
+      /**
+       * @description The prisoner's imprisonment status code.
+       * @example LIFE
+       */
+      imprisonmentStatus?: string
+      /**
+       * @description The prisoner's imprisonment status description.
+       * @example Serving Life Imprisonment
+       */
+      imprisonmentStatusDescription?: string
+      /**
+       * @description Most serious offence for this sentence
+       * @example Robbery
+       */
+      mostSeriousOffence: string
+      /**
+       * @description Indicates that the prisoner has been recalled
+       * @example false
+       */
+      recall?: boolean
+      /**
+       * @description Indicates that the prisoner has an indeterminate sentence
+       * @example true
+       */
+      indeterminateSentence?: boolean
+      /**
+       * Format: date
+       * @description Start Date for this sentence
+       * @example 2020-04-03
+       */
+      sentenceStartDate?: string
+      /**
+       * Format: date
+       * @description Actual of most likely Release Date
+       * @example 2023-05-02
+       */
+      releaseDate?: string
+      /**
+       * Format: date
+       * @description Release Date Confirmed
+       * @example 2023-05-01
+       */
+      confirmedReleaseDate?: string
+      /**
+       * Format: date
+       * @description Sentence Expiry Date
+       * @example 2023-05-01
+       */
+      sentenceExpiryDate?: string
+      /**
+       * Format: date
+       * @description Licence Expiry Date
+       * @example 2023-05-01
+       */
+      licenceExpiryDate?: string
+      /**
+       * Format: date
+       * @description HDC Eligibility Date
+       * @example 2023-05-01
+       */
+      homeDetentionCurfewEligibilityDate?: string
+      /**
+       * Format: date
+       * @description HDC Actual Date
+       * @example 2023-05-01
+       */
+      homeDetentionCurfewActualDate?: string
+      /**
+       * Format: date
+       * @description HDC End Date
+       * @example 2023-05-02
+       */
+      homeDetentionCurfewEndDate?: string
+      /**
+       * Format: date
+       * @description Top-up supervision start date
+       * @example 2023-04-29
+       */
+      topupSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description Top-up supervision expiry date
+       * @example 2023-05-01
+       */
+      topupSupervisionExpiryDate?: string
+      /**
+       * Format: date
+       * @description Parole  Eligibility Date
+       * @example 2023-05-01
+       */
+      paroleEligibilityDate?: string
+      /**
+       * Format: date
+       * @description Post Recall Release Date. if postRecallReleaseOverrideDate is available then it will be set as postRecallReleaseDate
+       * @example 2023-05-01
+       */
+      postRecallReleaseDate?: string
+      /**
+       * Format: date
+       * @description Conditional Release Date. If conditionalReleaseOverrideDate is available then it will be set as conditionalReleaseDate
+       * @example 2023-05-01
+       */
+      conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description Actual Parole Date
+       * @example 2023-05-01
+       */
+      actualParoleDate?: string
+      /**
+       * Format: date
+       * @description Release on Temporary Licence Date
+       * @example 2023-05-01
+       */
+      releaseOnTemporaryLicenceDate?: string
+    }
   }
   responses: never
   parameters: never

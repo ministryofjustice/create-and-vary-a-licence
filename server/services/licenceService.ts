@@ -36,6 +36,7 @@ import {
   UpdateOffenderDetailsRequest,
   HardStopCutoffDate,
   ComReviewCount,
+  CaseloadItem,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
@@ -593,5 +594,9 @@ export default class LicenceService {
 
   async reviewWithoutVariation(licenceId: number): Promise<void> {
     return this.licenceApiClient.reviewWithoutVariation(licenceId)
+  }
+
+  async getPrisonerDetail(nomsId: string, user: User): Promise<CaseloadItem> {
+    return this.licenceApiClient.getPrisonerDetail(nomsId, user)
   }
 }

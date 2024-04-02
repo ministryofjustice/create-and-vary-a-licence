@@ -339,6 +339,21 @@ describe('View and print - single standard licence view', () => {
     expect($1('#induction-meeting-details > .govuk-summary-list__row').length).toBe(4)
   })
 
+  it('should render standard post sentence supervision text', () => {
+    const $ = render({
+      licence: {
+        ...licence,
+        typeCode: 'PSS',
+      },
+    })
+    // Check the licence conditions title
+    expect($('h2').text()).toContain('Licence conditions')
+
+    expect($('p').text()).toContain(
+      'This licence contains standard post sentence supervision requirements only by default.'
+    )
+  })
+
   it('Print buttons are not visible when licence is not approved or active', () => {
     const $ = render({ licence: { ...licence, statusCode: 'SUBMITTED' } })
 
