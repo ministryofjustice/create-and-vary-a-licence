@@ -2,6 +2,8 @@ import Page from '../pages/page'
 import IndexPage from '../pages'
 
 context('Search for a person', () => {
+  const dates: string[] = []
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
@@ -9,6 +11,8 @@ context('Search for a person', () => {
     cy.task('stubGetLicence')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetLicencePolicyConditions')
+    cy.task('stubGetBankHolidays', dates)
+    cy.task('stubGetCutOffDateForLicenceTimeOut')
     cy.signIn()
   })
 

@@ -12,8 +12,8 @@
 
 {% for case in cases %}
     {% if case.urgentApproval and approvalNeededView %}
-        {% set releaseDate = '<span class="approval-overdue">' + case.releaseDate
-            + '</span><span class="approval-overdue approval-overdue-message">Urgent approval required for<br>upcoming release</span>' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
+            + '</span><span class="urgent-highlight urgent-highlight-message">Urgent approval required for<br>upcoming release</span>' %}
     {% else %}
         {% set releaseDate = case.releaseDate %}
     {% endif %}

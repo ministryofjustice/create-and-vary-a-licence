@@ -32,7 +32,7 @@ describe('Caseload', () => {
       },
     })
     expect($('.status-badge').text().toString()).toContain('Active')
-    expect($('.approval-overdue-message').text().toString()).toEqual('')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('')
   })
 
   it('should display badge', () => {
@@ -62,7 +62,7 @@ describe('Caseload', () => {
       },
     })
     expect($('.status-badge').text().toString()).toContain('Variation in progress')
-    expect($('.approval-overdue-message').text().toString()).toEqual('')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('')
   })
 
   it('should display Review needed badge', () => {
@@ -97,6 +97,6 @@ describe('Caseload', () => {
       },
     })
     expect($('.status-badge').text().toString()).toContain('Review needed')
-    expect($('.approval-overdue-message').text().toString()).toEqual('Timed out')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('Timed out')
   })
 })

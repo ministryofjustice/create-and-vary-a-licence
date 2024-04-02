@@ -22,7 +22,7 @@
 
 {% for offender in caseload %}
     {% if offender.licenceStatus === "REVIEW_NEEDED" %}
-        {% set releaseDate = '<span class="approval-overdue">' + offender.releaseDate + '</span><span class="approval-overdue approval-overdue-message">Timed out</span>' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Timed out</span>' %}
     {% else %}
         {% set releaseDate = offender.releaseDate %}
     {% endif %}
