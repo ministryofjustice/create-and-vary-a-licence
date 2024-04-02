@@ -60,7 +60,7 @@ describe('Caseload Service', () => {
   it('Does not call Licence API when no Nomis records are found', async () => {
     const offenders = new Container([
       {
-        nomisRecord: { prisonerNumber: null },
+        nomisRecord: { prisonerNumber: null, conditionalReleaseDate: tenDaysFromNow },
       } as ManagedCase,
     ])
     await serviceUnderTest.mapOffendersToLicences(offenders)
@@ -70,7 +70,7 @@ describe('Caseload Service', () => {
   it('Calls Licence API when Nomis records are found', async () => {
     const offenders = new Container([
       {
-        nomisRecord: { prisonerNumber: 'ABC123' },
+        nomisRecord: { prisonerNumber: 'ABC123', conditionalReleaseDate: tenDaysFromNow },
       } as ManagedCase,
     ])
     await serviceUnderTest.mapOffendersToLicences(offenders)

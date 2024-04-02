@@ -520,7 +520,7 @@ export default class CaseloadService {
   }
 
   public getHardStopReferenceDate = (nomisRecord: Prisoner, bankHolidays: BankHolidays): Date => {
-    const nomisReleaseDate = parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
+    const nomisReleaseDate = nomisRecord.releaseDate ? parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date()) : null
     const nomisCrd = parse(nomisRecord.conditionalReleaseDate, 'yyyy-MM-dd', new Date())
     if (
       nomisReleaseDate &&
