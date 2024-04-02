@@ -1,12 +1,18 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
+import { parse } from 'date-fns'
+import moment from 'moment'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import logger from '../../../../logger'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
+import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 
 export default class CaseloadRoutes {
-  constructor(private readonly caseloadService: CaseloadService) {}
+  constructor(
+    private readonly caseloadService: CaseloadService,
+    private readonly bankHolidayService: UkBankHolidayFeedService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const teamView = req.query.view === 'team'
@@ -41,7 +47,19 @@ export default class CaseloadRoutes {
       ? await this.caseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
       : await this.caseloadService.getStaffCreateCaseload(user)
 
-    const caseloadViewModel = createCaseloadViewModel(caseload, search)
+    const hardStopCutoffDate = parse(
+      (await this.caseloadService.getCutOffDateForLicenceTimeOut(user)).cutoffDate,
+      'dd/MM/yyyy',
+      new Date()
+    )
+
+    const bankHolidays = await this.bankHolidayService.getEnglishAndWelshHolidays()
+
+    const hardStopWarningDate = bankHolidays.getTwoWorkingDaysAfterDate(hardStopCutoffDate)
+
+    const hardStopDates = { hardStopCutoffDate, hardStopWarningDate }
+
+    const caseloadViewModel = createCaseloadViewModel(caseload, search, hardStopDates)
     res.render('pages/create/caseload', {
       caseload: caseloadViewModel,
       statusConfig,
@@ -49,6 +67,7 @@ export default class CaseloadRoutes {
       teamName,
       multipleTeams,
       search,
+      hardStopCutoffDate: moment(hardStopCutoffDate).format('DD MMM YYYY'),
     })
   }
 }
