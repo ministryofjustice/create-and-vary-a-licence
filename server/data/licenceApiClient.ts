@@ -34,6 +34,7 @@ import type {
   UpdateOffenderDetailsRequest,
   ProbationSearchRequest,
   ProbationSearchResult,
+  CaseloadItem,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -545,5 +546,12 @@ export default class LicenceApiClient extends RestClient {
     await this.post({
       path: `/licence/id/${licenceId}/review-with-no-variation-required`,
     })
+  }
+
+  async getPrisonerDetail(nomsId: string, user: User): Promise<CaseloadItem> {
+    return (await this.get(
+      { path: `/prisoner-search/nomisid/${nomsId}` },
+      { username: user.username }
+    )) as Promise<CaseloadItem>
   }
 }

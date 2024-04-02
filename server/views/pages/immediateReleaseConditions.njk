@@ -1,12 +1,20 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-{%  macro immediateReleaseConditions() %}
-    <p class="govuk-body">By default, the licence will automatically contain the following restrictions:</p>
-    <ul class="govuk-list govuk-list--bullet standard-conditions">
-        <li>standard conditions</li>
-        <li>the following additional condition:</li>
-    </ul>
-    {{ govukInsetText({
-        text: "Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer."
-    }) }}
+{%  macro immediateReleaseConditions(typeCode) %}
+    {% if typeCode === 'AP_PSS' or typeCode === 'AP' %}
+        <p class="govuk-body">By default, the licence will automatically contain the following restrictions:</p>
+        <ul class="govuk-list govuk-list--bullet standard-conditions">
+            <li>standard conditions</li>
+            <li>the following additional condition:</li>
+        </ul>
+        {{ govukInsetText({
+            text: "Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer."
+        }) }}
+    {% endif %}
+    {% if typeCode === 'PSS' %}
+        <p class="govuk-body">This licence contains standard post sentence supervision requirements only by default.
+            <br> <br>
+            No additional post sentence supervision requirements can be added before release. <br><br>A community probation practitioner can do this after release.
+        </p>
+    {% endif %}
 {% endmacro %}
