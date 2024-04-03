@@ -234,6 +234,13 @@ export default class CaseloadService {
         licenceStatus = LicenceStatus.OOS_RECALL
       }
 
+      if (!offender.nomisRecord.conditionalReleaseDate) {
+        return {
+          ...offender,
+          licences: [{ status: licenceStatus, type: licenceType, hardStopCutoffDate: null, hardStopWarningDate: null }],
+        }
+      }
+
       const releaseDate = this.getHardStopReferenceDate(offender.nomisRecord, bankHolidays)
 
       const hardStopCutoffDate = bankHolidays.getXWorkingDaysBeforeDate(releaseDate, 2)
