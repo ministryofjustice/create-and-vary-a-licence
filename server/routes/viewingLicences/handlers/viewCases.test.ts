@@ -12,7 +12,7 @@ import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import Container from '../../../services/container'
 import OmuCaselist from '../../../services/omuCaselist'
 
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
