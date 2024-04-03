@@ -7,7 +7,7 @@ import LicenceType from '../../../enumeration/licenceType'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { DeliusRecord } from '../../../@types/managedCase'
 
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
 
 describe('Route Handlers - Variation approval list', () => {

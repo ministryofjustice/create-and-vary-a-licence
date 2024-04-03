@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isFuture, parse, startOfDay, add, endOfDay, isWithinInterval, sub } from 'date-fns'
+import { isFuture, parse, startOfDay, add, endOfDay, isWithinInterval, sub, isAfter, isBefore } from 'date-fns'
 import _ from 'lodash'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
@@ -15,12 +15,14 @@ import { LicenceSummary, HardStopCutoffDate, ComReviewCount } from '../@types/li
 import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
+import UkBankHolidayFeedService, { BankHolidays } from './ukBankHolidayFeedService'
 
 export default class CaseloadService {
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly communityService: CommunityService,
-    private readonly licenceService: LicenceService
+    private readonly licenceService: LicenceService,
+    private readonly bankHolidayService: UkBankHolidayFeedService
   ) {}
 
   async getStaffCreateCaseload(user: User): Promise<ManagedCase[]> {
@@ -176,6 +178,8 @@ export default class CaseloadService {
       .unwrap()
       .filter(id => id !== null)
 
+    const bankHolidays = await this.bankHolidayService.getEnglishAndWelshHolidays()
+
     const existingLicences =
       nomisIdList.length === 0
         ? []
@@ -230,7 +234,15 @@ export default class CaseloadService {
         licenceStatus = LicenceStatus.OOS_RECALL
       }
 
-      return { ...offender, licences: [{ status: licenceStatus, type: licenceType }] }
+      const releaseDate = this.getHardStopReferenceDate(offender.nomisRecord, bankHolidays)
+
+      const hardStopCutoffDate = bankHolidays.getXWorkingDaysBeforeDate(releaseDate, 2)
+      const hardStopWarningDate = bankHolidays.getXWorkingDaysBeforeDate(hardStopCutoffDate, 2)
+
+      return {
+        ...offender,
+        licences: [{ status: licenceStatus, type: licenceType, hardStopCutoffDate, hardStopWarningDate }],
+      }
     })
   }
 
@@ -505,5 +517,19 @@ export default class CaseloadService {
 
   wrap<T>(items: T[]): Container<T> {
     return new Container(items)
+  }
+
+  public getHardStopReferenceDate = (nomisRecord: Prisoner, bankHolidays: BankHolidays): Date => {
+    const nomisReleaseDate = nomisRecord.releaseDate ? parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date()) : null
+    const nomisCrd = parse(nomisRecord.conditionalReleaseDate, 'yyyy-MM-dd', new Date())
+    if (
+      nomisReleaseDate &&
+      !isBefore(nomisReleaseDate, bankHolidays.getXWorkingDaysBeforeDate(nomisCrd, 1)) &&
+      !isAfter(nomisReleaseDate, nomisCrd)
+    ) {
+      return nomisReleaseDate
+    }
+
+    return nomisCrd
   }
 }
