@@ -493,4 +493,26 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#edit-licence-button').length).toBe(0)
     expect($('#edit-licence-button-2').length).toBe(0)
   })
+
+  it('should show a "Return to caselist" button on a submitted licence in the hard stop period', () => {
+    const $ = render({
+      licence,
+      statusCode: 'SUBMITTED',
+      isInHardStopPeriod: true,
+    })
+
+    expect($('[data-qa=return-to-caselist]').length).toBe(1)
+    expect($('[data-qa=return-to-caselist]').length).toBe(1)
+  })
+
+  it('should show a "Return to caselist" button on an approved licence in the hard stop period', () => {
+    const $ = render({
+      licence,
+      statusCode: 'APPROVED',
+      isInHardStopPeriod: true,
+    })
+
+    expect($('[data-qa=return-to-caselist]').length).toBe(1)
+    expect($('[data-qa=return-to-caselist]').length).toBe(1)
+  })
 })

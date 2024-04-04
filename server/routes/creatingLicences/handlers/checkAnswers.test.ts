@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
-import { Licence } from '../../../@types/licenceApiClientTypes'
+import { Licence, OmuContact } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
 import config from '../../../config'
 import LicenceKind from '../../../enumeration/LicenceKind'
@@ -200,6 +200,24 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           canEditInitialAppt: false,
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
+        })
+      })
+
+      it('should pass through the OMU email details', async () => {
+        licenceService.getOmuEmail.mockResolvedValue({ email: 'test@test.test' } as OmuContact)
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+          additionalConditions: [],
+          bespokeConditionsToDisplay: [],
+          backLink: req.session.returnToCase,
+          initialApptUpdatedMessage: undefined,
+          canEditInitialAppt: false,
+          isInHardStopPeriod: true,
+          statusCode: 'IN_PROGRESS',
+          omuEmail: 'test@test.test',
         })
       })
     })

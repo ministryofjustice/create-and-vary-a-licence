@@ -34,6 +34,7 @@ export default class CheckAnswersRoutes {
 
     const conditionsToDisplay = await this.conditionService.getAdditionalAPConditionsForSummaryAndPdf(licence, user)
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
+    const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
@@ -43,6 +44,7 @@ export default class CheckAnswersRoutes {
       canEditInitialAppt: licence.kind !== LicenceKind.VARIATION && !isInHardStopPeriod(licence),
       statusCode: licence.statusCode,
       isInHardStopPeriod: isInHardStopPeriod(licence),
+      omuEmail,
     })
   }
 
