@@ -118,18 +118,6 @@ export default class CaseloadService {
     return this.licenceService.getCutOffDateForLicenceTimeOut(user)
   }
 
-  async getApproverCaseload(user: User, prisonCaseload: string[], approvalNeeded: boolean): Promise<ManagedCase[]> {
-    let licences: LicenceSummary[]
-    if (approvalNeeded) {
-      licences = await this.licenceService.getLicencesForApproval(user, prisonCaseload)
-    } else {
-      licences = await this.licenceService.getLicencesRecentlyApproved(user, prisonCaseload)
-    }
-
-    const caseLoad: Container<ManagedCase> = await this.mapLicencesToOffenders(licences)
-    return this.mapResponsibleComsToCases(caseLoad)
-  }
-
   async getVaryApproverCaseload(user: User): Promise<ManagedCase[]> {
     return this.licenceService
       .getLicencesForVariationApproval(user)
@@ -380,7 +368,6 @@ export default class CaseloadService {
               approvedDate: l.approvedDate,
               versionOf: l.versionOf,
               kind: <LicenceKind>l.kind,
-              submittedByFullName: l.submittedByFullName,
             }
           }),
       }
