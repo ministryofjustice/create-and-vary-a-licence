@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import { getUnixTime, parse, format } from 'date-fns'
+import { getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
-import { convertToTitleCase, selectReleaseDate, isReleaseDateBeforeCutOffDate } from '../../../utils/utils'
+import { convertToTitleCase, selectReleaseDate, caseTabType } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 
@@ -37,13 +37,6 @@ export default class ViewAndPrintCaseRoutes {
           )
         }
         const releaseDate = selectReleaseDate(c.nomisRecord)
-        const hardStop =
-          releaseDate === 'not found'
-            ? false
-            : isReleaseDateBeforeCutOffDate(
-                cutoffDate,
-                format(parse(releaseDate, 'dd MMM yyyy', new Date()), 'dd/MM/yyyy')
-              )
         return {
           licenceId: latestLicence.id,
           licenceVersionOf: latestLicence.versionOf,
@@ -53,7 +46,8 @@ export default class ViewAndPrintCaseRoutes {
           releaseDate,
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: latestLicence.status,
-          hardStop,
+          tabType: caseTabType(latestLicence, c.nomisRecord, cutoffDate),
+          nomisLegalStatus: c.nomisRecord?.legalStatus,
           isClickable:
             latestLicence.status !== LicenceStatus.NOT_STARTED &&
             latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&

@@ -43,12 +43,12 @@
                     {
                         text: "Release date",
                         attributes: {
-                            "aria-sort":  "descending"  if probationView else  "ascending" 
+                            "aria-sort":  "none" if params.tabType === 'attentionNeeded' else ("descending"  if probationView else  "ascending")
                         }
                     }
                 ]
         %}
-        {% if params.isHardStop %}
+        {% if params.tabType === 'releasesInNextTwoWorkingDays' %}
             {% set licencesHeader = (licencesHeader.push({
                         text: "Last worked on by",
                         attributes: {
@@ -57,13 +57,24 @@
                 }), licencesHeader)
             %}
         {% endif %}
-        {% set licencesHeader = (licencesHeader.push({
-                        text: "Status",
-                        attributes: {
-                            "aria-sort": "none"
-                        }
-                }), licencesHeader)
-        %}
+        {% if params.tabType !== 'attentionNeeded' %}
+            {% set licencesHeader = (licencesHeader.push({
+                            text: "Status",
+                            attributes: {
+                                "aria-sort": "none"
+                            }
+                    }), licencesHeader)
+            %}
+        {% endif %}
+        {% if params.tabType === 'attentionNeeded' %}
+            {% set licencesHeader = (licencesHeader.splice(0, 0, {
+                    text: "NOMIS legal status",
+                    attributes: {
+                        "aria-sort": "descending"
+                    }
+                }
+            ), licencesHeader) %}
+        {% endif %}
         {{ govukTable({
                 attributes: {
                     'data-module': 'moj-sortable-table'
@@ -83,8 +94,7 @@
 {% endmacro %}
 
 {% macro viewCases(params) %}
-    {% set cases = params.cases | hardStop if params.isHardStop else 
-        params.cases | beforeHardStop %}
+    {% set cases = params.cases | tabType(params.tabType) %}
     {% set licences = [] %}
     {% set caseData = [] %}
 
@@ -137,7 +147,7 @@
                 html: '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' 
             }
         ] %}
-        {% if params.isHardStop %}
+        {% if params.tabType === 'releasesInNextTwoWorkingDays' %}
             {% set caseData = (caseData.push({
                         attributes: {
                             id: 'licence-last-worked-on-by-' + loop.index,
@@ -147,16 +157,28 @@
                     }), caseData) 
             %}
         {% endif %}
-        {% set caseData = (caseData.push({
+        {% if params.tabType !== 'attentionNeeded' %}
+            {% set caseData = (caseData.push({
+                        attributes: {
+                            id: 'licence-status-' + loop.index,
+                            "data-sort-value": case.licenceStatus | getStatusOrder
+                        },
+                        html: licenceStatusHtml
+                    }), caseData) 
+            %}
+        {% endif %}
+        {% if params.tabType === 'attentionNeeded' %}
+            {% set caseData = (caseData.splice(0, 0, {
                     attributes: {
-                        id: 'licence-status-' + loop.index,
-                        "data-sort-value": case.licenceStatus | getStatusOrder
+                        id: 'nomis-legal-status-' + loop.index,
+                        "data-sort-value": case.nomisLegalStatus
                     },
-                    html: licenceStatusHtml
-                }), caseData) 
-        %}
+                    text: case.nomisLegalStatus
+                }
+            ), caseData) %}
+        {% endif %}
         {% set licences = (licences.push(caseData), licences) %}
     {% endfor %}
-    {{ casesTable({licences: licences, isHardStop: params.isHardStop}) }}
+    {{ casesTable({licences: licences, tabType: params.tabType}) }}
 
 {% endmacro %}

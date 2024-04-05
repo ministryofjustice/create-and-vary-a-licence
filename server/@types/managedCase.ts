@@ -26,6 +26,7 @@ export type Licence = {
   updatedByFullName?: string
   hardStopWarningDate?: Date
   hardStopCutoffDate?: Date
+  licenceStartDate?: string
 }
 
 export type ApprovalLicence = {
