@@ -82,7 +82,7 @@ export default class CaseloadService {
 
     // Get cases due for release soon which do not have a submitted licence
     const today = startOfDay(new Date())
-    const todayPlusFourWeeks = endOfDay(add(new Date(), { weeks: 40 }))
+    const todayPlusFourWeeks = endOfDay(add(new Date(), { weeks: 4 }))
     const casesPendingLicence = this.prisonerService
       .searchPrisonersByReleaseDate(today, todayPlusFourWeeks, prisonCaseload, user)
       .then(caseload => this.wrap(caseload))
