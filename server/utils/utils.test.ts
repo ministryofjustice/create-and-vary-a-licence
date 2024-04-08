@@ -22,7 +22,7 @@ import {
   groupingBy,
   isReleaseDateOnOrBeforeCutOffDate,
   isAttentionNeeded,
-  caseTabType,
+  determineComCreateCasesTab,
   isInHardStopPeriod,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
@@ -602,16 +602,20 @@ describe('Get Case Tab Type', () => {
 
   it('should return attentionNeeded tab type', () => {
     expect(
-      caseTabType(licence, { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null }, '04/12/2023')
+      determineComCreateCasesTab(
+        licence,
+        { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null },
+        '04/12/2023'
+      )
     ).toEqual('attentionNeeded')
   })
 
   it('should return releasesInNextTwoWorkingDays tab type', () => {
-    expect(caseTabType(licence, nomisRecord, '06/12/2023')).toEqual('releasesInNextTwoWorkingDays')
+    expect(determineComCreateCasesTab(licence, nomisRecord, '06/12/2023')).toEqual('releasesInNextTwoWorkingDays')
   })
 
   it('should return futureReleases tab type', () => {
-    expect(caseTabType(licence, nomisRecord, '04/12/2023')).toEqual('futureReleases')
+    expect(determineComCreateCasesTab(licence, nomisRecord, '04/12/2023')).toEqual('futureReleases')
   })
 })
 

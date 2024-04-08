@@ -20,9 +20,17 @@
 {% endmacro %}
 
 {% macro casesTable(params) %}
+{% set licencesHeader = [] %}
     {% if params.licences.length > 0 %}
-        {% set licencesHeader = [
-                    {
+        {% if params.tabType === 'attentionNeeded' %}
+            {% set licencesHeader = (licencesHeader.push({
+                    text: "NOMIS legal status",
+                    attributes: {
+                        "aria-sort": "descending"
+                    }
+                }), licencesHeader) %}
+        {% endif %}
+        {% set licencesHeader = (licencesHeader.push({
                         text: "Name",
                         attributes: {
                             "aria-sort": "none"
@@ -45,8 +53,7 @@
                         attributes: {
                             "aria-sort":  "none" if params.tabType === 'attentionNeeded' else ("descending"  if probationView else  "ascending")
                         }
-                    }
-                ]
+                    }), licencesHeader)
         %}
         {% if params.tabType === 'releasesInNextTwoWorkingDays' %}
             {% set licencesHeader = (licencesHeader.push({
@@ -65,15 +72,6 @@
                             }
                     }), licencesHeader)
             %}
-        {% endif %}
-        {% if params.tabType === 'attentionNeeded' %}
-            {% set licencesHeader = (licencesHeader.splice(0, 0, {
-                    text: "NOMIS legal status",
-                    attributes: {
-                        "aria-sort": "descending"
-                    }
-                }
-            ), licencesHeader) %}
         {% endif %}
         {{ govukTable({
                 attributes: {
@@ -114,8 +112,17 @@
                 size: 'small'
             }, params.config) %}
         {% endif %}
-        {% set caseData = [
-            {
+        {% if params.tabType === 'attentionNeeded' %}
+            {% set caseData = (caseData.push({
+                    attributes: {
+                        id: 'nomis-legal-status-' + loop.index,
+                        "data-sort-value": case.nomisLegalStatus
+                    },
+                    text: case.nomisLegalStatus
+                }), caseData) 
+            %}
+        {% endif %}
+        {% set caseData = (caseData.push({
                 attributes: {
                     id: 'name-' + loop.index,
                     "data-sort-value": case.name
@@ -146,7 +153,7 @@
                 },
                 html: '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' 
             }
-        ] %}
+        ), caseData) %}
         {% if params.tabType === 'releasesInNextTwoWorkingDays' %}
             {% set caseData = (caseData.push({
                         attributes: {
@@ -166,16 +173,6 @@
                         html: licenceStatusHtml
                     }), caseData) 
             %}
-        {% endif %}
-        {% if params.tabType === 'attentionNeeded' %}
-            {% set caseData = (caseData.splice(0, 0, {
-                    attributes: {
-                        id: 'nomis-legal-status-' + loop.index,
-                        "data-sort-value": case.nomisLegalStatus
-                    },
-                    text: case.nomisLegalStatus
-                }
-            ), caseData) %}
         {% endif %}
         {% set licences = (licences.push(caseData), licences) %}
     {% endfor %}

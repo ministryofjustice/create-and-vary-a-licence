@@ -3,7 +3,7 @@ import { getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
-import { convertToTitleCase, selectReleaseDate, caseTabType } from '../../../utils/utils'
+import { convertToTitleCase, selectReleaseDate, determineComCreateCasesTab } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 
@@ -37,7 +37,7 @@ export default class ViewAndPrintCaseRoutes {
           )
         }
         const releaseDate = selectReleaseDate(c.nomisRecord)
-        const tabType = caseTabType(latestLicence, c.nomisRecord, cutoffDate)
+        const tabType = determineComCreateCasesTab(latestLicence, c.nomisRecord, cutoffDate)
         return {
           licenceId: latestLicence.id,
           licenceVersionOf: latestLicence.versionOf,
