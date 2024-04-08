@@ -31,10 +31,13 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import { User } from '../@types/CvlUserDetails'
 import LicenceEventType from '../enumeration/licenceEventType'
 import { InMemoryTokenStore } from './tokenStore'
+import logger from '../../logger'
 
 const licenceApiClient = new LicenceApiClient(
   new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
 )
+
+jest.mock('../../logger')
 
 describe('Licence API client tests', () => {
   const get = jest.spyOn(HmppsRestClient.prototype, 'get')
@@ -684,6 +687,15 @@ describe('Licence API client tests', () => {
         },
         { username: 'joebloggs' }
       )
+    })
+
+    describe('getOmuEmail', () => {
+      it('should log an error if the result code is an error', async () => {
+        get.mockRejectedValue('error')
+        await licenceApiClient.getOmuEmail('ABC', { username: 'joebloggs' } as User)
+
+        expect(logger.error).toHaveBeenCalledWith('Error when fetching OMU email for prisonId: ABC')
+      })
     })
   })
 })

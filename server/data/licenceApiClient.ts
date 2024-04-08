@@ -47,6 +47,7 @@ import {
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
+import logger from '../../logger'
 
 export default class LicenceApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -60,6 +61,7 @@ export default class LicenceApiClient extends RestClient {
         { username: user.username }
       )) as Promise<OmuContact>
     } catch (error) {
+      logger.error(`Error when fetching OMU email for prisonId: ${prisonId}`)
       return error.status >= 400 && error.status < 500 ? null : error
     }
   }
