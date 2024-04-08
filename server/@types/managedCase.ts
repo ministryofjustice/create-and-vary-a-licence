@@ -24,14 +24,32 @@ export type Licence = {
   approvedDate?: string
   versionOf?: number
   updatedByFullName?: string
-  submittedByFullName?: string
   hardStopWarningDate?: Date
   hardStopCutoffDate?: Date
 }
 
-export type ManagedCase = {
+export type ApprovalLicence = {
+  id?: number
+  status: LicenceStatus
+  kind?: LicenceKind
+  type: LicenceType
+  comUsername?: string
+  dateCreated?: string
+  approvedBy?: string
+  approvedDate?: string
+  versionOf?: number
+  updatedByFullName?: string
+  submittedByFullName: string
+  hardStopWarningDate?: Date
+  hardStopCutoffDate?: Date
+}
+
+export type GenericManagedCase<T> = {
   deliusRecord?: DeliusRecord
   nomisRecord?: Prisoner
-  licences?: Licence[]
+  licences?: T[]
   probationPractitioner?: ProbationPractitioner
 }
+
+export type ManagedCase = GenericManagedCase<Licence>
+export type ManagedCaseForApproval = GenericManagedCase<ApprovalLicence>

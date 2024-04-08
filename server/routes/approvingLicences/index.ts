@@ -14,7 +14,7 @@ import ComDetailsRoutes from './handlers/comDetails'
 
 export default function Index({
   licenceService,
-  caseloadService,
+  approvedCaseloadService,
   communityService,
   prisonerService,
   conditionService,
@@ -40,7 +40,7 @@ export default function Index({
     )
 
   const comDetailsHandler = new ComDetailsRoutes(communityService)
-  const approvalCasesHandler = new ApprovalCaseRoutes(caseloadService, prisonerService)
+  const approvalCasesHandler = new ApprovalCaseRoutes(approvedCaseloadService, prisonerService)
   const approvalViewHandler = new ApprovalViewRoutes(licenceService, communityService)
   const approvalConfirmedHandler = new ConfirmApprovedRoutes(communityService)
   const approvalRejectedHandler = new ConfirmRejectedRoutes()

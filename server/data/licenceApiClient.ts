@@ -35,6 +35,7 @@ import type {
   ProbationSearchRequest,
   ProbationSearchResult,
   CaseloadItem,
+  LicenceSummaryApproverView,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -262,7 +263,19 @@ export default class LicenceApiClient extends RestClient {
     )) as ComReviewCount
   }
 
-  async getLicencesRecentlyApproved(prisons?: string[], user?: User): Promise<LicenceSummary[]> {
+  async getLicencesForApproval(prisons?: string[], user?: User): Promise<LicenceSummaryApproverView[]> {
+    return (await this.post(
+      {
+        path: `/licences-for-approval`,
+        data: {
+          prisonCodes: prisons,
+        },
+      },
+      { username: user?.username }
+    )) as LicenceSummaryApproverView[]
+  }
+
+  async getLicencesRecentlyApproved(prisons?: string[], user?: User): Promise<LicenceSummaryApproverView[]> {
     return (await this.post(
       {
         path: `/licence/recently-approved`,
