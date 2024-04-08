@@ -37,6 +37,7 @@ export default class ViewAndPrintCaseRoutes {
           )
         }
         const releaseDate = selectReleaseDate(c.nomisRecord)
+        const tabType = caseTabType(latestLicence, c.nomisRecord, cutoffDate)
         return {
           licenceId: latestLicence.id,
           licenceVersionOf: latestLicence.versionOf,
@@ -46,17 +47,19 @@ export default class ViewAndPrintCaseRoutes {
           releaseDate,
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: latestLicence.status,
-          tabType: caseTabType(latestLicence, c.nomisRecord, cutoffDate),
+          tabType,
           nomisLegalStatus: c.nomisRecord?.legalStatus,
           isClickable:
-            latestLicence.status !== LicenceStatus.NOT_STARTED &&
-            latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
-            latestLicence.status !== LicenceStatus.OOS_RECALL &&
-            latestLicence.status !== LicenceStatus.OOS_BOTUS &&
-            latestLicence.status !== LicenceStatus.IN_PROGRESS &&
-            latestLicence.status !== LicenceStatus.VARIATION_IN_PROGRESS &&
-            latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
-            latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
+            tabType === 'attentionNeeded'
+              ? false
+              : latestLicence.status !== LicenceStatus.NOT_STARTED &&
+                latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
+                latestLicence.status !== LicenceStatus.OOS_RECALL &&
+                latestLicence.status !== LicenceStatus.OOS_BOTUS &&
+                latestLicence.status !== LicenceStatus.IN_PROGRESS &&
+                latestLicence.status !== LicenceStatus.VARIATION_IN_PROGRESS &&
+                latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
+                latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
           lastWorkedOnBy: latestLicence?.updatedByFullName,
         }
       })

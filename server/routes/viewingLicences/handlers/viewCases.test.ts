@@ -1128,7 +1128,7 @@ describe('Route handlers - View and print case list', () => {
           licences: [
             {
               type: LicenceType.AP,
-              status: LicenceStatus.NOT_STARTED,
+              status: LicenceStatus.APPROVED,
             },
           ],
           nomisRecord: {
@@ -1171,7 +1171,7 @@ describe('Route handlers - View and print case list', () => {
           {
             isClickable: false,
             licenceId: undefined,
-            licenceStatus: 'NOT_STARTED',
+            licenceStatus: 'APPROVED',
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
