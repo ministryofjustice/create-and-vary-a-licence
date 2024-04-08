@@ -2,16 +2,16 @@ import { Request, Response } from 'express'
 
 import { addDays, format } from 'date-fns'
 import ApprovalCaseRoutes from './approvalCases'
-import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
 
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
+import ApproverCaseloadService from '../../../services/approverCaseloadService'
 
-const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
-jest.mock('../../../services/caseloadService')
+const caseloadService = new ApproverCaseloadService(null, null, null) as jest.Mocked<ApproverCaseloadService>
+jest.mock('../../../services/approverCaseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 jest.mock('../../../services/prisonerService')
@@ -99,7 +99,8 @@ describe('Route Handlers - Approval - case list', () => {
         },
       },
     ]
-    caseloadService.getApproverCaseload.mockResolvedValue(caseLoadData)
+    caseloadService.getApprovalNeeded.mockResolvedValue(caseLoadData)
+    caseloadService.getRecentlyApproved.mockResolvedValue(caseLoadData)
 
     prisonerService.getPrisons.mockResolvedValue([
       {
@@ -127,7 +128,7 @@ describe('Route Handlers - Approval - case list', () => {
   describe('GET', () => {
     it('should render list of licences for approval', async () => {
       await handler.GET(req, res)
-      expect(caseloadService.getApproverCaseload).toHaveBeenCalledWith(res.locals.user, ['BAI'], true)
+      expect(caseloadService.getApprovalNeeded).toHaveBeenCalledWith(res.locals.user, ['BAI'])
       expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
         cases: [
           {
@@ -177,7 +178,7 @@ describe('Route Handlers - Approval - case list', () => {
     })
 
     it('should render list of licences recently approved', async () => {
-      caseloadService.getApproverCaseload.mockResolvedValue([
+      caseloadService.getRecentlyApproved.mockResolvedValue([
         {
           licences: [
             {
@@ -186,6 +187,7 @@ describe('Route Handlers - Approval - case list', () => {
               status: LicenceStatus.SUBMITTED,
               approvedBy: 'Bob Carolgees',
               approvedDate: '15/06/2012 12:34:56',
+              submittedByFullName: 'Tim Smith',
             },
           ],
           nomisRecord: {
@@ -206,6 +208,7 @@ describe('Route Handlers - Approval - case list', () => {
               status: LicenceStatus.NOT_STARTED,
               approvedBy: 'Jim Robbins',
               approvedDate: '25/04/2012 10:45:12',
+              submittedByFullName: 'Tim Smith',
             },
           ],
           nomisRecord: {
@@ -222,7 +225,7 @@ describe('Route Handlers - Approval - case list', () => {
 
       req.query.approval = 'recently'
       await handler.GET(req, res)
-      expect(caseloadService.getApproverCaseload).toHaveBeenCalledWith(res.locals.user, ['BAI'], false)
+      expect(caseloadService.getRecentlyApproved).toHaveBeenCalledWith(res.locals.user, ['BAI'])
       expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
         cases: [
           {
@@ -235,6 +238,7 @@ describe('Route Handlers - Approval - case list', () => {
             },
             approvedBy: 'Bob Carolgees',
             approvedOn: '15 June 2012',
+            submittedByFullName: 'Tim Smith',
             urgentApproval: true,
           },
           {
@@ -247,6 +251,7 @@ describe('Route Handlers - Approval - case list', () => {
             approvedBy: 'Jim Robbins',
             approvedOn: '25 April 2012',
             releaseDate: '01 May 2022',
+            submittedByFullName: 'Tim Smith',
             urgentApproval: true,
           },
         ],

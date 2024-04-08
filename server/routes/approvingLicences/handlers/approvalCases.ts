@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
 import { format, getUnixTime, isAfter, isValid, parse, subDays } from 'date-fns'
-import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
+import ApproverCaseloadService from '../../../services/approverCaseloadService'
 
 export default class ApprovalCaseRoutes {
   constructor(
-    private readonly caseloadService: CaseloadService,
+    private readonly approverCaseloadService: ApproverCaseloadService,
     private readonly prisonerService: PrisonerService
   ) {}
 
@@ -20,7 +20,9 @@ export default class ApprovalCaseRoutes {
     const allPrisons = await this.prisonerService.getPrisons()
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
-    const cases = await this.caseloadService.getApproverCaseload(user, prisonCaseloadToDisplay, approvalNeededView)
+    const cases = approvalNeededView
+      ? await this.approverCaseloadService.getApprovalNeeded(user, prisonCaseloadToDisplay)
+      : await this.approverCaseloadService.getRecentlyApproved(user, prisonCaseloadToDisplay)
 
     const caseloadViewModel = cases
       .map(c => {

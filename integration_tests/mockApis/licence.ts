@@ -917,6 +917,44 @@ export default {
     })
   },
 
+  stubGetLicencesToApprove: (
+    options: { versionOf?: number; kind?: string } = {
+      versionOf: null,
+      kind: 'CRD',
+    }
+  ): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPathPattern: `/licences-api/licences-for-approval`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: licencePlaceholder.id,
+            licenceType: licencePlaceholder.typeCode,
+            licenceStatus: 'SUBMITTED',
+            nomisId: licencePlaceholder.nomsId,
+            surname: licencePlaceholder.surname,
+            forename: licencePlaceholder.forename,
+            prisonCode: licencePlaceholder.prisonCode,
+            prisonDescription: licencePlaceholder.prisonDescription,
+            conditionalReleaseDate: licencePlaceholder.conditionalReleaseDate,
+            actualReleaseDate: licencePlaceholder.actualReleaseDate,
+            crn: licencePlaceholder.crn,
+            dateOfBirth: licencePlaceholder.dateOfBirth,
+            comUsername: licencePlaceholder.comUsername,
+            variationOf: null,
+            versionOf: options.versionOf,
+            kind: options.kind,
+          },
+        ],
+      },
+    })
+  },
+
   stubSubmitStatus: (): SuperAgentRequest => {
     return stubFor({
       request: {
