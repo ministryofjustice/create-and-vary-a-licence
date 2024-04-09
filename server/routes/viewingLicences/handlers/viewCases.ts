@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getUnixTime, parse, format } from 'date-fns'
+import { getUnixTime, format } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
@@ -37,20 +37,16 @@ export default class ViewAndPrintCaseRoutes {
           )
         }
         const releaseDate = selectReleaseDate(c.nomisRecord)
-        const hardStop =
-          releaseDate === 'not found'
-            ? false
-            : isReleaseDateBeforeCutOffDate(
-                cutoffDate,
-                format(parse(releaseDate, 'dd MMM yyyy', new Date()), 'dd/MM/yyyy')
-              )
+        const hardStop = !releaseDate
+          ? false
+          : isReleaseDateBeforeCutOffDate(cutoffDate, format(releaseDate, 'dd/MM/yyyy'))
         return {
           licenceId: latestLicence.id,
           licenceVersionOf: latestLicence.versionOf,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate,
+          releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: latestLicence.status,
           hardStop,

@@ -14,7 +14,7 @@ import {
   jsonDtToDate,
   jsonDtToDateShort,
   jsonDtToDateWithDay,
-  toDate,
+  parseCvlDate,
 } from './utils'
 import { AdditionalCondition, AdditionalConditionData, Licence } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
@@ -302,9 +302,9 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('dateToDisplay', (licence: Licence) => {
     const licenceType = licence.typeCode
-    const led = licence.licenceExpiryDate ? toDate(licence.licenceExpiryDate) : null
-    const tussd = licence.topupSupervisionStartDate ? toDate(licence.topupSupervisionStartDate) : null
-    const tused = licence.topupSupervisionExpiryDate ? toDate(licence.topupSupervisionExpiryDate) : null
+    const led = licence.licenceExpiryDate ? parseCvlDate(licence.licenceExpiryDate) : null
+    const tussd = licence.topupSupervisionStartDate ? parseCvlDate(licence.topupSupervisionStartDate) : null
+    const tused = licence.topupSupervisionExpiryDate ? parseCvlDate(licence.topupSupervisionExpiryDate) : null
 
     let dateToDisplay: Date
     let textToDisplay = ''

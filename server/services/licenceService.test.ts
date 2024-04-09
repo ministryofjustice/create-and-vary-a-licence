@@ -1,5 +1,5 @@
 import { Readable } from 'stream'
-import { format, parse } from 'date-fns'
+import { format } from 'date-fns'
 import { User } from '../@types/CvlUserDetails'
 import LicenceApiClient from '../data/licenceApiClient'
 import LicenceService from './licenceService'
@@ -665,9 +665,9 @@ describe('Licence Service', () => {
   })
 
   describe('Audit events', () => {
-    const eventTime = parse('13/01/2022 11:00:00', 'dd/MM/yyyy HH:mm:ss', new Date())
-    const eventStart = parse('12/01/2022 10:45:00', 'dd/MM/yyyy HH:mm:ss', new Date())
-    const eventEnd = parse('13/01/2022 10:45:00', 'dd/MM/yyyy HH:mm:ss', new Date())
+    const eventTime = utils.parseCvlDateTime('13/01/2022 11:00:00', { withSeconds: true })
+    const eventStart = utils.parseCvlDateTime('12/01/2022 10:45:00', { withSeconds: true })
+    const eventEnd = utils.parseCvlDateTime('13/01/2022 10:45:00', { withSeconds: true })
 
     it('will record a new audit event', async () => {
       await licenceService.recordAuditEvent('Summary', 'Detail', 1, eventTime, user)

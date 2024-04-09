@@ -1,5 +1,5 @@
 import { isDefined } from 'class-validator'
-import { addDays, format } from 'date-fns'
+import { format, isValid } from 'date-fns'
 import {
   addressObjectToString,
   convertDateFormat,
@@ -10,7 +10,6 @@ import {
   stringToAddressObject,
   jsonDtTo12HourTime,
   jsonDtToDate,
-  toDate,
   removeDuplicates,
   filterCentralCaseload,
   jsonDtToDateWithDay,
@@ -18,17 +17,19 @@ import {
   hasAuthSource,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
-  isPassedArdOrCrd,
   groupingBy,
   isReleaseDateBeforeCutOffDate,
   isInHardStopPeriod,
+  parseIsoDate,
+  parseCvlDate,
+  parseCvlDateTime,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/initialAppointment/types/address'
-import { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
+import { Licence } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import config from '../config'
@@ -157,13 +158,6 @@ describe('Convert date format', () => {
   })
 })
 
-describe('Create date from string', () => {
-  it('should return date object', () => {
-    const dateString = '25/12/2022'
-    expect(toDate(dateString)).toStrictEqual(new Date('2022-12-25'))
-  })
-})
-
 test.each`
   jsonDateTime          | day       | month     | year      | hour      | min       | ampm
   ${'12/12/2021 23:15'} | ${'12'}   | ${'12'}   | ${'2021'} | ${'11'}   | ${'15'}   | ${'pm'}
@@ -264,6 +258,99 @@ test.each`
   }
 })
 
+describe('parseIsoDate', () => {
+  it('ignores null', () => {
+    expect(parseIsoDate(null)).toEqual(null)
+  })
+  it('ignores empty string', () => {
+    expect(parseIsoDate('')).toEqual(null)
+  })
+  it('parses valid date', () => {
+    expect(format(parseIsoDate('2023-01-23'), 'yyyy-MM-yy')).toEqual('2023-01-23')
+  })
+  it('fails to parse invalid date format', () => {
+    const date = parseIsoDate('23/01/2023')
+    expect(isValid(date)).toEqual(false)
+  })
+  it('fails to parse invalid date', () => {
+    const date = parseIsoDate('invalid date')
+    expect(isValid(date)).toEqual(false)
+  })
+})
+
+describe('parseCvlDate', () => {
+  it('ignores null', () => {
+    expect(parseCvlDate(null)).toEqual(null)
+  })
+  it('ignores empty string', () => {
+    expect(parseCvlDate('')).toEqual(null)
+  })
+  it('parses valid date', () => {
+    expect(format(parseCvlDate('23/01/2023'), 'yyyy-MM-yy')).toEqual('2023-01-23')
+  })
+  it('fails to parse invalid date format', () => {
+    const date = parseCvlDate('2023-01-23')
+    expect(isValid(date)).toEqual(false)
+  })
+  it('fails to parse invalid date', () => {
+    const date = parseCvlDate('invalid date')
+    expect(isValid(date)).toEqual(false)
+  })
+})
+
+describe('parseCvlDateTime', () => {
+  it('ignores null', () => {
+    expect(parseCvlDateTime(null, { withSeconds: true })).toEqual(null)
+    expect(parseCvlDateTime(null, { withSeconds: false })).toEqual(null)
+  })
+  it('ignores empty string', () => {
+    expect(parseCvlDateTime('', { withSeconds: true })).toEqual(null)
+    expect(parseCvlDateTime('', { withSeconds: false })).toEqual(null)
+  })
+  it('parses valid date time', () => {
+    {
+      const dateTime = parseCvlDateTime('23/01/2023 10:30:45', { withSeconds: true })
+      const formatted = format(dateTime, 'yyyy-MM-yy hh:mm:ss')
+      expect(formatted).toEqual('2023-01-23 10:30:45')
+    }
+    {
+      const dateTime = parseCvlDateTime('23/01/2023 10:30', { withSeconds: false })
+      const formatted = format(dateTime, 'yyyy-MM-yy hh:mm')
+      expect(formatted).toEqual('2023-01-23 10:30')
+    }
+  })
+  it('fails to parse invalid date time', () => {
+    {
+      const date = parseCvlDateTime('2023-01-23', { withSeconds: true })
+      expect(isValid(date)).toEqual(false)
+    }
+    {
+      const date = parseCvlDateTime('2023-01-23', { withSeconds: false })
+      expect(isValid(date)).toEqual(false)
+    }
+  })
+  it('fails to parse date time with invalid withSeconds spec', () => {
+    {
+      const dateTime = parseCvlDateTime('23/01/2023 10:30:45', { withSeconds: false })
+      expect(isValid(dateTime)).toEqual(false)
+    }
+    {
+      const dateTime = parseCvlDateTime('23/01/2023 10:30', { withSeconds: true })
+      expect(isValid(dateTime)).toEqual(false)
+    }
+  })
+  it('fails to parse invalid date', () => {
+    {
+      const dateTime = parseCvlDateTime('invalid date time', { withSeconds: false })
+      expect(isValid(dateTime)).toEqual(false)
+    }
+    {
+      const dateTime = parseCvlDateTime('invalid date time', { withSeconds: true })
+      expect(isValid(dateTime)).toEqual(false)
+    }
+  })
+})
+
 describe('Remove duplicates', () => {
   it('should remove duplicates from a list of strings', () => {
     const listWithDuplicates = ['A', 'B', 'C', 'C', 'C']
@@ -352,7 +439,7 @@ describe('Get prisoner release date from Nomis', () => {
       conditionalReleaseDate: null,
     } as Prisoner
 
-    expect(selectReleaseDate(nomisRecord)).toBe('not found')
+    expect(selectReleaseDate(nomisRecord)).toStrictEqual(null)
   })
 
   it('Release date should be Conditional Release Date 22 Nov 2035', () => {
@@ -360,7 +447,7 @@ describe('Get prisoner release date from Nomis', () => {
       conditionalReleaseDate: '2035-11-22',
     } as Prisoner
 
-    expect(selectReleaseDate(nomisRecord)).toBe('22 Nov 2035')
+    expect(selectReleaseDate(nomisRecord)).toStrictEqual(parseIsoDate('2035-11-22'))
   })
 
   it('Release date should be Confirmed Release Date 22 Oct 2035', () => {
@@ -369,7 +456,7 @@ describe('Get prisoner release date from Nomis', () => {
       confirmedReleaseDate: '2035-10-22',
     } as Prisoner
 
-    expect(selectReleaseDate(nomisRecord)).toBe('22 Oct 2035')
+    expect(selectReleaseDate(nomisRecord)).toStrictEqual(parseIsoDate('2035-10-22'))
   })
 
   it('Release date should be Conditional Release Override Date 22 Nov 2036', () => {
@@ -378,105 +465,15 @@ describe('Get prisoner release date from Nomis', () => {
       conditionalReleaseOverrideDate: '2036-11-22',
     } as Prisoner
 
-    expect(selectReleaseDate(nomisRecord)).toBe('22 Nov 2036')
+    expect(selectReleaseDate(nomisRecord)).toStrictEqual(parseIsoDate('2036-11-22'))
   })
 
-  it('Returns malformed date as is', () => {
+  it('Filters out malformed date', () => {
     const nomisRecord = {
       conditionalReleaseDate: 'aaa2036-11-01',
     } as Prisoner
 
-    expect(selectReleaseDate(nomisRecord)).toBe('aaa2036-11-01')
-  })
-
-  describe('isPassedArdOrCrd', () => {
-    it('Should return true when legal status is NOT immigration and actualReleaseDate is yesterday', () => {
-      const licence = {
-        actualReleaseDate: format(addDays(new Date(), -1), 'dd/MM/yyyy'),
-        conditionalReleaseDate: format(addDays(new Date(), 5), 'dd/MM/yyyy'),
-      } as LicenceSummary
-
-      const prisoner = { legalStatus: 'SENTENCED' } as Prisoner
-
-      expect(isPassedArdOrCrd(licence, prisoner)).toBe(true)
-    })
-
-    it('Should return true when legal status is NOT immigration and actualReleaseDate is today', () => {
-      const licence = {
-        actualReleaseDate: format(new Date(), 'dd/MM/yyyy'),
-        conditionalReleaseDate: format(addDays(new Date(), 5), 'dd/MM/yyyy'),
-      } as LicenceSummary
-
-      const prisoner = { legalStatus: 'SENTENCED' } as Prisoner
-
-      expect(isPassedArdOrCrd(licence, prisoner)).toBe(true)
-    })
-
-    it('Should return false when legal status is NOT immigration and actualReleaseDate is tomorrow', () => {
-      const licence = {
-        actualReleaseDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-        conditionalReleaseDate: format(addDays(new Date(), 5), 'dd/MM/yyyy'),
-      } as LicenceSummary
-
-      const prisoner = { legalStatus: 'SENTENCED' } as Prisoner
-
-      expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
-    })
-
-    it('Should return true when legal status is immigration and conditionalReleaseDate is today', () => {
-      const licence = {
-        actualReleaseDate: undefined,
-        conditionalReleaseDate: format(new Date(), 'dd/MM/yyyy'),
-      } as LicenceSummary
-
-      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
-
-      expect(isPassedArdOrCrd(licence, prisoner)).toBe(true)
-    })
-
-    it('Should return false when legal status is immigration and conditionalReleaseDate is tomorrow', () => {
-      const licence = {
-        actualReleaseDate: undefined,
-        conditionalReleaseDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-      } as LicenceSummary
-
-      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
-
-      expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
-    })
-
-    it('Should return true when legal status is immigration and actualReleaseDate is present and in the past', () => {
-      const licence = {
-        actualReleaseDate: format(new Date(), 'dd/MM/yyyy'),
-        conditionalReleaseDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-      } as LicenceSummary
-
-      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
-
-      expect(isPassedArdOrCrd(licence, prisoner)).toBe(true)
-    })
-
-    it('Should return false when legal status is immigration and actualReleaseDate is present and in the future', () => {
-      const licence = {
-        actualReleaseDate: format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-        conditionalReleaseDate: format(new Date(), 'dd/MM/yyyy'),
-      } as LicenceSummary
-
-      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
-
-      expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
-    })
-
-    it('Should return false when legal status is immigration and no dates are present', () => {
-      const licence = {
-        actualReleaseDate: undefined,
-        conditionalReleaseDate: undefined,
-      } as LicenceSummary
-
-      const prisoner = { legalStatus: 'IMMIGRATION_DETAINEE' } as Prisoner
-
-      expect(isPassedArdOrCrd(licence, prisoner)).toBe(false)
-    })
+    expect(selectReleaseDate(nomisRecord)).toStrictEqual(null)
   })
 
   describe('groupingBy', () => {
