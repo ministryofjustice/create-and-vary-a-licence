@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getUnixTime } from 'date-fns'
+import { format, getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
@@ -44,7 +44,7 @@ export default class ViewAndPrintCaseRoutes {
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate,
+          releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
           releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
           licenceStatus: latestLicence.status,
           tabType,

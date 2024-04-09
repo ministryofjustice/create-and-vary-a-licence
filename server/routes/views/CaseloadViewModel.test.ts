@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { addDays, parse, subDays } from 'date-fns'
+import { addDays, subDays } from 'date-fns'
 import { DeliusRecord, Licence, ManagedCase, ProbationPractitioner } from '../../@types/managedCase'
 import { Prisoner } from '../../@types/prisonerSearchApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
@@ -7,6 +7,7 @@ import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import createCaseloadViewModel from './CaseloadViewModel'
 import config from '../../config'
+import { parseIsoDate } from '../../utils/utils'
 
 describe('CaseloadViewModel', () => {
   let nomisRecord: Prisoner
@@ -103,7 +104,7 @@ describe('CaseloadViewModel', () => {
     })
 
     it('sets showHardStopWarning to true if the release date is between the warning and cutoff dates', () => {
-      const releaseDate = parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
+      const releaseDate = parseIsoDate(nomisRecord.releaseDate)
       hardStopDates = { hardStopWarningDate: addDays(releaseDate, 1), hardStopCutoffDate: subDays(releaseDate, 1) }
 
       expect(
@@ -116,7 +117,7 @@ describe('CaseloadViewModel', () => {
     })
 
     it('sets showHardStopWarning to true if the release date is equal to the warning date', () => {
-      const releaseDate = parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
+      const releaseDate = parseIsoDate(nomisRecord.releaseDate)
       hardStopDates = { hardStopWarningDate: releaseDate, hardStopCutoffDate: subDays(releaseDate, 2) }
 
       expect(
@@ -129,7 +130,7 @@ describe('CaseloadViewModel', () => {
     })
 
     it('sets showHardStopWarning to false if the release date is equal to the cutoff date', () => {
-      const releaseDate = parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
+      const releaseDate = parseIsoDate(nomisRecord.releaseDate)
       hardStopDates = { hardStopWarningDate: addDays(releaseDate, 2), hardStopCutoffDate: releaseDate }
 
       expect(
@@ -153,7 +154,7 @@ describe('CaseloadViewModel', () => {
 
     it('sets showHardStopWarning to false if hardStopEnabled is false', () => {
       config.hardStopEnabled = false
-      const releaseDate = parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date())
+      const releaseDate = parseIsoDate(nomisRecord.releaseDate)
       hardStopDates = { hardStopWarningDate: subDays(releaseDate, 1), hardStopCutoffDate: addDays(releaseDate, 1) }
 
       expect(

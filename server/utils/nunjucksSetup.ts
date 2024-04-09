@@ -9,12 +9,13 @@ import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
 import type { ApplicationInfo } from '../applicationInfo'
 import {
+  ComCreateCaseTab,
   formatAddress,
   jsonDtTo12HourTime,
   jsonDtToDate,
   jsonDtToDateShort,
   jsonDtToDateWithDay,
-  toDate,
+  parseCvlDate,
 } from './utils'
 import { AdditionalCondition, AdditionalConditionData, Licence } from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
@@ -119,12 +120,8 @@ export function registerNunjucks(app?: express.Express): Environment {
     return appointmentTimeType[type]
   })
 
-  njkEnv.addFilter(
-    'tabType',
-    (
-      licences: Record<string, unknown>[],
-      type: 'releasesInNextTwoWorkingDays' | 'futureReleases' | 'attentionNeeded'
-    ) => licences.filter(c => c.tabType === type)
+  njkEnv.addFilter('filterByTabType', (licences: Record<string, unknown>[], type: ComCreateCaseTab) =>
+    licences.filter(c => c.tabType === type)
   )
 
   njkEnv.addFilter('fillFormResponse', (defaultValue: unknown, overrideValue: unknown) => {
@@ -302,9 +299,9 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('dateToDisplay', (licence: Licence) => {
     const licenceType = licence.typeCode
-    const led = licence.licenceExpiryDate ? toDate(licence.licenceExpiryDate) : null
-    const tussd = licence.topupSupervisionStartDate ? toDate(licence.topupSupervisionStartDate) : null
-    const tused = licence.topupSupervisionExpiryDate ? toDate(licence.topupSupervisionExpiryDate) : null
+    const led = licence.licenceExpiryDate ? parseCvlDate(licence.licenceExpiryDate) : null
+    const tussd = licence.topupSupervisionStartDate ? parseCvlDate(licence.topupSupervisionStartDate) : null
+    const tused = licence.topupSupervisionExpiryDate ? parseCvlDate(licence.topupSupervisionExpiryDate) : null
 
     let dateToDisplay: Date
     let textToDisplay = ''

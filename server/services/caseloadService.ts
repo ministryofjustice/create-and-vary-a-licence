@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isFuture, parse, startOfDay, add, endOfDay, isWithinInterval, sub, isAfter, isBefore } from 'date-fns'
+import { isFuture, startOfDay, add, endOfDay, isWithinInterval, sub, isAfter, isBefore } from 'date-fns'
 import _ from 'lodash'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
@@ -16,6 +16,7 @@ import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import UkBankHolidayFeedService, { BankHolidays } from './ukBankHolidayFeedService'
+import { parseIsoDate } from '../utils/utils'
 
 export default class CaseloadService {
   constructor(
@@ -483,7 +484,7 @@ export default class CaseloadService {
    */
   public static isParoleEligible(ped: string): boolean {
     if (!ped) return false
-    const pedDate = parse(ped, 'yyyy-MM-dd', new Date())
+    const pedDate = parseIsoDate(ped)
     return isFuture(pedDate)
   }
 
@@ -491,11 +492,11 @@ export default class CaseloadService {
     if (!ped) return true // All EDSs have PEDs, so if no ped, not an EDS and can stop the check here
     if (!crd) return false // This should never be hit as a previous filter removes those without CRDs
 
-    const crdDate = parse(crd, 'yyyy-MM-dd', new Date())
-    const ardDate = ard ? parse(ard, 'yyyy-MM-dd', new Date()) : undefined
+    const crdDate = parseIsoDate(crd)
+    const ardDate = ard ? parseIsoDate(ard) : undefined
 
     // if PED is in the future, they are OOS
-    if (isFuture(parse(ped, 'yyyy-MM-dd', new Date()))) return false
+    if (isFuture(parseIsoDate(ped))) return false
 
     // if ARD is not between CRD - 4 days and CRD (to account for bank holidays and weekends), then OOS
     if (ardDate && !isWithinInterval(ardDate, { start: sub(crdDate, { days: 4 }), end: crdDate })) {
@@ -515,8 +516,8 @@ export default class CaseloadService {
   }
 
   public getHardStopReferenceDate = (nomisRecord: Prisoner, bankHolidays: BankHolidays): Date => {
-    const nomisReleaseDate = nomisRecord.releaseDate ? parse(nomisRecord.releaseDate, 'yyyy-MM-dd', new Date()) : null
-    const nomisCrd = parse(nomisRecord.conditionalReleaseDate, 'yyyy-MM-dd', new Date())
+    const nomisReleaseDate = nomisRecord.releaseDate ? parseIsoDate(nomisRecord.releaseDate) : null
+    const nomisCrd = parseIsoDate(nomisRecord.conditionalReleaseDate)
     if (
       nomisReleaseDate &&
       !isBefore(nomisReleaseDate, bankHolidays.getXWorkingDaysBeforeDate(nomisCrd, 1)) &&

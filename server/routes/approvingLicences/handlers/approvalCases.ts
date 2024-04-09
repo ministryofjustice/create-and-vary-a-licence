@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { format, getUnixTime, isAfter, isValid, parse, subDays } from 'date-fns'
+import { format, getUnixTime, isAfter, isValid, subDays } from 'date-fns'
 import PrisonerService from '../../../services/prisonerService'
-import { convertToTitleCase, selectReleaseDate } from '../../../utils/utils'
+import { convertToTitleCase, parseCvlDateTime, selectReleaseDate } from '../../../utils/utils'
 import ApproverCaseloadService from '../../../services/approverCaseloadService'
 
 export default class ApprovalCaseRoutes {
@@ -31,7 +31,7 @@ export default class ApprovalCaseRoutes {
         let approvedDate
         if (_.head(c.licences).approvedDate) {
           approvedDate = format(
-            parse(_.head(c.licences).approvedDate, 'dd/MM/yyyy HH:mm:ss', new Date()),
+            parseCvlDateTime(_.head(c.licences).approvedDate, { withSeconds: true }),
             'dd MMMM yyyy'
           )
         }
@@ -41,7 +41,7 @@ export default class ApprovalCaseRoutes {
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
           submittedByFullName: _.head(c.licences).submittedByFullName,
-          releaseDate,
+          releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
           urgentApproval,
           approvedBy: _.head(c.licences).approvedBy,
           approvedOn: approvedDate,
@@ -73,8 +73,7 @@ export default class ApprovalCaseRoutes {
     })
   }
 
-  isUrgentApproval = (releaseDateString: string): boolean => {
-    const releaseDate = parse(releaseDateString, 'dd MMM yyyy', new Date())
+  isUrgentApproval = (releaseDate: Date): boolean => {
     const isValidDate = isValid(releaseDate)
     return isValidDate && isAfter(new Date(), subDays(releaseDate, 2))
   }

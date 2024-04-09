@@ -92,7 +92,7 @@
 {% endmacro %}
 
 {% macro viewCases(params) %}
-    {% set cases = params.cases | tabType(params.tabType) %}
+    {% set cases = params.cases | filterByTabType(params.tabType) %}
     {% set licences = [] %}
     {% set caseData = [] %}
 

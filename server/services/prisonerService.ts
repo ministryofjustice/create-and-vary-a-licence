@@ -1,7 +1,7 @@
 import { Readable } from 'stream'
 import fs from 'fs'
 import _ from 'lodash'
-import { format, parse } from 'date-fns'
+import { format } from 'date-fns'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import {
@@ -14,6 +14,7 @@ import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiCli
 import logger from '../../logger'
 import HdcStatus from '../@types/HdcStatus'
 import { User } from '../@types/CvlUserDetails'
+import { parseIsoDate } from '../utils/utils'
 
 export default class PrisonerService {
   constructor(
@@ -53,9 +54,7 @@ export default class PrisonerService {
       bookingId,
       user
     )
-    const sentenceStartDates: Date[] = sentenceAndOffenceDetails.map(details =>
-      parse(details.sentenceDate, 'yyyy-MM-dd', new Date())
-    )
+    const sentenceStartDates: Date[] = sentenceAndOffenceDetails.map(details => parseIsoDate(details.sentenceDate))
     return new Date(Math.max(...sentenceStartDates.map(date => date.getTime())))
   }
 
