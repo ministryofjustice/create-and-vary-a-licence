@@ -5,7 +5,7 @@ import pdfParse from 'pdf-parse'
 import GotenbergClient from '../../server/data/gotenbergClient'
 
 describe('Gotenberg API integration', () => {
-  const gotenbergUrl = 'http://localhost:3001'
+  const gotenbergUrl = 'http://localhost:3002'
   const client = new GotenbergClient(gotenbergUrl)
   const htmlString = '<html><head><title>A title</title></head><body><p>A document</p></body>'
 
