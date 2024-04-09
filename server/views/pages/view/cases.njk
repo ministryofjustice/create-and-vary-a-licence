@@ -2,10 +2,12 @@
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "partials/statusBadge.njk" import statusBadge %}
 {% from "partials/viewCases.njk" import viewCases %}
 {% from "partials/viewCases.njk" import offenderName %}
 {% from "partials/viewCases.njk" import casesTable %}
+{% from "pages/attentionNeededTabDescription.njk" import attentionNeededTabDescription %}
 
 {% set pageTitle = applicationName + " - view an approved licence" %}
 {% set pageId = "view-cases-page" %}
@@ -146,6 +148,14 @@
                                 Future releases
                             </a>
                     </li>
+                    {% if (cases | tabType('attentionNeeded')).length %}
+                        <li class="govuk-tabs__list-item" data-qa="attention-needed-view-link" role="presentation">
+                            <a class="govuk-tabs__tab" href="#attention-needed" id="tab_attention-needed" role="tab" aria-controls="attention-needed" aria-selected="false" tabindex="-2">
+                                    Attention needed
+                                    <span id="attention-needed-count" class="moj-notification-badge">{{ (cases | tabType('attentionNeeded')).length  }}</span>
+                                </a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <div class="govuk-tabs__panel" id="releases-two-days" role="tabpanel" aria-labelledby="tab_releases-two-days">
                     <h2 class="govuk-heading-l">Releases in next 2 working days</h2>
@@ -155,17 +165,22 @@
                         <li>you can generate a standard licence if a probation practitioner has not submitted one for approval.<br> This includes time-served releases
                                 </li>
                     </ul>
-                    {{ viewCases({ cases: cases, isHardStop: true, config: statusConfig}) }}
-                    <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
+                    {{ viewCases({ cases: cases, tabType: 'releasesInNextTwoWorkingDays', config: statusConfig}) }}
                 </div>
 
                 <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="before-hardstop" role="tabpanel" aria-labelledby="tab_before-hardstop">
                     <h2 class="govuk-heading-l">Future releases</h2>
                     <p class="govuk-body">Licences for people within 4 weeks of release or that have been started before then.</p>
-                    {{ viewCases({ cases: cases, isHardStop: false, config: statusConfig}) }}
-                    <div aria-live="polite" role="status" aria-atomic="true" class="govuk-visually-hidden"></div>
+                    {{ viewCases({ cases: cases, tabType: 'futureReleases', config: statusConfig}) }}
                 </div>
 
+                {% if (cases | tabType('attentionNeeded')).length %}
+                    <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="attention-needed" role="tabpanel" aria-labelledby="tab_attention-needed">
+                        <h2 class="govuk-heading-l">Attention needed</h2>
+                            {{ attentionNeededTabDescription() }}
+                            {{ viewCases({ cases: cases, tabType: 'attentionNeeded', config: statusConfig}) }}
+                    </div>
+                {% endif %}
             </div>
         {% else %}
             {{ casesTable({licences: licences, isHardStop: false}) }}
