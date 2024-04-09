@@ -148,11 +148,11 @@
                                 Future releases
                             </a>
                     </li>
-                    {% if (cases | tabType('attentionNeeded')).length %}
+                    {% if (cases | filterByTabType('attentionNeeded')).length %}
                         <li class="govuk-tabs__list-item" data-qa="attention-needed-view-link" role="presentation">
                             <a class="govuk-tabs__tab" href="#attention-needed" id="tab_attention-needed" role="tab" aria-controls="attention-needed" aria-selected="false" tabindex="-2">
                                     Attention needed
-                                    <span id="attention-needed-count" class="moj-notification-badge">{{ (cases | tabType('attentionNeeded')).length  }}</span>
+                                    <span id="attention-needed-count" class="moj-notification-badge">{{ (cases | filterByTabType('attentionNeeded')).length  }}</span>
                                 </a>
                         </li>
                     {% endif %}
@@ -174,7 +174,7 @@
                     {{ viewCases({ cases: cases, tabType: 'futureReleases', config: statusConfig}) }}
                 </div>
 
-                {% if (cases | tabType('attentionNeeded')).length %}
+                {% if (cases | filterByTabType('attentionNeeded')).length %}
                     <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="attention-needed" role="tabpanel" aria-labelledby="tab_attention-needed">
                         <h2 class="govuk-heading-l">Attention needed</h2>
                             {{ attentionNeededTabDescription() }}

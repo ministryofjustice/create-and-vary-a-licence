@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import _ from 'lodash'
-import { format, parse } from 'date-fns'
+import { format } from 'date-fns'
 import CaseloadService from '../../../services/caseloadService'
-import { convertToTitleCase } from '../../../utils/utils'
+import { convertToTitleCase, parseCvlDateTime, parseIsoDate } from '../../../utils/utils'
 
 export default class VaryApproveListRoutes {
   constructor(private readonly caseloadService: CaseloadService) {}
@@ -22,11 +22,11 @@ export default class VaryApproveListRoutes {
         const licence = _.head(c.licences)
 
         const releaseDate = c.nomisRecord.releaseDate
-          ? format(parse(c.nomisRecord.releaseDate, 'yyyy-MM-dd', new Date()), 'dd MMM yyyy')
+          ? format(parseIsoDate(c.nomisRecord.releaseDate), 'dd MMM yyyy')
           : null
 
         const variationRequestDate = licence.dateCreated
-          ? format(parse(licence.dateCreated, 'dd/MM/yyyy HH:mm', new Date()), 'dd MMMM yyyy')
+          ? format(parseCvlDateTime(licence.dateCreated, { withSeconds: false }), 'dd MMMM yyyy')
           : null
 
         return {
