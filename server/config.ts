@@ -155,7 +155,7 @@ export default {
       agent: new AgentConfig(Number(get('COMMUNITY_API_TIMEOUT_RESPONSE', 30000))),
     },
     gotenberg: {
-      url: get('GOTENBERG_API_URL', 'http://localhost:3001', requiredInProduction),
+      url: get('GOTENBERG_API_URL', 'http://localhost:3002', requiredInProduction),
       healthPath: '/health',
       pdfOptions: {
         marginTop: '0.8',

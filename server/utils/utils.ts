@@ -1,16 +1,18 @@
 import moment from 'moment'
-import { format, isBefore, parse, isEqual } from 'date-fns'
+import { isBefore, parse, isEqual, isValid } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
-import type { Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
+import type { Licence } from '../@types/licenceApiClientTypes'
 import type { Prisoner } from '../@types/prisonerSearchApiClientTypes'
-import logger from '../../logger'
-import type { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import config from '../config'
+import { Licence as ManagedCaseLicence } from '../@types/managedCase'
+import LicenceStatus from '../enumeration/licenceStatus'
+
+export type ComCreateCaseTab = 'attentionNeeded' | 'releasesInNextTwoWorkingDays' | 'futureReleases'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -124,9 +126,19 @@ const jsonDtTo12HourTime = (dt: string): string => {
   return momentTime.isValid() ? momentTime.format('hh:mm a') : null
 }
 
-const toDate = (date: string) => {
-  const [day, month, year] = date.split('/')
-  return new Date(`${year}-${month}-${day}`)
+const parseIsoDate = (date: string) => {
+  return date ? parse(date, 'yyyy-MM-dd', new Date()) : null
+}
+
+const parseCvlDate = (date: string) => {
+  return date ? parse(date, 'dd/MM/yyyy', new Date()) : null
+}
+
+const parseCvlDateTime = (date: string, { withSeconds }: { withSeconds: boolean }) => {
+  if (withSeconds) {
+    return date ? parse(date, 'dd/MM/yyyy HH:mm:ss', new Date()) : null
+  }
+  return date ? parse(date, 'dd/MM/yyyy HH:mm', new Date()) : null
 }
 
 const removeDuplicates = (list: string[]): string[] => {
@@ -183,38 +195,40 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
   }
 
   if (!dateString) {
-    return 'not found'
+    return null
   }
 
-  try {
-    dateString = format(new Date(dateString), 'dd MMM yyyy')
-  } catch (e) {
-    logger.error(
-      `Invalid date error: ${e.message} for prisonerNumber: ${nomisRecord.prisonerNumber} using date: ${dateString}`
-    )
-  }
-
-  return dateString
+  const date = parseIsoDate(dateString)
+  return isValid(date) ? date : null
 }
 
-const isReleaseDateBeforeCutOffDate = (cutOffDate: string, releaseDate: string): boolean => {
-  const rDate = parse(releaseDate, 'dd/MM/yyyy', new Date())
-  const cDate = parse(cutOffDate, 'dd/MM/yyyy', new Date())
-  return isBefore(rDate, cDate) || isEqual(rDate, cDate)
+const isAttentionNeeded = (licence: ManagedCaseLicence, nomisRecord: Prisoner) => {
+  const today = new Date()
+  const licenceStartDate = licence?.licenceStartDate ? parse(licence?.licenceStartDate, 'dd/MM/yyyy', new Date()) : ''
+  const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
+  const status = [APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED]
+  return (
+    (status.includes(licence?.status) && !nomisRecord.confirmedReleaseDate && !nomisRecord.conditionalReleaseDate) || // If licence status is ‘approved’, ‘submitted’, ‘in progress' or 'not started’ AND there is no CRD/ARD
+    (licence?.status === APPROVED && isBefore(licenceStartDate, today)) // If licence status is ‘approved’ AND CRD/ARD is in the past (licenceStartDate is equalto ARD/CRD)
+  )
 }
 
-const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonApiPrisoner): boolean => {
-  const releaseDate =
-    prisoner.legalStatus !== 'IMMIGRATION_DETAINEE'
-      ? licence.actualReleaseDate
-      : licence.actualReleaseDate || licence.conditionalReleaseDate
-
-  if (releaseDate) {
-    const rDate = parse(releaseDate, 'dd/MM/yyyy', new Date())
-    return isBefore(rDate, new Date())
+const determineComCreateCasesTab = (
+  licence: ManagedCaseLicence,
+  nomisRecord: Prisoner,
+  cutOffDateString: string
+): ComCreateCaseTab => {
+  if (isAttentionNeeded(licence, nomisRecord)) {
+    return 'attentionNeeded'
   }
 
-  return false
+  const releaseDate = selectReleaseDate(nomisRecord)
+  const cutOffDate = parseCvlDate(cutOffDateString)
+  return isReleaseDateOnOrBeforeCutOffDate(cutOffDate, releaseDate) ? 'releasesInNextTwoWorkingDays' : 'futureReleases'
+}
+
+const isReleaseDateOnOrBeforeCutOffDate = (cutOffDate: Date, releaseDate: Date): boolean => {
+  return isBefore(releaseDate, cutOffDate) || isEqual(releaseDate, cutOffDate)
 }
 
 const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], keyField: K): T[][] => {
@@ -249,7 +263,9 @@ export {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   jsonDtTo12HourTime,
-  toDate,
+  parseCvlDate,
+  parseCvlDateTime,
+  parseIsoDate,
   convertDateFormat,
   removeDuplicates,
   filterCentralCaseload,
@@ -257,8 +273,9 @@ export {
   formatAddress,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
-  isPassedArdOrCrd,
   groupingBy,
-  isReleaseDateBeforeCutOffDate,
+  isReleaseDateOnOrBeforeCutOffDate,
   isInHardStopPeriod,
+  isAttentionNeeded,
+  determineComCreateCasesTab,
 }

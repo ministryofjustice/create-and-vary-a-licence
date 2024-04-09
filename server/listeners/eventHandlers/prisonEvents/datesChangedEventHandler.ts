@@ -1,8 +1,8 @@
-import { format, isAfter, parse } from 'date-fns'
+import { format, isAfter } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { convertDateFormat } from '../../../utils/utils'
+import { convertDateFormat, parseCvlDate } from '../../../utils/utils'
 import logger from '../../../../logger'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import { PrisonEventMessage } from '../../../@types/events'
@@ -51,9 +51,7 @@ export default class DatesChangedEventHandler {
     const ssd = await this.prisonerService.getPrisonerLatestSentenceStartDate(bookingId)
     await Promise.all(
       licences.map(async licence => {
-        const crd = licence.conditionalReleaseDate
-          ? parse(licence.conditionalReleaseDate, 'dd/MM/yyyy', new Date())
-          : null
+        const crd = licence.conditionalReleaseDate ? parseCvlDate(licence.conditionalReleaseDate) : null
 
         if (ssd && crd && isAfter(ssd, crd)) {
           logger.info(

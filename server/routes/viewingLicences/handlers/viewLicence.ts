@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express'
-import { format, parse } from 'date-fns'
+import { format } from 'date-fns'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
-import { groupingBy, isInHardStopPeriod } from '../../../utils/utils'
+import { groupingBy, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import CommunityService from '../../../services/communityService'
 
@@ -98,6 +98,6 @@ export default class ViewAndPrintLicenceRoutes {
         licenceDate = licence.dateLastUpdated
         break
     }
-    return licenceDate ? format(parse(licenceDate, 'dd/MM/yyyy HH:mm:ss', new Date()), 'd LLLL yyyy') : null
+    return licenceDate ? format(parseCvlDateTime(licenceDate, { withSeconds: true }), 'd LLLL yyyy') : null
   }
 }
