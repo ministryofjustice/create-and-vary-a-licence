@@ -28,7 +28,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "3001:3000"
+      - "3002:3000"
     environment:
       - GOOGLE_CHROME_IGNORE_CERTIFICATE_ERRORS=1
       - DISABLE_UNOCONV=1
