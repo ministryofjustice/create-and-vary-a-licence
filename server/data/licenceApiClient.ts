@@ -36,6 +36,7 @@ import type {
   ProbationSearchResult,
   CaseloadItem,
   LicenceSummaryApproverView,
+  LicenceCreationResponse,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -89,7 +90,7 @@ export default class LicenceApiClient extends RestClient {
     }
   }
 
-  async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceSummary> {
+  async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceCreationResponse> {
     return (await this.post(
       {
         path: `/licence/create`,

@@ -25,7 +25,7 @@ export type Licence = {
   versionOf?: number
   updatedByFullName?: string
   hardStopWarningDate?: Date
-  hardStopCutoffDate?: Date
+  hardStopDate?: Date
   licenceStartDate?: string
 }
 
@@ -41,8 +41,6 @@ export type ApprovalLicence = {
   versionOf?: number
   updatedByFullName?: string
   submittedByFullName: string
-  hardStopWarningDate?: Date
-  hardStopCutoffDate?: Date
 }
 
 export type GenericManagedCase<T> = {

@@ -1721,6 +1721,16 @@ export interface components {
        */
       topupSupervisionExpiryDate?: string
       /**
+       * Format: date
+       * @description The date when the hard stop period starts
+       */
+      hardStopDate?: string
+      /**
+       * Format: date
+       * @description The date when warning about the hard stop period begins
+       */
+      hardStopWarningDate?: string
+      /**
        * @description The case reference number (CRN) of this person, from either prison or probation service
        * @example X12344
        */
@@ -1949,6 +1959,15 @@ export interface components {
        */
       type: 'CRD' | 'HARD_STOP'
     }
+    /** @description A reference to the created licence */
+    LicenceCreationResponse: {
+      /**
+       * Format: int64
+       * @description Internal identifier for this licence generated within this service
+       * @example 123344
+       */
+      licenceId: number
+    }
     /** @description Describes a prisoner due for release */
     PrisonerForRelease: {
       /**
@@ -2104,6 +2123,15 @@ export interface components {
        * @description The end time to query for events (default is now)
        */
       endTime: string
+    }
+    ErrorResponse_SubjectAccessRequest: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
     }
     /** @description Describes the data entered for an additional condition */
     AdditionalConditionData_SubjectAccessRequest: {
@@ -2464,8 +2492,11 @@ export interface components {
        */
       surname?: string
       kind: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      /**
+       * Format: date
+       * @description The sentence end date
+       */
+      sentenceEndDate?: string
       /**
        * @description The case reference number (CRN) for the person on this licence
        * @example X12444
@@ -2498,11 +2529,6 @@ export interface components {
       sentenceStartDate?: string
       /**
        * Format: date
-       * @description The sentence end date
-       */
-      sentenceEndDate?: string
-      /**
-       * Format: date
        * @description The date that the licence will start
        */
       licenceStartDate?: string
@@ -2526,14 +2552,6 @@ export interface components {
        * @example Cardiff-A
        */
       probationTeamCode?: string
-      /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number
-      /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition_SubjectAccessRequest'][]
       /**
        * @description The probation area code where this licence is supervised from
        * @example N01
@@ -2569,6 +2587,14 @@ export interface components {
        * @example Cardiff South
        */
       probationTeamDescription?: string
+      /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
+      bookingId?: number
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition_SubjectAccessRequest'][]
       /**
        * @description The middle names of the person on licence
        * @example John Peter
@@ -2668,24 +2694,24 @@ export interface components {
       isVariation: boolean
       /**
        * Format: date-time
-       * @description The date and time that this licence was last updated
-       */
-      dateLastUpdated?: string
-      /**
-       * Format: date-time
        * @description The date and time that this licence was first created
        */
       dateCreated?: string
       /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
+       * Format: date-time
+       * @description The date and time that this licence was last updated
        */
-      pnc?: string
+      dateLastUpdated?: string
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
        */
       bookingNo?: string
+      /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string
       /**
        * @description The criminal records office number (CRO) for the person on this licence
        * @example A/12444
@@ -2708,6 +2734,13 @@ export interface components {
       licenceVersion?: string
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
       /** @description The list of additional post sentence supervision conditions on this licence */
       additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
       /**
@@ -2746,11 +2779,6 @@ export interface components {
        * @example Jane Jones
        */
       updatedByFullName?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
     } & (
       | components['schemas']['CrdLicence_SubjectAccessRequest']
       | components['schemas']['VariationLicence_SubjectAccessRequest']
@@ -2822,15 +2850,6 @@ export interface components {
       | 'kind'
       | 'typeCode'
     >
-    ErrorResponse_SubjectAccessRequest: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
     LicencePolicy: {
       version: string
       standardConditions: components['schemas']['StandardConditions']
@@ -2901,8 +2920,11 @@ export interface components {
        */
       surname?: string
       kind: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * Format: date
+       * @description The sentence end date
+       */
+      sentenceEndDate?: string
       /**
        * @description The case reference number (CRN) for the person on this licence
        * @example X12444
@@ -2935,11 +2957,6 @@ export interface components {
       sentenceStartDate?: string
       /**
        * Format: date
-       * @description The sentence end date
-       */
-      sentenceEndDate?: string
-      /**
-       * Format: date
        * @description The date that the licence will start
        */
       licenceStartDate?: string
@@ -2963,14 +2980,6 @@ export interface components {
        * @example Cardiff-A
        */
       probationTeamCode?: string
-      /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number
-      /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * @description The probation area code where this licence is supervised from
        * @example N01
@@ -3006,6 +3015,14 @@ export interface components {
        * @example Cardiff South
        */
       probationTeamDescription?: string
+      /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
+      bookingId?: number
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition'][]
       /**
        * @description The middle names of the person on licence
        * @example John Peter
@@ -3105,24 +3122,24 @@ export interface components {
       isVariation: boolean
       /**
        * Format: date-time
-       * @description The date and time that this licence was last updated
-       */
-      dateLastUpdated?: string
-      /**
-       * Format: date-time
        * @description The date and time that this licence was first created
        */
       dateCreated?: string
       /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
+       * Format: date-time
+       * @description The date and time that this licence was last updated
        */
-      pnc?: string
+      dateLastUpdated?: string
       /**
        * @description The prison booking number for the person on this licence
        * @example F12333
        */
       bookingNo?: string
+      /**
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
+       */
+      pnc?: string
       /**
        * @description The criminal records office number (CRO) for the person on this licence
        * @example A/12444
@@ -3145,6 +3162,13 @@ export interface components {
       licenceVersion?: string
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
       /** @description The list of additional post sentence supervision conditions on this licence */
       additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /**
@@ -3183,11 +3207,6 @@ export interface components {
        * @example Jane Jones
        */
       updatedByFullName?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
     }
     /** @description Describes a CRD licence within this service */
     CrdLicence: WithRequired<
@@ -5312,7 +5331,7 @@ export interface operations {
       /** @description Licence created */
       200: {
         content: {
-          'application/json': components['schemas']['LicenceSummary']
+          'application/json': components['schemas']['LicenceCreationResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */

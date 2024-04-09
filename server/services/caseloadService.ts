@@ -16,7 +16,7 @@ import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import UkBankHolidayFeedService, { BankHolidays } from './ukBankHolidayFeedService'
-import { parseIsoDate } from '../utils/utils'
+import { parseCvlDate, parseIsoDate } from '../utils/utils'
 
 export default class CaseloadService {
   constructor(
@@ -202,6 +202,8 @@ export default class CaseloadService {
               comUsername: licence.comUsername,
               kind: <LicenceKind>licence.kind,
               versionOf: licence.versionOf,
+              hardStopDate: parseCvlDate(licence.hardStopDate),
+              hardStopWarningDate: parseCvlDate(licence.hardStopWarningDate),
             }
           }),
         }
@@ -226,18 +228,18 @@ export default class CaseloadService {
       if (!offender.nomisRecord.conditionalReleaseDate) {
         return {
           ...offender,
-          licences: [{ status: licenceStatus, type: licenceType, hardStopCutoffDate: null, hardStopWarningDate: null }],
+          licences: [{ status: licenceStatus, type: licenceType, hardStopDate: null, hardStopWarningDate: null }],
         }
       }
 
       const releaseDate = this.getHardStopReferenceDate(offender.nomisRecord, bankHolidays)
 
-      const hardStopCutoffDate = bankHolidays.getXWorkingDaysBeforeDate(releaseDate, 2)
-      const hardStopWarningDate = bankHolidays.getXWorkingDaysBeforeDate(hardStopCutoffDate, 2)
+      const hardStopDate = bankHolidays.getXWorkingDaysBeforeDate(releaseDate, 2)
+      const hardStopWarningDate = bankHolidays.getXWorkingDaysBeforeDate(hardStopDate, 2)
 
       return {
         ...offender,
-        licences: [{ status: licenceStatus, type: licenceType, hardStopCutoffDate, hardStopWarningDate }],
+        licences: [{ status: licenceStatus, type: licenceType, hardStopDate, hardStopWarningDate }],
       }
     })
   }
