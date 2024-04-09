@@ -23,6 +23,10 @@
   {% set submitButtonText = 'Send to prison for approval'%}
   {% set submitButtonAttrs = { 'data-qa': 'send-licence-conditions' } %}
 {% endif %}
+{% if isInHardStopPeriod %}
+    {% set omuEmailAppend = " at " + omuEmail + "." if omuEmail else "."%}
+    {% set contactForChangeText = "To request a change to this person’s appointment, contact " + licence.prisonDescription + omuEmailAppend %}
+{% endif %}
 
 {% block content %}
     {% if initialApptUpdatedMessage | length > 0%}
@@ -49,6 +53,11 @@
                     <h1 class="govuk-heading-l">Check licence and post sentence supervision order details</h1>
                 {% elseif (licence.isInPssPeriod and licence.typeCode === 'AP_PSS') or licence.typeCode === 'PSS' %}
                     <h1 class="govuk-heading-l">Check post sentence supervision order details</h1>
+                {% endif %}
+
+                {% if isInHardStopPeriod %}
+                    <p class='govuk-body'>You cannot work on a licence from 2 days before someone's release date.<br>This is so the prison can complete their final release checks.</p>
+                    <p class='govuk-body'>You can only ask the prison to change the initial appointment.<br>Any other changes must be made after release.</p>
                 {% endif %}
             {% endif %}
         </div>
@@ -85,7 +94,7 @@
             {% if licence.kind === 'VARIATION' %}
                 {{ variationSummary(licence, isInProgress) }}
             {% else %}
-                {{ inductionMeetingDetails(licence, canEditInitialAppt, validationErrors) }}
+                {{ inductionMeetingDetails(licence, canEditInitialAppt, validationErrors, contactForChangeText) }}
             {% endif %}
 
 
@@ -161,11 +170,18 @@
                                 attributes: { 'data-qa': 'discard' },
                                 href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
                             }) }}
-                        
                     {% endif %}
-                    
-                    <a href="{{ backLink }}" class="govuk-link govuk-!-font-size-19" data-qa="back-to-caseload-link">Return to caselist</a>
 
+                    {% if isInHardStopPeriod%}
+                        {{ govukButton({
+                            text: "Return to caselist",
+                            classes: "govuk-button--primary" if statusCode === 'SUBMITTED' else "govuk-button--secondary",
+                            attributes: { 'data-qa': 'return-to-caselist' },
+                            href: backLink
+                        }) }}
+                    {% else %}
+                        <a href="{{ backLink }}" class="govuk-link govuk-!-font-size-19" data-qa="back-to-caseload-link">Return to caselist</a>
+                    {% endif %}
                 </div>
             </form>
         </div>
