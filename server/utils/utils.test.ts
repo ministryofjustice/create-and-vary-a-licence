@@ -20,7 +20,9 @@ import {
   selectReleaseDate,
   isPassedArdOrCrd,
   groupingBy,
-  isReleaseDateBeforeCutOffDate,
+  isReleaseDateOnOrBeforeCutOffDate,
+  isAttentionNeeded,
+  determineComCreateCasesTab,
   isInHardStopPeriod,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
@@ -33,6 +35,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import config from '../config'
 import LicenceKind from '../enumeration/LicenceKind'
+import { Licence as ManagedCaseLicence } from '../@types/managedCase'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -517,15 +520,102 @@ describe('Get prisoner release date from Nomis', () => {
 
 describe('Check if release date before cutoff date', () => {
   it('should return true if release date is before cutoff date', () => {
-    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '03/12/2023')).toBeTruthy()
+    expect(isReleaseDateOnOrBeforeCutOffDate('04/12/2023', '03/12/2023')).toBeTruthy()
   })
 
   it('should return false if release date is after cutoff date', () => {
-    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '05/12/2023')).toBeFalsy()
+    expect(isReleaseDateOnOrBeforeCutOffDate('04/12/2023', '05/12/2023')).toBeFalsy()
   })
 
   it('should return true if release date is equal to cutoff date', () => {
-    expect(isReleaseDateBeforeCutOffDate('04/12/2023', '04/12/2023')).toBeTruthy()
+    expect(isReleaseDateOnOrBeforeCutOffDate('04/12/2023', '04/12/2023')).toBeTruthy()
+  })
+})
+
+describe('Check if licence needs attention', () => {
+  const licence = {
+    status: LicenceStatus.APPROVED,
+    licenceStartDate: '05/12/2023',
+  } as ManagedCaseLicence
+
+  const nomisRecord = {
+    prisonerNumber: 'G4169UO',
+    pncNumber: '98/240521B',
+    confirmedReleaseDate: '2023-12-05',
+    conditionalReleaseDate: '2023-12-05',
+  } as Prisoner
+
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2023-12-05'))
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
+  it('should return true if licence status is oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is no CRD/ARD', () => {
+    expect(
+      isAttentionNeeded(licence, { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null })
+    ).toBeTruthy()
+  })
+
+  it('should return false if licence status is not oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is no CRD/ARD', () => {
+    expect(
+      isAttentionNeeded(
+        { ...licence, status: LicenceStatus.ACTIVE },
+        { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null }
+      )
+    ).toBeFalsy()
+  })
+
+  it('should return false if licence status is oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is CRD/ARD', () => {
+    expect(isAttentionNeeded({ ...licence, licenceStartDate: '2023-12-06' }, nomisRecord)).toBeFalsy()
+  })
+
+  it('should return true if licence status is ‘approved’ AND CRD/ARD is in the past(licenceStartDate is equalto ARD/CRD)', () => {
+    expect(isAttentionNeeded({ ...licence, licenceStartDate: '04/12/2023' }, nomisRecord)).toBeTruthy()
+  })
+
+  it('should return false if licence status is ‘approved’ AND CRD/ARD is not in the past(licenceStartDate is equalto ARD/CRD)', () => {
+    expect(isAttentionNeeded({ ...licence, licenceStartDate: '06/12/2023' }, nomisRecord)).toBeFalsy()
+  })
+
+  it('should return false if licence status is not ‘approved’ AND CRD/ARD is in the past(licenceStartDate is equalto ARD/CRD)', () => {
+    expect(
+      isAttentionNeeded({ ...licence, licenceStartDate: '04/12/2023', status: LicenceStatus.ACTIVE }, nomisRecord)
+    ).toBeFalsy()
+  })
+})
+
+describe('Get Case Tab Type', () => {
+  const licence = {
+    status: LicenceStatus.APPROVED,
+    licenceStartDate: '05/12/2023',
+  } as ManagedCaseLicence
+
+  const nomisRecord = {
+    prisonerNumber: 'G4169UO',
+    pncNumber: '98/240521B',
+    confirmedReleaseDate: '2023-12-05',
+    conditionalReleaseDate: '2023-12-05',
+  } as Prisoner
+
+  it('should return attentionNeeded tab type', () => {
+    expect(
+      determineComCreateCasesTab(
+        licence,
+        { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null },
+        '04/12/2023'
+      )
+    ).toEqual('attentionNeeded')
+  })
+
+  it('should return releasesInNextTwoWorkingDays tab type', () => {
+    expect(determineComCreateCasesTab(licence, nomisRecord, '06/12/2023')).toEqual('releasesInNextTwoWorkingDays')
+  })
+
+  it('should return futureReleases tab type', () => {
+    expect(determineComCreateCasesTab(licence, nomisRecord, '04/12/2023')).toEqual('futureReleases')
   })
 })
 

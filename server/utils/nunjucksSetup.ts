@@ -119,13 +119,13 @@ export function registerNunjucks(app?: express.Express): Environment {
     return appointmentTimeType[type]
   })
 
-  njkEnv.addFilter('hardStop', (licences: Record<string, unknown>[]) => {
-    return licences.filter(c => c.hardStop)
-  })
-
-  njkEnv.addFilter('beforeHardStop', (licences: Record<string, unknown>[]) => {
-    return licences.filter(c => !c.hardStop)
-  })
+  njkEnv.addFilter(
+    'tabType',
+    (
+      licences: Record<string, unknown>[],
+      type: 'releasesInNextTwoWorkingDays' | 'futureReleases' | 'attentionNeeded'
+    ) => licences.filter(c => c.tabType === type)
+  )
 
   njkEnv.addFilter('fillFormResponse', (defaultValue: unknown, overrideValue: unknown) => {
     if (overrideValue !== undefined) {

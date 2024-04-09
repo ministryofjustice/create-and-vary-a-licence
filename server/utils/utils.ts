@@ -11,6 +11,8 @@ import logger from '../../logger'
 import type { PrisonApiPrisoner } from '../@types/prisonApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import config from '../config'
+import { Licence as ManagedCaseLicence } from '../@types/managedCase'
+import LicenceStatus from '../enumeration/licenceStatus'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -197,10 +199,37 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
   return dateString
 }
 
-const isReleaseDateBeforeCutOffDate = (cutOffDate: string, releaseDate: string): boolean => {
+const isAttentionNeeded = (licence: ManagedCaseLicence, nomisRecord: Prisoner) => {
+  const today = new Date()
+  const licenceStartDate = licence?.licenceStartDate ? parse(licence?.licenceStartDate, 'dd/MM/yyyy', new Date()) : ''
+  const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
+  const status = [APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED]
+  if (
+    (status.includes(licence?.status) && !nomisRecord.confirmedReleaseDate && !nomisRecord.conditionalReleaseDate) || // If licence status is ‘approved’, ‘submitted’, ‘in progress' or 'not started’ AND there is no CRD/ARD
+    (licence?.status === APPROVED && isBefore(licenceStartDate, today)) // If licence status is ‘approved’ AND CRD/ARD is in the past(licenceStartDate is equalto ARD/CRD)
+  ) {
+    return true
+  }
+  return false
+}
+
+const isReleaseDateOnOrBeforeCutOffDate = (cutOffDate: string, releaseDate: string): boolean => {
   const rDate = parse(releaseDate, 'dd/MM/yyyy', new Date())
   const cDate = parse(cutOffDate, 'dd/MM/yyyy', new Date())
   return isBefore(rDate, cDate) || isEqual(rDate, cDate)
+}
+
+const determineComCreateCasesTab = (
+  licence: ManagedCaseLicence,
+  nomisRecord: Prisoner,
+  cutOffDate: string
+): 'attentionNeeded' | 'releasesInNextTwoWorkingDays' | 'futureReleases' => {
+  if (isAttentionNeeded(licence, nomisRecord)) {
+    return 'attentionNeeded'
+  }
+
+  const releaseDate = format(parse(selectReleaseDate(nomisRecord), 'dd MMM yyyy', new Date()), 'dd/MM/yyyy')
+  return isReleaseDateOnOrBeforeCutOffDate(cutOffDate, releaseDate) ? 'releasesInNextTwoWorkingDays' : 'futureReleases'
 }
 
 const isPassedArdOrCrd = (licence: LicenceSummary, prisoner: Prisoner | PrisonApiPrisoner): boolean => {
@@ -259,6 +288,8 @@ export {
   selectReleaseDate,
   isPassedArdOrCrd,
   groupingBy,
-  isReleaseDateBeforeCutOffDate,
+  isReleaseDateOnOrBeforeCutOffDate,
   isInHardStopPeriod,
+  isAttentionNeeded,
+  determineComCreateCasesTab,
 }

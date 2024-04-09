@@ -81,6 +81,7 @@ describe('Route handlers - View and print case list', () => {
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
           confirmedReleaseDate: '2022-05-01',
+          legalStatus: 'SENTENCED',
         } as Prisoner,
         probationPractitioner: {
           name: 'Sherlock Holmes',
@@ -98,6 +99,7 @@ describe('Route handlers - View and print case list', () => {
           lastName: 'Smith',
           prisonerNumber: 'A1234AC',
           conditionalReleaseDate: '2022-05-01',
+          legalStatus: 'SENTENCED',
         } as Prisoner,
         probationPractitioner: {
           name: 'Walter White',
@@ -115,6 +117,7 @@ describe('Route handlers - View and print case list', () => {
           lastName: 'Lloyd',
           prisonerNumber: 'A1234AD',
           conditionalReleaseDate: '2022-05-01',
+          legalStatus: 'SENTENCED',
         } as Prisoner,
         probationPractitioner: {
           name: 'Harry Goldman',
@@ -132,6 +135,7 @@ describe('Route handlers - View and print case list', () => {
           lastName: 'Rowe',
           prisonerNumber: 'A1234AE',
           conditionalReleaseDate: '2022-06-10',
+          legalStatus: 'SENTENCED',
         } as Prisoner,
         probationPractitioner: {
           name: 'Larry Johnson',
@@ -149,6 +153,7 @@ describe('Route handlers - View and print case list', () => {
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
           confirmedReleaseDate: '2022-07-01',
+          legalStatus: 'SENTENCED',
         } as Prisoner,
         probationPractitioner: {
           name: 'Sherlock Holmes',
@@ -166,6 +171,7 @@ describe('Route handlers - View and print case list', () => {
           lastName: 'Bloggs',
           prisonerNumber: 'A1234AB',
           conditionalReleaseOverrideDate: '2022-06-01',
+          legalStatus: 'SENTENCED',
         } as Prisoner,
         probationPractitioner: {
           name: 'Thor',
@@ -183,6 +189,7 @@ describe('Route handlers - View and print case list', () => {
           lastName: 'Smith',
           prisonerNumber: 'A1234AC',
           conditionalReleaseDate: '2022-05-01',
+          legalStatus: 'SENTENCED',
         } as Prisoner,
         probationPractitioner: {
           name: 'Walter White',
@@ -200,6 +207,7 @@ describe('Route handlers - View and print case list', () => {
           lastName: 'Lloyd',
           prisonerNumber: 'A1234AD',
           conditionalReleaseDate: '2022-05-01',
+          legalStatus: 'SENTENCED',
         } as Prisoner,
         probationPractitioner: {
           name: 'Harry Goldman',
@@ -231,7 +239,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -244,7 +253,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -257,7 +267,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -270,7 +281,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -315,7 +327,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -328,7 +341,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -341,7 +355,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -354,7 +369,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
         hasMultipleCaseloadsInNomis: true,
@@ -393,7 +409,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -406,7 +423,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -419,7 +437,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -432,7 +451,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
         hasMultipleCaseloadsInNomis: true,
@@ -471,7 +491,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -484,7 +505,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -497,7 +519,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -510,7 +533,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -546,7 +570,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 Jul 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -559,7 +584,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 Jun 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -572,7 +598,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -585,7 +612,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -619,7 +647,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -653,7 +682,8 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             licenceStatus: LicenceStatus.NOT_STARTED,
             isClickable: false,
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -687,7 +717,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -722,7 +753,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 Jul 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -735,7 +767,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 Jun 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -748,7 +781,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -761,7 +795,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
 
@@ -797,7 +832,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -810,7 +846,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -823,7 +860,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -836,7 +874,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
 
@@ -874,6 +913,7 @@ describe('Route handlers - View and print case list', () => {
             lastName: 'Smith',
             prisonerNumber: 'A1234AA',
             confirmedReleaseDate: '2022-05-01',
+            legalStatus: 'SENTENCED',
           } as Prisoner,
           probationPractitioner: {
             name: 'Sherlock Holmes',
@@ -904,7 +944,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -920,7 +961,7 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
-    it('should evaluate the hardstop flag of cases', async () => {
+    it('should evaluate the tabType of cases', async () => {
       caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate: '02/05/2022' })
       caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
       res.locals.user.prisonCaseload = ['BAI']
@@ -940,7 +981,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: true,
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -953,7 +995,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: true,
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -966,7 +1009,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: true,
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -979,7 +1023,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
 
@@ -996,7 +1041,7 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
-    it('should return hardstop flag as false if cutoffDate is null', async () => {
+    it('should return tabType as futureReleases if cutoffDate is null', async () => {
       caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate: '' })
       caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
       res.locals.user.prisonCaseload = ['BAI']
@@ -1016,7 +1061,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -1029,7 +1075,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -1042,7 +1089,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: true,
@@ -1055,7 +1103,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
 
@@ -1072,14 +1121,14 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
-    it('should return hardstop flag as false if release date is null', async () => {
+    it('should return tab type as attentionNeeded if release date is null', async () => {
       caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate: '02/05/2022' })
       const caseLoadWithEmptyReleaseDate = new Container([
         {
           licences: [
             {
               type: LicenceType.AP,
-              status: LicenceStatus.NOT_STARTED,
+              status: LicenceStatus.APPROVED,
             },
           ],
           nomisRecord: {
@@ -1087,6 +1136,7 @@ describe('Route handlers - View and print case list', () => {
             lastName: 'Smith',
             prisonerNumber: 'A1234AA',
             confirmedReleaseDate: '',
+            legalStatus: 'SENTENCED',
           } as Prisoner,
           probationPractitioner: {
             name: 'Sherlock Holmes',
@@ -1104,6 +1154,7 @@ describe('Route handlers - View and print case list', () => {
             lastName: 'Smith',
             prisonerNumber: 'A1234AC',
             conditionalReleaseDate: null,
+            legalStatus: 'SENTENCED',
           } as Prisoner,
           probationPractitioner: {
             name: 'Walter White',
@@ -1120,7 +1171,7 @@ describe('Route handlers - View and print case list', () => {
           {
             isClickable: false,
             licenceId: undefined,
-            licenceStatus: 'NOT_STARTED',
+            licenceStatus: 'APPROVED',
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
@@ -1128,7 +1179,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: 'not found',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'attentionNeeded',
+            nomisLegalStatus: 'SENTENCED',
           },
           {
             isClickable: false,
@@ -1141,7 +1193,8 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: 'not found',
             releaseDateLabel: 'CRD',
-            hardStop: false,
+            tabType: 'attentionNeeded',
+            nomisLegalStatus: 'SENTENCED',
           },
         ],
 

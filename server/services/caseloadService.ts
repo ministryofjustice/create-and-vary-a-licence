@@ -368,6 +368,7 @@ export default class CaseloadService {
               approvedDate: l.approvedDate,
               versionOf: l.versionOf,
               kind: <LicenceKind>l.kind,
+              licenceStartDate: l.licenceStartDate,
             }
           }),
       }
