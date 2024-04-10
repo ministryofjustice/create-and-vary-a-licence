@@ -7,13 +7,13 @@ const caseloadService = new CaseloadService(null, null, null, null) as jest.Mock
 jest.mock('../../../services/caseloadService')
 
 describe('Route Handlers - ChangeLocationRoutes', () => {
-  const handler = new ChangeTeamRoutes(caseloadService)
+  const handler = new ChangeTeamRoutes(caseloadService, 'create')
   let req: Request
   let res: Response
   let next: NextFunction
 
   const probationTeams = [
-    { code: 'ABC', label: 'Team One', count: 3 },
+    { code: 'ABC', label: 'Team One', count: 0 },
     { code: 'ABCD', label: 'Team Two', count: 0 },
     { code: 'ABCDE', label: 'Team Three', count: 0 },
   ]
@@ -55,7 +55,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
         checked: null,
         backLinkHref: '/licence/create/caseload',
         validationErrors: [],
-        showTeamsCount: true,
+        showTeamsCount: false,
       })
     })
 
@@ -67,7 +67,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
         probationTeamsWithCount: probationTeams,
         checked: ['ABCD'],
         validationErrors: [],
-        showTeamsCount: true,
+        showTeamsCount: false,
       })
     })
 
@@ -78,11 +78,6 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     })
 
     it('Should list all teams with no selected team and showTeamsCount false', async () => {
-      const probationTeams = [
-        { code: 'ABC', label: 'Team One', count: 0 },
-        { code: 'ABCD', label: 'Team Two', count: 0 },
-        { code: 'ABCDE', label: 'Team Three', count: 0 },
-      ]
       caseloadService.getComReviewCount.mockResolvedValue({
         myCount: 1,
         teams: [
@@ -97,6 +92,24 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
         backLinkHref: '/licence/create/caseload',
         validationErrors: [],
         showTeamsCount: false,
+      })
+    })
+
+    it('Should display team case count', async () => {
+      const handler = new ChangeTeamRoutes(caseloadService, 'vary')
+      req.route.path = '/licence/vary/caseload/change-team'
+      req.session.teamSelection = ['ABCD']
+      await handler.GET()(req, res, next)
+      expect(res.render).toHaveBeenCalledWith('pages/changeTeam', {
+        backLinkHref: '/licence/vary/caseload?view=team',
+        probationTeamsWithCount: [
+          { code: 'ABC', label: 'Team One', count: 3 },
+          { code: 'ABCD', label: 'Team Two', count: 0 },
+          { code: 'ABCDE', label: 'Team Three', count: 0 },
+        ],
+        checked: ['ABCD'],
+        validationErrors: [],
+        showTeamsCount: true,
       })
     })
   })
@@ -117,7 +130,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
         backLinkHref: '/licence/create/caseload',
         checked: null,
         validationErrors: [{ field: 'teams', message: 'Select the team you wish to view cases for' }],
-        showTeamsCount: true,
+        showTeamsCount: false,
       })
     })
   })

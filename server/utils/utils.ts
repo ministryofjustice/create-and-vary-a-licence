@@ -202,14 +202,17 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
   return isValid(date) ? date : null
 }
 
-const isAttentionNeeded = (licence: ManagedCaseLicence, nomisRecord: Prisoner) => {
+const isAttentionNeeded = (
+  { status, licenceStartDate }: { status: LicenceStatus; licenceStartDate: string },
+  nomisRecord: Prisoner
+) => {
   const today = new Date()
-  const licenceStartDate = licence?.licenceStartDate ? parse(licence?.licenceStartDate, 'dd/MM/yyyy', new Date()) : ''
   const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
-  const status = [APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED]
   return (
-    (status.includes(licence?.status) && !nomisRecord.confirmedReleaseDate && !nomisRecord.conditionalReleaseDate) || // If licence status is ‘approved’, ‘submitted’, ‘in progress' or 'not started’ AND there is no CRD/ARD
-    (licence?.status === APPROVED && isBefore(licenceStartDate, today)) // If licence status is ‘approved’ AND CRD/ARD is in the past (licenceStartDate is equalto ARD/CRD)
+    ([APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED].includes(status) &&
+      !nomisRecord.confirmedReleaseDate &&
+      !nomisRecord.conditionalReleaseDate) || // If licence status is ‘approved’, ‘submitted’, ‘in progress' or 'not started’ AND there is no CRD/ARD
+    (status === APPROVED && isBefore(parseCvlDate(licenceStartDate), today)) // If licence status is ‘approved’ AND CRD/ARD is in the past (licenceStartDate is equalto ARD/CRD)
   )
 }
 
@@ -218,7 +221,7 @@ const determineComCreateCasesTab = (
   nomisRecord: Prisoner,
   cutOffDateString: string
 ): ComCreateCaseTab => {
-  if (isAttentionNeeded(licence, nomisRecord)) {
+  if (isAttentionNeeded({ status: licence.status, licenceStartDate: licence.licenceStartDate }, nomisRecord)) {
     return 'attentionNeeded'
   }
 

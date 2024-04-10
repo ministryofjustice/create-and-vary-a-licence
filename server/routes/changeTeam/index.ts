@@ -21,13 +21,13 @@ export default function Index({ conditionService, caseloadService }: Services): 
       asyncMiddleware(handler)
     )
 
-  const teamHandler = new ChangeTeamsLocation(caseloadService)
+  const createTeamHandler = new ChangeTeamsLocation(caseloadService, 'create')
+  get(createPrefix('/change-team'), createTeamHandler.GET())
+  post(createPrefix('/change-team'), createTeamHandler.POST())
 
-  get(createPrefix('/change-team'), teamHandler.GET())
-  get(varyPrefix('/change-team'), teamHandler.GET())
-
-  post(createPrefix('/change-team'), teamHandler.POST())
-  post(varyPrefix('/change-team'), teamHandler.POST())
+  const varyTeamHandler = new ChangeTeamsLocation(caseloadService, 'vary')
+  get(varyPrefix('/change-team'), varyTeamHandler.GET())
+  post(varyPrefix('/change-team'), varyTeamHandler.POST())
 
   return router
 }
