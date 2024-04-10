@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import moment from 'moment'
-import { addDays } from 'date-fns'
+import { subDays } from 'date-fns'
 import CaseloadRoutes from './caseload'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
@@ -37,8 +37,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.IN_PROGRESS,
-            hardStopDate: addDays(parseIsoDate('2022-10-12'), -2),
-            hardStopWarningDate: addDays(parseIsoDate('2022-10-12'), -4),
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
         probationPractitioner: {
@@ -65,8 +65,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.IN_PROGRESS,
-            hardStopDate: addDays(parseIsoDate('2022-10-12'), -2),
-            hardStopWarningDate: addDays(parseIsoDate('2022-10-12'), -4),
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
         probationPractitioner: {
@@ -90,8 +90,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             id: 2,
             type: LicenceType.AP_PSS,
             status: LicenceStatus.IN_PROGRESS,
-            hardStopDate: addDays(parseIsoDate('2022-10-12'), -2),
-            hardStopWarningDate: addDays(parseIsoDate('2022-10-12'), -4),
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
       },
@@ -110,8 +110,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             type: LicenceType.AP_PSS,
             status: LicenceStatus.NOT_IN_PILOT,
-            hardStopDate: addDays(parseIsoDate('2022-10-12'), -2),
-            hardStopWarningDate: addDays(parseIsoDate('2022-10-12'), -4),
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
       },
@@ -130,8 +130,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             type: LicenceType.AP_PSS,
             status: LicenceStatus.OOS_RECALL,
-            hardStopDate: addDays(parseIsoDate('2022-10-12'), -2),
-            hardStopWarningDate: addDays(parseIsoDate('2022-10-12'), -4),
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
       },
@@ -320,15 +320,15 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               id: 1,
               type: LicenceType.AP,
               status: LicenceStatus.APPROVED,
-              hardStopDate: addDays(parseIsoDate('2022-10-12'), -2),
-              hardStopWarningDate: addDays(parseIsoDate('2022-10-12'), -4),
+              hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+              hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
             },
             {
               id: 2,
               type: LicenceType.AP,
               status: LicenceStatus.IN_PROGRESS,
-              hardStopDate: addDays(parseIsoDate('2022-10-12'), -2),
-              hardStopWarningDate: addDays(parseIsoDate('2022-10-12'), -4),
+              hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+              hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
             },
           ],
           probationPractitioner: {

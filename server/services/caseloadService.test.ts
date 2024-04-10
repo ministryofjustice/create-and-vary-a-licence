@@ -1678,4 +1678,66 @@ describe('Caseload Service', () => {
       expect(CaseloadService.isEligibleEDS(yesterday, tenDaysFromNow, tenDaysFromNow, nineDaysFromNow)).toBe(false)
     })
   })
+
+  describe('getHardStopReferenceDate', () => {
+    it('uses ARD as hard stop reference date when it is within one working day of CRD', async () => {
+      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
+      bankHolidays.getXWorkingDaysBeforeDate = jest.fn(() => {
+        return new Date('2024-03-20')
+      })
+
+      const nomisRecord: Prisoner = {
+        prisonerNumber: 'ABC123',
+        releaseDate: '2024-03-20',
+        conditionalReleaseDate: '2024-03-21',
+      } as Prisoner
+
+      expect(serviceUnderTest.getHardStopReferenceDate(nomisRecord, bankHolidays)).toEqual(new Date('2024-03-20'))
+    })
+
+    it('uses ARD as hard stop reference date when it is equal to CRD', async () => {
+      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
+      bankHolidays.getXWorkingDaysBeforeDate = jest.fn(() => {
+        return new Date('2024-03-20')
+      })
+
+      const nomisRecord: Prisoner = {
+        prisonerNumber: 'ABC123',
+        releaseDate: '2024-03-21',
+        conditionalReleaseDate: '2024-03-21',
+      } as Prisoner
+
+      expect(serviceUnderTest.getHardStopReferenceDate(nomisRecord, bankHolidays)).toEqual(new Date('2024-03-21'))
+    })
+
+    it('uses CRD as hard stop reference date when ARD is more than one working day before CRD', async () => {
+      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
+      bankHolidays.getXWorkingDaysBeforeDate = jest.fn(() => {
+        return new Date('2024-03-20')
+      })
+
+      const nomisRecord: Prisoner = {
+        prisonerNumber: 'ABC123',
+        releaseDate: '2024-03-19',
+        conditionalReleaseDate: '2024-03-21',
+      } as Prisoner
+
+      expect(serviceUnderTest.getHardStopReferenceDate(nomisRecord, bankHolidays)).toEqual(new Date('2024-03-21'))
+    })
+
+    it('uses CRD as hard stop reference date when ARD is after CRD', async () => {
+      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
+      bankHolidays.getXWorkingDaysBeforeDate = jest.fn(() => {
+        return new Date('2024-03-20')
+      })
+
+      const nomisRecord: Prisoner = {
+        prisonerNumber: 'ABC123',
+        releaseDate: '2024-03-22',
+        conditionalReleaseDate: '2024-03-21',
+      } as Prisoner
+
+      expect(serviceUnderTest.getHardStopReferenceDate(nomisRecord, bankHolidays)).toEqual(new Date('2024-03-21'))
+    })
+  })
 })

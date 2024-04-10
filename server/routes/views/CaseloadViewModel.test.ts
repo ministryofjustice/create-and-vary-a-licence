@@ -38,8 +38,8 @@ describe('CaseloadViewModel', () => {
       status: LicenceStatus.IN_PROGRESS,
       type: LicenceType.AP,
       kind: LicenceKind.CRD,
-      hardStopDate: addDays(parseIsoDate('2020-01-02'), -2),
-      hardStopWarningDate: addDays(parseIsoDate('2020-01-02'), -4),
+      hardStopDate: subDays(parseIsoDate('2020-01-02'), 2),
+      hardStopWarningDate: subDays(parseIsoDate('2020-01-02'), 4),
     } as Licence
 
     managedCases = [
@@ -63,8 +63,8 @@ describe('CaseloadViewModel', () => {
     status: LicenceStatus.APPROVED,
     type: LicenceType.AP_PSS,
     kind: LicenceKind.CRD,
-    hardStopDate: addDays(parseIsoDate(nomisRecord2.releaseDate), -2),
-    hardStopWarningDate: addDays(parseIsoDate(nomisRecord2.releaseDate), -4),
+    hardStopDate: subDays(parseIsoDate(nomisRecord2.releaseDate), 2),
+    hardStopWarningDate: subDays(parseIsoDate(nomisRecord2.releaseDate), 4),
   } as Licence
 
   it('titleizes name', () => {
