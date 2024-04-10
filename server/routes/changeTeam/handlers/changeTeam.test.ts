@@ -7,7 +7,7 @@ const caseloadService = new CaseloadService(null, null, null, null) as jest.Mock
 jest.mock('../../../services/caseloadService')
 
 describe('Route Handlers - ChangeLocationRoutes', () => {
-  const handler = new ChangeTeamRoutes(caseloadService)
+  const handler = new ChangeTeamRoutes(caseloadService, 'create')
   let req: Request
   let res: Response
   let next: NextFunction
@@ -96,6 +96,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     })
 
     it('Should display team case count', async () => {
+      const handler = new ChangeTeamRoutes(caseloadService, 'vary')
       req.route.path = '/licence/vary/caseload/change-team'
       req.session.teamSelection = ['ABCD']
       await handler.GET()(req, res, next)

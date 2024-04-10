@@ -2,7 +2,12 @@ import { RequestHandler, Request, Response } from 'express'
 import CaseloadService from '../../../services/caseloadService'
 
 export default class ChangeTeamRoutes {
-  constructor(private readonly caseloadService: CaseloadService) {}
+  constructor(
+    private readonly caseloadService: CaseloadService,
+    private section: string
+  ) {
+    this.section = section
+  }
 
   public GET(): RequestHandler {
     return async (req, res) => {
@@ -32,7 +37,7 @@ export default class ChangeTeamRoutes {
     const probationTeamsWithCount = probationTeams.map(probationTeam => {
       return {
         ...probationTeam,
-        count: req.route.path.includes('create') ? 0 : teams.find(t => t.teamCode === probationTeam.code)?.count || 0,
+        count: this.section === 'create' ? 0 : teams.find(t => t.teamCode === probationTeam.code)?.count || 0,
       }
     })
     /*
