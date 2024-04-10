@@ -267,7 +267,7 @@ export default class LicenceApiClient extends RestClient {
   async getLicencesForApproval(prisons?: string[], user?: User): Promise<LicenceSummaryApproverView[]> {
     return (await this.post(
       {
-        path: `/licences-for-approval`,
+        path: `/licence/licences-for-approval`,
         data: {
           prisonCodes: prisons,
         },
