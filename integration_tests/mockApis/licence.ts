@@ -940,7 +940,7 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/licences-api/licences-for-approval`,
+        urlPathPattern: `/licences-api/licence/licences-for-approval`,
       },
       response: {
         status: 200,

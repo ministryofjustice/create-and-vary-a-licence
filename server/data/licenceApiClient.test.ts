@@ -274,6 +274,19 @@ describe('Licence API client tests', () => {
     )
   })
 
+  it('Should get licences for approval', async () => {
+    await licenceApiClient.getLicencesForApproval(['PRI'], { username: 'joebloggs' } as User)
+    expect(post).toHaveBeenCalledWith(
+      {
+        path: '/licence/licences-for-approval',
+        data: {
+          prisonCodes: ['PRI'],
+        },
+      },
+      { username: 'joebloggs' }
+    )
+  })
+
   it('should update responsible COM for an offender', async () => {
     await licenceApiClient.updateResponsibleCom('X1234', {
       staffIdentifier: 2000,
