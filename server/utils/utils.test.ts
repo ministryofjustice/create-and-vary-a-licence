@@ -568,6 +568,10 @@ describe('Check if licence needs attention', () => {
     ).toBeFalsy()
   })
 
+  it('should return false if licenceStartDate is null', () => {
+    expect(isAttentionNeeded({ ...licence, licenceStartDate: null }, nomisRecord)).toBeFalsy()
+  })
+
   it('should return false if licence status is oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is CRD/ARD', () => {
     expect(isAttentionNeeded({ ...licence, licenceStartDate: '2023-12-06' }, nomisRecord)).toBeFalsy()
   })
@@ -600,6 +604,9 @@ describe('Get Case Tab Type', () => {
     conditionalReleaseDate: '2023-12-05',
   } as Prisoner
 
+  it('should not return attentionNeeded tab type if licence object is undefined', () => {
+    expect(determineComCreateCasesTab(null, nomisRecord, '04/12/2023')).toEqual('futureReleases')
+  })
   it('should return attentionNeeded tab type', () => {
     expect(
       determineComCreateCasesTab(
