@@ -37,6 +37,7 @@ import {
   HardStopCutoffDate,
   ComReviewCount,
   CaseloadItem,
+  LicenceCreationResponse,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
@@ -64,7 +65,7 @@ export default class LicenceService {
     private readonly conditionService: ConditionService
   ) {}
 
-  async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceSummary> {
+  async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceCreationResponse> {
     return this.licenceApiClient.createLicence(licence, user)
   }
 

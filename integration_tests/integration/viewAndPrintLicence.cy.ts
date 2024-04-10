@@ -26,6 +26,7 @@ context('View and print licence', () => {
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubGetCutOffDateForLicenceTimeOut')
+    cy.task('stubFeComponents')
   })
   const singleCaseload = {
     details: [

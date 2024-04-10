@@ -1,26 +1,24 @@
 import moment from 'moment'
 import _ from 'lodash'
+import { format } from 'date-fns'
 import { Licence, ManagedCase } from '../../@types/managedCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
-import { convertToTitleCase } from '../../utils/utils'
+import { convertToTitleCase, parseIsoDate } from '../../utils/utils'
 import LicenceKind from '../../enumeration/LicenceKind'
 import config from '../../config'
 
-export default (
-  caseload: ManagedCase[],
-  search: string,
-  hardStopDates: { hardStopCutoffDate: Date; hardStopWarningDate: Date }
-) => {
+export default (caseload: ManagedCase[], search: string) => {
+  const now = new Date()
   return caseload
     .map(c => {
       const { licence, createLink } = findLicenceAndCreateLinkToDisplay(c)
-      const releaseDate = moment(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate)
-
+      const releaseDate = parseIsoDate(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate)
+      const { hardStopDate, hardStopWarningDate } = licence
       return {
         name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
         crnNumber: c.deliusRecord.offenderCrn,
         prisonerNumber: c.nomisRecord.prisonerNumber,
-        releaseDate: releaseDate.format('DD MMM YYYY'),
+        releaseDate: format(releaseDate, 'dd MMM yyyy'),
         licenceId: licence.id,
         licenceStatus: licence.status,
         licenceType: licence.type,
@@ -31,10 +29,8 @@ export default (
           licence.status !== LicenceStatus.NOT_IN_PILOT &&
           licence.status !== LicenceStatus.OOS_RECALL &&
           licence.status !== LicenceStatus.OOS_BOTUS,
-        showHardStopWarning:
-          config.hardStopEnabled &&
-          releaseDate <= moment(hardStopDates.hardStopWarningDate) &&
-          releaseDate > moment(hardStopDates.hardStopCutoffDate),
+        hardStopDate: format(hardStopDate, 'dd MMM yyyy'),
+        showHardStopWarning: config.hardStopEnabled && hardStopWarningDate <= now && now < hardStopDate,
       }
     })
     .filter(c => {

@@ -269,7 +269,7 @@ describe('parseIsoDate', () => {
     expect(parseIsoDate('')).toEqual(null)
   })
   it('parses valid date', () => {
-    expect(format(parseIsoDate('2023-01-23'), 'yyyy-MM-yy')).toEqual('2023-01-23')
+    expect(format(parseIsoDate('2023-01-24'), 'yyyy-MM-dd')).toEqual('2023-01-24')
   })
   it('fails to parse invalid date format', () => {
     const date = parseIsoDate('23/01/2023')
@@ -289,7 +289,7 @@ describe('parseCvlDate', () => {
     expect(parseCvlDate('')).toEqual(null)
   })
   it('parses valid date', () => {
-    expect(format(parseCvlDate('23/01/2023'), 'yyyy-MM-yy')).toEqual('2023-01-23')
+    expect(format(parseCvlDate('24/01/2023'), 'yyyy-MM-dd')).toEqual('2023-01-24')
   })
   it('fails to parse invalid date format', () => {
     const date = parseCvlDate('2023-01-23')
@@ -312,14 +312,14 @@ describe('parseCvlDateTime', () => {
   })
   it('parses valid date time', () => {
     {
-      const dateTime = parseCvlDateTime('23/01/2023 10:30:45', { withSeconds: true })
-      const formatted = format(dateTime, 'yyyy-MM-yy hh:mm:ss')
-      expect(formatted).toEqual('2023-01-23 10:30:45')
+      const dateTime = parseCvlDateTime('24/01/2023 10:30:45', { withSeconds: true })
+      const formatted = format(dateTime, 'yyyy-MM-dd hh:mm:ss')
+      expect(formatted).toEqual('2023-01-24 10:30:45')
     }
     {
-      const dateTime = parseCvlDateTime('23/01/2023 10:30', { withSeconds: false })
-      const formatted = format(dateTime, 'yyyy-MM-yy hh:mm')
-      expect(formatted).toEqual('2023-01-23 10:30')
+      const dateTime = parseCvlDateTime('24/01/2023 10:30', { withSeconds: false })
+      const formatted = format(dateTime, 'yyyy-MM-dd hh:mm')
+      expect(formatted).toEqual('2023-01-24 10:30')
     }
   })
   it('fails to parse invalid date time', () => {

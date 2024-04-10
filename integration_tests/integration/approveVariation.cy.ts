@@ -20,6 +20,7 @@ context('ACO review a licence variation', () => {
     cy.task('stubUpdateLicenceStatus')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
+    cy.task('stubFeComponents')
     cy.signIn()
   })
 

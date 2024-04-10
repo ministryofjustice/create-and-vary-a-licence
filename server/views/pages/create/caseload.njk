@@ -33,7 +33,7 @@
     {% endif %}
 
     {% if offender.showHardStopWarning %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + hardStopCutoffDate +'</span>' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate +'</span>' %}
     {% else %}
         {% set releaseDate = offender.releaseDate %}
     {% endif %}

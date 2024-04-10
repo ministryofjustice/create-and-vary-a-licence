@@ -14,6 +14,7 @@ export type UpdateAdditionalConditionDataRequest = components['schemas']['Update
 export type AdditionalConditionData = components['schemas']['AdditionalConditionData']
 export type ContactNumberRequest = components['schemas']['ContactNumberRequest']
 export type CreateLicenceRequest = components['schemas']['CreateLicenceRequest']
+export type LicenceCreationResponse = components['schemas']['LicenceCreationResponse']
 export type LicenceSummary = components['schemas']['LicenceSummary']
 export type Licence =
   | components['schemas']['VariationLicence']

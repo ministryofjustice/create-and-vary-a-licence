@@ -1,23 +1,21 @@
 import { Request, Response } from 'express'
 
 import moment from 'moment'
+import { subDays } from 'date-fns'
 import CaseloadRoutes from './caseload'
 import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { ManagedCase } from '../../../@types/managedCase'
-import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../../services/ukBankHolidayFeedService'
+import { parseIsoDate } from '../../../utils/utils'
 
-const bankHolidayRetriever: BankHolidayRetriever = async () => []
-const bankHolidayService = new UkBankHolidayFeedService(bankHolidayRetriever) as jest.Mocked<UkBankHolidayFeedService>
-const caseloadService = new CaseloadService(null, null, null, bankHolidayService) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
 
 jest.mock('../../../services/caseloadService')
-jest.mock('../../../services/ukBankHolidayFeedService')
 
 describe('Route Handlers - Create Licence - Caseload', () => {
-  const handler = new CaseloadRoutes(caseloadService, bankHolidayService)
+  const handler = new CaseloadRoutes(caseloadService)
   let req: Request
   let res: Response
 
@@ -39,6 +37,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.IN_PROGRESS,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
         probationPractitioner: {
@@ -65,6 +65,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.IN_PROGRESS,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
         probationPractitioner: {
@@ -88,6 +90,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             id: 2,
             type: LicenceType.AP_PSS,
             status: LicenceStatus.IN_PROGRESS,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
       },
@@ -106,6 +110,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             type: LicenceType.AP_PSS,
             status: LicenceStatus.NOT_IN_PILOT,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
       },
@@ -124,6 +130,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           {
             type: LicenceType.AP_PSS,
             status: LicenceStatus.OOS_RECALL,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
       },
@@ -131,13 +139,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
 
     caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({
       cutoffDate: moment().add(3, 'days').format('DD/MM/yyyy'),
-    })
-
-    bankHolidayService.getEnglishAndWelshHolidays.mockResolvedValue({
-      bankHolidays: [],
-      isBankHolidayOrWeekend: jest.fn(),
-      getTwoWorkingDaysAfterDate: jest.fn(),
-      getXWorkingDaysBeforeDate: jest.fn(),
     })
   })
 
@@ -184,6 +185,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'John Roberts',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
+            hardStopDate: '10 Oct 2022',
             prisonerNumber: '123',
             licenceId: 1,
             licenceStatus: LicenceStatus.IN_PROGRESS,
@@ -202,7 +204,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         statusConfig,
         teamView: false,
         teamName: null,
-        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
       expect(caseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
@@ -218,6 +219,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'John Roberts',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
+            hardStopDate: '10 Oct 2022',
             prisonerNumber: '123',
             licenceId: 1,
             licenceStatus: LicenceStatus.IN_PROGRESS,
@@ -234,6 +236,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'Dr Who',
             crnNumber: 'X381307',
             releaseDate: '12 Oct 2023',
+            hardStopDate: '10 Oct 2022',
             prisonerNumber: '124',
             probationPractitioner: undefined,
             licenceId: 2,
@@ -247,6 +250,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'Mabel Moorhouse',
             crnNumber: 'X381308',
             releaseDate: '12 Oct 2023',
+            hardStopDate: '10 Oct 2022',
             licenceId: undefined,
             prisonerNumber: '125',
             probationPractitioner: undefined,
@@ -260,6 +264,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'Ronald Recall',
             crnNumber: 'X381309',
             releaseDate: '12 Oct 2023',
+            hardStopDate: '10 Oct 2022',
             licenceId: undefined,
             prisonerNumber: '126',
             probationPractitioner: undefined,
@@ -275,7 +280,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         search: undefined,
         teamName: 'teamA',
         teamView: true,
-        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
@@ -316,11 +320,15 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               id: 1,
               type: LicenceType.AP,
               status: LicenceStatus.APPROVED,
+              hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+              hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
             },
             {
               id: 2,
               type: LicenceType.AP,
               status: LicenceStatus.IN_PROGRESS,
+              hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+              hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
             },
           ],
           probationPractitioner: {
@@ -338,6 +346,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             prisonerNumber: '123',
             releaseDate: '12 Oct 2022',
+            hardStopDate: '10 Oct 2022',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -353,7 +362,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         statusConfig,
         teamName: null,
         teamView: false,
-        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
     })
@@ -369,6 +377,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381307',
             probationPractitioner: undefined,
             releaseDate: '12 Oct 2023',
+            hardStopDate: '10 Oct 2022',
             prisonerNumber: '124',
             licenceId: 2,
             licenceStatus: LicenceStatus.IN_PROGRESS,
@@ -383,7 +392,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamName: 'teamA',
         teamView: true,
         search: 'x381307',
-        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
@@ -399,6 +407,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'Ronald Recall',
             crnNumber: 'X381309',
             releaseDate: '12 Oct 2023',
+            hardStopDate: '10 Oct 2022',
             prisonerNumber: '126',
             licenceStatus: LicenceStatus.OOS_RECALL,
             licenceType: LicenceType.AP_PSS,
@@ -412,7 +421,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: true,
         teamName: 'teamA',
         search: 'x381309',
-        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
@@ -428,6 +436,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'John Roberts',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
+            hardStopDate: '10 Oct 2022',
             prisonerNumber: '123',
             licenceId: 1,
             licenceStatus: LicenceStatus.IN_PROGRESS,
@@ -446,7 +455,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: true,
         teamName: 'teamA',
         search: 'holmes',
-        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
@@ -462,6 +470,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             name: 'John Roberts',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
+            hardStopDate: '10 Oct 2022',
             prisonerNumber: '123',
             licenceId: 1,
             licenceStatus: LicenceStatus.IN_PROGRESS,
@@ -480,19 +489,9 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: true,
         teamName: 'teamA',
         search: 'roberts',
-        hardStopCutoffDate: moment().add(3, 'days').format('DD MMM yyyy'),
       })
       expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
       expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
-    })
-
-    it('gets the two-working-day warning date', async () => {
-      caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({
-        cutoffDate: moment('2024-03-14').format('DD/MM/yyyy'),
-      })
-      const bankHolidays = await bankHolidayService.getEnglishAndWelshHolidays()
-      await handler.GET(req, res)
-      expect(bankHolidays.getTwoWorkingDaysAfterDate).toHaveBeenCalledWith(new Date('2024-03-14'))
     })
   })
 })
