@@ -552,14 +552,17 @@ describe('Check if licence needs attention', () => {
 
   it('should return true if licence status is oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is no CRD/ARD', () => {
     expect(
-      isAttentionNeeded(licence, { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null })
+      isAttentionNeeded(
+        { licenceStartDate: licence.licenceStartDate, status: licence.status },
+        { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null }
+      )
     ).toBeTruthy()
   })
 
   it('should return false if licence status is not oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is no CRD/ARD', () => {
     expect(
       isAttentionNeeded(
-        { ...licence, status: LicenceStatus.ACTIVE },
+        { licenceStartDate: null, status: LicenceStatus.ACTIVE },
         { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null }
       )
     ).toBeFalsy()

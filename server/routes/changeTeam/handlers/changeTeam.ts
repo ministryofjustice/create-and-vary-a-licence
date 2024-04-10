@@ -32,7 +32,7 @@ export default class ChangeTeamRoutes {
     const probationTeamsWithCount = probationTeams.map(probationTeam => {
       return {
         ...probationTeam,
-        count: teams.find(t => t.teamCode === probationTeam.code)?.count || 0,
+        count: req.route.path.includes('create') ? 0 : teams.find(t => t.teamCode === probationTeam.code)?.count || 0,
       }
     })
     /*
