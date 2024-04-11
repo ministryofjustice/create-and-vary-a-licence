@@ -33,7 +33,7 @@ generic-service:
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: "http://create-and-vary-a-licence"
     DPS_URL: "https://digital-preprod.prison.service.justice.gov.uk"
-    SHOW_WHATS_NEW_BANNER: "false"
+    SHOW_WHATS_NEW_BANNER: "true"
     TIME_OUT_JOB_ENABLED: "true"
 
     # To enable common front-end components
