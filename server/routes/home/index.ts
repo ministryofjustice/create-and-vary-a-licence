@@ -21,7 +21,7 @@ export default function Index(): Router {
   get('/about', aboutHandler.GET)
   get('/contact', contactUsHandler.GET)
   get('/accessibility-statement', accessibilityStatementHandler.GET)
-  get('/whats-new-page', whatsNewController.GET)
+  get('/whats-new', whatsNewController.GET)
 
   return router
 }
