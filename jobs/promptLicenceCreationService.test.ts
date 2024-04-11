@@ -3,23 +3,25 @@ import { format, add, startOfISOWeek, endOfISOWeek, subDays } from 'date-fns'
 import LicenceStatus from '../server/enumeration/licenceStatus'
 import CaseloadService from '../server/services/caseloadService'
 import Container from '../server/services/container'
-import PrisonerService from '../server/services/prisonerService'
 import PromptLicenceCreationService from './promptLicenceCreationService'
 import LicenceType from '../server/enumeration/licenceType'
+import type { ManagedCase } from '../server/@types/managedCase'
+import type { CvlPrisoner } from '../server/@types/licenceApiClientTypes'
+import LicenceService from '../server/services/licenceService'
 
 jest.mock('../server/services/caseloadService')
 jest.mock('../server/services/prisonerService')
 
-const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
-const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
+const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
-const promptLicenceCreationService = new PromptLicenceCreationService(prisonerService, caseloadService)
+const promptLicenceCreationService = new PromptLicenceCreationService(licenceService, caseloadService)
 
 type OffenderManager = { active: boolean; fromDate: string }
 
 describe('prompt licence creation service ', () => {
   beforeEach(() => {
-    prisonerService.searchPrisonersByReleaseDate = jest.fn()
+    licenceService.searchPrisonersByReleaseDate = jest.fn()
     caseloadService.pairNomisRecordsWithDelius = jest.fn()
     caseloadService.filterOffendersEligibleForLicence = jest.fn()
     caseloadService.mapOffendersToLicences = jest.fn()
@@ -58,7 +60,7 @@ describe('prompt licence creation service ', () => {
 
   describe('pollPrisonersDueForLicence', () => {
     it('should only return cases with specific statuses', async () => {
-      prisonerService.searchPrisonersByReleaseDate.mockResolvedValue([])
+      licenceService.searchPrisonersByReleaseDate.mockResolvedValue([])
       caseloadService.mapOffendersToLicences.mockResolvedValue(containerOfManagedCases)
 
       const earliestReleaseDate = startOfISOWeek(add(new Date(), { weeks: 12 }))
@@ -82,15 +84,21 @@ describe('prompt licence creation service ', () => {
   })
 })
 
-function createManagedCase(offenderManagers: OffenderManager[], licenceStatus: LicenceStatus) {
+function createManagedCase(offenderManagers: OffenderManager[], licenceStatus: LicenceStatus): ManagedCase {
   return {
     deliusRecord: { offenderId: 1, offenderManagers },
+    cvlFields: {
+      licenceType: 'AP',
+      hardStopDate: '2023-01-03',
+      hardStopWarningDate: '2023-01-01',
+      isInHardStopPeriod: true,
+      isDueForEarlyRelease: true,
+    },
     nomisRecord: {
-      restrictedPatient: false,
       prisonId: 'someId',
       conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
       status: 'someStatus',
-    },
+    } as CvlPrisoner,
     licences: [{ status: licenceStatus, type: LicenceType.AP }],
     probationPractitioner: { name: 'jim' },
   }

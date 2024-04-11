@@ -5,10 +5,10 @@ import CaseloadService from '../../../services/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import { DeliusRecord } from '../../../@types/managedCase'
+import type { DeliusRecord } from '../../../@types/managedCase'
+import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 
-const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
 jest.mock('../../../services/caseloadService')
 
@@ -27,12 +27,19 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             status: LicenceStatus.ACTIVE,
           },
         ],
+        cvlFields: {
+          licenceType: 'AP',
+          hardStopDate: '03/01/2023',
+          hardStopWarningDate: '01/01/2023',
+          isInHardStopPeriod: true,
+          isDueForEarlyRelease: false,
+        },
         nomisRecord: {
           firstName: 'Bob',
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
           releaseDate: '2022-05-01',
-        } as Prisoner,
+        } as CvlPrisoner,
         deliusRecord: {
           otherIds: {
             crn: 'X12345',
@@ -50,12 +57,19 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             status: LicenceStatus.REVIEW_NEEDED,
           },
         ],
+        cvlFields: {
+          licenceType: 'AP',
+          hardStopDate: '03/01/2023',
+          hardStopWarningDate: '01/01/2023',
+          isInHardStopPeriod: true,
+          isDueForEarlyRelease: false,
+        },
         nomisRecord: {
           firstName: 'John',
           lastName: 'Deer',
           prisonerNumber: 'A1234AR',
           releaseDate: '2022-05-02',
-        } as Prisoner,
+        } as CvlPrisoner,
         deliusRecord: {
           otherIds: {
             crn: 'X12346',
@@ -76,12 +90,19 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             status: LicenceStatus.ACTIVE,
           },
         ],
+        cvlFields: {
+          licenceType: 'AP',
+          hardStopDate: '03/01/2023',
+          hardStopWarningDate: '01/01/2023',
+          isInHardStopPeriod: true,
+          isDueForEarlyRelease: false,
+        },
         nomisRecord: {
           firstName: 'Bob',
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
           releaseDate: '2022-05-01',
-        } as Prisoner,
+        } as CvlPrisoner,
         deliusRecord: {
           otherIds: {
             crn: 'X12345',
@@ -99,12 +120,19 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             status: LicenceStatus.ACTIVE,
           },
         ],
+        cvlFields: {
+          licenceType: 'AP',
+          hardStopDate: '03/01/2023',
+          hardStopWarningDate: '01/01/2023',
+          isInHardStopPeriod: true,
+          isDueForEarlyRelease: false,
+        },
         nomisRecord: {
           firstName: 'Dr',
           lastName: 'Who',
           prisonerNumber: 'A1234AB',
           releaseDate: '2022-05-01',
-        } as Prisoner,
+        } as CvlPrisoner,
         deliusRecord: {
           otherIds: {
             crn: 'X12346',
@@ -122,12 +150,19 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             status: LicenceStatus.REVIEW_NEEDED,
           },
         ],
+        cvlFields: {
+          licenceType: 'AP',
+          hardStopDate: '03/01/2023',
+          hardStopWarningDate: '01/01/2023',
+          isInHardStopPeriod: true,
+          isDueForEarlyRelease: false,
+        },
         nomisRecord: {
           firstName: 'John',
           lastName: 'Deer',
           prisonerNumber: 'A1234AR',
           releaseDate: '2022-05-02',
-        } as Prisoner,
+        } as CvlPrisoner,
         deliusRecord: {
           otherIds: {
             crn: 'X12346',
@@ -282,12 +317,19 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
               status: LicenceStatus.ACTIVE,
             },
           ],
+          cvlFields: {
+            licenceType: 'AP',
+            hardStopDate: '03/01/2023',
+            hardStopWarningDate: '01/01/2023',
+            isInHardStopPeriod: true,
+            isDueForEarlyRelease: false,
+          },
           nomisRecord: {
             firstName: 'Bob',
             lastName: 'Smith',
             prisonerNumber: 'A1234AA',
             releaseDate: '2022-05-01',
-          } as Prisoner,
+          } as CvlPrisoner,
           deliusRecord: {
             otherIds: {
               crn: 'X12345',

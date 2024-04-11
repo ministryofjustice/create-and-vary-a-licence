@@ -1,16 +1,16 @@
 import moment from 'moment'
 import { addDays, subDays } from 'date-fns'
 import { DeliusRecord, Licence, ManagedCase, ProbationPractitioner } from '../../@types/managedCase'
-import { Prisoner } from '../../@types/prisonerSearchApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import createCaseloadViewModel from './CaseloadViewModel'
 import config from '../../config'
 import { parseIsoDate } from '../../utils/utils'
+import type { CvlFields, CvlPrisoner } from '../../@types/licenceApiClientTypes'
 
 describe('CaseloadViewModel', () => {
-  let nomisRecord: Prisoner
+  let nomisRecord: CvlPrisoner
   let deliusRecord: DeliusRecord
   let probationPractitioner: ProbationPractitioner
   let licence: Licence
@@ -23,7 +23,7 @@ describe('CaseloadViewModel', () => {
       prisonerNumber: 'A1234BC',
       releaseDate: '2020-01-01',
       conditionalReleaseDate: '2020-01-02',
-    } as Prisoner
+    } as CvlPrisoner
 
     deliusRecord = {
       offenderCrn: 'A123456',
@@ -54,7 +54,7 @@ describe('CaseloadViewModel', () => {
     prisonerNumber: 'D1234EF',
     releaseDate: '2020-01-01',
     conditionalReleaseDate: '2020-01-02',
-  } as Prisoner
+  } as CvlPrisoner
 
   const deliusRecord2 = { offenderCrn: 'B789012' } as DeliusRecord
 
@@ -67,24 +67,39 @@ describe('CaseloadViewModel', () => {
     hardStopWarningDate: subDays(parseIsoDate(nomisRecord2.releaseDate), 4),
   } as Licence
 
+  const cvlFields: CvlFields = {
+    licenceType: LicenceType.AP,
+    hardStopDate: '03/01/2023',
+    hardStopWarningDate: '01/01/2023',
+    isInHardStopPeriod: true,
+    isDueForEarlyRelease: false,
+  }
+
   it('titleizes name', () => {
     expect(
-      createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0].name
+      createCaseloadViewModel(
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+        null
+      )[0].name
     ).toEqual('Bob Smith')
   })
 
   it('prioritises release date over CRD', () => {
     expect(
-      createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-        .releaseDate
+      createCaseloadViewModel(
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+        null
+      )[0].releaseDate
     ).toEqual(moment(nomisRecord.releaseDate).format('DD MMM YYYY'))
   })
 
   it('uses CRD if release date is not present on NOMIS record', () => {
     nomisRecord = { ...nomisRecord, releaseDate: null }
     expect(
-      createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-        .releaseDate
+      createCaseloadViewModel(
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+        null
+      )[0].releaseDate
     ).toEqual(moment(nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'))
   })
 
@@ -103,8 +118,10 @@ describe('CaseloadViewModel', () => {
       licence = { ...licence, hardStopWarningDate: subDays(now, 1), hardStopDate: addDays(now, 1) }
 
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .showHardStopWarning
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].showHardStopWarning
       ).toEqual(true)
     })
 
@@ -113,8 +130,10 @@ describe('CaseloadViewModel', () => {
       licence = { ...licence, hardStopWarningDate: now, hardStopDate: addDays(now, 2) }
 
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .showHardStopWarning
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].showHardStopWarning
       ).toEqual(true)
     })
 
@@ -123,8 +142,10 @@ describe('CaseloadViewModel', () => {
       licence = { ...licence, hardStopWarningDate: subDays(now, 2), hardStopDate: now }
 
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .showHardStopWarning
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].showHardStopWarning
       ).toEqual(false)
     })
 
@@ -132,8 +153,10 @@ describe('CaseloadViewModel', () => {
       const now = new Date()
       licence = { ...licence, hardStopWarningDate: addDays(now, 1), hardStopDate: addDays(now, 3) }
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .showHardStopWarning
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].showHardStopWarning
       ).toEqual(false)
     })
 
@@ -141,8 +164,10 @@ describe('CaseloadViewModel', () => {
       const now = new Date()
       licence = { ...licence, hardStopWarningDate: subDays(now, 3), hardStopDate: subDays(now, 1) }
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .showHardStopWarning
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].showHardStopWarning
       ).toEqual(false)
     })
 
@@ -152,8 +177,10 @@ describe('CaseloadViewModel', () => {
       licence = { ...licence, hardStopWarningDate: subDays(releaseDate, 1), hardStopDate: addDays(releaseDate, 1) }
 
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .showHardStopWarning
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].showHardStopWarning
       ).toEqual(false)
     })
   })
@@ -162,7 +189,7 @@ describe('CaseloadViewModel', () => {
     it('should be false if the PP is undefined', () => {
       expect(
         createCaseloadViewModel(
-          [{ nomisRecord, deliusRecord, probationPractitioner: undefined, licences: [licence] }],
+          [{ nomisRecord, deliusRecord, probationPractitioner: undefined, cvlFields, licences: [licence] }],
           null
         )[0].isClickable
       ).toEqual(false)
@@ -171,31 +198,39 @@ describe('CaseloadViewModel', () => {
     it('should be false if the licence status is NOT_IN_PILOT', () => {
       licence = { ...licence, status: LicenceStatus.NOT_IN_PILOT }
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .isClickable
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].isClickable
       ).toEqual(false)
     })
 
     it('should be false if the licence is a recall', () => {
       licence = { ...licence, status: LicenceStatus.OOS_RECALL }
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .isClickable
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].isClickable
       ).toEqual(false)
     })
 
     it('should be false if the licence is a breach of supervision', () => {
       licence = { ...licence, status: LicenceStatus.OOS_BOTUS }
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .isClickable
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].isClickable
       ).toEqual(false)
     })
 
     it('should be true in any other case', () => {
       expect(
-        createCaseloadViewModel([{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }], null)[0]
-          .isClickable
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].isClickable
       ).toEqual(true)
     })
   })
@@ -316,7 +351,7 @@ describe('CaseloadViewModel', () => {
       const licence1 = { ...licence, id: 1, status: LicenceStatus.APPROVED }
       const licence2 = { ...licence, id: 2, status: LicenceStatus.TIMED_OUT, versionOf: 1 }
       const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence2, licence1] }],
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence2, licence1] }],
         null
       )[0]
       expect(licenceViewModel.createLink).toEqual('/licence/create/id/2/licence-changes-not-approved-in-time')
@@ -326,7 +361,7 @@ describe('CaseloadViewModel', () => {
     it('returns prison-will-create link if the licence is timed out, it is not an edit, and a hard stop licence has not been started', () => {
       licence = { ...licence, status: LicenceStatus.TIMED_OUT }
       const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
         null
       )[0]
       expect(licenceViewModel.createLink).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
@@ -343,7 +378,7 @@ describe('CaseloadViewModel', () => {
       }
       const licence2 = { ...licence, status: LicenceStatus.TIMED_OUT }
       const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence1, licence2] }],
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence1, licence2] }],
         null
       )[0]
       expect(licenceViewModel.createLink).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
@@ -353,7 +388,7 @@ describe('CaseloadViewModel', () => {
     it('returns prison-will-create link if the licence was not started and the hard-stop licence is IN_PROGRESS', () => {
       licence = { ...licence, kind: LicenceKind.HARD_STOP, status: LicenceStatus.IN_PROGRESS }
       const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
         null
       )[0]
       expect(licenceViewModel.createLink).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
@@ -364,7 +399,7 @@ describe('CaseloadViewModel', () => {
       const licence1 = { ...licence, id: 2, kind: LicenceKind.HARD_STOP, status: LicenceStatus.SUBMITTED, versionOf: 1 }
       const licence2 = { ...licence, status: LicenceStatus.TIMED_OUT }
       const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence1, licence2] }],
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence1, licence2] }],
         null
       )[0]
       expect(licenceViewModel.createLink).toEqual('/licence/create/id/2/licence-created-by-prison')
@@ -374,7 +409,7 @@ describe('CaseloadViewModel', () => {
     it('returns created-by-prison link if the licence kind is HARD_STOP and the licence status is not IN_PROGRESS, when the original licence was NOT_STARTED', () => {
       const licence1 = { ...licence, id: 2, kind: LicenceKind.HARD_STOP, status: LicenceStatus.SUBMITTED }
       const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence1] }],
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence1] }],
         null
       )[0]
       expect(licenceViewModel.createLink).toEqual('/licence/create/id/2/licence-created-by-prison')
@@ -384,7 +419,7 @@ describe('CaseloadViewModel', () => {
     it('returns the create licence link if the licence has not been started', () => {
       licence = { ...licence, id: undefined, status: LicenceStatus.NOT_STARTED, type: LicenceType.AP }
       const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
         null
       )[0]
       expect(licenceViewModel.createLink).toEqual('/licence/create/nomisId/A1234BC/confirm')
@@ -394,7 +429,7 @@ describe('CaseloadViewModel', () => {
     it('returns check-your-answers link if the licence is in any other state', () => {
       licence = { ...licence }
       const licenceViewModel = createCaseloadViewModel(
-        [{ nomisRecord, deliusRecord, probationPractitioner, licences: [licence] }],
+        [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
         null
       )[0]
       expect(licenceViewModel.createLink).toEqual('/licence/create/id/1/check-your-answers')

@@ -7,12 +7,12 @@ import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
 
 import LicenceType from '../../../enumeration/licenceType'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import Container from '../../../services/container'
 import OmuCaselist from '../../../services/omuCaselist'
+import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 
-const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -22,6 +22,14 @@ describe('Route handlers - View and print case list', () => {
   const handler = new ViewAndPrintCaseRoutes(caseloadService, prisonerService)
   let req: Request
   let res: Response
+
+  const cvlFields: CvlFields = {
+    licenceType: LicenceType.AP,
+    hardStopDate: '03/01/2023',
+    hardStopWarningDate: '01/01/2023',
+    isInHardStopPeriod: true,
+    isDueForEarlyRelease: false,
+  }
 
   beforeEach(() => {
     req = {
@@ -76,13 +84,14 @@ describe('Route handlers - View and print case list', () => {
             status: LicenceStatus.NOT_STARTED,
           },
         ],
+        cvlFields,
         nomisRecord: {
           firstName: 'Bob',
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
           confirmedReleaseDate: '2022-05-01',
           legalStatus: 'SENTENCED',
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Sherlock Holmes',
         },
@@ -94,13 +103,14 @@ describe('Route handlers - View and print case list', () => {
             status: LicenceStatus.IN_PROGRESS,
           },
         ],
+        cvlFields,
         nomisRecord: {
           firstName: 'Harvey',
           lastName: 'Smith',
           prisonerNumber: 'A1234AC',
           conditionalReleaseDate: '2022-05-01',
           legalStatus: 'SENTENCED',
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Walter White',
         },
@@ -112,13 +122,14 @@ describe('Route handlers - View and print case list', () => {
             status: LicenceStatus.SUBMITTED,
           },
         ],
+        cvlFields,
         nomisRecord: {
           firstName: 'Harold',
           lastName: 'Lloyd',
           prisonerNumber: 'A1234AD',
           conditionalReleaseDate: '2022-05-01',
           legalStatus: 'SENTENCED',
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Harry Goldman',
         },
@@ -130,13 +141,14 @@ describe('Route handlers - View and print case list', () => {
             status: LicenceStatus.APPROVED,
           },
         ],
+        cvlFields,
         nomisRecord: {
           firstName: 'Stephen',
           lastName: 'Rowe',
           prisonerNumber: 'A1234AE',
           conditionalReleaseDate: '2022-06-10',
           legalStatus: 'SENTENCED',
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Larry Johnson',
         },
@@ -148,13 +160,14 @@ describe('Route handlers - View and print case list', () => {
             status: LicenceStatus.ACTIVE,
           },
         ],
+        cvlFields,
         nomisRecord: {
           firstName: 'Bob',
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
           confirmedReleaseDate: '2022-07-01',
           legalStatus: 'SENTENCED',
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Sherlock Holmes',
         },
@@ -166,13 +179,14 @@ describe('Route handlers - View and print case list', () => {
             status: LicenceStatus.VARIATION_IN_PROGRESS,
           },
         ],
+        cvlFields,
         nomisRecord: {
           firstName: 'Joe',
           lastName: 'Bloggs',
           prisonerNumber: 'A1234AB',
-          conditionalReleaseOverrideDate: '2022-06-01',
+          conditionalReleaseDate: '2022-06-01',
           legalStatus: 'SENTENCED',
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Thor',
         },
@@ -184,13 +198,14 @@ describe('Route handlers - View and print case list', () => {
             status: LicenceStatus.VARIATION_SUBMITTED,
           },
         ],
+        cvlFields,
         nomisRecord: {
           firstName: 'Harvey',
           lastName: 'Smith',
           prisonerNumber: 'A1234AC',
           conditionalReleaseDate: '2022-05-01',
           legalStatus: 'SENTENCED',
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Walter White',
         },
@@ -202,13 +217,14 @@ describe('Route handlers - View and print case list', () => {
             status: LicenceStatus.VARIATION_APPROVED,
           },
         ],
+        cvlFields,
         nomisRecord: {
           firstName: 'Harold',
           lastName: 'Lloyd',
           prisonerNumber: 'A1234AD',
           conditionalReleaseDate: '2022-05-01',
           legalStatus: 'SENTENCED',
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Harry Goldman',
         },
@@ -908,13 +924,14 @@ describe('Route handlers - View and print case list', () => {
               versionOf: 45,
             },
           ],
+          cvlFields,
           nomisRecord: {
             firstName: 'Bob',
             lastName: 'Smith',
             prisonerNumber: 'A1234AA',
             confirmedReleaseDate: '2022-05-01',
             legalStatus: 'SENTENCED',
-          } as Prisoner,
+          } as CvlPrisoner,
           probationPractitioner: {
             name: 'Sherlock Holmes',
           },
@@ -1131,13 +1148,14 @@ describe('Route handlers - View and print case list', () => {
               status: LicenceStatus.APPROVED,
             },
           ],
+          cvlFields,
           nomisRecord: {
             firstName: 'Bob',
             lastName: 'Smith',
             prisonerNumber: 'A1234AA',
             confirmedReleaseDate: '',
             legalStatus: 'SENTENCED',
-          } as Prisoner,
+          } as CvlPrisoner,
           probationPractitioner: {
             name: 'Sherlock Holmes',
           },
@@ -1149,13 +1167,14 @@ describe('Route handlers - View and print case list', () => {
               status: LicenceStatus.IN_PROGRESS,
             },
           ],
+          cvlFields,
           nomisRecord: {
             firstName: 'Harvey',
             lastName: 'Smith',
             prisonerNumber: 'A1234AC',
             conditionalReleaseDate: null,
             legalStatus: 'SENTENCED',
-          } as Prisoner,
+          } as CvlPrisoner,
           probationPractitioner: {
             name: 'Walter White',
           },

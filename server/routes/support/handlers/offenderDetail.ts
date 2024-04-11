@@ -36,7 +36,7 @@ export default class OffenderDetailRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { nomsId } = req.params
-    const prisonerDetail = _.head(await this.prisonerService.searchPrisonersByNomisIds([nomsId], user))
+    const { prisoner: prisonerDetail, cvl: hardStopDetails } = await this.licenceService.getPrisonerDetail(nomsId, user)
     const deliusRecord = _.head(await this.communityService.searchProbationers({ nomsNumber: nomsId }))
     const probationPractitioner = deliusRecord?.offenderManagers.find(com => com.active)
     const probationPractitionerContact = probationPractitioner
@@ -69,6 +69,11 @@ export default class OffenderDetailRoutes {
         sentenceExpiryDate,
         licenceExpiryDate,
         paroleEligibilityDate,
+        hardStop: {
+          cutoffDate: hardStopDetails.hardStopDate,
+          warningDate: hardStopDetails.hardStopWarningDate,
+          isInHardStopPeriod: hardStopDetails.isInHardStopPeriod,
+        },
         determinate: prisonerDetail.indeterminateSentence ? 'No' : 'Yes',
         dob: (!!prisonerDetail && moment(prisonerDetail.dateOfBirth).format('DD MMM YYYY')) || '',
         hdcStatus: hdcStatus ? hdcStatus?.approvalStatus : 'Not found',

@@ -1,17 +1,15 @@
 import CommunityService from './communityService'
-import PrisonerService from './prisonerService'
-import { DeliusRecord, ManagedCaseForApproval } from '../@types/managedCase'
+import type { DeliusRecord, ManagedCaseForApproval } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
-import { LicenceSummaryApproverView } from '../@types/licenceApiClientTypes'
+import type { LicenceSummaryApproverView } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import { filterCentralCaseload } from '../utils/utils'
 import { LicenceApiClient } from '../data'
 
 export default class ApproverCaseloadService {
   constructor(
-    private readonly prisonerService: PrisonerService,
     private readonly communityService: CommunityService,
     private readonly licenceApiClient: LicenceApiClient
   ) {}
@@ -42,13 +40,14 @@ export default class ApproverCaseloadService {
       .filter(offender => offender.otherIds?.nomsNumber)
       .map(offender => offender.otherIds?.nomsNumber)
 
-    const nomisRecords = await this.prisonerService.searchPrisonersByNomisIds(caseloadNomisIds, user)
+    const nomisRecords = await this.licenceApiClient.searchPrisonersByNomsIds(caseloadNomisIds, user)
 
     return managedOffenders
       .map(offender => {
         return {
           deliusRecord: offender,
-          nomisRecord: nomisRecords.find(nomisRecord => nomisRecord.prisonerNumber === offender.otherIds?.nomsNumber),
+          nomisRecord: nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.otherIds?.nomsNumber)
+            ?.prisoner,
         }
       })
       .filter(offender => offender.nomisRecord)
