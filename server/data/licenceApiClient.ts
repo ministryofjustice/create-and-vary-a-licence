@@ -591,6 +591,9 @@ export default class LicenceApiClient extends RestClient {
     prisonIds?: string[],
     user?: User
   ): Promise<CaseloadItem[]> {
+    if (prisonIds.length < 1) {
+      return []
+    }
     return (await this.post(
       {
         path: `/prisoner-search/release-date-by-prison`,

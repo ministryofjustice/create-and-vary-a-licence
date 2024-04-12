@@ -227,7 +227,6 @@ export default class CaseloadService {
           licences: [{ status: licenceStatus, type: licenceType, hardStopDate: null, hardStopWarningDate: null }],
         }
       }
-
       const hardStopDate = parseCvlDate(offender.cvlFields?.hardStopDate)
       const hardStopWarningDate = parseCvlDate(offender.cvlFields?.hardStopWarningDate)
 

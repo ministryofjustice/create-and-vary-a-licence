@@ -96,8 +96,8 @@ function createCaselist(status: LicenceStatus, confirmedReleaseDate: string, con
         licences: [{ type: LicenceType.AP, status }],
         cvlFields: {
           licenceType: 'AP',
-          hardStopDate: '2023-01-03',
-          hardStopWarningDate: '2023-01-01',
+          hardStopDate: '03/01/2023',
+          hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: true,
         },
