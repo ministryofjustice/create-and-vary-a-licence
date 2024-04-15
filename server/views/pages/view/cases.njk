@@ -7,14 +7,32 @@
 {% from "partials/viewCases.njk" import viewCases %}
 {% from "partials/viewCases.njk" import offenderName %}
 {% from "partials/viewCases.njk" import casesTable %}
-{% from "pages/attentionNeededTabDescription.njk" import attentionNeededTabDescription %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "pages/releasesInTwoWorkingDaysTab.njk" import releasesInTwoWorkingDaysTab %}
+{% from "pages/futureReleasesTab.njk" import futureReleasesTab %}
+{% from "pages/attentionNeededTab.njk" import attentionNeededTab, attentionNeededTabHeadingWithCount %}
+
 
 {% set pageTitle = applicationName + " - view an approved licence" %}
 {% set pageId = "view-cases-page" %}
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
-
+{% set peopleInPrisontabs = [] %}
+{% set releaseInTwoWorkingDaysCount = (cases | filterByTabType('releasesInNextTwoWorkingDays')).length %}
+{% set futureReleasesCount = (cases | filterByTabType('futureReleases')).length %}
+{% set attentionNeededCount = (cases | filterByTabType('attentionNeeded')).length %}
+{% set releaseInNextTwoWorkingDaysLabel = "Releases in next 2 working days " + ("("  + releaseInTwoWorkingDaysCount + releaseInTwoWorkingDaysCount | pluralise(" result") + ")" if search) %}
+{% set futureReleasesLabel = "Future releases " + ("(" + futureReleasesCount + futureReleasesCount | pluralise(" result") + ")" if search) %}
+{% set attentionNeededLabel = "Attention needed " + ("(" + attentionNeededCount + attentionNeededCount | pluralise(" result") + ")" if search) %}
+{% if search and futureReleasesCount  %}
+    {% set activeTab = 'future-releases' %}
+{% elif search and attentionNeededCount  %}
+    {% set activeTab = 'attention-needed' %}
+{% else %}
+    {% set activeTab = 'releases-in-two-working-days' %}
+{% endif %}
 {% set licences = [] %}
+
 {% for case in cases %}
     {% if case.probationPractitioner %}
         {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
@@ -77,6 +95,7 @@
 
 {% if probationView %}
     {% set probationViewUrlQuery = '?view=probation' %}
+    {% set activeTab = '' %}
 {% endif %}
 
 {% block content %}
@@ -96,7 +115,8 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
             <div class="moj-search govuk-!-margin-bottom-8">
-                <form method="GET">
+                <form class="moj-search-form" method="GET">
+                    <input type="hidden" id="activeTab" value="{{ activeTab }}">
                     <input type="hidden" name="view" value="{% if probationView %}probation{% else %}prison{% endif %}">
                     <div class="govuk-form-group">
                         <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
@@ -109,7 +129,7 @@
                     </div>
                     <button class="govuk-button moj-search__button " data-module="govuk-button">
                         Search
-                        </button>
+                    </button>
                 </form>
             </div>
         </div>
@@ -133,55 +153,40 @@
         {% endif %}
 
         {% if not probationView %}
-            <div class="govuk-tabs" data-module="govuk-tabs">
+            {% set peopleInPrisontabs = (peopleInPrisontabs.push(
+                    {
+                        label: releaseInNextTwoWorkingDaysLabel,
+                        id: "releases-in-two-working-days",
+                        panel: {
+                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: "releasesInNextTwoWorkingDays", config: statusConfig})
+                        }
+                    }, 
+                    {
+                        label: futureReleasesLabel,
+                        id: "future-releases",
+                        panel: {
+                            html: futureReleasesTab({ cases: cases, tabType: "futureReleases", config: statusConfig})
+                        }
+                    }
+                ), peopleInPrisontabs) 
+            %}
 
-                <h2 class="govuk-tabs__title">
-                            Contents
-                        </h2>
-                <ul class="govuk-tabs__list" role="tablist">
-                    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" data-qa="releases-two-days-view-link" role="presentation">
-                        <a class="govuk-tabs__tab" href="#releases-two-days" id="tab_releases-two-days" role="tab" aria-controls="releases-two-days" aria-selected="true" tabindex="0">
-                                Releases in next 2 working days
-                            </a>
-                    <li class="govuk-tabs__list-item" data-qa="before-hardstop-view-link" role="presentation">
-                        <a class="govuk-tabs__tab" href="#before-hardstop" id="tab_before-hardstop" role="tab" aria-controls="before-hardstop" aria-selected="false" tabindex="-1">
-                                Future releases
-                            </a>
-                    </li>
-                    {% if (cases | filterByTabType('attentionNeeded')).length %}
-                        <li class="govuk-tabs__list-item" data-qa="attention-needed-view-link" role="presentation">
-                            <a class="govuk-tabs__tab" href="#attention-needed" id="tab_attention-needed" role="tab" aria-controls="attention-needed" aria-selected="false" tabindex="-2">
-                                    Attention needed
-                                    <span id="attention-needed-count" class="moj-notification-badge">{{ (cases | filterByTabType('attentionNeeded')).length  }}</span>
-                                </a>
-                        </li>
-                    {% endif %}
-                </ul>
-                <div class="govuk-tabs__panel" id="releases-two-days" role="tabpanel" aria-labelledby="tab_releases-two-days">
-                    <h2 class="govuk-heading-l">Releases in next 2 working days</h2>
-                    <p class="govuk-body">From 2 days before release:</p>
-                    <ul class="govuk-list govuk-list--bullet">
-                        <li>probation practitioners can no longer work on licences</li>
-                        <li>you can generate a standard licence if a probation practitioner has not submitted one for approval.<br> This includes time-served releases
-                                </li>
-                    </ul>
-                    {{ viewCases({ cases: cases, tabType: 'releasesInNextTwoWorkingDays', config: statusConfig}) }}
-                </div>
+            {% if attentionNeededCount %}
+                {% set peopleInPrisontabs = (peopleInPrisontabs.push(
+                    {
+                        label: attentionNeededTabHeadingWithCount({label: attentionNeededLabel, count: attentionNeededCount, isSearch: not not search}),
+                        id: "attention-needed",
+                        panel: {
+                            html: attentionNeededTab({ cases: cases, tabType: "attentionNeeded", config: statusConfig})
+                        }
+                    }
+                    ), peopleInPrisontabs) 
+                %}
+            {% endif %}
 
-                <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="before-hardstop" role="tabpanel" aria-labelledby="tab_before-hardstop">
-                    <h2 class="govuk-heading-l">Future releases</h2>
-                    <p class="govuk-body">Licences for people within 4 weeks of release or that have been started before then.</p>
-                    {{ viewCases({ cases: cases, tabType: 'futureReleases', config: statusConfig}) }}
-                </div>
-
-                {% if (cases | filterByTabType('attentionNeeded')).length %}
-                    <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="attention-needed" role="tabpanel" aria-labelledby="tab_attention-needed">
-                        <h2 class="govuk-heading-l">Attention needed</h2>
-                            {{ attentionNeededTabDescription() }}
-                            {{ viewCases({ cases: cases, tabType: 'attentionNeeded', config: statusConfig}) }}
-                    </div>
-                {% endif %}
-            </div>
+            {{ govukTabs({
+                items: peopleInPrisontabs
+            }) }}
         {% else %}
             {{ casesTable({licences: licences, isHardStop: false}) }}
         {% endif %}
@@ -242,3 +247,7 @@
         </p>
     </div>
 {% endmacro %}
+
+{% block pageScripts %}
+    <script src="/assets/js/search/setActiveTab.js"></script>
+{% endblock %}
