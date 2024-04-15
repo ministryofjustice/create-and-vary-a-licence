@@ -61,6 +61,7 @@ export default class ViewAndPrintCaseRoutes {
                 latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
                 latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
           lastWorkedOnBy: latestLicence?.updatedByFullName,
+          isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
         }
       })
       .filter(c => {

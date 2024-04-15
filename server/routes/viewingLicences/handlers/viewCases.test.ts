@@ -257,6 +257,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -271,6 +272,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -285,6 +287,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -299,6 +302,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -345,6 +349,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -359,6 +364,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -373,6 +379,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -387,6 +394,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: true,
@@ -427,6 +435,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -441,6 +450,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -455,6 +465,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -469,6 +480,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: true,
@@ -509,6 +521,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -523,6 +536,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -537,6 +551,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -551,6 +566,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -588,6 +604,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -602,6 +619,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -616,6 +634,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -630,6 +649,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -665,6 +685,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -700,6 +721,7 @@ describe('Route handlers - View and print case list', () => {
             isClickable: false,
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -735,6 +757,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -771,6 +794,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -785,6 +809,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -799,6 +824,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -813,6 +839,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
 
@@ -850,6 +877,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -864,6 +892,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -878,6 +907,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -892,6 +922,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
 
@@ -963,6 +994,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -1000,6 +1032,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -1014,6 +1047,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -1028,6 +1062,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -1042,6 +1077,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
 
@@ -1080,6 +1116,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'Confirmed release date',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -1094,6 +1131,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -1108,6 +1146,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: true,
@@ -1122,6 +1161,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'futureReleases',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
 
@@ -1200,6 +1240,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'attentionNeeded',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
           {
             isClickable: false,
@@ -1214,6 +1255,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDateLabel: 'CRD',
             tabType: 'attentionNeeded',
             nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
           },
         ],
 

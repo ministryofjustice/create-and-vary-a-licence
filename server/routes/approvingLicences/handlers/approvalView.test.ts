@@ -81,6 +81,7 @@ describe('Route - view and approve a licence', () => {
             additionalLicenceConditions: [],
             additionalPssConditions: [],
             bespokeConditions: [],
+            isDueForEarlyRelease: false,
           },
         },
       } as unknown as Response
@@ -95,9 +96,115 @@ describe('Route - view and approve a licence', () => {
           telephone: '07777777777',
         },
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
+        isDueForEarlyRelease: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(communityService.getStaffDetailByUsername).toHaveBeenCalled()
+    })
+
+    it('should set isDueForEarlyRelease to true when the licence is not a variation and the flag is true', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username, displayName },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.SUBMITTED,
+            surname: 'Bobson',
+            forename: 'Bob',
+            appointmentTime: '12/12/2022 14:16',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            bespokeConditions: [],
+            kind: 'CRD',
+            isDueForEarlyRelease: true,
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
+        additionalConditions: [],
+        staffDetails: {
+          email: 'joebloggs@probation.gov.uk',
+          name: 'Joe Bloggs',
+          telephone: '07777777777',
+        },
+        returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
+        isDueForEarlyRelease: true,
+      })
+    })
+
+    it('should set isDueForEarlyRelease to false when the licence is a variation', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username, displayName },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.SUBMITTED,
+            surname: 'Bobson',
+            forename: 'Bob',
+            appointmentTime: '12/12/2022 14:16',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            bespokeConditions: [],
+            kind: 'VARIATION',
+            isDueForEarlyRelease: true,
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
+        additionalConditions: [],
+        staffDetails: {
+          email: 'joebloggs@probation.gov.uk',
+          name: 'Joe Bloggs',
+          telephone: '07777777777',
+        },
+        returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
+        isDueForEarlyRelease: false,
+      })
+    })
+
+    it('should set isDueForEarlyRelease to false when the flag is false', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username, displayName },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.SUBMITTED,
+            surname: 'Bobson',
+            forename: 'Bob',
+            appointmentTime: '12/12/2022 14:16',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            bespokeConditions: [],
+            kind: 'CRD',
+            isDueForEarlyRelease: false,
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
+        additionalConditions: [],
+        staffDetails: {
+          email: 'joebloggs@probation.gov.uk',
+          name: 'Joe Bloggs',
+          telephone: '07777777777',
+        },
+        returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
+        isDueForEarlyRelease: false,
+      })
     })
   })
 

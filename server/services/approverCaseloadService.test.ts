@@ -47,6 +47,8 @@ describe('Approval Caseload Service', () => {
         licenceStatus: LicenceStatus.SUBMITTED,
         comUsername: 'joebloggs',
         isReviewNeeded: false,
+        isInHardStopPeriod: false,
+        isDueForEarlyRelease: true,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValue([
@@ -96,6 +98,7 @@ describe('Approval Caseload Service', () => {
             type: 'AP',
             status: 'SUBMITTED',
             comUsername: 'joebloggs',
+            isDueForEarlyRelease: true,
           },
         ],
         probationPractitioner: {
@@ -118,6 +121,8 @@ describe('Approval Caseload Service', () => {
         approvedByName: 'Jim Smith',
         approvedDate: '25/04/2014 07:45:59',
         isReviewNeeded: false,
+        isInHardStopPeriod: false,
+        isDueForEarlyRelease: false,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValue([
