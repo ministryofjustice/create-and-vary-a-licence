@@ -3,7 +3,7 @@ import fs from 'fs'
 import _ from 'lodash'
 import { format } from 'date-fns'
 import moment from 'moment'
-import {
+import type {
   AdditionalCondition,
   AdditionalConditionsRequest,
   AppointmentAddressRequest,
@@ -38,6 +38,7 @@ import {
   ComReviewCount,
   CaseloadItem,
   LicenceCreationResponse,
+  CvlPrisoner,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
@@ -57,7 +58,6 @@ import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
 import TimelineEventType from '../enumeration/TimelineEventType'
 import ConditionService from './conditionService'
-import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 
 export default class LicenceService {
   constructor(
@@ -516,7 +516,7 @@ export default class LicenceService {
     return this.licenceApiClient.batchInActivateLicences(licenceIds)
   }
 
-  public static getLicenceType = (sentenceDetail: Prisoner): LicenceType => {
+  public static getLicenceType = (sentenceDetail: CvlPrisoner): LicenceType => {
     const tused = sentenceDetail?.topupSupervisionExpiryDate
     const led = sentenceDetail?.licenceExpiryDate
 
@@ -579,5 +579,18 @@ export default class LicenceService {
 
   async getPrisonerDetail(nomsId: string, user: User): Promise<CaseloadItem> {
     return this.licenceApiClient.getPrisonerDetail(nomsId, user)
+  }
+
+  async searchPrisonersByNomsIds(nomsIds: string[], user: User): Promise<CaseloadItem[]> {
+    return this.licenceApiClient.searchPrisonersByNomsIds(nomsIds, user)
+  }
+
+  async searchPrisonersByReleaseDate(
+    earliestReleaseDate: Date,
+    latestReleaseDate: Date,
+    prisonIds?: string[],
+    user?: User
+  ): Promise<CaseloadItem[]> {
+    return this.licenceApiClient.searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonIds, user)
   }
 }

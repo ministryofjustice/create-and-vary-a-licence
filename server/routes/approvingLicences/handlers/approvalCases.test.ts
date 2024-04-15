@@ -6,11 +6,11 @@ import PrisonerService from '../../../services/prisonerService'
 
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import ApproverCaseloadService from '../../../services/approverCaseloadService'
+import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 
-const caseloadService = new ApproverCaseloadService(null, null, null) as jest.Mocked<ApproverCaseloadService>
+const caseloadService = new ApproverCaseloadService(null, null) as jest.Mocked<ApproverCaseloadService>
 jest.mock('../../../services/approverCaseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -55,7 +55,7 @@ describe('Route Handlers - Approval - case list', () => {
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
           confirmedReleaseDate: '2022-05-01',
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Walter White',
         },
@@ -73,8 +73,8 @@ describe('Route Handlers - Approval - case list', () => {
           firstName: 'Joe',
           lastName: 'Bloggs',
           prisonerNumber: 'A1234AB',
-          conditionalReleaseOverrideDate: '2022-05-01',
-        } as Prisoner,
+          conditionalReleaseDate: '2022-05-01',
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Thor',
         },
@@ -93,7 +93,7 @@ describe('Route Handlers - Approval - case list', () => {
           lastName: 'Smith',
           prisonerNumber: 'A1234AC',
           conditionalReleaseDate: format(nonUrgentReleaseDate, 'yyyy-MM-dd'),
-        } as Prisoner,
+        } as CvlPrisoner,
         probationPractitioner: {
           name: 'Walter Black',
         },
@@ -195,7 +195,7 @@ describe('Route Handlers - Approval - case list', () => {
             lastName: 'Smith',
             prisonerNumber: 'A1234AA',
             confirmedReleaseDate: '2022-05-01',
-          } as Prisoner,
+          } as CvlPrisoner,
           probationPractitioner: {
             name: 'Walter White',
           },
@@ -215,8 +215,8 @@ describe('Route Handlers - Approval - case list', () => {
             firstName: 'Joe',
             lastName: 'Bloggs',
             prisonerNumber: 'A1234AB',
-            conditionalReleaseOverrideDate: '2022-05-01',
-          } as Prisoner,
+            conditionalReleaseDate: '2022-05-01',
+          } as CvlPrisoner,
           probationPractitioner: {
             name: 'Thor',
           },

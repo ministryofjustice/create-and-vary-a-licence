@@ -121,9 +121,9 @@ export default defineConfig({
         stubGetSingleOffenderByCrn: community.stubGetSingleOffenderByCrn,
         stubCommunityApiPing: community.stubPing,
 
-        searchPrisonersByNomisIds: prisonerSearch.searchPrisonersByNomisIds,
+        searchPrisonersByNomisIds: licence.searchPrisonersByNomisIds,
+        searchPrisonersByReleaseDate: licence.searchPrisonersByReleaseDate,
         searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
-        searchPrisonersByReleaseDate: prisonerSearch.searchPrisonersByReleaseDate,
         stubPrisonerSearchApiPing: prisonerSearch.stubPing,
 
         stubGetPrisonUserDetails: prison.stubGetUserDetails,

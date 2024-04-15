@@ -5,8 +5,7 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
-import type { Licence } from '../@types/licenceApiClientTypes'
-import type { Prisoner } from '../@types/prisonerSearchApiClientTypes'
+import type { CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import config from '../config'
 import { Licence as ManagedCaseLicence } from '../@types/managedCase'
@@ -183,15 +182,11 @@ const formatAddress = (address?: string) => {
 const licenceIsTwoDaysToRelease = (licence: Licence) =>
   moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
 
-const selectReleaseDate = (nomisRecord: Prisoner) => {
+const selectReleaseDate = (nomisRecord: CvlPrisoner) => {
   let dateString = nomisRecord.conditionalReleaseDate
 
   if (nomisRecord.confirmedReleaseDate) {
     dateString = nomisRecord.confirmedReleaseDate
-  }
-
-  if (nomisRecord.conditionalReleaseOverrideDate) {
-    dateString = nomisRecord.conditionalReleaseOverrideDate
   }
 
   if (!dateString) {
@@ -204,7 +199,7 @@ const selectReleaseDate = (nomisRecord: Prisoner) => {
 
 const isAttentionNeeded = (
   { status, licenceStartDate }: { status: LicenceStatus; licenceStartDate?: string },
-  nomisRecord: Prisoner
+  nomisRecord: CvlPrisoner
 ) => {
   const today = new Date()
   const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
@@ -218,7 +213,7 @@ const isAttentionNeeded = (
 
 const determineComCreateCasesTab = (
   licence: ManagedCaseLicence,
-  nomisRecord: Prisoner,
+  nomisRecord: CvlPrisoner,
   cutOffDateString: string
 ): ComCreateCaseTab => {
   if (licence && isAttentionNeeded(licence, nomisRecord)) {

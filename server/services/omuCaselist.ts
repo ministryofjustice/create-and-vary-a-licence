@@ -52,9 +52,6 @@ function isOutOfScope(c: ManagedCase) {
 }
 
 function isInTheFuture(c: ManagedCase) {
-  const releaseDate =
-    c.nomisRecord.confirmedReleaseDate ||
-    c.nomisRecord.conditionalReleaseOverrideDate ||
-    c.nomisRecord.conditionalReleaseDate
+  const releaseDate = c.nomisRecord.confirmedReleaseDate || c.nomisRecord.conditionalReleaseDate
   return isFuture(new Date(releaseDate))
 }

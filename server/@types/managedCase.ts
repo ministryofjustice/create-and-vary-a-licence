@@ -1,9 +1,9 @@
-import { Prisoner } from './prisonerSearchApiClientTypes'
-import { OffenderDetail } from './probationSearchApiClientTypes'
-import { CommunityApiManagedOffender } from './communityClientTypes'
+import { type OffenderDetail } from './probationSearchApiClientTypes'
+import { type CommunityApiManagedOffender } from './communityClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import LicenceKind from '../enumeration/LicenceKind'
+import type { CvlPrisoner, CvlFields } from './licenceApiClientTypes'
 
 export type DeliusRecord = OffenderDetail & CommunityApiManagedOffender
 
@@ -45,10 +45,16 @@ export type ApprovalLicence = {
 
 export type GenericManagedCase<T> = {
   deliusRecord?: DeliusRecord
-  nomisRecord?: Prisoner
+  nomisRecord?: CvlPrisoner
   licences?: T[]
   probationPractitioner?: ProbationPractitioner
+  cvlFields: CvlFields
 }
-
 export type ManagedCase = GenericManagedCase<Licence>
-export type ManagedCaseForApproval = GenericManagedCase<ApprovalLicence>
+
+export type ManagedCaseForApproval = {
+  deliusRecord?: DeliusRecord
+  nomisRecord?: CvlPrisoner
+  licences?: ApprovalLicence[]
+  probationPractitioner?: ProbationPractitioner
+}

@@ -55,6 +55,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           forename: 'Jim',
           surname: 'Jones',
           statusCode: LicenceStatus.IN_PROGRESS,
+          isDueForEarlyRelease: true,
         } as Licence,
       },
     } as unknown as Response
@@ -172,7 +173,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       })
 
       it('should allow PPs to edit initial appointment details for non-variations that are not in the hard stop period', async () => {
-        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: false }
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
 
         await handler.GET(req, res)
 
@@ -188,7 +189,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       })
 
       it('should not allow PPs to edit initial appointment details for non-variations in the hard stop period', async () => {
-        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true } as Licence
 
         await handler.GET(req, res)
 
@@ -205,7 +206,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
       it('should pass through the OMU email details', async () => {
         licenceService.getOmuEmail.mockResolvedValue({ email: 'test@test.test' } as OmuContact)
-        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true }
+        res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: true } as Licence
 
         await handler.GET(req, res)
 

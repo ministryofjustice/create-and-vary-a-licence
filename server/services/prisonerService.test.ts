@@ -6,6 +6,7 @@ import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import PrisonerService from './prisonerService'
 import { HomeDetentionCurfew, PrisonApiPrisoner, PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
 import { PagePrisoner, Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
+import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 
 jest.mock('fs')
 jest.mock('../data/prisonApiClient')
@@ -191,7 +192,7 @@ describe('Prisoner Service', () => {
   describe('Get HDC statuses', () => {
     it('should return empty list if no booking ids are available', async () => {
       const actualResult = await prisonerService.getHdcStatuses(
-        [{ firstName: 'Joe', lastName: 'Bloggs' } as Prisoner],
+        [{ firstName: 'Joe', lastName: 'Bloggs' } as CvlPrisoner],
         user
       )
       expect(actualResult).toEqual([])
@@ -210,7 +211,7 @@ describe('Prisoner Service', () => {
             lastName: 'Bloggs',
             bookingId: '123',
             homeDetentionCurfewEligibilityDate: '26/12/2021',
-          } as Prisoner,
+          } as CvlPrisoner,
         ],
         user
       )

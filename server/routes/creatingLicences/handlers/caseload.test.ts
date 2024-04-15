@@ -10,7 +10,7 @@ import LicenceType from '../../../enumeration/licenceType'
 import { ManagedCase } from '../../../@types/managedCase'
 import { parseIsoDate } from '../../../utils/utils'
 
-const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
 jest.mock('../../../services/caseloadService')
 
