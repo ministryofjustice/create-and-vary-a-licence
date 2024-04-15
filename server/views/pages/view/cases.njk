@@ -24,7 +24,13 @@
 {% set releaseInNextTwoWorkingDaysLabel = "Releases in next 2 working days " + ("("  + releaseInTwoWorkingDaysCount + releaseInTwoWorkingDaysCount | pluralise(" result") + ")" if search) %}
 {% set futureReleasesLabel = "Future releases " + ("(" + futureReleasesCount + futureReleasesCount | pluralise(" result") + ")" if search) %}
 {% set attentionNeededLabel = "Attention needed " + ("(" + attentionNeededCount + attentionNeededCount | pluralise(" result") + ")" if search) %}
-{% set activeTab = '#releases-in-two-working-days' if search and releaseInTwoWorkingDaysCount else ('#future-releases' if search and futureReleasesCount else ('#attention-needed' if search and attentionNeededCount  else  '#releases-in-two-working-days')) %}
+{% if search and futureReleasesCount  %}
+    {% set activeTab = 'future-releases' %}
+{% elif search and attentionNeededCount  %}
+    {% set activeTab = 'attention-needed' %}
+{% else %}
+    {% set activeTab = 'releases-in-two-working-days' %}
+{% endif %}
 {% set licences = [] %}
 
 {% for case in cases %}
@@ -107,9 +113,9 @@
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
-                    <input type="hidden" name="activeTab" value="{{ activeTab }}">
             <div class="moj-search govuk-!-margin-bottom-8">
                 <form class="moj-search-form" method="GET">
+                    <input type="hidden" id="activeTab" value="{{ activeTab }}">
                     <input type="hidden" name="view" value="{% if probationView %}probation{% else %}prison{% endif %}">
                     <div class="govuk-form-group">
                         <label class="govuk-label moj-search__label govuk-!-font-weight-bold" for="search">
@@ -121,7 +127,7 @@
                         <input class="govuk-input moj-search__input" id="search" name="search" value="{{ search }}">
                     </div>
                     <button class="govuk-button moj-search__button " data-module="govuk-button">
-                        Search{{activeTab}}
+                        Search
                     </button>
                 </form>
             </div>
