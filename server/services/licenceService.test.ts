@@ -868,4 +868,69 @@ describe('Licence Service', () => {
     expect(licenceApiClient.getPrisonerDetail).toHaveBeenCalledWith(nomsId, user)
     expect(callToGetPrisonerDetails).toEqual(prisonerDetails)
   })
+
+  it('Search prisoners by nomis ids', async () => {
+    const prisonerDetails = {
+      prisoner: {
+        prisonerNumber: 'G4169UO',
+        firstName: 'EMAJINHANY',
+        lastName: 'ELYSASHA',
+        dateOfBirth: '1962-04-26',
+        status: 'ACTIVE IN',
+        prisonId: 'BAI',
+        sentenceStartDate: '2017-03-01',
+        releaseDate: '2024-07-19',
+        confirmedReleaseDate: '2024-07-19',
+        sentenceExpiryDate: '2028-08-31',
+        licenceExpiryDate: '2028-08-31',
+        conditionalReleaseDate: '2022-09-01',
+      },
+      cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+    } as CaseloadItem
+    licenceApiClient.searchPrisonersByNomsIds.mockResolvedValue([prisonerDetails])
+    const nomsId = 'G4169UO'
+
+    const result = await licenceService.searchPrisonersByNomsIds([nomsId], user)
+
+    expect(licenceApiClient.searchPrisonersByNomsIds).toHaveBeenCalledWith([nomsId], user)
+
+    expect(result).toEqual([prisonerDetails])
+  })
+
+  it('Search prisoners by nomis ids', async () => {
+    const prisonerDetails = {
+      prisoner: {
+        prisonerNumber: 'G4169UO',
+        firstName: 'EMAJINHANY',
+        lastName: 'ELYSASHA',
+        dateOfBirth: '1962-04-26',
+        status: 'ACTIVE IN',
+        prisonId: 'BAI',
+        sentenceStartDate: '2017-03-01',
+        releaseDate: '2024-07-19',
+        confirmedReleaseDate: '2024-07-19',
+        sentenceExpiryDate: '2028-08-31',
+        licenceExpiryDate: '2028-08-31',
+        conditionalReleaseDate: '2022-09-01',
+      },
+      cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+    } as CaseloadItem
+    licenceApiClient.searchPrisonersByReleaseDate.mockResolvedValue([prisonerDetails])
+
+    const result = await licenceService.searchPrisonersByReleaseDate(
+      utils.parseCvlDate('01/02/2024'),
+      utils.parseCvlDate('01/02/2025'),
+      ['MDI'],
+      user
+    )
+
+    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
+      utils.parseCvlDate('01/02/2024'),
+      utils.parseCvlDate('01/02/2025'),
+      ['MDI'],
+      user
+    )
+
+    expect(result).toEqual([prisonerDetails])
+  })
 })

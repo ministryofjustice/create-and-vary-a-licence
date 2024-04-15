@@ -4,10 +4,10 @@ import VaryApproveListRoutes from './varyApproveList'
 import CaseloadService from '../../../services/caseloadService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import { DeliusRecord } from '../../../@types/managedCase'
+import type { DeliusRecord } from '../../../@types/managedCase'
+import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 
-const caseloadService = new CaseloadService(null, null, null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
 
 describe('Route Handlers - Variation approval list', () => {
@@ -39,12 +39,19 @@ describe('Route Handlers - Variation approval list', () => {
             dateCreated: '01/05/2022 10:15',
           },
         ],
+        cvlFields: {
+          licenceType: 'AP',
+          hardStopDate: '03/01/2023',
+          hardStopWarningDate: '01/01/2023',
+          isInHardStopPeriod: true,
+          isDueForEarlyRelease: true,
+        },
         nomisRecord: {
           firstName: 'Bob',
           lastName: 'Smith',
           prisonerNumber: 'A1234AA',
           releaseDate: '2022-05-01',
-        } as Prisoner,
+        } as CvlPrisoner,
         deliusRecord: {
           otherIds: {
             crn: 'X12345',

@@ -2,9 +2,8 @@ import { Request, Response } from 'express'
 import PrisonerService from '../../../services/prisonerService'
 import CommunityService from '../../../services/communityService'
 import OffenderDetailRoutes from './offenderDetail'
-import type { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import type { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
-import type { LicenceSummary, Licence } from '../../../@types/licenceApiClientTypes'
+import type { LicenceSummary, Licence, CaseloadItem } from '../../../@types/licenceApiClientTypes'
 import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
 
@@ -38,21 +37,29 @@ describe('Route Handlers - Offender detail', () => {
       }
 
       const expectedPrisonerDetail = {
-        firstName: 'Peter',
-        lastName: 'Pepper',
-        conditionalReleaseDate: '2022-06-01',
-        confirmedReleaseDate: '2022-06-01',
-        postRecallReleaseDate: '2022-05-01',
-        topupSupervisionExpiryDate: '2023-05-01',
-        homeDetentionCurfewEligibilityDate: '2022-05-01',
-        sentenceExpiryDate: '2022-06-01',
-        licenceExpiryDate: '2022-06-01',
-        paroleEligibilityDate: '2022-01-01',
-        indeterminateSentence: false,
-        dateOfBirth: '1970-01-01',
-        recall: true,
-      } as Prisoner
-      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
+        prisoner: {
+          firstName: 'Peter',
+          lastName: 'Pepper',
+          conditionalReleaseDate: '2022-06-01',
+          confirmedReleaseDate: '2022-06-01',
+          postRecallReleaseDate: '2022-05-01',
+          topupSupervisionExpiryDate: '2023-05-01',
+          homeDetentionCurfewEligibilityDate: '2022-05-01',
+          sentenceExpiryDate: '2022-06-01',
+          licenceExpiryDate: '2022-06-01',
+          paroleEligibilityDate: '2022-01-01',
+          indeterminateSentence: false,
+          dateOfBirth: '1970-01-01',
+          recall: true,
+        },
+        cvl: {
+          isDueForEarlyRelease: false,
+          isInHardStopPeriod: false,
+          hardStopDate: '03/02/2023',
+          hardStopWarningDate: '01/02/2023',
+        },
+      } as CaseloadItem
+      licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
       communityService.searchProbationers.mockResolvedValue([
         {
@@ -103,7 +110,7 @@ describe('Route Handlers - Offender detail', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
         prisonerDetail: {
-          ...expectedPrisonerDetail,
+          ...expectedPrisonerDetail.prisoner,
           conditionalReleaseDate: '01 Jun 2022',
           confirmedReleaseDate: '01 Jun 2022',
           crn: 'X1234',
@@ -118,6 +125,11 @@ describe('Route Handlers - Offender detail', () => {
           sentenceExpiryDate: '01 Jun 2022',
           tused: '01 May 2023',
           recall: 'Yes',
+          hardStop: {
+            cutoffDate: '03/02/2023',
+            isInHardStopPeriod: false,
+            warningDate: '01/02/2023',
+          },
         },
         probationPractitioner: {
           email: 'mr.t@probation.gov.uk',
@@ -155,21 +167,29 @@ describe('Route Handlers - Offender detail', () => {
     }
 
     const expectedPrisonerDetail = {
-      firstName: 'David',
-      lastName: 'Pepper',
-      conditionalReleaseDate: '2022-06-01',
-      confirmedReleaseDate: '2022-06-01',
-      postRecallReleaseDate: '2022-05-01',
-      topupSupervisionExpiryDate: '2023-05-01',
-      homeDetentionCurfewEligibilityDate: '2022-05-01',
-      sentenceExpiryDate: '2022-06-01',
-      licenceExpiryDate: '2022-06-01',
-      paroleEligibilityDate: '2022-01-01',
-      indeterminateSentence: false,
-      dateOfBirth: '1995-03-05',
-      recall: false,
-    } as Prisoner
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
+      prisoner: {
+        firstName: 'David',
+        lastName: 'Pepper',
+        conditionalReleaseDate: '2022-06-01',
+        confirmedReleaseDate: '2022-06-01',
+        postRecallReleaseDate: '2022-05-01',
+        topupSupervisionExpiryDate: '2023-05-01',
+        homeDetentionCurfewEligibilityDate: '2022-05-01',
+        sentenceExpiryDate: '2022-06-01',
+        licenceExpiryDate: '2022-06-01',
+        paroleEligibilityDate: '2022-01-01',
+        indeterminateSentence: false,
+        dateOfBirth: '1995-03-05',
+        recall: false,
+      },
+      cvl: {
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: false,
+        hardStopDate: '03/02/2023',
+        hardStopWarningDate: '01/02/2023',
+      },
+    } as CaseloadItem
+    licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
     communityService.searchProbationers.mockResolvedValue([
       {
@@ -220,7 +240,7 @@ describe('Route Handlers - Offender detail', () => {
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
-        ...expectedPrisonerDetail,
+        ...expectedPrisonerDetail.prisoner,
         conditionalReleaseDate: '01 Jun 2022',
         confirmedReleaseDate: '01 Jun 2022',
         crn: 'X1234',
@@ -235,6 +255,11 @@ describe('Route Handlers - Offender detail', () => {
         sentenceExpiryDate: '01 Jun 2022',
         tused: '01 May 2023',
         recall: 'No',
+        hardStop: {
+          cutoffDate: '03/02/2023',
+          isInHardStopPeriod: false,
+          warningDate: '01/02/2023',
+        },
       },
       probationPractitioner: {
         email: 'mr.g@probation.gov.uk',
@@ -271,21 +296,22 @@ describe('Route Handlers - Offender detail', () => {
     }
 
     const expectedPrisonerDetail = {
-      firstName: 'David',
-      lastName: 'Pepper',
-      conditionalReleaseDate: null,
-      confirmedReleaseDate: '2022-06-01',
-      postRecallReleaseDate: null,
-      topupSupervisionExpiryDate: null,
-      homeDetentionCurfewEligibilityDate: null,
-      sentenceExpiryDate: null,
-      licenceExpiryDate: null,
-      paroleEligibilityDate: null,
-      indeterminateSentence: false,
-      dateOfBirth: '1995-03-05',
-      recall: false,
-    } as Prisoner
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
+      prisoner: {
+        firstName: 'David',
+        lastName: 'Pepper',
+        confirmedReleaseDate: '2022-06-01',
+        indeterminateSentence: false,
+        dateOfBirth: '1995-03-05',
+        recall: false,
+      },
+      cvl: {
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: false,
+        hardStopDate: '03/02/2023',
+        hardStopWarningDate: '01/02/2023',
+      },
+    } as CaseloadItem
+    licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
     communityService.searchProbationers.mockResolvedValue([
       {
@@ -336,7 +362,7 @@ describe('Route Handlers - Offender detail', () => {
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
-        ...expectedPrisonerDetail,
+        ...expectedPrisonerDetail.prisoner,
         conditionalReleaseDate: 'Not found',
         confirmedReleaseDate: '01 Jun 2022',
         crn: 'X1234',
@@ -351,6 +377,11 @@ describe('Route Handlers - Offender detail', () => {
         sentenceExpiryDate: 'Not found',
         tused: 'Not found',
         recall: 'No',
+        hardStop: {
+          cutoffDate: '03/02/2023',
+          isInHardStopPeriod: false,
+          warningDate: '01/02/2023',
+        },
       },
       probationPractitioner: {
         email: 'mr.g@probation.gov.uk',
@@ -388,21 +419,29 @@ describe('Route Handlers - Offender detail', () => {
     }
 
     const expectedPrisonerDetail = {
-      firstName: 'David',
-      lastName: 'Pepper',
-      conditionalReleaseDate: '2022-06-01',
-      confirmedReleaseDate: '2022-06-01',
-      postRecallReleaseDate: '2022-05-01',
-      topupSupervisionExpiryDate: '2023-05-01',
-      homeDetentionCurfewEligibilityDate: '2022-05-01',
-      sentenceExpiryDate: '2022-06-01',
-      licenceExpiryDate: '2022-06-01',
-      paroleEligibilityDate: '2022-01-01',
-      indeterminateSentence: false,
-      dateOfBirth: '1995-03-05',
-      recall: true,
-    } as Prisoner
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
+      prisoner: {
+        firstName: 'David',
+        lastName: 'Pepper',
+        conditionalReleaseDate: '2022-06-01',
+        confirmedReleaseDate: '2022-06-01',
+        postRecallReleaseDate: '2022-05-01',
+        topupSupervisionExpiryDate: '2023-05-01',
+        homeDetentionCurfewEligibilityDate: '2022-05-01',
+        sentenceExpiryDate: '2022-06-01',
+        licenceExpiryDate: '2022-06-01',
+        paroleEligibilityDate: '2022-01-01',
+        indeterminateSentence: false,
+        dateOfBirth: '1995-03-05',
+        recall: true,
+      },
+      cvl: {
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: false,
+        hardStopDate: '03/02/2023',
+        hardStopWarningDate: '01/02/2023',
+      },
+    } as CaseloadItem
+    licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
     communityService.searchProbationers.mockResolvedValue([
       {
@@ -468,7 +507,7 @@ describe('Route Handlers - Offender detail', () => {
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
-        ...expectedPrisonerDetail,
+        ...expectedPrisonerDetail.prisoner,
         conditionalReleaseDate: '01 Jun 2022',
         confirmedReleaseDate: '01 Jun 2022',
         crn: 'X1234',
@@ -483,6 +522,11 @@ describe('Route Handlers - Offender detail', () => {
         sentenceExpiryDate: '01 Jun 2022',
         tused: '01 May 2023',
         recall: 'Yes',
+        hardStop: {
+          cutoffDate: '03/02/2023',
+          isInHardStopPeriod: false,
+          warningDate: '01/02/2023',
+        },
       },
       probationPractitioner: {
         email: 'mr.g@probation.gov.uk',
@@ -520,21 +564,30 @@ describe('Route Handlers - Offender detail', () => {
     }
 
     const expectedPrisonerDetail = {
-      firstName: 'David',
-      lastName: 'Pepper',
-      conditionalReleaseDate: '2022-06-01',
-      confirmedReleaseDate: '2022-06-01',
-      postRecallReleaseDate: '2022-05-01',
-      topupSupervisionExpiryDate: '2023-05-01',
-      homeDetentionCurfewEligibilityDate: '2022-05-01',
-      sentenceExpiryDate: '2022-06-01',
-      licenceExpiryDate: '2022-06-01',
-      paroleEligibilityDate: '2022-01-01',
-      indeterminateSentence: false,
-      dateOfBirth: '1995-03-05',
-      recall: true,
-    } as Prisoner
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
+      prisoner: {
+        firstName: 'David',
+        lastName: 'Pepper',
+        conditionalReleaseDate: '2022-06-01',
+        confirmedReleaseDate: '2022-06-01',
+        postRecallReleaseDate: '2022-05-01',
+        topupSupervisionExpiryDate: '2023-05-01',
+        homeDetentionCurfewEligibilityDate: '2022-05-01',
+        sentenceExpiryDate: '2022-06-01',
+        licenceExpiryDate: '2022-06-01',
+        paroleEligibilityDate: '2022-01-01',
+        indeterminateSentence: false,
+        dateOfBirth: '1995-03-05',
+        recall: true,
+      },
+      cvl: {
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: false,
+        hardStopDate: '03/02/2023',
+        hardStopWarningDate: '01/02/2023',
+      },
+    } as CaseloadItem
+
+    licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
     communityService.searchProbationers.mockResolvedValue([
       {
@@ -599,7 +652,7 @@ describe('Route Handlers - Offender detail', () => {
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
-        ...expectedPrisonerDetail,
+        ...expectedPrisonerDetail.prisoner,
         conditionalReleaseDate: '01 Jun 2022',
         confirmedReleaseDate: '01 Jun 2022',
         crn: 'X1234',
@@ -614,6 +667,11 @@ describe('Route Handlers - Offender detail', () => {
         sentenceExpiryDate: '01 Jun 2022',
         tused: '01 May 2023',
         recall: 'Yes',
+        hardStop: {
+          cutoffDate: '03/02/2023',
+          isInHardStopPeriod: false,
+          warningDate: '01/02/2023',
+        },
       },
       probationPractitioner: {
         email: 'mr.g@probation.gov.uk',
