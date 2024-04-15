@@ -13,7 +13,7 @@ export default class ViewCasesPage extends Page {
   }
 
   clickFutureReleasesTab = (): ViewCasesPage => {
-    cy.get('#tab_before-hardstop').click()
+    cy.get('#tab_future-releases').click()
     return this
   }
 
