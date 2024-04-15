@@ -32,6 +32,7 @@ import { User } from '../@types/CvlUserDetails'
 import LicenceEventType from '../enumeration/licenceEventType'
 import { InMemoryTokenStore } from './tokenStore'
 import logger from '../../logger'
+import { parseCvlDate } from '../utils/utils'
 
 const licenceApiClient = new LicenceApiClient(
   new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
@@ -285,6 +286,52 @@ describe('Licence API client tests', () => {
       },
       { username: 'joebloggs' }
     )
+  })
+
+  it('Search prisoners by nomis ids', async () => {
+    await licenceApiClient.searchPrisonersByNomsIds(['A1234AA'], { username: 'joebloggs' } as User)
+    expect(post).toHaveBeenCalledWith(
+      {
+        path: '/prisoner-search/prisoner-numbers',
+        data: {
+          prisonerNumbers: ['A1234AA'],
+        },
+      },
+      { username: 'joebloggs' }
+    )
+  })
+
+  it('Search prisoners by nomis ids is not called with no prison numbers', async () => {
+    await licenceApiClient.searchPrisonersByNomsIds([], { username: 'joebloggs' } as User)
+    expect(post).not.toHaveBeenCalled()
+  })
+
+  it('Search prisoners by release date', async () => {
+    await licenceApiClient.searchPrisonersByReleaseDate(
+      parseCvlDate('01/02/2024'),
+      parseCvlDate('02/03/2025'),
+      ['MDI'],
+      {
+        username: 'joebloggs',
+      } as User
+    )
+    expect(post).toHaveBeenCalledWith(
+      {
+        path: '/prisoner-search/release-date-by-prison',
+        data: {
+          earliestReleaseDate: '2024-02-01',
+          latestReleaseDate: '2025-03-02',
+          prisonIds: ['MDI'],
+        },
+      },
+      { username: 'joebloggs' }
+    )
+  })
+  it('Search prisoners by release date is not called with no prison ids', async () => {
+    await licenceApiClient.searchPrisonersByReleaseDate(parseCvlDate('01/02/2024'), parseCvlDate('02/03/2025'), [], {
+      username: 'joebloggs',
+    } as User)
+    expect(post).not.toHaveBeenCalled()
   })
 
   it('should update responsible COM for an offender', async () => {

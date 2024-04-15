@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isFuture, startOfDay, add, endOfDay, isWithinInterval, sub, isAfter, isBefore } from 'date-fns'
+import { isFuture, startOfDay, add, endOfDay, isWithinInterval, sub } from 'date-fns'
 import _ from 'lodash'
 import CommunityService from './communityService'
 import PrisonerService from './prisonerService'
@@ -9,21 +9,18 @@ import { DeliusRecord, ManagedCase } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
-import { CommunityApiManagedOffender } from '../@types/communityClientTypes'
-import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
-import { LicenceSummary, HardStopCutoffDate, ComReviewCount } from '../@types/licenceApiClientTypes'
+import type { CommunityApiManagedOffender } from '../@types/communityClientTypes'
+import type { LicenceSummary, HardStopCutoffDate, ComReviewCount, CaseloadItem } from '../@types/licenceApiClientTypes'
 import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
-import UkBankHolidayFeedService, { BankHolidays } from './ukBankHolidayFeedService'
 import { parseCvlDate, parseIsoDate } from '../utils/utils'
 
 export default class CaseloadService {
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly communityService: CommunityService,
-    private readonly licenceService: LicenceService,
-    private readonly bankHolidayService: UkBankHolidayFeedService
+    private readonly licenceService: LicenceService
   ) {}
 
   async getStaffCreateCaseload(user: User): Promise<ManagedCase[]> {
@@ -84,7 +81,7 @@ export default class CaseloadService {
     // Get cases due for release soon which do not have a submitted licence
     const today = startOfDay(new Date())
     const todayPlusFourWeeks = endOfDay(add(new Date(), { weeks: 4 }))
-    const casesPendingLicence = this.prisonerService
+    const casesPendingLicence = this.licenceService
       .searchPrisonersByReleaseDate(today, todayPlusFourWeeks, prisonCaseload, user)
       .then(caseload => this.wrap(caseload))
       .then(caseload => this.pairNomisRecordsWithDelius(caseload))
@@ -133,27 +130,28 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  public pairNomisRecordsWithDelius = async (prisoners: Container<Prisoner>): Promise<Container<ManagedCase>> => {
+  public pairNomisRecordsWithDelius = async (prisoners: Container<CaseloadItem>): Promise<Container<ManagedCase>> => {
     const caseloadNomisIds = prisoners
       .unwrap()
-      .filter(offender => offender.prisonerNumber)
-      .map(offender => offender.prisonerNumber)
+      .filter(({ prisoner }) => prisoner.prisonerNumber)
+      .map(({ prisoner }) => prisoner.prisonerNumber)
 
     const deliusRecords = await this.communityService.getOffendersByNomsNumbers(caseloadNomisIds)
 
     return prisoners
-      .map(offender => {
+      .map(({ prisoner: offender, cvl: cvlFields }) => {
         const deliusRecord = deliusRecords.find(d => d.otherIds.nomsNumber === offender.prisonerNumber)
         if (deliusRecord) {
           return {
             nomisRecord: offender,
+            cvlFields,
             deliusRecord: {
               ...deliusRecord,
               staff: deliusRecord?.offenderManagers.find(om => om.active)?.staff,
             },
           }
         }
-        return { nomisRecord: offender }
+        return { nomisRecord: offender, cvlFields }
       })
       .filter(offender => offender.nomisRecord && offender.deliusRecord, 'Unable to find delius record')
   }
@@ -166,8 +164,6 @@ export default class CaseloadService {
       .map(offender => offender.nomisRecord.prisonerNumber)
       .unwrap()
       .filter(id => id !== null)
-
-    const bankHolidays = await this.bankHolidayService.getEnglishAndWelshHolidays()
 
     const existingLicences =
       nomisIdList.length === 0
@@ -231,11 +227,8 @@ export default class CaseloadService {
           licences: [{ status: licenceStatus, type: licenceType, hardStopDate: null, hardStopWarningDate: null }],
         }
       }
-
-      const releaseDate = this.getHardStopReferenceDate(offender.nomisRecord, bankHolidays)
-
-      const hardStopDate = bankHolidays.getXWorkingDaysBeforeDate(releaseDate, 2)
-      const hardStopWarningDate = bankHolidays.getXWorkingDaysBeforeDate(hardStopDate, 2)
+      const hardStopDate = parseCvlDate(offender.cvlFields?.hardStopDate)
+      const hardStopWarningDate = parseCvlDate(offender.cvlFields?.hardStopWarningDate)
 
       return {
         ...offender,
@@ -339,13 +332,16 @@ export default class CaseloadService {
       .filter(offender => offender.otherIds?.nomsNumber)
       .map(offender => offender.otherIds?.nomsNumber)
 
-    const nomisRecords = await this.prisonerService.searchPrisonersByNomisIds(caseloadNomisIds, user)
+    const nomisRecords = await this.licenceService.searchPrisonersByNomsIds(caseloadNomisIds, user)
 
     return managedOffenders
       .map(offender => {
+        const { prisoner, cvl: cvlFields } =
+          nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.otherIds?.nomsNumber) || {}
         return {
           deliusRecord: offender,
-          nomisRecord: nomisRecords.find(nomisRecord => nomisRecord.prisonerNumber === offender.otherIds?.nomsNumber),
+          nomisRecord: prisoner,
+          cvlFields,
         }
       })
       .filter(offender => offender.nomisRecord, 'unable to find prison record')
@@ -515,19 +511,5 @@ export default class CaseloadService {
 
   wrap<T>(items: T[]): Container<T> {
     return new Container(items)
-  }
-
-  public getHardStopReferenceDate = (nomisRecord: Prisoner, bankHolidays: BankHolidays): Date => {
-    const nomisReleaseDate = nomisRecord.releaseDate ? parseIsoDate(nomisRecord.releaseDate) : null
-    const nomisCrd = parseIsoDate(nomisRecord.conditionalReleaseDate)
-    if (
-      nomisReleaseDate &&
-      !isBefore(nomisReleaseDate, bankHolidays.getXWorkingDaysBeforeDate(nomisCrd, 1)) &&
-      !isAfter(nomisReleaseDate, nomisCrd)
-    ) {
-      return nomisReleaseDate
-    }
-
-    return nomisCrd
   }
 }

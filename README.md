@@ -1,4 +1,4 @@
-[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fcreate-and-vary-a-licence)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#create-and-vary-a-licence "Link to report")
+[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fcreate-and-vary-a-licence)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#create-and-vary-a-licence 'Link to report')
 [![CircleCI](https://circleci.com/gh/ministryofjustice/create-and-vary-a-licence/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/create-and-vary-a-licence)
 [![codecov](https://codecov.io/gh/ministryofjustice/create-and-vary-a-licence/branch/main/graph/badge.svg?token=S8DS3BV91P)](https://codecov.io/gh/ministryofjustice/create-and-vary-a-licence)
 
@@ -8,16 +8,18 @@ This is the user interface service for creating and varying licences for people
 leaving prison.
 
 ## Dependencies
+
 This service requires instances of these dependent services:
-* `hmpps-auth` - authorisation and authentication
-* `redis` - session store and token caching
-* `prison-api` - prison data
-* `community-api` - probation data  
-* `create-and-vary-a-licence-api` - licence data  
-* `prisoner-offender-search` - prisoner search
-* `probation-offender-search` - probation search
-* `prison-register` - prison register and contant information
-* `gotenberg` - produce PDFs from HTML templated URLs
+
+- `hmpps-auth` - authorisation and authentication
+- `redis` - session store and token caching
+- `prison-api` - prison data
+- `community-api` - probation data
+- `create-and-vary-a-licence-api` - licence data
+- `prisoner-offender-search` - prisoner search
+- `probation-offender-search` - probation search
+- `prison-register` - prison register and contant information
+- `gotenberg` - produce PDFs from HTML templated URLs
 
 It also requires a connection to 3 SQS queues to listen to prison events, probation events and HMPPS domain events.
 In local development this uses localstack to simulate aws.
@@ -55,7 +57,7 @@ This runs the specific integration test `gotenbergIntegration.test.ts` causing a
 to be sent to the local Gotenberg container, converted to PDF and returned. The PDF is parsed
 to check that it contains some of the wording requested.
 
-NOTE: This test is not currently run in CI. 
+NOTE: This test is not currently run in CI.
 
 ## Integration tests (Cypress/Wiremock)
 
@@ -87,12 +89,12 @@ You will need to be on VPN.
 
 These are:
 
-* redis
-* localstack
-* gotenberg
+- redis
+- localstack
+- gotenberg
 
 2. Copy `.env.example` to `.env` in the root of the project and customise.
-For the client ID and secrets present in the file, you will need to retrieve these values from the kubernetes dev environment. 
+   For the client ID and secrets present in the file, you will need to retrieve these values from the kubernetes dev environment.
 
 3. Run the script to start the required containers and start the local service, which will use the `.env` file to set up its environment to reference the DEV APIs.
 
@@ -104,17 +106,15 @@ For the client ID and secrets present in the file, you will need to retrieve the
 
 `npm run lint`
 
-
 ## Deployment
-
 
 ### Helm
 
 There are four services associated with this UI service:
 
-* create-and-vary-a-licence  (generic-service)
-* gotenberg (generic-service)
-* generic-prometheus-alerts
+- create-and-vary-a-licence (generic-service)
+- gotenberg (generic-service)
+- generic-prometheus-alerts
 
 ## Dependency Checks
 
@@ -131,24 +131,25 @@ Scripts are provided to generate these types from the development instances:
 
 `generate-community-api-types.sh` - Re-run when Community API types change
 
-`generate-licence-api-types.sh` - Re-run when create and vary a licence API types change
+`generate-licence-api-types.sh` - Re-run when create and vary a licence API types change from dev
+`generate-licence-api-types.sh --local` - Re-run when create and vary a licence API types change from locally running API
 
 `generate-prison-api-types.sh` - Re-run when prisoner API types change
 
-`generate-prisoner-offender-search-types.sh`  Re-run when prisoner offender search API types change
+`generate-prisoner-offender-search-types.sh` Re-run when prisoner offender search API types change
 
-`generate-probation-offender-search-types.sh`  Re-run when probation offender search API types change
+`generate-probation-offender-search-types.sh` Re-run when probation offender search API types change
 
-`generate-prison-register-types.sh`  Re-run when prison register API types change
+`generate-prison-register-types.sh` Re-run when prison register API types change
 
 There may be some manual editing needed, particularly to:
 
-  - Replace double quotes with single-quotes
-  - Remove all semi-colons
-  - Validate the api-docs endpoint for swagger (in case it changes)
-  - Eslint ignore any lines which complain about not being camel-case with `eslint-disable camelcase`
-  - Eslint ignore empty interfaces with `eslint-disable-next-line @typescript-eslint/no-empty-interface`
-or remove the unused and empty interface.
+- Replace double quotes with single-quotes
+- Remove all semi-colons
+- Validate the api-docs endpoint for swagger (in case it changes)
+- Eslint ignore any lines which complain about not being camel-case with `eslint-disable camelcase`
+- Eslint ignore empty interfaces with `eslint-disable-next-line @typescript-eslint/no-empty-interface`
+  or remove the unused and empty interface.
 
 ## Gotenberg Container
 
@@ -157,11 +158,12 @@ The Gotenberg container is used only to convert templated HTML into PDF files fo
 Whilst running locally, the Gotenberg container needs to know how to contact the `create-and-vary-a-licence` service
 using a hostname. It does this to pull in resources like stylesheets and images whilst rendering the HTML.
 
-For any docker container to reference the docker host (where the UI service is running), the hostname 
+For any docker container to reference the docker host (where the UI service is running), the hostname
 `host.docker-internal` is used. For Mac and Windows users, this just works. For Linux users, this host
 needs to be passed into Gotenburg as an `extra-host`. See the `docker-compose.yaml` file for this.
 
-e.g. 
+e.g.
+
 ```angular2html
 gotenberg:
     image: thecodingmachine/gotenberg:6.4.3

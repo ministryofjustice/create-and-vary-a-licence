@@ -11,18 +11,17 @@ import applicationInfo from '../server/applicationInfo'
 initialiseAppInsights(applicationInfo('create-and-vary-a-licence-prompt-licence-create-job'))
 
 import logger from '../logger'
-import { Prisoner } from '../server/@types/prisonerSearchApiClientTypes'
 import config from '../server/config'
 import { services } from '../server/services'
 import { ManagedCase } from '../server/@types/managedCase'
 import LicenceStatus from '../server/enumeration/licenceStatus'
-import { EmailContact } from '../server/@types/licenceApiClientTypes'
+import type { CvlPrisoner, EmailContact } from '../server/@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../server/utils/utils'
 import PromptLicenceCreationService from './promptLicenceCreationService'
 
-const { caseloadService, prisonerService, communityService, licenceService } = services
+const { caseloadService, communityService, licenceService } = services
 
-const promptLicenceCreationService = new PromptLicenceCreationService(prisonerService, caseloadService)
+const promptLicenceCreationService = new PromptLicenceCreationService(licenceService, caseloadService)
 
 const buildEmailGroups = async (
   urgentPromptCases: ManagedCase[],
@@ -30,10 +29,10 @@ const buildEmailGroups = async (
 ): Promise<EmailContact[]> => {
   const managedCases = [...urgentPromptCases, ...initialPromptCases]
 
-  const mapPrisonerToReleaseCase = (prisoner: Prisoner) => {
+  const mapPrisonerToReleaseCase = (prisoner: CvlPrisoner) => {
     return {
       name: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
-      crn: prisoner.crn,
+      crn: undefined as string, // FIXME - this is never worked!
       releaseDate: prisoner.confirmedReleaseDate || prisoner.conditionalReleaseDate,
     }
   }

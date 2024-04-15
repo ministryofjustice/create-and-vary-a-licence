@@ -240,6 +240,28 @@
         </div>
     </details>
 
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">Hard stop details</caption>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Warning date</th>
+                    <td class="govuk-table__cell">{{ prisonerDetail.hardStop.warningDate }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Cutoff date</th>
+                    <td class="govuk-table__cell">{{ prisonerDetail.hardStop.cutoffDate }}</td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Is in hardstop period?</th>
+                    <td class="govuk-table__cell">{{ prisonerDetail.hardStop.isInHardStopPeriod }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
     <div class="govuk-button-group">
         {{ govukButton({
             text: "Return to search",

@@ -1,4 +1,5 @@
 import { Readable } from 'stream'
+import { format } from 'date-fns'
 import RestClient from './hmppsRestClient'
 import type {
   ContactNumberRequest,
@@ -569,5 +570,41 @@ export default class LicenceApiClient extends RestClient {
       { path: `/prisoner-search/nomisid/${nomsId}` },
       { username: user.username }
     )) as Promise<CaseloadItem>
+  }
+
+  async searchPrisonersByNomsIds(prisonerNumbers: string[], user?: User): Promise<CaseloadItem[]> {
+    if (prisonerNumbers.length < 1) {
+      return []
+    }
+    return (await this.post(
+      {
+        path: '/prisoner-search/prisoner-numbers',
+        data: { prisonerNumbers },
+      },
+      { username: user?.username }
+    )) as Promise<CaseloadItem[]>
+  }
+
+  async searchPrisonersByReleaseDate(
+    earliestReleaseDate: Date,
+    latestReleaseDate: Date,
+    prisonIds?: string[],
+    user?: User
+  ): Promise<CaseloadItem[]> {
+    if (prisonIds.length < 1) {
+      return []
+    }
+    return (await this.post(
+      {
+        path: `/prisoner-search/release-date-by-prison`,
+        data: {
+          earliestReleaseDate: format(earliestReleaseDate, 'yyyy-MM-dd'),
+
+          latestReleaseDate: format(latestReleaseDate, 'yyyy-MM-dd'),
+          prisonIds,
+        },
+      },
+      { username: user?.username }
+    )) as Promise<CaseloadItem[]>
   }
 }

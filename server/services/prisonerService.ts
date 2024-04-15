@@ -15,6 +15,7 @@ import logger from '../../logger'
 import HdcStatus from '../@types/HdcStatus'
 import { User } from '../@types/CvlUserDetails'
 import { parseIsoDate } from '../utils/utils'
+import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 
 export default class PrisonerService {
   constructor(
@@ -101,7 +102,7 @@ export default class PrisonerService {
     }
   }
 
-  async getHdcStatuses(offenders: Prisoner[], user?: User): Promise<HdcStatus[]> {
+  async getHdcStatuses(offenders: CvlPrisoner[], user?: User): Promise<HdcStatus[]> {
     const bookingIds = offenders.map(o => parseInt(o.bookingId, 10)).filter(o => o)
     if (bookingIds.length === 0) return []
 

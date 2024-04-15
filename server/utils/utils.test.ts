@@ -31,12 +31,11 @@ import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/initialAppointment/types/address'
-import { Licence } from '../@types/licenceApiClientTypes'
+import type { CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
-import { Prisoner } from '../@types/prisonerSearchApiClientTypes'
 import config from '../config'
 import LicenceKind from '../enumeration/LicenceKind'
-import { Licence as ManagedCaseLicence } from '../@types/managedCase'
+import type { Licence as ManagedCaseLicence } from '../@types/managedCase'
 
 describe('Convert to title case', () => {
   it('null string', () => {
@@ -440,7 +439,7 @@ describe('Get prisoner release date from Nomis', () => {
   it('No date returns "not found', () => {
     const nomisRecord = {
       conditionalReleaseDate: null,
-    } as Prisoner
+    } as CvlPrisoner
 
     expect(selectReleaseDate(nomisRecord)).toStrictEqual(null)
   })
@@ -448,7 +447,7 @@ describe('Get prisoner release date from Nomis', () => {
   it('Release date should be Conditional Release Date 22 Nov 2035', () => {
     const nomisRecord = {
       conditionalReleaseDate: '2035-11-22',
-    } as Prisoner
+    } as CvlPrisoner
 
     expect(selectReleaseDate(nomisRecord)).toStrictEqual(parseIsoDate('2035-11-22'))
   })
@@ -457,24 +456,15 @@ describe('Get prisoner release date from Nomis', () => {
     const nomisRecord = {
       conditionalReleaseDate: '2035-11-22',
       confirmedReleaseDate: '2035-10-22',
-    } as Prisoner
+    } as CvlPrisoner
 
     expect(selectReleaseDate(nomisRecord)).toStrictEqual(parseIsoDate('2035-10-22'))
-  })
-
-  it('Release date should be Conditional Release Override Date 22 Nov 2036', () => {
-    const nomisRecord = {
-      conditionalReleaseDate: '2036-11-01',
-      conditionalReleaseOverrideDate: '2036-11-22',
-    } as Prisoner
-
-    expect(selectReleaseDate(nomisRecord)).toStrictEqual(parseIsoDate('2036-11-22'))
   })
 
   it('Filters out malformed date', () => {
     const nomisRecord = {
       conditionalReleaseDate: 'aaa2036-11-01',
-    } as Prisoner
+    } as CvlPrisoner
 
     expect(selectReleaseDate(nomisRecord)).toStrictEqual(null)
   })
@@ -540,7 +530,7 @@ describe('Check if licence needs attention', () => {
     pncNumber: '98/240521B',
     confirmedReleaseDate: '2023-12-05',
     conditionalReleaseDate: '2023-12-05',
-  } as Prisoner
+  } as CvlPrisoner
 
   beforeEach(() => {
     jest.useFakeTimers().setSystemTime(new Date('2023-12-05'))
@@ -602,7 +592,7 @@ describe('Get Case Tab Type', () => {
     pncNumber: '98/240521B',
     confirmedReleaseDate: '2023-12-05',
     conditionalReleaseDate: '2023-12-05',
-  } as Prisoner
+  } as CvlPrisoner
 
   it('should not return attentionNeeded tab type if licence object is undefined', () => {
     expect(determineComCreateCasesTab(null, nomisRecord, '04/12/2023')).toEqual('futureReleases')

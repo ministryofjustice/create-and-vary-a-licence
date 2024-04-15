@@ -4,12 +4,12 @@ import config from '../server/config'
 import Container from '../server/services/container'
 import { ManagedCase } from '../server/@types/managedCase'
 import LicenceStatus from '../server/enumeration/licenceStatus'
-import PrisonerService from '../server/services/prisonerService'
 import CaseloadService from '../server/services/caseloadService'
+import LicenceService from '../server/services/licenceService'
 
 export default class PromptLicenceCreationService {
   constructor(
-    private readonly prisonerService: PrisonerService,
+    private readonly licenceService: LicenceService,
     private readonly caseloadService: CaseloadService
   ) {}
 
@@ -20,9 +20,9 @@ export default class PromptLicenceCreationService {
   ): Promise<ManagedCase[]> => {
     const prisonCodes = config.rollout.prisons
 
-    return this.prisonerService
+    return this.licenceService
       .searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonCodes)
-      .then(prisoners => prisoners.filter(offender => offender.status && offender.status.startsWith('ACTIVE')))
+      .then(prisoners => prisoners.filter(({ prisoner }) => prisoner?.status.startsWith('ACTIVE')))
       .then(caseload => new Container(caseload))
       .then(caseload => this.caseloadService.pairNomisRecordsWithDelius(caseload))
       .then(caseload => this.caseloadService.filterOffendersEligibleForLicence(caseload))

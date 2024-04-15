@@ -3,6 +3,7 @@ import OmuCaselist from './omuCaselist'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import Container from './container'
+import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 
 describe('omu caselist', () => {
   const futureDate = format(add(new Date(), { weeks: 1 }), 'yyyy-MM-dd')
@@ -93,12 +94,19 @@ function createCaselist(status: LicenceStatus, confirmedReleaseDate: string, con
       {
         deliusRecord: { offenderId: 1 },
         licences: [{ type: LicenceType.AP, status }],
+        cvlFields: {
+          licenceType: 'AP',
+          hardStopDate: '03/01/2023',
+          hardStopWarningDate: '01/01/2023',
+          isInHardStopPeriod: true,
+          isDueForEarlyRelease: true,
+        },
         nomisRecord: {
+          prisonerNumber: 'A1234AA',
           status: 'ACTIVE IN',
           confirmedReleaseDate,
           conditionalReleaseDate,
-          restrictedPatient: false,
-        },
+        } as CvlPrisoner,
       },
     ])
   )
