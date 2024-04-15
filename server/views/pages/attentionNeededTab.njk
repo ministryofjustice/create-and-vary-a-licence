@@ -1,0 +1,17 @@
+{% from "pages/attentionNeededTabDescription.njk" import attentionNeededTabDescription %}
+{% from "partials/viewCases.njk" import viewCases %}
+
+{% macro attentionNeededTab(params) %}
+    <div id="attention-needed" role="tabpanel" aria-labelledby="tab_attention-needed">
+        <h2 class="govuk-heading-l">Attention needed</h2>
+            {{ attentionNeededTabDescription() }}
+            {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config}) }}
+    </div>
+{% endmacro %}
+
+{%  macro attentionNeededTabHeadingWithCount(params) %}
+    {{ params.label }}
+    {% if not params.isSearch %}
+        <span id="attention-needed-count" class="moj-notification-badge">{{ params.count  }}</span>
+    {% endif %}
+{% endmacro %}
