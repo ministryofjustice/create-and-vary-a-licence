@@ -219,6 +219,8 @@ export default class CaseloadService {
       } else if (this.isRecall(offender)) {
         // Offender is subject to an active recall - not clickable
         licenceStatus = LicenceStatus.OOS_RECALL
+      } else if (offender.cvlFields.isInHardStopPeriod) {
+        licenceStatus = LicenceStatus.TIMED_OUT
       }
 
       if (!offender.nomisRecord.conditionalReleaseDate) {
