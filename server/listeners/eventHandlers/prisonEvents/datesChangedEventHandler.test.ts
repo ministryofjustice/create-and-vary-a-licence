@@ -68,7 +68,7 @@ describe('Sentence dates changed event handler', () => {
 
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC123'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
+      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED', 'TIMED_OUT']
     )
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
   })
@@ -96,6 +96,10 @@ describe('Sentence dates changed event handler', () => {
         licenceId: 4,
         licenceStatus: 'REJECTED',
       },
+      {
+        licenceId: 5,
+        licenceStatus: 'TIMED_OUT',
+      },
     ] as LicenceSummary[])
 
     await handler.handle(event)
@@ -115,6 +119,7 @@ describe('Sentence dates changed event handler', () => {
     expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('2', newDates)
     expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('3', newDates)
     expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('4', newDates)
+    expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('5', newDates)
   })
 
   it('should use conditional release override date, sentence expiry override date, licence expiry override date, topup supervision expiry override date', async () => {
