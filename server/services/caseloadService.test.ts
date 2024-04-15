@@ -36,7 +36,6 @@ describe('Caseload Service', () => {
     communityService.getManagedOffendersByTeam.mockResolvedValue([])
     communityService.getOffendersByCrn.mockResolvedValue([])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([])
-    prisonerService.searchPrisonersByNomisIds.mockResolvedValue([])
     prisonerService.getHdcStatuses.mockResolvedValue([])
     licenceService.getLicencesByNomisIdsAndStatus = jest.fn().mockResolvedValue([])
     licenceService.searchPrisonersByReleaseDate = jest.fn().mockResolvedValue([])

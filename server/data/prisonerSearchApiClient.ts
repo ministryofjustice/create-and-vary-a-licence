@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
-import type { PagePrisoner, Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
-import { PrisonerSearchByBookingIds, PrisonerSearchByNomisIds } from '../@types/prisonerSearchApiClientTypes'
+import type { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
+import { PrisonerSearchByBookingIds } from '../@types/prisonerSearchApiClientTypes'
 import RestClient from './hmppsRestClient'
 import type { TokenStore } from './tokenStore'
 
@@ -21,20 +21,6 @@ export default class PrisonerSearchApiClient extends RestClient {
     )) as Promise<Prisoner[]>
   }
 
-  async searchPrisonersByNomsIds(nomisIdsToSearch: PrisonerSearchByNomisIds, user?: User): Promise<Prisoner[]> {
-    const { prisonerNumbers } = nomisIdsToSearch
-    if (prisonerNumbers.length < 1) {
-      return []
-    }
-    return (await this.post(
-      {
-        path: '/prisoner-search/prisoner-numbers',
-        data: nomisIdsToSearch,
-      },
-      { username: user?.username }
-    )) as Promise<Prisoner[]>
-  }
-
   async searchPrisonersByBookingIds(bookingIdsToSearch: PrisonerSearchByBookingIds, user?: User): Promise<Prisoner[]> {
     const { bookingIds } = bookingIdsToSearch
     if (bookingIds.length < 1) {
@@ -47,25 +33,5 @@ export default class PrisonerSearchApiClient extends RestClient {
       },
       { username: user?.username }
     )) as Promise<Prisoner[]>
-  }
-
-  async searchPrisonersByReleaseDate(
-    earliestReleaseDate: string,
-    latestReleaseDate: string,
-    prisonIds?: string[],
-    user?: User
-  ): Promise<PagePrisoner> {
-    return (await this.post(
-      {
-        path: `/prisoner-search/release-date-by-prison`,
-        data: {
-          earliestReleaseDate,
-          latestReleaseDate,
-          prisonIds,
-        },
-        query: { size: 2000 },
-      },
-      { username: user?.username }
-    )) as Promise<PagePrisoner>
   }
 }
