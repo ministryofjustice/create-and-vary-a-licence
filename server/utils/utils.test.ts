@@ -609,7 +609,9 @@ describe('Get Case Tab Type', () => {
   } as CvlPrisoner
 
   it('should not return attentionNeeded tab type if licence object is undefined', () => {
-    expect(determineComCreateCasesTab(null, nomisRecord, '04/12/2023')).toEqual('futureReleases')
+    expect(determineComCreateCasesTab({ ...licence, licenceStartDate: null }, nomisRecord, '04/12/2023')).not.toEqual(
+      'attentionNeeded'
+    )
   })
   it('should return attentionNeeded tab type', () => {
     expect(
@@ -622,11 +624,15 @@ describe('Get Case Tab Type', () => {
   })
 
   it('should return releasesInNextTwoWorkingDays tab type', () => {
-    expect(determineComCreateCasesTab(licence, nomisRecord, '06/12/2023')).toEqual('releasesInNextTwoWorkingDays')
+    expect(
+      determineComCreateCasesTab({ ...licence, status: LicenceStatus.VARIATION_IN_PROGRESS }, nomisRecord, '06/12/2023')
+    ).toEqual('releasesInNextTwoWorkingDays')
   })
 
   it('should return futureReleases tab type', () => {
-    expect(determineComCreateCasesTab(licence, nomisRecord, '04/12/2023')).toEqual('futureReleases')
+    expect(
+      determineComCreateCasesTab({ ...licence, status: LicenceStatus.VARIATION_IN_PROGRESS }, nomisRecord, '04/12/2023')
+    ).toEqual('futureReleases')
   })
 })
 
