@@ -335,6 +335,11 @@ export function registerNunjucks(app?: express.Express): Environment {
     return word + plural
   })
 
+  njkEnv.addFilter('titlecase', (word: string) => {
+    if (!word) return word
+    return word[0].toUpperCase() + word.substr(1).toLowerCase()
+  })
+
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('serviceName', config.serviceName)
   njkEnv.addGlobal('useNewSearch', config.useNewSearch)
