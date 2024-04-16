@@ -48,6 +48,7 @@ describe('Route Handlers - Approval - case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.SUBMITTED,
             submittedByFullName: 'John Smith',
+            isDueForEarlyRelease: false,
           },
         ],
         nomisRecord: {
@@ -67,6 +68,7 @@ describe('Route Handlers - Approval - case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.NOT_STARTED,
             submittedByFullName: 'John Smith',
+            isDueForEarlyRelease: true,
           },
         ],
         nomisRecord: {
@@ -86,6 +88,7 @@ describe('Route Handlers - Approval - case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.NOT_IN_PILOT,
             submittedByFullName: 'John Smith',
+            isDueForEarlyRelease: false,
           },
         ],
         nomisRecord: {
@@ -141,6 +144,7 @@ describe('Route Handlers - Approval - case list', () => {
             },
             submittedByFullName: 'John Smith',
             urgentApproval: true,
+            isDueForEarlyRelease: false,
           },
           {
             licenceId: 2,
@@ -152,6 +156,7 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             releaseDate: '01 May 2022',
             urgentApproval: true,
+            isDueForEarlyRelease: true,
           },
           {
             licenceId: 3,
@@ -163,6 +168,7 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             releaseDate: format(nonUrgentReleaseDate, 'dd MMM yyyy'),
             urgentApproval: false,
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -188,6 +194,7 @@ describe('Route Handlers - Approval - case list', () => {
               approvedBy: 'Bob Carolgees',
               approvedDate: '15/06/2012 12:34:56',
               submittedByFullName: 'Tim Smith',
+              isDueForEarlyRelease: false,
             },
           ],
           nomisRecord: {
@@ -209,6 +216,7 @@ describe('Route Handlers - Approval - case list', () => {
               approvedBy: 'Jim Robbins',
               approvedDate: '25/04/2012 10:45:12',
               submittedByFullName: 'Tim Smith',
+              isDueForEarlyRelease: true,
             },
           ],
           nomisRecord: {
@@ -240,6 +248,7 @@ describe('Route Handlers - Approval - case list', () => {
             approvedOn: '15 June 2012',
             submittedByFullName: 'Tim Smith',
             urgentApproval: true,
+            isDueForEarlyRelease: false,
           },
           {
             licenceId: 2,
@@ -253,6 +262,7 @@ describe('Route Handlers - Approval - case list', () => {
             releaseDate: '01 May 2022',
             submittedByFullName: 'Tim Smith',
             urgentApproval: true,
+            isDueForEarlyRelease: true,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -284,6 +294,7 @@ describe('Route Handlers - Approval - case list', () => {
             },
             submittedByFullName: 'John Smith',
             urgentApproval: true,
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -315,6 +326,7 @@ describe('Route Handlers - Approval - case list', () => {
             },
             submittedByFullName: 'John Smith',
             urgentApproval: true,
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -346,6 +358,7 @@ describe('Route Handlers - Approval - case list', () => {
             },
             submittedByFullName: 'John Smith',
             urgentApproval: true,
+            isDueForEarlyRelease: false,
           },
         ],
         hasMultipleCaseloadsInNomis: false,

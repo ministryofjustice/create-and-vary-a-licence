@@ -3,6 +3,7 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import CommunityService from '../../../services/communityService'
 import { groupingBy } from '../../../utils/utils'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ApprovalViewRoutes {
   constructor(
@@ -37,6 +38,7 @@ export default class ApprovalViewRoutes {
           email: comDetails?.email,
         },
         returnPath,
+        isDueForEarlyRelease: licence.kind !== LicenceKind.VARIATION && licence.isDueForEarlyRelease,
       })
     } else {
       res.redirect(`/licence/approve/cases`)
