@@ -11,6 +11,7 @@ import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import Container from '../../../services/container'
 import OmuCaselist from '../../../services/omuCaselist'
 import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
+import config from '../../../config'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
@@ -69,6 +70,7 @@ describe('Route handlers - View and print case list', () => {
       },
     ] as PrisonDetail[])
     caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate: '01 May 2022' })
+    config.hardStopEnabled = false
   })
 
   afterEach(() => {
@@ -1179,6 +1181,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should return tab type as attentionNeeded if release date is null', async () => {
+      config.hardStopEnabled = true
       caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate: '02/05/2022' })
       const caseLoadWithEmptyReleaseDate = new Container([
         {
