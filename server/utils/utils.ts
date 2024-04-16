@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isBefore, parse, isEqual, isValid } from 'date-fns'
+import { isBefore, parse, isEqual, isValid, startOfDay } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -201,7 +201,7 @@ const isAttentionNeeded = (
   { status, licenceStartDate }: { status: LicenceStatus; licenceStartDate?: string },
   nomisRecord: CvlPrisoner
 ) => {
-  const today = new Date()
+  const today = startOfDay(new Date())
   const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
   return (
     ([APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED].includes(status) &&
