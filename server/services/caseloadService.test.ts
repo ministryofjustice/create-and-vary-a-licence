@@ -11,6 +11,7 @@ import LicenceType from '../enumeration/licenceType'
 import { ManagedCase } from '../@types/managedCase'
 import Container from './container'
 import { CaseloadItem } from '../@types/licenceApiClientTypes'
+import config from '../config'
 
 jest.mock('./prisonerService')
 jest.mock('./communityService')
@@ -70,24 +71,36 @@ describe('Caseload Service', () => {
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(1)
   })
 
-  it('Sets NOT_STARTED licences to TIMED_OUT when in the hard stop period', async () => {
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
-    const offenders = new Container([
-      {
-        nomisRecord: { prisonerNumber: 'ABC123' },
-        cvlFields: { isInHardStopPeriod: true },
-      } as ManagedCase,
-    ])
-    const result = await serviceUnderTest.mapOffendersToLicences(offenders)
-    expect(result.unwrap()).toMatchObject([
-      {
-        nomisRecord: {
-          prisonerNumber: 'ABC123',
+  describe('in the hard stop period', () => {
+    const existingConfig = config
+
+    beforeAll(() => {
+      config.hardStopEnabled = true
+    })
+
+    afterAll(() => {
+      config.hardStopEnabled = existingConfig.hardStopEnabled
+    })
+
+    it('Sets NOT_STARTED licences to TIMED_OUT when in the hard stop period', async () => {
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
+      const offenders = new Container([
+        {
+          nomisRecord: { prisonerNumber: 'ABC123' },
+          cvlFields: { isInHardStopPeriod: true },
+        } as ManagedCase,
+      ])
+      const result = await serviceUnderTest.mapOffendersToLicences(offenders)
+      expect(result.unwrap()).toMatchObject([
+        {
+          nomisRecord: {
+            prisonerNumber: 'ABC123',
+          },
+          cvlFields: { isInHardStopPeriod: true },
+          licences: [{ status: 'TIMED_OUT', type: 'PSS' }],
         },
-        cvlFields: { isInHardStopPeriod: true },
-        licences: [{ status: 'TIMED_OUT', type: 'PSS' }],
-      },
-    ])
+      ])
+    })
   })
 
   it('filters invalid data due to mismatch between delius and nomis', async () => {
