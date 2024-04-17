@@ -22,9 +22,13 @@
 
 {% macro attentionNeededTab(params) %}
     <div id="attention-needed" role="tabpanel" aria-labelledby="tab_attention-needed">
-        <h2 class="govuk-heading-l">Attention needed</h2>
+        {% if '0 results' in params.label %}
+            <h2 class="govuk-heading-l">{{ params.label }}</h2>
+        {% else %}
+            <h2 class="govuk-heading-l">Attention needed</h2>
             {{ attentionNeededTabDescription() }}
             {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config}) }}
+        {% endif %}
     </div>
 {% endmacro %}
 
