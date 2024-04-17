@@ -58,6 +58,7 @@ import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
 import TimelineEventType from '../enumeration/TimelineEventType'
 import ConditionService from './conditionService'
+import logger from '../../logger'
 
 export default class LicenceService {
   constructor(
@@ -463,7 +464,15 @@ export default class LicenceService {
   }
 
   async notifyComsToPromptLicenceCreation(emailGroups: EmailContact[]): Promise<void> {
-    return this.licenceApiClient.notifyComsToPromptEmailCreation(emailGroups)
+    const groups = emailGroups.filter(e => e.initialPromptCases.length || e.urgentPromptCases.length)
+    if (groups.length) {
+      const casesCount = emailGroups.reduce(
+        (acc, e) => acc + (e.initialPromptCases?.length || 0) + (e.urgentPromptCases?.length || 0),
+        0
+      )
+      logger.info(`Prompting ${emailGroups.length} contacts about ${casesCount} cases for licence creation`)
+      await this.licenceApiClient.notifyComsToPromptEmailCreation(emailGroups)
+    }
   }
 
   async getTimelineEvents(licence: Licence, user: User): Promise<TimelineEvent[]> {
