@@ -69,7 +69,7 @@ export default class ViewAndPrintCaseRoutes {
       }
     })
 
-    const showAttentionNeededTab = !!caseloadViewModel.find(e => e.tabType === ComCreateCaseTab.ATTENTION_NEEDED)
+    const showAttentionNeededTab = caseloadViewModel.some(e => e.tabType === ComCreateCaseTab.ATTENTION_NEEDED)
     const caseloadSearchResult = caseloadViewModel
       .filter(c => {
         const searchString = search?.toLowerCase().trim()
