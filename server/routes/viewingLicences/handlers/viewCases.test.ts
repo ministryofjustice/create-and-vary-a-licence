@@ -12,6 +12,7 @@ import Container from '../../../services/container'
 import OmuCaselist from '../../../services/omuCaselist'
 import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import config from '../../../config'
+import { ComCreateCaseTab } from '../../../utils/utils'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
@@ -307,6 +308,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -399,6 +402,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: true,
         prisonsToDisplay: [
           {
@@ -485,6 +490,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: true,
         prisonsToDisplay: [
           {
@@ -571,6 +578,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -654,6 +663,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -690,6 +701,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -726,6 +739,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -762,6 +777,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -844,7 +861,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -927,7 +945,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -999,6 +1018,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -1082,7 +1103,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -1166,7 +1188,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -1261,7 +1284,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-
+        ComCreateCaseTab,
+        showAttentionNeededTab: true,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
           {
@@ -1271,6 +1295,72 @@ describe('Route handlers - View and print case list', () => {
         ],
         probationView: false,
         search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should return showAttentionNeededTab true even if search results has no attention needed cases', async () => {
+      config.hardStopEnabled = true
+      req.query.search = 'A12345AA'
+      caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({ cutoffDate: '02/05/2022' })
+      const caseLoadWithEmptyReleaseDate = new Container([
+        {
+          licences: [
+            {
+              type: LicenceType.AP,
+              status: LicenceStatus.APPROVED,
+            },
+          ],
+          cvlFields,
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+            confirmedReleaseDate: '',
+            legalStatus: 'SENTENCED',
+          } as CvlPrisoner,
+          probationPractitioner: {
+            name: 'Sherlock Holmes',
+          },
+        },
+        {
+          licences: [
+            {
+              type: LicenceType.AP,
+              status: LicenceStatus.IN_PROGRESS,
+            },
+          ],
+          cvlFields,
+          nomisRecord: {
+            firstName: 'Harvey',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AC',
+            conditionalReleaseDate: null,
+            legalStatus: 'SENTENCED',
+          } as CvlPrisoner,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+      ])
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseLoadWithEmptyReleaseDate))
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [],
+        ComCreateCaseTab,
+        showAttentionNeededTab: true,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: 'A12345AA',
         statusConfig,
       })
     })
