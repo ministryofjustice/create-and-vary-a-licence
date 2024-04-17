@@ -309,4 +309,11 @@ describe('Nunjucks Filters', () => {
       expect(result).toEqual('PSS end date: 13 Dec 2022')
     })
   })
+
+  describe('titleCaseWord', () => {
+    it('should convert first character to Caps', () => {
+      expect(registerNunjucks().getFilter('titlecase')('IMMIGRATION DETAINEE')).toEqual('Immigration detainee')
+      expect(registerNunjucks().getFilter('titlecase')('sENTENCED')).toEqual('Sentenced')
+    })
+  })
 })

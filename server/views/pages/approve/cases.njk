@@ -14,10 +14,12 @@
     {% if case.urgentApproval and approvalNeededView %}
         {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
             + '</span><span class="urgent-highlight urgent-highlight-message">Urgent approval required for<br>upcoming release</span>' %}
+    {% elseif case.isDueForEarlyRelease and approvalNeededView %}
+        {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDate
+            + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
     {% else %}
         {% set releaseDate = case.releaseDate %}
     {% endif %}
-
 
     {% if approvalNeededView %}
         {% set nameLink = '/licence/approve/id/' + case.licenceId + '/view' %}

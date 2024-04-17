@@ -8,9 +8,9 @@
 {% from "partials/viewCases.njk" import offenderName %}
 {% from "partials/viewCases.njk" import casesTable %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
-{% from "pages/releasesInTwoWorkingDaysTab.njk" import releasesInTwoWorkingDaysTab %}
-{% from "pages/futureReleasesTab.njk" import futureReleasesTab %}
-{% from "pages/attentionNeededTab.njk" import attentionNeededTab, attentionNeededTabHeadingWithCount %}
+{% from "partials/hardStop/releasesInTwoWorkingDaysTab.njk" import releasesInTwoWorkingDaysTab %}
+{% from "partials/hardStop/futureReleasesTab.njk" import futureReleasesTab %}
+{% from "partials/hardStop/attentionNeededTab.njk" import attentionNeededTab, attentionNeededTabHeadingWithCount %}
 
 
 {% set pageTitle = applicationName + " - view an approved licence" %}

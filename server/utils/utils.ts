@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isBefore, parse, isEqual, isValid } from 'date-fns'
+import { isBefore, parse, isEqual, isValid, startOfDay } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -201,14 +201,15 @@ const isAttentionNeeded = (
   { status, licenceStartDate }: { status: LicenceStatus; licenceStartDate?: string },
   nomisRecord: CvlPrisoner
 ) => {
-  const today = new Date()
+  const today = startOfDay(new Date())
+
   const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
-  return (
-    ([APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED].includes(status) &&
-      !nomisRecord.confirmedReleaseDate &&
-      !nomisRecord.conditionalReleaseDate) || // If licence status is ‘approved’, ‘submitted’, ‘in progress' or 'not started’ AND there is no CRD/ARD
-    (licenceStartDate && status === APPROVED && isBefore(parseCvlDate(licenceStartDate), today)) // If licence status is ‘approved’ AND CRD/ARD is in the past (licenceStartDate is equalto ARD/CRD)
-  )
+  const noReleaseDates = !nomisRecord.confirmedReleaseDate && !nomisRecord.conditionalReleaseDate
+
+  const missingDates = [APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED].includes(status) && noReleaseDates
+  const startDateInPast = licenceStartDate && status === APPROVED && isBefore(parseCvlDate(licenceStartDate), today)
+
+  return missingDates || startDateInPast
 }
 
 const determineComCreateCasesTab = (

@@ -6,6 +6,7 @@ import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase, selectReleaseDate, determineComCreateCasesTab } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
+import config from '../../../config'
 
 export default class ViewAndPrintCaseRoutes {
   constructor(
@@ -50,7 +51,7 @@ export default class ViewAndPrintCaseRoutes {
           tabType,
           nomisLegalStatus: c.nomisRecord?.legalStatus,
           isClickable:
-            tabType === 'attentionNeeded'
+            config.hardStopEnabled && tabType === 'attentionNeeded'
               ? false
               : latestLicence.status !== LicenceStatus.NOT_STARTED &&
                 latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
@@ -61,6 +62,7 @@ export default class ViewAndPrintCaseRoutes {
                 latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
                 latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
           lastWorkedOnBy: latestLicence?.updatedByFullName,
+          isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
         }
       })
       .filter(c => {

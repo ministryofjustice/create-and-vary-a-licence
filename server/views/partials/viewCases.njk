@@ -118,10 +118,17 @@
                         id: 'nomis-legal-status-' + loop.index,
                         "data-sort-value": case.nomisLegalStatus
                     },
-                    text: case.nomisLegalStatus
+                    text: case.nomisLegalStatus | titlecase
                 }), caseData) 
             %}
         {% endif %}
+
+        {% if case.isDueForEarlyRelease %}
+            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
+        {% else %}
+            {% set releaseDate = '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' %}
+        {% endif %}
+
         {% set caseData = (caseData.push({
                 attributes: {
                     id: 'name-' + loop.index,
@@ -151,7 +158,7 @@
                     id: 'release-date-' + loop.index,
                     "data-sort-value": case.releaseDate | dateToUnix
                 },
-                html: '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' 
+                html: releaseDate 
             }
         ), caseData) %}
         {% if params.tabType === 'releasesInNextTwoWorkingDays' %}

@@ -1,11 +1,19 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro keyDates(licence) %}
+{% macro keyDates(licence, isDueForEarlyRelease) %}
+
+    {% set releaseDate = licence.actualReleaseDate | datetimeToDateShort or licence.conditionalReleaseDate | datetimeToDateShort %}
+
+    {% if isDueForEarlyRelease %}
+        {% set releaseDateHtml = '<span class="urgent-highlight">' + releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
+    {% else %}
+        {% set releaseDateHtml = '<p>' + releaseDate + '</p>' %}
+    {% endif %}
 
     {% set dateRows = [
             {
                 key: { text: "Release date" },
-                value: { text: licence.actualReleaseDate | datetimeToDateShort or licence.conditionalReleaseDate | datetimeToDateShort }
+                value: { html: releaseDateHtml }
             }
         ]
      %}
