@@ -11,7 +11,11 @@ import config from '../config'
 import { Licence as ManagedCaseLicence } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 
-export type ComCreateCaseTab = 'attentionNeeded' | 'releasesInNextTwoWorkingDays' | 'futureReleases'
+export enum ComCreateCaseTab {
+  RELEASES_IN_NEXT_TWO_WORKING_DAYS = 'releasesInNextTwoWorkingDays',
+  FUTURE_RELEASES = 'futureReleases',
+  ATTENTION_NEEDED = 'attentionNeeded',
+}
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -218,12 +222,14 @@ const determineComCreateCasesTab = (
   cutOffDateString: string
 ): ComCreateCaseTab => {
   if (licence && isAttentionNeeded(licence, nomisRecord)) {
-    return 'attentionNeeded'
+    return ComCreateCaseTab.ATTENTION_NEEDED
   }
 
   const releaseDate = selectReleaseDate(nomisRecord)
   const cutOffDate = parseCvlDate(cutOffDateString)
-  return isReleaseDateOnOrBeforeCutOffDate(cutOffDate, releaseDate) ? 'releasesInNextTwoWorkingDays' : 'futureReleases'
+  return isReleaseDateOnOrBeforeCutOffDate(cutOffDate, releaseDate)
+    ? ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS
+    : ComCreateCaseTab.FUTURE_RELEASES
 }
 
 const isReleaseDateOnOrBeforeCutOffDate = (cutOffDate: Date, releaseDate: Date): boolean => {
