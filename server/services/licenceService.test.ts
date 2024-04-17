@@ -712,9 +712,35 @@ describe('Licence Service', () => {
     })
   })
 
-  it('should notify the responsible officer with a prompt to create a licence', async () => {
+  it('should not notify the responsible officer with a prompt to create a licence if no cases to prompt about', async () => {
     const expectedRequest = [
       { email: 'joe.bloggs@probation.gov.uk', comName: 'Joe Bloggs', initialPromptCases: [], urgentPromptCases: [] },
+    ] as EmailContact[]
+    await licenceService.notifyComsToPromptLicenceCreation(expectedRequest)
+    expect(licenceApiClient.notifyComsToPromptEmailCreation).not.toHaveBeenCalled()
+  })
+
+  it('should notify the responsible officer with a prompt to create a licence if initial prompts outstanding', async () => {
+    const expectedRequest = [
+      {
+        email: 'joe.bloggs@probation.gov.uk',
+        comName: 'Joe Bloggs',
+        initialPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
+        urgentPromptCases: [],
+      },
+    ] as EmailContact[]
+    await licenceService.notifyComsToPromptLicenceCreation(expectedRequest)
+    expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
+  })
+
+  it('should notify the responsible officer with a prompt to create a licence if urgent prompts outstanding', async () => {
+    const expectedRequest = [
+      {
+        email: 'joe.bloggs@probation.gov.uk',
+        comName: 'Joe Bloggs',
+        initialPromptCases: [],
+        urgentPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
+      },
     ] as EmailContact[]
     await licenceService.notifyComsToPromptLicenceCreation(expectedRequest)
     expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
