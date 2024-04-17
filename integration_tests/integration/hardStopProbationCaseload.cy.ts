@@ -6,7 +6,7 @@ context('Create a licence', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubGetCaseloadItem')
+    cy.task('stubGetCaseloadItemInHardStop')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
     cy.task('stubGetStaffDetailsByList')
@@ -14,14 +14,22 @@ context('Create a licence', () => {
     cy.task('stubGetBankHolidays', dates)
     cy.task('stubGetCutOffDateForLicenceTimeOut')
     cy.task('stubFeComponents')
+    cy.task('searchPrisonersByNomisIdsInHardStop')
     cy.signIn()
+  })
+
+  it('should redirect to prison-will-create-this-licence if the licence was NOT_STARTED and is now TIMED_OUT', () => {
+    cy.task('stubGetExistingLicenceForOffenderNoResult')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateALicenceInHardStop()
+    caseloadPage.clickNameOfTimedOutLicence()
   })
 
   it('should redirect to prison-will-create-this-licence if a licence has timed out', () => {
     cy.task('stubGetLicencesForStatus', { status: 'TIMED_OUT' })
     cy.task('stubGetTimedOutLicence')
     const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicenceWithoutLicencesStub()
+    const caseloadPage = indexPage.clickCreateALicenceInHardStop()
     caseloadPage.clickNameOfTimedOutLicence()
   })
 
@@ -29,7 +37,7 @@ context('Create a licence', () => {
     cy.task('stubGetLicencesForStatus', { status: 'TIMED_OUT', versionOf: 1 })
     cy.task('stubGetTimedOutEditLicence')
     const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicenceWithoutLicencesStub()
+    const caseloadPage = indexPage.clickCreateALicenceInHardStop()
     caseloadPage.clickNameOfTimedOutEdit()
   })
 
@@ -37,7 +45,7 @@ context('Create a licence', () => {
     cy.task('stubGetHardStopAndTimedOutLicences', 'IN_PROGRESS')
     cy.task('stubGetHardStopLicence')
     const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicenceWithoutLicencesStub()
+    const caseloadPage = indexPage.clickCreateALicenceInHardStop()
     caseloadPage.clickNameOfTimedOutLicence()
   })
 
@@ -45,7 +53,7 @@ context('Create a licence', () => {
     cy.task('stubGetHardStopAndTimedOutLicences', 'SUBMITTED')
     cy.task('stubGetHardStopLicence')
     const indexPage = Page.verifyOnPage(IndexPage)
-    const caseloadPage = indexPage.clickCreateALicenceWithoutLicencesStub()
+    const caseloadPage = indexPage.clickCreateALicenceInHardStop()
     caseloadPage.clickNameOfHardStopLicence()
   })
 })

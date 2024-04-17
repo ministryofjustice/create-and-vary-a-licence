@@ -15,6 +15,7 @@ import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import { parseCvlDate, parseIsoDate } from '../utils/utils'
+import config from '../config'
 
 export default class CaseloadService {
   constructor(
@@ -219,7 +220,7 @@ export default class CaseloadService {
       } else if (this.isRecall(offender)) {
         // Offender is subject to an active recall - not clickable
         licenceStatus = LicenceStatus.OOS_RECALL
-      } else if (offender.cvlFields.isInHardStopPeriod) {
+      } else if (config.hardStopEnabled && offender.cvlFields.isInHardStopPeriod) {
         licenceStatus = LicenceStatus.TIMED_OUT
       }
 
