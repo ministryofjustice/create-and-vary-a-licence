@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 
-import moment from 'moment'
 import { subDays } from 'date-fns'
 import CaseloadRoutes from './caseload'
 import CaseloadService from '../../../services/caseloadService'
@@ -136,10 +135,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         ],
       },
     ] as unknown as ManagedCase[])
-
-    caseloadService.getCutOffDateForLicenceTimeOut.mockResolvedValue({
-      cutoffDate: moment().add(3, 'days').format('DD/MM/yyyy'),
-    })
   })
 
   afterEach(() => {

@@ -30,7 +30,6 @@ export default class ViewAndPrintCaseRoutes {
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
     const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
-    const { cutoffDate } = await this.caseloadService.getCutOffDateForLicenceTimeOut(user)
     const casesToView = view === 'prison' ? caselist.getPrisonView() : caselist.getProbationView()
 
     const caseloadViewModel = casesToView.unwrap().map(c => {
@@ -41,7 +40,7 @@ export default class ViewAndPrintCaseRoutes {
         )
       }
       const releaseDate = selectReleaseDate(c.nomisRecord)
-      const tabType = determineComCreateCasesTab(latestLicence, c.nomisRecord, cutoffDate)
+      const tabType = determineComCreateCasesTab(latestLicence, c.nomisRecord, c.cvlFields)
       return {
         licenceId: latestLicence.id,
         licenceVersionOf: latestLicence.versionOf,

@@ -34,7 +34,6 @@ import type {
   AddAdditionalConditionRequest,
   LicenceConditionChange,
   UpdateOffenderDetailsRequest,
-  HardStopCutoffDate,
   ComReviewCount,
   CaseloadItem,
   LicenceCreationResponse,
@@ -297,10 +296,6 @@ export default class LicenceService {
       null,
       user
     )
-  }
-
-  async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
-    return this.licenceApiClient.getCutOffDateForLicenceTimeOut(user)
   }
 
   async getComReviewCount(user: User): Promise<ComReviewCount> {
