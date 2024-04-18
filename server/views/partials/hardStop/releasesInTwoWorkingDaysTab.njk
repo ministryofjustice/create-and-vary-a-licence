@@ -3,12 +3,14 @@
 {%  macro releasesInTwoWorkingDaysTab(params) %}
     <div id="releases-in-two-working-days" role="tabpanel" aria-labelledby="tab_releases-two-days">
         <h2 class="govuk-heading-l">Releases in next 2 working days</h2>
-        <p class="govuk-body">From 2 days before release:</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>probation practitioners can no longer work on licences</li>
-            <li>you can generate a standard licence if a probation practitioner has not submitted one for approval.<br> This includes time-served releases
-                    </li>
-        </ul>
+        {% if params.count !== 0 %}
+            <p class="govuk-body">From 2 days before release:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>probation practitioners can no longer work on licences</li>
+                <li>you can generate a standard licence if a probation practitioner has not submitted one for approval.<br> This includes time-served releases
+                        </li>
+            </ul>
+        {% endif %}
        {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config}) }} 
     </div>
 {% endmacro %}

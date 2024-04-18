@@ -160,14 +160,14 @@
                         label: releaseInNextTwoWorkingDaysLabel,
                         id: "releases-in-two-working-days",
                         panel: {
-                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig})
+                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig, count: releaseInTwoWorkingDaysCount })
                         }
                     }, 
                     {
                         label: futureReleasesLabel,
                         id: "future-releases",
                         panel: {
-                            html: futureReleasesTab({ cases: cases, tabType: ComCreateCaseTab.FUTURE_RELEASES, config: statusConfig})
+                            html: futureReleasesTab({ cases: cases, tabType: ComCreateCaseTab.FUTURE_RELEASES, config: statusConfig, count: futureReleasesCount })
                         }
                     }
                 ), peopleInPrisontabs) 
@@ -179,7 +179,7 @@
                         label: attentionNeededTabHeadingWithCount({label: attentionNeededLabel, count: attentionNeededCount, isSearch: not not search}),
                         id: "attention-needed",
                         panel: {
-                            html: attentionNeededTab({ cases: cases, tabType: ComCreateCaseTab.ATTENTION_NEEDED, config: statusConfig, label: attentionNeededLabel})
+                            html: attentionNeededTab({ cases: cases, tabType: ComCreateCaseTab.ATTENTION_NEEDED, config: statusConfig, count: attentionNeededCount })
                         }
                     }
                     ), peopleInPrisontabs) 
