@@ -13,6 +13,10 @@ cronjobs:
   deactivate_release_date_passed_licences:
     enabled: true
     schedule: "0 2 * * 1-5" # 2am UTC Monday - Friday
+  hard_stop_licences_review_overdue:
+    enabled: false
+    schedule: "0 8 * * 1-5" # 8:00am UTC Monday - Friday
+
 generic-service:
   nameOverride: create-and-vary-a-licence
   replicaCount: 4
