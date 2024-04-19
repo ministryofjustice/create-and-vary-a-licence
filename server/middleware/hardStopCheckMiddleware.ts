@@ -3,7 +3,6 @@ import LicenceKind from '../enumeration/LicenceKind'
 import UserType from '../enumeration/userType'
 import { isInHardStopPeriod } from '../utils/utils'
 import logger from '../../logger'
-import config from '../config'
 
 export default function hardStopCheckMiddleware(userType: UserType): RequestHandler {
   return async (req, res, next) => {
