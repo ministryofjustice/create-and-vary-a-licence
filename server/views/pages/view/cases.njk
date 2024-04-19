@@ -73,7 +73,7 @@
         {
             attributes: {
                 id: 'com-' + loop.index,
-                "data-sort-value": case.probationPractitioner
+                "data-sort-value": case.probationPractitioner.name
             },
             html: comDetailsHtml,
             classes: "max-width max-width-200"
@@ -190,7 +190,7 @@
                 items: peopleInPrisontabs
             }) }}
         {% else %}
-            {{ casesTable({licences: licences, isHardStop: false}) }}
+            {{ casesTable({licences: licences, isHardStop: false, probationView: probationView}) }}
         {% endif %}
     </div>
 {% endmacro %}
@@ -232,7 +232,7 @@
         {% if hasMultipleCaseloadsInNomis %}
             {{ prisonsListToDisplay() }}
         {% endif %}
-        {{ casesTable({licences: licences, isHardStop: false}) }}
+        {{ casesTable({licences: licences, isHardStop: false, probationView: probationView}) }}
     </div>
 {% endmacro %}
 

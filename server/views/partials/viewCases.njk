@@ -1,9 +1,5 @@
-{% extends "layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "./statusBadge.njk" import statusBadge %}
-
-{% set pageTitle = applicationName + " - view an approved licence hardstop" %}
-{% set pageId = 'view-hardstop-cases-page' %}
 
 {% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, licenceStatus, index) %}
     <div class="caseload-offender-name">
@@ -51,7 +47,7 @@
                     {
                         text: "Release date",
                         attributes: {
-                            "aria-sort":  "none" if params.tabType === 'attentionNeeded' else ("descending"  if probationView else  "ascending")
+                            "aria-sort":  "none" if params.tabType === 'attentionNeeded' else ("descending"  if params.probationView else  "ascending")
                         }
                     }), licencesHeader)
         %}
@@ -148,7 +144,7 @@
             {
                 attributes: {
                     id: 'com-' + loop.index,
-                    "data-sort-value": case.probationPractitioner
+                    "data-sort-value": case.probationPractitioner.name
                 },
                 html: comDetailsHtml,
                 classes: "max-width max-width-200"
@@ -183,6 +179,6 @@
         {% endif %}
         {% set licences = (licences.push(caseData), licences) %}
     {% endfor %}
-    {{ casesTable({licences: licences, tabType: params.tabType}) }}
+    {{ casesTable({licences: licences, tabType: params.tabType, probationView: false }) }}
 
 {% endmacro %}

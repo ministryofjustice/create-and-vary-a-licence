@@ -35,6 +35,27 @@ describe('Route handlers - View and print case list', () => {
     isDueForEarlyRelease: false,
   }
 
+  const exampleCase = {
+    licences: [
+      {
+        type: LicenceType.AP,
+        status: LicenceStatus.NOT_STARTED,
+        hardStopDate: startOfDay(subDays(new Date(), 1)),
+      },
+    ],
+    cvlFields,
+    nomisRecord: {
+      firstName: 'Bob',
+      lastName: 'Smith',
+      prisonerNumber: 'A1234AA',
+      confirmedReleaseDate: '2022-05-01',
+      legalStatus: 'SENTENCED',
+    } as CvlPrisoner,
+    probationPractitioner: {
+      name: 'Sherlock Holmes',
+    },
+  } as ManagedCase
+
   beforeEach(() => {
     req = {
       query: {},
@@ -105,6 +126,26 @@ describe('Route handlers - View and print case list', () => {
         licences: [
           {
             type: LicenceType.AP,
+            status: LicenceStatus.APPROVED,
+            hardStopDate: startOfDay(addDays(new Date(), 1)),
+          },
+        ],
+        cvlFields,
+        nomisRecord: {
+          firstName: 'Stephen',
+          lastName: 'Rowe',
+          prisonerNumber: 'A1234AE',
+          conditionalReleaseDate: '2022-06-10',
+          legalStatus: 'SENTENCED',
+        } as CvlPrisoner,
+        probationPractitioner: {
+          name: 'Larry Johnson',
+        },
+      },
+      {
+        licences: [
+          {
+            type: LicenceType.AP,
             status: LicenceStatus.IN_PROGRESS,
             hardStopDate: startOfDay(subDays(new Date(), 1)),
           },
@@ -141,26 +182,7 @@ describe('Route handlers - View and print case list', () => {
           name: 'Harry Goldman',
         },
       },
-      {
-        licences: [
-          {
-            type: LicenceType.AP,
-            status: LicenceStatus.APPROVED,
-            hardStopDate: startOfDay(addDays(new Date(), 1)),
-          },
-        ],
-        cvlFields,
-        nomisRecord: {
-          firstName: 'Stephen',
-          lastName: 'Rowe',
-          prisonerNumber: 'A1234AE',
-          conditionalReleaseDate: '2022-06-10',
-          legalStatus: 'SENTENCED',
-        } as CvlPrisoner,
-        probationPractitioner: {
-          name: 'Larry Johnson',
-        },
-      },
+
       {
         licences: [
           {
@@ -519,172 +541,118 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should render licences for for People In Prison in ascending order', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      const aCase = (
+        prisonerNumber: string,
+        confirmedReleaseDate: string,
+        conditionalReleaseDate: string
+      ): ManagedCase => ({
+        ...exampleCase,
+        nomisRecord: { ...exampleCase.nomisRecord, prisonerNumber, conditionalReleaseDate, confirmedReleaseDate },
+      })
+
+      caseloadService.getOmuCaseload.mockResolvedValue(
+        new OmuCaselist(
+          new Container([
+            aCase('A1234AD', '2022-05-01', '2022-01-03'),
+            aCase('A1234AE', '2022-06-01', '2022-05-03'),
+            aCase('A1234AB', '2022-04-01', '2022-06-03'),
+            aCase('A1234AC', '2022-04-05', '2022-05-03'),
+            aCase('A1234AA', undefined, '2022-01-09'),
+          ])
+        )
+      )
+
       req.session.caseloadsSelected = ['MDI']
       res.locals.user.prisonCaseload = ['MDI']
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [
-          {
-            isClickable: false,
-            licenceId: undefined,
-            licenceStatus: 'NOT_STARTED',
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'Confirmed release date',
-            tabType: 'releasesInNextTwoWorkingDays',
-            nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
-          },
-          {
-            isClickable: false,
-            licenceId: undefined,
-            licenceStatus: 'IN_PROGRESS',
-            name: 'Harvey Smith',
-            prisonerNumber: 'A1234AC',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            tabType: 'releasesInNextTwoWorkingDays',
-            nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
-          },
-          {
-            isClickable: true,
-            licenceId: undefined,
-            licenceStatus: 'SUBMITTED',
-            name: 'Harold Lloyd',
-            prisonerNumber: 'A1234AD',
-            probationPractitioner: {
-              name: 'Harry Goldman',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            tabType: 'releasesInNextTwoWorkingDays',
-            nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
-          },
-          {
-            isClickable: true,
-            licenceId: undefined,
-            licenceStatus: 'APPROVED',
-            name: 'Stephen Rowe',
-            prisonerNumber: 'A1234AE',
-            probationPractitioner: {
-              name: 'Larry Johnson',
-            },
-            releaseDate: '10 Jun 2022',
-            releaseDateLabel: 'CRD',
-            tabType: 'futureReleases',
-            nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
-          },
-        ],
-        ComCreateCaseTab,
-        showAttentionNeededTab: false,
-        hasMultipleCaseloadsInNomis: false,
-        prisonsToDisplay: [
-          {
-            agencyId: 'MDI',
-            description: 'Moorland (HMP)',
-          },
-        ],
-        probationView: false,
-        search: undefined,
-        statusConfig,
-      })
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/view/cases',
+        expect.objectContaining({
+          cases: [
+            expect.objectContaining({
+              prisonerNumber: 'A1234AA',
+              releaseDate: '09 Jan 2022',
+            }),
+            expect.objectContaining({
+              prisonerNumber: 'A1234AB',
+              releaseDate: '01 Apr 2022',
+            }),
+            expect.objectContaining({
+              prisonerNumber: 'A1234AC',
+              releaseDate: '05 Apr 2022',
+            }),
+            expect.objectContaining({
+              prisonerNumber: 'A1234AD',
+              releaseDate: '01 May 2022',
+            }),
+            expect.objectContaining({
+              prisonerNumber: 'A1234AE',
+              releaseDate: '01 Jun 2022',
+            }),
+          ],
+          probationView: false,
+        })
+      )
     })
 
     it('should render licences for for People On Probation in descending order', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      req.query.view = 'probation'
+
+      const aCase = (
+        prisonerNumber: string,
+        confirmedReleaseDate: string,
+        conditionalReleaseDate: string
+      ): ManagedCase => ({
+        ...exampleCase,
+        licences: [{ ...exampleCase.licences[0], status: LicenceStatus.ACTIVE }],
+        nomisRecord: { ...exampleCase.nomisRecord, prisonerNumber, conditionalReleaseDate, confirmedReleaseDate },
+      })
+
+      caseloadService.getOmuCaseload.mockResolvedValue(
+        new OmuCaselist(
+          new Container([
+            aCase('A1234AD', '2022-05-01', '2022-01-03'),
+            aCase('A1234AE', '2022-06-01', '2022-05-03'),
+            aCase('A1234AB', '2022-04-01', '2022-06-03'),
+            aCase('A1234AC', '2022-04-05', '2022-05-03'),
+            aCase('A1234AA', undefined, '2022-01-09'),
+          ])
+        )
+      )
+
       req.session.caseloadsSelected = ['MDI']
       res.locals.user.prisonCaseload = ['MDI']
-      req.query.view = 'probation'
       await handler.GET(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
-        cases: [
-          {
-            isClickable: true,
-            licenceId: undefined,
-            licenceStatus: 'ACTIVE',
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-            },
-            releaseDate: '01 Jul 2022',
-            releaseDateLabel: 'Confirmed release date',
-            tabType: 'releasesInNextTwoWorkingDays',
-            nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
-          },
-          {
-            isClickable: false,
-            licenceId: undefined,
-            licenceStatus: 'VARIATION_IN_PROGRESS',
-            name: 'Joe Bloggs',
-            prisonerNumber: 'A1234AB',
-            probationPractitioner: {
-              name: 'Thor',
-            },
-            releaseDate: '01 Jun 2022',
-            releaseDateLabel: 'CRD',
-            tabType: 'futureReleases',
-            nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
-          },
-          {
-            isClickable: false,
-            licenceId: undefined,
-            licenceStatus: 'VARIATION_SUBMITTED',
-            name: 'Harvey Smith',
-            prisonerNumber: 'A1234AC',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            tabType: 'futureReleases',
-            nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
-          },
-          {
-            isClickable: false,
-            licenceId: undefined,
-            licenceStatus: 'VARIATION_APPROVED',
-            name: 'Harold Lloyd',
-            prisonerNumber: 'A1234AD',
-            probationPractitioner: {
-              name: 'Harry Goldman',
-            },
-            releaseDate: '01 May 2022',
-            releaseDateLabel: 'CRD',
-            tabType: 'futureReleases',
-            nomisLegalStatus: 'SENTENCED',
-            isDueForEarlyRelease: false,
-          },
-        ],
-        ComCreateCaseTab,
-        showAttentionNeededTab: false,
-        hasMultipleCaseloadsInNomis: false,
-        prisonsToDisplay: [
-          {
-            agencyId: 'MDI',
-            description: 'Moorland (HMP)',
-          },
-        ],
-        probationView: true,
-        search: undefined,
-        statusConfig,
-      })
+      expect(res.render).toHaveBeenCalledWith(
+        'pages/view/cases',
+        expect.objectContaining({
+          cases: [
+            expect.objectContaining({
+              prisonerNumber: 'A1234AE',
+              releaseDate: '01 Jun 2022',
+            }),
+            expect.objectContaining({
+              prisonerNumber: 'A1234AD',
+              releaseDate: '01 May 2022',
+            }),
+            expect.objectContaining({
+              prisonerNumber: 'A1234AC',
+              releaseDate: '05 Apr 2022',
+            }),
+            expect.objectContaining({
+              prisonerNumber: 'A1234AB',
+              releaseDate: '01 Apr 2022',
+            }),
+            expect.objectContaining({
+              prisonerNumber: 'A1234AA',
+              releaseDate: '09 Jan 2022',
+            }),
+          ],
+          probationView: true,
+        })
+      )
     })
 
     it('should successfully search by name', async () => {
