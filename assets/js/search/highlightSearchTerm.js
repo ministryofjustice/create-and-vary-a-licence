@@ -6,9 +6,9 @@ window.onload = function () {
   }
   const searchTerm = document.getElementById('searchTerm').value
 
-  if (searchTerm.length < 2) {
-    return
-  }
+  // if (searchTerm.length < 2) {
+  //   return
+  // }
 
   for (let result of searchResults) {
     result.innerHTML = caseInsensitiveHighlighting(result.innerHTML, searchTerm)

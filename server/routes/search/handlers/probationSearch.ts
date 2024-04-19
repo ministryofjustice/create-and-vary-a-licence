@@ -22,6 +22,7 @@ export default class ProbationSearch {
     } else {
       searchResponse = await this.searchService.getProbationSearchResults(queryTerm, deliusStaffIdentifier)
     }
+    console.log('searchResponse', searchResponse)
 
     const backLink = this.getBackLink(previousCaseloadPage)
 
