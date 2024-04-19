@@ -19,27 +19,31 @@ export default class ConfirmCreateRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
-    const backLink = req.session.returnToCase || '/licence/create/caseload'
+    const backLink = req.session?.returnToCase || '/licence/create/caseload'
 
     const [nomisRecord, deliusRecord, bankHolidays] = await Promise.all([
-      this.prisonerService.getPrisonerDetail(nomisId, user),
+      this.licenceService.getPrisonerDetail(nomisId, user),
       this.communityService.getProbationer({ nomsNumber: nomisId }),
       this.ukBankHolidayFeedService.getEnglishAndWelshHolidays(),
     ])
 
+    if (nomisRecord.cvl.isInHardStopPeriod) {
+      return res.redirect('/access-denied')
+    }
+
     return res.render('pages/create/confirmCreate', {
       licence: {
         crn: deliusRecord?.otherIds?.crn,
-        actualReleaseDate: nomisRecord.sentenceDetail.confirmedReleaseDate
-          ? moment(nomisRecord.sentenceDetail.confirmedReleaseDate).format('DD/MM/YYYY')
+        actualReleaseDate: nomisRecord.prisoner.confirmedReleaseDate
+          ? moment(nomisRecord.prisoner.confirmedReleaseDate).format('DD/MM/YYYY')
           : undefined,
-        conditionalReleaseDate: moment(nomisRecord.sentenceDetail.conditionalReleaseDate).format('DD/MM/YYYY'),
-        dateOfBirth: moment(nomisRecord.dateOfBirth).format('DD/MM/YYYY'),
-        forename: convertToTitleCase(nomisRecord.firstName),
-        surname: convertToTitleCase(nomisRecord.lastName),
+        conditionalReleaseDate: moment(nomisRecord.prisoner.conditionalReleaseDate).format('DD/MM/YYYY'),
+        dateOfBirth: moment(nomisRecord.prisoner.dateOfBirth).format('DD/MM/YYYY'),
+        forename: convertToTitleCase(nomisRecord.prisoner.firstName),
+        surname: convertToTitleCase(nomisRecord.prisoner.lastName),
       },
       releaseIsOnBankHolidayOrWeekend: bankHolidays.isBankHolidayOrWeekend(
-        moment(nomisRecord.sentenceDetail.confirmedReleaseDate || nomisRecord.sentenceDetail.conditionalReleaseDate)
+        moment(nomisRecord.prisoner.confirmedReleaseDate || nomisRecord.prisoner.conditionalReleaseDate)
       ),
       backLink,
     })
@@ -49,7 +53,12 @@ export default class ConfirmCreateRoutes {
     const { nomisId } = req.params
     const { user } = res.locals
     const { answer } = req.body
-    const backLink = req.session.returnToCase
+    const backLink = req.session?.returnToCase
+
+    const nomisRecord = await this.licenceService.getPrisonerDetail(nomisId, user)
+    if (nomisRecord.cvl.isInHardStopPeriod) {
+      return res.redirect('/access-denied')
+    }
 
     if (answer === YesOrNo.YES) {
       const { licenceId } = await this.licenceService.createLicence({ nomsId: nomisId, type: LicenceKind.CRD }, user)
