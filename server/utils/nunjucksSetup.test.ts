@@ -1,7 +1,10 @@
 import { format, addDays, subDays, addMonths } from 'date-fns'
-import { Licence } from '../@types/licenceApiClientTypes'
+import { SUBSCRIBE } from 'superagent'
+import { FoundProbationRecord, Licence } from '../@types/licenceApiClientTypes'
 import { renderTemplate } from './__testutils/templateTestUtils'
 import { registerNunjucks } from './nunjucksSetup'
+import LicenceStatus from '../enumeration/licenceStatus'
+import LicenceKind from '../enumeration/LicenceKind'
 
 describe('Nunjucks Filters', () => {
   describe('initialiseName', () => {
@@ -314,6 +317,47 @@ describe('Nunjucks Filters', () => {
     it('should convert first character to Caps', () => {
       expect(registerNunjucks().getFilter('titlecase')('IMMIGRATION DETAINEE')).toEqual('Immigration detainee')
       expect(registerNunjucks().getFilter('titlecase')('sENTENCED')).toEqual('Sentenced')
+    })
+  })
+
+  describe('getlicenceStatusForSearchResults', () => {
+    it('should return REVIEW_NEEDED status', () => {
+      expect(
+        registerNunjucks().getFilter('getlicenceStatusForSearchResults')({
+          isReviewNeeded: true,
+          licenceStatus: LicenceStatus.ACTIVE,
+        } as FoundProbationRecord)
+      ).toEqual(LicenceStatus.REVIEW_NEEDED)
+    })
+
+    it('should return TIMED_OUT status', () => {
+      expect(
+        registerNunjucks().getFilter('getlicenceStatusForSearchResults')({
+          isReviewNeeded: false,
+          kind: LicenceKind.HARD_STOP,
+          licenceStatus: LicenceStatus.SUBMITTED,
+        } as FoundProbationRecord)
+      ).toEqual(LicenceStatus.TIMED_OUT)
+    })
+
+    it('should return the same status as licence status', () => {
+      expect(
+        registerNunjucks().getFilter('getlicenceStatusForSearchResults')({
+          isReviewNeeded: false,
+          kind: LicenceKind.CRD,
+          licenceStatus: LicenceStatus.SUBMITTED,
+        } as FoundProbationRecord)
+      ).toEqual(LicenceStatus.SUBMITTED)
+    })
+  })
+
+  describe('getreleaseDateForSearchResults', () => {
+    it('should return not found string', () => {
+      expect(registerNunjucks().getFilter('getreleaseDateForSearchResults')('')).toEqual('not found')
+    })
+
+    it('should return dd MMM yyyy date format', () => {
+      expect(registerNunjucks().getFilter('getreleaseDateForSearchResults')('20/04/2024')).toEqual('20 Apr 2024')
     })
   })
 })

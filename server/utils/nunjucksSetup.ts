@@ -379,6 +379,10 @@ export function registerNunjucks(app?: express.Express): Environment {
     return isHardStopLicence ? LicenceStatus.TIMED_OUT : <LicenceStatus>licence.licenceStatus
   })
 
+  njkEnv.addFilter('getreleaseDateForSearchResults', (releaseDate: string): string => {
+    return releaseDate ? format(parseCvlDate(releaseDate), 'dd MMM yyyy') : 'not found'
+  })
+
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('serviceName', config.serviceName)
   njkEnv.addGlobal('useNewSearch', config.useNewSearch)
