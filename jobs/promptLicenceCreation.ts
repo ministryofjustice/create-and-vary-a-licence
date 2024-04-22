@@ -100,11 +100,15 @@ const notifyComOfUpcomingReleases = async (emailGroups: EmailContact[]) => {
 /* eslint-enable */
 
 Promise.all([
-  promptLicenceCreationService.pollPrisonersDueForLicence(
-    startOfISOWeek(new Date()),
-    endOfISOWeek(add(new Date(), { weeks: 3 })),
-    [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS]
-  ),
+  promptLicenceCreationService
+    .pollPrisonersDueForLicence(startOfISOWeek(new Date()), endOfISOWeek(add(new Date(), { weeks: 3 })), [
+      LicenceStatus.NOT_STARTED,
+      LicenceStatus.IN_PROGRESS,
+    ])
+    .then(caseload => {
+      logger.info(`urgentPromptCases: ${caseload.length}`)
+      return caseload
+    }),
 
   promptLicenceCreationService
     .pollPrisonersDueForLicence(
@@ -112,13 +116,23 @@ Promise.all([
       endOfISOWeek(add(new Date(), { weeks: 11 })),
       [LicenceStatus.NOT_STARTED]
     )
-    .then(caseload => promptLicenceCreationService.excludeCasesNotAssignedToPpWithinPast7Days(caseload)),
+    .then(caseload => {
+      logger.info(`week13InitialPromptCases - before filter: ${caseload.length}`)
+      const result = promptLicenceCreationService.excludeCasesNotAssignedToPpWithinPast7Days(caseload)
+      logger.info(`week13InitialPromptCases - after filter: ${result.length}`)
+      return result
+    }),
 
-  promptLicenceCreationService.pollPrisonersDueForLicence(
-    startOfISOWeek(add(new Date(), { weeks: 12 })),
-    endOfISOWeek(add(new Date(), { weeks: 12 })),
-    [LicenceStatus.NOT_STARTED]
-  ),
+  promptLicenceCreationService
+    .pollPrisonersDueForLicence(
+      startOfISOWeek(add(new Date(), { weeks: 12 })),
+      endOfISOWeek(add(new Date(), { weeks: 12 })),
+      [LicenceStatus.NOT_STARTED]
+    )
+    .then(caseload => {
+      logger.info(`week5to12InitialPromptCases: ${caseload.length}`)
+      return caseload
+    }),
 ])
   .then(([urgentPromptCases, week13InitialPromptCases, week5to12InitialPromptCases]) =>
     buildEmailGroups(urgentPromptCases, [...week13InitialPromptCases, ...week5to12InitialPromptCases])

@@ -30,7 +30,6 @@ export default class IndexPage extends Page {
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetAnOffendersManagers')
-    cy.task('stubGetCutOffDateForLicenceTimeOut')
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
@@ -45,7 +44,6 @@ export default class IndexPage extends Page {
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetAnOffendersManagers')
-    cy.task('stubGetCutOffDateForLicenceTimeOut')
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
@@ -58,7 +56,6 @@ export default class IndexPage extends Page {
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetAnOffendersManagers')
-    cy.task('stubGetCutOffDateForLicenceTimeOut')
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
   }

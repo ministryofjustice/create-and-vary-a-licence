@@ -12,7 +12,6 @@ context('Search for a person', () => {
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetBankHolidays', dates)
-    cy.task('stubGetCutOffDateForLicenceTimeOut')
     cy.task('stubFeComponents')
     cy.signIn()
   })

@@ -3,7 +3,12 @@ import { format, getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
-import { convertToTitleCase, selectReleaseDate, determineComCreateCasesTab } from '../../../utils/utils'
+import {
+  convertToTitleCase,
+  selectReleaseDate,
+  determineComCreateCasesTab,
+  ComCreateCaseTab,
+} from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import config from '../../../config'
@@ -25,46 +30,46 @@ export default class ViewAndPrintCaseRoutes {
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
     const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
-    const { cutoffDate } = await this.caseloadService.getCutOffDateForLicenceTimeOut(user)
     const casesToView = view === 'prison' ? caselist.getPrisonView() : caselist.getProbationView()
 
-    const caseloadViewModel = casesToView
-      .unwrap()
-      .map(c => {
-        let latestLicence = _.head(c.licences)
-        if (!probationView && c.licences.length > 1) {
-          latestLicence = c.licences.find(
-            l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS
-          )
-        }
-        const releaseDate = selectReleaseDate(c.nomisRecord)
-        const tabType = determineComCreateCasesTab(latestLicence, c.nomisRecord, cutoffDate)
-        return {
-          licenceId: latestLicence.id,
-          licenceVersionOf: latestLicence.versionOf,
-          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
-          prisonerNumber: c.nomisRecord.prisonerNumber,
-          probationPractitioner: c.probationPractitioner,
-          releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
-          releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
-          licenceStatus: latestLicence.status,
-          tabType,
-          nomisLegalStatus: c.nomisRecord?.legalStatus,
-          isClickable:
-            config.hardStopEnabled && tabType === 'attentionNeeded'
-              ? false
-              : latestLicence.status !== LicenceStatus.NOT_STARTED &&
-                latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
-                latestLicence.status !== LicenceStatus.OOS_RECALL &&
-                latestLicence.status !== LicenceStatus.OOS_BOTUS &&
-                latestLicence.status !== LicenceStatus.IN_PROGRESS &&
-                latestLicence.status !== LicenceStatus.VARIATION_IN_PROGRESS &&
-                latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
-                latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
-          lastWorkedOnBy: latestLicence?.updatedByFullName,
-          isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
-        }
-      })
+    const caseloadViewModel = casesToView.unwrap().map(c => {
+      let latestLicence = _.head(c.licences)
+      if (!probationView && c.licences.length > 1) {
+        latestLicence = c.licences.find(
+          l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS
+        )
+      }
+      const releaseDate = selectReleaseDate(c.nomisRecord)
+      const tabType = determineComCreateCasesTab(latestLicence, c.nomisRecord, c.cvlFields)
+      return {
+        licenceId: latestLicence.id,
+        licenceVersionOf: latestLicence.versionOf,
+        name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+        prisonerNumber: c.nomisRecord.prisonerNumber,
+        probationPractitioner: c.probationPractitioner,
+        releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
+        releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
+        licenceStatus: latestLicence.status,
+        tabType,
+        nomisLegalStatus: c.nomisRecord?.legalStatus,
+        isClickable:
+          config.hardStopEnabled && tabType === ComCreateCaseTab.ATTENTION_NEEDED
+            ? false
+            : latestLicence.status !== LicenceStatus.NOT_STARTED &&
+              latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
+              latestLicence.status !== LicenceStatus.OOS_RECALL &&
+              latestLicence.status !== LicenceStatus.OOS_BOTUS &&
+              latestLicence.status !== LicenceStatus.IN_PROGRESS &&
+              latestLicence.status !== LicenceStatus.VARIATION_IN_PROGRESS &&
+              latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
+              latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
+        lastWorkedOnBy: latestLicence?.updatedByFullName,
+        isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
+      }
+    })
+
+    const showAttentionNeededTab = caseloadViewModel.some(e => e.tabType === ComCreateCaseTab.ATTENTION_NEEDED)
+    const caseloadSearchResult = caseloadViewModel
       .filter(c => {
         const searchString = search?.toLowerCase().trim()
         if (!searchString) return true
@@ -83,7 +88,9 @@ export default class ViewAndPrintCaseRoutes {
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
 
     res.render('pages/view/cases', {
-      cases: caseloadViewModel,
+      cases: caseloadSearchResult,
+      ComCreateCaseTab,
+      showAttentionNeededTab,
       statusConfig,
       search,
       prisonsToDisplay,

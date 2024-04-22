@@ -41,12 +41,7 @@ import type {
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
-import {
-  UpdateComRequest,
-  UpdatePrisonUserRequest,
-  HardStopCutoffDate,
-  ComReviewCount,
-} from '../@types/licenceApiClientTypes'
+import { UpdateComRequest, UpdatePrisonUserRequest, ComReviewCount } from '../@types/licenceApiClientTypes'
 import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
@@ -245,15 +240,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username }
     )) as LicenceSummary[]
-  }
-
-  async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
-    return (await this.get(
-      {
-        path: `/current-hard-stop-cutoff-date`,
-      },
-      { username: user?.username }
-    )) as HardStopCutoffDate
   }
 
   async getComReviewCount(user: User): Promise<ComReviewCount> {

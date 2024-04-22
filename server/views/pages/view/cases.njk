@@ -18,13 +18,15 @@
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
 {% set peopleInPrisontabs = [] %}
-{% set releaseInTwoWorkingDaysCount = (cases | filterByTabType('releasesInNextTwoWorkingDays')).length %}
-{% set futureReleasesCount = (cases | filterByTabType('futureReleases')).length %}
-{% set attentionNeededCount = (cases | filterByTabType('attentionNeeded')).length %}
+{% set releaseInTwoWorkingDaysCount = (cases | filterByTabType(ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)).length %}
+{% set futureReleasesCount = (cases | filterByTabType(ComCreateCaseTab.FUTURE_RELEASES)).length %}
+{% set attentionNeededCount = (cases | filterByTabType(ComCreateCaseTab.ATTENTION_NEEDED)).length %}
 {% set releaseInNextTwoWorkingDaysLabel = "Releases in next 2 working days " + ("("  + releaseInTwoWorkingDaysCount + releaseInTwoWorkingDaysCount | pluralise(" result") + ")" if search) %}
 {% set futureReleasesLabel = "Future releases " + ("(" + futureReleasesCount + futureReleasesCount | pluralise(" result") + ")" if search) %}
 {% set attentionNeededLabel = "Attention needed " + ("(" + attentionNeededCount + attentionNeededCount | pluralise(" result") + ")" if search) %}
-{% if search and futureReleasesCount  %}
+{% if search and releaseInTwoWorkingDaysCount  %}
+    {% set activeTab = 'releases-in-two-working-days' %}
+{% elif search and futureReleasesCount  %}
     {% set activeTab = 'future-releases' %}
 {% elif search and attentionNeededCount  %}
     {% set activeTab = 'attention-needed' %}
@@ -71,7 +73,7 @@
         {
             attributes: {
                 id: 'com-' + loop.index,
-                "data-sort-value": case.probationPractitioner
+                "data-sort-value": case.probationPractitioner.name
             },
             html: comDetailsHtml,
             classes: "max-width max-width-200"
@@ -158,26 +160,26 @@
                         label: releaseInNextTwoWorkingDaysLabel,
                         id: "releases-in-two-working-days",
                         panel: {
-                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: "releasesInNextTwoWorkingDays", config: statusConfig})
+                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig, count: releaseInTwoWorkingDaysCount })
                         }
                     }, 
                     {
                         label: futureReleasesLabel,
                         id: "future-releases",
                         panel: {
-                            html: futureReleasesTab({ cases: cases, tabType: "futureReleases", config: statusConfig})
+                            html: futureReleasesTab({ cases: cases, tabType: ComCreateCaseTab.FUTURE_RELEASES, config: statusConfig, count: futureReleasesCount })
                         }
                     }
                 ), peopleInPrisontabs) 
             %}
 
-            {% if attentionNeededCount %}
+            {% if showAttentionNeededTab %}
                 {% set peopleInPrisontabs = (peopleInPrisontabs.push(
                     {
                         label: attentionNeededTabHeadingWithCount({label: attentionNeededLabel, count: attentionNeededCount, isSearch: not not search}),
                         id: "attention-needed",
                         panel: {
-                            html: attentionNeededTab({ cases: cases, tabType: "attentionNeeded", config: statusConfig})
+                            html: attentionNeededTab({ cases: cases, tabType: ComCreateCaseTab.ATTENTION_NEEDED, config: statusConfig, count: attentionNeededCount })
                         }
                     }
                     ), peopleInPrisontabs) 
@@ -188,7 +190,7 @@
                 items: peopleInPrisontabs
             }) }}
         {% else %}
-            {{ casesTable({licences: licences, isHardStop: false}) }}
+            {{ casesTable({licences: licences, isHardStop: false, probationView: probationView}) }}
         {% endif %}
     </div>
 {% endmacro %}
@@ -230,7 +232,7 @@
         {% if hasMultipleCaseloadsInNomis %}
             {{ prisonsListToDisplay() }}
         {% endif %}
-        {{ casesTable({licences: licences, isHardStop: false}) }}
+        {{ casesTable({licences: licences, isHardStop: false, probationView: probationView}) }}
     </div>
 {% endmacro %}
 

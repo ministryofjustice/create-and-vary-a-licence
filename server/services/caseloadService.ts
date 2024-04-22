@@ -10,7 +10,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
 import type { CommunityApiManagedOffender } from '../@types/communityClientTypes'
-import type { LicenceSummary, HardStopCutoffDate, ComReviewCount, CaseloadItem } from '../@types/licenceApiClientTypes'
+import type { LicenceSummary, ComReviewCount, CaseloadItem } from '../@types/licenceApiClientTypes'
 import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
@@ -111,10 +111,6 @@ export default class CaseloadService {
 
   async getComReviewCount(user: User): Promise<ComReviewCount> {
     return this.licenceService.getComReviewCount(user)
-  }
-
-  async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
-    return this.licenceService.getCutOffDateForLicenceTimeOut(user)
   }
 
   async getVaryApproverCaseload(user: User): Promise<ManagedCase[]> {
@@ -371,6 +367,8 @@ export default class CaseloadService {
               versionOf: l.versionOf,
               kind: <LicenceKind>l.kind,
               licenceStartDate: l.licenceStartDate,
+              hardStopDate: parseCvlDate(l.hardStopDate),
+              hardStopWarningDate: parseCvlDate(l.hardStopWarningDate),
             }
           }),
       }

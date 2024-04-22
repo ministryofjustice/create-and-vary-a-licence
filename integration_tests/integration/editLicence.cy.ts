@@ -14,7 +14,6 @@ context('Edit a licence before release', () => {
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetBankHolidays', dates)
-    cy.task('stubGetCutOffDateForLicenceTimeOut')
     cy.task('stubFeComponents')
     cy.signIn()
   })
