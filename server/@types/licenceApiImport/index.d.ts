@@ -2157,10 +2157,16 @@ export interface components {
         | 'TIMED_OUT'
       /** @description Indicates whether the offender is in prison or out on probation */
       isOnProbation?: boolean
-      /** @description Is a review of this licence is required
+      /**
+       * @description Label for release date
+       * @example Confirmed release date
+       */
+      releaseDateLabel?: string
+      /**
+       * @description Is a review of this licence is required
        * @example true
        */
-      isReviewNeeded: boolean
+      isReviewNeeded?: boolean
     }
     /** @description Describes an enriched probation search result */
     ProbationSearchResult: {
