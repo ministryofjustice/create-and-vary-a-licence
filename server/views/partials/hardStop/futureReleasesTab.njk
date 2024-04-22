@@ -3,7 +3,9 @@
 {% macro futureReleasesTab(params) %}
     <div id="future-releases" role="tabpanel" aria-labelledby="tab_before-hardstop">
         <h2 class="govuk-heading-l">Future releases</h2>
-        <p class="govuk-body">Licences for people within 4 weeks of release or that have been started before then.</p>
+        {% if params.count !== 0 %}
+            <p class="govuk-body">Licences for people within 4 weeks of release or that have been started before then.</p>
+        {% endif %}
         {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config}) }} 
     </div>
 {% endmacro %}

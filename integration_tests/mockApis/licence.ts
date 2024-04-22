@@ -1,5 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
-import { addDays, addMonths, format } from 'date-fns'
+import { addDays, addMonths, format, subDays } from 'date-fns'
 import { stubFor } from '../wiremock'
 import LicenceStatus from '../../server/licences/licenceStatus'
 // eslint-disable-next-line camelcase
@@ -287,6 +287,9 @@ export default {
           appointmentTime: '01/12/2021 00:34',
           appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
           isInHardStopPeriod: options.isInHardStopPeriod || false,
+          hardStopDate: options.isInHardStopPeriod
+            ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
+            : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
           additionalLicenceConditions: [
             {
               id: 1,
@@ -584,6 +587,7 @@ export default {
     nomisId: string
     status: string
     bookingId: number
+    isInHardStop: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -607,7 +611,9 @@ export default {
             comUsername: 'jsmith',
             bookingId: options.bookingId,
             dateCreated: '01/03/2021 10:15',
-            hardStopDate: '05/12/2023',
+            hardStopDate: options.isInHardStopPeriod
+              ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
+              : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
             hardStopWarningDate: '03/12/2023',
           },
         ],
@@ -1486,20 +1492,6 @@ export default {
         jsonBody: {
           email: 'test@test.test',
         },
-      },
-    })
-  },
-
-  stubGetCutOffDateForLicenceTimeOut: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/current-hard-stop-cutoff-date`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { cutoffDate: '05/12/2023' },
       },
     })
   },

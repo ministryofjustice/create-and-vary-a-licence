@@ -1,11 +1,12 @@
 import moment from 'moment'
 import { isBefore, parse, isEqual, isValid, startOfDay } from 'date-fns'
+import assert from 'assert'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
-import type { CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
+import type { CvlFields, CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import config from '../config'
 import { Licence as ManagedCaseLicence } from '../@types/managedCase'
@@ -219,15 +220,15 @@ const isAttentionNeeded = (
 const determineComCreateCasesTab = (
   licence: ManagedCaseLicence,
   nomisRecord: CvlPrisoner,
-  cutOffDateString: string
+  cvlFields: CvlFields
 ): ComCreateCaseTab => {
   if (licence && isAttentionNeeded(licence, nomisRecord)) {
     return ComCreateCaseTab.ATTENTION_NEEDED
   }
-
-  const releaseDate = selectReleaseDate(nomisRecord)
-  const cutOffDate = parseCvlDate(cutOffDateString)
-  return isReleaseDateOnOrBeforeCutOffDate(cutOffDate, releaseDate)
+  const hardStopDate = licence ? licence.hardStopDate : parseCvlDate(cvlFields.hardStopDate)
+  // hard stop should always be populated, blow up if not
+  assert(hardStopDate, `Prisoner '${nomisRecord.prisonerNumber}' is missing hard stop date`)
+  return hardStopDate <= startOfDay(new Date())
     ? ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS
     : ComCreateCaseTab.FUTURE_RELEASES
 }
