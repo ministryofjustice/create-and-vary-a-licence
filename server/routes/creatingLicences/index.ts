@@ -29,7 +29,6 @@ export default function Index({
   licenceService,
   caseloadService,
   communityService,
-  prisonerService,
   ukBankHolidayFeedService,
   conditionService,
 }: Services): Router {
@@ -90,12 +89,7 @@ export default function Index({
   }
 
   {
-    const controller = new ConfirmCreateRoutes(
-      communityService,
-      prisonerService,
-      licenceService,
-      ukBankHolidayFeedService
-    )
+    const controller = new ConfirmCreateRoutes(communityService, licenceService, ukBankHolidayFeedService)
     get('/nomisId/:nomisId/confirm', controller.GET)
     post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
   }

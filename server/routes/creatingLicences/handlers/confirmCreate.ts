@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import CommunityService from '../../../services/communityService'
-import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase } from '../../../utils/utils'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
@@ -11,7 +10,6 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly communityService: CommunityService,
-    private readonly prisonerService: PrisonerService,
     private readonly licenceService: LicenceService,
     private readonly ukBankHolidayFeedService: UkBankHolidayFeedService
   ) {}
