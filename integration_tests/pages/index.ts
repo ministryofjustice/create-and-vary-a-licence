@@ -48,10 +48,9 @@ export default class IndexPage extends Page {
     return Page.verifyOnPage(CaseloadPage)
   }
 
-  clickCreateALicenceWithoutLicencesStub = (): CaseloadPage => {
+  clickCreateALicenceInHardStop = (): CaseloadPage => {
     cy.task('stubGetManagedOffenders')
     cy.task('stubGetOffendersByCrn')
-    cy.task('searchPrisonersByNomisIds')
     cy.task('stubGetPrisonerDetail')
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')

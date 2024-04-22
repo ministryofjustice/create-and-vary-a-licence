@@ -11,10 +11,10 @@ import LicenceType from '../enumeration/licenceType'
 import { ManagedCase } from '../@types/managedCase'
 import Container from './container'
 import { CaseloadItem } from '../@types/licenceApiClientTypes'
+import config from '../config'
 
 jest.mock('./prisonerService')
 jest.mock('./communityService')
-// jest.mock('./licenceService')
 
 describe('Caseload Service', () => {
   const elevenDaysFromNow = format(addDays(new Date(), 11), 'yyyy-MM-dd')
@@ -53,6 +53,7 @@ describe('Caseload Service', () => {
     const offenders = new Container([
       {
         nomisRecord: { prisonerNumber: null },
+        cvlFields: {},
       } as ManagedCase,
     ])
     await serviceUnderTest.mapOffendersToLicences(offenders)
@@ -68,6 +69,38 @@ describe('Caseload Service', () => {
     ])
     await serviceUnderTest.mapOffendersToLicences(offenders)
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(1)
+  })
+
+  describe('in the hard stop period', () => {
+    const existingConfig = config
+
+    beforeAll(() => {
+      config.hardStopEnabled = true
+    })
+
+    afterAll(() => {
+      config.hardStopEnabled = existingConfig.hardStopEnabled
+    })
+
+    it('Sets NOT_STARTED licences to TIMED_OUT when in the hard stop period', async () => {
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
+      const offenders = new Container([
+        {
+          nomisRecord: { prisonerNumber: 'ABC123' },
+          cvlFields: { isInHardStopPeriod: true },
+        } as ManagedCase,
+      ])
+      const result = await serviceUnderTest.mapOffendersToLicences(offenders)
+      expect(result.unwrap()).toMatchObject([
+        {
+          nomisRecord: {
+            prisonerNumber: 'ABC123',
+          },
+          cvlFields: { isInHardStopPeriod: true },
+          licences: [{ status: 'TIMED_OUT', type: 'PSS' }],
+        },
+      ])
+    })
   })
 
   it('filters invalid data due to mismatch between delius and nomis', async () => {
@@ -139,24 +172,25 @@ describe('Caseload Service', () => {
           paroleEligibilityDate: yesterday,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
-        prisoner: { prisonerNumber: 'AB1234F', paroleEligibilityDate: tenDaysFromNow },
+        prisoner: { prisonerNumber: 'AB1234F', paroleEligibilityDate: tenDaysFromNow, cvl: {} },
       },
       {
-        prisoner: { prisonerNumber: 'AB1234G', legalStatus: 'DEAD' },
+        prisoner: { prisonerNumber: 'AB1234G', legalStatus: 'DEAD', cvl: {} },
       },
       {
-        prisoner: { prisonerNumber: 'AB1234H', indeterminateSentence: true },
+        prisoner: { prisonerNumber: 'AB1234H', indeterminateSentence: true, cvl: {} },
       },
       {
-        prisoner: { prisonerNumber: 'AB1234I' },
+        prisoner: { prisonerNumber: 'AB1234I', cvl: {} },
       },
       {
-        prisoner: { prisonerNumber: 'AB1234J', conditionalReleaseDate: tenDaysFromNow },
+        prisoner: { prisonerNumber: 'AB1234J', conditionalReleaseDate: tenDaysFromNow, cvl: {} },
       },
       {
-        prisoner: { prisonerNumber: 'AB1234K', conditionalReleaseDate: tenDaysFromNow, bookingId: '123' },
+        prisoner: { prisonerNumber: 'AB1234K', conditionalReleaseDate: tenDaysFromNow, bookingId: '123', cvl: {} },
       },
       {
         prisoner: {
@@ -164,6 +198,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       // This case tests that recalls are overridden if the PRRD < the conditionalReleaseDate - so NOT_STARTED
       {
@@ -174,6 +209,7 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           recall: true,
         },
+        cvl: {},
       },
       // This case tests that recalls are NOT overridden if the PRRD > the conditionalReleaseDate - so OOS_RECALL
       {
@@ -184,6 +220,7 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           recall: true,
         },
+        cvl: {},
       },
       // This case tests that recalls are overridden if the PRRD is equal to the conditionalReleaseDate - so NOT_STARTED
       {
@@ -194,6 +231,7 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           recall: true,
         },
+        cvl: {},
       },
       // This case tests that recalls are overridden if no PRRD exists and there is only the conditionalReleaseDate - so NOT_STARTED
       {
@@ -203,6 +241,7 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           recall: true,
         },
+        cvl: {},
       },
       // This case tests that the case is included when the status is INACTIVE TRN
       {
@@ -211,6 +250,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: nineDaysFromNow,
           status: 'INACTIVE TRN',
         },
+        cvl: {},
       },
     ] as CaseloadItem[])
     prisonerService.getHdcStatuses.mockResolvedValue([
@@ -373,6 +413,7 @@ describe('Caseload Service', () => {
           licenceExpiryDate: '2022-12-26',
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -380,8 +421,9 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'INACTIVE OUT',
         },
+        cvl: {},
       },
-      { prisoner: { prisonerNumber: 'AB1234G', conditionalReleaseDate: tenDaysFromNow } },
+      { prisoner: { prisonerNumber: 'AB1234G', conditionalReleaseDate: tenDaysFromNow }, cvl: {} },
       {
         prisoner: {
           prisonerNumber: 'AB1234H',
@@ -389,6 +431,7 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           topupSupervisionExpiryDate: '2023-06-22',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -398,6 +441,7 @@ describe('Caseload Service', () => {
           topupSupervisionExpiryDate: '2023-06-22',
           licenceExpiryDate: elevenDaysFromNow,
         },
+        cvl: {},
       },
     ] as CaseloadItem[])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
@@ -503,8 +547,9 @@ describe('Caseload Service', () => {
           licenceExpiryDate: '2022-12-26',
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
-      { prisoner: { prisonerNumber: 'AB1234F', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' } },
+      { prisoner: { prisonerNumber: 'AB1234F', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' }, cvl: {} },
     ] as CaseloadItem[])
 
     const result = await serviceUnderTest.getTeamCreateCaseload(user, ['teamA'])
@@ -572,6 +617,7 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           recall: true,
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -582,6 +628,7 @@ describe('Caseload Service', () => {
           imprisonmentStatus: 'BOTUS',
           recall: true,
         },
+        cvl: {},
       },
     ] as CaseloadItem[])
 
@@ -652,6 +699,7 @@ describe('Caseload Service', () => {
           licenceExpiryDate: '2022-12-26',
           status: 'INACTIVE OUT',
         },
+        cvl: {},
       },
     ] as CaseloadItem[])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
@@ -721,6 +769,7 @@ describe('Caseload Service', () => {
           licenceExpiryDate: '2022-12-26',
           status: 'INACTIVE OUT',
         },
+        cvl: {},
       },
     ] as CaseloadItem[])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
@@ -782,7 +831,10 @@ describe('Caseload Service', () => {
         { otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } } as OffenderDetail,
       ])
       licenceService.searchPrisonersByNomsIds.mockResolvedValue([
-        { prisoner: { prisonerNumber: 'AB1234E', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' } },
+        {
+          prisoner: { prisonerNumber: 'AB1234E', confirmedReleaseDate: tenDaysFromNow, status: 'INACTIVE OUT' },
+          cvl: {},
+        },
         {
           prisoner: {
             prisonerNumber: 'AB1234F',
@@ -790,6 +842,7 @@ describe('Caseload Service', () => {
             licenceExpiryDate: '2022-12-26',
             status: 'INACTIVE OUT',
           },
+          cvl: {},
         },
       ] as CaseloadItem[])
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
@@ -906,6 +959,7 @@ describe('Caseload Service', () => {
             licenceExpiryDate: '2022-12-26',
             status: 'INACTIVE OUT',
           },
+          cvl: {},
         },
       ] as CaseloadItem[])
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
@@ -1061,6 +1115,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1068,6 +1123,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'OUT',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1075,6 +1131,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1084,6 +1141,7 @@ describe('Caseload Service', () => {
           topupSupervisionExpiryDate: '2023-12-26',
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1093,6 +1151,7 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           homeDetentionCurfewEligibilityDate: undefined,
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1101,6 +1160,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1109,6 +1169,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1118,6 +1179,7 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           homeDetentionCurfewEligibilityDate: nineDaysFromNow,
         },
+        cvl: {},
       },
     ] as CaseloadItem[])
 
@@ -1172,6 +1234,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1179,6 +1242,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1187,6 +1251,7 @@ describe('Caseload Service', () => {
           licenceExpiryDate: '2022-12-26',
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1195,6 +1260,7 @@ describe('Caseload Service', () => {
           licenceExpiryDate: '2022-12-26',
           status: 'OUT',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1203,6 +1269,7 @@ describe('Caseload Service', () => {
           licenceExpiryDate: '2022-12-26',
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
     ] as CaseloadItem[])
     communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
@@ -1634,6 +1701,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1641,6 +1709,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
       {
         prisoner: {
@@ -1648,6 +1717,7 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
+        cvl: {},
       },
     ] as CaseloadItem[])
     communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
@@ -1714,6 +1784,7 @@ describe('Caseload Service', () => {
           confirmedReleaseDate: tenDaysFromNow,
           status: 'INACTIVE OUT',
         },
+        cvl: {},
       } as CaseloadItem,
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
