@@ -1,13 +1,9 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "./statusBadge.njk" import statusBadge %}
 
-{% macro offenderName(offenderName, prisonerNumber, licenceId, isClickable, versionOfId, licenceStatus, index) %}
+{% macro offenderName(offenderName, link, index) %}
     <div class="caseload-offender-name">
-        {% if isClickable %}
-            {% set link = "/licence/view/id/" + licenceId + "/show" %}
-            {% if versionOfId and licenceStatus === 'SUBMITTED' %}
-                {% set link = link + "?lastApprovedVersion=" + versionOfId %}
-            {% endif %}
+        {% if link %}
             <a id="name-button-{{ index }}" href={{ link }} class="govuk-link govuk-heading-s">{{ offenderName }}</a>
         {% else %}
             <span id="name-button-{{ index }}" class="govuk-heading-s">{{ offenderName }}</span>
@@ -130,7 +126,7 @@
                     id: 'name-' + loop.index,
                     "data-sort-value": case.name
                 },
-                html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, case.licenceStatus, loop.index),
+                html: offenderName(case.name, case.link, loop.index),
                 classes: "max-width max-width-220"
             },
             {
