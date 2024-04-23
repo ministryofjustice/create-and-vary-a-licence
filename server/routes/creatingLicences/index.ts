@@ -29,7 +29,6 @@ export default function Index({
   licenceService,
   caseloadService,
   communityService,
-  prisonerService,
   ukBankHolidayFeedService,
   conditionService,
 }: Services): Router {
@@ -48,8 +47,16 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      asyncMiddleware(handler),
-      hardStopCheckMiddleware(UserType.PROBATION)
+      asyncMiddleware(handler)
+    )
+
+  const getWithHardStopCheck = (path: string, handler: RequestHandler) =>
+    router.get(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      fetchLicence(licenceService),
+      hardStopCheckMiddleware(UserType.PROBATION),
+      asyncMiddleware(handler)
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -58,6 +65,16 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
+      asyncMiddleware(handler)
+    )
+
+  const postWithHardStopCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
+    router.post(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      fetchLicence(licenceService),
+      validationMiddleware(conditionService, type),
+      hardStopCheckMiddleware(UserType.PROBATION),
       asyncMiddleware(handler)
     )
 
@@ -72,44 +89,43 @@ export default function Index({
   }
 
   {
-    const controller = new ConfirmCreateRoutes(
-      communityService,
-      prisonerService,
-      licenceService,
-      ukBankHolidayFeedService
-    )
+    const controller = new ConfirmCreateRoutes(communityService, licenceService, ukBankHolidayFeedService)
     get('/nomisId/:nomisId/confirm', controller.GET)
     post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
   }
 
   {
     const controller = new AdditionalLicenceConditionsQuestionRoutes()
-    get('/id/:licenceId/additional-licence-conditions-question', controller.GET)
-    post('/id/:licenceId/additional-licence-conditions-question', controller.POST, AdditionalConditionsYesOrNo)
+    getWithHardStopCheck('/id/:licenceId/additional-licence-conditions-question', controller.GET)
+    postWithHardStopCheck(
+      '/id/:licenceId/additional-licence-conditions-question',
+      controller.POST,
+      AdditionalConditionsYesOrNo
+    )
   }
 
   {
     const controller = new AdditionalPssConditionsQuestionRoutes()
-    get('/id/:licenceId/additional-pss-conditions-question', controller.GET)
-    post('/id/:licenceId/additional-pss-conditions-question', controller.POST, PssConditionsYesOrNo)
+    getWithHardStopCheck('/id/:licenceId/additional-pss-conditions-question', controller.GET)
+    postWithHardStopCheck('/id/:licenceId/additional-pss-conditions-question', controller.POST, PssConditionsYesOrNo)
   }
 
   {
     const controller = new BespokeConditionsQuestionRoutes()
-    get('/id/:licenceId/bespoke-conditions-question', controller.GET)
-    post('/id/:licenceId/bespoke-conditions-question', controller.POST, BespokeConditionsYesOrNo)
+    getWithHardStopCheck('/id/:licenceId/bespoke-conditions-question', controller.GET)
+    postWithHardStopCheck('/id/:licenceId/bespoke-conditions-question', controller.POST, BespokeConditionsYesOrNo)
   }
 
   {
     const controller = new CheckAnswersRoutes(licenceService, conditionService)
     get('/id/:licenceId/check-your-answers', controller.GET)
-    post('/id/:licenceId/check-your-answers', controller.POST)
+    postWithHardStopCheck('/id/:licenceId/check-your-answers', controller.POST)
   }
 
   {
     const controller = new EditQuestionRoutes(licenceService)
-    get('/id/:licenceId/edit', controller.GET)
-    post('/id/:licenceId/edit', controller.POST, YesOrNoQuestion)
+    getWithHardStopCheck('/id/:licenceId/edit', controller.GET)
+    postWithHardStopCheck('/id/:licenceId/edit', controller.POST, YesOrNoQuestion)
   }
 
   {

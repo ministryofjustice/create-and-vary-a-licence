@@ -22,6 +22,8 @@ const testAppInfo: ApplicationInfo = {
 
 export const user = {
   username: 'Joe Bloggs',
+  userRoles: ['ROLE_LICENCE_RO'],
+  probationTeamCodes: ['ABC123'],
 }
 
 const signedCookiesProvider = jest.fn()

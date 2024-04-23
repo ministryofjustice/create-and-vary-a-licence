@@ -15,6 +15,8 @@ import Telephone from './types/telephone'
 import DateTime from './types/dateTime'
 import UserType from '../../enumeration/userType'
 import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
+import LicenceKind from '../../enumeration/LicenceKind'
+import licenceKindCheckMiddleware from '../../middleware/licenceKindCheckMiddleware'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
@@ -32,6 +34,7 @@ export default function Index({ licenceService, conditionService }: Services): R
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
+      licenceKindCheckMiddleware(LicenceKind.VARIATION),
       hardStopCheckMiddleware(userType),
       asyncMiddleware(handler)
     )
@@ -41,6 +44,7 @@ export default function Index({ licenceService, conditionService }: Services): R
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
+      licenceKindCheckMiddleware(LicenceKind.VARIATION),
       validationMiddleware(conditionService, type),
       asyncMiddleware(handler)
     )
