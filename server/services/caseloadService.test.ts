@@ -1791,6 +1791,9 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           legalStatus: 'SENTENCED',
         },
+        cvl: {
+          isInHardStopPeriod: true,
+        },
       },
     ] as CaseloadItem[])
     communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
@@ -1820,7 +1823,9 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: twoDaysFromNow,
           status: 'ACTIVE IN',
         },
-        cvl: {},
+        cvl: {
+          isInHardStopPeriod: true,
+        },
       },
       {
         prisoner: {
@@ -1828,7 +1833,9 @@ describe('Caseload Service', () => {
           conditionalReleaseDate: tenDaysFromNow,
           status: 'ACTIVE IN',
         },
-        cvl: {},
+        cvl: {
+          isInHardStopPeriod: false,
+        },
       },
     ] as CaseloadItem[])
     communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
