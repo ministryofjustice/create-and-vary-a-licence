@@ -10,11 +10,12 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
 import type { CommunityApiManagedOffender } from '../@types/communityClientTypes'
-import type { LicenceSummary, HardStopCutoffDate, ComReviewCount, CaseloadItem } from '../@types/licenceApiClientTypes'
+import type { LicenceSummary, ComReviewCount, CaseloadItem } from '../@types/licenceApiClientTypes'
 import Container from './container'
 import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import { parseCvlDate, parseIsoDate } from '../utils/utils'
+import config from '../config'
 
 export default class CaseloadService {
   constructor(
@@ -110,10 +111,6 @@ export default class CaseloadService {
 
   async getComReviewCount(user: User): Promise<ComReviewCount> {
     return this.licenceService.getComReviewCount(user)
-  }
-
-  async getCutOffDateForLicenceTimeOut(user: User): Promise<HardStopCutoffDate> {
-    return this.licenceService.getCutOffDateForLicenceTimeOut(user)
   }
 
   async getVaryApproverCaseload(user: User): Promise<ManagedCase[]> {
@@ -219,6 +216,8 @@ export default class CaseloadService {
       } else if (this.isRecall(offender)) {
         // Offender is subject to an active recall - not clickable
         licenceStatus = LicenceStatus.OOS_RECALL
+      } else if (config.hardStopEnabled && offender.cvlFields.isInHardStopPeriod) {
+        licenceStatus = LicenceStatus.TIMED_OUT
       }
 
       if (!offender.nomisRecord.conditionalReleaseDate) {
@@ -368,6 +367,8 @@ export default class CaseloadService {
               versionOf: l.versionOf,
               kind: <LicenceKind>l.kind,
               licenceStartDate: l.licenceStartDate,
+              hardStopDate: parseCvlDate(l.hardStopDate),
+              hardStopWarningDate: parseCvlDate(l.hardStopWarningDate),
             }
           }),
       }

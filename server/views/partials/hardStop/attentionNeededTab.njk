@@ -1,0 +1,38 @@
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "partials/viewCases.njk" import viewCases %}
+
+{%  macro attentionNeededTabDescription(params) %}
+    <h2 class="govuk-heading-l">Attention needed</h2>
+    {% if params.count !== 0 %}
+        <p class="govuk-body">Check the legal status of people below to see if you need to request support. 
+            <br><strong>You must not release someone in this list with the licence created in this service</strong>.</p>
+        {{ govukDetails({
+            summaryText: "Why are these licences showing here?",
+            html: "<p class='govuk-body'>Create and vary a licence gets key dates from NOMIS. If key dates are removed from NOMIS, <br> the licence will have no dates and remain in the list of people in prison.</p> <p class='govuk-body'>This means the probation practitioner cannot see or work on the licence.</p>",
+            classes: ""
+        }) }}
+        <h3 class="govuk-heading-m" style="padding-top: 10px;">If legal status is remand or convicted unsentenced</h3>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>If their charges are dropped, they are found not guilty or get a non-custodial sentence, contact
+                &nbsp;createandvaryalicence@digital.justice.gov.uk&nbsp;for support immediately</li>
+            <li>If someone gets a new custodial sentence, then you do not need to do anything</li>
+        </ul>
+        <h3 class="govuk-heading-m">Any other legal status</h3>
+        <p class="govuk-body" style="padding-bottom: 20px;">Contact&nbsp;createandvaryalicence@digital.justice.gov.uk for support immediately.
+            <br> For example, the legal status could be immigration detainee.</p>
+    {% endif %}
+{% endmacro %}
+
+{% macro attentionNeededTab(params) %}
+    <div id="attention-needed" role="tabpanel" aria-labelledby="tab_attention-needed">
+        {{ attentionNeededTabDescription({count: params.count}) }}
+        {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config}) }}
+    </div>
+{% endmacro %}
+
+{%  macro attentionNeededTabHeadingWithCount(params) %}
+    {{ params.label }}
+    {% if not params.isSearch %}
+        <span id="attention-needed-count" class="moj-notification-badge">{{ params.count  }}</span>
+    {% endif %}
+{% endmacro %}

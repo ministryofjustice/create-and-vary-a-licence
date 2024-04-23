@@ -28,23 +28,22 @@ export default class ApprovalCaseRoutes {
       .map(c => {
         const releaseDate = selectReleaseDate(c.nomisRecord)
         const urgentApproval = this.isUrgentApproval(releaseDate)
+        const licence = _.head(c.licences)
         let approvedDate
-        if (_.head(c.licences).approvedDate) {
-          approvedDate = format(
-            parseCvlDateTime(_.head(c.licences).approvedDate, { withSeconds: true }),
-            'dd MMMM yyyy'
-          )
+        if (licence.approvedDate) {
+          approvedDate = format(parseCvlDateTime(licence.approvedDate, { withSeconds: true }), 'dd MMMM yyyy')
         }
         return {
-          licenceId: _.head(c.licences).id,
+          licenceId: licence.id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
           prisonerNumber: c.nomisRecord.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          submittedByFullName: _.head(c.licences).submittedByFullName,
+          submittedByFullName: licence.submittedByFullName,
           releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
           urgentApproval,
-          approvedBy: _.head(c.licences).approvedBy,
+          approvedBy: licence.approvedBy,
           approvedOn: approvedDate,
+          isDueForEarlyRelease: licence.isDueForEarlyRelease,
         }
       })
       .filter(c => {

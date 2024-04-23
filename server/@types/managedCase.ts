@@ -41,6 +41,7 @@ export type ApprovalLicence = {
   versionOf?: number
   updatedByFullName?: string
   submittedByFullName: string
+  isDueForEarlyRelease: boolean
 }
 
 export type GenericManagedCase<T> = {

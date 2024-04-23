@@ -1,5 +1,5 @@
 import { SuperAgentRequest } from 'superagent'
-import { addDays, addMonths, format } from 'date-fns'
+import { addDays, addMonths, format, subDays } from 'date-fns'
 import { stubFor } from '../wiremock'
 import LicenceStatus from '../../server/licences/licenceStatus'
 // eslint-disable-next-line camelcase
@@ -287,6 +287,9 @@ export default {
           appointmentTime: '01/12/2021 00:34',
           appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
           isInHardStopPeriod: options.isInHardStopPeriod || false,
+          hardStopDate: options.isInHardStopPeriod
+            ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
+            : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
           additionalLicenceConditions: [
             {
               id: 1,
@@ -584,6 +587,7 @@ export default {
     nomisId: string
     status: string
     bookingId: number
+    isInHardStopPeriod: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -607,7 +611,9 @@ export default {
             comUsername: 'jsmith',
             bookingId: options.bookingId,
             dateCreated: '01/03/2021 10:15',
-            hardStopDate: '05/12/2023',
+            hardStopDate: options.isInHardStopPeriod
+              ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
+              : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
             hardStopWarningDate: '03/12/2023',
           },
         ],
@@ -1312,11 +1318,13 @@ export default {
               comName: 'Test Staff',
               comStaffCode: '3000',
               teamName: 'Test Team',
-              releaseDate: '2023-08-16',
+              releaseDate: '16/08/2023',
               licenceId: 1,
               licenceType: 'AP',
               licenceStatus: LicenceStatus.IN_PROGRESS,
               isOnProbation: false,
+              isDueForEarlyRelease: false,
+              releaseDateLabel: 'CRD',
             },
           ],
           inPrisonCount: 1,
@@ -1490,20 +1498,6 @@ export default {
     })
   },
 
-  stubGetCutOffDateForLicenceTimeOut: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/current-hard-stop-cutoff-date`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: { cutoffDate: '05/12/2023' },
-      },
-    })
-  },
-
   stubPing: () =>
     stubFor({
       request: {
@@ -1578,7 +1572,7 @@ export default {
               licenceType: 'AP',
               hardStopDate: '03/01/2023',
               hardStopWarningDate: '01/01/2023',
-              isInHardStopPeriod: true,
+              isInHardStopPeriod: false,
               isDueForEarlyRelease: true,
             },
             prisoner: {
@@ -1689,6 +1683,108 @@ export default {
               locationDescription: 'Moorland (HMP & YOI)',
               restrictedPatient: false,
               conditionalReleaseDate: nextThirtyDays,
+            },
+          },
+        ],
+      },
+    })
+  },
+
+  stubGetCaseloadItemInHardStop: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/prisoner-search/nomisid/.*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          prisoner: {
+            prisonerNumber: 'G9786GC',
+            firstName: 'DOUGAL',
+            lastName: 'MCGUIRE',
+            dateOfBirth: '1940-12-20',
+            status: 'ACTIVE IN',
+            prisonId: 'MDI',
+            sentenceStartDate: '2017-03-01',
+            releaseDate: '2024-07-19',
+            confirmedReleaseDate: '2022-11-20',
+            sentenceExpiryDate: '2028-08-31',
+            licenceExpiryDate: '2028-08-31',
+            conditionalReleaseDate: '2022-11-21',
+          },
+          cvl: {
+            licenceType: 'AP',
+            hardStopDate: '03/01/2023',
+            hardStopWarningDate: '01/01/2023',
+            isInHardStopPeriod: true,
+            isDueForEarlyRelease: true,
+          },
+        },
+      },
+    }),
+
+  searchPrisonersByNomisIdsInHardStop: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/prisoner-search/prisoner-numbers`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            cvl: {
+              licenceType: 'AP',
+              hardStopDate: '03/01/2023',
+              hardStopWarningDate: '01/01/2023',
+              isInHardStopPeriod: true,
+              isDueForEarlyRelease: true,
+            },
+            prisoner: {
+              prisonerNumber: 'G9786GC',
+              bookingId: '1201102',
+              bookNumber: '38518A',
+              firstName: 'DOUGAL',
+              lastName: 'MCGUIRE',
+              dateOfBirth: '1940-12-20',
+              gender: 'Male',
+              youthOffender: false,
+              status: 'ACTIVE IN',
+              lastMovementTypeCode: 'ADM',
+              lastMovementReasonCode: '24',
+              inOutStatus: 'IN',
+              prisonId: 'MDI',
+              prisonName: 'Moorland (HMP & YOI)',
+              cellLocation: 'RECP',
+              dateCreated: '2022-07-05 10:30:00',
+              aliases: [
+                {
+                  firstName: 'DOUGLAS',
+                  lastName: 'ADORNO',
+                  dateOfBirth: '1939-11-19',
+                  gender: 'Male',
+                  ethnicity: 'Asian/Asian British: Indian',
+                },
+              ],
+              alerts: [
+                {
+                  alertType: 'H',
+                  alertCode: 'HA2',
+                  active: true,
+                  expired: false,
+                },
+              ],
+              legalStatus: 'RECALL',
+              imprisonmentStatus: 'CUR_ORA',
+              imprisonmentStatusDescription: 'ORA Recalled from Curfew Conditions',
+              indeterminateSentence: false,
+              receptionDate: '2021-01-08',
+              locationDescription: 'Moorland (HMP & YOI)',
+              restrictedPatient: false,
+              conditionalReleaseDate: nextMonth,
             },
           },
         ],

@@ -726,18 +726,6 @@ describe('Licence API client tests', () => {
     })
   })
 
-  describe('Hardstop CutoffDate: ', () => {
-    it('Should get cutoff date for hardstop', async () => {
-      await licenceApiClient.getCutOffDateForLicenceTimeOut({ username: 'joebloggs' } as User)
-      expect(get).toHaveBeenCalledWith(
-        {
-          path: '/current-hard-stop-cutoff-date',
-        },
-        { username: 'joebloggs' }
-      )
-    })
-  })
-
   describe('Com review count: ', () => {
     it('Should get mycount and teams individual count for Com', async () => {
       await licenceApiClient.getComReviewCount({ username: 'joebloggs', deliusStaffIdentifier: 2000 } as User)

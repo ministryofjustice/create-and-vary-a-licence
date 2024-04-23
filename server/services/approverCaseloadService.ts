@@ -77,6 +77,7 @@ export default class ApproverCaseloadService {
               versionOf: l.versionOf,
               kind: <LicenceKind>l.kind,
               submittedByFullName: l.submittedByFullName,
+              isDueForEarlyRelease: l.isDueForEarlyRelease,
             }
           }),
       }

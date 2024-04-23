@@ -1,17 +1,22 @@
 import moment from 'moment'
-import { isBefore, parse, isEqual, isValid } from 'date-fns'
+import { isBefore, parse, isEqual, isValid, startOfDay } from 'date-fns'
+import assert from 'assert'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
-import type { CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
+import type { CvlFields, CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import config from '../config'
 import { Licence as ManagedCaseLicence } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 
-export type ComCreateCaseTab = 'attentionNeeded' | 'releasesInNextTwoWorkingDays' | 'futureReleases'
+export enum ComCreateCaseTab {
+  RELEASES_IN_NEXT_TWO_WORKING_DAYS = 'releasesInNextTwoWorkingDays',
+  FUTURE_RELEASES = 'futureReleases',
+  ATTENTION_NEEDED = 'attentionNeeded',
+}
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -201,28 +206,31 @@ const isAttentionNeeded = (
   { status, licenceStartDate }: { status: LicenceStatus; licenceStartDate?: string },
   nomisRecord: CvlPrisoner
 ) => {
-  const today = new Date()
+  const today = startOfDay(new Date())
+
   const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
-  return (
-    ([APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED].includes(status) &&
-      !nomisRecord.confirmedReleaseDate &&
-      !nomisRecord.conditionalReleaseDate) || // If licence status is ‘approved’, ‘submitted’, ‘in progress' or 'not started’ AND there is no CRD/ARD
-    (licenceStartDate && status === APPROVED && isBefore(parseCvlDate(licenceStartDate), today)) // If licence status is ‘approved’ AND CRD/ARD is in the past (licenceStartDate is equalto ARD/CRD)
-  )
+  const noReleaseDates = !nomisRecord.confirmedReleaseDate && !nomisRecord.conditionalReleaseDate
+
+  const missingDates = [APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED].includes(status) && noReleaseDates
+  const startDateInPast = licenceStartDate && status === APPROVED && isBefore(parseCvlDate(licenceStartDate), today)
+
+  return missingDates || startDateInPast
 }
 
 const determineComCreateCasesTab = (
   licence: ManagedCaseLicence,
   nomisRecord: CvlPrisoner,
-  cutOffDateString: string
+  cvlFields: CvlFields
 ): ComCreateCaseTab => {
   if (licence && isAttentionNeeded(licence, nomisRecord)) {
-    return 'attentionNeeded'
+    return ComCreateCaseTab.ATTENTION_NEEDED
   }
-
-  const releaseDate = selectReleaseDate(nomisRecord)
-  const cutOffDate = parseCvlDate(cutOffDateString)
-  return isReleaseDateOnOrBeforeCutOffDate(cutOffDate, releaseDate) ? 'releasesInNextTwoWorkingDays' : 'futureReleases'
+  const hardStopDate = licence ? licence.hardStopDate : parseCvlDate(cvlFields.hardStopDate)
+  // hard stop should always be populated, blow up if not
+  assert(hardStopDate, `Prisoner '${nomisRecord.prisonerNumber}' is missing hard stop date`)
+  return hardStopDate <= startOfDay(new Date())
+    ? ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS
+    : ComCreateCaseTab.FUTURE_RELEASES
 }
 
 const isReleaseDateOnOrBeforeCutOffDate = (cutOffDate: Date, releaseDate: Date): boolean => {
