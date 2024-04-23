@@ -16,6 +16,7 @@ import {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   parseCvlDate,
+  toIsoDate,
 } from './utils'
 import {
   AdditionalCondition,
@@ -208,6 +209,8 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('dateToUnix', (date: string) => {
     return moment(date, 'D MMM YYYY').unix()
   })
+
+  njkEnv.addFilter('toIsoDate', toIsoDate)
 
   njkEnv.addFilter('getStatusOrder', (licenceStatus: LicenceStatus) => {
     const licenceStatusOrderMap = new Map()

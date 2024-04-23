@@ -26,6 +26,7 @@ import {
   parseCvlDate,
   parseCvlDateTime,
   ComCreateCaseTab,
+  toIsoDate,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -280,6 +281,15 @@ describe('parseIsoDate', () => {
   it('fails to parse invalid date', () => {
     const date = parseIsoDate('invalid date')
     expect(isValid(date)).toEqual(false)
+  })
+})
+
+describe('toIsoDate', () => {
+  it('ignores null', () => {
+    expect(toIsoDate(null)).toEqual(null)
+  })
+  it('format date', () => {
+    expect(toIsoDate(parseIsoDate('2023-01-23'))).toEqual('2023-01-23')
   })
 })
 
