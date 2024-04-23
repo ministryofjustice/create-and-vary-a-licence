@@ -107,6 +107,7 @@ export default defineConfig({
         stubLicencesPing: licence.stubPing,
         stubGetComReviewCount: licence.stubGetComReviewCount,
         stubGetCaseloadItem: licence.stubGetCaseloadItem,
+        stubGetCaseloadItemInHardStop: licence.stubGetCaseloadItemInHardStop,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
@@ -122,6 +123,7 @@ export default defineConfig({
 
         searchPrisonersByNomisIds: licence.searchPrisonersByNomisIds,
         searchPrisonersByReleaseDate: licence.searchPrisonersByReleaseDate,
+        searchPrisonersByNomisIdsInHardStop: licence.searchPrisonersByNomisIdsInHardStop,
         searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
         stubPrisonerSearchApiPing: prisonerSearch.stubPing,
 
