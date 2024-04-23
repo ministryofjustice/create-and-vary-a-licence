@@ -104,7 +104,21 @@ export default class CaseloadService {
       })
 
     const [withLicence, pending] = await Promise.all([casesWithLicences, casesPendingLicence])
-    const casesWithComs = await this.mapResponsibleComsToCasesWithExclusions(withLicence.concat(pending))
+
+    const allCases = withLicence.concat(pending)
+    const allCasesWithStatusOverrides = allCases.map(c => {
+      const managedCase = c
+      managedCase.licences = managedCase.licences.map(l => {
+        const licence = l
+        if (licence.status === LicenceStatus.TIMED_OUT) {
+          licence.status = LicenceStatus.NOT_STARTED
+        }
+        return licence
+      })
+      return managedCase
+    })
+
+    const casesWithComs = await this.mapResponsibleComsToCasesWithExclusions(allCasesWithStatusOverrides)
 
     return new OmuCaselist(casesWithComs)
   }
