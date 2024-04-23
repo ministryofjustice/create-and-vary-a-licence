@@ -48,6 +48,7 @@ export type OverrideLicenceDatesRequest = components['schemas']['OverrideLicence
 export type UpdateOffenderDetailsRequest = components['schemas']['UpdateOffenderDetailsRequest']
 export type ProbationSearchRequest = components['schemas']['ProbationUserSearchRequest']
 export type ProbationSearchResult = components['schemas']['ProbationSearchResult']
+export type FoundProbationRecord = components['schemas']['FoundProbationRecord']
 export type ComReviewCount = components['schemas']['ComReviewCount']
 export type CaseloadItem = components['schemas']['CaseloadItem']
 export type CvlPrisoner = components['schemas']['Prisoner']

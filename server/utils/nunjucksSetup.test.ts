@@ -1,7 +1,9 @@
 import { format, addDays, subDays, addMonths } from 'date-fns'
-import { Licence } from '../@types/licenceApiClientTypes'
+import { FoundProbationRecord, Licence } from '../@types/licenceApiClientTypes'
 import { renderTemplate } from './__testutils/templateTestUtils'
 import { registerNunjucks } from './nunjucksSetup'
+import LicenceStatus from '../enumeration/licenceStatus'
+import LicenceKind from '../enumeration/LicenceKind'
 
 describe('Nunjucks Filters', () => {
   describe('initialiseName', () => {
@@ -314,6 +316,113 @@ describe('Nunjucks Filters', () => {
     it('should convert first character to Caps', () => {
       expect(registerNunjucks().getFilter('titlecase')('IMMIGRATION DETAINEE')).toEqual('Immigration detainee')
       expect(registerNunjucks().getFilter('titlecase')('sENTENCED')).toEqual('Sentenced')
+    })
+  })
+
+  describe('getlicenceStatusForSearchResults', () => {
+    it('should return REVIEW_NEEDED status', () => {
+      expect(
+        registerNunjucks().getFilter('getlicenceStatusForSearchResults')({
+          isReviewNeeded: true,
+          licenceStatus: LicenceStatus.ACTIVE,
+        } as FoundProbationRecord)
+      ).toEqual(LicenceStatus.REVIEW_NEEDED)
+    })
+
+    it('should return TIMED_OUT status', () => {
+      expect(
+        registerNunjucks().getFilter('getlicenceStatusForSearchResults')({
+          isReviewNeeded: false,
+          kind: LicenceKind.HARD_STOP,
+          licenceStatus: LicenceStatus.SUBMITTED,
+        } as FoundProbationRecord)
+      ).toEqual(LicenceStatus.TIMED_OUT)
+    })
+
+    it('should return the same status as licence status', () => {
+      expect(
+        registerNunjucks().getFilter('getlicenceStatusForSearchResults')({
+          isReviewNeeded: false,
+          kind: LicenceKind.CRD,
+          licenceStatus: LicenceStatus.SUBMITTED,
+        } as FoundProbationRecord)
+      ).toEqual(LicenceStatus.SUBMITTED)
+    })
+  })
+
+  describe('cvlDateToDateShort', () => {
+    it('should return not found string', () => {
+      expect(registerNunjucks().getFilter('cvlDateToDateShort')('')).toEqual('not found')
+    })
+
+    it('should return dd MMM yyyy date format', () => {
+      expect(registerNunjucks().getFilter('cvlDateToDateShort')('20/04/2024')).toEqual('20 Apr 2024')
+    })
+  })
+
+  describe('createOffenderLink', () => {
+    it('should return licence-changes-not-approved-in-time page', () => {
+      expect(
+        registerNunjucks().getFilter('createOffenderLink')({
+          licenceId: 2,
+          licenceStatus: LicenceStatus.TIMED_OUT,
+          kind: LicenceKind.CRD,
+          versionOf: 1,
+        } as FoundProbationRecord)
+      ).toEqual('/licence/create/id/2/licence-changes-not-approved-in-time')
+    })
+
+    it('should return prison-will-create-this-licence page', () => {
+      expect(
+        registerNunjucks().getFilter('createOffenderLink')({
+          licenceId: 2,
+          licenceStatus: LicenceStatus.TIMED_OUT,
+          kind: LicenceKind.CRD,
+          nomisId: 'A1234BC',
+        } as FoundProbationRecord)
+      ).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
+
+      expect(
+        registerNunjucks().getFilter('createOffenderLink')({
+          licenceId: 2,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          kind: LicenceKind.HARD_STOP,
+          nomisId: 'A1234BC',
+        } as FoundProbationRecord)
+      ).toEqual('/licence/create/nomisId/A1234BC/prison-will-create-this-licence')
+    })
+
+    it('should return licence-created-by-prison page', () => {
+      expect(
+        registerNunjucks().getFilter('createOffenderLink')({
+          licenceId: 2,
+          licenceStatus: LicenceStatus.ACTIVE,
+          kind: LicenceKind.HARD_STOP,
+          nomisId: 'A1234BC',
+        } as FoundProbationRecord)
+      ).toEqual('/licence/create/id/2/licence-created-by-prison')
+    })
+
+    it('should return cnfirm create licence page', () => {
+      expect(
+        registerNunjucks().getFilter('createOffenderLink')({
+          licenceId: null,
+          licenceStatus: LicenceStatus.NOT_STARTED,
+          kind: LicenceKind.CRD,
+          nomisId: 'A1234BC',
+        } as FoundProbationRecord)
+      ).toEqual('/licence/create/nomisId/A1234BC/confirm')
+    })
+
+    it('should return check-your-answers page', () => {
+      expect(
+        registerNunjucks().getFilter('createOffenderLink')({
+          licenceId: 2,
+          licenceStatus: LicenceStatus.SUBMITTED,
+          kind: LicenceKind.CRD,
+          nomisId: 'A1234BC',
+        } as FoundProbationRecord)
+      ).toEqual('/licence/create/id/2/check-your-answers')
     })
   })
 })
