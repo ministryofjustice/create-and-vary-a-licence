@@ -6,6 +6,8 @@ import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import logger from '../../../../logger'
+import config from '../../../config'
 
 export default class ConfirmCreateRoutes {
   constructor(
@@ -25,7 +27,8 @@ export default class ConfirmCreateRoutes {
       this.ukBankHolidayFeedService.getEnglishAndWelshHolidays(),
     ])
 
-    if (nomisRecord.cvl.isInHardStopPeriod) {
+    if (config.hardStopEnabled && nomisRecord.cvl.isInHardStopPeriod) {
+      logger.error('Access denied to PP licence creation GET due to being in hard stop period')
       return res.redirect('/access-denied')
     }
 
@@ -54,7 +57,8 @@ export default class ConfirmCreateRoutes {
     const backLink = req.session?.returnToCase
 
     const nomisRecord = await this.licenceService.getPrisonerDetail(nomisId, user)
-    if (nomisRecord.cvl.isInHardStopPeriod) {
+    if (config.hardStopEnabled && nomisRecord.cvl.isInHardStopPeriod) {
+      logger.error('Access denied to PP licence creation POST due to being in hard stop period')
       return res.redirect('/access-denied')
     }
 
