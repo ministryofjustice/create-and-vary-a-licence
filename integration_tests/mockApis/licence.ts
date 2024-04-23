@@ -587,7 +587,7 @@ export default {
     nomisId: string
     status: string
     bookingId: number
-    isInHardStop: boolean
+    isInHardStopPeriod: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -1318,11 +1318,13 @@ export default {
               comName: 'Test Staff',
               comStaffCode: '3000',
               teamName: 'Test Team',
-              releaseDate: '2023-08-16',
+              releaseDate: '16/08/2023',
               licenceId: 1,
               licenceType: 'AP',
               licenceStatus: LicenceStatus.IN_PROGRESS,
               isOnProbation: false,
+              isDueForEarlyRelease: false,
+              releaseDateLabel: 'CRD',
             },
           ],
           inPrisonCount: 1,
