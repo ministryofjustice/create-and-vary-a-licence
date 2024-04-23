@@ -353,10 +353,7 @@ export function registerNunjucks(app?: express.Express): Environment {
       return `/licence/create/id/${licence.licenceId}/licence-changes-not-approved-in-time`
     }
 
-    if (
-      (isTimedOutLicence && !isHardStopLicence) ||
-      (isHardStopLicence && licence.licenceStatus === LicenceStatus.IN_PROGRESS)
-    ) {
+    if (isTimedOutLicence || (isHardStopLicence && licence.licenceStatus === LicenceStatus.IN_PROGRESS)) {
       return `/licence/create/nomisId/${licence.nomisId}/prison-will-create-this-licence`
     }
 
@@ -379,7 +376,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     return isHardStopLicence ? LicenceStatus.TIMED_OUT : <LicenceStatus>licence.licenceStatus
   })
 
-  njkEnv.addFilter('getreleaseDateForSearchResults', (releaseDate: string): string => {
+  njkEnv.addFilter('cvlDateToDateShort', (releaseDate: string): string => {
     return releaseDate ? format(parseCvlDate(releaseDate), 'dd MMM yyyy') : 'not found'
   })
 

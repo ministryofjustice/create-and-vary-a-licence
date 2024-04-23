@@ -350,13 +350,13 @@ describe('Nunjucks Filters', () => {
     })
   })
 
-  describe('getreleaseDateForSearchResults', () => {
+  describe('cvlDateToDateShort', () => {
     it('should return not found string', () => {
-      expect(registerNunjucks().getFilter('getreleaseDateForSearchResults')('')).toEqual('not found')
+      expect(registerNunjucks().getFilter('cvlDateToDateShort')('')).toEqual('not found')
     })
 
     it('should return dd MMM yyyy date format', () => {
-      expect(registerNunjucks().getFilter('getreleaseDateForSearchResults')('20/04/2024')).toEqual('20 Apr 2024')
+      expect(registerNunjucks().getFilter('cvlDateToDateShort')('20/04/2024')).toEqual('20 Apr 2024')
     })
   })
 

@@ -124,9 +124,9 @@
     {% endif %}
 
     {% if offender.isDueForEarlyRelease %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | getreleaseDateForSearchResults + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
     {% else %}
-        {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | getreleaseDateForSearchResults + '</p>' %}
+        {% set releaseDate = '<p>' + offender.releaseDateLabel + ': <br>' + offender.releaseDate | cvlDateToDateShort + '</p>' %}
     {% endif %}
 
     {% set result = [
