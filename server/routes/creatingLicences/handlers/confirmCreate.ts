@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import CommunityService from '../../../services/communityService'
-import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase } from '../../../utils/utils'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
 import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import logger from '../../../../logger'
+import config from '../../../config'
 
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly communityService: CommunityService,
-    private readonly prisonerService: PrisonerService,
     private readonly licenceService: LicenceService,
     private readonly ukBankHolidayFeedService: UkBankHolidayFeedService
   ) {}
@@ -19,27 +19,32 @@ export default class ConfirmCreateRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
-    const backLink = req.session.returnToCase || '/licence/create/caseload'
+    const backLink = req.session?.returnToCase || '/licence/create/caseload'
 
     const [nomisRecord, deliusRecord, bankHolidays] = await Promise.all([
-      this.prisonerService.getPrisonerDetail(nomisId, user),
+      this.licenceService.getPrisonerDetail(nomisId, user),
       this.communityService.getProbationer({ nomsNumber: nomisId }),
       this.ukBankHolidayFeedService.getEnglishAndWelshHolidays(),
     ])
 
+    if (config.hardStopEnabled && nomisRecord.cvl.isInHardStopPeriod) {
+      logger.error('Access denied to PP licence creation GET due to being in hard stop period')
+      return res.redirect('/access-denied')
+    }
+
     return res.render('pages/create/confirmCreate', {
       licence: {
         crn: deliusRecord?.otherIds?.crn,
-        actualReleaseDate: nomisRecord.sentenceDetail.confirmedReleaseDate
-          ? moment(nomisRecord.sentenceDetail.confirmedReleaseDate).format('DD/MM/YYYY')
+        actualReleaseDate: nomisRecord.prisoner.confirmedReleaseDate
+          ? moment(nomisRecord.prisoner.confirmedReleaseDate).format('DD/MM/YYYY')
           : undefined,
-        conditionalReleaseDate: moment(nomisRecord.sentenceDetail.conditionalReleaseDate).format('DD/MM/YYYY'),
-        dateOfBirth: moment(nomisRecord.dateOfBirth).format('DD/MM/YYYY'),
-        forename: convertToTitleCase(nomisRecord.firstName),
-        surname: convertToTitleCase(nomisRecord.lastName),
+        conditionalReleaseDate: moment(nomisRecord.prisoner.conditionalReleaseDate).format('DD/MM/YYYY'),
+        dateOfBirth: moment(nomisRecord.prisoner.dateOfBirth).format('DD/MM/YYYY'),
+        forename: convertToTitleCase(nomisRecord.prisoner.firstName),
+        surname: convertToTitleCase(nomisRecord.prisoner.lastName),
       },
       releaseIsOnBankHolidayOrWeekend: bankHolidays.isBankHolidayOrWeekend(
-        moment(nomisRecord.sentenceDetail.confirmedReleaseDate || nomisRecord.sentenceDetail.conditionalReleaseDate)
+        moment(nomisRecord.prisoner.confirmedReleaseDate || nomisRecord.prisoner.conditionalReleaseDate)
       ),
       backLink,
     })
@@ -49,7 +54,13 @@ export default class ConfirmCreateRoutes {
     const { nomisId } = req.params
     const { user } = res.locals
     const { answer } = req.body
-    const backLink = req.session.returnToCase
+    const backLink = req.session?.returnToCase
+
+    const nomisRecord = await this.licenceService.getPrisonerDetail(nomisId, user)
+    if (config.hardStopEnabled && nomisRecord.cvl.isInHardStopPeriod) {
+      logger.error('Access denied to PP licence creation POST due to being in hard stop period')
+      return res.redirect('/access-denied')
+    }
 
     if (answer === YesOrNo.YES) {
       const { licenceId } = await this.licenceService.createLicence({ nomsId: nomisId, type: LicenceKind.CRD }, user)

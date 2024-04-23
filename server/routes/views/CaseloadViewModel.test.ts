@@ -185,6 +185,41 @@ describe('CaseloadViewModel', () => {
     })
   })
 
+  it('copes with missing release dates', () => {
+    expect(
+      createCaseloadViewModel(
+        [
+          {
+            nomisRecord: { ...nomisRecord, releaseDate: undefined, conditionalReleaseDate: undefined },
+            deliusRecord,
+            probationPractitioner: undefined,
+            cvlFields,
+            licences: [licence],
+          },
+        ],
+        null
+      )[0].releaseDate
+    ).toEqual(undefined)
+  })
+
+  it('copes with sort dates', () => {
+    // This shouldn't happen for PPs but can happen in support view
+    expect(
+      createCaseloadViewModel(
+        [
+          {
+            nomisRecord: { ...nomisRecord, releaseDate: undefined, conditionalReleaseDate: undefined },
+            deliusRecord,
+            probationPractitioner: undefined,
+            cvlFields,
+            licences: [licence],
+          },
+        ],
+        null
+      )[0].releaseDate
+    ).toEqual(undefined)
+  })
+
   describe('isClickable', () => {
     it('should be false if the PP is undefined', () => {
       expect(
@@ -251,6 +286,7 @@ describe('CaseloadViewModel', () => {
           createLink: '/licence/create/id/1/check-your-answers',
           isClickable: true,
           showHardStopWarning: false,
+          sortDate: parseIsoDate('2020-01-01'),
         },
       ])
     })
@@ -270,6 +306,7 @@ describe('CaseloadViewModel', () => {
           createLink: '/licence/create/id/2/check-your-answers',
           isClickable: true,
           showHardStopWarning: false,
+          sortDate: parseIsoDate('2020-01-01'),
         },
       ])
     })
@@ -289,6 +326,7 @@ describe('CaseloadViewModel', () => {
           createLink: '/licence/create/id/1/check-your-answers',
           isClickable: true,
           showHardStopWarning: false,
+          sortDate: parseIsoDate('2020-01-01'),
         },
         {
           name: 'John Johnson',
@@ -303,6 +341,7 @@ describe('CaseloadViewModel', () => {
           createLink: '/licence/create/id/2/check-your-answers',
           isClickable: true,
           showHardStopWarning: false,
+          sortDate: parseIsoDate('2020-01-01'),
         },
       ])
     })
@@ -328,6 +367,7 @@ describe('CaseloadViewModel', () => {
         createLink: '/licence/create/id/2/check-your-answers',
         isClickable: true,
         showHardStopWarning: false,
+        sortDate: parseIsoDate('2020-01-01'),
       },
       {
         name: 'Bob Smith',
@@ -342,6 +382,7 @@ describe('CaseloadViewModel', () => {
         createLink: '/licence/create/id/1/check-your-answers',
         isClickable: true,
         showHardStopWarning: false,
+        sortDate: parseIsoDate('2020-02-02'),
       },
     ])
   })

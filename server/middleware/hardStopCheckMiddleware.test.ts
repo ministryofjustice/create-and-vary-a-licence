@@ -57,14 +57,7 @@ describe('hardStopCheckMiddleware', () => {
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should redirect to access-denied for variations', () => {
-      res.locals.licence = { ...licence, kind: LicenceKind.VARIATION } as Licence
-      hardStopCheckMiddleware(userType)(req, res, next)
-      expect(res.redirect).toHaveBeenCalledWith('/access-denied')
-      expect(next).not.toHaveBeenCalled()
-    })
-
-    it('should call next if the licence is not a variation and is outside of the hard stop window', () => {
+    it('should call next if the licence is outside of the hard stop window', () => {
       res.locals.licence = { ...licence, kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
       hardStopCheckMiddleware(userType)(req, res, next)
       expect(res.redirect).not.toHaveBeenCalled()
@@ -88,14 +81,7 @@ describe('hardStopCheckMiddleware', () => {
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     })
 
-    it('should redirect to access-denied for variations', () => {
-      res.locals.licence = { ...licence, kind: LicenceKind.VARIATION } as Licence
-      hardStopCheckMiddleware(userType)(req, res, next)
-      expect(res.redirect).toHaveBeenCalledWith('/access-denied')
-      expect(next).not.toHaveBeenCalled()
-    })
-
-    it('should call next if the licence is not a variation and is in the hard stop window', () => {
+    it('should call next if the licence is in the hard stop window', () => {
       res.locals.licence = { ...licence, kind: LicenceKind.CRD, isInHardStopPeriod: true } as Licence
       hardStopCheckMiddleware(userType)(req, res, next)
       expect(res.redirect).not.toHaveBeenCalled()

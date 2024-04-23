@@ -11,13 +11,13 @@ export default class ConfirmCreatePage extends Page {
   }
 
   selectYes = (): ConfirmCreatePage => {
+    cy.task('stubPostLicence')
     cy.get(this.yesRadioButtonId).click()
     return this
   }
 
   clickContinue = (): AppointmentPersonPage => {
     cy.task('stubGetStaffDetailsByStaffId')
-    cy.task('stubPostLicence')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AppointmentPersonPage)
   }

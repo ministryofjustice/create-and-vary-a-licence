@@ -1,4 +1,3 @@
-import moment from 'moment'
 import _ from 'lodash'
 import { format } from 'date-fns'
 import { Licence, ManagedCase } from '../../@types/managedCase'
@@ -12,13 +11,15 @@ export default (caseload: ManagedCase[], search: string) => {
   return caseload
     .map(c => {
       const { licence, createLink } = findLicenceAndCreateLinkToDisplay(c)
-      const releaseDate = parseIsoDate(c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate)
+      const releaseDateString = c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate
+      const releaseDate = releaseDateString && parseIsoDate(releaseDateString)
       const { hardStopDate, hardStopWarningDate } = licence
       return {
         name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
         crnNumber: c.deliusRecord.offenderCrn,
         prisonerNumber: c.nomisRecord.prisonerNumber,
-        releaseDate: format(releaseDate, 'dd MMM yyyy'),
+        releaseDate: releaseDate && format(releaseDate, 'dd MMM yyyy'),
+        sortDate: releaseDate,
         licenceId: licence.id,
         licenceStatus: licence.status,
         licenceType: licence.type,
@@ -43,9 +44,7 @@ export default (caseload: ManagedCase[], search: string) => {
       )
     })
     .sort((a, b) => {
-      const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
-      const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
-      return crd1 - crd2
+      return (a.sortDate?.getTime() || 0) - (b.sortDate?.getTime() || 0)
     })
 }
 
