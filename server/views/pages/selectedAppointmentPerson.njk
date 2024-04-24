@@ -1,5 +1,3 @@
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-
 {%  macro selectedAppointmentPerson(licence) %}
     {% switch licence.appointmentPersonType %}
         {% case 'DUTY_OFFICER' %}
