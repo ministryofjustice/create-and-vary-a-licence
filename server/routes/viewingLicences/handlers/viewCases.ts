@@ -42,7 +42,7 @@ export default class ViewAndPrintCaseRoutes {
       return false
     }
     const inProgressHardStop = licence.kind === LicenceKind.HARD_STOP && licence.status === LicenceStatus.IN_PROGRESS
-    const notStarted = [LicenceStatus.NOT_STARTED, LicenceStatus.TIMED_OUT].includes(licence.status)
+    const notStarted = licence.status === LicenceStatus.TIMED_OUT
 
     if (cvlField.isInHardStopPeriod && (inProgressHardStop || notStarted)) {
       return true
