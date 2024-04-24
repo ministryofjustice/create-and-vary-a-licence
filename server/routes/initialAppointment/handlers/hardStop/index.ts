@@ -17,7 +17,7 @@ import DateTime from '../../types/dateTime'
 import ViewAndPrintLicenceRoutes from '../../../viewingLicences/handlers/viewLicence'
 import ConfirmationRoutes from '../../../creatingLicences/handlers/confirmation'
 
-export default function Index({ licenceService, conditionService, communityService }: Services): Router {
+export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hard-stop${path}`
@@ -65,7 +65,7 @@ export default function Index({ licenceService, conditionService, communityServi
     post('(/create|/edit)/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }
   {
-    const controller = new ViewAndPrintLicenceRoutes(licenceService, communityService)
+    const controller = new ViewAndPrintLicenceRoutes(licenceService)
     get('/id/:licenceId/check-your-answers', controller.GET)
     post('/id/:licenceId/check-your-answers', controller.POST)
   }
