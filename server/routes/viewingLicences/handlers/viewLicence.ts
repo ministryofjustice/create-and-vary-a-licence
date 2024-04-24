@@ -5,6 +5,7 @@ import type LicenceService from '../../../services/licenceService'
 import { groupingBy, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import CommunityService from '../../../services/communityService'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(
@@ -64,7 +65,10 @@ export default class ViewAndPrintLicenceRoutes {
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         warningMessage,
-        isEditableByPrison: isInHardStopPeriod(licence),
+        isEditableByPrison:
+          licence.statusCode !== LicenceStatus.ACTIVE &&
+          licence.kind !== LicenceKind.VARIATION &&
+          isInHardStopPeriod(licence),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
       })
