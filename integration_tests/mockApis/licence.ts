@@ -587,7 +587,7 @@ export default {
     nomisId: string
     status: string
     bookingId: number
-    isInHardStop: boolean
+    isInHardStopPeriod: boolean
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -611,7 +611,7 @@ export default {
             comUsername: 'jsmith',
             bookingId: options.bookingId,
             dateCreated: '01/03/2021 10:15',
-            hardStopDate: options.isInHardStopPeriod
+            hardStopDate: options.isInHardStop
               ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
               : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
             hardStopWarningDate: '03/12/2023',
@@ -1318,11 +1318,13 @@ export default {
               comName: 'Test Staff',
               comStaffCode: '3000',
               teamName: 'Test Team',
-              releaseDate: '2023-08-16',
+              releaseDate: '16/08/2023',
               licenceId: 1,
               licenceType: 'AP',
               licenceStatus: LicenceStatus.IN_PROGRESS,
               isOnProbation: false,
+              isDueForEarlyRelease: false,
+              releaseDateLabel: 'CRD',
             },
           ],
           inPrisonCount: 1,
@@ -1545,12 +1547,12 @@ export default {
             prisonId: 'BAI',
             sentenceStartDate: '2017-03-01',
             releaseDate: '2024-07-19',
-            confirmedReleaseDate: '2022-11-20',
+            confirmedReleaseDate: '2022-11-10',
             sentenceExpiryDate: '2028-08-31',
             licenceExpiryDate: '2028-08-31',
-            conditionalReleaseDate: '2022-11-21',
+            conditionalReleaseDate: '2022-11-10',
           },
-          cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+          cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, isInhardStopPeriod: false },
         },
       },
     }),

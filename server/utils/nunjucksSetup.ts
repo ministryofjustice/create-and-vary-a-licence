@@ -16,8 +16,14 @@ import {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   parseCvlDate,
+  toIsoDate,
 } from './utils'
-import { AdditionalCondition, AdditionalConditionData, Licence } from '../@types/licenceApiClientTypes'
+import {
+  AdditionalCondition,
+  AdditionalConditionData,
+  Licence,
+  FoundProbationRecord,
+} from '../@types/licenceApiClientTypes'
 import SimpleTime from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import Address from '../routes/initialAppointment/types/address'
@@ -204,6 +210,8 @@ export function registerNunjucks(app?: express.Express): Environment {
     return moment(date, 'D MMM YYYY').unix()
   })
 
+  njkEnv.addFilter('toIsoDate', toIsoDate)
+
   njkEnv.addFilter('getStatusOrder', (licenceStatus: LicenceStatus) => {
     const licenceStatusOrderMap = new Map()
 
@@ -338,6 +346,41 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter('titlecase', (word: string) => {
     if (!word) return word
     return word[0].toUpperCase() + word.substr(1).toLowerCase()
+  })
+
+  njkEnv.addFilter('createOffenderLink', (licence: FoundProbationRecord): string => {
+    const isTimedOutLicence = licence?.licenceStatus === 'TIMED_OUT'
+    const isHardStopLicence = licence?.kind === 'HARD_STOP'
+
+    if (isTimedOutLicence && licence.versionOf) {
+      return `/licence/create/id/${licence.licenceId}/licence-changes-not-approved-in-time`
+    }
+
+    if (isTimedOutLicence || (isHardStopLicence && licence.licenceStatus === LicenceStatus.IN_PROGRESS)) {
+      return `/licence/create/nomisId/${licence.nomisId}/prison-will-create-this-licence`
+    }
+
+    if (isHardStopLicence) {
+      return `/licence/create/id/${licence.licenceId}/licence-created-by-prison`
+    }
+
+    if (!licence.licenceId) {
+      return `/licence/create/nomisId/${licence.nomisId}/confirm`
+    }
+
+    return `/licence/create/id/${licence.licenceId}/check-your-answers`
+  })
+
+  njkEnv.addFilter('getlicenceStatusForSearchResults', (licence: FoundProbationRecord): LicenceStatus => {
+    if (licence.isReviewNeeded) {
+      return LicenceStatus.REVIEW_NEEDED
+    }
+    const isHardStopLicence = licence?.kind === 'HARD_STOP'
+    return isHardStopLicence ? LicenceStatus.TIMED_OUT : <LicenceStatus>licence.licenceStatus
+  })
+
+  njkEnv.addFilter('cvlDateToDateShort', (releaseDate: string): string => {
+    return releaseDate ? format(parseCvlDate(releaseDate), 'dd MMM yyyy') : 'not found'
   })
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)

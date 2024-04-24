@@ -12,12 +12,64 @@ import {
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import config from '../../../config'
+import { Licence } from '../../../@types/managedCase'
+import { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
+import LicenceKind from '../../../enumeration/LicenceKind'
+
+const nonViewableStatuses = [
+  LicenceStatus.NOT_IN_PILOT,
+  LicenceStatus.OOS_RECALL,
+  LicenceStatus.OOS_BOTUS,
+  LicenceStatus.VARIATION_IN_PROGRESS,
+  LicenceStatus.VARIATION_APPROVED,
+  LicenceStatus.VARIATION_SUBMITTED,
+  LicenceStatus.NOT_STARTED,
+  LicenceStatus.IN_PROGRESS,
+]
 
 export default class ViewAndPrintCaseRoutes {
   constructor(
     private readonly caseloadService: CaseloadService,
     private readonly prisonerService: PrisonerService
   ) {}
+
+  isClickable = (licence: Licence, cvlField: CvlFields, tabType: ComCreateCaseTab): boolean => {
+    if (!config.hardStopEnabled) {
+      return !nonViewableStatuses.includes(licence.status)
+    }
+
+    if (tabType === ComCreateCaseTab.ATTENTION_NEEDED) {
+      return false
+    }
+    const inProgressHardStop = licence.kind === LicenceKind.HARD_STOP && licence.status === LicenceStatus.IN_PROGRESS
+    const notStarted = [LicenceStatus.NOT_STARTED, LicenceStatus.TIMED_OUT].includes(licence.status)
+
+    if (cvlField.isInHardStopPeriod && (inProgressHardStop || notStarted)) {
+      return true
+    }
+    return !nonViewableStatuses.includes(licence.status)
+  }
+
+  getLink = (licence: Licence, cvlFields: CvlFields, prisoner: CvlPrisoner, tabType: ComCreateCaseTab): string => {
+    if (!this.isClickable(licence, cvlFields, tabType)) {
+      return null
+    }
+    if (licence.id) {
+      const query =
+        licence.versionOf && licence.status === LicenceStatus.SUBMITTED
+          ? `?lastApprovedVersion=${licence.versionOf}`
+          : ''
+      return `/licence/view/id/${licence.id}/show${query}`
+    }
+    if (licence.status === LicenceStatus.TIMED_OUT) {
+      return `/licence/hard-stop/create/nomisId/${prisoner.prisonerNumber}/confirm`
+    }
+    return null
+  }
+
+  getStatus = (licence: Licence) => {
+    return licence.status === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licence.status
+  }
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
@@ -49,20 +101,10 @@ export default class ViewAndPrintCaseRoutes {
         probationPractitioner: c.probationPractitioner,
         releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
         releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
-        licenceStatus: latestLicence.status,
+        licenceStatus: this.getStatus(latestLicence),
         tabType,
         nomisLegalStatus: c.nomisRecord?.legalStatus,
-        isClickable:
-          config.hardStopEnabled && tabType === ComCreateCaseTab.ATTENTION_NEEDED
-            ? false
-            : latestLicence.status !== LicenceStatus.NOT_STARTED &&
-              latestLicence.status !== LicenceStatus.NOT_IN_PILOT &&
-              latestLicence.status !== LicenceStatus.OOS_RECALL &&
-              latestLicence.status !== LicenceStatus.OOS_BOTUS &&
-              latestLicence.status !== LicenceStatus.IN_PROGRESS &&
-              latestLicence.status !== LicenceStatus.VARIATION_IN_PROGRESS &&
-              latestLicence.status !== LicenceStatus.VARIATION_APPROVED &&
-              latestLicence.status !== LicenceStatus.VARIATION_SUBMITTED,
+        link: this.getLink(latestLicence, c.cvlFields, c.nomisRecord, tabType),
         lastWorkedOnBy: latestLicence?.updatedByFullName,
         isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
       }

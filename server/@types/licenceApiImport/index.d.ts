@@ -2077,6 +2077,12 @@ export interface components {
     }
     /** @description Describes a search result which has been found and enriched */
     FoundProbationRecord: {
+      /**
+       * @description kind of licence, null if no licence exists
+       * @example CRD
+       * @enum {string}
+       */
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP'
       /** @description The forename and surname of the offender */
       name: string
       /**
@@ -2121,6 +2127,12 @@ export interface components {
        */
       licenceId?: number
       /**
+       * Format: int64
+       * @description The licence Id which this licence is a version of
+       * @example 86
+       */
+      versionOf?: number
+      /**
        * @description The type of licence
        * @enum {string}
        */
@@ -2145,6 +2157,16 @@ export interface components {
         | 'TIMED_OUT'
       /** @description Indicates whether the offender is in prison or out on probation */
       isOnProbation?: boolean
+      /**
+       * @description Label for release date
+       * @example Confirmed release date
+       */
+      releaseDateLabel?: string
+      /**
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded?: boolean
     }
     /** @description Describes an enriched probation search result */
     ProbationSearchResult: {

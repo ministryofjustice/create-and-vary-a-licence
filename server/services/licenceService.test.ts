@@ -437,6 +437,7 @@ describe('Licence Service', () => {
         'VARIATION_APPROVED',
         'VARIATION_IN_PROGRESS',
         'VARIATION_SUBMITTED',
+        'TIMED_OUT',
       ],
       ['MDI'],
       null,
