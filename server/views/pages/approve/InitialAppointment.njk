@@ -1,4 +1,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "pages/selectedAppointmentPerson.njk" import selectedAppointmentPerson %}
 
 {% macro InitialAppointment(licence) %}
     {{ govukSummaryList({
@@ -6,7 +7,7 @@
         rows: [
             {
                 key: { text: "Appointment with" },
-                value: { text: licence.appointmentPerson }
+                value: { text: selectedAppointmentPerson(licence) }
             },
             {
                 key: { text: "Address" },

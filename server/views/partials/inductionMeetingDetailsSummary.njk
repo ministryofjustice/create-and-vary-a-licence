@@ -1,4 +1,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "pages/selectedAppointmentPerson.njk" import selectedAppointmentPerson %}
 
 {% macro inductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
@@ -21,7 +22,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentPerson'),
                 key: { text: "Name" },
-                value: { text: licence.appointmentPerson },
+                value: { text: selectedAppointmentPerson(licence) },
                 actions: {
                     items: [
                         {
