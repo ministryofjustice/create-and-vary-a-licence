@@ -1017,7 +1017,7 @@ describe('Route handlers - View and print case list', () => {
           {
             licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
-            link: '/licence/view/id/3/show',
+            link: '/licence/hard-stop/id/3/check-your-answers',
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
