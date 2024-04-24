@@ -1,7 +1,6 @@
 import { Readable } from 'stream'
 import fs from 'fs'
 import _ from 'lodash'
-import { format } from 'date-fns'
 import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import {
@@ -71,16 +70,6 @@ export default class PrisonerService {
     return this.prisonerSearchApiClient.searchPrisoners(prisonerSearchCriteria, user)
   }
 
-  async searchPrisonersByNomisIds(nomisIds: string[], user: User): Promise<Prisoner[]> {
-    if (nomisIds.length < 1) {
-      return []
-    }
-    const prisonerSearchCriteria = {
-      prisonerNumbers: nomisIds,
-    }
-    return this.prisonerSearchApiClient.searchPrisonersByNomsIds(prisonerSearchCriteria, user)
-  }
-
   async searchPrisonersByBookingIds(bookingIds: number[], user?: User): Promise<Prisoner[]> {
     if (bookingIds.length < 1) {
       return []
@@ -132,22 +121,5 @@ export default class PrisonerService {
     }
     const hdcLicence = await this.getActiveHdcStatus(bookingId.toString())
     return !!hdcLicence && hdcLicence.approvalStatus === 'APPROVED'
-  }
-
-  async searchPrisonersByReleaseDate(
-    earliestReleaseDate: Date,
-    latestReleaseDate: Date,
-    prisonIds?: string[],
-    user?: User
-  ): Promise<Prisoner[]> {
-    return this.prisonerSearchApiClient
-      .searchPrisonersByReleaseDate(
-        format(earliestReleaseDate, 'yyyy-MM-dd'),
-        format(latestReleaseDate, 'yyyy-MM-dd'),
-
-        prisonIds,
-        user
-      )
-      .then(pageable => pageable.content)
   }
 }

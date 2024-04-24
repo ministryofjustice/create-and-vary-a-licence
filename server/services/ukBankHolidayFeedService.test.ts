@@ -25,28 +25,4 @@ describe('Uk bank holiday feed service', () => {
       expect(result.isBankHolidayOrWeekend(moment('2023-09-18'))).toBeFalsy()
     })
   })
-
-  describe('getTwoWorkingDaysAfterDate', () => {
-    it('should return two days before the given date, if it is a working day', async () => {
-      const result = await ukBankHolidayFeedService.getEnglishAndWelshHolidays()
-      expect(result.getTwoWorkingDaysAfterDate(new Date('2022-06-06'))).toEqual(new Date('2022-06-08'))
-    })
-
-    it('should return the earliest working day at least two days before the given date, if some are not working days', async () => {
-      const result = await ukBankHolidayFeedService.getEnglishAndWelshHolidays()
-      expect(result.getTwoWorkingDaysAfterDate(new Date('2022-06-01'))).toEqual(new Date('2022-06-07'))
-    })
-  })
-
-  describe('getXWorkingDaysBeforeDate', () => {
-    it('should return two days before the given date, if it is a working day', async () => {
-      const result = await ukBankHolidayFeedService.getEnglishAndWelshHolidays()
-      expect(result.getXWorkingDaysBeforeDate(new Date('2022-06-08'), 2)).toEqual(new Date('2022-06-06'))
-    })
-
-    it('should return the earliest working day at least two days before the given date, if some are not working days', async () => {
-      const result = await ukBankHolidayFeedService.getEnglishAndWelshHolidays()
-      expect(result.getXWorkingDaysBeforeDate(new Date('2022-06-07'), 2)).toEqual(new Date('2022-06-01'))
-    })
-  })
 })

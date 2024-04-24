@@ -1,18 +1,15 @@
 import { Request, Response } from 'express'
 import OffenderAuditRoutes from './offenderAudit'
-import PrisonerService from '../../../services/prisonerService'
 import LicenceService from '../../../services/licenceService'
-import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
-import { AuditEvent } from '../../../@types/licenceApiClientTypes'
+import type { AuditEvent, CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../../../utils/utils'
 
-const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Offender audit', () => {
-  const handler = new OffenderAuditRoutes(licenceService, prisonerService)
+  const handler = new OffenderAuditRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -47,9 +44,9 @@ describe('Route Handlers - Offender audit', () => {
         paroleEligibilityDate: '2022-01-01',
         indeterminateSentence: false,
         dateOfBirth: '1970-01-01',
-      } as Prisoner
+      } as CvlPrisoner
 
-      prisonerService.searchPrisonersByNomisIds.mockResolvedValue([expectedPrisonerDetail])
+      licenceService.getPrisonerDetail.mockResolvedValue({ prisoner: expectedPrisonerDetail, cvl: {} as CvlFields })
 
       const expectedAuditDetail = {
         id: 1,
