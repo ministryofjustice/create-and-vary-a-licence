@@ -5,7 +5,7 @@ import PrisonApiClient from '../data/prisonApiClient'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import PrisonerService from './prisonerService'
 import { HomeDetentionCurfew, PrisonApiPrisoner, PrisonInformation, PrisonDetail } from '../@types/prisonApiClientTypes'
-import { PagePrisoner, Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
+import { Prisoner, PrisonerSearchCriteria } from '../@types/prisonerSearchApiClientTypes'
 import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 
 jest.mock('fs')
@@ -140,31 +140,6 @@ describe('Prisoner Service', () => {
       { lastName: 'Bloggs' } as PrisonerSearchCriteria,
       user
     )
-  })
-
-  describe('Search Prisoners by nomis ids', () => {
-    it('should return an empty list if criteria is empty', async () => {
-      const expectedResult = [] as Prisoner[]
-
-      const actualResult = await prisonerService.searchPrisonersByNomisIds([], user)
-
-      expect(actualResult).toEqual(expectedResult)
-      expect(prisonerSearchApiClient.searchPrisonersByNomsIds).not.toHaveBeenCalled()
-    })
-
-    it('should return a list of matching prisoners', async () => {
-      const expectedResult = [{ prisonerNumber: 'ABC1234', firstName: 'Joe', lastName: 'Bloggs' }] as Prisoner[]
-
-      prisonerSearchApiClient.searchPrisonersByNomsIds.mockResolvedValue(expectedResult)
-
-      const actualResult = await prisonerService.searchPrisonersByNomisIds(['ABC1234'], user)
-
-      expect(actualResult).toEqual(expectedResult)
-      expect(prisonerSearchApiClient.searchPrisonersByNomsIds).toHaveBeenCalledWith(
-        { prisonerNumbers: ['ABC1234'] },
-        user
-      )
-    })
   })
 
   describe('Search Prisoners by booking ids', () => {
@@ -331,28 +306,5 @@ describe('Prisoner Service', () => {
 
       expect(actualResult).toStrictEqual(false)
     })
-  })
-
-  it('Search prisoners by release date', async () => {
-    const expectedResult = [{ firstName: 'Joe', lastName: 'Bloggs' }]
-
-    prisonerSearchApiClient.searchPrisonersByReleaseDate.mockResolvedValue({
-      content: [{ firstName: 'Joe', lastName: 'Bloggs' }],
-    } as PagePrisoner)
-
-    const actualResult = await prisonerService.searchPrisonersByReleaseDate(
-      new Date('2022-01-01'),
-      new Date('2022-01-01'),
-      ['MDI'],
-      user
-    )
-
-    expect(actualResult).toEqual(expectedResult)
-    expect(prisonerSearchApiClient.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
-      '2022-01-01',
-      '2022-01-01',
-      ['MDI'],
-      user
-    )
   })
 })
