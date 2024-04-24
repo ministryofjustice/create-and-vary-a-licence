@@ -71,6 +71,14 @@ export default class ViewAndPrintCaseRoutes {
     return licence.status === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licence.status
   }
 
+  findLatestLicence = (licences: Licence[]): Licence => {
+    if (licences.find(l => l.status === LicenceStatus.TIMED_OUT)) {
+      return licences.find(l => l.status !== LicenceStatus.TIMED_OUT)
+    }
+
+    return licences.find(l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS)
+  }
+
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
     const view = req.query.view || 'prison'
@@ -87,9 +95,7 @@ export default class ViewAndPrintCaseRoutes {
     const caseloadViewModel = casesToView.unwrap().map(c => {
       let latestLicence = _.head(c.licences)
       if (!probationView && c.licences.length > 1) {
-        latestLicence = c.licences.find(
-          l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS
-        )
+        latestLicence = this.findLatestLicence(c.licences)
       }
       const releaseDate = selectReleaseDate(c.nomisRecord)
       const tabType = determineComCreateCasesTab(latestLicence, c.nomisRecord, c.cvlFields)
