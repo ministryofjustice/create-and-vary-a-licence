@@ -67,6 +67,10 @@ export default class ViewAndPrintCaseRoutes {
     return null
   }
 
+  getStatus = (licence: Licence) => {
+    return licence.status === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licence.status
+  }
+
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
     const view = req.query.view || 'prison'
@@ -97,7 +101,7 @@ export default class ViewAndPrintCaseRoutes {
         probationPractitioner: c.probationPractitioner,
         releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
         releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
-        licenceStatus: latestLicence.status,
+        licenceStatus: this.getStatus(latestLicence),
         tabType,
         nomisLegalStatus: c.nomisRecord?.legalStatus,
         link: this.getLink(latestLicence, c.cvlFields, c.nomisRecord, tabType),
