@@ -73,6 +73,7 @@ describe('CaseloadViewModel', () => {
     hardStopWarningDate: '01/01/2023',
     isInHardStopPeriod: true,
     isDueForEarlyRelease: false,
+    isDueToBeReleasedInTheNextTwoWorkingDays: false,
   }
 
   it('titleizes name', () => {

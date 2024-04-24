@@ -49,6 +49,7 @@ describe('Approval Caseload Service', () => {
         isReviewNeeded: false,
         isInHardStopPeriod: false,
         isDueForEarlyRelease: true,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValue([
@@ -123,6 +124,7 @@ describe('Approval Caseload Service', () => {
         isReviewNeeded: false,
         isInHardStopPeriod: false,
         isDueForEarlyRelease: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValue([
