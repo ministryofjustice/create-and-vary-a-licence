@@ -274,11 +274,7 @@ describe('Route - view and approve a licence', () => {
 
         await handler.GET(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('pages/view/view', {
-          additionalConditions: [],
-          isEditableByPrison: false,
-          isPrisonUser: true,
-        })
+        expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
     })
