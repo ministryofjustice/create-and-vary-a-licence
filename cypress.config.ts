@@ -108,6 +108,8 @@ export default defineConfig({
         stubGetComReviewCount: licence.stubGetComReviewCount,
         stubGetCaseloadItem: licence.stubGetCaseloadItem,
         stubGetCaseloadItemInHardStop: licence.stubGetCaseloadItemInHardStop,
+        stubGetPreviouslyApprovedAndTimedOutLicences: licence.stubGetPreviouslyApprovedAndTimedOutLicences,
+        stubGetApprovedLicenceInHardStop: licence.stubGetApprovedLicenceInHardStop,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,

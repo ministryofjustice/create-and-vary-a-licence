@@ -33,8 +33,8 @@ context('Create a licence', () => {
   })
 
   it('should redirect to licence-not-approved-in-time if the timed out licence is an edit of a previously approved licence', () => {
-    cy.task('stubGetLicencesForStatus', { status: 'TIMED_OUT', versionOf: 1 })
-    cy.task('stubGetTimedOutEditLicence')
+    cy.task('stubGetPreviouslyApprovedAndTimedOutLicences')
+    cy.task('stubGetApprovedLicenceInHardStop')
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicenceInHardStop()
     caseloadPage.clickNameOfTimedOutEdit()

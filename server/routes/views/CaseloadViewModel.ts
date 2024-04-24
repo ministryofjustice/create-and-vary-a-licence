@@ -53,9 +53,10 @@ const findLicenceAndCreateLinkToDisplay = (c: ManagedCase): { licence: Licence; 
   const hardStopLicence = c.licences.find(l => l.kind === LicenceKind.HARD_STOP)
 
   if (timedOutLicence && timedOutLicence.versionOf) {
+    const previouslyApproved = c.licences.find(l => l.id === timedOutLicence.versionOf)
     return {
-      licence: timedOutLicence,
-      createLink: `/licence/create/id/${timedOutLicence.id}/licence-changes-not-approved-in-time`,
+      licence: { ...previouslyApproved, status: LicenceStatus.TIMED_OUT },
+      createLink: `/licence/create/id/${previouslyApproved.id}/licence-changes-not-approved-in-time`,
     }
   }
   if (
