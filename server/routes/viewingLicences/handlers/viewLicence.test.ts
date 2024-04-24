@@ -5,6 +5,7 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import config from '../../../config'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const username = 'joebloggs'
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
@@ -199,7 +200,7 @@ describe('Route - view and approve a licence', () => {
           redirect: jest.fn(),
           locals: {
             user,
-            licence: { ...licence, isInHardStopPeriod: true },
+            licence: { ...licence, statusCode: LicenceStatus.APPROVED, isInHardStopPeriod: true },
           },
         } as unknown as Response
 
@@ -230,6 +231,47 @@ describe('Route - view and approve a licence', () => {
           isEditableByPrison: false,
           isPrisonUser: true,
         })
+        expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+      })
+
+      it('should not be editable by prison CAs when in the hard stop window and with licence status ACTIVE', async () => {
+        res = {
+          render: jest.fn(),
+          redirect: jest.fn(),
+          locals: {
+            user,
+            licence: { ...licence, isInHardStopPeriod: true },
+          },
+        } as unknown as Response
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+          additionalConditions: [],
+          isEditableByPrison: false,
+          isPrisonUser: true,
+        })
+        expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+      })
+
+      it('should not be editable by prison CAs when in the hard stop window and with licence kind VARIATION', async () => {
+        res = {
+          render: jest.fn(),
+          redirect: jest.fn(),
+          locals: {
+            user,
+            licence: {
+              ...licence,
+              statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
+              kind: LicenceKind.VARIATION,
+              isInHardStopPeriod: true,
+            },
+          },
+        } as unknown as Response
+
+        await handler.GET(req, res)
+
+        expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
     })

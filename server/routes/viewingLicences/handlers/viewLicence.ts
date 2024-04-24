@@ -64,7 +64,7 @@ export default class ViewAndPrintLicenceRoutes {
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         warningMessage,
-        isEditableByPrison: isInHardStopPeriod(licence),
+        isEditableByPrison: licence.statusCode !== LicenceStatus.ACTIVE && isInHardStopPeriod(licence),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
       })
