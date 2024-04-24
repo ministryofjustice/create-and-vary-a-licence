@@ -611,7 +611,7 @@ export default {
             comUsername: 'jsmith',
             bookingId: options.bookingId,
             dateCreated: '01/03/2021 10:15',
-            hardStopDate: options.isInHardStop
+            hardStopDate: options.isInHardStopPeriod
               ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
               : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
             hardStopWarningDate: '03/12/2023',
@@ -856,7 +856,6 @@ export default {
   stubGetLicencesForStatus: (
     options: { status: string; versionOf?: number; kind?: string } = {
       status: 'IN_PROGRESS',
-      versionOf: null,
       kind: 'CRD',
     }
   ): SuperAgentRequest => {
@@ -884,7 +883,7 @@ export default {
             dateOfBirth: licencePlaceholder.dateOfBirth,
             comUsername: licencePlaceholder.comUsername,
             variationOf: options.status === 'VARIATION_SUBMITTED' ? 2 : null,
-            versionOf: options.versionOf,
+            versionOf: null,
             kind: options.kind,
             hardStopDate: '05/12/2023',
             hardStopWarningDate: '03/12/2023',
@@ -935,6 +934,61 @@ export default {
             dateOfBirth: licencePlaceholder.dateOfBirth,
             comUsername: licencePlaceholder.comUsername,
             kind: 'HARD_STOP',
+            hardStopDate: '05/12/2023',
+            hardStopWarningDate: '03/12/2023',
+          },
+        ],
+      },
+    })
+  },
+
+  stubGetPreviouslyApprovedAndTimedOutLicences: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPathPattern: `/licences-api/licence/match`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: 1,
+            licenceType: licencePlaceholder.typeCode,
+            licenceStatus: 'APPROVED',
+            nomisId: licencePlaceholder.nomsId,
+            surname: licencePlaceholder.surname,
+            forename: licencePlaceholder.forename,
+            prisonCode: licencePlaceholder.prisonCode,
+            prisonDescription: licencePlaceholder.prisonDescription,
+            conditionalReleaseDate: licencePlaceholder.conditionalReleaseDate,
+            actualReleaseDate: licencePlaceholder.actualReleaseDate,
+            crn: licencePlaceholder.crn,
+            dateOfBirth: licencePlaceholder.dateOfBirth,
+            comUsername: licencePlaceholder.comUsername,
+            variationOf: null,
+            versionOf: null,
+            kind: 'CRD',
+            hardStopDate: '05/12/2023',
+            hardStopWarningDate: '03/12/2023',
+          },
+          {
+            licenceId: 2,
+            licenceType: licencePlaceholder.typeCode,
+            licenceStatus: 'TIMED_OUT',
+            nomisId: licencePlaceholder.nomsId,
+            surname: licencePlaceholder.surname,
+            forename: licencePlaceholder.forename,
+            prisonCode: licencePlaceholder.prisonCode,
+            prisonDescription: licencePlaceholder.prisonDescription,
+            conditionalReleaseDate: licencePlaceholder.conditionalReleaseDate,
+            actualReleaseDate: licencePlaceholder.actualReleaseDate,
+            crn: licencePlaceholder.crn,
+            dateOfBirth: licencePlaceholder.dateOfBirth,
+            comUsername: licencePlaceholder.comUsername,
+            variationOf: null,
+            versionOf: 1,
+            kind: 'CRD',
             hardStopDate: '05/12/2023',
             hardStopWarningDate: '03/12/2023',
           },
@@ -1477,6 +1531,24 @@ export default {
           appointmentContact: '07891245678',
           appointmentTime: '01/12/2021 00:34',
           appointmentTimeType: 'SPECIFIC_DATE_TIME',
+        },
+      },
+    })
+  },
+
+  stubGetApprovedLicenceInHardStop: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/licence/id/(\\d*)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          statusCode: 'APPROVED',
+          isInHardStopPeriod: true,
         },
       },
     })
