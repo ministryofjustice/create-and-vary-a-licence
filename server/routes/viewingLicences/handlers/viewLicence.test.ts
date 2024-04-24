@@ -5,17 +5,14 @@ import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import config from '../../../config'
-import CommunityService from '../../../services/communityService'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
 const username = 'joebloggs'
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/communityService')
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ViewAndPrintLicenceRoutes(licenceService, communityService)
+  const handler = new ViewAndPrintLicenceRoutes(licenceService)
   let req: Request
   let res: Response
 
@@ -301,11 +298,45 @@ describe('Route - view and approve a licence', () => {
   })
 
   describe('POST', () => {
-    it('should submit the variation response and redirect to the confirmation page', async () => {
+    it('should submit the licence response and redirect to the confirmation page', async () => {
       req = {
         params: {
           licenceId: 1,
         },
+        flash: jest.fn(),
+        query: {},
+      } as unknown as Request
+
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: {
+            username: 'joebloggs',
+          },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
+            appointmentPersonType: 'DUTY_OFFICER',
+            appointmentAddress: 'some address',
+            appointmentContact: '0123455666',
+            appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
+          },
+        },
+      } as unknown as Response
+
+      await handler.POST(req, res)
+
+      expect(licenceService.submitLicence).toHaveBeenCalledWith(1, { username: 'joebloggs' })
+      expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/confirmation')
+    })
+
+    it('should fail to process due to validation issues', async () => {
+      req = {
+        params: {
+          licenceId: 1,
+        },
+        flash: jest.fn(),
         query: {},
       } as unknown as Request
 
@@ -322,20 +353,14 @@ describe('Route - view and approve a licence', () => {
           },
         },
       } as unknown as Response
-      communityService.getPduHeads.mockResolvedValue([
-        {
-          email: 'jbloggs@probation.gov.uk',
-          staff: {
-            forenames: 'Joe',
-            surname: 'Bloggs',
-          },
-        },
-      ])
 
       await handler.POST(req, res)
 
-      expect(licenceService.submitLicence).toHaveBeenCalledWith(1, { username: 'joebloggs' })
-      expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/confirmation')
+      expect(res.redirect).toHaveBeenCalledWith('back')
+      expect(req.flash).toHaveBeenCalledWith(
+        'validationErrors',
+        '[{"field":"appointmentPersonType","message":"Select \'Change\' to go back and add who to meet"},{"field":"appointmentAddress","message":"Select \'Change\' to go back and add appointment address"},{"field":"appointmentContact","message":"Select \'Change\' to go back and add appointment telephone number"},{"field":"appointmentTimeType","message":"Select \'Change\' to go back and add appointment date and time"}]'
+      )
     })
   })
 })
