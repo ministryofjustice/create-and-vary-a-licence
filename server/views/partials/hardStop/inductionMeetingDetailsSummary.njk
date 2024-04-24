@@ -1,16 +1,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "pages/selectedAppointmentPerson.njk" import selectedAppointmentPerson %}
 
 {% macro hardStopInductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
     {% set routepath = "/licence/hard-stop/edit/id/" + licence.id %}
-    {% switch licence.appointmentPersonType %}
-        {% case 'DUTY_OFFICER' %}
-            {% set appointmentPerson = 'Duty Officer' %}
-        {% case 'RESPONSIBLE_COM' %}
-            {% set appointmentPerson = licence.responsibleComFullName + ", this person’s probation practitioner" %}
-        {% default %}
-            {% set appointmentPerson = licence.appointmentPerson %}
-    {% endswitch %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
@@ -28,7 +21,7 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentPerson'),
                 key: { text: "Name" },
-                value: { text: appointmentPerson },
+                value: { text: selectedAppointmentPerson(licence) },
                 actions: {
                     items: [
                         {
