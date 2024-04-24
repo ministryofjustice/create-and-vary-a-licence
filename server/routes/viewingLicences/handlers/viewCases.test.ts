@@ -946,7 +946,7 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
-    it('should allow creation of hardstop licence during hardstop', async () => {
+    it('should allow creation of hardstop licence during hardstop and should override the TIMED_OUT status to NOT_STARTED', async () => {
       config.hardStopEnabled = true
       caseloadService.getOmuCaseload.mockResolvedValue(
         new OmuCaselist(
@@ -963,7 +963,7 @@ describe('Route handlers - View and print case list', () => {
         cases: [
           {
             licenceId: undefined,
-            licenceStatus: 'TIMED_OUT',
+            licenceStatus: 'NOT_STARTED',
             link: '/licence/hard-stop/create/nomisId/A1234AA/confirm',
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
@@ -1106,7 +1106,7 @@ describe('Route handlers - View and print case list', () => {
           },
           {
             licenceId: undefined,
-            licenceStatus: 'TIMED_OUT',
+            licenceStatus: 'NOT_STARTED',
             link: '/licence/hard-stop/create/nomisId/A1234AA/confirm',
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
