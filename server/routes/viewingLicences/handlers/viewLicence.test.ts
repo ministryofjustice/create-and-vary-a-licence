@@ -243,7 +243,7 @@ describe('Route - view and approve a licence', () => {
           redirect: jest.fn(),
           locals: {
             user,
-            licence: { ...licence, isInHardStopPeriod: true },
+            licence: { ...licence, statusCode: LicenceStatus.APPROVED, isInHardStopPeriod: true },
           },
         } as unknown as Response
 
