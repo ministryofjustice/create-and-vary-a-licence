@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isBefore, parse, isEqual, isValid, startOfDay } from 'date-fns'
+import { isBefore, parse, isEqual, isValid, startOfDay, format } from 'date-fns'
 import assert from 'assert'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
@@ -136,6 +136,10 @@ const parseIsoDate = (date: string) => {
 
 const parseCvlDate = (date: string) => {
   return date ? parse(date, 'dd/MM/yyyy', new Date()) : null
+}
+
+const toIsoDate = (date: Date) => {
+  return date ? format(date, 'yyyy-MM-dd') : null
 }
 
 const parseCvlDateTime = (date: string, { withSeconds }: { withSeconds: boolean }) => {
@@ -284,4 +288,5 @@ export {
   isInHardStopPeriod,
   isAttentionNeeded,
   determineComCreateCasesTab,
+  toIsoDate,
 }

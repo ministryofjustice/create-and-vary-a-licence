@@ -15,6 +15,7 @@ import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTyp
 import config from '../../../config'
 import { ComCreateCaseTab, parseCvlDate } from '../../../utils/utils'
 import { ManagedCase } from '../../../@types/managedCase'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/caseloadService')
@@ -38,6 +39,7 @@ describe('Route handlers - View and print case list', () => {
   const exampleCase = {
     licences: [
       {
+        kind: 'CRD',
         type: LicenceType.AP,
         status: LicenceStatus.NOT_STARTED,
         hardStopDate: startOfDay(subDays(new Date(), 1)),
@@ -125,6 +127,7 @@ describe('Route handlers - View and print case list', () => {
       {
         licences: [
           {
+            id: 2,
             type: LicenceType.AP,
             status: LicenceStatus.APPROVED,
             hardStopDate: startOfDay(addDays(new Date(), 1)),
@@ -145,6 +148,7 @@ describe('Route handlers - View and print case list', () => {
       {
         licences: [
           {
+            id: 3,
             type: LicenceType.AP,
             status: LicenceStatus.IN_PROGRESS,
             hardStopDate: startOfDay(subDays(new Date(), 1)),
@@ -165,6 +169,7 @@ describe('Route handlers - View and print case list', () => {
       {
         licences: [
           {
+            id: 4,
             type: LicenceType.AP,
             status: LicenceStatus.SUBMITTED,
             hardStopDate: startOfDay(subDays(new Date(), 1)),
@@ -186,6 +191,7 @@ describe('Route handlers - View and print case list', () => {
       {
         licences: [
           {
+            id: 5,
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
             hardStopDate: startOfDay(subDays(new Date(), 1)),
@@ -206,6 +212,7 @@ describe('Route handlers - View and print case list', () => {
       {
         licences: [
           {
+            id: 6,
             type: LicenceType.AP,
             status: LicenceStatus.VARIATION_IN_PROGRESS,
             hardStopDate: startOfDay(addDays(new Date(), 1)),
@@ -226,6 +233,7 @@ describe('Route handlers - View and print case list', () => {
       {
         licences: [
           {
+            id: 7,
             type: LicenceType.AP,
             status: LicenceStatus.VARIATION_SUBMITTED,
             hardStopDate: startOfDay(addDays(new Date(), 1)),
@@ -246,6 +254,7 @@ describe('Route handlers - View and print case list', () => {
       {
         licences: [
           {
+            id: 8,
             type: LicenceType.AP,
             status: LicenceStatus.VARIATION_APPROVED,
             hardStopDate: startOfDay(addDays(new Date(), 1)),
@@ -279,7 +288,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: false,
+            link: null,
             licenceId: undefined,
             licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
@@ -294,8 +303,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: false,
-            licenceId: undefined,
+            link: null,
+            licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
             name: 'Harvey Smith',
             prisonerNumber: 'A1234AC',
@@ -309,8 +318,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/4/show',
+            licenceId: 4,
             licenceStatus: 'SUBMITTED',
             name: 'Harold Lloyd',
             prisonerNumber: 'A1234AD',
@@ -324,8 +333,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/2/show',
+            licenceId: 2,
             licenceStatus: 'APPROVED',
             name: 'Stephen Rowe',
             prisonerNumber: 'A1234AE',
@@ -373,7 +382,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: false,
+            link: null,
             licenceId: undefined,
             licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
@@ -388,8 +397,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: false,
-            licenceId: undefined,
+            link: null,
+            licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
             name: 'Harvey Smith',
             prisonerNumber: 'A1234AC',
@@ -403,8 +412,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/4/show',
+            licenceId: 4,
             licenceStatus: 'SUBMITTED',
             name: 'Harold Lloyd',
             prisonerNumber: 'A1234AD',
@@ -418,8 +427,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/2/show',
+            licenceId: 2,
             licenceStatus: 'APPROVED',
             name: 'Stephen Rowe',
             prisonerNumber: 'A1234AE',
@@ -461,7 +470,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: false,
+            link: null,
             licenceId: undefined,
             licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
@@ -476,8 +485,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: false,
-            licenceId: undefined,
+            link: null,
+            licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
             name: 'Harvey Smith',
             prisonerNumber: 'A1234AC',
@@ -491,8 +500,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/4/show',
+            licenceId: 4,
             licenceStatus: 'SUBMITTED',
             name: 'Harold Lloyd',
             prisonerNumber: 'A1234AD',
@@ -506,8 +515,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/2/show',
+            licenceId: 2,
             licenceStatus: 'APPROVED',
             name: 'Stephen Rowe',
             prisonerNumber: 'A1234AE',
@@ -663,7 +672,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: false,
+            link: null,
             licenceId: undefined,
             licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
@@ -710,7 +719,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             licenceStatus: LicenceStatus.NOT_STARTED,
-            isClickable: false,
+            link: null,
             tabType: 'releasesInNextTwoWorkingDays',
             nomisLegalStatus: 'SENTENCED',
             isDueForEarlyRelease: false,
@@ -739,7 +748,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: false,
+            link: null,
             licenceId: undefined,
             licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
@@ -769,7 +778,7 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
-    it('should evaluate the clickability of cases for probation view', async () => {
+    it('should evaluate the links of cases for probation view', async () => {
       caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'probation'
@@ -778,8 +787,8 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/5/show',
+            licenceId: 5,
             licenceStatus: 'ACTIVE',
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
@@ -793,8 +802,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: false,
-            licenceId: undefined,
+            link: null,
+            licenceId: 6,
             licenceStatus: 'VARIATION_IN_PROGRESS',
             name: 'Joe Bloggs',
             prisonerNumber: 'A1234AB',
@@ -808,8 +817,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: false,
-            licenceId: undefined,
+            link: null,
+            licenceId: 7,
             licenceStatus: 'VARIATION_SUBMITTED',
             name: 'Harvey Smith',
             prisonerNumber: 'A1234AC',
@@ -823,8 +832,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: false,
-            licenceId: undefined,
+            link: null,
+            licenceId: 8,
             licenceStatus: 'VARIATION_APPROVED',
             name: 'Harold Lloyd',
             prisonerNumber: 'A1234AD',
@@ -853,7 +862,7 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
-    it('should evaluate the clickability of cases for prison view', async () => {
+    it('should evaluate the links of cases for prison view', async () => {
       caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
@@ -862,7 +871,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: false,
+            link: null,
             licenceId: undefined,
             licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
@@ -877,8 +886,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: false,
-            licenceId: undefined,
+            link: null,
+            licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
             name: 'Harvey Smith',
             prisonerNumber: 'A1234AC',
@@ -892,8 +901,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/4/show',
+            licenceId: 4,
             licenceStatus: 'SUBMITTED',
             name: 'Harold Lloyd',
             prisonerNumber: 'A1234AD',
@@ -907,8 +916,212 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
+            link: '/licence/view/id/2/show',
+            licenceId: 2,
+            licenceStatus: 'APPROVED',
+            name: 'Stephen Rowe',
+            prisonerNumber: 'A1234AE',
+            probationPractitioner: {
+              name: 'Larry Johnson',
+            },
+            releaseDate: '10 Jun 2022',
+            releaseDateLabel: 'CRD',
+            tabType: 'futureReleases',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+        ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should allow creation of hardstop licence during hardstop and should override the TIMED_OUT status to NOT_STARTED', async () => {
+      config.hardStopEnabled = true
+      caseloadService.getOmuCaseload.mockResolvedValue(
+        new OmuCaselist(
+          new Container([
+            { ...exampleCase, licences: [{ ...exampleCase.licences[0], status: LicenceStatus.TIMED_OUT }] },
+          ])
+        )
+      )
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
             licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            link: '/licence/hard-stop/create/nomisId/A1234AA/confirm',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+        ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should allow modifying inprogress hardstop licence during hardstop', async () => {
+      config.hardStopEnabled = true
+      caseloadService.getOmuCaseload.mockResolvedValue(
+        new OmuCaselist(
+          new Container([
+            {
+              ...exampleCase,
+              licences: [
+                { ...exampleCase.licences[0], id: 3, kind: LicenceKind.HARD_STOP, status: LicenceStatus.IN_PROGRESS },
+              ],
+            },
+          ])
+        )
+      )
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            licenceId: 3,
+            licenceStatus: 'IN_PROGRESS',
+            link: '/licence/view/id/3/show',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+        ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should evaluate the links of cases for prison view in hardstop', async () => {
+      config.hardStopEnabled = true
+      caseloadService.getOmuCaseload.mockResolvedValue(
+        new OmuCaselist(
+          new Container([
+            ...caseList.unwrap(),
+            { ...exampleCase, licences: [{ ...exampleCase.licences[0], status: LicenceStatus.TIMED_OUT }] },
+          ])
+        )
+      )
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            link: null,
+            licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+          {
+            link: null,
+            licenceId: 3,
+            licenceStatus: 'IN_PROGRESS',
+            name: 'Harvey Smith',
+            prisonerNumber: 'A1234AC',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+          {
+            link: '/licence/view/id/4/show',
+            licenceId: 4,
+            licenceStatus: 'SUBMITTED',
+            name: 'Harold Lloyd',
+            prisonerNumber: 'A1234AD',
+            probationPractitioner: {
+              name: 'Harry Goldman',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'CRD',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+          {
+            licenceId: undefined,
+            licenceStatus: 'NOT_STARTED',
+            link: '/licence/hard-stop/create/nomisId/A1234AA/confirm',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+          {
+            link: '/licence/view/id/2/show',
+            licenceId: 2,
             licenceStatus: 'APPROVED',
             name: 'Stephen Rowe',
             prisonerNumber: 'A1234AE',
@@ -981,7 +1194,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: false,
+            link: null,
             licenceId: 67,
             licenceVersionOf: 45,
             licenceStatus: 'IN_PROGRESS',
@@ -1021,7 +1234,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: false,
+            link: null,
             licenceId: undefined,
             licenceStatus: 'NOT_STARTED',
             name: 'Bob Smith',
@@ -1036,8 +1249,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: false,
-            licenceId: undefined,
+            link: null,
+            licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
             name: 'Harvey Smith',
             prisonerNumber: 'A1234AC',
@@ -1051,8 +1264,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/4/show',
+            licenceId: 4,
             licenceStatus: 'SUBMITTED',
             name: 'Harold Lloyd',
             prisonerNumber: 'A1234AD',
@@ -1066,8 +1279,8 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: true,
-            licenceId: undefined,
+            link: '/licence/view/id/2/show',
+            licenceId: 2,
             licenceStatus: 'APPROVED',
             name: 'Stephen Rowe',
             prisonerNumber: 'A1234AE',
@@ -1146,7 +1359,7 @@ describe('Route handlers - View and print case list', () => {
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [
           {
-            isClickable: false,
+            link: null,
             licenceId: undefined,
             licenceStatus: 'APPROVED',
             name: 'Bob Smith',
@@ -1161,7 +1374,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
           {
-            isClickable: false,
+            link: null,
             licenceId: undefined,
             licenceStatus: 'IN_PROGRESS',
             name: 'Harvey Smith',

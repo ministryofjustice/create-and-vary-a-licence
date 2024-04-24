@@ -19,7 +19,7 @@ export default class ConfirmCreateRoutes {
     const { nomisId } = req.params
     const { user } = res.locals
     const { answer } = req.body
-    const backLink = req.session.returnToCase
+    const backLink = req.session.returnToCase || '/licence/view/cases'
 
     if (answer === YesOrNo.YES) {
       const { licenceId } = await this.licenceService.createLicence(

@@ -59,7 +59,7 @@
                 id: 'name-' + loop.index,
                 "data-sort-value": case.name
             },
-            html: offenderName(case.name, case.prisonerNumber, case.licenceId, case.isClickable, case.licenceVersionOf, case.licenceStatus, loop.index),
+            html: offenderName(case.name, case.link, loop.index),
             classes: "max-width max-width-220"
         },
         {

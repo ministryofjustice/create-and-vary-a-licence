@@ -18,7 +18,7 @@ export default class CheckAnswersRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
-    const backLink = req.session.returnToCase || '/licence/create/caseload'
+    const backLink = req.session?.returnToCase || '/licence/create/caseload'
 
     // Record the view event only when an officer views a licence which is not their own
     if (licence?.comStaffId !== user?.deliusStaffIdentifier) {

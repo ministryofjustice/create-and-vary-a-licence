@@ -3,14 +3,11 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import CommunityService from '../../../services/communityService'
-import PrisonerService from '../../../services/prisonerService'
-import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
-import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
+import { CaseloadItem, CvlPrisoner, LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 
 const bankHolidayRetriever: BankHolidayRetriever = async () => []
@@ -21,7 +18,7 @@ jest.mock('../../../services/communityService')
 jest.mock('../../../services/prisonerService')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(communityService, prisonerService, licenceService, ukBankHolidayFeedService)
+  const handler = new ConfirmCreateRoutes(communityService, licenceService, ukBankHolidayFeedService)
   let req: Request
   let res: Response
 
@@ -50,6 +47,19 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         },
       },
     } as unknown as Response
+
+    licenceService.getPrisonerDetail.mockResolvedValue({
+      prisoner: {
+        confirmedReleaseDate: '2022-11-20',
+        conditionalReleaseDate: '2022-11-21',
+        dateOfBirth: '1960-11-10',
+        firstName: 'Patrick',
+        lastName: 'Holmes',
+      } as CvlPrisoner,
+      cvl: {
+        isInHardStopPeriod: false,
+      },
+    } as CaseloadItem)
   })
 
   afterEach(() => {
@@ -58,15 +68,6 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
 
   describe('GET', () => {
     beforeEach(() => {
-      prisonerService.getPrisonerDetail.mockResolvedValue({
-        sentenceDetail: {
-          confirmedReleaseDate: '2022-11-20',
-          conditionalReleaseDate: '2022-11-21',
-        },
-        dateOfBirth: '1960-11-10',
-        firstName: 'Patrick',
-        lastName: 'Holmes',
-      } as PrisonApiPrisoner)
       communityService.getProbationer.mockResolvedValue({
         otherIds: {
           crn: 'X1234',
@@ -115,14 +116,17 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
     })
 
     it('actualReleaseDate should be undefined if confirmedReleaseDate does not exist', async () => {
-      prisonerService.getPrisonerDetail.mockResolvedValue({
-        sentenceDetail: {
+      licenceService.getPrisonerDetail.mockResolvedValue({
+        prisoner: {
           conditionalReleaseDate: '2022-11-20',
+          dateOfBirth: '1960-11-10',
+          firstName: 'Patrick',
+          lastName: 'Holmes',
+        } as CvlPrisoner,
+        cvl: {
+          isInHardStopPeriod: false,
         },
-        dateOfBirth: '1960-11-10',
-        firstName: 'Patrick',
-        lastName: 'Holmes',
-      } as PrisonApiPrisoner)
+      } as CaseloadItem)
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
