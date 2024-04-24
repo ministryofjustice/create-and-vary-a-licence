@@ -5,7 +5,6 @@ import type LicenceService from '../../../services/licenceService'
 import { groupingBy, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import CommunityService from '../../../services/communityService'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(
