@@ -58,6 +58,8 @@ describe('Route handlers - View and print case list', () => {
     },
   } as ManagedCase
 
+  const existingConfig = config
+
   beforeEach(() => {
     req = {
       query: {},
@@ -95,11 +97,11 @@ describe('Route handlers - View and print case list', () => {
         description: 'Birmingham (HMP)',
       },
     ] as PrisonDetail[])
-    config.hardStopEnabled = false
   })
 
   afterEach(() => {
     jest.resetAllMocks()
+    config.hardStopEnabled = existingConfig.hardStopEnabled
   })
 
   describe('GET', () => {
@@ -1466,6 +1468,147 @@ describe('Route handlers - View and print case list', () => {
         probationView: false,
         search: 'A12345AA',
         statusConfig,
+      })
+    })
+
+    describe('findLatestLicence with TIMED_OUT licence', () => {
+      it('should return a hard stop licence', async () => {
+        const caseList = new Container([
+          {
+            licences: [
+              {
+                type: LicenceType.AP,
+                status: LicenceStatus.TIMED_OUT,
+                hardStopDate: startOfDay(subDays(new Date(), 1)),
+              },
+              {
+                id: 2,
+                type: LicenceType.AP,
+                status: LicenceStatus.APPROVED,
+                hardStopDate: startOfDay(subDays(new Date(), 1)),
+                kind: LicenceKind.HARD_STOP,
+              },
+            ],
+            cvlFields,
+            nomisRecord: {
+              firstName: 'Bob',
+              lastName: 'Smith',
+              prisonerNumber: 'A1234AA',
+              confirmedReleaseDate: '2022-05-01',
+              legalStatus: 'SENTENCED',
+            } as CvlPrisoner,
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+          },
+        ])
+
+        caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+          cases: [
+            {
+              link: '/licence/view/id/2/show',
+              licenceId: 2,
+              licenceStatus: 'APPROVED',
+              name: 'Bob Smith',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Sherlock Holmes',
+              },
+              releaseDate: '01 May 2022',
+              releaseDateLabel: 'Confirmed release date',
+              tabType: 'releasesInNextTwoWorkingDays',
+              nomisLegalStatus: 'SENTENCED',
+              isDueForEarlyRelease: false,
+            },
+          ],
+          ComCreateCaseTab,
+          showAttentionNeededTab: false,
+          hasMultipleCaseloadsInNomis: false,
+          prisonsToDisplay: [
+            {
+              agencyId: 'BAI',
+              description: 'Belmarsh (HMP)',
+            },
+          ],
+          probationView: false,
+          search: undefined,
+          statusConfig,
+        })
+      })
+
+      it('should return a previously approved licence', async () => {
+        const caseList = new Container([
+          {
+            licences: [
+              {
+                id: 1,
+                type: LicenceType.AP,
+                status: LicenceStatus.APPROVED,
+                hardStopDate: startOfDay(subDays(new Date(), 1)),
+                kind: LicenceKind.HARD_STOP,
+              },
+              {
+                id: 2,
+                type: LicenceType.AP,
+                status: LicenceStatus.TIMED_OUT,
+                hardStopDate: startOfDay(subDays(new Date(), 1)),
+                kind: LicenceKind.CRD,
+                versionOf: 1,
+              },
+            ],
+            cvlFields,
+            nomisRecord: {
+              firstName: 'Bob',
+              lastName: 'Smith',
+              prisonerNumber: 'A1234AA',
+              confirmedReleaseDate: '2022-05-01',
+              legalStatus: 'SENTENCED',
+            } as CvlPrisoner,
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+          },
+        ])
+
+        caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+          cases: [
+            {
+              link: '/licence/view/id/1/show',
+              licenceId: 1,
+              licenceStatus: 'APPROVED',
+              name: 'Bob Smith',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Sherlock Holmes',
+              },
+              releaseDate: '01 May 2022',
+              releaseDateLabel: 'Confirmed release date',
+              tabType: 'releasesInNextTwoWorkingDays',
+              nomisLegalStatus: 'SENTENCED',
+              isDueForEarlyRelease: false,
+            },
+          ],
+          ComCreateCaseTab,
+          showAttentionNeededTab: false,
+          hasMultipleCaseloadsInNomis: false,
+          prisonsToDisplay: [
+            {
+              agencyId: 'BAI',
+              description: 'Belmarsh (HMP)',
+            },
+          ],
+          probationView: false,
+          search: undefined,
+          statusConfig,
+        })
       })
     })
 
