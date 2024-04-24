@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Session } from 'express-session'
 
 import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
@@ -81,6 +82,14 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       await handler.POST(req, res)
       expect(licenceService.createLicence).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(req.session.returnToCase)
+    })
+
+    it('should not create licence and should redirect when answer is NO when no session', async () => {
+      req.body.answer = 'No'
+      req.session = {} as Session
+      await handler.POST(req, res)
+      expect(licenceService.createLicence).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/licence/view/cases')
     })
   })
 })
