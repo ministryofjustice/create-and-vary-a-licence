@@ -1,0 +1,50 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components//button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% set pageTitle = applicationName + " - Create a licence - Confirmation" %}
+{% set pageId = "confirmation-page" %}
+{% set hideLicenceBanner = true %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ govukPanel({
+              titleText: titleText,
+              html: "You still need to contact the probation team" if not licence.comEmail
+            }) }}
+            <h2 class="govuk-heading-m">What happens next</h2>
+            <p>We have sent the licence for approval. This is usually done by the prison governor.</p>
+
+            <p class="govuk-body" id="sent-to">
+               {% if licence.comEmail %}
+                    Once the licence has been approved, we will automatically email the probation team to tell them.
+               {% else %}
+                    Once this licence has been approved, <strong>you will need to notify the probation team</strong>. We do not have their contact details to do this automatically.
+               {% endif %}        
+            </p>
+       
+
+            <h2 class="govuk-heading-m">If you need to make any changes</h2>
+            <p class="govuk-body">
+                <p>Only the initial appointment can be changed. For example, because a probation practitioner requests a different date or time. You can return to the service to edit this after it has been sent or approved.</p>
+                <p>The licence will not need to be approved again.</p>
+            </p>
+
+            <h2 class="govuk-heading-m">Give us your feedback</h2>
+            <p class="govuk-body">
+                <a href="{{ exitSurveyLink }}" rel="noreferrer noopener" target="_blank" id="exit-survey" class="govuk-link">What did you think of this service?</a> (takes 30 seconds)
+            </p>
+
+            <p class="govuk-body">
+            {{ govukButton({
+                text: "Return to caselist",
+                classes: "govuk-button--primary govuk-!-margin-bottom-0 govuk-body",
+                href: backLink,
+                attributes: { 'data-qa': 'return-to-caselist' }
+            }) }}
+            </p>
+        </div>
+    </div>
+{% endblock %}

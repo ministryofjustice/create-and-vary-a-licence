@@ -86,29 +86,4 @@ describe('Route Handlers - Confirmation', () => {
       })
     })
   })
-
-  describe('Create Hard Stop Licence', () => {
-    describe('GET', () => {
-      it('should render correct return to caseload link for hard stop licence', async () => {
-        res.locals.licence.kind = 'HARD_STOP'
-
-        const reqWithEmptySession = {
-          params: {
-            licenceId: '1',
-          },
-          session: {},
-          flash: jest.fn(),
-        } as unknown as Request
-
-        res.locals.licence.typeCode = 'AP'
-
-        await handler.GET(reqWithEmptySession, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/confirmation', {
-          confirmationMessage: 'We have sent the licence to Leeds (HMP) for approval.',
-          titleText: 'Licence conditions for Bobby Zamora sent',
-          backLink: '/licence/view/cases',
-        })
-      })
-    })
-  })
 })

@@ -15,7 +15,7 @@ import Telephone from '../../types/telephone'
 import InitialMeetingTimeRoutes from './initialMeetingTime'
 import DateTime from '../../types/dateTime'
 import ViewAndPrintLicenceRoutes from '../../../viewingLicences/handlers/viewLicence'
-import ConfirmationRoutes from '../../../creatingLicences/handlers/confirmation'
+import ConfirmationRoutes from '../../../creatingLicences/handlers/hardStop/confirmation'
 
 export default function Index({ licenceService, conditionService }: Services): Router {
   const router = Router()
