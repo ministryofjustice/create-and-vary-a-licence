@@ -58,6 +58,9 @@ export default class ViewAndPrintCaseRoutes {
     if (!this.isClickable(licence, cvlFields, tabType)) {
       return null
     }
+    if (licence.status === LicenceStatus.TIMED_OUT) {
+      return `/licence/hard-stop/create/nomisId/${prisoner.prisonerNumber}/confirm`
+    }
     if (licence.id) {
       const query =
         licence.versionOf && licence.status === LicenceStatus.SUBMITTED
@@ -68,9 +71,7 @@ export default class ViewAndPrintCaseRoutes {
         ? `/licence/hard-stop/id/${licence.id}/check-your-answers${query}`
         : `/licence/view/id/${licence.id}/show${query}`
     }
-    if (licence.status === LicenceStatus.TIMED_OUT) {
-      return `/licence/hard-stop/create/nomisId/${prisoner.prisonerNumber}/confirm`
-    }
+
     return null
   }
 
