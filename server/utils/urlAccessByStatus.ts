@@ -63,6 +63,7 @@ const allowedPaths = [
     status: 'ACTIVE',
     allowed: [
       '/licence/create/id/(\\d)*/check-your-answers.*',
+      '/licence/create/id/(\\d)*/licence-created-by-prison',
       '/licence/view/id/(\\d)*/.*',
       '/licence/vary/id/(\\d)*/.*',
       '/licence/vary-approve/id/(\\d)*/approve',

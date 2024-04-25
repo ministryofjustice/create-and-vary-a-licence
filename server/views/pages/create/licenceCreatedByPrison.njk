@@ -7,6 +7,11 @@
 {% set backLinkHref = backLink %}
 {% set contactForChangeText = "To request a change to this person’s appointment, contact " + licence.prisonDescription + " at " + omuEmail + "." %}
 {% set pageId = "hard-stop-licence-page"%}
+{% if licence.statusCode === "ACTIVE" %}
+  {% set isPrintable = true %}
+{% else %}
+  {% set isPrintable = false %}
+{% endif %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -27,9 +32,17 @@
             <p class="govuk-body">The prison <strong>cannot</strong>  add any other additional or bespoke conditions.</p>
             <p class="govuk-body">If you need to add any additional or bespoke licence conditions, you can do so after release.</p>
             <p class="govuk-body">
+                {% if isPrintable %}
+                    {{ govukButton({
+                        text: "View and print licence PDF",
+                        classes: "govuk-button--primary govuk-!-margin-right-1",
+                        href: '/licence/view/id/' + licence.id + '/pdf-print',
+                        attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+                    }) }}
+                {% endif %}
                 {{ govukButton({
-                    text: "Return to caselist",
-                    classes: "govuk-!-margin-bottom-0 govuk-body",
+                    text: "Return to case list",
+                    classes: "govuk-button--secondary" if isPrintable,
                     href: backLink,
                     attributes: { 'data-qa': 'return-to-caselist' }
                 }) }}
