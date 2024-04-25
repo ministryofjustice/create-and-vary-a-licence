@@ -48,7 +48,9 @@ export default class CaseloadRoutes {
     const caseloadViewModel = cases
       .map(c => {
         const licence =
-          c.licences.length > 1 ? c.licences.find(l => l.status !== LicenceStatus.ACTIVE) : _.head(c.licences)
+          c.licences.length > 1
+            ? c.licences.filter(l => l.status !== LicenceStatus.TIMED_OUT).find(l => l.status !== LicenceStatus.ACTIVE)
+            : _.head(c.licences)
 
         return {
           licenceId: licence.id,

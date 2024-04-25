@@ -994,6 +994,52 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
+    it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
+      config.hardStopEnabled = true
+      caseloadService.getOmuCaseload.mockResolvedValue(
+        new OmuCaselist(
+          new Container([
+            { ...exampleCase, licences: [{ ...exampleCase.licences[0], id: 4, status: LicenceStatus.TIMED_OUT }] },
+          ])
+        )
+      )
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            licenceId: 4,
+            licenceStatus: 'NOT_STARTED',
+            link: '/licence/hard-stop/create/nomisId/A1234AA/confirm',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+        ],
+        ComCreateCaseTab,
+        showAttentionNeededTab: false,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
     it('should allow modifying inprogress hardstop licence during hardstop', async () => {
       config.hardStopEnabled = true
       caseloadService.getOmuCaseload.mockResolvedValue(
