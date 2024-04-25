@@ -33,6 +33,12 @@ export default class ViewAndPrintCaseRoutes {
     private readonly prisonerService: PrisonerService
   ) {}
 
+  isEditableInHardStop = (licence: Licence) => {
+    const inProgressHardStop = licence.kind === LicenceKind.HARD_STOP && licence.status === LicenceStatus.IN_PROGRESS
+    const notStarted = licence.status === LicenceStatus.TIMED_OUT
+    return inProgressHardStop || notStarted
+  }
+
   isClickable = (licence: Licence, cvlField: CvlFields, tabType: ComCreateCaseTab): boolean => {
     if (!config.hardStopEnabled) {
       return !nonViewableStatuses.includes(licence.status)
@@ -41,10 +47,8 @@ export default class ViewAndPrintCaseRoutes {
     if (tabType === ComCreateCaseTab.ATTENTION_NEEDED) {
       return false
     }
-    const inProgressHardStop = licence.kind === LicenceKind.HARD_STOP && licence.status === LicenceStatus.IN_PROGRESS
-    const notStarted = [LicenceStatus.NOT_STARTED, LicenceStatus.TIMED_OUT].includes(licence.status)
 
-    if (cvlField.isInHardStopPeriod && (inProgressHardStop || notStarted)) {
+    if (cvlField.isInHardStopPeriod && this.isEditableInHardStop(licence)) {
       return true
     }
     return !nonViewableStatuses.includes(licence.status)
@@ -59,7 +63,10 @@ export default class ViewAndPrintCaseRoutes {
         licence.versionOf && licence.status === LicenceStatus.SUBMITTED
           ? `?lastApprovedVersion=${licence.versionOf}`
           : ''
-      return `/licence/view/id/${licence.id}/show${query}`
+
+      return cvlFields.isInHardStopPeriod && this.isEditableInHardStop(licence)
+        ? `/licence/hard-stop/id/${licence.id}/check-your-answers${query}`
+        : `/licence/view/id/${licence.id}/show${query}`
     }
     if (licence.status === LicenceStatus.TIMED_OUT) {
       return `/licence/hard-stop/create/nomisId/${prisoner.prisonerNumber}/confirm`
@@ -69,6 +76,14 @@ export default class ViewAndPrintCaseRoutes {
 
   getStatus = (licence: Licence) => {
     return licence.status === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licence.status
+  }
+
+  findLatestLicence = (licences: Licence[]): Licence => {
+    if (licences.find(l => l.status === LicenceStatus.TIMED_OUT)) {
+      return licences.find(l => l.status !== LicenceStatus.TIMED_OUT)
+    }
+
+    return licences.find(l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS)
   }
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -87,9 +102,7 @@ export default class ViewAndPrintCaseRoutes {
     const caseloadViewModel = casesToView.unwrap().map(c => {
       let latestLicence = _.head(c.licences)
       if (!probationView && c.licences.length > 1) {
-        latestLicence = c.licences.find(
-          l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS
-        )
+        latestLicence = this.findLatestLicence(c.licences)
       }
       const releaseDate = selectReleaseDate(c.nomisRecord)
       const tabType = determineComCreateCasesTab(latestLicence, c.nomisRecord, c.cvlFields)

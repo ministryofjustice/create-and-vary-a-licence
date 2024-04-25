@@ -395,7 +395,7 @@ describe('CaseloadViewModel', () => {
         [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence2, licence1] }],
         null
       )[0]
-      expect(licenceViewModel.createLink).toEqual('/licence/create/id/2/licence-changes-not-approved-in-time')
+      expect(licenceViewModel.createLink).toEqual('/licence/create/id/1/licence-changes-not-approved-in-time')
       expect(licenceViewModel.licenceStatus).toEqual('TIMED_OUT')
     })
 

@@ -1,0 +1,11 @@
+{%  macro selectedAppointmentPerson(licence) %}
+    {% switch licence.appointmentPersonType %}
+        {% case 'DUTY_OFFICER' %}
+            {% set appointmentPerson = 'Duty Officer' %}
+        {% case 'RESPONSIBLE_COM' %}
+            {% set appointmentPerson = licence.responsibleComFullName + ", this person’s probation practitioner" %}
+        {% default %}
+            {% set appointmentPerson = licence.appointmentPerson %}
+    {% endswitch %}
+    {{ appointmentPerson }}
+{% endmacro %}

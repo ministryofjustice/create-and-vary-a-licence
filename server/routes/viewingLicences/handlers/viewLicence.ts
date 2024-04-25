@@ -1,16 +1,16 @@
 import type { Request, Response } from 'express'
 import { format } from 'date-fns'
+import { plainToInstance } from 'class-transformer'
+import { ValidationError, validate } from 'class-validator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
 import { groupingBy, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
-import CommunityService from '../../../services/communityService'
+import { FieldValidationError } from '../../../middleware/validationMiddleware'
+import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
 
 export default class ViewAndPrintLicenceRoutes {
-  constructor(
-    private readonly licenceService: LicenceService,
-    private readonly communityService: CommunityService
-  ) {}
+  constructor(private readonly licenceService: LicenceService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -64,7 +64,7 @@ export default class ViewAndPrintLicenceRoutes {
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         warningMessage,
-        isEditableByPrison: isInHardStopPeriod(licence),
+        isEditableByPrison: licence.statusCode !== LicenceStatus.ACTIVE && isInHardStopPeriod(licence),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
       })
@@ -75,7 +75,13 @@ export default class ViewAndPrintLicenceRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
+
+    const errors = await this.validateLicence(licence)
+    if (errors.length > 0) {
+      req.flash('validationErrors', JSON.stringify(errors))
+      return res.redirect('back')
+    }
 
     await this.licenceService.submitLicence(licenceId, user)
 
@@ -99,5 +105,15 @@ export default class ViewAndPrintLicenceRoutes {
         break
     }
     return licenceDate ? format(parseCvlDateTime(licenceDate, { withSeconds: true }), 'd LLLL yyyy') : null
+  }
+
+  private validateLicence = async (licence: Licence): Promise<FieldValidationError[]> => {
+    const licenceToSubmit = plainToInstance(HardStopLicenceToSubmit, licence, { excludeExtraneousValues: true })
+    const errors: ValidationError[] = await validate(licenceToSubmit)
+
+    return errors.flatMap(error => ({
+      field: error.property,
+      message: Object.values(error.constraints)[Object.values(error.constraints).length - 1],
+    }))
   }
 }

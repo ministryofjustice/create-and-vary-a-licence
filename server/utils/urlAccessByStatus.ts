@@ -46,6 +46,7 @@ const allowedPaths = [
       '/licence/view/id/(\\d)*/.*',
       '/licence/approve/id/(\\d)*/probation-practitioner.*',
       '/licence/create/id/(\\d)*/licence-created-by-prison',
+      '/licence/create/id/(\\d)*/licence-changes-not-approved-in-time',
     ],
   },
   {
@@ -101,10 +102,7 @@ const allowedPaths = [
   },
   {
     status: 'TIMED_OUT',
-    allowed: [
-      '/licence/create/id/(\\d)*/licence-changes-not-approved-in-time',
-      '/licence/create/nomisId/.*/prison-will-create-this-licence',
-    ],
+    allowed: ['/licence/create/nomisId/.*/prison-will-create-this-licence'],
   },
 ] as AllowedPathByStatusConfig[]
 

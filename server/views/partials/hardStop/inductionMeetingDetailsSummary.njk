@@ -1,16 +1,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "pages/selectedAppointmentPerson.njk" import selectedAppointmentPerson %}
 
 {% macro hardStopInductionMeetingDetails(licence, isEditable, validationErrors, contactForChangeText, isPrisonUser) %}
     {% set apptDateTimeEntered = licence.appointmentTime or licence.appointmentTimeType | length > 0 %}
     {% set routepath = "/licence/hard-stop/edit/id/" + licence.id %}
-    {% switch licence.appointmentPersonType %}
-        {% case 'DUTY_OFFICER' %}
-            {% set appointmentPerson = 'Duty Officer' %}
-        {% case 'RESPONSIBLE_COM' %}
-            {% set appointmentPerson = licence.responsibleComFullName + ", this person’s probation practitioner" %}
-        {% default %}
-            {% set appointmentPerson = licence.appointmentPerson %}
-    {% endswitch %}
 
     <div class="govuk-grid-row check-answers-header">
         <div class="govuk-grid-column-three-quarters">
@@ -28,14 +21,14 @@
             {
                 classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentPerson'),
                 key: { text: "Name" },
-                value: { text: appointmentPerson },
+                value: { text: selectedAppointmentPerson(licence) },
                 actions: {
                     items: [
                         {
                             href: routepath + "/initial-meeting-name",
                             text: "Change",
                             visuallyHiddenText: "name",
-                            attributes: { "data-qa": "person-change-link" }
+                            attributes: { "id": "appointmentPersonType", "data-qa": "person-change-link" }
                         }
                     ]
                 } if isEditable
@@ -50,7 +43,7 @@
                             href: routepath + "/initial-meeting-place",
                             text: "Change",
                             visuallyHiddenText: "address",
-                            attributes: { "data-qa": "address-change-link" }
+                            attributes: { "id": "appointmentAddress", "data-qa": "address-change-link" }
                         }
                     ]
                 } if isEditable
@@ -65,7 +58,7 @@
                             href: routepath + "/initial-meeting-contact",
                             text: "Change",
                             visuallyHiddenText: "telephone",
-                            attributes: { "data-qa": "telephone-change-link" }
+                            attributes: { "id": "appointmentContact",  "data-qa": "telephone-change-link" }
                         }
                     ]
                 } if isEditable
@@ -80,7 +73,7 @@
                             href: routepath + "/initial-meeting-time",
                             text: "Change",
                             visuallyHiddenText: "date",
-                            attributes: { "data-qa": "date-change-link" }
+                            attributes: { "id": "appointmentTimeType",   "data-qa": "date-change-link" }
                         }
                     ]
                 } if isEditable
