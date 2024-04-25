@@ -7,11 +7,8 @@
 {% set backLinkHref = backLink %}
 {% set contactForChangeText = "To request a change to this person’s appointment, contact " + licence.prisonDescription + " at " + omuEmail + "." %}
 {% set pageId = "hard-stop-licence-page"%}
-{% if licence.statusCode === "ACTIVE" %}
-  {% set isPrintable = true %}
-{% else %}
-  {% set isPrintable = false %}
-{% endif %}
+{% set isPrintable = licence.statusCode === "ACTIVE" %}
+
 {% set printPdfLink = "/licence/view/id/"+ licence.id + "/pdf-print" %}
 
 {% block content %}
