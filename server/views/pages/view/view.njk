@@ -18,7 +18,8 @@
   {% set isPrintable = false %}
 {% endif %}
 
-{% set pageTitle = applicationName + " - " + actionWord + " a licence" %}
+{% set inProgressHardStopLicence = licence.kind === 'HARD_STOP' and licence.statusCode == 'IN_PROGRESS' %}
+{% set pageTitle = applicationName + " - " + "Check licence details" if inProgressHardStopLicence else (actionWord + " a licence") %}
 {% set pageId = "print-view-page" %}
 {% set backLinkHref = "/licence/view/cases" %}
 
@@ -34,8 +35,10 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}">  
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                {% if licence.typeCode === 'AP' %}
-                <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ licence.forename }} {{ licence.surname }}</h1>
+                {% if inProgressHardStopLicence %}
+                  <h1 class="govuk-heading-l">Check licence details</h1>
+                {% elseif licence.typeCode === 'AP' %}
+                  <h1 class="govuk-heading-l">{{ actionWord }} licence for {{ licence.forename }} {{ licence.surname }}</h1>
                 {% elseif licence.typeCode === 'AP_PSS' %}
                     <h1 class="govuk-heading-l">{{ actionWord }} licence and post sentence supervision order for {{ licence.forename }} {{ licence.surname }}</h1>
                 {% elseif licence.typeCode === 'PSS' %}
