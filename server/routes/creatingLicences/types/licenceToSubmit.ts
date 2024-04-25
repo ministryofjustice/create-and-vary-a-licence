@@ -1,13 +1,18 @@
 import { Expose } from 'class-transformer'
-import { IsNotEmpty } from 'class-validator'
+import { IsNotEmpty, ValidateIf } from 'class-validator'
 import AdditionalConditions from '../../manageConditions/types/additionalConditions'
 import ConditionsHaveBeenExpanded from '../../../validators/conditionsHaveBeenExpanded'
 import AppointmentTimeType from '../../../enumeration/appointmentTimeType'
 
 class LicenceToSubmit {
   @Expose()
+  @ValidateIf(o => o.appointmentPersonType === 'SPECIFIC_PERSON')
   @IsNotEmpty({ message: "Select 'Change' to go back and add who to meet" })
   appointmentPerson: string
+
+  @Expose()
+  @IsNotEmpty({ message: "Select 'Change' to go back and add who to meet" })
+  appointmentPersonType: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
 
   @Expose()
   @IsNotEmpty({ message: "Select 'Change' to go back and add appointment address" })
