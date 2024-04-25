@@ -90,17 +90,22 @@ export default class CaseloadService {
       .then(caseload => this.mapOffendersToLicences(caseload, user))
       .then(caseload => this.buildCreateCaseload(caseload))
       .then(caseload => {
-        return caseload.filter(
-          c =>
-            [
-              LicenceStatus.NOT_STARTED,
-              LicenceStatus.TIMED_OUT,
-              LicenceStatus.NOT_IN_PILOT,
-              LicenceStatus.OOS_RECALL,
-              LicenceStatus.OOS_BOTUS,
-            ].some(status => c.licences.find(l => l.status === status)),
-          'Has no licence in NOT_STARTED, TIMED_OUT, NOT_IN_PILOT, OOS_RECALL, OOS_BOTUS'
-        )
+        return caseload
+          .filter(
+            c => !c.licences.find(l => l.status === LicenceStatus.TIMED_OUT && l.id),
+            'Is a timed out IN_PROGRESS licence, will have been caught by earlier getLicencesForOmu'
+          )
+          .filter(
+            c =>
+              [
+                LicenceStatus.NOT_STARTED,
+                LicenceStatus.TIMED_OUT,
+                LicenceStatus.NOT_IN_PILOT,
+                LicenceStatus.OOS_RECALL,
+                LicenceStatus.OOS_BOTUS,
+              ].some(status => c.licences.find(l => l.status === status)),
+            'Has no licence in NOT_STARTED, TIMED_OUT, NOT_IN_PILOT, OOS_RECALL, OOS_BOTUS'
+          )
       })
 
     const [withLicence, pending] = await Promise.all([casesWithLicences, casesPendingLicence])
