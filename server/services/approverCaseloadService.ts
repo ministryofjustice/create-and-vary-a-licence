@@ -78,6 +78,7 @@ export default class ApproverCaseloadService {
               kind: <LicenceKind>l.kind,
               submittedByFullName: l.submittedByFullName,
               isDueForEarlyRelease: l.isDueForEarlyRelease,
+              isDueToBeReleasedInTheNextTwoWorkingDays: l.isDueToBeReleasedInTheNextTwoWorkingDays,
             }
           }),
       }

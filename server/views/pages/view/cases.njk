@@ -18,9 +18,9 @@
 {% set backLinkHref = "/" %}
 {% set noJsBackLink = true %}
 {% set peopleInPrisontabs = [] %}
-{% set releaseInTwoWorkingDaysCount = (cases | filterByTabType(ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)).length %}
-{% set futureReleasesCount = (cases | filterByTabType(ComCreateCaseTab.FUTURE_RELEASES)).length %}
-{% set attentionNeededCount = (cases | filterByTabType(ComCreateCaseTab.ATTENTION_NEEDED)).length %}
+{% set releaseInTwoWorkingDaysCount = (cases | filterByTabType(CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)).length %}
+{% set futureReleasesCount = (cases | filterByTabType(CaViewCasesTab.FUTURE_RELEASES)).length %}
+{% set attentionNeededCount = (cases | filterByTabType(CaViewCasesTab.ATTENTION_NEEDED)).length %}
 {% set releaseInNextTwoWorkingDaysLabel = "Releases in next 2 working days " + ("("  + releaseInTwoWorkingDaysCount + releaseInTwoWorkingDaysCount | pluralise(" result") + ")" if search) %}
 {% set futureReleasesLabel = "Future releases " + ("(" + futureReleasesCount + futureReleasesCount | pluralise(" result") + ")" if search) %}
 {% set attentionNeededLabel = "Attention needed " + ("(" + attentionNeededCount + attentionNeededCount | pluralise(" result") + ")" if search) %}
@@ -160,14 +160,14 @@
                         label: releaseInNextTwoWorkingDaysLabel,
                         id: "releases-in-two-working-days",
                         panel: {
-                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig, count: releaseInTwoWorkingDaysCount })
+                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig, count: releaseInTwoWorkingDaysCount })
                         }
                     }, 
                     {
                         label: futureReleasesLabel,
                         id: "future-releases",
                         panel: {
-                            html: futureReleasesTab({ cases: cases, tabType: ComCreateCaseTab.FUTURE_RELEASES, config: statusConfig, count: futureReleasesCount })
+                            html: futureReleasesTab({ cases: cases, tabType: CaViewCasesTab.FUTURE_RELEASES, config: statusConfig, count: futureReleasesCount })
                         }
                     }
                 ), peopleInPrisontabs) 
@@ -179,7 +179,7 @@
                         label: attentionNeededTabHeadingWithCount({label: attentionNeededLabel, count: attentionNeededCount, isSearch: not not search}),
                         id: "attention-needed",
                         panel: {
-                            html: attentionNeededTab({ cases: cases, tabType: ComCreateCaseTab.ATTENTION_NEEDED, config: statusConfig, count: attentionNeededCount })
+                            html: attentionNeededTab({ cases: cases, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: attentionNeededCount })
                         }
                     }
                     ), peopleInPrisontabs) 
