@@ -9,7 +9,7 @@ describe('View print licence button', () => {
   it('should show print licence pdf button', () => {
     const $ = render({
       licence: {
-        statusCode: LicenceStatus.ACTIVE,
+        statusCode: LicenceStatus.APPROVED,
         prisonDescription: 'prisonDescription',
         typeCode: LicenceType.AP_PSS,
       },
