@@ -66,6 +66,7 @@ describe('Route Handlers - Offender licences', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
       } as LicenceSummary
 
       licenceService.getPrisonerDetail.mockResolvedValue({ prisoner: expectedPrisonerDetail, cvl: {} as CvlFields })

@@ -454,6 +454,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -712,6 +713,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -782,6 +784,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: true,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -855,6 +858,7 @@ describe('Caseload Service', () => {
           isReviewNeeded: false,
           isDueForEarlyRelease: false,
           isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         {
           kind: 'VARIATION',
@@ -866,6 +870,7 @@ describe('Caseload Service', () => {
           isReviewNeeded: false,
           isDueForEarlyRelease: false,
           isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
       ])
       communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -972,6 +977,7 @@ describe('Caseload Service', () => {
           isReviewNeeded: true,
           isDueForEarlyRelease: false,
           isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
       ])
       communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -1035,6 +1041,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
       {
         kind: 'CRD',
@@ -1046,7 +1053,9 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
+
       {
         kind: 'CRD',
         nomisId: 'AB1234G',
@@ -1057,6 +1066,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
       {
         kind: 'CRD',
@@ -1069,6 +1079,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
@@ -1105,6 +1116,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     licenceService.searchPrisonersByReleaseDate.mockResolvedValue([
@@ -1635,6 +1647,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
       {
         kind: 'CRD',
@@ -1646,6 +1659,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
       {
         kind: 'HARD_STOP',
@@ -1657,6 +1671,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     licenceService.searchPrisonersByReleaseDate.mockResolvedValueOnce([
@@ -1740,6 +1755,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
 
@@ -1768,6 +1784,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValue([
