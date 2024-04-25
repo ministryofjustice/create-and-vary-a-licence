@@ -40,11 +40,24 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
+    expect(licenceService.updateStatus).not.toHaveBeenCalled()
+  })
+
+  it('should consider licences with all relevant statuses', async () => {
+    const event = {
+      additionalInformation: {
+        reason: 'RELEASED',
+        nomsNumber: 'ABC1234',
+      },
+    } as DomainEventMessage
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue(undefined)
+
+    await handler.handle(event)
+
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC1234'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
+      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED', 'TIMED_OUT']
     )
-    expect(licenceService.updateStatus).not.toHaveBeenCalled()
   })
 
   it('should activated an APPROVED licence and deactivate any others', async () => {
@@ -67,6 +80,10 @@ describe('Release event handler', () => {
         licenceId: 4,
         licenceStatus: 'REJECTED',
       },
+      {
+        licenceId: 5,
+        licenceStatus: 'TIMED_OUT',
+      },
     ]
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
@@ -85,10 +102,6 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
-      ['ABC1234'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
-    )
     expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.ACTIVE)
     expect(licenceService.deactivateLicences).toHaveBeenCalledWith(unapprovedLicences)
   })
@@ -116,10 +129,6 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
-      ['ABC1234'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
-    )
     expect(licenceService.deactivateLicences).toHaveBeenCalledWith([
       {
         licenceId: 1,
@@ -151,10 +160,6 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
-      ['ABC1234'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
-    )
     expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.INACTIVE)
   })
 
@@ -184,10 +189,6 @@ describe('Release event handler', () => {
 
     await handler.handle(event)
 
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
-      ['ABC1234'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
-    )
     expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.ACTIVE)
   })
 
