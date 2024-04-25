@@ -1,13 +1,23 @@
 import { Request, Response } from 'express'
 import LicenceType from '../../../enumeration/licenceType'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ConfirmationRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
-    const backLink = req.session.returnToCase || '/licence/create/caseload'
 
     let titleText
     let confirmationMessage
+    let backLink
+
+    switch (licence.kind) {
+      case LicenceKind.HARD_STOP:
+        backLink = '/licence/view/cases'
+        break
+      default:
+        backLink = req.session.returnToCase || '/licence/create/caseload'
+        break
+    }
 
     switch (licence.typeCode) {
       case LicenceType.AP_PSS:
