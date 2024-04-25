@@ -12,6 +12,7 @@
 {% else %}
   {% set isPrintable = false %}
 {% endif %}
+{% set printPdfLink = "/licence/view/id/"+ licence.id + "/pdf-print" %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -34,15 +35,16 @@
             <p class="govuk-body">
                 {% if isPrintable %}
                     {{ govukButton({
-                        text: "View and print licence PDF",
-                        classes: "govuk-button--primary govuk-!-margin-right-1",
-                        href: '/licence/view/id/' + licence.id + '/pdf-print',
-                        attributes: { 'data-qa': 'print-licence', 'target': "_blank" }
+                        text: 'View and print licence PDF',
+                        id: 'print-licence-pdf',
+                        classes: 'govuk-button--primary govuk-!-margin-right-1',
+                        href: printPdfLink,
+                        attributes: { 'data-qa': 'print-licence', 'target': '_blank' }
                     }) }}
                 {% endif %}
                 {{ govukButton({
-                    text: "Return to case list",
-                    classes: "govuk-button--secondary" if isPrintable,
+                    text: 'Return to case list',
+                    classes: 'govuk-button--secondary' if isPrintable,
                     href: backLink,
                     attributes: { 'data-qa': 'return-to-caselist' }
                 }) }}
