@@ -307,14 +307,79 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         {
           licences: [
             {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.ACTIVE,
+            },
+            {
               id: 2,
               type: LicenceType.AP,
               status: LicenceStatus.VARIATION_IN_PROGRESS,
             },
+          ],
+          cvlFields: {
+            licenceType: 'AP',
+            hardStopDate: '03/01/2023',
+            hardStopWarningDate: '01/01/2023',
+            isInHardStopPeriod: true,
+            isDueForEarlyRelease: false,
+          },
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: '2022-05-01',
+          } as CvlPrisoner,
+          deliusRecord: {
+            otherIds: {
+              crn: 'X12345',
+            },
+          } as DeliusRecord,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+      ])
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
+        caseload: [
+          {
+            licenceId: 2,
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+        ],
+        multipleTeams: false,
+        search: undefined,
+        statusConfig,
+        teamName: null,
+        teamView: false,
+        myCount: 1,
+        teamCount: 2,
+      })
+      expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+    })
+
+    it('should ignore any timed out licences', async () => {
+      caseloadService.getStaffVaryCaseload.mockResolvedValue([
+        {
+          licences: [
             {
               id: 1,
               type: LicenceType.AP,
-              status: LicenceStatus.ACTIVE,
+              status: LicenceStatus.TIMED_OUT,
+            },
+            {
+              id: 2,
+              type: LicenceType.AP,
+              status: LicenceStatus.VARIATION_IN_PROGRESS,
             },
           ],
           cvlFields: {
