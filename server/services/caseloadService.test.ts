@@ -1785,6 +1785,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: true,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
       },
       {
         kind: 'CRD',
@@ -1796,6 +1797,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: true,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
@@ -1851,6 +1853,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: true,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
       },
       {
         kind: 'CRD',
@@ -1862,6 +1865,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: true,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
       },
     ])
 
