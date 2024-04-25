@@ -603,10 +603,15 @@ describe('Licence API client tests', () => {
   })
 
   it('should call to set a licence as reviewed', async () => {
-    await licenceApiClient.reviewWithoutVariation(1)
-    expect(post).toHaveBeenCalledWith({
-      path: `/licence/id/1/review-with-no-variation-required`,
-    })
+    await licenceApiClient.reviewWithoutVariation(1, {
+      username: 'bob',
+    } as User)
+    expect(post).toHaveBeenCalledWith(
+      {
+        path: `/licence/id/1/review-with-no-variation-required`,
+      },
+      { username: 'bob' }
+    )
   })
 
   it('should get prisoner details', async () => {

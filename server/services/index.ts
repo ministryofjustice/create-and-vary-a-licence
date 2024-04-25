@@ -12,6 +12,7 @@ import { dataAccess } from '../data'
 import SearchService from './searchService'
 import FeComponentsService from './feComponentsService'
 import ApproverCaseloadService from './approverCaseloadService'
+import TimelineService from './timelineService'
 
 const {
   manageUsersApiClient,
@@ -36,6 +37,7 @@ const approvedCaseloadService = new ApproverCaseloadService(communityService, li
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
 const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
 const searchService = new SearchService(licenceApiClient)
+const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
 
 export const services = {
@@ -53,6 +55,7 @@ export const services = {
   searchService,
   licenceApiClient,
   feComponentsService,
+  timelineService,
 }
 
 export type Services = typeof services

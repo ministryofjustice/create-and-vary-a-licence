@@ -54,8 +54,6 @@ import { User } from '../@types/CvlUserDetails'
 import compareLicenceConditions, { VariedConditions } from '../utils/licenceComparator'
 import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
-import TimelineEvent from '../@types/TimelineEvent'
-import TimelineEventType from '../enumeration/TimelineEventType'
 import ConditionService from './conditionService'
 import logger from '../../logger'
 
@@ -471,23 +469,6 @@ export default class LicenceService {
     }
   }
 
-  async getTimelineEvents(licence: Licence, user: User): Promise<TimelineEvent[]> {
-    const licences: Licence[] = []
-    let thisLicence: Licence = licence
-    licences.push(thisLicence)
-
-    // Get the trail of variations back to the original licence
-    while (thisLicence.kind === 'VARIATION') {
-      // eslint-disable-next-line no-await-in-loop
-      thisLicence = await this.licenceApiClient.getLicenceById(thisLicence?.variationOf, user)
-      if (thisLicence) {
-        licences.push(thisLicence)
-      }
-    }
-
-    return this.convertLicencesToTimelineEvents(licences)
-  }
-
   async getOmuEmail(prisonId: string, user: User): Promise<OmuContact | null> {
     return this.licenceApiClient.getOmuEmail(prisonId, user)
   }
@@ -536,50 +517,12 @@ export default class LicenceService {
     return LicenceType.AP_PSS
   }
 
-  private convertLicencesToTimelineEvents(licences: Licence[]): TimelineEvent[] {
-    return licences.map(licence => {
-      const varyOf = licence.kind === 'VARIATION' ? licence.variationOf : undefined
-      const { title, eventType } = LicenceService.getTimelineEventType(varyOf, licence.statusCode)
-      return new TimelineEvent(
-        eventType,
-        title,
-        licence.statusCode,
-        licence.createdByFullName,
-        licence.id,
-        licence.dateLastUpdated
-      )
-    })
-  }
-
-  private static getTimelineEventType(varyOf: number, status: string): { eventType: TimelineEventType; title: string } {
-    switch (status) {
-      case LicenceStatus.VARIATION_IN_PROGRESS:
-        return { eventType: TimelineEventType.VARIATION_IN_PROGRESS, title: 'Variation in progress' }
-
-      case LicenceStatus.VARIATION_SUBMITTED:
-        return { eventType: TimelineEventType.SUBMITTED, title: 'Variation submitted' }
-
-      case LicenceStatus.VARIATION_REJECTED:
-        return { eventType: TimelineEventType.REJECTED, title: 'Variation rejected' }
-
-      case LicenceStatus.VARIATION_APPROVED:
-        return { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }
-
-      case LicenceStatus.ACTIVE:
-      case LicenceStatus.INACTIVE:
-      default:
-        return varyOf
-          ? { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }
-          : { eventType: TimelineEventType.CREATION, title: 'Licence created' }
-    }
-  }
-
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     return this.licenceApiClient.getParentLicenceOrSelf(licenceId, user)
   }
 
-  async reviewWithoutVariation(licenceId: number): Promise<void> {
-    return this.licenceApiClient.reviewWithoutVariation(licenceId)
+  async reviewWithoutVariation(licenceId: number, user: User): Promise<void> {
+    return this.licenceApiClient.reviewWithoutVariation(licenceId, user)
   }
 
   async getPrisonerDetail(nomsId: string, user: User): Promise<CaseloadItem> {
