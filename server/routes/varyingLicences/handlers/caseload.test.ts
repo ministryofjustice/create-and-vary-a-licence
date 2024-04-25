@@ -25,6 +25,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -33,6 +34,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'Bob',
@@ -55,6 +57,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 2,
             type: LicenceType.AP,
             status: LicenceStatus.REVIEW_NEEDED,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -63,6 +66,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'John',
@@ -88,6 +92,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -96,6 +101,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'Bob',
@@ -118,6 +124,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 2,
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -126,6 +133,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'Dr',
@@ -148,6 +156,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 3,
             type: LicenceType.AP,
             status: LicenceStatus.REVIEW_NEEDED,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -156,6 +165,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'John',
@@ -310,11 +320,13 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
               id: 1,
               type: LicenceType.AP,
               status: LicenceStatus.ACTIVE,
+              isDueToBeReleasedInTheNextTwoWorkingDays: false,
             },
             {
               id: 2,
               type: LicenceType.AP,
               status: LicenceStatus.VARIATION_IN_PROGRESS,
+              isDueToBeReleasedInTheNextTwoWorkingDays: false,
             },
           ],
           cvlFields: {
@@ -323,6 +335,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             hardStopWarningDate: '01/01/2023',
             isInHardStopPeriod: true,
             isDueForEarlyRelease: false,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
           nomisRecord: {
             firstName: 'Bob',
@@ -374,12 +387,15 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             {
               id: 1,
               type: LicenceType.AP,
+
               status: LicenceStatus.TIMED_OUT,
+              isDueToBeReleasedInTheNextTwoWorkingDays: false,
             },
             {
               id: 2,
               type: LicenceType.AP,
               status: LicenceStatus.VARIATION_IN_PROGRESS,
+              isDueToBeReleasedInTheNextTwoWorkingDays: false,
             },
           ],
           cvlFields: {
@@ -388,6 +404,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             hardStopWarningDate: '01/01/2023',
             isInHardStopPeriod: true,
             isDueForEarlyRelease: false,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
           nomisRecord: {
             firstName: 'Bob',

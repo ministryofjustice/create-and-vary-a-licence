@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { format, getUnixTime, isAfter, isValid, subDays } from 'date-fns'
+import { format, getUnixTime } from 'date-fns'
 import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase, parseCvlDateTime, selectReleaseDate } from '../../../utils/utils'
 import ApproverCaseloadService from '../../../services/approverCaseloadService'
@@ -26,9 +26,9 @@ export default class ApprovalCaseRoutes {
 
     const caseloadViewModel = cases
       .map(c => {
-        const releaseDate = selectReleaseDate(c.nomisRecord)
-        const urgentApproval = this.isUrgentApproval(releaseDate)
         const licence = _.head(c.licences)
+        const releaseDate = selectReleaseDate(c.nomisRecord)
+        const urgentApproval = licence.isDueToBeReleasedInTheNextTwoWorkingDays
         let approvedDate
         if (licence.approvedDate) {
           approvedDate = format(parseCvlDateTime(licence.approvedDate, { withSeconds: true }), 'dd MMMM yyyy')
@@ -70,10 +70,5 @@ export default class ApprovalCaseRoutes {
       hasMultipleCaseloadsInNomis,
       approvalNeededView,
     })
-  }
-
-  isUrgentApproval = (releaseDate: Date): boolean => {
-    const isValidDate = isValid(releaseDate)
-    return isValidDate && isAfter(new Date(), subDays(releaseDate, 2))
   }
 }

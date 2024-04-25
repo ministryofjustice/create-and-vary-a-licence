@@ -93,13 +93,14 @@ function createManagedCase(offenderManagers: OffenderManager[], licenceStatus: L
       hardStopWarningDate: '01/01/2023',
       isInHardStopPeriod: true,
       isDueForEarlyRelease: true,
+      isDueToBeReleasedInTheNextTwoWorkingDays: true,
     },
     nomisRecord: {
       prisonId: 'someId',
       conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
       status: 'someStatus',
     } as CvlPrisoner,
-    licences: [{ status: licenceStatus, type: LicenceType.AP }],
+    licences: [{ status: licenceStatus, type: LicenceType.AP, isDueToBeReleasedInTheNextTwoWorkingDays: true }],
     probationPractitioner: { name: 'jim' },
   }
 }

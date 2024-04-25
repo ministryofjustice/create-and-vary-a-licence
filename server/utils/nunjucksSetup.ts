@@ -9,7 +9,7 @@ import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
 import type { ApplicationInfo } from '../applicationInfo'
 import {
-  ComCreateCaseTab,
+  CaViewCasesTab,
   formatAddress,
   jsonDtTo12HourTime,
   jsonDtToDate,
@@ -126,7 +126,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     return appointmentTimeType[type]
   })
 
-  njkEnv.addFilter('filterByTabType', (licences: Record<string, unknown>[], type: ComCreateCaseTab) =>
+  njkEnv.addFilter('filterByTabType', (licences: Record<string, unknown>[], type: CaViewCasesTab) =>
     licences.filter(c => c.tabType === type)
   )
 

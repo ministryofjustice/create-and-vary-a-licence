@@ -20,12 +20,12 @@ import {
   groupingBy,
   isReleaseDateOnOrBeforeCutOffDate,
   isAttentionNeeded,
-  determineComCreateCasesTab,
+  determineCaViewCasesTab,
   isInHardStopPeriod,
   parseIsoDate,
   parseCvlDate,
   parseCvlDateTime,
-  ComCreateCaseTab,
+  CaViewCasesTab,
   toIsoDate,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
@@ -609,7 +609,6 @@ describe('Check if licence needs attention', () => {
 
 describe('Get Case Tab Type', () => {
   const now = new Date()
-  const future = addDays(now, 1)
   const past = subDays(now, 1)
 
   const licence = {
@@ -626,56 +625,62 @@ describe('Get Case Tab Type', () => {
 
   it('should not choose attention needed if no licence', () => {
     expect(
-      determineComCreateCasesTab(undefined, nomisRecord, { hardStopDate: toCvlDate(future) } as CvlFields)
-    ).toEqual(ComCreateCaseTab.FUTURE_RELEASES)
+      determineCaViewCasesTab(undefined, nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields)
+    ).toEqual(CaViewCasesTab.FUTURE_RELEASES)
   })
 
   it('should choose attention needed when approved licence start date is before now', () => {
     expect(
-      determineComCreateCasesTab(
+      determineCaViewCasesTab(
         { ...licence, status: LicenceStatus.APPROVED, licenceStartDate: toCvlDate(past) },
         { ...nomisRecord },
-        {
-          hardStopDate: toCvlDate(future),
-        } as CvlFields
+        {} as CvlFields
       )
-    ).toEqual(ComCreateCaseTab.ATTENTION_NEEDED)
+    ).toEqual(CaViewCasesTab.ATTENTION_NEEDED)
   })
 
   it('should choose attention needed when missing release dates', () => {
     expect(
-      determineComCreateCasesTab(
+      determineCaViewCasesTab(
         licence,
         { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null },
-        { hardStopDate: toCvlDate(future) } as CvlFields
+        {} as CvlFields
       )
-    ).toEqual(ComCreateCaseTab.ATTENTION_NEEDED)
+    ).toEqual(CaViewCasesTab.ATTENTION_NEEDED)
   })
 
-  it('should choose future releases tab when licence hardstop date is in the future', () => {
-    expect(determineComCreateCasesTab({ ...licence, hardStopDate: future }, nomisRecord, {} as CvlFields)).toEqual(
-      ComCreateCaseTab.FUTURE_RELEASES
-    )
-  })
-
-  it('should choose future releases tab when missing licence and hardstop date is in the future', () => {
+  it('should choose future releases tab when licence says no release in next 2 days', () => {
     expect(
-      determineComCreateCasesTab(undefined, nomisRecord, { hardStopDate: toCvlDate(future) } as CvlFields)
-    ).toEqual(ComCreateCaseTab.FUTURE_RELEASES)
+      determineCaViewCasesTab(
+        { ...licence, isDueToBeReleasedInTheNextTwoWorkingDays: false },
+        nomisRecord,
+        {} as CvlFields
+      )
+    ).toEqual(CaViewCasesTab.FUTURE_RELEASES)
   })
 
-  it('should choose releases in next two days when licence hardstop date is in the past', () => {
-    expect(determineComCreateCasesTab({ ...licence, hardStopDate: past }, nomisRecord, {} as CvlFields)).toEqual(
-      ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS
-    )
-  })
-
-  it('should choose releases in next two days when missing licence and hardstop date is in the past', () => {
+  it('should choose future releases tab when missing licence and cvl fields say no release in next 2 days', () => {
     expect(
-      determineComCreateCasesTab(undefined, nomisRecord, {
-        hardStopDate: toCvlDate(past),
+      determineCaViewCasesTab(undefined, nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields)
+    ).toEqual(CaViewCasesTab.FUTURE_RELEASES)
+  })
+
+  it('should choose releases in next two days when licence says release in next 2 days', () => {
+    expect(
+      determineCaViewCasesTab(
+        { ...licence, isDueToBeReleasedInTheNextTwoWorkingDays: true },
+        nomisRecord,
+        {} as CvlFields
+      )
+    ).toEqual(CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)
+  })
+
+  it('should choose releases in next two days when missing licence and cvl says release in next 2 days', () => {
+    expect(
+      determineCaViewCasesTab(undefined, nomisRecord, {
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
       } as CvlFields)
-    ).toEqual(ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)
+    ).toEqual(CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)
   })
 })
 

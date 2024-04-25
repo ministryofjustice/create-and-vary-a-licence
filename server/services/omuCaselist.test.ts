@@ -93,13 +93,14 @@ function createCaselist(status: LicenceStatus, confirmedReleaseDate: string, con
     new Container([
       {
         deliusRecord: { offenderId: 1 },
-        licences: [{ type: LicenceType.AP, status }],
+        licences: [{ type: LicenceType.AP, status, isDueToBeReleasedInTheNextTwoWorkingDays: false }],
         cvlFields: {
           licenceType: 'AP',
           hardStopDate: '03/01/2023',
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: true,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           prisonerNumber: 'A1234AA',

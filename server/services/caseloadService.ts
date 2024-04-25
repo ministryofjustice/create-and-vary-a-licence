@@ -202,6 +202,7 @@ export default class CaseloadService {
               versionOf: licence.versionOf,
               hardStopDate: parseCvlDate(licence.hardStopDate),
               hardStopWarningDate: parseCvlDate(licence.hardStopWarningDate),
+              isDueToBeReleasedInTheNextTwoWorkingDays: licence.isDueToBeReleasedInTheNextTwoWorkingDays,
             }
           }),
         }
@@ -228,15 +229,32 @@ export default class CaseloadService {
       if (!offender.nomisRecord.conditionalReleaseDate) {
         return {
           ...offender,
-          licences: [{ status: licenceStatus, type: licenceType, hardStopDate: null, hardStopWarningDate: null }],
+          licences: [
+            {
+              status: licenceStatus,
+              type: licenceType,
+              hardStopDate: null,
+              hardStopWarningDate: null,
+              isDueToBeReleasedInTheNextTwoWorkingDays: null,
+            },
+          ],
         }
       }
       const hardStopDate = parseCvlDate(offender.cvlFields?.hardStopDate)
       const hardStopWarningDate = parseCvlDate(offender.cvlFields?.hardStopWarningDate)
+      const isDueToBeReleasedInTheNextTwoWorkingDays = offender.cvlFields?.isDueToBeReleasedInTheNextTwoWorkingDays
 
       return {
         ...offender,
-        licences: [{ status: licenceStatus, type: licenceType, hardStopDate, hardStopWarningDate }],
+        licences: [
+          {
+            status: licenceStatus,
+            type: licenceType,
+            hardStopDate,
+            hardStopWarningDate,
+            isDueToBeReleasedInTheNextTwoWorkingDays,
+          },
+        ],
       }
     })
   }
@@ -374,6 +392,7 @@ export default class CaseloadService {
               licenceStartDate: l.licenceStartDate,
               hardStopDate: parseCvlDate(l.hardStopDate),
               hardStopWarningDate: parseCvlDate(l.hardStopWarningDate),
+              isDueToBeReleasedInTheNextTwoWorkingDays: l.isDueToBeReleasedInTheNextTwoWorkingDays,
             }
           }),
       }
