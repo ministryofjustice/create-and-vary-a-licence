@@ -37,6 +37,7 @@ describe('Route Handlers - Variation approval list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.VARIATION_SUBMITTED,
             dateCreated: '01/05/2022 10:15',
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
           },
         ],
         cvlFields: {
@@ -45,6 +46,7 @@ describe('Route Handlers - Variation approval list', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: true,
+          isDueToBeReleasedInTheNextTwoWorkingDays: true,
         },
         nomisRecord: {
           firstName: 'Bob',

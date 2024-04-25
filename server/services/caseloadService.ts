@@ -90,17 +90,22 @@ export default class CaseloadService {
       .then(caseload => this.mapOffendersToLicences(caseload, user))
       .then(caseload => this.buildCreateCaseload(caseload))
       .then(caseload => {
-        return caseload.filter(
-          c =>
-            [
-              LicenceStatus.NOT_STARTED,
-              LicenceStatus.TIMED_OUT,
-              LicenceStatus.NOT_IN_PILOT,
-              LicenceStatus.OOS_RECALL,
-              LicenceStatus.OOS_BOTUS,
-            ].some(status => c.licences.find(l => l.status === status)),
-          'Has no licence in NOT_STARTED, TIMED_OUT, NOT_IN_PILOT, OOS_RECALL, OOS_BOTUS'
-        )
+        return caseload
+          .filter(
+            c => !c.licences.find(l => l.status === LicenceStatus.TIMED_OUT && l.id),
+            'Is a timed out IN_PROGRESS licence, will have been caught by earlier getLicencesForOmu'
+          )
+          .filter(
+            c =>
+              [
+                LicenceStatus.NOT_STARTED,
+                LicenceStatus.TIMED_OUT,
+                LicenceStatus.NOT_IN_PILOT,
+                LicenceStatus.OOS_RECALL,
+                LicenceStatus.OOS_BOTUS,
+              ].some(status => c.licences.find(l => l.status === status)),
+            'Has no licence in NOT_STARTED, TIMED_OUT, NOT_IN_PILOT, OOS_RECALL, OOS_BOTUS'
+          )
       })
 
     const [withLicence, pending] = await Promise.all([casesWithLicences, casesPendingLicence])
@@ -197,6 +202,7 @@ export default class CaseloadService {
               versionOf: licence.versionOf,
               hardStopDate: parseCvlDate(licence.hardStopDate),
               hardStopWarningDate: parseCvlDate(licence.hardStopWarningDate),
+              isDueToBeReleasedInTheNextTwoWorkingDays: licence.isDueToBeReleasedInTheNextTwoWorkingDays,
             }
           }),
         }
@@ -223,15 +229,32 @@ export default class CaseloadService {
       if (!offender.nomisRecord.conditionalReleaseDate) {
         return {
           ...offender,
-          licences: [{ status: licenceStatus, type: licenceType, hardStopDate: null, hardStopWarningDate: null }],
+          licences: [
+            {
+              status: licenceStatus,
+              type: licenceType,
+              hardStopDate: null,
+              hardStopWarningDate: null,
+              isDueToBeReleasedInTheNextTwoWorkingDays: null,
+            },
+          ],
         }
       }
       const hardStopDate = parseCvlDate(offender.cvlFields?.hardStopDate)
       const hardStopWarningDate = parseCvlDate(offender.cvlFields?.hardStopWarningDate)
+      const isDueToBeReleasedInTheNextTwoWorkingDays = offender.cvlFields?.isDueToBeReleasedInTheNextTwoWorkingDays
 
       return {
         ...offender,
-        licences: [{ status: licenceStatus, type: licenceType, hardStopDate, hardStopWarningDate }],
+        licences: [
+          {
+            status: licenceStatus,
+            type: licenceType,
+            hardStopDate,
+            hardStopWarningDate,
+            isDueToBeReleasedInTheNextTwoWorkingDays,
+          },
+        ],
       }
     })
   }
@@ -369,6 +392,7 @@ export default class CaseloadService {
               licenceStartDate: l.licenceStartDate,
               hardStopDate: parseCvlDate(l.hardStopDate),
               hardStopWarningDate: parseCvlDate(l.hardStopWarningDate),
+              isDueToBeReleasedInTheNextTwoWorkingDays: l.isDueToBeReleasedInTheNextTwoWorkingDays,
             }
           }),
       }

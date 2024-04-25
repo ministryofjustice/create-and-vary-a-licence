@@ -1,6 +1,5 @@
 import moment from 'moment'
 import { isBefore, parse, isEqual, isValid, startOfDay, format } from 'date-fns'
-import assert from 'assert'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -12,7 +11,7 @@ import config from '../config'
 import { Licence as ManagedCaseLicence } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 
-export enum ComCreateCaseTab {
+export enum CaViewCasesTab {
   RELEASES_IN_NEXT_TWO_WORKING_DAYS = 'releasesInNextTwoWorkingDays',
   FUTURE_RELEASES = 'futureReleases',
   ATTENTION_NEEDED = 'attentionNeeded',
@@ -221,20 +220,18 @@ const isAttentionNeeded = (
   return missingDates || startDateInPast
 }
 
-const determineComCreateCasesTab = (
+const determineCaViewCasesTab = (
   licence: ManagedCaseLicence,
   nomisRecord: CvlPrisoner,
   cvlFields: CvlFields
-): ComCreateCaseTab => {
+): CaViewCasesTab => {
   if (licence && isAttentionNeeded(licence, nomisRecord)) {
-    return ComCreateCaseTab.ATTENTION_NEEDED
+    return CaViewCasesTab.ATTENTION_NEEDED
   }
-  const hardStopDate = licence ? licence.hardStopDate : parseCvlDate(cvlFields.hardStopDate)
-  // hard stop should always be populated, blow up if not
-  assert(hardStopDate, `Prisoner '${nomisRecord.prisonerNumber}' is missing hard stop date`)
-  return hardStopDate <= startOfDay(new Date())
-    ? ComCreateCaseTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS
-    : ComCreateCaseTab.FUTURE_RELEASES
+  const { isDueToBeReleasedInTheNextTwoWorkingDays } = licence || cvlFields
+  return isDueToBeReleasedInTheNextTwoWorkingDays
+    ? CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS
+    : CaViewCasesTab.FUTURE_RELEASES
 }
 
 const isReleaseDateOnOrBeforeCutOffDate = (cutOffDate: Date, releaseDate: Date): boolean => {
@@ -287,6 +284,6 @@ export {
   isReleaseDateOnOrBeforeCutOffDate,
   isInHardStopPeriod,
   isAttentionNeeded,
-  determineComCreateCasesTab,
+  determineCaViewCasesTab,
   toIsoDate,
 }

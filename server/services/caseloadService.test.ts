@@ -20,6 +20,7 @@ describe('Caseload Service', () => {
   const elevenDaysFromNow = format(addDays(new Date(), 11), 'yyyy-MM-dd')
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
   const nineDaysFromNow = format(addDays(new Date(), 9), 'yyyy-MM-dd')
+  const twoDaysFromNow = format(addDays(new Date(), 2), 'yyyy-MM-dd')
   const yesterday = format(addDays(new Date(), -1), 'yyyy-MM-dd')
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
@@ -454,6 +455,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -712,6 +714,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -782,6 +785,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: true,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -855,6 +859,7 @@ describe('Caseload Service', () => {
           isReviewNeeded: false,
           isDueForEarlyRelease: false,
           isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         {
           kind: 'VARIATION',
@@ -866,6 +871,7 @@ describe('Caseload Service', () => {
           isReviewNeeded: false,
           isDueForEarlyRelease: false,
           isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
       ])
       communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -972,6 +978,7 @@ describe('Caseload Service', () => {
           isReviewNeeded: true,
           isDueForEarlyRelease: false,
           isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
       ])
       communityService.getStaffDetailsByUsernameList.mockResolvedValue([
@@ -1035,6 +1042,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
       {
         kind: 'CRD',
@@ -1046,7 +1054,9 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
+
       {
         kind: 'CRD',
         nomisId: 'AB1234G',
@@ -1057,6 +1067,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
       {
         kind: 'CRD',
@@ -1069,6 +1080,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
@@ -1105,6 +1117,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     licenceService.searchPrisonersByReleaseDate.mockResolvedValue([
@@ -1635,6 +1648,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
       {
         kind: 'CRD',
@@ -1646,6 +1660,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
       {
         kind: 'HARD_STOP',
@@ -1657,6 +1672,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     licenceService.searchPrisonersByReleaseDate.mockResolvedValueOnce([
@@ -1740,6 +1756,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
 
@@ -1756,6 +1773,122 @@ describe('Caseload Service', () => {
     ])
   })
 
+  it('Should exclude TIMED_OUT licences with ids, to prevent duplication', async () => {
+    licenceService.getLicencesForOmu.mockResolvedValue([
+      {
+        kind: 'CRD',
+        nomisId: 'AB1234D',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.APPROVED,
+        comUsername: 'joebloggs',
+        isReviewNeeded: false,
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: true,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
+      },
+      {
+        kind: 'CRD',
+        nomisId: 'AB1234D',
+        licenceId: 2,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.TIMED_OUT,
+        comUsername: 'joebloggs',
+        isReviewNeeded: false,
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: true,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
+      },
+    ])
+    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
+      {
+        otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+      {
+        username: 'joebloggs',
+        staffCode: 'X1234',
+        staff: {
+          forenames: 'Joe',
+          surname: 'Bloggs',
+        },
+      },
+    ])
+    licenceService.searchPrisonersByNomsIds.mockResolvedValue([
+      {
+        prisoner: {
+          prisonerNumber: 'AB1234D',
+          conditionalReleaseDate: twoDaysFromNow,
+          status: 'ACTIVE IN',
+        },
+        cvl: { isInHardStopPeriod: true },
+      },
+    ] as CaseloadItem[])
+    licenceService.searchPrisonersByReleaseDate.mockResolvedValueOnce([
+      {
+        prisoner: {
+          prisonerNumber: 'AB1234D',
+          conditionalReleaseDate: twoDaysFromNow,
+          status: 'ACTIVE IN',
+          legalStatus: 'SENTENCED',
+        },
+      },
+    ] as CaseloadItem[])
+    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
+      {
+        otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+    ])
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        kind: 'CRD',
+        nomisId: 'AB1234D',
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.APPROVED,
+        comUsername: 'joebloggs',
+        isReviewNeeded: false,
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: true,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
+      },
+      {
+        kind: 'CRD',
+        nomisId: 'AB1234D',
+        licenceId: 2,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.TIMED_OUT,
+        comUsername: 'joebloggs',
+        isReviewNeeded: false,
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: true,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
+      },
+    ])
+
+    const result = await serviceUnderTest.getOmuCaseload(user, ['p1', 'p2'])
+
+    expect(result.cases.exclusions()).toMatchObject([
+      [
+        {
+          deliusRecord: { otherIds: { crn: 'X12347', nomsNumber: 'AB1234D' } },
+          licences: [{ id: 1 }, { id: 2 }],
+        },
+        'Is a timed out IN_PROGRESS licence, will have been caught by earlier getLicencesForOmu',
+      ],
+    ])
+
+    expect(result.cases.unwrap()).toMatchObject([
+      {
+        deliusRecord: { otherIds: { crn: 'X12347', nomsNumber: 'AB1234D' } },
+        licences: [{ id: 1 }, { id: 2 }],
+      },
+    ])
+  })
+
   it('builds the vary approver caseload', async () => {
     licenceService.getLicencesForVariationApproval.mockResolvedValue([
       {
@@ -1768,6 +1901,7 @@ describe('Caseload Service', () => {
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
     communityService.getOffendersByNomsNumbers.mockResolvedValue([

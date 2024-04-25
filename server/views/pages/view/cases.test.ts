@@ -2,7 +2,7 @@ import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import statusConfig from '../../../licences/licenceStatus'
 import config from '../../../config'
-import { ComCreateCaseTab } from '../../../utils/utils'
+import { CaViewCasesTab } from '../../../utils/utils'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/view/cases.njk').toString())
 const existingConfig = config
@@ -75,7 +75,7 @@ describe('View and print a licence - case list', () => {
         },
       ],
       showAttentionNeededTab: true,
-      ComCreateCaseTab,
+      CaViewCasesTab,
       statusConfig,
       search,
       prisonsToDisplay,
@@ -111,7 +111,7 @@ describe('View and print a licence - case list', () => {
         },
       ],
       showAttentionNeededTab: false,
-      ComCreateCaseTab,
+      CaViewCasesTab,
       statusConfig,
       search,
       prisonsToDisplay,
@@ -146,7 +146,7 @@ describe('View and print a licence - case list', () => {
         },
       ],
       showAttentionNeededTab: true,
-      ComCreateCaseTab,
+      CaViewCasesTab,
       statusConfig,
       search,
       prisonsToDisplay,

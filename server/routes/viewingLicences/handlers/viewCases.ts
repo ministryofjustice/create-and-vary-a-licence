@@ -3,12 +3,7 @@ import { format, getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import CaseloadService from '../../../services/caseloadService'
-import {
-  convertToTitleCase,
-  selectReleaseDate,
-  determineComCreateCasesTab,
-  ComCreateCaseTab,
-} from '../../../utils/utils'
+import { convertToTitleCase, selectReleaseDate, determineCaViewCasesTab, CaViewCasesTab } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import config from '../../../config'
@@ -39,12 +34,12 @@ export default class ViewAndPrintCaseRoutes {
     return inProgressHardStop || notStarted
   }
 
-  isClickable = (licence: Licence, cvlField: CvlFields, tabType: ComCreateCaseTab): boolean => {
+  isClickable = (licence: Licence, cvlField: CvlFields, tabType: CaViewCasesTab): boolean => {
     if (!config.hardStopEnabled) {
       return !nonViewableStatuses.includes(licence.status)
     }
 
-    if (tabType === ComCreateCaseTab.ATTENTION_NEEDED) {
+    if (tabType === CaViewCasesTab.ATTENTION_NEEDED) {
       return false
     }
 
@@ -54,9 +49,12 @@ export default class ViewAndPrintCaseRoutes {
     return !nonViewableStatuses.includes(licence.status)
   }
 
-  getLink = (licence: Licence, cvlFields: CvlFields, prisoner: CvlPrisoner, tabType: ComCreateCaseTab): string => {
+  getLink = (licence: Licence, cvlFields: CvlFields, prisoner: CvlPrisoner, tabType: CaViewCasesTab): string => {
     if (!this.isClickable(licence, cvlFields, tabType)) {
       return null
+    }
+    if (licence.status === LicenceStatus.TIMED_OUT) {
+      return `/licence/hard-stop/create/nomisId/${prisoner.prisonerNumber}/confirm`
     }
     if (licence.id) {
       const query =
@@ -68,9 +66,7 @@ export default class ViewAndPrintCaseRoutes {
         ? `/licence/hard-stop/id/${licence.id}/check-your-answers${query}`
         : `/licence/view/id/${licence.id}/show${query}`
     }
-    if (licence.status === LicenceStatus.TIMED_OUT) {
-      return `/licence/hard-stop/create/nomisId/${prisoner.prisonerNumber}/confirm`
-    }
+
     return null
   }
 
@@ -105,7 +101,7 @@ export default class ViewAndPrintCaseRoutes {
         latestLicence = this.findLatestLicence(c.licences)
       }
       const releaseDate = selectReleaseDate(c.nomisRecord)
-      const tabType = determineComCreateCasesTab(latestLicence, c.nomisRecord, c.cvlFields)
+      const tabType = determineCaViewCasesTab(latestLicence, c.nomisRecord, c.cvlFields)
       return {
         licenceId: latestLicence.id,
         licenceVersionOf: latestLicence.versionOf,
@@ -123,7 +119,7 @@ export default class ViewAndPrintCaseRoutes {
       }
     })
 
-    const showAttentionNeededTab = caseloadViewModel.some(e => e.tabType === ComCreateCaseTab.ATTENTION_NEEDED)
+    const showAttentionNeededTab = caseloadViewModel.some(e => e.tabType === CaViewCasesTab.ATTENTION_NEEDED)
     const caseloadSearchResult = caseloadViewModel
       .filter(c => {
         const searchString = search?.toLowerCase().trim()
@@ -144,7 +140,7 @@ export default class ViewAndPrintCaseRoutes {
 
     res.render('pages/view/cases', {
       cases: caseloadSearchResult,
-      ComCreateCaseTab,
+      CaViewCasesTab,
       showAttentionNeededTab,
       statusConfig,
       search,

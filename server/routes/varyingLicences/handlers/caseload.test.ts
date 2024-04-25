@@ -25,6 +25,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -33,6 +34,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'Bob',
@@ -55,6 +57,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 2,
             type: LicenceType.AP,
             status: LicenceStatus.REVIEW_NEEDED,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -63,6 +66,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'John',
@@ -88,6 +92,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 1,
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -96,6 +101,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'Bob',
@@ -118,6 +124,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 2,
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -126,6 +133,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'Dr',
@@ -148,6 +156,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             id: 3,
             type: LicenceType.AP,
             status: LicenceStatus.REVIEW_NEEDED,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields: {
@@ -156,6 +165,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           hardStopWarningDate: '01/01/2023',
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
         nomisRecord: {
           firstName: 'John',
@@ -307,14 +317,16 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         {
           licences: [
             {
-              id: 2,
-              type: LicenceType.AP,
-              status: LicenceStatus.VARIATION_IN_PROGRESS,
-            },
-            {
               id: 1,
               type: LicenceType.AP,
               status: LicenceStatus.ACTIVE,
+              isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            },
+            {
+              id: 2,
+              type: LicenceType.AP,
+              status: LicenceStatus.VARIATION_IN_PROGRESS,
+              isDueToBeReleasedInTheNextTwoWorkingDays: false,
             },
           ],
           cvlFields: {
@@ -323,6 +335,76 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             hardStopWarningDate: '01/01/2023',
             isInHardStopPeriod: true,
             isDueForEarlyRelease: false,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
+          },
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: '2022-05-01',
+          } as CvlPrisoner,
+          deliusRecord: {
+            otherIds: {
+              crn: 'X12345',
+            },
+          } as DeliusRecord,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+      ])
+
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
+        caseload: [
+          {
+            licenceId: 2,
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            releaseDate: '01 May 2022',
+            licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+        ],
+        multipleTeams: false,
+        search: undefined,
+        statusConfig,
+        teamName: null,
+        teamView: false,
+        myCount: 1,
+        teamCount: 2,
+      })
+      expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+    })
+
+    it('should ignore any timed out licences', async () => {
+      caseloadService.getStaffVaryCaseload.mockResolvedValue([
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+
+              status: LicenceStatus.TIMED_OUT,
+              isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            },
+            {
+              id: 2,
+              type: LicenceType.AP,
+              status: LicenceStatus.VARIATION_IN_PROGRESS,
+              isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            },
+          ],
+          cvlFields: {
+            licenceType: 'AP',
+            hardStopDate: '03/01/2023',
+            hardStopWarningDate: '01/01/2023',
+            isInHardStopPeriod: true,
+            isDueForEarlyRelease: false,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
           nomisRecord: {
             firstName: 'Bob',

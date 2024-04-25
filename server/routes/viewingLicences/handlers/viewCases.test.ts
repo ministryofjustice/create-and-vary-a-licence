@@ -13,7 +13,7 @@ import Container from '../../../services/container'
 import OmuCaselist from '../../../services/omuCaselist'
 import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import config from '../../../config'
-import { ComCreateCaseTab, parseCvlDate } from '../../../utils/utils'
+import { CaViewCasesTab, parseCvlDate } from '../../../utils/utils'
 import { ManagedCase } from '../../../@types/managedCase'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
@@ -34,6 +34,7 @@ describe('Route handlers - View and print case list', () => {
     hardStopWarningDate: '01/01/2023',
     isInHardStopPeriod: true,
     isDueForEarlyRelease: false,
+    isDueToBeReleasedInTheNextTwoWorkingDays: false,
   }
 
   const exampleCase = {
@@ -43,6 +44,7 @@ describe('Route handlers - View and print case list', () => {
         type: LicenceType.AP,
         status: LicenceStatus.NOT_STARTED,
         hardStopDate: startOfDay(subDays(new Date(), 1)),
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
       },
     ],
     cvlFields,
@@ -112,6 +114,7 @@ describe('Route handlers - View and print case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.NOT_STARTED,
             hardStopDate: startOfDay(subDays(new Date(), 1)),
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
           },
         ],
         cvlFields,
@@ -133,6 +136,7 @@ describe('Route handlers - View and print case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.APPROVED,
             hardStopDate: startOfDay(addDays(new Date(), 1)),
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields,
@@ -154,6 +158,7 @@ describe('Route handlers - View and print case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.IN_PROGRESS,
             hardStopDate: startOfDay(subDays(new Date(), 1)),
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
           },
         ],
         cvlFields,
@@ -175,6 +180,7 @@ describe('Route handlers - View and print case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.SUBMITTED,
             hardStopDate: startOfDay(subDays(new Date(), 1)),
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
           },
         ],
         cvlFields,
@@ -197,6 +203,7 @@ describe('Route handlers - View and print case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
             hardStopDate: startOfDay(subDays(new Date(), 1)),
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
           },
         ],
         cvlFields,
@@ -218,6 +225,7 @@ describe('Route handlers - View and print case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.VARIATION_IN_PROGRESS,
             hardStopDate: startOfDay(addDays(new Date(), 1)),
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields,
@@ -239,6 +247,7 @@ describe('Route handlers - View and print case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.VARIATION_SUBMITTED,
             hardStopDate: startOfDay(addDays(new Date(), 1)),
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields,
@@ -260,6 +269,7 @@ describe('Route handlers - View and print case list', () => {
             type: LicenceType.AP,
             status: LicenceStatus.VARIATION_APPROVED,
             hardStopDate: startOfDay(addDays(new Date(), 1)),
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
           },
         ],
         cvlFields,
@@ -350,7 +360,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -444,7 +454,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: true,
         prisonsToDisplay: [
@@ -532,7 +542,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: true,
         prisonsToDisplay: [
@@ -689,7 +699,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -727,7 +737,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -765,7 +775,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -849,7 +859,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -933,7 +943,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -979,7 +989,53 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
+        showAttentionNeededTab: false,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
+      config.hardStopEnabled = true
+      caseloadService.getOmuCaseload.mockResolvedValue(
+        new OmuCaselist(
+          new Container([
+            { ...exampleCase, licences: [{ ...exampleCase.licences[0], id: 4, status: LicenceStatus.TIMED_OUT }] },
+          ])
+        )
+      )
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            licenceId: 4,
+            licenceStatus: 'NOT_STARTED',
+            link: '/licence/hard-stop/create/nomisId/A1234AA/confirm',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+        ],
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -1030,7 +1086,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -1137,7 +1193,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -1161,6 +1217,7 @@ describe('Route handlers - View and print case list', () => {
               type: LicenceType.AP,
               status: LicenceStatus.APPROVED,
               hardStopDate: parseCvlDate('12/01/2024'),
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
             },
             {
               id: 67,
@@ -1168,6 +1225,7 @@ describe('Route handlers - View and print case list', () => {
               status: LicenceStatus.IN_PROGRESS,
               versionOf: 45,
               hardStopDate: parseCvlDate('12/01/2024'),
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
             },
           ],
           cvlFields,
@@ -1212,7 +1270,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -1296,7 +1354,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: false,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -1319,6 +1377,7 @@ describe('Route handlers - View and print case list', () => {
             {
               type: LicenceType.AP,
               status: LicenceStatus.APPROVED,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
             },
           ],
           cvlFields,
@@ -1338,6 +1397,7 @@ describe('Route handlers - View and print case list', () => {
             {
               type: LicenceType.AP,
               status: LicenceStatus.IN_PROGRESS,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
             },
           ],
           cvlFields,
@@ -1391,7 +1451,7 @@ describe('Route handlers - View and print case list', () => {
             isDueForEarlyRelease: false,
           },
         ],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: true,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -1415,6 +1475,7 @@ describe('Route handlers - View and print case list', () => {
             {
               type: LicenceType.AP,
               status: LicenceStatus.APPROVED,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
             },
           ],
           cvlFields,
@@ -1434,6 +1495,7 @@ describe('Route handlers - View and print case list', () => {
             {
               type: LicenceType.AP,
               status: LicenceStatus.IN_PROGRESS,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
             },
           ],
           cvlFields,
@@ -1456,7 +1518,7 @@ describe('Route handlers - View and print case list', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [],
-        ComCreateCaseTab,
+        CaViewCasesTab,
         showAttentionNeededTab: true,
         hasMultipleCaseloadsInNomis: false,
         prisonsToDisplay: [
@@ -1480,6 +1542,7 @@ describe('Route handlers - View and print case list', () => {
                 type: LicenceType.AP,
                 status: LicenceStatus.TIMED_OUT,
                 hardStopDate: startOfDay(subDays(new Date(), 1)),
+                isDueToBeReleasedInTheNextTwoWorkingDays: true,
               },
               {
                 id: 2,
@@ -1487,6 +1550,7 @@ describe('Route handlers - View and print case list', () => {
                 status: LicenceStatus.APPROVED,
                 hardStopDate: startOfDay(subDays(new Date(), 1)),
                 kind: LicenceKind.HARD_STOP,
+                isDueToBeReleasedInTheNextTwoWorkingDays: true,
               },
             ],
             cvlFields,
@@ -1525,7 +1589,7 @@ describe('Route handlers - View and print case list', () => {
               isDueForEarlyRelease: false,
             },
           ],
-          ComCreateCaseTab,
+          CaViewCasesTab,
           showAttentionNeededTab: false,
           hasMultipleCaseloadsInNomis: false,
           prisonsToDisplay: [
@@ -1550,6 +1614,7 @@ describe('Route handlers - View and print case list', () => {
                 status: LicenceStatus.APPROVED,
                 hardStopDate: startOfDay(subDays(new Date(), 1)),
                 kind: LicenceKind.HARD_STOP,
+                isDueToBeReleasedInTheNextTwoWorkingDays: true,
               },
               {
                 id: 2,
@@ -1558,6 +1623,7 @@ describe('Route handlers - View and print case list', () => {
                 hardStopDate: startOfDay(subDays(new Date(), 1)),
                 kind: LicenceKind.CRD,
                 versionOf: 1,
+                isDueToBeReleasedInTheNextTwoWorkingDays: true,
               },
             ],
             cvlFields,
@@ -1596,7 +1662,7 @@ describe('Route handlers - View and print case list', () => {
               isDueForEarlyRelease: false,
             },
           ],
-          ComCreateCaseTab,
+          CaViewCasesTab,
           showAttentionNeededTab: false,
           hasMultipleCaseloadsInNomis: false,
           prisonsToDisplay: [
