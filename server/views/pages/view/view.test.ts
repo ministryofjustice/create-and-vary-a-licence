@@ -373,4 +373,12 @@ describe('View and print - single standard licence view', () => {
 
     expect($('h1').text()).toContain('Print post sentence supervision order for John Smith')
   })
+
+  it('Title changes for hard stop in progress licence', () => {
+    const $ = render({
+      licence: { ...licence, statusCode: 'IN_PROGRESS', typeCode: 'PSS' },
+    })
+
+    expect($('h1').text()).toContain('Check licence details')
+  })
 })
