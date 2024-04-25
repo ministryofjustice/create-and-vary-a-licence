@@ -1153,6 +1153,7 @@ export default {
           statusCode: 'VARIATION_IN_PROGRESS',
           spoDiscussion: 'Yes',
           vloDiscussion: 'Yes',
+          appointmentPersonType: 'SPECIFIC_PERSON',
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
