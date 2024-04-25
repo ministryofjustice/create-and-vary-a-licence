@@ -47,10 +47,11 @@ export default class CaseloadRoutes {
 
     const caseloadViewModel = cases
       .map(c => {
+        const licences = c.licences.filter(l => l.status !== LicenceStatus.TIMED_OUT)
         const licence =
-          c.licences.length > 1
-            ? c.licences.filter(l => l.status !== LicenceStatus.TIMED_OUT).find(l => l.status !== LicenceStatus.ACTIVE)
-            : _.head(c.licences)
+          licences.length > 1
+            ? licences.find(l => l.status !== LicenceStatus.ACTIVE && l.status !== LicenceStatus.REVIEW_NEEDED)
+            : _.head(licences)
 
         return {
           licenceId: licence.id,
