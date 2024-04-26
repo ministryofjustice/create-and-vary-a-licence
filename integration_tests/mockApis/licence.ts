@@ -281,6 +281,7 @@ export default {
           kind: options.kind,
           statusCode: options.statusCode, // Overrides licencePlaceHolder status
           typeCode: options.typeCode, // Overrides licence status code
+          appointmentPersonType: 'SPECIFIC_PERSON',
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
@@ -1437,6 +1438,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
           ...licencePlaceholder,
+          appointmentPersonType: 'SPECIFIC_PERSON',
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
@@ -1527,6 +1529,7 @@ export default {
           ...licencePlaceholder,
           kind: 'HARD_STOP',
           isInHardStopPeriod: true,
+          appointmentPersonType: 'SPECIFIC_PERSON',
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
