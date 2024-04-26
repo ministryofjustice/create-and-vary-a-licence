@@ -393,6 +393,7 @@ export default class CaseloadService {
               hardStopDate: parseCvlDate(l.hardStopDate),
               hardStopWarningDate: parseCvlDate(l.hardStopWarningDate),
               isDueToBeReleasedInTheNextTwoWorkingDays: l.isDueToBeReleasedInTheNextTwoWorkingDays,
+              updatedByFullName: l.updatedByFullName,
             }
           }),
       }

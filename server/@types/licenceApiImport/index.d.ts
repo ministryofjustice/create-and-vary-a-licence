@@ -236,6 +236,13 @@ export interface paths {
      */
     post: operations['runRemoveExpiredConditionsJob']
   }
+  '/run-hard-stop-licence-review-overdue-job': {
+    /**
+     * Triggers the hard stop licence review overdue job.
+     * @description Triggers a job that sends a notification when the COM has not reviewed a hard stop licence 5 days after activation. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['runHardStopLicenceReviewOverdueJob']
+  }
   '/run-expire-licences-job': {
     /**
      * Triggers the licence expiry job.
@@ -1874,6 +1881,11 @@ export interface components {
        * @example true
        */
       isReviewNeeded: boolean
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string
     }
     /** @description Request object for searching for licences which are ready to approve */
     ApproveLicencesRequest: {

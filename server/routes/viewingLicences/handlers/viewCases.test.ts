@@ -1533,6 +1533,76 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
+    it('should render last worked on by correctly', async () => {
+      const cases = new Container([
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.NOT_STARTED,
+              hardStopDate: startOfDay(subDays(new Date(), 1)),
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              updatedByFullName: 'Test Updater',
+            },
+          ],
+          cvlFields,
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+            confirmedReleaseDate: '2022-05-01',
+            legalStatus: 'SENTENCED',
+          } as CvlPrisoner,
+          probationPractitioner: {
+            name: 'Sherlock Holmes',
+          },
+        },
+      ])
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(cases))
+      res.locals.prisonCaseload = ['BAI']
+      await handler.GET(req, res)
+
+      expect(prisonerService.getPrisons).toHaveBeenCalled()
+
+      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+        { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
+        ['BAI']
+      )
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            link: null,
+            licenceId: 1,
+            licenceStatus: 'NOT_STARTED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+            lastWorkedOnBy: 'Test Updater',
+          },
+        ],
+        CaViewCasesTab,
+        showAttentionNeededTab: false,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
     describe('findLatestLicence with TIMED_OUT licence', () => {
       it('should return a hard stop licence', async () => {
         const caseList = new Container([
