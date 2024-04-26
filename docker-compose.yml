@@ -17,7 +17,7 @@ services:
       retries: 5
 
   gotenberg:
-    image: thecodingmachine/gotenberg:7.5.0
+    image: thecodingmachine/gotenberg:8.5.0
     networks:
       - hmpps
     container_name: gotenberg
