@@ -155,6 +155,7 @@ describe('createLicenceRoutes', () => {
         isInHardStopPeriod: false,
         additionalLicenceConditions: [],
         additionalPssConditions: [],
+        appointmentPersonType: 'SPECIFIC_PERSON',
         appointmentPerson: 'Bob Smith',
         appointmentAddress: '123 Fake St',
         appointmentContact: '01234567890',

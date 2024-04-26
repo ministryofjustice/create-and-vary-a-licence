@@ -43,6 +43,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         },
         licence: {
           id: 1,
+          appointmentPersonType: 'SPECIFIC_PERSON',
           appointmentPerson: 'Isaac Newton',
           appointmentAddress: 'Down the road, over there',
           appointmentContact: '07891245678',
@@ -240,7 +241,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
         JSON.stringify([
-          { field: 'appointmentPerson', message: "Select 'Change' to go back and add who to meet" },
+          { field: 'appointmentPersonType', message: "Select 'Change' to go back and add who to meet" },
           { field: 'appointmentAddress', message: "Select 'Change' to go back and add appointment address" },
           { field: 'appointmentContact', message: "Select 'Change' to go back and add appointment telephone number" },
           { field: 'appointmentTimeType', message: "Select 'Change' to go back and add appointment date and time" },
@@ -264,6 +265,39 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       conditionService.getPolicyVersion.mockResolvedValue('2.0')
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/confirmation')
+    })
+
+    it('should redirect back with error messages in flash if appointment person field is empty', async () => {
+      res.locals.licence = {
+        ...res.locals.licence,
+        appointmentPersonType: 'SPECIFIC_PERSON',
+        appointmentPerson: '',
+      } as Licence
+
+      await handler.POST(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith(
+        'validationErrors',
+        JSON.stringify([{ field: 'appointmentPerson', message: "Select 'Change' to go back and add who to meet" }])
+      )
+      expect(res.redirect).toHaveBeenCalledWith('back')
+    })
+
+    it('should not redirect back with error messages in flash if appointment person field is empty', async () => {
+      res.locals.licence = {
+        ...res.locals.licence,
+        appointmentPersonType: 'DUTY_OFFICER',
+        appointmentPerson: '',
+        version: '2.0',
+      } as Licence
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
+      await handler.POST(req, res)
+
+      expect(licenceService.submitLicence).toHaveBeenCalledWith('1', {
+        username: 'joebloggs',
+        deliusStaffIdentifier: 123,
+      })
     })
   })
 })
