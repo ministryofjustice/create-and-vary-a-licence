@@ -22,6 +22,7 @@ describe('Review Hard Stop licence handler', () => {
       licence: {
         id: 1,
       },
+      locals: { user: { username: 'bob' } },
       render: jest.fn(),
       redirect: jest.fn(),
     } as unknown as Response
@@ -45,7 +46,7 @@ describe('Review Hard Stop licence handler', () => {
     it('redirects to timeline if the answer is no and calls to set the review date', async () => {
       req.body.answer = YesOrNo.NO
       await handler.POST(req, res)
-      expect(licenceService.reviewWithoutVariation).toHaveBeenCalledWith(1)
+      expect(licenceService.reviewWithoutVariation).toHaveBeenCalledWith(1, { username: 'bob' })
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/timeline')
     })
   })

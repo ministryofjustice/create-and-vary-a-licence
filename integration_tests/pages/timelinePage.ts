@@ -9,7 +9,7 @@ export default class TimelinePage extends Page {
   checkTimelineContent = (): TimelinePage => {
     cy.get('.moj-timeline__title').should('contain', 'Licence created')
     cy.get('.moj-timeline__byline').should('contain', 'by John Smith')
-    cy.get('.moj-timeline__date').should('be.visible').should('contain', '10th September 2021 at 10:01 am')
+    cy.get('.moj-timeline__date').should('be.visible').should('contain', '10th September 2021 at 10:00 am')
     return this
   }
 
