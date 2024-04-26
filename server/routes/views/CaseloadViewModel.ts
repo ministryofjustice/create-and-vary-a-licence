@@ -32,6 +32,7 @@ export default (caseload: ManagedCase[], search: string) => {
           licence.status !== LicenceStatus.OOS_BOTUS,
         hardStopDate: format(hardStopDate, 'dd MMM yyyy'),
         showHardStopWarning: config.hardStopEnabled && hardStopWarningDate <= now && now < hardStopDate,
+        isDueForEarlyRelease: c.cvlFields?.isDueForEarlyRelease,
       }
     })
     .filter(c => {

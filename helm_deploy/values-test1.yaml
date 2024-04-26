@@ -10,6 +10,9 @@ cronjobs:
   expire_licences:
     enabled: false
     schedule: "0 10 * * 1-5" # 10am UTC, Monday - Friday
+  hard_stop_licences_review_overdue:
+    enabled: true
+    schedule: "00 8 * * 1-5" # 8am UTC Monday - Friday
 
 generic-service:
   replicaCount: 2
