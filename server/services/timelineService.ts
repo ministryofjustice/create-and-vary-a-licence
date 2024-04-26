@@ -79,14 +79,14 @@ export default class TimelineService {
 
   private static getTimelineEvent(licence: Licence): TimelineEvent {
     const varyOf = licence.kind === 'VARIATION' ? licence.variationOf : undefined
-
+    const creator = convertToTitleCase(licence.createdByFullName)
     switch (licence.statusCode) {
       case LicenceStatus.VARIATION_IN_PROGRESS:
         return new TimelineEvent(
           TimelineEventType.VARIATION_IN_PROGRESS,
           'Variation in progress',
           licence.statusCode,
-          licence.createdByFullName,
+          creator,
           licence.id,
           licence.dateLastUpdated
         )
@@ -96,7 +96,7 @@ export default class TimelineService {
           TimelineEventType.SUBMITTED,
           'Variation submitted',
           licence.statusCode,
-          licence.createdByFullName,
+          creator,
           licence.id,
           licence.dateLastUpdated
         )
@@ -106,7 +106,7 @@ export default class TimelineService {
           TimelineEventType.REJECTED,
           'Variation rejected',
           licence.statusCode,
-          licence.createdByFullName,
+          creator,
           licence.id,
           licence.dateLastUpdated
         )
@@ -116,20 +116,21 @@ export default class TimelineService {
           TimelineEventType.VARIATION,
           'Licence varied',
           licence.statusCode,
-          licence.createdByFullName,
+          creator,
           licence.id,
           licence.dateLastUpdated
         )
 
       case LicenceStatus.ACTIVE:
       case LicenceStatus.INACTIVE:
-      default:
+      default: {
+        const prisonName = convertToTitleCase(licence.prisonDescription).replace('hmp', 'HMP').replace('yoi', 'YOI')
         return varyOf
           ? new TimelineEvent(
               TimelineEventType.VARIATION,
               'Licence varied',
               licence.statusCode,
-              licence.createdByFullName,
+              creator,
               licence.id,
               licence.dateLastUpdated
             )
@@ -137,10 +138,11 @@ export default class TimelineService {
               TimelineEventType.CREATION,
               'Licence created',
               licence.statusCode,
-              `${licence.createdByFullName}${licence.kind === LicenceKind.HARD_STOP ? `, ${licence.prisonDescription}` : ''}`,
+              `${creator}${licence.kind === LicenceKind.HARD_STOP ? `, ${prisonName}` : ''}`,
               licence.id,
               licence.dateCreated
             )
+      }
     }
   }
 }

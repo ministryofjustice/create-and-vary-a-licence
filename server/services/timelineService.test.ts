@@ -126,9 +126,9 @@ describe('Timeline Service', () => {
         id: 2,
         kind: 'HARD_STOP',
         statusCode: LicenceStatus.ACTIVE,
-        createdByFullName: 'James Brown',
+        createdByFullName: 'JAMES BROWN',
         dateLastUpdated: '12/11/2022 10:00:00',
-        prisonDescription: 'Moorland (HMP)',
+        prisonDescription: 'Moorland (hmp)',
         dateCreated: '10/11/2022 11:00:00',
       } as Licence
 
