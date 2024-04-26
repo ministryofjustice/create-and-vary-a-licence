@@ -54,12 +54,24 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           lastName: 'ELYSASHA',
           confirmedReleaseDate: '2024-07-19',
           conditionalReleaseDate: '2022-09-01',
+          dateOfBirth: '1992-12-06',
         },
         cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
       } as CaseloadItem
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmCreate', { licenceType: 'AP' })
+      expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmCreate', {
+        licence: {
+          nomsId: 'ABC123',
+          actualReleaseDate: '19/07/2024',
+          conditionalReleaseDate: '01/09/2022',
+          dateOfBirth: '06/12/1992',
+          forename: 'Emajinhany',
+          surname: 'Elysasha',
+          licenceType: 'AP',
+        },
+        backLink: req.session?.returnToCase,
+      })
     })
   })
 
