@@ -43,8 +43,14 @@ describe('CaseloadViewModel', () => {
     } as Licence
 
     managedCases = [
-      { nomisRecord, deliusRecord, probationPractitioner, licences: [licence] },
-      { nomisRecord: nomisRecord2, deliusRecord: deliusRecord2, probationPractitioner, licences: [licence2] },
+      { nomisRecord, deliusRecord, probationPractitioner, licences: [licence], cvlFields: {} },
+      {
+        nomisRecord: nomisRecord2,
+        deliusRecord: deliusRecord2,
+        probationPractitioner,
+        licences: [licence2],
+        cvlFields: {},
+      },
     ] as ManagedCase[]
   })
 
@@ -221,6 +227,23 @@ describe('CaseloadViewModel', () => {
     ).toEqual(undefined)
   })
 
+  it('passes through isDueForEarlyRelease from cvlFields', () => {
+    expect(
+      createCaseloadViewModel(
+        [
+          {
+            nomisRecord: { ...nomisRecord, releaseDate: undefined, conditionalReleaseDate: undefined },
+            deliusRecord,
+            probationPractitioner: undefined,
+            cvlFields: { ...cvlFields, isDueForEarlyRelease: true },
+            licences: [licence],
+          },
+        ],
+        null
+      )[0].isDueForEarlyRelease
+    ).toEqual(true)
+  })
+
   describe('isClickable', () => {
     it('should be false if the PP is undefined', () => {
       expect(
@@ -351,8 +374,14 @@ describe('CaseloadViewModel', () => {
   it('sorts based on CRD', () => {
     nomisRecord = { ...nomisRecord, releaseDate: null, conditionalReleaseDate: '2020-02-02' }
     managedCases = [
-      { nomisRecord, deliusRecord, probationPractitioner, licences: [licence] },
-      { nomisRecord: nomisRecord2, deliusRecord: deliusRecord2, probationPractitioner, licences: [licence2] },
+      { nomisRecord, deliusRecord, probationPractitioner, licences: [licence], cvlFields: {} },
+      {
+        nomisRecord: nomisRecord2,
+        deliusRecord: deliusRecord2,
+        probationPractitioner,
+        licences: [licence2],
+        cvlFields: {},
+      },
     ] as ManagedCase[]
     expect(createCaseloadViewModel(managedCases, 'bond')).toEqual([
       {

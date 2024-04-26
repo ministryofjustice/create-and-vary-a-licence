@@ -44,6 +44,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           name: 'Joe Bloggs',
           staffIdentifier: 2000,
         },
+        cvlFields: {},
       },
     ] as unknown as ManagedCase[])
 
@@ -72,6 +73,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           name: 'Sherlock Holmes',
           staffIdentifier: 3000,
         },
+        cvlFields: {},
       },
       {
         deliusRecord: {
@@ -93,6 +95,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
+        cvlFields: {},
       },
       {
         deliusRecord: {
@@ -113,6 +116,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
+        cvlFields: {},
       },
       {
         deliusRecord: {
@@ -133,6 +137,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
           },
         ],
+        cvlFields: {},
       },
     ] as unknown as ManagedCase[])
   })
@@ -334,6 +339,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           probationPractitioner: {
             name: 'Joe Bloggs',
           },
+          cvlFields: {},
         },
       ] as unknown as ManagedCase[])
 
