@@ -15,7 +15,7 @@ cronjobs:
     schedule: "0 2 * * 1-5" # 2am UTC Monday - Friday
   hard_stop_licences_review_overdue:
     enabled: false
-    schedule: "0 8 * * 1-5" # 8:00am UTC Monday - Friday
+    schedule: "0 8 * * *" # 8:00am UTC every day
 
 generic-service:
   nameOverride: create-and-vary-a-licence
