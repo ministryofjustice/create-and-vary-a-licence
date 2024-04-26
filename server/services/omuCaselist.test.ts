@@ -101,6 +101,7 @@ function createCaselist(status: LicenceStatus, confirmedReleaseDate: string, con
           isInHardStopPeriod: true,
           isDueForEarlyRelease: true,
           isDueToBeReleasedInTheNextTwoWorkingDays: false,
+          isEligibleForEarlyRelease: false,
         },
         nomisRecord: {
           prisonerNumber: 'A1234AA',

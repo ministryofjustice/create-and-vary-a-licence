@@ -35,6 +35,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
           isDueToBeReleasedInTheNextTwoWorkingDays: false,
+          isEligibleForEarlyRelease: false,
         },
         nomisRecord: {
           firstName: 'Bob',
@@ -67,6 +68,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
           isDueToBeReleasedInTheNextTwoWorkingDays: false,
+          isEligibleForEarlyRelease: false,
         },
         nomisRecord: {
           firstName: 'John',
@@ -102,6 +104,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
           isDueToBeReleasedInTheNextTwoWorkingDays: false,
+          isEligibleForEarlyRelease: false,
         },
         nomisRecord: {
           firstName: 'Bob',
@@ -134,6 +137,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
           isDueToBeReleasedInTheNextTwoWorkingDays: false,
+          isEligibleForEarlyRelease: false,
         },
         nomisRecord: {
           firstName: 'Dr',
@@ -166,6 +170,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           isInHardStopPeriod: true,
           isDueForEarlyRelease: false,
           isDueToBeReleasedInTheNextTwoWorkingDays: false,
+          isEligibleForEarlyRelease: false,
         },
         nomisRecord: {
           firstName: 'John',
@@ -336,6 +341,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             isInHardStopPeriod: true,
             isDueForEarlyRelease: false,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            isEligibleForEarlyRelease: false,
           },
           nomisRecord: {
             firstName: 'Bob',
@@ -404,6 +410,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             isInHardStopPeriod: true,
             isDueForEarlyRelease: false,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            isEligibleForEarlyRelease: false,
           },
           nomisRecord: {
             firstName: 'Bob',
@@ -472,6 +479,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             isInHardStopPeriod: false,
             isDueForEarlyRelease: false,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            isEligibleForEarlyRelease: false,
           },
           nomisRecord: {
             firstName: 'Bob',

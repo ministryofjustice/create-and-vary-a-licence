@@ -80,6 +80,7 @@ describe('CaseloadViewModel', () => {
     isInHardStopPeriod: true,
     isDueForEarlyRelease: false,
     isDueToBeReleasedInTheNextTwoWorkingDays: false,
+    isEligibleForEarlyRelease: false,
   }
 
   it('titleizes name', () => {
