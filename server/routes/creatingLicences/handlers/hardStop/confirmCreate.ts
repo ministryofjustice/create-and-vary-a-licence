@@ -1,7 +1,9 @@
 import { Request, Response } from 'express'
+import moment from 'moment'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import LicenceService from '../../../../services/licenceService'
 import LicenceKind from '../../../../enumeration/LicenceKind'
+import { convertToTitleCase } from '../../../../utils/utils'
 
 export default class ConfirmCreateRoutes {
   constructor(private readonly licenceService: LicenceService) {}
@@ -9,10 +11,26 @@ export default class ConfirmCreateRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { nomisId } = req.params
     const { user } = res.locals
-    const {
-      cvl: { licenceType },
-    } = await this.licenceService.getPrisonerDetail(nomisId, user)
-    return res.render('pages/create/hardStop/confirmCreate', { licenceType })
+    const backLink = req.session?.returnToCase || '/licence/view/cases'
+    const [
+      {
+        cvl: { licenceType },
+        prisoner: { confirmedReleaseDate, conditionalReleaseDate, dateOfBirth, firstName, lastName },
+      },
+    ] = await Promise.all([this.licenceService.getPrisonerDetail(nomisId, user)])
+
+    return res.render('pages/create/hardStop/confirmCreate', {
+      licence: {
+        nomsId: nomisId,
+        actualReleaseDate: confirmedReleaseDate ? moment(confirmedReleaseDate).format('DD/MM/YYYY') : undefined,
+        conditionalReleaseDate: moment(conditionalReleaseDate).format('DD/MM/YYYY'),
+        dateOfBirth: moment(dateOfBirth).format('DD/MM/YYYY'),
+        forename: convertToTitleCase(firstName),
+        surname: convertToTitleCase(lastName),
+        licenceType,
+      },
+      backLink,
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
