@@ -318,6 +318,7 @@ describe('Route - view and approve a licence', () => {
             id: 1,
             statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
             appointmentPersonType: 'DUTY_OFFICER',
+            appointmentPerson: '',
             appointmentAddress: 'some address',
             appointmentContact: '0123455666',
             appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
@@ -360,6 +361,43 @@ describe('Route - view and approve a licence', () => {
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
         '[{"field":"appointmentPersonType","message":"Select \'Change\' to go back and add who to meet"},{"field":"appointmentAddress","message":"Select \'Change\' to go back and add appointment address"},{"field":"appointmentContact","message":"Select \'Change\' to go back and add appointment telephone number"},{"field":"appointmentTimeType","message":"Select \'Change\' to go back and add appointment date and time"}]'
+      )
+    })
+
+    it('should redirect back with error messages in flash if appointment person field is empty', async () => {
+      req = {
+        params: {
+          licenceId: 1,
+        },
+        flash: jest.fn(),
+        query: {},
+      } as unknown as Request
+
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: {
+            username: 'joebloggs',
+          },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.VARIATION_IN_PROGRESS,
+            appointmentPersonType: 'SPECIFIC_PERSON',
+            appointmentPerson: '',
+            appointmentAddress: 'some address',
+            appointmentContact: '0123455666',
+            appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
+          },
+        },
+      } as unknown as Response
+
+      await handler.POST(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('back')
+      expect(req.flash).toHaveBeenCalledWith(
+        'validationErrors',
+        '[{"field":"appointmentPerson","message":"Select \'Change\' to go back and add who to meet"}]'
       )
     })
   })
