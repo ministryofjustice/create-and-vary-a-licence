@@ -7,14 +7,18 @@ const render = templateRenderer(fs.readFileSync('server/views/pages/create/hardS
 describe('Caseload', () => {
   it('should display standard conditions text', () => {
     const $ = render({
-      licenceType: 'AP',
+      licence: {
+        licenceType: 'AP',
+      },
     })
     expect($('.licence-conditions').text().toString()).toContain('standard conditions')
   })
 
   it('should display post sentence supervision text', () => {
     const $ = render({
-      licenceType: 'PSS',
+      licence: {
+        licenceType: 'PSS',
+      },
     })
     expect($('.licence-conditions').text().toString()).toContain(
       'This licence contains standard post sentence supervision requirements only by default.'
