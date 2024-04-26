@@ -72,42 +72,75 @@ export default class TimelineService {
     const reviewTimelineEvents = hardstopLicence ? await this.getReviewEvents(hardstopLicence, user) : []
 
     return licences
-      .map(licence => {
-        const varyOf = licence.kind === 'VARIATION' ? licence.variationOf : undefined
-        const { title, eventType } = TimelineService.getTimelineEventType(varyOf, licence.statusCode)
+      .map(licence => TimelineService.getTimelineEvent(licence))
+      .concat(reviewTimelineEvents)
+      .sort((a, b) => b.getSortTime() - a.getSortTime())
+  }
+
+  private static getTimelineEvent(licence: Licence): TimelineEvent {
+    const varyOf = licence.kind === 'VARIATION' ? licence.variationOf : undefined
+
+    switch (licence.statusCode) {
+      case LicenceStatus.VARIATION_IN_PROGRESS:
         return new TimelineEvent(
-          eventType,
-          title,
+          TimelineEventType.VARIATION_IN_PROGRESS,
+          'Variation in progress',
           licence.statusCode,
           licence.createdByFullName,
           licence.id,
           licence.dateLastUpdated
         )
-      })
-      .concat(reviewTimelineEvents)
-      .sort((a, b) => b.getSortTime() - a.getSortTime())
-  }
-
-  private static getTimelineEventType(varyOf: number, status: string): { eventType: TimelineEventType; title: string } {
-    switch (status) {
-      case LicenceStatus.VARIATION_IN_PROGRESS:
-        return { eventType: TimelineEventType.VARIATION_IN_PROGRESS, title: 'Variation in progress' }
 
       case LicenceStatus.VARIATION_SUBMITTED:
-        return { eventType: TimelineEventType.SUBMITTED, title: 'Variation submitted' }
+        return new TimelineEvent(
+          TimelineEventType.SUBMITTED,
+          'Variation submitted',
+          licence.statusCode,
+          licence.createdByFullName,
+          licence.id,
+          licence.dateLastUpdated
+        )
 
       case LicenceStatus.VARIATION_REJECTED:
-        return { eventType: TimelineEventType.REJECTED, title: 'Variation rejected' }
+        return new TimelineEvent(
+          TimelineEventType.REJECTED,
+          'Variation rejected',
+          licence.statusCode,
+          licence.createdByFullName,
+          licence.id,
+          licence.dateLastUpdated
+        )
 
       case LicenceStatus.VARIATION_APPROVED:
-        return { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }
+        return new TimelineEvent(
+          TimelineEventType.VARIATION,
+          'Licence varied',
+          licence.statusCode,
+          licence.createdByFullName,
+          licence.id,
+          licence.dateLastUpdated
+        )
 
       case LicenceStatus.ACTIVE:
       case LicenceStatus.INACTIVE:
       default:
         return varyOf
-          ? { eventType: TimelineEventType.VARIATION, title: 'Licence varied' }
-          : { eventType: TimelineEventType.CREATION, title: 'Licence created' }
+          ? new TimelineEvent(
+              TimelineEventType.VARIATION,
+              'Licence varied',
+              licence.statusCode,
+              licence.createdByFullName,
+              licence.id,
+              licence.dateLastUpdated
+            )
+          : new TimelineEvent(
+              TimelineEventType.CREATION,
+              'Licence created',
+              licence.statusCode,
+              `${licence.createdByFullName}${licence.kind === LicenceKind.HARD_STOP ? `, ${licence.prisonDescription}` : ''}`,
+              licence.id,
+              licence.dateCreated
+            )
     }
   }
 }

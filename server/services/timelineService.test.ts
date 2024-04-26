@@ -32,6 +32,7 @@ describe('Timeline Service', () => {
       statusCode: LicenceStatus.ACTIVE,
       createdByFullName: 'Jackson Browne',
       dateLastUpdated: '10/11/2022 11:00:00',
+      dateCreated: '10/11/2022 10:00:00',
     } as Licence
 
     const expectedEvents = [
@@ -41,7 +42,7 @@ describe('Timeline Service', () => {
         statusCode: 'ACTIVE',
         createdBy: 'Jackson Browne',
         licenceId: 1,
-        lastUpdate: '10/11/2022 11:00:00',
+        lastUpdate: '10/11/2022 10:00:00',
       },
     ] as unknown as TimelineEvent[]
 
@@ -127,6 +128,8 @@ describe('Timeline Service', () => {
         statusCode: LicenceStatus.ACTIVE,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:00:00',
+        prisonDescription: 'Moorland (HMP)',
+        dateCreated: '10/11/2022 11:00:00',
       } as Licence
 
       licenceApiClient.matchLicenceEvents.mockResolvedValue([
@@ -136,7 +139,7 @@ describe('Timeline Service', () => {
           username: 'TIM_USER',
           forenames: 'Tim',
           surname: 'Smith',
-          eventTime: '12/11/2022 14:00:00',
+          eventTime: '12/11/2022 12:30:00',
           eventDescription: `Licence reviewed without being varied for Jack Walker`,
         },
       ])
@@ -145,15 +148,15 @@ describe('Timeline Service', () => {
         {
           createdBy: 'Tim Smith',
           eventType: 'REVIEWED_WITHOUT_VARIATION',
-          lastUpdate: '12/11/2022 14:00:00',
+          lastUpdate: '12/11/2022 12:30:00',
           licenceId: 2,
           statusCode: 'ACTIVE',
           title: 'Licence reviewed without being varied',
         },
         {
-          createdBy: 'James Brown',
+          createdBy: 'James Brown, Moorland (HMP)',
           eventType: 'CREATION',
-          lastUpdate: '12/11/2022 10:00:00',
+          lastUpdate: '10/11/2022 11:00:00',
           licenceId: 2,
           statusCode: 'ACTIVE',
           title: 'Licence created',
