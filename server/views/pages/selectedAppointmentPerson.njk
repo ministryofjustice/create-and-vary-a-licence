@@ -3,7 +3,7 @@
         {% case 'DUTY_OFFICER' %}
             {% set appointmentPerson = 'Duty Officer' %}
         {% case 'RESPONSIBLE_COM' %}
-            {% set appointmentPerson = licence.responsibleComFullName + ", this person’s probation practitioner" %}
+            {% set appointmentPerson = licence.responsibleComFullName %}
         {% default %}
             {% set appointmentPerson = licence.appointmentPerson %}
     {% endswitch %}

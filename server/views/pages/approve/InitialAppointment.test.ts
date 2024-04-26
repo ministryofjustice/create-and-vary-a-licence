@@ -60,8 +60,6 @@ describe('View Initial appointment details - approve licence', () => {
         appointmentPersonType: 'RESPONSIBLE_COM',
       },
     })
-    expect($3('#initial-appointment-details > div:nth-child(1) > dd').text().trim()).toBe(
-      'COM, this person’s probation practitioner'
-    )
+    expect($3('#initial-appointment-details > div:nth-child(1) > dd').text().trim()).toBe('COM')
   })
 })
