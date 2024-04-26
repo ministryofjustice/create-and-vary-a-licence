@@ -4,7 +4,6 @@ import CommunityService from '../../../services/communityService'
 import { convertToTitleCase } from '../../../utils/utils'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
-import UkBankHolidayFeedService from '../../../services/ukBankHolidayFeedService'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import logger from '../../../../logger'
 import config from '../../../config'
@@ -12,8 +11,7 @@ import config from '../../../config'
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly communityService: CommunityService,
-    private readonly licenceService: LicenceService,
-    private readonly ukBankHolidayFeedService: UkBankHolidayFeedService
+    private readonly licenceService: LicenceService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -21,10 +19,9 @@ export default class ConfirmCreateRoutes {
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/create/caseload'
 
-    const [nomisRecord, deliusRecord, bankHolidays] = await Promise.all([
+    const [nomisRecord, deliusRecord] = await Promise.all([
       this.licenceService.getPrisonerDetail(nomisId, user),
       this.communityService.getProbationer({ nomsNumber: nomisId }),
-      this.ukBankHolidayFeedService.getEnglishAndWelshHolidays(),
     ])
 
     if (config.hardStopEnabled && nomisRecord.cvl.isInHardStopPeriod) {
@@ -42,10 +39,8 @@ export default class ConfirmCreateRoutes {
         dateOfBirth: moment(nomisRecord.prisoner.dateOfBirth).format('DD/MM/YYYY'),
         forename: convertToTitleCase(nomisRecord.prisoner.firstName),
         surname: convertToTitleCase(nomisRecord.prisoner.lastName),
+        isEligibleForEarlyRelease: nomisRecord.cvl.isEligibleForEarlyRelease,
       },
-      releaseIsOnBankHolidayOrWeekend: bankHolidays.isBankHolidayOrWeekend(
-        moment(nomisRecord.prisoner.confirmedReleaseDate || nomisRecord.prisoner.conditionalReleaseDate)
-      ),
       backLink,
     })
   }

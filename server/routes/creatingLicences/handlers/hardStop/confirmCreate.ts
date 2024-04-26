@@ -13,7 +13,7 @@ export default class ConfirmCreateRoutes {
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/view/cases'
     const {
-      cvl: { licenceType },
+      cvl: { licenceType, isEligibleForEarlyRelease },
       prisoner: { confirmedReleaseDate, conditionalReleaseDate, dateOfBirth, firstName, lastName },
     } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
@@ -26,6 +26,7 @@ export default class ConfirmCreateRoutes {
         forename: convertToTitleCase(firstName),
         surname: convertToTitleCase(lastName),
         licenceType,
+        isEligibleForEarlyRelease,
       },
       backLink,
     })

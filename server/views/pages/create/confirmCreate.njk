@@ -18,7 +18,7 @@
 
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        {% if releaseIsOnBankHolidayOrWeekend %}
+        {% if licence.isEligibleForEarlyRelease %}
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full-from-desktop">
                     {{ govukWarningText({

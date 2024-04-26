@@ -35,6 +35,7 @@ describe('Route handlers - View and print case list', () => {
     isInHardStopPeriod: true,
     isDueForEarlyRelease: false,
     isDueToBeReleasedInTheNextTwoWorkingDays: false,
+    isEligibleForEarlyRelease: false,
   }
 
   const exampleCase = {
