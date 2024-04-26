@@ -27,7 +27,6 @@ import {
 } from '../@types/licenceApiClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
 import LicenceEventType from '../enumeration/licenceEventType'
-import TimelineEvent from '../@types/TimelineEvent'
 import ConditionService from './conditionService'
 import { AdditionalConditionsConfig } from '../@types/LicencePolicy'
 
@@ -628,8 +627,8 @@ describe('Licence Service', () => {
   })
 
   it('should review a licence with no variation required', async () => {
-    await licenceService.reviewWithoutVariation(1)
-    expect(licenceApiClient.reviewWithoutVariation).toHaveBeenCalledWith(1)
+    await licenceService.reviewWithoutVariation(1, user)
+    expect(licenceApiClient.reviewWithoutVariation).toHaveBeenCalledWith(1, user)
   })
 
   describe('Exclusion zone file', () => {
@@ -747,128 +746,33 @@ describe('Licence Service', () => {
     expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
   })
 
-  describe('Get timeline events', () => {
-    const originalLicence = {
-      id: 1,
-      kind: 'CRD',
-      statusCode: LicenceStatus.ACTIVE,
-      createdByFullName: 'Jackson Browne',
-      dateLastUpdated: '10/11/2022 11:00:00',
-    } as Licence
+  it('will get variations of a licence', async () => {
+    const nomisId = '250412'
+    const licenceVariation = {
+      licenceId: 2,
+      nomisId,
+      licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+    } as LicenceSummary
 
-    const expectedEvents = [
-      {
-        eventType: 'CREATION',
-        title: 'Licence created',
-        statusCode: 'ACTIVE',
-        createdBy: 'Jackson Browne',
-        licenceId: 1,
-        lastUpdate: '10/11/2022 11:00:00',
-      },
-    ] as unknown as TimelineEvent[]
+    licenceApiClient.matchLicences.mockResolvedValue([licenceVariation])
+    const licenceVariations = await licenceService.getIncompleteLicenceVariations(nomisId)
 
-    it('will return a list of timeline events for an approved variation', async () => {
-      const licenceVariation = {
-        id: 2,
-        kind: 'VARIATION',
-        statusCode: LicenceStatus.VARIATION_APPROVED,
-        variationOf: 1,
-        createdByFullName: 'James Brown',
-        dateLastUpdated: '12/11/2022 10:45:00',
-      } as Licence
-
-      const variationApproved = {
-        eventType: 'VARIATION',
-        title: 'Licence varied',
-        statusCode: 'VARIATION_APPROVED',
-        createdBy: 'James Brown',
-        licenceId: 2,
-        lastUpdate: '12/11/2022 10:45:00',
-      }
-
-      licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
-      const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
-      expect(timelineEvents).toEqual([variationApproved, ...expectedEvents])
-      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith(1, user)
-    })
-
-    it('will return a list of timeline events for a submitted variation', async () => {
-      const licenceVariation = {
-        id: 2,
-        kind: 'VARIATION',
-        statusCode: LicenceStatus.VARIATION_SUBMITTED,
-        variationOf: 1,
-        createdByFullName: 'James Brown',
-        dateLastUpdated: '12/11/2022 10:45:00',
-      } as Licence
-
-      const variationSubmitted = {
-        eventType: 'SUBMITTED',
-        title: 'Variation submitted',
-        statusCode: 'VARIATION_SUBMITTED',
-        createdBy: 'James Brown',
-        licenceId: 2,
-        lastUpdate: '12/11/2022 10:45:00',
-      }
-
-      licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
-      const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
-      expect(timelineEvents).toEqual([variationSubmitted, ...expectedEvents])
-      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith(1, user)
-    })
-    it('will return a list of timeline events for a rejected variation', async () => {
-      const licenceVariation = {
-        id: 2,
-        kind: 'VARIATION',
-        statusCode: LicenceStatus.VARIATION_REJECTED,
-        variationOf: 1,
-        createdByFullName: 'James Brown',
-        dateLastUpdated: '12/11/2022 10:45:00',
-      } as Licence
-
-      const variationRejected = {
-        eventType: 'REJECTED',
-        title: 'Variation rejected',
-        statusCode: 'VARIATION_REJECTED',
-        createdBy: 'James Brown',
-        licenceId: 2,
-        lastUpdate: '12/11/2022 10:45:00',
-      }
-
-      licenceApiClient.getLicenceById.mockResolvedValue(originalLicence)
-      const timelineEvents = await licenceService.getTimelineEvents(licenceVariation, user)
-      expect(timelineEvents).toEqual([variationRejected, ...expectedEvents])
-      expect(licenceApiClient.getLicenceById).toHaveBeenCalledWith(1, user)
-    })
-
-    it('will get variations of a licence', async () => {
-      const nomisId = '250412'
-      const licenceVariation = {
-        licenceId: 2,
-        nomisId,
-        licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
-      } as LicenceSummary
-
-      licenceApiClient.matchLicences.mockResolvedValue([licenceVariation])
-      const licenceVariations = await licenceService.getIncompleteLicenceVariations(nomisId)
-
-      expect(licenceVariations).toEqual([licenceVariation])
-      expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
-        [
-          LicenceStatus.VARIATION_IN_PROGRESS,
-          LicenceStatus.VARIATION_SUBMITTED,
-          LicenceStatus.VARIATION_REJECTED,
-          LicenceStatus.VARIATION_APPROVED,
-        ],
-        null,
-        null,
-        [nomisId],
-        null,
-        null,
-        null,
-        undefined
-      )
-    })
+    expect(licenceVariations).toEqual([licenceVariation])
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
+      [
+        LicenceStatus.VARIATION_IN_PROGRESS,
+        LicenceStatus.VARIATION_SUBMITTED,
+        LicenceStatus.VARIATION_REJECTED,
+        LicenceStatus.VARIATION_APPROVED,
+      ],
+      null,
+      null,
+      [nomisId],
+      null,
+      null,
+      null,
+      undefined
+    )
   })
 
   it('Get prisoner details', async () => {

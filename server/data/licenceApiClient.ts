@@ -551,10 +551,13 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async reviewWithoutVariation(licenceId: number): Promise<void> {
-    await this.post({
-      path: `/licence/id/${licenceId}/review-with-no-variation-required`,
-    })
+  async reviewWithoutVariation(licenceId: number, user: User): Promise<void> {
+    await this.post(
+      {
+        path: `/licence/id/${licenceId}/review-with-no-variation-required`,
+      },
+      { username: user.username }
+    )
   }
 
   async getPrisonerDetail(nomsId: string, user: User): Promise<CaseloadItem> {

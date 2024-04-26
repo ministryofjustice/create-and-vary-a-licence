@@ -49,7 +49,7 @@
             <div class="moj-timeline__item">
                 <div class="moj-timeline__header">
                     <h2 class="moj-timeline__title">{{ event.title }}</h2>
-                    <p class="moj-timeline__byline">by {{ event.createdBy | title }}</p>
+                    <p class="moj-timeline__byline">by {{ event.createdBy }}</p>
                 </div>
 
                 <p class="moj-timeline__date">{{"Last update: " if event.statusCode === 'VARIATION_IN_PROGRESS'}} {{ event.lastUpdate | datetimeToDate }} at {{ event.lastUpdate | datetimeTo12HourTime }}</p>

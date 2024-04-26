@@ -41,6 +41,7 @@ export default function Index({
   caseloadService,
   communityService,
   conditionService,
+  timelineService,
 }: Services): Router {
   const router = Router()
 
@@ -72,7 +73,7 @@ export default function Index({
 
   const caseloadHandler = new CaseloadRoutes(caseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
-  const timelineHandler = new TimelineRoutes(licenceService)
+  const timelineHandler = new TimelineRoutes(licenceService, timelineService)
   const viewLicenceHandler = new ViewVariationRoutes(licenceService, conditionService)
   const viewActiveLicenceHandler = new ViewActiveLicenceRoutes(conditionService)
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)

@@ -1,9 +1,13 @@
 import { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import TimelineService from '../../../services/timelineService'
 import LicenceService from '../../../services/licenceService'
 
 export default class TimelineRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly timelineService: TimelineService
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user, licence } = res.locals
@@ -19,7 +23,7 @@ export default class TimelineRoutes {
       LicenceStatus.VARIATION_REJECTED,
     ].includes(<LicenceStatus>licence.statusCode)
 
-    const timelineEvents = await this.licenceService.getTimelineEvents(licence, user)
+    const timelineEvents = await this.timelineService.getTimelineEvents(licence, user)
 
     return res.render(`pages/vary/timeline`, {
       timelineEvents,

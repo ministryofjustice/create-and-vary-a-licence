@@ -2249,6 +2249,15 @@ export interface components {
        */
       endTime: string
     }
+    ErrorResponse_SubjectAccessRequest: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+    }
     /** @description Describes the data entered for an additional condition */
     AdditionalConditionData_SubjectAccessRequest: {
       /**
@@ -2558,7 +2567,8 @@ export interface components {
         | 'SUPERSEDED'
         | 'HARD_STOP_CREATED'
         | 'HARD_STOP_SUBMITTED'
-        | 'HARD_STOP_REVIEWED'
+        | 'HARD_STOP_REVIEWED_WITHOUT_VARIATION'
+        | 'HARD_STOP_REVIEWED_WITH_VARIATION'
         | 'VARIATION_CREATED'
         | 'VARIATION_SUBMITTED_REASON'
         | 'VARIATION_IN_PROGRESS'
@@ -2615,28 +2625,6 @@ export interface components {
        * @example 1.4
        */
       version?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       */
-      supersededDate?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       */
-      dateLastUpdated?: string
-      /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
-       */
-      updatedByUsername?: string
-      /**
-       * @description The version number of this licence
-       * @example 1.3
-       */
-      licenceVersion?: string
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
@@ -2746,10 +2734,27 @@ export interface components {
        */
       probationLauCode?: string
       /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
        */
-      updatedByFullName?: string
+      supersededDate?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       */
+      dateLastUpdated?: string
+      /**
+       * @description The username of the person who last updated this licence
+       * @example X34433
+       */
+      updatedByUsername?: string
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean
       /**
        * @description The username which created this licence
        * @example X12333
@@ -2766,30 +2771,26 @@ export interface components {
        */
       submittedByFullName?: string
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
        */
-      crn?: string
+      updatedByFullName?: string
       /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
+       * @description Is a review of this licence is required
+       * @example true
        */
-      pnc?: string
+      isReviewNeeded: boolean
       /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
        */
-      cro?: string
+      comUsername?: string
       /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
        */
-      bookingNo?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       */
-      dateCreated?: string
+      comStaffId?: number
       kind: string
       /**
        * @description The current status code for this licence
@@ -2810,6 +2811,31 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+      /**
+       * @description The prison booking number for the person on this licence
+       * @example F12333
+       */
+      bookingNo?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       */
+      dateCreated?: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -2841,45 +2867,20 @@ export interface components {
        */
       dateOfBirth?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
        */
-      nomsId?: string
+      pnc?: string
       /**
-       * @description The first name of the person on licence
-       * @example Michael
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
        */
-      forename?: string
+      cro?: string
       /**
-       * @description The family name of the person on licence
-       * @example Smith
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
        */
-      surname?: string
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      crn?: string
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
@@ -2927,6 +2928,15 @@ export interface components {
        * @enum {string}
        */
       appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string
     } & (
       | components['schemas']['CrdLicence_SubjectAccessRequest']
       | components['schemas']['VariationLicence_SubjectAccessRequest']
@@ -2998,15 +3008,6 @@ export interface components {
       | 'kind'
       | 'typeCode'
     >
-    ErrorResponse_SubjectAccessRequest: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
     GetDlqResult: {
       /** Format: int32 */
       messagesFoundCount: number
@@ -3059,28 +3060,6 @@ export interface components {
        * @example 1.4
        */
       version?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was superseded by a new variant
-       */
-      supersededDate?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was last updated
-       */
-      dateLastUpdated?: string
-      /**
-       * @description The username of the person who last updated this licence
-       * @example X34433
-       */
-      updatedByUsername?: string
-      /**
-       * @description The version number of this licence
-       * @example 1.3
-       */
-      licenceVersion?: string
-      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
-      isActivatedInPssPeriod?: boolean
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
@@ -3190,10 +3169,27 @@ export interface components {
        */
       probationLauCode?: string
       /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
+       * Format: date-time
+       * @description The date and time that this licence was superseded by a new variant
        */
-      updatedByFullName?: string
+      supersededDate?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was last updated
+       */
+      dateLastUpdated?: string
+      /**
+       * @description The username of the person who last updated this licence
+       * @example X34433
+       */
+      updatedByUsername?: string
+      /**
+       * @description The version number of this licence
+       * @example 1.3
+       */
+      licenceVersion?: string
+      /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
+      isActivatedInPssPeriod?: boolean
       /**
        * @description The username which created this licence
        * @example X12333
@@ -3210,30 +3206,26 @@ export interface components {
        */
       submittedByFullName?: string
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
        */
-      crn?: string
+      updatedByFullName?: string
       /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
+       * @description Is a review of this licence is required
+       * @example true
        */
-      pnc?: string
+      isReviewNeeded: boolean
       /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
+       * @description The nDELIUS user name for the supervising probation officer
+       * @example X32122
        */
-      cro?: string
+      comUsername?: string
       /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
        */
-      bookingNo?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       */
-      dateCreated?: string
+      comStaffId?: number
       kind: string
       /**
        * @description The current status code for this licence
@@ -3254,6 +3246,31 @@ export interface components {
         | 'VARIATION_APPROVED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+      /**
+       * @description The prison booking number for the person on this licence
+       * @example F12333
+       */
+      bookingNo?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this licence was first created
+       */
+      dateCreated?: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string
       /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
@@ -3285,45 +3302,20 @@ export interface components {
        */
       dateOfBirth?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
        */
-      nomsId?: string
+      pnc?: string
       /**
-       * @description The first name of the person on licence
-       * @example Michael
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
        */
-      forename?: string
+      cro?: string
       /**
-       * @description The family name of the person on licence
-       * @example Smith
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
        */
-      surname?: string
-      /**
-       * @description The nDELIUS user name for the supervising probation officer
-       * @example X32122
-       */
-      comUsername?: string
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      crn?: string
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
@@ -3371,6 +3363,15 @@ export interface components {
        * @enum {string}
        */
       appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition'][]
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string
     }
     /** @description Describes a CRD licence within this service */
     CrdLicence: WithRequired<
@@ -3635,7 +3636,8 @@ export interface components {
         | 'SUPERSEDED'
         | 'HARD_STOP_CREATED'
         | 'HARD_STOP_SUBMITTED'
-        | 'HARD_STOP_REVIEWED'
+        | 'HARD_STOP_REVIEWED_WITHOUT_VARIATION'
+        | 'HARD_STOP_REVIEWED_WITH_VARIATION'
         | 'VARIATION_CREATED'
         | 'VARIATION_SUBMITTED_REASON'
         | 'VARIATION_IN_PROGRESS'
@@ -6381,7 +6383,8 @@ export interface operations {
           | 'SUPERSEDED'
           | 'HARD_STOP_CREATED'
           | 'HARD_STOP_SUBMITTED'
-          | 'HARD_STOP_REVIEWED'
+          | 'HARD_STOP_REVIEWED_WITHOUT_VARIATION'
+          | 'HARD_STOP_REVIEWED_WITH_VARIATION'
           | 'VARIATION_CREATED'
           | 'VARIATION_SUBMITTED_REASON'
           | 'VARIATION_IN_PROGRESS'

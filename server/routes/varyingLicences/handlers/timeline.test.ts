@@ -4,12 +4,16 @@ import LicenceService from '../../../services/licenceService'
 import TimelineRoutes from './timeline'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import TimelineEvent from '../../../@types/TimelineEvent'
+import TimelineService from '../../../services/timelineService'
+
+jest.mock('../../../services/licenceService')
+jest.mock('../../../services/timelineService')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-jest.mock('../../../services/licenceService')
+const timelineService = new TimelineService(null) as jest.Mocked<TimelineService>
 
 describe('Route Handlers - Timeline', () => {
-  const handler = new TimelineRoutes(licenceService)
+  const handler = new TimelineRoutes(licenceService, timelineService)
 
   let req: Request
   let res: Response
@@ -63,11 +67,11 @@ describe('Route Handlers - Timeline', () => {
         },
       ] as unknown as TimelineEvent[]
 
-      licenceService.getTimelineEvents.mockResolvedValue(timelineEvents)
+      timelineService.getTimelineEvents.mockResolvedValue(timelineEvents)
 
       await handler.GET(req, res)
 
-      expect(licenceService.getTimelineEvents).toHaveBeenCalledWith(
+      expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_IN_PROGRESS, isReviewNeeded: false },
         { username: 'joebloggs' }
       )
@@ -115,11 +119,11 @@ describe('Route Handlers - Timeline', () => {
         },
       ] as unknown as TimelineEvent[]
 
-      licenceService.getTimelineEvents.mockResolvedValue(timelineEvents)
+      timelineService.getTimelineEvents.mockResolvedValue(timelineEvents)
 
       await handler.GET(req, res)
 
-      expect(licenceService.getTimelineEvents).toHaveBeenCalledWith(
+      expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_APPROVED, isReviewNeeded: false },
         { username: 'joebloggs' }
       )
@@ -167,11 +171,11 @@ describe('Route Handlers - Timeline', () => {
         },
       ] as unknown as TimelineEvent[]
 
-      licenceService.getTimelineEvents.mockResolvedValue(timelineEvents)
+      timelineService.getTimelineEvents.mockResolvedValue(timelineEvents)
 
       await handler.GET(req, res)
 
-      expect(licenceService.getTimelineEvents).toHaveBeenCalledWith(
+      expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_REJECTED, isReviewNeeded: false },
         { username: 'joebloggs' }
       )
@@ -211,11 +215,11 @@ describe('Route Handlers - Timeline', () => {
         },
       ] as unknown as TimelineEvent[]
 
-      licenceService.getTimelineEvents.mockResolvedValue(timelineEvents)
+      timelineService.getTimelineEvents.mockResolvedValue(timelineEvents)
 
       await handler.GET(req, res)
 
-      expect(licenceService.getTimelineEvents).toHaveBeenCalledWith(
+      expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.REVIEW_NEEDED, isReviewNeeded: true },
         { username: 'joebloggs' }
       )
