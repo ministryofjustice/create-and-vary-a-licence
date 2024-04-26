@@ -12,12 +12,10 @@ export default class ConfirmCreateRoutes {
     const { nomisId } = req.params
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/view/cases'
-    const [
-      {
-        cvl: { licenceType },
-        prisoner: { confirmedReleaseDate, conditionalReleaseDate, dateOfBirth, firstName, lastName },
-      },
-    ] = await Promise.all([this.licenceService.getPrisonerDetail(nomisId, user)])
+    const {
+      cvl: { licenceType },
+      prisoner: { confirmedReleaseDate, conditionalReleaseDate, dateOfBirth, firstName, lastName },
+    } = await this.licenceService.getPrisonerDetail(nomisId, user)
 
     return res.render('pages/create/hardStop/confirmCreate', {
       licence: {
