@@ -34,14 +34,12 @@ generic-service:
     LICENCES_URL: "http://create-and-vary-a-licence"
     DPS_URL: "https://digital-preprod.prison.service.justice.gov.uk"
     SHOW_WHATS_NEW_BANNER: "true"
-    TIME_OUT_JOB_ENABLED: "true"
 
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components-preprod.hmpps.service.justice.gov.uk"
     COMMON_COMPONENTS_ENABLED: "true"
     MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"
 
-    HARD_STOP_ENABLED: 'true'
 
 
 gotenberg:
