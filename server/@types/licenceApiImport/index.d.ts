@@ -1883,6 +1883,11 @@ export interface components {
        * @example true
        */
       isReviewNeeded: boolean
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string
     }
     /** @description Request object for searching for licences which are ready to approve */
     ApproveLicencesRequest: {

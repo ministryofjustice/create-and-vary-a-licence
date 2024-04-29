@@ -1043,6 +1043,7 @@ describe('Caseload Service', () => {
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        updatedByFullName: 'X Y',
       },
       {
         kind: 'CRD',
@@ -1055,8 +1056,8 @@ describe('Caseload Service', () => {
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        updatedByFullName: 'X Y',
       },
-
       {
         kind: 'CRD',
         nomisId: 'AB1234G',
@@ -1068,6 +1069,7 @@ describe('Caseload Service', () => {
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        updatedByFullName: 'X Y',
       },
       {
         kind: 'CRD',
@@ -1081,6 +1083,7 @@ describe('Caseload Service', () => {
         isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        updatedByFullName: 'X Y',
       },
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
@@ -1352,6 +1355,7 @@ describe('Caseload Service', () => {
             id: 1,
             status: 'APPROVED',
             type: 'PSS',
+            updatedByFullName: 'X Y',
           },
         ],
         nomisRecord: {
@@ -1388,6 +1392,7 @@ describe('Caseload Service', () => {
             id: 2,
             status: 'IN_PROGRESS',
             type: 'PSS',
+            updatedByFullName: 'X Y',
           },
         ],
         nomisRecord: {
@@ -1425,6 +1430,7 @@ describe('Caseload Service', () => {
             status: 'SUBMITTED',
             type: 'AP',
             versionOf: 2,
+            updatedByFullName: 'X Y',
           },
         ],
         nomisRecord: {
@@ -1462,6 +1468,7 @@ describe('Caseload Service', () => {
             id: 3,
             status: 'ACTIVE',
             type: 'AP',
+            updatedByFullName: 'X Y',
           },
         ],
         nomisRecord: {
