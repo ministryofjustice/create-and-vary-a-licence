@@ -58,7 +58,7 @@
                 {% endif %}
 
                 {% if licence.kind === 'HARD_STOP' %}
-                    {{ hardStopInductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
+                    {{ hardStopInductionMeetingDetails(licence, isEditableByPrison, validationErrors, null, isPrisonUser) }}
                 {% else %}
                     {{ inductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
                 {% endif %}

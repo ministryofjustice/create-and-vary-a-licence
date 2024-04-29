@@ -20,7 +20,7 @@
         classes: 'govuk-!-margin-bottom-9',
         rows: [
             {
-                classes: 'govuk-summary-list__row--error' if validationErrors | findError('appointmentPerson'),
+                classes: 'govuk-summary-list__row--error' if (validationErrors | findError('appointmentPerson') or validationErrors | findError('appointmentPersonType')),
                 key: { text: "Name" },
                 value: { text: selectedAppointmentPerson(licence) },
                 actions: {
