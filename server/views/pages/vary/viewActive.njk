@@ -4,7 +4,7 @@
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
-{% from "partials/varyCallToActions.njk" import cta %}
+{% from "partials/varyCallToActions.njk" import activeCta %}
 
 {% set pageTitle = applicationName + " - Vary a licence - Active licence" %}
 {% set isInVariation = licence.statusCode == 'VARIATION_IN_PROGRESS' or licence.statusCode == 'VARIATION_SUBMITTED' 
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    {{ cta(callToActions, licence) }}
+    {{ activeCta(callToActions, licence) }}
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
@@ -60,6 +60,6 @@
         </div>
     </div>
 
-    {{ cta(callToActions, licence) }}
+    {{ activeCta(callToActions, licence) }}
 
 {% endblock %}

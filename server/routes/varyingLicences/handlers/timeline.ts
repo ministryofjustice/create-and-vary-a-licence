@@ -1,7 +1,18 @@
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import TimelineService from '../../../services/timelineService'
 import LicenceService from '../../../services/licenceService'
+import type { Licence } from '../../../@types/licenceApiClientTypes'
+
+enum CallToActionType {
+  PRINT_TO_ACTIVATE = 'PRINT_TO_ACTIVATE',
+  EDIT = 'EDIT',
+  REVIEW = 'REVIEW',
+  VIEW_OR_VARY = 'VIEW_OR_VARY',
+}
+
+const { VARIATION_APPROVED, ACTIVE, VARIATION_IN_PROGRESS, VARIATION_REJECTED, VARIATION_SUBMITTED } = LicenceStatus
+const { PRINT_TO_ACTIVATE, EDIT, VIEW_OR_VARY, REVIEW } = CallToActionType
 
 export default class TimelineRoutes {
   constructor(
@@ -9,30 +20,32 @@ export default class TimelineRoutes {
     private readonly timelineService: TimelineService
   ) {}
 
+  getCtaType = (licence: Licence): CallToActionType => {
+    if (licence.statusCode === VARIATION_APPROVED) {
+      return PRINT_TO_ACTIVATE
+    }
+    if (licence.statusCode === ACTIVE && !licence.isReviewNeeded) {
+      return VIEW_OR_VARY
+    }
+
+    if ([VARIATION_IN_PROGRESS, VARIATION_SUBMITTED, VARIATION_REJECTED].includes(<LicenceStatus>licence.statusCode)) {
+      return EDIT
+    }
+
+    if (licence.isReviewNeeded) {
+      return REVIEW
+    }
+    return null
+  }
+
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user, licence } = res.locals
-
-    // Set up call to action buttons based on current licence status
-    const shouldShowPrintToActivateButton = licence.statusCode === LicenceStatus.VARIATION_APPROVED
-
-    const shouldShowViewOrVaryButton = licence.statusCode === LicenceStatus.ACTIVE && !licence.isReviewNeeded
-
-    const shouldShowEditButton = [
-      LicenceStatus.VARIATION_IN_PROGRESS,
-      LicenceStatus.VARIATION_SUBMITTED,
-      LicenceStatus.VARIATION_REJECTED,
-    ].includes(<LicenceStatus>licence.statusCode)
 
     const timelineEvents = await this.timelineService.getTimelineEvents(licence, user)
 
     return res.render(`pages/vary/timeline`, {
       timelineEvents,
-      callToActions: {
-        shouldShowViewOrVaryButton,
-        shouldShowPrintToActivateButton,
-        shouldShowEditButton,
-        shouldShowReviewButton: licence.isReviewNeeded,
-      },
+      callToAction: this.getCtaType(licence),
     })
   }
 
