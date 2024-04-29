@@ -26,7 +26,7 @@
 {% macro attentionNeededTab(params) %}
     <div id="attention-needed" role="tabpanel" aria-labelledby="tab_attention-needed">
         {{ attentionNeededTabDescription({count: params.count}) }}
-        {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config}) }}
+        {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config, activeTab: params.activeTab}) }}
     </div>
 {% endmacro %}
 
