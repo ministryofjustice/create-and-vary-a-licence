@@ -94,6 +94,7 @@ function createManagedCase(offenderManagers: OffenderManager[], licenceStatus: L
       isInHardStopPeriod: true,
       isDueForEarlyRelease: true,
       isDueToBeReleasedInTheNextTwoWorkingDays: true,
+      isEligibleForEarlyRelease: false,
     },
     nomisRecord: {
       prisonId: 'someId',

@@ -47,6 +47,7 @@ describe('Route Handlers - Variation approval list', () => {
           isInHardStopPeriod: true,
           isDueForEarlyRelease: true,
           isDueToBeReleasedInTheNextTwoWorkingDays: true,
+          isEligibleForEarlyRelease: false,
         },
         nomisRecord: {
           firstName: 'Bob',

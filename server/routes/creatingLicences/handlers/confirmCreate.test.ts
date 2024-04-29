@@ -5,20 +5,16 @@ import ConfirmCreateRoutes from './confirmCreate'
 import CommunityService from '../../../services/communityService'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { CaseloadItem, CvlPrisoner, LicenceSummary } from '../../../@types/licenceApiClientTypes'
-import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../../services/ukBankHolidayFeedService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-
-const bankHolidayRetriever: BankHolidayRetriever = async () => []
-const ukBankHolidayFeedService = new UkBankHolidayFeedService(bankHolidayRetriever)
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/communityService')
 jest.mock('../../../services/prisonerService')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(communityService, licenceService, ukBankHolidayFeedService)
+  const handler = new ConfirmCreateRoutes(communityService, licenceService)
   let req: Request
   let res: Response
 
@@ -58,6 +54,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       } as CvlPrisoner,
       cvl: {
         isInHardStopPeriod: false,
+        isEligibleForEarlyRelease: true,
       },
     } as CaseloadItem)
   })
@@ -85,8 +82,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '10/11/1960',
           forename: 'Patrick',
           surname: 'Holmes',
+          isEligibleForEarlyRelease: true,
         },
-        releaseIsOnBankHolidayOrWeekend: true,
         backLink: req.session.returnToCase,
       })
     })
@@ -109,8 +106,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '10/11/1960',
           forename: 'Patrick',
           surname: 'Holmes',
+          isEligibleForEarlyRelease: true,
         },
-        releaseIsOnBankHolidayOrWeekend: true,
         backLink: '/licence/create/caseload',
       })
     })
@@ -125,6 +122,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         } as CvlPrisoner,
         cvl: {
           isInHardStopPeriod: false,
+          isEligibleForEarlyRelease: false,
         },
       } as CaseloadItem)
 
@@ -137,8 +135,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           dateOfBirth: '10/11/1960',
           forename: 'Patrick',
           surname: 'Holmes',
+          isEligibleForEarlyRelease: false,
         },
-        releaseIsOnBankHolidayOrWeekend: true,
         backLink: req.session.returnToCase,
       })
     })
