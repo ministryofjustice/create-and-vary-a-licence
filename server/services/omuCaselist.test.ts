@@ -93,7 +93,9 @@ function createCaselist(status: LicenceStatus, confirmedReleaseDate: string, con
     new Container([
       {
         deliusRecord: { offenderId: 1 },
-        licences: [{ type: LicenceType.AP, status, isDueToBeReleasedInTheNextTwoWorkingDays: false }],
+        licences: [
+          { type: LicenceType.AP, status, isDueToBeReleasedInTheNextTwoWorkingDays: false, releaseDate: null },
+        ],
         cvlFields: {
           licenceType: 'AP',
           hardStopDate: '03/01/2023',

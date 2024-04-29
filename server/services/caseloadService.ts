@@ -193,6 +193,7 @@ export default class CaseloadService {
         return {
           ...offender,
           licences: licences.map(licence => {
+            const releaseDate = licence.actualReleaseDate || licence.conditionalReleaseDate
             return {
               id: licence.licenceId,
               status: licence.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : <LicenceStatus>licence.licenceStatus,
@@ -203,6 +204,7 @@ export default class CaseloadService {
               hardStopDate: parseCvlDate(licence.hardStopDate),
               hardStopWarningDate: parseCvlDate(licence.hardStopWarningDate),
               isDueToBeReleasedInTheNextTwoWorkingDays: licence.isDueToBeReleasedInTheNextTwoWorkingDays,
+              releaseDate: releaseDate ? parseCvlDate(releaseDate) : null,
             }
           }),
         }
@@ -236,6 +238,7 @@ export default class CaseloadService {
               hardStopDate: null,
               hardStopWarningDate: null,
               isDueToBeReleasedInTheNextTwoWorkingDays: null,
+              releaseDate: null,
             },
           ],
         }
@@ -243,6 +246,7 @@ export default class CaseloadService {
       const hardStopDate = parseCvlDate(offender.cvlFields?.hardStopDate)
       const hardStopWarningDate = parseCvlDate(offender.cvlFields?.hardStopWarningDate)
       const isDueToBeReleasedInTheNextTwoWorkingDays = offender.cvlFields?.isDueToBeReleasedInTheNextTwoWorkingDays
+      const releaseDate = offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate
 
       return {
         ...offender,
@@ -253,6 +257,7 @@ export default class CaseloadService {
             hardStopDate,
             hardStopWarningDate,
             isDueToBeReleasedInTheNextTwoWorkingDays,
+            releaseDate: releaseDate ? parseIsoDate(releaseDate) : null,
           },
         ],
       }
@@ -379,6 +384,7 @@ export default class CaseloadService {
         licences: licences
           .filter(l => l.nomisId === offender.nomisRecord.prisonerNumber)
           .map(l => {
+            const releaseDate = l.actualReleaseDate || l.conditionalReleaseDate
             return {
               id: l.licenceId,
               type: <LicenceType>l.licenceType,
@@ -394,6 +400,7 @@ export default class CaseloadService {
               hardStopWarningDate: parseCvlDate(l.hardStopWarningDate),
               isDueToBeReleasedInTheNextTwoWorkingDays: l.isDueToBeReleasedInTheNextTwoWorkingDays,
               updatedByFullName: l.updatedByFullName,
+              releaseDate: releaseDate ? parseCvlDate(releaseDate) : null,
             }
           }),
       }

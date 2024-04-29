@@ -26,6 +26,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            releaseDate: null,
           },
         ],
         cvlFields: {
@@ -59,6 +60,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             type: LicenceType.AP,
             status: LicenceStatus.REVIEW_NEEDED,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            releaseDate: null,
           },
         ],
         cvlFields: {
@@ -95,6 +97,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            releaseDate: null,
           },
         ],
         cvlFields: {
@@ -128,6 +131,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             type: LicenceType.AP,
             status: LicenceStatus.ACTIVE,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            releaseDate: null,
           },
         ],
         cvlFields: {
@@ -161,6 +165,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             type: LicenceType.AP,
             status: LicenceStatus.REVIEW_NEEDED,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            releaseDate: null,
           },
         ],
         cvlFields: {
@@ -326,12 +331,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
               type: LicenceType.AP,
               status: LicenceStatus.ACTIVE,
               isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              releaseDate: null,
             },
             {
               id: 2,
               type: LicenceType.AP,
               status: LicenceStatus.VARIATION_IN_PROGRESS,
               isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              releaseDate: null,
             },
           ],
           cvlFields: {
@@ -395,12 +402,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
               type: LicenceType.AP,
               status: LicenceStatus.TIMED_OUT,
               isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              releaseDate: null,
             },
             {
               id: 2,
               type: LicenceType.AP,
               status: LicenceStatus.VARIATION_IN_PROGRESS,
               isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              releaseDate: null,
             },
           ],
           cvlFields: {
@@ -464,12 +473,14 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
               type: LicenceType.AP,
               status: LicenceStatus.REVIEW_NEEDED,
               isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              releaseDate: null,
             },
             {
               id: 2,
               type: LicenceType.AP,
               status: LicenceStatus.VARIATION_IN_PROGRESS,
               isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              releaseDate: null,
             },
           ],
           cvlFields: {

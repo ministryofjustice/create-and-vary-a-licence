@@ -5,7 +5,7 @@ import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
 import type { LicenceSummaryApproverView } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
-import { filterCentralCaseload } from '../utils/utils'
+import { filterCentralCaseload, parseCvlDate } from '../utils/utils'
 import { LicenceApiClient } from '../data'
 
 export default class ApproverCaseloadService {
@@ -66,6 +66,7 @@ export default class ApproverCaseloadService {
         licences: licences
           .filter(l => l.nomisId === offender.nomisRecord.prisonerNumber)
           .map(l => {
+            const releaseDate = l.actualReleaseDate || l.conditionalReleaseDate
             return {
               id: l.licenceId,
               type: <LicenceType>l.licenceType,
@@ -79,6 +80,7 @@ export default class ApproverCaseloadService {
               submittedByFullName: l.submittedByFullName,
               isDueForEarlyRelease: l.isDueForEarlyRelease,
               isDueToBeReleasedInTheNextTwoWorkingDays: l.isDueToBeReleasedInTheNextTwoWorkingDays,
+              releaseDate: releaseDate ? parseCvlDate(releaseDate) : null,
             }
           }),
       }
