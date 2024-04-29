@@ -191,11 +191,7 @@ const licenceIsTwoDaysToRelease = (licence: Licence) =>
   moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
 
 const selectReleaseDate = (nomisRecord: CvlPrisoner) => {
-  let dateString = nomisRecord.conditionalReleaseDate
-
-  if (nomisRecord.confirmedReleaseDate) {
-    dateString = nomisRecord.confirmedReleaseDate
-  }
+  const dateString = nomisRecord.confirmedReleaseDate || nomisRecord.conditionalReleaseDate
 
   if (!dateString) {
     return null
@@ -207,12 +203,12 @@ const selectReleaseDate = (nomisRecord: CvlPrisoner) => {
 
 const isAttentionNeeded = (
   { status, licenceStartDate }: { status: LicenceStatus; licenceStartDate?: string },
-  nomisRecord: CvlPrisoner
+  releaseDate: Date
 ) => {
   const today = startOfDay(new Date())
 
   const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
-  const noReleaseDates = !nomisRecord.confirmedReleaseDate && !nomisRecord.conditionalReleaseDate
+  const noReleaseDates = !releaseDate
 
   const missingDates = [APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED].includes(status) && noReleaseDates
   const startDateInPast = licenceStartDate && status === APPROVED && isBefore(parseCvlDate(licenceStartDate), today)
@@ -225,7 +221,9 @@ const determineCaViewCasesTab = (
   nomisRecord: CvlPrisoner,
   cvlFields: CvlFields
 ): CaViewCasesTab => {
-  if (licence && isAttentionNeeded(licence, nomisRecord)) {
+  const releaseDate = licence?.releaseDate || selectReleaseDate(nomisRecord)
+
+  if (licence && isAttentionNeeded(licence, releaseDate)) {
     return CaViewCasesTab.ATTENTION_NEEDED
   }
   const { isDueToBeReleasedInTheNextTwoWorkingDays } = licence || cvlFields

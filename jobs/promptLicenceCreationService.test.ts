@@ -101,7 +101,14 @@ function createManagedCase(offenderManagers: OffenderManager[], licenceStatus: L
       conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
       status: 'someStatus',
     } as CvlPrisoner,
-    licences: [{ status: licenceStatus, type: LicenceType.AP, isDueToBeReleasedInTheNextTwoWorkingDays: true }],
+    licences: [
+      {
+        status: licenceStatus,
+        type: LicenceType.AP,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
+        releaseDate: null,
+      },
+    ],
     probationPractitioner: { name: 'jim' },
   }
 }

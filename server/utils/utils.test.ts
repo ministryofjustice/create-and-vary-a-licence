@@ -540,69 +540,54 @@ describe('Check if licence needs attention', () => {
     licenceStartDate: toCvlDate(addDays(now, 1)),
   } as ManagedCaseLicence
 
-  const nomisRecord = {
-    prisonerNumber: 'G4169UO',
-    pncNumber: '98/240521B',
-    confirmedReleaseDate: toCvlDate(addDays(now, 3)),
-    conditionalReleaseDate: toCvlDate(addDays(now, 3)),
-  } as CvlPrisoner
+  const releaseDate = addDays(now, 3)
 
   afterEach(() => {
     jest.resetAllMocks()
   })
 
   it('should return true if licence status is oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is no CRD/ARD', () => {
-    expect(
-      isAttentionNeeded(
-        { licenceStartDate: licence.licenceStartDate, status: licence.status },
-        { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null }
-      )
-    ).toBeTruthy()
+    expect(isAttentionNeeded({ licenceStartDate: licence.licenceStartDate, status: licence.status }, null)).toBeTruthy()
   })
 
   it('should return false if licence status is not oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is no CRD/ARD', () => {
-    expect(
-      isAttentionNeeded(
-        { licenceStartDate: null, status: LicenceStatus.ACTIVE },
-        { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null }
-      )
-    ).toBeFalsy()
+    expect(isAttentionNeeded({ licenceStartDate: null, status: LicenceStatus.ACTIVE }, null)).toBeFalsy()
   })
 
   describe('when status is approved', () => {
     const status = LicenceStatus.APPROVED
     it('should return false if licenceStartDate is null', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: null }, nomisRecord)).toBeFalsy()
+      expect(isAttentionNeeded({ status, licenceStartDate: null }, releaseDate)).toBeFalsy()
     })
 
     it('should return false when start date is today', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(now) }, nomisRecord)).toBeFalsy()
+      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(now) }, releaseDate)).toBeFalsy()
     })
 
     it('should return false when start date is in the future', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(addDays(now, 1)) }, nomisRecord)).toBeFalsy()
+      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(addDays(now, 1)) }, releaseDate)).toBeFalsy()
     })
 
     it('should return true when start date is in the past', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(subDays(now, 1)) }, nomisRecord)).toBeTruthy()
+      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(subDays(now, 1)) }, releaseDate)).toBeTruthy()
     })
   })
   describe('when status is not approved', () => {
     const status = LicenceStatus.ACTIVE
     it('should return false if licenceStartDate is null', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: null }, nomisRecord)).toBeFalsy()
+      expect(isAttentionNeeded({ status, licenceStartDate: null }, releaseDate)).toBeFalsy()
     })
 
     it('should return false when start date is today', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(now) }, nomisRecord)).toBeFalsy()
+      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(now) }, releaseDate)).toBeFalsy()
     })
 
     it('should return false when start date is in the future', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(addDays(now, 1)) }, nomisRecord)).toBeFalsy()
+      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(addDays(now, 1)) }, releaseDate)).toBeFalsy()
     })
 
     it('should return true when start date is in the past', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(subDays(now, 1)) }, nomisRecord)).toBeFalsy()
+      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(subDays(now, 1)) }, releaseDate)).toBeFalsy()
     })
   })
 })
