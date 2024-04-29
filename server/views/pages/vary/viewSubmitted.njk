@@ -4,7 +4,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "partials/variationDetails.njk" import variationDetails %}
 {% from "partials/variedConditions.njk" import variedConditions %}
-{% from "partials/varyCallToActions.njk" import cta %}
+{% from "partials/varyCallToActions.njk" import submittedCta %}
 
 {% set pageTitle = applicationName + " - Vary a licence - Variation request status" %}
 {% set pageId = "variation-request-status-page" %}
@@ -21,10 +21,10 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                {{ cta(callToActions, licence) }}
+                {{ submittedCta(callToActions, licence) }}
                 {{ variationDetails(licence, conversation) }}
                 {{ variedConditions(conditionComparison) }}
-                {{ cta(callToActions, licence) }}
+                {{ submittedCta(callToActions, licence) }}
             </div>
         </div>
     </form>

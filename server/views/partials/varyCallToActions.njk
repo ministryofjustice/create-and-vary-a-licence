@@ -1,7 +1,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
-{% macro cta(callToActions, licence, csrfToken) %}
+{% macro activeCta(callToActions, licence, csrfToken) %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if callToActions.shouldShowVaryButton %}
@@ -12,40 +12,15 @@
                     attributes: { 'data-qa': 'vary-licence' }
                 }) }}
             {% endif %}
-            {% if callToActions.shouldShowPrintToActivateButton %}
-                {{ govukButton({
-                    text: "Set licence to active",
-                    classes: "govuk-button--primary govuk-!-margin-right-1",
-                    type: "submit",
-                    attributes: { 'data-qa': 'view-and-print' },
-                    preventDoubleClick: true
-                }) }}
-            {% endif %}
-            {% if callToActions.shouldShowPrintButton %}
-                {{ govukButton({
-                    text: "Print",
-                    classes: "govuk-button--primary govuk-!-margin-right-1",
-                    href: '#'
-                }) }}
-            {% endif %}
-            {% if callToActions.shouldShowViewOrVaryButton %}
-                {{ govukButton({
-                    text: "View or vary licence",
-                    classes: "govuk-button--primary govuk-!-margin-right-1",
-                    href: '/licence/vary/id/' + licence.id + '/view-active',
-                    attributes: { 'data-qa': 'view-or-vary-licence' }
-                }) }}
-            {% endif %}
-            {% if callToActions.shouldShowEditButton %}
-                {{ govukButton({
-                    text: "Edit variation",
-                    classes: "govuk-button--primary govuk-!-margin-right-1",
-                    href: '/licence/vary/id/' + licence.id + '/view',
-                    attributes: { 'data-qa': 'edit-licence' }
-                }) }}
-            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro submittedCta(callToActions, licence, csrfToken) %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
             {% if callToActions.shouldShowEditAndDiscardButton %}
-                {% set class = "govuk-button--secondary" if callToActions.shouldShowPrintButton else "govuk-button--primary" %}
+                {% set class = "govuk-button--primary" %}
                 {{ govukButton({
                     text: "Edit variation",
                     classes: class + " govuk-!-margin-right-1",
@@ -57,7 +32,59 @@
                     href: '/licence/vary/id/' + licence.id + '/confirm-discard-variation'
                 }) }}
             {% endif %}
-            {% if callToActions.shouldShowReviewButton %}
+        </div>
+    </div>
+{% endmacro %}
+ 
+{% macro timelineCta(callToAction, licence, csrfToken) %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {% switch callToAction %}
+            
+            {% case 'PRINT_TO_ACTIVATE' %}
+                {{ govukButton({
+                    text: "Set licence to active",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    type: "submit",
+                    attributes: { 'data-qa': 'view-and-print' },
+                    preventDoubleClick: true
+                }) }}
+                {{ govukButton ({
+    text: "Return to case list",
+                        classes: "govuk-button--secondary",
+                        href: "/licence/vary/caseload",
+                        attributes: { 'data-qa': 'return-to-caselist' }
+                }) }}
+            
+            {% case 'VIEW_OR_VARY' %}
+                {{ govukButton({
+                    text: "View or vary licence",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    href: '/licence/vary/id/' + licence.id + '/view-active',
+                    attributes: { 'data-qa': 'view-or-vary-licence' }
+                }) }}
+                {{ govukButton ({
+                    text: "Return to case list",
+                    classes: "govuk-button--secondary",
+                    href: "/licence/vary/caseload",
+                    attributes: { 'data-qa': 'return-to-caselist' }
+                }) }}
+            
+            {% case 'EDIT' %}
+                {{ govukButton({
+                    text: "Edit variation",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    href: '/licence/vary/id/' + licence.id + '/view',
+                    attributes: { 'data-qa': 'edit-licence' }
+                }) }}
+                {{ govukButton ({
+                    text: "Return to case list",
+                    classes: "govuk-button--secondary",
+                    href: "/licence/vary/caseload",
+                    attributes: { 'data-qa': 'return-to-caselist' }
+                }) }}
+            
+            {% case 'REVIEW' %}
                 <div class="govuk-grid-column-full">
                     {{ govukWarningText ({
                         text: "Review needed – Standard licence generated by the prison as you did not get one approved in time for the prison's final release checks.",
@@ -73,10 +100,12 @@
                     {{ govukButton ({
                         text: "Return to case list",
                         classes: "govuk-button--secondary",
-                        href: "/licence/vary/caseload"
+                        href: "/licence/vary/caseload",
+                        attributes: { 'data-qa': 'return-to-caselist' }
                     }) }}
                 </div>
-            {% endif %}
+            
+            {% endswitch %}
         </div>
     </div>
 {% endmacro %}
