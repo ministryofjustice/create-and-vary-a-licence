@@ -157,6 +157,17 @@ describe('CaseloadViewModel', () => {
       ).toEqual(false)
     })
 
+    it('should handle missing hardstop date', () => {
+      licence = { ...licence, hardStopWarningDate: null, hardStopDate: null }
+
+      expect(
+        createCaseloadViewModel(
+          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
+          null
+        )[0].hardStopDate
+      ).toEqual(null)
+    })
+
     it('sets showHardStopWarning to false if now is before window', () => {
       const now = new Date()
       licence = { ...licence, hardStopWarningDate: addDays(now, 1), hardStopDate: addDays(now, 3) }
