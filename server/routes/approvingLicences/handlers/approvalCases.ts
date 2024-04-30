@@ -57,7 +57,7 @@ export default class ApprovalCaseRoutes {
         )
       })
       .sort((a, b) => {
-        return (a.sortDate.getTime() || 0) - (b.sortDate.getTime() || 0)
+        return (a.sortDate?.getTime() || 0) - (b.sortDate?.getTime() || 0)
       })
 
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))

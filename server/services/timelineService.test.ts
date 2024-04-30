@@ -173,5 +173,58 @@ describe('Timeline Service', () => {
         user
       )
     })
+
+    it('will handle missing dates', async () => {
+      const standardLicence = {
+        id: 2,
+        kind: 'HARD_STOP',
+        statusCode: LicenceStatus.ACTIVE,
+        createdByFullName: 'JAMES BROWN',
+        dateLastUpdated: '12/11/2022 10:00:00',
+        prisonDescription: 'Moorland (hmp)',
+        dateCreated: undefined,
+      } as Licence
+
+      licenceApiClient.matchLicenceEvents.mockResolvedValue([
+        {
+          licenceId: 2,
+          eventType: LicenceEventType.HARD_STOP_REVIEWED_WITHOUT_VARIATION,
+          username: 'TIM_USER',
+          forenames: 'Tim',
+          surname: 'Smith',
+          eventTime: undefined,
+          eventDescription: `Licence reviewed without being varied for Jack Walker`,
+        },
+      ])
+
+      const expected = [
+        {
+          createdBy: 'James Brown, Moorland (HMP)',
+          eventType: 'CREATION',
+          lastUpdate: undefined as string,
+          licenceId: 2,
+          statusCode: 'ACTIVE',
+          title: 'Licence created',
+        },
+        {
+          createdBy: 'Tim Smith',
+          eventType: 'REVIEWED_WITHOUT_VARIATION',
+          lastUpdate: undefined as string,
+          licenceId: 2,
+          statusCode: 'ACTIVE',
+          title: 'Licence reviewed without being varied',
+        },
+      ]
+
+      const timelineEvents = await timelineService.getTimelineEvents(standardLicence, user)
+      expect(timelineEvents).toEqual(expected)
+      expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith(
+        '2',
+        ['HARD_STOP_REVIEWED_WITHOUT_VARIATION'],
+        'eventTime',
+        'DESC',
+        user
+      )
+    })
   })
 })
