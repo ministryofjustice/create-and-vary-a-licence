@@ -31,7 +31,7 @@
 {% elif search and attentionNeededCount  %}
     {% set activeTab = 'attention-needed' %}
 {% else %}
-    {% set activeTab = 'releases-in-two-working-days' %}
+    {% set activeTab = '' %}
 {% endif %}
 {% set licences = [] %}
 
@@ -160,14 +160,14 @@
                         label: releaseInNextTwoWorkingDaysLabel,
                         id: "releases-in-two-working-days",
                         panel: {
-                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig, count: releaseInTwoWorkingDaysCount })
+                            html: releasesInTwoWorkingDaysTab({ cases: cases, tabType: CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS, config: statusConfig, count: releaseInTwoWorkingDaysCount, activeTab: 'releases-in-two-working-days' })
                         }
                     }, 
                     {
                         label: futureReleasesLabel,
                         id: "future-releases",
                         panel: {
-                            html: futureReleasesTab({ cases: cases, tabType: CaViewCasesTab.FUTURE_RELEASES, config: statusConfig, count: futureReleasesCount })
+                            html: futureReleasesTab({ cases: cases, tabType: CaViewCasesTab.FUTURE_RELEASES, config: statusConfig, count: futureReleasesCount, activeTab: 'future-releases' })
                         }
                     }
                 ), peopleInPrisontabs) 
@@ -179,7 +179,7 @@
                         label: attentionNeededTabHeadingWithCount({label: attentionNeededLabel, count: attentionNeededCount, isSearch: not not search}),
                         id: "attention-needed",
                         panel: {
-                            html: attentionNeededTab({ cases: cases, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: attentionNeededCount })
+                            html: attentionNeededTab({ cases: cases, tabType: CaViewCasesTab.ATTENTION_NEEDED, config: statusConfig, count: attentionNeededCount, activeTab: 'attention-needed' })
                         }
                     }
                     ), peopleInPrisontabs) 

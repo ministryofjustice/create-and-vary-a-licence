@@ -5,6 +5,7 @@ import LicenceService from '../../../../services/licenceService'
 import Telephone from '../../types/telephone'
 import UserType from '../../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
+import PathType from '../../../../enumeration/pathType'
 
 jest.mock('../initialMeetingUpdatedFlashMessage')
 
@@ -47,17 +48,28 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
   })
 
   describe('Prison user journey', () => {
-    const handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON)
+    let handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.CREATE)
 
     describe('GET', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingContact')
+        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingContact', {
+          continueOrSaveLabel: 'Continue',
+        })
+      })
+
+      it('should render view with Save Label', async () => {
+        handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingContact', {
+          continueOrSaveLabel: 'Save',
+        })
       })
     })
 
     describe('POST', () => {
       it('should redirect to the meeting time page', async () => {
+        handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.CREATE)
         await handler.POST(req, res)
         expect(licenceService.updateContactNumber).toHaveBeenCalledWith(
           1,
@@ -68,13 +80,13 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       })
 
       it('should redirect to the check your answers page', async () => {
+        handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.EDIT)
         req = {
           params: {
             licenceId: 1,
           },
           body: contactNumber,
           query: {},
-          path: 'edit',
         } as unknown as Request
         await handler.POST(req, res)
         expect(licenceService.updateContactNumber).toHaveBeenCalledWith(

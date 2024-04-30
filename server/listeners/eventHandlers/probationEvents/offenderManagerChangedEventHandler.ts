@@ -15,11 +15,11 @@ export default class OffenderManagerChangedEventHandler {
     const { crn } = event
     const deliusRecord = await this.communityService.getSingleOffenderByCrn(crn)
     const offenderManagers = await this.communityService.getAnOffendersManagers(crn)
-    const responsibleOfficer = deliusRecord.offenderManagers.find(om => om.active)
+    const responsibleOfficer = deliusRecord.offenderManagers?.find(om => om.active)
 
     logger.info(`responsible officer code for crn ${crn} is ${responsibleOfficer?.staff?.code}`)
 
-    const newCom = offenderManagers.find(om => om.staffCode === responsibleOfficer.staff.code)
+    const newCom = offenderManagers.find(om => om.staffCode === responsibleOfficer?.staff?.code)
 
     if (newCom) {
       const comDetails = await this.communityService.getStaffDetailByStaffIdentifier(newCom.staffId)

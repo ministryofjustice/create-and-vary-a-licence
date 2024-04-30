@@ -6,6 +6,7 @@ import DateTime from '../../types/dateTime'
 import UserType from '../../../../enumeration/userType'
 import AppointmentTimeType from '../../../../enumeration/appointmentTimeType'
 import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
+import PathType from '../../../../enumeration/pathType'
 
 jest.mock('../initialMeetingUpdatedFlashMessage')
 
@@ -57,7 +58,7 @@ describe('Route - create licence - initial meeting date and time', () => {
   })
 
   describe('Hardstop licence prison user journey', () => {
-    const handler = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON)
+    let handler = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON, PathType.CREATE)
 
     describe('GET', () => {
       it('should render initial meeting time view', async () => {
@@ -65,12 +66,24 @@ describe('Route - create licence - initial meeting date and time', () => {
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingTime', {
           formDate,
           appointmentTimeType,
+          continueOrSaveLabel: 'Continue',
+        })
+      })
+
+      it('should render initial meeting time view with Save Label', async () => {
+        handler = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingTime', {
+          formDate,
+          appointmentTimeType,
+          continueOrSaveLabel: 'Save',
         })
       })
     })
 
     describe('POST', () => {
       it('should redirect to the next page', async () => {
+        handler = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON, PathType.CREATE)
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')

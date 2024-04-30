@@ -5,6 +5,7 @@ import LicenceService from '../../../../services/licenceService'
 import Address from '../../types/address'
 import UserType from '../../../../enumeration/userType'
 import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
+import PathType from '../../../../enumeration/pathType'
 
 jest.mock('../initialMeetingUpdatedFlashMessage')
 
@@ -51,30 +52,43 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     licenceService.recordAuditEvent = jest.fn()
   })
   describe('Hardstop licence prison user journey', () => {
-    const handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON)
+    let handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.CREATE)
 
     describe('GET', () => {
       it('should render view', async () => {
         await handler.GET(req, res)
-        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', { formAddress })
+        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
+          formAddress,
+          continueOrSaveLabel: 'Continue',
+        })
+      })
+
+      it('should render view with save Label', async () => {
+        handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        await handler.GET(req, res)
+        expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
+          formAddress,
+          continueOrSaveLabel: 'Save',
+        })
       })
     })
 
     describe('POST', () => {
       it('should redirect to the initial meeting contact page', async () => {
+        handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.CREATE)
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-contact')
       })
 
       it('should redirect to the check your answers page page', async () => {
+        handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.EDIT)
         req = {
           params: {
             licenceId: 1,
           },
           body: formAddress,
           query: {},
-          path: 'edit',
         } as unknown as Request
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })

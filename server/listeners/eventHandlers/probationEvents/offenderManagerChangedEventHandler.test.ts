@@ -181,6 +181,30 @@ describe('Offender manager changed event handler', () => {
     expect(licenceService.updateResponsibleCom).not.toHaveBeenCalled()
   })
 
+  it('should not update the responsible COM if no offenderManagers', async () => {
+    communityService.getSingleOffenderByCrn.mockResolvedValue({} as OffenderDetail)
+    communityService.getAnOffendersManagers.mockResolvedValue([
+      {
+        staffCode: 'X12344',
+        staffId: 2000,
+      },
+      {
+        staffCode: 'X12345',
+        staffId: 3000,
+      },
+    ])
+
+    const event = {
+      crn: 'X1234',
+    } as ProbationEventMessage
+
+    await handler.handle(event)
+
+    expect(communityService.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
+    expect(communityService.getStaffDetailByStaffIdentifier).not.toHaveBeenCalled()
+    expect(licenceService.updateResponsibleCom).not.toHaveBeenCalled()
+  })
+
   it('should assign the COM to a role if they do not have it already', async () => {
     communityService.getSingleOffenderByCrn.mockResolvedValue({
       offenderManagers: [

@@ -11,6 +11,6 @@
             </ul>
             <p>You will not be able to generate a standard licence for someone being released early if the probation practitioner has not submitted one.</p>
         {% endif %}
-       {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config}) }} 
+       {{ viewCases({ cases: params.cases, tabType: params.tabType, config: params.config, activeTab: params.activeTab}) }} 
     </div>
 {% endmacro %}

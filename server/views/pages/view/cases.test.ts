@@ -81,7 +81,7 @@ describe('View and print a licence - case list', () => {
       prisonsToDisplay,
       probationView,
     })
-    expect($('input[id="activeTab"]').val()).toBe('releases-in-two-working-days')
+    expect($('.govuk-tabs__list-item--selected').text()).toContain('Releases in next 2 working days')
     expect($('.govuk-tabs__list a').text()).toContain('Releases in next 2 working days')
     expect($('.govuk-tabs__list a').text()).toContain('Future releases')
     expect($('.govuk-tabs__list a').text()).toContain('Attention needed')
@@ -117,7 +117,7 @@ describe('View and print a licence - case list', () => {
       prisonsToDisplay,
       probationView,
     })
-    expect($('input[id="activeTab"]').val()).toBe('releases-in-two-working-days')
+    expect($('.govuk-tabs__list-item--selected').text()).toContain('Releases in next 2 working days')
     expect($('.govuk-tabs__list a').text()).toContain('Releases in next 2 working days')
     expect($('.govuk-tabs__list a').text()).toContain('Future releases')
     expect($('.govuk-tabs__list a').text()).not.toContain('Attention needed')
