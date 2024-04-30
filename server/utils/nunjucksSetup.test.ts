@@ -428,19 +428,21 @@ describe('Nunjucks Filters', () => {
 
   describe('legalStatus', () => {
     it('should return Recall', () => {
-      expect(registerNunjucks().getFilter('legalStatus')('RECALL').getFilter('titlecase')).toEqual('Recall')
+      expect(registerNunjucks().getFilter('titlecase')(registerNunjucks().getFilter('legalStatus')('RECALL'))).toEqual(
+        'Recall'
+      )
     })
 
     it('should return Indeterminate Sentence', () => {
-      expect(registerNunjucks().getFilter('legalStatus')('INDETERMINATE_SENTENCE').getFilter('titlecase')).toEqual(
-        'Indeterminate sentence'
-      )
+      expect(
+        registerNunjucks().getFilter('titlecase')(registerNunjucks().getFilter('legalStatus')('INDETERMINATE_SENTENCE'))
+      ).toEqual('Indeterminate sentence')
     })
 
     it('should return Immigration Detainee', () => {
-      expect(registerNunjucks().getFilter('legalStatus')('IMMIGRATION_DETAINEE').getFilter('titlecase')).toEqual(
-        'Immigration detainee'
-      )
+      expect(
+        registerNunjucks().getFilter('titlecase')(registerNunjucks().getFilter('legalStatus')('IMMIGRATION_DETAINEE'))
+      ).toEqual('Immigration detainee')
     })
   })
 })
