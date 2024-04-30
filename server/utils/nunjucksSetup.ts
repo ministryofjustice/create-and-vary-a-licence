@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import path from 'path'
 import nunjucks, { Environment } from 'nunjucks'
-import { isToday, isYesterday, format } from 'date-fns'
+import { isToday, isYesterday, format, startOfDay } from 'date-fns'
 import express from 'express'
 import moment from 'moment'
 import { filesize } from 'filesize'
@@ -31,6 +31,7 @@ import LicenceStatus from '../enumeration/licenceStatus'
 import { getEditConditionHref } from './conditionRoutes'
 import AppointmentTimeType from '../enumeration/appointmentTimeType'
 import LegalStatus from '../enumeration/LegalStatus'
+import LicenceKind from '../enumeration/LicenceKind'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -381,13 +382,26 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('cvlDateToDateShort', (releaseDate: string): string => {
-    return releaseDate ? format(parseCvlDate(releaseDate), 'dd MMM yyyy') : 'not found'
+    return releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found'
   })
 
   njkEnv.addFilter('legalStatus', (status: string) => {
     const legalStatus: Record<string, string> = LegalStatus
     return legalStatus[status]
   })
+
+  njkEnv.addFilter(
+    'shouldShowHardStopWarning',
+    (licence: { kind: LicenceKind; hardStopWarningDate: Date; hardStopDate: Date }): boolean => {
+      const now = startOfDay(new Date())
+      return (
+        config.hardStopEnabled &&
+        licence.kind !== LicenceKind.VARIATION &&
+        licence.hardStopWarningDate <= now &&
+        now < licence.hardStopDate
+      )
+    }
+  )
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('serviceName', config.serviceName)

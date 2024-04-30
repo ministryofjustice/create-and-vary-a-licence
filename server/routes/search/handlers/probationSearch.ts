@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
-import type { ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
+import type { ParsedProbationSearchResult } from '../../../@types/parsedProbationSearchResult'
 
 export default class ProbationSearch {
   constructor(private readonly searchService: SearchService) {}
@@ -11,7 +11,7 @@ export default class ProbationSearch {
     const { deliusStaffIdentifier } = res.locals.user
     const previousCaseloadPage = req.query.previousPage as string
 
-    let searchResponse: ProbationSearchResult
+    let searchResponse: ParsedProbationSearchResult
 
     if (queryTerm.length === 0) {
       searchResponse = {
@@ -22,6 +22,8 @@ export default class ProbationSearch {
     } else {
       searchResponse = await this.searchService.getProbationSearchResults(queryTerm, deliusStaffIdentifier)
     }
+
+    console.dir(searchResponse, { depth: null })
 
     const backLink = this.getBackLink(previousCaseloadPage)
 

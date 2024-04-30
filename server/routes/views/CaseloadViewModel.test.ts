@@ -1,11 +1,10 @@
 import moment from 'moment'
-import { addDays, subDays } from 'date-fns'
+import { subDays } from 'date-fns'
 import { DeliusRecord, Licence, ManagedCase, ProbationPractitioner } from '../../@types/managedCase'
 import LicenceKind from '../../enumeration/LicenceKind'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import createCaseloadViewModel from './CaseloadViewModel'
-import config from '../../config'
 import { parseIsoDate } from '../../utils/utils'
 import type { CvlFields, CvlPrisoner } from '../../@types/licenceApiClientTypes'
 
@@ -109,99 +108,6 @@ describe('CaseloadViewModel', () => {
         null
       )[0].releaseDate
     ).toEqual(moment(nomisRecord.conditionalReleaseDate).format('DD MMM YYYY'))
-  })
-
-  describe('showHardStopWarning', () => {
-    const existingConfig = config
-
-    beforeAll(() => {
-      config.hardStopEnabled = true
-    })
-    afterAll(() => {
-      config.hardStopEnabled = existingConfig.hardStopEnabled
-    })
-
-    it('sets showHardStopWarning to true if now is between the warning and hard stop dates', () => {
-      const now = new Date()
-      licence = { ...licence, hardStopWarningDate: subDays(now, 1), hardStopDate: addDays(now, 1) }
-
-      expect(
-        createCaseloadViewModel(
-          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
-          null
-        )[0].showHardStopWarning
-      ).toEqual(true)
-    })
-
-    it('sets showHardStopWarning to true if now is equal to the warning date', () => {
-      const now = new Date()
-      licence = { ...licence, hardStopWarningDate: now, hardStopDate: addDays(now, 2) }
-
-      expect(
-        createCaseloadViewModel(
-          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
-          null
-        )[0].showHardStopWarning
-      ).toEqual(true)
-    })
-
-    it('sets showHardStopWarning to false if now is equal to the hardstop date', () => {
-      const now = new Date()
-      licence = { ...licence, hardStopWarningDate: subDays(now, 2), hardStopDate: now }
-
-      expect(
-        createCaseloadViewModel(
-          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
-          null
-        )[0].showHardStopWarning
-      ).toEqual(false)
-    })
-
-    it('should handle missing hardstop date', () => {
-      licence = { ...licence, hardStopWarningDate: null, hardStopDate: null }
-
-      expect(
-        createCaseloadViewModel(
-          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
-          null
-        )[0].hardStopDate
-      ).toEqual(null)
-    })
-
-    it('sets showHardStopWarning to false if now is before window', () => {
-      const now = new Date()
-      licence = { ...licence, hardStopWarningDate: addDays(now, 1), hardStopDate: addDays(now, 3) }
-      expect(
-        createCaseloadViewModel(
-          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
-          null
-        )[0].showHardStopWarning
-      ).toEqual(false)
-    })
-
-    it('sets showHardStopWarning to false if the now is after window', () => {
-      const now = new Date()
-      licence = { ...licence, hardStopWarningDate: subDays(now, 3), hardStopDate: subDays(now, 1) }
-      expect(
-        createCaseloadViewModel(
-          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
-          null
-        )[0].showHardStopWarning
-      ).toEqual(false)
-    })
-
-    it('sets showHardStopWarning to false if hardStopEnabled is false', () => {
-      config.hardStopEnabled = false
-      const releaseDate = parseIsoDate(nomisRecord.releaseDate)
-      licence = { ...licence, hardStopWarningDate: subDays(releaseDate, 1), hardStopDate: addDays(releaseDate, 1) }
-
-      expect(
-        createCaseloadViewModel(
-          [{ nomisRecord, deliusRecord, probationPractitioner, cvlFields, licences: [licence] }],
-          null
-        )[0].showHardStopWarning
-      ).toEqual(false)
-    })
   })
 
   it('copes with missing release dates', () => {
