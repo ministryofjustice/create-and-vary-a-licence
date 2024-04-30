@@ -110,7 +110,7 @@
                         id: 'nomis-legal-status-' + loop.index,
                         "data-sort-value": case.nomisLegalStatus
                     },
-                    text: case.nomisLegalStatus | titlecase
+                    text: case.nomisLegalStatus | legalStatus
                 }), caseData) 
             %}
         {% endif %}
