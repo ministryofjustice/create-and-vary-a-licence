@@ -1,8 +1,12 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
+import PathType from '../../../../enumeration/pathType'
 
 export default class InitialMeetingNameRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly path: PathType
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
@@ -16,14 +20,17 @@ export default class InitialMeetingNameRoutes {
       SPECIFIC_PERSON: 'Someone else',
     }
 
-    res.render('pages/create/hardStop/initialMeetingPerson', { appointmentPersonType })
+    res.render('pages/create/hardStop/initialMeetingPerson', {
+      appointmentPersonType,
+      continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
+    })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
     const { user } = res.locals
     await this.licenceService.updateAppointmentPerson(licenceId, req.body, user)
-    if (req.path?.includes('edit')) {
+    if (this.path === PathType.EDIT) {
       res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
     } else {
       res.redirect(`/licence/hard-stop/create/id/${licenceId}/initial-meeting-place`)
