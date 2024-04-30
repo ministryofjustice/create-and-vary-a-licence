@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../../services/licenceService'
 import { AppointmentPersonRequest } from '../../../../@types/licenceApiClientTypes'
+import PathType from '../../../../enumeration/pathType'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -40,7 +41,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
   })
 
   describe('Prison user(CA) journey', () => {
-    const handler = new InitialMeetingNameRoutes(licenceService)
+    let handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
 
     describe('GET', () => {
       it('should render view', async () => {
@@ -52,8 +53,10 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPerson', {
           appointmentPersonType,
+          continueOrSaveLabel: 'Continue',
         })
 
+        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
         res.locals.licence.responsibleComFullName = null
         const appointmentPersonTypeWithOutPP = {
           DUTY_OFFICER: 'Duty Officer',
@@ -62,6 +65,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPerson', {
           appointmentPersonType: appointmentPersonTypeWithOutPP,
+          continueOrSaveLabel: 'Save',
         })
       })
     })
@@ -69,6 +73,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     /** To be added */
     describe('POST', () => {
       it('should redirect to the meeting time page', async () => {
+        handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
           username: 'joebloggs',
@@ -77,13 +82,13 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
       })
 
       it('should redirect to the check your answers page', async () => {
+        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
         req = {
           params: {
             licenceId: '1',
           },
           body: contactPerson,
           query: {},
-          path: 'edit',
         } as unknown as Request
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {

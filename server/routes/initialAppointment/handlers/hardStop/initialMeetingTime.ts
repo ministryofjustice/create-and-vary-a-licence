@@ -4,11 +4,13 @@ import DateTime from '../../types/dateTime'
 import UserType from '../../../../enumeration/userType'
 import AppointmentTimeType from '../../../../enumeration/appointmentTimeType'
 import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
+import PathType from '../../../../enumeration/pathType'
 
 export default class InitialMeetingTimeRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly userType: UserType
+    private readonly userType: UserType,
+    private readonly path: PathType
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -19,6 +21,7 @@ export default class InitialMeetingTimeRoutes {
     return res.render('pages/create/hardStop/initialMeetingTime', {
       formDate,
       appointmentTimeType,
+      continueOrSaveLabel: this.path === PathType.EDIT ? 'Save' : 'Continue',
     })
   }
 
