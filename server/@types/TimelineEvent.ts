@@ -18,6 +18,6 @@ export default class TimelineEvent {
   ) {}
 
   getSortTime() {
-    return parseCvlDateTime(this.lastUpdate, { withSeconds: true }).getTime()
+    return parseCvlDateTime(this.lastUpdate, { withSeconds: true })?.getTime()
   }
 }

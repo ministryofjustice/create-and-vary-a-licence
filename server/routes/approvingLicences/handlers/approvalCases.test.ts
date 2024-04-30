@@ -310,6 +310,104 @@ describe('Route Handlers - Approval - case list', () => {
       })
     })
 
+    it('should handle missing dates', async () => {
+      caseloadService.getRecentlyApproved.mockResolvedValue([
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.SUBMITTED,
+              approvedBy: 'Bob Carolgees',
+              approvedDate: '15/06/2012 12:34:56',
+              submittedByFullName: 'Tim Smith',
+              isDueForEarlyRelease: false,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: undefined,
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+          } as CvlPrisoner,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.SUBMITTED,
+              approvedBy: 'Bob Carolgees',
+              approvedDate: '15/06/2012 12:34:56',
+              submittedByFullName: 'Tim Smith',
+              isDueForEarlyRelease: false,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: undefined,
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+          } as CvlPrisoner,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+      ])
+
+      req.query.approval = 'recently'
+      await handler.GET(req, res)
+      expect(caseloadService.getRecentlyApproved).toHaveBeenCalledWith(res.locals.user, ['BAI'])
+      expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
+        cases: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: 'not found',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            approvedBy: 'Bob Carolgees',
+            approvedOn: '15 June 2012',
+            submittedByFullName: 'Tim Smith',
+            urgentApproval: true,
+            isDueForEarlyRelease: false,
+            sortDate: null,
+          },
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: 'not found',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            approvedBy: 'Bob Carolgees',
+            approvedOn: '15 June 2012',
+            submittedByFullName: 'Tim Smith',
+            urgentApproval: true,
+            isDueForEarlyRelease: false,
+            sortDate: null,
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        search: undefined,
+        approvalNeededView: false,
+      })
+    })
+
     it('should successfully search by name', async () => {
       req.query.search = 'bob'
 
