@@ -30,6 +30,7 @@ import Address from '../routes/initialAppointment/types/address'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { getEditConditionHref } from './conditionRoutes'
 import AppointmentTimeType from '../enumeration/appointmentTimeType'
+import LegalStatus from '../enumeration/LegalStatus'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -381,6 +382,11 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('cvlDateToDateShort', (releaseDate: string): string => {
     return releaseDate ? format(parseCvlDate(releaseDate), 'dd MMM yyyy') : 'not found'
+  })
+
+  njkEnv.addFilter('legalStatus', (status: string) => {
+    const legalStatus: Record<string, string> = LegalStatus
+    return legalStatus[status]
   })
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)

@@ -425,4 +425,24 @@ describe('Nunjucks Filters', () => {
       ).toEqual('/licence/create/id/2/check-your-answers')
     })
   })
+
+  describe('legalStatus', () => {
+    it('should return Recall', () => {
+      expect(registerNunjucks().getFilter('titlecase')(registerNunjucks().getFilter('legalStatus')('RECALL'))).toEqual(
+        'Recall'
+      )
+    })
+
+    it('should return Indeterminate Sentence', () => {
+      expect(
+        registerNunjucks().getFilter('titlecase')(registerNunjucks().getFilter('legalStatus')('INDETERMINATE_SENTENCE'))
+      ).toEqual('Indeterminate sentence')
+    })
+
+    it('should return Immigration Detainee', () => {
+      expect(
+        registerNunjucks().getFilter('titlecase')(registerNunjucks().getFilter('legalStatus')('IMMIGRATION_DETAINEE'))
+      ).toEqual('Immigration detainee')
+    })
+  })
 })
