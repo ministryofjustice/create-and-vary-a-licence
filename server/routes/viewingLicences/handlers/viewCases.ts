@@ -100,7 +100,7 @@ export default class ViewAndPrintCaseRoutes {
       if (!probationView && c.licences.length > 1) {
         latestLicence = this.findLatestLicence(c.licences)
       }
-      const releaseDate = selectReleaseDate(c.nomisRecord)
+      const releaseDate = latestLicence?.releaseDate || selectReleaseDate(c.nomisRecord)
       const tabType = determineCaViewCasesTab(latestLicence, c.nomisRecord, c.cvlFields)
       return {
         licenceId: latestLicence.id,

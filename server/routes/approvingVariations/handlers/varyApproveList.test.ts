@@ -38,6 +38,7 @@ describe('Route Handlers - Variation approval list', () => {
             status: LicenceStatus.VARIATION_SUBMITTED,
             dateCreated: '01/05/2022 10:15',
             isDueToBeReleasedInTheNextTwoWorkingDays: true,
+            releaseDate: null,
           },
         ],
         cvlFields: {

@@ -1219,6 +1219,7 @@ describe('Route handlers - View and print case list', () => {
               status: LicenceStatus.APPROVED,
               hardStopDate: parseCvlDate('12/01/2024'),
               isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: null,
             },
             {
               id: 67,
@@ -1227,6 +1228,7 @@ describe('Route handlers - View and print case list', () => {
               versionOf: 45,
               hardStopDate: parseCvlDate('12/01/2024'),
               isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: null,
             },
           ],
           cvlFields,
@@ -1370,7 +1372,70 @@ describe('Route handlers - View and print case list', () => {
       })
     })
 
-    it('should return tab type as attentionNeeded if release date is null', async () => {
+    it('should return tab type as attentionNeeded if release date is null on search but present on licences', async () => {
+      config.hardStopEnabled = true
+      const caseLoadWithReleaseDate = new Container([
+        {
+          licences: [
+            {
+              type: LicenceType.AP,
+              status: LicenceStatus.APPROVED,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: parseCvlDate('01/02/2024'),
+            },
+          ],
+          cvlFields,
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+            confirmedReleaseDate: '',
+            legalStatus: 'SENTENCED',
+          } as CvlPrisoner,
+          probationPractitioner: {
+            name: 'Sherlock Holmes',
+          },
+        },
+      ])
+      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseLoadWithReleaseDate))
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            link: null,
+            licenceId: undefined,
+            licenceStatus: 'APPROVED',
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 Feb 2024',
+            releaseDateLabel: 'CRD',
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: 'SENTENCED',
+            isDueForEarlyRelease: false,
+          },
+        ],
+        CaViewCasesTab,
+        showAttentionNeededTab: false,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: undefined,
+        statusConfig,
+      })
+    })
+
+    it('should not return tab type as attentionNeeded if release date is null', async () => {
       config.hardStopEnabled = true
       const caseLoadWithEmptyReleaseDate = new Container([
         {
@@ -1379,6 +1444,7 @@ describe('Route handlers - View and print case list', () => {
               type: LicenceType.AP,
               status: LicenceStatus.APPROVED,
               isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: null,
             },
           ],
           cvlFields,
@@ -1399,6 +1465,7 @@ describe('Route handlers - View and print case list', () => {
               type: LicenceType.AP,
               status: LicenceStatus.IN_PROGRESS,
               isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: null,
             },
           ],
           cvlFields,
@@ -1477,6 +1544,7 @@ describe('Route handlers - View and print case list', () => {
               type: LicenceType.AP,
               status: LicenceStatus.APPROVED,
               isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: null,
             },
           ],
           cvlFields,
@@ -1497,6 +1565,7 @@ describe('Route handlers - View and print case list', () => {
               type: LicenceType.AP,
               status: LicenceStatus.IN_PROGRESS,
               isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: null,
             },
           ],
           cvlFields,
@@ -1545,6 +1614,7 @@ describe('Route handlers - View and print case list', () => {
               hardStopDate: startOfDay(subDays(new Date(), 1)),
               isDueToBeReleasedInTheNextTwoWorkingDays: true,
               updatedByFullName: 'Test Updater',
+              releaseDate: null,
             },
           ],
           cvlFields,
@@ -1614,6 +1684,7 @@ describe('Route handlers - View and print case list', () => {
                 status: LicenceStatus.TIMED_OUT,
                 hardStopDate: startOfDay(subDays(new Date(), 1)),
                 isDueToBeReleasedInTheNextTwoWorkingDays: true,
+                releaseDate: null,
               },
               {
                 id: 2,
@@ -1622,6 +1693,7 @@ describe('Route handlers - View and print case list', () => {
                 hardStopDate: startOfDay(subDays(new Date(), 1)),
                 kind: LicenceKind.HARD_STOP,
                 isDueToBeReleasedInTheNextTwoWorkingDays: true,
+                releaseDate: null,
               },
             ],
             cvlFields,
@@ -1686,6 +1758,7 @@ describe('Route handlers - View and print case list', () => {
                 hardStopDate: startOfDay(subDays(new Date(), 1)),
                 kind: LicenceKind.HARD_STOP,
                 isDueToBeReleasedInTheNextTwoWorkingDays: true,
+                releaseDate: null,
               },
               {
                 id: 2,
@@ -1695,6 +1768,7 @@ describe('Route handlers - View and print case list', () => {
                 kind: LicenceKind.CRD,
                 versionOf: 1,
                 isDueToBeReleasedInTheNextTwoWorkingDays: true,
+                releaseDate: null,
               },
             ],
             cvlFields,

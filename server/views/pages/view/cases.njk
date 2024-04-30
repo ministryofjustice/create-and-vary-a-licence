@@ -83,7 +83,7 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": case.releaseDate | dateToUnix
             },
-            html: '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' 
+            html: '<p>' + (case.releaseDateLabel + ': <br>' if not probationView)  + case.releaseDate + '</p>' 
         },
         {
             attributes: {

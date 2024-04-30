@@ -27,6 +27,7 @@ export type Licence = {
   hardStopWarningDate?: Date
   hardStopDate?: Date
   licenceStartDate?: string
+  releaseDate: Date
   isDueToBeReleasedInTheNextTwoWorkingDays: boolean
 }
 
@@ -43,6 +44,7 @@ export type ApprovalLicence = {
   updatedByFullName?: string
   submittedByFullName: string
   isDueForEarlyRelease: boolean
+  releaseDate: Date
   isDueToBeReleasedInTheNextTwoWorkingDays: boolean
 }
 

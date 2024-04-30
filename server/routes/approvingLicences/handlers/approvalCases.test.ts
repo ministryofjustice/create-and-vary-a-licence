@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { addDays, format } from 'date-fns'
+import { addDays, format, startOfDay } from 'date-fns'
 import ApprovalCaseRoutes from './approvalCases'
 import PrisonerService from '../../../services/prisonerService'
 
@@ -9,6 +9,8 @@ import LicenceType from '../../../enumeration/licenceType'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import ApproverCaseloadService from '../../../services/approverCaseloadService'
 import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
+import type { ManagedCaseForApproval } from '../../../@types/managedCase'
+import { parseCvlDate } from '../../../utils/utils'
 
 const caseloadService = new ApproverCaseloadService(null, null) as jest.Mocked<ApproverCaseloadService>
 jest.mock('../../../services/approverCaseloadService')
@@ -24,6 +26,7 @@ describe('Route Handlers - Approval - case list', () => {
   let res: Response
 
   beforeEach(() => {
+    jest.resetAllMocks()
     req = {
       query: {},
       session: { caseloadsSelected: [] },
@@ -50,6 +53,7 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             isDueForEarlyRelease: false,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            releaseDate: null,
           },
         ],
         nomisRecord: {
@@ -71,6 +75,7 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             isDueForEarlyRelease: true,
             isDueToBeReleasedInTheNextTwoWorkingDays: true,
+            releaseDate: null,
           },
         ],
         nomisRecord: {
@@ -92,6 +97,7 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             isDueForEarlyRelease: false,
             isDueToBeReleasedInTheNextTwoWorkingDays: false,
+            releaseDate: null,
           },
         ],
         nomisRecord: {
@@ -104,7 +110,7 @@ describe('Route Handlers - Approval - case list', () => {
           name: 'Walter Black',
         },
       },
-    ]
+    ] as ManagedCaseForApproval[]
     caseloadService.getApprovalNeeded.mockResolvedValue(caseLoadData)
     caseloadService.getRecentlyApproved.mockResolvedValue(caseLoadData)
 
@@ -127,9 +133,6 @@ describe('Route Handlers - Approval - case list', () => {
       },
     ] as PrisonDetail[])
   })
-  afterEach(() => {
-    jest.resetAllMocks()
-  })
 
   describe('GET', () => {
     it('should render list of licences for approval', async () => {
@@ -148,6 +151,7 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             urgentApproval: false,
             isDueForEarlyRelease: false,
+            sortDate: parseCvlDate('01/05/2022'),
           },
           {
             licenceId: 2,
@@ -160,6 +164,7 @@ describe('Route Handlers - Approval - case list', () => {
             releaseDate: '01 May 2022',
             urgentApproval: true,
             isDueForEarlyRelease: true,
+            sortDate: parseCvlDate('01/05/2022'),
           },
           {
             licenceId: 3,
@@ -172,6 +177,7 @@ describe('Route Handlers - Approval - case list', () => {
             releaseDate: format(nonUrgentReleaseDate, 'dd MMM yyyy'),
             urgentApproval: false,
             isDueForEarlyRelease: false,
+            sortDate: startOfDay(nonUrgentReleaseDate),
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -186,6 +192,63 @@ describe('Route Handlers - Approval - case list', () => {
       })
     })
 
+    it('should prioritise licence release date if present', async () => {
+      const caseLoadData = [
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.SUBMITTED,
+              submittedByFullName: 'John Smith',
+              isDueForEarlyRelease: false,
+              isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              releaseDate: null,
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+            confirmedReleaseDate: '2022-05-01',
+          } as CvlPrisoner,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+      ] as ManagedCaseForApproval[]
+      caseloadService.getApprovalNeeded.mockResolvedValue(caseLoadData)
+
+      await handler.GET(req, res)
+
+      expect(caseloadService.getApprovalNeeded).toHaveBeenCalledWith(res.locals.user, ['BAI'])
+      expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
+        cases: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: '01 May 2022',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            submittedByFullName: 'John Smith',
+            urgentApproval: false,
+            isDueForEarlyRelease: false,
+            sortDate: parseCvlDate('01/05/2022'),
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        search: undefined,
+        approvalNeededView: true,
+      })
+    })
     it('should render list of licences recently approved', async () => {
       caseloadService.getRecentlyApproved.mockResolvedValue([
         {
@@ -199,6 +262,7 @@ describe('Route Handlers - Approval - case list', () => {
               submittedByFullName: 'Tim Smith',
               isDueForEarlyRelease: false,
               isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: parseCvlDate('12/02/2024'),
             },
           ],
           nomisRecord: {
@@ -209,29 +273,6 @@ describe('Route Handlers - Approval - case list', () => {
           } as CvlPrisoner,
           probationPractitioner: {
             name: 'Walter White',
-          },
-        },
-        {
-          licences: [
-            {
-              id: 2,
-              type: LicenceType.AP,
-              status: LicenceStatus.NOT_STARTED,
-              approvedBy: 'Jim Robbins',
-              approvedDate: '25/04/2012 10:45:12',
-              submittedByFullName: 'Tim Smith',
-              isDueForEarlyRelease: true,
-              isDueToBeReleasedInTheNextTwoWorkingDays: false,
-            },
-          ],
-          nomisRecord: {
-            firstName: 'Joe',
-            lastName: 'Bloggs',
-            prisonerNumber: 'A1234AB',
-            conditionalReleaseDate: '2022-05-01',
-          } as CvlPrisoner,
-          probationPractitioner: {
-            name: 'Thor',
           },
         },
       ])
@@ -245,7 +286,7 @@ describe('Route Handlers - Approval - case list', () => {
             licenceId: 1,
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
-            releaseDate: '01 May 2022',
+            releaseDate: '12 Feb 2024',
             probationPractitioner: {
               name: 'Walter White',
             },
@@ -254,20 +295,105 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'Tim Smith',
             urgentApproval: true,
             isDueForEarlyRelease: false,
+            sortDate: parseCvlDate('12/02/2024'),
+          },
+        ],
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        search: undefined,
+        approvalNeededView: false,
+      })
+    })
+
+    it('should handle missing dates', async () => {
+      caseloadService.getRecentlyApproved.mockResolvedValue([
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.SUBMITTED,
+              approvedBy: 'Bob Carolgees',
+              approvedDate: '15/06/2012 12:34:56',
+              submittedByFullName: 'Tim Smith',
+              isDueForEarlyRelease: false,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: undefined,
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+          } as CvlPrisoner,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+        {
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.SUBMITTED,
+              approvedBy: 'Bob Carolgees',
+              approvedDate: '15/06/2012 12:34:56',
+              submittedByFullName: 'Tim Smith',
+              isDueForEarlyRelease: false,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: undefined,
+            },
+          ],
+          nomisRecord: {
+            firstName: 'Bob',
+            lastName: 'Smith',
+            prisonerNumber: 'A1234AA',
+          } as CvlPrisoner,
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+        },
+      ])
+
+      req.query.approval = 'recently'
+      await handler.GET(req, res)
+      expect(caseloadService.getRecentlyApproved).toHaveBeenCalledWith(res.locals.user, ['BAI'])
+      expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
+        cases: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: 'not found',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            approvedBy: 'Bob Carolgees',
+            approvedOn: '15 June 2012',
+            submittedByFullName: 'Tim Smith',
+            urgentApproval: true,
+            isDueForEarlyRelease: false,
+            sortDate: null,
           },
           {
-            licenceId: 2,
-            name: 'Joe Bloggs',
-            prisonerNumber: 'A1234AB',
+            licenceId: 1,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: 'not found',
             probationPractitioner: {
-              name: 'Thor',
+              name: 'Walter White',
             },
-            approvedBy: 'Jim Robbins',
-            approvedOn: '25 April 2012',
-            releaseDate: '01 May 2022',
+            approvedBy: 'Bob Carolgees',
+            approvedOn: '15 June 2012',
             submittedByFullName: 'Tim Smith',
-            urgentApproval: false,
-            isDueForEarlyRelease: true,
+            urgentApproval: true,
+            isDueForEarlyRelease: false,
+            sortDate: null,
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -300,6 +426,7 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             urgentApproval: false,
             isDueForEarlyRelease: false,
+            sortDate: parseCvlDate('01/05/2022'),
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -332,6 +459,7 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             urgentApproval: false,
             isDueForEarlyRelease: false,
+            sortDate: parseCvlDate('01/05/2022'),
           },
         ],
         hasMultipleCaseloadsInNomis: false,
@@ -364,6 +492,7 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             urgentApproval: false,
             isDueForEarlyRelease: false,
+            sortDate: parseCvlDate('01/05/2022'),
           },
         ],
         hasMultipleCaseloadsInNomis: false,

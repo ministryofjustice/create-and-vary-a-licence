@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { format, getUnixTime } from 'date-fns'
+import { format } from 'date-fns'
 import PrisonerService from '../../../services/prisonerService'
 import { convertToTitleCase, parseCvlDateTime, selectReleaseDate } from '../../../utils/utils'
 import ApproverCaseloadService from '../../../services/approverCaseloadService'
@@ -27,7 +27,7 @@ export default class ApprovalCaseRoutes {
     const caseloadViewModel = cases
       .map(c => {
         const licence = _.head(c.licences)
-        const releaseDate = selectReleaseDate(c.nomisRecord)
+        const releaseDate = licence?.releaseDate || selectReleaseDate(c.nomisRecord)
         const urgentApproval = licence.isDueToBeReleasedInTheNextTwoWorkingDays
         let approvedDate
         if (licence.approvedDate) {
@@ -40,6 +40,7 @@ export default class ApprovalCaseRoutes {
           probationPractitioner: c.probationPractitioner,
           submittedByFullName: licence.submittedByFullName,
           releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
+          sortDate: releaseDate,
           urgentApproval,
           approvedBy: licence.approvedBy,
           approvedOn: approvedDate,
@@ -56,9 +57,7 @@ export default class ApprovalCaseRoutes {
         )
       })
       .sort((a, b) => {
-        const crd1 = getUnixTime(new Date(a.releaseDate))
-        const crd2 = getUnixTime(new Date(b.releaseDate))
-        return crd1 - crd2
+        return (a.sortDate?.getTime() || 0) - (b.sortDate?.getTime() || 0)
       })
 
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
