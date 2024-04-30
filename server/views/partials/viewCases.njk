@@ -90,7 +90,7 @@
     {% for case in cases %}
         {% set caseData = [] %}
         {% if case.probationPractitioner %}
-            {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '">' + case.probationPractitioner.name + '</a>' %}
+            {% set comDetailsHtml = '<a class="govuk-link" href="/licence/view/probation-practitioner/staffCode/' + case.probationPractitioner.staffCode + '?activeTab=' + params.activeTab+ '">' + case.probationPractitioner.name + '</a>' %}        
         {% else %}
             {% set comDetailsHtml = 'Unallocated' %}
         {% endif %}
