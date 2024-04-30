@@ -30,7 +30,7 @@ export default (caseload: ManagedCase[], search: string) => {
           licence.status !== LicenceStatus.NOT_IN_PILOT &&
           licence.status !== LicenceStatus.OOS_RECALL &&
           licence.status !== LicenceStatus.OOS_BOTUS,
-        hardStopDate: format(hardStopDate, 'dd MMM yyyy'),
+        hardStopDate: hardStopDate && format(hardStopDate, 'dd MMM yyyy'),
         showHardStopWarning: config.hardStopEnabled && hardStopWarningDate <= now && now < hardStopDate,
         isDueForEarlyRelease: c.cvlFields?.isDueForEarlyRelease,
       }
