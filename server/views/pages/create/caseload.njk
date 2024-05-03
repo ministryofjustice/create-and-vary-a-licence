@@ -33,8 +33,8 @@
 
     {% if offender.isDueForEarlyRelease %}
         {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
-    {% elseif offender.showHardStopWarning %}
-        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate +'</span>' %}
+    {% elseif offender | shouldShowHardStopWarning %}
+        {% set releaseDate = '<span class="urgent-highlight">' + offender.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Submit licence by ' + offender.hardStopDate | cvlDateToDateShort  +'</span>' %}
     {% else %}
         {% set releaseDate = offender.releaseDate %}
     {% endif %}
