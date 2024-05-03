@@ -393,13 +393,14 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addFilter(
     'shouldShowHardStopWarning',
     (licence: { kind: LicenceKind; hardStopWarningDate: string; hardStopDate: string }): boolean => {
+      if (!licence.hardStopWarningDate || !licence.hardStopDate) {
+        return false
+      }
       const now = startOfDay(new Date())
       return (
         config.hardStopEnabled &&
         licence.kind !== LicenceKind.VARIATION &&
-        !!licence.hardStopWarningDate &&
         parseCvlDate(licence.hardStopWarningDate) <= now &&
-        !!licence.hardStopDate &&
         now < parseCvlDate(licence.hardStopDate)
       )
     }
