@@ -1,9 +1,10 @@
-import { format, addDays, subDays, addMonths } from 'date-fns'
+import { format, addDays, subDays, addMonths, startOfDay } from 'date-fns'
 import { FoundProbationRecord, Licence } from '../@types/licenceApiClientTypes'
 import { renderTemplate } from './__testutils/templateTestUtils'
 import { registerNunjucks } from './nunjucksSetup'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceKind from '../enumeration/LicenceKind'
+import config from '../config'
 
 describe('Nunjucks Filters', () => {
   describe('initialiseName', () => {
@@ -443,6 +444,92 @@ describe('Nunjucks Filters', () => {
       expect(
         registerNunjucks().getFilter('titlecase')(registerNunjucks().getFilter('legalStatus')('IMMIGRATION_DETAINEE'))
       ).toEqual('Immigration detainee')
+    })
+  })
+
+  describe('shouldShowHardStopWarning', () => {
+    const existingConfig = config
+    const now = new Date()
+
+    beforeEach(() => {
+      config.hardStopEnabled = true
+    })
+
+    afterEach(() => {
+      jest.resetAllMocks()
+      config.hardStopEnabled = existingConfig.hardStopEnabled
+    })
+
+    it('should return true if now is between the warning and hard stop dates', () => {
+      const licence = {
+        kind: LicenceKind.CRD,
+        hardStopWarningDate: format(subDays(now, 1), 'dd/MM/yyyy'),
+        hardStopDate: format(addDays(now, 1), 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(true)
+    })
+
+    it('should return true if now is equal to the warning date', () => {
+      const licence = {
+        kind: LicenceKind.CRD,
+        hardStopWarningDate: format(now, 'dd/MM/yyyy'),
+        hardStopDate: format(addDays(now, 2), 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(true)
+    })
+
+    it('should return false if now is equal to the hardstop date', () => {
+      const licence = {
+        kind: LicenceKind.CRD,
+        hardStopWarningDate: format(subDays(now, 2), 'dd/MM/yyyy'),
+        hardStopDate: format(now, 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
+    })
+
+    it('should return false if now is before window', () => {
+      const licence = {
+        kind: LicenceKind.CRD,
+        hardStopWarningDate: format(addDays(now, 1), 'dd/MM/yyyy'),
+        hardStopDate: format(addDays(now, 3), 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
+    })
+
+    it('should return false if the now is after window', () => {
+      const licence = {
+        kind: LicenceKind.CRD,
+        hardStopWarningDate: format(subDays(now, 3), 'dd/MM/yyyy'),
+        hardStopDate: format(subDays(now, 1), 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
+    })
+
+    it('should return false if kind is VARTATION', () => {
+      config.hardStopEnabled = false
+      const licence = {
+        kind: LicenceKind.VARIATION,
+        hardStopWarningDate: format(now, 'dd/MM/yyyy'),
+        hardStopDate: format(addDays(now, 2), 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
+    })
+
+    it('should return false if hardStopEnabled is false', () => {
+      config.hardStopEnabled = false
+      const licence = {
+        kind: LicenceKind.CRD,
+        hardStopWarningDate: format(subDays(now, 1), 'dd/MM/yyyy'),
+        hardStopDate: format(addDays(now, 1), 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
     })
   })
 })

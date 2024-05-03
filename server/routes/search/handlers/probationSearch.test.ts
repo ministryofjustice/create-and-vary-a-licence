@@ -3,7 +3,6 @@ import { ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
 import ProbationSearchRoutes from './probationSearch'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
-import { ParsedProbationSearchResult } from '../../../@types/parsedProbationSearchResult'
 
 const searchService = new SearchService(null) as jest.Mocked<SearchService>
 
@@ -45,7 +44,7 @@ describe('Route Handlers - Search - Probation Search', () => {
   }
 
   beforeEach(() => {
-    searchService.getProbationSearchResults.mockResolvedValue(searchResponse as ParsedProbationSearchResult)
+    searchService.getProbationSearchResults.mockResolvedValue(searchResponse as ProbationSearchResult)
 
     req = {} as Request
 

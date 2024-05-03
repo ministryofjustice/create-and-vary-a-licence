@@ -16,6 +16,7 @@ import {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   parseCvlDate,
+  parseIsoDate,
   toIsoDate,
 } from './utils'
 import {
@@ -382,7 +383,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('cvlDateToDateShort', (releaseDate: string): string => {
-    return releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found'
+    return releaseDate ? format(parseCvlDate(releaseDate), 'dd MMM yyyy') : 'not found'
   })
 
   njkEnv.addFilter('legalStatus', (status: string) => {
@@ -392,13 +393,20 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter(
     'shouldShowHardStopWarning',
-    (licence: { kind: LicenceKind; hardStopWarningDate: Date; hardStopDate: Date }): boolean => {
+    (licence: { kind: LicenceKind; hardStopWarningDate: string; hardStopDate: string }): boolean => {
       const now = startOfDay(new Date())
+      console.log('now', now)
+      console.log('config.hardStopEnabled', config.hardStopEnabled)
+      console.log('licence.kind', licence.kind)
+      console.log('licence.hardStopWarningDate', licence.hardStopWarningDate)
+      console.log('parseCvlDate(licence.hardStopWarningDate)', parseCvlDate(licence.hardStopWarningDate))
+      console.log('licence.hardStopDate', licence.hardStopDate)
+      console.log('parseCvlDate(licence.hardStopDate)', parseCvlDate(licence.hardStopDate))
       return (
         config.hardStopEnabled &&
         licence.kind !== LicenceKind.VARIATION &&
-        licence.hardStopWarningDate <= now &&
-        now < licence.hardStopDate
+        parseCvlDate(licence.hardStopWarningDate) <= now &&
+        now < parseCvlDate(licence.hardStopDate)
       )
     }
   )
