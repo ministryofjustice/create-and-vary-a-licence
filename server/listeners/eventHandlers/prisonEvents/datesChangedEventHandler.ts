@@ -93,6 +93,9 @@ export default class DatesChangedEventHandler {
       topupSupervisionExpiryDate:
         convertDateFormat(prisoner.sentenceDetail?.topupSupervisionExpiryOverrideDate) ||
         convertDateFormat(prisoner.sentenceDetail?.topupSupervisionExpiryDate),
+      postRecallReleaseDate:
+        convertDateFormat(prisoner.sentenceDetail?.postRecallReleaseOverrideDate) ||
+        convertDateFormat(prisoner.sentenceDetail?.postRecallReleaseDate),
     })
   }
 }
