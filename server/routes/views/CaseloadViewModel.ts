@@ -4,8 +4,10 @@ import { Licence, ManagedCase } from '../../@types/managedCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import { convertToTitleCase, parseIsoDate } from '../../utils/utils'
 import LicenceKind from '../../enumeration/LicenceKind'
+import config from '../../config'
 
 export default (caseload: ManagedCase[], search: string) => {
+  const now = new Date()
   return caseload
     .map(c => {
       const { licence, createLink } = findLicenceAndCreateLinkToDisplay(c)
@@ -28,9 +30,8 @@ export default (caseload: ManagedCase[], search: string) => {
           licence.status !== LicenceStatus.NOT_IN_PILOT &&
           licence.status !== LicenceStatus.OOS_RECALL &&
           licence.status !== LicenceStatus.OOS_BOTUS,
-        hardStopDate: hardStopDate && format(hardStopDate, 'dd/MM/yyyy'),
-        hardStopWarningDate: hardStopWarningDate && format(hardStopWarningDate, 'dd/MM/yyyy'),
-        kind: licence.kind,
+        hardStopDate: hardStopDate && format(hardStopDate, 'dd MMM yyyy'),
+        showHardStopWarning: config.hardStopEnabled && hardStopWarningDate <= now && now < hardStopDate,
         isDueForEarlyRelease: c.cvlFields?.isDueForEarlyRelease,
       }
     })
