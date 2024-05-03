@@ -1,4 +1,4 @@
-import { format, addDays, subDays, addMonths, startOfDay } from 'date-fns'
+import { format, addDays, subDays, addMonths } from 'date-fns'
 import { FoundProbationRecord, Licence } from '../@types/licenceApiClientTypes'
 import { renderTemplate } from './__testutils/templateTestUtils'
 import { registerNunjucks } from './nunjucksSetup'

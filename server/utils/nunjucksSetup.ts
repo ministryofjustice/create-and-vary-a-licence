@@ -16,7 +16,6 @@ import {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   parseCvlDate,
-  parseIsoDate,
   toIsoDate,
 } from './utils'
 import {
@@ -395,13 +394,6 @@ export function registerNunjucks(app?: express.Express): Environment {
     'shouldShowHardStopWarning',
     (licence: { kind: LicenceKind; hardStopWarningDate: string; hardStopDate: string }): boolean => {
       const now = startOfDay(new Date())
-      console.log('now', now)
-      console.log('config.hardStopEnabled', config.hardStopEnabled)
-      console.log('licence.kind', licence.kind)
-      console.log('licence.hardStopWarningDate', licence.hardStopWarningDate)
-      console.log('parseCvlDate(licence.hardStopWarningDate)', parseCvlDate(licence.hardStopWarningDate))
-      console.log('licence.hardStopDate', licence.hardStopDate)
-      console.log('parseCvlDate(licence.hardStopDate)', parseCvlDate(licence.hardStopDate))
       return (
         config.hardStopEnabled &&
         licence.kind !== LicenceKind.VARIATION &&
