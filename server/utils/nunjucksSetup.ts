@@ -397,7 +397,9 @@ export function registerNunjucks(app?: express.Express): Environment {
       return (
         config.hardStopEnabled &&
         licence.kind !== LicenceKind.VARIATION &&
+        !!licence.hardStopWarningDate &&
         parseCvlDate(licence.hardStopWarningDate) <= now &&
+        !!licence.hardStopDate &&
         now < parseCvlDate(licence.hardStopDate)
       )
     }

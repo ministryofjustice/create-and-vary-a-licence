@@ -511,11 +511,40 @@ describe('Nunjucks Filters', () => {
     })
 
     it('should return false if kind is VARTATION', () => {
-      config.hardStopEnabled = false
       const licence = {
         kind: LicenceKind.VARIATION,
         hardStopWarningDate: format(now, 'dd/MM/yyyy'),
         hardStopDate: format(addDays(now, 2), 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
+    })
+
+    it('should return true if now is between the warning and hard stop dates with null kind', () => {
+      const licence = {
+        kind: null as LicenceKind,
+        hardStopWarningDate: format(subDays(now, 1), 'dd/MM/yyyy'),
+        hardStopDate: format(addDays(now, 1), 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(true)
+    })
+
+    it('should return false if hardStopWarningDate is null', () => {
+      const licence = {
+        kind: LicenceKind.CRD,
+        hardStopWarningDate: '',
+        hardStopDate: format(addDays(now, 1), 'dd/MM/yyyy'),
+      }
+
+      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
+    })
+
+    it('should return false if hardStopDate is null', () => {
+      const licence = {
+        kind: LicenceKind.CRD,
+        hardStopWarningDate: format(subDays(now, 1), 'dd/MM/yyyy'),
+        hardStopDate: '',
       }
 
       expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
