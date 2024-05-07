@@ -5,9 +5,9 @@ import DateString from '../../creatingLicences/types/dateString'
 import ValidDateString from '../../../validators/dateStringValidator'
 import SimpleTime, { AmPm } from '../../creatingLicences/types/time'
 import ValidSimpleTime from '../../../validators/simpleTimeValidator'
-import DateIsBefore from '../../../validators/dateIsBefore'
 import DateIsAfterExpectedReleaseDate from '../../../validators/dateIsAfterExpectedReleaseDate'
 import DateIsOnWorkDay from '../../../validators/dateIsOnWorkDay'
+import DateIsBeforeLicenceExpiryOrTused from '../../../validators/dateIsBeforeLicenceExpiryOrTused'
 
 class DateTime {
   static fromDateAndTime = (date: DateString, simpleTime: SimpleTime): DateTime => {
@@ -21,7 +21,7 @@ class DateTime {
   @Type(() => DateString)
   @Validate(ValidDateString)
   @ValidateIf(o => o.appointmentTimeType === 'SPECIFIC_DATE_TIME')
-  @DateIsBefore('licence.licenceExpiryDate', {
+  @DateIsBeforeLicenceExpiryOrTused({
     message: 'Appointment date must be before the end of the licence date',
   })
   @DateIsOnWorkDay({
