@@ -109,6 +109,51 @@ context('Create a licence', () => {
     })
   })
 
+  it('should click through the create a licence journey for a PSS-only licence', () => {
+    cy.task('stubGetPssLicence')
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const caseloadPage = indexPage.clickCreateAPssLicence()
+    const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
+    const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentContactPage = appointmentPlacePage
+      .enterAddressLine1('123 Fake Street')
+      .enterTown('Fakestown')
+      .enterCounty('Durham')
+      .enterPostcode('DH11AF')
+      .clickContinue()
+
+    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+
+    cy.task('getNextWorkingDay', dates).then(appointmentDate => {
+      const pssConditionsQuestionPage = appointmentTimePage
+        .selectTypePss('SPECIFIC_DATE_TIME')
+        .enterDate(moment(appointmentDate))
+        .enterTime(moment())
+        .clickContinueToPss()
+
+      const pssConditionsPage = pssConditionsQuestionPage.selectYes().clickContinue()
+
+      const pssConditionsInputPage = pssConditionsPage
+        .selectCondition('62c83b80-2223-4562-a195-0670f4072088')
+        .selectCondition('fda24aa9-a2b0-4d49-9c87-23b0a7be4013')
+        .clickContinue()
+
+      const checkAnswersPage = pssConditionsInputPage
+        .withContext(pssConditionsPage.getContext())
+        .enterTime()
+        .enterDate()
+        .enterAddress()
+        .nextInput()
+        .enterAddress()
+        .clickContinue()
+
+      const confirmationPage = checkAnswersPage.clickSendLicenceConditionsToPrison()
+      const caseloadPageExit = confirmationPage.clickReturnPss()
+      caseloadPageExit.signOut().click()
+    })
+  })
+
   it('should not allow a licence to be submitted without initial appointment details', () => {
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicence()
