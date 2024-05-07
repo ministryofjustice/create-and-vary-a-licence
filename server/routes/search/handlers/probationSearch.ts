@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import SearchService from '../../../services/searchService'
 import statusConfig from '../../../licences/licenceStatus'
-import type { ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
+import { ProbationSearchResult } from '../../../@types/licenceApiClientTypes'
 
 export default class ProbationSearch {
   constructor(private readonly searchService: SearchService) {}
