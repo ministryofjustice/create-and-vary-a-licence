@@ -113,6 +113,7 @@ describe('Sentence dates changed event handler', () => {
       licenceExpiryDate: '09/09/2023',
       topupSupervisionStartDate: '09/09/2023',
       topupSupervisionExpiryDate: '09/09/2024',
+      postRecallReleaseDate: undefined,
     } as Record<string, string>
 
     expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1', newDates)
@@ -122,7 +123,7 @@ describe('Sentence dates changed event handler', () => {
     expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('5', newDates)
   })
 
-  it('should use conditional release override date, sentence expiry override date, licence expiry override date, topup supervision expiry override date', async () => {
+  it('should use conditional release override date, sentence expiry override date, licence expiry override date, topup supervision expiry override date, post recall release override date', async () => {
     prisonerService.getPrisonerDetail.mockResolvedValue({
       ...prisoner,
       sentenceDetail: {
@@ -131,6 +132,7 @@ describe('Sentence dates changed event handler', () => {
         sentenceExpiryOverrideDate: '2022-09-11',
         licenceExpiryOverrideDate: '2022-09-12',
         topupSupervisionExpiryOverrideDate: '2022-09-13',
+        postRecallReleaseOverrideDate: '2024-05-02',
       },
     } as PrisonApiPrisoner)
 
@@ -157,6 +159,7 @@ describe('Sentence dates changed event handler', () => {
       licenceExpiryDate: '12/09/2022',
       topupSupervisionStartDate: '09/09/2023',
       topupSupervisionExpiryDate: '13/09/2022',
+      postRecallReleaseDate: '02/05/2024',
     })
   })
 
@@ -169,6 +172,7 @@ describe('Sentence dates changed event handler', () => {
         sentenceExpiryOverrideDate: null,
         licenceExpiryOverrideDate: null,
         topupSupervisionExpiryOverrideDate: null,
+        postRecallReleaseOverrideDate: null,
       },
     } as PrisonApiPrisoner)
 
@@ -195,6 +199,7 @@ describe('Sentence dates changed event handler', () => {
       licenceExpiryDate: '09/09/2023',
       topupSupervisionStartDate: '09/09/2023',
       topupSupervisionExpiryDate: '09/09/2024',
+      postRecallReleaseDate: undefined,
     })
   })
 
