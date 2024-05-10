@@ -46,12 +46,12 @@ export default function Index({ licenceService, conditionService }: Services): R
       asyncMiddleware(handler)
     )
   {
-    const controller = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+    const controller = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-name', controller.GET)
     post('/create/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
   {
-    const controller = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+    const controller = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-name', controller.GET)
     post('/edit/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }

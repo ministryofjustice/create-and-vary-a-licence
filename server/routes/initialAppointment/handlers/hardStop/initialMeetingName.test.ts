@@ -4,6 +4,7 @@ import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../../services/licenceService'
 import { AppointmentPersonRequest } from '../../../../@types/licenceApiClientTypes'
 import PathType from '../../../../enumeration/pathType'
+import UserType from '../../../../enumeration/userType'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -41,7 +42,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
   })
 
   describe('Prison user(CA) journey', () => {
-    let handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+    let handler = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.CREATE)
 
     describe('GET', () => {
       it('should render view', async () => {
@@ -56,7 +57,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           continueOrSaveLabel: 'Continue',
         })
 
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+        handler = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.EDIT)
         res.locals.licence.responsibleComFullName = null
         const appointmentPersonTypeWithOutPP = {
           DUTY_OFFICER: 'Duty Officer',
@@ -73,7 +74,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     /** To be added */
     describe('POST', () => {
       it('should redirect to the meeting time page', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
+        handler = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.CREATE)
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
           username: 'joebloggs',
@@ -82,7 +83,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
       })
 
       it('should redirect to the check your answers page', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
+        handler = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.EDIT)
         req = {
           params: {
             licenceId: '1',
