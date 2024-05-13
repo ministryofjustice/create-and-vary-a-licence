@@ -52,7 +52,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
     licenceService.recordAuditEvent = jest.fn()
   })
   describe('Hardstop licence prison user journey', () => {
-    let handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+    let handler = new InitialMeetingPlaceRoutes(licenceService, PathType.CREATE)
 
     describe('GET', () => {
       it('should render view', async () => {
@@ -64,7 +64,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
       })
 
       it('should render view with save Label', async () => {
-        handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        handler = new InitialMeetingPlaceRoutes(licenceService, PathType.EDIT)
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingPlace', {
           formAddress,
@@ -75,14 +75,14 @@ describe('Route Handlers - Create Licence - Initial Meeting Place', () => {
 
     describe('POST', () => {
       it('should redirect to the initial meeting contact page', async () => {
-        handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+        handler = new InitialMeetingPlaceRoutes(licenceService, PathType.CREATE)
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentAddress).toHaveBeenCalledWith(1, formAddress, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-contact')
       })
 
       it('should redirect to the check your answers page page', async () => {
-        handler = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        handler = new InitialMeetingPlaceRoutes(licenceService, PathType.EDIT)
         req = {
           params: {
             licenceId: 1,

@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import PathType from '../../../../enumeration/pathType'
+import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
+import UserType from '../../../../enumeration/userType'
 
 export default class InitialMeetingNameRoutes {
   constructor(
@@ -28,8 +30,10 @@ export default class InitialMeetingNameRoutes {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const { licenceId } = req.params
-    const { user } = res.locals
+    const { user, licence } = res.locals
     await this.licenceService.updateAppointmentPerson(licenceId, req.body, user)
+    flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
+
     if (this.path === PathType.EDIT) {
       res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
     } else {

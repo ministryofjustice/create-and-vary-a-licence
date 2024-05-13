@@ -4,6 +4,10 @@ import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../../services/licenceService'
 import { AppointmentPersonRequest } from '../../../../@types/licenceApiClientTypes'
 import PathType from '../../../../enumeration/pathType'
+import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
+import UserType from '../../../../enumeration/userType'
+
+jest.mock('../initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -95,6 +99,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           username: 'joebloggs',
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
+      })
+
+      it('should call to generate a flash message', async () => {
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
       })
     })
   })
