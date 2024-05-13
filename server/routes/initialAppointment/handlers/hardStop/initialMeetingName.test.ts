@@ -4,7 +4,10 @@ import InitialMeetingNameRoutes from './initialMeetingName'
 import LicenceService from '../../../../services/licenceService'
 import { AppointmentPersonRequest } from '../../../../@types/licenceApiClientTypes'
 import PathType from '../../../../enumeration/pathType'
+import flashInitialApptUpdatedMessage from '../initialMeetingUpdatedFlashMessage'
 import UserType from '../../../../enumeration/userType'
+
+jest.mock('../initialMeetingUpdatedFlashMessage')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
@@ -42,7 +45,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
   })
 
   describe('Prison user(CA) journey', () => {
-    let handler = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+    let handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
 
     describe('GET', () => {
       it('should render view', async () => {
@@ -57,7 +60,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           continueOrSaveLabel: 'Continue',
         })
 
-        handler = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
         res.locals.licence.responsibleComFullName = null
         const appointmentPersonTypeWithOutPP = {
           DUTY_OFFICER: 'Duty Officer',
@@ -74,7 +77,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
     /** To be added */
     describe('POST', () => {
       it('should redirect to the meeting time page', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+        handler = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentPerson).toHaveBeenCalledWith('1', contactPerson, {
           username: 'joebloggs',
@@ -83,7 +86,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
       })
 
       it('should redirect to the check your answers page', async () => {
-        handler = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        handler = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
         req = {
           params: {
             licenceId: '1',
@@ -96,6 +99,11 @@ describe('Route Handlers - Create Licence - Initial Meeting Name - Probation use
           username: 'joebloggs',
         })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
+      })
+
+      it('should call to generate a flash message', async () => {
+        await handler.POST(req, res)
+        expect(flashInitialApptUpdatedMessage).toHaveBeenCalledWith(req, res.locals.licence, UserType.PRISON)
       })
     })
   })

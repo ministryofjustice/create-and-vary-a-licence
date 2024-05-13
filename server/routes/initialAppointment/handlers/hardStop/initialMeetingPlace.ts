@@ -8,7 +8,6 @@ import PathType from '../../../../enumeration/pathType'
 export default class InitialMeetingPlaceRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly userType: UserType,
     private readonly path: PathType
   ) {}
 
@@ -27,7 +26,7 @@ export default class InitialMeetingPlaceRoutes {
     const { user, licence } = res.locals
     await this.licenceService.updateAppointmentAddress(licenceId, req.body, user)
 
-    flashInitialApptUpdatedMessage(req, licence, this.userType)
+    flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
     if (this.path === PathType.EDIT) {
       res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
     } else {

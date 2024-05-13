@@ -9,7 +9,6 @@ import PersonName from '../../types/personName'
 import InitialMeetingNameRoutes from './initialMeetingName'
 import Address from '../../types/address'
 import InitialMeetingPlaceRoutes from './initialMeetingPlace'
-import UserType from '../../../../enumeration/userType'
 import InitialMeetingContactRoutes from './initialMeetingContact'
 import Telephone from '../../types/telephone'
 import InitialMeetingTimeRoutes from './initialMeetingTime'
@@ -46,42 +45,42 @@ export default function Index({ licenceService, conditionService }: Services): R
       asyncMiddleware(handler)
     )
   {
-    const controller = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+    const controller = new InitialMeetingNameRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-name', controller.GET)
     post('/create/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
   {
-    const controller = new InitialMeetingNameRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+    const controller = new InitialMeetingNameRoutes(licenceService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-name', controller.GET)
     post('/edit/id/:licenceId/initial-meeting-name', controller.POST, PersonName)
   }
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+    const controller = new InitialMeetingPlaceRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-place', controller.GET)
     post('/create/id/:licenceId/initial-meeting-place', controller.POST, Address)
   }
   {
-    const controller = new InitialMeetingPlaceRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+    const controller = new InitialMeetingPlaceRoutes(licenceService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-place', controller.GET)
     post('/edit/id/:licenceId/initial-meeting-place', controller.POST, Address)
   }
   {
-    const controller = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+    const controller = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-contact', controller.GET)
     post('/create/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
   }
   {
-    const controller = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+    const controller = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-contact', controller.GET)
     post('/edit/id/:licenceId/initial-meeting-contact', controller.POST, Telephone)
   }
   {
-    const controller = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+    const controller = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)
     get('/create/id/:licenceId/initial-meeting-time', controller.GET)
     post('/create/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }
   {
-    const controller = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+    const controller = new InitialMeetingTimeRoutes(licenceService, PathType.EDIT)
     get('/edit/id/:licenceId/initial-meeting-time', controller.GET)
     post('/edit/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }

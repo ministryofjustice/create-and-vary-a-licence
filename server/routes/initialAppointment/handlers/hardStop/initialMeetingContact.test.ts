@@ -48,7 +48,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
   })
 
   describe('Prison user journey', () => {
-    let handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+    let handler = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
 
     describe('GET', () => {
       it('should render view', async () => {
@@ -59,7 +59,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       })
 
       it('should render view with Save Label', async () => {
-        handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        handler = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingContact', {
           continueOrSaveLabel: 'Save',
@@ -69,7 +69,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
 
     describe('POST', () => {
       it('should redirect to the meeting time page', async () => {
-        handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+        handler = new InitialMeetingContactRoutes(licenceService, PathType.CREATE)
         await handler.POST(req, res)
         expect(licenceService.updateContactNumber).toHaveBeenCalledWith(
           1,
@@ -80,7 +80,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
       })
 
       it('should redirect to the check your answers page', async () => {
-        handler = new InitialMeetingContactRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        handler = new InitialMeetingContactRoutes(licenceService, PathType.EDIT)
         req = {
           params: {
             licenceId: 1,

@@ -58,7 +58,7 @@ describe('Route - create licence - initial meeting date and time', () => {
   })
 
   describe('Hardstop licence prison user journey', () => {
-    let handler = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+    let handler = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)
 
     describe('GET', () => {
       it('should render initial meeting time view', async () => {
@@ -71,7 +71,7 @@ describe('Route - create licence - initial meeting date and time', () => {
       })
 
       it('should render initial meeting time view with Save Label', async () => {
-        handler = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON, PathType.EDIT)
+        handler = new InitialMeetingTimeRoutes(licenceService, PathType.EDIT)
         await handler.GET(req, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/initialMeetingTime', {
           formDate,
@@ -83,7 +83,7 @@ describe('Route - create licence - initial meeting date and time', () => {
 
     describe('POST', () => {
       it('should redirect to the next page', async () => {
-        handler = new InitialMeetingTimeRoutes(licenceService, UserType.PRISON, PathType.CREATE)
+        handler = new InitialMeetingTimeRoutes(licenceService, PathType.CREATE)
         await handler.POST(req, res)
         expect(licenceService.updateAppointmentTime).toHaveBeenCalledWith(1, formDate, { username: 'joebloggs' })
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')

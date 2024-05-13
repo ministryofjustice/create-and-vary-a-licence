@@ -9,7 +9,6 @@ import PathType from '../../../../enumeration/pathType'
 export default class InitialMeetingTimeRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly userType: UserType,
     private readonly path: PathType
   ) {}
 
@@ -30,7 +29,7 @@ export default class InitialMeetingTimeRoutes {
     const { user, licence } = res.locals
     await this.licenceService.updateAppointmentTime(licenceId, req.body, user)
 
-    flashInitialApptUpdatedMessage(req, licence, this.userType)
+    flashInitialApptUpdatedMessage(req, licence, UserType.PRISON)
 
     return res.redirect(`/licence/hard-stop/id/${licenceId}/check-your-answers`)
   }
