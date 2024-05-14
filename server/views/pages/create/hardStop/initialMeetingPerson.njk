@@ -27,7 +27,6 @@
                             Who is the initial appointment with? 
                         </label> 
                     </h1>
-                    <span class="govuk-hint">Choose duty officer if you have not spoken to this person’s allocated probation practitioner.</span>
 
                     {% if licence.isEligibleForEarlyRelease %}
                         {{ govukWarningText({
@@ -71,6 +70,10 @@
                     {{ govukRadios({
                     id: "appointment-with-type",
                     name: "appointmentPersonType",
+                    hint: {
+                        text: "Choose duty officer if you have not spoken to this person’s allocated probation practitioner.",
+                        classes: "govuk-!-margin-bottom-6"
+                    },
                     value: (formResponses.appointmentPersonType or licence.appointmentPersonType) or DUTY_OFFICER,
                     items: initialMeetingPersonOptions
                     }) }}
