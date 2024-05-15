@@ -512,6 +512,12 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
+  async runNotifyAttentionNeededLicencesJob() {
+    await this.post({
+      path: '/run-notify-attention-needed-licences-job',
+    })
+  }
+
   async overrideLicenceDates(licenceId: number, request: OverrideLicenceDatesRequest, user: User) {
     await this.put({ path: `/licence/id/${licenceId}/override/dates`, data: request }, { username: user?.username })
   }
