@@ -1,12 +1,34 @@
+import { format } from 'date-fns'
+import _ from 'lodash'
 import CommunityService from './communityService'
-import type { DeliusRecord, ManagedCaseForApproval } from '../@types/managedCase'
+import type { DeliusRecord, ManagedCaseForApproval, ProbationPractitioner } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
 import type { LicenceSummaryApproverView } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
-import { filterCentralCaseload, parseCvlDate } from '../utils/utils'
+import {
+  convertToTitleCase,
+  filterCentralCaseload,
+  parseCvlDate,
+  parseCvlDateTime,
+  selectReleaseDate,
+} from '../utils/utils'
 import { LicenceApiClient } from '../data'
+
+export type ApprovalCase = {
+  licenceId: number
+  name: string
+  prisonerNumber: string
+  probationPractitioner: ProbationPractitioner
+  submittedByFullName: string
+  releaseDate: string
+  sortDate: Date
+  urgentApproval: boolean
+  approvedBy: string
+  approvedOn: string
+  isDueForEarlyRelease: boolean
+}
 
 export default class ApproverCaseloadService {
   constructor(
@@ -14,43 +36,22 @@ export default class ApproverCaseloadService {
     private readonly licenceApiClient: LicenceApiClient
   ) {}
 
-  async getApprovalNeeded(user: User, prisonCaseload: string[]): Promise<ManagedCaseForApproval[]> {
+  async getApprovalNeeded(user: User, prisonCaseload: string[], searchString: string): Promise<ApprovalCase[]> {
     const licences: LicenceSummaryApproverView[] = await this.licenceApiClient.getLicencesForApproval(
       filterCentralCaseload(prisonCaseload),
       user
     )
     const caseLoad: ManagedCaseForApproval[] = await this.mapLicencesToOffenders(licences)
-    return this.mapResponsibleComsToCases(caseLoad)
+    return this.applySearch(searchString, await this.mapResponsibleComsToCases(caseLoad))
   }
 
-  async getRecentlyApproved(user: User, prisonCaseload: string[]): Promise<ManagedCaseForApproval[]> {
+  async getRecentlyApproved(user: User, prisonCaseload: string[], searchString: string): Promise<ApprovalCase[]> {
     const licences: LicenceSummaryApproverView[] = await this.licenceApiClient.getLicencesRecentlyApproved(
       filterCentralCaseload(prisonCaseload),
       user
     )
     const caseLoad: ManagedCaseForApproval[] = await this.mapLicencesToOffenders(licences)
-    return this.mapResponsibleComsToCases(caseLoad)
-  }
-
-  private pairDeliusRecordsWithNomis = async (
-    managedOffenders: DeliusRecord[],
-    user: User
-  ): Promise<ManagedCaseForApproval[]> => {
-    const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.otherIds?.nomsNumber)
-      .map(offender => offender.otherIds?.nomsNumber)
-
-    const nomisRecords = await this.licenceApiClient.searchPrisonersByNomsIds(caseloadNomisIds, user)
-
-    return managedOffenders
-      .map(offender => {
-        return {
-          deliusRecord: offender,
-          nomisRecord: nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.otherIds?.nomsNumber)
-            ?.prisoner,
-        }
-      })
-      .filter(offender => offender.nomisRecord)
+    return this.applySearch(searchString, await this.mapResponsibleComsToCases(caseLoad))
   }
 
   private mapLicencesToOffenders = async (
@@ -87,7 +88,28 @@ export default class ApproverCaseloadService {
     })
   }
 
-  private async mapResponsibleComsToCases(caseload: ManagedCaseForApproval[]): Promise<ManagedCaseForApproval[]> {
+  private pairDeliusRecordsWithNomis = async (
+    managedOffenders: DeliusRecord[],
+    user: User
+  ): Promise<ManagedCaseForApproval[]> => {
+    const caseloadNomisIds = managedOffenders
+      .filter(offender => offender.otherIds?.nomsNumber)
+      .map(offender => offender.otherIds?.nomsNumber)
+
+    const nomisRecords = await this.licenceApiClient.searchPrisonersByNomsIds(caseloadNomisIds, user)
+
+    return managedOffenders
+      .map(offender => {
+        return {
+          deliusRecord: offender,
+          nomisRecord: nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.otherIds?.nomsNumber)
+            ?.prisoner,
+        }
+      })
+      .filter(offender => offender.nomisRecord)
+  }
+
+  private async mapResponsibleComsToCases(caseload: ManagedCaseForApproval[]): Promise<ApprovalCase[]> {
     const comUsernames = caseload
       .map(
         offender =>
@@ -97,38 +119,74 @@ export default class ApproverCaseloadService {
 
     const coms = await this.communityService.getStaffDetailsByUsernameList(comUsernames)
 
-    return caseload.map(offender => {
-      const responsibleCom = coms.find(
-        com =>
-          com.username?.toLowerCase() ===
-          offender.licences
-            .find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE)
-            .comUsername?.toLowerCase()
-      )
+    return caseload
+      .map(offender => {
+        const responsibleCom = coms.find(
+          com =>
+            com.username?.toLowerCase() ===
+            offender.licences
+              .find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE)
+              .comUsername?.toLowerCase()
+        )
 
-      if (responsibleCom) {
+        if (responsibleCom) {
+          return {
+            ...offender,
+            probationPractitioner: {
+              staffCode: responsibleCom.staffCode,
+              name: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`.trim(),
+            },
+          }
+        }
+
+        if (!offender.deliusRecord.staff || offender.deliusRecord.staff.unallocated) {
+          return {
+            ...offender,
+          }
+        }
+
         return {
           ...offender,
           probationPractitioner: {
-            staffCode: responsibleCom.staffCode,
-            name: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`.trim(),
+            staffCode: offender.deliusRecord.staff.code,
+            name: `${offender.deliusRecord.staff.forenames} ${offender.deliusRecord.staff.surname}`.trim(),
           },
         }
-      }
-
-      if (!offender.deliusRecord.staff || offender.deliusRecord.staff.unallocated) {
-        return {
-          ...offender,
+      })
+      .map((c: ManagedCaseForApproval) => {
+        const licence = _.head(c.licences)
+        const releaseDate = licence?.releaseDate || selectReleaseDate(c.nomisRecord)
+        const urgentApproval = licence.isDueToBeReleasedInTheNextTwoWorkingDays
+        let approvedDate
+        if (licence.approvedDate) {
+          approvedDate = format(parseCvlDateTime(licence.approvedDate, { withSeconds: true }), 'dd MMMM yyyy')
         }
-      }
+        return {
+          licenceId: licence.id,
+          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+          prisonerNumber: c.nomisRecord.prisonerNumber,
+          probationPractitioner: c.probationPractitioner,
+          submittedByFullName: licence.submittedByFullName,
+          releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
+          sortDate: releaseDate,
+          urgentApproval,
+          approvedBy: licence.approvedBy,
+          approvedOn: approvedDate,
+          isDueForEarlyRelease: licence.isDueForEarlyRelease,
+        }
+      })
+      .sort((a, b) => (a.sortDate?.getTime() || 0) - (b.sortDate?.getTime() || 0))
+  }
 
-      return {
-        ...offender,
-        probationPractitioner: {
-          staffCode: offender.deliusRecord.staff.code,
-          name: `${offender.deliusRecord.staff.forenames} ${offender.deliusRecord.staff.surname}`.trim(),
-        },
-      }
+  applySearch(searchString: string, cases: ApprovalCase[]): ApprovalCase[] {
+    if (!searchString) return cases
+    const term = searchString?.toLowerCase()
+    return cases.filter(c => {
+      return (
+        c.name.toLowerCase().includes(term) ||
+        c.prisonerNumber?.toLowerCase().includes(term) ||
+        c.probationPractitioner?.name.toLowerCase().includes(term)
+      )
     })
   }
 }
