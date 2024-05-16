@@ -506,6 +506,12 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
+  async runInactivateRecallLicencesJob() {
+    await this.post({
+      path: '/run-inactivate-recall-licences-job',
+    })
+  }
+
   async overrideLicenceDates(licenceId: number, request: OverrideLicenceDatesRequest, user: User) {
     await this.put({ path: `/licence/id/${licenceId}/override/dates`, data: request }, { username: user?.username })
   }
