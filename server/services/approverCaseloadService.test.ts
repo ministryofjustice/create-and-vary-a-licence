@@ -79,7 +79,7 @@ describe('Approval Caseload Service', () => {
         {
           licenceId: 1,
           approvedBy: undefined,
-          approvedOn: undefined,
+          approvedOn: null,
           isDueForEarlyRelease: true,
           name: 'The Prisoner',
           prisonerNumber: 'AB1234E',
@@ -116,7 +116,7 @@ describe('Approval Caseload Service', () => {
     const expectedResult = {
       licenceId: 1,
       approvedBy: 'Jim Smith',
-      approvedOn: '25 April 2014',
+      approvedOn: '25 Apr 2014',
       isDueForEarlyRelease: false,
       name: 'The Prisoner',
       prisonerNumber: 'AB1234E',
