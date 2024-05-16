@@ -23,6 +23,6 @@ licenceApiClient
     flush({ callback: () => process.exit() }, 'success')
   })
   .catch((error: Error) => {
-    logger.error(error, 'Problem occurred while updating licence status to time out')
+    logger.error(error, 'Problem occurred while inactivating recall licences')
     flush({ callback: () => process.exit(1) }, 'failure')
   })
