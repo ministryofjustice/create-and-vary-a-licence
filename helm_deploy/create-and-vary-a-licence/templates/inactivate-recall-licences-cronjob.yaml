@@ -1,0 +1,25 @@
+{{- if .Values.cronjobs.inactivate_recall_licences.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: inactivate-recall-licences
+spec:
+  schedule: {{ .Values.cronjobs.inactivate_recall_licences.schedule }}
+  concurrencyPolicy: Replace
+  failedJobsHistoryLimit: 5
+  startingDeadlineSeconds: 43200
+  successfulJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: create-and-vary-a-licence
+            image: {{ with index .Values "generic-service" }}{{ .image.repository }}:{{ .image.tag }}{{ end }}
+            args:
+            - node
+            - dist/jobs/inactivateRecallLicences
+{{- include "deployment.envs" (index .Values "generic-service") | nindent 12 }}
+          restartPolicy: Never
+          activeDeadlineSeconds: 3600
+{{- end }}

@@ -16,6 +16,9 @@ cronjobs:
   hard_stop_licences_review_overdue:
     enabled: true
     schedule: "0 8 * * *" # 8:00am UTC every day
+  inactivate_recall_licences:
+    enabled: false
+    schedule: "0 7 * * *" #7:00am UTC every day
 
 generic-service:
   nameOverride: create-and-vary-a-licence
