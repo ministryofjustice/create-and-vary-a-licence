@@ -14,7 +14,6 @@ import type {
   BespokeConditionsRequest,
   ContactNumberRequest,
   CreateLicenceRequest,
-  EmailContact,
   Licence,
   LicenceSummary,
   NotifyRequest,
@@ -55,7 +54,6 @@ import compareLicenceConditions, { VariedConditions } from '../utils/licenceComp
 import ApprovalComment from '../@types/ApprovalComment'
 import LicenceEventType from '../enumeration/licenceEventType'
 import ConditionService from './conditionService'
-import logger from '../../logger'
 
 export default class LicenceService {
   constructor(
@@ -455,18 +453,6 @@ export default class LicenceService {
     })
 
     return conversation || []
-  }
-
-  async notifyComsToPromptLicenceCreation(emailGroups: EmailContact[]): Promise<void> {
-    const groups = emailGroups.filter(e => e.initialPromptCases.length || e.urgentPromptCases.length)
-    if (groups.length) {
-      const casesCount = emailGroups.reduce(
-        (acc, e) => acc + (e.initialPromptCases?.length || 0) + (e.urgentPromptCases?.length || 0),
-        0
-      )
-      logger.info(`Prompting ${emailGroups.length} contacts about ${casesCount} cases for licence creation`)
-      await this.licenceApiClient.notifyComsToPromptEmailCreation(emailGroups)
-    }
   }
 
   async getOmuEmail(prisonId: string, user: User): Promise<OmuContact | null> {

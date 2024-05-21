@@ -6,16 +6,26 @@ import Container from '../server/services/container'
 import PromptLicenceCreationService from './promptLicenceCreationService'
 import LicenceType from '../server/enumeration/licenceType'
 import type { ManagedCase } from '../server/@types/managedCase'
-import type { CvlPrisoner } from '../server/@types/licenceApiClientTypes'
+import type { CvlPrisoner, EmailContact } from '../server/@types/licenceApiClientTypes'
 import LicenceService from '../server/services/licenceService'
+import CommunityService from '../server/services/communityService'
+import { LicenceApiClient } from '../server/data'
 
 jest.mock('../server/services/caseloadService')
 jest.mock('../server/services/prisonerService')
+jest.mock('../server/data')
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
+const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
 
-const promptLicenceCreationService = new PromptLicenceCreationService(licenceService, caseloadService)
+const promptLicenceCreationService = new PromptLicenceCreationService(
+  licenceService,
+  caseloadService,
+  communityService,
+  licenceApiClient
+)
 
 type OffenderManager = { active: boolean; fromDate: string }
 
@@ -80,6 +90,42 @@ describe('prompt licence creation service ', () => {
     it('should exclude allocations not made in past 7 days', () => {
       const actualResult = promptLicenceCreationService.excludeCasesNotAssignedToPpWithinPast7Days(managedCases)
       expect(actualResult).toHaveLength(2)
+    })
+  })
+
+  describe('notifyCom', () => {
+    it('should not notify the responsible officer with a prompt to create a licence if no cases to prompt about', async () => {
+      const expectedRequest = [
+        { email: 'joe.bloggs@probation.gov.uk', comName: 'Joe Bloggs', initialPromptCases: [], urgentPromptCases: [] },
+      ] as EmailContact[]
+      await promptLicenceCreationService.notifyComsToPromptLicenceCreation(expectedRequest)
+      expect(licenceApiClient.notifyComsToPromptEmailCreation).not.toHaveBeenCalled()
+    })
+
+    it('should notify the responsible officer with a prompt to create a licence if initial prompts outstanding', async () => {
+      const expectedRequest = [
+        {
+          email: 'joe.bloggs@probation.gov.uk',
+          comName: 'Joe Bloggs',
+          initialPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
+          urgentPromptCases: [],
+        },
+      ] as EmailContact[]
+      await promptLicenceCreationService.notifyComsToPromptLicenceCreation(expectedRequest)
+      expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
+    })
+
+    it('should notify the responsible officer with a prompt to create a licence if urgent prompts outstanding', async () => {
+      const expectedRequest = [
+        {
+          email: 'joe.bloggs@probation.gov.uk',
+          comName: 'Joe Bloggs',
+          initialPromptCases: [],
+          urgentPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
+        },
+      ] as EmailContact[]
+      await promptLicenceCreationService.notifyComsToPromptLicenceCreation(expectedRequest)
+      expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
     })
   })
 })

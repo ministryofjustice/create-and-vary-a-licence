@@ -14,7 +14,6 @@ import BespokeConditions from '../routes/manageConditions/types/bespokeCondition
 import LicenceStatus from '../enumeration/licenceStatus'
 import {
   AdditionalCondition,
-  EmailContact,
   Licence,
   LicenceSummary,
   StandardCondition,
@@ -710,40 +709,6 @@ describe('Licence Service', () => {
         user
       )
     })
-  })
-
-  it('should not notify the responsible officer with a prompt to create a licence if no cases to prompt about', async () => {
-    const expectedRequest = [
-      { email: 'joe.bloggs@probation.gov.uk', comName: 'Joe Bloggs', initialPromptCases: [], urgentPromptCases: [] },
-    ] as EmailContact[]
-    await licenceService.notifyComsToPromptLicenceCreation(expectedRequest)
-    expect(licenceApiClient.notifyComsToPromptEmailCreation).not.toHaveBeenCalled()
-  })
-
-  it('should notify the responsible officer with a prompt to create a licence if initial prompts outstanding', async () => {
-    const expectedRequest = [
-      {
-        email: 'joe.bloggs@probation.gov.uk',
-        comName: 'Joe Bloggs',
-        initialPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
-        urgentPromptCases: [],
-      },
-    ] as EmailContact[]
-    await licenceService.notifyComsToPromptLicenceCreation(expectedRequest)
-    expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
-  })
-
-  it('should notify the responsible officer with a prompt to create a licence if urgent prompts outstanding', async () => {
-    const expectedRequest = [
-      {
-        email: 'joe.bloggs@probation.gov.uk',
-        comName: 'Joe Bloggs',
-        initialPromptCases: [],
-        urgentPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
-      },
-    ] as EmailContact[]
-    await licenceService.notifyComsToPromptLicenceCreation(expectedRequest)
-    expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
   })
 
   it('will get variations of a licence', async () => {
