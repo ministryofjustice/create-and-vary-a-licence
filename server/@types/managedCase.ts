@@ -56,10 +56,3 @@ export type GenericManagedCase<T> = {
   cvlFields: CvlFields
 }
 export type ManagedCase = GenericManagedCase<Licence>
-
-export type ManagedCaseForApproval = {
-  deliusRecord?: DeliusRecord
-  nomisRecord?: CvlPrisoner
-  licences?: ApprovalLicence[]
-  probationPractitioner?: ProbationPractitioner
-}
