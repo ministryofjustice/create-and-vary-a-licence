@@ -13,6 +13,7 @@ import { LicenceApiClient } from '../server/data'
 
 jest.mock('../server/services/caseloadService')
 jest.mock('../server/services/prisonerService')
+jest.mock('../server/services/communityService')
 jest.mock('../server/data')
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
@@ -93,12 +94,12 @@ describe('prompt licence creation service ', () => {
     })
   })
 
-  describe('notifyCom', () => {
+  describe('notifyComOfUpcomingReleases', () => {
     it('should not notify the responsible officer with a prompt to create a licence if no cases to prompt about', async () => {
       const expectedRequest = [
         { email: 'joe.bloggs@probation.gov.uk', comName: 'Joe Bloggs', initialPromptCases: [], urgentPromptCases: [] },
       ] as EmailContact[]
-      await promptLicenceCreationService.notifyComsToPromptLicenceCreation(expectedRequest)
+      await promptLicenceCreationService.notifyComOfUpcomingReleases(expectedRequest)
       expect(licenceApiClient.notifyComsToPromptEmailCreation).not.toHaveBeenCalled()
     })
 
@@ -111,7 +112,7 @@ describe('prompt licence creation service ', () => {
           urgentPromptCases: [],
         },
       ] as EmailContact[]
-      await promptLicenceCreationService.notifyComsToPromptLicenceCreation(expectedRequest)
+      await promptLicenceCreationService.notifyComOfUpcomingReleases(expectedRequest)
       expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
     })
 
@@ -124,15 +125,154 @@ describe('prompt licence creation service ', () => {
           urgentPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
         },
       ] as EmailContact[]
-      await promptLicenceCreationService.notifyComsToPromptLicenceCreation(expectedRequest)
+      await promptLicenceCreationService.notifyComOfUpcomingReleases(expectedRequest)
       expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
+    })
+
+    it('should filter out email groups that have no cases', async () => {
+      const cases = [
+        {
+          email: 'joe.bloggs@probation.gov.uk',
+          comName: 'Joe Bloggs',
+          initialPromptCases: [],
+          urgentPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
+        },
+        {
+          email: 'sid.bloggs@probation.gov.uk',
+          comName: 'Sid Bloggs',
+          initialPromptCases: [],
+          urgentPromptCases: [],
+        },
+        {
+          email: 'jim.bloggs@probation.gov.uk',
+          comName: 'Jim Bloggs',
+          initialPromptCases: [],
+          urgentPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
+        },
+      ] as EmailContact[]
+      await promptLicenceCreationService.notifyComOfUpcomingReleases(cases)
+      const [a, , b] = cases
+      expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith([a, b])
     })
   })
 })
 
-function createManagedCase(offenderManagers: OffenderManager[], licenceStatus: LicenceStatus): ManagedCase {
+describe('buildEmailGroups', () => {
+  it('should build email groups', async () => {
+    communityService.getStaffDetailByStaffCodeList.mockResolvedValue([
+      {
+        staffCode: 'ABC',
+        email: 'abc@justice.gov.uk',
+        staff: { forenames: 'ABC', surname: 'STAFF' },
+        probationArea: { code: 'N03', probationAreaId: 1 },
+      },
+      {
+        staffCode: 'CDE',
+        email: 'cde@justice.gov.uk',
+        staff: { forenames: 'ABC', surname: 'STAFF' },
+        probationArea: { code: 'N03', probationAreaId: 1 },
+      },
+      {
+        staffCode: 'XYZ',
+        email: 'xyz@justice.gov.uk',
+        staff: { forenames: 'ABC', surname: 'STAFF' },
+        probationArea: { code: 'N03', probationAreaId: 1 },
+      },
+    ])
+    const result = await promptLicenceCreationService.buildEmailGroups(
+      [
+        createManagedCase(
+          [
+            {
+              active: true,
+              fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
+              staff: { code: 'ABC' },
+            } as OffenderManager,
+            {
+              active: false,
+              fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
+              staff: { code: 'CDE' },
+            } as OffenderManager,
+          ],
+          LicenceStatus.IN_PROGRESS,
+          'A1234',
+          { firstName: 'FAAA', lastName: 'LAAA', prisonerNumber: 'A1234AA' }
+        ),
+      ],
+      [
+        createManagedCase(
+          [
+            {
+              active: true,
+              fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
+              staff: { code: 'XYZ' },
+            } as OffenderManager,
+          ],
+          LicenceStatus.IN_PROGRESS,
+          'B1234',
+          { firstName: 'FBBB', lastName: 'LBBB', prisonerNumber: 'B1234BB' }
+        ),
+        createManagedCase(
+          [
+            {
+              active: true,
+              fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
+              staff: { code: 'ABC' },
+            } as OffenderManager,
+          ],
+          LicenceStatus.APPROVED,
+          'C1234',
+          { firstName: 'FCCC', lastName: 'LCCC', prisonerNumber: 'C1234CC' }
+        ),
+      ]
+    )
+    expect(result).toStrictEqual([
+      {
+        comName: 'ABC STAFF',
+        email: 'abc@justice.gov.uk',
+        initialPromptCases: [
+          {
+            crn: 'C1234',
+            name: 'Fccc Lccc',
+            releaseDate: '2024-05-21',
+          },
+        ],
+        urgentPromptCases: [
+          {
+            crn: 'A1234',
+            name: 'Faaa Laaa',
+            releaseDate: '2024-05-21',
+          },
+        ],
+      },
+      {
+        comName: 'ABC STAFF',
+        email: 'xyz@justice.gov.uk',
+        initialPromptCases: [
+          {
+            crn: 'B1234',
+            name: 'Fbbb Lbbb',
+            releaseDate: '2024-05-21',
+          },
+        ],
+        urgentPromptCases: [],
+      },
+    ])
+  })
+})
+
+function createManagedCase(
+  offenderManagers: OffenderManager[],
+  licenceStatus: LicenceStatus,
+  crn: string = 'A1234',
+  prisoner: { firstName: string; lastName: string; prisonerNumber: string } = {
+    firstName: 'firstName',
+    lastName: 'lastName',
+    prisonerNumber: 'ZZZZZZZ',
+  }
+): ManagedCase {
   return {
-    deliusRecord: { offenderId: 1, offenderManagers },
+    deliusRecord: { offenderId: 1, offenderManagers, offenderCrn: crn },
     cvlFields: {
       licenceType: 'AP',
       hardStopDate: '03/01/2023',
@@ -144,8 +284,11 @@ function createManagedCase(offenderManagers: OffenderManager[], licenceStatus: L
     },
     nomisRecord: {
       prisonId: 'someId',
+      firstName: prisoner.firstName,
+      lastName: prisoner.lastName,
       conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
       status: 'someStatus',
+      prisonerNumber: prisoner.prisonerNumber,
     } as CvlPrisoner,
     licences: [
       {
