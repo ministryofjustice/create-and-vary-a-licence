@@ -24,7 +24,15 @@ export default class CommunityService {
   }
 
   async getStaffDetailByStaffCodeList(staffCodes: string[]): Promise<CommunityApiStaffDetails[]> {
-    return this.communityApiClient.getStaffDetailByStaffCodeList(staffCodes)
+    const staffDetails = []
+    /* eslint-disable */
+    for (const codes of _.chunk(staffCodes, 500)) {
+      const partResult = await this.communityApiClient.getStaffDetailByStaffCodeList(codes)
+      staffDetails.push(partResult)
+    }
+    /* eslint-enable */
+
+    return staffDetails.flat()
   }
 
   async getStaffDetailByStaffIdentifier(staffIdentifier: number): Promise<CommunityApiStaffDetails> {
