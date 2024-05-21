@@ -47,10 +47,10 @@ export default class PromptLicenceCreationService {
   ): Promise<EmailContact[]> => {
     const managedCases = [...urgentPromptCases, ...initialPromptCases]
 
-    const mapPrisonerToReleaseCase = (prisoner: CvlPrisoner) => {
+    const mapPrisonerToReleaseCase = (prisoner: CvlPrisoner & { crn: string }) => {
       return {
         name: convertToTitleCase(`${prisoner.firstName} ${prisoner.lastName}`),
-        crn: undefined as string, // FIXME - this is never worked!
+        crn: prisoner.crn,
         releaseDate: prisoner.confirmedReleaseDate || prisoner.conditionalReleaseDate,
       }
     }
@@ -59,15 +59,8 @@ export default class PromptLicenceCreationService {
       managedCases.map(prisoner => prisoner.deliusRecord.offenderManagers.find(manager => manager.active)?.staff.code)
     )
 
-    const staffDetails = []
-    /* eslint-disable */
-    for (const codes of _.chunk(staffCodes, 500)) {
-      const partResult = await this.communityService.getStaffDetailByStaffCodeList(codes)
-      staffDetails.push(partResult)
-    }
-    /* eslint-enable */
+    const staff = await this.communityService.getStaffDetailByStaffCodeList(staffCodes)
 
-    const staff = staffDetails.flat()
     const prisonersWithCom = managedCases
       .map(prisoner => {
         const responsibleComStaffCode = prisoner.deliusRecord.offenderManagers.find(manager => manager.active)?.staff
@@ -95,10 +88,10 @@ export default class PromptLicenceCreationService {
 
         return {
           initialPromptCases: prisoners
-            .filter(p => initialPromptCases.find(ipc => _.isEqual(ipc.nomisRecord, p)))
+            .filter(p => initialPromptCases.find(ipc => ipc.nomisRecord.prisonerNumber === p.prisonerNumber))
             .map(prisoner => mapPrisonerToReleaseCase(prisoner)),
           urgentPromptCases: prisoners
-            .filter(p => urgentPromptCases.find(upc => _.isEqual(upc.nomisRecord, p)))
+            .filter(p => urgentPromptCases.find(upc => upc.nomisRecord.prisonerNumber === p.prisonerNumber))
             .map(prisoner => mapPrisonerToReleaseCase(prisoner)),
           comName,
           email,
@@ -127,22 +120,22 @@ export default class PromptLicenceCreationService {
     const workList = _.chunk(emailGroups, 30)
 
     for (const probationOfficers of workList) {
-      await this.notifyComsToPromptLicenceCreation(probationOfficers)
-    }
-  }
-
-  async notifyComsToPromptLicenceCreation(emailGroups: EmailContact[]): Promise<void> {
-    const groups = emailGroups.filter(e => e.initialPromptCases.length || e.urgentPromptCases.length)
-    if (groups.length) {
-      const casesCount = emailGroups.reduce(
-        (acc, e) => acc + (e.initialPromptCases?.length || 0) + (e.urgentPromptCases?.length || 0),
-        0
-      )
-      logger.info(`Prompting ${emailGroups.length} contacts about ${casesCount} cases for licence creation`)
-      await this.licenceApiClient.notifyComsToPromptEmailCreation(emailGroups)
+      const groups = probationOfficers.filter(e => e.initialPromptCases.length || e.urgentPromptCases.length)
+      if (groups.length) {
+        await this.notifyComsToPromptLicenceCreation(groups)
+      }
     }
   }
   /* eslint-enable */
+
+  private async notifyComsToPromptLicenceCreation(emailGroups: EmailContact[]): Promise<void> {
+    const casesCount = emailGroups.reduce(
+      (acc, e) => acc + (e.initialPromptCases?.length || 0) + (e.urgentPromptCases?.length || 0),
+      0
+    )
+    logger.info(`Prompting ${emailGroups.length} contacts about ${casesCount} cases for licence creation`)
+    await this.licenceApiClient.notifyComsToPromptEmailCreation(emailGroups)
+  }
 
   run = async () => {
     const [urgentPromptCases, week13InitialPromptCases, week5to12InitialPromptCases] = await Promise.all([
