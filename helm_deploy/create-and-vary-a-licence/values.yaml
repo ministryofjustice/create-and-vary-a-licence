@@ -20,8 +20,8 @@ cronjobs:
     enabled: false
     schedule: "0 7 * * *" #7:00am UTC every day
   notify_attention_needed_licences:
-    enabled: false
-    schedule: "0 9 * * 1" # 9am UTC, every monday
+    enabled: true
+    schedule: "0 9 * * 1" # 9am UTC every monday
 
 generic-service:
   nameOverride: create-and-vary-a-licence
