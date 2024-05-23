@@ -13,6 +13,7 @@ import SearchService from './searchService'
 import FeComponentsService from './feComponentsService'
 import ApproverCaseloadService from './approverCaseloadService'
 import TimelineService from './timelineService'
+import PromptLicenceCreationService from '../../jobs/promptLicenceCreationService'
 
 const {
   manageUsersApiClient,
@@ -39,6 +40,12 @@ const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
 const searchService = new SearchService(licenceApiClient)
 const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
+const promptLicenceCreationService = new PromptLicenceCreationService(
+  licenceService,
+  caseloadService,
+  communityService,
+  licenceApiClient
+)
 
 export const services = {
   userService,
@@ -56,6 +63,7 @@ export const services = {
   licenceApiClient,
   feComponentsService,
   timelineService,
+  promptLicenceCreationService,
 }
 
 export type Services = typeof services
