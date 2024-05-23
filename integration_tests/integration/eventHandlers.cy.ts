@@ -19,7 +19,7 @@ context('Event handlers', () => {
             "MessageAttributes": {
               "eventType": {
                 "Type": "String",
-                "Value": "prison-offender-events.prisoner.released"
+                "Value": "prisoner-offender-search.prisoner.released"
               }
             }
          }`

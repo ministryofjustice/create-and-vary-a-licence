@@ -21,7 +21,7 @@ export default function buildEventHandler({ licenceService, prisonerService }: S
       logger.info(`Domain Event (${eventType}) : ${JSON.stringify(eventMessage)}`)
 
       switch (eventType) {
-        case 'prison-offender-events.prisoner.released':
+        case 'prisoner-offender-search.prisoner.released':
           releaseEventHandler.handle(eventMessage).catch(error => logger.error(error))
           break
         case 'prison-offender-events.prisoner.received':
