@@ -104,8 +104,9 @@ export default class PromptLicenceCreationService {
     const startOf7Days = subDays(new Date(), 7)
     const endOf7Days = new Date()
     const isWithinPast7Days = (c: ManagedCase) => {
-      if (c.deliusRecord.offenderManagers) {
-        const dateAllocatedToPp = new Date(c.deliusRecord.offenderManagers.find(om => om.active).fromDate)
+      const offenderManager = c.deliusRecord?.offenderManagers?.find(om => om.active)
+      if (offenderManager) {
+        const dateAllocatedToPp = new Date(offenderManager.fromDate)
         return dateAllocatedToPp >= startOf7Days && dateAllocatedToPp < endOf7Days
       }
       return false
@@ -137,7 +138,7 @@ export default class PromptLicenceCreationService {
     await this.licenceApiClient.notifyComsToPromptEmailCreation(emailGroups)
   }
 
-  run = async () => {
+  public async gatherGroups(): Promise<EmailContact[]> {
     const [urgentPromptCases, week13InitialPromptCases, week5to12InitialPromptCases] = await Promise.all([
       this.pollPrisonersDueForLicence(startOfISOWeek(new Date()), endOfISOWeek(add(new Date(), { weeks: 3 })), [
         LicenceStatus.NOT_STARTED,
@@ -168,11 +169,11 @@ export default class PromptLicenceCreationService {
       }),
     ])
 
-    const emailGroups = await this.buildEmailGroups(urgentPromptCases, [
-      ...week13InitialPromptCases,
-      ...week5to12InitialPromptCases,
-    ])
+    return this.buildEmailGroups(urgentPromptCases, [...week13InitialPromptCases, ...week5to12InitialPromptCases])
+  }
 
+  run = async () => {
+    const emailGroups = await this.gatherGroups()
     await this.notifyComOfUpcomingReleases(emailGroups)
   }
 }

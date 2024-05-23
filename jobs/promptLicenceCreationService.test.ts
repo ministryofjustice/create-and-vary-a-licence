@@ -28,6 +28,7 @@ const promptLicenceCreationService = new PromptLicenceCreationService(
   licenceApiClient
 )
 
+const today = format(new Date(), 'yyyy-MM-dd')
 type OffenderManager = { active: boolean; fromDate: string }
 
 describe('prompt licence creation service ', () => {
@@ -43,7 +44,7 @@ describe('prompt licence creation service ', () => {
   })
 
   const managedCases = [
-    createManagedCase([{ active: true, fromDate: format(new Date(), 'yyyy-MM-dd') }], LicenceStatus.NOT_STARTED),
+    createManagedCase([{ active: true, fromDate: today }], LicenceStatus.NOT_STARTED),
 
     createManagedCase(
       [
@@ -234,14 +235,14 @@ describe('buildEmailGroups', () => {
           {
             crn: 'C1234',
             name: 'Fccc Lccc',
-            releaseDate: '2024-05-21',
+            releaseDate: today,
           },
         ],
         urgentPromptCases: [
           {
             crn: 'A1234',
             name: 'Faaa Laaa',
-            releaseDate: '2024-05-21',
+            releaseDate: today,
           },
         ],
       },
@@ -252,7 +253,7 @@ describe('buildEmailGroups', () => {
           {
             crn: 'B1234',
             name: 'Fbbb Lbbb',
-            releaseDate: '2024-05-21',
+            releaseDate: today,
           },
         ],
         urgentPromptCases: [],
@@ -286,7 +287,7 @@ function createManagedCase(
       prisonId: 'someId',
       firstName: prisoner.firstName,
       lastName: prisoner.lastName,
-      conditionalReleaseDate: format(new Date(), 'yyyy-MM-dd'),
+      conditionalReleaseDate: today,
       status: 'someStatus',
       prisonerNumber: prisoner.prisonerNumber,
     } as CvlPrisoner,

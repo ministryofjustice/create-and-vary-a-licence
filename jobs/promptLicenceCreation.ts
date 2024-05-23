@@ -10,16 +10,8 @@ initialiseAppInsights(applicationInfo('create-and-vary-a-licence-prompt-licence-
 
 import logger from '../logger'
 import { services } from '../server/services'
-import PromptLicenceCreationService from './promptLicenceCreationService'
 
-const { caseloadService, communityService, licenceService, licenceApiClient } = services
-
-const promptLicenceCreationService = new PromptLicenceCreationService(
-  licenceService,
-  caseloadService,
-  communityService,
-  licenceApiClient
-)
+const { promptLicenceCreationService } = services
 
 promptLicenceCreationService
   .run()

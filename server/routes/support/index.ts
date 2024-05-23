@@ -19,6 +19,7 @@ import OffenderLicenceDatesRoutes from './handlers/offenderLicenceDates'
 import ProbationTeamRoutes from './handlers/probationTeam'
 import ProbationUserRoutes from './handlers/probationStaff'
 import ComDetailsRoutes from './handlers/comDetails'
+import PromptCasesRoutes from './handlers/promptCases'
 
 export default function Index({
   communityService,
@@ -28,6 +29,7 @@ export default function Index({
   conditionService,
   licenceOverrideService,
   caseloadService,
+  promptLicenceCreationService,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -53,8 +55,10 @@ export default function Index({
   const probationTeamHandler = new ProbationTeamRoutes(caseloadService)
   const probationStaffHandler = new ProbationUserRoutes(caseloadService, communityService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
+  const promptCasesHander = new PromptCasesRoutes(promptLicenceCreationService)
 
   get('/', supportHomeHandler.GET)
+  get('/prompt-cases', promptCasesHander.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
   get('/manage-omu-email-address/:prisonId', manageOmuEmailAddressHandler.GET_IN_CONTEXT)
   post('/manage-omu-email-address/add-or-edit', manageOmuEmailAddressHandler.ADD_OR_EDIT, prisonIdAndEmail)
