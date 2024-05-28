@@ -52,17 +52,18 @@ generic-service:
   env:
     NODE_ENV: "production"
     REDIS_TLS_ENABLED: "true"
-    TOKEN_VERIFICATION_ENABLED: "true"
-    LICENCE_WATERMARK: "false"
     APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY);IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
     SERVICE_NAME: "create-and-vary-a-licence"
-    SHOW_WHATS_NEW_BANNER: "true"
-    USE_NEW_SEARCH: "true"
     # To enable common front-end components
     COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
-    COMMON_COMPONENTS_ENABLED: 'true'
     MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
     FRIDAY_RELEASE_POLICY: 'https://www.gov.uk/government/publications/discretionary-fridaypre-bank-holiday-release-scheme-policy-framework'
+    # Feature toggles
+    LICENCE_WATERMARK: "false"
+    TOKEN_VERIFICATION_ENABLED: "true"
+    COMMON_COMPONENTS_ENABLED: "true"
+    SHOW_WHATS_NEW_BANNER: "false"
+    USE_NEW_SEARCH: "true"
     HARD_STOP_ENABLED: "true"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
