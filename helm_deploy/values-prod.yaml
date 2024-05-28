@@ -26,13 +26,10 @@ generic-service:
     GOTENBERG_API_URL: "http://create-and-vary-a-licence-gotenberg"
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: "http://create-and-vary-a-licence"
-    RESTRICT_ROLLOUT: "false"
     DPS_URL: "https://digital.prison.service.justice.gov.uk"
-    SHOW_WHATS_NEW_BANNER: "true"
 
     # To enable common front-end components
     COMPONENT_API_URL: "https://frontend-components.hmpps.service.justice.gov.uk"
-    COMMON_COMPONENTS_ENABLED: "true"
     MANAGE_USERS_API_URL: "https://manage-users-api.hmpps.service.justice.gov.uk"
 
 gotenberg:
