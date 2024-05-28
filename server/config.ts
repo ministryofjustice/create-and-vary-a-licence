@@ -206,7 +206,6 @@ export default {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
   },
   rollout: {
-    restricted: get('RESTRICT_ROLLOUT', 'false') === 'true',
     probationAreas: ['N03', 'N53', 'N51', 'N52', 'N54', 'N50', 'N55', 'N58', 'N56', 'N59', 'N07', 'N57', 'N43'],
     prisons: [
       'CFI',
