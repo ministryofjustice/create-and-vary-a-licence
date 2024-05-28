@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: notify_attention_needed_licences
+  name: notify-attention-needed-licences
 spec:
   schedule: {{ .Values.cronjobs.notify_attention_needed_licences.schedule }}
   concurrencyPolicy: Replace
