@@ -18,7 +18,7 @@ export default function setUpWebSecurity(): Router {
     'code.jquery.com',
     '*.googletagmanager.com',
     'www.google-analytics.com',
-    "'sha256-+6WnXIl4mbFTCARd8N3COQmT3bJJmo32N8q8ZSQAIcU='",
+    "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
   ]
   const styleSrc = ["'self'", 'code.jquery.com']
   const fontSrc = ["'self'"]
