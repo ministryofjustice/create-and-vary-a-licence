@@ -100,7 +100,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.574.0",
-    "@ministryofjustice/frontend": "^1.8.1",
+    "@ministryofjustice/frontend": "2.1",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.5",
     "body-parser": "^1.20.2",
@@ -116,7 +116,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "filesize": "^10.1.2",
-    "govuk-frontend": "^4.8.0",
+    "govuk-frontend": "^5.0.0",
     "helmet": "^7.1.0",
     "http-errors": "^2.0.0",
     "jquery": "^3.7.1",
