@@ -97,6 +97,7 @@ generic-service:
       - internal
       - prisons
       - private_prisons
+      - probation
 
 gotenberg:
   nameOverride: gotenberg
