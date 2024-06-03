@@ -1,5 +1,6 @@
-window.GOVUKFrontend.initAll()
+import { initAll } from '/assets/govuk/govuk-frontend.min.js'
 
+initAll()
 // Initiate the back links
 $('[class$=js-backlink]').on('click', e => {
   e.preventDefault()
