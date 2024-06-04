@@ -9,14 +9,14 @@ import type { CvlPrisoner, EmailContact } from '../server/@types/licenceApiClien
 import LicenceService from '../server/services/licenceService'
 import CommunityService from '../server/services/communityService'
 import { LicenceApiClient } from '../server/data'
-import CaCaseloadService from '../server/services/caCaseloadService'
+import PromptListService from '../server/services/promptListService'
 
-jest.mock('../server/services/caCaseloadService')
+jest.mock('../server/services/promptListService')
 jest.mock('../server/services/prisonerService')
 jest.mock('../server/services/communityService')
 jest.mock('../server/data')
 
-const caseloadService = new CaCaseloadService(null, null, null) as jest.Mocked<CaCaseloadService>
+const caseloadService = new PromptListService(null, null, null) as jest.Mocked<PromptListService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>

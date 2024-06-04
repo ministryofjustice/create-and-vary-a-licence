@@ -15,6 +15,7 @@ import ApproverCaseloadService from './approverCaseloadService'
 import TimelineService from './timelineService'
 import PromptLicenceCreationService from '../../jobs/promptLicenceCreationService'
 import CaCaseloadService from './caCaseloadService'
+import PromptListService from './promptListService'
 
 const {
   manageUsersApiClient,
@@ -36,6 +37,7 @@ const licenceService = new LicenceService(licenceApiClient, conditionService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
 const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
 const caCaseloadService = new CaCaseloadService(prisonerService, communityService, licenceService)
+const promptListService = new PromptListService(prisonerService, communityService, licenceService)
 const approvedCaseloadService = new ApproverCaseloadService(communityService, licenceApiClient)
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
 const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
@@ -44,7 +46,7 @@ const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
 const promptLicenceCreationService = new PromptLicenceCreationService(
   licenceService,
-  caCaseloadService,
+  promptListService,
   communityService,
   licenceApiClient
 )

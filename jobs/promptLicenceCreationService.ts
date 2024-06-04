@@ -11,12 +11,12 @@ import { convertToTitleCase } from '../server/utils/utils'
 import CommunityService from '../server/services/communityService'
 import logger from '../logger'
 import { LicenceApiClient } from '../server/data'
-import CaCaseloadService from '../server/services/caCaseloadService'
+import PromptListService from '../server/services/promptListService'
 
 export default class PromptLicenceCreationService {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly caseloadService: CaCaseloadService,
+    private readonly promptListService: PromptListService,
     private readonly communityService: CommunityService,
     private readonly licenceApiClient: LicenceApiClient
   ) {}
@@ -32,9 +32,9 @@ export default class PromptLicenceCreationService {
       .searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonCodes)
       .then(prisoners => prisoners.filter(({ prisoner }) => prisoner?.status.startsWith('ACTIVE')))
       .then(caseload => new Container(caseload))
-      .then(caseload => this.caseloadService.pairNomisRecordsWithDelius(caseload))
-      .then(caseload => this.caseloadService.filterOffendersEligibleForLicence(caseload))
-      .then(prisoners => this.caseloadService.mapOffendersToLicences(prisoners))
+      .then(caseload => this.promptListService.pairNomisRecordsWithDelius(caseload))
+      .then(caseload => this.promptListService.filterOffendersEligibleForLicence(caseload))
+      .then(prisoners => this.promptListService.mapOffendersToLicences(prisoners))
       .then(caseload => caseload.unwrap())
       .then(prisoners =>
         prisoners.filter(offender => licenceStatus.some(status => offender.licences.find(l => l.status === status)))

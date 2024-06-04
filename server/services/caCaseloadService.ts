@@ -61,7 +61,7 @@ export default class CaCaseloadService {
     return new OmuCaselist(casesWithComs)
   }
 
-  public pairNomisRecordsWithDelius = async (prisoners: Container<CaseloadItem>): Promise<Container<ManagedCase>> => {
+  private pairNomisRecordsWithDelius = async (prisoners: Container<CaseloadItem>): Promise<Container<ManagedCase>> => {
     const caseloadNomisIds = prisoners
       .unwrap()
       .filter(({ prisoner }) => prisoner.prisonerNumber)
@@ -193,7 +193,7 @@ export default class CaCaseloadService {
     })
   }
 
-  public filterOffendersEligibleForLicence = async (offenders: Container<ManagedCase>, user?: User) => {
+  private filterOffendersEligibleForLicence = async (offenders: Container<ManagedCase>, user?: User) => {
     const eligibleOffenders = offenders
       .filter(
         offender => !CaCaseloadService.isParoleEligible(offender.nomisRecord.paroleEligibilityDate),
