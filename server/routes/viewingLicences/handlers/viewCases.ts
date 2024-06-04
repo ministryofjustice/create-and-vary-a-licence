@@ -8,7 +8,7 @@ import PrisonerService from '../../../services/prisonerService'
 import { Licence } from '../../../@types/managedCase'
 import { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import CaCaseloadService from '../../../services/caCaseloadService'
+import CaCaseloadService from '../../../services/lists/caCaseloadService'
 
 const nonViewableStatuses = [
   LicenceStatus.NOT_IN_PILOT,

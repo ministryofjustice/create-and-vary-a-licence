@@ -1,5 +1,5 @@
 import { RequestHandler, Request, Response } from 'express'
-import CaseloadService from '../../../services/caseloadService'
+import CaseloadService from '../../../services/lists/caseloadService'
 
 export default class ChangeTeamRoutes {
   constructor(

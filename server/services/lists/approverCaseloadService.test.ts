@@ -1,16 +1,21 @@
-import CommunityService from './communityService'
-import LicenceApiClient from '../data/licenceApiClient'
-import type { User } from '../@types/CvlUserDetails'
-import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
-import LicenceStatus from '../enumeration/licenceStatus'
-import LicenceType from '../enumeration/licenceType'
+import CommunityService from '../communityService'
+import LicenceApiClient from '../../data/licenceApiClient'
+import type { User } from '../../@types/CvlUserDetails'
+import type { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
+import LicenceStatus from '../../enumeration/licenceStatus'
+import LicenceType from '../../enumeration/licenceType'
 import ApproverCaseloadService from './approverCaseloadService'
-import type { CaseloadItem, CvlFields, CvlPrisoner, LicenceSummaryApproverView } from '../@types/licenceApiClientTypes'
-import { parseIsoDate } from '../utils/utils'
+import type {
+  CaseloadItem,
+  CvlFields,
+  CvlPrisoner,
+  LicenceSummaryApproverView,
+} from '../../@types/licenceApiClientTypes'
+import { parseIsoDate } from '../../utils/utils'
 
-jest.mock('./communityService')
-jest.mock('./licenceService')
-jest.mock('../data/licenceApiClient')
+jest.mock('../communityService')
+jest.mock('../licenceService')
+jest.mock('../../data/licenceApiClient')
 
 const communityOffender = {
   otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },

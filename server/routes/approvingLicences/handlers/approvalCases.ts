@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import type PrisonerService from '../../../services/prisonerService'
-import type ApproverCaseloadService from '../../../services/approverCaseloadService'
+import type ApproverCaseloadService from '../../../services/lists/approverCaseloadService'
 
 export default class ApprovalCaseRoutes {
   constructor(

@@ -9,15 +9,15 @@ import PrisonerService from '../../../services/prisonerService'
 import LicenceType from '../../../enumeration/licenceType'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import Container from '../../../services/container'
-import OmuCaselist from '../../../services/omuCaselist'
+import OmuCaselist from '../../../services/lists/omuCaselist'
 import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import { CaViewCasesTab, parseCvlDate } from '../../../utils/utils'
 import { ManagedCase } from '../../../@types/managedCase'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import CaCaseloadService from '../../../services/caCaseloadService'
+import CaCaseloadService from '../../../services/lists/caCaseloadService'
 
 const caseloadService = new CaCaseloadService(null, null, null) as jest.Mocked<CaCaseloadService>
-jest.mock('../../../services/caCaseloadService')
+jest.mock('../../../services/lists/caCaseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 jest.mock('../../../services/prisonerService')

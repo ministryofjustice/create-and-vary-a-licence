@@ -9,9 +9,9 @@ import type { CvlPrisoner, EmailContact } from '../server/@types/licenceApiClien
 import LicenceService from '../server/services/licenceService'
 import CommunityService from '../server/services/communityService'
 import { LicenceApiClient } from '../server/data'
-import PromptListService from '../server/services/promptListService'
+import PromptListService from '../server/services/lists/promptListService'
 
-jest.mock('../server/services/promptListService')
+jest.mock('../server/services/lists/promptListService')
 jest.mock('../server/services/prisonerService')
 jest.mock('../server/services/communityService')
 jest.mock('../server/data')

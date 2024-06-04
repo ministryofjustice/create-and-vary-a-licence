@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import ChangeTeamRoutes from './changeTeam'
-import CaseloadService from '../../../services/caseloadService'
+import CaseloadService from '../../../services/lists/caseloadService'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
-jest.mock('../../../services/caseloadService')
+jest.mock('../../../services/lists/caseloadService')
 
 describe('Route Handlers - ChangeLocationRoutes', () => {
   const handler = new ChangeTeamRoutes(caseloadService, 'create')

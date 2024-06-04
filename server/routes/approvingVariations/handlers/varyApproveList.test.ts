@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 
 import VaryApproveListRoutes from './varyApproveList'
-import CaseloadService from '../../../services/caseloadService'
+import CaseloadService from '../../../services/lists/caseloadService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import type { DeliusRecord } from '../../../@types/managedCase'
 import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
-jest.mock('../../../services/caseloadService')
+jest.mock('../../../services/lists/caseloadService')
 
 describe('Route Handlers - Variation approval list', () => {
   const handler = new VaryApproveListRoutes(caseloadService)

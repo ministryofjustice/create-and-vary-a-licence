@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import CaseloadService from '../../../services/caseloadService'
+import CaseloadService from '../../../services/lists/caseloadService'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import statusConfig from '../../../licences/licenceStatus'
 import CommunityService from '../../../services/communityService'

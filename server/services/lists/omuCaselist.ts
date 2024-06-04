@@ -1,7 +1,7 @@
 import { isFuture } from 'date-fns'
-import { ManagedCase } from '../@types/managedCase'
-import LicenceStatus from '../enumeration/licenceStatus'
-import Container from './container'
+import { ManagedCase } from '../../@types/managedCase'
+import LicenceStatus from '../../enumeration/licenceStatus'
+import Container from '../container'
 
 const PRISON_VIEW_STATUSES = [
   LicenceStatus.NOT_STARTED,

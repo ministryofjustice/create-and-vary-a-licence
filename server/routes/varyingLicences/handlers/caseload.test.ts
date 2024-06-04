@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import CaseloadRoutes from './caseload'
-import CaseloadService from '../../../services/caseloadService'
+import CaseloadService from '../../../services/lists/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
@@ -10,7 +10,7 @@ import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 
 const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
 
-jest.mock('../../../services/caseloadService')
+jest.mock('../../../services/lists/caseloadService')
 
 describe('Route Handlers - Vary Licence - Caseload', () => {
   const handler = new CaseloadRoutes(caseloadService)

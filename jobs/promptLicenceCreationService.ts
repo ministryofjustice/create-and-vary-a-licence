@@ -11,7 +11,7 @@ import { convertToTitleCase } from '../server/utils/utils'
 import CommunityService from '../server/services/communityService'
 import logger from '../logger'
 import { LicenceApiClient } from '../server/data'
-import PromptListService from '../server/services/promptListService'
+import PromptListService from '../server/services/lists/promptListService'
 
 export default class PromptLicenceCreationService {
   constructor(

@@ -1,17 +1,17 @@
 import moment from 'moment'
-import { isFuture, startOfDay, add, endOfDay, isWithinInterval, sub } from 'date-fns'
-import CommunityService from './communityService'
-import PrisonerService from './prisonerService'
-import LicenceService from './licenceService'
+import { startOfDay, add, endOfDay } from 'date-fns'
+import CommunityService from '../communityService'
+import PrisonerService from '../prisonerService'
+import LicenceService from '../licenceService'
 import OmuCaselist from './omuCaselist'
-import { DeliusRecord, ManagedCase } from '../@types/managedCase'
-import LicenceStatus from '../enumeration/licenceStatus'
-import LicenceType from '../enumeration/licenceType'
-import { User } from '../@types/CvlUserDetails'
-import type { LicenceSummary, CaseloadItem } from '../@types/licenceApiClientTypes'
-import Container from './container'
-import LicenceKind from '../enumeration/LicenceKind'
-import { parseCvlDate, parseIsoDate } from '../utils/utils'
+import { DeliusRecord, ManagedCase } from '../../@types/managedCase'
+import LicenceStatus from '../../enumeration/licenceStatus'
+import LicenceType from '../../enumeration/licenceType'
+import { User } from '../../@types/CvlUserDetails'
+import type { LicenceSummary, CaseloadItem } from '../../@types/licenceApiClientTypes'
+import LicenceKind from '../../enumeration/LicenceKind'
+import { parseCvlDate, parseIsoDate } from '../../utils/utils'
+import CaseListUtils from './caselistUtils'
 
 export default class CaCaseloadService {
   constructor(
@@ -31,39 +31,32 @@ export default class CaCaseloadService {
     const todayPlusFourWeeks = endOfDay(add(new Date(), { weeks: 4 }))
     const casesPendingLicence = this.licenceService
       .searchPrisonersByReleaseDate(today, todayPlusFourWeeks, prisonCaseload, user)
-      .then(caseload => this.wrap(caseload))
       .then(caseload => this.pairNomisRecordsWithDelius(caseload))
       .then(caseload => this.filterOffendersEligibleForLicence(caseload, user))
       .then(caseload => this.mapOffendersToLicences(caseload, user))
       .then(caseload => this.buildCreateCaseload(caseload))
       .then(caseload => {
         return caseload
-          .filter(
-            c => !c.licences.find(l => l.status === LicenceStatus.TIMED_OUT && l.id),
-            'Is a timed out IN_PROGRESS licence, will have been caught by earlier getLicencesForOmu'
-          )
-          .filter(
-            c =>
-              [
-                LicenceStatus.NOT_STARTED,
-                LicenceStatus.TIMED_OUT,
-                LicenceStatus.NOT_IN_PILOT,
-                LicenceStatus.OOS_RECALL,
-                LicenceStatus.OOS_BOTUS,
-              ].some(status => c.licences.find(l => l.status === status)),
-            'Has no licence in NOT_STARTED, TIMED_OUT, NOT_IN_PILOT, OOS_RECALL, OOS_BOTUS'
+          .filter(c => !c.licences.find(l => l.status === LicenceStatus.TIMED_OUT && l.id))
+          .filter(c =>
+            [
+              LicenceStatus.NOT_STARTED,
+              LicenceStatus.TIMED_OUT,
+              LicenceStatus.NOT_IN_PILOT,
+              LicenceStatus.OOS_RECALL,
+              LicenceStatus.OOS_BOTUS,
+            ].some(status => c.licences.find(l => l.status === status))
           )
       })
 
     const [withLicence, pending] = await Promise.all([casesWithLicences, casesPendingLicence])
-    const casesWithComs = await this.mapResponsibleComsToCasesWithExclusions(withLicence.concat(pending))
+    const casesWithComs = await this.mapResponsibleComsToCases(withLicence.concat(pending))
 
     return new OmuCaselist(casesWithComs)
   }
 
-  private pairNomisRecordsWithDelius = async (prisoners: Container<CaseloadItem>): Promise<Container<ManagedCase>> => {
+  private pairNomisRecordsWithDelius = async (prisoners: Array<CaseloadItem>): Promise<Array<ManagedCase>> => {
     const caseloadNomisIds = prisoners
-      .unwrap()
       .filter(({ prisoner }) => prisoner.prisonerNumber)
       .map(({ prisoner }) => prisoner.prisonerNumber)
 
@@ -84,17 +77,11 @@ export default class CaCaseloadService {
         }
         return { nomisRecord: offender, cvlFields }
       })
-      .filter(offender => offender.nomisRecord && offender.deliusRecord, 'Unable to find delius record')
+      .filter(offender => offender.nomisRecord && offender.deliusRecord)
   }
 
-  public mapOffendersToLicences = async (
-    offenders: Container<ManagedCase>,
-    user?: User
-  ): Promise<Container<ManagedCase>> => {
-    const nomisIdList = offenders
-      .map(offender => offender.nomisRecord.prisonerNumber)
-      .unwrap()
-      .filter(id => id !== null)
+  public mapOffendersToLicences = async (offenders: Array<ManagedCase>, user?: User): Promise<Array<ManagedCase>> => {
+    const nomisIdList = offenders.map(offender => offender.nomisRecord.prisonerNumber).filter(id => id !== null)
 
     const existingLicences =
       nomisIdList.length === 0
@@ -147,10 +134,10 @@ export default class CaCaseloadService {
       // Default status (if not overridden below) will show the case as clickable on case lists
       let licenceStatus = LicenceStatus.NOT_STARTED
 
-      if (this.isBreachOfTopUpSupervision(offender)) {
+      if (CaseListUtils.isBreachOfTopUpSupervision(offender)) {
         // Imprisonment status indicates a breach of top up supervision order - not clickable (yet)
         licenceStatus = LicenceStatus.OOS_BOTUS
-      } else if (this.isRecall(offender)) {
+      } else if (CaseListUtils.isRecall(offender)) {
         // Offender is subject to an active recall - not clickable
         licenceStatus = LicenceStatus.OOS_RECALL
       } else if (offender.cvlFields.isInHardStopPeriod) {
@@ -193,30 +180,25 @@ export default class CaCaseloadService {
     })
   }
 
-  private filterOffendersEligibleForLicence = async (offenders: Container<ManagedCase>, user?: User) => {
+  private filterOffendersEligibleForLicence = async (offenders: Array<ManagedCase>, user?: User) => {
     const eligibleOffenders = offenders
-      .filter(
-        offender => !CaCaseloadService.isParoleEligible(offender.nomisRecord.paroleEligibilityDate),
-        'is eligible for parole'
-      )
-      .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD', 'is dead')
-      .filter(offender => !offender.nomisRecord.indeterminateSentence, 'on indeterminate sentence')
-      .filter(offender => offender.nomisRecord.conditionalReleaseDate, 'has no conditional release date')
-      .filter(
-        offender =>
-          CaCaseloadService.isEligibleEDS(
-            offender.nomisRecord.paroleEligibilityDate,
-            offender.nomisRecord.conditionalReleaseDate,
-            offender.nomisRecord.confirmedReleaseDate,
-            offender.nomisRecord.actualParoleDate
-          ),
-        'is on an ineligible Extended Determinate Sentence'
+      .filter(offender => !CaseListUtils.isParoleEligible(offender.nomisRecord.paroleEligibilityDate))
+      .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
+      .filter(offender => !offender.nomisRecord.indeterminateSentence)
+      .filter(offender => offender.nomisRecord.conditionalReleaseDate)
+      .filter(offender =>
+        CaseListUtils.isEligibleEDS(
+          offender.nomisRecord.paroleEligibilityDate,
+          offender.nomisRecord.conditionalReleaseDate,
+          offender.nomisRecord.confirmedReleaseDate,
+          offender.nomisRecord.actualParoleDate
+        )
       )
 
-    if (eligibleOffenders.isEmpty()) return eligibleOffenders
+    if (!eligibleOffenders.length) return eligibleOffenders
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
-      eligibleOffenders.map(c => c.nomisRecord).unwrap(),
+      eligibleOffenders.map(c => c.nomisRecord),
       user
     )
 
@@ -227,49 +209,40 @@ export default class CaCaseloadService {
         hdcRecord.approvalStatus !== 'APPROVED' ||
         !offender.nomisRecord.homeDetentionCurfewEligibilityDate
       )
-    }, 'approved for HDC')
+    })
   }
 
-  private buildCreateCaseload = (managedOffenders: Container<ManagedCase>): Container<ManagedCase> => {
+  private buildCreateCaseload = (managedOffenders: Array<ManagedCase>): Array<ManagedCase> => {
     return managedOffenders
       .filter(
         offender =>
           offender.nomisRecord.status &&
-          (offender.nomisRecord.status.startsWith('ACTIVE') || offender.nomisRecord.status === 'INACTIVE TRN'),
-        'status is not ACTIVE or INACTIVE TRN'
+          (offender.nomisRecord.status.startsWith('ACTIVE') || offender.nomisRecord.status === 'INACTIVE TRN')
       )
-      .filter(
-        offender =>
-          moment(
-            moment(
-              offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate,
-              'YYYY-MM-DD'
-            )
-          ).isSameOrAfter(moment(), 'day'),
-        'confirmed release date (or conditional release date) is before today'
+      .filter(offender =>
+        moment(
+          moment(offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
+        ).isSameOrAfter(moment(), 'day')
       )
-      .filter(
-        offender =>
-          [
-            LicenceStatus.OOS_RECALL,
-            LicenceStatus.OOS_BOTUS,
-            LicenceStatus.NOT_IN_PILOT,
-            LicenceStatus.NOT_STARTED,
-            LicenceStatus.IN_PROGRESS,
-            LicenceStatus.SUBMITTED,
-            LicenceStatus.APPROVED,
-            LicenceStatus.TIMED_OUT,
-          ].some(status => offender.licences.find(l => l.status === status)),
-        'licence status is not one of OOS_RECALL, OOS_BOTUS, NOT_IN_PILOT, NOT_STARTED, IN_PROGRESS, SUBMITTED, APPROVED,'
+      .filter(offender =>
+        [
+          LicenceStatus.OOS_RECALL,
+          LicenceStatus.OOS_BOTUS,
+          LicenceStatus.NOT_IN_PILOT,
+          LicenceStatus.NOT_STARTED,
+          LicenceStatus.IN_PROGRESS,
+          LicenceStatus.SUBMITTED,
+          LicenceStatus.APPROVED,
+          LicenceStatus.TIMED_OUT,
+        ].some(status => offender.licences.find(l => l.status === status))
       )
   }
 
   private pairDeliusRecordsWithNomis = async (
-    managedOffenders: Container<DeliusRecord>,
+    managedOffenders: Array<DeliusRecord>,
     user: User
-  ): Promise<Container<ManagedCase>> => {
+  ): Promise<Array<ManagedCase>> => {
     const caseloadNomisIds = managedOffenders
-      .unwrap()
       .filter(offender => offender.otherIds?.nomsNumber)
       .map(offender => offender.otherIds?.nomsNumber)
 
@@ -285,13 +258,13 @@ export default class CaCaseloadService {
           cvlFields,
         }
       })
-      .filter(offender => offender.nomisRecord, 'unable to find prison record')
+      .filter(offender => offender.nomisRecord)
   }
 
-  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<Container<ManagedCase>> => {
+  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<Array<ManagedCase>> => {
     const nomisIds = licences.map(l => l.nomisId)
     const deliusRecords = await this.communityService.getOffendersByNomsNumbers(nomisIds)
-    const offenders = await this.pairDeliusRecordsWithNomis(this.wrap(deliusRecords), user)
+    const offenders = await this.pairDeliusRecordsWithNomis(deliusRecords, user)
     return offenders.map(offender => {
       return {
         ...offender,
@@ -321,11 +294,8 @@ export default class CaCaseloadService {
     })
   }
 
-  private async mapResponsibleComsToCasesWithExclusions(
-    caseload: Container<ManagedCase>
-  ): Promise<Container<ManagedCase>> {
+  private async mapResponsibleComsToCases(caseload: Array<ManagedCase>): Promise<Array<ManagedCase>> {
     const comUsernames = caseload
-      .unwrap()
       .map(
         offender =>
           offender.licences.find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE).comUsername
@@ -367,73 +337,5 @@ export default class CaCaseloadService {
         },
       }
     })
-  }
-
-  private isRecall = (offender: ManagedCase): boolean => {
-    const recall = offender.nomisRecord?.recall && offender.nomisRecord.recall === true
-    const crd = offender.nomisRecord?.conditionalReleaseDate
-    const prrd = offender.nomisRecord?.postRecallReleaseDate
-
-    // If a CRD but no PRRD it should NOT be treated as a recall
-    if (crd && !prrd) {
-      return false
-    }
-
-    if (crd && prrd) {
-      const dateCrd = moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
-      const datePrrd = moment(offender.nomisRecord.postRecallReleaseDate, 'YYYY-MM-DD')
-      // If the PRRD > CRD - it should be treated as a recall
-      if (datePrrd.isAfter(dateCrd)) {
-        return true
-      }
-      // If PRRD <= CRD - should not be treated as a recall
-      return false
-    }
-
-    // Trust the Nomis recall flag as a fallback position - the above rules should always override
-    return recall
-  }
-
-  private isBreachOfTopUpSupervision = (offender: ManagedCase): boolean => {
-    return offender.nomisRecord?.imprisonmentStatus && offender.nomisRecord?.imprisonmentStatus === 'BOTUS'
-  }
-
-  /**
-   * Parole Eligibility Date must be set and in the future
-   * If the date is in the past, it's no longer parole eligible
-   * Parole eligibility excludes the offender, so a truthy return here is an exclusion from CVL
-   * @param ped
-   */
-  public static isParoleEligible(ped: string): boolean {
-    if (!ped) return false
-    const pedDate = parseIsoDate(ped)
-    return isFuture(pedDate)
-  }
-
-  public static isEligibleEDS(ped: string, crd: string, ard: string, apd: string): boolean {
-    if (!ped) return true // All EDSs have PEDs, so if no ped, not an EDS and can stop the check here
-    if (!crd) return false // This should never be hit as a previous filter removes those without CRDs
-
-    const crdDate = parseIsoDate(crd)
-    const ardDate = ard ? parseIsoDate(ard) : undefined
-
-    // if PED is in the future, they are OOS
-    if (isFuture(parseIsoDate(ped))) return false
-
-    // if ARD is not between CRD - 4 days and CRD (to account for bank holidays and weekends), then OOS
-    if (ardDate && !isWithinInterval(ardDate, { start: sub(crdDate, { days: 4 }), end: crdDate })) {
-      return false
-    }
-
-    // an APD with a PED in the past means they were a successful parole applicant on a later attempt, so are OOS
-    if (apd) {
-      return false
-    }
-
-    return true
-  }
-
-  wrap<T>(items: T[]): Container<T> {
-    return new Container(items)
   }
 }

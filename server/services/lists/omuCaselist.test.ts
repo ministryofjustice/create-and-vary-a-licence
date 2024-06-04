@@ -1,9 +1,9 @@
 import { add, sub, format } from 'date-fns'
 import OmuCaselist from './omuCaselist'
-import LicenceStatus from '../enumeration/licenceStatus'
-import LicenceType from '../enumeration/licenceType'
-import Container from './container'
-import { CvlPrisoner } from '../@types/licenceApiClientTypes'
+import LicenceStatus from '../../enumeration/licenceStatus'
+import LicenceType from '../../enumeration/licenceType'
+import Container from '../container'
+import { CvlPrisoner } from '../../@types/licenceApiClientTypes'
 
 describe('omu caselist', () => {
   const futureDate = format(add(new Date(), { weeks: 1 }), 'yyyy-MM-dd')
