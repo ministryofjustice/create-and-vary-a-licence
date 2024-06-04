@@ -2,7 +2,6 @@ import { add, endOfISOWeek, startOfISOWeek, subDays } from 'date-fns'
 
 import _ from 'lodash'
 import config from '../server/config'
-import Container from '../server/services/container'
 import { ManagedCase } from '../server/@types/managedCase'
 import LicenceStatus from '../server/enumeration/licenceStatus'
 import LicenceService from '../server/services/licenceService'
@@ -31,11 +30,9 @@ export default class PromptLicenceCreationService {
     return this.licenceService
       .searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonCodes)
       .then(prisoners => prisoners.filter(({ prisoner }) => prisoner?.status.startsWith('ACTIVE')))
-      .then(caseload => new Container(caseload))
       .then(caseload => this.promptListService.pairNomisRecordsWithDelius(caseload))
       .then(caseload => this.promptListService.filterOffendersEligibleForLicence(caseload))
       .then(prisoners => this.promptListService.mapOffendersToLicences(prisoners))
-      .then(caseload => caseload.unwrap())
       .then(prisoners =>
         prisoners.filter(offender => licenceStatus.some(status => offender.licences.find(l => l.status === status)))
       )

@@ -1,7 +1,6 @@
 import { format, add, startOfISOWeek, endOfISOWeek, subDays } from 'date-fns'
 
 import LicenceStatus from '../server/enumeration/licenceStatus'
-import Container from '../server/services/container'
 import PromptLicenceCreationService from './promptLicenceCreationService'
 import LicenceType from '../server/enumeration/licenceType'
 import type { ManagedCase } from '../server/@types/managedCase'
@@ -68,7 +67,7 @@ describe('prompt licence creation service ', () => {
     ),
   ]
 
-  const containerOfManagedCases = new Container(managedCases)
+  const containerOfManagedCases = managedCases
 
   describe('pollPrisonersDueForLicence', () => {
     it('should only return cases with specific statuses', async () => {

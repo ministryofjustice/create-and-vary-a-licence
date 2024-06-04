@@ -339,4 +339,8 @@ export default class CaCaseloadService {
       }
     })
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 1c9dc06 (CVSL-1910 removing container wrapping from CA and prompt lists)

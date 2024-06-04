@@ -90,7 +90,7 @@ export default class ViewAndPrintCaseRoutes {
     const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
     const casesToView = view === 'prison' ? caselist.getPrisonView() : caselist.getProbationView()
 
-    const caseloadViewModel = casesToView.unwrap().map(c => {
+    const caseloadViewModel = casesToView.map(c => {
       let latestLicence = _.head(c.licences)
       if (!probationView && c.licences.length > 1) {
         latestLicence = this.findLatestLicence(c.licences)

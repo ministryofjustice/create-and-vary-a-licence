@@ -9,7 +9,6 @@ import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
 import type { LicenceSummary, CaseloadItem } from '../../@types/licenceApiClientTypes'
-import Container from '../container'
 import LicenceKind from '../../enumeration/LicenceKind'
 import { parseCvlDate, parseIsoDate } from '../../utils/utils'
 import config from '../../config'
@@ -33,7 +32,6 @@ export default class PromptListService {
     const todayPlusFourWeeks = endOfDay(add(new Date(), { weeks: 4 }))
     const casesPendingLicence = this.licenceService
       .searchPrisonersByReleaseDate(today, todayPlusFourWeeks, prisonCaseload, user)
-      .then(caseload => this.wrap(caseload))
       .then(caseload => this.pairNomisRecordsWithDelius(caseload))
       .then(caseload => this.filterOffendersEligibleForLicence(caseload, user))
       .then(caseload => this.mapOffendersToLicences(caseload, user))
@@ -63,9 +61,8 @@ export default class PromptListService {
     return new OmuCaselist(casesWithComs)
   }
 
-  public pairNomisRecordsWithDelius = async (prisoners: Container<CaseloadItem>): Promise<Container<ManagedCase>> => {
+  public pairNomisRecordsWithDelius = async (prisoners: Array<CaseloadItem>): Promise<Array<ManagedCase>> => {
     const caseloadNomisIds = prisoners
-      .unwrap()
       .filter(({ prisoner }) => prisoner.prisonerNumber)
       .map(({ prisoner }) => prisoner.prisonerNumber)
 
@@ -89,14 +86,8 @@ export default class PromptListService {
       .filter(offender => offender.nomisRecord && offender.deliusRecord, 'Unable to find delius record')
   }
 
-  public mapOffendersToLicences = async (
-    offenders: Container<ManagedCase>,
-    user?: User
-  ): Promise<Container<ManagedCase>> => {
-    const nomisIdList = offenders
-      .map(offender => offender.nomisRecord.prisonerNumber)
-      .unwrap()
-      .filter(id => id !== null)
+  public mapOffendersToLicences = async (offenders: Array<ManagedCase>, user?: User): Promise<Array<ManagedCase>> => {
+    const nomisIdList = offenders.map(offender => offender.nomisRecord.prisonerNumber).filter(id => id !== null)
 
     const existingLicences =
       nomisIdList.length === 0
@@ -195,30 +186,28 @@ export default class PromptListService {
     })
   }
 
-  public filterOffendersEligibleForLicence = async (offenders: Container<ManagedCase>, user?: User) => {
+  public filterOffendersEligibleForLicence = async (offenders: Array<ManagedCase>, user?: User) => {
     const eligibleOffenders = offenders
       .filter(
         offender => !CaseListUtils.isParoleEligible(offender.nomisRecord.paroleEligibilityDate),
         'is eligible for parole'
       )
-      .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD', 'is dead')
-      .filter(offender => !offender.nomisRecord.indeterminateSentence, 'on indeterminate sentence')
-      .filter(offender => offender.nomisRecord.conditionalReleaseDate, 'has no conditional release date')
-      .filter(
-        offender =>
-          CaseListUtils.isEligibleEDS(
-            offender.nomisRecord.paroleEligibilityDate,
-            offender.nomisRecord.conditionalReleaseDate,
-            offender.nomisRecord.confirmedReleaseDate,
-            offender.nomisRecord.actualParoleDate
-          ),
-        'is on an ineligible Extended Determinate Sentence'
+      .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
+      .filter(offender => !offender.nomisRecord.indeterminateSentence)
+      .filter(offender => offender.nomisRecord.conditionalReleaseDate)
+      .filter(offender =>
+        CaseListUtils.isEligibleEDS(
+          offender.nomisRecord.paroleEligibilityDate,
+          offender.nomisRecord.conditionalReleaseDate,
+          offender.nomisRecord.confirmedReleaseDate,
+          offender.nomisRecord.actualParoleDate
+        )
       )
 
-    if (eligibleOffenders.isEmpty()) return eligibleOffenders
+    if (!eligibleOffenders.length) return eligibleOffenders
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
-      eligibleOffenders.map(c => c.nomisRecord).unwrap(),
+      eligibleOffenders.map(c => c.nomisRecord),
       user
     )
 
@@ -229,49 +218,40 @@ export default class PromptListService {
         hdcRecord.approvalStatus !== 'APPROVED' ||
         !offender.nomisRecord.homeDetentionCurfewEligibilityDate
       )
-    }, 'approved for HDC')
+    })
   }
 
-  private buildCreateCaseload = (managedOffenders: Container<ManagedCase>): Container<ManagedCase> => {
+  private buildCreateCaseload = (managedOffenders: Array<ManagedCase>): Array<ManagedCase> => {
     return managedOffenders
       .filter(
         offender =>
           offender.nomisRecord.status &&
-          (offender.nomisRecord.status.startsWith('ACTIVE') || offender.nomisRecord.status === 'INACTIVE TRN'),
-        'status is not ACTIVE or INACTIVE TRN'
+          (offender.nomisRecord.status.startsWith('ACTIVE') || offender.nomisRecord.status === 'INACTIVE TRN')
       )
-      .filter(
-        offender =>
-          moment(
-            moment(
-              offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate,
-              'YYYY-MM-DD'
-            )
-          ).isSameOrAfter(moment(), 'day'),
-        'confirmed release date (or conditional release date) is before today'
+      .filter(offender =>
+        moment(
+          moment(offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
+        ).isSameOrAfter(moment(), 'day')
       )
-      .filter(
-        offender =>
-          [
-            LicenceStatus.OOS_RECALL,
-            LicenceStatus.OOS_BOTUS,
-            LicenceStatus.NOT_IN_PILOT,
-            LicenceStatus.NOT_STARTED,
-            LicenceStatus.IN_PROGRESS,
-            LicenceStatus.SUBMITTED,
-            LicenceStatus.APPROVED,
-            LicenceStatus.TIMED_OUT,
-          ].some(status => offender.licences.find(l => l.status === status)),
-        'licence status is not one of OOS_RECALL, OOS_BOTUS, NOT_IN_PILOT, NOT_STARTED, IN_PROGRESS, SUBMITTED, APPROVED,'
+      .filter(offender =>
+        [
+          LicenceStatus.OOS_RECALL,
+          LicenceStatus.OOS_BOTUS,
+          LicenceStatus.NOT_IN_PILOT,
+          LicenceStatus.NOT_STARTED,
+          LicenceStatus.IN_PROGRESS,
+          LicenceStatus.SUBMITTED,
+          LicenceStatus.APPROVED,
+          LicenceStatus.TIMED_OUT,
+        ].some(status => offender.licences.find(l => l.status === status))
       )
   }
 
   private pairDeliusRecordsWithNomis = async (
-    managedOffenders: Container<DeliusRecord>,
+    managedOffenders: Array<DeliusRecord>,
     user: User
-  ): Promise<Container<ManagedCase>> => {
+  ): Promise<Array<ManagedCase>> => {
     const caseloadNomisIds = managedOffenders
-      .unwrap()
       .filter(offender => offender.otherIds?.nomsNumber)
       .map(offender => offender.otherIds?.nomsNumber)
 
@@ -290,10 +270,10 @@ export default class PromptListService {
       .filter(offender => offender.nomisRecord, 'unable to find prison record')
   }
 
-  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<Container<ManagedCase>> => {
+  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<Array<ManagedCase>> => {
     const nomisIds = licences.map(l => l.nomisId)
     const deliusRecords = await this.communityService.getOffendersByNomsNumbers(nomisIds)
-    const offenders = await this.pairDeliusRecordsWithNomis(this.wrap(deliusRecords), user)
+    const offenders = await this.pairDeliusRecordsWithNomis(deliusRecords, user)
     return offenders.map(offender => {
       return {
         ...offender,
@@ -323,11 +303,9 @@ export default class PromptListService {
     })
   }
 
-  private async mapResponsibleComsToCasesWithExclusions(
-    caseload: Container<ManagedCase>
-  ): Promise<Container<ManagedCase>> {
+  private async mapResponsibleComsToCasesWithExclusions(caseload: Array<ManagedCase>): Promise<Array<ManagedCase>> {
     const comUsernames = caseload
-      .unwrap()
+
       .map(
         offender =>
           offender.licences.find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE).comUsername
@@ -369,9 +347,5 @@ export default class PromptListService {
         },
       }
     })
-  }
-
-  wrap<T>(items: T[]): Container<T> {
-    return new Container(items)
   }
 }
