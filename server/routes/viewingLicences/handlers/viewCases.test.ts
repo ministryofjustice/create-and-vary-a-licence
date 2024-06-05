@@ -4,7 +4,6 @@ import { addDays, startOfDay, subDays } from 'date-fns'
 import ViewAndPrintCaseRoutes from './viewCases'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import statusConfig from '../../../licences/licenceStatus'
-import CaseloadService from '../../../services/caseloadService'
 import PrisonerService from '../../../services/prisonerService'
 
 import LicenceType from '../../../enumeration/licenceType'
@@ -15,9 +14,10 @@ import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTyp
 import { CaViewCasesTab, parseCvlDate } from '../../../utils/utils'
 import { ManagedCase } from '../../../@types/managedCase'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import CaCaseloadService from '../../../services/caCaseloadService'
 
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
-jest.mock('../../../services/caseloadService')
+const caseloadService = new CaCaseloadService(null, null, null) as jest.Mocked<CaCaseloadService>
+jest.mock('../../../services/caCaseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 jest.mock('../../../services/prisonerService')

@@ -5,18 +5,18 @@ import config from '../server/config'
 import Container from '../server/services/container'
 import { ManagedCase } from '../server/@types/managedCase'
 import LicenceStatus from '../server/enumeration/licenceStatus'
-import CaseloadService from '../server/services/caseloadService'
 import LicenceService from '../server/services/licenceService'
 import { CvlPrisoner, EmailContact } from '../server/@types/licenceApiClientTypes'
 import { convertToTitleCase } from '../server/utils/utils'
 import CommunityService from '../server/services/communityService'
 import logger from '../logger'
 import { LicenceApiClient } from '../server/data'
+import CaCaseloadService from '../server/services/caCaseloadService'
 
 export default class PromptLicenceCreationService {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly caseloadService: CaseloadService,
+    private readonly caseloadService: CaCaseloadService,
     private readonly communityService: CommunityService,
     private readonly licenceApiClient: LicenceApiClient
   ) {}

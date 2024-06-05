@@ -2,13 +2,13 @@ import { Request, Response } from 'express'
 import { format, getUnixTime } from 'date-fns'
 import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
-import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase, selectReleaseDate, determineCaViewCasesTab, CaViewCasesTab } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
 import { Licence } from '../../../@types/managedCase'
 import { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import CaCaseloadService from '../../../services/caCaseloadService'
 
 const nonViewableStatuses = [
   LicenceStatus.NOT_IN_PILOT,
@@ -23,7 +23,7 @@ const nonViewableStatuses = [
 
 export default class ViewAndPrintCaseRoutes {
   constructor(
-    private readonly caseloadService: CaseloadService,
+    private readonly caseloadService: CaCaseloadService,
     private readonly prisonerService: PrisonerService
   ) {}
 
