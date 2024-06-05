@@ -3,7 +3,6 @@ import PrisonerService from '../prisonerService'
 import CommunityService from '../communityService'
 import LicenceService from '../licenceService'
 import { ManagedCase } from '../../@types/managedCase'
-import config from '../../config'
 import PromptListService from './promptListService'
 
 jest.mock('../prisonerService')
@@ -56,16 +55,6 @@ describe('PromptList Service', () => {
   })
 
   describe('in the hard stop period', () => {
-    const existingConfig = config
-
-    beforeAll(() => {
-      config.hardStopEnabled = true
-    })
-
-    afterAll(() => {
-      config.hardStopEnabled = existingConfig.hardStopEnabled
-    })
-
     it('Sets NOT_STARTED licences to TIMED_OUT when in the hard stop period', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
       const offenders = [

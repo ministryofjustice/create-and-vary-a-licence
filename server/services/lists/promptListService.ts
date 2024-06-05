@@ -11,7 +11,6 @@ import { User } from '../../@types/CvlUserDetails'
 import type { LicenceSummary, CaseloadItem } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
 import { parseCvlDate, parseIsoDate } from '../../utils/utils'
-import config from '../../config'
 import CaseListUtils from './caselistUtils'
 
 export default class PromptListService {
@@ -146,7 +145,7 @@ export default class PromptListService {
       } else if (CaseListUtils.isRecall(offender)) {
         // Offender is subject to an active recall - not clickable
         licenceStatus = LicenceStatus.OOS_RECALL
-      } else if (config.hardStopEnabled && offender.cvlFields.isInHardStopPeriod) {
+      } else if (offender.cvlFields.isInHardStopPeriod) {
         licenceStatus = LicenceStatus.TIMED_OUT
       }
 

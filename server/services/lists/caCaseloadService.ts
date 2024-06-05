@@ -11,7 +11,6 @@ import { User } from '../../@types/CvlUserDetails'
 import type { LicenceSummary, CaseloadItem } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
 import { parseCvlDate, parseIsoDate } from '../../utils/utils'
-import config from '../../config'
 import CaseListUtils from './caselistUtils'
 
 export default class CaCaseloadService {
@@ -141,7 +140,7 @@ export default class CaCaseloadService {
       } else if (CaseListUtils.isRecall(offender)) {
         // Offender is subject to an active recall - not clickable
         licenceStatus = LicenceStatus.OOS_RECALL
-      } else if (config.hardStopEnabled && offender.cvlFields.isInHardStopPeriod) {
+      } else if (offender.cvlFields.isInHardStopPeriod) {
         licenceStatus = LicenceStatus.TIMED_OUT
       }
 
@@ -339,8 +338,4 @@ export default class CaCaseloadService {
       }
     })
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 1c9dc06 (CVSL-1910 removing container wrapping from CA and prompt lists)
