@@ -12,7 +12,6 @@ import type { LicenceSummary, CaseloadItem } from '../@types/licenceApiClientTyp
 import Container from './container'
 import LicenceKind from '../enumeration/LicenceKind'
 import { parseCvlDate, parseIsoDate } from '../utils/utils'
-import config from '../config'
 
 export default class CaCaseloadService {
   constructor(
@@ -154,7 +153,7 @@ export default class CaCaseloadService {
       } else if (this.isRecall(offender)) {
         // Offender is subject to an active recall - not clickable
         licenceStatus = LicenceStatus.OOS_RECALL
-      } else if (config.hardStopEnabled && offender.cvlFields.isInHardStopPeriod) {
+      } else if (offender.cvlFields.isInHardStopPeriod) {
         licenceStatus = LicenceStatus.TIMED_OUT
       }
 
