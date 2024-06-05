@@ -10,9 +10,8 @@ import LicenceType from '../../../enumeration/licenceType'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import { CaViewCasesTab, parseCvlDate } from '../../../utils/utils'
-import { Licence, ManagedCase } from '../../../@types/managedCase'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import CaCaseloadService from '../../../services/lists/caCaseloadService'
+import CaCaseloadService, { Case } from '../../../services/lists/caCaseloadService'
 
 const caseloadService = new CaCaseloadService(null, null, null) as jest.Mocked<CaCaseloadService>
 jest.mock('../../../services/lists/caCaseloadService')
@@ -36,15 +35,13 @@ describe('Route handlers - View and print case list', () => {
   }
 
   const exampleCase = {
-    licences: [
-      {
-        kind: 'CRD',
-        type: LicenceType.AP,
-        status: LicenceStatus.NOT_STARTED,
-        hardStopDate: startOfDay(subDays(new Date(), 1)),
-        isDueToBeReleasedInTheNextTwoWorkingDays: true,
-      },
-    ],
+    licence: {
+      kind: 'CRD',
+      type: LicenceType.AP,
+      status: LicenceStatus.NOT_STARTED,
+      hardStopDate: startOfDay(subDays(new Date(), 1)),
+      isDueToBeReleasedInTheNextTwoWorkingDays: true,
+    },
     cvlFields,
     nomisRecord: {
       firstName: 'Bob',
@@ -56,7 +53,7 @@ describe('Route handlers - View and print case list', () => {
     probationPractitioner: {
       name: 'Sherlock Holmes',
     },
-  } as ManagedCase
+  } as Case
 
   beforeEach(() => {
     req = {
@@ -103,14 +100,12 @@ describe('Route handlers - View and print case list', () => {
 
   const prisonCaseload = [
     {
-      licences: [
-        {
-          type: LicenceType.AP,
-          status: LicenceStatus.NOT_STARTED,
-          hardStopDate: startOfDay(subDays(new Date(), 1)),
-          isDueToBeReleasedInTheNextTwoWorkingDays: true,
-        },
-      ],
+      licence: {
+        type: LicenceType.AP,
+        status: LicenceStatus.NOT_STARTED,
+        hardStopDate: startOfDay(subDays(new Date(), 1)),
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
+      },
       cvlFields,
       nomisRecord: {
         firstName: 'Bob',
@@ -124,15 +119,13 @@ describe('Route handlers - View and print case list', () => {
       },
     },
     {
-      licences: [
-        {
-          id: 2,
-          type: LicenceType.AP,
-          status: LicenceStatus.APPROVED,
-          hardStopDate: startOfDay(addDays(new Date(), 1)),
-          isDueToBeReleasedInTheNextTwoWorkingDays: false,
-        },
-      ],
+      licence: {
+        id: 2,
+        type: LicenceType.AP,
+        status: LicenceStatus.APPROVED,
+        hardStopDate: startOfDay(addDays(new Date(), 1)),
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      },
       cvlFields,
       nomisRecord: {
         firstName: 'Stephen',
@@ -146,15 +139,13 @@ describe('Route handlers - View and print case list', () => {
       },
     },
     {
-      licences: [
-        {
-          id: 3,
-          type: LicenceType.AP,
-          status: LicenceStatus.IN_PROGRESS,
-          hardStopDate: startOfDay(subDays(new Date(), 1)),
-          isDueToBeReleasedInTheNextTwoWorkingDays: true,
-        },
-      ],
+      licence: {
+        id: 3,
+        type: LicenceType.AP,
+        status: LicenceStatus.IN_PROGRESS,
+        hardStopDate: startOfDay(subDays(new Date(), 1)),
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
+      },
       cvlFields,
       nomisRecord: {
         firstName: 'Harvey',
@@ -168,15 +159,13 @@ describe('Route handlers - View and print case list', () => {
       },
     },
     {
-      licences: [
-        {
-          id: 4,
-          type: LicenceType.AP,
-          status: LicenceStatus.SUBMITTED,
-          hardStopDate: startOfDay(subDays(new Date(), 1)),
-          isDueToBeReleasedInTheNextTwoWorkingDays: true,
-        },
-      ],
+      licence: {
+        id: 4,
+        type: LicenceType.AP,
+        status: LicenceStatus.SUBMITTED,
+        hardStopDate: startOfDay(subDays(new Date(), 1)),
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
+      },
       cvlFields,
       nomisRecord: {
         firstName: 'Harold',
@@ -189,20 +178,18 @@ describe('Route handlers - View and print case list', () => {
         name: 'Harry Goldman',
       },
     },
-  ] as ManagedCase[]
+  ] as Case[]
 
   describe('GET', () => {
     const probationCaseLoad = [
       {
-        licences: [
-          {
-            id: 5,
-            type: LicenceType.AP,
-            status: LicenceStatus.ACTIVE,
-            hardStopDate: startOfDay(subDays(new Date(), 1)),
-            isDueToBeReleasedInTheNextTwoWorkingDays: true,
-          },
-        ],
+        licence: {
+          id: 5,
+          type: LicenceType.AP,
+          status: LicenceStatus.ACTIVE,
+          hardStopDate: startOfDay(subDays(new Date(), 1)),
+          isDueToBeReleasedInTheNextTwoWorkingDays: true,
+        },
         cvlFields,
         nomisRecord: {
           firstName: 'Bob',
@@ -216,15 +203,13 @@ describe('Route handlers - View and print case list', () => {
         },
       },
       {
-        licences: [
-          {
-            id: 6,
-            type: LicenceType.AP,
-            status: LicenceStatus.VARIATION_IN_PROGRESS,
-            hardStopDate: startOfDay(addDays(new Date(), 1)),
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-          },
-        ],
+        licence: {
+          id: 6,
+          type: LicenceType.AP,
+          status: LicenceStatus.VARIATION_IN_PROGRESS,
+          hardStopDate: startOfDay(addDays(new Date(), 1)),
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
         cvlFields,
         nomisRecord: {
           firstName: 'Joe',
@@ -238,15 +223,13 @@ describe('Route handlers - View and print case list', () => {
         },
       },
       {
-        licences: [
-          {
-            id: 7,
-            type: LicenceType.AP,
-            status: LicenceStatus.VARIATION_SUBMITTED,
-            hardStopDate: startOfDay(addDays(new Date(), 1)),
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-          },
-        ],
+        licence: {
+          id: 7,
+          type: LicenceType.AP,
+          status: LicenceStatus.VARIATION_SUBMITTED,
+          hardStopDate: startOfDay(addDays(new Date(), 1)),
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
         cvlFields,
         nomisRecord: {
           firstName: 'Harvey',
@@ -260,15 +243,13 @@ describe('Route handlers - View and print case list', () => {
         },
       },
       {
-        licences: [
-          {
-            id: 8,
-            type: LicenceType.AP,
-            status: LicenceStatus.VARIATION_APPROVED,
-            hardStopDate: startOfDay(addDays(new Date(), 1)),
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-          },
-        ],
+        licence: {
+          id: 8,
+          type: LicenceType.AP,
+          status: LicenceStatus.VARIATION_APPROVED,
+          hardStopDate: startOfDay(addDays(new Date(), 1)),
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
         cvlFields,
         nomisRecord: {
           firstName: 'Harold',
@@ -281,7 +262,7 @@ describe('Route handlers - View and print case list', () => {
           name: 'Harry Goldman',
         },
       },
-    ] as ManagedCase[]
+    ] as Case[]
 
     it('should render cases when user only has 1 caseloaded prison', async () => {
       caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
@@ -559,11 +540,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should render licences for for People In Prison in ascending order', async () => {
-      const aCase = (
-        prisonerNumber: string,
-        confirmedReleaseDate: string,
-        conditionalReleaseDate: string
-      ): ManagedCase => ({
+      const aCase = (prisonerNumber: string, confirmedReleaseDate: string, conditionalReleaseDate: string): Case => ({
         ...exampleCase,
         nomisRecord: { ...exampleCase.nomisRecord, prisonerNumber, conditionalReleaseDate, confirmedReleaseDate },
       })
@@ -613,13 +590,9 @@ describe('Route handlers - View and print case list', () => {
     it('should render licences for for People On Probation in descending order', async () => {
       req.query.view = 'probation'
 
-      const aCase = (
-        prisonerNumber: string,
-        confirmedReleaseDate: string,
-        conditionalReleaseDate: string
-      ): ManagedCase => ({
+      const aCase = (prisonerNumber: string, confirmedReleaseDate: string, conditionalReleaseDate: string): Case => ({
         ...exampleCase,
-        licences: [{ ...exampleCase.licences[0], status: LicenceStatus.ACTIVE }],
+        licence: { ...exampleCase.licence, status: LicenceStatus.ACTIVE },
         nomisRecord: { ...exampleCase.nomisRecord, prisonerNumber, conditionalReleaseDate, confirmedReleaseDate },
       })
 
@@ -949,7 +922,7 @@ describe('Route handlers - View and print case list', () => {
 
     it('should allow creation of hardstop licence during hardstop and should override the TIMED_OUT status to NOT_STARTED', async () => {
       caseloadService.getPrisonView.mockResolvedValue([
-        { ...exampleCase, licences: [{ ...exampleCase.licences[0], status: LicenceStatus.TIMED_OUT }] },
+        { ...exampleCase, licence: { ...exampleCase.licence, status: LicenceStatus.TIMED_OUT } },
       ])
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
@@ -990,7 +963,7 @@ describe('Route handlers - View and print case list', () => {
 
     it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
       caseloadService.getPrisonView.mockResolvedValue([
-        { ...exampleCase, licences: [{ ...exampleCase.licences[0], id: 4, status: LicenceStatus.TIMED_OUT }] },
+        { ...exampleCase, licence: { ...exampleCase.licence, id: 4, status: LicenceStatus.TIMED_OUT } },
       ])
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
@@ -1033,9 +1006,7 @@ describe('Route handlers - View and print case list', () => {
       caseloadService.getPrisonView.mockResolvedValue([
         {
           ...exampleCase,
-          licences: [
-            { ...exampleCase.licences[0], id: 3, kind: LicenceKind.HARD_STOP, status: LicenceStatus.IN_PROGRESS },
-          ],
+          licence: { ...exampleCase.licence, id: 3, kind: LicenceKind.HARD_STOP, status: LicenceStatus.IN_PROGRESS },
         },
       ])
       res.locals.user.prisonCaseload = ['BAI']
@@ -1078,7 +1049,7 @@ describe('Route handlers - View and print case list', () => {
     it('should evaluate the links of cases for prison view in hardstop', async () => {
       caseloadService.getPrisonView.mockResolvedValue([
         ...prisonCaseload,
-        { ...exampleCase, licences: [{ ...exampleCase.licences[0], status: LicenceStatus.TIMED_OUT }] },
+        { ...exampleCase, licence: { ...exampleCase.licence, status: LicenceStatus.TIMED_OUT } },
       ])
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
@@ -1180,25 +1151,15 @@ describe('Route handlers - View and print case list', () => {
     it('should render in progress licence if an offender has an approved and in progress version', async () => {
       const multipleLicencesCaseList = [
         {
-          licences: [
-            {
-              id: 45,
-              type: LicenceType.AP,
-              status: LicenceStatus.APPROVED,
-              hardStopDate: parseCvlDate('12/01/2024'),
-              isDueToBeReleasedInTheNextTwoWorkingDays: true,
-              releaseDate: null,
-            },
-            {
-              id: 67,
-              type: LicenceType.AP,
-              status: LicenceStatus.IN_PROGRESS,
-              versionOf: 45,
-              hardStopDate: parseCvlDate('12/01/2024'),
-              isDueToBeReleasedInTheNextTwoWorkingDays: true,
-              releaseDate: null,
-            },
-          ] as Licence[],
+          licence: {
+            id: 67,
+            type: LicenceType.AP,
+            status: LicenceStatus.IN_PROGRESS,
+            versionOf: 45,
+            hardStopDate: parseCvlDate('12/01/2024'),
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
+            releaseDate: null as Date,
+          },
           cvlFields,
           nomisRecord: {
             firstName: 'Bob',
@@ -1343,14 +1304,12 @@ describe('Route handlers - View and print case list', () => {
     it('should return tab type as attentionNeeded if release date is null on search but present on licences', async () => {
       const caseLoadWithReleaseDate = [
         {
-          licences: [
-            {
-              type: LicenceType.AP,
-              status: LicenceStatus.APPROVED,
-              isDueToBeReleasedInTheNextTwoWorkingDays: true,
-              releaseDate: parseCvlDate('01/02/2024'),
-            },
-          ],
+          licence: {
+            type: LicenceType.AP,
+            status: LicenceStatus.APPROVED,
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
+            releaseDate: parseCvlDate('01/02/2024'),
+          },
           cvlFields,
           nomisRecord: {
             firstName: 'Bob',
@@ -1405,14 +1364,12 @@ describe('Route handlers - View and print case list', () => {
     it('should not return tab type as attentionNeeded if release date is null', async () => {
       const caseLoadWithEmptyReleaseDate = [
         {
-          licences: [
-            {
-              type: LicenceType.AP,
-              status: LicenceStatus.APPROVED,
-              isDueToBeReleasedInTheNextTwoWorkingDays: true,
-              releaseDate: null as Date,
-            },
-          ],
+          licence: {
+            type: LicenceType.AP,
+            status: LicenceStatus.APPROVED,
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
+            releaseDate: null as Date,
+          },
           cvlFields,
           nomisRecord: {
             firstName: 'Bob',
@@ -1426,14 +1383,12 @@ describe('Route handlers - View and print case list', () => {
           },
         },
         {
-          licences: [
-            {
-              type: LicenceType.AP,
-              status: LicenceStatus.IN_PROGRESS,
-              isDueToBeReleasedInTheNextTwoWorkingDays: true,
-              releaseDate: null,
-            },
-          ],
+          licence: {
+            type: LicenceType.AP,
+            status: LicenceStatus.IN_PROGRESS,
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
+            releaseDate: null as Date,
+          },
           cvlFields,
           nomisRecord: {
             firstName: 'Harvey',
@@ -1504,14 +1459,12 @@ describe('Route handlers - View and print case list', () => {
       req.query.search = 'A12345AA'
       const caseLoadWithEmptyReleaseDate = [
         {
-          licences: [
-            {
-              type: LicenceType.AP,
-              status: LicenceStatus.APPROVED,
-              isDueToBeReleasedInTheNextTwoWorkingDays: true,
-              releaseDate: null,
-            },
-          ],
+          licence: {
+            type: LicenceType.AP,
+            status: LicenceStatus.APPROVED,
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
+            releaseDate: null,
+          },
           cvlFields,
           nomisRecord: {
             firstName: 'Bob',
@@ -1525,14 +1478,12 @@ describe('Route handlers - View and print case list', () => {
           },
         },
         {
-          licences: [
-            {
-              type: LicenceType.AP,
-              status: LicenceStatus.IN_PROGRESS,
-              isDueToBeReleasedInTheNextTwoWorkingDays: true,
-              releaseDate: null,
-            },
-          ],
+          licence: {
+            type: LicenceType.AP,
+            status: LicenceStatus.IN_PROGRESS,
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
+            releaseDate: null,
+          },
           cvlFields,
           nomisRecord: {
             firstName: 'Harvey',
@@ -1545,7 +1496,7 @@ describe('Route handlers - View and print case list', () => {
             name: 'Walter White',
           },
         },
-      ] as ManagedCase[]
+      ] as Case[]
       caseloadService.getPrisonView.mockResolvedValue(caseLoadWithEmptyReleaseDate)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
@@ -1571,17 +1522,15 @@ describe('Route handlers - View and print case list', () => {
     it('should render last worked on by correctly', async () => {
       const cases = [
         {
-          licences: [
-            {
-              id: 1,
-              type: LicenceType.AP,
-              status: LicenceStatus.NOT_STARTED,
-              hardStopDate: startOfDay(subDays(new Date(), 1)),
-              isDueToBeReleasedInTheNextTwoWorkingDays: true,
-              updatedByFullName: 'Test Updater',
-              releaseDate: null as Date,
-            },
-          ],
+          licence: {
+            id: 1,
+            type: LicenceType.AP,
+            status: LicenceStatus.NOT_STARTED,
+            hardStopDate: startOfDay(subDays(new Date(), 1)),
+            isDueToBeReleasedInTheNextTwoWorkingDays: true,
+            updatedByFullName: 'Test Updater',
+            releaseDate: null as Date,
+          },
           cvlFields,
           nomisRecord: {
             firstName: 'Bob',
@@ -1643,24 +1592,15 @@ describe('Route handlers - View and print case list', () => {
       it('should return a hard stop licence', async () => {
         const caseList = [
           {
-            licences: [
-              {
-                type: LicenceType.AP,
-                status: LicenceStatus.TIMED_OUT,
-                hardStopDate: startOfDay(subDays(new Date(), 1)),
-                isDueToBeReleasedInTheNextTwoWorkingDays: true,
-                releaseDate: null as Date,
-              },
-              {
-                id: 2,
-                type: LicenceType.AP,
-                status: LicenceStatus.APPROVED,
-                hardStopDate: startOfDay(subDays(new Date(), 1)),
-                kind: LicenceKind.HARD_STOP,
-                isDueToBeReleasedInTheNextTwoWorkingDays: true,
-                releaseDate: null as Date,
-              },
-            ],
+            licence: {
+              id: 2,
+              type: LicenceType.AP,
+              status: LicenceStatus.APPROVED,
+              hardStopDate: startOfDay(subDays(new Date(), 1)),
+              kind: LicenceKind.HARD_STOP,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: null as Date,
+            },
             cvlFields,
             nomisRecord: {
               firstName: 'Bob',
@@ -1715,27 +1655,15 @@ describe('Route handlers - View and print case list', () => {
       it('should return a previously approved licence', async () => {
         const caseList = [
           {
-            licences: [
-              {
-                id: 1,
-                type: LicenceType.AP,
-                status: LicenceStatus.APPROVED,
-                hardStopDate: startOfDay(subDays(new Date(), 1)),
-                kind: LicenceKind.HARD_STOP,
-                isDueToBeReleasedInTheNextTwoWorkingDays: true,
-                releaseDate: null as Date,
-              },
-              {
-                id: 2,
-                type: LicenceType.AP,
-                status: LicenceStatus.TIMED_OUT,
-                hardStopDate: startOfDay(subDays(new Date(), 1)),
-                kind: LicenceKind.CRD,
-                versionOf: 1,
-                isDueToBeReleasedInTheNextTwoWorkingDays: true,
-                releaseDate: null as Date,
-              },
-            ],
+            licence: {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.APPROVED,
+              hardStopDate: startOfDay(subDays(new Date(), 1)),
+              kind: LicenceKind.HARD_STOP,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              releaseDate: null as Date,
+            },
             cvlFields,
             nomisRecord: {
               firstName: 'Bob',
