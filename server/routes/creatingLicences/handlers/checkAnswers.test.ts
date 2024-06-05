@@ -3,7 +3,6 @@ import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import { Licence, OmuContact } from '../../../@types/licenceApiClientTypes'
 import CheckAnswersRoutes from './checkAnswers'
-// import config from '../../../config'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 
@@ -165,15 +164,6 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     describe('when hard stop is enabled', () => {
-      // const existingConfig = config
-      // beforeAll(() => {
-      //   config.hardStopEnabled = true
-      // })
-
-      // afterAll(() => {
-      //   config.hardStopEnabled = existingConfig.hardStopEnabled
-      // })
-
       it('should allow PPs to edit initial appointment details for non-variations that are not in the hard stop period', async () => {
         res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
 
