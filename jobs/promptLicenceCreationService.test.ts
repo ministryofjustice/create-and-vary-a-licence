@@ -1,7 +1,6 @@
 import { format, add, startOfISOWeek, endOfISOWeek, subDays } from 'date-fns'
 
 import LicenceStatus from '../server/enumeration/licenceStatus'
-import CaseloadService from '../server/services/caseloadService'
 import Container from '../server/services/container'
 import PromptLicenceCreationService from './promptLicenceCreationService'
 import LicenceType from '../server/enumeration/licenceType'
@@ -10,13 +9,14 @@ import type { CvlPrisoner, EmailContact } from '../server/@types/licenceApiClien
 import LicenceService from '../server/services/licenceService'
 import CommunityService from '../server/services/communityService'
 import { LicenceApiClient } from '../server/data'
+import CaCaseloadService from '../server/services/caCaseloadService'
 
-jest.mock('../server/services/caseloadService')
+jest.mock('../server/services/caCaseloadService')
 jest.mock('../server/services/prisonerService')
 jest.mock('../server/services/communityService')
 jest.mock('../server/data')
 
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+const caseloadService = new CaCaseloadService(null, null, null) as jest.Mocked<CaCaseloadService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
 const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
