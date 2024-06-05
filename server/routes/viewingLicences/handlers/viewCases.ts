@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { format, getUnixTime } from 'date-fns'
-import _ from 'lodash'
 import statusConfig from '../../../licences/licenceStatus'
 import { convertToTitleCase, selectReleaseDate, determineCaViewCasesTab, CaViewCasesTab } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
@@ -69,14 +68,6 @@ export default class ViewAndPrintCaseRoutes {
     return licence.status === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licence.status
   }
 
-  findLatestLicence = (licences: Licence[]): Licence => {
-    if (licences.find(l => l.status === LicenceStatus.TIMED_OUT)) {
-      return licences.find(l => l.status !== LicenceStatus.TIMED_OUT)
-    }
-
-    return licences.find(l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS)
-  }
-
   GET = async (req: Request, res: Response): Promise<void> => {
     const search = req.query.search as string
     const view = req.query.view || 'prison'
@@ -93,25 +84,21 @@ export default class ViewAndPrintCaseRoutes {
         : await this.caseloadService.getProbationView(user, prisonCaseloadToDisplay)
 
     const caseloadViewModel = casesToView.map(c => {
-      let latestLicence = _.head(c.licences)
-      if (!probationView && c.licences.length > 1) {
-        latestLicence = this.findLatestLicence(c.licences)
-      }
-      const releaseDate = latestLicence?.releaseDate || selectReleaseDate(c.nomisRecord)
-      const tabType = determineCaViewCasesTab(latestLicence, c.nomisRecord, c.cvlFields)
+      const releaseDate = c.licence?.releaseDate || selectReleaseDate(c.nomisRecord)
+      const tabType = determineCaViewCasesTab(c.licence, c.nomisRecord, c.cvlFields)
       return {
-        licenceId: latestLicence.id,
-        licenceVersionOf: latestLicence.versionOf,
+        licenceId: c.licence.id,
+        licenceVersionOf: c.licence.versionOf,
         name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
         prisonerNumber: c.nomisRecord.prisonerNumber,
         probationPractitioner: c.probationPractitioner,
         releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
         releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
-        licenceStatus: this.getStatus(latestLicence),
+        licenceStatus: this.getStatus(c.licence),
         tabType,
         nomisLegalStatus: c.nomisRecord?.legalStatus,
-        link: this.getLink(latestLicence, c.cvlFields, c.nomisRecord, tabType),
-        lastWorkedOnBy: latestLicence?.updatedByFullName,
+        link: this.getLink(c.licence, c.cvlFields, c.nomisRecord, tabType),
+        lastWorkedOnBy: c.licence?.updatedByFullName,
         isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
       }
     })

@@ -20,6 +20,14 @@ export type ManagedCase = {
   cvlFields: CvlFields
 }
 
+export type Case = {
+  deliusRecord?: DeliusRecord
+  nomisRecord?: CvlPrisoner
+  licence?: Licence
+  probationPractitioner?: ProbationPractitioner
+  cvlFields: CvlFields
+}
+
 const PRISON_VIEW_STATUSES = [
   LicenceStatus.NOT_STARTED,
   LicenceStatus.IN_PROGRESS,
@@ -48,14 +56,20 @@ export default class CaCaseloadService {
     private readonly licenceService: LicenceService
   ) {}
 
-  public async getPrisonView(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
+  public async getPrisonView(user: User, prisonCaseload: string[]): Promise<Case[]> {
     const cases = await this.getOmuCaseload(user, prisonCaseload)
-    return cases.filter(this.isPrisonCase)
+    return cases.filter(this.isPrisonCase).map(({ licences, ...c }) => ({
+      ...c,
+      licence: this.findLatestLicence(licences),
+    }))
   }
 
-  public async getProbationView(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
+  public async getProbationView(user: User, prisonCaseload: string[]): Promise<Case[]> {
     const cases = await this.getOmuCaseload(user, prisonCaseload)
-    return cases.filter(this.isProbationCase)
+    return cases.filter(this.isProbationCase).map(({ licences, ...c }) => ({
+      ...c,
+      licence: licences[0],
+    }))
   }
 
   public isPrisonCase(managedCase: ManagedCase): boolean {
@@ -399,5 +413,13 @@ export default class CaCaseloadService {
   isReleaseInFuture(c: ManagedCase) {
     const releaseDate = c.nomisRecord.confirmedReleaseDate || c.nomisRecord.conditionalReleaseDate
     return isFuture(new Date(releaseDate))
+  }
+
+  findLatestLicence(licences: Licence[]): Licence {
+    if (licences.find(l => l.status === LicenceStatus.TIMED_OUT)) {
+      return licences.find(l => l.status !== LicenceStatus.TIMED_OUT)
+    }
+
+    return licences.find(l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS)
   }
 }
