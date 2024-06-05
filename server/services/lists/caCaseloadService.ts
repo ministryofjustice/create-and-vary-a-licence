@@ -1,17 +1,45 @@
 import moment from 'moment'
-import { startOfDay, add, endOfDay } from 'date-fns'
+import { startOfDay, add, endOfDay, isFuture } from 'date-fns'
 import CommunityService from '../communityService'
 import PrisonerService from '../prisonerService'
 import LicenceService from '../licenceService'
-import OmuCaselist from './omuCaselist'
-import { DeliusRecord, ManagedCase } from '../../@types/managedCase'
+import { DeliusRecord, Licence, ProbationPractitioner } from '../../@types/managedCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
-import type { LicenceSummary, CaseloadItem } from '../../@types/licenceApiClientTypes'
+import type { LicenceSummary, CaseloadItem, CvlPrisoner, CvlFields } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
 import { parseCvlDate, parseIsoDate } from '../../utils/utils'
 import CaseListUtils from './caselistUtils'
+
+export type ManagedCase = {
+  deliusRecord?: DeliusRecord
+  nomisRecord?: CvlPrisoner
+  licences?: Licence[]
+  probationPractitioner?: ProbationPractitioner
+  cvlFields: CvlFields
+}
+
+const PRISON_VIEW_STATUSES = [
+  LicenceStatus.NOT_STARTED,
+  LicenceStatus.IN_PROGRESS,
+  LicenceStatus.APPROVED,
+  LicenceStatus.SUBMITTED,
+  LicenceStatus.TIMED_OUT,
+]
+
+const OUT_OF_SCOPE_PRISON_VIEW_STATUSES = [
+  LicenceStatus.NOT_IN_PILOT,
+  LicenceStatus.OOS_RECALL,
+  LicenceStatus.OOS_BOTUS,
+]
+
+const PROBATION_VIEW_STATUSES = [
+  LicenceStatus.ACTIVE,
+  LicenceStatus.VARIATION_IN_PROGRESS,
+  LicenceStatus.VARIATION_APPROVED,
+  LicenceStatus.VARIATION_SUBMITTED,
+]
 
 export default class CaCaseloadService {
   constructor(
@@ -20,7 +48,28 @@ export default class CaCaseloadService {
     private readonly licenceService: LicenceService
   ) {}
 
-  async getOmuCaseload(user: User, prisonCaseload: string[]): Promise<OmuCaselist> {
+  public async getPrisonView(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
+    const cases = await this.getOmuCaseload(user, prisonCaseload)
+    return cases.filter(this.isPrisonCase)
+  }
+
+  public async getProbationView(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
+    const cases = await this.getOmuCaseload(user, prisonCaseload)
+    return cases.filter(this.isProbationCase)
+  }
+
+  public isPrisonCase(managedCase: ManagedCase): boolean {
+    return (
+      (this.isOutOfScope(managedCase) || this.hasAnyStatusOf(PRISON_VIEW_STATUSES, managedCase)) &&
+      (!this.isOutOfScope(managedCase) || this.isReleaseInFuture(managedCase))
+    )
+  }
+
+  public isProbationCase(managedCase: ManagedCase): boolean {
+    return this.hasAnyStatusOf(PROBATION_VIEW_STATUSES, managedCase)
+  }
+
+  public async getOmuCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
     // Get cases with a licence in ACTIVE, APPROVED, SUBMITTED, IN_PROGRESS or VARIATION_IN_* state
     const casesWithLicences = this.licenceService
       .getLicencesForOmu(user, prisonCaseload)
@@ -52,7 +101,7 @@ export default class CaCaseloadService {
     const [withLicence, pending] = await Promise.all([casesWithLicences, casesPendingLicence])
     const casesWithComs = await this.mapResponsibleComsToCases(withLicence.concat(pending))
 
-    return new OmuCaselist(casesWithComs)
+    return casesWithComs
   }
 
   private pairNomisRecordsWithDelius = async (prisoners: Array<CaseloadItem>): Promise<Array<ManagedCase>> => {
@@ -129,7 +178,7 @@ export default class CaCaseloadService {
       // No licences present for this offender - determine how to show them in case lists
 
       // Determine the likely type of intended licence from the prison record
-      const licenceType = LicenceService.getLicenceType(offender.nomisRecord)
+      const licenceType = CaseListUtils.getLicenceType(offender.nomisRecord)
 
       // Default status (if not overridden below) will show the case as clickable on case lists
       let licenceStatus = LicenceStatus.NOT_STARTED
@@ -337,5 +386,18 @@ export default class CaCaseloadService {
         },
       }
     })
+  }
+
+  hasAnyStatusOf(statuses: LicenceStatus[], c: ManagedCase) {
+    return statuses.includes(c?.licences[0]?.status)
+  }
+
+  isOutOfScope(c: ManagedCase) {
+    return this.hasAnyStatusOf(OUT_OF_SCOPE_PRISON_VIEW_STATUSES, c)
+  }
+
+  isReleaseInFuture(c: ManagedCase) {
+    const releaseDate = c.nomisRecord.confirmedReleaseDate || c.nomisRecord.conditionalReleaseDate
+    return isFuture(new Date(releaseDate))
   }
 }
