@@ -4,7 +4,6 @@ import ViewAndPrintLicenceRoutes from './viewLicence'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
-import config from '../../../config'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
 const username = 'joebloggs'
@@ -185,15 +184,6 @@ describe('Route - view and approve a licence', () => {
     })
 
     describe('when hard stop is enabled', () => {
-      const existingConfig = config
-      beforeAll(() => {
-        config.hardStopEnabled = true
-      })
-
-      afterAll(() => {
-        config.hardStopEnabled = existingConfig.hardStopEnabled
-      })
-
       it('should be editable by prison CAs when in the hard stop window', async () => {
         res = {
           render: jest.fn(),

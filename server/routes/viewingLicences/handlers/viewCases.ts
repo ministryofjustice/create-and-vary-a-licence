@@ -6,7 +6,6 @@ import CaseloadService from '../../../services/caseloadService'
 import { convertToTitleCase, selectReleaseDate, determineCaViewCasesTab, CaViewCasesTab } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
-import config from '../../../config'
 import { Licence } from '../../../@types/managedCase'
 import { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
@@ -35,10 +34,6 @@ export default class ViewAndPrintCaseRoutes {
   }
 
   isClickable = (licence: Licence, cvlField: CvlFields, tabType: CaViewCasesTab): boolean => {
-    if (!config.hardStopEnabled) {
-      return !nonViewableStatuses.includes(licence.status)
-    }
-
     if (tabType === CaViewCasesTab.ATTENTION_NEEDED) {
       return false
     }

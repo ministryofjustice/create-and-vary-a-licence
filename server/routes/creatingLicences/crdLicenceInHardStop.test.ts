@@ -5,7 +5,6 @@ import { appWithAllRoutes } from '../__testutils/appSetup'
 import { CaseloadItem, CvlPrisoner, Licence, OmuContact } from '../../@types/licenceApiClientTypes'
 import CommunityService from '../../services/communityService'
 import ConditionService from '../../services/conditionService'
-import config from '../../config'
 import { AdditionalConditionAp } from '../../@types/LicencePolicy'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
 
@@ -42,16 +41,6 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.resetAllMocks()
-})
-
-const existingConfig = config
-
-beforeAll(() => {
-  config.hardStopEnabled = true
-})
-
-afterAll(() => {
-  config.hardStopEnabled = existingConfig.hardStopEnabled
 })
 
 describe('createLicenceRoutes', () => {

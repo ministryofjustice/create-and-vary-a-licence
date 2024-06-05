@@ -12,7 +12,6 @@ import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import Container from '../../../services/container'
 import OmuCaselist from '../../../services/omuCaselist'
 import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
-import config from '../../../config'
 import { CaViewCasesTab, parseCvlDate } from '../../../utils/utils'
 import { ManagedCase } from '../../../@types/managedCase'
 import LicenceKind from '../../../enumeration/LicenceKind'
@@ -61,8 +60,6 @@ describe('Route handlers - View and print case list', () => {
     },
   } as ManagedCase
 
-  const existingConfig = config
-
   beforeEach(() => {
     req = {
       query: {},
@@ -104,7 +101,6 @@ describe('Route handlers - View and print case list', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
-    config.hardStopEnabled = existingConfig.hardStopEnabled
   })
 
   describe('GET', () => {
@@ -960,7 +956,6 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow creation of hardstop licence during hardstop and should override the TIMED_OUT status to NOT_STARTED', async () => {
-      config.hardStopEnabled = true
       caseloadService.getOmuCaseload.mockResolvedValue(
         new OmuCaselist(
           new Container([
@@ -1006,7 +1001,6 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
-      config.hardStopEnabled = true
       caseloadService.getOmuCaseload.mockResolvedValue(
         new OmuCaselist(
           new Container([
@@ -1052,7 +1046,6 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow modifying inprogress hardstop licence during hardstop', async () => {
-      config.hardStopEnabled = true
       caseloadService.getOmuCaseload.mockResolvedValue(
         new OmuCaselist(
           new Container([
@@ -1103,7 +1096,6 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the links of cases for prison view in hardstop', async () => {
-      config.hardStopEnabled = true
       caseloadService.getOmuCaseload.mockResolvedValue(
         new OmuCaselist(
           new Container([
@@ -1373,7 +1365,6 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should return tab type as attentionNeeded if release date is null on search but present on licences', async () => {
-      config.hardStopEnabled = true
       const caseLoadWithReleaseDate = new Container([
         {
           licences: [
@@ -1436,7 +1427,6 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should not return tab type as attentionNeeded if release date is null', async () => {
-      config.hardStopEnabled = true
       const caseLoadWithEmptyReleaseDate = new Container([
         {
           licences: [
@@ -1535,7 +1525,6 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should return showAttentionNeededTab true even if search results has no attention needed cases', async () => {
-      config.hardStopEnabled = true
       req.query.search = 'A12345AA'
       const caseLoadWithEmptyReleaseDate = new Container([
         {

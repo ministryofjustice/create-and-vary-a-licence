@@ -396,7 +396,6 @@ export function registerNunjucks(app?: express.Express): Environment {
       }
       const now = startOfDay(new Date())
       return (
-        config.hardStopEnabled &&
         licence.kind !== LicenceKind.VARIATION &&
         parseCvlDate(licence.hardStopWarningDate) <= now &&
         now < parseCvlDate(licence.hardStopDate)
@@ -409,7 +408,6 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('useNewSearch', config.useNewSearch)
   njkEnv.addGlobal('showWhatsNewBanner', config.showWhatsNewBanner)
   njkEnv.addGlobal('fridayReleasePolicy', config.fridayReleasePolicy)
-  njkEnv.addGlobal('hardStopEnabled', config.hardStopEnabled)
 
   return njkEnv
 }

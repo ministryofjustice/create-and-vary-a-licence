@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceType from '../../../enumeration/licenceType'
 import CommunityService from '../../../services/communityService'
-import config from '../../../config'
 
 export default class ConfirmApprovedRoutes {
   constructor(private readonly communityService: CommunityService) {}
@@ -35,7 +34,7 @@ export default class ConfirmApprovedRoutes {
     res.render('pages/approve/confirmation', {
       titleText,
       confirmationMessage,
-      isComEmailAvailable: config.hardStopEnabled && comDetails?.email != null,
+      isComEmailAvailable: comDetails?.email != null,
     })
   }
 }

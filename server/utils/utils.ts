@@ -7,7 +7,6 @@ import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
 import type { CvlFields, CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
-import config from '../config'
 import { Licence as ManagedCaseLicence } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 
@@ -251,7 +250,7 @@ const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], k
 }
 
 const isInHardStopPeriod = (licence: Licence): boolean => {
-  return config.hardStopEnabled && licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod
+  return licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod
 }
 
 export {
