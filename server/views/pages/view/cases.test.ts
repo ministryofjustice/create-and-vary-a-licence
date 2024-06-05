@@ -1,18 +1,18 @@
 import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import statusConfig from '../../../licences/licenceStatus'
-import config from '../../../config'
 import { CaViewCasesTab } from '../../../utils/utils'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/view/cases.njk').toString())
-const existingConfig = config
 
 describe('View and print a licence - case list', () => {
   afterEach(() => {
     jest.resetAllMocks()
-    config.hardStopEnabled = existingConfig.hardStopEnabled
   })
-  it('should display a table containing licences to print', () => {
+  it('should display a prison view table containing licences to print', () => {
+    const search = ''
+    const prisonsToDisplay = ''
+    const probationView = false
     const $ = render({
       cases: [
         {
@@ -20,14 +20,22 @@ describe('View and print a licence - case list', () => {
           prisonerNumber: 'A1234AA',
           releaseDate: '3 Aug 2022',
           releaseDateLabel: 'Confirmed release date',
+          tabType: 'releasesInNextTwoWorkingDays',
         },
         {
           name: 'John Smith',
           prisonerNumber: 'A1234AB',
           releaseDate: '1 Sep 2022',
           releaseDateLabel: 'CRD',
+          tabType: 'releasesInNextTwoWorkingDays',
         },
       ],
+      showAttentionNeededTab: false,
+      CaViewCasesTab,
+      statusConfig,
+      search,
+      prisonsToDisplay,
+      probationView,
     })
     expect($('tbody .govuk-table__row').length).toBe(2)
     expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
@@ -38,8 +46,44 @@ describe('View and print a licence - case list', () => {
     expect($('#release-date-2').text()).toBe('CRD: 1 Sep 2022')
   })
 
+  it('should display a probation view table containing licences to print', () => {
+    const search = ''
+    const prisonsToDisplay = ''
+    const probationView = true
+    const $ = render({
+      cases: [
+        {
+          name: 'Adam Balasaravika',
+          prisonerNumber: 'A1234AA',
+          releaseDate: '3 Aug 2022',
+          releaseDateLabel: 'Confirmed release date',
+          tabType: '',
+        },
+        {
+          name: 'John Smith',
+          prisonerNumber: 'A1234AB',
+          releaseDate: '1 Sep 2022',
+          releaseDateLabel: 'CRD',
+          tabType: '',
+        },
+      ],
+      showAttentionNeededTab: false,
+      CaViewCasesTab,
+      statusConfig,
+      search,
+      prisonsToDisplay,
+      probationView,
+    })
+    expect($('tbody .govuk-table__row').length).toBe(2)
+    expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
+    expect($('#nomis-id-1').text()).toBe('A1234AA')
+    expect($('#release-date-1').text()).toBe('3 Aug 2022')
+    expect($('#name-2 > div > span').text()).toBe('John Smith')
+    expect($('#nomis-id-2').text()).toBe('A1234AB')
+    expect($('#release-date-2').text()).toBe('1 Sep 2022')
+  })
+
   it('should load pepople in prison tab with three sub tabs', () => {
-    config.hardStopEnabled = true
     const search = ''
     const prisonsToDisplay = ''
     const probationView = false
@@ -89,7 +133,6 @@ describe('View and print a licence - case list', () => {
   })
 
   it('should hide attention needed tab', () => {
-    config.hardStopEnabled = true
     const search = ''
     const prisonsToDisplay = ''
     const probationView = false
@@ -124,7 +167,6 @@ describe('View and print a licence - case list', () => {
   })
 
   it('should show result count while search', () => {
-    config.hardStopEnabled = true
     const search = 'Jo'
     const prisonsToDisplay = ''
     const probationView = false

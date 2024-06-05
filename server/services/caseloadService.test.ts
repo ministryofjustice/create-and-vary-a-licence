@@ -11,7 +11,6 @@ import LicenceType from '../enumeration/licenceType'
 import { ManagedCase } from '../@types/managedCase'
 import Container from './container'
 import { CaseloadItem } from '../@types/licenceApiClientTypes'
-import config from '../config'
 
 jest.mock('./prisonerService')
 jest.mock('./communityService')
@@ -71,16 +70,6 @@ describe('Caseload Service', () => {
   })
 
   describe('in the hard stop period', () => {
-    const existingConfig = config
-
-    beforeAll(() => {
-      config.hardStopEnabled = true
-    })
-
-    afterAll(() => {
-      config.hardStopEnabled = existingConfig.hardStopEnabled
-    })
-
     it('Sets NOT_STARTED licences to TIMED_OUT when in the hard stop period', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
       const offenders = new Container([

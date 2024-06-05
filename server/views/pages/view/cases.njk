@@ -101,14 +101,6 @@
 {% endif %}
 
 {% block content %}
-    {% if hardStopEnabled %}
-        {{ hardStop() }}
-    {% else %}
-        {{ nonHardStop() }}
-    {% endif %}
-{% endblock %}
-
-{% macro hardStop() %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-xl">Select someone to view or print licences and supervision orders</h1>
@@ -190,51 +182,10 @@
                 items: peopleInPrisontabs
             }) }}
         {% else %}
-            {{ casesTable({licences: licences, isHardStop: false, probationView: probationView}) }}
+            {{ casesTable({licences: licences, tabType: '', probationView: probationView}) }}
         {% endif %}
     </div>
-{% endmacro %}
-
-{% macro nonHardStop() %}
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">Select a person to view or print licences and supervision orders</h1>
-        </div>
-    </div>
-    <div class="moj-search govuk-!-margin-bottom-6">
-        <nav class="moj-sub-navigation" aria-label="Sub navigation">
-            <ul class="moj-sub-navigation__list">
-                <li class="moj-sub-navigation__item">
-                    <a class="moj-sub-navigation__link" data-qa="prison-view-link"  {% if not probationView %}aria-current="page"{% endif %} href="?view=prison">People in prison</a>
-                </li>
-                <li class="moj-sub-navigation__item">
-                    <a class="moj-sub-navigation__link"  data-qa="probation-view-link"{% if probationView %}aria-current="page"{% endif %} href="?view=probation">People on probation</a>
-                </li>
-                <li class="moj-sub-navigation__item govuk-!-margin-right-0 govuk-!-width-one-half float-right">
-                    <div class="moj-search">
-                        <form method="GET">
-                            <input type="hidden" name="view" value="{% if probationView %}probation{% else %}prison{% endif %}">
-                            <div class="govuk-form-group">
-                                <label class="govuk-visually-hidden" for="search">
-                                        Search for a case
-                                    </label>
-                                <input class="govuk-input moj-search__input govuk-!-font-size-14" id="search" name="search" placeholder="You can search by name, prison number or probation practitioner" value="{{ search }}">
-                            </div>
-                            <button class="govuk-button moj-search__button" data-module="govuk-button">
-                                    Search
-                                </button>
-                        </form>
-                    </div>
-                </li>
-            </ul>
-        </nav>
-
-        {% if hasMultipleCaseloadsInNomis %}
-            {{ prisonsListToDisplay() }}
-        {% endif %}
-        {{ casesTable({licences: licences, isHardStop: false, probationView: probationView}) }}
-    </div>
-{% endmacro %}
+{% endblock %}
 
 {% macro prisonsListToDisplay() %}
     <div class="govuk-!-padding-top-2 govuk-!-padding-bottom-2 {{ 'border-bottom' if probationView }}">

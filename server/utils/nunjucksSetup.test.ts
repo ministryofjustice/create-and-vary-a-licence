@@ -4,7 +4,6 @@ import { renderTemplate } from './__testutils/templateTestUtils'
 import { registerNunjucks } from './nunjucksSetup'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceKind from '../enumeration/LicenceKind'
-import config from '../config'
 
 describe('Nunjucks Filters', () => {
   describe('initialiseName', () => {
@@ -448,16 +447,10 @@ describe('Nunjucks Filters', () => {
   })
 
   describe('shouldShowHardStopWarning', () => {
-    const existingConfig = config
     const now = new Date()
-
-    beforeEach(() => {
-      config.hardStopEnabled = true
-    })
 
     afterEach(() => {
       jest.resetAllMocks()
-      config.hardStopEnabled = existingConfig.hardStopEnabled
     })
 
     it('should return true if now is between the warning and hard stop dates', () => {
@@ -545,17 +538,6 @@ describe('Nunjucks Filters', () => {
         kind: LicenceKind.CRD,
         hardStopWarningDate: format(subDays(now, 1), 'dd/MM/yyyy'),
         hardStopDate: '',
-      }
-
-      expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)
-    })
-
-    it('should return false if hardStopEnabled is false', () => {
-      config.hardStopEnabled = false
-      const licence = {
-        kind: LicenceKind.CRD,
-        hardStopWarningDate: format(subDays(now, 1), 'dd/MM/yyyy'),
-        hardStopDate: format(addDays(now, 1), 'dd/MM/yyyy'),
       }
 
       expect(registerNunjucks().getFilter('shouldShowHardStopWarning')(licence)).toEqual(false)

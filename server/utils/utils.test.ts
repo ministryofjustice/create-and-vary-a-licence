@@ -35,7 +35,6 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/initialAppointment/types/address'
 import type { CvlFields, CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
-import config from '../config'
 import LicenceKind from '../enumeration/LicenceKind'
 import type { Licence as ManagedCaseLicence } from '../@types/managedCase'
 
@@ -671,21 +670,11 @@ describe('Get Case Tab Type', () => {
 
 describe('isInHardStopPeriod', () => {
   let licence: Licence
-  const existingConfig = config
   beforeEach(() => {
-    config.hardStopEnabled = true
     licence = {
       kind: LicenceKind.CRD,
       isInHardStopPeriod: true,
     } as Licence
-  })
-  afterAll(() => {
-    config.hardStopEnabled = existingConfig.hardStopEnabled
-  })
-
-  it('returns false if the hard stop feature flag is false', () => {
-    config.hardStopEnabled = false
-    expect(isInHardStopPeriod(licence)).toBe(false)
   })
 
   it('returns false if the licence is a variation', () => {

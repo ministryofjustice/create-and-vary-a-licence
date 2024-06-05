@@ -6,7 +6,6 @@ import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import logger from '../../../../logger'
-import config from '../../../config'
 
 export default class ConfirmCreateRoutes {
   constructor(
@@ -24,7 +23,7 @@ export default class ConfirmCreateRoutes {
       this.communityService.getProbationer({ nomsNumber: nomisId }),
     ])
 
-    if (config.hardStopEnabled && nomisRecord.cvl.isInHardStopPeriod) {
+    if (nomisRecord.cvl.isInHardStopPeriod) {
       logger.error('Access denied to PP licence creation GET due to being in hard stop period')
       return res.redirect('/access-denied')
     }
@@ -52,7 +51,7 @@ export default class ConfirmCreateRoutes {
     const backLink = req.session?.returnToCase
 
     const nomisRecord = await this.licenceService.getPrisonerDetail(nomisId, user)
-    if (config.hardStopEnabled && nomisRecord.cvl.isInHardStopPeriod) {
+    if (nomisRecord.cvl.isInHardStopPeriod) {
       logger.error('Access denied to PP licence creation POST due to being in hard stop period')
       return res.redirect('/access-denied')
     }

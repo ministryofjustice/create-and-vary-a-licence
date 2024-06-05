@@ -81,7 +81,7 @@
         ), caseData) %}
     {% endif %}
 
-    {% if hardStopEnabled and approvalNeededView %}
+    {% if approvalNeededView %}
         {% set caseData = (caseData.splice(3, 0,
             {
                 attributes: {
@@ -206,7 +206,7 @@
             ), tableHeadings) %}
         {% endif %}
 
-        {% if hardStopEnabled and approvalNeededView %}
+        {% if approvalNeededView %}
             {% set tableHeadings = (tableHeadings.splice(3, 0, {
                     text: "Submitted by",
                     attributes: {

@@ -64,7 +64,6 @@ generic-service:
     COMMON_COMPONENTS_ENABLED: "true"
     SHOW_WHATS_NEW_BANNER: "false"
     USE_NEW_SEARCH: "true"
-    HARD_STOP_ENABLED: "true"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
