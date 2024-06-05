@@ -1,9 +1,7 @@
-import moment from 'moment'
-import type { Licence, CvlPrisoner } from '../@types/licenceApiClientTypes'
+import type { Licence } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import { convertToTitleCase } from '../utils/utils'
 import LicenceStatus from '../enumeration/licenceStatus'
-import LicenceType from '../enumeration/licenceType'
 import { User } from '../@types/CvlUserDetails'
 import LicenceEventType from '../enumeration/licenceEventType'
 import TimelineEvent from '../@types/TimelineEvent'
@@ -50,21 +48,6 @@ export default class TimelineService {
     }
 
     return this.convertLicencesToTimelineEvents(licences, user)
-  }
-
-  public static getLicenceType = (sentenceDetail: CvlPrisoner): LicenceType => {
-    const tused = sentenceDetail?.topupSupervisionExpiryDate
-    const led = sentenceDetail?.licenceExpiryDate
-
-    if (!led) {
-      return LicenceType.PSS
-    }
-
-    if (!tused || moment(tused, 'YYYY-MM-DD') <= moment(led, 'YYYY-MM-DD')) {
-      return LicenceType.AP
-    }
-
-    return LicenceType.AP_PSS
   }
 
   private async convertLicencesToTimelineEvents(licences: Licence[], user: User): Promise<TimelineEvent[]> {

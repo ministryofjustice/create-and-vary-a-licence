@@ -48,11 +48,10 @@ export type ApprovalLicence = {
   isDueToBeReleasedInTheNextTwoWorkingDays: boolean
 }
 
-export type GenericManagedCase<T> = {
+export type ManagedCase = {
   deliusRecord?: DeliusRecord
   nomisRecord?: CvlPrisoner
-  licences?: T[]
+  licences?: Licence[]
   probationPractitioner?: ProbationPractitioner
   cvlFields: CvlFields
 }
-export type ManagedCase = GenericManagedCase<Licence>

@@ -8,7 +8,6 @@ import PrisonerService from '../../../services/prisonerService'
 
 import LicenceType from '../../../enumeration/licenceType'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
-import OmuCaselist from '../../../services/lists/omuCaselist'
 import type { CvlFields, CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import { CaViewCasesTab, parseCvlDate } from '../../../utils/utils'
 import { Licence, ManagedCase } from '../../../@types/managedCase'
@@ -102,96 +101,98 @@ describe('Route handlers - View and print case list', () => {
     jest.resetAllMocks()
   })
 
-  describe('GET', () => {
-    const caseList = [
-      {
-        licences: [
-          {
-            type: LicenceType.AP,
-            status: LicenceStatus.NOT_STARTED,
-            hardStopDate: startOfDay(subDays(new Date(), 1)),
-            isDueToBeReleasedInTheNextTwoWorkingDays: true,
-          },
-        ],
-        cvlFields,
-        nomisRecord: {
-          firstName: 'Bob',
-          lastName: 'Smith',
-          prisonerNumber: 'A1234AA',
-          confirmedReleaseDate: '2022-05-01',
-          legalStatus: 'SENTENCED',
-        } as CvlPrisoner,
-        probationPractitioner: {
-          name: 'Sherlock Holmes',
+  const prisonCaseload = [
+    {
+      licences: [
+        {
+          type: LicenceType.AP,
+          status: LicenceStatus.NOT_STARTED,
+          hardStopDate: startOfDay(subDays(new Date(), 1)),
+          isDueToBeReleasedInTheNextTwoWorkingDays: true,
         },
+      ],
+      cvlFields,
+      nomisRecord: {
+        firstName: 'Bob',
+        lastName: 'Smith',
+        prisonerNumber: 'A1234AA',
+        confirmedReleaseDate: '2022-05-01',
+        legalStatus: 'SENTENCED',
+      } as CvlPrisoner,
+      probationPractitioner: {
+        name: 'Sherlock Holmes',
       },
-      {
-        licences: [
-          {
-            id: 2,
-            type: LicenceType.AP,
-            status: LicenceStatus.APPROVED,
-            hardStopDate: startOfDay(addDays(new Date(), 1)),
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-          },
-        ],
-        cvlFields,
-        nomisRecord: {
-          firstName: 'Stephen',
-          lastName: 'Rowe',
-          prisonerNumber: 'A1234AE',
-          conditionalReleaseDate: '2022-06-10',
-          legalStatus: 'SENTENCED',
-        } as CvlPrisoner,
-        probationPractitioner: {
-          name: 'Larry Johnson',
+    },
+    {
+      licences: [
+        {
+          id: 2,
+          type: LicenceType.AP,
+          status: LicenceStatus.APPROVED,
+          hardStopDate: startOfDay(addDays(new Date(), 1)),
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
         },
+      ],
+      cvlFields,
+      nomisRecord: {
+        firstName: 'Stephen',
+        lastName: 'Rowe',
+        prisonerNumber: 'A1234AE',
+        conditionalReleaseDate: '2022-06-10',
+        legalStatus: 'SENTENCED',
+      } as CvlPrisoner,
+      probationPractitioner: {
+        name: 'Larry Johnson',
       },
-      {
-        licences: [
-          {
-            id: 3,
-            type: LicenceType.AP,
-            status: LicenceStatus.IN_PROGRESS,
-            hardStopDate: startOfDay(subDays(new Date(), 1)),
-            isDueToBeReleasedInTheNextTwoWorkingDays: true,
-          },
-        ],
-        cvlFields,
-        nomisRecord: {
-          firstName: 'Harvey',
-          lastName: 'Smith',
-          prisonerNumber: 'A1234AC',
-          conditionalReleaseDate: '2022-05-01',
-          legalStatus: 'SENTENCED',
-        } as CvlPrisoner,
-        probationPractitioner: {
-          name: 'Walter White',
+    },
+    {
+      licences: [
+        {
+          id: 3,
+          type: LicenceType.AP,
+          status: LicenceStatus.IN_PROGRESS,
+          hardStopDate: startOfDay(subDays(new Date(), 1)),
+          isDueToBeReleasedInTheNextTwoWorkingDays: true,
         },
+      ],
+      cvlFields,
+      nomisRecord: {
+        firstName: 'Harvey',
+        lastName: 'Smith',
+        prisonerNumber: 'A1234AC',
+        conditionalReleaseDate: '2022-05-01',
+        legalStatus: 'SENTENCED',
+      } as CvlPrisoner,
+      probationPractitioner: {
+        name: 'Walter White',
       },
-      {
-        licences: [
-          {
-            id: 4,
-            type: LicenceType.AP,
-            status: LicenceStatus.SUBMITTED,
-            hardStopDate: startOfDay(subDays(new Date(), 1)),
-            isDueToBeReleasedInTheNextTwoWorkingDays: true,
-          },
-        ],
-        cvlFields,
-        nomisRecord: {
-          firstName: 'Harold',
-          lastName: 'Lloyd',
-          prisonerNumber: 'A1234AD',
-          conditionalReleaseDate: '2022-05-01',
-          legalStatus: 'SENTENCED',
-        } as CvlPrisoner,
-        probationPractitioner: {
-          name: 'Harry Goldman',
+    },
+    {
+      licences: [
+        {
+          id: 4,
+          type: LicenceType.AP,
+          status: LicenceStatus.SUBMITTED,
+          hardStopDate: startOfDay(subDays(new Date(), 1)),
+          isDueToBeReleasedInTheNextTwoWorkingDays: true,
         },
+      ],
+      cvlFields,
+      nomisRecord: {
+        firstName: 'Harold',
+        lastName: 'Lloyd',
+        prisonerNumber: 'A1234AD',
+        conditionalReleaseDate: '2022-05-01',
+        legalStatus: 'SENTENCED',
+      } as CvlPrisoner,
+      probationPractitioner: {
+        name: 'Harry Goldman',
       },
+    },
+  ] as ManagedCase[]
 
+  describe('GET', () => {
+    const probationCaseLoad = [
       {
         licences: [
           {
@@ -283,13 +284,13 @@ describe('Route handlers - View and print case list', () => {
     ] as ManagedCase[]
 
     it('should render cases when user only has 1 caseloaded prison', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
       res.locals.prisonCaseload = ['BAI']
       await handler.GET(req, res)
 
       expect(prisonerService.getPrisons).toHaveBeenCalled()
 
-      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+      expect(caseloadService.getPrisonView).toHaveBeenCalledWith(
         { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
         ['BAI']
       )
@@ -372,13 +373,13 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should render cases when user selects prison which is not their currently active prison', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
       res.locals.user.prisonCaseload = ['BAI', 'MDI']
       req.session.caseloadsSelected = ['MDI']
 
       await handler.GET(req, res)
 
-      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+      expect(caseloadService.getPrisonView).toHaveBeenCalledWith(
         {
           activeCaseload: 'BAI',
           prisonCaseload: ['BAI', 'MDI'],
@@ -466,12 +467,12 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should render list of licences for multiple selected prisons', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
       req.session.caseloadsSelected = ['MDI', 'BXI']
       res.locals.user.prisonCaseload = ['BAI', 'MDI', 'BXI']
       await handler.GET(req, res)
 
-      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+      expect(caseloadService.getPrisonView).toHaveBeenCalledWith(
         { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI', 'MDI', 'BXI'] },
         ['MDI', 'BXI']
       )
@@ -567,15 +568,13 @@ describe('Route handlers - View and print case list', () => {
         nomisRecord: { ...exampleCase.nomisRecord, prisonerNumber, conditionalReleaseDate, confirmedReleaseDate },
       })
 
-      caseloadService.getOmuCaseload.mockResolvedValue(
-        new OmuCaselist([
-          aCase('A1234AD', '2022-05-01', '2022-01-03'),
-          aCase('A1234AE', '2022-06-01', '2022-05-03'),
-          aCase('A1234AB', '2022-04-01', '2022-06-03'),
-          aCase('A1234AC', '2022-04-05', '2022-05-03'),
-          aCase('A1234AA', undefined, '2022-01-09'),
-        ])
-      )
+      caseloadService.getPrisonView.mockResolvedValue([
+        aCase('A1234AD', '2022-05-01', '2022-01-03'),
+        aCase('A1234AE', '2022-06-01', '2022-05-03'),
+        aCase('A1234AB', '2022-04-01', '2022-06-03'),
+        aCase('A1234AC', '2022-04-05', '2022-05-03'),
+        aCase('A1234AA', undefined, '2022-01-09'),
+      ])
 
       req.session.caseloadsSelected = ['MDI']
       res.locals.user.prisonCaseload = ['MDI']
@@ -624,15 +623,13 @@ describe('Route handlers - View and print case list', () => {
         nomisRecord: { ...exampleCase.nomisRecord, prisonerNumber, conditionalReleaseDate, confirmedReleaseDate },
       })
 
-      caseloadService.getOmuCaseload.mockResolvedValue(
-        new OmuCaselist([
-          aCase('A1234AD', '2022-05-01', '2022-01-03'),
-          aCase('A1234AE', '2022-06-01', '2022-05-03'),
-          aCase('A1234AB', '2022-04-01', '2022-06-03'),
-          aCase('A1234AC', '2022-04-05', '2022-05-03'),
-          aCase('A1234AA', undefined, '2022-01-09'),
-        ])
-      )
+      caseloadService.getProbationView.mockResolvedValue([
+        aCase('A1234AD', '2022-05-01', '2022-01-03'),
+        aCase('A1234AE', '2022-06-01', '2022-05-03'),
+        aCase('A1234AB', '2022-04-01', '2022-06-03'),
+        aCase('A1234AC', '2022-04-05', '2022-05-03'),
+        aCase('A1234AA', undefined, '2022-01-09'),
+      ])
 
       req.session.caseloadsSelected = ['MDI']
       res.locals.user.prisonCaseload = ['MDI']
@@ -669,7 +666,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should successfully search by name', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
       req.query.search = 'bob'
       await handler.GET(req, res)
 
@@ -707,7 +704,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should successfully search by prison number', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
       req.query.search = 'A1234AA'
       await handler.GET(req, res)
 
@@ -745,7 +742,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should successfully search by probation practitioner', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
       req.query.search = 'holmes'
       await handler.GET(req, res)
 
@@ -783,7 +780,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the links of cases for probation view', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      caseloadService.getProbationView.mockResolvedValue(probationCaseLoad)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'probation'
       await handler.GET(req, res)
@@ -867,7 +864,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the links of cases for prison view', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -951,11 +948,9 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow creation of hardstop licence during hardstop and should override the TIMED_OUT status to NOT_STARTED', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(
-        new OmuCaselist([
-          { ...exampleCase, licences: [{ ...exampleCase.licences[0], status: LicenceStatus.TIMED_OUT }] },
-        ])
-      )
+      caseloadService.getPrisonView.mockResolvedValue([
+        { ...exampleCase, licences: [{ ...exampleCase.licences[0], status: LicenceStatus.TIMED_OUT }] },
+      ])
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -994,11 +989,9 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(
-        new OmuCaselist([
-          { ...exampleCase, licences: [{ ...exampleCase.licences[0], id: 4, status: LicenceStatus.TIMED_OUT }] },
-        ])
-      )
+      caseloadService.getPrisonView.mockResolvedValue([
+        { ...exampleCase, licences: [{ ...exampleCase.licences[0], id: 4, status: LicenceStatus.TIMED_OUT }] },
+      ])
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -1037,16 +1030,14 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow modifying inprogress hardstop licence during hardstop', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(
-        new OmuCaselist([
-          {
-            ...exampleCase,
-            licences: [
-              { ...exampleCase.licences[0], id: 3, kind: LicenceKind.HARD_STOP, status: LicenceStatus.IN_PROGRESS },
-            ],
-          },
-        ])
-      )
+      caseloadService.getPrisonView.mockResolvedValue([
+        {
+          ...exampleCase,
+          licences: [
+            { ...exampleCase.licences[0], id: 3, kind: LicenceKind.HARD_STOP, status: LicenceStatus.IN_PROGRESS },
+          ],
+        },
+      ])
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -1085,12 +1076,10 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the links of cases for prison view in hardstop', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(
-        new OmuCaselist([
-          ...caseList,
-          { ...exampleCase, licences: [{ ...exampleCase.licences[0], status: LicenceStatus.TIMED_OUT }] },
-        ])
-      )
+      caseloadService.getPrisonView.mockResolvedValue([
+        ...prisonCaseload,
+        { ...exampleCase, licences: [{ ...exampleCase.licences[0], status: LicenceStatus.TIMED_OUT }] },
+      ])
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -1223,13 +1212,13 @@ describe('Route handlers - View and print case list', () => {
           },
         },
       ]
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(multipleLicencesCaseList))
+      caseloadService.getPrisonView.mockResolvedValue(multipleLicencesCaseList)
       res.locals.prisonCaseload = ['BAI']
       await handler.GET(req, res)
 
       expect(prisonerService.getPrisons).toHaveBeenCalled()
 
-      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+      expect(caseloadService.getPrisonView).toHaveBeenCalledWith(
         { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
         ['BAI']
       )
@@ -1268,7 +1257,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the tabType of cases', async () => {
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -1375,7 +1364,7 @@ describe('Route handlers - View and print case list', () => {
           },
         },
       ]
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseLoadWithReleaseDate))
+      caseloadService.getPrisonView.mockResolvedValue(caseLoadWithReleaseDate)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -1458,7 +1447,7 @@ describe('Route handlers - View and print case list', () => {
           },
         },
       ]
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseLoadWithEmptyReleaseDate))
+      caseloadService.getPrisonView.mockResolvedValue(caseLoadWithEmptyReleaseDate)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -1557,7 +1546,7 @@ describe('Route handlers - View and print case list', () => {
           },
         },
       ] as ManagedCase[]
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseLoadWithEmptyReleaseDate))
+      caseloadService.getPrisonView.mockResolvedValue(caseLoadWithEmptyReleaseDate)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -1606,13 +1595,13 @@ describe('Route handlers - View and print case list', () => {
           },
         },
       ]
-      caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(cases))
+      caseloadService.getPrisonView.mockResolvedValue(cases)
       res.locals.prisonCaseload = ['BAI']
       await handler.GET(req, res)
 
       expect(prisonerService.getPrisons).toHaveBeenCalled()
 
-      expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
+      expect(caseloadService.getPrisonView).toHaveBeenCalledWith(
         { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
         ['BAI']
       )
@@ -1686,7 +1675,7 @@ describe('Route handlers - View and print case list', () => {
           },
         ]
 
-        caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+        caseloadService.getPrisonView.mockResolvedValue(caseList)
 
         await handler.GET(req, res)
 
@@ -1761,7 +1750,7 @@ describe('Route handlers - View and print case list', () => {
           },
         ]
 
-        caseloadService.getOmuCaseload.mockResolvedValue(new OmuCaselist(caseList))
+        caseloadService.getPrisonView.mockResolvedValue(caseList)
 
         await handler.GET(req, res)
 
@@ -1796,25 +1785,6 @@ describe('Route handlers - View and print case list', () => {
           search: undefined,
           statusConfig,
         })
-      })
-    })
-
-    describe('GET_WITH_EXCLUSIONS', () => {
-      it('should render list of licences and display the currently active caseload prison', async () => {
-        res.locals.prisonCaseload = ['BAI']
-        const omuCaselist = new OmuCaselist(caseList)
-        caseloadService.getOmuCaseload.mockResolvedValue(omuCaselist)
-
-        await handler.GET_WITH_EXCLUSIONS(req, res)
-
-        expect(prisonerService.getPrisons).toHaveBeenCalled()
-
-        expect(caseloadService.getOmuCaseload).toHaveBeenCalledWith(
-          { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
-          ['BAI']
-        )
-        expect(res.header).toHaveBeenCalledWith('Content-Type', 'application/json')
-        expect(res.send).toHaveBeenCalledWith(JSON.stringify(omuCaselist.getPrisonView(), null, 4))
       })
     })
   })

@@ -87,8 +87,10 @@ export default class ViewAndPrintCaseRoutes {
     const allPrisons = await this.prisonerService.getPrisons()
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
-    const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
-    const casesToView = view === 'prison' ? caselist.getPrisonView() : caselist.getProbationView()
+    const casesToView =
+      view === 'prison'
+        ? await this.caseloadService.getPrisonView(user, prisonCaseloadToDisplay)
+        : await this.caseloadService.getProbationView(user, prisonCaseloadToDisplay)
 
     const caseloadViewModel = casesToView.map(c => {
       let latestLicence = _.head(c.licences)
@@ -143,18 +145,5 @@ export default class ViewAndPrintCaseRoutes {
       hasMultipleCaseloadsInNomis,
       probationView,
     })
-  }
-
-  GET_WITH_EXCLUSIONS = async (req: Request, res: Response): Promise<void> => {
-    const { user } = res.locals
-    const { caseloadsSelected = [] } = req.session
-    const allPrisons = await this.prisonerService.getPrisons()
-    const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
-    const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
-
-    const caselist = await this.caseloadService.getOmuCaseload(user, prisonCaseloadToDisplay)
-    const cases = req.query.view === 'probation' ? caselist.getProbationView() : caselist.getPrisonView()
-    res.header('Content-Type', 'application/json')
-    res.send(JSON.stringify(cases, null, 4))
   }
 }
