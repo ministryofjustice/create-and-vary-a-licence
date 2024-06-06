@@ -13,9 +13,6 @@ cronjobs:
   hard_stop_licences_review_overdue:
     enabled: true
     schedule: "00 8 * * 1-5" # 8am UTC Monday - Friday
-  inactivate_recall_licences:
-    enabled: true
-    schedule: "0 7 * * 1-5" #7:00am UTC every day
 
 generic-service:
   replicaCount: 2

@@ -16,9 +16,6 @@ cronjobs:
   hard_stop_licences_review_overdue:
     enabled: true
     schedule: "0 8 * * *" # 8:00am UTC every day
-  inactivate_recall_licences:
-    enabled: false
-    schedule: "0 7 * * *" #7:00am UTC every day
   notify_attention_needed_licences:
     enabled: true
     schedule: "0 9 * * 1" # 9am UTC, every monday
