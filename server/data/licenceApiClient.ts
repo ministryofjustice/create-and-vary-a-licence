@@ -506,12 +506,6 @@ export default class LicenceApiClient extends RestClient {
     })
   }
 
-  async runInactivateRecallLicencesJob() {
-    await this.post({
-      path: '/run-inactivate-recall-licences-job',
-    })
-  }
-
   async runNotifyAttentionNeededLicencesJob() {
     await this.post({
       path: '/run-notify-attention-needed-licences-job',
