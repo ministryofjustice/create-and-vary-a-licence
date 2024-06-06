@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import moment from 'moment'
 import _ from 'lodash'
 import { format } from 'date-fns'
-import CaseloadService from '../../../services/caseloadService'
+import CaseloadService from '../../../services/lists/caseloadService'
 import { convertToTitleCase, parseCvlDateTime, parseIsoDate } from '../../../utils/utils'
 
 export default class VaryApproveListRoutes {

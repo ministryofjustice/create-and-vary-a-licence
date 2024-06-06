@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import CaseloadService from '../../../services/caseloadService'
+import CaseloadService from '../../../services/lists/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import logger from '../../../../logger'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'

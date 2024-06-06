@@ -1,19 +1,19 @@
 import moment from 'moment'
-import { isFuture, isWithinInterval, sub } from 'date-fns'
 import _ from 'lodash'
-import CommunityService from './communityService'
-import PrisonerService from './prisonerService'
-import LicenceService from './licenceService'
-import { DeliusRecord, ManagedCase } from '../@types/managedCase'
-import LicenceStatus from '../enumeration/licenceStatus'
-import LicenceType from '../enumeration/licenceType'
-import { User } from '../@types/CvlUserDetails'
-import type { CommunityApiManagedOffender } from '../@types/communityClientTypes'
-import type { LicenceSummary, ComReviewCount } from '../@types/licenceApiClientTypes'
-import Container from './container'
-import type { OffenderDetail } from '../@types/probationSearchApiClientTypes'
-import LicenceKind from '../enumeration/LicenceKind'
-import { parseCvlDate, parseIsoDate } from '../utils/utils'
+import CommunityService from '../communityService'
+import PrisonerService from '../prisonerService'
+import LicenceService from '../licenceService'
+import { DeliusRecord, ManagedCase } from '../../@types/managedCase'
+import LicenceStatus from '../../enumeration/licenceStatus'
+import LicenceType from '../../enumeration/licenceType'
+import { User } from '../../@types/CvlUserDetails'
+import type { CommunityApiManagedOffender } from '../../@types/communityClientTypes'
+import type { LicenceSummary, ComReviewCount } from '../../@types/licenceApiClientTypes'
+import Container from '../container'
+import type { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
+import LicenceKind from '../../enumeration/LicenceKind'
+import { parseCvlDate, parseIsoDate } from '../../utils/utils'
+import CaseListUtils from './caselistUtils'
 
 export default class CaseloadService {
   constructor(
@@ -149,10 +149,10 @@ export default class CaseloadService {
       // Default status (if not overridden below) will show the case as clickable on case lists
       let licenceStatus = LicenceStatus.NOT_STARTED
 
-      if (this.isBreachOfTopUpSupervision(offender)) {
+      if (CaseListUtils.isBreachOfTopUpSupervision(offender)) {
         // Imprisonment status indicates a breach of top up supervision order - not clickable (yet)
         licenceStatus = LicenceStatus.OOS_BOTUS
-      } else if (this.isRecall(offender)) {
+      } else if (CaseListUtils.isRecall(offender)) {
         // Offender is subject to an active recall - not clickable
         licenceStatus = LicenceStatus.OOS_RECALL
       } else if (offender.cvlFields.isInHardStopPeriod) {
@@ -198,7 +198,7 @@ export default class CaseloadService {
   private filterOffendersEligibleForLicence = async (offenders: Container<ManagedCase>, user?: User) => {
     const eligibleOffenders = offenders
       .filter(
-        offender => !CaseloadService.isParoleEligible(offender.nomisRecord.paroleEligibilityDate),
+        offender => !CaseListUtils.isParoleEligible(offender.nomisRecord.paroleEligibilityDate),
         'is eligible for parole'
       )
       .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD', 'is dead')
@@ -206,7 +206,7 @@ export default class CaseloadService {
       .filter(offender => offender.nomisRecord.conditionalReleaseDate, 'has no conditional release date')
       .filter(
         offender =>
-          CaseloadService.isEligibleEDS(
+          CaseListUtils.isEligibleEDS(
             offender.nomisRecord.paroleEligibilityDate,
             offender.nomisRecord.conditionalReleaseDate,
             offender.nomisRecord.confirmedReleaseDate,
@@ -407,70 +407,6 @@ export default class CaseloadService {
         }
       })
     )
-  }
-
-  private isRecall = (offender: ManagedCase): boolean => {
-    const recall = offender.nomisRecord?.recall && offender.nomisRecord.recall === true
-    const crd = offender.nomisRecord?.conditionalReleaseDate
-    const prrd = offender.nomisRecord?.postRecallReleaseDate
-
-    // If a CRD but no PRRD it should NOT be treated as a recall
-    if (crd && !prrd) {
-      return false
-    }
-
-    if (crd && prrd) {
-      const dateCrd = moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
-      const datePrrd = moment(offender.nomisRecord.postRecallReleaseDate, 'YYYY-MM-DD')
-      // If the PRRD > CRD - it should be treated as a recall
-      if (datePrrd.isAfter(dateCrd)) {
-        return true
-      }
-      // If PRRD <= CRD - should not be treated as a recall
-      return false
-    }
-
-    // Trust the Nomis recall flag as a fallback position - the above rules should always override
-    return recall
-  }
-
-  private isBreachOfTopUpSupervision = (offender: ManagedCase): boolean => {
-    return offender.nomisRecord?.imprisonmentStatus && offender.nomisRecord?.imprisonmentStatus === 'BOTUS'
-  }
-
-  /**
-   * Parole Eligibility Date must be set and in the future
-   * If the date is in the past, it's no longer parole eligible
-   * Parole eligibility excludes the offender, so a truthy return here is an exclusion from CVL
-   * @param ped
-   */
-  public static isParoleEligible(ped: string): boolean {
-    if (!ped) return false
-    const pedDate = parseIsoDate(ped)
-    return isFuture(pedDate)
-  }
-
-  public static isEligibleEDS(ped: string, crd: string, ard: string, apd: string): boolean {
-    if (!ped) return true // All EDSs have PEDs, so if no ped, not an EDS and can stop the check here
-    if (!crd) return false // This should never be hit as a previous filter removes those without CRDs
-
-    const crdDate = parseIsoDate(crd)
-    const ardDate = ard ? parseIsoDate(ard) : undefined
-
-    // if PED is in the future, they are OOS
-    if (isFuture(parseIsoDate(ped))) return false
-
-    // if ARD is not between CRD - 4 days and CRD (to account for bank holidays and weekends), then OOS
-    if (ardDate && !isWithinInterval(ardDate, { start: sub(crdDate, { days: 4 }), end: crdDate })) {
-      return false
-    }
-
-    // an APD with a PED in the past means they were a successful parole applicant on a later attempt, so are OOS
-    if (apd) {
-      return false
-    }
-
-    return true
   }
 
   wrap<T>(items: T[]): Container<T> {

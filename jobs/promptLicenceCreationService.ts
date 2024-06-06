@@ -2,7 +2,6 @@ import { add, endOfISOWeek, startOfISOWeek, subDays } from 'date-fns'
 
 import _ from 'lodash'
 import config from '../server/config'
-import Container from '../server/services/container'
 import { ManagedCase } from '../server/@types/managedCase'
 import LicenceStatus from '../server/enumeration/licenceStatus'
 import LicenceService from '../server/services/licenceService'
@@ -11,12 +10,12 @@ import { convertToTitleCase } from '../server/utils/utils'
 import CommunityService from '../server/services/communityService'
 import logger from '../logger'
 import { LicenceApiClient } from '../server/data'
-import CaCaseloadService from '../server/services/caCaseloadService'
+import PromptListService from '../server/services/lists/promptListService'
 
 export default class PromptLicenceCreationService {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly caseloadService: CaCaseloadService,
+    private readonly promptListService: PromptListService,
     private readonly communityService: CommunityService,
     private readonly licenceApiClient: LicenceApiClient
   ) {}
@@ -31,11 +30,9 @@ export default class PromptLicenceCreationService {
     return this.licenceService
       .searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonCodes)
       .then(prisoners => prisoners.filter(({ prisoner }) => prisoner?.status.startsWith('ACTIVE')))
-      .then(caseload => new Container(caseload))
-      .then(caseload => this.caseloadService.pairNomisRecordsWithDelius(caseload))
-      .then(caseload => this.caseloadService.filterOffendersEligibleForLicence(caseload))
-      .then(prisoners => this.caseloadService.mapOffendersToLicences(prisoners))
-      .then(caseload => caseload.unwrap())
+      .then(caseload => this.promptListService.pairNomisRecordsWithDelius(caseload))
+      .then(caseload => this.promptListService.filterOffendersEligibleForLicence(caseload))
+      .then(prisoners => this.promptListService.mapOffendersToLicences(prisoners))
       .then(prisoners =>
         prisoners.filter(offender => licenceStatus.some(status => offender.licences.find(l => l.status === status)))
       )

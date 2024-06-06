@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import _ from 'lodash'
-import CaseloadService from '../../../services/caseloadService'
+import CaseloadService from '../../../services/lists/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'

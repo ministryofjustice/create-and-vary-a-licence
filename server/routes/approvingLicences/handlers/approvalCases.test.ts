@@ -4,11 +4,11 @@ import ApprovalCaseRoutes from './approvalCases'
 import PrisonerService from '../../../services/prisonerService'
 
 import type { PrisonDetail } from '../../../@types/prisonApiClientTypes'
-import ApproverCaseloadService, { type ApprovalCase } from '../../../services/approverCaseloadService'
+import ApproverCaseloadService, { type ApprovalCase } from '../../../services/lists/approverCaseloadService'
 import { parseCvlDate } from '../../../utils/utils'
 
 const caseloadService = new ApproverCaseloadService(null, null) as jest.Mocked<ApproverCaseloadService>
-jest.mock('../../../services/approverCaseloadService')
+jest.mock('../../../services/lists/approverCaseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 jest.mock('../../../services/prisonerService')

@@ -1,9 +1,9 @@
 import { format } from 'date-fns'
-import CommunityService from './communityService'
-import type { DeliusRecord, ProbationPractitioner } from '../@types/managedCase'
-import LicenceStatus from '../enumeration/licenceStatus'
-import { User } from '../@types/CvlUserDetails'
-import type { CvlPrisoner, LicenceSummaryApproverView } from '../@types/licenceApiClientTypes'
+import CommunityService from '../communityService'
+import type { DeliusRecord, ProbationPractitioner } from '../../@types/managedCase'
+import LicenceStatus from '../../enumeration/licenceStatus'
+import { User } from '../../@types/CvlUserDetails'
+import type { CvlPrisoner, LicenceSummaryApproverView } from '../../@types/licenceApiClientTypes'
 
 import {
   convertToTitleCase,
@@ -11,10 +11,10 @@ import {
   parseCvlDate,
   parseCvlDateTime,
   selectReleaseDate,
-} from '../utils/utils'
-import { LicenceApiClient } from '../data'
-import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
-import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
+} from '../../utils/utils'
+import { LicenceApiClient } from '../../data'
+import { CommunityApiStaffDetails } from '../../@types/communityClientTypes'
+import { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
 
 export type ApprovalCase = {
   licenceId: number

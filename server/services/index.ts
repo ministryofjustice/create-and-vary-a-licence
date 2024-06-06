@@ -3,7 +3,7 @@ import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
 import CommunityService from './communityService'
 import QrCodeService from './qrCodeService'
-import CaseloadService from './caseloadService'
+import CaseloadService from './lists/caseloadService'
 import UkBankHolidayFeedService from './ukBankHolidayFeedService'
 import PrisonRegisterService from './prisonRegisterService'
 import ConditionService from './conditionService'
@@ -11,10 +11,11 @@ import LicenceOverrideService from './licenceOverrideService'
 import { dataAccess } from '../data'
 import SearchService from './searchService'
 import FeComponentsService from './feComponentsService'
-import ApproverCaseloadService from './approverCaseloadService'
+import ApproverCaseloadService from './lists/approverCaseloadService'
 import TimelineService from './timelineService'
 import PromptLicenceCreationService from '../../jobs/promptLicenceCreationService'
-import CaCaseloadService from './caCaseloadService'
+import CaCaseloadService from './lists/caCaseloadService'
+import PromptListService from './lists/promptListService'
 
 const {
   manageUsersApiClient,
@@ -36,6 +37,7 @@ const licenceService = new LicenceService(licenceApiClient, conditionService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
 const caseloadService = new CaseloadService(prisonerService, communityService, licenceService)
 const caCaseloadService = new CaCaseloadService(prisonerService, communityService, licenceService)
+const promptListService = new PromptListService(prisonerService, communityService, licenceService)
 const approvedCaseloadService = new ApproverCaseloadService(communityService, licenceApiClient)
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
 const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
@@ -44,7 +46,7 @@ const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
 const promptLicenceCreationService = new PromptLicenceCreationService(
   licenceService,
-  caCaseloadService,
+  promptListService,
   communityService,
   licenceApiClient
 )
