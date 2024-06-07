@@ -1,3 +1,4 @@
+import { addDays, format, subDays } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import PrisonerService from '../../../services/prisonerService'
@@ -6,12 +7,14 @@ import SentenceDatesChangedEventHandler from './datesChangedEventHandler'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { PrisonEventMessage } from '../../../@types/events'
+import logger from '../../../../logger'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/prisonerService')
+jest.mock('../../../../logger')
 
 const prisoner = {
   sentenceDetail: {
@@ -272,5 +275,152 @@ describe('Sentence dates changed event handler', () => {
     await handler.handle(event)
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
     expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.INACTIVE)
+  })
+
+  describe('With a future PRRD', () => {
+    const prisoner = {
+      sentenceDetail: {
+        conditionalReleaseDate: '2022-09-09',
+        sentenceStartDate: '2021-09-09',
+        sentenceExpiryDate: '2023-09-09',
+        licenceExpiryDate: '2023-09-09',
+        topupSupervisionStartDate: '2023-09-09',
+        topupSupervisionExpiryDate: '2024-09-09',
+        postRecallReleaseDate: format(addDays(new Date(), 2), 'yyyy-MM-dd'),
+      },
+    } as PrisonApiPrisoner
+
+    beforeEach(() => {
+      prisonerService.getPrisonerDetail.mockResolvedValue(prisoner)
+    })
+
+    it('should deactivate an active licence if the PRRD has changed and is in the future', async () => {
+      const event = {
+        offenderIdDisplay: 'ABC123',
+      } as PrisonEventMessage
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        {
+          licenceId: 1,
+          licenceStatus: 'ACTIVE',
+          conditionalReleaseDate: '08/09/2022',
+          postRecallReleaseDate: '01/01/2022',
+        } as LicenceSummary,
+      ])
+
+      await handler.handle(event)
+      expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
+      expect(logger.info).toHaveBeenCalledWith(
+        `licence id: 1 - deactivated due to new PRRD: ${prisoner.sentenceDetail.postRecallReleaseDate} (existing PRRD: 01/01/2022)`
+      )
+      expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.INACTIVE)
+    })
+
+    it('should deactivate an active licence if the licence does not have an existing PRRD and is in the future', async () => {
+      const event = {
+        offenderIdDisplay: 'ABC123',
+      } as PrisonEventMessage
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        {
+          licenceId: 1,
+          licenceStatus: 'ACTIVE',
+          conditionalReleaseDate: '08/09/2022',
+        } as LicenceSummary,
+      ])
+
+      await handler.handle(event)
+      expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
+      expect(logger.info).toHaveBeenCalledWith(
+        `licence id: 1 - deactivated due to new PRRD: ${prisoner.sentenceDetail.postRecallReleaseDate} (existing PRRD: undefined)`
+      )
+      expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.INACTIVE)
+    })
+
+    it('should not deactivate an active licence with a future PRRD if the PRRD has not changed', async () => {
+      const event = {
+        offenderIdDisplay: 'ABC123',
+      } as PrisonEventMessage
+
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        {
+          licenceId: 1,
+          licenceStatus: 'ACTIVE',
+          conditionalReleaseDate: '08/09/2022',
+          postRecallReleaseDate: format(addDays(new Date(), 2), 'dd/MM/yyyy'),
+        } as LicenceSummary,
+      ])
+
+      await handler.handle(event)
+      expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
+      expect(logger.info).not.toHaveBeenCalled()
+      expect(licenceService.updateStatus).not.toHaveBeenCalled()
+    })
+  })
+
+  it('should not deactive an active licence if the new PRRD is in the past', async () => {
+    const prisoner = {
+      sentenceDetail: {
+        conditionalReleaseDate: '2022-09-09',
+        sentenceStartDate: '2021-09-09',
+        sentenceExpiryDate: '2023-09-09',
+        licenceExpiryDate: '2023-09-09',
+        topupSupervisionStartDate: '2023-09-09',
+        topupSupervisionExpiryDate: '2024-09-09',
+        postRecallReleaseDate: format(subDays(new Date(), 2), 'yyyy-MM-dd'),
+      },
+    } as PrisonApiPrisoner
+    prisonerService.getPrisonerDetail.mockResolvedValue(prisoner)
+
+    const event = {
+      offenderIdDisplay: 'ABC123',
+    } as PrisonEventMessage
+
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'ACTIVE',
+        conditionalReleaseDate: '08/09/2022',
+        postRecallReleaseDate: format(subDays(new Date(), 4), 'yyyy-MM-dd'),
+      } as LicenceSummary,
+    ])
+
+    await handler.handle(event)
+    expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
+    expect(logger.info).not.toHaveBeenCalled()
+    expect(licenceService.updateStatus).not.toHaveBeenCalled()
+  })
+
+  it('should not deactive an active licence if the new PRRD is today', async () => {
+    const prisoner = {
+      sentenceDetail: {
+        conditionalReleaseDate: '2022-09-09',
+        sentenceStartDate: '2021-09-09',
+        sentenceExpiryDate: '2023-09-09',
+        licenceExpiryDate: '2023-09-09',
+        topupSupervisionStartDate: '2023-09-09',
+        topupSupervisionExpiryDate: '2024-09-09',
+        postRecallReleaseDate: format(new Date(), 'yyyy-MM-dd'),
+      },
+    } as PrisonApiPrisoner
+    prisonerService.getPrisonerDetail.mockResolvedValue(prisoner)
+
+    const event = {
+      offenderIdDisplay: 'ABC123',
+    } as PrisonEventMessage
+
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        licenceStatus: 'ACTIVE',
+        conditionalReleaseDate: '08/09/2022',
+        postRecallReleaseDate: format(subDays(new Date(), 4), 'yyyy-MM-dd'),
+      } as LicenceSummary,
+    ])
+
+    await handler.handle(event)
+    expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
+    expect(logger.info).not.toHaveBeenCalled()
+    expect(licenceService.updateStatus).not.toHaveBeenCalled()
   })
 })

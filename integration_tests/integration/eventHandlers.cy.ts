@@ -1,3 +1,5 @@
+import { addDays, format } from 'date-fns'
+
 context('Event handlers', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -187,6 +189,78 @@ context('Event handlers', () => {
       )
 
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
+    })
+
+    it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to deactivate licence with status ACTIVE if the PRRD is changed to be in the future', () => {
+      cy.task('stubGetActiveAndVariationLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
+      cy.task('stubGetRecalledPrisonerDetail', format(addDays(new Date(), 2), 'yyyy-MM-dd'))
+      cy.task('stubUpdateSentenceDates')
+      cy.task('stubUpdateLicenceStatus')
+      cy.task('stubGetPrisonerSentencesAndOffencesWithPastSsd')
+
+      cy.task(
+        'sendPrisonEvent',
+        `{
+          "Message": "{\\"bookingId\\":1234,\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "SENTENCE_DATES-CHANGED"
+            }
+          }
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
+    })
+
+    it('should listen to the SENTENCE_DATES-CHANGED event and call endpoint to deactivate licence with status VARIATION_IN_PROGRESS if the PRRD is changed to be in the future', () => {
+      cy.task('stubGetActiveAndVariationLicencesForOffender', { nomisId: 'G9786GC', status: 'VARIATION_IN_PROGRESS' })
+      cy.task('stubGetRecalledPrisonerDetail', format(addDays(new Date(), 2), 'yyyy-MM-dd'))
+      cy.task('stubUpdateSentenceDates')
+      cy.task('stubUpdateLicenceStatus')
+      cy.task('stubGetPrisonerSentencesAndOffencesWithPastSsd')
+
+      cy.task(
+        'sendPrisonEvent',
+        `{
+          "Message": "{\\"bookingId\\":1234,\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "SENTENCE_DATES-CHANGED"
+            }
+          }
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
+    })
+
+    it('should listen to the SENTENCE_DATES-CHANGED event and should not call endpoint to deactivate licence with status ACTIVE if the PRRD is changed to be today', () => {
+      cy.task('stubGetActiveAndVariationLicencesForOffender', { nomisId: 'G9786GC', status: 'ACTIVE' })
+      cy.task('stubGetRecalledPrisonerDetail', format(new Date(), 'yyyy-MM-dd'))
+      cy.task('stubUpdateSentenceDates')
+      cy.task('stubUpdateLicenceStatus')
+      cy.task('stubGetPrisonerSentencesAndOffencesWithPastSsd')
+
+      cy.task(
+        'sendPrisonEvent',
+        `{
+          "Message": "{\\"bookingId\\":1234,\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "MessageAttributes": {
+            "eventType": {
+              "Type": "String",
+              "Value": "SENTENCE_DATES-CHANGED"
+            }
+          }
+         }`
+      )
+
+      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 0 })
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
     })
 
