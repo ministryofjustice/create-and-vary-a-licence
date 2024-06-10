@@ -2,6 +2,8 @@ import moment from 'moment'
 import { isFuture, isWithinInterval, sub } from 'date-fns'
 import type { ManagedCase } from '../../@types/managedCase'
 import { parseIsoDate } from '../../utils/utils'
+import { CvlPrisoner } from '../../@types/licenceApiClientTypes'
+import LicenceType from '../../enumeration/licenceType'
 
 export default class CaseListUtils {
   public static isRecall(offender: ManagedCase): boolean {
@@ -66,5 +68,20 @@ export default class CaseListUtils {
     }
 
     return true
+  }
+
+  public static getLicenceType = (sentenceDetail: CvlPrisoner): LicenceType => {
+    const tused = sentenceDetail?.topupSupervisionExpiryDate
+    const led = sentenceDetail?.licenceExpiryDate
+
+    if (!led) {
+      return LicenceType.PSS
+    }
+
+    if (!tused || moment(tused, 'YYYY-MM-DD') <= moment(led, 'YYYY-MM-DD')) {
+      return LicenceType.AP
+    }
+
+    return LicenceType.AP_PSS
   }
 }
