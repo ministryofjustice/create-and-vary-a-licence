@@ -1,4 +1,4 @@
-import { addDays, add, format, startOfDay, endOfDay } from 'date-fns'
+import { addDays, add, format, startOfDay, endOfDay, sub } from 'date-fns'
 import PrisonerService from '../prisonerService'
 import CommunityService from '../communityService'
 import LicenceService from '../licenceService'
@@ -8,10 +8,11 @@ import HdcStatus from '../../@types/HdcStatus'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { ManagedCase } from '../../@types/managedCase'
-import { CaseloadItem } from '../../@types/licenceApiClientTypes'
+import { CaseloadItem, CvlPrisoner } from '../../@types/licenceApiClientTypes'
 import CaCaseloadService from './caCaseloadService'
 
 jest.mock('../prisonerService')
+jest.mock('../licenceService')
 jest.mock('../communityService')
 
 describe('Caseload Service', () => {
@@ -34,11 +35,10 @@ describe('Caseload Service', () => {
     communityService.getOffendersByCrn.mockResolvedValue([])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([])
     prisonerService.getHdcStatuses.mockResolvedValue([])
-    licenceService.getLicencesByNomisIdsAndStatus = jest.fn().mockResolvedValue([])
-    licenceService.searchPrisonersByReleaseDate = jest.fn().mockResolvedValue([])
-    licenceService.searchPrisonersByNomsIds = jest.fn().mockResolvedValue([])
-    licenceService.getLicencesForVariationApproval = jest.fn().mockResolvedValue([])
-    licenceService.getLicencesForOmu = jest.fn().mockResolvedValue([])
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
+    licenceService.searchPrisonersByReleaseDate.mockResolvedValue([])
+    licenceService.searchPrisonersByNomsIds.mockResolvedValue([])
+    licenceService.getLicencesForOmu.mockResolvedValue([])
   })
 
   afterEach(() => {
@@ -389,7 +389,7 @@ describe('Caseload Service', () => {
       ['p1', 'p2'],
       user
     )
-    expect(result.cases).toMatchObject([
+    expect(result).toMatchObject([
       {
         deliusRecord: {
           offenderManagers: [
@@ -800,11 +800,89 @@ describe('Caseload Service', () => {
 
     const result = await serviceUnderTest.getOmuCaseload(user, ['p1', 'p2'])
 
-    expect(result.cases).toMatchObject([
+    expect(result).toMatchObject([
       {
         deliusRecord: { otherIds: { crn: 'X12347', nomsNumber: 'AB1234D' } },
         licences: [{ id: 1 }, { id: 2 }],
       },
     ])
   })
+
+  const futureDate = format(add(new Date(), { weeks: 1 }), 'yyyy-MM-dd')
+  const pastDate = format(sub(new Date(), { weeks: 1 }), 'yyyy-MM-dd')
+
+  describe('isPrisonCase', () => {
+    it('should return case for prison status and future CRD', () => {
+      const c = createCase(LicenceStatus.SUBMITTED, futureDate, '2022-10-19')
+      expect(serviceUnderTest.isPrisonCase(c)).toBe(true)
+    })
+    it('should return case for prison status and past CRD', () => {
+      const c = createCase(LicenceStatus.SUBMITTED, pastDate, '2022-10-19')
+      expect(serviceUnderTest.isPrisonCase(c)).toBe(true)
+    })
+    it('should return exclusion for probation status and future CRD', () => {
+      const c = createCase(LicenceStatus.ACTIVE, futureDate, '2022-10-19')
+      expect(serviceUnderTest.isPrisonCase(c)).toBe(false)
+    })
+    it('should return exclusion for probation status and past CRD', () => {
+      const c = createCase(LicenceStatus.ACTIVE, pastDate, '2022-10-19')
+      expect(serviceUnderTest.isPrisonCase(c)).toBe(false)
+    })
+    it('should return case for out-of-scope status and future CRD', () => {
+      const c = createCase(LicenceStatus.OOS_BOTUS, futureDate, '2022-10-19')
+      expect(serviceUnderTest.isPrisonCase(c)).toBe(true)
+    })
+    it('should return exclusion for out-of-scope status and past CRD', () => {
+      const c = createCase(LicenceStatus.OOS_BOTUS, pastDate, '2022-10-19')
+      expect(serviceUnderTest.isPrisonCase(c)).toBe(false)
+    })
+  })
+  describe('isProbationCase', () => {
+    it('should return case for probation status and future CRD', () => {
+      const c = createCase(LicenceStatus.ACTIVE, futureDate, '2022-10-19')
+      expect(serviceUnderTest.isProbationCase(c)).toBe(true)
+    })
+    it('should return case for probation status and past CRD', () => {
+      const c = createCase(LicenceStatus.VARIATION_APPROVED, pastDate, '2022-10-19')
+      expect(serviceUnderTest.isProbationCase(c)).toBe(true)
+    })
+    it('should return exclusion for prison status and future CRD', () => {
+      const c = createCase(LicenceStatus.IN_PROGRESS, futureDate, '2022-10-19')
+      expect(serviceUnderTest.isProbationCase(c)).toBe(false)
+    })
+    it('should return exclusion for prison status and past CRD', () => {
+      const c = createCase(LicenceStatus.NOT_IN_PILOT, pastDate, '2022-10-19')
+      expect(serviceUnderTest.isProbationCase(c)).toBe(false)
+    })
+    it('should return exclusion for out-of-scope status and future CRD', () => {
+      const c = createCase(LicenceStatus.OOS_BOTUS, futureDate, '2022-10-19')
+      expect(serviceUnderTest.isProbationCase(c)).toBe(false)
+    })
+    it('should return exclusion for out-of-scope status and past CRD', () => {
+      const c = createCase(LicenceStatus.OOS_BOTUS, pastDate, '2022-10-19')
+      expect(serviceUnderTest.isProbationCase(c)).toBe(false)
+    })
+  })
 })
+
+function createCase(status: LicenceStatus, confirmedReleaseDate: string, conditionalReleaseDate: string): ManagedCase {
+  return {
+    deliusRecord: { offenderId: 1 },
+    licences: [{ type: LicenceType.AP, status, isDueToBeReleasedInTheNextTwoWorkingDays: false, releaseDate: null }],
+    cvlFields: {
+      licenceType: 'AP',
+      hardStopDate: '03/01/2023',
+      hardStopWarningDate: '01/01/2023',
+      isInHardStopPeriod: true,
+      isDueForEarlyRelease: true,
+      isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      isEligibleForEarlyRelease: false,
+    },
+    nomisRecord: {
+      prisonerNumber: 'A1234AA',
+      status: 'ACTIVE IN',
+      confirmedReleaseDate,
+      conditionalReleaseDate,
+    } as CvlPrisoner,
+  }
+}
