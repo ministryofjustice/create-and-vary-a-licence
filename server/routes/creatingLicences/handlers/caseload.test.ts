@@ -207,7 +207,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
           },
         ],
-        search: undefined,
         multipleTeams: false,
         statusConfig,
         teamView: false,
@@ -293,7 +292,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         ],
         statusConfig,
         multipleTeams: true,
-        search: undefined,
         teamName: 'teamA',
         teamView: true,
       })
@@ -379,148 +377,11 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           },
         ],
         multipleTeams: false,
-        search: undefined,
         statusConfig,
         teamName: null,
         teamView: false,
       })
       expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
-    })
-
-    it('should successfully search by CRN', async () => {
-      req.query = { view: 'team', search: 'x381307' }
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
-        caseload: [
-          {
-            name: 'Dr Who',
-            crnNumber: 'X381307',
-            probationPractitioner: undefined,
-            releaseDate: '12 Oct 2023',
-            hardStopDate: '10/10/2022',
-            hardStopWarningDate: '08/10/2022',
-            kind: 'CRD',
-            prisonerNumber: '124',
-            licenceId: 2,
-            licenceStatus: LicenceStatus.IN_PROGRESS,
-            licenceType: LicenceType.AP_PSS,
-            isClickable: false,
-            createLink: '/licence/create/id/2/check-your-answers',
-            sortDate: parseIsoDate('2023-10-12'),
-          },
-        ],
-        statusConfig,
-        multipleTeams: true,
-        teamName: 'teamA',
-        teamView: true,
-        search: 'x381307',
-      })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
-      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
-    })
-
-    it('should successfully search by CRN for an un-clickable recall case', async () => {
-      req.query = { view: 'team', search: 'x381309' }
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
-        caseload: [
-          {
-            name: 'Ronald Recall',
-            crnNumber: 'X381309',
-            releaseDate: '12 Oct 2023',
-            hardStopDate: '10/10/2022',
-            hardStopWarningDate: '08/10/2022',
-            kind: 'CRD',
-            prisonerNumber: '126',
-            licenceStatus: LicenceStatus.OOS_RECALL,
-            licenceType: LicenceType.AP_PSS,
-            isClickable: false,
-            createLink: '/licence/create/nomisId/126/confirm',
-            sortDate: parseIsoDate('2023-10-12'),
-          },
-        ],
-        statusConfig,
-        multipleTeams: true,
-        teamView: true,
-        teamName: 'teamA',
-        search: 'x381309',
-      })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
-      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
-    })
-
-    it('should successfully search by probation practitioner', async () => {
-      req.query = { view: 'team', search: 'holmes' }
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
-        caseload: [
-          {
-            name: 'John Roberts',
-            crnNumber: 'X381306',
-            releaseDate: '12 Oct 2022',
-            hardStopDate: '10/10/2022',
-            hardStopWarningDate: '08/10/2022',
-            kind: 'CRD',
-            prisonerNumber: '123',
-            licenceId: 1,
-            licenceStatus: LicenceStatus.IN_PROGRESS,
-            licenceType: LicenceType.AP,
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-              staffIdentifier: 3000,
-            },
-            isClickable: true,
-            createLink: '/licence/create/id/1/check-your-answers',
-            sortDate: parseIsoDate('2022-10-12'),
-          },
-        ],
-        statusConfig,
-        multipleTeams: true,
-        teamView: true,
-        teamName: 'teamA',
-        search: 'holmes',
-      })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
-      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
-    })
-
-    it('should successfully search by offender name', async () => {
-      req.query = { view: 'team', search: 'roberts' }
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
-        caseload: [
-          {
-            name: 'John Roberts',
-            crnNumber: 'X381306',
-            releaseDate: '12 Oct 2022',
-            hardStopDate: '10/10/2022',
-            hardStopWarningDate: '08/10/2022',
-            kind: 'CRD',
-            prisonerNumber: '123',
-            licenceId: 1,
-            licenceStatus: LicenceStatus.IN_PROGRESS,
-            licenceType: LicenceType.AP,
-            probationPractitioner: {
-              name: 'Sherlock Holmes',
-              staffIdentifier: 3000,
-            },
-            isClickable: true,
-            createLink: '/licence/create/id/1/check-your-answers',
-            sortDate: parseIsoDate('2022-10-12'),
-          },
-        ],
-        statusConfig,
-        multipleTeams: true,
-        teamView: true,
-        teamName: 'teamA',
-        search: 'roberts',
-      })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
-      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
   })
 })

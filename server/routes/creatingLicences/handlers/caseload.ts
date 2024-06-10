@@ -10,7 +10,7 @@ export default class CaseloadRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const teamView = req.query.view === 'team'
-    const search = req.query.search as string
+    // const search = req.query.search as string
 
     const { user } = res.locals
 
@@ -41,14 +41,13 @@ export default class CaseloadRoutes {
       ? await this.caseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
       : await this.caseloadService.getStaffCreateCaseload(user)
 
-    const caseloadViewModel = createCaseloadViewModel(caseload, search)
+    const caseloadViewModel = createCaseloadViewModel(caseload)
     res.render('pages/create/caseload', {
       caseload: caseloadViewModel,
       statusConfig,
       teamView,
       teamName,
       multipleTeams,
-      search,
     })
   }
 }
