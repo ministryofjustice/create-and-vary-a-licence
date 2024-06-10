@@ -28,7 +28,7 @@ export default class ProbationTeamRoutes {
         : await this.caseloadService.getStaffVaryCaseload({ ...user, deliusStaffIdentifier: staff.staffIdentifier })
 
     return res.render('pages/support/probationStaff', {
-      caseload: createCaseloadViewModel(caseload, undefined),
+      caseload: createCaseloadViewModel(caseload),
       statusConfig,
       view,
       staffName: `${staff.staff.forenames} ${staff.staff.surname} (${staff.staffCode})`,

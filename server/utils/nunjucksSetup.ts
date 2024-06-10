@@ -405,7 +405,6 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('serviceName', config.serviceName)
-  njkEnv.addGlobal('useNewSearch', config.useNewSearch)
   njkEnv.addGlobal('showWhatsNewBanner', config.showWhatsNewBanner)
   njkEnv.addGlobal('fridayReleasePolicy', config.fridayReleasePolicy)
 
