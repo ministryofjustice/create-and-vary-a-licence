@@ -5,7 +5,7 @@ import LicenceStatus from '../../enumeration/licenceStatus'
 import { convertToTitleCase, parseIsoDate } from '../../utils/utils'
 import LicenceKind from '../../enumeration/LicenceKind'
 
-export default (caseload: ManagedCase[], search: string) => {
+export default (caseload: ManagedCase[]) => {
   return caseload
     .map(c => {
       const { licence, createLink } = findLicenceAndCreateLinkToDisplay(c)
@@ -33,15 +33,6 @@ export default (caseload: ManagedCase[], search: string) => {
         kind: licence.kind,
         isDueForEarlyRelease: c.cvlFields?.isDueForEarlyRelease,
       }
-    })
-    .filter(c => {
-      const searchString = search?.toLowerCase().trim()
-      if (!searchString) return true
-      return (
-        c.crnNumber?.toLowerCase().includes(searchString) ||
-        c.name.toLowerCase().includes(searchString) ||
-        c.probationPractitioner?.name.toLowerCase().includes(searchString)
-      )
     })
     .sort((a, b) => {
       return (a.sortDate?.getTime() || 0) - (b.sortDate?.getTime() || 0)

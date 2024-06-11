@@ -329,7 +329,6 @@ export default {
       'SLI',
     ],
   },
-  useNewSearch: get('USE_NEW_SEARCH', 'false', requiredInProduction) === 'true',
   showWhatsNewBanner: get('SHOW_WHATS_NEW_BANNER', 'false', requiredInProduction) === 'true',
   fridayReleasePolicy: get(
     'FRIDAY_RELEASE_POLICY',

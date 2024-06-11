@@ -22,7 +22,7 @@ export default class ProbationTeamRoutes {
         : await this.caseloadService.getTeamVaryCaseload(user, [teamCode])
 
     return res.render('pages/support/probationTeam', {
-      caseload: createCaseloadViewModel(caseload, undefined),
+      caseload: createCaseloadViewModel(caseload),
       statusConfig,
       teamCode,
       view,

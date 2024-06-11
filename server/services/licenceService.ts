@@ -2,7 +2,6 @@ import { Readable } from 'stream'
 import fs from 'fs'
 import _ from 'lodash'
 import { format } from 'date-fns'
-import moment from 'moment'
 import type {
   AdditionalCondition,
   AdditionalConditionsRequest,
@@ -36,7 +35,6 @@ import type {
   ComReviewCount,
   CaseloadItem,
   LicenceCreationResponse,
-  CvlPrisoner,
 } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
@@ -486,21 +484,6 @@ export default class LicenceService {
   async deactivateLicences(licences: LicenceSummary[]): Promise<void> {
     const licenceIds = licences.map(l => l.licenceId)
     return this.licenceApiClient.batchInActivateLicences(licenceIds)
-  }
-
-  public static getLicenceType = (sentenceDetail: CvlPrisoner): LicenceType => {
-    const tused = sentenceDetail?.topupSupervisionExpiryDate
-    const led = sentenceDetail?.licenceExpiryDate
-
-    if (!led) {
-      return LicenceType.PSS
-    }
-
-    if (!tused || moment(tused, 'YYYY-MM-DD') <= moment(led, 'YYYY-MM-DD')) {
-      return LicenceType.AP
-    }
-
-    return LicenceType.AP_PSS
   }
 
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
