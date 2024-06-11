@@ -21,22 +21,16 @@ export default class DatesChangedEventHandler {
       offenderIdDisplay ||
       (await this.prisonerService.searchPrisonersByBookingIds([bookingId])).map(o => o.prisonerNumber).pop()
 
-    const activeAndVariationLicences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+    const activeLicence = await this.licenceService.getLatestLicenceByNomisIdsAndStatus(
       [nomisId],
-      [
-        LicenceStatus.ACTIVE,
-        LicenceStatus.VARIATION_IN_PROGRESS,
-        LicenceStatus.VARIATION_SUBMITTED,
-        LicenceStatus.VARIATION_REJECTED,
-        LicenceStatus.VARIATION_APPROVED,
-      ]
+      [LicenceStatus.ACTIVE]
     )
 
     const prisoner = await this.prisonerService.getPrisonerDetail(nomisId)
 
-    if (activeAndVariationLicences.length) {
-      await this.deactivateLicencesIfPrisonerResentenced(activeAndVariationLicences, bookingId)
-      await this.deactivateLicencesIfFuturePrrd(activeAndVariationLicences, prisoner)
+    if (activeLicence) {
+      await this.deactivateLicencesIfPrisonerResentenced(activeLicence, bookingId)
+      await this.deactivateLicencesIfFuturePrrd(activeLicence, prisoner)
     } else {
       const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
         [nomisId],
@@ -57,39 +51,32 @@ export default class DatesChangedEventHandler {
     }
   }
 
-  deactivateLicencesIfPrisonerResentenced = async (licences: LicenceSummary[], bookingId: number) => {
+  deactivateLicencesIfPrisonerResentenced = async (licence: LicenceSummary, bookingId: number) => {
     const ssd = await this.prisonerService.getPrisonerLatestSentenceStartDate(bookingId)
-    await Promise.all(
-      licences.map(async licence => {
-        const crd = licence.conditionalReleaseDate ? parseCvlDate(licence.conditionalReleaseDate) : null
 
-        if (ssd && crd && isAfter(ssd, crd)) {
-          logger.info(
-            `new sentence start date: ${ssd} is after licence crd: ${crd} so deactivating current licence with id: ${licence.licenceId}`
-          )
-          await this.licenceService.updateStatus(licence.licenceId, LicenceStatus.INACTIVE)
-        }
-      })
-    )
+    const crd = licence.conditionalReleaseDate ? parseCvlDate(licence.conditionalReleaseDate) : null
+
+    if (ssd && crd && isAfter(ssd, crd)) {
+      logger.info(
+        `new sentence start date: ${ssd} is after licence crd: ${crd} so deactivating current licence with id: ${licence.licenceId}`
+      )
+      await this.licenceService.deactivateActiveAndVariationLicences(licence.licenceId, 'RESENTENCED')
+    }
   }
 
-  deactivateLicencesIfFuturePrrd = async (licences: LicenceSummary[], prisoner: PrisonApiPrisoner) => {
+  deactivateLicencesIfFuturePrrd = async (licence: LicenceSummary, prisoner: PrisonApiPrisoner) => {
     const prrd =
       prisoner.sentenceDetail?.postRecallReleaseOverrideDate || prisoner.sentenceDetail?.postRecallReleaseDate
-    const activeLicence =
-      licences.length > 1 ? licences.find(l => l.licenceStatus === LicenceStatus.ACTIVE) : licences[0]
     if (prrd) {
       const prrdDate = parseIsoDate(prrd)
-      if (format(prrdDate, 'dd/MM/yyyy') === activeLicence.postRecallReleaseDate) {
+      if (format(prrdDate, 'dd/MM/yyyy') === licence.postRecallReleaseDate) {
         return
       }
       if (isAfter(prrdDate, startOfDay(new Date()))) {
-        licences.map(async licence => {
-          logger.info(
-            `licence id: ${activeLicence.licenceId} - deactivated due to new PRRD: ${prrd} (existing PRRD: ${activeLicence.postRecallReleaseDate})`
-          )
-          await this.licenceService.updateStatus(licence.licenceId, LicenceStatus.INACTIVE)
-        })
+        logger.info(
+          `licence id: ${licence.licenceId} - deactivated due to new PRRD: ${prrd} (existing PRRD: ${licence.postRecallReleaseDate})`
+        )
+        await this.licenceService.deactivateActiveAndVariationLicences(licence.licenceId, 'RECALLED')
       }
     }
   }
