@@ -559,31 +559,23 @@ export default {
           {
             matchesJsonPath: {
               expression: '$.status',
-              contains: 'ACTIVE',
-            },
-          },
-          {
-            matchesJsonPath: {
-              expression: '$.status',
-              contains: 'VARIATION_IN_PROGRESS',
-            },
-          },
-          {
-            matchesJsonPath: {
-              expression: '$.status',
-              contains: 'VARIATION_SUBMITTED',
-            },
-          },
-          {
-            matchesJsonPath: {
-              expression: '$.status',
-              contains: 'VARIATION_REJECTED',
-            },
-          },
-          {
-            matchesJsonPath: {
-              expression: '$.status',
-              contains: 'VARIATION_APPROVED',
+              or: [
+                {
+                  contains: 'ACTIVE',
+                },
+                {
+                  contains: 'VARIATION_IN_PROGRESS',
+                },
+                {
+                  contains: 'VARIATION_IN_SUBMITTED',
+                },
+                {
+                  contains: 'VARIATION_IN_REJECTED',
+                },
+                {
+                  contains: 'VARIATION_IN_APPROVED',
+                },
+              ],
             },
           },
         ],
@@ -2032,6 +2024,20 @@ export default {
             },
           },
         ],
+      },
+    })
+  },
+
+  stubDeactivateLicenceAndVariations: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/licence/id/(\\d*)/deactivate-licence-and-variations`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
       },
     })
   },

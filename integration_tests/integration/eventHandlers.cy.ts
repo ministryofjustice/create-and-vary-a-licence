@@ -5,6 +5,7 @@ context('Event handlers', () => {
     cy.task('reset')
     cy.task('purgeQueues')
     cy.task('stubSystemToken')
+    cy.task('stubDeactivateLicenceAndVariations')
   })
 
   describe('Domain events', () => {
@@ -164,7 +165,11 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', {
+        verb: 'POST',
+        path: '/licences-api/licence/id/1/deactivate-licence-and-variations',
+        times: 1,
+      })
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
     })
 
@@ -188,7 +193,11 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', {
+        verb: 'POST',
+        path: '/licences-api/licence/id/1/deactivate-licence-and-variations',
+        times: 1,
+      })
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
     })
 
@@ -212,7 +221,11 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', {
+        verb: 'POST',
+        path: '/licences-api/licence/id/1/deactivate-licence-and-variations',
+        times: 1,
+      })
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
     })
 
@@ -236,7 +249,11 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
+      cy.task('verifyEndpointCalled', {
+        verb: 'POST',
+        path: '/licences-api/licence/id/1/deactivate-licence-and-variations',
+        times: 1,
+      })
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
     })
 
@@ -260,7 +277,11 @@ context('Event handlers', () => {
          }`
       )
 
-      cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 0 })
+      cy.task('verifyEndpointCalled', {
+        verb: 'POST',
+        path: '/licences-api/licence/id/1/deactivate-licence-and-variations',
+        times: 0,
+      })
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 0 })
     })
 
@@ -275,7 +296,7 @@ context('Event handlers', () => {
       cy.task(
         'sendPrisonEvent',
         `{
-          "Message": "{\\"offenderIdDisplay\\":\\"G9786GC\\"}",
+          "Message": "{\\"bookingId\\":1234,\\"offenderIdDisplay\\":\\"G9786GC\\"}",
           "MessageAttributes": {
             "eventType": {
               "Type": "String",

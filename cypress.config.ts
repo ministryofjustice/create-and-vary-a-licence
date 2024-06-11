@@ -114,6 +114,7 @@ export default defineConfig({
         stubGetPreviouslyApprovedAndTimedOutLicences: licence.stubGetPreviouslyApprovedAndTimedOutLicences,
         stubGetApprovedLicenceInHardStop: licence.stubGetApprovedLicenceInHardStop,
         stubGetPssCaseloadItem: licence.stubGetPssCaseloadItem,
+        stubDeactivateLicenceAndVariations: licence.stubDeactivateLicenceAndVariations,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
