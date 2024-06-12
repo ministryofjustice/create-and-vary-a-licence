@@ -3,7 +3,6 @@ import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { convertDateFormat, parseCvlDate, parseIsoDate } from '../../../utils/utils'
-import logger from '../../../../logger'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import { PrisonEventMessage } from '../../../@types/events'
 import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
@@ -57,9 +56,6 @@ export default class DatesChangedEventHandler {
     const crd = licence.conditionalReleaseDate ? parseCvlDate(licence.conditionalReleaseDate) : null
 
     if (ssd && crd && isAfter(ssd, crd)) {
-      logger.info(
-        `new sentence start date: ${ssd} is after licence crd: ${crd} so deactivating current licence with id: ${licence.licenceId}`
-      )
       await this.licenceService.deactivateActiveAndVariationLicences(licence.licenceId, 'RESENTENCED')
     }
   }
@@ -73,9 +69,6 @@ export default class DatesChangedEventHandler {
         return
       }
       if (isAfter(prrdDate, startOfDay(new Date()))) {
-        logger.info(
-          `licence id: ${licence.licenceId} - deactivated due to new PRRD: ${prrd} (existing PRRD: ${licence.postRecallReleaseDate})`
-        )
         await this.licenceService.deactivateActiveAndVariationLicences(licence.licenceId, 'RECALLED')
       }
     }
