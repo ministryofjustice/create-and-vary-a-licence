@@ -510,4 +510,8 @@ export default class LicenceService {
   ): Promise<CaseloadItem[]> {
     return this.licenceApiClient.searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonIds, user)
   }
+
+  async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
+    return this.licenceApiClient.deactivateActiveAndVariationLicences(licenceId, reason)
+  }
 }

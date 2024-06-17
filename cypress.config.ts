@@ -114,6 +114,7 @@ export default defineConfig({
         stubGetPreviouslyApprovedAndTimedOutLicences: licence.stubGetPreviouslyApprovedAndTimedOutLicences,
         stubGetApprovedLicenceInHardStop: licence.stubGetApprovedLicenceInHardStop,
         stubGetPssCaseloadItem: licence.stubGetPssCaseloadItem,
+        stubDeactivateLicenceAndVariations: licence.stubDeactivateLicenceAndVariations,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
@@ -139,7 +140,9 @@ export default defineConfig({
         stubGetPrisonerImage: prison.stubGetPrisonerImage,
         stubGetStaffDetailByUsername: community.stubGetStaffDetailByUsername,
         stubGetPrisonerDetail: prison.stubGetPrisonerDetail,
+        stubGetRecalledPrisonerDetail: prison.stubGetRecalledPrisonerDetail,
         stubGetPrisonerSentencesAndOffences: prison.stubGetPrisonerSentencesAndOffences,
+        stubGetPrisonerSentencesAndOffencesWithPastSsd: prison.stubGetPrisonerSentencesAndOffencesWithPastSsd,
         stubGetPrisonInformation: prison.stubGetPrisonInformation,
         stubGetHdcStatus: prison.stubGetHdcStatus,
         stubGetPrisons: prison.stubGetPrisons,

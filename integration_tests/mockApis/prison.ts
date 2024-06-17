@@ -28,6 +28,32 @@ export default {
     })
   },
 
+  stubGetRecalledPrisonerDetail: (prrd: string): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/prison-api/api/offenders/G9786GC`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          bookingNo: '1234',
+          bookingId: '1234',
+          agencyId: 'BMI',
+          firstName: 'DOUGAL',
+          middleName: 'JP',
+          lastName: 'MCGUIRE',
+          dateOfBirth: '1950-05-28',
+          sentenceDetail: {
+            conditionalReleaseDate: '2022-11-10',
+            postRecallReleaseDate: prrd,
+          },
+        },
+      },
+    })
+  },
+
   stubGetPrisonerSentencesAndOffences: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -130,6 +156,52 @@ export default {
               },
             ],
             fineAmount: 9999999.12,
+          },
+        ],
+      },
+    })
+  },
+
+  stubGetPrisonerSentencesAndOffencesWithPastSsd: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/prison-api/api/offender-sentences/booking/1234/sentences-and-offences`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            bookingId: 1234,
+            sentenceSequence: 1,
+            lineSequence: 1,
+            caseSequence: 1,
+            caseReference: 'ABC123',
+            courtDescription: 'A court',
+            sentenceStatus: 'A',
+            sentenceCategory: '1984',
+            sentenceCalculationType: 'ABC',
+            sentenceTypeDescription: 'Standard Determinate Sentence',
+            sentenceDate: '2021-09-27',
+            terms: [
+              {
+                years: 0,
+                months: 15,
+                weeks: 0,
+                days: 0,
+                code: 'IMP',
+              },
+            ],
+            offences: [
+              {
+                offenderChargeId: 5678,
+                offenceStartDate: '2021-05-02',
+                offenceCode: 'AB1234',
+                offenceDescription: 'offence',
+                indicators: ['912', 'ABC'],
+              },
+            ],
           },
         ],
       },

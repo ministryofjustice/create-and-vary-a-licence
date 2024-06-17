@@ -1,11 +1,11 @@
-import { format, isAfter } from 'date-fns'
+import { format, isAfter, startOfDay } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { convertDateFormat, parseCvlDate } from '../../../utils/utils'
-import logger from '../../../../logger'
+import { convertDateFormat, parseCvlDate, parseIsoDate } from '../../../utils/utils'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import { PrisonEventMessage } from '../../../@types/events'
+import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 
 export default class DatesChangedEventHandler {
   constructor(
@@ -20,19 +20,16 @@ export default class DatesChangedEventHandler {
       offenderIdDisplay ||
       (await this.prisonerService.searchPrisonersByBookingIds([bookingId])).map(o => o.prisonerNumber).pop()
 
-    const activeAndVariationLicences = await this.licenceService.getLicencesByNomisIdsAndStatus(
+    const activeLicence = await this.licenceService.getLatestLicenceByNomisIdsAndStatus(
       [nomisId],
-      [
-        LicenceStatus.ACTIVE,
-        LicenceStatus.VARIATION_IN_PROGRESS,
-        LicenceStatus.VARIATION_SUBMITTED,
-        LicenceStatus.VARIATION_REJECTED,
-        LicenceStatus.VARIATION_APPROVED,
-      ]
+      [LicenceStatus.ACTIVE]
     )
 
-    if (activeAndVariationLicences.length) {
-      await this.deactivateLicencesIfPrisonerResentenced(activeAndVariationLicences, bookingId)
+    const prisoner = await this.prisonerService.getPrisonerDetail(nomisId)
+
+    if (activeLicence) {
+      await this.deactivateLicencesIfPrisonerResentenced(activeLicence, bookingId)
+      await this.deactivateLicencesIfFuturePrrd(activeLicence, prisoner)
     } else {
       const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
         [nomisId],
@@ -47,30 +44,37 @@ export default class DatesChangedEventHandler {
 
       await Promise.all(
         licences.map(licence => {
-          return this.updateLicenceSentenceDates(licence, nomisId)
+          return this.updateLicenceSentenceDates(licence, prisoner)
         })
       )
     }
   }
 
-  deactivateLicencesIfPrisonerResentenced = async (licences: LicenceSummary[], bookingId: number) => {
+  deactivateLicencesIfPrisonerResentenced = async (licence: LicenceSummary, bookingId: number) => {
     const ssd = await this.prisonerService.getPrisonerLatestSentenceStartDate(bookingId)
-    await Promise.all(
-      licences.map(async licence => {
-        const crd = licence.conditionalReleaseDate ? parseCvlDate(licence.conditionalReleaseDate) : null
 
-        if (ssd && crd && isAfter(ssd, crd)) {
-          logger.info(
-            `new sentence start date: ${ssd} is after licence crd: ${crd} so deactivating current licence with id: ${licence.licenceId}`
-          )
-          await this.licenceService.updateStatus(licence.licenceId, LicenceStatus.INACTIVE)
-        }
-      })
-    )
+    const crd = licence.conditionalReleaseDate ? parseCvlDate(licence.conditionalReleaseDate) : null
+
+    if (ssd && crd && isAfter(ssd, crd)) {
+      await this.licenceService.deactivateActiveAndVariationLicences(licence.licenceId, 'RESENTENCED')
+    }
   }
 
-  updateLicenceSentenceDates = async (licence: LicenceSummary, nomisId: string) => {
-    const prisoner = await this.prisonerService.getPrisonerDetail(nomisId)
+  deactivateLicencesIfFuturePrrd = async (licence: LicenceSummary, prisoner: PrisonApiPrisoner) => {
+    const prrd =
+      prisoner.sentenceDetail?.postRecallReleaseOverrideDate || prisoner.sentenceDetail?.postRecallReleaseDate
+    if (prrd) {
+      const prrdDate = parseIsoDate(prrd)
+      if (format(prrdDate, 'dd/MM/yyyy') === licence.postRecallReleaseDate) {
+        return
+      }
+      if (isAfter(prrdDate, startOfDay(new Date()))) {
+        await this.licenceService.deactivateActiveAndVariationLicences(licence.licenceId, 'RECALLED')
+      }
+    }
+  }
+
+  updateLicenceSentenceDates = async (licence: LicenceSummary, prisoner: PrisonApiPrisoner) => {
     const sentenceStartDate = await this.prisonerService.getPrisonerLatestSentenceStartDate(prisoner.bookingId)
 
     await this.licenceService.updateSentenceDates(licence.licenceId.toString(), {

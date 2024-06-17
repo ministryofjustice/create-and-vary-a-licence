@@ -236,6 +236,13 @@ export interface paths {
      */
     post: operations['runRemoveExpiredConditionsJob']
   }
+  '/run-notify-attention-needed-licences-job': {
+    /**
+     * Triggers the notify attention needed licences job.
+     * @description Triggers a job that notifies licences with a status of APPROVED and a CRD or ARD in past or licences with a status of APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED with no release date. Requires ROLE_CVL_ADMIN.
+     */
+    post: operations['runNotifyAttentionNeededLicencesJob']
+  }
   '/run-hard-stop-licence-review-overdue-job': {
     /**
      * Triggers the hard stop licence review overdue job.
@@ -333,6 +340,13 @@ export interface paths {
      * @description Create a new version of an  approved licence. The new licence will have a new id and have status IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['editLicence']
+  }
+  '/licence/id/{licenceId}/deactivate-licence-and-variations': {
+    /**
+     * Deactivate an active licence and any associated variations
+     * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    post: operations['deactivateLicenceAndVariations']
   }
   '/licence/id/{licenceId}/create-variation': {
     /**
@@ -916,6 +930,11 @@ export interface components {
        * @description The date when the post sentence supervision period ends
        */
       topupSupervisionExpiryDate?: string
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       */
+      postRecallReleaseDate?: string
       /** @description Reason for overriding the licence dates */
       reason: string
     }
@@ -1559,6 +1578,11 @@ export interface components {
        */
       topupSupervisionExpiryDate?: string
       /**
+       * Format: date
+       * @description The release date after being recalled
+       */
+      postRecallReleaseDate?: string
+      /**
        * Format: date-time
        * @description The date the licence was created
        */
@@ -1812,6 +1836,11 @@ export interface components {
       topupSupervisionExpiryDate?: string
       /**
        * Format: date
+       * @description The release date after being recalled
+       */
+      postRecallReleaseDate?: string
+      /**
+       * Format: date
        * @description The date when the hard stop period starts
        */
       hardStopDate?: string
@@ -1919,6 +1948,14 @@ export interface components {
         | 'TIMED_OUT'
       /** @description Reason for overriding the licence status */
       reason: string
+    }
+    /** @description Request object for deactivating an active licence and its variations */
+    DeactivateLicenceAndVariationsRequest: {
+      /**
+       * @description A key representing the reason for the variation
+       * @example RESENTENCED
+       */
+      reason?: string
     }
     /** @description Describes an additional condition request */
     AddAdditionalConditionRequest: {
@@ -2647,15 +2684,20 @@ export interface components {
       appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
       isEligibleForEarlyRelease: boolean
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
       /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
        */
       conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       */
+      postRecallReleaseDate?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
       /**
        * Format: date
        * @description The date when the post sentence supervision period starts, from prison services
@@ -2696,15 +2738,41 @@ export interface components {
       /** @description The list of additional post sentence supervision conditions on this licence */
       additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
       /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
        */
-      bookingNo?: string
+      crn?: string
       /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
        */
-      dateCreated?: string
+      pnc?: string
+      /**
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
+       */
+      cro?: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string
+      /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
+      bookingId?: number
       /**
        * @description The agency code of the detaining prison
        * @example LEI
@@ -2730,26 +2798,15 @@ export interface components {
        */
       dateOfBirth?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * @description The prison booking number for the person on this licence
+       * @example F12333
        */
-      nomsId?: string
+      bookingNo?: string
       /**
-       * @description The first name of the person on licence
-       * @example Michael
+       * Format: date-time
+       * @description The date and time that this licence was first created
        */
-      forename?: string
-      /**
-       * @description The family name of the person on licence
-       * @example Smith
-       */
-      surname?: string
-      /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number
+      dateCreated?: string
       kind: string
       /**
        * @description The current status code for this licence
@@ -2787,41 +2844,6 @@ export interface components {
        */
       isReviewNeeded: boolean
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string
-      /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Gordon Sumner
-       */
-      createdByFullName?: string
-      /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string
-      /**
        * Format: date-time
        * @description The date and time that this licence was superseded by a new variant
        */
@@ -2843,6 +2865,11 @@ export interface components {
       licenceVersion?: string
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
+      /**
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       */
+      earliestReleaseDate?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
@@ -2947,10 +2974,25 @@ export interface components {
        */
       probationLauCode?: string
       /**
-       * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
        */
-      earliestReleaseDate?: string
+      updatedByFullName?: string
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Gordon Sumner
+       */
+      createdByFullName?: string
+      /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
+       */
+      submittedByFullName?: string
     } & (
       | components['schemas']['CrdLicence_SubjectAccessRequest']
       | components['schemas']['VariationLicence_SubjectAccessRequest']
@@ -3082,15 +3124,20 @@ export interface components {
       appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
       isEligibleForEarlyRelease: boolean
-      /** @description The list of standard licence conditions on this licence */
-      standardLicenceConditions?: components['schemas']['StandardCondition'][]
-      /** @description The list of standard post sentence supervision conditions on this licence */
-      standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
        */
       conditionalReleaseDate?: string
+      /**
+       * Format: date
+       * @description The release date after being recalled
+       */
+      postRecallReleaseDate?: string
+      /** @description The list of standard licence conditions on this licence */
+      standardLicenceConditions?: components['schemas']['StandardCondition'][]
+      /** @description The list of standard post sentence supervision conditions on this licence */
+      standardPssConditions?: components['schemas']['StandardCondition'][]
       /**
        * Format: date
        * @description The date when the post sentence supervision period starts, from prison services
@@ -3131,15 +3178,41 @@ export interface components {
       /** @description The list of additional post sentence supervision conditions on this licence */
       additionalPssConditions: components['schemas']['AdditionalCondition'][]
       /**
-       * @description The prison booking number for the person on this licence
-       * @example F12333
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
        */
-      bookingNo?: string
+      crn?: string
       /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
+       * @description The police national computer number (PNC) for the person on this licence
+       * @example 2015/12444
        */
-      dateCreated?: string
+      pnc?: string
+      /**
+       * @description The criminal records office number (CRO) for the person on this licence
+       * @example A/12444
+       */
+      cro?: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string
+      /**
+       * @description The first name of the person on licence
+       * @example Michael
+       */
+      forename?: string
+      /**
+       * @description The family name of the person on licence
+       * @example Smith
+       */
+      surname?: string
+      /**
+       * Format: int64
+       * @description The prison internal booking ID for the person on this licence
+       * @example 989898
+       */
+      bookingId?: number
       /**
        * @description The agency code of the detaining prison
        * @example LEI
@@ -3165,26 +3238,15 @@ export interface components {
        */
       dateOfBirth?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
+       * @description The prison booking number for the person on this licence
+       * @example F12333
        */
-      nomsId?: string
+      bookingNo?: string
       /**
-       * @description The first name of the person on licence
-       * @example Michael
+       * Format: date-time
+       * @description The date and time that this licence was first created
        */
-      forename?: string
-      /**
-       * @description The family name of the person on licence
-       * @example Smith
-       */
-      surname?: string
-      /**
-       * Format: int64
-       * @description The prison internal booking ID for the person on this licence
-       * @example 989898
-       */
-      bookingId?: number
+      dateCreated?: string
       kind: string
       /**
        * @description The current status code for this licence
@@ -3222,41 +3284,6 @@ export interface components {
        */
       isReviewNeeded: boolean
       /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn?: string
-      /**
-       * @description The criminal records office number (CRO) for the person on this licence
-       * @example A/12444
-       */
-      cro?: string
-      /**
-       * @description The police national computer number (PNC) for the person on this licence
-       * @example 2015/12444
-       */
-      pnc?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Gordon Sumner
-       */
-      createdByFullName?: string
-      /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
-       */
-      submittedByFullName?: string
-      /**
        * Format: date-time
        * @description The date and time that this licence was superseded by a new variant
        */
@@ -3278,6 +3305,11 @@ export interface components {
       licenceVersion?: string
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
+      /**
+       * Format: date
+       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       */
+      earliestReleaseDate?: string
       /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
@@ -3382,10 +3414,25 @@ export interface components {
        */
       probationLauCode?: string
       /**
-       * Format: date
-       * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
        */
-      earliestReleaseDate?: string
+      updatedByFullName?: string
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Gordon Sumner
+       */
+      createdByFullName?: string
+      /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
+       */
+      submittedByFullName?: string
     }
     /** @description Describes a CRD licence within this service */
     CrdLicence: WithRequired<
@@ -5097,6 +5144,30 @@ export interface operations {
     }
   }
   /**
+   * Triggers the notify attention needed licences job.
+   * @description Triggers a job that notifies licences with a status of APPROVED and a CRD or ARD in past or licences with a status of APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED with no release date. Requires ROLE_CVL_ADMIN.
+   */
+  runNotifyAttentionNeededLicencesJob: {
+    responses: {
+      /** @description Activation job executed. */
+      200: {
+        content: never
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
    * Triggers the hard stop licence review overdue job.
    * @description Triggers a job that sends a notification when the COM has not reviewed a hard stop licence 5 days after activation. Requires ROLE_CVL_ADMIN.
    */
@@ -5519,6 +5590,48 @@ export interface operations {
     }
     responses: {
       /** @description Licence version created */
+      200: {
+        content: {
+          'application/json': components['schemas']['LicenceSummary']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Deactivate an active licence and any associated variations
+   * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+   */
+  deactivateLicenceAndVariations: {
+    parameters: {
+      path: {
+        licenceId: number
+      }
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DeactivateLicenceAndVariationsRequest']
+      }
+    }
+    responses: {
+      /** @description Licence(s) deactivated */
       200: {
         content: {
           'application/json': components['schemas']['LicenceSummary']
