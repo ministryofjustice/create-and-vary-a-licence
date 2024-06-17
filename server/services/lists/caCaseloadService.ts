@@ -485,11 +485,12 @@ export default class CaCaseloadService {
     })
   }
 
+  // change
   private getStatus = (licence: Licence) => {
-    // console.log('licence:', licence)
     return licence?.status === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licence?.status
   }
 
+  // change
   private getLink = (
     licence: Licence,
     cvlFields: CvlFields,
@@ -516,6 +517,7 @@ export default class CaCaseloadService {
     return null
   }
 
+  // change
   private isClickable = (licence: Licence, cvlField: CvlFields, tabType: CaViewCasesTab): boolean => {
     if (tabType === CaViewCasesTab.ATTENTION_NEEDED) {
       return false
@@ -527,6 +529,7 @@ export default class CaCaseloadService {
     return !nonViewableStatuses.includes(licence?.status)
   }
 
+  // change
   private isEditableInHardStop = (licence: Licence) => {
     const inProgressHardStop = licence?.kind === LicenceKind.HARD_STOP && licence?.status === LicenceStatus.IN_PROGRESS
     const notStarted = licence?.status === LicenceStatus.TIMED_OUT

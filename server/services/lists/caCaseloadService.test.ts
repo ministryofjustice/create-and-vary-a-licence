@@ -1,4 +1,4 @@
-import { addDays, add, format, startOfDay, endOfDay, sub } from 'date-fns'
+import { add, addDays, format, startOfDay, endOfDay, sub } from 'date-fns'
 import PrisonerService from '../prisonerService'
 import CommunityService from '../communityService'
 import LicenceService from '../licenceService'
@@ -9,7 +9,7 @@ import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { Licence, ManagedCase } from '../../@types/managedCase'
 import { CaseloadItem, CvlPrisoner, LicenceSummary } from '../../@types/licenceApiClientTypes'
-import CaCaseloadService from './caCaseloadService'
+import CaCaseloadService, { CaCase, CaCaseLoad } from './caCaseloadService'
 
 jest.mock('../prisonerService')
 jest.mock('../licenceService')
@@ -62,6 +62,21 @@ describe('Caseload Service', () => {
     type: 'PSS',
     updatedByFullName: 'X Y',
   } as Licence
+  const caCase = {
+    licenceId: 1,
+    licenceVersionOf: undefined,
+    name: 'John Cena',
+    prisonerNumber: 'AB1234D',
+    probationPractitioner,
+    releaseDate: format(addDays(new Date(), 2), 'dd MMM yyy'),
+    releaseDateLabel: 'CRD',
+    licenceStatus: 'APPROVED',
+    tabType: 'futureReleases',
+    nomisLegalStatus: undefined,
+    link: '/licence/view/id/1/show',
+    lastWorkedOnBy: 'X Y',
+    isDueForEarlyRelease: false,
+  } as CaCase
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
   const nineDaysFromNow = format(addDays(new Date(), 9), 'yyyy-MM-dd')
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -346,12 +361,12 @@ describe('Caseload Service', () => {
       { ...offender, otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' } },
     ] as OffenderDetail[])
 
-    const result = await serviceUnderTest.getOmuCaseload(user, ['p1', 'p2'])
+    const result = await serviceUnderTest.getOmuCaseload(user, user.prisonCaseload)
 
     expect(licenceService.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
       startOfDay(new Date()),
       endOfDay(add(new Date(), { weeks: 4 })),
-      ['p1', 'p2'],
+      user.prisonCaseload,
       user
     )
     expect(result).toMatchObject([
@@ -731,6 +746,389 @@ describe('Caseload Service', () => {
         },
       ] as Licence[]
       expect(serviceUnderTest.findLatestLicence(licences)).toBe(licences[0])
+    })
+  })
+
+  describe('CA Caseload,', () => {
+    beforeEach(() => {
+      licenceService.getLicencesForOmu.mockResolvedValue([
+        {
+          ...licenceSummary,
+          licenceType: LicenceType.PSS,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: true,
+        },
+        {
+          ...licenceSummary,
+          nomisId: 'AB1234E',
+          licenceId: 2,
+          licenceType: LicenceType.PSS,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+        {
+          ...licenceSummary,
+          nomisId: 'AB1234G',
+          licenceId: 3,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.ACTIVE,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+        {
+          ...licenceSummary,
+          nomisId: 'AB1234F',
+          licenceId: 4,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.SUBMITTED,
+          versionOf: 2,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+      ])
+      prisonerService.getHdcStatuses.mockResolvedValue([
+        {
+          bookingId: '1234',
+          checksPassed: true,
+          approvalStatus: 'APPROVED',
+        },
+        {
+          bookingId: '12345',
+          checksPassed: true,
+          approvalStatus: 'PENDING',
+        },
+        {
+          bookingId: '123456',
+          checksPassed: true,
+          approvalStatus: undefined,
+        },
+        {
+          bookingId: '1234567',
+          checksPassed: true,
+          approvalStatus: 'APPROVED',
+        },
+      ] as HdcStatus[])
+      licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+        {
+          ...licenceSummary,
+          nomisId: 'AB1234F',
+          licenceId: 4,
+          licenceStatus: LicenceStatus.SUBMITTED,
+          versionOf: 2,
+          isInHardStopPeriod: false,
+        },
+      ])
+      licenceService.searchPrisonersByReleaseDate.mockResolvedValue([
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234F',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: 'ACTIVE IN',
+          },
+          cvl: {},
+        },
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234G',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: 'OUT',
+          },
+          cvl: {},
+        },
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234H',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: 'ACTIVE IN',
+          },
+          cvl: {},
+        },
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234I',
+            conditionalReleaseDate: tenDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+            topupSupervisionExpiryDate: '2023-12-26',
+            status: 'ACTIVE IN',
+          },
+          cvl: {},
+        },
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234J',
+            bookingId: '1234',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: 'ACTIVE IN',
+            homeDetentionCurfewEligibilityDate: undefined,
+          },
+          cvl: {},
+        },
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234K',
+            bookingId: '12345',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: 'ACTIVE IN',
+          },
+          cvl: {},
+        },
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234L',
+            bookingId: '123456',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: 'ACTIVE IN',
+          },
+          cvl: {},
+        },
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234M',
+            bookingId: '1234567',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: 'ACTIVE IN',
+            homeDetentionCurfewEligibilityDate: nineDaysFromNow,
+          },
+          cvl: {},
+        },
+      ] as CaseloadItem[])
+      communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
+        { ...offender, otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' } },
+        { ...offender, otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } },
+        { ...offender, otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } },
+        { ...offender, otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' } },
+        { ...offender, otherIds: { nomsNumber: 'AB1234J', crn: 'X12352' } },
+        { ...offender, otherIds: { nomsNumber: 'AB1234K', crn: 'X12353' } },
+        { ...offender, otherIds: { nomsNumber: 'AB1234L', crn: 'X12354' } },
+        { ...offender, otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' } },
+      ] as OffenderDetail[])
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetails])
+      licenceService.searchPrisonersByNomsIds.mockResolvedValue([
+        {
+          prisoner: {
+            firstName: 'John',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234D',
+            conditionalReleaseDate: twoDaysFromNow,
+            status: 'ACTIVE IN',
+          },
+          cvl: { isDueForEarlyRelease: false },
+        },
+        {
+          prisoner: {
+            firstName: 'John',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234E',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: 'ACTIVE IN',
+          },
+          cvl: { isDueForEarlyRelease: false },
+        },
+        {
+          prisoner: {
+            firstName: 'John',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234F',
+            conditionalReleaseDate: tenDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+            status: 'ACTIVE IN',
+          },
+          cvl: { isDueForEarlyRelease: false },
+        },
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234G',
+            conditionalReleaseDate: tenDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+            status: 'OUT',
+          },
+          cvl: {},
+        },
+        {
+          prisoner: {
+            prisonerNumber: 'AB1234H',
+            conditionalReleaseDate: tenDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+            status: 'ACTIVE IN',
+          },
+          cvl: {},
+        },
+      ] as CaseloadItem[])
+      communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
+        { ...offender, otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } },
+        { ...offender, otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } },
+        { ...offender, otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' } },
+      ] as OffenderDetail[])
+    })
+    it('should return showAttentionNeededTab false along with caseload if there are no attention neeeded licences', async () => {
+      expect(await serviceUnderTest.getPrisonView(user, user.prisonCaseload, '')).toMatchObject({
+        cases: [
+          { ...caCase, tabType: 'releasesInNextTwoWorkingDays' },
+          {
+            ...caCase,
+            licenceId: 2,
+            prisonerNumber: 'AB1234E',
+            releaseDate: format(addDays(new Date(), 10), 'dd MMM yyy'),
+            licenceStatus: 'IN_PROGRESS',
+            link: null,
+          },
+          {
+            ...caCase,
+            licenceId: 4,
+            licenceVersionOf: 2,
+            prisonerNumber: 'AB1234F',
+            probationPractitioner,
+            releaseDate: format(addDays(new Date(), 10), 'dd MMM yyy'),
+            releaseDateLabel: 'CRD',
+            licenceStatus: 'SUBMITTED',
+            link: '/licence/view/id/4/show?lastApprovedVersion=2',
+          },
+        ],
+        showAttentionNeededTab: false,
+      } as CaCaseLoad)
+    })
+
+    // it('should return showAttentionNeededTab true along with caseload if there are attention neeeded licences', async () => {
+    //   licenceService.searchPrisonersByNomsIds.mockResolvedValue([
+    //     {
+    //       prisoner: {
+    //         firstName: 'John',
+    //         lastName: 'Cena',
+    //         prisonerNumber: 'AB1234D',
+    //         conditionalReleaseDate: '',
+    //         status: 'ACTIVE IN',
+    //         legalStatus: 'IMMIGRATION_DETAINEE',
+    //       },
+    //       cvl: { isDueForEarlyRelease: false },
+    //     },
+    //     {
+    //       prisoner: {
+    //         firstName: 'John',
+    //         lastName: 'Cena',
+    //         prisonerNumber: 'AB1234E',
+    //         conditionalReleaseDate: tenDaysFromNow,
+    //         status: 'ACTIVE IN',
+    //       },
+    //       cvl: { isDueForEarlyRelease: false },
+    //     },
+    //     {
+    //       prisoner: {
+    //         firstName: 'John',
+    //         lastName: 'Cena',
+    //         prisonerNumber: 'AB1234F',
+    //         conditionalReleaseDate: tenDaysFromNow,
+    //         licenceExpiryDate: '2022-12-26',
+    //         status: 'ACTIVE IN',
+    //       },
+    //       cvl: { isDueForEarlyRelease: false },
+    //     },
+    //   ] as CaseloadItem[])
+    //   expect(await serviceUnderTest.getPrisonView(user, user.prisonCaseload, '')).toMatchObject({
+    //     cases: [
+    //       {
+    //         ...caCase,
+    //         releaseDate: 'not found',
+    //         tabType: 'attentionNeeded',
+    //         nomisLegalStatus: 'IMMIGRATION_DETAINEE',
+    //         link: null,
+    //       },
+    //       {
+    //         ...caCase,
+    //         licenceId: 2,
+    //         prisonerNumber: 'AB1234E',
+    //         releaseDate: format(addDays(new Date(), 10), 'dd MMM yyy'),
+    //         licenceStatus: 'IN_PROGRESS',
+    //         link: null,
+    //       },
+    //       {
+    //         ...caCase,
+    //         licenceId: 4,
+    //         licenceVersionOf: 2,
+    //         prisonerNumber: 'AB1234F',
+    //         probationPractitioner,
+    //         releaseDate: format(addDays(new Date(), 10), 'dd MMM yyy'),
+    //         releaseDateLabel: 'CRD',
+    //         licenceStatus: 'SUBMITTED',
+    //         link: '/licence/view/id/4/show?lastApprovedVersion=2',
+    //       },
+    //     ],
+    //     showAttentionNeededTab: true,
+    //   } as CaCaseLoad)
+    // })
+
+    it('should return filtered results', async () => {
+      expect(await serviceUnderTest.getPrisonView(user, user.prisonCaseload, 'AB1234D')).toMatchObject({
+        cases: [{ ...caCase, tabType: 'releasesInNextTwoWorkingDays' }],
+        showAttentionNeededTab: false,
+      } as CaCaseLoad)
+    })
+
+    it('should return sorted results', async () => {
+      licenceService.searchPrisonersByNomsIds.mockResolvedValue([
+        {
+          prisoner: {
+            firstName: 'John',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234D',
+            conditionalReleaseDate: twoDaysFromNow,
+            status: 'ACTIVE IN',
+          },
+          cvl: { isDueForEarlyRelease: false },
+        },
+        {
+          prisoner: {
+            firstName: 'John',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234E',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: 'ACTIVE IN',
+          },
+          cvl: { isDueForEarlyRelease: false },
+        },
+        {
+          prisoner: {
+            firstName: 'John',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234F',
+            conditionalReleaseDate: nineDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+            status: 'ACTIVE IN',
+          },
+          cvl: { isDueForEarlyRelease: false },
+        },
+      ] as CaseloadItem[])
+      expect(await serviceUnderTest.getPrisonView(user, user.prisonCaseload, '')).toMatchObject({
+        cases: [
+          {
+            ...caCase,
+            tabType: 'releasesInNextTwoWorkingDays',
+            nomisLegalStatus: undefined,
+            releaseDate: format(addDays(new Date(), 2), 'dd MMM yyy'),
+            link: '/licence/view/id/1/show',
+          },
+          {
+            ...caCase,
+            licenceId: 4,
+            licenceVersionOf: 2,
+            prisonerNumber: 'AB1234F',
+            probationPractitioner,
+            releaseDate: format(addDays(new Date(), 9), 'dd MMM yyy'),
+            releaseDateLabel: 'CRD',
+            licenceStatus: 'SUBMITTED',
+            link: '/licence/view/id/4/show?lastApprovedVersion=2',
+          },
+          {
+            ...caCase,
+            licenceId: 2,
+            prisonerNumber: 'AB1234E',
+            releaseDate: format(addDays(new Date(), 10), 'dd MMM yyy'),
+            licenceStatus: 'IN_PROGRESS',
+            link: null,
+          },
+        ],
+        showAttentionNeededTab: false,
+      } as CaCaseLoad)
     })
   })
 })
