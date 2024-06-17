@@ -7,8 +7,8 @@ import { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
 import HdcStatus from '../../@types/HdcStatus'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
-import { ManagedCase } from '../../@types/managedCase'
-import { CaseloadItem, CvlPrisoner } from '../../@types/licenceApiClientTypes'
+import { Licence, ManagedCase } from '../../@types/managedCase'
+import { CaseloadItem, CvlPrisoner, LicenceSummary } from '../../@types/licenceApiClientTypes'
 import CaCaseloadService from './caCaseloadService'
 
 jest.mock('../prisonerService')
@@ -16,9 +16,54 @@ jest.mock('../licenceService')
 jest.mock('../communityService')
 
 describe('Caseload Service', () => {
+  const licenceSummary = {
+    kind: 'CRD',
+    nomisId: 'AB1234D',
+    licenceId: 1,
+    licenceType: LicenceType.AP,
+    licenceStatus: LicenceStatus.APPROVED,
+    comUsername: 'joebloggs',
+    isReviewNeeded: false,
+    isDueForEarlyRelease: false,
+    isInHardStopPeriod: true,
+    isDueToBeReleasedInTheNextTwoWorkingDays: true,
+    updatedByFullName: 'X Y',
+  } as LicenceSummary
+  const offender = {
+    otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' },
+    offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+  } as OffenderDetail
+  const twoDaysFromNow = format(addDays(new Date(), 2), 'yyyy-MM-dd')
+  const caseloadItem = {
+    prisoner: {
+      prisonerNumber: 'AB1234D',
+      conditionalReleaseDate: twoDaysFromNow,
+      status: 'ACTIVE IN',
+    },
+    cvl: { isInHardStopPeriod: true },
+  }
+  const staffDetails = {
+    username: 'joebloggs',
+    staffCode: 'X1234',
+    staff: {
+      forenames: 'Joe',
+      surname: 'Bloggs',
+    },
+  }
+  const probationPractitioner = {
+    name: 'Joe Bloggs',
+    staffCode: 'X1234',
+  }
+  const aLicence = {
+    comUsername: 'joebloggs',
+    dateCreated: undefined,
+    id: 1,
+    status: LicenceStatus.APPROVED,
+    type: 'PSS',
+    updatedByFullName: 'X Y',
+  } as Licence
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
   const nineDaysFromNow = format(addDays(new Date(), 9), 'yyyy-MM-dd')
-  const twoDaysFromNow = format(addDays(new Date(), 2), 'yyyy-MM-dd')
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
   const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
@@ -92,57 +137,38 @@ describe('Caseload Service', () => {
   it('OMU caseload', async () => {
     licenceService.getLicencesForOmu.mockResolvedValue([
       {
-        kind: 'CRD',
-        nomisId: 'AB1234D',
-        licenceId: 1,
+        ...licenceSummary,
         licenceType: LicenceType.PSS,
-        licenceStatus: LicenceStatus.APPROVED,
-        comUsername: 'joebloggs',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
-        updatedByFullName: 'X Y',
       },
       {
-        kind: 'CRD',
+        ...licenceSummary,
         nomisId: 'AB1234E',
         licenceId: 2,
         licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.IN_PROGRESS,
-        comUsername: 'joebloggs',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
-        updatedByFullName: 'X Y',
       },
       {
-        kind: 'CRD',
+        ...licenceSummary,
         nomisId: 'AB1234G',
         licenceId: 3,
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.ACTIVE,
-        comUsername: 'joebloggs',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
-        updatedByFullName: 'X Y',
       },
       {
-        kind: 'CRD',
+        ...licenceSummary,
         nomisId: 'AB1234F',
         licenceId: 4,
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.SUBMITTED,
-        comUsername: 'joebloggs',
         versionOf: 2,
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
-        updatedByFullName: 'X Y',
       },
     ])
     prisonerService.getHdcStatuses.mockResolvedValue([
@@ -169,15 +195,11 @@ describe('Caseload Service', () => {
     ] as HdcStatus[])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
-        kind: 'CRD',
+        ...licenceSummary,
         nomisId: 'AB1234F',
         licenceId: 4,
-        licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.SUBMITTED,
-        comUsername: 'joebloggs',
         versionOf: 2,
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
         isInHardStopPeriod: false,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
@@ -258,49 +280,16 @@ describe('Caseload Service', () => {
     ] as CaseloadItem[])
 
     communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
-      {
-        otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234J', crn: 'X12352' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234K', crn: 'X12353' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234L', crn: 'X12354' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
+      { ...offender, otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234J', crn: 'X12352' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234K', crn: 'X12353' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234L', crn: 'X12354' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' } },
     ] as OffenderDetail[])
-    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
-      {
-        username: 'joebloggs',
-        staffCode: 'X1234',
-        staff: {
-          forenames: 'Joe',
-          surname: 'Bloggs',
-        },
-      },
-    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetails])
     licenceService.searchPrisonersByNomsIds.mockResolvedValue([
       {
         prisoner: {
@@ -347,38 +336,14 @@ describe('Caseload Service', () => {
       },
     ] as CaseloadItem[])
     communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
-      {
-        otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234I', crn: 'X12351' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234J', crn: 'X12352' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234K', crn: 'X12353' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234L', crn: 'X12354' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
-      {
-        otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      },
+      { ...offender, otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234F', crn: 'X12349' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234G', crn: 'X12350' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234I', crn: 'X12351' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234J', crn: 'X12352' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234K', crn: 'X12353' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234L', crn: 'X12354' } },
+      { ...offender, otherIds: { nomsNumber: 'AB1234M', crn: 'X12355' } },
     ] as OffenderDetail[])
 
     const result = await serviceUnderTest.getOmuCaseload(user, ['p1', 'p2'])
@@ -395,11 +360,7 @@ describe('Caseload Service', () => {
           offenderManagers: [
             {
               active: true,
-              staff: {
-                code: 'X1234',
-                forenames: 'Joe',
-                surname: 'Bloggs',
-              },
+              staff: staffDetails.staff,
             },
           ],
           otherIds: {
@@ -407,36 +368,20 @@ describe('Caseload Service', () => {
             nomsNumber: 'AB1234D',
           },
         },
-        licences: [
-          {
-            comUsername: 'joebloggs',
-            dateCreated: undefined,
-            id: 1,
-            status: 'APPROVED',
-            type: 'PSS',
-            updatedByFullName: 'X Y',
-          },
-        ],
+        licences: [aLicence],
         nomisRecord: {
           conditionalReleaseDate: tenDaysFromNow,
           prisonerNumber: 'AB1234D',
           status: 'ACTIVE IN',
         },
-        probationPractitioner: {
-          name: 'Joe Bloggs',
-          staffCode: 'X1234',
-        },
+        probationPractitioner,
       },
       {
         deliusRecord: {
           offenderManagers: [
             {
               active: true,
-              staff: {
-                code: 'X1234',
-                forenames: 'Joe',
-                surname: 'Bloggs',
-              },
+              staff: staffDetails.staff,
             },
           ],
           otherIds: {
@@ -444,36 +389,20 @@ describe('Caseload Service', () => {
             nomsNumber: 'AB1234E',
           },
         },
-        licences: [
-          {
-            comUsername: 'joebloggs',
-            dateCreated: undefined,
-            id: 2,
-            status: 'IN_PROGRESS',
-            type: 'PSS',
-            updatedByFullName: 'X Y',
-          },
-        ],
+        licences: [{ ...aLicence, id: 2, status: LicenceStatus.IN_PROGRESS }],
         nomisRecord: {
           conditionalReleaseDate: tenDaysFromNow,
           prisonerNumber: 'AB1234E',
           status: 'ACTIVE IN',
         },
-        probationPractitioner: {
-          name: 'Joe Bloggs',
-          staffCode: 'X1234',
-        },
+        probationPractitioner,
       },
       {
         deliusRecord: {
           offenderManagers: [
             {
               active: true,
-              staff: {
-                code: 'X1234',
-                forenames: 'Joe',
-                surname: 'Bloggs',
-              },
+              staff: staffDetails.staff,
             },
           ],
           otherIds: {
@@ -481,38 +410,21 @@ describe('Caseload Service', () => {
             nomsNumber: 'AB1234F',
           },
         },
-        licences: [
-          {
-            comUsername: 'joebloggs',
-            dateCreated: undefined,
-            id: 4,
-            status: 'SUBMITTED',
-            type: 'AP',
-            versionOf: 2,
-            updatedByFullName: 'X Y',
-          },
-        ],
+        licences: [{ ...aLicence, id: 4, status: LicenceStatus.SUBMITTED, type: LicenceType.AP, versionOf: 2 }],
         nomisRecord: {
           conditionalReleaseDate: tenDaysFromNow,
           licenceExpiryDate: '2022-12-26',
           prisonerNumber: 'AB1234F',
           status: 'ACTIVE IN',
         },
-        probationPractitioner: {
-          name: 'Joe Bloggs',
-          staffCode: 'X1234',
-        },
+        probationPractitioner,
       },
       {
         deliusRecord: {
           offenderManagers: [
             {
               active: true,
-              staff: {
-                code: 'X1234',
-                forenames: 'Joe',
-                surname: 'Bloggs',
-              },
+              staff: staffDetails.staff,
             },
           ],
           otherIds: {
@@ -520,48 +432,28 @@ describe('Caseload Service', () => {
             nomsNumber: 'AB1234G',
           },
         },
-        licences: [
-          {
-            comUsername: 'joebloggs',
-            dateCreated: undefined,
-            id: 3,
-            status: 'ACTIVE',
-            type: 'AP',
-            updatedByFullName: 'X Y',
-          },
-        ],
+        licences: [{ ...aLicence, id: 3, status: LicenceStatus.ACTIVE, type: LicenceType.AP }],
         nomisRecord: {
           conditionalReleaseDate: tenDaysFromNow,
           licenceExpiryDate: '2022-12-26',
           prisonerNumber: 'AB1234G',
           status: 'OUT',
         },
-        probationPractitioner: {
-          name: 'Joe Bloggs',
-          staffCode: 'X1234',
-        },
+        probationPractitioner,
       },
       {
         deliusRecord: {
           offenderManagers: [
             {
               active: true,
-              staff: {
-                code: 'X1234',
-                forenames: 'Joe',
-                surname: 'Bloggs',
-              },
+              staff: staffDetails.staff,
             },
           ],
           otherIds: {
             crn: 'X12351',
             nomsNumber: 'AB1234I',
           },
-          staff: {
-            code: 'X1234',
-            forenames: 'Joe',
-            surname: 'Bloggs',
-          },
+          staff: staffDetails.staff,
         },
         licences: [
           {
@@ -576,32 +468,21 @@ describe('Caseload Service', () => {
           prisonerNumber: 'AB1234I',
           status: 'ACTIVE IN',
         },
-        probationPractitioner: {
-          name: 'Joe Bloggs',
-          staffCode: 'X1234',
-        },
+        probationPractitioner,
       },
       {
         deliusRecord: {
           offenderManagers: [
             {
               active: true,
-              staff: {
-                code: 'X1234',
-                forenames: 'Joe',
-                surname: 'Bloggs',
-              },
+              staff: staffDetails.staff,
             },
           ],
           otherIds: {
             crn: 'X12352',
             nomsNumber: 'AB1234J',
           },
-          staff: {
-            code: 'X1234',
-            forenames: 'Joe',
-            surname: 'Bloggs',
-          },
+          staff: staffDetails.staff,
         },
         licences: [
           {
@@ -616,32 +497,21 @@ describe('Caseload Service', () => {
           status: 'ACTIVE IN',
           homeDetentionCurfewEligibilityDate: undefined,
         },
-        probationPractitioner: {
-          name: 'Joe Bloggs',
-          staffCode: 'X1234',
-        },
+        probationPractitioner,
       },
       {
         deliusRecord: {
           offenderManagers: [
             {
               active: true,
-              staff: {
-                code: 'X1234',
-                forenames: 'Joe',
-                surname: 'Bloggs',
-              },
+              staff: staffDetails.staff,
             },
           ],
           otherIds: {
             crn: 'X12353',
             nomsNumber: 'AB1234K',
           },
-          staff: {
-            code: 'X1234',
-            forenames: 'Joe',
-            surname: 'Bloggs',
-          },
+          staff: staffDetails.staff,
         },
         licences: [
           {
@@ -655,32 +525,21 @@ describe('Caseload Service', () => {
           prisonerNumber: 'AB1234K',
           status: 'ACTIVE IN',
         },
-        probationPractitioner: {
-          name: 'Joe Bloggs',
-          staffCode: 'X1234',
-        },
+        probationPractitioner,
       },
       {
         deliusRecord: {
           offenderManagers: [
             {
               active: true,
-              staff: {
-                code: 'X1234',
-                forenames: 'Joe',
-                surname: 'Bloggs',
-              },
+              staff: staffDetails.staff,
             },
           ],
           otherIds: {
             crn: 'X12354',
             nomsNumber: 'AB1234L',
           },
-          staff: {
-            code: 'X1234',
-            forenames: 'Joe',
-            surname: 'Bloggs',
-          },
+          staff: staffDetails.staff,
         },
         licences: [
           {
@@ -694,108 +553,24 @@ describe('Caseload Service', () => {
           prisonerNumber: 'AB1234L',
           status: 'ACTIVE IN',
         },
-        probationPractitioner: {
-          name: 'Joe Bloggs',
-          staffCode: 'X1234',
-        },
+        probationPractitioner,
       },
     ])
   })
 
   it('Should exclude TIMED_OUT licences with ids, to prevent duplication', async () => {
     licenceService.getLicencesForOmu.mockResolvedValue([
-      {
-        kind: 'CRD',
-        nomisId: 'AB1234D',
-        licenceId: 1,
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.APPROVED,
-        comUsername: 'joebloggs',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: true,
-        isDueToBeReleasedInTheNextTwoWorkingDays: true,
-      },
-      {
-        kind: 'CRD',
-        nomisId: 'AB1234D',
-        licenceId: 2,
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.TIMED_OUT,
-        comUsername: 'joebloggs',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: true,
-        isDueToBeReleasedInTheNextTwoWorkingDays: true,
-      },
+      licenceSummary,
+      { ...licenceSummary, licenceId: 2, licenceStatus: LicenceStatus.TIMED_OUT },
     ])
-    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
-      {
-        otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      } as OffenderDetail,
-    ])
-    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
-      {
-        username: 'joebloggs',
-        staffCode: 'X1234',
-        staff: {
-          forenames: 'Joe',
-          surname: 'Bloggs',
-        },
-      },
-    ])
-    licenceService.searchPrisonersByNomsIds.mockResolvedValue([
-      {
-        prisoner: {
-          prisonerNumber: 'AB1234D',
-          conditionalReleaseDate: twoDaysFromNow,
-          status: 'ACTIVE IN',
-        },
-        cvl: { isInHardStopPeriod: true },
-      },
-    ] as CaseloadItem[])
-    licenceService.searchPrisonersByReleaseDate.mockResolvedValueOnce([
-      {
-        prisoner: {
-          prisonerNumber: 'AB1234D',
-          conditionalReleaseDate: twoDaysFromNow,
-          status: 'ACTIVE IN',
-          legalStatus: 'SENTENCED',
-        },
-      },
-    ] as CaseloadItem[])
-    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([
-      {
-        otherIds: { nomsNumber: 'AB1234D', crn: 'X12347' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      } as OffenderDetail,
-    ])
+    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([offender])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetails])
+    licenceService.searchPrisonersByNomsIds.mockResolvedValue([caseloadItem] as CaseloadItem[])
+    licenceService.searchPrisonersByReleaseDate.mockResolvedValueOnce([caseloadItem] as CaseloadItem[])
+    communityService.getOffendersByNomsNumbers.mockResolvedValueOnce([offender])
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
-      {
-        kind: 'CRD',
-        nomisId: 'AB1234D',
-        licenceId: 1,
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.APPROVED,
-        comUsername: 'joebloggs',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: true,
-        isDueToBeReleasedInTheNextTwoWorkingDays: true,
-      },
-      {
-        kind: 'CRD',
-        nomisId: 'AB1234D',
-        licenceId: 2,
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.TIMED_OUT,
-        comUsername: 'joebloggs',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: true,
-        isDueToBeReleasedInTheNextTwoWorkingDays: true,
-      },
+      licenceSummary,
+      { ...licenceSummary, licenceId: 2, licenceStatus: LicenceStatus.TIMED_OUT },
     ])
 
     const result = await serviceUnderTest.getOmuCaseload(user, ['p1', 'p2'])
@@ -861,6 +636,101 @@ describe('Caseload Service', () => {
     it('should return exclusion for out-of-scope status and past CRD', () => {
       const c = createCase(LicenceStatus.OOS_BOTUS, pastDate, '2022-10-19')
       expect(serviceUnderTest.isProbationCase(c)).toBe(false)
+    })
+  })
+
+  describe('hasAnyStatusOf', () => {
+    const PRISON_VIEW_STATUSES = [
+      LicenceStatus.NOT_STARTED,
+      LicenceStatus.IN_PROGRESS,
+      LicenceStatus.APPROVED,
+      LicenceStatus.SUBMITTED,
+      LicenceStatus.TIMED_OUT,
+    ]
+    it('should return true if licence status is in provided statuses', () => {
+      const managedCase = {
+        licences: [{ status: LicenceStatus.NOT_STARTED }],
+      } as ManagedCase
+      expect(serviceUnderTest.hasAnyStatusOf(PRISON_VIEW_STATUSES, managedCase)).toBe(true)
+    })
+
+    it('should return false if licence status is not in provided statuses', () => {
+      const managedCase = {
+        licences: [{ status: LicenceStatus.ACTIVE }],
+      } as ManagedCase
+      expect(serviceUnderTest.hasAnyStatusOf(PRISON_VIEW_STATUSES, managedCase)).toBe(false)
+    })
+  })
+
+  describe('isOutOfScope', () => {
+    it('should return true if licence status is in OUT_OF_SCOPE_PRISON_VIEW_STATUSES', () => {
+      const managedCase = {
+        licences: [{ status: LicenceStatus.NOT_IN_PILOT }],
+      } as ManagedCase
+      expect(serviceUnderTest.isOutOfScope(managedCase)).toBe(true)
+    })
+
+    it('should return false if licence status is not in OUT_OF_SCOPE_PRISON_VIEW_STATUSES', () => {
+      const managedCase = {
+        licences: [{ status: LicenceStatus.ACTIVE }],
+      } as ManagedCase
+      expect(serviceUnderTest.isOutOfScope(managedCase)).toBe(false)
+    })
+  })
+
+  describe('isReleaseInFuture', () => {
+    it('should return true if ARD/CRD date is in feature', () => {
+      const managedCase = {
+        nomisRecord: { confirmedReleaseDate: futureDate },
+      } as ManagedCase
+      expect(serviceUnderTest.isReleaseInFuture(managedCase)).toBe(true)
+    })
+
+    it('should return false if ARD/CRD date is in past', () => {
+      const managedCase = {
+        nomisRecord: { confirmedReleaseDate: pastDate },
+      } as ManagedCase
+      expect(serviceUnderTest.isReleaseInFuture(managedCase)).toBe(false)
+    })
+
+    it('should return false if ARD/CRD date is today', () => {
+      const managedCase = {
+        nomisRecord: { confirmedReleaseDate: format(new Date(), 'yyyy-MM-dd') },
+      } as ManagedCase
+      expect(serviceUnderTest.isReleaseInFuture(managedCase)).toBe(false)
+    })
+  })
+
+  describe('findLatestLicence', () => {
+    it('should return the first element if the licences length is one', () => {
+      const licences = {
+        status: LicenceStatus.APPROVED,
+      } as Licence
+      expect(serviceUnderTest.findLatestLicence([licences])).toBe(licences)
+    })
+
+    it('should return the IN_PROGRESS licence if there are IN_PROGRESS and TIMED_OUT licences', () => {
+      const licences = [
+        {
+          status: LicenceStatus.IN_PROGRESS,
+        },
+        {
+          status: LicenceStatus.TIMED_OUT,
+        },
+      ] as Licence[]
+      expect(serviceUnderTest.findLatestLicence(licences)).toBe(licences[0])
+    })
+
+    it('should return the IN_PROGRESS licence if there are IN_PROGRESS and SUBMITTED licences', () => {
+      const licences = [
+        {
+          status: LicenceStatus.IN_PROGRESS,
+        },
+        {
+          status: LicenceStatus.SUBMITTED,
+        },
+      ] as Licence[]
+      expect(serviceUnderTest.findLatestLicence(licences)).toBe(licences[0])
     })
   })
 })
