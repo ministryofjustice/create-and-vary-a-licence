@@ -40,9 +40,9 @@ export default class ViewAndPrintCaseRoutes {
         ? await this.caseloadService.getPrisonView(user, prisonCaseloadToDisplay, searchString)
         : await this.caseloadService.getProbationView(user, prisonCaseloadToDisplay, searchString)
 
-    cases.map(c => {
-      return {
-        link: this.getLink(
+    res.render('pages/view/cases', {
+      cases: cases.map(c => {
+        const link = this.getLink(
           c.kind,
           c.licenceId,
           c.licenceStatus,
@@ -50,12 +50,24 @@ export default class ViewAndPrintCaseRoutes {
           c.isInHardStopPeriod,
           c.prisonerNumber,
           c.tabType
-        ),
-        licenceStatus: this.getStatus(c.licenceStatus),
-      }
-    })
-    res.render('pages/view/cases', {
-      cases,
+        )
+        const licenceStatus = this.getStatus(c.licenceStatus)
+        return {
+          licenceId: c.licenceId,
+          licenceVersionOf: c.licenceVersionOf,
+          name: c.name,
+          prisonerNumber: c.prisonerNumber,
+          probationPractitioner: c.probationPractitioner,
+          releaseDate: c.releaseDate,
+          releaseDateLabel: c.releaseDateLabel,
+          tabType: c.tabType,
+          nomisLegalStatus: c.nomisLegalStatus,
+          lastWorkedOnBy: c.lastWorkedOnBy,
+          isDueForEarlyRelease: c.isDueForEarlyRelease,
+          link,
+          licenceStatus,
+        }
+      }),
       CaViewCasesTab,
       showAttentionNeededTab,
       statusConfig,
