@@ -1058,7 +1058,7 @@ describe('Caseload Service', () => {
       } as CaCaseLoad)
     })
 
-    it('should return sorted results', async () => {
+    it('should return sorted results in ascending order', async () => {
       licenceService.searchPrisonersByNomsIds.mockResolvedValue([
         {
           prisoner: {
@@ -1116,6 +1116,112 @@ describe('Caseload Service', () => {
             prisonerNumber: 'AB1234E',
             releaseDate: format(addDays(new Date(), 10), 'dd MMM yyy'),
             licenceStatus: 'IN_PROGRESS',
+          },
+        ],
+        showAttentionNeededTab: false,
+      } as CaCaseLoad)
+    })
+
+    it('should return sorted results in descending order', async () => {
+      licenceService.getLicencesForOmu.mockResolvedValue([
+        {
+          ...licenceSummary,
+          licenceType: LicenceType.PSS,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: true,
+        },
+        {
+          ...licenceSummary,
+          nomisId: 'AB1234E',
+          licenceId: 2,
+          licenceType: LicenceType.PSS,
+          licenceStatus: LicenceStatus.VARIATION_APPROVED,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+        {
+          ...licenceSummary,
+          nomisId: 'AB1234G',
+          licenceId: 3,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.ACTIVE,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+        {
+          ...licenceSummary,
+          nomisId: 'AB1234F',
+          licenceId: 4,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
+          versionOf: 2,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: false,
+        },
+      ])
+      licenceService.searchPrisonersByNomsIds.mockResolvedValue([
+        {
+          prisoner: {
+            firstName: 'John',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234G',
+            conditionalReleaseDate: nineDaysFromNow,
+            status: LicenceStatus.ACTIVE,
+          },
+          cvl: { isDueForEarlyRelease: false },
+        },
+        {
+          prisoner: {
+            firstName: 'John',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234E',
+            conditionalReleaseDate: tenDaysFromNow,
+            status: LicenceStatus.VARIATION_IN_PROGRESS,
+          },
+          cvl: { isDueForEarlyRelease: false },
+        },
+        {
+          prisoner: {
+            firstName: 'John',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234F',
+            conditionalReleaseDate: twoDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+            status: LicenceStatus.VARIATION_APPROVED,
+          },
+          cvl: { isDueForEarlyRelease: false },
+        },
+      ] as CaseloadItem[])
+      expect(await serviceUnderTest.getProbationView(user, user.prisonCaseload, '')).toMatchObject({
+        cases: [
+          {
+            ...caCase,
+            licenceId: 2,
+            licenceStatus: 'VARIATION_APPROVED',
+            prisonerNumber: 'AB1234E',
+            tabType: 'futureReleases',
+            nomisLegalStatus: undefined,
+            releaseDate: format(addDays(new Date(), 10), 'dd MMM yyy'),
+          },
+          {
+            ...caCase,
+            licenceId: 3,
+            prisonerNumber: 'AB1234G',
+            releaseDate: format(addDays(new Date(), 9), 'dd MMM yyy'),
+            licenceStatus: 'ACTIVE',
+            isDueForEarlyRelease: false,
+            isInHardStopPeriod: undefined,
+            kind: 'CRD',
+            name: 'John Cena',
+          },
+          {
+            ...caCase,
+            licenceId: 4,
+            licenceVersionOf: 2,
+            prisonerNumber: 'AB1234F',
+            releaseDate: format(addDays(new Date(), 2), 'dd MMM yyy'),
+            releaseDateLabel: 'CRD',
+            licenceStatus: 'VARIATION_IN_PROGRESS',
           },
         ],
         showAttentionNeededTab: false,
