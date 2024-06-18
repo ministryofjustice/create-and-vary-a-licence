@@ -25,6 +25,7 @@ export type CaCaseLoad = {
 }
 
 export type CaCase = {
+  kind: LicenceKind
   licenceId: number
   licenceVersionOf: number
   name: string
@@ -45,9 +46,9 @@ export type CaCase = {
     | 'REMAND'
     | 'UNKNOWN'
     | 'OTHER'
-  link: string
   lastWorkedOnBy: string
   isDueForEarlyRelease: boolean
+  isInHardStopPeriod: boolean
 }
 
 export type ManagedCase = {
@@ -184,6 +185,7 @@ export default class CaCaseloadService {
       const releaseDate = c.licence?.releaseDate || selectReleaseDate(c.nomisRecord)
       const tabType = determineCaViewCasesTab(c.licence, c.nomisRecord, c.cvlFields)
       return {
+        kind: c.licence?.kind,
         licenceId: c.licence?.id,
         licenceVersionOf: c.licence?.versionOf,
         name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
@@ -191,12 +193,12 @@ export default class CaCaseloadService {
         probationPractitioner: c.probationPractitioner,
         releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
         releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
-        licenceStatus: this.getStatus(c.licence),
+        licenceStatus: c.licence.status,
         tabType,
         nomisLegalStatus: c.nomisRecord?.legalStatus,
-        link: this.getLink(c.licence, c.cvlFields, c.nomisRecord, tabType),
         lastWorkedOnBy: c.licence?.updatedByFullName,
         isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
+        isInHardStopPeriod: c.cvlFields.isInHardStopPeriod,
       }
     })
   }
@@ -483,57 +485,6 @@ export default class CaCaseloadService {
         },
       }
     })
-  }
-
-  // change
-  private getStatus = (licence: Licence) => {
-    return licence?.status === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licence?.status
-  }
-
-  // change
-  private getLink = (
-    licence: Licence,
-    cvlFields: CvlFields,
-    prisoner: CvlPrisoner,
-    tabType: CaViewCasesTab
-  ): string => {
-    if (!this.isClickable(licence, cvlFields, tabType)) {
-      return null
-    }
-    if (licence?.status === LicenceStatus.TIMED_OUT) {
-      return `/licence/hard-stop/create/nomisId/${prisoner.prisonerNumber}/confirm`
-    }
-    if (licence?.id) {
-      const query =
-        licence?.versionOf && licence?.status === LicenceStatus.SUBMITTED
-          ? `?lastApprovedVersion=${licence?.versionOf}`
-          : ''
-
-      return cvlFields.isInHardStopPeriod && this.isEditableInHardStop(licence)
-        ? `/licence/hard-stop/id/${licence?.id}/check-your-answers${query}`
-        : `/licence/view/id/${licence?.id}/show${query}`
-    }
-
-    return null
-  }
-
-  // change
-  private isClickable = (licence: Licence, cvlField: CvlFields, tabType: CaViewCasesTab): boolean => {
-    if (tabType === CaViewCasesTab.ATTENTION_NEEDED) {
-      return false
-    }
-
-    if (cvlField.isInHardStopPeriod && this.isEditableInHardStop(licence)) {
-      return true
-    }
-    return !nonViewableStatuses.includes(licence?.status)
-  }
-
-  // change
-  private isEditableInHardStop = (licence: Licence) => {
-    const inProgressHardStop = licence?.kind === LicenceKind.HARD_STOP && licence?.status === LicenceStatus.IN_PROGRESS
-    const notStarted = licence?.status === LicenceStatus.TIMED_OUT
-    return inProgressHardStop || notStarted
   }
 
   hasAnyStatusOf(statuses: LicenceStatus[], c: ManagedCase) {
