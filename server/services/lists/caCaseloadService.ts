@@ -88,15 +88,6 @@ const PROBATION_VIEW_STATUSES = [
   LicenceStatus.VARIATION_SUBMITTED,
 ]
 
-const nonViewableStatuses = [
-  ...OUT_OF_SCOPE_PRISON_VIEW_STATUSES,
-  LicenceStatus.VARIATION_IN_PROGRESS,
-  LicenceStatus.VARIATION_APPROVED,
-  LicenceStatus.VARIATION_SUBMITTED,
-  LicenceStatus.NOT_STARTED,
-  LicenceStatus.IN_PROGRESS,
-]
-
 export default class CaCaseloadService {
   constructor(
     private readonly prisonerService: PrisonerService,
