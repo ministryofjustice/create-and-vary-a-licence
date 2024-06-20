@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import statusConfig from '../../../licences/licenceStatus'
 import { CaViewCasesTab } from '../../../utils/utils'
 import PrisonerService from '../../../services/prisonerService'
-import CaCaseloadService from '../../../services/lists/caCaseloadService'
+import CaCaseloadService, { CaCase } from '../../../services/lists/caCaseloadService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
@@ -42,15 +42,7 @@ export default class ViewAndPrintCaseRoutes {
 
     res.render('pages/view/cases', {
       cases: cases.map(c => {
-        const link = this.getLink(
-          c.kind,
-          c.licenceId,
-          c.licenceStatus,
-          c.licenceVersionOf,
-          c.isInHardStopPeriod,
-          c.prisonerNumber,
-          c.tabType
-        )
+        const link = this.getLink(c)
         const licenceStatus = this.getStatus(c.licenceStatus)
         return {
           licenceId: c.licenceId,
@@ -82,28 +74,22 @@ export default class ViewAndPrintCaseRoutes {
     return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
   }
 
-  private getLink = (
-    kind: LicenceKind,
-    licenceId: number,
-    licenceStatus: LicenceStatus,
-    licenceVersionOf: number,
-    isInHardStopPeriod: boolean,
-    prisonerNumber: string,
-    tabType: CaViewCasesTab
-  ): string => {
-    if (!this.isClickable(kind, licenceStatus, isInHardStopPeriod, tabType)) {
+  private getLink = (licence: CaCase): string => {
+    if (!this.isClickable(licence.kind, licence.licenceStatus, licence.isInHardStopPeriod, licence.tabType)) {
       return null
     }
-    if (licenceStatus === LicenceStatus.TIMED_OUT) {
-      return `/licence/hard-stop/create/nomisId/${prisonerNumber}/confirm`
+    if (licence.licenceStatus === LicenceStatus.TIMED_OUT) {
+      return `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
     }
-    if (licenceId) {
+    if (licence.licenceId) {
       const query =
-        licenceVersionOf && licenceStatus === LicenceStatus.SUBMITTED ? `?lastApprovedVersion=${licenceVersionOf}` : ''
+        licence.licenceVersionOf && licence.licenceStatus === LicenceStatus.SUBMITTED
+          ? `?lastApprovedVersion=${licence.licenceVersionOf}`
+          : ''
 
-      return isInHardStopPeriod && this.isEditableInHardStop(kind, licenceStatus)
-        ? `/licence/hard-stop/id/${licenceId}/check-your-answers${query}`
-        : `/licence/view/id/${licenceId}/show${query}`
+      return licence.isInHardStopPeriod && this.isEditableInHardStop(licence.kind, licence.licenceStatus)
+        ? `/licence/hard-stop/id/${licence.licenceId}/check-your-answers${query}`
+        : `/licence/view/id/${licence.licenceId}/show${query}`
     }
 
     return null
