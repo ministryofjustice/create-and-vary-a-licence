@@ -608,4 +608,13 @@ export default class LicenceApiClient extends RestClient {
       { username: user?.username }
     )) as Promise<CaseloadItem[]>
   }
+
+  async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
+    await this.post({
+      path: `/licence/id/${licenceId}/deactivate-licence-and-variations`,
+      data: {
+        reason,
+      },
+    })
+  }
 }
