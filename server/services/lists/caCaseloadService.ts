@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { startOfDay, add, endOfDay, isFuture } from 'date-fns'
+import { startOfDay, add, endOfDay, isFuture, format, getUnixTime } from 'date-fns'
 import CommunityService from '../communityService'
 import PrisonerService from '../prisonerService'
 import LicenceService from '../licenceService'
@@ -9,8 +9,47 @@ import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
 import type { LicenceSummary, CaseloadItem, CvlPrisoner, CvlFields } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
-import { parseCvlDate, parseIsoDate } from '../../utils/utils'
+import {
+  CaViewCasesTab,
+  convertToTitleCase,
+  determineCaViewCasesTab,
+  parseCvlDate,
+  parseIsoDate,
+  selectReleaseDate,
+} from '../../utils/utils'
 import CaseListUtils from './caselistUtils'
+
+export type CaCaseLoad = {
+  cases: CaCase[]
+  showAttentionNeededTab: boolean
+}
+
+export type CaCase = {
+  kind: LicenceKind
+  licenceId: number
+  licenceVersionOf: number
+  name: string
+  prisonerNumber: string
+  probationPractitioner: ProbationPractitioner
+  releaseDate: string
+  releaseDateLabel: string
+  licenceStatus: LicenceStatus
+  tabType: CaViewCasesTab
+  nomisLegalStatus:
+    | 'RECALL'
+    | 'DEAD'
+    | 'INDETERMINATE_SENTENCE'
+    | 'SENTENCED'
+    | 'CONVICTED_UNSENTENCED'
+    | 'CIVIL_PRISONER'
+    | 'IMMIGRATION_DETAINEE'
+    | 'REMAND'
+    | 'UNKNOWN'
+    | 'OTHER'
+  lastWorkedOnBy: string
+  isDueForEarlyRelease: boolean
+  isInHardStopPeriod: boolean
+}
 
 export type ManagedCase = {
   deliusRecord?: DeliusRecord
@@ -56,24 +95,26 @@ export default class CaCaseloadService {
     private readonly licenceService: LicenceService
   ) {}
 
-  public async getPrisonView(user: User, prisonCaseload: string[]): Promise<Case[]> {
+  public async getPrisonView(user: User, prisonCaseload: string[], searchString: string): Promise<CaCaseLoad> {
     const cases = await this.getOmuCaseload(user, prisonCaseload)
-    return cases
+    const caseLoad: Case[] = cases
       .filter(c => this.isPrisonCase(c))
       .map(({ licences, ...c }) => ({
         ...c,
         licence: this.findLatestLicence(licences),
       }))
+    return this.caCaseload(caseLoad, searchString, 'prison')
   }
 
-  public async getProbationView(user: User, prisonCaseload: string[]): Promise<Case[]> {
+  public async getProbationView(user: User, prisonCaseload: string[], searchString: string): Promise<CaCaseLoad> {
     const cases = await this.getOmuCaseload(user, prisonCaseload)
-    return cases
+    const caseLoad: Case[] = cases
       .filter(c => this.isProbationCase(c))
       .map(({ licences, ...c }) => ({
         ...c,
         licence: licences[0],
       }))
+    return this.caCaseload(caseLoad, searchString, 'probation')
   }
 
   public isPrisonCase(managedCase: ManagedCase): boolean {
@@ -120,6 +161,37 @@ export default class CaCaseloadService {
     const casesWithComs = await this.mapResponsibleComsToCases(withLicence.concat(pending))
 
     return casesWithComs
+  }
+
+  private caCaseload(cases: Case[], searchString: string, view: 'prison' | 'probation'): CaCaseLoad {
+    const caseLoad = this.caseloadViewModel(cases)
+    const showAttentionNeededTab = caseLoad.some(e => e.tabType === CaViewCasesTab.ATTENTION_NEEDED)
+    const searchResults = this.applySearch(searchString, caseLoad)
+    const sortResults = this.applySort(searchResults, view)
+    return { cases: sortResults, showAttentionNeededTab }
+  }
+
+  private caseloadViewModel(cases: Case[]) {
+    return cases.map(c => {
+      const releaseDate = c.licence?.releaseDate || selectReleaseDate(c.nomisRecord)
+      const tabType = determineCaViewCasesTab(c.licence, c.nomisRecord, c.cvlFields)
+      return {
+        kind: c.licence?.kind,
+        licenceId: c.licence?.id,
+        licenceVersionOf: c.licence?.versionOf,
+        name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+        prisonerNumber: c.nomisRecord.prisonerNumber,
+        probationPractitioner: c.probationPractitioner,
+        releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
+        releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
+        licenceStatus: c.licence.status,
+        tabType,
+        nomisLegalStatus: c.nomisRecord?.legalStatus,
+        lastWorkedOnBy: c.licence?.updatedByFullName,
+        isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
+        isInHardStopPeriod: c.cvlFields.isInHardStopPeriod,
+      }
+    })
   }
 
   private pairNomisRecordsWithDelius = async (prisoners: Array<CaseloadItem>): Promise<Array<ManagedCase>> => {
@@ -428,5 +500,25 @@ export default class CaCaseloadService {
     }
 
     return licences.find(l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS)
+  }
+
+  applySearch(searchString: string, cases: CaCase[]): CaCase[] {
+    if (!searchString) return cases
+    const term = searchString?.toLowerCase()
+    return cases.filter(c => {
+      return (
+        c.name.toLowerCase().includes(term) ||
+        c.prisonerNumber?.toLowerCase().includes(term) ||
+        c.probationPractitioner?.name.toLowerCase().includes(term)
+      )
+    })
+  }
+
+  applySort(cases: CaCase[], view: 'prison' | 'probation'): CaCase[] {
+    return cases.sort((a, b) => {
+      const crd1 = getUnixTime(new Date(a.releaseDate))
+      const crd2 = getUnixTime(new Date(b.releaseDate))
+      return view === 'prison' ? crd1 - crd2 : crd2 - crd1
+    })
   }
 }
