@@ -38,7 +38,7 @@ services:
       test: [ 'CMD', 'curl', '-f', 'http://localhost:3000/health' ]
 
   localstack:
-    image: localstack/localstack:3.0.2
+    image: localstack/localstack:3.5.0
     networks:
       - hmpps
     container_name: localstack
