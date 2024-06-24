@@ -38,6 +38,7 @@ import type {
   CaseloadItem,
   LicenceSummaryApproverView,
   LicenceCreationResponse,
+  SearchResultsPage,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -589,24 +590,25 @@ export default class LicenceApiClient extends RestClient {
   async searchPrisonersByReleaseDate(
     earliestReleaseDate: Date,
     latestReleaseDate: Date,
-    prisonIds?: string[],
+    prisonIds: string[],
+    page: number,
     user?: User
-  ): Promise<CaseloadItem[]> {
+  ): Promise<SearchResultsPage> {
     if (prisonIds.length < 1) {
-      return []
+      return null
     }
     return (await this.post(
       {
         path: `/prisoner-search/release-date-by-prison`,
+        query: { page },
         data: {
           earliestReleaseDate: format(earliestReleaseDate, 'yyyy-MM-dd'),
-
           latestReleaseDate: format(latestReleaseDate, 'yyyy-MM-dd'),
           prisonIds,
         },
       },
       { username: user?.username }
-    )) as Promise<CaseloadItem[]>
+    )) as Promise<SearchResultsPage>
   }
 
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {

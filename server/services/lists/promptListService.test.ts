@@ -32,17 +32,6 @@ describe('PromptList Service', () => {
     jest.resetAllMocks()
   })
 
-  it('Does not call Licence API when no Nomis records are found', async () => {
-    const offenders = [
-      {
-        nomisRecord: { prisonerNumber: null },
-        cvlFields: {},
-      } as ManagedCase,
-    ]
-    await serviceUnderTest.mapOffendersToLicences(offenders)
-    expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(0)
-  })
-
   it('Calls Licence API when Nomis records are found', async () => {
     const offenders = [
       {

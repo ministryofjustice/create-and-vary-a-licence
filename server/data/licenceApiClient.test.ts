@@ -311,6 +311,7 @@ describe('Licence API client tests', () => {
       parseCvlDate('01/02/2024'),
       parseCvlDate('02/03/2025'),
       ['MDI'],
+      1,
       {
         username: 'joebloggs',
       } as User
@@ -318,6 +319,7 @@ describe('Licence API client tests', () => {
     expect(post).toHaveBeenCalledWith(
       {
         path: '/prisoner-search/release-date-by-prison',
+        query: { page: 1 },
         data: {
           earliestReleaseDate: '2024-02-01',
           latestReleaseDate: '2025-03-02',
@@ -328,7 +330,7 @@ describe('Licence API client tests', () => {
     )
   })
   it('Search prisoners by release date is not called with no prison ids', async () => {
-    await licenceApiClient.searchPrisonersByReleaseDate(parseCvlDate('01/02/2024'), parseCvlDate('02/03/2025'), [], {
+    await licenceApiClient.searchPrisonersByReleaseDate(parseCvlDate('01/02/2024'), parseCvlDate('02/03/2025'), [], 1, {
       username: 'joebloggs',
     } as User)
     expect(post).not.toHaveBeenCalled()

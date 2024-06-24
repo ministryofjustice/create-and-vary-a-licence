@@ -1,15 +1,14 @@
 import moment from 'moment'
 import { isFuture, isWithinInterval, sub } from 'date-fns'
-import type { ManagedCase } from '../../@types/managedCase'
 import { parseIsoDate } from '../../utils/utils'
 import { CvlPrisoner } from '../../@types/licenceApiClientTypes'
 import LicenceType from '../../enumeration/licenceType'
 
 export default class CaseListUtils {
-  public static isRecall(offender: ManagedCase): boolean {
-    const recall = offender.nomisRecord?.recall && offender.nomisRecord.recall === true
-    const crd = offender.nomisRecord?.conditionalReleaseDate
-    const prrd = offender.nomisRecord?.postRecallReleaseDate
+  public static isRecall(offender: CvlPrisoner): boolean {
+    const recall = offender.recall && offender.recall === true
+    const crd = offender.conditionalReleaseDate
+    const prrd = offender.postRecallReleaseDate
 
     // If a CRD but no PRRD it should NOT be treated as a recall
     if (crd && !prrd) {
@@ -17,8 +16,8 @@ export default class CaseListUtils {
     }
 
     if (crd && prrd) {
-      const dateCrd = moment(offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
-      const datePrrd = moment(offender.nomisRecord.postRecallReleaseDate, 'YYYY-MM-DD')
+      const dateCrd = moment(offender.conditionalReleaseDate, 'YYYY-MM-DD')
+      const datePrrd = moment(offender.postRecallReleaseDate, 'YYYY-MM-DD')
       // If the PRRD > CRD - it should be treated as a recall
       if (datePrrd.isAfter(dateCrd)) {
         return true
@@ -31,8 +30,8 @@ export default class CaseListUtils {
     return recall
   }
 
-  public static isBreachOfTopUpSupervision = (offender: ManagedCase): boolean => {
-    return offender.nomisRecord?.imprisonmentStatus && offender.nomisRecord?.imprisonmentStatus === 'BOTUS'
+  public static isBreachOfTopUpSupervision = (offender: CvlPrisoner): boolean => {
+    return offender.imprisonmentStatus && offender.imprisonmentStatus === 'BOTUS'
   }
 
   /**
