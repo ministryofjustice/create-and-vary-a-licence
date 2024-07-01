@@ -2,7 +2,6 @@ import { add, endOfISOWeek, startOfISOWeek } from 'date-fns'
 import PrisonerService from '../prisonerService'
 import CommunityService from '../communityService'
 import LicenceService from '../licenceService'
-import { ManagedCase } from '../../@types/managedCase'
 import PromptListService from './promptListService'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import { CaseloadItem } from '../../@types/licenceApiClientTypes'
@@ -93,12 +92,12 @@ describe('PromptList Service', () => {
   describe('in the hard stop period', () => {
     it('Sets NOT_STARTED licences to TIMED_OUT when in the hard stop period', async () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
-      const offenders = [
-        {
-          nomisRecord: { prisonerNumber: 'ABC123' },
-          cvlFields: { isInHardStopPeriod: true },
-        } as ManagedCase,
-      ]
+      // const offenders = [
+      //   {
+      //     nomisRecord: { prisonerNumber: 'ABC123' },
+      //     cvlFields: { isInHardStopPeriod: true },
+      //   } as ManagedCase,
+      // ]
     })
   })
 })
