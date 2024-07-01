@@ -1,7 +1,8 @@
-import { format } from 'date-fns'
+import { format, subDays } from 'date-fns'
 import PromptLicenceCreationService from './promptLicenceCreationService'
 import { LicenceApiClient } from '../server/data'
 import PromptListService, { PromptCase } from '../server/services/lists/promptListService'
+import { toIsoDate } from '../server/utils/utils'
 
 jest.mock('../server/services/lists/promptListService')
 jest.mock('../server/data')
@@ -14,6 +15,10 @@ const promptLicenceCreationService = new PromptLicenceCreationService(promptList
 const today = format(new Date(), 'yyyy-MM-dd')
 
 describe('prompt licence creation service ', () => {
+  beforeEach(() => {
+    promptListService.getListForDates = jest.fn().mockResolvedValue([])
+  })
+
   afterEach(() => {
     jest.resetAllMocks()
   })
@@ -72,21 +77,37 @@ describe('prompt licence creation service ', () => {
     //     })
     //   })
 
-    //   describe('excludeCasesNotAssignedToPpWithinPast7Days', () => {
-    //     it('should exclude allocations not made in past 7 days', () => {
-    //       const actualResult = promptLicenceCreationService.excludeCasesNotAssignedToPpWithinPast7Days(managedCases)
-    //       expect(actualResult).toHaveLength(2)
-    //     })
-    //   })
+    describe('excludeCasesNotAssignedToPpWithinPast7Days', () => {
+      it('should exclude com allocations not made in past 7 days', async () => {
+        promptListService.getListForDates.mockResolvedValueOnce([])
 
-    //   describe('notifyComOfUpcomingReleases', () => {
-    //     it('should not notify the responsible officer with a prompt to create a licence if no cases to prompt about', async () => {
-    //       const expectedRequest = [
-    //         { email: 'joe.bloggs@probation.gov.uk', comName: 'Joe Bloggs', initialPromptCases: [], urgentPromptCases: [] },
-    //       ] as EmailContact[]
-    //       await promptLicenceCreationService.notifyComOfUpcomingReleases(expectedRequest)
-    //       expect(licenceApiClient.notifyComsToPromptEmailCreation).not.toHaveBeenCalled()
-    //     })
+        const promptAllocatedWithinPast7Days = createPrompt({
+          crn: 'Z5678',
+          comAllocationDate: toIsoDate(subDays(new Date(), 3)),
+        })
+        const promptAllocatedNotWithinPast7Days = createPrompt({})
+
+        promptListService.getListForDates.mockResolvedValueOnce([
+          promptAllocatedWithinPast7Days,
+          promptAllocatedNotWithinPast7Days,
+        ])
+        promptListService.getListForDates.mockResolvedValueOnce([])
+
+        const result = await promptLicenceCreationService.gatherGroups()
+        expect(result).toHaveLength(1)
+        expect(result[0].urgentPromptCases).toHaveLength(0)
+        expect(result[0].initialPromptCases).toHaveLength(1)
+        expect(result[0].initialPromptCases[0].crn).toEqual('Z5678')
+      })
+    })
+
+    describe('notifyComOfUpcomingReleases', () => {
+      it('should not notify the responsible officer with a prompt to create a licence if no cases to prompt about', async () => {
+        promptListService.getListForDates.mockResolvedValue([])
+        await promptLicenceCreationService.run()
+        expect(licenceApiClient.notifyComsToPromptEmailCreation).not.toHaveBeenCalled()
+      })
+    })
 
     //     it('should notify the responsible officer with a prompt to create a licence if initial prompts outstanding', async () => {
     //       const expectedRequest = [

@@ -86,7 +86,6 @@ export default class PromptLicenceCreationService {
       }
     }
   }
-  /* eslint-enable */
 
   private async notifyComsToPromptLicenceCreation(emailGroups: EmailContact[]): Promise<void> {
     const casesCount = emailGroups.reduce(
