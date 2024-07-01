@@ -599,7 +599,7 @@ export default class LicenceApiClient extends RestClient {
     }
     return (await this.post(
       {
-        path: `/prisoner-search/release-date-by-prison`,
+        path: `/release-date-by-prison`,
         query: { page },
         data: {
           earliestReleaseDate: format(earliestReleaseDate, 'yyyy-MM-dd'),
