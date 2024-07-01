@@ -318,7 +318,7 @@ describe('Licence API client tests', () => {
     )
     expect(post).toHaveBeenCalledWith(
       {
-        path: '/prisoner-search/release-date-by-prison',
+        path: '/release-date-by-prison',
         query: { page: 1 },
         data: {
           earliestReleaseDate: '2024-02-01',
