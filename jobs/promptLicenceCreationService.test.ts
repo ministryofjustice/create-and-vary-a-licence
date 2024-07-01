@@ -1,8 +1,5 @@
-import { format, add, startOfISOWeek, endOfISOWeek, subDays } from 'date-fns'
-
-import LicenceStatus from '../server/enumeration/licenceStatus'
+import { format } from 'date-fns'
 import PromptLicenceCreationService from './promptLicenceCreationService'
-import type { EmailContact } from '../server/@types/licenceApiClientTypes'
 import { LicenceApiClient } from '../server/data'
 import PromptListService, { PromptCase } from '../server/services/lists/promptListService'
 
@@ -29,7 +26,7 @@ describe('prompt licence creation service ', () => {
           comName: 'A Staff',
           email: 'staff1@justice.gov.uk',
           initialPromptCases: [],
-          urgentPromptCases: [{ crn: 'A1234', name: 'Alex Staffmember', releaseDate: '2024-06-13' }],
+          urgentPromptCases: [{ crn: 'A1234', name: 'Alex Staffmember', releaseDate: today }],
         },
       ])
     })
@@ -40,7 +37,7 @@ describe('prompt licence creation service ', () => {
         {
           comName: 'A Staff',
           email: 'staff1@justice.gov.uk',
-          initialPromptCases: [{ crn: 'A1234', name: 'Alex Staffmember', releaseDate: '2024-06-13' }],
+          initialPromptCases: [{ crn: 'A1234', name: 'Alex Staffmember', releaseDate: today }],
           urgentPromptCases: [],
         },
       ])
