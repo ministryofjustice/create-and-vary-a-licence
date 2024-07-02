@@ -3,6 +3,7 @@ import PromptLicenceCreationService from './promptLicenceCreationService'
 import { LicenceApiClient } from '../server/data'
 import PromptListService, { PromptCase } from '../server/services/lists/promptListService'
 import { toIsoDate } from '../server/utils/utils'
+import { EmailContact } from '../server/@types/licenceApiClientTypes'
 
 jest.mock('../server/services/lists/promptListService')
 jest.mock('../server/data')
@@ -109,18 +110,28 @@ describe('prompt licence creation service ', () => {
       })
     })
 
-    //     it('should notify the responsible officer with a prompt to create a licence if initial prompts outstanding', async () => {
-    //       const expectedRequest = [
-    //         {
-    //           email: 'joe.bloggs@probation.gov.uk',
-    //           comName: 'Joe Bloggs',
-    //           initialPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
-    //           urgentPromptCases: [],
-    //         },
-    //       ] as EmailContact[]
-    //       await promptLicenceCreationService.notifyComOfUpcomingReleases(expectedRequest)
-    //       expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
-    //     })
+    it('should notify the responsible officer with a prompt to create a licence if initial prompts outstanding', async () => {
+      const expectedRequest = [
+        {
+          initialPromptCases: [],
+          urgentPromptCases: [
+            {
+              name: 'Alex Staffmember',
+              crn: 'A1234',
+              releaseDate: today,
+            },
+          ],
+          email: 'staff1@justice.gov.uk',
+          comName: 'A Staff',
+        },
+      ] as EmailContact[]
+      promptListService.getListForDates.mockResolvedValue([])
+      promptListService.getListForDates.mockResolvedValueOnce([createPrompt({})])
+
+      await promptLicenceCreationService.run()
+
+      expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
+    })
 
     //     it('should notify the responsible officer with a prompt to create a licence if urgent prompts outstanding', async () => {
     //       const expectedRequest = [
