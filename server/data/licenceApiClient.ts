@@ -252,6 +252,7 @@ export default class LicenceApiClient extends RestClient {
     )) as ComReviewCount
   }
 
+  // TODO: don't believe these two are used now we have moved the caseload to the backend - remove these from where they are used and the tests?
   async getLicencesForApproval(prisons?: string[], user?: User): Promise<LicenceSummaryApproverView[]> {
     return (await this.post(
       {
