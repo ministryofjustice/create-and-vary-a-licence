@@ -7,7 +7,6 @@ export default class ApproverCaseloadService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
   async getApprovalNeeded(user: User, prisonCaseload: string[], searchString: string): Promise<ApprovalCase[]> {
-    console.log(prisonCaseload)
     const caseLoad: ApprovalCase[] = await this.licenceApiClient.getApprovalCaseload(prisonCaseload, user)
     return this.applySearch(searchString, caseLoad)
   }
