@@ -1,4 +1,3 @@
-import CommunityService from '../communityService'
 import { User } from '../../@types/CvlUserDetails'
 import type { ApprovalCase } from '../../@types/licenceApiClientTypes'
 import { LicenceApiClient } from '../../data'
