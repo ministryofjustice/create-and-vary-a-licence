@@ -57,26 +57,52 @@ describe('prompt licence creation service ', () => {
       expect(result).toStrictEqual([])
     })
 
-    // grouping
+    it('should group prompt cases by email', () => {
+      const urgentEmail1 = createPrompt({
+        comName: 'com 1',
+        prisonerNumber: 'G4169UO',
+        comEmail: 'email1@justice.gov.uk',
+      })
+      const nonUrgetEmail1 = createPrompt({
+        comName: 'com 1',
+        prisonerNumber: 'G7436KC',
+        comEmail: 'email1@justice.gov.uk',
+      })
+      const urgentEmail2 = createPrompt({
+        comName: 'com 2',
+        prisonerNumber: 'G1945CG',
+        comEmail: 'email2@justice.gov.uk',
+      })
 
-    //     it('should only return cases with specific statuses', async () => {
-    //       const managedCases = [createPrompt({ releaseDate: today })]
-
-    //       licenceService.searchPrisonersByReleaseDate.mockResolvedValue([])
-    //       promptLicenceCreationService.mapOffendersToLicences.mockResolvedValue(containerOfManagedCases)
-
-    //       const earliestReleaseDate = startOfISOWeek(add(new Date(), { weeks: 12 }))
-    //       const latestReleaseDate = endOfISOWeek(add(new Date(), { weeks: 12 }))
-
-    //       const result = await promptLicenceCreationService.pollPrisonersDueForLicence(
-    //         earliestReleaseDate,
-    //         latestReleaseDate,
-    //         [LicenceStatus.IN_PROGRESS, LicenceStatus.NOT_STARTED]
-    //       )
-
-    //       expect(result).toHaveLength(3)
-    //     })
-    //   })
+      const result = promptLicenceCreationService.buildEmailGroups([urgentEmail1, urgentEmail2], [nonUrgetEmail1])
+      expect(result).toHaveLength(2)
+      expect(result).toStrictEqual([
+        {
+          comName: 'com 1',
+          email: 'email1@justice.gov.uk',
+          initialPromptCases: [{ crn: 'A1234', name: 'Alex Staffmember', releaseDate: today }],
+          urgentPromptCases: [
+            {
+              crn: 'A1234',
+              name: 'Alex Staffmember',
+              releaseDate: today,
+            },
+          ],
+        },
+        {
+          comName: 'com 2',
+          email: 'email2@justice.gov.uk',
+          initialPromptCases: [],
+          urgentPromptCases: [
+            {
+              crn: 'A1234',
+              name: 'Alex Staffmember',
+              releaseDate: today,
+            },
+          ],
+        },
+      ])
+    })
 
     describe('excludeCasesNotAssignedToPpWithinPast7Days', () => {
       it('should exclude com allocations not made in past 7 days', async () => {
@@ -132,150 +158,6 @@ describe('prompt licence creation service ', () => {
 
       expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
     })
-
-    //     it('should notify the responsible officer with a prompt to create a licence if urgent prompts outstanding', async () => {
-    //       const expectedRequest = [
-    //         {
-    //           email: 'joe.bloggs@probation.gov.uk',
-    //           comName: 'Joe Bloggs',
-    //           initialPromptCases: [],
-    //           urgentPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
-    //         },
-    //       ] as EmailContact[]
-    //       await promptLicenceCreationService.notifyComOfUpcomingReleases(expectedRequest)
-    //       expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith(expectedRequest)
-    //     })
-
-    //     it('should filter out email groups that have no cases', async () => {
-    //       const cases = [
-    //         {
-    //           email: 'joe.bloggs@probation.gov.uk',
-    //           comName: 'Joe Bloggs',
-    //           initialPromptCases: [],
-    //           urgentPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
-    //         },
-    //         {
-    //           email: 'sid.bloggs@probation.gov.uk',
-    //           comName: 'Sid Bloggs',
-    //           initialPromptCases: [],
-    //           urgentPromptCases: [],
-    //         },
-    //         {
-    //           email: 'jim.bloggs@probation.gov.uk',
-    //           comName: 'Jim Bloggs',
-    //           initialPromptCases: [],
-    //           urgentPromptCases: [{ crn: undefined, name: 'aaa', releaseDate: '2023-01-02' }],
-    //         },
-    //       ] as EmailContact[]
-    //       await promptLicenceCreationService.notifyComOfUpcomingReleases(cases)
-    //       const [a, , b] = cases
-    //       expect(licenceApiClient.notifyComsToPromptEmailCreation).toHaveBeenCalledWith([a, b])
-    //     })
-    //   })
-    // })
-
-    // describe('buildEmailGroups', () => {
-    //   it('should build email groups', async () => {
-    //     communityService.getStaffDetailByStaffCodeList.mockResolvedValue([
-    //       {
-    //         staffCode: 'ABC',
-    //         email: 'abc@justice.gov.uk',
-    //         staff: { forenames: 'ABC', surname: 'STAFF' },
-    //         probationArea: { code: 'N03', probationAreaId: 1 },
-    //       },
-    //       {
-    //         staffCode: 'CDE',
-    //         email: 'cde@justice.gov.uk',
-    //         staff: { forenames: 'ABC', surname: 'STAFF' },
-    //         probationArea: { code: 'N03', probationAreaId: 1 },
-    //       },
-    //       {
-    //         staffCode: 'XYZ',
-    //         email: 'xyz@justice.gov.uk',
-    //         staff: { forenames: 'ABC', surname: 'STAFF' },
-    //         probationArea: { code: 'N03', probationAreaId: 1 },
-    //       },
-    //     ])
-    //     const result = await promptLicenceCreationService.buildEmailGroups(
-    //       [
-    //         createPrompt(
-    //           [
-    //             {
-    //               active: true,
-    //               fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
-    //               staff: { code: 'ABC' },
-    //             } as OffenderManager,
-    //             {
-    //               active: false,
-    //               fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
-    //               staff: { code: 'CDE' },
-    //             } as OffenderManager,
-    //           ],
-    //           LicenceStatus.IN_PROGRESS,
-    //           'A1234',
-    //           { firstName: 'FAAA', lastName: 'LAAA', prisonerNumber: 'A1234AA' }
-    //         ),
-    //       ],
-    //       [
-    //         createPrompt(
-    //           [
-    //             {
-    //               active: true,
-    //               fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
-    //               staff: { code: 'XYZ' },
-    //             } as OffenderManager,
-    //           ],
-    //           LicenceStatus.IN_PROGRESS,
-    //           'B1234',
-    //           { firstName: 'FBBB', lastName: 'LBBB', prisonerNumber: 'B1234BB' }
-    //         ),
-    //         createPrompt(
-    //           [
-    //             {
-    //               active: true,
-    //               fromDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
-    //               staff: { code: 'ABC' },
-    //             } as OffenderManager,
-    //           ],
-    //           LicenceStatus.APPROVED,
-    //           'C1234',
-    //           { firstName: 'FCCC', lastName: 'LCCC', prisonerNumber: 'C1234CC' }
-    //         ),
-    //       ]
-    //     )
-    //     expect(result).toStrictEqual([
-    //       {
-    //         comName: 'ABC STAFF',
-    //         email: 'abc@justice.gov.uk',
-    //         initialPromptCases: [
-    //           {
-    //             crn: 'C1234',
-    //             name: 'Fccc Lccc',
-    //             releaseDate: today,
-    //           },
-    //         ],
-    //         urgentPromptCases: [
-    //           {
-    //             crn: 'A1234',
-    //             name: 'Faaa Laaa',
-    //             releaseDate: today,
-    //           },
-    //         ],
-    //       },
-    //       {
-    //         comName: 'ABC STAFF',
-    //         email: 'xyz@justice.gov.uk',
-    //         initialPromptCases: [
-    //           {
-    //             crn: 'B1234',
-    //             name: 'Fbbb Lbbb',
-    //             releaseDate: today,
-    //           },
-    //         ],
-    //         urgentPromptCases: [],
-    //       },
-    //     ])
-    //   })
   })
 
   function createPrompt({
