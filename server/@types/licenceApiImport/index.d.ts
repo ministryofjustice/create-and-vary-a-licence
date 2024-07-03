@@ -390,6 +390,20 @@ export interface paths {
      */
     post: operations['searchForOffenderOnStaffCaseload']
   }
+  '/caseload/prison-approver/recently-approved': {
+    /**
+     * Returns a caseload that has recently been approved
+     * @description Returns an enriched list of cases which have recently been approved
+     */
+    post: operations['getRecentlyApproved']
+  }
+  '/caseload/prison-approver/approval-needed': {
+    /**
+     * Returns a caseload waiting for approval
+     * @description Returns an enriched list of cases which are awaiting approval
+     */
+    post: operations['getApprovalNeeded']
+  }
   '/audit/retrieve': {
     /**
      * Retrieves a list of auditable events matching the criteria provided.
@@ -2275,6 +2289,69 @@ export interface components {
        * @example 10
        */
       onProbationCount: number
+    }
+    /** @description Describes an approval case */
+    ApprovalCase: {
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      licenceId?: number
+      /**
+       * @description The full name of the person on licence
+       * @example John Doe
+       */
+      name?: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      prisonerNumber?: string
+      /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Doe
+       */
+      submittedByFullName?: string
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       */
+      releaseDate?: string
+      /**
+       * @description Whether an urgent approval is needed for this person
+       * @example false
+       */
+      urgentApproval?: boolean
+      /**
+       * @description The username who approved the licence on behalf of the prison governor
+       * @example X33221
+       */
+      approvedBy?: string
+      /**
+       * Format: date-time
+       * @description The date and time that this prison approved this licence
+       */
+      approvedOn?: string
+      /**
+       * @description Is the prisoner due for early release
+       * @example false
+       */
+      isDueForEarlyRelease?: boolean
+      probationPractitioner?: components['schemas']['ProbationPractitioner']
+    }
+    /** @description Describes a probation practitioner on an approval case */
+    ProbationPractitioner: {
+      /**
+       * @description The unique staff code for the probation practitioner
+       * @example SH00001
+       */
+      staffCode?: string
+      /**
+       * @description The full name of the probation practitioner
+       * @example Joe Bloggs
+       */
+      name: string
     }
     /** @description Describes an audit event request */
     AuditRequest: {
@@ -5880,6 +5957,68 @@ export interface operations {
       400: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Returns a caseload that has recently been approved
+   * @description Returns an enriched list of cases which have recently been approved
+   */
+  getRecentlyApproved: {
+    requestBody: {
+      content: {
+        'application/json': string[]
+      }
+    }
+    responses: {
+      /** @description Returns a list of cases that have recently been approved */
+      200: {
+        content: {
+          'application/json': components['schemas']['ApprovalCase'][]
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  /**
+   * Returns a caseload waiting for approval
+   * @description Returns an enriched list of cases which are awaiting approval
+   */
+  getApprovalNeeded: {
+    requestBody: {
+      content: {
+        'application/json': string[]
+      }
+    }
+    responses: {
+      /** @description Returns a list of cases awaiting approval */
+      200: {
+        content: {
+          'application/json': components['schemas']['ApprovalCase'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */

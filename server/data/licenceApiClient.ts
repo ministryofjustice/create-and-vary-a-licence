@@ -38,6 +38,7 @@ import type {
   CaseloadItem,
   LicenceSummaryApproverView,
   LicenceCreationResponse,
+  ApprovalCase,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -616,5 +617,31 @@ export default class LicenceApiClient extends RestClient {
         reason,
       },
     })
+  }
+
+  async getApprovalCaseload(prisons?: string[], user?: User): Promise<ApprovalCase[]> {
+    if (prisons.length < 1) {
+      return []
+    }
+    return (await this.post(
+      {
+        path: `/caseload/prison-approver/approval-needed`,
+        data: prisons,
+      },
+      { username: user?.username }
+    )) as Promise<ApprovalCase[]>
+  }
+
+  async getRecentlyApprovedCaseload(prisons?: string[], user?: User): Promise<ApprovalCase[]> {
+    if (prisons.length < 1) {
+      return []
+    }
+    return (await this.post(
+      {
+        path: `/caseload/prison-approver/recently-approved`,
+        data: prisons,
+      },
+      { username: user?.username }
+    )) as Promise<ApprovalCase[]>
   }
 }

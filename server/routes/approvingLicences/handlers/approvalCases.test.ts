@@ -4,10 +4,10 @@ import ApprovalCaseRoutes from './approvalCases'
 import PrisonerService from '../../../services/prisonerService'
 
 import type { PrisonDetail } from '../../../@types/prisonApiClientTypes'
-import ApproverCaseloadService, { type ApprovalCase } from '../../../services/lists/approverCaseloadService'
-import { parseCvlDate } from '../../../utils/utils'
+import ApproverCaseloadService from '../../../services/lists/approverCaseloadService'
+import { ApprovalCase } from '../../../@types/licenceApiClientTypes'
 
-const caseloadService = new ApproverCaseloadService(null, null) as jest.Mocked<ApproverCaseloadService>
+const caseloadService = new ApproverCaseloadService(null) as jest.Mocked<ApproverCaseloadService>
 jest.mock('../../../services/lists/approverCaseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -25,7 +25,6 @@ const cases: ApprovalCase[] = [
     submittedByFullName: 'John Smith',
     urgentApproval: false,
     isDueForEarlyRelease: false,
-    sortDate: parseCvlDate('01/05/2022'),
     approvedBy: 'An Approver',
     approvedOn: '10 April 2023',
   },
@@ -40,7 +39,6 @@ const cases: ApprovalCase[] = [
     releaseDate: '01 May 2022',
     urgentApproval: true,
     isDueForEarlyRelease: true,
-    sortDate: parseCvlDate('01/05/2022'),
     approvedBy: 'Bn Approver',
     approvedOn: '12 April 2023',
   },
