@@ -10,7 +10,8 @@ export type DeliusRecord = OffenderDetail & CommunityApiManagedOffender
 export type ProbationPractitioner = {
   staffCode?: string
   staffIdentifier?: number
-  name: string
+  name?: string
+  staffUsername?: string
 }
 
 export type Licence = {

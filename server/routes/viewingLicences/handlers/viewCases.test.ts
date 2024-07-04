@@ -201,13 +201,13 @@ describe('Route handlers - View and print case list', () => {
     } as CaCaseLoad
 
     it('should render cases when user only has 1 caseloaded prison', async () => {
-      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue(prisonCaseload)
       res.locals.prisonCaseload = ['BAI']
       await handler.GET(req, res)
 
       expect(prisonerService.getPrisons).toHaveBeenCalled()
 
-      expect(caseloadService.getPrisonView).toHaveBeenCalledWith(
+      expect(caseloadService.getPrisonOmuCaseload).toHaveBeenCalledWith(
         { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
         ['BAI'],
         ''
@@ -295,7 +295,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the links of cases for probation view', async () => {
-      caseloadService.getProbationView.mockResolvedValue(probationCaseLoad)
+      caseloadService.getProbationOmuCaseload.mockResolvedValue(probationCaseLoad)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'probation'
       await handler.GET(req, res)
@@ -371,7 +371,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the links of cases for prison view', async () => {
-      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue(prisonCaseload)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -459,7 +459,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow creation of hardstop licence during hardstop and should override the TIMED_OUT status to NOT_STARTED', async () => {
-      caseloadService.getPrisonView.mockResolvedValue(probationCaseLoad)
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue(probationCaseLoad)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -535,7 +535,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
-      caseloadService.getPrisonView.mockResolvedValue({
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue({
         cases: [probationCaseLoad.cases[1] as CaCase],
         showAttentionNeededTab: false,
       })
@@ -574,7 +574,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow modifying inprogress hardstop licence during hardstop', async () => {
-      caseloadService.getPrisonView.mockResolvedValue({
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue({
         cases: [probationCaseLoad.cases[2] as CaCase],
         showAttentionNeededTab: false,
       })
@@ -613,7 +613,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the links of cases for prison view in hardstop', async () => {
-      caseloadService.getPrisonView.mockResolvedValue(probationCaseLoad)
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue(probationCaseLoad)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -689,7 +689,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should evaluate the tabType of cases', async () => {
-      caseloadService.getPrisonView.mockResolvedValue(prisonCaseload)
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue(prisonCaseload)
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)

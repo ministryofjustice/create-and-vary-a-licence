@@ -1733,7 +1733,7 @@ export interface components {
        * @description The prison nomis identifier for this offender
        * @example A1234AA
        */
-      nomisId?: string
+      nomisId: string
       /**
        * @description The offender surname
        * @example Smith
