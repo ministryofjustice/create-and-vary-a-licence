@@ -1864,13 +1864,19 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/licences-api/prisoner-search/release-date-by-prison`,
+        urlPathPattern: `/licences-api/release-date-by-prison`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
+        jsonBody: {
+          page: {
+            size: 2000,
+            number: 0,
+            totalElements: 1,
+            totalPages: 1,
+          },
+          content: {
             cvl: {
               licenceType: 'AP',
               hardStopDate: '03/01/2023',
@@ -1921,7 +1927,7 @@ export default {
               conditionalReleaseDate: nextThirtyDays,
             },
           },
-        ],
+        },
       },
     })
   },
