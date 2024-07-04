@@ -298,19 +298,19 @@ describe('Caseload Service', () => {
       const caseWithNoComId = { probationPractitioner: {} } as CaCase
       it('initialises params to empty arrays if there are no relevant cases', () => {
         expect(serviceUnderTest.splitCasesByComDetails([caseWithComUsername])).toEqual({
-          staffCode: [],
-          staffUsername: [caseWithComUsername],
-          noComId: [],
+          withStaffCode: [],
+          withStaffUsername: [caseWithComUsername],
+          withNoComId: [],
         })
         expect(serviceUnderTest.splitCasesByComDetails([caseWithComCode])).toEqual({
-          staffCode: [caseWithComCode],
-          staffUsername: [],
-          noComId: [],
+          withStaffCode: [caseWithComCode],
+          withStaffUsername: [],
+          withNoComId: [],
         })
         expect(serviceUnderTest.splitCasesByComDetails([caseWithNoComId])).toEqual({
-          staffCode: [],
-          staffUsername: [],
-          noComId: [caseWithNoComId],
+          withStaffCode: [],
+          withStaffUsername: [],
+          withNoComId: [caseWithNoComId],
         })
       })
     })

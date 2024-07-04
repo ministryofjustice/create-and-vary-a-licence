@@ -23,9 +23,9 @@ export type CaCaseLoad = {
 }
 
 export type GroupedByCom = {
-  staffCode: CaCase[]
-  staffUsername: CaCase[]
-  noComId: CaCase[]
+  withStaffCode: CaCase[]
+  withStaffUsername: CaCase[]
+  withNoComId: CaCase[]
 }
 
 export type CaCase = {
@@ -143,31 +143,29 @@ export default class CaCaseloadService {
   }
 
   private enrichWithNomisData(licences: LicenceSummary[], prisoners: CaseloadItem[]): CaCase[] {
-    return prisoners
-      .map(p => {
-        const licencesForOffender = licences.filter(l => l.nomisId === p.prisoner.prisonerNumber)
-        const licence = this.findLatestLicenceSummary(licencesForOffender)
-        const releaseDate = parseCvlDate(licence.actualReleaseDate || licence.conditionalReleaseDate)
-        return {
-          kind: <LicenceKind>licence.kind,
-          licenceId: licence.licenceId,
-          licenceVersionOf: licence.versionOf,
-          name: convertToTitleCase(`${licence.forename} ${licence.surname}`.trim()),
-          prisonerNumber: licence.nomisId,
-          releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
-          releaseDateLabel: licence.actualReleaseDate ? 'Confirmed release date' : 'CRD',
-          licenceStatus: <LicenceStatus>licence.licenceStatus,
-          nomisLegalStatus: p.prisoner.legalStatus,
-          lastWorkedOnBy: licence.updatedByFullName,
-          isDueForEarlyRelease: licence.isDueForEarlyRelease,
-          isInHardStopPeriod: licence.isInHardStopPeriod,
-          tabType: determineCaViewCasesTab(p.prisoner, p.cvl, licence),
-          probationPractitioner: {
-            staffUsername: licence.comUsername,
-          },
-        }
-      })
-      .filter(c => c)
+    return prisoners.map(p => {
+      const licencesForOffender = licences.filter(l => l.nomisId === p.prisoner.prisonerNumber)
+      const licence = this.findLatestLicenceSummary(licencesForOffender)
+      const releaseDate = parseCvlDate(licence.actualReleaseDate || licence.conditionalReleaseDate)
+      return {
+        kind: <LicenceKind>licence.kind,
+        licenceId: licence.licenceId,
+        licenceVersionOf: licence.versionOf,
+        name: convertToTitleCase(`${licence.forename} ${licence.surname}`.trim()),
+        prisonerNumber: licence.nomisId,
+        releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
+        releaseDateLabel: licence.actualReleaseDate ? 'Confirmed release date' : 'CRD',
+        licenceStatus: <LicenceStatus>licence.licenceStatus,
+        nomisLegalStatus: p.prisoner.legalStatus,
+        lastWorkedOnBy: licence.updatedByFullName,
+        isDueForEarlyRelease: licence.isDueForEarlyRelease,
+        isInHardStopPeriod: licence.isInHardStopPeriod,
+        tabType: determineCaViewCasesTab(p.prisoner, p.cvl, licence),
+        probationPractitioner: {
+          staffUsername: licence.comUsername,
+        },
+      }
+    })
   }
 
   private createNotStartedLicenceForCase(cases: ManagedCase[]): CaCase[] {
@@ -315,17 +313,17 @@ export default class CaCaseloadService {
     return licences.filter(l => l.nomisLegalStatus !== 'DEAD')
   }
 
-  private async mapCasesToComs(cases: CaCase[]): Promise<CaCase[]> {
-    const splitCases = this.splitCasesByComDetails(cases)
+  private async mapCasesToComs(casesToMap: CaCase[]): Promise<CaCase[]> {
+    const cases = this.splitCasesByComDetails(casesToMap)
 
-    const noComPrisonerNumbers = splitCases.noComId.map(c => c.prisonerNumber)
+    const noComPrisonerNumbers = cases.withNoComId.map(c => c.prisonerNumber)
     const deliusRecords = await this.communityService.getOffendersByNomsNumbers(noComPrisonerNumbers)
 
     const caCaseList: CaCase[] = []
 
     // if no code or username, hit delius to find COM details
     caCaseList.push(
-      ...splitCases.noComId.map(c => {
+      ...cases.withNoComId.map(c => {
         const com = deliusRecords
           .find(d => d.otherIds.nomsNumber === c.prisonerNumber)
           .offenderManagers.find(om => om.active)?.staff
@@ -344,11 +342,11 @@ export default class CaCaseloadService {
     )
 
     // If COM username but no code, do a separate call to use the data in CVL if it exists. Should help highlight any desync between Delius and CVL
-    const comUsernames = splitCases.staffUsername.map(c => c.probationPractitioner.staffUsername)
+    const comUsernames = cases.withStaffUsername.map(c => c.probationPractitioner.staffUsername)
     const coms = await this.communityService.getStaffDetailsByUsernameList(comUsernames)
 
     caCaseList.push(
-      ...splitCases.staffUsername.map(c => {
+      ...cases.withStaffUsername.map(c => {
         const com = coms.find(com => com.username.toLowerCase() === c.probationPractitioner.staffUsername.toLowerCase())
         if (com) {
           return {
@@ -365,7 +363,7 @@ export default class CaCaseloadService {
 
     // If already have COM code and name, no extra calls required
     caCaseList.push(
-      ...splitCases.staffCode.map(c => {
+      ...cases.withStaffCode.map(c => {
         return {
           ...c,
           probationPractitioner: {
@@ -427,28 +425,22 @@ export default class CaCaseloadService {
   }
 
   splitCasesByComDetails(cases: CaCase[]) {
-    const groupedCases = cases.reduce((acc, c) => {
-      const groups = acc
-      if (!groups.staffCode) {
-        groups.staffCode = []
-      }
-      if (!groups.staffUsername) {
-        groups.staffUsername = []
-      }
-      if (!groups.noComId) {
-        groups.noComId = []
-      }
+    const groupedCases = cases.reduce(
+      (acc, c) => {
+        const groups = acc
 
-      if (c.probationPractitioner.staffCode) {
-        groups.staffCode.push(c)
-      } else if (c.probationPractitioner.staffUsername) {
-        groups.staffUsername.push(c)
-      } else {
-        groups.noComId.push(c)
-      }
+        if (c.probationPractitioner.staffCode) {
+          groups.withStaffCode.push(c)
+        } else if (c.probationPractitioner.staffUsername) {
+          groups.withStaffUsername.push(c)
+        } else {
+          groups.withNoComId.push(c)
+        }
 
-      return groups
-    }, {} as GroupedByCom)
+        return groups
+      },
+      { withStaffCode: [], withStaffUsername: [], withNoComId: [] } as GroupedByCom
+    )
     return groupedCases
   }
 }
