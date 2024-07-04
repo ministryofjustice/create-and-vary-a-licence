@@ -521,10 +521,26 @@ export default class LicenceService {
   async searchPrisonersByReleaseDate(
     earliestReleaseDate: Date,
     latestReleaseDate: Date,
-    prisonIds?: string[],
+    prisonIds: string[],
     user?: User
   ): Promise<CaseloadItem[]> {
-    return this.licenceApiClient.searchPrisonersByReleaseDate(earliestReleaseDate, latestReleaseDate, prisonIds, user)
+    let pageNumber = 0
+    let results: CaseloadItem[] = []
+
+    while (pageNumber >= 0) {
+      // eslint-disable-next-line no-await-in-loop
+      const { content, page } = await this.licenceApiClient.searchPrisonersByReleaseDate(
+        earliestReleaseDate,
+        latestReleaseDate,
+        prisonIds,
+        pageNumber,
+        user
+      )
+      pageNumber = pageNumber < page.totalPages - 1 ? pageNumber + 1 : -1
+      results = results.concat(content)
+    }
+
+    return results
   }
 
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {

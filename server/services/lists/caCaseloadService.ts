@@ -175,10 +175,10 @@ export default class CaCaseloadService {
       // Default status (if not overridden below) will show the case as clickable on case lists
       let licenceStatus = LicenceStatus.NOT_STARTED
 
-      if (CaseListUtils.isBreachOfTopUpSupervision(c)) {
+      if (CaseListUtils.isBreachOfTopUpSupervision(c.nomisRecord)) {
         // Imprisonment status indicates a breach of top up supervision order - not clickable (yet)
         licenceStatus = LicenceStatus.OOS_BOTUS
-      } else if (CaseListUtils.isRecall(c)) {
+      } else if (CaseListUtils.isRecall(c.nomisRecord)) {
         // Offender is subject to an active recall - not clickable
         licenceStatus = LicenceStatus.OOS_RECALL
       } else if (c.cvlFields.isInHardStopPeriod) {
