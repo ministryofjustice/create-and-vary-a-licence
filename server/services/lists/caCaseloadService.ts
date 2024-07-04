@@ -349,7 +349,7 @@ export default class CaCaseloadService {
 
     caCaseList.push(
       ...splitCases.staffUsername.map(c => {
-        const com = coms.find(com => com.username === c.probationPractitioner.staffUsername)
+        const com = coms.find(com => com.username.toLowerCase() === c.probationPractitioner.staffUsername.toLowerCase())
         if (com) {
           return {
             ...c,
