@@ -44,12 +44,7 @@ const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
 const searchService = new SearchService(licenceApiClient)
 const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
-const promptLicenceCreationService = new PromptLicenceCreationService(
-  licenceService,
-  promptListService,
-  communityService,
-  licenceApiClient
-)
+const promptLicenceCreationService = new PromptLicenceCreationService(promptListService, licenceApiClient)
 
 export const services = {
   userService,

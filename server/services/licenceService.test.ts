@@ -811,22 +811,43 @@ describe('Licence Service', () => {
       },
       cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
     } as CaseloadItem
-    licenceApiClient.searchPrisonersByReleaseDate.mockResolvedValue([prisonerDetails])
+    licenceApiClient.searchPrisonersByReleaseDate.mockResolvedValue({
+      page: { totalPages: 3 },
+      content: [prisonerDetails],
+    })
 
-    const result = await licenceService.searchPrisonersByReleaseDate(
-      utils.parseCvlDate('01/02/2024'),
-      utils.parseCvlDate('01/02/2025'),
+    const startDate = utils.parseCvlDate('01/02/2024')
+    const endDate = utils.parseCvlDate('01/02/2025')
+
+    const result = await licenceService.searchPrisonersByReleaseDate(startDate, endDate, ['MDI'], user)
+
+    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenNthCalledWith(
+      1,
+      startDate,
+      endDate,
       ['MDI'],
+      0,
+      user
+    )
+    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenNthCalledWith(
+      2,
+      startDate,
+      endDate,
+      ['MDI'],
+      1,
+      user
+    )
+    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenNthCalledWith(
+      3,
+      startDate,
+      endDate,
+      ['MDI'],
+      2,
       user
     )
 
-    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenCalledWith(
-      utils.parseCvlDate('01/02/2024'),
-      utils.parseCvlDate('01/02/2025'),
-      ['MDI'],
-      user
-    )
+    expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenCalledTimes(3)
 
-    expect(result).toEqual([prisonerDetails])
+    expect(result).toEqual([prisonerDetails, prisonerDetails, prisonerDetails])
   })
 })
