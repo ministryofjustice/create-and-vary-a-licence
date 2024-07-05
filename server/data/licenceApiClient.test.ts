@@ -753,4 +753,28 @@ describe('Licence API client tests', () => {
       })
     })
   })
+
+  describe('Approver caseloads: ', () => {
+    it('Should get licences for approval', async () => {
+      await licenceApiClient.getApprovalCaseload(['PRI'], { username: 'joebloggs' } as User)
+      expect(post).toHaveBeenCalledWith(
+        {
+          path: '/caseload/prison-approver/approval-needed',
+          data: ['PRI'],
+        },
+        { username: 'joebloggs' }
+      )
+    })
+
+    it('Should get licences that have recently been approved', async () => {
+      await licenceApiClient.getRecentlyApprovedCaseload(['PRI'], { username: 'joebloggs' } as User)
+      expect(post).toHaveBeenCalledWith(
+        {
+          path: '/caseload/prison-approver/recently-approved',
+          data: ['PRI'],
+        },
+        { username: 'joebloggs' }
+      )
+    })
+  })
 })

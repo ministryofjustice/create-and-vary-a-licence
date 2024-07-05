@@ -104,6 +104,10 @@ const licencePlaceholder = {
 
 const nextMonth = format(addMonths(new Date(), 1), 'yyyy-MM-dd')
 const nextThirtyDays = format(addDays(new Date(), 30), 'yyyy-MM-dd')
+const probationPractitionerPlaceholder = {
+  staffCode: 'X1234',
+  name: 'Joe Bloggs',
+}
 
 export default {
   updateComDetails: (): SuperAgentRequest => {
@@ -2044,6 +2048,60 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {},
+      },
+    })
+  },
+
+  stubGetApprovalCaseload: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/prison-approver/approval-needed`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: licencePlaceholder.id,
+            name: `${licencePlaceholder.forename} ${licencePlaceholder.surname}`,
+            prisonerNumber: licencePlaceholder.nomsId,
+            submittedByFullName: 'Test Submitter',
+            releaseDate: licencePlaceholder.actualReleaseDate,
+            urgentApproval: false,
+            approvedBy: 'Test Approver',
+            approvedOn: '03/07/2024 12:30',
+            isDueForEarlyRelease: false,
+            probationPractitioner: probationPractitionerPlaceholder,
+          },
+        ],
+      },
+    })
+  },
+
+  stubGetRecentlyApproved: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/prison-approver/recently-approved`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: licencePlaceholder.id,
+            name: `${licencePlaceholder.forename} ${licencePlaceholder.surname}`,
+            prisonerNumber: licencePlaceholder.nomsId,
+            submittedByFullName: 'Test Submitter',
+            releaseDate: licencePlaceholder.actualReleaseDate,
+            urgentApproval: false,
+            approvedBy: 'Test Approver',
+            approvedOn: '03/07/2024 12:30',
+            isDueForEarlyRelease: false,
+            probationPractitioner: probationPractitionerPlaceholder,
+          },
+        ],
       },
     })
   },
