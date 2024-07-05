@@ -390,6 +390,20 @@ export interface paths {
      */
     post: operations['searchForOffenderOnStaffCaseload']
   }
+  '/caseload/prison-approver/recently-approved': {
+    /**
+     * Returns a caseload that has recently been approved
+     * @description Returns an enriched list of cases which have recently been approved
+     */
+    post: operations['getRecentlyApproved']
+  }
+  '/caseload/prison-approver/approval-needed': {
+    /**
+     * Returns a caseload waiting for approval
+     * @description Returns an enriched list of cases which are awaiting approval
+     */
+    post: operations['getApprovalNeeded']
+  }
   '/audit/retrieve': {
     /**
      * Retrieves a list of auditable events matching the criteria provided.

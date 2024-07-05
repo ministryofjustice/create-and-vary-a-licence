@@ -30,7 +30,7 @@ context('Reject a licence', () => {
       ],
     })
     cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
-    cy.task('stubGetLicencesToApprove')
+    cy.task('stubGetApprovalCaseload')
     cy.task('stubGetOffendersByNomsNumber')
     cy.task('searchPrisonersByNomisIds')
     cy.task('stubUpdateLicenceStatus', 1)

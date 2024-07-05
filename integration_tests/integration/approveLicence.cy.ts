@@ -22,7 +22,7 @@ context('Approve a licence', () => {
     })
 
     cy.task('stubGetCompletedLicence', { statusCode: 'SUBMITTED', typeCode: 'AP_PSS' })
-    cy.task('stubGetLicencesToApprove')
+    cy.task('stubGetApprovalCaseload')
     cy.task('stubGetOffendersByNomsNumber')
     cy.task('searchPrisonersByNomisIds')
     cy.task('stubUpdateLicenceStatus', 1)
@@ -218,5 +218,17 @@ context('Approve a licence', () => {
     const changeLocationPage = Page.verifyOnPage(ChangeLocationPage)
     changeLocationPage.clickContinue()
     changeLocationPage.getErrorSummary().should('exist')
+  })
+
+  it('should show recently approved successfully', () => {
+    cy.task('stubGetPrisonUserCaseloads', singleCaseload)
+    cy.task('stubGetRecentlyApprovedCaseload')
+    cy.signIn()
+    const indexPage = Page.verifyOnPage(IndexPage)
+    const approvalCasesPage = indexPage.clickApproveALicence()
+    const recentlyApprovedPage = approvalCasesPage.clickRecentlyApprovedLink()
+    recentlyApprovedPage.getTableRows().should(rows => {
+      expect(rows).to.have.length(1)
+    })
   })
 })

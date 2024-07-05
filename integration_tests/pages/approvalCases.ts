@@ -7,6 +7,10 @@ export default class ApprovalCasesPage extends Page {
 
   private changeLocationsLink = '[data-qa=change-location-link]'
 
+  private recentlyApprovedTab = '[data-qa=recently-approved-link]'
+
+  private approvalNeededTab = '[data-qa=approval-needed-link]'
+
   constructor() {
     super('approval-cases-page')
   }
@@ -19,6 +23,11 @@ export default class ApprovalCasesPage extends Page {
   clickChangeLocationsLink = (): ChangeLocationPage => {
     cy.get(this.changeLocationsLink).click()
     return Page.verifyOnPage(ChangeLocationPage)
+  }
+
+  clickRecentlyApprovedLink = (): ApprovalCasesPage => {
+    cy.get(this.recentlyApprovedTab).click()
+    return Page.verifyOnPage(ApprovalCasesPage)
   }
 
   getCaseloadNames = () => {
