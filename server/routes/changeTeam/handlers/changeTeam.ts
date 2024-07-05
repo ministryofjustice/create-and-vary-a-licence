@@ -1,10 +1,10 @@
-import { RequestHandler, Request, Response } from 'express'
-import CaseloadService from '../../../services/lists/caseloadService'
+import { Request, RequestHandler, Response } from 'express'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
 
 export default class ChangeTeamRoutes {
   constructor(
-    private readonly caseloadService: CaseloadService,
-    private section: string
+    private readonly comCaseloadService: ComCaseloadService,
+    private readonly section: string
   ) {
     this.section = section
   }
@@ -32,7 +32,7 @@ export default class ChangeTeamRoutes {
   private async render(req: Request, res: Response, validationErrors?: [{ field: string; message: string }] | []) {
     const { user } = res.locals
     const { probationTeams } = user
-    const { teams } = await this.caseloadService.getComReviewCount(user)
+    const { teams } = await this.comCaseloadService.getComReviewCount(user)
 
     const probationTeamsWithCount = probationTeams.map(probationTeam => {
       return {

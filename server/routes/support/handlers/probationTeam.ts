@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import CaseloadService from '../../../services/lists/caseloadService'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import statusConfig from '../../../licences/licenceStatus'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
 
 export default class ProbationTeamRoutes {
-  constructor(private readonly caseloadService: CaseloadService) {}
+  constructor(private readonly comCaseloadService: ComCaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const view = req.query.view as string
@@ -18,8 +18,8 @@ export default class ProbationTeamRoutes {
 
     const caseload =
       view === 'prison'
-        ? await this.caseloadService.getTeamCreateCaseload(user, [teamCode])
-        : await this.caseloadService.getTeamVaryCaseload(user, [teamCode])
+        ? await this.comCaseloadService.getTeamCreateCaseload(user, [teamCode])
+        : await this.comCaseloadService.getTeamVaryCaseload(user, [teamCode])
 
     return res.render('pages/support/probationTeam', {
       caseload: createCaseloadViewModel(caseload),

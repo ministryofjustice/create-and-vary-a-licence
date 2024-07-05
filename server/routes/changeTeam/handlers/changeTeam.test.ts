@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
 import ChangeTeamRoutes from './changeTeam'
-import CaseloadService from '../../../services/lists/caseloadService'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
 
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+const comCaseloadService = new ComCaseloadService(null, null, null) as jest.Mocked<ComCaseloadService>
 
-jest.mock('../../../services/lists/caseloadService')
+jest.mock('../../../services/lists/comCaseloadService')
 
 describe('Route Handlers - ChangeLocationRoutes', () => {
-  const handler = new ChangeTeamRoutes(caseloadService, 'create')
+  const handler = new ChangeTeamRoutes(comCaseloadService, 'create')
   let req: Request
   let res: Response
   let next: NextFunction
@@ -38,7 +38,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
       },
     } as unknown as Request
 
-    caseloadService.getComReviewCount.mockResolvedValue({
+    comCaseloadService.getComReviewCount.mockResolvedValue({
       myCount: 1,
       teams: [
         { teamCode: 'ABC', count: 3 },
@@ -78,7 +78,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     })
 
     it('Should list all teams with no selected team and showTeamsCount false', async () => {
-      caseloadService.getComReviewCount.mockResolvedValue({
+      comCaseloadService.getComReviewCount.mockResolvedValue({
         myCount: 1,
         teams: [
           { teamCode: 'teamA', count: 3 },
@@ -96,7 +96,7 @@ describe('Route Handlers - ChangeLocationRoutes', () => {
     })
 
     it('Should display team case count', async () => {
-      const handler = new ChangeTeamRoutes(caseloadService, 'vary')
+      const handler = new ChangeTeamRoutes(comCaseloadService, 'vary')
       req.route.path = '/licence/vary/caseload/change-team'
       req.session.teamSelection = ['ABCD']
       await handler.GET()(req, res, next)

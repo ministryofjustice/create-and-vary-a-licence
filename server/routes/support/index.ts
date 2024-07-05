@@ -28,7 +28,7 @@ export default function Index({
   prisonRegisterService,
   conditionService,
   licenceOverrideService,
-  caseloadService,
+  comCaseloadService,
   promptLicenceCreationService,
 }: Services): Router {
   const router = Router()
@@ -52,13 +52,13 @@ export default function Index({
   const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
-  const probationTeamHandler = new ProbationTeamRoutes(caseloadService)
-  const probationStaffHandler = new ProbationUserRoutes(caseloadService, communityService)
+  const probationTeamHandler = new ProbationTeamRoutes(comCaseloadService)
+  const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, communityService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
-  const promptCasesHander = new PromptCasesRoutes(promptLicenceCreationService)
+  const promptCasesHandler = new PromptCasesRoutes(promptLicenceCreationService)
 
   get('/', supportHomeHandler.GET)
-  get('/prompt-cases', promptCasesHander.GET)
+  get('/prompt-cases', promptCasesHandler.GET)
   get('/manage-omu-email-address', manageOmuEmailAddressHandler.GET)
   get('/manage-omu-email-address/:prisonId', manageOmuEmailAddressHandler.GET_IN_CONTEXT)
   post('/manage-omu-email-address/add-or-edit', manageOmuEmailAddressHandler.ADD_OR_EDIT, prisonIdAndEmail)

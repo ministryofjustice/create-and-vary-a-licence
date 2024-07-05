@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import CaseloadService from '../../../services/lists/caseloadService'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import statusConfig from '../../../licences/licenceStatus'
 import CommunityService from '../../../services/communityService'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
 
 export default class ProbationTeamRoutes {
   constructor(
-    private readonly caseloadService: CaseloadService,
+    private readonly comCaseloadService: ComCaseloadService,
     private readonly communityService: CommunityService
   ) {}
 
@@ -24,8 +24,11 @@ export default class ProbationTeamRoutes {
 
     const caseload =
       view === 'prison'
-        ? await this.caseloadService.getStaffCreateCaseload({ ...user, deliusStaffIdentifier: staff.staffIdentifier })
-        : await this.caseloadService.getStaffVaryCaseload({ ...user, deliusStaffIdentifier: staff.staffIdentifier })
+        ? await this.comCaseloadService.getStaffCreateCaseload({
+            ...user,
+            deliusStaffIdentifier: staff.staffIdentifier,
+          })
+        : await this.comCaseloadService.getStaffVaryCaseload({ ...user, deliusStaffIdentifier: staff.staffIdentifier })
 
     return res.render('pages/support/probationStaff', {
       caseload: createCaseloadViewModel(caseload),
