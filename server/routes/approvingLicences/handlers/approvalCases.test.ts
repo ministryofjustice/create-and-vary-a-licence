@@ -13,12 +13,12 @@ jest.mock('../../../services/lists/approverCaseloadService')
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 jest.mock('../../../services/prisonerService')
 
-const cases: ApprovalCase[] = [
+const caseload: ApprovalCase[] = [
   {
     licenceId: 1,
     name: 'Bob Smith',
     prisonerNumber: 'A1234AA',
-    releaseDate: '01 May 2022',
+    releaseDate: '01/05/2022',
     probationPractitioner: {
       name: 'Walter White',
     },
@@ -26,7 +26,7 @@ const cases: ApprovalCase[] = [
     urgentApproval: false,
     isDueForEarlyRelease: false,
     approvedBy: 'An Approver',
-    approvedOn: '10 April 2023',
+    approvedOn: '10/04/2023 00:00:00',
   },
   {
     licenceId: 2,
@@ -36,11 +36,11 @@ const cases: ApprovalCase[] = [
       name: 'Thor',
     },
     submittedByFullName: 'John Smith',
-    releaseDate: '01 May 2022',
+    releaseDate: '01/05/2022',
     urgentApproval: true,
     isDueForEarlyRelease: true,
     approvedBy: 'Bn Approver',
-    approvedOn: '12 April 2023',
+    approvedOn: '12/04/2023 00:00:00',
   },
 ]
 
@@ -67,8 +67,8 @@ describe('Route Handlers - Approval - case list', () => {
       },
     } as unknown as Response
 
-    caseloadService.getApprovalNeeded.mockResolvedValue(cases)
-    caseloadService.getRecentlyApproved.mockResolvedValue(cases)
+    caseloadService.getApprovalNeeded.mockResolvedValue(caseload)
+    caseloadService.getRecentlyApproved.mockResolvedValue(caseload)
 
     prisonerService.getPrisons.mockResolvedValue([
       {
@@ -96,7 +96,36 @@ describe('Route Handlers - Approval - case list', () => {
         await handler.GET(req, res)
         expect(caseloadService.getApprovalNeeded).toHaveBeenCalledWith(res.locals.user, ['BAI'], undefined)
         expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
-          cases,
+          cases: [
+            {
+              licenceId: 1,
+              name: 'Bob Smith',
+              prisonerNumber: 'A1234AA',
+              releaseDate: '01 May 2022',
+              probationPractitioner: {
+                name: 'Walter White',
+              },
+              submittedByFullName: 'John Smith',
+              urgentApproval: false,
+              isDueForEarlyRelease: false,
+              approvedBy: 'An Approver',
+              approvedOn: '10 Apr 2023',
+            },
+            {
+              licenceId: 2,
+              name: 'Joe Bloggs',
+              prisonerNumber: 'A1234AB',
+              probationPractitioner: {
+                name: 'Thor',
+              },
+              submittedByFullName: 'John Smith',
+              releaseDate: '01 May 2022',
+              urgentApproval: true,
+              isDueForEarlyRelease: true,
+              approvedBy: 'Bn Approver',
+              approvedOn: '12 Apr 2023',
+            },
+          ],
           hasMultipleCaseloadsInNomis: false,
           prisonsToDisplay: [
             {
@@ -129,19 +158,18 @@ describe('Route Handlers - Approval - case list', () => {
             submittedByFullName: 'John Smith',
             urgentApproval: false,
             isDueForEarlyRelease: false,
-            approvedBy: 'An Approver',
-            approvedOn: '10 April 2023',
+            approvedBy: null,
+            approvedOn: null,
           },
         ]
         caseloadService.getApprovalNeeded.mockResolvedValue(caseload)
-        caseloadService.getRecentlyApproved.mockResolvedValue(caseload)
         await handler.GET(req, res)
         expect(caseloadService.getApprovalNeeded).toHaveBeenCalledWith(res.locals.user, ['BAI'], undefined)
         expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
           cases: [
             {
-              approvedBy: 'An Approver',
-              approvedOn: '10 April 2023',
+              approvedBy: null,
+              approvedOn: null,
               isDueForEarlyRelease: false,
               licenceId: 1,
               name: 'Bob Smith',
@@ -167,69 +195,42 @@ describe('Route Handlers - Approval - case list', () => {
       })
     })
 
-    it('should render null where approved date is not set', async () => {
-      req = {
-        query: {
-          approval: 'recently',
-        },
-        session: { caseloadsSelected: [] },
-      } as unknown as Request
-      const caseload: ApprovalCase[] = [
-        {
-          licenceId: 1,
-          name: 'Bob Smith',
-          prisonerNumber: 'A1234AA',
-          releaseDate: null,
-          probationPractitioner: {
-            name: 'Walter White',
-          },
-          submittedByFullName: 'John Smith',
-          urgentApproval: false,
-          isDueForEarlyRelease: false,
-          approvedBy: null,
-          approvedOn: null,
-        },
-      ]
-      caseloadService.getApprovalNeeded.mockResolvedValue(caseload)
-      caseloadService.getRecentlyApproved.mockResolvedValue(caseload)
-      await handler.GET(req, res)
-      expect(caseloadService.getRecentlyApproved).toHaveBeenCalledWith(res.locals.user, ['BAI'], undefined)
-      expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
-        cases: [
-          {
-            approvedBy: null,
-            approvedOn: null,
-            isDueForEarlyRelease: false,
-            licenceId: 1,
-            name: 'Bob Smith',
-            prisonerNumber: 'A1234AA',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-            releaseDate: 'not found',
-            submittedByFullName: 'John Smith',
-            urgentApproval: false,
-          },
-        ],
-        hasMultipleCaseloadsInNomis: false,
-        prisonsToDisplay: [
-          {
-            agencyId: 'BAI',
-            description: 'Belmarsh (HMP)',
-          },
-        ],
-        search: undefined,
-        approvalNeededView: false,
-      })
-    })
-
     describe('GET recently approved', () => {
       it('should render list of licences recently approved', async () => {
         req.query.approval = 'recently'
         await handler.GET(req, res)
         expect(caseloadService.getRecentlyApproved).toHaveBeenCalledWith(res.locals.user, ['BAI'], undefined)
         expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
-          cases,
+          cases: [
+            {
+              licenceId: 1,
+              name: 'Bob Smith',
+              prisonerNumber: 'A1234AA',
+              releaseDate: '01 May 2022',
+              probationPractitioner: {
+                name: 'Walter White',
+              },
+              submittedByFullName: 'John Smith',
+              urgentApproval: false,
+              isDueForEarlyRelease: false,
+              approvedBy: 'An Approver',
+              approvedOn: '10 Apr 2023',
+            },
+            {
+              licenceId: 2,
+              name: 'Joe Bloggs',
+              prisonerNumber: 'A1234AB',
+              probationPractitioner: {
+                name: 'Thor',
+              },
+              submittedByFullName: 'John Smith',
+              releaseDate: '01 May 2022',
+              urgentApproval: true,
+              isDueForEarlyRelease: true,
+              approvedBy: 'Bn Approver',
+              approvedOn: '12 Apr 2023',
+            },
+          ],
           hasMultipleCaseloadsInNomis: false,
           prisonsToDisplay: [
             {
@@ -248,6 +249,61 @@ describe('Route Handlers - Approval - case list', () => {
 
         await handler.GET(req, res)
         expect(caseloadService.getRecentlyApproved).toHaveBeenCalledWith(res.locals.user, ['BAI'], 'some search term')
+      })
+
+      it('should render null where approved date is not set', async () => {
+        req = {
+          query: {
+            approval: 'recently',
+          },
+          session: { caseloadsSelected: [] },
+        } as unknown as Request
+        const caseload: ApprovalCase[] = [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            prisonerNumber: 'A1234AA',
+            releaseDate: null,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            submittedByFullName: 'John Smith',
+            urgentApproval: false,
+            isDueForEarlyRelease: false,
+            approvedBy: null,
+            approvedOn: null,
+          },
+        ]
+        caseloadService.getRecentlyApproved.mockResolvedValue(caseload)
+        await handler.GET(req, res)
+        expect(caseloadService.getRecentlyApproved).toHaveBeenCalledWith(res.locals.user, ['BAI'], undefined)
+        expect(res.render).toHaveBeenCalledWith('pages/approve/cases', {
+          cases: [
+            {
+              approvedBy: null,
+              approvedOn: null,
+              isDueForEarlyRelease: false,
+              licenceId: 1,
+              name: 'Bob Smith',
+              prisonerNumber: 'A1234AA',
+              probationPractitioner: {
+                name: 'Walter White',
+              },
+              releaseDate: 'not found',
+              submittedByFullName: 'John Smith',
+              urgentApproval: false,
+            },
+          ],
+          hasMultipleCaseloadsInNomis: false,
+          prisonsToDisplay: [
+            {
+              agencyId: 'BAI',
+              description: 'Belmarsh (HMP)',
+            },
+          ],
+          search: undefined,
+          approvalNeededView: false,
+        })
       })
     })
   })
