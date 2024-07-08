@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import _ from 'lodash'
-import CaseloadService from '../../../services/lists/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
 
 export default class CaseloadRoutes {
-  constructor(private readonly caseloadService: CaseloadService) {}
+  constructor(private readonly comCaseloadService: ComCaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const teamView = req.query.view === 'team'
@@ -15,10 +15,10 @@ export default class CaseloadRoutes {
     const { user } = res.locals
 
     const cases = teamView
-      ? await this.caseloadService.getTeamVaryCaseload(user, req.session.teamSelection)
-      : await this.caseloadService.getStaffVaryCaseload(user)
+      ? await this.comCaseloadService.getTeamVaryCaseload(user, req.session.teamSelection)
+      : await this.comCaseloadService.getStaffVaryCaseload(user)
 
-    const reviewCount = await this.caseloadService.getComReviewCount(user)
+    const reviewCount = await this.comCaseloadService.getComReviewCount(user)
     const { myCount } = reviewCount
     let { teams } = reviewCount
 

@@ -27,7 +27,7 @@ import UserType from '../../enumeration/userType'
 
 export default function Index({
   licenceService,
-  caseloadService,
+  comCaseloadService,
   communityService,
   conditionService,
 }: Services): Router {
@@ -78,7 +78,7 @@ export default function Index({
     )
 
   {
-    const controller = new CaseloadRoutes(caseloadService)
+    const controller = new CaseloadRoutes(comCaseloadService)
     get('/caseload', controller.GET)
   }
 

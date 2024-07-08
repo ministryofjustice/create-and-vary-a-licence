@@ -1,4 +1,4 @@
-import { RequestHandler, Request, Response, NextFunction, Router } from 'express'
+import { NextFunction, Request, RequestHandler, Response, Router } from 'express'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -38,7 +38,7 @@ function alterResObject() {
 
 export default function Index({
   licenceService,
-  caseloadService,
+  comCaseloadService,
   communityService,
   conditionService,
   timelineService,
@@ -71,7 +71,7 @@ export default function Index({
       asyncMiddleware(handler)
     )
 
-  const caseloadHandler = new CaseloadRoutes(caseloadService)
+  const caseloadHandler = new CaseloadRoutes(comCaseloadService)
   const comDetailsHandler = new ComDetailsRoutes(communityService)
   const timelineHandler = new TimelineRoutes(licenceService, timelineService)
   const viewLicenceHandler = new ViewVariationRoutes(licenceService, conditionService)

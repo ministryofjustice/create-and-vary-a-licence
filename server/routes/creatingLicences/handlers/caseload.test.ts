@@ -2,25 +2,25 @@ import { Request, Response } from 'express'
 
 import { subDays } from 'date-fns'
 import CaseloadRoutes from './caseload'
-import CaseloadService from '../../../services/lists/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import { ManagedCase } from '../../../@types/managedCase'
 import { parseIsoDate } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
 
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+const comCaseloadService = new ComCaseloadService(null, null, null) as jest.Mocked<ComCaseloadService>
 
-jest.mock('../../../services/lists/caseloadService')
+jest.mock('../../../services/lists/comCaseloadService')
 
 describe('Route Handlers - Create Licence - Caseload', () => {
-  const handler = new CaseloadRoutes(caseloadService)
+  const handler = new CaseloadRoutes(comCaseloadService)
   let req: Request
   let res: Response
 
   beforeEach(() => {
-    caseloadService.getStaffCreateCaseload.mockResolvedValue([
+    comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
       {
         deliusRecord: {
           offenderCrn: 'X381306',
@@ -50,7 +50,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       },
     ] as unknown as ManagedCase[])
 
-    caseloadService.getTeamCreateCaseload.mockResolvedValue([
+    comCaseloadService.getTeamCreateCaseload.mockResolvedValue([
       {
         deliusRecord: {
           offenderCrn: 'X381306',
@@ -212,8 +212,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamView: false,
         teamName: null,
       })
-      expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
-      expect(caseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
+      expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(comCaseloadService.getTeamCreateCaseload).not.toHaveBeenCalled()
     })
 
     it('should render view with Team Cases tab selected', async () => {
@@ -295,8 +295,8 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamName: 'teamA',
         teamView: true,
       })
-      expect(caseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
-      expect(caseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
+      expect(comCaseloadService.getTeamCreateCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
+      expect(comCaseloadService.getStaffCreateCaseload).not.toHaveBeenCalled()
     })
 
     it('should redirect to change team page when user has multiple teams and no active team selected', async () => {
@@ -317,7 +317,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     })
 
     it('should render the non-approved licence if 2 exist', async () => {
-      caseloadService.getStaffCreateCaseload.mockResolvedValue([
+      comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
         {
           deliusRecord: {
             offenderCrn: 'X381306',
@@ -381,7 +381,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         teamName: null,
         teamView: false,
       })
-      expect(caseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(comCaseloadService.getStaffCreateCaseload).toHaveBeenCalledWith(res.locals.user)
     })
   })
 })
