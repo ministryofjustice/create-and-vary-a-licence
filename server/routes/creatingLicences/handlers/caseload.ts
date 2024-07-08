@@ -10,8 +10,6 @@ export default class CaseloadRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const teamView = req.query.view === 'team'
-    // const search = req.query.search as string
-
     const { user } = res.locals
 
     logger.info(`GET caseload for ${user?.username} with roles ${user?.userRoles} team view: ${teamView}`)
