@@ -4,7 +4,6 @@ import { User } from '../../@types/CvlUserDetails'
 import { DeliusRecord, ManagedCase } from '../../@types/managedCase'
 import CommunityService from '../communityService'
 import type { CommunityApiManagedOffender } from '../../@types/communityClientTypes'
-import Container from '../container'
 import type { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
 import LicenceService from '../licenceService'
 import CaseListUtils from './caselistUtils'
@@ -77,29 +76,26 @@ export default class ComCaseloadService {
 
   private mapManagedOffenderRecordToOffenderDetail = async (
     caseload: CommunityApiManagedOffender[]
-  ): Promise<Container<DeliusRecord>> => {
+  ): Promise<Array<DeliusRecord>> => {
     const crns = caseload.map(c => c.offenderCrn)
     const batchedCrns = _.chunk(crns, 500)
     const batchedOffenders: Promise<OffenderDetail[]>[] = batchedCrns.map(batch => {
       return this.communityService.getOffendersByCrn(batch)
     })
     const offenders = (await Promise.all(batchedOffenders)).flat()
-    return this.wrap(
-      offenders.map(o => {
-        return {
-          ...o,
-          ...caseload.find(c => c.offenderCrn === o.otherIds?.crn),
-        }
-      })
-    )
+    return offenders.map(o => {
+      return {
+        ...o,
+        ...caseload.find(c => c.offenderCrn === o.otherIds?.crn),
+      }
+    })
   }
 
   private pairDeliusRecordsWithNomis = async (
-    managedOffenders: Container<DeliusRecord>,
+    managedOffenders: Array<DeliusRecord>,
     user: User
-  ): Promise<Container<ManagedCase>> => {
+  ): Promise<Array<ManagedCase>> => {
     const caseloadNomisIds = managedOffenders
-      .unwrap()
       .filter(offender => offender.otherIds?.nomsNumber)
       .map(offender => offender.otherIds?.nomsNumber)
 
@@ -118,7 +114,7 @@ export default class ComCaseloadService {
       .filter(offender => offender.nomisRecord, 'unable to find prison record')
   }
 
-  private filterOffendersEligibleForLicence = async (offenders: Container<ManagedCase>, user?: User) => {
+  private filterOffendersEligibleForLicence = async (offenders: Array<ManagedCase>, user?: User) => {
     const eligibleOffenders = offenders
       .filter(
         offender => !CaseListUtils.isParoleEligible(offender.nomisRecord.paroleEligibilityDate),
@@ -138,10 +134,10 @@ export default class ComCaseloadService {
         'is on an ineligible Extended Determinate Sentence'
       )
 
-    if (eligibleOffenders.isEmpty()) return eligibleOffenders
+    if (eligibleOffenders.length === 0) return eligibleOffenders
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
-      eligibleOffenders.map(c => c.nomisRecord).unwrap(),
+      eligibleOffenders.map(c => c.nomisRecord),
       user
     )
 
@@ -155,14 +151,8 @@ export default class ComCaseloadService {
     }, 'approved for HDC')
   }
 
-  public mapOffendersToLicences = async (
-    offenders: Container<ManagedCase>,
-    user?: User
-  ): Promise<Container<ManagedCase>> => {
-    const nomisIdList = offenders
-      .map(offender => offender.nomisRecord.prisonerNumber)
-      .unwrap()
-      .filter(id => id !== null)
+  public mapOffendersToLicences = async (offenders: Array<ManagedCase>, user?: User): Promise<Array<ManagedCase>> => {
+    const nomisIdList = offenders.map(offender => offender.nomisRecord.prisonerNumber).filter(id => id !== null)
 
     const existingLicences =
       nomisIdList.length === 0
@@ -261,7 +251,7 @@ export default class ComCaseloadService {
     })
   }
 
-  private buildCreateCaseload = (managedOffenders: Container<ManagedCase>): Container<ManagedCase> => {
+  private buildCreateCaseload = (managedOffenders: Array<ManagedCase>): Array<ManagedCase> => {
     return managedOffenders
       .filter(
         offender =>
@@ -295,11 +285,8 @@ export default class ComCaseloadService {
       )
   }
 
-  private async mapResponsibleComsToCasesWithExclusions(
-    caseload: Container<ManagedCase>
-  ): Promise<Container<ManagedCase>> {
+  private async mapResponsibleComsToCasesWithExclusions(caseload: Array<ManagedCase>): Promise<Array<ManagedCase>> {
     const comUsernames = caseload
-      .unwrap()
       .map(
         offender =>
           offender.licences.find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE).comUsername
@@ -343,11 +330,11 @@ export default class ComCaseloadService {
     })
   }
 
-  private async mapResponsibleComsToCases(caseload: Container<ManagedCase>): Promise<ManagedCase[]> {
-    return this.mapResponsibleComsToCasesWithExclusions(caseload).then(it => it.unwrap())
+  private async mapResponsibleComsToCases(caseload: Array<ManagedCase>): Promise<ManagedCase[]> {
+    return this.mapResponsibleComsToCasesWithExclusions(caseload).then(it => it)
   }
 
-  private buildVaryCaseload = (managedOffenders: Container<ManagedCase>): Container<ManagedCase> => {
+  private buildVaryCaseload = (managedOffenders: Array<ManagedCase>): Array<ManagedCase> => {
     return managedOffenders.filter(
       offender =>
         [
@@ -360,9 +347,5 @@ export default class ComCaseloadService {
         ].some(status => offender.licences.find(l => l.status === status)),
       'licence status is not one of ACTIVE, VARIATION_IN_PROGRESS, VARIATION_SUBMITTED, VARIATION_APPROVED, VARIATION_REJECTED, REVIEW_NEEDED'
     )
-  }
-
-  wrap<T>(items: T[]): Container<T> {
-    return new Container(items)
   }
 }
