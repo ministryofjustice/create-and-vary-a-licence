@@ -36,7 +36,6 @@ import type {
   ProbationSearchRequest,
   ProbationSearchResult,
   CaseloadItem,
-  LicenceSummaryApproverView,
   LicenceCreationResponse,
   ApprovalCase,
   SearchResultsPage,
@@ -251,31 +250,6 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username }
     )) as ComReviewCount
-  }
-
-  // TODO: don't believe these two are used now we have moved the caseload to the backend - remove these from where they are used and the tests?
-  async getLicencesForApproval(prisons?: string[], user?: User): Promise<LicenceSummaryApproverView[]> {
-    return (await this.post(
-      {
-        path: `/licence/licences-for-approval`,
-        data: {
-          prisonCodes: prisons,
-        },
-      },
-      { username: user?.username }
-    )) as LicenceSummaryApproverView[]
-  }
-
-  async getLicencesRecentlyApproved(prisons?: string[], user?: User): Promise<LicenceSummaryApproverView[]> {
-    return (await this.post(
-      {
-        path: `/licence/recently-approved`,
-        data: {
-          prisonCodes: prisons,
-        },
-      },
-      { username: user?.username }
-    )) as LicenceSummary[]
   }
 
   async batchInActivateLicences(licenceIds: number[]): Promise<void> {

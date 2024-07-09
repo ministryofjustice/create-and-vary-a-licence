@@ -2,7 +2,6 @@ import LicenceApiClient from '../../data/licenceApiClient'
 import type { User } from '../../@types/CvlUserDetails'
 import ApproverCaseloadService from './approverCaseloadService'
 import type { ApprovalCase } from '../../@types/licenceApiClientTypes'
-import { parseIsoDate } from '../../utils/utils'
 
 jest.mock('../communityService')
 jest.mock('../licenceService')
@@ -22,16 +21,15 @@ describe('Approval Caseload Service', () => {
     jest.resetAllMocks()
   })
 
-  describe('approval needed', () => {
+  describe('search', () => {
     const approvalCase = {
       licenceId: 1,
       approvedBy: 'Jim Smith',
-      approvedOn: '25 Apr 2014',
+      approvedOn: '25/04/2014 00:00:00',
       isDueForEarlyRelease: false,
       name: 'The Prisoner',
       prisonerNumber: 'AB1234E',
-      releaseDate: '25 May 2024',
-      sortDate: parseIsoDate('2024-05-25'),
+      releaseDate: '25/05/2024',
       submittedByFullName: 'An Submitter',
       urgentApproval: false,
       probationPractitioner: {
@@ -39,90 +37,36 @@ describe('Approval Caseload Service', () => {
         name: 'Joe Bloggs',
       },
     } as ApprovalCase
-
-    it('builds the approval needed caseload', async () => {
-      licenceApiClient.getApprovalCaseload.mockResolvedValue([approvalCase])
-
-      const result = await serviceUnderTest.getApprovalNeeded(user, [], undefined)
-
-      expect(result).toMatchObject([approvalCase])
-    })
-  })
-
-  describe('recently approved', () => {
-    const approvalCase = {
-      licenceId: 1,
-      approvedBy: 'Jim Smith',
-      approvedOn: '25 Apr 2014',
-      isDueForEarlyRelease: false,
-      name: 'The Prisoner',
-      prisonerNumber: 'AB1234E',
-      releaseDate: '25 May 2024',
-      sortDate: parseIsoDate('2024-05-25'),
-      submittedByFullName: 'An Submitter',
-      urgentApproval: false,
-      probationPractitioner: {
-        staffCode: 'X1234',
-        name: 'Joe Bloggs',
-      },
-    } as ApprovalCase
-
-    it('builds the recently approved caseload', async () => {
+    it('no results', async () => {
       licenceApiClient.getRecentlyApprovedCaseload.mockResolvedValue([approvalCase])
 
-      const result = await serviceUnderTest.getRecentlyApproved(user, [], undefined)
+      const result = await serviceUnderTest.getRecentlyApproved(user, [], 'aaaa')
+
+      expect(result).toStrictEqual([])
+    })
+
+    it('search by partial prison number', async () => {
+      licenceApiClient.getRecentlyApprovedCaseload.mockResolvedValue([approvalCase])
+
+      const result = await serviceUnderTest.getRecentlyApproved(user, [], 'AB12')
 
       expect(result).toStrictEqual([approvalCase])
     })
 
-    describe('search', () => {
-      const approvalCase = {
-        licenceId: 1,
-        approvedBy: 'Jim Smith',
-        approvedOn: '25 Apr 2014',
-        isDueForEarlyRelease: false,
-        name: 'The Prisoner',
-        prisonerNumber: 'AB1234E',
-        releaseDate: '25 May 2024',
-        sortDate: parseIsoDate('2024-05-25'),
-        submittedByFullName: 'An Submitter',
-        urgentApproval: false,
-        probationPractitioner: {
-          staffCode: 'X1234',
-          name: 'Joe Bloggs',
-        },
-      } as ApprovalCase
-      it('no results', async () => {
-        licenceApiClient.getRecentlyApprovedCaseload.mockResolvedValue([approvalCase])
+    it('search by partial prisoner name', async () => {
+      licenceApiClient.getRecentlyApprovedCaseload.mockResolvedValue([approvalCase])
 
-        const result = await serviceUnderTest.getRecentlyApproved(user, [], 'aaaa')
+      const result = await serviceUnderTest.getRecentlyApproved(user, [], 'PRIS')
 
-        expect(result).toStrictEqual([])
-      })
+      expect(result).toStrictEqual([approvalCase])
+    })
 
-      it('search by partial prison number', async () => {
-        licenceApiClient.getRecentlyApprovedCaseload.mockResolvedValue([approvalCase])
+    it('search by partial pp name', async () => {
+      licenceApiClient.getRecentlyApprovedCaseload.mockResolvedValue([approvalCase])
 
-        const result = await serviceUnderTest.getRecentlyApproved(user, [], 'AB12')
+      const result = await serviceUnderTest.getRecentlyApproved(user, [], 'Blog')
 
-        expect(result).toStrictEqual([approvalCase])
-      })
-
-      it('search by partial prisoner name', async () => {
-        licenceApiClient.getRecentlyApprovedCaseload.mockResolvedValue([approvalCase])
-
-        const result = await serviceUnderTest.getRecentlyApproved(user, [], 'PRIS')
-
-        expect(result).toStrictEqual([approvalCase])
-      })
-
-      it('search by partial pp name', async () => {
-        licenceApiClient.getRecentlyApprovedCaseload.mockResolvedValue([approvalCase])
-
-        const result = await serviceUnderTest.getRecentlyApproved(user, [], 'Blog')
-
-        expect(result).toStrictEqual([approvalCase])
-      })
+      expect(result).toStrictEqual([approvalCase])
     })
   })
 })
