@@ -306,13 +306,6 @@ export interface paths {
      */
     post: operations['getLicencesMatchingCriteria']
   }
-  '/licence/licences-for-approval': {
-    /**
-     * Get a list of licence summaries ready for approval
-     * @description Get a list of licence summaries ready for approval. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-     */
-    post: operations['getLicencesForApproval']
-  }
   '/licence/inactivate-licences': {
     /**
      * Inactivate licences in bulk
@@ -5533,43 +5526,6 @@ export interface operations {
       200: {
         content: {
           'application/json': components['schemas']['LicenceSummary'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /**
-   * Get a list of licence summaries ready for approval
-   * @description Get a list of licence summaries ready for approval. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
-  getLicencesForApproval: {
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['ApproveLicencesRequest']
-      }
-    }
-    responses: {
-      /** @description Returned list of licence summary details - empty if no matches. */
-      200: {
-        content: {
-          'application/json': components['schemas']['LicenceSummaryApproverView'][]
-        }
-      }
-      /** @description Bad request, request body must be valid */
-      400: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */

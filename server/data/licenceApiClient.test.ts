@@ -262,32 +262,6 @@ describe('Licence API client tests', () => {
     })
   })
 
-  it('Should get recently approved licences', async () => {
-    await licenceApiClient.getLicencesRecentlyApproved(['PRI'], { username: 'joebloggs' } as User)
-    expect(post).toHaveBeenCalledWith(
-      {
-        path: '/licence/recently-approved',
-        data: {
-          prisonCodes: ['PRI'],
-        },
-      },
-      { username: 'joebloggs' }
-    )
-  })
-
-  it('Should get licences for approval', async () => {
-    await licenceApiClient.getLicencesForApproval(['PRI'], { username: 'joebloggs' } as User)
-    expect(post).toHaveBeenCalledWith(
-      {
-        path: '/licence/licences-for-approval',
-        data: {
-          prisonCodes: ['PRI'],
-        },
-      },
-      { username: 'joebloggs' }
-    )
-  })
-
   it('Search prisoners by nomis ids', async () => {
     await licenceApiClient.searchPrisonersByNomsIds(['A1234AA'], { username: 'joebloggs' } as User)
     expect(post).toHaveBeenCalledWith(
