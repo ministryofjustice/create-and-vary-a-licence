@@ -36,7 +36,6 @@ import type {
   ProbationSearchRequest,
   ProbationSearchResult,
   CaseloadItem,
-  LicenceSummaryApproverView,
   LicenceCreationResponse,
   ApprovalCase,
   SearchResultsPage,
