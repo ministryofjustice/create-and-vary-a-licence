@@ -20,7 +20,6 @@ export type Licence =
   | components['schemas']['VariationLicence']
   | components['schemas']['HardStopLicence']
   | components['schemas']['CrdLicence']
-export type LicenceSummaryApproverView = components['schemas']['LicenceSummaryApproverView']
 export type LicenceEvent = components['schemas']['LicenceEvent']
 export type StatusUpdateRequest = components['schemas']['StatusUpdateRequest']
 export type UpdateComRequest = components['schemas']['UpdateComRequest']

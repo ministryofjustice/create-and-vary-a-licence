@@ -66,8 +66,6 @@ describe('Caseload Service', () => {
   } as User
 
   beforeEach(() => {
-    communityService.getManagedOffenders.mockResolvedValue([])
-    communityService.getManagedOffendersByTeam.mockResolvedValue([])
     communityService.getOffendersByCrn.mockResolvedValue([])
     communityService.getStaffDetailsByUsernameList.mockResolvedValue([])
     prisonerService.getHdcStatuses.mockResolvedValue([])

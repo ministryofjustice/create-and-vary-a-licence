@@ -1,17 +1,15 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import CaseloadService from '../../../services/lists/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import logger from '../../../../logger'
 import createCaseloadViewModel from '../../views/CaseloadViewModel'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
 
 export default class CaseloadRoutes {
-  constructor(private readonly caseloadService: CaseloadService) {}
+  constructor(private readonly comCaseloadService: ComCaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const teamView = req.query.view === 'team'
-    // const search = req.query.search as string
-
     const { user } = res.locals
 
     logger.info(`GET caseload for ${user?.username} with roles ${user?.userRoles} team view: ${teamView}`)
@@ -38,8 +36,8 @@ export default class CaseloadRoutes {
     }
 
     const caseload = teamView
-      ? await this.caseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
-      : await this.caseloadService.getStaffCreateCaseload(user)
+      ? await this.comCaseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
+      : await this.comCaseloadService.getStaffCreateCaseload(user)
 
     const caseloadViewModel = createCaseloadViewModel(caseload)
     res.render('pages/create/caseload', {

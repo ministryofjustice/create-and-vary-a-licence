@@ -76,7 +76,6 @@ export default defineConfig({
         stubSubmitStatus: licence.stubSubmitStatus,
         stubUpdateLicenceStatus: licence.stubUpdateLicenceStatus,
         stubGetLicencesForStatus: licence.stubGetLicencesForStatus,
-        stubGetLicencesToApprove: licence.stubGetLicencesToApprove,
         stubGetCompletedLicence: licence.stubGetCompletedLicence,
         stubRecordAuditEvent: licence.stubRecordAuditEvent,
         stubCreateVariation: licence.stubCreateVariation,

@@ -18,15 +18,10 @@ describe('PromptList Service', () => {
   const serviceUnderTest = new PromptListService(prisonerService, communityService, licenceService)
 
   beforeEach(() => {
-    communityService.getManagedOffenders.mockResolvedValue([])
-    communityService.getManagedOffendersByTeam.mockResolvedValue([])
-    communityService.getOffendersByCrn.mockResolvedValue([])
-    communityService.getStaffDetailsByUsernameList.mockResolvedValue([])
     prisonerService.getHdcStatuses.mockResolvedValue([])
     licenceService.getLicencesByNomisIdsAndStatus = jest.fn().mockResolvedValue([])
     licenceService.searchPrisonersByReleaseDate = jest.fn().mockResolvedValue([])
 
-    licenceService.searchPrisonersByNomsIds = jest.fn().mockResolvedValue([])
     licenceService.getLicencesForVariationApproval = jest.fn().mockResolvedValue([])
   })
 

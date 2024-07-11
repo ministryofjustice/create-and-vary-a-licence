@@ -1,24 +1,24 @@
 import { Request, Response } from 'express'
 
 import CaseloadRoutes from './caseload'
-import CaseloadService from '../../../services/lists/caseloadService'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import type { DeliusRecord } from '../../../@types/managedCase'
 import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
 
-const caseloadService = new CaseloadService(null, null, null) as jest.Mocked<CaseloadService>
+const comCaseloadService = new ComCaseloadService(null, null, null) as jest.Mocked<ComCaseloadService>
 
-jest.mock('../../../services/lists/caseloadService')
+jest.mock('../../../services/lists/comCaseloadService')
 
 describe('Route Handlers - Vary Licence - Caseload', () => {
-  const handler = new CaseloadRoutes(caseloadService)
+  const handler = new CaseloadRoutes(comCaseloadService)
   let req: Request
   let res: Response
 
   beforeEach(() => {
-    caseloadService.getStaffVaryCaseload.mockResolvedValue([
+    comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
       {
         licences: [
           {
@@ -89,7 +89,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       },
     ])
 
-    caseloadService.getTeamVaryCaseload.mockResolvedValue([
+    comCaseloadService.getTeamVaryCaseload.mockResolvedValue([
       {
         licences: [
           {
@@ -194,7 +194,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       },
     ])
 
-    caseloadService.getComReviewCount.mockResolvedValue({
+    comCaseloadService.getComReviewCount.mockResolvedValue({
       myCount: 1,
       teams: [
         { teamCode: 'teamA', count: 1 },
@@ -269,7 +269,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         myCount: 1,
         teamCount: 2,
       })
-      expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(comCaseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
 
     it('should render view with Team Cases tab selected', async () => {
@@ -319,11 +319,11 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         myCount: 1,
         teamCount: 1,
       })
-      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
+      expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
 
     it('should render the non-active licence if 2 exist', async () => {
-      caseloadService.getStaffVaryCaseload.mockResolvedValue([
+      comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
         {
           licences: [
             {
@@ -390,11 +390,11 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         myCount: 1,
         teamCount: 2,
       })
-      expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(comCaseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
 
     it('should ignore any timed out licences', async () => {
-      caseloadService.getStaffVaryCaseload.mockResolvedValue([
+      comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
         {
           licences: [
             {
@@ -461,11 +461,11 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         myCount: 1,
         teamCount: 2,
       })
-      expect(caseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(comCaseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
     })
 
     it('should display variations over REVIEW_NEEDED licences', async () => {
-      caseloadService.getStaffVaryCaseload.mockResolvedValue([
+      comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
         {
           licences: [
             {
@@ -561,7 +561,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         myCount: 1,
         teamCount: 1,
       })
-      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
+      expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
 
     it('should successfully search by probation practitioner', async () => {
@@ -602,7 +602,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         myCount: 1,
         teamCount: 1,
       })
-      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
+      expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
 
     it('should successfully search by crn', async () => {
@@ -632,7 +632,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
         myCount: 1,
         teamCount: 1,
       })
-      expect(caseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
+      expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
 
     it('should return REVIEW NEEDED cases to top of caseload', () => {
@@ -812,7 +812,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
     })
 
     it('should render view with my count 2 and team count 5 with My Cases tab selected', async () => {
-      caseloadService.getComReviewCount.mockResolvedValue({
+      comCaseloadService.getComReviewCount.mockResolvedValue({
         myCount: 2,
         teams: [
           { teamCode: 'teamA', count: 2 },
@@ -862,7 +862,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           teamSelection: ['teamB'],
         },
       } as Request
-      caseloadService.getComReviewCount.mockResolvedValue({
+      comCaseloadService.getComReviewCount.mockResolvedValue({
         myCount: 2,
         teams: [
           { teamCode: 'teamA', count: 2 },

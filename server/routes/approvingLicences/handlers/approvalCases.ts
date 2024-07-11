@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express'
+import { format } from 'date-fns'
 import type PrisonerService from '../../../services/prisonerService'
 import type ApproverCaseloadService from '../../../services/lists/approverCaseloadService'
+import { parseCvlDate, parseCvlDateTime } from '../../../utils/utils'
 
 export default class ApprovalCaseRoutes {
   constructor(
@@ -18,9 +20,17 @@ export default class ApprovalCaseRoutes {
     const activeCaseload = allPrisons.filter(p => p.agencyId === user.activeCaseload)
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
     const searchTerm = search?.toLowerCase().trim()
-    const cases = approvalNeededView
-      ? await this.approverCaseloadService.getApprovalNeeded(user, prisonCaseloadToDisplay, searchTerm)
-      : await this.approverCaseloadService.getRecentlyApproved(user, prisonCaseloadToDisplay, searchTerm)
+    const cases = (
+      approvalNeededView
+        ? await this.approverCaseloadService.getApprovalNeeded(user, prisonCaseloadToDisplay, searchTerm)
+        : await this.approverCaseloadService.getRecentlyApproved(user, prisonCaseloadToDisplay, searchTerm)
+    ).map(c => {
+      return {
+        ...c,
+        releaseDate: c.releaseDate ? format(parseCvlDate(c.releaseDate), 'dd MMM yyyy') : 'not found',
+        approvedOn: c.approvedOn ? format(parseCvlDateTime(c.approvedOn, { withSeconds: true }), 'dd MMM yyyy') : null,
+      }
+    })
 
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
 

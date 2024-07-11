@@ -40,7 +40,7 @@ services:
   localstack:
     image: localstack/localstack:3.5.0
     networks:
-      - hmpps
+      - hmpps_int
     container_name: localstack
     ports:
       - "4566-4597:4566-4597"
