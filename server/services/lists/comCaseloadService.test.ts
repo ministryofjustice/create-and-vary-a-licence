@@ -39,7 +39,6 @@ describe('COM Caseload Service', () => {
     licenceService.searchPrisonersByReleaseDate = jest.fn().mockResolvedValue([])
     licenceService.searchPrisonersByNomsIds = jest.fn().mockResolvedValue([])
     licenceService.getLicencesForVariationApproval = jest.fn().mockResolvedValue([])
-    licenceService.getLicencesForOmu = jest.fn().mockResolvedValue([])
   })
 
   afterEach(() => {
