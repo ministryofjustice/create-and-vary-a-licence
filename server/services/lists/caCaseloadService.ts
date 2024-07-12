@@ -71,7 +71,7 @@ export default class CaCaseloadService {
   ) {}
 
   public async getPrisonOmuCaseload(user: User, prisonCaseload: string[], searchString?: string): Promise<CaCaseLoad> {
-    const existingLicences = await this.licenceService.getPreReleaseLicencesForOmu(user, prisonCaseload)
+    const existingLicences = await this.licenceService.getPreReleaseAndActiveLicencesForOmu(user, prisonCaseload)
     const eligibleExistingLicences = await this.filterAndFormatExistingLicences(existingLicences, user)
 
     const eligibleNotStartedLicences = await this.findAndFormatNotStartedLicences(
@@ -316,7 +316,7 @@ export default class CaCaseloadService {
   }
 
   private filterExistingLicencesForEligibility = (licences: CaCase[]): CaCase[] => {
-    return licences.filter(l => l.nomisLegalStatus !== 'DEAD')
+    return licences.filter(l => l.nomisLegalStatus !== 'DEAD').filter(l => l.licenceStatus !== LicenceStatus.ACTIVE)
   }
 
   private async mapCasesToComs(casesToMap: CaCase[]): Promise<CaCase[]> {

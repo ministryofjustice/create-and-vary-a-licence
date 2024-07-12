@@ -72,7 +72,7 @@ describe('Caseload Service', () => {
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
     licenceService.searchPrisonersByReleaseDate.mockResolvedValue([])
     licenceService.searchPrisonersByNomsIds.mockResolvedValue([])
-    licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+    licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
     licenceService.getPostReleaseLicencesForOmu.mockResolvedValue([])
   })
 
@@ -130,7 +130,7 @@ describe('Caseload Service', () => {
         },
       ] as CaseloadItem[])
 
-      licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([
+      licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([
         {
           ...licenceSummary,
           forename: 'Steve',
@@ -214,7 +214,7 @@ describe('Caseload Service', () => {
 
     describe('in the hard stop period', () => {
       it('Sets NOT_STARTED licences to TIMED_OUT when in the hard stop period', async () => {
-        licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+        licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
         const nomisRecord = {
           prisoner: {
             prisonerNumber: 'ABC123',
@@ -433,7 +433,7 @@ describe('Caseload Service', () => {
           },
         } as CaseloadItem,
       ])
-      licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([
+      licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([
         {
           ...licenceSummary,
           forename: 'Steve',
@@ -486,6 +486,66 @@ describe('Caseload Service', () => {
             isInHardStopPeriod: false,
           },
         ],
+        showAttentionNeededTab: false,
+      })
+    })
+
+    it('should filter out cases with an existing ACTIVE licence', async () => {
+      licenceService.searchPrisonersByReleaseDate.mockResolvedValue([
+        {
+          prisoner: {
+            firstName: 'Steve',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234E',
+            conditionalReleaseDate: twoMonthsFromNow,
+            confirmedReleaseDate: twoDaysFromNow,
+            status: 'ACTIVE IN',
+            legalStatus: 'SENTENCED',
+          },
+          cvl: {
+            isDueForEarlyRelease: true,
+            isInHardStopPeriod: false,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
+          },
+        } as CaseloadItem,
+      ])
+      licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([
+        {
+          ...licenceSummary,
+          forename: 'Steve',
+          surname: 'Cena',
+          nomisId: 'AB1234E',
+          licenceId: 2,
+          licenceType: LicenceType.PSS,
+          licenceStatus: LicenceStatus.ACTIVE,
+          isInHardStopPeriod: false,
+          isDueToBeReleasedInTheNextTwoWorkingDays: true,
+          conditionalReleaseDate: twoMonthsFromNowCvlFormat,
+          actualReleaseDate: twoDaysFromNowCvlFormat,
+          isDueForEarlyRelease: true,
+        },
+      ])
+      licenceService.searchPrisonersByNomsIds.mockResolvedValue([
+        {
+          prisoner: {
+            firstName: 'Steve',
+            lastName: 'Cena',
+            prisonerNumber: 'AB1234E',
+            conditionalReleaseDate: twoMonthsFromNow,
+            confirmedReleaseDate: twoDaysFromNow,
+            status: 'ACTIVE IN',
+            legalStatus: 'SENTENCED',
+          },
+          cvl: {
+            isDueForEarlyRelease: true,
+            isInHardStopPeriod: false,
+            isDueToBeReleasedInTheNextTwoWorkingDays: false,
+          },
+        },
+      ] as CaseloadItem[])
+
+      expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
+        cases: [],
         showAttentionNeededTab: false,
       })
     })
@@ -629,7 +689,7 @@ describe('Caseload Service', () => {
           },
         },
       ] as CaseloadItem[])
-      licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([
+      licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([
         {
           ...licenceSummary,
           forename: 'Steve',
@@ -765,7 +825,7 @@ describe('Caseload Service', () => {
     describe('filtering rules', () => {
       beforeEach(() => {
         licenceService.searchPrisonersByReleaseDate.mockResolvedValue([])
-        licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+        licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
         licenceService.searchPrisonersByNomsIds.mockResolvedValue([])
         communityService.getOffendersByNomsNumbers.mockResolvedValue([
           {
@@ -797,7 +857,7 @@ describe('Caseload Service', () => {
             } as CaseloadItem,
           ])
 
-          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+          licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
 
           expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
             cases: [],
@@ -825,7 +885,7 @@ describe('Caseload Service', () => {
             } as CaseloadItem,
           ])
 
-          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+          licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
 
           expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
             cases: [],
@@ -854,7 +914,7 @@ describe('Caseload Service', () => {
             } as CaseloadItem,
           ])
 
-          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+          licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
 
           expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
             cases: [],
@@ -881,7 +941,7 @@ describe('Caseload Service', () => {
             } as CaseloadItem,
           ])
 
-          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+          licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
 
           expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
             cases: [],
@@ -909,7 +969,7 @@ describe('Caseload Service', () => {
             } as CaseloadItem,
           ])
 
-          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+          licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
 
           expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
             cases: [],
@@ -936,7 +996,7 @@ describe('Caseload Service', () => {
             } as CaseloadItem,
           ])
 
-          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+          licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
 
           expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
             cases: [],
@@ -966,7 +1026,7 @@ describe('Caseload Service', () => {
             } as CaseloadItem,
           ])
 
-          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+          licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([])
 
           expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
             cases: [],
@@ -1017,7 +1077,7 @@ describe('Caseload Service', () => {
 
       describe('existing licences', () => {
         it('should filter out cases with a legal status of "DEAD"', async () => {
-          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([
+          licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([
             {
               ...licenceSummary,
               forename: 'Steve',
@@ -1043,6 +1103,48 @@ describe('Caseload Service', () => {
                 confirmedReleaseDate: twoDaysFromNow,
                 status: 'ACTIVE IN',
                 legalStatus: 'DEAD',
+              },
+              cvl: {
+                isDueForEarlyRelease: true,
+                isInHardStopPeriod: false,
+                isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              },
+            },
+          ] as CaseloadItem[])
+
+          expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
+            cases: [],
+            showAttentionNeededTab: false,
+          })
+        })
+
+        it('should filter out ACTIVE licences', async () => {
+          licenceService.getPreReleaseAndActiveLicencesForOmu.mockResolvedValue([
+            {
+              ...licenceSummary,
+              forename: 'Steve',
+              surname: 'Cena',
+              nomisId: 'AB1234E',
+              licenceId: 2,
+              licenceType: LicenceType.PSS,
+              licenceStatus: LicenceStatus.ACTIVE,
+              isInHardStopPeriod: false,
+              isDueToBeReleasedInTheNextTwoWorkingDays: true,
+              conditionalReleaseDate: twoMonthsFromNowCvlFormat,
+              actualReleaseDate: twoDaysFromNowCvlFormat,
+              isDueForEarlyRelease: true,
+            },
+          ])
+          licenceService.searchPrisonersByNomsIds.mockResolvedValue([
+            {
+              prisoner: {
+                firstName: 'Steve',
+                lastName: 'Cena',
+                prisonerNumber: 'AB1234E',
+                conditionalReleaseDate: twoMonthsFromNow,
+                confirmedReleaseDate: twoDaysFromNow,
+                status: 'ACTIVE IN',
+                legalStatus: 'SENTENCED',
               },
               cvl: {
                 isDueForEarlyRelease: true,
