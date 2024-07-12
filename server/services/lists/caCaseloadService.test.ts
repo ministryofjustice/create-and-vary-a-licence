@@ -221,6 +221,7 @@ describe('Caseload Service', () => {
             firstName: 'John',
             lastName: 'Doe',
             legalStatus: 'SENTENCED',
+            status: 'ACTIVE IN',
             conditionalReleaseDate: twoDaysFromNow,
           },
           cvl: {
@@ -955,6 +956,7 @@ describe('Caseload Service', () => {
                 status: 'ACTIVE IN',
                 legalStatus: 'SENTENCED',
                 actualParoleDate: twoDaysFromNow,
+                paroleEligibilityDate: twoDaysFromNow,
               },
               cvl: {
                 isDueForEarlyRelease: true,
