@@ -1,4 +1,4 @@
-import { add, addDays, format, startOfDay, endOfDay, addMonths } from 'date-fns'
+import { add, addDays, format, startOfDay, endOfDay, addMonths, subDays } from 'date-fns'
 import PrisonerService from '../prisonerService'
 import CommunityService from '../communityService'
 import LicenceService from '../licenceService'
@@ -766,6 +766,12 @@ describe('Caseload Service', () => {
         licenceService.searchPrisonersByReleaseDate.mockResolvedValue([])
         licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
         licenceService.searchPrisonersByNomsIds.mockResolvedValue([])
+        communityService.getOffendersByNomsNumbers.mockResolvedValue([
+          {
+            otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
+            offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Cloggs', code: 'X1235' } }],
+          },
+        ] as OffenderDetail[])
       })
 
       describe('NOT_STARTED licences', () => {
@@ -863,6 +869,61 @@ describe('Caseload Service', () => {
                 lastName: 'Cena',
                 prisonerNumber: 'AB1234E',
                 conditionalReleaseDate: null,
+                status: 'ACTIVE IN',
+                legalStatus: 'SENTENCED',
+              },
+              cvl: {
+                isDueForEarlyRelease: true,
+                isInHardStopPeriod: false,
+                isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              },
+            } as CaseloadItem,
+          ])
+
+          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+
+          expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
+            cases: [],
+            showAttentionNeededTab: false,
+          })
+        })
+
+        it('should filter out cases with a status that does not begin with ACTIVE or INACTIVE TRN', async () => {
+          licenceService.searchPrisonersByReleaseDate.mockResolvedValue([
+            {
+              prisoner: {
+                firstName: 'Steve',
+                lastName: 'Cena',
+                prisonerNumber: 'AB1234E',
+                conditionalReleaseDate: twoMonthsFromNow,
+                confirmedReleaseDate: twoDaysFromNow,
+                status: 'INACTIVE OUT',
+                legalStatus: 'SENTENCED',
+              },
+              cvl: {
+                isDueForEarlyRelease: true,
+                isInHardStopPeriod: false,
+                isDueToBeReleasedInTheNextTwoWorkingDays: false,
+              },
+            } as CaseloadItem,
+          ])
+
+          licenceService.getPreReleaseLicencesForOmu.mockResolvedValue([])
+
+          expect(await serviceUnderTest.getPrisonOmuCaseload(user, [])).toEqual({
+            cases: [],
+            showAttentionNeededTab: false,
+          })
+        })
+
+        it('should filter out cases passed their release date', async () => {
+          licenceService.searchPrisonersByReleaseDate.mockResolvedValue([
+            {
+              prisoner: {
+                firstName: 'Steve',
+                lastName: 'Cena',
+                prisonerNumber: 'AB1234E',
+                conditionalReleaseDate: format(subDays(new Date(), 2), 'yyyy-MM-dd'),
                 status: 'ACTIVE IN',
                 legalStatus: 'SENTENCED',
               },

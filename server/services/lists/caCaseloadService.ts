@@ -1,4 +1,4 @@
-import { startOfDay, add, endOfDay, format, getUnixTime } from 'date-fns'
+import { startOfDay, add, endOfDay, format, getUnixTime, isBefore } from 'date-fns'
 import CommunityService from '../communityService'
 import PrisonerService from '../prisonerService'
 import LicenceService from '../licenceService'
@@ -124,10 +124,6 @@ export default class CaCaseloadService {
   ): Promise<CaCase[]> {
     const licenceNomisIds = licences.map(l => l.nomisId)
     const prisonersApproachingRelease = await this.getPrisonersApproachingRelease(user, prisonCaseload)
-
-    if (!prisonersApproachingRelease.length) {
-      return []
-    }
 
     const prisonersWithoutLicences = prisonersApproachingRelease.filter(
       p => !licenceNomisIds.includes(p.prisoner.prisonerNumber)
@@ -285,6 +281,16 @@ export default class CaCaseloadService {
       .filter(offender => offender.prisoner.legalStatus !== 'DEAD')
       .filter(offender => !offender.prisoner.indeterminateSentence)
       .filter(offender => offender.prisoner.conditionalReleaseDate)
+      .filter(offender => {
+        const { status } = offender.prisoner
+        return status && (status.startsWith('ACTIVE') || status === 'INACTIVE TRN')
+      })
+      .filter(offender => {
+        return !isBefore(
+          parseIsoDate(offender.prisoner.confirmedReleaseDate || offender.prisoner.conditionalReleaseDate),
+          startOfDay(new Date())
+        )
+      })
       .filter(offender =>
         CaseListUtils.isEligibleEDS(
           offender.prisoner.paroleEligibilityDate,
