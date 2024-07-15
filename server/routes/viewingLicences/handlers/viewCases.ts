@@ -37,8 +37,8 @@ export default class ViewAndPrintCaseRoutes {
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
     const { cases, showAttentionNeededTab } =
       view === 'prison'
-        ? await this.caseloadService.getPrisonView(user, prisonCaseloadToDisplay, searchString)
-        : await this.caseloadService.getProbationView(user, prisonCaseloadToDisplay, searchString)
+        ? await this.caseloadService.getPrisonOmuCaseload(user, prisonCaseloadToDisplay, searchString)
+        : await this.caseloadService.getProbationOmuCaseload(user, prisonCaseloadToDisplay, searchString)
 
     res.render('pages/view/cases', {
       cases: cases.map(c => {

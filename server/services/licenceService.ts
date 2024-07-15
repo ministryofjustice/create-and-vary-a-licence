@@ -269,16 +269,34 @@ export default class LicenceService {
     return _.head(licences)
   }
 
-  async getLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
+  async getPreReleaseAndActiveLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
+    // No need to include VARIATION_X licences, as all of these will also have an ACTIVE licence
     const statuses = [
-      LicenceStatus.ACTIVE.valueOf(),
       LicenceStatus.APPROVED.valueOf(),
       LicenceStatus.SUBMITTED.valueOf(),
       LicenceStatus.IN_PROGRESS.valueOf(),
+      LicenceStatus.TIMED_OUT,
+      LicenceStatus.ACTIVE,
+    ]
+    const filteredPrisons = filterCentralCaseload(prisonCaseload)
+    return this.licenceApiClient.matchLicences(
+      statuses,
+      filteredPrisons,
+      null,
+      null,
+      null,
+      'conditionalReleaseDate',
+      null,
+      user
+    )
+  }
+
+  async getPostReleaseLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
+    const statuses = [
+      LicenceStatus.ACTIVE.valueOf(),
       LicenceStatus.VARIATION_APPROVED.valueOf(),
       LicenceStatus.VARIATION_IN_PROGRESS.valueOf(),
       LicenceStatus.VARIATION_SUBMITTED.valueOf(),
-      LicenceStatus.TIMED_OUT,
     ]
     const filteredPrisons = filterCentralCaseload(prisonCaseload)
     return this.licenceApiClient.matchLicences(

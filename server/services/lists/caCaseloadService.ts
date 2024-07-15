@@ -1,11 +1,9 @@
-import moment from 'moment'
-import { startOfDay, add, endOfDay, isFuture, format, getUnixTime } from 'date-fns'
+import { startOfDay, add, endOfDay, format, getUnixTime, isBefore } from 'date-fns'
 import CommunityService from '../communityService'
 import PrisonerService from '../prisonerService'
 import LicenceService from '../licenceService'
 import { DeliusRecord, Licence, ProbationPractitioner } from '../../@types/managedCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
-import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
 import type { LicenceSummary, CaseloadItem, CvlPrisoner, CvlFields } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
@@ -13,9 +11,9 @@ import {
   CaViewCasesTab,
   convertToTitleCase,
   determineCaViewCasesTab,
+  groupingBy,
   parseCvlDate,
   parseIsoDate,
-  selectReleaseDate,
 } from '../../utils/utils'
 import CaseListUtils from './caselistUtils'
 
@@ -24,18 +22,24 @@ export type CaCaseLoad = {
   showAttentionNeededTab: boolean
 }
 
+export type GroupedByCom = {
+  withStaffCode: CaCase[]
+  withStaffUsername: CaCase[]
+  withNoComId: CaCase[]
+}
+
 export type CaCase = {
-  kind: LicenceKind
-  licenceId: number
-  licenceVersionOf: number
+  kind?: LicenceKind
+  licenceId?: number
+  licenceVersionOf?: number
   name: string
   prisonerNumber: string
-  probationPractitioner: ProbationPractitioner
+  probationPractitioner?: ProbationPractitioner
   releaseDate: string
   releaseDateLabel: string
   licenceStatus: LicenceStatus
-  tabType: CaViewCasesTab
-  nomisLegalStatus:
+  tabType?: CaViewCasesTab
+  nomisLegalStatus?:
     | 'RECALL'
     | 'DEAD'
     | 'INDETERMINATE_SENTENCE'
@@ -46,9 +50,9 @@ export type CaCase = {
     | 'REMAND'
     | 'UNKNOWN'
     | 'OTHER'
-  lastWorkedOnBy: string
-  isDueForEarlyRelease: boolean
-  isInHardStopPeriod: boolean
+  lastWorkedOnBy?: string
+  isDueForEarlyRelease?: boolean
+  isInHardStopPeriod?: boolean
 }
 
 export type ManagedCase = {
@@ -59,35 +63,6 @@ export type ManagedCase = {
   cvlFields: CvlFields
 }
 
-export type Case = {
-  deliusRecord?: DeliusRecord
-  nomisRecord?: CvlPrisoner
-  licence?: Licence
-  probationPractitioner?: ProbationPractitioner
-  cvlFields: CvlFields
-}
-
-const PRISON_VIEW_STATUSES = [
-  LicenceStatus.NOT_STARTED,
-  LicenceStatus.IN_PROGRESS,
-  LicenceStatus.APPROVED,
-  LicenceStatus.SUBMITTED,
-  LicenceStatus.TIMED_OUT,
-]
-
-const OUT_OF_SCOPE_PRISON_VIEW_STATUSES = [
-  LicenceStatus.NOT_IN_PILOT,
-  LicenceStatus.OOS_RECALL,
-  LicenceStatus.OOS_BOTUS,
-]
-
-const PROBATION_VIEW_STATUSES = [
-  LicenceStatus.ACTIVE,
-  LicenceStatus.VARIATION_IN_PROGRESS,
-  LicenceStatus.VARIATION_APPROVED,
-  LicenceStatus.VARIATION_SUBMITTED,
-]
-
 export default class CaCaseloadService {
   constructor(
     private readonly prisonerService: PrisonerService,
@@ -95,101 +70,177 @@ export default class CaCaseloadService {
     private readonly licenceService: LicenceService
   ) {}
 
-  public async getPrisonView(user: User, prisonCaseload: string[], searchString: string): Promise<CaCaseLoad> {
-    const cases = await this.getOmuCaseload(user, prisonCaseload)
-    const caseLoad: Case[] = cases
-      .filter(c => this.isPrisonCase(c))
-      .map(({ licences, ...c }) => ({
-        ...c,
-        licence: this.findLatestLicence(licences),
-      }))
-    return this.caCaseload(caseLoad, searchString, 'prison')
-  }
+  public async getPrisonOmuCaseload(user: User, prisonCaseload: string[], searchString?: string): Promise<CaCaseLoad> {
+    const existingLicences = await this.licenceService.getPreReleaseAndActiveLicencesForOmu(user, prisonCaseload)
+    const eligibleExistingLicences = await this.filterAndFormatExistingLicences(existingLicences, user)
 
-  public async getProbationView(user: User, prisonCaseload: string[], searchString: string): Promise<CaCaseLoad> {
-    const cases = await this.getOmuCaseload(user, prisonCaseload)
-    const caseLoad: Case[] = cases
-      .filter(c => this.isProbationCase(c))
-      .map(({ licences, ...c }) => ({
-        ...c,
-        licence: licences[0],
-      }))
-    return this.caCaseload(caseLoad, searchString, 'probation')
-  }
-
-  public isPrisonCase(managedCase: ManagedCase): boolean {
-    return (
-      (this.isOutOfScope(managedCase) || this.hasAnyStatusOf(PRISON_VIEW_STATUSES, managedCase)) &&
-      (!this.isOutOfScope(managedCase) || this.isReleaseInFuture(managedCase))
+    const eligibleNotStartedLicences = await this.findAndFormatNotStartedLicences(
+      existingLicences,
+      prisonCaseload,
+      user
     )
+
+    if (!eligibleExistingLicences.length && !eligibleNotStartedLicences.length) {
+      return { cases: [], showAttentionNeededTab: false }
+    }
+
+    const cases = await this.mapCasesToComs(eligibleExistingLicences.concat(eligibleNotStartedLicences))
+
+    return this.buildCaseload(cases, searchString, 'prison')
   }
 
-  public isProbationCase(managedCase: ManagedCase): boolean {
-    return this.hasAnyStatusOf(PROBATION_VIEW_STATUSES, managedCase)
+  public async getProbationOmuCaseload(
+    user: User,
+    prisonCaseload: string[],
+    searchString?: string
+  ): Promise<CaCaseLoad> {
+    const licences = await this.licenceService.getPostReleaseLicencesForOmu(user, prisonCaseload)
+
+    if (!licences.length) {
+      return { cases: [], showAttentionNeededTab: false }
+    }
+
+    const formattedLicences = this.formatReleasedLicences(licences)
+    const cases = await this.mapCasesToComs(formattedLicences)
+
+    return this.buildCaseload(cases, searchString, 'probation')
   }
 
-  public async getOmuCaseload(user: User, prisonCaseload: string[]): Promise<ManagedCase[]> {
-    // Get cases with a licence in ACTIVE, APPROVED, SUBMITTED, IN_PROGRESS or VARIATION_IN_* state
-    const casesWithLicences = this.licenceService
-      .getLicencesForOmu(user, prisonCaseload)
-      .then(licences => this.mapLicencesToOffenders(licences))
+  private async filterAndFormatExistingLicences(licences: LicenceSummary[], user: User): Promise<CaCase[]> {
+    const preReleaseLicences = licences.filter(l => l.licenceStatus !== LicenceStatus.ACTIVE)
 
-    // Get cases due for release soon which do not have a submitted licence
-    const today = startOfDay(new Date())
-    const todayPlusFourWeeks = endOfDay(add(new Date(), { weeks: 4 }))
-    const casesPendingLicence = this.licenceService
-      .searchPrisonersByReleaseDate(today, todayPlusFourWeeks, prisonCaseload, user)
-      .then(caseload => this.pairNomisRecordsWithDelius(caseload))
-      .then(caseload => this.filterOffendersEligibleForLicence(caseload, user))
-      .then(caseload => this.mapOffendersToLicences(caseload, user))
-      .then(caseload => this.buildCreateCaseload(caseload))
-      .then(caseload => {
-        return caseload
-          .filter(c => !c.licences.find(l => l.status === LicenceStatus.TIMED_OUT && l.id))
-          .filter(c =>
-            [
-              LicenceStatus.NOT_STARTED,
-              LicenceStatus.TIMED_OUT,
-              LicenceStatus.NOT_IN_PILOT,
-              LicenceStatus.OOS_RECALL,
-              LicenceStatus.OOS_BOTUS,
-            ].some(status => c.licences.find(l => l.status === status))
-          )
-      })
+    if (!preReleaseLicences.length) {
+      return []
+    }
 
-    const [withLicence, pending] = await Promise.all([casesWithLicences, casesPendingLicence])
-    const casesWithComs = await this.mapResponsibleComsToCases(withLicence.concat(pending))
-
-    return casesWithComs
+    const licenceNomisIds = preReleaseLicences.map(l => l.nomisId)
+    const prisonersWithLicences = await this.licenceService.searchPrisonersByNomsIds(licenceNomisIds, user)
+    const nomisEnrichedLicences = this.enrichWithNomisData(preReleaseLicences, prisonersWithLicences)
+    return this.filterExistingLicencesForEligibility(nomisEnrichedLicences)
   }
 
-  private caCaseload(cases: Case[], searchString: string, view: 'prison' | 'probation'): CaCaseLoad {
-    const caseLoad = this.caseloadViewModel(cases)
-    const showAttentionNeededTab = caseLoad.some(e => e.tabType === CaViewCasesTab.ATTENTION_NEEDED)
-    const searchResults = this.applySearch(searchString, caseLoad)
-    const sortResults = this.applySort(searchResults, view)
-    return { cases: sortResults, showAttentionNeededTab }
+  private async findAndFormatNotStartedLicences(
+    licences: LicenceSummary[],
+    prisonCaseload: string[],
+    user: User
+  ): Promise<CaCase[]> {
+    const licenceNomisIds = licences.map(l => l.nomisId)
+    const prisonersApproachingRelease = await this.getPrisonersApproachingRelease(user, prisonCaseload)
+
+    const prisonersWithoutLicences = prisonersApproachingRelease.filter(
+      p => !licenceNomisIds.includes(p.prisoner.prisonerNumber)
+    )
+
+    if (!prisonersWithoutLicences.length) {
+      return []
+    }
+
+    const eligiblePrisoners = await this.filterOffendersEligibleForLicence(prisonersWithoutLicences, user)
+    const casesWithoutLicences = await this.pairNomisRecordsWithDelius(eligiblePrisoners)
+    return this.createNotStartedLicenceForCase(casesWithoutLicences)
   }
 
-  private caseloadViewModel(cases: Case[]) {
-    return cases.map(c => {
-      const releaseDate = c.licence?.releaseDate || selectReleaseDate(c.nomisRecord)
-      const tabType = determineCaViewCasesTab(c.licence, c.nomisRecord, c.cvlFields)
+  private enrichWithNomisData(licences: LicenceSummary[], prisoners: CaseloadItem[]): CaCase[] {
+    return prisoners.map(p => {
+      const licencesForOffender = licences.filter(l => l.nomisId === p.prisoner.prisonerNumber)
+      const licence = this.findLatestLicenceSummary(licencesForOffender)
+      const releaseDate = parseCvlDate(licence.actualReleaseDate || licence.conditionalReleaseDate)
       return {
-        kind: c.licence?.kind,
-        licenceId: c.licence?.id,
-        licenceVersionOf: c.licence?.versionOf,
+        kind: <LicenceKind>licence.kind,
+        licenceId: licence.licenceId,
+        licenceVersionOf: licence.versionOf,
+        name: convertToTitleCase(`${licence.forename} ${licence.surname}`.trim()),
+        prisonerNumber: licence.nomisId,
+        releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
+        releaseDateLabel: licence.actualReleaseDate ? 'Confirmed release date' : 'CRD',
+        licenceStatus: <LicenceStatus>licence.licenceStatus,
+        nomisLegalStatus: p.prisoner.legalStatus,
+        lastWorkedOnBy: licence.updatedByFullName,
+        isDueForEarlyRelease: licence.isDueForEarlyRelease,
+        isInHardStopPeriod: licence.isInHardStopPeriod,
+        tabType: determineCaViewCasesTab(p.prisoner, p.cvl, licence),
+        probationPractitioner: {
+          staffUsername: licence.comUsername,
+        },
+      }
+    })
+  }
+
+  private createNotStartedLicenceForCase(cases: ManagedCase[]): CaCase[] {
+    return cases.map(c => {
+      // Default status (if not overridden below) will show the case as clickable on case lists
+      let licenceStatus = LicenceStatus.NOT_STARTED
+
+      if (CaseListUtils.isBreachOfTopUpSupervision(c.nomisRecord)) {
+        // Imprisonment status indicates a breach of top up supervision order - not clickable (yet)
+        licenceStatus = LicenceStatus.OOS_BOTUS
+      } else if (CaseListUtils.isRecall(c.nomisRecord)) {
+        // Offender is subject to an active recall - not clickable
+        licenceStatus = LicenceStatus.OOS_RECALL
+      } else if (c.cvlFields.isInHardStopPeriod) {
+        licenceStatus = LicenceStatus.TIMED_OUT
+      }
+
+      const com = c.deliusRecord.staff
+
+      if (!c.nomisRecord.conditionalReleaseDate) {
+        return {
+          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+          prisonerNumber: c.nomisRecord.prisonerNumber,
+          releaseDate: null,
+          releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
+          licenceStatus: <LicenceStatus>licenceStatus,
+          nomisLegalStatus: c.nomisRecord.legalStatus,
+          isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
+          isInHardStopPeriod: c.cvlFields.isInHardStopPeriod,
+          tabType: determineCaViewCasesTab(c.nomisRecord, c.cvlFields),
+          probationPractitioner: {
+            staffCode: com.code,
+            name: `${com.forenames} ${com.surname}`.trim(),
+          },
+        }
+      }
+
+      const releaseDate = parseIsoDate(c.nomisRecord.confirmedReleaseDate || c.nomisRecord.conditionalReleaseDate)
+
+      return {
         name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
         prisonerNumber: c.nomisRecord.prisonerNumber,
-        probationPractitioner: c.probationPractitioner,
-        releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
+        releaseDate: format(releaseDate, 'dd MMM yyyy'),
         releaseDateLabel: c.nomisRecord.confirmedReleaseDate ? 'Confirmed release date' : 'CRD',
-        licenceStatus: c.licence.status,
-        tabType,
-        nomisLegalStatus: c.nomisRecord?.legalStatus,
-        lastWorkedOnBy: c.licence?.updatedByFullName,
+        licenceStatus: <LicenceStatus>licenceStatus,
+        nomisLegalStatus: c.nomisRecord.legalStatus,
         isDueForEarlyRelease: c.cvlFields.isDueForEarlyRelease,
         isInHardStopPeriod: c.cvlFields.isInHardStopPeriod,
+        tabType: determineCaViewCasesTab(c.nomisRecord, c.cvlFields),
+        probationPractitioner: {
+          staffCode: com.code,
+          name: `${com.forenames} ${com.surname}`.trim(),
+        },
+      }
+    })
+  }
+
+  private formatReleasedLicences = (licences: LicenceSummary[]): CaCase[] => {
+    const groupedLicences = groupingBy(licences, 'nomisId')
+    return groupedLicences.map(licences => {
+      const licence = licences.length > 1 ? licences.find(l => l.licenceStatus !== LicenceStatus.ACTIVE) : licences[0]
+      const releaseDate = parseCvlDate(licence.actualReleaseDate || licence.conditionalReleaseDate)
+      return {
+        kind: <LicenceKind>licence.kind,
+        licenceId: licence.licenceId,
+        licenceVersionOf: licence.versionOf,
+        name: convertToTitleCase(`${licence.forename} ${licence.surname}`.trim()),
+        prisonerNumber: licence.nomisId,
+        releaseDate: releaseDate ? format(releaseDate, 'dd MMM yyyy') : 'not found',
+        releaseDateLabel: licence.actualReleaseDate ? 'Confirmed release date' : 'CRD',
+        licenceStatus: <LicenceStatus>licence.licenceStatus,
+        lastWorkedOnBy: licence.updatedByFullName,
+        isDueForEarlyRelease: licence.isDueForEarlyRelease,
+        isInHardStopPeriod: licence.isInHardStopPeriod,
+        probationPractitioner: {
+          staffUsername: licence.comUsername,
+        },
       }
     })
   }
@@ -198,6 +249,10 @@ export default class CaCaseloadService {
     const caseloadNomisIds = prisoners
       .filter(({ prisoner }) => prisoner.prisonerNumber)
       .map(({ prisoner }) => prisoner.prisonerNumber)
+
+    if (!caseloadNomisIds.length) {
+      return []
+    }
 
     const deliusRecords = await this.communityService.getOffendersByNomsNumbers(caseloadNomisIds)
 
@@ -219,287 +274,142 @@ export default class CaCaseloadService {
       .filter(offender => offender.nomisRecord && offender.deliusRecord)
   }
 
-  public mapOffendersToLicences = async (offenders: Array<ManagedCase>, user?: User): Promise<Array<ManagedCase>> => {
-    const nomisIdList = offenders.map(offender => offender.nomisRecord.prisonerNumber).filter(id => id !== null)
-
-    const existingLicences =
-      nomisIdList.length === 0
-        ? []
-        : await this.licenceService.getLicencesByNomisIdsAndStatus(
-            nomisIdList,
-            [
-              LicenceStatus.ACTIVE,
-              LicenceStatus.IN_PROGRESS,
-              LicenceStatus.SUBMITTED,
-              LicenceStatus.APPROVED,
-              LicenceStatus.VARIATION_IN_PROGRESS,
-              LicenceStatus.VARIATION_SUBMITTED,
-              LicenceStatus.VARIATION_APPROVED,
-              LicenceStatus.VARIATION_REJECTED,
-              LicenceStatus.TIMED_OUT,
-            ],
-            user
-          )
-
-    return offenders.map(offender => {
-      const licences = existingLicences.filter(licence => licence.nomisId === offender.nomisRecord.prisonerNumber)
-      if (licences.length > 0) {
-        // Return a case in the list for the existing licence
-        return {
-          ...offender,
-          licences: licences.map(licence => {
-            const releaseDate = licence.actualReleaseDate || licence.conditionalReleaseDate
-            return {
-              id: licence.licenceId,
-              status: licence.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : <LicenceStatus>licence.licenceStatus,
-              type: <LicenceType>licence.licenceType,
-              comUsername: licence.comUsername,
-              kind: <LicenceKind>licence.kind,
-              versionOf: licence.versionOf,
-              hardStopDate: parseCvlDate(licence.hardStopDate),
-              hardStopWarningDate: parseCvlDate(licence.hardStopWarningDate),
-              isDueToBeReleasedInTheNextTwoWorkingDays: licence.isDueToBeReleasedInTheNextTwoWorkingDays,
-              releaseDate: releaseDate ? parseCvlDate(releaseDate) : null,
-            }
-          }),
-        }
-      }
-
-      // No licences present for this offender - determine how to show them in case lists
-
-      // Determine the likely type of intended licence from the prison record
-      const licenceType = CaseListUtils.getLicenceType(offender.nomisRecord)
-
-      // Default status (if not overridden below) will show the case as clickable on case lists
-      let licenceStatus = LicenceStatus.NOT_STARTED
-
-      if (CaseListUtils.isBreachOfTopUpSupervision(offender.nomisRecord)) {
-        // Imprisonment status indicates a breach of top up supervision order - not clickable (yet)
-        licenceStatus = LicenceStatus.OOS_BOTUS
-      } else if (CaseListUtils.isRecall(offender.nomisRecord)) {
-        // Offender is subject to an active recall - not clickable
-        licenceStatus = LicenceStatus.OOS_RECALL
-      } else if (offender.cvlFields.isInHardStopPeriod) {
-        licenceStatus = LicenceStatus.TIMED_OUT
-      }
-
-      if (!offender.nomisRecord.conditionalReleaseDate) {
-        return {
-          ...offender,
-          licences: [
-            {
-              status: licenceStatus,
-              type: licenceType,
-              hardStopDate: null,
-              hardStopWarningDate: null,
-              isDueToBeReleasedInTheNextTwoWorkingDays: null,
-              releaseDate: null,
-            },
-          ],
-        }
-      }
-      const hardStopDate = parseCvlDate(offender.cvlFields?.hardStopDate)
-      const hardStopWarningDate = parseCvlDate(offender.cvlFields?.hardStopWarningDate)
-      const isDueToBeReleasedInTheNextTwoWorkingDays = offender.cvlFields?.isDueToBeReleasedInTheNextTwoWorkingDays
-      const releaseDate = offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate
-
-      return {
-        ...offender,
-        licences: [
-          {
-            status: licenceStatus,
-            type: licenceType,
-            hardStopDate,
-            hardStopWarningDate,
-            isDueToBeReleasedInTheNextTwoWorkingDays,
-            releaseDate: releaseDate ? parseIsoDate(releaseDate) : null,
-          },
-        ],
-      }
-    })
-  }
-
-  private filterOffendersEligibleForLicence = async (offenders: Array<ManagedCase>, user?: User) => {
+  private filterOffendersEligibleForLicence = async (
+    offenders: Array<CaseloadItem>,
+    user?: User
+  ): Promise<CaseloadItem[]> => {
     const eligibleOffenders = offenders
-      .filter(offender => !CaseListUtils.isParoleEligible(offender.nomisRecord.paroleEligibilityDate))
-      .filter(offender => offender.nomisRecord.legalStatus !== 'DEAD')
-      .filter(offender => !offender.nomisRecord.indeterminateSentence)
-      .filter(offender => offender.nomisRecord.conditionalReleaseDate)
+      .filter(offender => !CaseListUtils.isParoleEligible(offender.prisoner.paroleEligibilityDate))
+      .filter(offender => offender.prisoner.legalStatus !== 'DEAD')
+      .filter(offender => !offender.prisoner.indeterminateSentence)
+      .filter(offender => offender.prisoner.conditionalReleaseDate)
+      .filter(offender => {
+        const { status } = offender.prisoner
+        return status && (status.startsWith('ACTIVE') || status === 'INACTIVE TRN')
+      })
+      .filter(offender => {
+        return !isBefore(
+          parseIsoDate(offender.prisoner.confirmedReleaseDate || offender.prisoner.conditionalReleaseDate),
+          startOfDay(new Date())
+        )
+      })
       .filter(offender =>
         CaseListUtils.isEligibleEDS(
-          offender.nomisRecord.paroleEligibilityDate,
-          offender.nomisRecord.conditionalReleaseDate,
-          offender.nomisRecord.confirmedReleaseDate,
-          offender.nomisRecord.actualParoleDate
+          offender.prisoner.paroleEligibilityDate,
+          offender.prisoner.conditionalReleaseDate,
+          offender.prisoner.confirmedReleaseDate,
+          offender.prisoner.actualParoleDate
         )
       )
 
     if (!eligibleOffenders.length) return eligibleOffenders
 
     const hdcStatuses = await this.prisonerService.getHdcStatuses(
-      eligibleOffenders.map(c => c.nomisRecord),
+      eligibleOffenders.map(c => c.prisoner),
       user
     )
 
     return eligibleOffenders.filter(offender => {
-      const hdcRecord = hdcStatuses.find(hdc => hdc.bookingId === offender.nomisRecord.bookingId)
+      const hdcRecord = hdcStatuses.find(hdc => hdc.bookingId === offender.prisoner.bookingId)
       return (
-        !hdcRecord ||
-        hdcRecord.approvalStatus !== 'APPROVED' ||
-        !offender.nomisRecord.homeDetentionCurfewEligibilityDate
+        !hdcRecord || hdcRecord.approvalStatus !== 'APPROVED' || !offender.prisoner.homeDetentionCurfewEligibilityDate
       )
     })
   }
 
-  private buildCreateCaseload = (managedOffenders: Array<ManagedCase>): Array<ManagedCase> => {
-    return managedOffenders
-      .filter(
-        offender =>
-          offender.nomisRecord.status &&
-          (offender.nomisRecord.status.startsWith('ACTIVE') || offender.nomisRecord.status === 'INACTIVE TRN')
-      )
-      .filter(offender =>
-        moment(
-          moment(offender.nomisRecord.confirmedReleaseDate || offender.nomisRecord.conditionalReleaseDate, 'YYYY-MM-DD')
-        ).isSameOrAfter(moment(), 'day')
-      )
-      .filter(offender =>
-        [
-          LicenceStatus.OOS_RECALL,
-          LicenceStatus.OOS_BOTUS,
-          LicenceStatus.NOT_IN_PILOT,
-          LicenceStatus.NOT_STARTED,
-          LicenceStatus.IN_PROGRESS,
-          LicenceStatus.SUBMITTED,
-          LicenceStatus.APPROVED,
-          LicenceStatus.TIMED_OUT,
-        ].some(status => offender.licences.find(l => l.status === status))
-      )
+  private filterExistingLicencesForEligibility = (licences: CaCase[]): CaCase[] => {
+    return licences.filter(l => l.nomisLegalStatus !== 'DEAD')
   }
 
-  private pairDeliusRecordsWithNomis = async (
-    managedOffenders: Array<DeliusRecord>,
-    user: User
-  ): Promise<Array<ManagedCase>> => {
-    const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.otherIds?.nomsNumber)
-      .map(offender => offender.otherIds?.nomsNumber)
+  private async mapCasesToComs(casesToMap: CaCase[]): Promise<CaCase[]> {
+    const cases = this.splitCasesByComDetails(casesToMap)
 
-    const nomisRecords = await this.licenceService.searchPrisonersByNomsIds(caseloadNomisIds, user)
+    const noComPrisonerNumbers = cases.withNoComId.map(c => c.prisonerNumber)
+    const deliusRecords = await this.communityService.getOffendersByNomsNumbers(noComPrisonerNumbers)
 
-    return managedOffenders
-      .map(offender => {
-        const { prisoner, cvl: cvlFields } =
-          nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.otherIds?.nomsNumber) || {}
-        return {
-          deliusRecord: offender,
-          nomisRecord: prisoner,
-          cvlFields,
+    const caCaseList: CaCase[] = []
+
+    // if no code or username, hit delius to find COM details
+    caCaseList.push(
+      ...cases.withNoComId.map(c => {
+        const com = deliusRecords
+          .find(d => d.otherIds.nomsNumber === c.prisonerNumber)
+          .offenderManagers.find(om => om.active)?.staff
+        if (com && !com.unallocated) {
+          return {
+            ...c,
+            probationPractitioner: {
+              staffCode: com.code,
+              name: `${com.forenames} ${com.surname}`.trim(),
+            },
+          }
         }
+
+        return c
       })
-      .filter(offender => offender.nomisRecord)
-  }
+    )
 
-  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<Array<ManagedCase>> => {
-    const nomisIds = licences.map(l => l.nomisId)
-    const deliusRecords = await this.communityService.getOffendersByNomsNumbers(nomisIds)
-    const offenders = await this.pairDeliusRecordsWithNomis(deliusRecords, user)
-    return offenders.map(offender => {
-      return {
-        ...offender,
-        licences: licences
-          .filter(l => l.nomisId === offender.nomisRecord.prisonerNumber)
-          .map(l => {
-            const releaseDate = l.actualReleaseDate || l.conditionalReleaseDate
-            return {
-              id: l.licenceId,
-              type: <LicenceType>l.licenceType,
-              status: <LicenceStatus>l.licenceStatus,
-              comUsername: l.comUsername,
-              dateCreated: l.dateCreated,
-              approvedBy: l.approvedByName,
-              approvedDate: l.approvedDate,
-              versionOf: l.versionOf,
-              kind: <LicenceKind>l.kind,
-              licenceStartDate: l.licenceStartDate,
-              hardStopDate: parseCvlDate(l.hardStopDate),
-              hardStopWarningDate: parseCvlDate(l.hardStopWarningDate),
-              isDueToBeReleasedInTheNextTwoWorkingDays: l.isDueToBeReleasedInTheNextTwoWorkingDays,
-              updatedByFullName: l.updatedByFullName,
-              releaseDate: releaseDate ? parseCvlDate(releaseDate) : null,
-            }
-          }),
-      }
-    })
-  }
-
-  private async mapResponsibleComsToCases(caseload: Array<ManagedCase>): Promise<Array<ManagedCase>> {
-    const comUsernames = caseload
-      .map(
-        offender =>
-          offender.licences.find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE).comUsername
-      )
-      .filter(comUsername => comUsername)
-
+    // If COM username but no code, do a separate call to use the data in CVL if it exists. Should help highlight any desync between Delius and CVL
+    const comUsernames = cases.withStaffUsername.map(c => c.probationPractitioner.staffUsername)
     const coms = await this.communityService.getStaffDetailsByUsernameList(comUsernames)
 
-    return caseload.map(offender => {
-      const responsibleCom = coms.find(
-        com =>
-          com.username?.toLowerCase() ===
-          offender.licences
-            .find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE)
-            .comUsername?.toLowerCase()
-      )
+    caCaseList.push(
+      ...cases.withStaffUsername.map(c => {
+        const com = coms.find(com => com.username.toLowerCase() === c.probationPractitioner.staffUsername.toLowerCase())
+        if (com) {
+          return {
+            ...c,
+            probationPractitioner: {
+              staffCode: com.staffCode,
+              name: `${com.staff.forenames} ${com.staff.surname}`.trim(),
+            },
+          }
+        }
+        return c
+      })
+    )
 
-      if (responsibleCom) {
+    // If already have COM code and name, no extra calls required
+    caCaseList.push(
+      ...cases.withStaffCode.map(c => {
         return {
-          ...offender,
+          ...c,
           probationPractitioner: {
-            staffCode: responsibleCom.staffCode,
-            name: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`.trim(),
+            staffCode: c.probationPractitioner.staffCode,
+            name: c.probationPractitioner.name,
           },
         }
-      }
+      })
+    )
 
-      if (!offender.deliusRecord.staff || offender.deliusRecord.staff.unallocated) {
-        return {
-          ...offender,
-        }
-      }
-
-      return {
-        ...offender,
-        probationPractitioner: {
-          staffCode: offender.deliusRecord.staff.code,
-          name: `${offender.deliusRecord.staff.forenames} ${offender.deliusRecord.staff.surname}`.trim(),
-        },
-      }
-    })
+    return caCaseList
   }
 
-  hasAnyStatusOf(statuses: LicenceStatus[], c: ManagedCase) {
-    return statuses.includes(c?.licences[0]?.status)
+  private async getPrisonersApproachingRelease(user: User, prisonCaseload: string[]): Promise<CaseloadItem[]> {
+    const today = startOfDay(new Date())
+    const todayPlusFourWeeks = endOfDay(add(new Date(), { weeks: 4 }))
+
+    return this.licenceService.searchPrisonersByReleaseDate(today, todayPlusFourWeeks, prisonCaseload, user)
   }
 
-  isOutOfScope(c: ManagedCase) {
-    return this.hasAnyStatusOf(OUT_OF_SCOPE_PRISON_VIEW_STATUSES, c)
+  private buildCaseload(cases: CaCase[], searchString: string, view: 'prison' | 'probation'): CaCaseLoad {
+    const showAttentionNeededTab = cases.some(e => e.tabType === CaViewCasesTab.ATTENTION_NEEDED)
+    const searchResults = this.applySearch(searchString, cases)
+    const sortResults = this.applySort(searchResults, view)
+    return { cases: sortResults, showAttentionNeededTab }
   }
 
-  isReleaseInFuture(c: ManagedCase) {
-    const releaseDate = c.nomisRecord.confirmedReleaseDate || c.nomisRecord.conditionalReleaseDate
-    return isFuture(new Date(releaseDate))
-  }
-
-  findLatestLicence(licences: Licence[]): Licence {
+  findLatestLicenceSummary(licences: LicenceSummary[]): LicenceSummary {
     if (licences.length === 1) {
       return licences[0]
     }
-    if (licences.find(l => l.status === LicenceStatus.TIMED_OUT)) {
-      return licences.find(l => l.status !== LicenceStatus.TIMED_OUT)
+    if (licences.find(l => l.licenceStatus === LicenceStatus.TIMED_OUT)) {
+      return licences.find(l => l.licenceStatus !== LicenceStatus.TIMED_OUT)
     }
 
-    return licences.find(l => l.status === LicenceStatus.SUBMITTED || l.status === LicenceStatus.IN_PROGRESS)
+    return licences.find(
+      l => l.licenceStatus === LicenceStatus.SUBMITTED || l.licenceStatus === LicenceStatus.IN_PROGRESS
+    )
   }
 
   applySearch(searchString: string, cases: CaCase[]): CaCase[] {
@@ -520,5 +430,25 @@ export default class CaCaseloadService {
       const crd2 = getUnixTime(new Date(b.releaseDate))
       return view === 'prison' ? crd1 - crd2 : crd2 - crd1
     })
+  }
+
+  splitCasesByComDetails(cases: CaCase[]) {
+    const groupedCases = cases.reduce(
+      (acc, c) => {
+        const groups = acc
+
+        if (c.probationPractitioner.staffCode) {
+          groups.withStaffCode.push(c)
+        } else if (c.probationPractitioner.staffUsername) {
+          groups.withStaffUsername.push(c)
+        } else {
+          groups.withNoComId.push(c)
+        }
+
+        return groups
+      },
+      { withStaffCode: [], withStaffUsername: [], withNoComId: [] } as GroupedByCom
+    )
+    return groupedCases
   }
 }

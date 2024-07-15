@@ -23,7 +23,6 @@ describe('PromptList Service', () => {
     licenceService.searchPrisonersByReleaseDate = jest.fn().mockResolvedValue([])
 
     licenceService.getLicencesForVariationApproval = jest.fn().mockResolvedValue([])
-    licenceService.getLicencesForOmu = jest.fn().mockResolvedValue([])
   })
 
   afterEach(() => {

@@ -421,22 +421,13 @@ describe('Licence Service', () => {
     )
   })
 
-  it('should get licences created within an OMU users prison', async () => {
+  it('should get pre-release licences created within an OMU users prison', async () => {
     jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
     licenceApiClient.matchLicences.mockResolvedValue([{ licenceId: 1 } as LicenceSummary])
 
-    const result = await licenceService.getLicencesForOmu(user, [])
+    const result = await licenceService.getPreReleaseAndActiveLicencesForOmu(user, [])
     expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
-      [
-        'ACTIVE',
-        'APPROVED',
-        'SUBMITTED',
-        'IN_PROGRESS',
-        'VARIATION_APPROVED',
-        'VARIATION_IN_PROGRESS',
-        'VARIATION_SUBMITTED',
-        'TIMED_OUT',
-      ],
+      ['APPROVED', 'SUBMITTED', 'IN_PROGRESS', 'TIMED_OUT', 'ACTIVE'],
       ['MDI'],
       null,
       null,
@@ -446,6 +437,27 @@ describe('Licence Service', () => {
       user
     )
     expect(result).toEqual([{ licenceId: 1 }])
+  })
+
+  it('should get post-release licences created within an OMU users prison', async () => {
+    jest.spyOn(utils, 'filterCentralCaseload').mockReturnValue(['MDI'])
+    licenceApiClient.matchLicences.mockResolvedValue([
+      { licenceId: 1 } as LicenceSummary,
+      { licenceId: 2 } as LicenceSummary,
+    ])
+
+    const result = await licenceService.getPostReleaseLicencesForOmu(user, [])
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith(
+      ['ACTIVE', 'VARIATION_APPROVED', 'VARIATION_IN_PROGRESS', 'VARIATION_SUBMITTED'],
+      ['MDI'],
+      null,
+      null,
+      null,
+      'conditionalReleaseDate',
+      null,
+      user
+    )
+    expect(result).toEqual([{ licenceId: 1 }, { licenceId: 2 }])
   })
 
   it('should update COM responsible for an offender', async () => {

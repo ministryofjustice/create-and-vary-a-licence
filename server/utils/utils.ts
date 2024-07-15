@@ -5,9 +5,8 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
-import type { CvlFields, CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
+import type { CvlFields, CvlPrisoner, Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
-import { Licence as ManagedCaseLicence } from '../@types/managedCase'
 import LicenceStatus from '../enumeration/licenceStatus'
 
 export enum CaViewCasesTab {
@@ -200,29 +199,30 @@ const selectReleaseDate = (nomisRecord: CvlPrisoner) => {
   return isValid(date) ? date : null
 }
 
-const isAttentionNeeded = (
-  { status, licenceStartDate }: { status: LicenceStatus; licenceStartDate?: string },
-  releaseDate: Date
-) => {
+const isAttentionNeeded = (status: LicenceStatus, licenceStartDate: Date, releaseDate: Date) => {
   const today = startOfDay(new Date())
 
   const { APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED } = LicenceStatus
   const noReleaseDates = !releaseDate
 
   const missingDates = [APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED].includes(status) && noReleaseDates
-  const startDateInPast = licenceStartDate && status === APPROVED && isBefore(parseCvlDate(licenceStartDate), today)
+  const startDateInPast = licenceStartDate && status === APPROVED && isBefore(licenceStartDate, today)
 
   return missingDates || startDateInPast
 }
 
 const determineCaViewCasesTab = (
-  licence: ManagedCaseLicence,
   nomisRecord: CvlPrisoner,
-  cvlFields: CvlFields
+  cvlFields: CvlFields,
+  licence?: LicenceSummary
 ): CaViewCasesTab => {
-  const releaseDate = licence?.releaseDate || selectReleaseDate(nomisRecord)
+  const releaseDate =
+    parseCvlDate(licence?.actualReleaseDate || licence?.conditionalReleaseDate) || selectReleaseDate(nomisRecord)
 
-  if (licence && isAttentionNeeded(licence, releaseDate)) {
+  if (
+    licence &&
+    isAttentionNeeded(<LicenceStatus>licence.licenceStatus, parseCvlDate(licence.licenceStartDate), releaseDate)
+  ) {
     return CaViewCasesTab.ATTENTION_NEEDED
   }
   const { isDueToBeReleasedInTheNextTwoWorkingDays } = licence || cvlFields

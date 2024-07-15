@@ -1,5 +1,5 @@
 import { isDefined } from 'class-validator'
-import { addDays, format, isValid, subDays } from 'date-fns'
+import { addDays, format, isValid, startOfDay, subDays } from 'date-fns'
 import {
   addressObjectToString,
   convertDateFormat,
@@ -33,10 +33,9 @@ import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import Address from '../routes/initialAppointment/types/address'
-import type { CvlFields, CvlPrisoner, Licence } from '../@types/licenceApiClientTypes'
+import type { CvlFields, CvlPrisoner, Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceKind from '../enumeration/LicenceKind'
-import type { Licence as ManagedCaseLicence } from '../@types/managedCase'
 
 const toCvlDate = (d: Date) => format(d, 'dd/MM/yyyy')
 
@@ -534,11 +533,8 @@ describe('Check if release date before cutoff date', () => {
 describe('Check if licence needs attention', () => {
   const now = new Date()
 
-  const licence = {
-    status: LicenceStatus.APPROVED,
-    licenceStartDate: toCvlDate(addDays(now, 1)),
-  } as ManagedCaseLicence
-
+  const licenceStatus = LicenceStatus.APPROVED
+  const licenceStartDate = addDays(now, 1)
   const releaseDate = addDays(now, 3)
 
   afterEach(() => {
@@ -546,47 +542,47 @@ describe('Check if licence needs attention', () => {
   })
 
   it('should return true if licence status is oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is no CRD/ARD', () => {
-    expect(isAttentionNeeded({ licenceStartDate: licence.licenceStartDate, status: licence.status }, null)).toBeTruthy()
+    expect(isAttentionNeeded(licenceStatus, licenceStartDate, null)).toBeTruthy()
   })
 
   it('should return false if licence status is not oneof ‘approved’, ‘submitted’, ‘in progress‘, ‘not started‘ AND there is no CRD/ARD', () => {
-    expect(isAttentionNeeded({ licenceStartDate: null, status: LicenceStatus.ACTIVE }, null)).toBeFalsy()
+    expect(isAttentionNeeded(LicenceStatus.ACTIVE, null, null)).toBeFalsy()
   })
 
   describe('when status is approved', () => {
-    const status = LicenceStatus.APPROVED
+    const licenceStatus = LicenceStatus.APPROVED
     it('should return false if licenceStartDate is null', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: null }, releaseDate)).toBeFalsy()
+      expect(isAttentionNeeded(licenceStatus, null, releaseDate)).toBeFalsy()
     })
 
     it('should return false when start date is today', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(now) }, releaseDate)).toBeFalsy()
+      expect(isAttentionNeeded(licenceStatus, startOfDay(now), releaseDate)).toBeFalsy()
     })
 
     it('should return false when start date is in the future', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(addDays(now, 1)) }, releaseDate)).toBeFalsy()
+      expect(isAttentionNeeded(licenceStatus, startOfDay(addDays(now, 1)), releaseDate)).toBeFalsy()
     })
 
     it('should return true when start date is in the past', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(subDays(now, 1)) }, releaseDate)).toBeTruthy()
+      expect(isAttentionNeeded(licenceStatus, startOfDay(subDays(now, 1)), releaseDate)).toBeTruthy()
     })
   })
   describe('when status is not approved', () => {
-    const status = LicenceStatus.ACTIVE
+    const licenceStatus = LicenceStatus.ACTIVE
     it('should return false if licenceStartDate is null', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: null }, releaseDate)).toBeFalsy()
+      expect(isAttentionNeeded(licenceStatus, null, releaseDate)).toBeFalsy()
     })
 
     it('should return false when start date is today', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(now) }, releaseDate)).toBeFalsy()
+      expect(isAttentionNeeded(licenceStatus, now, releaseDate)).toBeFalsy()
     })
 
     it('should return false when start date is in the future', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(addDays(now, 1)) }, releaseDate)).toBeFalsy()
+      expect(isAttentionNeeded(licenceStatus, addDays(now, 1), releaseDate)).toBeFalsy()
     })
 
     it('should return true when start date is in the past', () => {
-      expect(isAttentionNeeded({ status, licenceStartDate: toCvlDate(subDays(now, 1)) }, releaseDate)).toBeFalsy()
+      expect(isAttentionNeeded(licenceStatus, subDays(now, 1), releaseDate)).toBeFalsy()
     })
   })
 })
@@ -596,9 +592,9 @@ describe('Get Case Tab Type', () => {
   const past = subDays(now, 1)
 
   const licence = {
-    status: LicenceStatus.IN_PROGRESS,
+    licenceStatus: LicenceStatus.IN_PROGRESS,
     licenceStartDate: '05/12/2023',
-  } as ManagedCaseLicence
+  } as LicenceSummary
 
   const nomisRecord = {
     prisonerNumber: 'G4169UO',
@@ -609,61 +605,63 @@ describe('Get Case Tab Type', () => {
 
   it('should not choose attention needed if no licence', () => {
     expect(
-      determineCaViewCasesTab(undefined, nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields)
+      determineCaViewCasesTab(nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields, undefined)
     ).toEqual(CaViewCasesTab.FUTURE_RELEASES)
   })
 
   it('should choose attention needed when approved licence start date is before now', () => {
     expect(
-      determineCaViewCasesTab(
-        { ...licence, status: LicenceStatus.APPROVED, licenceStartDate: toCvlDate(past) },
-        { ...nomisRecord },
-        {} as CvlFields
-      )
+      determineCaViewCasesTab({ ...nomisRecord }, {} as CvlFields, {
+        ...licence,
+        licenceStatus: LicenceStatus.APPROVED,
+        licenceStartDate: toCvlDate(past),
+      })
     ).toEqual(CaViewCasesTab.ATTENTION_NEEDED)
   })
 
   it('should choose attention needed when missing release dates', () => {
     expect(
       determineCaViewCasesTab(
-        licence,
         { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null },
-        {} as CvlFields
+        {} as CvlFields,
+        licence
       )
     ).toEqual(CaViewCasesTab.ATTENTION_NEEDED)
   })
 
   it('should choose future releases tab when licence says no release in next 2 days', () => {
     expect(
-      determineCaViewCasesTab(
-        { ...licence, isDueToBeReleasedInTheNextTwoWorkingDays: false },
-        nomisRecord,
-        {} as CvlFields
-      )
+      determineCaViewCasesTab(nomisRecord, {} as CvlFields, {
+        ...licence,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      })
     ).toEqual(CaViewCasesTab.FUTURE_RELEASES)
   })
 
   it('should choose future releases tab when missing licence and cvl fields say no release in next 2 days', () => {
     expect(
-      determineCaViewCasesTab(undefined, nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields)
+      determineCaViewCasesTab(nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields, undefined)
     ).toEqual(CaViewCasesTab.FUTURE_RELEASES)
   })
 
   it('should choose releases in next two days when licence says release in next 2 days', () => {
     expect(
-      determineCaViewCasesTab(
-        { ...licence, isDueToBeReleasedInTheNextTwoWorkingDays: true },
-        nomisRecord,
-        {} as CvlFields
-      )
+      determineCaViewCasesTab(nomisRecord, {} as CvlFields, {
+        ...licence,
+        isDueToBeReleasedInTheNextTwoWorkingDays: true,
+      })
     ).toEqual(CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)
   })
 
   it('should choose releases in next two days when missing licence and cvl says release in next 2 days', () => {
     expect(
-      determineCaViewCasesTab(undefined, nomisRecord, {
-        isDueToBeReleasedInTheNextTwoWorkingDays: true,
-      } as CvlFields)
+      determineCaViewCasesTab(
+        nomisRecord,
+        {
+          isDueToBeReleasedInTheNextTwoWorkingDays: true,
+        } as CvlFields,
+        undefined
+      )
     ).toEqual(CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)
   })
 })
