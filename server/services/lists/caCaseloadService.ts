@@ -107,13 +107,15 @@ export default class CaCaseloadService {
   }
 
   private async filterAndFormatExistingLicences(licences: LicenceSummary[], user: User): Promise<CaCase[]> {
-    if (!licences.length) {
+    const preReleaseLicences = licences.filter(l => l.licenceStatus !== LicenceStatus.ACTIVE)
+
+    if (!preReleaseLicences.length) {
       return []
     }
 
-    const licenceNomisIds = licences.map(l => l.nomisId)
+    const licenceNomisIds = preReleaseLicences.map(l => l.nomisId)
     const prisonersWithLicences = await this.licenceService.searchPrisonersByNomsIds(licenceNomisIds, user)
-    const nomisEnrichedLicences = this.enrichWithNomisData(licences, prisonersWithLicences)
+    const nomisEnrichedLicences = this.enrichWithNomisData(preReleaseLicences, prisonersWithLicences)
     return this.filterExistingLicencesForEligibility(nomisEnrichedLicences)
   }
 
@@ -316,7 +318,7 @@ export default class CaCaseloadService {
   }
 
   private filterExistingLicencesForEligibility = (licences: CaCase[]): CaCase[] => {
-    return licences.filter(l => l.nomisLegalStatus !== 'DEAD').filter(l => l.licenceStatus !== LicenceStatus.ACTIVE)
+    return licences.filter(l => l.nomisLegalStatus !== 'DEAD')
   }
 
   private async mapCasesToComs(casesToMap: CaCase[]): Promise<CaCase[]> {
