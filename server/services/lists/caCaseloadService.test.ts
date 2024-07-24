@@ -402,6 +402,30 @@ describe('Caseload Service', () => {
           showAttentionNeededTab: false,
         } as CaCaseLoad)
       })
+
+      it('should not cause an error if the probation practitioner name is undefined', async () => {
+        communityService.getStaffDetailsByUsernameList.mockResolvedValue([])
+
+        expect(await serviceUnderTest.getPrisonOmuCaseload(user, user.prisonCaseload, 'Steve')).toMatchObject({
+          cases: [
+            {
+              kind: 'CRD',
+              licenceId: 2,
+              name: 'Steve Cena',
+              prisonerNumber: 'AB1234E',
+              releaseDate: format(addDays(new Date(), 2), 'dd MMM yyy'),
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'IN_PROGRESS',
+              tabType: 'releasesInNextTwoWorkingDays',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'X Y',
+              isDueForEarlyRelease: true,
+              isInHardStopPeriod: false,
+            },
+          ],
+          showAttentionNeededTab: false,
+        } as CaCaseLoad)
+      })
     })
 
     it('should query for cases being released within 4 weeks', async () => {

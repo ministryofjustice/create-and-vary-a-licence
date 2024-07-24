@@ -419,7 +419,7 @@ export default class CaCaseloadService {
       return (
         c.name.toLowerCase().includes(term) ||
         c.prisonerNumber?.toLowerCase().includes(term) ||
-        c.probationPractitioner?.name.toLowerCase().includes(term)
+        c.probationPractitioner?.name?.toLowerCase().includes(term)
       )
     })
   }
