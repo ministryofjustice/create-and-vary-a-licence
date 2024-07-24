@@ -54,12 +54,16 @@ describe('PromptList Service', () => {
         surname: 'Bloggs',
         otherIds: {
           nomsNumber: 'G4169UO',
+          crn: 'A123345V',
         },
         offenderManagers: [
           {
             active: true,
+            fromDate: '2023-01-01',
             staff: {
               code: 'X12345',
+              forenames: 'BOB',
+              surname: 'SMITH',
             },
             probationArea: {
               code: 'N01',
@@ -73,15 +77,66 @@ describe('PromptList Service', () => {
       {
         staffIdentifier: 2000,
         staffCode: 'X12345',
+        email: 'comEmail@example.com',
       },
     ] as CommunityApiStaffDetails[])
 
-    await serviceUnderTest.getListForDates(startOfISOWeek(new Date()), endOfISOWeek(add(new Date(), { weeks: 3 })), [
-      LicenceStatus.NOT_STARTED,
-      LicenceStatus.IN_PROGRESS,
-    ])
+    const response = await serviceUnderTest.getListForDates(
+      startOfISOWeek(new Date()),
+      endOfISOWeek(add(new Date(), { weeks: 3 })),
+      [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS]
+    )
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(1)
     expect(prisonerService.getHdcStatuses).toHaveBeenCalledTimes(1)
+    expect(response).toStrictEqual([
+      {
+        comAllocationDate: '2023-01-01',
+        comEmail: 'comEmail@example.com',
+        comName: 'BOB SMITH',
+        comProbationAreaCode: 'N01',
+        comStaffCode: 'X12345',
+        crn: 'A123345V',
+        firstName: 'EMAJINHANY',
+        lastName: 'ELYSASHA',
+        prisonerNumber: 'G4169UO',
+        releaseDate: '2024-07-19',
+      },
+    ])
+  })
+
+  it('missing delius record', async () => {
+    const prisonerDetails = {
+      prisoner: {
+        prisonerNumber: 'G4169UO',
+        firstName: 'EMAJINHANY',
+        lastName: 'ELYSASHA',
+        dateOfBirth: '1962-04-26',
+        status: 'ACTIVE IN',
+        prisonId: 'BAI',
+        sentenceStartDate: '2017-03-01',
+        releaseDate: '2024-07-19',
+        confirmedReleaseDate: '2024-07-19',
+        sentenceExpiryDate: '2028-08-31',
+        licenceExpiryDate: '2028-08-31',
+        conditionalReleaseDate: '2022-09-01',
+      },
+      cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+    } as CaseloadItem
+    licenceService.searchPrisonersByReleaseDate.mockResolvedValue([prisonerDetails])
+    communityService.getOffendersByNomsNumbers.mockResolvedValue([])
+    communityService.getStaffDetailByStaffCodeList.mockResolvedValue([
+      {
+        staffIdentifier: 2000,
+        staffCode: 'X12345',
+      },
+    ] as CommunityApiStaffDetails[])
+
+    const response = await serviceUnderTest.getListForDates(
+      startOfISOWeek(new Date()),
+      endOfISOWeek(add(new Date(), { weeks: 3 })),
+      [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS]
+    )
+    expect(response).toStrictEqual([])
   })
 
   describe('in the hard stop period', () => {
