@@ -132,22 +132,24 @@ export default class PromptListService {
     const staffCodeToStaff = Object.fromEntries(staff.map(s => [s.staffCode, s]))
 
     return Object.fromEntries(
-      prisonerNumbers.map(prisoner => {
-        const { om, crn } = prisonerNumbersToDeliusRecords[prisoner]
-        const staff = staffCodeToStaff[om.staff.code]
+      prisonerNumbers
+        .filter(prisoner => prisonerNumbersToDeliusRecords[prisoner])
+        .map(prisoner => {
+          const { om, crn } = prisonerNumbersToDeliusRecords[prisoner]
+          const staff = staffCodeToStaff[om.staff.code]
 
-        return [
-          prisoner,
-          {
-            crn,
-            comStaffCode: om.staff.code,
-            comEmail: staff.email,
-            comName: `${om.staff.forenames} ${om.staff.surname}`,
-            comAllocationDate: om.fromDate,
-            comProbationAreaCode: om.probationArea.code,
-          },
-        ]
-      })
+          return [
+            prisoner,
+            {
+              crn,
+              comStaffCode: om.staff.code,
+              comEmail: staff.email,
+              comName: `${om.staff.forenames} ${om.staff.surname}`,
+              comAllocationDate: om.fromDate,
+              comProbationAreaCode: om.probationArea.code,
+            },
+          ]
+        })
     )
   }
 
