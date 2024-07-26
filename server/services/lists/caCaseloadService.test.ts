@@ -56,9 +56,7 @@ describe('Caseload Service', () => {
   describe('Probation tab caseload', () => {
     it('should return prison caseload', async () => {
       const result = await serviceUnderTest.getProbationOmuCaseload(user, ['BAI'], '')
-      expect(result).toMatchObject({
-        cases: [{ ...caCase, tabType: null }],
-      })
+      expect(result).toMatchObject([{ ...caCase, tabType: null }])
     })
   })
 })
