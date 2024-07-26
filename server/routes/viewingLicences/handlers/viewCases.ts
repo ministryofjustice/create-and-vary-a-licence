@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { format } from 'date-fns/format'
 import statusConfig from '../../../licences/licenceStatus'
-import { CaViewCasesTab } from '../../../utils/utils'
+import { CaViewCasesTab, parseCvlDate } from '../../../utils/utils'
 import PrisonerService from '../../../services/prisonerService'
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
@@ -52,7 +52,7 @@ export default class ViewAndPrintCaseRoutes {
           name: c.name,
           prisonerNumber: c.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: c.releaseDate ? format(c.releaseDate, 'dd MMM yyyy') : 'not found',
+          releaseDate: c.releaseDate ? format(parseCvlDate(c.releaseDate), 'dd MMM yyyy') : 'not found',
           releaseDateLabel: c.releaseDateLabel,
           tabType: CaViewCasesTab[c.tabType],
           nomisLegalStatus: c.nomisLegalStatus,

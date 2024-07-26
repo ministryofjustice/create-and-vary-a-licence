@@ -74,7 +74,7 @@ describe('Route handlers - View and print case list', () => {
       probationPractitioner: {
         name: 'Sherlock Holmes',
       },
-      releaseDate: '01 May 2022',
+      releaseDate: '01/05/2022',
       releaseDateLabel: 'Confirmed release date',
       licenceStatus: LicenceStatus.NOT_STARTED,
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
@@ -91,7 +91,7 @@ describe('Route handlers - View and print case list', () => {
       probationPractitioner: {
         name: 'Larry Johnson',
       },
-      releaseDate: '10 Jun 2022',
+      releaseDate: '10/06/2022',
       releaseDateLabel: 'Confirmed release date',
       licenceStatus: LicenceStatus.APPROVED,
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
@@ -108,7 +108,7 @@ describe('Route handlers - View and print case list', () => {
       probationPractitioner: {
         name: 'Walter White',
       },
-      releaseDate: '01 May 2022',
+      releaseDate: '01/05/2022',
       releaseDateLabel: 'Confirmed release date',
       licenceStatus: LicenceStatus.IN_PROGRESS,
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
@@ -125,7 +125,7 @@ describe('Route handlers - View and print case list', () => {
       probationPractitioner: {
         name: 'Harry Goldman',
       },
-      releaseDate: '01 May 2022',
+      releaseDate: '01/05/2022',
       releaseDateLabel: 'CRD',
       licenceStatus: LicenceStatus.SUBMITTED,
       tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
@@ -146,7 +146,7 @@ describe('Route handlers - View and print case list', () => {
           licenceStatus: LicenceStatus.ACTIVE,
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          releaseDate: '01 Jul 2022',
+          releaseDate: '01/07/2022',
           releaseDateLabel: 'Confirmed release date',
           probationPractitioner: {
             name: 'Sherlock Holmes',
@@ -163,7 +163,7 @@ describe('Route handlers - View and print case list', () => {
           licenceStatus: LicenceStatus.TIMED_OUT,
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          releaseDate: '01 Jun 2022',
+          releaseDate: '01/06/2022',
           releaseDateLabel: 'Confirmed release date',
           prisonerNumber: 'A1234AB',
           probationPractitioner: {
@@ -177,7 +177,7 @@ describe('Route handlers - View and print case list', () => {
           licenceStatus: LicenceStatus.IN_PROGRESS,
           isDueForEarlyRelease: true,
           isInHardStopPeriod: true,
-          releaseDate: '01 May 2022',
+          releaseDate: '01/05/2022',
           releaseDateLabel: 'Confirmed release date',
           prisonerNumber: 'A1234AC',
           probationPractitioner: {
@@ -190,7 +190,7 @@ describe('Route handlers - View and print case list', () => {
           licenceStatus: LicenceStatus.VARIATION_APPROVED,
           isDueForEarlyRelease: false,
           isInHardStopPeriod: true,
-          releaseDate: '01 May 2022',
+          releaseDate: '01/05/2022',
           releaseDateLabel: 'Confirmed release date',
           prisonerNumber: 'A1234AD',
           probationPractitioner: {
