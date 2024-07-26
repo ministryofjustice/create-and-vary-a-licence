@@ -1,10 +1,11 @@
 import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator'
-import moment from 'moment'
+// import moment from 'moment'
 import _ from 'lodash'
 import type SimpleDate from '../routes/creatingLicences/types/date'
 import DateString from '../routes/creatingLicences/types/dateString'
 
 export default function DateIsAfterExpectedReleaseDate(validationOptions?: ValidationOptions) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const DateIsAfterExpectedReleaseDate = async (date: SimpleDate | DateString, { object }: ValidationArguments) => {
     return true
     // const dateAsMoment = date.toMoment()
