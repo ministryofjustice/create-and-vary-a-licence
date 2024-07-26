@@ -6,10 +6,9 @@ import PrisonerService from '../../../services/prisonerService'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { CaViewCasesTab } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import CaCaseloadService from '../../../services/lists/caCaseloadService'
-import { CaCase, CaCaseLoad } from '../../../@types/licenceApiClientTypes'
+import CaCaseloadService, { CaCase, CaCaseLoad } from '../../../services/lists/caCaseloadService'
 
-const caseloadService = new CaCaseloadService(null) as jest.Mocked<CaCaseloadService>
+const caseloadService = new CaCaseloadService(null, null, null) as jest.Mocked<CaCaseloadService>
 jest.mock('../../../services/lists/caCaseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -77,7 +76,7 @@ describe('Route handlers - View and print case list', () => {
       releaseDate: '01 May 2022',
       releaseDateLabel: 'Confirmed release date',
       licenceStatus: LicenceStatus.NOT_STARTED,
-      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+      tabType: 'releasesInNextTwoWorkingDays',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isDueForEarlyRelease: false,
@@ -94,7 +93,7 @@ describe('Route handlers - View and print case list', () => {
       releaseDate: '10 Jun 2022',
       releaseDateLabel: 'Confirmed release date',
       licenceStatus: LicenceStatus.APPROVED,
-      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+      tabType: 'releasesInNextTwoWorkingDays',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isDueForEarlyRelease: false,
@@ -111,7 +110,7 @@ describe('Route handlers - View and print case list', () => {
       releaseDate: '01 May 2022',
       releaseDateLabel: 'Confirmed release date',
       licenceStatus: LicenceStatus.IN_PROGRESS,
-      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+      tabType: 'releasesInNextTwoWorkingDays',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isDueForEarlyRelease: false,
@@ -128,7 +127,7 @@ describe('Route handlers - View and print case list', () => {
       releaseDate: '01 May 2022',
       releaseDateLabel: 'CRD',
       licenceStatus: LicenceStatus.SUBMITTED,
-      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+      tabType: 'releasesInNextTwoWorkingDays',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isDueForEarlyRelease: true,
@@ -153,7 +152,7 @@ describe('Route handlers - View and print case list', () => {
           },
           name: 'Bob Smith',
           prisonerNumber: 'A1234AA',
-          tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+          tabType: 'releasesInNextTwoWorkingDays',
           nomisLegalStatus: 'SENTENCED',
           lastWorkedOnBy: 'Test Updater',
         },
