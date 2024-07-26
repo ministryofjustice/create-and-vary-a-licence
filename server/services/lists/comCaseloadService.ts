@@ -398,6 +398,7 @@ export default class ComCaseloadService {
           hardStopWarningDate: hardStopWarningDate && format(hardStopWarningDate, 'dd/MM/yyyy'),
           kind: licence.kind,
           isDueForEarlyRelease: c.cvlFields?.isDueForEarlyRelease,
+          licenceCreationType: licence.licenceCreationType,
         }
       })
       .sort((a, b) => {
