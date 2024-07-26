@@ -135,7 +135,7 @@ describe('Route handlers - View and print case list', () => {
       isInHardStopPeriod: true,
     },
   ] as CaCase[]
-  const prisonCaseload = { cases: caCase } as CaCaseLoad
+  const prisonCaseload = { cases: caCase, showAttentionNeededTab: false } as CaCaseLoad
 
   describe('GET', () => {
     const probationCaseLoad = {
@@ -198,6 +198,7 @@ describe('Route handlers - View and print case list', () => {
           },
         },
       ] as CaCase[],
+      showAttentionNeededTab: false,
     } as CaCaseLoad
 
     it('should render cases when user only has 1 caseloaded prison', async () => {
@@ -537,6 +538,7 @@ describe('Route handlers - View and print case list', () => {
     it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
       caseloadService.getPrisonOmuCaseload.mockResolvedValue({
         cases: [probationCaseLoad.cases[1] as CaCase],
+        showAttentionNeededTab: false,
       })
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
@@ -575,6 +577,7 @@ describe('Route handlers - View and print case list', () => {
     it('should allow modifying inprogress hardstop licence during hardstop', async () => {
       caseloadService.getPrisonOmuCaseload.mockResolvedValue({
         cases: [probationCaseLoad.cases[2] as CaCase],
+        showAttentionNeededTab: false,
       })
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
