@@ -25,7 +25,6 @@ import {
   UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
-  CaCaseloadSearch,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -748,22 +747,6 @@ describe('Licence API client tests', () => {
           path: '/caseload/prison-approver/recently-approved',
           data: ['PRI'],
         },
-        { username: 'joebloggs' }
-      )
-    })
-  })
-
-  describe('Ca caseloads: ', () => {
-    const data = { prisonCodes: ['PRI'], searchString: '' } as CaCaseloadSearch
-    it('Should get licences for prison view', async () => {
-      await licenceApiClient.getPrisonOmuCaseload(data, { username: 'joebloggs' } as User)
-      expect(post).toHaveBeenCalledWith({ path: '/caseload/case-admin/prison-view', data }, { username: 'joebloggs' })
-    })
-
-    it('Should get licences for probation view', async () => {
-      await licenceApiClient.getProbationOmuCaseload(data, { username: 'joebloggs' } as User)
-      expect(post).toHaveBeenCalledWith(
-        { path: '/caseload/case-admin/probation-view', data },
         { username: 'joebloggs' }
       )
     })

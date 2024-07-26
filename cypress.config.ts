@@ -116,8 +116,6 @@ export default defineConfig({
         stubDeactivateLicenceAndVariations: licence.stubDeactivateLicenceAndVariations,
         stubGetApprovalCaseload: licence.stubGetApprovalCaseload,
         stubGetRecentlyApprovedCaseload: licence.stubGetRecentlyApproved,
-        stubGetPrisonOmuCaseload: licence.stubGetPrisonOmuCaseload,
-        stubGetProbationOmuCaseload: licence.stubGetProbationOmuCaseload,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
