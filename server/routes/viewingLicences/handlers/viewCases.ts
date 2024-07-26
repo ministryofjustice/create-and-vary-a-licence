@@ -37,7 +37,7 @@ export default class ViewAndPrintCaseRoutes {
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
     const searchString = search?.toLowerCase().trim()
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
-    const { cases } =
+    const cases =
       view === 'prison'
         ? await this.caseloadService.getPrisonOmuCaseload(user, prisonCaseloadToDisplay, searchString)
         : await this.caseloadService.getProbationOmuCaseload(user, prisonCaseloadToDisplay, searchString)

@@ -7,7 +7,7 @@ import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { CaViewCasesTab } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
-import { CaCase, CaCaseLoad } from '../../../@types/licenceApiClientTypes'
+import { CaCase } from '../../../@types/licenceApiClientTypes'
 
 const caseloadService = new CaCaseloadService(null) as jest.Mocked<CaCaseloadService>
 jest.mock('../../../services/lists/caCaseloadService')
@@ -135,70 +135,68 @@ describe('Route handlers - View and print case list', () => {
       isInHardStopPeriod: true,
     },
   ] as CaCase[]
-  const prisonCaseload = { cases: caCase } as CaCaseLoad
+  const prisonCaseload = caCase as CaCase[]
 
   describe('GET', () => {
-    const probationCaseLoad = {
-      cases: [
-        {
-          kind: LicenceKind.CRD,
-          licenceId: 5,
-          licenceStatus: LicenceStatus.ACTIVE,
-          isDueForEarlyRelease: true,
-          isInHardStopPeriod: true,
-          releaseDate: '01/07/2022',
-          releaseDateLabel: 'Confirmed release date',
-          probationPractitioner: {
-            name: 'Sherlock Holmes',
-          },
-          name: 'Bob Smith',
-          prisonerNumber: 'A1234AA',
-          tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
-          nomisLegalStatus: 'SENTENCED',
-          lastWorkedOnBy: 'Test Updater',
+    const probationCaseLoad = [
+      {
+        kind: LicenceKind.CRD,
+        licenceId: 5,
+        licenceStatus: LicenceStatus.ACTIVE,
+        isDueForEarlyRelease: true,
+        isInHardStopPeriod: true,
+        releaseDate: '01/07/2022',
+        releaseDateLabel: 'Confirmed release date',
+        probationPractitioner: {
+          name: 'Sherlock Holmes',
         },
-        {
-          ...caCase,
-          licenceId: 6,
-          licenceStatus: LicenceStatus.TIMED_OUT,
-          isDueForEarlyRelease: true,
-          isInHardStopPeriod: true,
-          releaseDate: '01/06/2022',
-          releaseDateLabel: 'Confirmed release date',
-          prisonerNumber: 'A1234AB',
-          probationPractitioner: {
-            name: 'Thor',
-          },
+        name: 'Bob Smith',
+        prisonerNumber: 'A1234AA',
+        tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
+        nomisLegalStatus: 'SENTENCED',
+        lastWorkedOnBy: 'Test Updater',
+      },
+      {
+        ...caCase,
+        licenceId: 6,
+        licenceStatus: LicenceStatus.TIMED_OUT,
+        isDueForEarlyRelease: true,
+        isInHardStopPeriod: true,
+        releaseDate: '01/06/2022',
+        releaseDateLabel: 'Confirmed release date',
+        prisonerNumber: 'A1234AB',
+        probationPractitioner: {
+          name: 'Thor',
         },
-        {
-          ...caCase,
-          kind: LicenceKind.HARD_STOP,
-          licenceId: 7,
-          licenceStatus: LicenceStatus.IN_PROGRESS,
-          isDueForEarlyRelease: true,
-          isInHardStopPeriod: true,
-          releaseDate: '01/05/2022',
-          releaseDateLabel: 'Confirmed release date',
-          prisonerNumber: 'A1234AC',
-          probationPractitioner: {
-            name: 'Walter White',
-          },
+      },
+      {
+        ...caCase,
+        kind: LicenceKind.HARD_STOP,
+        licenceId: 7,
+        licenceStatus: LicenceStatus.IN_PROGRESS,
+        isDueForEarlyRelease: true,
+        isInHardStopPeriod: true,
+        releaseDate: '01/05/2022',
+        releaseDateLabel: 'Confirmed release date',
+        prisonerNumber: 'A1234AC',
+        probationPractitioner: {
+          name: 'Walter White',
         },
-        {
-          ...caCase,
-          licenceId: 8,
-          licenceStatus: LicenceStatus.VARIATION_APPROVED,
-          isDueForEarlyRelease: false,
-          isInHardStopPeriod: true,
-          releaseDate: '01/05/2022',
-          releaseDateLabel: 'Confirmed release date',
-          prisonerNumber: 'A1234AD',
-          probationPractitioner: {
-            name: 'Harry Goldman',
-          },
+      },
+      {
+        ...caCase,
+        licenceId: 8,
+        licenceStatus: LicenceStatus.VARIATION_APPROVED,
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: true,
+        releaseDate: '01/05/2022',
+        releaseDateLabel: 'Confirmed release date',
+        prisonerNumber: 'A1234AD',
+        probationPractitioner: {
+          name: 'Harry Goldman',
         },
-      ] as CaCase[],
-    } as CaCaseLoad
+      },
+    ] as CaCase[]
 
     it('should render cases when user only has 1 caseloaded prison', async () => {
       caseloadService.getPrisonOmuCaseload.mockResolvedValue(prisonCaseload)
@@ -535,9 +533,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
-      caseloadService.getPrisonOmuCaseload.mockResolvedValue({
-        cases: [probationCaseLoad.cases[1] as CaCase],
-      })
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue([probationCaseLoad[1] as CaCase])
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
@@ -573,9 +569,7 @@ describe('Route handlers - View and print case list', () => {
     })
 
     it('should allow modifying inprogress hardstop licence during hardstop', async () => {
-      caseloadService.getPrisonOmuCaseload.mockResolvedValue({
-        cases: [probationCaseLoad.cases[2] as CaCase],
-      })
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue([probationCaseLoad[2] as CaCase])
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
       await handler.GET(req, res)
