@@ -29,7 +29,7 @@ export type ComCase = {
   sortDate?: Date
   licenceId: number
   licenceStatus: LicenceStatus
-  licenceType: 'AP' | 'AP_PSS' | 'PSS'
+  licenceType: LicenceType
   probationPractitioner: ProbationPractitioner
   hardStopDate?: string
   hardStopWarningDate?: string
