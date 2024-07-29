@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { format } from 'date-fns/format'
 import statusConfig from '../../../licences/licenceStatus'
-import { CaViewCasesTab } from '../../../utils/utils'
+import { CaViewCasesTab, parseCvlDate } from '../../../utils/utils'
 import PrisonerService from '../../../services/prisonerService'
 import CaCaseloadService from '../../../services/lists/caCaseloadService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
@@ -37,7 +37,7 @@ export default class ViewAndPrintCaseRoutes {
     const prisonCaseloadToDisplay = caseloadsSelected.length ? caseloadsSelected : [activeCaseload[0].agencyId]
     const searchString = search?.toLowerCase().trim()
     const prisonsToDisplay = allPrisons.filter(p => prisonCaseloadToDisplay.includes(p.agencyId))
-    const { cases } =
+    const cases =
       view === 'prison'
         ? await this.caseloadService.getPrisonOmuCaseload(user, prisonCaseloadToDisplay, searchString)
         : await this.caseloadService.getProbationOmuCaseload(user, prisonCaseloadToDisplay, searchString)
@@ -52,7 +52,7 @@ export default class ViewAndPrintCaseRoutes {
           name: c.name,
           prisonerNumber: c.prisonerNumber,
           probationPractitioner: c.probationPractitioner,
-          releaseDate: c.releaseDate ? format(c.releaseDate, 'dd MMM yyyy') : 'not found',
+          releaseDate: c.releaseDate ? format(parseCvlDate(c.releaseDate), 'dd MMM yyyy') : 'not found',
           releaseDateLabel: c.releaseDateLabel,
           tabType: CaViewCasesTab[c.tabType],
           nomisLegalStatus: c.nomisLegalStatus,

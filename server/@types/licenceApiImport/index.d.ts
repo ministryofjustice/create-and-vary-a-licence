@@ -1440,11 +1440,6 @@ export interface components {
        */
       prisonCodes: string[]
     }
-    /** @description Describes an CA(OMU) caseload */
-    CaCaseLoad: {
-      /** @description CA(OMU) cases */
-      cases: components['schemas']['CaCase'][]
-    }
     /** @description Describes an CA(OMU) case */
     CaCase: {
       /**
