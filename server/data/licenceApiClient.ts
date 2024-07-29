@@ -40,7 +40,7 @@ import type {
   ApprovalCase,
   SearchResultsPage,
   CaCaseloadSearch,
-  CaCaseLoad,
+  CaCase,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -624,23 +624,23 @@ export default class LicenceApiClient extends RestClient {
     )) as Promise<ApprovalCase[]>
   }
 
-  async getPrisonOmuCaseload(caCaseloadSearch: CaCaseloadSearch, user?: User): Promise<CaCaseLoad> {
+  async getPrisonOmuCaseload(caCaseloadSearch: CaCaseloadSearch, user?: User): Promise<CaCase[]> {
     return (await this.post(
       {
         path: `/caseload/case-admin/prison-view`,
         data: caCaseloadSearch,
       },
       { username: user?.username }
-    )) as Promise<CaCaseLoad>
+    )) as Promise<CaCase[]>
   }
 
-  async getProbationOmuCaseload(caCaseloadSearch: CaCaseloadSearch, user?: User): Promise<CaCaseLoad> {
+  async getProbationOmuCaseload(caCaseloadSearch: CaCaseloadSearch, user?: User): Promise<CaCase[]> {
     return (await this.post(
       {
         path: `/caseload/case-admin/probation-view`,
         data: caCaseloadSearch,
       },
       { username: user?.username }
-    )) as Promise<CaCaseLoad>
+    )) as Promise<CaCase[]>
   }
 }
