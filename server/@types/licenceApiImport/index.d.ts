@@ -1425,6 +1425,122 @@ export interface components {
        */
       comEmail?: string
     }
+    /** @description Search Criteria for CA Caseload Search */
+    CaCaseloadSearch: {
+      /**
+       * @description Search text to filter caseload
+       * @example 2022-04-20
+       */
+      searchString?: string
+      /**
+       * @description List of Prison Ids (can include OUT and TRN) to restrict the search by. Unrestricted if not supplied or null
+       * @example [
+       *   "MDI"
+       * ]
+       */
+      prisonCodes: string[]
+    }
+    /** @description Describes an CA(OMU) caseload */
+    CaCaseLoad: {
+      /** @description CA(OMU) cases */
+      cases: components['schemas']['CaCase'][]
+    }
+    /** @description Describes an CA(OMU) case */
+    CaCase: {
+      /**
+       * @description Type of this licence
+       * @example CRD
+       * @enum {string}
+       */
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP'
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      licenceId?: number
+      /**
+       * Format: int64
+       * @description The version number of this licence
+       */
+      licenceVersionOf?: number
+      /**
+       * @description The full name of the person on licence
+       * @example John Doe
+       */
+      name: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      prisonerNumber: string
+      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       */
+      releaseDate?: string
+      /**
+       * @description Label for release date
+       * @example Confirmed release date
+       */
+      releaseDateLabel?: string
+      /**
+       * @description The new status for this licence
+       * @example APPROVED
+       * @enum {string}
+       */
+      licenceStatus:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
+        | 'OOS_BOTUS'
+        | 'OOS_RECALL'
+      /**
+       * @description The type of tab this licence has to be populated
+       * @example RELEASES_IN_NEXT_TWO_WORKING_DAYS
+       * @enum {string}
+       */
+      tabType?: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS' | 'FUTURE_RELEASES' | 'ATTENTION_NEEDED'
+      /**
+       * @description Legal Status
+       * @example SENTENCED
+       * @enum {string}
+       */
+      nomisLegalStatus?:
+        | 'RECALL'
+        | 'DEAD'
+        | 'INDETERMINATE_SENTENCE'
+        | 'SENTENCED'
+        | 'CONVICTED_UNSENTENCED'
+        | 'CIVIL_PRISONER'
+        | 'IMMIGRATION_DETAINEE'
+        | 'REMAND'
+        | 'UNKNOWN'
+        | 'OTHER'
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      lastWorkedOnBy?: string
+      /**
+       * @description Is the prisoner due for early release
+       * @example false
+       */
+      isDueForEarlyRelease?: boolean
+      /** @description Is the licence in the hard stop period? (Within two working days of release) */
+      isInHardStopPeriod: boolean
+    }
     /** @description Request object for searching for recently approved licences */
     RecentlyApprovedLicencesRequest: {
       /**

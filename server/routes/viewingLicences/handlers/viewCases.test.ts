@@ -6,9 +6,10 @@ import PrisonerService from '../../../services/prisonerService'
 import { PrisonDetail } from '../../../@types/prisonApiClientTypes'
 import { CaViewCasesTab } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import CaCaseloadService, { CaCase, CaCaseLoad } from '../../../services/lists/caCaseloadService'
+import CaCaseloadService from '../../../services/lists/caCaseloadService'
+import { CaCase, CaCaseLoad } from '../../../@types/licenceApiClientTypes'
 
-const caseloadService = new CaCaseloadService(null, null, null) as jest.Mocked<CaCaseloadService>
+const caseloadService = new CaCaseloadService(null) as jest.Mocked<CaCaseloadService>
 jest.mock('../../../services/lists/caCaseloadService')
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
@@ -76,7 +77,7 @@ describe('Route handlers - View and print case list', () => {
       releaseDate: '01 May 2022',
       releaseDateLabel: 'Confirmed release date',
       licenceStatus: LicenceStatus.NOT_STARTED,
-      tabType: 'releasesInNextTwoWorkingDays',
+      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isDueForEarlyRelease: false,
@@ -93,7 +94,7 @@ describe('Route handlers - View and print case list', () => {
       releaseDate: '10 Jun 2022',
       releaseDateLabel: 'Confirmed release date',
       licenceStatus: LicenceStatus.APPROVED,
-      tabType: 'releasesInNextTwoWorkingDays',
+      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isDueForEarlyRelease: false,
@@ -110,7 +111,7 @@ describe('Route handlers - View and print case list', () => {
       releaseDate: '01 May 2022',
       releaseDateLabel: 'Confirmed release date',
       licenceStatus: LicenceStatus.IN_PROGRESS,
-      tabType: 'releasesInNextTwoWorkingDays',
+      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isDueForEarlyRelease: false,
@@ -127,14 +128,14 @@ describe('Route handlers - View and print case list', () => {
       releaseDate: '01 May 2022',
       releaseDateLabel: 'CRD',
       licenceStatus: LicenceStatus.SUBMITTED,
-      tabType: 'releasesInNextTwoWorkingDays',
+      tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isDueForEarlyRelease: true,
       isInHardStopPeriod: true,
     },
   ] as CaCase[]
-  const prisonCaseload = { cases: caCase, showAttentionNeededTab: false } as CaCaseLoad
+  const prisonCaseload = { cases: caCase } as CaCaseLoad
 
   describe('GET', () => {
     const probationCaseLoad = {
@@ -152,7 +153,7 @@ describe('Route handlers - View and print case list', () => {
           },
           name: 'Bob Smith',
           prisonerNumber: 'A1234AA',
-          tabType: 'releasesInNextTwoWorkingDays',
+          tabType: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS',
           nomisLegalStatus: 'SENTENCED',
           lastWorkedOnBy: 'Test Updater',
         },
@@ -197,7 +198,6 @@ describe('Route handlers - View and print case list', () => {
           },
         },
       ] as CaCase[],
-      showAttentionNeededTab: false,
     } as CaCaseLoad
 
     it('should render cases when user only has 1 caseloaded prison', async () => {
@@ -537,7 +537,6 @@ describe('Route handlers - View and print case list', () => {
     it('should allow creation of hardstop licence for existing TIMED_OUT licences', async () => {
       caseloadService.getPrisonOmuCaseload.mockResolvedValue({
         cases: [probationCaseLoad.cases[1] as CaCase],
-        showAttentionNeededTab: false,
       })
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'
@@ -576,7 +575,6 @@ describe('Route handlers - View and print case list', () => {
     it('should allow modifying inprogress hardstop licence during hardstop', async () => {
       caseloadService.getPrisonOmuCaseload.mockResolvedValue({
         cases: [probationCaseLoad.cases[2] as CaCase],
-        showAttentionNeededTab: false,
       })
       res.locals.user.prisonCaseload = ['BAI']
       req.query.view = 'prison'

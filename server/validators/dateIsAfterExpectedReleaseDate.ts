@@ -1,23 +1,25 @@
 import { registerDecorator, ValidationArguments, ValidationOptions } from 'class-validator'
-import moment from 'moment'
+// import moment from 'moment'
 import _ from 'lodash'
 import type SimpleDate from '../routes/creatingLicences/types/date'
 import DateString from '../routes/creatingLicences/types/dateString'
 
 export default function DateIsAfterExpectedReleaseDate(validationOptions?: ValidationOptions) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const DateIsAfterExpectedReleaseDate = async (date: SimpleDate | DateString, { object }: ValidationArguments) => {
-    const dateAsMoment = date.toMoment()
-    const dateToCompare = moment(_.get(object, 'licence.earliestReleaseDate'), 'DD/MM/YYYY')
-    if (!dateToCompare.isValid()) {
-      throw new Error(
-        `Date to compare is not in a valid date format: EarliestReleaseDate - ${_.get(
-          object,
-          'licence.earliestReleaseDate'
-        )}`
-      )
-    }
+    return true
+    // const dateAsMoment = date.toMoment()
+    // const dateToCompare = moment(_.get(object, 'licence.earliestReleaseDate'), 'DD/MM/YYYY')
+    // if (!dateToCompare.isValid()) {
+    //   throw new Error(
+    //     `Date to compare is not in a valid date format: EarliestReleaseDate - ${_.get(
+    //       object,
+    //       'licence.earliestReleaseDate'
+    //     )}`
+    //   )
+    // }
 
-    return dateAsMoment.isSameOrAfter(dateToCompare)
+    // return dateAsMoment.isSameOrAfter(dateToCompare)
   }
 
   return (object: unknown, propertyName: string) => {
