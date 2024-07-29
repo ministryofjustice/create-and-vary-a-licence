@@ -38,14 +38,12 @@ describe('Caseload Service', () => {
 
   const caseload = {
     cases: [caCase],
-    showAttentionNeededTab: false,
   } as CaCaseLoad
 
   beforeEach(() => {
     licenceApiClient.getPrisonOmuCaseload.mockResolvedValue(caseload)
     licenceApiClient.getProbationOmuCaseload.mockResolvedValue({
       cases: [{ ...caCase, tabType: null }],
-      showAttentionNeededTab: false,
     })
   })
 
@@ -64,7 +62,6 @@ describe('Caseload Service', () => {
       const result = await serviceUnderTest.getProbationOmuCaseload(user, ['BAI'], '')
       expect(result).toMatchObject({
         cases: [{ ...caCase, tabType: null }],
-        showAttentionNeededTab: false,
       })
     })
   })
