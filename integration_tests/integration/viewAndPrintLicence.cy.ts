@@ -12,6 +12,8 @@ context('View and print licence', () => {
     cy.task('reset')
     cy.task('stubPrisonSignIn')
     cy.task('stubGetPrisonUserDetails')
+    cy.task('stubGetPrisonOmuCaseload')
+    cy.task('stubGetProbationOmuCaseload')
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
     cy.task('stubGetOffendersByNomsNumber')
     cy.task('searchPrisonersByNomisIds')

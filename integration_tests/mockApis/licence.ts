@@ -2067,4 +2067,75 @@ export default {
       },
     })
   },
+
+  stubGetPrisonOmuCaseload: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/prison-view`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          cases: [
+            {
+              kind: 'CRD',
+              licenceId: 1,
+              name: 'Steve Cena',
+              prisonerNumber: 'AB1234E',
+              probationPractitioner: {
+                name: 'John Smith',
+                staffCode: 'X1234',
+              },
+              releaseDate: '01 May 2022',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'APPROVED',
+              tabType: 'FUTURE_RELEASES',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'X Y',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
+            },
+          ],
+          showAttentionNeededTab: true,
+        },
+      },
+    })
+  },
+  stubGetProbationOmuCaseload: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/case-admin/probation-view`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          cases: [
+            {
+              kind: 'CRD',
+              licenceId: 2,
+              name: 'Steve Cena',
+              prisonerNumber: 'AB1234E',
+              probationPractitioner: {
+                name: 'Joe Bloggs',
+                staffCode: 'X1234',
+              },
+              releaseDate: '01 May 2022',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'ACTIVE',
+              tabType: null,
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'X Y',
+              isDueForEarlyRelease: true,
+              isInHardStopPeriod: false,
+            },
+          ],
+          showAttentionNeededTab: false,
+        },
+      },
+    })
+  },
 }
