@@ -84,7 +84,7 @@ describe('COM Caseload Service', () => {
             prisonerNumber: 'ABC123',
           },
           cvlFields: { isInHardStopPeriod: true },
-          licences: [{ status: 'TIMED_OUT', type: 'PSS' }],
+          licences: [{ nomisId: 'ABC123', status: 'TIMED_OUT', type: 'PSS' }],
         },
       ])
     })
@@ -195,7 +195,6 @@ describe('COM Caseload Service', () => {
         },
         cvl: {},
       },
-      // This case tests that recalls are NOT overridden if the PRRD > the conditionalReleaseDate - so OOS_RECALL
       {
         prisoner: {
           prisonerNumber: 'AB1234N',
@@ -288,13 +287,6 @@ describe('COM Caseload Service', () => {
         licenceStatus: 'NOT_STARTED',
         licenceType: 'PSS',
       },
-      {
-        crnNumber: 'X12353',
-        prisonerNumber: 'AB1234N',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'OOS_RECALL',
-        licenceType: 'PSS',
-      },
     ])
   })
 
@@ -355,6 +347,7 @@ describe('COM Caseload Service', () => {
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         kind: 'CRD',
+        crn: 'X12352',
         nomisId: 'AB1234I',
         licenceId: 1,
         licenceType: LicenceType.AP_PSS,
@@ -517,17 +510,6 @@ describe('COM Caseload Service', () => {
           name: 'Joe Bloggs',
         },
       },
-      {
-        crnNumber: 'X12349',
-        prisonerNumber: 'AB1234F',
-        releaseDate: expectedReleaseDate,
-        licenceStatus: 'OOS_BOTUS',
-        licenceType: 'PSS',
-        probationPractitioner: {
-          staffCode: 'X54321',
-          name: 'Sherlock Holmes',
-        },
-      },
     ])
     expect(communityService.getManagedOffendersByTeam).toHaveBeenCalledTimes(1)
   })
@@ -553,6 +535,7 @@ describe('COM Caseload Service', () => {
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234E',
+        crn: 'X12348',
         licenceId: 1,
         kind: 'CRD',
         licenceType: LicenceType.AP,
@@ -565,6 +548,7 @@ describe('COM Caseload Service', () => {
       },
       {
         nomisId: 'AB1234E',
+        crn: 'X12348',
         licenceId: 2,
         kind: 'CRD',
         licenceType: LicenceType.AP,
@@ -637,6 +621,7 @@ describe('COM Caseload Service', () => {
       },
       {
         nomisId: 'AB1234E',
+        crn: 'X12348',
         licenceId: 2,
         kind: 'CRD',
         licenceType: LicenceType.AP,
@@ -649,6 +634,7 @@ describe('COM Caseload Service', () => {
       },
       {
         nomisId: 'AB1234E',
+        crn: 'X12348',
         licenceId: 3,
         kind: 'CRD',
         licenceType: LicenceType.AP,
@@ -709,6 +695,7 @@ describe('COM Caseload Service', () => {
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234E',
+        crn: 'X12348',
         licenceId: 1,
         kind: 'HARD_STOP',
         licenceType: LicenceType.AP,
@@ -773,6 +760,7 @@ describe('COM Caseload Service', () => {
         {
           kind: 'VARIATION',
           nomisId: 'AB1234E',
+          crn: 'X12348',
           licenceId: 1,
           licenceType: LicenceType.PSS,
           licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
@@ -785,6 +773,7 @@ describe('COM Caseload Service', () => {
         {
           kind: 'VARIATION',
           nomisId: 'AB1234F',
+          crn: 'X12349',
           licenceId: 2,
           licenceType: LicenceType.AP,
           licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
@@ -870,6 +859,7 @@ describe('COM Caseload Service', () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
         {
           nomisId: 'AB1234E',
+          crn: 'X12348',
           licenceId: 1,
           kind: 'HARD_STOP',
           licenceType: LicenceType.AP,

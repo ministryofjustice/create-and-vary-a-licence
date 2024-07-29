@@ -161,6 +161,8 @@ export default class ComCaseloadService {
           ),
         'is on an ineligible Extended Determinate Sentence'
       )
+      .filter(offender => !CaseListUtils.isRecall(offender.nomisRecord))
+      .filter(offender => !CaseListUtils.isBreachOfTopUpSupervision(offender.nomisRecord))
 
     if (eligibleOffenders.length === 0) return eligibleOffenders
 
@@ -213,8 +215,11 @@ export default class ComCaseloadService {
               id: licence.licenceId,
               status: licence.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : <LicenceStatus>licence.licenceStatus,
               type: <LicenceType>licence.licenceType,
-              comUsername: licence.comUsername,
               kind: <LicenceKind>licence.kind,
+              crn: licence.crn,
+              nomisId: licence.nomisId,
+              name: convertToTitleCase(`${offender.nomisRecord.firstName} ${offender.nomisRecord.lastName}`.trim()),
+              comUsername: licence.comUsername,
               versionOf: licence.versionOf,
               hardStopDate: parseCvlDate(licence.hardStopDate),
               hardStopWarningDate: parseCvlDate(licence.hardStopWarningDate),
@@ -233,27 +238,25 @@ export default class ComCaseloadService {
       // Default status (if not overridden below) will show the case as clickable on case lists
       let licenceStatus = LicenceStatus.NOT_STARTED
 
-      if (CaseListUtils.isBreachOfTopUpSupervision(offender.nomisRecord)) {
-        // Imprisonment status indicates a breach of top up supervision order - not clickable (yet)
-        licenceStatus = LicenceStatus.OOS_BOTUS
-      } else if (CaseListUtils.isRecall(offender.nomisRecord)) {
-        // Offender is subject to an active recall - not clickable
-        licenceStatus = LicenceStatus.OOS_RECALL
-      } else if (offender.cvlFields.isInHardStopPeriod) {
+      if (offender.cvlFields.isInHardStopPeriod) {
         licenceStatus = LicenceStatus.TIMED_OUT
       }
 
       if (!offender.nomisRecord.conditionalReleaseDate) {
+        const releaseDate = offender.nomisRecord.confirmedReleaseDate
         return {
           ...offender,
           licences: [
             {
               status: licenceStatus,
               type: licenceType,
+              crn: offender.deliusRecord?.offenderCrn,
+              nomisId: offender.nomisRecord?.prisonerNumber,
+              name: convertToTitleCase(`${offender.nomisRecord.firstName} ${offender.nomisRecord.lastName}`.trim()),
+              releaseDate: releaseDate ? parseIsoDate(releaseDate) : null,
               hardStopDate: null,
               hardStopWarningDate: null,
               isDueToBeReleasedInTheNextTwoWorkingDays: null,
-              releaseDate: null,
             },
           ],
         }
@@ -269,6 +272,9 @@ export default class ComCaseloadService {
           {
             status: licenceStatus,
             type: licenceType,
+            crn: offender.deliusRecord?.offenderCrn,
+            nomisId: offender.nomisRecord?.prisonerNumber,
+            name: convertToTitleCase(`${offender.nomisRecord.firstName} ${offender.nomisRecord.lastName}`.trim()),
             hardStopDate,
             hardStopWarningDate,
             isDueToBeReleasedInTheNextTwoWorkingDays,
@@ -300,16 +306,13 @@ export default class ComCaseloadService {
       .filter(
         offender =>
           [
-            LicenceStatus.OOS_RECALL,
-            LicenceStatus.OOS_BOTUS,
-            LicenceStatus.NOT_IN_PILOT,
             LicenceStatus.NOT_STARTED,
             LicenceStatus.IN_PROGRESS,
             LicenceStatus.SUBMITTED,
             LicenceStatus.APPROVED,
             LicenceStatus.TIMED_OUT,
           ].some(status => offender.licences.find(l => l.status === status)),
-        'licence status is not one of OOS_RECALL, OOS_BOTUS, NOT_IN_PILOT, NOT_STARTED, IN_PROGRESS, SUBMITTED, APPROVED,'
+        'licence status is not one of NOT_STARTED, IN_PROGRESS, SUBMITTED, APPROVED,'
       )
   }
 
@@ -379,25 +382,32 @@ export default class ComCaseloadService {
 
   createCaseloadViewModel = (caseload: ManagedCase[]): ComCase[] => {
     return caseload
-      .map(c => {
-        const licence = this.findLicenceToDisplay(c)
-        const releaseDate = c.nomisRecord.releaseDate || c.nomisRecord.conditionalReleaseDate
-        const sortDate = releaseDate && parseIsoDate(releaseDate)
+      .map(managedCase => {
+        const licence = this.findLicenceToDisplay(managedCase)
+        let releaseDate: string | Date
+        let sortDate: Date
+        if (licence.releaseDate) {
+          releaseDate = licence.releaseDate
+          sortDate = releaseDate
+        } else {
+          releaseDate = managedCase.nomisRecord.releaseDate || managedCase.nomisRecord.conditionalReleaseDate
+          sortDate = parseIsoDate(releaseDate)
+        }
         const { hardStopDate, hardStopWarningDate } = licence
         return {
-          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
-          crnNumber: c.deliusRecord.offenderCrn,
-          prisonerNumber: c.nomisRecord.prisonerNumber,
+          name: licence.name,
+          crnNumber: licence.crn,
+          prisonerNumber: licence.nomisId,
           releaseDate: releaseDate && format(releaseDate, 'dd/MM/yyyy'),
           sortDate,
           licenceId: licence.id,
           licenceStatus: licence.status,
           licenceType: licence.type,
-          probationPractitioner: c.probationPractitioner,
+          probationPractitioner: managedCase.probationPractitioner,
           hardStopDate: hardStopDate && format(hardStopDate, 'dd/MM/yyyy'),
           hardStopWarningDate: hardStopWarningDate && format(hardStopWarningDate, 'dd/MM/yyyy'),
           kind: licence.kind,
-          isDueForEarlyRelease: c.cvlFields?.isDueForEarlyRelease,
+          isDueForEarlyRelease: managedCase.cvlFields?.isDueForEarlyRelease,
           licenceCreationType: licence.licenceCreationType,
         }
       })
@@ -414,14 +424,13 @@ export default class ComCaseloadService {
           ? licences.find(l => l.status !== LicenceStatus.ACTIVE && l.status !== LicenceStatus.REVIEW_NEEDED)
           : _.head(licences)
 
-      const releaseDate = managedCase.nomisRecord.releaseDate || managedCase.nomisRecord.conditionalReleaseDate
       return {
         licenceId: licence.id,
-        name: convertToTitleCase(`${managedCase.nomisRecord.firstName} ${managedCase.nomisRecord.lastName}`.trim()),
-        crnNumber: managedCase.deliusRecord.offenderCrn,
-        prisonerNumber: managedCase.nomisRecord.prisonerNumber,
+        name: licence.name,
+        crnNumber: licence.crn,
+        prisonerNumber: licence.nomisId,
         licenceType: licence.type,
-        releaseDate: releaseDate && format(releaseDate, 'dd/MM/yyyy'),
+        releaseDate: licence.releaseDate && format(licence.releaseDate, 'dd/MM/yyyy'),
         licenceStatus: licence.status,
         probationPractitioner: managedCase.probationPractitioner,
         kind: licence.kind,

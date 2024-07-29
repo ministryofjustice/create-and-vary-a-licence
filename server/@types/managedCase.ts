@@ -27,6 +27,9 @@ export type Licence = {
   status: LicenceStatus
   kind?: LicenceKind
   type: LicenceType
+  crn?: string
+  nomisId?: string
+  name?: string
   comUsername?: string
   dateCreated?: string
   approvedBy?: string
@@ -38,7 +41,6 @@ export type Licence = {
   licenceStartDate?: string
   releaseDate: Date
   isDueToBeReleasedInTheNextTwoWorkingDays: boolean
-  previouslyApprovedId?: number
   licenceCreationType?: LicenceCreationType
 }
 
