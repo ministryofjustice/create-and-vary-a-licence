@@ -218,7 +218,7 @@ export default class ComCaseloadService {
               kind: <LicenceKind>licence.kind,
               crn: licence.crn,
               nomisId: licence.nomisId,
-              name: convertToTitleCase(`${offender.nomisRecord.firstName} ${offender.nomisRecord.lastName}`.trim()),
+              name: convertToTitleCase(`${licence.forename} ${licence.surname}`.trim()),
               comUsername: licence.comUsername,
               versionOf: licence.versionOf,
               hardStopDate: parseCvlDate(licence.hardStopDate),
@@ -231,7 +231,6 @@ export default class ComCaseloadService {
       }
 
       // No licences present for this offender - determine how to show them in case lists
-
       // Determine the likely type of intended licence from the prison record
       const licenceType = CaseListUtils.getLicenceType(offender.nomisRecord)
 
@@ -384,22 +383,13 @@ export default class ComCaseloadService {
     return caseload
       .map(managedCase => {
         const licence = this.findLicenceToDisplay(managedCase)
-        let releaseDate: string | Date
-        let sortDate: Date
-        if (licence.releaseDate) {
-          releaseDate = licence.releaseDate
-          sortDate = releaseDate
-        } else {
-          releaseDate = managedCase.nomisRecord.releaseDate || managedCase.nomisRecord.conditionalReleaseDate
-          sortDate = parseIsoDate(releaseDate)
-        }
         const { hardStopDate, hardStopWarningDate } = licence
         return {
           name: licence.name,
           crnNumber: licence.crn,
           prisonerNumber: licence.nomisId,
-          releaseDate: releaseDate && format(releaseDate, 'dd/MM/yyyy'),
-          sortDate,
+          releaseDate: licence.releaseDate && format(licence.releaseDate, 'dd/MM/yyyy'),
+          sortDate: licence.releaseDate,
           licenceId: licence.id,
           licenceStatus: licence.status,
           licenceType: licence.type,

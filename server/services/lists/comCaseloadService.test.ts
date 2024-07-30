@@ -352,6 +352,7 @@ describe('COM Caseload Service', () => {
         licenceId: 1,
         licenceType: LicenceType.AP_PSS,
         licenceStatus: LicenceStatus.SUBMITTED,
+        conditionalReleaseDate: convertDateFormat(tenDaysFromNow),
         comUsername: 'sherlockholmes',
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
