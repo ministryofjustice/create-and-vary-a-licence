@@ -6,7 +6,6 @@ import logger from '../../../../logger'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { parseCvlDate } from '../../../utils/utils'
 import { LicenceCreationType } from '../../../@types/managedCase'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
@@ -54,11 +53,7 @@ export default class CaseloadRoutes {
         hardStopDate: comCase.hardStopDate && format(parseCvlDate(comCase.hardStopDate), 'dd/MM/yyyy'),
         hardStopWarningDate:
           comCase.hardStopWarningDate && format(parseCvlDate(comCase.hardStopWarningDate), 'dd/MM/yyyy'),
-        isClickable:
-          comCase.probationPractitioner !== undefined &&
-          comCase.licenceStatus !== LicenceStatus.NOT_IN_PILOT &&
-          comCase.licenceStatus !== LicenceStatus.OOS_RECALL &&
-          comCase.licenceStatus !== LicenceStatus.OOS_BOTUS,
+        isClickable: comCase.probationPractitioner !== undefined,
       }
     })
 
