@@ -45,7 +45,7 @@ export default class ViewAndPrintCaseRoutes {
     res.render('pages/view/cases', {
       cases: cases.map(c => {
         const link = this.getLink(c)
-        const licenceStatus = this.getStatus(<LicenceStatus>c.licenceStatus)
+        const licenceStatus = <LicenceStatus>c.licenceStatus
         return {
           licenceId: c.licenceId,
           licenceVersionOf: c.licenceVersionOf,
@@ -72,10 +72,6 @@ export default class ViewAndPrintCaseRoutes {
     })
   }
 
-  private getStatus = (licenceStatus: LicenceStatus) => {
-    return licenceStatus === LicenceStatus.TIMED_OUT ? LicenceStatus.NOT_STARTED : licenceStatus
-  }
-
   private getLink = (licence: CaCase): string => {
     if (
       !this.isClickable(
@@ -87,7 +83,7 @@ export default class ViewAndPrintCaseRoutes {
     ) {
       return null
     }
-    if (licence.licenceStatus === LicenceStatus.TIMED_OUT) {
+    if (licence.licenceStatus === LicenceStatus.NOT_STARTED && licence.isInHardStopPeriod) {
       return `/licence/hard-stop/create/nomisId/${licence.prisonerNumber}/confirm`
     }
     if (licence.licenceId) {
@@ -97,7 +93,11 @@ export default class ViewAndPrintCaseRoutes {
           : ''
 
       return licence.isInHardStopPeriod &&
-        this.isEditableInHardStop(<LicenceKind>licence.kind, <LicenceStatus>licence.licenceStatus)
+        this.isEditableInHardStop(
+          <LicenceKind>licence.kind,
+          <LicenceStatus>licence.licenceStatus,
+          licence.isInHardStopPeriod
+        )
         ? `/licence/hard-stop/id/${licence.licenceId}/check-your-answers${query}`
         : `/licence/view/id/${licence.licenceId}/show${query}`
     }
@@ -115,15 +115,15 @@ export default class ViewAndPrintCaseRoutes {
       return false
     }
 
-    if (isInHardStopPeriod && this.isEditableInHardStop(kind, licenceStatus)) {
+    if (isInHardStopPeriod && this.isEditableInHardStop(kind, licenceStatus, isInHardStopPeriod)) {
       return true
     }
     return !this.nonViewableStatuses.includes(licenceStatus)
   }
 
-  private isEditableInHardStop = (kind: LicenceKind, licenceStatus: LicenceStatus) => {
+  private isEditableInHardStop = (kind: LicenceKind, licenceStatus: LicenceStatus, isInHardStopPeriod: boolean) => {
     const inProgressHardStop = kind === LicenceKind.HARD_STOP && licenceStatus === LicenceStatus.IN_PROGRESS
-    const notStarted = licenceStatus === LicenceStatus.TIMED_OUT
-    return inProgressHardStop || notStarted
+    const notStartedInHardStop = licenceStatus === LicenceStatus.NOT_STARTED && isInHardStopPeriod
+    return inProgressHardStop || notStartedInHardStop
   }
 }

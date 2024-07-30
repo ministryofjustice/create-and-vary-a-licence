@@ -81,7 +81,7 @@ describe('Route handlers - View and print case list', () => {
       nomisLegalStatus: 'SENTENCED',
       lastWorkedOnBy: 'Test Updater',
       isDueForEarlyRelease: false,
-      isInHardStopPeriod: true,
+      isInHardStopPeriod: false,
     },
     {
       kind: LicenceKind.CRD,
@@ -159,7 +159,7 @@ describe('Route handlers - View and print case list', () => {
       {
         ...caCase,
         licenceId: 6,
-        licenceStatus: LicenceStatus.TIMED_OUT,
+        licenceStatus: LicenceStatus.NOT_STARTED,
         isDueForEarlyRelease: true,
         isInHardStopPeriod: true,
         releaseDate: '01/06/2022',
