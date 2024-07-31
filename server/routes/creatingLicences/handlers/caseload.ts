@@ -5,7 +5,7 @@ import statusConfig from '../../../licences/licenceStatus'
 import logger from '../../../../logger'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { parseCvlDate } from '../../../utils/utils'
-import { LicenceCreationType } from '../../../@types/managedCase'
+import LicenceCreationType from '../../../enumeration/licenceCreationType'
 
 export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
@@ -54,6 +54,7 @@ export default class CaseloadRoutes {
         hardStopWarningDate:
           comCase.hardStopWarningDate && format(parseCvlDate(comCase.hardStopWarningDate), 'dd/MM/yyyy'),
         isClickable: comCase.probationPractitioner !== undefined,
+        sortDate: parseCvlDate(comCase.releaseDate),
       }
     })
 
@@ -66,11 +67,7 @@ export default class CaseloadRoutes {
     })
   }
 
-  findCreateLinkToDisplay = (
-    licenceCreationType: LicenceCreationType,
-    licenceId: number,
-    prisonerNumber: string
-  ): string => {
+  findCreateLinkToDisplay = (licenceCreationType: string, licenceId: number, prisonerNumber: string): string => {
     if (licenceCreationType === LicenceCreationType.LICENCE_CHANGES_NOT_APPROVED_IN_TIME) {
       return `/licence/create/id/${licenceId}/licence-changes-not-approved-in-time`
     }
