@@ -70,8 +70,9 @@ export default class PrintLicenceRoutes {
     )
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
+    // TO DO add typeCode for HDC templates eg HDC_AP
     res.renderPDF(
-      `pages/licence/${licence.typeCode}`,
+      `pages/licence/HDC_AP`,
       {
         licencesUrl,
         imageData,
