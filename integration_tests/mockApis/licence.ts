@@ -2077,26 +2077,28 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            kind: 'CRD',
-            licenceId: 1,
-            name: 'Steve Cena',
-            prisonerNumber: 'AB1234E',
-            probationPractitioner: {
-              name: 'John Smith',
-              staffCode: 'X1234',
+        jsonBody: {
+          cases: [
+            {
+              kind: 'CRD',
+              licenceId: 1,
+              name: 'Steve Cena',
+              prisonerNumber: 'AB1234E',
+              probationPractitioner: {
+                name: 'John Smith',
+                staffCode: 'X1234',
+              },
+              releaseDate: '01 May 2022',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'APPROVED',
+              tabType: 'FUTURE_RELEASES',
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'X Y',
+              isDueForEarlyRelease: false,
+              isInHardStopPeriod: true,
             },
-            releaseDate: '01/05/2022',
-            releaseDateLabel: 'Confirmed release date',
-            licenceStatus: 'APPROVED',
-            tabType: 'FUTURE_RELEASES',
-            nomisLegalStatus: 'SENTENCED',
-            lastWorkedOnBy: 'X Y',
-            isDueForEarlyRelease: false,
-            isInHardStopPeriod: true,
-          },
-        ],
+          ],
+        },
       },
     })
   },
@@ -2109,26 +2111,28 @@ export default {
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            kind: 'CRD',
-            licenceId: 2,
-            name: 'Steve Cena',
-            prisonerNumber: 'AB1234E',
-            probationPractitioner: {
-              name: 'Joe Bloggs',
-              staffCode: 'X1234',
+        jsonBody: {
+          cases: [
+            {
+              kind: 'CRD',
+              licenceId: 2,
+              name: 'Steve Cena',
+              prisonerNumber: 'AB1234E',
+              probationPractitioner: {
+                name: 'Joe Bloggs',
+                staffCode: 'X1234',
+              },
+              releaseDate: '01 May 2022',
+              releaseDateLabel: 'Confirmed release date',
+              licenceStatus: 'ACTIVE',
+              tabType: null,
+              nomisLegalStatus: 'SENTENCED',
+              lastWorkedOnBy: 'X Y',
+              isDueForEarlyRelease: true,
+              isInHardStopPeriod: false,
             },
-            releaseDate: '01/05/2022',
-            releaseDateLabel: 'Confirmed release date',
-            licenceStatus: 'ACTIVE',
-            tabType: null,
-            nomisLegalStatus: 'SENTENCED',
-            lastWorkedOnBy: 'X Y',
-            isDueForEarlyRelease: true,
-            isInHardStopPeriod: false,
-          },
-        ],
+          ],
+        },
       },
     })
   },
