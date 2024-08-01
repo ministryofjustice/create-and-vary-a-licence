@@ -1,8 +1,7 @@
 import { Request, Response } from 'express'
-import { format } from 'date-fns'
+import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import statusConfig from '../../../licences/licenceStatus'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
-import { parseCvlDate } from '../../../utils/utils'
 
 export default class ProbationTeamRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
@@ -17,22 +16,13 @@ export default class ProbationTeamRoutes {
 
     const { user } = res.locals
 
-    const caseload = (
+    const caseload =
       view === 'prison'
         ? await this.comCaseloadService.getTeamCreateCaseload(user, [teamCode])
         : await this.comCaseloadService.getTeamVaryCaseload(user, [teamCode])
-    ).map(comCase => {
-      return {
-        ...comCase,
-        releaseDate: format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy'),
-        hardStopDate: comCase.hardStopDate && format(parseCvlDate(comCase.hardStopDate), 'dd/MM/yyyy'),
-        hardStopWarningDate:
-          comCase.hardStopWarningDate && format(parseCvlDate(comCase.hardStopWarningDate), 'dd/MM/yyyy'),
-      }
-    })
 
     return res.render('pages/support/probationTeam', {
-      caseload,
+      caseload: createCaseloadViewModel(caseload),
       statusConfig,
       teamCode,
       view,

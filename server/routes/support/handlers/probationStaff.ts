@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import statusConfig from '../../../licences/licenceStatus'
 import CommunityService from '../../../services/communityService'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
@@ -30,7 +31,7 @@ export default class ProbationTeamRoutes {
         : await this.comCaseloadService.getStaffVaryCaseload({ ...user, deliusStaffIdentifier: staff.staffIdentifier })
 
     return res.render('pages/support/probationStaff', {
-      caseload,
+      caseload: createCaseloadViewModel(caseload),
       statusConfig,
       view,
       staffName: `${staff.staff.forenames} ${staff.staff.surname} (${staff.staffCode})`,
