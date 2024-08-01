@@ -10,13 +10,16 @@
     -    watermark - true or false
 #}
 
+{% set offenderName = licence.forename + " " + licence.surname %}
+{% set pageTitle = offenderName %}
+
 {% block content %}
-   <div class="center">
+   <div>
       <p>
       <h1>LICENCE</h1>
       <h3>Criminal Justice Act 2003</h3>
-      <h2>{{ licence.prisonDescription }}n</h2>
-      <h2>{{ prisonTelephone }}</h2>
+      <h2>{{ licence.prisonDescription }}</h2>
+      <h2>{{ prisonTelephone or "MISSING - Prison Telephone" }}</h2>
       </p>
    </div>
    <table class="wide">
@@ -55,7 +58,7 @@
          objectives of this supervision are to (a) protect the public, (b) prevent re-offending and (c) help you to
          resettle successfully into the community.</li>
       <li>Your Home Detention Curfew commences on <span class="entry">{{ licence.sentenceEndDate | datetimeToDate }}</span> and expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate }}</span></li>
-      <li>Your supervision commences on <span class="entry">{{ licence.licenceStartDate | datetimeToDate }}</span> and expires on <span class="entry">{{ licence.actualReleaseDate | datetimeToDate }}</span> unless this licence is previously revoked.</li>
+      <li>Your supervision commences on <span class="entry">{{ licence.licenceStartDate | datetimeToDate }}</span> and expires on <span class="entry">{{ licence.actualReleaseDate | datetimeToDate or "MISSING - Actual Release Date" }}</span> unless this licence is previously revoked.</li>
       <li>On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
          during the currency of your licence, whether or not leave has been granted for you to remain in the United
          Kingdom), unless otherwise directed by your supervising officer, you must report without delay to:<br /><br /><span class="entry">{{ licence.appointmentPerson }}</span><br />
@@ -68,11 +71,15 @@
    <h2>Home Detention Curfew</h2>
    <ol class="continue">
       <li>The address(es) to which you are curfewed are:<br /><br /><span class="pre entry">
-         {% for a in (licence.curfewAddress | formatAddressAsList) %}
-            <span class="bold line-space-after">{{ a }}</span>
-         {% endfor %}
+         {% if licence.curfewAddress %}
+            {% for a in (licence.curfewAddress | formatAddressAsList) %}
+               <span class="bold line-space-after">{{ a }}</span>
+            {% endfor %}
+         {% else %}
+            "MISSING - Curfew Address"
+         {% endif%}
         <br />Details of curfew times are shown below at paragraph 7.</li>
-      <li>On the day of your release, you will be subject to curfew at your curfew address from <span class="entry">{{ licence.curfewFirstDayTimeFrom | datetimeTo12HourTime }}</span> until <span class="entry">{{ licence.curfewFirstDayTimeUntil | datetimeTo12HourTime }}.</span> The contractor will visit you at this address before
+      <li>On the day of your release, you will be subject to curfew at your curfew address from <span class="entry">{{ licence.curfewFirstDayTimeFrom | datetimeTo12HourTime or "MISSING - curfewFirstDayTimeFrom"  }}</span> until <span class="entry">{{ licence.curfewFirstDayTimeUntil | datetimeTo12HourTime or "MISSING - curfewFirstDayTimeUntil"  }}.</span> The contractor will visit you at this address before
          midnight during this period in order to fit you with the tag. You must show the contractor this copy of the
          licence to confirm your identity. Your curfew will then run until the curfew finish time the following morning.
          On your last day of curfew the contractor will visit you to remove the tag and monitoring equipment. This will
@@ -202,8 +209,8 @@
    </ol>
    <div class="no-break">
       <h3>Contact Points</h3>
-      <p>Monitoring Supplier: <span class="entry">{{ monitoringSupplierTelephone }}</span></p>
-      <p>Releasing establishment: <span class="entry">{{ prisonTelephone }}</span></p><br />
+      <p>Monitoring Supplier: <span class="entry">{{ monitoringSupplierTelephone or "MISSING - monitoringSupplierTelephone" }}</span></p>
+      <p>Releasing establishment: <span class="entry">{{ prisonTelephone or "MISSING - prisonTelephone"}}</span></p><br />
    </div>
    <div class="box">
       <p>Name: <span class="entry">{{ licence.approvedByName }}</span></p>
