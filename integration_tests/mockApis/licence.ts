@@ -2098,6 +2098,7 @@ export default {
               isInHardStopPeriod: true,
             },
           ],
+          showAttentionNeededTab: true,
         },
       },
     })
@@ -2132,6 +2133,7 @@ export default {
               isInHardStopPeriod: false,
             },
           ],
+          showAttentionNeededTab: false,
         },
       },
     })
