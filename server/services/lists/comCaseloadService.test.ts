@@ -1,4 +1,4 @@
-import { addDays, format, parse } from 'date-fns'
+import { addDays, format } from 'date-fns'
 import PrisonerService from '../prisonerService'
 import CommunityService from '../communityService'
 import LicenceService from '../licenceService'
@@ -10,7 +10,6 @@ import LicenceType from '../../enumeration/licenceType'
 import { ManagedCase } from '../../@types/managedCase'
 import { CaseloadItem } from '../../@types/licenceApiClientTypes'
 import ComCaseloadService from './comCaseloadService'
-import { convertDateFormat } from '../../utils/utils'
 
 jest.mock('../prisonerService')
 jest.mock('../communityService')
@@ -84,7 +83,7 @@ describe('COM Caseload Service', () => {
             prisonerNumber: 'ABC123',
           },
           cvlFields: { isInHardStopPeriod: true },
-          licences: [{ nomisId: 'ABC123', status: 'TIMED_OUT', type: 'PSS' }],
+          licences: [{ status: 'TIMED_OUT', type: 'PSS' }],
         },
       ])
     })
@@ -111,11 +110,19 @@ describe('COM Caseload Service', () => {
     const result = await serviceUnderTest.getStaffCreateCaseload(user)
     expect(result).toMatchObject([
       {
-        crnNumber: 'X12348',
-        prisonerNumber: 'AB1234E',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
+        deliusRecord: {
+          offenderCrn: 'X12348',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          conditionalReleaseDate: tenDaysFromNow,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
       },
     ])
   })
@@ -169,12 +176,7 @@ describe('COM Caseload Service', () => {
         prisoner: { prisonerNumber: 'AB1234J', conditionalReleaseDate: tenDaysFromNow, cvl: {} },
       },
       {
-        prisoner: {
-          prisonerNumber: 'AB1234K',
-          conditionalReleaseDate: tenDaysFromNow,
-          bookingId: '123',
-          cvl: {},
-        },
+        prisoner: { prisonerNumber: 'AB1234K', conditionalReleaseDate: tenDaysFromNow, bookingId: '123', cvl: {} },
       },
       {
         prisoner: {
@@ -195,6 +197,7 @@ describe('COM Caseload Service', () => {
         },
         cvl: {},
       },
+      // This case tests that recalls are NOT overridden if the PRRD > the conditionalReleaseDate - so OOS_RECALL
       {
         prisoner: {
           prisonerNumber: 'AB1234N',
@@ -246,46 +249,129 @@ describe('COM Caseload Service', () => {
     const result = await serviceUnderTest.getStaffCreateCaseload(user)
     expect(result).toMatchObject([
       {
-        crnNumber: 'X12354',
-        prisonerNumber: 'AB1234P',
-        releaseDate: convertDateFormat(nineDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
+        deliusRecord: {
+          offenderCrn: 'X12348',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          conditionalReleaseDate: tenDaysFromNow,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
       },
       {
-        crnNumber: 'X12355',
-        prisonerNumber: 'AB1234Q',
-        releaseDate: convertDateFormat(nineDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
+        deliusRecord: {
+          offenderCrn: 'X12351',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234L',
+          conditionalReleaseDate: tenDaysFromNow,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
       },
       {
-        crnNumber: 'X12356',
-        prisonerNumber: 'AB1234R',
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
-        releaseDate: convertDateFormat(nineDaysFromNow),
+        deliusRecord: {
+          otherIds: {
+            nomsNumber: 'AB1234M',
+            crn: 'X12352',
+          },
+          offenderCrn: 'X12352',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234M',
+          conditionalReleaseDate: tenDaysFromNow,
+          postRecallReleaseDate: nineDaysFromNow,
+          status: 'ACTIVE IN',
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
       },
       {
-        crnNumber: 'X12348',
-        prisonerNumber: 'AB1234E',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
+        deliusRecord: {
+          offenderCrn: 'X12353',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234N',
+          conditionalReleaseDate: tenDaysFromNow,
+          postRecallReleaseDate: elevenDaysFromNow,
+          status: 'ACTIVE IN',
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'OOS_RECALL',
+            type: 'PSS',
+          },
+        ],
       },
       {
-        crnNumber: 'X12351',
-        prisonerNumber: 'AB1234L',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
+        deliusRecord: {
+          offenderCrn: 'X12354',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234P',
+          conditionalReleaseDate: nineDaysFromNow,
+          postRecallReleaseDate: nineDaysFromNow,
+          status: 'ACTIVE IN',
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
       },
       {
-        crnNumber: 'X12352',
-        prisonerNumber: 'AB1234M',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
+        deliusRecord: {
+          offenderCrn: 'X12355',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234Q',
+          conditionalReleaseDate: nineDaysFromNow,
+          status: 'ACTIVE IN',
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
+      },
+      {
+        deliusRecord: {
+          offenderCrn: 'X12356',
+          otherIds: {
+            crn: 'X12356',
+            nomsNumber: 'AB1234R',
+          },
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
+        nomisRecord: {
+          conditionalReleaseDate: nineDaysFromNow,
+          prisonerNumber: 'AB1234R',
+          status: 'INACTIVE TRN',
+        },
       },
     ])
   })
@@ -347,12 +433,10 @@ describe('COM Caseload Service', () => {
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         kind: 'CRD',
-        crn: 'X12352',
         nomisId: 'AB1234I',
         licenceId: 1,
         licenceType: LicenceType.AP_PSS,
         licenceStatus: LicenceStatus.SUBMITTED,
-        conditionalReleaseDate: convertDateFormat(tenDaysFromNow),
         comUsername: 'sherlockholmes',
         isReviewNeeded: false,
         isDueForEarlyRelease: false,
@@ -374,30 +458,57 @@ describe('COM Caseload Service', () => {
     const result = await serviceUnderTest.getStaffCreateCaseload(user)
     expect(result).toMatchObject([
       {
-        crnNumber: 'X12348',
-        prisonerNumber: 'AB1234E',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'AP',
+        deliusRecord: {
+          offenderCrn: 'X12348',
+          staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' },
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          conditionalReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'AP',
+          },
+        ],
         probationPractitioner: {
           name: 'Joe Bloggs',
           staffCode: 'X1234',
         },
       },
       {
-        crnNumber: 'X12351',
-        prisonerNumber: 'AB1234H',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
+        deliusRecord: {
+          offenderCrn: 'X12351',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234H',
+          conditionalReleaseDate: tenDaysFromNow,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
       },
       {
-        crnNumber: 'X12352',
-        prisonerNumber: 'AB1234I',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceId: 1,
-        licenceStatus: 'SUBMITTED',
-        licenceType: 'AP_PSS',
+        deliusRecord: {
+          offenderCrn: 'X12352',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234I',
+          conditionalReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: elevenDaysFromNow,
+        },
+        licences: [
+          {
+            id: 1,
+            status: 'SUBMITTED',
+            type: 'AP_PSS',
+          },
+        ],
         probationPractitioner: {
           staffCode: 'X54321',
           name: 'Sherlock Holmes',
@@ -425,32 +536,46 @@ describe('COM Caseload Service', () => {
         },
         cvl: {},
       },
-      {
-        prisoner: { prisonerNumber: 'AB1234F', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' },
-        cvl: {},
-      },
+      { prisoner: { prisonerNumber: 'AB1234F', conditionalReleaseDate: tenDaysFromNow, status: 'ACTIVE IN' }, cvl: {} },
     ] as CaseloadItem[])
 
     const result = await serviceUnderTest.getTeamCreateCaseload(user, ['teamA'])
     expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(1, 'teamA')
     expect(result).toMatchObject([
       {
-        crnNumber: 'X12348',
-        prisonerNumber: 'AB1234E',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'AP',
+        deliusRecord: {
+          offenderCrn: 'X12348',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          conditionalReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'AP',
+          },
+        ],
         probationPractitioner: {
           staffCode: 'X1234',
           name: 'Joe Bloggs',
         },
       },
       {
-        crnNumber: 'X12349',
-        prisonerNumber: 'AB1234F',
-        releaseDate: convertDateFormat(tenDaysFromNow),
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
+        deliusRecord: {
+          offenderCrn: 'X12349',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234F',
+          conditionalReleaseDate: tenDaysFromNow,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
         probationPractitioner: {
           staffCode: 'X54321',
           name: 'Sherlock Holmes',
@@ -498,17 +623,48 @@ describe('COM Caseload Service', () => {
 
     expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(1, 'teamB')
 
-    const expectedReleaseDate = format(parse(tenDaysFromNow, 'yyyy-MM-dd', new Date()), 'dd/MM/yyyy')
     expect(result).toMatchObject([
       {
-        crnNumber: 'X12348',
-        prisonerNumber: 'AB1234E',
-        releaseDate: expectedReleaseDate,
-        licenceStatus: 'NOT_STARTED',
-        licenceType: 'PSS',
+        deliusRecord: {
+          offenderCrn: 'X12348',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          releaseDate: tenDaysFromNow,
+          conditionalReleaseDate: tenDaysFromNow,
+          postRecallReleaseDate: tenDaysFromNow,
+          recall: true,
+        },
+        licences: [
+          {
+            status: 'NOT_STARTED',
+            type: 'PSS',
+          },
+        ],
         probationPractitioner: {
           staffCode: 'X1234',
           name: 'Joe Bloggs',
+        },
+      },
+      {
+        deliusRecord: {
+          offenderCrn: 'X12349',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234F',
+          releaseDate: tenDaysFromNow,
+          conditionalReleaseDate: tenDaysFromNow,
+          imprisonmentStatus: 'BOTUS',
+        },
+        licences: [
+          {
+            status: 'OOS_BOTUS',
+            type: 'PSS',
+          },
+        ],
+        probationPractitioner: {
+          staffCode: 'X54321',
+          name: 'Sherlock Holmes',
         },
       },
     ])
@@ -536,21 +692,7 @@ describe('COM Caseload Service', () => {
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234E',
-        crn: 'X12348',
         licenceId: 1,
-        kind: 'CRD',
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.ACTIVE,
-        comUsername: 'sherlockholmes',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: false,
-        isDueToBeReleasedInTheNextTwoWorkingDays: false,
-      },
-      {
-        nomisId: 'AB1234E',
-        crn: 'X12348',
-        licenceId: 2,
         kind: 'CRD',
         licenceType: LicenceType.AP,
         licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
@@ -576,97 +718,22 @@ describe('COM Caseload Service', () => {
 
     expect(result).toMatchObject([
       {
-        crnNumber: 'X12348',
-        prisonerNumber: 'AB1234E',
-        licenceId: 2,
-        licenceStatus: 'VARIATION_IN_PROGRESS',
-        licenceType: 'AP',
-        probationPractitioner: {
-          staffCode: 'X54321',
-          name: 'Sherlock Holmes',
+        deliusRecord: {
+          offenderCrn: 'X12348',
         },
-      },
-    ])
-  })
-
-  it('builds the staff vary caseload, ignoring any timed out licences', async () => {
-    communityService.getManagedOffenders.mockResolvedValue([
-      { offenderCrn: 'X12348', staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } },
-    ])
-    communityService.getOffendersByCrn.mockResolvedValue([
-      { otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' } } as OffenderDetail,
-    ])
-    licenceService.searchPrisonersByNomsIds.mockResolvedValue([
-      {
-        prisoner: {
+        nomisRecord: {
           prisonerNumber: 'AB1234E',
           confirmedReleaseDate: tenDaysFromNow,
           licenceExpiryDate: '2022-12-26',
-          status: 'INACTIVE OUT',
         },
-        cvl: {},
-      },
-    ] as CaseloadItem[])
-    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
-      {
-        nomisId: 'AB1234E',
-        licenceId: 1,
-        kind: 'CRD',
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.TIMED_OUT,
-        comUsername: 'sherlockholmes',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: false,
-        isDueToBeReleasedInTheNextTwoWorkingDays: false,
-      },
-      {
-        nomisId: 'AB1234E',
-        crn: 'X12348',
-        licenceId: 2,
-        kind: 'CRD',
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.ACTIVE,
-        comUsername: 'sherlockholmes',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: false,
-        isDueToBeReleasedInTheNextTwoWorkingDays: false,
-      },
-      {
-        nomisId: 'AB1234E',
-        crn: 'X12348',
-        licenceId: 3,
-        kind: 'CRD',
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
-        comUsername: 'sherlockholmes',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: false,
-        isDueToBeReleasedInTheNextTwoWorkingDays: false,
-      },
-    ])
-    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
-      {
-        username: 'sherlockholmes',
-        staffCode: 'X54321',
-        staff: {
-          forenames: 'Sherlock',
-          surname: 'Holmes',
-        },
-      },
-    ])
-
-    const result = await serviceUnderTest.getStaffVaryCaseload(user)
-
-    expect(result).toMatchObject([
-      {
-        crnNumber: 'X12348',
-        prisonerNumber: 'AB1234E',
-        licenceId: 3,
-        licenceStatus: 'VARIATION_IN_PROGRESS',
-        licenceType: 'AP',
+        licences: [
+          {
+            id: 1,
+            status: 'VARIATION_IN_PROGRESS',
+            type: 'AP',
+            comUsername: 'sherlockholmes',
+          },
+        ],
         probationPractitioner: {
           staffCode: 'X54321',
           name: 'Sherlock Holmes',
@@ -696,7 +763,6 @@ describe('COM Caseload Service', () => {
     licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
       {
         nomisId: 'AB1234E',
-        crn: 'X12348',
         licenceId: 1,
         kind: 'HARD_STOP',
         licenceType: LicenceType.AP,
@@ -723,11 +789,22 @@ describe('COM Caseload Service', () => {
 
     expect(result).toMatchObject([
       {
-        crnNumber: 'X12348',
-        prisonerNumber: 'AB1234E',
-        licenceId: 1,
-        licenceStatus: 'REVIEW_NEEDED',
-        licenceType: 'AP',
+        deliusRecord: {
+          offenderCrn: 'X12348',
+        },
+        nomisRecord: {
+          prisonerNumber: 'AB1234E',
+          confirmedReleaseDate: tenDaysFromNow,
+          licenceExpiryDate: '2022-12-26',
+        },
+        licences: [
+          {
+            id: 1,
+            status: 'REVIEW_NEEDED',
+            type: 'AP',
+            comUsername: 'sherlockholmes',
+          },
+        ],
         probationPractitioner: {
           staffCode: 'X54321',
           name: 'Sherlock Holmes',
@@ -761,7 +838,6 @@ describe('COM Caseload Service', () => {
         {
           kind: 'VARIATION',
           nomisId: 'AB1234E',
-          crn: 'X12348',
           licenceId: 1,
           licenceType: LicenceType.PSS,
           licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
@@ -774,7 +850,6 @@ describe('COM Caseload Service', () => {
         {
           kind: 'VARIATION',
           nomisId: 'AB1234F',
-          crn: 'X12349',
           licenceId: 2,
           licenceType: LicenceType.AP,
           licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
@@ -815,22 +890,43 @@ describe('COM Caseload Service', () => {
       expect(communityService.getManagedOffendersByTeam).toHaveBeenNthCalledWith(1, 'teamA')
       expect(result).toMatchObject([
         {
-          crnNumber: 'X12348',
-          prisonerNumber: 'AB1234E',
-          licenceId: 1,
-          licenceStatus: 'VARIATION_IN_PROGRESS',
-          licenceType: 'PSS',
+          deliusRecord: {
+            offenderCrn: 'X12348',
+          },
+          nomisRecord: {
+            prisonerNumber: 'AB1234E',
+            confirmedReleaseDate: tenDaysFromNow,
+          },
+          licences: [
+            {
+              id: 1,
+              status: 'VARIATION_IN_PROGRESS',
+              type: 'PSS',
+              comUsername: 'joebloggs',
+            },
+          ],
           probationPractitioner: {
             staffCode: 'X1234',
             name: 'Joe Bloggs',
           },
         },
         {
-          crnNumber: 'X12349',
-          prisonerNumber: 'AB1234F',
-          licenceId: 2,
-          licenceStatus: 'VARIATION_IN_PROGRESS',
-          licenceType: 'AP',
+          deliusRecord: {
+            offenderCrn: 'X12349',
+          },
+          nomisRecord: {
+            prisonerNumber: 'AB1234F',
+            confirmedReleaseDate: tenDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+          },
+          licences: [
+            {
+              id: 2,
+              status: 'VARIATION_IN_PROGRESS',
+              type: 'AP',
+              comUsername: 'sherlockholmes',
+            },
+          ],
           probationPractitioner: {
             staffCode: 'X54321',
             name: 'Sherlock Holmes',
@@ -860,7 +956,6 @@ describe('COM Caseload Service', () => {
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
         {
           nomisId: 'AB1234E',
-          crn: 'X12348',
           licenceId: 1,
           kind: 'HARD_STOP',
           licenceType: LicenceType.AP,
@@ -887,11 +982,22 @@ describe('COM Caseload Service', () => {
 
       expect(result).toMatchObject([
         {
-          crnNumber: 'X12348',
-          prisonerNumber: 'AB1234E',
-          licenceId: 1,
-          licenceStatus: 'REVIEW_NEEDED',
-          licenceType: 'AP',
+          deliusRecord: {
+            offenderCrn: 'X12348',
+          },
+          nomisRecord: {
+            prisonerNumber: 'AB1234E',
+            confirmedReleaseDate: tenDaysFromNow,
+            licenceExpiryDate: '2022-12-26',
+          },
+          licences: [
+            {
+              id: 1,
+              status: 'REVIEW_NEEDED',
+              type: 'AP',
+              comUsername: 'sherlockholmes',
+            },
+          ],
           probationPractitioner: {
             staffCode: 'X54321',
             name: 'Sherlock Holmes',

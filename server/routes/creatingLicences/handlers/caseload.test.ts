@@ -1,10 +1,14 @@
 import { Request, Response } from 'express'
+
+import { subDays } from 'date-fns'
 import CaseloadRoutes from './caseload'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
+import { ManagedCase } from '../../../@types/managedCase'
+import { parseIsoDate } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import ComCaseloadService, { ComCase } from '../../../services/lists/comCaseloadService'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
 
 const comCaseloadService = new ComCaseloadService(null, null, null) as jest.Mocked<ComCaseloadService>
 
@@ -18,84 +22,130 @@ describe('Route Handlers - Create Licence - Caseload', () => {
   beforeEach(() => {
     comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
       {
-        crnNumber: 'X381306',
-        name: 'John Roberts',
-        releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
-        prisonerNumber: '123',
-        licenceId: 1,
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.IN_PROGRESS,
-        hardStopDate: '10/10/2022',
-        hardStopWarningDate: '10/10/2022',
-        kind: LicenceKind.CRD,
+        deliusRecord: {
+          offenderCrn: 'X381306',
+        },
+        nomisRecord: {
+          firstName: 'John',
+          lastName: 'Roberts',
+          conditionalReleaseDate: '2022-10-12',
+          prisonerNumber: '123',
+          prisonId: 'MDI',
+        },
+        licences: [
+          {
+            id: 1,
+            type: LicenceType.AP,
+            status: LicenceStatus.IN_PROGRESS,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
+            kind: LicenceKind.CRD,
+          },
+        ],
         probationPractitioner: {
           name: 'Joe Bloggs',
           staffIdentifier: 2000,
         },
+        cvlFields: {},
       },
-    ] as unknown as ComCase[])
+    ] as unknown as ManagedCase[])
 
     comCaseloadService.getTeamCreateCaseload.mockResolvedValue([
       {
-        crnNumber: 'X381306',
-        name: 'John Roberts',
-        releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
-        prisonerNumber: '123',
-        licenceId: 1,
-        licenceType: LicenceType.AP,
-        licenceStatus: LicenceStatus.IN_PROGRESS,
-        hardStopDate: '10/10/2022',
-        hardStopWarningDate: '10/10/2022',
-        kind: LicenceKind.CRD,
+        deliusRecord: {
+          offenderCrn: 'X381306',
+        },
+        nomisRecord: {
+          firstName: 'John',
+          lastName: 'Roberts',
+          conditionalReleaseDate: '2022-10-12',
+          prisonerNumber: '123',
+          prisonId: 'MDI',
+        },
+        licences: [
+          {
+            id: 1,
+            type: LicenceType.AP,
+            status: LicenceStatus.IN_PROGRESS,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
+            kind: LicenceKind.CRD,
+          },
+        ],
         probationPractitioner: {
           name: 'Sherlock Holmes',
           staffIdentifier: 3000,
         },
-        isClickable: true,
-        createLink: '/licence/create/id/1/check-your-answers',
+        cvlFields: {},
       },
       {
-        crnNumber: 'X381307',
-        name: 'Dr Who',
-        releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
-        prisonerNumber: '124',
-        licenceId: 2,
-        licenceType: LicenceType.AP_PSS,
-        licenceStatus: LicenceStatus.IN_PROGRESS,
-        hardStopDate: '10/10/2022',
-        hardStopWarningDate: '10/10/2022',
-        kind: LicenceKind.CRD,
+        deliusRecord: {
+          offenderCrn: 'X381307',
+        },
+        nomisRecord: {
+          firstName: 'Dr',
+          lastName: 'Who',
+          conditionalReleaseDate: '2023-10-12',
+          prisonerNumber: '124',
+          prisonId: 'LEI',
+        },
+        licences: [
+          {
+            id: 2,
+            type: LicenceType.AP_PSS,
+            status: LicenceStatus.IN_PROGRESS,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
+            kind: LicenceKind.CRD,
+          },
+        ],
+        cvlFields: {},
       },
       {
-        crnNumber: 'X381308',
-        name: 'Mabel Moorhouse',
-        releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
-        prisonerNumber: '125',
-        licenceId: 3,
-        licenceType: LicenceType.AP_PSS,
-        licenceStatus: LicenceStatus.NOT_IN_PILOT,
-        hardStopDate: '10/10/2022',
-        hardStopWarningDate: '10/10/2022',
-        kind: LicenceKind.CRD,
+        deliusRecord: {
+          offenderCrn: 'X381308',
+        },
+        nomisRecord: {
+          firstName: 'Mabel',
+          lastName: 'Moorhouse',
+          conditionalReleaseDate: '2023-10-12',
+          prisonerNumber: '125',
+          prisonId: 'LEI',
+        },
+        licences: [
+          {
+            type: LicenceType.AP_PSS,
+            status: LicenceStatus.NOT_IN_PILOT,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
+            kind: LicenceKind.CRD,
+          },
+        ],
+        cvlFields: {},
       },
       {
-        crnNumber: 'X381309',
-        name: 'Ronald Recall',
-        releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
-        prisonerNumber: '126',
-        licenceId: 4,
-        licenceType: LicenceType.AP_PSS,
-        licenceStatus: LicenceStatus.OOS_RECALL,
-        hardStopDate: '10/10/2022',
-        hardStopWarningDate: '10/10/2022',
-        kind: LicenceKind.CRD,
+        deliusRecord: {
+          offenderCrn: 'X381309',
+        },
+        nomisRecord: {
+          firstName: 'Ronald',
+          lastName: 'Recall',
+          conditionalReleaseDate: '2023-10-12',
+          prisonerNumber: '126',
+          prisonId: 'LEI',
+        },
+        licences: [
+          {
+            type: LicenceType.AP_PSS,
+            status: LicenceStatus.OOS_RECALL,
+            hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+            hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
+            kind: LicenceKind.CRD,
+          },
+        ],
+        cvlFields: {},
       },
-    ] as unknown as ComCase[])
+    ] as unknown as ManagedCase[])
   })
 
   afterEach(() => {
@@ -142,7 +192,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             hardStopDate: '10/10/2022',
-            hardStopWarningDate: '10/10/2022',
+            hardStopWarningDate: '08/10/2022',
             kind: 'CRD',
             prisonerNumber: '123',
             licenceId: 1,
@@ -152,9 +202,9 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Joe Bloggs',
               staffIdentifier: 2000,
             },
-            sortDate: '2022-10-12',
-            createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
+            createLink: '/licence/create/id/1/check-your-answers',
+            sortDate: parseIsoDate('2022-10-12'),
           },
         ],
         multipleTeams: false,
@@ -177,7 +227,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             hardStopDate: '10/10/2022',
-            hardStopWarningDate: '10/10/2022',
+            hardStopWarningDate: '08/10/2022',
             kind: 'CRD',
             prisonerNumber: '123',
             licenceId: 1,
@@ -189,52 +239,55 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             isClickable: true,
             createLink: '/licence/create/id/1/check-your-answers',
-            sortDate: '2022-10-12',
+            sortDate: parseIsoDate('2022-10-12'),
           },
           {
             name: 'Dr Who',
             crnNumber: 'X381307',
-            releaseDate: '12 Oct 2022',
+            releaseDate: '12 Oct 2023',
             hardStopDate: '10/10/2022',
-            hardStopWarningDate: '10/10/2022',
+            hardStopWarningDate: '08/10/2022',
             kind: 'CRD',
             prisonerNumber: '124',
+            probationPractitioner: undefined,
             licenceId: 2,
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
-            sortDate: '2022-10-12',
-            createLink: '/licence/create/id/2/check-your-answers',
             isClickable: false,
+            createLink: '/licence/create/id/2/check-your-answers',
+            sortDate: parseIsoDate('2023-10-12'),
           },
           {
             name: 'Mabel Moorhouse',
             crnNumber: 'X381308',
-            releaseDate: '12 Oct 2022',
+            releaseDate: '12 Oct 2023',
             hardStopDate: '10/10/2022',
-            hardStopWarningDate: '10/10/2022',
+            hardStopWarningDate: '08/10/2022',
             kind: 'CRD',
+            licenceId: undefined,
             prisonerNumber: '125',
-            licenceId: 3,
+            probationPractitioner: undefined,
             licenceStatus: LicenceStatus.NOT_IN_PILOT,
             licenceType: LicenceType.AP_PSS,
-            sortDate: '2022-10-12',
-            createLink: '/licence/create/id/3/check-your-answers',
             isClickable: false,
+            createLink: '/licence/create/nomisId/125/confirm',
+            sortDate: parseIsoDate('2023-10-12'),
           },
           {
             name: 'Ronald Recall',
             crnNumber: 'X381309',
-            releaseDate: '12 Oct 2022',
+            releaseDate: '12 Oct 2023',
             hardStopDate: '10/10/2022',
-            hardStopWarningDate: '10/10/2022',
+            hardStopWarningDate: '08/10/2022',
             kind: 'CRD',
+            licenceId: undefined,
             prisonerNumber: '126',
-            licenceId: 4,
+            probationPractitioner: undefined,
             licenceStatus: LicenceStatus.OOS_RECALL,
             licenceType: LicenceType.AP_PSS,
-            sortDate: '2022-10-12',
-            createLink: '/licence/create/id/4/check-your-answers',
             isClickable: false,
+            createLink: '/licence/create/nomisId/126/confirm',
+            sortDate: parseIsoDate('2023-10-12'),
           },
         ],
         statusConfig,
@@ -266,24 +319,40 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     it('should render the non-approved licence if 2 exist', async () => {
       comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
         {
-          crnNumber: 'X381306',
-          name: 'John Roberts',
-          releaseDate: '12/10/2022',
-          sortDate: '2022-10-11T23:00:00.000Z',
-          prisonerNumber: '123',
-          licenceId: 2,
-          licenceType: LicenceType.AP,
-          licenceStatus: LicenceStatus.IN_PROGRESS,
-          hardStopDate: '10/10/2022',
-          hardStopWarningDate: '10/10/2022',
-          kind: LicenceKind.CRD,
+          deliusRecord: {
+            offenderCrn: 'X381306',
+          },
+          nomisRecord: {
+            firstName: 'John',
+            lastName: 'Roberts',
+            conditionalReleaseDate: '2022-10-12',
+            prisonerNumber: '123',
+            prisonId: 'MDI',
+          },
+          licences: [
+            {
+              id: 1,
+              type: LicenceType.AP,
+              status: LicenceStatus.APPROVED,
+              hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+              hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
+              kind: LicenceKind.CRD,
+            },
+            {
+              id: 2,
+              type: LicenceType.AP,
+              status: LicenceStatus.IN_PROGRESS,
+              hardStopDate: subDays(parseIsoDate('2022-10-12'), 2),
+              hardStopWarningDate: subDays(parseIsoDate('2022-10-12'), 4),
+              kind: LicenceKind.CRD,
+            },
+          ],
           probationPractitioner: {
             name: 'Joe Bloggs',
           },
-          createLink: '/licence/create/id/2/check-your-answers',
-          isClickable: true,
+          cvlFields: {},
         },
-      ] as unknown as ComCase[])
+      ] as unknown as ManagedCase[])
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
@@ -294,9 +363,9 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             crnNumber: 'X381306',
             prisonerNumber: '123',
             releaseDate: '12 Oct 2022',
+            hardStopWarningDate: '08/10/2022',
             kind: LicenceKind.CRD,
             hardStopDate: '10/10/2022',
-            hardStopWarningDate: '10/10/2022',
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
             probationPractitioner: {
@@ -304,7 +373,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             isClickable: true,
             createLink: '/licence/create/id/2/check-your-answers',
-            sortDate: '2022-10-11T23:00:00.000Z',
+            sortDate: parseIsoDate('2022-10-12'),
           },
         ],
         multipleTeams: false,
