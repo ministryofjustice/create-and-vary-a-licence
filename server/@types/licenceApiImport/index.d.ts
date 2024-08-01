@@ -1444,6 +1444,8 @@ export interface components {
     CaCaseLoad: {
       /** @description CA(OMU) cases */
       cases: components['schemas']['CaCase'][]
+      /** @description show attention needed tab in prison caseload */
+      showAttentionNeededTab: boolean
     }
     /** @description Describes an CA(OMU) case */
     CaCase: {
