@@ -1,6 +1,6 @@
 import { addDays, format } from 'date-fns'
 import { User } from '../../@types/CvlUserDetails'
-import { CaCase } from '../../@types/licenceApiClientTypes'
+import { CaCase, CaCaseLoad } from '../../@types/licenceApiClientTypes'
 import CaCaseloadService from './caCaseloadService'
 import LicenceApiClient from '../../data/licenceApiClient'
 
@@ -36,11 +36,15 @@ describe('Caseload Service', () => {
     isInHardStopPeriod: false,
   } as CaCase
 
-  const caseload = [caCase]
+  const caseload = {
+    cases: [caCase],
+  } as CaCaseLoad
 
   beforeEach(() => {
     licenceApiClient.getPrisonOmuCaseload.mockResolvedValue(caseload)
-    licenceApiClient.getProbationOmuCaseload.mockResolvedValue([{ ...caCase, tabType: null }])
+    licenceApiClient.getProbationOmuCaseload.mockResolvedValue({
+      cases: [{ ...caCase, tabType: null }],
+    })
   })
 
   afterEach(() => {
@@ -56,7 +60,9 @@ describe('Caseload Service', () => {
   describe('Probation tab caseload', () => {
     it('should return prison caseload', async () => {
       const result = await serviceUnderTest.getProbationOmuCaseload(user, ['BAI'], '')
-      expect(result).toMatchObject([{ ...caCase, tabType: null }])
+      expect(result).toMatchObject({
+        cases: [{ ...caCase, tabType: null }],
+      })
     })
   })
 })
