@@ -136,7 +136,7 @@
     "reflect-metadata": "^0.2.2",
     "sqs-consumer": "^10.3.0",
     "superagent": "^9.0.2",
-    "uuid": "^9.0.1"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/bunyan": "^1.8.11",
@@ -159,7 +159,7 @@
     "@types/redis-mock": "^0.17.3",
     "@types/superagent": "^8.1.8",
     "@types/supertest": "^6.0.2",
-    "@types/uuid": "^9.0.8",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.17.0",
     "@typescript-eslint/parser": "^7.17.0",
     "axe-core": "^4.10.0",
