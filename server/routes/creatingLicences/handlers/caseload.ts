@@ -49,12 +49,12 @@ export default class CaseloadRoutes {
           comCase.licenceId,
           comCase.prisonerNumber
         ),
-        releaseDate: format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy'),
+        releaseDate: comCase.releaseDate && format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy'),
         hardStopDate: comCase.hardStopDate && format(parseCvlDate(comCase.hardStopDate), 'dd/MM/yyyy'),
         hardStopWarningDate:
           comCase.hardStopWarningDate && format(parseCvlDate(comCase.hardStopWarningDate), 'dd/MM/yyyy'),
         isClickable: comCase.probationPractitioner !== undefined,
-        sortDate: parseCvlDate(comCase.releaseDate),
+        sortDate: comCase.releaseDate && parseCvlDate(comCase.releaseDate),
       }
     })
 
