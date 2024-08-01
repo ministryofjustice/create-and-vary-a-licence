@@ -1,14 +1,7 @@
 import _ from 'lodash'
 import moment from 'moment/moment'
-import { format } from 'date-fns'
 import { User } from '../../@types/CvlUserDetails'
-import {
-  DeliusRecord,
-  Licence,
-  LicenceCreationType,
-  ManagedCase,
-  ProbationPractitioner,
-} from '../../@types/managedCase'
+import { DeliusRecord, ManagedCase } from '../../@types/managedCase'
 import CommunityService from '../communityService'
 import type { CommunityApiManagedOffender } from '../../@types/communityClientTypes'
 import type { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
@@ -18,25 +11,8 @@ import PrisonerService from '../prisonerService'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import LicenceKind from '../../enumeration/LicenceKind'
-import { convertToTitleCase, parseCvlDate, parseIsoDate } from '../../utils/utils'
+import { parseCvlDate, parseIsoDate } from '../../utils/utils'
 import type { ComReviewCount } from '../../@types/licenceApiClientTypes'
-
-export type ComCase = {
-  name: string
-  crnNumber: string
-  prisonerNumber: string
-  releaseDate: string
-  sortDate?: Date
-  licenceId: number
-  licenceStatus: LicenceStatus
-  licenceType: LicenceType
-  probationPractitioner: ProbationPractitioner
-  hardStopDate?: string
-  hardStopWarningDate?: string
-  kind: LicenceKind
-  isDueForEarlyRelease: boolean
-  licenceCreationType?: LicenceCreationType
-}
 
 export default class ComCaseloadService {
   constructor(
@@ -45,7 +21,7 @@ export default class ComCaseloadService {
     private readonly prisonerService: PrisonerService
   ) {}
 
-  public async getStaffCreateCaseload(user: User): Promise<ComCase[]> {
+  public async getStaffCreateCaseload(user: User): Promise<ManagedCase[]> {
     const { deliusStaffIdentifier } = user
 
     return this.communityService
@@ -56,10 +32,9 @@ export default class ComCaseloadService {
       .then(caseload => this.mapOffendersToLicences(caseload, user))
       .then(caseload => this.buildCreateCaseload(caseload))
       .then(caseload => this.mapResponsibleComsToCases(caseload))
-      .then(caseload => this.createCaseloadViewModel(caseload))
   }
 
-  public async getTeamCreateCaseload(user: User, teamSelected?: string[]): Promise<ComCase[]> {
+  public async getTeamCreateCaseload(user: User, teamSelected?: string[]): Promise<ManagedCase[]> {
     const teamCode = _.head(teamSelected || user.probationTeamCodes)
 
     return this.communityService
@@ -70,10 +45,9 @@ export default class ComCaseloadService {
       .then(caseload => this.mapOffendersToLicences(caseload, user))
       .then(caseload => this.buildCreateCaseload(caseload))
       .then(caseload => this.mapResponsibleComsToCases(caseload))
-      .then(caseload => this.createCaseloadViewModel(caseload))
   }
 
-  async getStaffVaryCaseload(user: User): Promise<ComCase[]> {
+  async getStaffVaryCaseload(user: User): Promise<ManagedCase[]> {
     const { deliusStaffIdentifier } = user
     return this.communityService
       .getManagedOffenders(deliusStaffIdentifier)
@@ -82,10 +56,9 @@ export default class ComCaseloadService {
       .then(caseload => this.mapOffendersToLicences(caseload, user))
       .then(caseload => this.buildVaryCaseload(caseload))
       .then(caseload => this.mapResponsibleComsToCases(caseload))
-      .then(caseload => this.createVaryCaseloadViewModel(caseload))
   }
 
-  async getTeamVaryCaseload(user: User, teamSelected?: string[]): Promise<ComCase[]> {
+  async getTeamVaryCaseload(user: User, teamSelected?: string[]): Promise<ManagedCase[]> {
     const teamCode = _.head(teamSelected || user.probationTeamCodes)
 
     return this.communityService
@@ -95,7 +68,6 @@ export default class ComCaseloadService {
       .then(caseload => this.mapOffendersToLicences(caseload, user))
       .then(caseload => this.buildVaryCaseload(caseload))
       .then(caseload => this.mapResponsibleComsToCases(caseload))
-      .then(caseload => this.createVaryCaseloadViewModel(caseload))
   }
 
   async getComReviewCount(user: User): Promise<ComReviewCount> {
@@ -161,8 +133,6 @@ export default class ComCaseloadService {
           ),
         'is on an ineligible Extended Determinate Sentence'
       )
-      .filter(offender => !CaseListUtils.isRecall(offender.nomisRecord))
-      .filter(offender => !CaseListUtils.isBreachOfTopUpSupervision(offender.nomisRecord))
 
     if (eligibleOffenders.length === 0) return eligibleOffenders
 
@@ -215,11 +185,8 @@ export default class ComCaseloadService {
               id: licence.licenceId,
               status: licence.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : <LicenceStatus>licence.licenceStatus,
               type: <LicenceType>licence.licenceType,
-              kind: <LicenceKind>licence.kind,
-              crn: licence.crn,
-              nomisId: licence.nomisId,
-              name: convertToTitleCase(`${licence.forename} ${licence.surname}`.trim()),
               comUsername: licence.comUsername,
+              kind: <LicenceKind>licence.kind,
               versionOf: licence.versionOf,
               hardStopDate: parseCvlDate(licence.hardStopDate),
               hardStopWarningDate: parseCvlDate(licence.hardStopWarningDate),
@@ -231,31 +198,34 @@ export default class ComCaseloadService {
       }
 
       // No licences present for this offender - determine how to show them in case lists
+
       // Determine the likely type of intended licence from the prison record
       const licenceType = CaseListUtils.getLicenceType(offender.nomisRecord)
 
       // Default status (if not overridden below) will show the case as clickable on case lists
       let licenceStatus = LicenceStatus.NOT_STARTED
 
-      if (offender.cvlFields.isInHardStopPeriod) {
+      if (CaseListUtils.isBreachOfTopUpSupervision(offender.nomisRecord)) {
+        // Imprisonment status indicates a breach of top up supervision order - not clickable (yet)
+        licenceStatus = LicenceStatus.OOS_BOTUS
+      } else if (CaseListUtils.isRecall(offender.nomisRecord)) {
+        // Offender is subject to an active recall - not clickable
+        licenceStatus = LicenceStatus.OOS_RECALL
+      } else if (offender.cvlFields.isInHardStopPeriod) {
         licenceStatus = LicenceStatus.TIMED_OUT
       }
 
       if (!offender.nomisRecord.conditionalReleaseDate) {
-        const releaseDate = offender.nomisRecord.confirmedReleaseDate
         return {
           ...offender,
           licences: [
             {
               status: licenceStatus,
               type: licenceType,
-              crn: offender.deliusRecord?.offenderCrn,
-              nomisId: offender.nomisRecord?.prisonerNumber,
-              name: convertToTitleCase(`${offender.nomisRecord.firstName} ${offender.nomisRecord.lastName}`.trim()),
-              releaseDate: releaseDate ? parseIsoDate(releaseDate) : null,
               hardStopDate: null,
               hardStopWarningDate: null,
               isDueToBeReleasedInTheNextTwoWorkingDays: null,
+              releaseDate: null,
             },
           ],
         }
@@ -271,9 +241,6 @@ export default class ComCaseloadService {
           {
             status: licenceStatus,
             type: licenceType,
-            crn: offender.deliusRecord?.offenderCrn,
-            nomisId: offender.nomisRecord?.prisonerNumber,
-            name: convertToTitleCase(`${offender.nomisRecord.firstName} ${offender.nomisRecord.lastName}`.trim()),
             hardStopDate,
             hardStopWarningDate,
             isDueToBeReleasedInTheNextTwoWorkingDays,
@@ -305,13 +272,16 @@ export default class ComCaseloadService {
       .filter(
         offender =>
           [
+            LicenceStatus.OOS_RECALL,
+            LicenceStatus.OOS_BOTUS,
+            LicenceStatus.NOT_IN_PILOT,
             LicenceStatus.NOT_STARTED,
             LicenceStatus.IN_PROGRESS,
             LicenceStatus.SUBMITTED,
             LicenceStatus.APPROVED,
             LicenceStatus.TIMED_OUT,
           ].some(status => offender.licences.find(l => l.status === status)),
-        'licence status is not one of NOT_STARTED, IN_PROGRESS, SUBMITTED, APPROVED,'
+        'licence status is not one of OOS_RECALL, OOS_BOTUS, NOT_IN_PILOT, NOT_STARTED, IN_PROGRESS, SUBMITTED, APPROVED,'
       )
   }
 
@@ -377,100 +347,5 @@ export default class ComCaseloadService {
         ].some(status => offender.licences.find(l => l.status === status)),
       'licence status is not one of ACTIVE, VARIATION_IN_PROGRESS, VARIATION_SUBMITTED, VARIATION_APPROVED, VARIATION_REJECTED, REVIEW_NEEDED'
     )
-  }
-
-  createCaseloadViewModel = (caseload: ManagedCase[]): ComCase[] => {
-    return caseload
-      .map(managedCase => {
-        const licence = this.findLicenceToDisplay(managedCase)
-        const { hardStopDate, hardStopWarningDate } = licence
-        return {
-          name: licence.name,
-          crnNumber: licence.crn,
-          prisonerNumber: licence.nomisId,
-          releaseDate: licence.releaseDate && format(licence.releaseDate, 'dd/MM/yyyy'),
-          sortDate: licence.releaseDate,
-          licenceId: licence.id,
-          licenceStatus: licence.status,
-          licenceType: licence.type,
-          probationPractitioner: managedCase.probationPractitioner,
-          hardStopDate: hardStopDate && format(hardStopDate, 'dd/MM/yyyy'),
-          hardStopWarningDate: hardStopWarningDate && format(hardStopWarningDate, 'dd/MM/yyyy'),
-          kind: licence.kind,
-          isDueForEarlyRelease: managedCase.cvlFields?.isDueForEarlyRelease,
-          licenceCreationType: licence.licenceCreationType,
-        }
-      })
-      .sort((a, b) => {
-        return (a.sortDate?.getTime() || 0) - (b.sortDate?.getTime() || 0)
-      })
-  }
-
-  createVaryCaseloadViewModel = (caseload: ManagedCase[]): ComCase[] => {
-    return caseload.map(managedCase => {
-      const licences = managedCase.licences.filter(l => l.status !== LicenceStatus.TIMED_OUT)
-      const licence =
-        licences.length > 1
-          ? licences.find(l => l.status !== LicenceStatus.ACTIVE && l.status !== LicenceStatus.REVIEW_NEEDED)
-          : _.head(licences)
-
-      return {
-        licenceId: licence.id,
-        name: licence.name,
-        crnNumber: licence.crn,
-        prisonerNumber: licence.nomisId,
-        licenceType: licence.type,
-        releaseDate: licence.releaseDate && format(licence.releaseDate, 'dd/MM/yyyy'),
-        licenceStatus: licence.status,
-        probationPractitioner: managedCase.probationPractitioner,
-        kind: licence.kind,
-        isDueForEarlyRelease: managedCase.cvlFields?.isDueForEarlyRelease,
-      }
-    })
-  }
-
-  findLicenceToDisplay = (c: ManagedCase): Licence => {
-    const timedOutLicence = c.licences.find(l => l.status === LicenceStatus.TIMED_OUT)
-    const hardStopLicence = c.licences.find(l => l.kind === LicenceKind.HARD_STOP)
-
-    if (timedOutLicence && timedOutLicence.versionOf) {
-      const previouslyApproved = c.licences.find(l => l.id === timedOutLicence.versionOf)
-      return {
-        ...previouslyApproved,
-        status: LicenceStatus.TIMED_OUT,
-        licenceCreationType: LicenceCreationType.LICENCE_CHANGES_NOT_APPROVED_IN_TIME,
-      }
-    }
-
-    if (
-      (timedOutLicence && !hardStopLicence) ||
-      (hardStopLicence && hardStopLicence.status === LicenceStatus.IN_PROGRESS)
-    ) {
-      if (timedOutLicence) {
-        return { ...timedOutLicence, licenceCreationType: LicenceCreationType.PRISON_WILL_CREATE_THIS_LICENCE }
-      }
-
-      return {
-        ...hardStopLicence,
-        status: LicenceStatus.TIMED_OUT,
-        licenceCreationType: LicenceCreationType.PRISON_WILL_CREATE_THIS_LICENCE,
-      }
-    }
-    if (hardStopLicence) {
-      return {
-        ...hardStopLicence,
-        status: LicenceStatus.TIMED_OUT,
-        licenceCreationType: LicenceCreationType.LICENCE_CREATED_BY_PRISON,
-      }
-    }
-
-    const licence =
-      c.licences.length > 1 ? c.licences.find(l => l.status !== LicenceStatus.APPROVED) : _.head(c.licences)
-
-    if (!licence.id) {
-      return { ...licence, licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED }
-    }
-
-    return { ...licence, licenceCreationType: LicenceCreationType.LICENCE_IN_PROGRESS }
   }
 }

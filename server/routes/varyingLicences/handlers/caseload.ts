@@ -1,11 +1,10 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
 import _ from 'lodash'
-import { format } from 'date-fns'
 import statusConfig from '../../../licences/licenceStatus'
+import { convertToTitleCase } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
-import { parseCvlDate } from '../../../utils/utils'
 
 export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
@@ -15,16 +14,9 @@ export default class CaseloadRoutes {
     const search = req.query.search as string
     const { user } = res.locals
 
-    const cases = (
-      teamView
-        ? await this.comCaseloadService.getTeamVaryCaseload(user, req.session.teamSelection)
-        : await this.comCaseloadService.getStaffVaryCaseload(user)
-    ).map(comCase => {
-      return {
-        ...comCase,
-        releaseDate: format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy'),
-      }
-    })
+    const cases = teamView
+      ? await this.comCaseloadService.getTeamVaryCaseload(user, req.session.teamSelection)
+      : await this.comCaseloadService.getStaffVaryCaseload(user)
 
     const reviewCount = await this.comCaseloadService.getComReviewCount(user)
     const { myCount } = reviewCount
@@ -54,6 +46,23 @@ export default class CaseloadRoutes {
     }
 
     const caseloadViewModel = cases
+      .map(c => {
+        const licences = c.licences.filter(l => l.status !== LicenceStatus.TIMED_OUT)
+        const licence =
+          licences.length > 1
+            ? licences.find(l => l.status !== LicenceStatus.ACTIVE && l.status !== LicenceStatus.REVIEW_NEEDED)
+            : _.head(licences)
+
+        return {
+          licenceId: licence.id,
+          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+          crnNumber: c.deliusRecord.otherIds.crn,
+          licenceType: licence.type,
+          releaseDate: moment(c.nomisRecord.releaseDate, 'YYYY-MM-DD').format('DD MMM YYYY'),
+          licenceStatus: licence.status,
+          probationPractitioner: c.probationPractitioner,
+        }
+      })
       .filter(c => {
         const searchString = search?.toLowerCase().trim()
         if (!searchString) return true

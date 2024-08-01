@@ -1,11 +1,9 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { format } from 'date-fns'
 import statusConfig from '../../../licences/licenceStatus'
 import logger from '../../../../logger'
+import createCaseloadViewModel from '../../views/CaseloadViewModel'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
-import { parseCvlDate } from '../../../utils/utils'
-import { LicenceCreationType } from '../../../@types/managedCase'
 
 export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
@@ -37,56 +35,17 @@ export default class CaseloadRoutes {
       req.session.returnToCase = '/licence/create/caseload'
     }
 
-    const caseload = (
-      teamView
-        ? await this.comCaseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
-        : await this.comCaseloadService.getStaffCreateCaseload(user)
-    ).map(comCase => {
-      return {
-        ...comCase,
-        createLink: this.findCreateLinkToDisplay(
-          comCase.licenceCreationType,
-          comCase.licenceId,
-          comCase.prisonerNumber
-        ),
-        releaseDate: format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy'),
-        hardStopDate: comCase.hardStopDate && format(parseCvlDate(comCase.hardStopDate), 'dd/MM/yyyy'),
-        hardStopWarningDate:
-          comCase.hardStopWarningDate && format(parseCvlDate(comCase.hardStopWarningDate), 'dd/MM/yyyy'),
-        isClickable: comCase.probationPractitioner !== undefined,
-      }
-    })
+    const caseload = teamView
+      ? await this.comCaseloadService.getTeamCreateCaseload(user, req.session.teamSelection)
+      : await this.comCaseloadService.getStaffCreateCaseload(user)
 
+    const caseloadViewModel = createCaseloadViewModel(caseload)
     res.render('pages/create/caseload', {
-      caseload,
+      caseload: caseloadViewModel,
       statusConfig,
       teamView,
       teamName,
       multipleTeams,
     })
-  }
-
-  findCreateLinkToDisplay = (
-    licenceCreationType: LicenceCreationType,
-    licenceId: number,
-    prisonerNumber: string
-  ): string => {
-    if (licenceCreationType === LicenceCreationType.LICENCE_CHANGES_NOT_APPROVED_IN_TIME) {
-      return `/licence/create/id/${licenceId}/licence-changes-not-approved-in-time`
-    }
-
-    if (licenceCreationType === LicenceCreationType.PRISON_WILL_CREATE_THIS_LICENCE) {
-      return `/licence/create/nomisId/${prisonerNumber}/prison-will-create-this-licence`
-    }
-
-    if (licenceCreationType === LicenceCreationType.LICENCE_CREATED_BY_PRISON) {
-      return `/licence/create/id/${licenceId}/licence-created-by-prison`
-    }
-
-    if (licenceCreationType === LicenceCreationType.LICENCE_NOT_STARTED) {
-      return `/licence/create/nomisId/${prisonerNumber}/confirm`
-    }
-
-    return `/licence/create/id/${licenceId}/check-your-answers`
   }
 }
