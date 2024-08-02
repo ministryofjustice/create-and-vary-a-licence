@@ -3604,12 +3604,7 @@ export interface components {
        * @example Jane Jones
        */
       submittedByFullName?: string
-    } & (
-      | components['schemas']['CrdLicence']
-      | components['schemas']['VariationLicence']
-      | components['schemas']['HardStopLicence']
-      | components['schemas']['HdcLicence']
-    )
+    }
     /** @description Describes a CRD licence within this service */
     CrdLicence: WithRequired<
       {
