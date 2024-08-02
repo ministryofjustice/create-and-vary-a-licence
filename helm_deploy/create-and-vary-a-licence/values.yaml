@@ -59,7 +59,7 @@ generic-service:
     LICENCE_WATERMARK: "false"
     TOKEN_VERIFICATION_ENABLED: "true"
     COMMON_COMPONENTS_ENABLED: "true"
-    SHOW_WHATS_NEW_BANNER: "false"
+    SHOW_WHATS_NEW_BANNER: "true"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
