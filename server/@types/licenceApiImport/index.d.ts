@@ -3603,12 +3603,7 @@ export interface components {
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
        */
-      responsibleComFullName?: string
-      /**
-       * @description The username which created this licence
-       * @example X12333
-       */
-      createdByUsername?: string
+      submittedByFullName?: string
     } & (
       | components['schemas']['CrdLicence']
       | components['schemas']['VariationLicence']
