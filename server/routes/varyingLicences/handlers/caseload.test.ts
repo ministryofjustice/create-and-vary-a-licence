@@ -4,9 +4,8 @@ import CaseloadRoutes from './caseload'
 import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
-import type { DeliusRecord } from '../../../@types/managedCase'
-import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const comCaseloadService = new ComCaseloadService(null, null, null) as jest.Mocked<ComCaseloadService>
 
@@ -20,177 +19,77 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
   beforeEach(() => {
     comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
       {
-        licences: [
-          {
-            id: 1,
-            type: LicenceType.AP,
-            status: LicenceStatus.ACTIVE,
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-            releaseDate: null,
-          },
-        ],
-        cvlFields: {
-          licenceType: 'AP',
-          hardStopDate: '03/01/2023',
-          hardStopWarningDate: '01/01/2023',
-          isInHardStopPeriod: true,
-          isDueForEarlyRelease: false,
-          isDueToBeReleasedInTheNextTwoWorkingDays: false,
-          isEligibleForEarlyRelease: false,
-        },
-        nomisRecord: {
-          firstName: 'Bob',
-          lastName: 'Smith',
-          prisonerNumber: 'A1234AA',
-          releaseDate: '2022-05-01',
-        } as CvlPrisoner,
-        deliusRecord: {
-          otherIds: {
-            crn: 'X12345',
-          },
-        } as DeliusRecord,
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.ACTIVE,
+        kind: LicenceKind.CRD,
+        prisonerNumber: 'A1234AA',
+        releaseDate: '01/05/2022',
+        crnNumber: 'X12345',
+        name: 'Bob Smith',
         probationPractitioner: {
           name: 'Walter White',
         },
+        isDueForEarlyRelease: false,
       },
       {
-        licences: [
-          {
-            id: 2,
-            type: LicenceType.AP,
-            status: LicenceStatus.REVIEW_NEEDED,
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-            releaseDate: null,
-          },
-        ],
-        cvlFields: {
-          licenceType: 'AP',
-          hardStopDate: '03/01/2023',
-          hardStopWarningDate: '01/01/2023',
-          isInHardStopPeriod: true,
-          isDueForEarlyRelease: false,
-          isDueToBeReleasedInTheNextTwoWorkingDays: false,
-          isEligibleForEarlyRelease: false,
-        },
-        nomisRecord: {
-          firstName: 'John',
-          lastName: 'Deer',
-          prisonerNumber: 'A1234AR',
-          releaseDate: '2022-05-02',
-        } as CvlPrisoner,
-        deliusRecord: {
-          otherIds: {
-            crn: 'X12346',
-          },
-        } as DeliusRecord,
+        licenceId: 2,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.REVIEW_NEEDED,
+        name: 'John Deer',
+        prisonerNumber: 'A1234AR',
+        releaseDate: '02/05/2022',
+        crnNumber: 'X12346',
         probationPractitioner: {
           name: 'Walter White',
         },
+        kind: LicenceKind.CRD,
+        isDueForEarlyRelease: false,
       },
     ])
 
     comCaseloadService.getTeamVaryCaseload.mockResolvedValue([
       {
-        licences: [
-          {
-            id: 1,
-            type: LicenceType.AP,
-            status: LicenceStatus.ACTIVE,
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-            releaseDate: null,
-          },
-        ],
-        cvlFields: {
-          licenceType: 'AP',
-          hardStopDate: '03/01/2023',
-          hardStopWarningDate: '01/01/2023',
-          isInHardStopPeriod: true,
-          isDueForEarlyRelease: false,
-          isDueToBeReleasedInTheNextTwoWorkingDays: false,
-          isEligibleForEarlyRelease: false,
-        },
-        nomisRecord: {
-          firstName: 'Bob',
-          lastName: 'Smith',
-          prisonerNumber: 'A1234AA',
-          releaseDate: '2022-05-01',
-        } as CvlPrisoner,
-        deliusRecord: {
-          otherIds: {
-            crn: 'X12345',
-          },
-        } as DeliusRecord,
+        licenceId: 1,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.ACTIVE,
+        isDueForEarlyRelease: false,
+        name: 'Bob Smith',
+        prisonerNumber: 'A1234AA',
+        releaseDate: '01/05/2022',
+        crnNumber: 'X12345',
         probationPractitioner: {
           name: 'Walter White',
         },
+        kind: LicenceKind.CRD,
       },
       {
-        licences: [
-          {
-            id: 2,
-            type: LicenceType.AP,
-            status: LicenceStatus.ACTIVE,
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-            releaseDate: null,
-          },
-        ],
-        cvlFields: {
-          licenceType: 'AP',
-          hardStopDate: '03/01/2023',
-          hardStopWarningDate: '01/01/2023',
-          isInHardStopPeriod: true,
-          isDueForEarlyRelease: false,
-          isDueToBeReleasedInTheNextTwoWorkingDays: false,
-          isEligibleForEarlyRelease: false,
-        },
-        nomisRecord: {
-          firstName: 'Dr',
-          lastName: 'Who',
-          prisonerNumber: 'A1234AB',
-          releaseDate: '2022-05-01',
-        } as CvlPrisoner,
-        deliusRecord: {
-          otherIds: {
-            crn: 'X12346',
-          },
-        } as DeliusRecord,
+        licenceId: 2,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.ACTIVE,
+        isDueForEarlyRelease: false,
+        name: 'Dr Who',
+        prisonerNumber: 'A1234AB',
+        releaseDate: '01/05/2022',
+        crnNumber: 'X12346',
         probationPractitioner: {
           name: 'Sherlock Holmes',
         },
+        kind: LicenceKind.CRD,
       },
       {
-        licences: [
-          {
-            id: 3,
-            type: LicenceType.AP,
-            status: LicenceStatus.REVIEW_NEEDED,
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-            releaseDate: null,
-          },
-        ],
-        cvlFields: {
-          licenceType: 'AP',
-          hardStopDate: '03/01/2023',
-          hardStopWarningDate: '01/01/2023',
-          isInHardStopPeriod: true,
-          isDueForEarlyRelease: false,
-          isDueToBeReleasedInTheNextTwoWorkingDays: false,
-          isEligibleForEarlyRelease: false,
-        },
-        nomisRecord: {
-          firstName: 'John',
-          lastName: 'Deer',
-          prisonerNumber: 'A1234AR',
-          releaseDate: '2022-05-02',
-        } as CvlPrisoner,
-        deliusRecord: {
-          otherIds: {
-            crn: 'X12346',
-          },
-        } as DeliusRecord,
+        licenceId: 3,
+        licenceType: LicenceType.AP,
+        licenceStatus: LicenceStatus.REVIEW_NEEDED,
+        isDueForEarlyRelease: false,
+        name: 'John Deer',
+        prisonerNumber: 'A1234AR',
+        releaseDate: '02/05/2022',
+        crnNumber: 'X12346',
         probationPractitioner: {
           name: 'Walter White',
         },
+        kind: LicenceKind.CRD,
       },
     ])
 
@@ -242,23 +141,29 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceId: 2,
             name: 'John Deer',
             crnNumber: 'X12346',
+            prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: 'CRD',
           },
           {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: 'CRD',
           },
         ],
         multipleTeams: false,
@@ -281,34 +186,43 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceId: 3,
             name: 'John Deer',
             crnNumber: 'X12346',
+            prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
           {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
           {
             licenceId: 2,
             name: 'Dr Who',
             crnNumber: 'X12346',
+            prisonerNumber: 'A1234AB',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Sherlock Holmes',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
         ],
         multipleTeams: true,
@@ -322,218 +236,6 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
 
-    it('should render the non-active licence if 2 exist', async () => {
-      comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
-        {
-          licences: [
-            {
-              id: 1,
-              type: LicenceType.AP,
-              status: LicenceStatus.ACTIVE,
-              isDueToBeReleasedInTheNextTwoWorkingDays: false,
-              releaseDate: null,
-            },
-            {
-              id: 2,
-              type: LicenceType.AP,
-              status: LicenceStatus.VARIATION_IN_PROGRESS,
-              isDueToBeReleasedInTheNextTwoWorkingDays: false,
-              releaseDate: null,
-            },
-          ],
-          cvlFields: {
-            licenceType: 'AP',
-            hardStopDate: '03/01/2023',
-            hardStopWarningDate: '01/01/2023',
-            isInHardStopPeriod: true,
-            isDueForEarlyRelease: false,
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-            isEligibleForEarlyRelease: false,
-          },
-          nomisRecord: {
-            firstName: 'Bob',
-            lastName: 'Smith',
-            prisonerNumber: 'A1234AA',
-            releaseDate: '2022-05-01',
-          } as CvlPrisoner,
-          deliusRecord: {
-            otherIds: {
-              crn: 'X12345',
-            },
-          } as DeliusRecord,
-          probationPractitioner: {
-            name: 'Walter White',
-          },
-        },
-      ])
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
-        caseload: [
-          {
-            licenceId: 2,
-            name: 'Bob Smith',
-            crnNumber: 'X12345',
-            releaseDate: '01 May 2022',
-            licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
-            licenceType: LicenceType.AP,
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-          },
-        ],
-        multipleTeams: false,
-        search: undefined,
-        statusConfig,
-        teamName: null,
-        teamView: false,
-        myCount: 1,
-        teamCount: 2,
-      })
-      expect(comCaseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
-    })
-
-    it('should ignore any timed out licences', async () => {
-      comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
-        {
-          licences: [
-            {
-              id: 1,
-              type: LicenceType.AP,
-              status: LicenceStatus.TIMED_OUT,
-              isDueToBeReleasedInTheNextTwoWorkingDays: false,
-              releaseDate: null,
-            },
-            {
-              id: 2,
-              type: LicenceType.AP,
-              status: LicenceStatus.VARIATION_IN_PROGRESS,
-              isDueToBeReleasedInTheNextTwoWorkingDays: false,
-              releaseDate: null,
-            },
-          ],
-          cvlFields: {
-            licenceType: 'AP',
-            hardStopDate: '03/01/2023',
-            hardStopWarningDate: '01/01/2023',
-            isInHardStopPeriod: true,
-            isDueForEarlyRelease: false,
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-            isEligibleForEarlyRelease: false,
-          },
-          nomisRecord: {
-            firstName: 'Bob',
-            lastName: 'Smith',
-            prisonerNumber: 'A1234AA',
-            releaseDate: '2022-05-01',
-          } as CvlPrisoner,
-          deliusRecord: {
-            otherIds: {
-              crn: 'X12345',
-            },
-          } as DeliusRecord,
-          probationPractitioner: {
-            name: 'Walter White',
-          },
-        },
-      ])
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
-        caseload: [
-          {
-            licenceId: 2,
-            name: 'Bob Smith',
-            crnNumber: 'X12345',
-            releaseDate: '01 May 2022',
-            licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
-            licenceType: LicenceType.AP,
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-          },
-        ],
-        multipleTeams: false,
-        search: undefined,
-        statusConfig,
-        teamName: null,
-        teamView: false,
-        myCount: 1,
-        teamCount: 2,
-      })
-      expect(comCaseloadService.getStaffVaryCaseload).toHaveBeenCalledWith(res.locals.user)
-    })
-
-    it('should display variations over REVIEW_NEEDED licences', async () => {
-      comCaseloadService.getStaffVaryCaseload.mockResolvedValue([
-        {
-          licences: [
-            {
-              id: 1,
-              type: LicenceType.AP,
-              status: LicenceStatus.REVIEW_NEEDED,
-              isDueToBeReleasedInTheNextTwoWorkingDays: false,
-              releaseDate: null,
-            },
-            {
-              id: 2,
-              type: LicenceType.AP,
-              status: LicenceStatus.VARIATION_IN_PROGRESS,
-              isDueToBeReleasedInTheNextTwoWorkingDays: false,
-              releaseDate: null,
-            },
-          ],
-          cvlFields: {
-            licenceType: 'AP',
-            hardStopDate: '03/01/2023',
-            hardStopWarningDate: '01/01/2023',
-            isInHardStopPeriod: false,
-            isDueForEarlyRelease: false,
-            isDueToBeReleasedInTheNextTwoWorkingDays: false,
-            isEligibleForEarlyRelease: false,
-          },
-          nomisRecord: {
-            firstName: 'Bob',
-            lastName: 'Smith',
-            prisonerNumber: 'A1234AA',
-            releaseDate: '2022-05-01',
-          } as CvlPrisoner,
-          deliusRecord: {
-            otherIds: {
-              crn: 'X12345',
-            },
-          } as DeliusRecord,
-          probationPractitioner: {
-            name: 'Walter White',
-          },
-        },
-      ])
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
-        caseload: [
-          {
-            licenceId: 2,
-            name: 'Bob Smith',
-            crnNumber: 'X12345',
-            releaseDate: '01 May 2022',
-            licenceStatus: LicenceStatus.VARIATION_IN_PROGRESS,
-            licenceType: LicenceType.AP,
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-          },
-        ],
-        multipleTeams: false,
-        search: undefined,
-        statusConfig,
-        teamName: null,
-        teamView: false,
-        myCount: 1,
-        teamCount: 2,
-      })
-    })
-
     it('should successfully search by name', async () => {
       req.query.view = 'team'
       req.query.search = 'smith'
@@ -545,12 +247,15 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
         ],
         multipleTeams: true,
@@ -575,23 +280,29 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceId: 3,
             name: 'John Deer',
             crnNumber: 'X12346',
+            prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
           {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
         ],
         multipleTeams: true,
@@ -616,12 +327,15 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
         ],
         multipleTeams: true,
@@ -648,6 +362,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             staffCode: 'X12342',
             name: 'CVL COM',
           },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 2,
@@ -660,6 +376,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             staffCode: 'X12342',
             name: 'CVL COM',
           },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 3,
@@ -672,6 +390,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             staffCode: 'X12342',
             name: 'CVL COM',
           },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 4,
@@ -684,6 +404,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             staffCode: 'X12342',
             name: 'CVL COM',
           },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 5,
@@ -696,6 +418,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             staffCode: 'X12342',
             name: 'CVL COM',
           },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 6,
@@ -708,30 +432,36 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             staffCode: 'X12342',
             name: 'CVL COM',
           },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 7,
           name: 'Datessdu Kiarerick',
           crnNumber: 'L258122',
           licenceType: 'AP',
-          releaseDate: '5 Dec 2023',
+          releaseDate: '05 Dec 2023',
           licenceStatus: LicenceStatus.REVIEW_NEEDED,
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
           },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 8,
           name: 'Datessdu Kiarerick',
           crnNumber: 'L258122',
           licenceType: 'AP',
-          releaseDate: '5 Dec 2024',
+          releaseDate: '05 Dec 2024',
           licenceStatus: LicenceStatus.ACTIVE,
           probationPractitioner: {
             staffCode: 'X12342',
             name: 'CVL COM',
           },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
       ]
       const sortedCaseload = [
@@ -740,9 +470,11 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           name: 'Datessdu Kiarerick',
           crnNumber: 'L258122',
           licenceType: 'AP',
-          releaseDate: '5 Dec 2023',
+          releaseDate: '05 Dec 2023',
           licenceStatus: 'REVIEW_NEEDED',
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 5,
@@ -752,6 +484,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           releaseDate: '20 Oct 2024',
           licenceStatus: 'REVIEW_NEEDED',
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 1,
@@ -761,6 +495,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           releaseDate: '21 Oct 2024',
           licenceStatus: 'REVIEW_NEEDED',
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 4,
@@ -770,6 +506,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           releaseDate: '16 Jul 2024',
           licenceStatus: 'IN_PROGRESS',
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 2,
@@ -779,6 +517,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           releaseDate: '17 Jul 2024',
           licenceStatus: 'ACTIVE',
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 3,
@@ -788,6 +528,8 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           releaseDate: '23 Jul 2024',
           licenceStatus: 'INACTIVE',
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 6,
@@ -797,15 +539,19 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
           releaseDate: '30 Nov 2024',
           licenceStatus: 'ACTIVE',
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
         {
           licenceId: 8,
           name: 'Datessdu Kiarerick',
           crnNumber: 'L258122',
           licenceType: 'AP',
-          releaseDate: '5 Dec 2024',
+          releaseDate: '05 Dec 2024',
           licenceStatus: 'ACTIVE',
           probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          isDueForEarlyRelease: false,
+          kind: LicenceKind.CRD,
         },
       ]
       expect(caseload.sort(handler.prioritiseReviewNeeded)).toEqual(sortedCaseload)
@@ -826,23 +572,29 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceId: 2,
             name: 'John Deer',
             crnNumber: 'X12346',
+            prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
           {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
         ],
         multipleTeams: false,
@@ -877,34 +629,43 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             licenceId: 3,
             name: 'John Deer',
             crnNumber: 'X12346',
+            prisonerNumber: 'A1234AR',
             releaseDate: '02 May 2022',
             licenceStatus: LicenceStatus.REVIEW_NEEDED,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
           {
             licenceId: 1,
             name: 'Bob Smith',
             crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Walter White',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
           {
             licenceId: 2,
             name: 'Dr Who',
             crnNumber: 'X12346',
+            prisonerNumber: 'A1234AB',
             releaseDate: '01 May 2022',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
               name: 'Sherlock Holmes',
             },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
         ],
         multipleTeams: true,
