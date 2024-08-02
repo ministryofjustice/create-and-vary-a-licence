@@ -4,6 +4,7 @@ import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
+import { HdcCurfewAddress, HdcFirstDayCurfewFromUntil, HdcWeeklyCurfewFromUntil } from '../../../@types/HdcLicence'
 import { User } from '../../../@types/CvlUserDetails'
 
 const pdfHeaderFooterStyle =
@@ -71,20 +72,81 @@ export default class PrintLicenceRoutes {
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
     // TO DO add typeCode for HDC templates eg HDC_AP
-    res.renderPDF(
-      `pages/licence/HDC_AP`,
-      {
-        licencesUrl,
-        imageData,
-        qrCode,
-        htmlPrint: false,
-        watermark,
-        singleItemConditions,
-        multipleItemConditions,
-        exclusionZoneMapData,
-      },
-      { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
-    )
+    if (licence.kind === 'HDC') {
+      const curfewAddress: HdcCurfewAddress = {
+        addressLineOne: 'addressLineOne',
+        addressLineTwo: 'addressLineTwo',
+        addressTownOrCity: 'addressTownOrCity',
+        addressPostcode: 'addressPostcode',
+      }
+      const firstDayCurfewTimes: HdcFirstDayCurfewFromUntil = {
+        from: '09:00',
+        until: '17:00',
+      }
+      const weeklyCurfewTimes: HdcWeeklyCurfewFromUntil = {
+        monday: {
+          from: '09:00',
+          until: '17:00',
+        },
+        tuesday: {
+          from: '09:00',
+          until: '17:00',
+        },
+        wednesday: {
+          from: '09:00',
+          until: '17:00',
+        },
+        thursday: {
+          from: '09:00',
+          until: '17:00',
+        },
+        friday: {
+          from: '09:00',
+          until: '17:00',
+        },
+        saturday: {
+          from: '09:00',
+          until: '17:00',
+        },
+        sunday: {
+          from: '09:00',
+          until: '17:00',
+        },
+      }
+      const prisonTelephone = '0121 1234567'
+      const monitoringSupplierTelephone = '0800 137 291'
+
+      res.renderPDF(
+        `pages/licence/HDC_AP`,
+        {
+          licencesUrl,
+          imageData,
+          qrCode,
+          htmlPrint: false,
+          watermark,
+          singleItemConditions,
+          multipleItemConditions,
+          exclusionZoneMapData,
+          prisonTelephone,
+        },
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
+      )
+    } else {
+      res.renderPDF(
+        `pages/licence/${licence.typeCode}`,
+        {
+          licencesUrl,
+          imageData,
+          qrCode,
+          htmlPrint: false,
+          watermark,
+          singleItemConditions,
+          multipleItemConditions,
+          exclusionZoneMapData,
+        },
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
+      )
+    }
   }
 
   private groupConditions(licence: Licence) {

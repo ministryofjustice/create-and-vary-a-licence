@@ -1489,7 +1489,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP'
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
@@ -1638,7 +1638,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind: 'CRD' | 'VARIATION' | 'HARD_STOP'
+      kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
       /**
        * Format: int64
        * @description Internal identifier for this licence generated within this service
@@ -2037,7 +2037,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      type: 'CRD' | 'HARD_STOP'
+      type: 'CRD' | 'HARD_STOP' | 'HDC'
     }
     /** @description A reference to the created licence */
     LicenceCreationResponse: {
@@ -2113,7 +2113,7 @@ export interface components {
        * @example CRD
        * @enum {string}
        */
-      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP'
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
       /** @description The forename and surname of the offender */
       name: string
       /**
@@ -2717,6 +2717,47 @@ export interface components {
       | 'kind'
       | 'typeCode'
     >
+    /** @description Describes a HDC licence within this service */
+    HdcLicence_SubjectAccessRequest: WithRequired<
+      {
+        kind: 'HDC'
+      } & Omit<components['schemas']['Licence_SubjectAccessRequest'], 'kind'> & {
+          /**
+           * @description Type of this licence
+           * @example HDC
+           * @enum {string}
+           */
+          kind?: 'HDC'
+          /**
+           * Format: date
+           * @description Date which the hard stop period will start
+           */
+          hardStopDate?: string
+          /**
+           * Format: date
+           * @description Date which to show the hard stop warning
+           */
+          hardStopWarningDate?: string
+          /** @description Is the licence in the hard stop period? (Within two working days of release) */
+          isInHardStopPeriod?: boolean
+          /** @description Is the prisoner due for early release */
+          isDueForEarlyRelease?: boolean
+          /** @description Is the prisoner due to be released in the next two working days */
+          isDueToBeReleasedInTheNextTwoWorkingDays?: boolean
+        },
+      | 'additionalLicenceConditions'
+      | 'additionalPssConditions'
+      | 'bespokeConditions'
+      | 'id'
+      | 'isDueForEarlyRelease'
+      | 'isDueToBeReleasedInTheNextTwoWorkingDays'
+      | 'isEligibleForEarlyRelease'
+      | 'isInHardStopPeriod'
+      | 'isReviewNeeded'
+      | 'isVariation'
+      | 'kind'
+      | 'typeCode'
+    >
     /** @description Describes an event that was related to a licence */
     LicenceEvent_SubjectAccessRequest: {
       /**
@@ -2758,6 +2799,8 @@ export interface components {
         | 'VERSION_CREATED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'HDC_CREATED'
+        | 'HDC_SUBMITTED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -3124,6 +3167,7 @@ export interface components {
       | components['schemas']['CrdLicence_SubjectAccessRequest']
       | components['schemas']['VariationLicence_SubjectAccessRequest']
       | components['schemas']['HardStopLicence_SubjectAccessRequest']
+      | components['schemas']['HdcLicence_SubjectAccessRequest']
     )
     /** @description The Sar Content holds the prisoner details */
     SarContent_SubjectAccessRequest: {
@@ -3559,8 +3603,18 @@ export interface components {
        * @description The full name of the person who last submitted this licence
        * @example Jane Jones
        */
-      submittedByFullName?: string
-    }
+      responsibleComFullName?: string
+      /**
+       * @description The username which created this licence
+       * @example X12333
+       */
+      createdByUsername?: string
+    } & (
+      | components['schemas']['CrdLicence']
+      | components['schemas']['VariationLicence']
+      | components['schemas']['HardStopLicence']
+      | components['schemas']['HdcLicence']
+    )
     /** @description Describes a CRD licence within this service */
     CrdLicence: WithRequired<
       {
@@ -3618,6 +3672,47 @@ export interface components {
            * @description The date time when the hardstop licence was reviewed by a probation practitioner
            */
           reviewDate?: string
+          /**
+           * Format: date
+           * @description Date which the hard stop period will start
+           */
+          hardStopDate?: string
+          /**
+           * Format: date
+           * @description Date which to show the hard stop warning
+           */
+          hardStopWarningDate?: string
+          /** @description Is the licence in the hard stop period? (Within two working days of release) */
+          isInHardStopPeriod?: boolean
+          /** @description Is the prisoner due for early release */
+          isDueForEarlyRelease?: boolean
+          /** @description Is the prisoner due to be released in the next two working days */
+          isDueToBeReleasedInTheNextTwoWorkingDays?: boolean
+        },
+      | 'additionalLicenceConditions'
+      | 'additionalPssConditions'
+      | 'bespokeConditions'
+      | 'id'
+      | 'isDueForEarlyRelease'
+      | 'isDueToBeReleasedInTheNextTwoWorkingDays'
+      | 'isEligibleForEarlyRelease'
+      | 'isInHardStopPeriod'
+      | 'isReviewNeeded'
+      | 'isVariation'
+      | 'kind'
+      | 'typeCode'
+    >
+    /** @description Describes a HDC licence within this service */
+    HdcLicence: WithRequired<
+      {
+        kind: 'HDC'
+      } & Omit<components['schemas']['Licence'], 'kind'> & {
+          /**
+           * @description Type of this licence
+           * @example HDC
+           * @enum {string}
+           */
+          kind?: 'HDC'
           /**
            * Format: date
            * @description Date which the hard stop period will start
@@ -3837,6 +3932,8 @@ export interface components {
         | 'VERSION_CREATED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
+        | 'HDC_CREATED'
+        | 'HDC_SUBMITTED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -6706,6 +6803,8 @@ export interface operations {
           | 'VERSION_CREATED'
           | 'NOT_STARTED'
           | 'TIMED_OUT'
+          | 'HDC_CREATED'
+          | 'HDC_SUBMITTED'
         )[]
         sortBy?: string
         sortOrder?: string
