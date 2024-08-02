@@ -131,7 +131,6 @@ export default defineConfig({
         stubGetStaffDetailsByStaffId: community.stubGetStaffDetailsByStaffId,
         stubGetStaffDetailsByStaffCode: community.stubGetStaffDetailsByStaffCode,
         stubGetStaffDetailsByList: community.stubGetStaffDetailsByList,
-        stubGetManagedOffenders: community.stubGetManagedOffenders,
         stubGetAnOffendersManagers: community.stubGetAnOffendersManagers,
         stubGetUserDetailsByUsername: community.stubGetUserDetailsByUsername,
         stubAssignRole: community.stubAssignRole,

@@ -17,7 +17,6 @@ context('Create a licence', () => {
   })
 
   it('should redirect to prison-will-create-this-licence if the licence was NOT_STARTED and is now TIMED_OUT', () => {
-    cy.task('stubGetExistingLicenceForOffenderNoResult')
     cy.task('stubGetStaffCreateCaseloadForHardStop')
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicenceInHardStop()
@@ -25,8 +24,6 @@ context('Create a licence', () => {
   })
 
   it('should redirect to prison-will-create-this-licence if a licence has timed out', () => {
-    cy.task('stubGetLicencesForStatus', { status: 'TIMED_OUT' })
-    cy.task('stubGetTimedOutLicence')
     cy.task('stubGetStaffCreateCaseloadForHardStop', { licenceId: 1 })
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicenceInHardStop()
@@ -43,7 +40,6 @@ context('Create a licence', () => {
 
   it('should redirect to prison-will-create-this-licence if the prison-created licence is yet to be submitted', () => {
     cy.task('stubGetHardStopAndTimedOutLicencesCaseload')
-    cy.task('stubGetHardStopLicence')
     const indexPage = Page.verifyOnPage(IndexPage)
     const caseloadPage = indexPage.clickCreateALicenceInHardStop()
     caseloadPage.clickNameOfTimedOutLicence()
