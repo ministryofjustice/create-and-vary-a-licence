@@ -1,7 +1,5 @@
 import Page from '../pages/page'
 import IndexPage from '../pages'
-import LicenceStatus from '../../server/enumeration/licenceStatus'
-import LicenceCreationType from '../../server/enumeration/licenceCreationType'
 
 context('Vary a licence', () => {
   const dates: string[] = []
@@ -10,13 +8,12 @@ context('Vary a licence', () => {
     cy.task('reset')
     cy.task('stubProbationSignIn')
     cy.task('stubGetStaffDetails')
+    cy.task('stubGetManagedOffenders')
+    cy.task('stubGetOffendersByCrn')
     cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'VARIATION', status: 'ACTIVE' })
     cy.task('stubGetCompletedLicence', { statusCode: 'ACTIVE', typeCode: 'AP_PSS' })
-    cy.task('stubGetStaffVaryCaseload', {
-      licenceId: 1,
-      licenceStatus: LicenceStatus.ACTIVE,
-      licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,
-    })
+    cy.task('stubGetOffendersByNomsNumber')
+    cy.task('searchPrisonersByNomisIds')
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubRecordAuditEvent')
     cy.task('stubMatchLicenceEvents')

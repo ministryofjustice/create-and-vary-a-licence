@@ -249,6 +249,31 @@ export default {
     })
   },
 
+  stubGetManagedOffenders: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/community-api/secure/staff/staffIdentifier/2000/caseload/managedOffenders`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            offenderCrn: 'X344165',
+            staffIdentifier: 2500012436,
+            crnNumber: 'X344165',
+            staff: {
+              code: 'X12345',
+              forenames: 'John',
+              surname: 'Smith',
+            },
+          },
+        ],
+      },
+    })
+  },
+
   stubGetPduHeads: (): SuperAgentRequest => {
     return stubFor({
       request: {
