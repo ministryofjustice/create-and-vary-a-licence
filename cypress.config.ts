@@ -110,11 +110,7 @@ export default defineConfig({
         stubGetComReviewCount: licence.stubGetComReviewCount,
         stubGetCaseloadItem: licence.stubGetCaseloadItem,
         stubGetCaseloadItemInHardStop: licence.stubGetCaseloadItemInHardStop,
-        stubGetPreviouslyApprovedAndTimedOutLicencesCaseload:
-          licence.stubGetPreviouslyApprovedAndTimedOutLicencesCaseload,
-        stubGetHardStopAndTimedOutLicencesCaseload: licence.stubGetHardStopAndTimedOutLicencesCaseload,
-        stubGetHardStopAndTimedOutAndSubmittedLicencesCaseload:
-          licence.stubGetHardStopAndTimedOutAndSubmittedLicencesCaseload,
+        stubGetPreviouslyApprovedAndTimedOutLicences: licence.stubGetPreviouslyApprovedAndTimedOutLicences,
         stubGetApprovedLicenceInHardStop: licence.stubGetApprovedLicenceInHardStop,
         stubGetPssCaseloadItem: licence.stubGetPssCaseloadItem,
         stubDeactivateLicenceAndVariations: licence.stubDeactivateLicenceAndVariations,
@@ -122,15 +118,13 @@ export default defineConfig({
         stubGetRecentlyApprovedCaseload: licence.stubGetRecentlyApproved,
         stubGetPrisonOmuCaseload: licence.stubGetPrisonOmuCaseload,
         stubGetProbationOmuCaseload: licence.stubGetProbationOmuCaseload,
-        stubGetStaffCreateCaseload: licence.stubGetStaffCreateCaseload,
-        stubGetStaffVaryCaseload: licence.stubGetStaffVaryCaseload,
-        stubGetStaffCreateCaseloadForHardStop: licence.stubGetStaffCreateCaseloadForHardStop,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
         stubGetStaffDetailsByStaffId: community.stubGetStaffDetailsByStaffId,
         stubGetStaffDetailsByStaffCode: community.stubGetStaffDetailsByStaffCode,
         stubGetStaffDetailsByList: community.stubGetStaffDetailsByList,
+        stubGetManagedOffenders: community.stubGetManagedOffenders,
         stubGetAnOffendersManagers: community.stubGetAnOffendersManagers,
         stubGetUserDetailsByUsername: community.stubGetUserDetailsByUsername,
         stubAssignRole: community.stubAssignRole,
@@ -140,6 +134,7 @@ export default defineConfig({
         searchPrisonersByNomisIds: licence.searchPrisonersByNomisIds,
         searchPssPrisonersByNomisIds: licence.searchPssPrisonersByNomisIds,
         searchPrisonersByReleaseDate: licence.searchPrisonersByReleaseDate,
+        searchPrisonersByNomisIdsInHardStop: licence.searchPrisonersByNomisIdsInHardStop,
         searchPrisonersByBookingIds: prisonerSearch.searchPrisonersByBookingIds,
         stubPrisonerSearchApiPing: prisonerSearch.stubPing,
 

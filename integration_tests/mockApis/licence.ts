@@ -6,7 +6,6 @@ import LicenceStatus from '../../server/licences/licenceStatus'
 import policyV2_0 from './polices/v2-0'
 // eslint-disable-next-line camelcase
 import policyV2_1 from './polices/v2-1'
-import LicenceCreationType from '../../server/enumeration/licenceCreationType'
 
 const ACTIVE_POLICY_VERSION = '2.1'
 
@@ -265,6 +264,21 @@ export default {
       },
     })
   },
+
+  stubGetNextPolicyChange: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-apilicence/vary/id/(\\d)/policy-changes/condition/(\\d)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
   stubGetCompletedLicence: (options: {
     statusCode: string
     typeCode: 'AP_PSS' | 'AP' | 'PSS'
@@ -996,90 +1010,61 @@ export default {
     })
   },
 
-  stubGetPreviouslyApprovedAndTimedOutLicencesCaseload: (): SuperAgentRequest => {
+  stubGetPreviouslyApprovedAndTimedOutLicences: (): SuperAgentRequest => {
     return stubFor({
       request: {
-        method: 'GET',
-        urlPathPattern: `/licences-api/caseload/com/staff/(\\d)*/create-case-load`,
+        method: 'POST',
+        urlPathPattern: `/licences-api/licence/match`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Bob Zimmer',
-            crnNumber: 'X12345',
-            prisonerNumber: 'G9786GC',
-            releaseDate: '13/03/2021',
             licenceId: 1,
-            licenceStatus: 'TIMED_OUT',
-            licenceType: 'AP_PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
+            licenceType: licencePlaceholder.typeCode,
+            licenceStatus: 'APPROVED',
+            nomisId: licencePlaceholder.nomsId,
+            surname: licencePlaceholder.surname,
+            forename: licencePlaceholder.forename,
+            prisonCode: licencePlaceholder.prisonCode,
+            prisonDescription: licencePlaceholder.prisonDescription,
+            conditionalReleaseDate: licencePlaceholder.conditionalReleaseDate,
+            actualReleaseDate: licencePlaceholder.actualReleaseDate,
+            crn: licencePlaceholder.crn,
+            dateOfBirth: licencePlaceholder.dateOfBirth,
+            comUsername: licencePlaceholder.comUsername,
+            variationOf: null,
+            versionOf: null,
+            kind: 'CRD',
             hardStopDate: '05/12/2023',
             hardStopWarningDate: '03/12/2023',
-            licenceCreationType: LicenceCreationType.LICENCE_CHANGES_NOT_APPROVED_IN_TIME,
-            isInHardStopPeriod: true,
           },
-        ],
-      },
-    })
-  },
-  stubGetHardStopAndTimedOutLicencesCaseload: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: `/licences-api/caseload/com/staff/(\\d)*/create-case-load`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
           {
-            name: 'Bob Zimmer',
-            crnNumber: 'X12345',
-            prisonerNumber: 'G9786GC',
-            releaseDate: '01/04/2021',
-            licenceId: 1,
-            licenceStatus: 'TIMED_OUT',
-            licenceType: 'AP_PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
-            hardStopDate: '05/12/2023',
-            hardStopWarningDate: '03/12/2023',
-            licenceCreationType: LicenceCreationType.PRISON_WILL_CREATE_THIS_LICENCE,
-            isInHardStopPeriod: true,
-          },
-        ],
-      },
-    })
-  },
-  stubGetHardStopAndTimedOutAndSubmittedLicencesCaseload: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: `/licences-api/caseload/com/staff/(\\d)*/create-case-load`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            name: 'Bob Zimmer',
-            crnNumber: 'X12345',
-            prisonerNumber: 'G9786GC',
-            releaseDate: '01/04/2021',
             licenceId: 2,
+            licenceType: licencePlaceholder.typeCode,
             licenceStatus: 'TIMED_OUT',
-            licenceType: 'AP_PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
+            nomisId: licencePlaceholder.nomsId,
+            surname: licencePlaceholder.surname,
+            forename: licencePlaceholder.forename,
+            prisonCode: licencePlaceholder.prisonCode,
+            prisonDescription: licencePlaceholder.prisonDescription,
+            conditionalReleaseDate: licencePlaceholder.conditionalReleaseDate,
+            actualReleaseDate: licencePlaceholder.actualReleaseDate,
+            crn: licencePlaceholder.crn,
+            dateOfBirth: licencePlaceholder.dateOfBirth,
+            comUsername: licencePlaceholder.comUsername,
+            variationOf: null,
+            versionOf: 1,
+            kind: 'CRD',
             hardStopDate: '05/12/2023',
             hardStopWarningDate: '03/12/2023',
-            licenceCreationType: LicenceCreationType.LICENCE_CREATED_BY_PRISON,
-            isInHardStopPeriod: true,
           },
         ],
       },
     })
   },
+
   stubSubmitStatus: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -1947,6 +1932,74 @@ export default {
         },
       },
     }),
+
+  searchPrisonersByNomisIdsInHardStop: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/prisoner-search/prisoner-numbers`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            cvl: {
+              licenceType: 'AP',
+              hardStopDate: '03/01/2023',
+              hardStopWarningDate: '01/01/2023',
+              isInHardStopPeriod: true,
+              isDueForEarlyRelease: true,
+            },
+            prisoner: {
+              prisonerNumber: 'G9786GC',
+              bookingId: '1201102',
+              bookNumber: '38518A',
+              firstName: 'DOUGAL',
+              lastName: 'MCGUIRE',
+              dateOfBirth: '1940-12-20',
+              gender: 'Male',
+              youthOffender: false,
+              status: 'ACTIVE IN',
+              lastMovementTypeCode: 'ADM',
+              lastMovementReasonCode: '24',
+              inOutStatus: 'IN',
+              prisonId: 'MDI',
+              prisonName: 'Moorland (HMP & YOI)',
+              cellLocation: 'RECP',
+              dateCreated: '2022-07-05 10:30:00',
+              aliases: [
+                {
+                  firstName: 'DOUGLAS',
+                  lastName: 'ADORNO',
+                  dateOfBirth: '1939-11-19',
+                  gender: 'Male',
+                  ethnicity: 'Asian/Asian British: Indian',
+                },
+              ],
+              alerts: [
+                {
+                  alertType: 'H',
+                  alertCode: 'HA2',
+                  active: true,
+                  expired: false,
+                },
+              ],
+              legalStatus: 'RECALL',
+              imprisonmentStatus: 'CUR_ORA',
+              imprisonmentStatusDescription: 'ORA Recalled from Curfew Conditions',
+              indeterminateSentence: false,
+              receptionDate: '2021-01-08',
+              locationDescription: 'Moorland (HMP & YOI)',
+              restrictedPatient: false,
+              conditionalReleaseDate: nextMonth,
+            },
+          },
+        ],
+      },
+    })
+  },
+
   stubDeactivateLicenceAndVariations: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -2074,103 +2127,6 @@ export default {
             lastWorkedOnBy: 'X Y',
             isDueForEarlyRelease: true,
             isInHardStopPeriod: false,
-          },
-        ],
-      },
-    })
-  },
-  stubGetStaffCreateCaseload: (options: {
-    licenceId: number
-    licenceStatus: string
-    licenceCreationType: string
-  }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/caseload/com/staff/(\\d)*/create-case-load`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            name: 'Dougal Mcguire',
-            crnNumber: 'X344165',
-            prisonerNumber: 'G9786GC',
-            releaseDate: '01/09/2024',
-            licenceId: options.licenceId,
-            licenceStatus: options.licenceStatus,
-            licenceType: 'PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
-            hardStopDate: '03/01/2023',
-            hardStopWarningDate: '01/01/2023',
-            isDueForEarlyRelease: true,
-            licenceCreationType: options.licenceCreationType,
-          },
-        ],
-      },
-    })
-  },
-  stubGetStaffCreateCaseloadForHardStop: (options: {
-    licenceId: number
-    licenceStatus: string
-    licenceCreationType: string
-  }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/caseload/com/staff/(\\d)*/create-case-load`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            name: 'Dougal Mcguire',
-            crnNumber: 'X344165',
-            prisonerNumber: 'G9786GC',
-            releaseDate: '01/09/2024',
-            licenceId: options && options.licenceId,
-            licenceStatus: 'TIMED_OUT',
-            licenceType: 'AP',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
-            hardStopDate: '03/01/2023',
-            hardStopWarningDate: '01/01/2023',
-            isDueForEarlyRelease: true,
-            licenceCreationType: LicenceCreationType.PRISON_WILL_CREATE_THIS_LICENCE,
-            isInHardStopPeriod: true,
-          },
-        ],
-      },
-    })
-  },
-  stubGetStaffVaryCaseload: (options: {
-    licenceId: number
-    licenceStatus: string
-    licenceCreationType: string
-  }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/licences-api/caseload/com/staff/(\\d)*/vary-case-load`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            name: 'Dougal Mcguire',
-            crnNumber: 'X344165',
-            prisonerNumber: 'G9786GC',
-            releaseDate: '01/09/2024',
-            licenceId: options.licenceId,
-            licenceStatus: options.licenceStatus,
-            licenceType: 'PSS',
-            probationPractitioner: { staffCode: 'X12345', name: 'John Smith' },
-            hardStopDate: '03/01/2023',
-            hardStopWarningDate: '01/01/2023',
-            isDueForEarlyRelease: true,
-            licenceCreationType: options.licenceCreationType,
           },
         ],
       },
