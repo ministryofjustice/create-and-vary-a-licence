@@ -111,7 +111,7 @@ export default class ViewAndPrintCaseRoutes {
     isInHardStopPeriod: boolean,
     tabType: string
   ): boolean => {
-    if (tabType === 'attentionNeeded') {
+    if (tabType === 'ATTENTION_NEEDED') {
       return false
     }
 

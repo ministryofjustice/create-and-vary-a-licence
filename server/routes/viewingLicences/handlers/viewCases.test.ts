@@ -767,5 +767,47 @@ describe('Route handlers - View and print case list', () => {
         statusConfig,
       })
     })
+
+    it('should return link as null if tabType is ATTENTION_NEEDED', async () => {
+      caseloadService.getPrisonOmuCaseload.mockResolvedValue([
+        { ...caCase[0], licenceId: 5, tabType: 'ATTENTION_NEEDED' } as CaCase,
+      ])
+      res.locals.user.prisonCaseload = ['BAI']
+      req.query.view = 'prison'
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
+        cases: [
+          {
+            isDueForEarlyRelease: false,
+            lastWorkedOnBy: 'Test Updater',
+            licenceId: 5,
+            licenceStatus: 'NOT_STARTED',
+            link: null,
+            name: 'Bob Smith',
+            nomisLegalStatus: 'SENTENCED',
+            prisonerNumber: 'A1234AA',
+            probationPractitioner: {
+              name: 'Sherlock Holmes',
+            },
+            releaseDate: '01 May 2022',
+            releaseDateLabel: 'Confirmed release date',
+            tabType: 'attentionNeeded',
+          },
+        ],
+        CaViewCasesTab,
+        showAttentionNeededTab: true,
+        hasMultipleCaseloadsInNomis: false,
+        prisonsToDisplay: [
+          {
+            agencyId: 'BAI',
+            description: 'Belmarsh (HMP)',
+          },
+        ],
+        probationView: false,
+        search: '',
+        statusConfig,
+      })
+    })
   })
 })
