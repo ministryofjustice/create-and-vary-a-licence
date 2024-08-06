@@ -4,9 +4,11 @@ import statusConfig from '../../../licences/licenceStatus'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import ComCaseloadService, { ComCase } from '../../../services/lists/comCaseloadService'
+import ComCaseloadService from '../../../services/lists/comCaseloadService'
+import { ComCase } from '../../../@types/licenceApiClientTypes'
+import { parseIsoDate } from '../../../utils/utils'
 
-const comCaseloadService = new ComCaseloadService(null, null, null) as jest.Mocked<ComCaseloadService>
+const comCaseloadService = new ComCaseloadService(null, null) as jest.Mocked<ComCaseloadService>
 
 jest.mock('../../../services/lists/comCaseloadService')
 
@@ -21,7 +23,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         crnNumber: 'X381306',
         name: 'John Roberts',
         releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
         prisonerNumber: '123',
         licenceId: 1,
         licenceType: LicenceType.AP,
@@ -41,7 +42,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         crnNumber: 'X381306',
         name: 'John Roberts',
         releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
         prisonerNumber: '123',
         licenceId: 1,
         licenceType: LicenceType.AP,
@@ -60,7 +60,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         crnNumber: 'X381307',
         name: 'Dr Who',
         releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
         prisonerNumber: '124',
         licenceId: 2,
         licenceType: LicenceType.AP_PSS,
@@ -73,7 +72,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         crnNumber: 'X381308',
         name: 'Mabel Moorhouse',
         releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
         prisonerNumber: '125',
         licenceId: 3,
         licenceType: LicenceType.AP_PSS,
@@ -86,7 +84,6 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         crnNumber: 'X381309',
         name: 'Ronald Recall',
         releaseDate: '12/10/2022',
-        sortDate: '2022-10-12',
         prisonerNumber: '126',
         licenceId: 4,
         licenceType: LicenceType.AP_PSS,
@@ -152,7 +149,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
               name: 'Joe Bloggs',
               staffIdentifier: 2000,
             },
-            sortDate: '2022-10-12',
+            sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/1/check-your-answers',
             isClickable: true,
           },
@@ -189,7 +186,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             isClickable: true,
             createLink: '/licence/create/id/1/check-your-answers',
-            sortDate: '2022-10-12',
+            sortDate: parseIsoDate('2022-10-12'),
           },
           {
             name: 'Dr Who',
@@ -202,7 +199,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceId: 2,
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP_PSS,
-            sortDate: '2022-10-12',
+            sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/2/check-your-answers',
             isClickable: false,
           },
@@ -217,7 +214,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceId: 3,
             licenceStatus: LicenceStatus.NOT_IN_PILOT,
             licenceType: LicenceType.AP_PSS,
-            sortDate: '2022-10-12',
+            sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/3/check-your-answers',
             isClickable: false,
           },
@@ -232,7 +229,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceId: 4,
             licenceStatus: LicenceStatus.OOS_RECALL,
             licenceType: LicenceType.AP_PSS,
-            sortDate: '2022-10-12',
+            sortDate: parseIsoDate('2022-10-12'),
             createLink: '/licence/create/id/4/check-your-answers',
             isClickable: false,
           },
@@ -269,7 +266,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
           crnNumber: 'X381306',
           name: 'John Roberts',
           releaseDate: '12/10/2022',
-          sortDate: '2022-10-11T23:00:00.000Z',
+          sortDate: '12/10/2022',
           prisonerNumber: '123',
           licenceId: 2,
           licenceType: LicenceType.AP,
@@ -304,7 +301,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             },
             isClickable: true,
             createLink: '/licence/create/id/2/check-your-answers',
-            sortDate: '2022-10-11T23:00:00.000Z',
+            sortDate: parseIsoDate('2022-10-12'),
           },
         ],
         multipleTeams: false,
