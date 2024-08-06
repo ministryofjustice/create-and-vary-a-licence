@@ -23,6 +23,7 @@ export default class CaseloadRoutes {
       return {
         ...comCase,
         releaseDate: format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy'),
+        licenceStatus: comCase.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : comCase.licenceStatus,
       }
     })
 
@@ -78,15 +79,15 @@ export default class CaseloadRoutes {
   }
 
   prioritiseReviewNeeded(
-    a: { licenceStatus: LicenceStatus; releaseDate: string },
-    b: { licenceStatus: LicenceStatus; releaseDate: string }
+    a: { isReviewNeeded: boolean; releaseDate: string },
+    b: { isReviewNeeded: boolean; releaseDate: string }
   ) {
     const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
     const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
-    if (a.licenceStatus === LicenceStatus.REVIEW_NEEDED && b.licenceStatus !== LicenceStatus.REVIEW_NEEDED) {
+    if (a.isReviewNeeded && !b.isReviewNeeded) {
       return -1
     }
-    if (a.licenceStatus !== LicenceStatus.REVIEW_NEEDED && b.licenceStatus === LicenceStatus.REVIEW_NEEDED) {
+    if (!a.isReviewNeeded && b.isReviewNeeded) {
       return 1
     }
     return crd1 - crd2
