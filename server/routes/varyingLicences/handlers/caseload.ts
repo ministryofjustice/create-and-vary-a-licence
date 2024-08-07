@@ -20,7 +20,7 @@ export default class CaseloadRoutes {
         ? await this.comCaseloadService.getTeamVaryCaseload(user, req.session.teamSelection)
         : await this.comCaseloadService.getStaffVaryCaseload(user)
     ).map(comCase => {
-      const releaseDate = comCase.releaseDate ? format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy') : 'Not Found'
+      const releaseDate = comCase.releaseDate ? format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy') : 'not found'
       return {
         ...comCase,
         releaseDate,
