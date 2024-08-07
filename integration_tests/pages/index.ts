@@ -4,6 +4,8 @@ import ApprovalCasesPage from './approvalCases'
 import ViewCasesPage from './viewCasesPage'
 import VaryCasesPage from './varyCases'
 import VaryApproveCasesPage from './varyApproveCasesPage'
+import LicenceCreationType from '../../server/enumeration/licenceCreationType'
+import LicenceStatus from '../../server/enumeration/licenceStatus'
 
 export default class IndexPage extends Page {
   private createLicenceTileId = '#createLicenceCard'
@@ -21,57 +23,57 @@ export default class IndexPage extends Page {
   }
 
   clickCreateALicence = (): CaseloadPage => {
-    cy.task('stubGetManagedOffenders')
-    cy.task('stubGetOffendersByCrn')
-    cy.task('searchPrisonersByNomisIds')
-    cy.task('stubGetExistingLicenceForOffenderNoResult')
     cy.task('stubGetCaseloadItem')
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetAnOffendersManagers')
+    cy.task('stubGetStaffCreateCaseload', {
+      licenceStatus: LicenceStatus.NOT_STARTED,
+      licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,
+    })
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
 
   clickCreateALicenceToEdit = (): CaseloadPage => {
-    cy.task('stubGetManagedOffenders')
-    cy.task('stubGetOffendersByCrn')
-    cy.task('searchPrisonersByNomisIds')
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', status: 'APPROVED' })
     cy.task('stubGetCaseloadItem')
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetAnOffendersManagers')
     cy.task('stubGetStaffDetailsByList')
+    cy.task('stubGetStaffCreateCaseload', {
+      licenceId: 1,
+      licenceStatus: 'APPROVED',
+      licenceCreationType: LicenceCreationType.LICENCE_IN_PROGRESS,
+    })
+
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
 
   clickCreateALicenceInHardStop = (): CaseloadPage => {
-    cy.task('stubGetManagedOffenders')
-    cy.task('stubGetOffendersByCrn')
-    cy.task('searchPrisonersByNomisIdsInHardStop')
     cy.task('stubGetCaseloadItemInHardStop')
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetAnOffendersManagers')
+
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
 
   clickCreateAPssLicence = (): CaseloadPage => {
-    cy.task('stubGetManagedOffenders')
-    cy.task('stubGetOffendersByCrn')
-    cy.task('searchPssPrisonersByNomisIds')
-    cy.task('stubGetExistingLicenceForOffenderNoResult')
     cy.task('stubGetPssCaseloadItem')
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
     cy.task('stubGetAnOffendersManagers')
+    cy.task('stubGetStaffCreateCaseload', {
+      licenceStatus: LicenceStatus.NOT_STARTED,
+      licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,
+    })
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
   }
