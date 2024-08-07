@@ -15,7 +15,7 @@ context('SignIn with fallback header', () => {
     Page.verifyOnPage(AuthSignInPage)
   })
 
-  it('Common components header and footer should not display', () => {
+  it('Commmon components header and footer should not display', () => {
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.commonComponentsHeader().should('not.exist')
