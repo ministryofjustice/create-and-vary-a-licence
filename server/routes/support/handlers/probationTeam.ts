@@ -22,9 +22,10 @@ export default class ProbationTeamRoutes {
         ? await this.comCaseloadService.getTeamCreateCaseload(user, [teamCode])
         : await this.comCaseloadService.getTeamVaryCaseload(user, [teamCode])
     ).map(comCase => {
+      const releaseDate = comCase.releaseDate ? format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy') : 'not found'
       return {
         ...comCase,
-        releaseDate: format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy'),
+        releaseDate,
         hardStopDate: comCase.hardStopDate && format(parseCvlDate(comCase.hardStopDate), 'dd/MM/yyyy'),
         hardStopWarningDate:
           comCase.hardStopWarningDate && format(parseCvlDate(comCase.hardStopWarningDate), 'dd/MM/yyyy'),
