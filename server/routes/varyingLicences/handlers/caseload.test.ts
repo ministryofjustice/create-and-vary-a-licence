@@ -267,7 +267,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
             name: 'Bob Smith',
             crnNumber: 'X12345',
             prisonerNumber: 'A1234AA',
-            releaseDate: 'Not Found',
+            releaseDate: 'not found',
             licenceStatus: LicenceStatus.ACTIVE,
             licenceType: LicenceType.AP,
             probationPractitioner: {
