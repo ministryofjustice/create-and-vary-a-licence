@@ -14,6 +14,14 @@ export type ProbationPractitioner = {
   staffUsername?: string
 }
 
+export enum LicenceCreationType {
+  LICENCE_CHANGES_NOT_APPROVED_IN_TIME,
+  PRISON_WILL_CREATE_THIS_LICENCE,
+  LICENCE_CREATED_BY_PRISON,
+  LICENCE_NOT_STARTED,
+  LICENCE_IN_PROGRESS,
+}
+
 export type Licence = {
   id?: number
   status: LicenceStatus
@@ -33,6 +41,7 @@ export type Licence = {
   licenceStartDate?: string
   releaseDate: Date
   isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+  licenceCreationType?: LicenceCreationType
 }
 
 export type ManagedCase = {

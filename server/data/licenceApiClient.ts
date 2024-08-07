@@ -41,8 +41,6 @@ import type {
   SearchResultsPage,
   CaCaseloadSearch,
   CaCase,
-  ComCase,
-  TeamCaseloadRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -644,31 +642,5 @@ export default class LicenceApiClient extends RestClient {
       },
       { username: user?.username }
     )) as Promise<CaCase[]>
-  }
-
-  async getStaffCreateCaseload(deliusStaffIdentifier: number): Promise<ComCase[]> {
-    return (await this.get({
-      path: `/caseload/com/staff/${deliusStaffIdentifier}/create-case-load`,
-    })) as Promise<ComCase[]>
-  }
-
-  async getTeamCreateCaseload(teamCaseloadRequest: TeamCaseloadRequest): Promise<ComCase[]> {
-    return (await this.post({
-      path: `/caseload/com/team/create-case-load`,
-      data: teamCaseloadRequest,
-    })) as Promise<ComCase[]>
-  }
-
-  async getStaffVaryCaseload(deliusStaffIdentifier: number): Promise<ComCase[]> {
-    return (await this.get({
-      path: `/caseload/com/staff/${deliusStaffIdentifier}/vary-case-load`,
-    })) as Promise<ComCase[]>
-  }
-
-  async getTeamVaryCaseload(teamCaseloadRequest: TeamCaseloadRequest): Promise<ComCase[]> {
-    return (await this.post({
-      path: `/caseload/com/team/vary-case-load`,
-      data: teamCaseloadRequest,
-    })) as Promise<ComCase[]>
   }
 }

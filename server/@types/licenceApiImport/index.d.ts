@@ -397,34 +397,6 @@ export interface paths {
      */
     post: operations['getApprovalNeeded']
   }
-  '/caseload/com/team/vary-case-load': {
-    /**
-     * Returns the vary caseload for a team
-     * @description Returns an enriched list of cases which can have a variation created for a team
-     */
-    post: operations['getTeamVaryCaseload']
-  }
-  '/caseload/com/team/create-case-load': {
-    /**
-     * Returns the create caseload for a team
-     * @description Returns an enriched list of cases which require a licence to be created for a team
-     */
-    post: operations['getTeamCreateCaseload']
-  }
-  '/caseload/case-admin/probation-view': {
-    /**
-     * Returns a case admin caseload
-     * @description Returns an enriched list of cases for people on probation
-     */
-    post: operations['getProbationView']
-  }
-  '/caseload/case-admin/prison-view': {
-    /**
-     * Returns a case admin caseload
-     * @description Returns an enriched list of cases for people on prison
-     */
-    post: operations['getPrisonView']
-  }
   '/audit/retrieve': {
     /**
      * Retrieves a list of auditable events matching the criteria provided.
@@ -567,20 +539,6 @@ export interface paths {
      * @description Retrieve the individual and team count of cases that the probation practitioner needs to review. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['retrieveReviewCounts']
-  }
-  '/caseload/com/staff/{deliusStaffIdentifier}/vary-case-load': {
-    /**
-     * Returns the vary caseload for a member of staff
-     * @description Returns an enriched list of cases which can have a variation created for a member of staff
-     */
-    get: operations['getStaffVaryCaseload']
-  }
-  '/caseload/com/staff/{deliusStaffIdentifier}/create-case-load': {
-    /**
-     * Returns the create caseload for a member of staff
-     * @description Returns an enriched list of cases which require a licence to be created
-     */
-    get: operations['getStaffCreateCaseload']
   }
   '/bank-holidays': {
     /**
@@ -2280,128 +2238,6 @@ export interface components {
        * @example Joe Bloggs
        */
       name: string
-      /**
-       * Format: int64
-       * @description Probation staffIdentifier in nDelius
-       * @example 120003434
-       */
-      staffIdentifier?: number
-      /**
-       * @description The NOMIS username of the case administrator
-       * @example jbloggs
-       */
-      staffUsername?: string
-    }
-    /** @description Request object for requesting a case load for a team */
-    TeamCaseloadRequest: {
-      /**
-       * @description The probation team codes to get the case loads for
-       * @example [
-       *   "teamA",
-       *   "teamC"
-       * ]
-       */
-      probationTeamCodes: string[]
-      /**
-       * @description The teams linked to the user to get the case loads for
-       * @example [
-       *   "teamA",
-       *   "teamC"
-       * ]
-       */
-      teamSelected: string[]
-    }
-    /** @description Describes an COM case */
-    ComCase: {
-      /**
-       * @description The full name of the person on licence
-       * @example John Doe
-       */
-      name?: string
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crnNumber?: string
-      /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
-       */
-      prisonerNumber?: string
-      /**
-       * Format: date
-       * @description The date on which the prisoner leaves custody
-       */
-      releaseDate?: string
-      /**
-       * Format: int64
-       * @description Unique identifier for this licence within the service
-       * @example 99999
-       */
-      licenceId?: number
-      /**
-       * @description The new status for this licence
-       * @example APPROVED
-       * @enum {string}
-       */
-      licenceStatus?:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-      /**
-       * @description The licence type code
-       * @example AP
-       * @enum {string}
-       */
-      licenceType?: 'AP' | 'AP_PSS' | 'PSS'
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
-      /**
-       * Format: date
-       * @description Date which the hard stop period will start
-       */
-      hardStopDate?: string
-      /**
-       * Format: date
-       * @description Date which to show the hard stop warning
-       */
-      hardStopWarningDate?: string
-      /**
-       * @description Type of this licence
-       * @example CRD
-       * @enum {string}
-       */
-      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
-      /**
-       * @description Is the prisoner due for early release
-       * @example false
-       */
-      isDueForEarlyRelease: boolean
-      /**
-       * @description How this licence will need to be created
-       * @example PRISON_WILL_CREATE_THIS_LICENCE
-       * @enum {string}
-       */
-      licenceCreationType?:
-        | 'LICENCE_CHANGES_NOT_APPROVED_IN_TIME'
-        | 'PRISON_WILL_CREATE_THIS_LICENCE'
-        | 'LICENCE_CREATED_BY_PRISON'
-        | 'LICENCE_NOT_STARTED'
-        | 'LICENCE_IN_PROGRESS'
     }
     /** @description Describes an audit event request */
     AuditRequest: {
@@ -6779,68 +6615,6 @@ export interface operations {
       400: {
         content: {
           'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /**
-   * Returns the vary caseload for a member of staff
-   * @description Returns an enriched list of cases which can have a variation created for a member of staff
-   */
-  getStaffVaryCaseload: {
-    parameters: {
-      path: {
-        deliusStaffIdentifier: number
-      }
-    }
-    responses: {
-      /** @description Returns a list of cases that can have a variation created */
-      200: {
-        content: {
-          'application/json': components['schemas']['ComCase'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /**
-   * Returns the create caseload for a member of staff
-   * @description Returns an enriched list of cases which require a licence to be created
-   */
-  getStaffCreateCaseload: {
-    parameters: {
-      path: {
-        deliusStaffIdentifier: number
-      }
-    }
-    responses: {
-      /** @description Returns a list of cases that require a licence to be created */
-      200: {
-        content: {
-          'application/json': components['schemas']['ComCase'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
