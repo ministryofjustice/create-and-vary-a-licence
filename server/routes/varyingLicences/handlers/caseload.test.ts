@@ -236,6 +236,58 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
       expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
     })
 
+    it('should render view with null release date', async () => {
+      comCaseloadService.getTeamVaryCaseload.mockResolvedValue([
+        {
+          licenceId: 1,
+          licenceType: LicenceType.AP,
+          licenceStatus: LicenceStatus.ACTIVE,
+          isDueForEarlyRelease: false,
+          name: 'Bob Smith',
+          prisonerNumber: 'A1234AA',
+          releaseDate: null,
+          crnNumber: 'X12345',
+          probationPractitioner: {
+            name: 'Walter White',
+          },
+          kind: LicenceKind.CRD,
+        },
+      ])
+      comCaseloadService.getComReviewCount.mockResolvedValueOnce({
+        myCount: 1,
+        teams: [{ teamCode: 'teamA', count: 1 }],
+      })
+
+      req.query.view = 'team'
+      await handler.GET(req, res)
+      expect(res.render).toHaveBeenCalledWith('pages/vary/caseload', {
+        caseload: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            prisonerNumber: 'A1234AA',
+            releaseDate: 'not found',
+            licenceStatus: LicenceStatus.ACTIVE,
+            licenceType: LicenceType.AP,
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+            isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
+          },
+        ],
+        multipleTeams: true,
+        search: undefined,
+        statusConfig,
+        teamName: 'teamA',
+        teamView: true,
+        myCount: 1,
+        teamCount: 1,
+      })
+      expect(comCaseloadService.getTeamVaryCaseload).toHaveBeenCalledWith(res.locals.user, ['teamA'])
+    })
+
     it('should successfully search by name', async () => {
       req.query.view = 'team'
       req.query.search = 'smith'
