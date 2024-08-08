@@ -4,6 +4,7 @@ import statusConfig from '../../../licences/licenceStatus'
 import CommunityService from '../../../services/communityService'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { parseCvlDate } from '../../../utils/utils'
+import LicenceStatus from '../../../enumeration/licenceStatus'
 
 export default class ProbationTeamRoutes {
   constructor(
@@ -39,6 +40,7 @@ export default class ProbationTeamRoutes {
         return {
           ...comCase,
           releaseDate,
+          licenceStatus: comCase.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : comCase.licenceStatus,
           sortDate: comCase.releaseDate && parseCvlDate(comCase.releaseDate),
         }
       })
