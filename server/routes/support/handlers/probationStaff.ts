@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import statusConfig from '../../../licences/licenceStatus'
 import CommunityService from '../../../services/communityService'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
+import { parseCvlDate } from '../../../utils/utils'
 
 export default class ProbationTeamRoutes {
   constructor(
@@ -21,13 +22,26 @@ export default class ProbationTeamRoutes {
 
     const staff = await this.communityService.getStaffDetailByStaffCode(staffCode)
 
-    const caseload =
+    const caseload = (
       view === 'prison'
         ? await this.comCaseloadService.getStaffCreateCaseload({
             ...user,
             deliusStaffIdentifier: staff.staffIdentifier,
           })
-        : await this.comCaseloadService.getStaffVaryCaseload({ ...user, deliusStaffIdentifier: staff.staffIdentifier })
+        : await this.comCaseloadService.getStaffVaryCaseload({
+            ...user,
+            deliusStaffIdentifier: staff.staffIdentifier,
+          })
+    )
+      .map(comCase => {
+        return {
+          ...comCase,
+          sortDate: comCase.releaseDate && parseCvlDate(comCase.releaseDate),
+        }
+      })
+      .sort((a, b) => {
+        return (a.sortDate?.getTime() || 0) - (b.sortDate?.getTime() || 0)
+      })
 
     return res.render('pages/support/probationStaff', {
       caseload,
