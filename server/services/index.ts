@@ -17,6 +17,7 @@ import PromptLicenceCreationService from '../../jobs/promptLicenceCreationServic
 import CaCaseloadService from './lists/caCaseloadService'
 import PromptListService from './lists/promptListService'
 import ComCaseloadService from './lists/comCaseloadService'
+import HdcService from './hdcService'
 
 const {
   manageUsersApiClient,
@@ -47,6 +48,7 @@ const searchService = new SearchService(licenceApiClient)
 const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
 const promptLicenceCreationService = new PromptLicenceCreationService(promptListService, licenceApiClient)
+const hdcService = new HdcService(licenceApiClient)
 
 export const services = {
   userService,
@@ -67,6 +69,7 @@ export const services = {
   feComponentsService,
   timelineService,
   promptLicenceCreationService,
+  hdcService,
 }
 
 export type Services = typeof services

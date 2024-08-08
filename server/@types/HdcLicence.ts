@@ -1,10 +1,3 @@
-export type HdcCurfewAddress = {
-  addressLineOne: string
-  addressLineTwo: string
-  addressTownOrCity: string
-  addressPostcode: string
-}
-
 export type HdcFirstDayCurfewFromUntil = CurfewFromUntil
 
 export type HdcWeeklyCurfewFromUntil = {
@@ -15,6 +8,14 @@ export type HdcWeeklyCurfewFromUntil = {
   friday: CurfewFromUntil
   saturday: CurfewFromUntil
   sunday: CurfewFromUntil
+}
+
+export type HdcInfo = {
+  curfewAddress: string
+  firstDayCurfewTimes: HdcFirstDayCurfewFromUntil
+  weeklyCurfewTimes: HdcWeeklyCurfewFromUntil
+  prisonTelephone: string
+  monitoringSupplierTelephone: string
 }
 
 type CurfewFromUntil = {

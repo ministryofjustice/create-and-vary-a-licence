@@ -14,72 +14,75 @@
 {% set pageTitle = offenderName %}
 
 {% block content %}
-   <div>
+   <div id = "details" class="details">
       <p>
       <h1>LICENCE</h1>
       <h3>Criminal Justice Act 2003</h3>
       <h2>{{ licence.prisonDescription }}</h2>
-      <h2>{{ prisonTelephone or "MISSING - Prison Telephone" }}</h2>
+      <h2>{{ hdcInfo.prisonTelephone or "MISSING - Prison Telephone" }}</h2>
       </p>
    </div>
-   <table class="wide">
-      <tr>
-         <td class="nopad">
-            <table>
-               <tr>
-                  <td>Name:</td>
-                  <td class="entry" colspan="3">{{ offenderName }}</td>
-               </tr>
-               <tr>
-                  <td>Date of Birth:</td>
-                  <td class="entry" colspan="3">{{ licence.dateOfBirth | datetimeToDate }}</td>
-               </tr>
-               <tr>
-                  <td>Prison no:</td>
-                  <td class="entry">{{ licence.nomsId or "N/A" }}</td>
-                  <td>CRO no:</td>
-                  <td class="entry">{{ licence.cro or "N/A"}}</td>
-               </tr>
-               <tr>
-                  <td>Booking no:</td>
-                  <td class="entry">{{ licence.bookingNo or "N/A"}}</td>
-                  <td>PNC Id:</td>
-                  <td class="entry">{{ licence.pnc or "N/A"}}</td>
-               </tr>
-            </table>
-         </td>
-         {% include "pages/licence/partials/headshot.njk" %}
-      </tr>
-   </table>
+   <div id = "offender" class="offender">
+      {% include "pages/licence/partials/headshot.njk" %}
+      <table class="wide">
+         <tr>
+            <td class="nopad">
+               <table>
+                  <tr>
+                     <td>Name:</td>
+                     <td class="entry" colspan="3">{{ offenderName }}</td>
+                  </tr>
+                  <tr>
+                     <td>Date of Birth:</td>
+                     <td class="entry" colspan="3">{{ licence.dateOfBirth | datetimeToDate }}</td>
+                  </tr>
+                  <tr>
+                     <td>Prison no:</td>
+                     <td class="entry">{{ licence.nomsId or "N/A" }}</td>
+                     <td>CRO no:</td>
+                     <td class="entry">{{ licence.cro or "N/A"}}</td>
+                  </tr>
+                  <tr>
+                     <td>Booking no:</td>
+                     <td class="entry">{{ licence.bookingNo or "N/A"}}</td>
+                     <td>PNC Id:</td>
+                     <td class="entry">{{ licence.pnc or "N/A"}}</td>
+                  </tr>
+               </table>
+            </td>
+         </tr>
+      </table>
+   </div>
    <ol class="start">
       <li>Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on licence.
          You will be subject to a Home Detention Curfew. The objective of the Home Detention Curfew is to help you
          manage your return into the community. You will also be under the supervision of a nominated officer. The
          objectives of this supervision are to (a) protect the public, (b) prevent re-offending and (c) help you to
          resettle successfully into the community.</li>
-      <li>Your Home Detention Curfew commences on <span class="entry">{{ licence.sentenceEndDate | datetimeToDate }}</span> and expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate }}</span></li>
-      <li>Your supervision commences on <span class="entry">{{ licence.licenceStartDate | datetimeToDate }}</span> and expires on <span class="entry">{{ licence.actualReleaseDate | datetimeToDate or "MISSING - Actual Release Date" }}</span> unless this licence is previously revoked.</li>
+      <li>Your Home Detention Curfew commences on <span class="entry">{{ licence.homeDetentionCurfewApprovedDate | datetimeToDate or "MISSING - HDC Approved Date"}}</span> and expires on <span class="entry">{{ licence.actualReleaseDate | datetimeToDate or licence.conditionalReleaseDate | datetimeToDate or "MISSING - Actual Release Date"}}</span></li>
+      <li>Your supervision commences on <span class="entry">{{ licence.homeDetentionCurfewApprovedDate | datetimeToDate or "MISSING - HDC Approved Date"}}</span> and expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate or "MISSING - Licence expiry date" }}</span> unless this licence is previously revoked.</li>
       <li>On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
          during the currency of your licence, whether or not leave has been granted for you to remain in the United
          Kingdom), unless otherwise directed by your supervising officer, you must report without delay to:<br /><br /><span class="entry">{{ licence.appointmentPerson }}</span><br />
          {% for a in (licence.appointmentAddress | formatAddressAsList) %}
-            <span class="bold line-space-after">{{ a }}</span>
+            <div id="appointmentAddress"><span class="bold line-space-after">{{ a }}</span></div>
          {% endfor %}
-         <br />At <span class="entry">{{ licence.appointmentTime | datetimeToDateWithDay }}</span> on <span class="entry">{{ licence.appointmentTime | datetimeTo12HourTime }}</span></li>
+         <br />At <span class="entry">{{ licence.appointmentTime | datetimeToDateWithDay or "MISSING - Appointment Time"}}</span> on <span class="entry">{{ licence.appointmentDate | datetimeTo12HourTime or "MISSING - Appointment Date"}}</span></li>
    </ol>
    <div class="smallPaddingBottom"></div>
    <h2>Home Detention Curfew</h2>
-   <ol class="continue">
+   <ol id = "hdcDetails" class="continue">
       <li>The address(es) to which you are curfewed are:<br /><br /><span class="pre entry">
-         {% if licence.curfewAddress %}
-            {% for a in (licence.curfewAddress | formatAddressAsList) %}
-               <span class="bold line-space-after">{{ a }}</span>
+         {% if hdcInfo.curfewAddress %}
+            {% for a in (hdcInfo.curfewAddress | formatAddressAsList) %}
+               <div id="curfewAddress"><span class="bold line-space-after">{{ a }}</span></div>
             {% endfor %}
          {% else %}
             "MISSING - Curfew Address"
          {% endif%}
         <br />Details of curfew times are shown below at paragraph 7.</li>
-      <li>On the day of your release, you will be subject to curfew at your curfew address from <span class="entry">{{ licence.curfewFirstDayTimeFrom | datetimeTo12HourTime or "MISSING - curfewFirstDayTimeFrom"  }}</span> until <span class="entry">{{ licence.curfewFirstDayTimeUntil | datetimeTo12HourTime or "MISSING - curfewFirstDayTimeUntil"  }}.</span> The contractor will visit you at this address before
+      <li>On the day of your release, you will be subject to curfew at your curfew address from <span class="entry">{{ hdcInfo.firstDayCurfewTimes.from or "MISSING - firstDayCurfewTimes From"  }}</span> 
+         until <span class="entry">{{ hdcInfo.firstDayCurfewTimes.until or "MISSING - firstDayCurfewTimes Until"  }}.</span> The contractor will visit you at this address before
          midnight during this period in order to fit you with the tag. You must show the contractor this copy of the
          licence to confirm your identity. Your curfew will then run until the curfew finish time the following morning.
          On your last day of curfew the contractor will visit you to remove the tag and monitoring equipment. This will
@@ -89,51 +92,51 @@
             <tr>
                <td>Monday</td>
                <td>from</td>
-               <td class="entry">{{ licence.curfewMonFrom | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.monday.from }}</td>
                <td>until</td>
-               <td class="entry">{{ licence.curfewMonUntil | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.monday.until }}</td>
             </tr>
             <tr>
                <td>Tuesday</td>
                <td>from</td>
-               <td class="entry">{{ licence.curfewTuesFrom | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.tuesday.from }}</td>
                <td>until</td>
-               <td class="entry">{{ licence.curfewTuesUntil | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.tuesday.until }}</td>
             </tr>
             <tr>
                <td>Wednesday</td>
                <td>from</td>
-               <td class="entry">{{ licence.curfewWedFrom | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.wednesday.from }}</td>
                <td>until</td>
-               <td class="entry">{{ licence.curfewWedUntil | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.wednesday.until }}</td>
             </tr>
             <tr>
                <td>Thursday</td>
                <td>from</td>
-               <td class="entry">{{ licence.curfewThursFrom | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.thursday.from }}</td>
                <td>until</td>
-               <td class="entry">{{ licence.curfewThursUntil | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.thursday.until }}</td>
             </tr>
             <tr>
                <td>Friday</td>
                <td>from</td>
-               <td class="entry">{{ licence.curfewFriFrom | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.friday.from }}</td>
                <td>until</td>
-               <td class="entry">{{ licence.curfewFriUntil | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.friday.until }}</td>
             </tr>
             <tr>
                <td>Saturday</td>
                <td>from</td>
-               <td class="entry">{{ licence.curfewSatFrom | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.saturday.from }}</td>
                <td>until</td>
-               <td class="entry">{{ licence.curfewSatUntil | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.saturday.until }}</td>
             </tr>
             <tr>
                <td>Sunday</td>
                <td>from</td>
-               <td class="entry">{{ licence.curfewSunFrom | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.sunday.from }}</td>
                <td>until</td>
-               <td class="entry">{{ licence.curfewSunUntil | datetimeTo12HourTime }}</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.sunday.until }}</td>
             </tr>
          </table>
       </li>
@@ -204,17 +207,17 @@
          custody until the date on which your licence would have otherwise ended. If you are sent back to prison and are
          re-released before the end of your licence, you will still be subject to licence conditions until the end of
          your sentence.</li>
-      <li>Your licence expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate }}</span></li>
-      <li>Your sentence expires on <span class="entry">{{ licence.sentenceEndDate | datetimeToDate }}</span></li>
+      <li>Your licence expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate or "MISSING - Licence Expiry Date" }}</span></li>
+      <li>Your sentence expires on <span class="entry">{{ licence.sentenceEndDate | datetimeToDate or "MISSING - Sentence End Date"}}</span></li>
    </ol>
    <div class="no-break">
       <h3>Contact Points</h3>
-      <p>Monitoring Supplier: <span class="entry">{{ monitoringSupplierTelephone or "MISSING - monitoringSupplierTelephone" }}</span></p>
-      <p>Releasing establishment: <span class="entry">{{ prisonTelephone or "MISSING - prisonTelephone"}}</span></p><br />
+      <p>Monitoring Supplier: <span class="entry">{{ hdcInfo.monitoringSupplierTelephone or "MISSING - monitoringSupplierTelephone" }}</span></p>
+      <p>Releasing establishment: <span class="entry">{{ hdcInfo.prisonTelephone or "MISSING - prisonTelephone"}}</span></p><br />
    </div>
    <div class="box">
-      <p>Name: <span class="entry">{{ licence.approvedByName }}</span></p>
-      <p>Date: <span class="entry">{{ licence.approvedDate | datetimeToDate }}</span></p>
+      <p>Name: <span class="entry">{{ licence.approvedByName or "MISSING - ApprovedByName"}}</span></p>
+      <p>Date: <span class="entry">{{ licence.approvedDate | datetimeToDate or "MISSING - Approved Date"}}</span></p>
       <p>for the Secretary of State for Justice.</p><br />
       <p>This licence has been given to me and its requirements have been explained.</p>
       <p>Name: <span class="entry">{{ offenderName }}</span></p>
