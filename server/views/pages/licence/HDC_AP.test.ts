@@ -1,6 +1,5 @@
 import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
-import type { Licence } from '../../../@types/licenceApiClientTypes'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/licence/HDC_AP.njk').toString())
 

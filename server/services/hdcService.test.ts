@@ -65,7 +65,7 @@ describe('HDC service', () => {
         monitoringSupplierTelephone: '0800 137 291',
       }
 
-      const result = await hdcService.getHdcInfo(licence)
+      const result = await hdcService.getHdcInfo()
       expect(result).toEqual(exampleHdcInfo)
     })
   })

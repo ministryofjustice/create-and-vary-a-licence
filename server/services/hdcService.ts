@@ -1,12 +1,11 @@
 import { HdcFirstDayCurfewFromUntil, HdcInfo, HdcWeeklyCurfewFromUntil } from '../@types/HdcLicence'
-import { Licence } from '../@types/licenceApiClientTypes'
 import config from '../config'
 import LicenceApiClient from '../data/licenceApiClient'
 
 export default class HdcService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
-  async getHdcInfo(licence: Licence): Promise<HdcInfo> {
+  async getHdcInfo(): Promise<HdcInfo> {
     const curfewAddress: string = 'addressLineOne, addressLineTwo, addressTownOrCity, addressPostcode'
 
     const firstDayCurfewTimes: HdcFirstDayCurfewFromUntil = {
