@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { format } from 'date-fns'
 import statusConfig from '../../../licences/licenceStatus'
 import CommunityService from '../../../services/communityService'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
@@ -34,8 +35,10 @@ export default class ProbationTeamRoutes {
           })
     )
       .map(comCase => {
+        const releaseDate = comCase.releaseDate ? format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy') : 'not found'
         return {
           ...comCase,
+          releaseDate,
           sortDate: comCase.releaseDate && parseCvlDate(comCase.releaseDate),
         }
       })
