@@ -1,23 +1,9 @@
 import HdcService from './hdcService'
 import { LicenceApiClient } from '../data'
-import { Licence } from '../@types/licenceApiClientTypes'
-import LicenceStatus from '../enumeration/licenceStatus'
-import LicenceKind from '../enumeration/LicenceKind'
 
 describe('HDC service', () => {
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const hdcService = new HdcService(licenceApiClient)
-
-  const licence = {
-    id: 1,
-    surname: 'Test Surname',
-    forename: 'Test Forename',
-    kind: LicenceKind.HDC,
-    statusCode: LicenceStatus.ACTIVE,
-    additionalLicenceConditions: [],
-    additionalPssConditions: [],
-    bespokeConditions: [],
-  } as Licence
 
   afterEach(() => {
     jest.clearAllMocks()
