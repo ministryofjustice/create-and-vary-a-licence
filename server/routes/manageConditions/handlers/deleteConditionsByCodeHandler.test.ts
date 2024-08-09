@@ -39,18 +39,9 @@ describe('Route Handlers - Create Licence - Delete Conditions By Code Handler Ha
   describe('DELETE', () => {
     it('should remove all conditions on the licence which belong to the submitted code', async () => {
       await handler.DELETE(req, res)
-      expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledWith(
-        'abc',
-        {
-          id: 123,
-          additionalLicenceConditions: [
-            { id: 1, code: 'abc' },
-            { id: 2, code: 'abc' },
-            { id: 3, code: 'cba' },
-          ],
-        },
-        { username: 'joebloggs' }
-      )
+      expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledWith(['abc'], 123, {
+        username: 'joebloggs',
+      })
 
       expect(res.redirect).toHaveBeenCalledWith(`/licence/create/id/123/additional-licence-conditions/callback`)
     })
@@ -58,18 +49,9 @@ describe('Route Handlers - Create Licence - Delete Conditions By Code Handler Ha
     it('should propagate fromReview query param', async () => {
       req.query.fromReview = 'true'
       await handler.DELETE(req, res)
-      expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledWith(
-        'abc',
-        {
-          id: 123,
-          additionalLicenceConditions: [
-            { id: 1, code: 'abc' },
-            { id: 2, code: 'abc' },
-            { id: 3, code: 'cba' },
-          ],
-        },
-        { username: 'joebloggs' }
-      )
+      expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledWith(['abc'], 123, {
+        username: 'joebloggs',
+      })
 
       expect(res.redirect).toHaveBeenCalledWith(
         `/licence/create/id/123/additional-licence-conditions/callback?fromReview=true`

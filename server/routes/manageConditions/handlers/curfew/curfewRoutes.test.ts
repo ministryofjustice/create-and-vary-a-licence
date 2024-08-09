@@ -160,8 +160,8 @@ describe('Route handlers - Curfew routes', () => {
       await handler.POST(req, res)
 
       expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledWith(
-        CURFEW_CONDITION_CODE,
-        res.locals.licence,
+        [CURFEW_CONDITION_CODE],
+        res.locals.licence.id,
         res.locals.user
       )
     })

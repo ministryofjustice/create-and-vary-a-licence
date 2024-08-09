@@ -101,23 +101,20 @@ export default class LicenceService {
   }
 
   async addAdditionalCondition(
-    id: string,
+    licenceId: string,
     conditionType: LicenceType,
     formData: AddAdditionalConditionRequest,
     user: User
   ) {
-    return this.licenceApiClient.addAdditionalCondition(id, conditionType, formData, user)
+    return this.licenceApiClient.addAdditionalCondition(licenceId, conditionType, formData, user)
   }
 
   async deleteAdditionalCondition(conditionId: number, licenceId: number, user: User) {
     return this.licenceApiClient.deleteAdditionalCondition(conditionId, licenceId, user)
   }
 
-  async deleteAdditionalConditionsByCode(conditionCode: string, licence: Licence, user: User): Promise<void> {
-    const conditionIds = licence.additionalLicenceConditions.filter(c => c.code === conditionCode).map(c => c.id)
-    await Promise.all(
-      conditionIds.map(conditionId => this.licenceApiClient.deleteAdditionalCondition(conditionId, licence.id, user))
-    )
+  async deleteAdditionalConditionsByCode(conditionCodes: string[], licenceId: number, user: User): Promise<void> {
+    await this.licenceApiClient.deleteAdditionalConditionsByCode(conditionCodes, licenceId, user)
   }
 
   async updateAdditionalConditions(

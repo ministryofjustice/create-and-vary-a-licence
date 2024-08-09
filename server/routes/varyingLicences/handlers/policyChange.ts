@@ -1,8 +1,8 @@
 import { Response, Request } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceType from '../../../enumeration/licenceType'
-import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
-import ConditionService from '../../../services/conditionService'
+import { AddAdditionalConditionRequest, AdditionalCondition } from '../../../@types/licenceApiClientTypes'
+import ConditionService, { PolicyAdditionalCondition } from '../../../services/conditionService'
 import policyChangeHintText from '../../../config/policyChangeHintText'
 import conditionChangeType from '../../../enumeration/conditionChangeType'
 import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/LicencePolicy'
@@ -99,8 +99,9 @@ export default class PolicyChangeRoutes {
       additionalLicenceConditions = licence.additionalPssConditions
     }
 
-    const inputs = []
-    let licenceConditionCodes = additionalLicenceConditions.map((c: AdditionalCondition) => c.code)
+    const inputs: string[] = []
+    const licenceConditionCodes = additionalLicenceConditions.map((c: AdditionalCondition) => c.code)
+    const conditionsToAdd: PolicyAdditionalCondition[] = []
 
     // if the condition is being replaced by new condition(s)
     if (condition.changeType === conditionChangeType.DELETED || condition.changeType === conditionChangeType.REPLACED) {
@@ -108,53 +109,79 @@ export default class PolicyChangeRoutes {
 
       // Remove replaced condition and any previously-selected replacements
       // Previously selected replacements removed to allow user to go back and unselect or reselect erroneous changes
-      licenceConditionCodes = licenceConditionCodes
-        .filter((code: string) => code !== condition.code)
-        .filter((code: string) => !replacedByCodes.includes(code))
+      const conditionsToDelete = licenceConditionCodes
+        .filter(code => code === condition.code || replacedByCodes.includes(code))
+        .filter(code => !req.body.additionalConditions?.includes(code))
+
+      this.licenceService.deleteAdditionalConditionsByCode(conditionsToDelete, licence.id, user)
 
       // Add replacement conditions
       if (req.body.additionalConditions?.length > 0) {
-        const replacementArray = await Promise.all(
-          req.body.additionalConditions.map((code: string) => {
-            return this.conditionService.getAdditionalConditionByCode(code, licence.version)
+        await Promise.all(
+          await req.body.additionalConditions.map(async (code: string) => {
+            const conditionToAdd = await this.conditionService.getAdditionalConditionByCode(code, licence.version)
+
+            if (!licenceConditionCodes.includes(code)) {
+              conditionsToAdd.push(conditionToAdd)
+            }
+
+            if (conditionToAdd.requiresInput) {
+              inputs.push(conditionToAdd.code)
+            }
           })
         )
-
-        replacementArray.forEach(replacement => {
-          licenceConditionCodes.push(replacement.code)
-          if (replacement.requiresInput) {
-            inputs.push(replacement.code)
-          }
-        })
       }
     } else if (
       condition.changeType === conditionChangeType.NEW_OPTIONS ||
-      (condition.changeType === conditionChangeType.TEXT_CHANGE &&
-        (await this.conditionService.getAdditionalConditionByCode(condition.code, licence.version)).requiresInput)
+      condition.changeType === conditionChangeType.TEXT_CHANGE
     ) {
+      const policyCondition = await this.conditionService.getAdditionalConditionByCode(condition.code, licence.version)
+
       if (!licenceConditionCodes.includes(condition.code)) {
-        licenceConditionCodes.push(condition.code)
+        conditionsToAdd.push(policyCondition)
       }
-      inputs.push(condition.code)
-    } else if (condition.changeType === conditionChangeType.TEXT_CHANGE) {
-      if (!licenceConditionCodes.includes(condition.code)) {
-        licenceConditionCodes.push(condition.code)
+
+      if (policyCondition.requiresInput) {
+        inputs.push(condition.code)
+      } else {
+        // Removes any now-unused user-entered data
+        await this.licenceService.updateAdditionalConditionData(
+          licenceId,
+          additionalLicenceConditions.find((c: AdditionalCondition) => c.code === condition.code),
+          {},
+          user
+        )
       }
-      // Removes any now-unused user-entered data
-      await this.licenceService.updateAdditionalConditionData(
-        licenceId,
-        additionalLicenceConditions.find((c: AdditionalCondition) => c.code === condition.code),
-        {},
-        user
+
+      // Update condition text to match new policy version
+      await this.licenceService.updateAdditionalConditions(
+        licence.id,
+        conditionType,
+        { additionalConditions: licenceConditionCodes },
+        user,
+        licence.version
       )
     }
 
-    await this.licenceService.updateAdditionalConditions(
-      licence.id,
-      conditionType,
-      { additionalConditions: licenceConditionCodes },
-      user,
-      licence.version
+    await Promise.all(
+      conditionsToAdd.map(async (conditionToAdd: PolicyAdditionalCondition) => {
+        const sequence = this.conditionService.currentOrNextSequenceForCondition(
+          licence.additionalLicenceConditions,
+          conditionToAdd.code
+        )
+        const type = await this.conditionService.getAdditionalConditionType(conditionToAdd.code, licence.version)
+
+        const request = {
+          conditionCode: conditionToAdd.code,
+          conditionCategory: conditionToAdd?.categoryShort || conditionToAdd?.category,
+          conditionText: conditionToAdd.text,
+          conditionType: type,
+          expandedText: conditionToAdd.tpl,
+          sequence,
+        } as AddAdditionalConditionRequest
+
+        return this.licenceService.addAdditionalCondition(licenceId, type, request, user)
+      })
     )
 
     req.session.changedConditionsInputs = inputs
