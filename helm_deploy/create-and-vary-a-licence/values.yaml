@@ -61,6 +61,9 @@ generic-service:
     COMMON_COMPONENTS_ENABLED: "true"
     SHOW_WHATS_NEW_BANNER: "true"
 
+    # HDC
+    MONITORING_SUPPLIER_TELEPHONE: "0800 137 291"
+
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
   #   [name of kubernetes secret]:
