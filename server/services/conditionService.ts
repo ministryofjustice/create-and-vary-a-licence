@@ -44,7 +44,7 @@ import { AdditionalConditionAp, AdditionalConditionPss, AdditionalConditionsConf
 import { User } from '../@types/CvlUserDetails'
 import LicenceStatus from '../enumeration/licenceStatus'
 
-type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
+export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
 export default class ConditionService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}

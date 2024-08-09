@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import ConditionService from '../../../services/conditionService'
+import ConditionService, { PolicyAdditionalCondition } from '../../../services/conditionService'
 import PolicyChangeRoutes from './policyChange'
 import { Licence, LicenceConditionChange } from '../../../@types/licenceApiClientTypes'
 
@@ -60,12 +60,19 @@ describe('Route handlers', () => {
       typeCode: 'AP_PSS',
     } as Licence)
 
+    conditionService.getAdditionalConditionByCode.mockResolvedValue({
+      code: 'code 5',
+      requiresInput: false,
+    } as PolicyAdditionalCondition)
+
     req = {
       params: {
         licenceId: '1',
         changeCounter: '1',
       },
-      body: {},
+      body: {
+        additionalConditions: ['code 5'],
+      },
       query: {},
       session: {
         changedConditions: [condition1, condition2, condition3, condition4],
@@ -182,7 +189,8 @@ describe('Route handlers', () => {
 
     it('updates the additional licence conditions', async () => {
       await handler.POST(req, res)
-      expect(licenceService.updateAdditionalConditions).toHaveBeenCalled()
+      expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledTimes(1)
+      expect(licenceService.addAdditionalCondition).toHaveBeenCalledTimes(1)
     })
   })
 

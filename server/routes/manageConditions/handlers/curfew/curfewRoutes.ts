@@ -46,7 +46,7 @@ export default class CurfewRoutes {
     const { user, licence } = res.locals
     const inputs = req.body
 
-    await this.licenceService.deleteAdditionalConditionsByCode(conditionCode, licence, user)
+    await this.licenceService.deleteAdditionalConditionsByCode([conditionCode], licence.id, user)
 
     await this.addCurfewCondition(licence, user, conditionCode, inputs.curfewStart, inputs.curfewEnd, inputs)
     if (inputs.numberOfCurfews === 'Two curfews' || inputs.numberOfCurfews === 'Three curfews') {

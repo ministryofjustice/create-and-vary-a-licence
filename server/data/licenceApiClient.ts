@@ -171,6 +171,13 @@ export default class LicenceApiClient extends RestClient {
     )
   }
 
+  async deleteAdditionalConditionsByCode(conditionCodes: string[], licenceId: number, user: User) {
+    await this.post(
+      { path: `/licence/id/${licenceId}/delete-additional-conditions-by-code`, data: { conditionCodes } },
+      { username: user.username }
+    )
+  }
+
   async updateAdditionalConditions(
     licenceId: number,
     additionalConditions: AdditionalConditionsRequest,
