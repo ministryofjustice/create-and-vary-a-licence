@@ -31,8 +31,8 @@
     "rebuild": "npm run clean && npm i && npm run build"
   },
   "engines": {
-    "node": "^20",
-    "npm": "^10"
+    "node": "^20.16.0",
+    "npm": "^10.8.2"
   },
   "jest": {
     "transform": {
@@ -99,8 +99,8 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.621.0",
-    "@ministryofjustice/frontend": "2.1",
+    "@aws-sdk/client-sqs": "^3.623.0",
+    "@ministryofjustice/frontend": "2.2.0",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.5",
     "body-parser": "^1.20.2",
@@ -116,7 +116,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "filesize": "^10.1.4",
-    "govuk-frontend": "^5.4.1",
+    "govuk-frontend": "^5.5.0",
     "helmet": "^7.1.0",
     "http-errors": "^2.0.0",
     "jquery": "^3.7.1",
@@ -150,7 +150,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/lodash": "^4.17.7",
     "@types/multer": "^1.4.11",
-    "@types/node": "^20.14.13",
+    "@types/node": "^20.14.14",
     "@types/number-to-words": "^1.2.3",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.16",
@@ -160,13 +160,13 @@
     "@types/superagent": "^8.1.8",
     "@types/supertest": "^6.0.2",
     "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^7.17.0",
-    "@typescript-eslint/parser": "^7.17.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "axe-core": "^4.10.0",
     "better-npm-audit": "^3.7.3",
     "cheerio": "^1.0.0-rc.12",
     "concurrently": "^8.2.2",
-    "cypress": "^13.13.1",
+    "cypress": "^13.13.2",
     "cypress-axe": "^1.5.0",
     "cypress-multi-reporters": "^1.6.4",
     "dotenv": "^16.4.5",
@@ -174,7 +174,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-cypress": "^3.3.0",
+    "eslint-plugin-cypress": "^3.4.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-no-only-tests": "^3.1.0",
     "eslint-plugin-prettier": "^5.2.1",
@@ -183,7 +183,7 @@
     "jest-html-reporter": "^3.10.2",
     "jest-junit": "^16.0.0",
     "jsonwebtoken": "^9.0.2",
-    "lint-staged": "^15.2.7",
+    "lint-staged": "^15.2.8",
     "mocha": "^10.7.0",
     "mocha-junit-reporter": "^2.2.1",
     "nock": "^13.5.4",
@@ -194,10 +194,10 @@
     "redis-mock": "^0.56.3",
     "sass": "^1.77.8",
     "supertest": "^7.0.0",
-    "ts-jest": "^29.2.3",
-    "typescript": "^5.4.5"
+    "ts-jest": "^29.2.4",
+    "typescript": "^5.5.4"
   },
   "overrides": {
-    "semver": "^7.5.3"
+    "semver": "^7.6.3"
   }
 }
