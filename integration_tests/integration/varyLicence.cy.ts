@@ -26,6 +26,7 @@ context('Vary a licence', () => {
     cy.task('stubUpdateStandardConditions')
     cy.task('stubFeComponents')
     cy.task('stubGetBankHolidays', dates)
+    cy.task('stubDeleteAdditionalConditionsByCode')
     cy.signIn()
   })
 

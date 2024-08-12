@@ -2176,4 +2176,18 @@ export default {
       },
     })
   },
+
+  stubDeleteAdditionalConditionsByCode: () => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/licence/id/(\\d)*/delete-additional-conditions-by-code`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
 }
