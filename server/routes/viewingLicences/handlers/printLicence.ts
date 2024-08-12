@@ -5,6 +5,8 @@ import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { User } from '../../../@types/CvlUserDetails'
+import LicenceKind from '../../../enumeration/LicenceKind'
+import HdcService from '../../../services/hdcService'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
@@ -19,7 +21,8 @@ export default class PrintLicenceRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly qrCodeService: QrCodeService,
-    private readonly licenceService: LicenceService
+    private readonly licenceService: LicenceService,
+    private readonly hdcService: HdcService
   ) {}
 
   preview = async (req: Request, res: Response): Promise<void> => {
@@ -40,13 +43,19 @@ export default class PrintLicenceRoutes {
     )
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
-    res.render(`pages/licence/${licence.typeCode}`, {
+
+    const hdcInfo = licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcInfo() : null
+
+    const licenceToPrint = {
       qrCode,
       htmlPrint,
-      exclusionZoneMapData,
       singleItemConditions,
       multipleItemConditions,
-    })
+      exclusionZoneMapData,
+      hdcInfo,
+    }
+
+    res.render(`pages/licence/${this.getTemplateForLicence(licence)}`, licenceToPrint)
   }
 
   renderPdf = async (req: Request, res: Response): Promise<void> => {
@@ -70,20 +79,25 @@ export default class PrintLicenceRoutes {
     )
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
-    res.renderPDF(
-      `pages/licence/${licence.typeCode}`,
-      {
-        licencesUrl,
-        imageData,
-        qrCode,
-        htmlPrint: false,
-        watermark,
-        singleItemConditions,
-        multipleItemConditions,
-        exclusionZoneMapData,
-      },
-      { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
-    )
+
+    const hdcInfo = licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcInfo() : null
+
+    const licenceToPrint = {
+      licencesUrl,
+      imageData,
+      qrCode,
+      htmlPrint: false,
+      watermark,
+      singleItemConditions,
+      multipleItemConditions,
+      exclusionZoneMapData,
+      hdcInfo,
+    }
+
+    res.renderPDF(`pages/licence/${this.getTemplateForLicence(licence)}`, licenceToPrint, {
+      filename,
+      pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions },
+    })
   }
 
   private groupConditions(licence: Licence) {
@@ -152,5 +166,14 @@ export default class PrintLicenceRoutes {
       }
     })
     return map
+  }
+
+  getTemplateForLicence(licence: Licence): string {
+    const licenceKind = licence.kind
+    const licenceType = licence.typeCode
+    if (licenceKind === LicenceKind.HDC) {
+      return 'HDC_AP'
+    }
+    return licenceType
   }
 }
