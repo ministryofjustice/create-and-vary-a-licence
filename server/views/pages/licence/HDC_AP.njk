@@ -1,0 +1,227 @@
+{% extends "pages/licence/pdf-layout.njk" %}
+
+{# Data supplied to this template
+    -    licence (implicit from res.locals)
+    -    qrCodesEnabled (implicit from res.locals)
+    -    licencesUrl - URL back to this service
+    -    imageData - prisoner image data
+    -    qrCode - QR code data (ready to show) or null
+    -    htmlPrint - true or false
+    -    watermark - true or false
+#}
+
+{% set offenderName = licence.forename + " " + licence.surname %}
+{% set pageTitle = offenderName %}
+
+{% block content %}
+   <div id = "details" class="details">
+      <p>
+      <h1>LICENCE</h1>
+      <h3>Criminal Justice Act 2003</h3>
+      <h2>{{ licence.prisonDescription }}</h2>
+      <h2>{{ hdcInfo.prisonTelephone or "MISSING - Prison Telephone" }}</h2>
+      </p>
+   </div>
+   <div id = "offender" class="offender">
+      {% include "pages/licence/partials/headshot.njk" %}
+      <table class="wide">
+         <tr>
+            <td class="nopad">
+               <table>
+                  <tr>
+                     <td>Name:</td>
+                     <td class="entry" colspan="3">{{ offenderName }}</td>
+                  </tr>
+                  <tr>
+                     <td>Date of Birth:</td>
+                     <td class="entry" colspan="3">{{ licence.dateOfBirth | datetimeToDate }}</td>
+                  </tr>
+                  <tr>
+                     <td>Prison no:</td>
+                     <td class="entry">{{ licence.nomsId or "N/A" }}</td>
+                     <td>CRO no:</td>
+                     <td class="entry">{{ licence.cro or "N/A"}}</td>
+                  </tr>
+                  <tr>
+                     <td>Booking no:</td>
+                     <td class="entry">{{ licence.bookingNo or "N/A"}}</td>
+                     <td>PNC Id:</td>
+                     <td class="entry">{{ licence.pnc or "N/A"}}</td>
+                  </tr>
+               </table>
+            </td>
+         </tr>
+      </table>
+   </div>
+   <ol class="start">
+      <li>Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on licence.
+         You will be subject to a Home Detention Curfew. The objective of the Home Detention Curfew is to help you
+         manage your return into the community. You will also be under the supervision of a nominated officer. The
+         objectives of this supervision are to (a) protect the public, (b) prevent re-offending and (c) help you to
+         resettle successfully into the community.</li>
+      <li>Your Home Detention Curfew commences on <span class="entry">{{ licence.homeDetentionCurfewApprovedDate | datetimeToDate or "MISSING - HDC Approved Date"}}</span> and expires on <span class="entry">{{ licence.actualReleaseDate | datetimeToDate or licence.conditionalReleaseDate | datetimeToDate or "MISSING - Actual Release Date"}}</span></li>
+      <li>Your supervision commences on <span class="entry">{{ licence.homeDetentionCurfewApprovedDate | datetimeToDate or "MISSING - HDC Approved Date"}}</span> and expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate or "MISSING - Licence expiry date" }}</span> unless this licence is previously revoked.</li>
+      <li>On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
+         during the currency of your licence, whether or not leave has been granted for you to remain in the United
+         Kingdom), unless otherwise directed by your supervising officer, you must report without delay to:<br /><br /><span class="entry">{{ licence.appointmentPerson }}</span><br />
+         {% for a in (licence.appointmentAddress | formatAddressAsList) %}
+            <div id="appointmentAddress"><span class="bold line-space-after">{{ a }}</span></div>
+         {% endfor %}
+         <br />At <span class="entry">{{ licence.appointmentTime | datetimeToDateWithDay or "MISSING - Appointment Time"}}</span> on <span class="entry">{{ licence.appointmentDate | datetimeTo12HourTime or "MISSING - Appointment Date"}}</span></li>
+   </ol>
+   <div class="smallPaddingBottom"></div>
+   <h2>Home Detention Curfew</h2>
+   <ol id = "hdcDetails" class="continue">
+      <li>The address(es) to which you are curfewed are:<br /><br /><span class="pre entry">
+         {% if hdcInfo.curfewAddress %}
+            {% for a in (hdcInfo.curfewAddress | formatAddressAsList) %}
+               <div id="curfewAddress"><span class="bold line-space-after">{{ a }}</span></div>
+            {% endfor %}
+         {% else %}
+            "MISSING - Curfew Address"
+         {% endif%}
+        <br />Details of curfew times are shown below at paragraph 7.</li>
+      <li>On the day of your release, you will be subject to curfew at your curfew address from <span class="entry">{{ hdcInfo.firstDayCurfewTimes.from or "MISSING - firstDayCurfewTimes From"  }}</span> 
+         until <span class="entry">{{ hdcInfo.firstDayCurfewTimes.until or "MISSING - firstDayCurfewTimes Until"  }}.</span> The contractor will visit you at this address before
+         midnight during this period in order to fit you with the tag. You must show the contractor this copy of the
+         licence to confirm your identity. Your curfew will then run until the curfew finish time the following morning.
+         On your last day of curfew the contractor will visit you to remove the tag and monitoring equipment. This will
+         take place in the last two hours of your last curfew period; i.e. between 10pm and midnight.</li>
+      <li class="no-break">After your day of release, you are required to remain at your place of curfew during the following hours:<br><br>
+         <table class="compact">
+            <tr>
+               <td>Monday</td>
+               <td>from</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.monday.from }}</td>
+               <td>until</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.monday.until }}</td>
+            </tr>
+            <tr>
+               <td>Tuesday</td>
+               <td>from</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.tuesday.from }}</td>
+               <td>until</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.tuesday.until }}</td>
+            </tr>
+            <tr>
+               <td>Wednesday</td>
+               <td>from</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.wednesday.from }}</td>
+               <td>until</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.wednesday.until }}</td>
+            </tr>
+            <tr>
+               <td>Thursday</td>
+               <td>from</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.thursday.from }}</td>
+               <td>until</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.thursday.until }}</td>
+            </tr>
+            <tr>
+               <td>Friday</td>
+               <td>from</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.friday.from }}</td>
+               <td>until</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.friday.until }}</td>
+            </tr>
+            <tr>
+               <td>Saturday</td>
+               <td>from</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.saturday.from }}</td>
+               <td>until</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.saturday.until }}</td>
+            </tr>
+            <tr>
+               <td>Sunday</td>
+               <td>from</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.sunday.from }}</td>
+               <td>until</td>
+               <td class="entry">{{ hdcInfo.weeklyCurfewTimes.sunday.until }}</td>
+            </tr>
+         </table>
+      </li>
+      <li>Your compliance with the conditions of the Home Detention Curfew will be monitored by the electronic
+         monitoring contractor. You must provide the contractor with access to the curfew address to install and check
+         the monitoring equipment and electronic tag. Such visits will be made during your curfew hours but not between
+         midnight and 6.00am. However, the contractor may visit the curfew address between midnight and 6:00am in
+         order to investigate a reported violation.</li>
+      <li>The monitoring equipment will usually operate via the mobile cellular network and will only need a dedicated
+         telephone line to be fitted if the mobile signal is poor at the curfew address. You will be responsible for
+         meeting the cost of the small amount of electricity used by the monitoring equipment at your curfew address.
+         It is your responsibility to ensure that there is an electricity supply available during your time on
+         curfew.</li>
+      <li>In the event of a dedicated telephone line needing to be installed you must agree to the installation at
+         your curfew address for use by the supplier. The supplier will notify you of a time and a date and you must be
+         present, and provide access to, the curfew address at the notified time to allow installation to take place.
+         The installation will normally take place during standard working hours and is fully paid for by the
+         supplier.</li>
+      <li class="no-break">While on Home Detention Curfew you may be liable to recall to prison if you breach the condition of this
+         licence relating to the curfew. You will be in breach of this condition if:<ol class="roman start">
+            <li>You are absent from your curfew address during the specified curfew hours;</li>
+            <li>You commit violence against or threaten the contractor or any of his staff with violence;</li>
+            <li>You damage or tamper with the monitoring equipment;</li>
+            <li>You withdraw your consent to the monitoring arrangements.</li>
+         </ol>
+      </li>
+      <li>In addition, you may be recalled to prison if your whereabouts can no longer be electronically monitored at
+         the specified address.</li>
+      <li>The contractor may authorise your absence from your place of curfew in clearly defined circumstances, which
+         you will be informed about by the contractor in writing. You must contact the contractor in advance of any such
+         absence to seek authorisation where this is possible. If it is not possible to contact the contractor in
+         advance, you must contact them as soon as possible thereafter. Absence for any other reason other than these
+         clearly defined circumstances will constitute a breach of your curfew condition.</li>
+      <li>If you need to seek a permanent change to your curfew conditions (for instance because of the requirements of
+         a new job), you must contact the Prison Service establishment from which you were released. A contact number is
+         attached at the bottom of this licence.</li>
+   </ol>
+   <div class="smallPaddingBottom"></div>
+   <h3>Probation Supervision</h3>
+   <ol class="continue">
+      <li>You must place yourself under the supervision of whichever supervising officer or social worker is nominated
+         for this purpose from time to time.</li>
+      <li class="no-break">While under supervision you must:<ol class="roman start">
+            <li>Be of good behaviour and not behave in a way which undermines the purpose of the licence period;</li>
+            <li>Not commit any offence;</li>
+            <li>Keep in touch with the supervising officer in accordance with instructions given by the supervising officer;</li>
+            <li>Receive visits from the supervising officer in accordance with instructions given by the supervising officer;</li>
+            <li>Reside permanently at an address approved by the supervising officer and obtain the prior permission
+               of the supervising officer for any stay of one or more nights at a different address;</li>
+            <li> Not undertake work, or a particular type of work, unless it is approved by the supervising officer
+               and notify the supervising officer in advance of any proposal to undertake work or a particular type of work;</li>
+            <li>Not travel outside the United Kingdom, the Channel Islands or the Isle of Man, except with the
+               prior permission of the supervising officer or for the purposes of immigration deportation or removal;</li>
+            <li>Tell your supervising officer if you use a name which is different to the name or names which appear on your licence</li>
+            <li>Tell your supervising officer if you change or add any contact details, including phone number or email</li>
+            <div class="pre conditions"><br /></div>
+         </ol>
+      </li>
+      <div class="pagebreak"></div>
+      <li>The Secretary of State may vary or cancel any of the above conditions, in accordance with Section 250(4) of
+         the Criminal Justice Act 2003.</li>
+      <li>If you fail to submit yourself to a recall to custody following either a notification of the revocation of
+         your licence, or remain out of contact with Probation Services for a period of six months, you may be liable to
+         face a further charge of being unlawfully at large following recall under section 255ZA of the Criminal Justice
+         Act 2003. This could result in a fine, a sentence of up to two years’ imprisonment, or both.</li>
+      <li>If you fail to comply with any requirement of your licence period (set out above) or
+         if you otherwise pose a risk to the public, you will be liable to have this licence revoked and be recalled to
+         custody until the date on which your licence would have otherwise ended. If you are sent back to prison and are
+         re-released before the end of your licence, you will still be subject to licence conditions until the end of
+         your sentence.</li>
+      <li>Your licence expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate or "MISSING - Licence Expiry Date" }}</span></li>
+      <li>Your sentence expires on <span class="entry">{{ licence.sentenceEndDate | datetimeToDate or "MISSING - Sentence End Date"}}</span></li>
+   </ol>
+   <div class="no-break">
+      <h3>Contact Points</h3>
+      <p>Monitoring Supplier: <span class="entry">{{ hdcInfo.monitoringSupplierTelephone or "MISSING - monitoringSupplierTelephone" }}</span></p>
+      <p>Releasing establishment: <span class="entry">{{ hdcInfo.prisonTelephone or "MISSING - prisonTelephone"}}</span></p><br />
+   </div>
+   <div class="box">
+      <p>Name: <span class="entry">{{ licence.approvedByName or "MISSING - ApprovedByName"}}</span></p>
+      <p>Date: <span class="entry">{{ licence.approvedDate | datetimeToDate or "MISSING - Approved Date"}}</span></p>
+      <p>for the Secretary of State for Justice.</p><br />
+      <p>This licence has been given to me and its requirements have been explained.</p>
+      <p>Name: <span class="entry">{{ offenderName }}</span></p>
+      <p>Signed:</p><br />
+      <p>Date:</p>
+   </div>
+{% endblock %}
