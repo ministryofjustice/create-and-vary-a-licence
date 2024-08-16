@@ -125,6 +125,7 @@ export default defineConfig({
         stubGetStaffCreateCaseload: licence.stubGetStaffCreateCaseload,
         stubGetStaffVaryCaseload: licence.stubGetStaffVaryCaseload,
         stubGetStaffCreateCaseloadForHardStop: licence.stubGetStaffCreateCaseloadForHardStop,
+        stubDeleteAdditionalConditionsByCode: licence.stubDeleteAdditionalConditionsByCode,
 
         stubGetPduHeads: community.stubGetPduHeads,
         stubGetStaffDetails: community.stubGetStaffDetails,
