@@ -89,6 +89,9 @@ describe('Route handlers', () => {
           id: '1',
           version: 'version',
         },
+        user: {
+          username: 'joebloggs',
+        },
       },
     } as unknown as Response
   })
@@ -201,7 +204,9 @@ describe('Route handlers', () => {
 
       await handler.DELETE(req, res)
 
-      expect(licenceService.updateAdditionalConditions).toHaveBeenCalled()
+      expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledWith(['code1'], '1', {
+        username: 'joebloggs',
+      })
       expect(req.session.changedConditionsCounter).toEqual(1)
       expect(res.redirect).toHaveBeenCalledWith(`/licence/vary/id/1/policy-changes/callback`)
     })
@@ -212,7 +217,7 @@ describe('Route handlers', () => {
 
       await handler.DELETE(req, res)
 
-      expect(licenceService.updateAdditionalConditions).not.toHaveBeenCalled()
+      expect(licenceService.deleteAdditionalConditionsByCode).not.toHaveBeenCalled()
       expect(req.session.changedConditionsCounter).toEqual(0)
       expect(res.redirect).toHaveBeenCalledWith(`/licence/vary/id/1/policy-changes/callback`)
     })
