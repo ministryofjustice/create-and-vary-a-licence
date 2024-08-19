@@ -197,30 +197,7 @@ export default class PolicyChangeRoutes {
     if (req.body['confirm-delete'] === 'yes') {
       const counter = +changeCounter
       const conditionCode = req.session.changedConditions[counter - 1].code
-      const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
-        conditionCode,
-        (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version
-      )
-
-      let additionalConditionCodes: string[] = []
-
-      if (conditionType === LicenceType.AP) {
-        additionalConditionCodes = licence.additionalLicenceConditions
-          .filter((c: AdditionalCondition) => c.code !== conditionCode)
-          .map((condition: AdditionalCondition) => condition.code)
-      } else if (conditionType === LicenceType.PSS) {
-        additionalConditionCodes = licence.additionalPssConditions
-          .filter((c: AdditionalCondition) => c.code !== conditionCode)
-          .map((condition: AdditionalCondition) => condition.code)
-      }
-
-      await this.licenceService.updateAdditionalConditions(
-        licence.id,
-        conditionType,
-        { additionalConditions: additionalConditionCodes },
-        user,
-        licence.version
-      )
+      await this.licenceService.deleteAdditionalConditionsByCode([conditionCode], licence.id, user)
     } else {
       req.session.changedConditionsCounter -= 1
     }
