@@ -5,7 +5,6 @@ import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
 import type { LicenceSummary } from '../../@types/licenceApiClientTypes'
-import Container from '../container'
 import LicenceKind from '../../enumeration/LicenceKind'
 import { parseCvlDate } from '../../utils/utils'
 
@@ -29,12 +28,8 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
   }
 
-  private pairDeliusRecordsWithNomis = async (
-    managedOffenders: Container<DeliusRecord>,
-    user: User
-  ): Promise<Container<ManagedCase>> => {
+  private pairDeliusRecordsWithNomis = async (managedOffenders: DeliusRecord[], user: User): Promise<ManagedCase[]> => {
     const caseloadNomisIds = managedOffenders
-      .unwrap()
       .filter(offender => offender.otherIds?.nomsNumber)
       .map(offender => offender.otherIds?.nomsNumber)
 
@@ -53,10 +48,10 @@ export default class CaseloadService {
       .filter(offender => offender.nomisRecord, 'unable to find prison record')
   }
 
-  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<Container<ManagedCase>> => {
+  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<ManagedCase[]> => {
     const nomisIds = licences.map(l => l.nomisId)
     const deliusRecords = await this.communityService.getOffendersByNomsNumbers(nomisIds)
-    const offenders = await this.pairDeliusRecordsWithNomis(this.wrap(deliusRecords), user)
+    const offenders = await this.pairDeliusRecordsWithNomis(deliusRecords, user)
     return offenders.map(offender => {
       return {
         ...offender,
@@ -86,11 +81,8 @@ export default class CaseloadService {
     })
   }
 
-  private async mapResponsibleComsToCasesWithExclusions(
-    caseload: Container<ManagedCase>
-  ): Promise<Container<ManagedCase>> {
+  private async mapResponsibleComsToCases(caseload: ManagedCase[]): Promise<ManagedCase[]> {
     const comUsernames = caseload
-      .unwrap()
       .map(
         offender =>
           offender.licences.find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE).comUsername
@@ -132,13 +124,5 @@ export default class CaseloadService {
         },
       }
     })
-  }
-
-  private async mapResponsibleComsToCases(caseload: Container<ManagedCase>): Promise<ManagedCase[]> {
-    return this.mapResponsibleComsToCasesWithExclusions(caseload).then(it => it.unwrap())
-  }
-
-  wrap<T>(items: T[]): Container<T> {
-    return new Container(items)
   }
 }
