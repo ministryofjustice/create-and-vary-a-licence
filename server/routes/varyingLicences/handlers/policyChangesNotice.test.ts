@@ -41,8 +41,6 @@ describe('Route handlers', () => {
     suggestions: [{ code: 'code 6', currentText: 'Condition 6' }],
   } as LicenceConditionChange
 
-  licenceService.getPolicyChanges.mockResolvedValue([condition1, condition2, condition3])
-
   beforeEach(() => {
     req = {
       params: {
@@ -63,6 +61,8 @@ describe('Route handlers', () => {
         },
       },
     } as unknown as Response
+
+    licenceService.getPolicyChanges.mockResolvedValue([condition1, condition2, condition3])
   })
 
   describe('GET', () => {
@@ -79,6 +79,13 @@ describe('Route handlers', () => {
       expect(res.render).toHaveBeenCalledWith('pages/vary/policyChanges', {
         numberOfChanges: 'Three',
       })
+    })
+
+    it('redirects to check-your-answers if all policy changes have been reviewed already', async () => {
+      licenceService.getPolicyChanges.mockResolvedValue([])
+
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
   })
 

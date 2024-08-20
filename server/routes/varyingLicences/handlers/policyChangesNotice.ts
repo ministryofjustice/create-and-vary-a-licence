@@ -11,6 +11,12 @@ export default class PolicyChangesNoticeRoutes {
     const { licenceId } = req.params
 
     const changedConditions = await this.licenceService.getPolicyChanges(licenceId)
+
+    // If policy changes have all already been reviewed, no need to render the notice page
+    if (changedConditions.length < 1) {
+      return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)
+    }
+
     const numberOfChanges = convertToTitleCase(Converter.toWords(changedConditions.length))
 
     req.session.changedConditions = changedConditions.sort((a: LicenceConditionChange, b: LicenceConditionChange) => {
@@ -21,7 +27,7 @@ export default class PolicyChangesNoticeRoutes {
     })
     req.session.changedConditionsCounter = 0
 
-    res.render('pages/vary/policyChanges', { numberOfChanges })
+    return res.render('pages/vary/policyChanges', { numberOfChanges })
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
