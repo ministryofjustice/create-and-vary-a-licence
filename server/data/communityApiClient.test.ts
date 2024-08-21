@@ -1,7 +1,6 @@
 import HmppsRestClient from './hmppsRestClient'
 import CommunityApiClient from './communityApiClient'
 import {
-  CommunityApiManagedOffender,
   CommunityApiOffenderManager,
   CommunityApiStaffDetails,
   CommunityApiUserDetails,
@@ -70,28 +69,6 @@ describe('Community Api client tests', () => {
 
     expect(post).toHaveBeenCalledWith({ path: '/secure/staff/list/staffCodes', data: ['X1234'] })
     expect(result).toEqual([{ staffIdentifier: 2000 }])
-  })
-
-  it('Get staff caseload', async () => {
-    get.mockResolvedValue({ nomsNumber: 'ABC1234' } as CommunityApiManagedOffender)
-
-    const result = await communityApiClient.getStaffCaseload(2000)
-
-    expect(get).toHaveBeenCalledWith({
-      path: '/secure/staff/staffIdentifier/2000/caseload/managedOffenders',
-    })
-    expect(result).toEqual({ nomsNumber: 'ABC1234' })
-  })
-
-  it('Get team caseload', async () => {
-    get.mockResolvedValue({ offenderCrn: 'ABC1234' } as CommunityApiManagedOffender)
-
-    const result = await communityApiClient.getTeamCaseload('teamA')
-
-    expect(get).toHaveBeenCalledWith({
-      path: '/secure/team/teamA/caseload/managedOffenders',
-    })
-    expect(result).toEqual({ offenderCrn: 'ABC1234' })
   })
 
   it(`Get a list of an offender's managers`, async () => {
