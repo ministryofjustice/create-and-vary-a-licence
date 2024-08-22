@@ -209,6 +209,44 @@ describe('Hmpps Rest Client tests', () => {
       ).rejects.toThrow('Not Found')
     })
 
+    it('Should return error response body if predicate provided when bad response', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
+      })
+        .post('/test', { testData1: 'testValue1' })
+        .reply(409, { result: 'not successful' })
+
+      await expect(
+        restClient.post({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+          data: {
+            testData1: 'testValue1',
+          },
+          returnBodyOnErrorIfPredicate: e => e.response.status === 409,
+        })
+      ).resolves.toStrictEqual({ result: 'not successful' })
+    })
+
+    it('Should throw error if predicate provided and not bad response', async () => {
+      nock('http://localhost:8080', {
+        reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },
+      })
+        .post('/test', { testData1: 'testValue1' })
+        .reply(407, { result: 'not successful' })
+
+      await expect(
+        restClient.post({
+          path: '/test',
+          headers: { header1: 'headerValue1' },
+          data: {
+            testData1: 'testValue1',
+          },
+          returnBodyOnErrorIfPredicate: e => e.response.status === 409,
+        })
+      ).rejects.toThrow('Proxy Authentication Required')
+    })
+
     it('Should not retry if request fails', async () => {
       nock('http://localhost:8080', {
         reqheaders: { authorization: 'Bearer token-1', header1: 'headerValue1' },

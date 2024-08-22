@@ -92,13 +92,18 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceCreationResponse> {
-    return (await this.post(
+    const response = (await this.post(
       {
         path: `/licence/create`,
         data: licence,
+        returnBodyOnErrorIfPredicate: e => e.response.status === 409,
       },
       { username: user.username }
-    )) as Promise<LicenceSummary>
+    )) as Record<string, unknown>
+
+    return response.status === 409
+      ? { licenceId: response.existingResourceId as number }
+      : { licenceId: response.licenceId as number }
   }
 
   async getLicenceById(licenceId: number, user: User): Promise<Licence> {

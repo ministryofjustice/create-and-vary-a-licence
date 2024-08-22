@@ -10,7 +10,6 @@ import {
   AuditRequest,
   BespokeConditionsRequest,
   ContactNumberRequest,
-  CreateLicenceRequest,
   EmailContact,
   Licence,
   LicenceSummary,
@@ -26,6 +25,7 @@ import {
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
   CaCaseloadSearch,
+  LicenceCreationResponse,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -62,12 +62,29 @@ describe('Licence API client tests', () => {
   })
 
   it('Create licence request', async () => {
-    post.mockResolvedValue({ licenceId: 1, prisonCode: 'MDI' } as LicenceSummary)
+    post.mockResolvedValue({ licenceId: 1 } as LicenceCreationResponse)
 
-    const result = await licenceApiClient.createLicence({} as CreateLicenceRequest, { username: 'joebloggs' } as User)
+    const creationRequest = { nomsId: 'A1234AA', type: 'CRD' as const }
+    const result = await licenceApiClient.createLicence(creationRequest, { username: 'joebloggs' } as User)
 
-    expect(post).toHaveBeenCalledWith({ path: '/licence/create', data: {} }, { username: 'joebloggs' })
-    expect(result).toEqual({ licenceId: 1, prisonCode: 'MDI' })
+    expect(post).toHaveBeenCalledWith(
+      { path: '/licence/create', data: creationRequest, returnBodyOnErrorIfPredicate: expect.any(Function) },
+      { username: 'joebloggs' }
+    )
+    expect(result).toEqual({ licenceId: 1 })
+  })
+
+  it('Create licence request when resouce already exists', async () => {
+    post.mockResolvedValue({ status: 409, existingResourceId: 3 })
+
+    const creationRequest = { nomsId: 'A1234AA', type: 'CRD' as const }
+    const result = await licenceApiClient.createLicence(creationRequest, { username: 'joebloggs' } as User)
+
+    expect(post).toHaveBeenCalledWith(
+      { path: '/licence/create', data: creationRequest, returnBodyOnErrorIfPredicate: expect.any(Function) },
+      { username: 'joebloggs' }
+    )
+    expect(result).toEqual({ licenceId: 3 })
   })
 
   it('Get licence by Id', async () => {
