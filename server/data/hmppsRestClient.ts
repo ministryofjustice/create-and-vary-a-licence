@@ -26,6 +26,7 @@ interface PostRequest {
   data?: Record<string, unknown> | number[] | string[] | Record<string, unknown>[]
   query?: ParsedUrlQueryInput
   raw?: boolean
+  returnBodyOnErrorIfPredicate?: (e: superagent.ResponseError) => boolean
 }
 
 interface PostMultiPartRequest {
@@ -106,7 +107,15 @@ export default class HmppsRestClient {
   }
 
   async post(
-    { path = null, headers = {}, responseType = '', data = {}, query = {}, raw = false }: PostRequest,
+    {
+      path = null,
+      headers = {},
+      responseType = '',
+      data = {},
+      query = {},
+      raw = false,
+      returnBodyOnErrorIfPredicate,
+    }: PostRequest,
     signedWithMethod?: SignedWithMethod
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
@@ -126,6 +135,9 @@ export default class HmppsRestClient {
         return raw ? response : response.body
       })
       .catch(error => {
+        if (returnBodyOnErrorIfPredicate && returnBodyOnErrorIfPredicate(error)) {
+          return error.response.body
+        }
         const sanitisedError = sanitiseError(error)
         logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'POST'`)
         throw sanitisedError
