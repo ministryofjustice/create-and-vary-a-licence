@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", ":disableDependencyDashboard"],
+  "extends": ["github>ministryofjustice/hmpps-renovate-config:node", ":disableDependencyDashboard"],
   "enabledManagers": ["npm", "nvm", "dockerfile", "docker-compose", "helmv3", "helm-values", "github-actions"],
   "printConfig": true,
   "timezone": "Europe/London",
