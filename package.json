@@ -135,7 +135,7 @@
     "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "sqs-consumer": "^10.3.0",
-    "superagent": "^9.0.2",
+    "superagent": "^10.1.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
