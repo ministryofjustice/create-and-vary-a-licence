@@ -154,7 +154,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     return times[index]
   })
 
-  njkEnv.addFilter('getValueFromAddress', (formValues: unknown[], property: string, index = 0) => {
+  njkEnv.addFilter('getValueFromAddress', (formValues: string[], property: keyof Address, index = 0) => {
     const addresses = formValues.map(value => (typeof value === 'string' ? Address.fromString(value) : value))
     return addresses[index] ? addresses[index][property] : ''
   })
@@ -224,7 +224,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     return licenceStatusOrderMap.get(licenceStatus)
   })
 
-  njkEnv.addGlobal('getFormResponses', (formResponses: unknown, inputName: string) => {
+  njkEnv.addGlobal('getFormResponses', (formResponses: Record<string, unknown>, inputName: string) => {
     return formResponses ? [formResponses[inputName]].flat() : undefined
   })
 
@@ -276,13 +276,16 @@ export function registerNunjucks(app?: express.Express): Environment {
     })
   })
 
-  njkEnv.addFilter('toChecked', <T>(array: T[], valueKey: string, textKey: string, values: T[] = []) => {
-    return array.map(item => ({
-      value: item[valueKey],
-      text: item[textKey],
-      checked: values.includes(item[valueKey]),
-    }))
-  })
+  njkEnv.addFilter(
+    'toChecked',
+    <T extends Record<string, unknown>>(array: T[], valueKey: string, textKey: string, values: unknown[] = []) => {
+      return array.map(item => ({
+        value: item[valueKey],
+        text: item[textKey],
+        checked: values.includes(item[valueKey]),
+      }))
+    }
+  )
 
   njkEnv.addFilter('sortConditionsBySequence', (array: AdditionalCondition[]) => {
     return array.sort((a, b) => a.sequence - b.sequence)

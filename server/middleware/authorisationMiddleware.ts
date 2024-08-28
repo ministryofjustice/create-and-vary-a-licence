@@ -4,8 +4,8 @@ import logger from '../../logger'
 import AuthRole from '../enumeration/authRole'
 
 const isAuthorisedRole = (role: string): boolean =>
-  Object.keys(AuthRole)
-    .map(key => AuthRole[key])
+  Object.values(AuthRole)
+    .map(role => role as string)
     .includes(role)
 
 export default function authorisationMiddleware(req: Request, res: Response, next: NextFunction): void {
