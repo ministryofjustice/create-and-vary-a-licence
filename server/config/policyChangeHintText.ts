@@ -1,4 +1,6 @@
-export default {
+type HintText = { description: string[]; bulletpoints: string[] }
+
+const policyChangeHints: Record<string, Record<string, HintText>> = {
   'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65': {
     v2_1: {
       description: ['Details of appointment time, date and location removed.'],
@@ -84,3 +86,5 @@ export default {
     },
   },
 }
+
+export default policyChangeHints

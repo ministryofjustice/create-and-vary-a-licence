@@ -24,8 +24,12 @@ describe('Initial appointment updated flash message', () => {
   const messageKey = 'initialApptUpdated'
 
   it('does not generate a message for any licence statuses other than SUBMITTED or APPROVED', () => {
-    Object.keys(LicenceStatus).forEach(key => {
-      flashInitialApptUpdatedMessage(req, { ...licence, statusCode: LicenceStatus[key] }, UserType.PROBATION)
+    Object.values(LicenceStatus).forEach(statusCode => {
+      flashInitialApptUpdatedMessage(
+        req,
+        { ...licence, statusCode: statusCode as Licence['statusCode'] },
+        UserType.PROBATION
+      )
     })
 
     expect(req.flash).toHaveBeenCalledTimes(2)

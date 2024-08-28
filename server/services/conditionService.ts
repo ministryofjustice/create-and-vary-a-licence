@@ -64,7 +64,10 @@ export default class ConditionService {
     return (await this.getLicencePolicy()).version
   }
 
-  async getStandardConditions(licenceType: string, version: string = null): Promise<StandardCondition[]> {
+  async getStandardConditions(
+    licenceType: LicenceType.AP | LicenceType.PSS,
+    version: string = null
+  ): Promise<StandardCondition[]> {
     const conditions = await this.getLicencePolicy(version)
     return conditions.standardConditions[licenceType].map((condition: StandardCondition, index: number) => {
       return {
@@ -87,7 +90,7 @@ export default class ConditionService {
   }
 
   async getGroupedAdditionalConditions(
-    licenceType: string,
+    licenceType: LicenceType.AP | LicenceType.PSS,
     version: string = null
   ): Promise<{ category: string; conditions: PolicyAdditionalCondition[] }[]> {
     const additionalConditions = await this.getAdditionalConditions(version)
