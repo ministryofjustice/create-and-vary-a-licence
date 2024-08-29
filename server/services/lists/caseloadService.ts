@@ -1,15 +1,13 @@
 import { format } from 'date-fns'
 import moment from 'moment'
-import _ from 'lodash'
+import assert from 'assert'
 import CommunityService from '../communityService'
 import LicenceService from '../licenceService'
-import { DeliusRecord, ManagedCase, ProbationPractitioner } from '../../@types/managedCase'
-import LicenceStatus from '../../enumeration/licenceStatus'
+import { DeliusRecord, ProbationPractitioner } from '../../@types/managedCase'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
-import type { LicenceSummary } from '../../@types/licenceApiClientTypes'
-import LicenceKind from '../../enumeration/LicenceKind'
-import { convertToTitleCase, parseCvlDate, parseCvlDateTime, parseIsoDate } from '../../utils/utils'
+import type { CvlPrisoner, LicenceSummary } from '../../@types/licenceApiClientTypes'
+import { associateBy, convertToTitleCase, parseCvlDateTime, parseIsoDate } from '../../utils/utils'
 
 export type VaryApprovalCase = {
   licenceId: number
@@ -19,6 +17,13 @@ export type VaryApprovalCase = {
   variationRequestDate: string
   releaseDate: string
   probationPractitioner: ProbationPractitioner
+}
+
+type NomisAndDeliusPair = { deliusRecord?: DeliusRecord; nomisRecord?: CvlPrisoner }
+
+type ManagedCase = Omit<VaryApprovalCase, 'probationPractitioner'> & {
+  deliusRecord: DeliusRecord
+  comUsername: string
 }
 
 export default class CaseloadService {
@@ -41,78 +46,66 @@ export default class CaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(search, caseload))
   }
 
-  private pairDeliusRecordsWithNomis = async (managedOffenders: DeliusRecord[], user: User): Promise<ManagedCase[]> => {
-    const caseloadNomisIds = managedOffenders
-      .filter(offender => offender.otherIds?.nomsNumber)
+  private pairDeliusRecordsWithNomis = async (
+    licences: LicenceSummary[],
+    user: User
+  ): Promise<NomisAndDeliusPair[]> => {
+    const deliusRecords = await this.communityService.getOffendersByNomsNumbers(licences.map(l => l.nomisId))
+
+    const caseloadNomisIds = deliusRecords
       .map(offender => offender.otherIds?.nomsNumber)
+      .filter(nomsNumber => nomsNumber)
 
     const nomisRecords = await this.licenceService.searchPrisonersByNomsIds(caseloadNomisIds, user)
+    const nomisRecord = associateBy(nomisRecords, record => record.prisoner.prisonerNumber)
 
-    return managedOffenders
-      .map(offender => {
-        const { prisoner, cvl: cvlFields } =
-          nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.otherIds?.nomsNumber) || {}
-        return {
-          deliusRecord: offender,
-          nomisRecord: prisoner,
-          cvlFields,
-        }
-      })
+    return deliusRecords
+      .map(offender => ({
+        deliusRecord: offender,
+        nomisRecord: nomisRecord[offender.otherIds?.nomsNumber]?.prisoner,
+      }))
       .filter(offender => offender.nomisRecord)
   }
 
   private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<ManagedCase[]> => {
-    const nomisIds = licences.map(l => l.nomisId)
-    const deliusRecords = await this.communityService.getOffendersByNomsNumbers(nomisIds)
-    const offenders = await this.pairDeliusRecordsWithNomis(deliusRecords, user)
+    const offenders = await this.pairDeliusRecordsWithNomis(licences, user)
+
     return offenders.map(offender => {
+      const foundLicences = licences.filter(l => l.nomisId === offender.nomisRecord.prisonerNumber)
+      assert(foundLicences.length === 1, `offender '${offender.nomisRecord.prisonerNumber}' has more than one licence`)
+
+      const licence = foundLicences[0]
+
+      const releaseDate = offender.nomisRecord.releaseDate
+        ? format(parseIsoDate(offender.nomisRecord.releaseDate), 'dd MMM yyyy')
+        : null
+
+      const variationRequestDate = licence.dateCreated
+        ? format(parseCvlDateTime(licence.dateCreated, { withSeconds: false }), 'dd MMMM yyyy')
+        : null
+
       return {
-        ...offender,
-        licences: licences
-          .filter(l => l.nomisId === offender.nomisRecord.prisonerNumber)
-          .map(l => {
-            const releaseDate = l.actualReleaseDate || l.conditionalReleaseDate
-            return {
-              id: l.licenceId,
-              type: <LicenceType>l.licenceType,
-              status: <LicenceStatus>l.licenceStatus,
-              comUsername: l.comUsername,
-              dateCreated: l.dateCreated,
-              approvedBy: l.approvedByName,
-              approvedDate: l.approvedDate,
-              versionOf: l.versionOf,
-              kind: <LicenceKind>l.kind,
-              licenceStartDate: l.licenceStartDate,
-              hardStopDate: parseCvlDate(l.hardStopDate),
-              hardStopWarningDate: parseCvlDate(l.hardStopWarningDate),
-              isDueToBeReleasedInTheNextTwoWorkingDays: l.isDueToBeReleasedInTheNextTwoWorkingDays,
-              updatedByFullName: l.updatedByFullName,
-              releaseDate: releaseDate ? parseCvlDate(releaseDate) : null,
-            }
-          }),
+        licenceId: licence.licenceId,
+        name: convertToTitleCase(`${offender.nomisRecord.firstName} ${offender.nomisRecord.lastName}`.trim()),
+        crnNumber: offender.deliusRecord.otherIds.crn,
+        licenceType: <LicenceType>licence.licenceType,
+        variationRequestDate,
+        releaseDate,
+        // transient
+        comUsername: licence.comUsername,
+        deliusRecord: offender.deliusRecord,
       }
     })
   }
 
   private async mapResponsibleComsToCases(search: string, caseload: ManagedCase[]): Promise<VaryApprovalCase[]> {
-    const comUsernames = caseload
-      .map(
-        offender =>
-          offender.licences.find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE).comUsername
-      )
-      .filter(comUsername => comUsername)
+    const comUsernames = caseload.map(offender => offender.comUsername).filter(comUsername => comUsername)
 
     const coms = await this.communityService.getStaffDetailsByUsernameList(comUsernames)
 
     return caseload
-      .map(offender => {
-        const responsibleCom = coms.find(
-          com =>
-            com.username?.toLowerCase() ===
-            offender.licences
-              .find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE)
-              .comUsername?.toLowerCase()
-        )
+      .map(({ comUsername, deliusRecord, ...offender }) => {
+        const responsibleCom = coms.find(com => com.username?.toLowerCase() === comUsername?.toLowerCase())
 
         if (responsibleCom) {
           return {
@@ -124,39 +117,19 @@ export default class CaseloadService {
           }
         }
 
-        if (!offender.deliusRecord.staff || offender.deliusRecord.staff.unallocated) {
+        if (!deliusRecord.staff || deliusRecord.staff.unallocated) {
           return {
             ...offender,
+            probationPractitioner: undefined,
           }
         }
 
         return {
           ...offender,
           probationPractitioner: {
-            staffCode: offender.deliusRecord.staff.code,
-            name: `${offender.deliusRecord.staff.forenames} ${offender.deliusRecord.staff.surname}`.trim(),
+            staffCode: deliusRecord.staff.code,
+            name: `${deliusRecord.staff.forenames} ${deliusRecord.staff.surname}`.trim(),
           },
-        }
-      })
-      .map(c => {
-        const licence = _.head(c.licences)
-
-        const releaseDate = c.nomisRecord.releaseDate
-          ? format(parseIsoDate(c.nomisRecord.releaseDate), 'dd MMM yyyy')
-          : null
-
-        const variationRequestDate = licence.dateCreated
-          ? format(parseCvlDateTime(licence.dateCreated, { withSeconds: false }), 'dd MMMM yyyy')
-          : null
-
-        return {
-          licenceId: licence.id,
-          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
-          crnNumber: c.deliusRecord.otherIds.crn,
-          licenceType: licence.type,
-          variationRequestDate,
-          releaseDate,
-          probationPractitioner: c.probationPractitioner,
         }
       })
       .filter(c => {

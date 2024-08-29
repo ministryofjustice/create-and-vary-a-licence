@@ -249,6 +249,17 @@ const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], k
   return Object.values(results)
 }
 
+const associateBy = <T extends Record<string, unknown>>(arr: T[], keyGetter: (t: T) => string): Record<string, T> => {
+  return arr.reduce(
+    (acc, c) => {
+      const key = keyGetter(c)
+      acc[key] = c
+      return acc
+    },
+    {} as Record<string, T>
+  )
+}
+
 const isInHardStopPeriod = (licence: Licence): boolean => {
   return licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod
 }
@@ -277,6 +288,7 @@ export {
   formatAddress,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
+  associateBy,
   groupingBy,
   isReleaseDateOnOrBeforeCutOffDate,
   isInHardStopPeriod,
