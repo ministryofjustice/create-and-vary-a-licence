@@ -1,12 +1,25 @@
+import { format } from 'date-fns'
+import moment from 'moment'
+import _ from 'lodash'
 import CommunityService from '../communityService'
 import LicenceService from '../licenceService'
-import { DeliusRecord, ManagedCase } from '../../@types/managedCase'
+import { DeliusRecord, ManagedCase, ProbationPractitioner } from '../../@types/managedCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
 import type { LicenceSummary } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
-import { parseCvlDate } from '../../utils/utils'
+import { convertToTitleCase, parseCvlDate, parseCvlDateTime, parseIsoDate } from '../../utils/utils'
+
+export type VaryApprovalCase = {
+  licenceId: number
+  name: string
+  crnNumber: string
+  licenceType: LicenceType
+  variationRequestDate: string
+  releaseDate: string
+  probationPractitioner: ProbationPractitioner
+}
 
 export default class CaseloadService {
   constructor(
@@ -14,18 +27,18 @@ export default class CaseloadService {
     private readonly licenceService: LicenceService
   ) {}
 
-  async getVaryApproverCaseload(user: User): Promise<ManagedCase[]> {
+  async getVaryApproverCaseload(user: User, search: string): Promise<VaryApprovalCase[]> {
     return this.licenceService
       .getLicencesForVariationApproval(user)
       .then(licences => this.mapLicencesToOffenders(licences))
-      .then(caseload => this.mapResponsibleComsToCases(caseload))
+      .then(caseload => this.mapResponsibleComsToCases(search, caseload))
   }
 
-  async getVaryApproverCaseloadByRegion(user: User): Promise<ManagedCase[]> {
+  async getVaryApproverCaseloadByRegion(user: User, search: string = undefined): Promise<VaryApprovalCase[]> {
     return this.licenceService
       .getLicencesForVariationApprovalByRegion(user)
       .then(licences => this.mapLicencesToOffenders(licences))
-      .then(caseload => this.mapResponsibleComsToCases(caseload))
+      .then(caseload => this.mapResponsibleComsToCases(search, caseload))
   }
 
   private pairDeliusRecordsWithNomis = async (managedOffenders: DeliusRecord[], user: User): Promise<ManagedCase[]> => {
@@ -45,7 +58,7 @@ export default class CaseloadService {
           cvlFields,
         }
       })
-      .filter(offender => offender.nomisRecord, 'unable to find prison record')
+      .filter(offender => offender.nomisRecord)
   }
 
   private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<ManagedCase[]> => {
@@ -81,7 +94,7 @@ export default class CaseloadService {
     })
   }
 
-  private async mapResponsibleComsToCases(caseload: ManagedCase[]): Promise<ManagedCase[]> {
+  private async mapResponsibleComsToCases(search: string, caseload: ManagedCase[]): Promise<VaryApprovalCase[]> {
     const comUsernames = caseload
       .map(
         offender =>
@@ -91,38 +104,74 @@ export default class CaseloadService {
 
     const coms = await this.communityService.getStaffDetailsByUsernameList(comUsernames)
 
-    return caseload.map(offender => {
-      const responsibleCom = coms.find(
-        com =>
-          com.username?.toLowerCase() ===
-          offender.licences
-            .find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE)
-            .comUsername?.toLowerCase()
-      )
+    return caseload
+      .map(offender => {
+        const responsibleCom = coms.find(
+          com =>
+            com.username?.toLowerCase() ===
+            offender.licences
+              .find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE)
+              .comUsername?.toLowerCase()
+        )
 
-      if (responsibleCom) {
+        if (responsibleCom) {
+          return {
+            ...offender,
+            probationPractitioner: {
+              staffCode: responsibleCom.staffCode,
+              name: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`.trim(),
+            },
+          }
+        }
+
+        if (!offender.deliusRecord.staff || offender.deliusRecord.staff.unallocated) {
+          return {
+            ...offender,
+          }
+        }
+
         return {
           ...offender,
           probationPractitioner: {
-            staffCode: responsibleCom.staffCode,
-            name: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`.trim(),
+            staffCode: offender.deliusRecord.staff.code,
+            name: `${offender.deliusRecord.staff.forenames} ${offender.deliusRecord.staff.surname}`.trim(),
           },
         }
-      }
+      })
+      .map(c => {
+        const licence = _.head(c.licences)
 
-      if (!offender.deliusRecord.staff || offender.deliusRecord.staff.unallocated) {
+        const releaseDate = c.nomisRecord.releaseDate
+          ? format(parseIsoDate(c.nomisRecord.releaseDate), 'dd MMM yyyy')
+          : null
+
+        const variationRequestDate = licence.dateCreated
+          ? format(parseCvlDateTime(licence.dateCreated, { withSeconds: false }), 'dd MMMM yyyy')
+          : null
+
         return {
-          ...offender,
+          licenceId: licence.id,
+          name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
+          crnNumber: c.deliusRecord.otherIds.crn,
+          licenceType: licence.type,
+          variationRequestDate,
+          releaseDate,
+          probationPractitioner: c.probationPractitioner,
         }
-      }
-
-      return {
-        ...offender,
-        probationPractitioner: {
-          staffCode: offender.deliusRecord.staff.code,
-          name: `${offender.deliusRecord.staff.forenames} ${offender.deliusRecord.staff.surname}`.trim(),
-        },
-      }
-    })
+      })
+      .filter(c => {
+        const searchString = search?.toLowerCase().trim()
+        if (!searchString) return true
+        return (
+          c.crnNumber?.toLowerCase().includes(searchString) ||
+          c.name.toLowerCase().includes(searchString) ||
+          c.probationPractitioner?.name.toLowerCase().includes(searchString)
+        )
+      })
+      .sort((a, b) => {
+        const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
+        const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
+        return crd1 - crd2
+      })
   }
 }
