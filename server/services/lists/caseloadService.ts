@@ -1,13 +1,19 @@
 import { format } from 'date-fns'
 import moment from 'moment'
-import assert from 'assert'
 import CommunityService from '../communityService'
 import LicenceService from '../licenceService'
 import { DeliusRecord, ProbationPractitioner } from '../../@types/managedCase'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
 import type { CvlPrisoner, LicenceSummary } from '../../@types/licenceApiClientTypes'
-import { associateBy, convertToTitleCase, parseCvlDateTime, parseIsoDate } from '../../utils/utils'
+import {
+  assertContainsNoDuplicates,
+  associateBy,
+  convertToTitleCase,
+  parseCvlDateTime,
+  parseIsoDate,
+} from '../../utils/utils'
+import { CommunityApiStaffDetails } from '../../@types/communityClientTypes'
 
 export type VaryApprovalCase = {
   licenceId: number
@@ -19,11 +25,11 @@ export type VaryApprovalCase = {
   probationPractitioner: ProbationPractitioner
 }
 
-type NomisAndDeliusPair = { deliusRecord?: DeliusRecord; nomisRecord?: CvlPrisoner }
-
-type ManagedCase = Omit<VaryApprovalCase, 'probationPractitioner'> & {
-  deliusRecord: DeliusRecord
-  comUsername: string
+type Case = {
+  deliusRecord?: DeliusRecord
+  nomisRecord?: CvlPrisoner
+  licence: LicenceSummary
+  probationPractitioner: ProbationPractitioner
 }
 
 export default class CaseloadService {
@@ -35,50 +41,49 @@ export default class CaseloadService {
   async getVaryApproverCaseload(user: User, search: string): Promise<VaryApprovalCase[]> {
     return this.licenceService
       .getLicencesForVariationApproval(user)
-      .then(licences => this.mapLicencesToOffenders(licences))
-      .then(caseload => this.mapResponsibleComsToCases(search, caseload))
+      .then(licences => this.buildCase(licences))
+      .then(caseload => this.sortAndFilter(search, caseload))
   }
 
   async getVaryApproverCaseloadByRegion(user: User, search: string = undefined): Promise<VaryApprovalCase[]> {
     return this.licenceService
       .getLicencesForVariationApprovalByRegion(user)
-      .then(licences => this.mapLicencesToOffenders(licences))
-      .then(caseload => this.mapResponsibleComsToCases(search, caseload))
+      .then(licences => this.buildCase(licences))
+      .then(caseload => this.sortAndFilter(search, caseload))
   }
 
-  private pairDeliusRecordsWithNomis = async (
-    licences: LicenceSummary[],
-    user: User
-  ): Promise<NomisAndDeliusPair[]> => {
+  private linkRecords = async (licences: LicenceSummary[], user: User): Promise<Case[]> => {
     const deliusRecords = await this.communityService.getOffendersByNomsNumbers(licences.map(l => l.nomisId))
 
-    const caseloadNomisIds = deliusRecords
-      .map(offender => offender.otherIds?.nomsNumber)
-      .filter(nomsNumber => nomsNumber)
+    const caseloadNomisIds = deliusRecords.map(offender => offender.otherIds?.nomsNumber).filter(nomisId => nomisId)
 
     const nomisRecords = await this.licenceService.searchPrisonersByNomsIds(caseloadNomisIds, user)
-    const nomisRecord = associateBy(nomisRecords, record => record.prisoner.prisonerNumber)
 
-    return deliusRecords
-      .map(offender => ({
-        deliusRecord: offender,
-        nomisRecord: nomisRecord[offender.otherIds?.nomsNumber]?.prisoner,
-      }))
-      .filter(offender => offender.nomisRecord)
+    const deliusRecordByPrisonNumber = associateBy(deliusRecords, record => record.otherIds.nomsNumber)
+    const nomisRecordByPrisonNumber = associateBy(nomisRecords, record => record.prisoner.prisonerNumber)
+
+    const comUsernames = licences.map(licence => licence.comUsername).filter(comUsername => comUsername)
+    const coms = await this.communityService.getStaffDetailsByUsernameList(comUsernames)
+
+    return licences
+      .map(licence => {
+        const deliusRecord = deliusRecordByPrisonNumber[licence.nomisId]
+        return {
+          licence,
+          deliusRecord,
+          nomisRecord: nomisRecordByPrisonNumber[licence.nomisId]?.prisoner,
+          probationPractitioner: getProbationPractioner(coms, licence.comUsername, deliusRecord),
+        }
+      })
+      .filter(licence => licence.nomisRecord)
   }
 
-  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<ManagedCase[]> => {
-    const offenders = await this.pairDeliusRecordsWithNomis(licences, user)
+  private buildCase = async (licences: LicenceSummary[], user?: User): Promise<VaryApprovalCase[]> => {
+    assertContainsNoDuplicates(licences, l => l.nomisId)
+    const cases = await this.linkRecords(licences, user)
 
-    return offenders.map(offender => {
-      const foundLicences = licences.filter(l => l.nomisId === offender.nomisRecord.prisonerNumber)
-      assert(foundLicences.length === 1, `offender '${offender.nomisRecord.prisonerNumber}' has more than one licence`)
-
-      const licence = foundLicences[0]
-
-      const releaseDate = offender.nomisRecord.releaseDate
-        ? format(parseIsoDate(offender.nomisRecord.releaseDate), 'dd MMM yyyy')
-        : null
+    return cases.map(({ licence, deliusRecord, nomisRecord, probationPractitioner }) => {
+      const releaseDate = nomisRecord.releaseDate ? format(parseIsoDate(nomisRecord.releaseDate), 'dd MMM yyyy') : null
 
       const variationRequestDate = licence.dateCreated
         ? format(parseCvlDateTime(licence.dateCreated, { withSeconds: false }), 'dd MMMM yyyy')
@@ -86,52 +91,18 @@ export default class CaseloadService {
 
       return {
         licenceId: licence.licenceId,
-        name: convertToTitleCase(`${offender.nomisRecord.firstName} ${offender.nomisRecord.lastName}`.trim()),
-        crnNumber: offender.deliusRecord.otherIds.crn,
+        name: convertToTitleCase(`${nomisRecord.firstName} ${nomisRecord.lastName}`.trim()),
+        crnNumber: deliusRecord.otherIds.crn,
         licenceType: <LicenceType>licence.licenceType,
         variationRequestDate,
         releaseDate,
-        // transient
-        comUsername: licence.comUsername,
-        deliusRecord: offender.deliusRecord,
+        probationPractitioner,
       }
     })
   }
 
-  private async mapResponsibleComsToCases(search: string, caseload: ManagedCase[]): Promise<VaryApprovalCase[]> {
-    const comUsernames = caseload.map(offender => offender.comUsername).filter(comUsername => comUsername)
-
-    const coms = await this.communityService.getStaffDetailsByUsernameList(comUsernames)
-
-    return caseload
-      .map(({ comUsername, deliusRecord, ...offender }) => {
-        const responsibleCom = coms.find(com => com.username?.toLowerCase() === comUsername?.toLowerCase())
-
-        if (responsibleCom) {
-          return {
-            ...offender,
-            probationPractitioner: {
-              staffCode: responsibleCom.staffCode,
-              name: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`.trim(),
-            },
-          }
-        }
-
-        if (!deliusRecord.staff || deliusRecord.staff.unallocated) {
-          return {
-            ...offender,
-            probationPractitioner: undefined,
-          }
-        }
-
-        return {
-          ...offender,
-          probationPractitioner: {
-            staffCode: deliusRecord.staff.code,
-            name: `${deliusRecord.staff.forenames} ${deliusRecord.staff.surname}`.trim(),
-          },
-        }
-      })
+  private sortAndFilter = (search: string, caseload: VaryApprovalCase[]) =>
+    caseload
       .filter(c => {
         const searchString = search?.toLowerCase().trim()
         if (!searchString) return true
@@ -146,5 +117,28 @@ export default class CaseloadService {
         const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
         return crd1 - crd2
       })
+}
+
+const getProbationPractioner = (
+  coms: CommunityApiStaffDetails[],
+  comUsername: string,
+  deliusRecord: DeliusRecord
+): ProbationPractitioner => {
+  const responsibleCom = coms.find(com => com.username?.toLowerCase() === comUsername?.toLowerCase())
+
+  if (responsibleCom) {
+    return {
+      staffCode: responsibleCom.staffCode,
+      name: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`.trim(),
+    }
+  }
+
+  if (!deliusRecord.staff || deliusRecord.staff?.unallocated) {
+    return undefined
+  }
+
+  return {
+    staffCode: deliusRecord.staff.code,
+    name: `${deliusRecord.staff.forenames} ${deliusRecord.staff.surname}`.trim(),
   }
 }

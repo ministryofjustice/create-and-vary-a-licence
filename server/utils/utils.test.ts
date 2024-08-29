@@ -27,6 +27,8 @@ import {
   parseCvlDateTime,
   CaViewCasesTab,
   toIsoDate,
+  assertContainsNoDuplicates,
+  associateBy,
 } from './utils'
 import AuthRole from '../enumeration/authRole'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
@@ -687,5 +689,58 @@ describe('isInHardStopPeriod', () => {
 
   it('returns true for non-variations in the hard stop period when the feature is enabled', () => {
     expect(isInHardStopPeriod(licence)).toBe(true)
+  })
+})
+
+describe('assertContainsNoDuplicates', () => {
+  test('empty does not blow up', () => {
+    assertContainsNoDuplicates([], s => s)
+  })
+  test('single does not blow up', () => {
+    assertContainsNoDuplicates([{ k: 'a' }], s => s.k)
+  })
+  test('double does not blow up', () => {
+    assertContainsNoDuplicates([{ k: 'a' }, { k: 'b' }], s => s.k)
+  })
+  test('detects duplicates', () => {
+    expect(() => assertContainsNoDuplicates([{ k: 'a' }, { k: 'b' }, { k: 'a' }], s => s.k)).toThrow(
+      `Duplicates detected: 'a'`
+    )
+  })
+
+  test('detects multiple duplicates', () => {
+    expect(() =>
+      assertContainsNoDuplicates([{ k: 'c' }, { k: 'a' }, { k: 'b' }, { k: 'a' }, { k: 'c' }], s => s.k)
+    ).toThrow(`Duplicates detected: 'c, a'`)
+  })
+})
+
+describe('associateBy', () => {
+  test('empty does not blow up', () => {
+    expect(associateBy([], s => s)).toStrictEqual({})
+  })
+  test('single item', () => {
+    expect(associateBy([{ k: 'a', v: 1 }], s => s.k)).toStrictEqual({ a: { k: 'a', v: 1 } })
+  })
+  test('multiple items per key are replaced', () => {
+    expect(
+      associateBy(
+        [
+          { k: 'a', v: 1 },
+          { k: 'b', v: 2 },
+          { k: 'a', v: 3 },
+        ],
+        s => s.k
+      )
+    ).toStrictEqual({
+      a: {
+        k: 'a',
+        v: 3,
+      },
+      b: {
+        k: 'b',
+        v: 2,
+      },
+    })
   })
 })

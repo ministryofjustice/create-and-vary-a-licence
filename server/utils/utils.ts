@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { isBefore, parse, isEqual, isValid, startOfDay, format } from 'date-fns'
+import assert from 'assert'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -260,6 +261,23 @@ const associateBy = <T extends Record<string, unknown>>(arr: T[], keyGetter: (t:
   )
 }
 
+const assertContainsNoDuplicates = <T extends Record<string, unknown>>(arr: T[], keyGetter: (t: T) => string): void => {
+  const result = arr.reduce(
+    (acc, c) => {
+      const key = keyGetter(c)
+      const array = acc[key] || []
+      array.push(c)
+      acc[key] = array
+      return acc
+    },
+    {} as Record<string, T[]>
+  )
+
+  const duplicates = Object.entries(result).filter(([, cases]) => cases.length > 1)
+
+  assert(duplicates.length === 0, `Duplicates detected: '${duplicates.map(([key]) => key).join(', ')}'`)
+}
+
 const isInHardStopPeriod = (licence: Licence): boolean => {
   return licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod
 }
@@ -289,6 +307,7 @@ export {
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
   associateBy,
+  assertContainsNoDuplicates,
   groupingBy,
   isReleaseDateOnOrBeforeCutOffDate,
   isInHardStopPeriod,
