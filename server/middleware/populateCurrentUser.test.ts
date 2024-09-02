@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { Session } from 'express-session'
+import { addDays, format, subDays } from 'date-fns'
 import populateCurrentUser from './populateCurrentUser'
 import UserService from '../services/userService'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
@@ -223,13 +224,44 @@ describe('populateCurrentUser', () => {
       },
       teams: [
         {
-          code: 'teamCode',
+          code: 'teamCode-1',
           district: {
             code: 'lauCode',
           },
           borough: {
             code: 'pduCode',
           },
+          endDate: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
+        },
+        {
+          code: 'teamCode-2',
+          district: {
+            code: 'lauCode',
+          },
+          borough: {
+            code: 'pduCode',
+          },
+          endDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
+        },
+        {
+          code: 'teamCode-3',
+          district: {
+            code: 'lauCode',
+          },
+          borough: {
+            code: 'pduCode',
+          },
+          endDate: format(new Date(), 'yyyy-MM-dd'),
+        },
+        {
+          code: 'teamCode-4',
+          district: {
+            code: 'lauCode',
+          },
+          borough: {
+            code: 'pduCode',
+          },
+          endDate: undefined,
         },
       ],
     } as CommunityApiStaffDetails)
@@ -242,7 +274,7 @@ describe('populateCurrentUser', () => {
       probationAreaDescription: 'areaDesc',
       probationPduCodes: ['pduCode'],
       probationLauCodes: ['lauCode'],
-      probationTeamCodes: ['teamCode'],
+      probationTeamCodes: ['teamCode-1', 'teamCode-4'],
     })
     expect(licenceServiceMock.updateComDetails).toHaveBeenCalledWith({
       staffIdentifier: 2000,
