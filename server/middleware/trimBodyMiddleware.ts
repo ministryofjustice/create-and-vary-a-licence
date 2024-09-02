@@ -2,14 +2,15 @@ import { RequestHandler } from 'express'
 
 export default function trimRequestBody(): RequestHandler {
   // Recursively iterate into an object and trim any strings inside
-  const deepTrim = (object: object): object => {
+  const deepTrim = <T extends Record<string, string | T>>(object: T): object => {
     const o = object
     if (o) {
-      Object.keys(o).forEach(key => {
-        if (typeof o[key] === 'string') {
-          o[key] = o[key].trim()
-        } else if (typeof o[key] === 'object') {
-          o[key] = deepTrim(o[key])
+      ;(Object.keys(o) as (keyof T)[]).forEach(key => {
+        const val = o[key]
+        if (typeof val === 'string') {
+          o[key] = val.trim() as typeof val
+        } else if (typeof val === 'object') {
+          o[key] = deepTrim(val as T) as typeof val
         }
       })
     }

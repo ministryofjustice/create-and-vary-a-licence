@@ -149,7 +149,7 @@ export default class LicenceService {
   async updateAdditionalConditionData(
     licenceId: string,
     condition: AdditionalCondition,
-    formData: unknown,
+    formData: Record<string, unknown>,
     user: User
   ): Promise<void> {
     let sequenceNumber = -1

@@ -3,7 +3,6 @@ import RestClient from './hmppsRestClient'
 import {
   CommunityApiStaffDetails,
   CommunityApiOffenderManager,
-  CommunityApiManagedOffender,
   CommunityApiUserDetails,
 } from '../@types/communityClientTypes'
 import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
@@ -44,18 +43,6 @@ export default class CommunityApiClient extends RestClient {
       path: `/secure/staff/list/staffCodes`,
       data: staffCodes,
     })) as Promise<CommunityApiStaffDetails[]>
-  }
-
-  async getStaffCaseload(staffId: number): Promise<CommunityApiManagedOffender[]> {
-    return (await this.get({
-      path: `/secure/staff/staffIdentifier/${staffId}/caseload/managedOffenders`,
-    })) as Promise<CommunityApiManagedOffender[]>
-  }
-
-  async getTeamCaseload(teamCode: string): Promise<CommunityApiManagedOffender[]> {
-    return (await this.get({
-      path: `/secure/team/${teamCode}/caseload/managedOffenders`,
-    })) as Promise<CommunityApiManagedOffender[]>
   }
 
   async getAnOffendersManagers(crn: string): Promise<CommunityApiOffenderManager[]> {

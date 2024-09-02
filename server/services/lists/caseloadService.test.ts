@@ -22,10 +22,6 @@ describe('Caseload Service', () => {
   } as User
 
   beforeEach(() => {
-    communityService.getOffendersByCrn.mockResolvedValue([])
-    communityService.getStaffDetailsByUsernameList.mockResolvedValue([])
-    licenceService.getLicencesByNomisIdsAndStatus = jest.fn().mockResolvedValue([])
-    licenceService.searchPrisonersByReleaseDate = jest.fn().mockResolvedValue([])
     licenceService.searchPrisonersByNomsIds = jest.fn().mockResolvedValue([])
     licenceService.getLicencesForVariationApproval = jest.fn().mockResolvedValue([])
   })

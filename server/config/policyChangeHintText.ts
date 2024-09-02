@@ -1,4 +1,6 @@
-export default [
+type HintText = { code: string; fromVersions: string[]; description: string[]; bulletpoints: string[] }
+
+const policyChangeHints: HintText[] = [
   {
     code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
     fromVersions: ['1.0', '2.0'],
@@ -84,3 +86,5 @@ export default [
     bulletpoints: [],
   },
 ]
+
+export default policyChangeHints
