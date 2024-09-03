@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
 import logger from '../../logger'
-import { convertToTitleCase, removeDuplicates } from '../utils/utils'
+import { convertToTitleCase, parseIsoDate, removeDuplicates } from '../utils/utils'
 import CvlUserDetails from '../@types/CvlUserDetails'
 import config from '../config'
 import LicenceService from '../services/licenceService'
@@ -72,10 +72,11 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             cvlUser.telephoneNumber = probationUser?.telephoneNumber
             cvlUser.probationAreaCode = probationUser?.probationArea?.code
             cvlUser.probationAreaDescription = probationUser?.probationArea?.description
-            cvlUser.probationPduCodes = probationUser?.teams?.map(team => team?.borough?.code)
-            cvlUser.probationLauCodes = probationUser?.teams?.map(team => team?.district?.code)
-            cvlUser.probationTeamCodes = probationUser?.teams?.map(team => team?.code)
-            cvlUser.probationTeams = probationUser?.teams
+            const teams = probationUser?.teams?.filter(t => !t.endDate || parseIsoDate(t.endDate) > new Date()) || []
+            cvlUser.probationPduCodes = Array.from(new Set(teams.map(team => team?.borough?.code)))
+            cvlUser.probationLauCodes = Array.from(new Set(teams.map(team => team?.district?.code)))
+            cvlUser.probationTeamCodes = teams.map(team => team?.code)
+            cvlUser.probationTeams = teams
               .map(team => ({ code: team.code, label: team.description }))
               .sort((a, b) => (a.label > b.label ? 1 : -1))
 
