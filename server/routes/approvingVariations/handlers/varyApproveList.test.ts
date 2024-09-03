@@ -2,13 +2,22 @@ import { Request, Response } from 'express'
 
 import VaryApproveListRoutes from './varyApproveList'
 import CaseloadService from '../../../services/lists/caseloadService'
-import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
-import type { DeliusRecord } from '../../../@types/managedCase'
-import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
 
 const caseloadService = new CaseloadService(null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/lists/caseloadService')
+
+const aCase = {
+  licenceId: 1,
+  licenceType: LicenceType.AP,
+  variationRequestDate: '01 May 2022',
+  releaseDate: '01 May 2022',
+  name: 'Bob Smith',
+  crnNumber: 'X12345',
+  probationPractitioner: {
+    name: 'Walter White',
+  },
+}
 
 describe('Route Handlers - Variation approval list', () => {
   const handler = new VaryApproveListRoutes(caseloadService)
@@ -28,44 +37,6 @@ describe('Route Handlers - Variation approval list', () => {
         },
       },
     } as unknown as Response
-
-    caseloadService.getVaryApproverCaseload.mockResolvedValue([
-      {
-        licences: [
-          {
-            id: 1,
-            type: LicenceType.AP,
-            status: LicenceStatus.VARIATION_SUBMITTED,
-            dateCreated: '01/05/2022 10:15',
-            isDueToBeReleasedInTheNextTwoWorkingDays: true,
-            releaseDate: null,
-          },
-        ],
-        cvlFields: {
-          licenceType: 'AP',
-          hardStopDate: '03/01/2023',
-          hardStopWarningDate: '01/01/2023',
-          isInHardStopPeriod: true,
-          isDueForEarlyRelease: true,
-          isDueToBeReleasedInTheNextTwoWorkingDays: true,
-          isEligibleForEarlyRelease: false,
-        },
-        nomisRecord: {
-          firstName: 'Bob',
-          lastName: 'Smith',
-          prisonerNumber: 'A1234AA',
-          releaseDate: '2022-05-01',
-        } as CvlPrisoner,
-        deliusRecord: {
-          otherIds: {
-            crn: 'X12345',
-          },
-        } as DeliusRecord,
-        probationPractitioner: {
-          name: 'Walter White',
-        },
-      },
-    ])
   })
 
   afterEach(() => {
@@ -74,8 +45,10 @@ describe('Route Handlers - Variation approval list', () => {
 
   describe('GET', () => {
     it('should render list of variations for approval', async () => {
+      caseloadService.getVaryApproverCaseload.mockResolvedValue([aCase])
+
       await handler.GET(req, res)
-      expect(caseloadService.getVaryApproverCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getVaryApproverCaseload).toHaveBeenCalledWith(res.locals.user, undefined)
       expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
         caseload: [
           {
@@ -95,88 +68,42 @@ describe('Route Handlers - Variation approval list', () => {
       })
     })
 
-    it('should successfully search by name', async () => {
+    it('should render list of variations for region for approval', async () => {
+      req.query.view = 'region'
+      caseloadService.getVaryApproverCaseloadByRegion.mockResolvedValue([aCase])
+
+      await handler.GET(req, res)
+      expect(caseloadService.getVaryApproverCaseloadByRegion).toHaveBeenCalledWith(res.locals.user, undefined)
+      expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
+        caseload: [
+          {
+            licenceId: 1,
+            name: 'Bob Smith',
+            crnNumber: 'X12345',
+            licenceType: 'AP',
+            releaseDate: '01 May 2022',
+            variationRequestDate: '01 May 2022',
+            probationPractitioner: {
+              name: 'Walter White',
+            },
+          },
+        ],
+        regionCases: true,
+        search: undefined,
+      })
+    })
+
+    it('should pass search request through for approval search', async () => {
       req.query.search = 'bob'
-
       await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
-        caseload: [
-          {
-            licenceId: 1,
-            name: 'Bob Smith',
-            crnNumber: 'X12345',
-            licenceType: 'AP',
-            releaseDate: '01 May 2022',
-            variationRequestDate: '01 May 2022',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-          },
-        ],
-        regionCases: false,
-        search: 'bob',
-      })
+      expect(caseloadService.getVaryApproverCaseload).toHaveBeenCalledWith(res.locals.user, 'bob')
     })
 
-    it('should successfully search by crn number', async () => {
-      req.query.search = 'X12345'
-
+    it('should pass search request through for approval region search', async () => {
+      req.query.view = 'region'
+      req.query.search = 'bob'
       await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
-        caseload: [
-          {
-            licenceId: 1,
-            name: 'Bob Smith',
-            crnNumber: 'X12345',
-            licenceType: 'AP',
-            releaseDate: '01 May 2022',
-            variationRequestDate: '01 May 2022',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-          },
-        ],
-        regionCases: false,
-        search: 'X12345',
-      })
-    })
-
-    it('should successfully search by probation practitioner', async () => {
-      req.query.search = 'white'
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
-        caseload: [
-          {
-            licenceId: 1,
-            name: 'Bob Smith',
-            crnNumber: 'X12345',
-            licenceType: 'AP',
-            releaseDate: '01 May 2022',
-            variationRequestDate: '01 May 2022',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
-          },
-        ],
-        regionCases: false,
-        search: 'white',
-      })
-    })
-
-    it('should return empty caseload if search does not match', async () => {
-      req.query.search = 'XXX'
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
-        caseload: [],
-        search: 'XXX',
-        regionCases: false,
-      })
+      expect(caseloadService.getVaryApproverCaseloadByRegion).toHaveBeenCalledWith(res.locals.user, 'bob')
     })
   })
 })

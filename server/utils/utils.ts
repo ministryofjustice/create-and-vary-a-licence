@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { isBefore, parse, isEqual, isValid, startOfDay, format } from 'date-fns'
+import assert from 'assert'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -249,6 +250,34 @@ const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], k
   return Object.values(results)
 }
 
+const associateBy = <T extends Record<string, unknown>>(arr: T[], keyGetter: (t: T) => string): Record<string, T> => {
+  return arr.reduce(
+    (acc, c) => {
+      const key = keyGetter(c)
+      acc[key] = c
+      return acc
+    },
+    {} as Record<string, T>
+  )
+}
+
+const assertContainsNoDuplicates = <T extends Record<string, unknown>>(arr: T[], keyGetter: (t: T) => string): void => {
+  const result = arr.reduce(
+    (acc, c) => {
+      const key = keyGetter(c)
+      const array = acc[key] || []
+      array.push(c)
+      acc[key] = array
+      return acc
+    },
+    {} as Record<string, T[]>
+  )
+
+  const duplicates = Object.entries(result).filter(([, cases]) => cases.length > 1)
+
+  assert(duplicates.length === 0, `Duplicates detected: '${duplicates.map(([key]) => key).join(', ')}'`)
+}
+
 const isInHardStopPeriod = (licence: Licence): boolean => {
   return licence.kind !== LicenceKind.VARIATION && licence.isInHardStopPeriod
 }
@@ -277,6 +306,8 @@ export {
   formatAddress,
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
+  associateBy,
+  assertContainsNoDuplicates,
   groupingBy,
   isReleaseDateOnOrBeforeCutOffDate,
   isInHardStopPeriod,

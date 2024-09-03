@@ -6,9 +6,10 @@ import { User } from '../../@types/CvlUserDetails'
 import { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
-import { CaseloadItem } from '../../@types/licenceApiClientTypes'
+import { CaseloadItem, LicenceSummary } from '../../@types/licenceApiClientTypes'
 
 jest.mock('../communityService')
+jest.mock('../licenceService')
 
 describe('Caseload Service', () => {
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
@@ -21,84 +22,206 @@ describe('Caseload Service', () => {
     prisonCaseload: ['p1', 'p2'],
   } as User
 
-  beforeEach(() => {
-    licenceService.searchPrisonersByNomsIds = jest.fn().mockResolvedValue([])
-    licenceService.getLicencesForVariationApproval = jest.fn().mockResolvedValue([])
-  })
+  const licence = {
+    kind: 'VARIATION',
+    nomisId: 'AB1234E',
+    licenceId: 1,
+    licenceType: LicenceType.PSS,
+    licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
+    comUsername: 'joebloggs',
+    isReviewNeeded: false,
+    isDueForEarlyRelease: false,
+    isInHardStopPeriod: false,
+    isDueToBeReleasedInTheNextTwoWorkingDays: false,
+    dateCreated: '12/01/2024 10:45',
+  } as LicenceSummary
+
+  const offenderDetail = {
+    otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
+    offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+  } as OffenderDetail
+
+  const caseloadItem = {
+    prisoner: {
+      firstName: 'Bob',
+      lastName: 'Smith',
+      prisonerNumber: 'AB1234E',
+      confirmedReleaseDate: tenDaysFromNow,
+      status: 'INACTIVE OUT',
+      releaseDate: '2023-01-24',
+    },
+    cvl: {},
+  } as CaseloadItem
+
+  const staffDetail = {
+    username: 'joebloggs',
+    staffCode: 'X1234',
+    staff: {
+      forenames: 'Joe',
+      surname: 'Bloggs',
+    },
+  }
 
   afterEach(() => {
     jest.resetAllMocks()
   })
 
   it('builds the vary approver caseload', async () => {
-    licenceService.getLicencesForVariationApproval.mockResolvedValue([
+    licenceService.getLicencesForVariationApproval.mockResolvedValue([licence])
+    communityService.getOffendersByNomsNumbers.mockResolvedValue([offenderDetail])
+    licenceService.searchPrisonersByNomsIds.mockResolvedValue([caseloadItem])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetail])
+
+    const result = await serviceUnderTest.getVaryApproverCaseload(user, '')
+
+    expect(result).toStrictEqual([
       {
-        kind: 'VARIATION',
-        nomisId: 'AB1234E',
+        crnNumber: 'X12348',
         licenceId: 1,
-        licenceType: LicenceType.PSS,
-        licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
-        comUsername: 'joebloggs',
-        isReviewNeeded: false,
-        isDueForEarlyRelease: false,
-        isInHardStopPeriod: false,
-        isDueToBeReleasedInTheNextTwoWorkingDays: false,
-      },
-    ])
-    communityService.getOffendersByNomsNumbers.mockResolvedValue([
-      {
-        otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
-        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
-      } as OffenderDetail,
-    ])
-    licenceService.searchPrisonersByNomsIds.mockResolvedValue([
-      {
-        prisoner: {
-          prisonerNumber: 'AB1234E',
-          confirmedReleaseDate: tenDaysFromNow,
-          status: 'INACTIVE OUT',
-        },
-        cvl: {},
-      } as CaseloadItem,
-    ])
-    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
-      {
-        username: 'joebloggs',
-        staffCode: 'X1234',
-        staff: {
-          forenames: 'Joe',
-          surname: 'Bloggs',
-        },
-      },
-    ])
-
-    const result = await serviceUnderTest.getVaryApproverCaseload(user)
-
-    expect(result).toMatchObject([
-      {
-        deliusRecord: {
-          otherIds: {
-            nomsNumber: 'AB1234E',
-            crn: 'X12348',
-          },
-        },
-        nomisRecord: {
-          prisonerNumber: 'AB1234E',
-          confirmedReleaseDate: tenDaysFromNow,
-        },
-        licences: [
-          {
-            id: 1,
-            type: 'PSS',
-            status: 'VARIATION_SUBMITTED',
-            comUsername: 'joebloggs',
-          },
-        ],
+        licenceType: 'PSS',
+        name: 'Bob Smith',
+        releaseDate: '24 Jan 2023',
+        variationRequestDate: '12 January 2024',
         probationPractitioner: {
           staffCode: 'X1234',
           name: 'Joe Bloggs',
         },
       },
     ])
+  })
+
+  it('builds the vary approver caseload for region', async () => {
+    licenceService.getLicencesForVariationApprovalByRegion.mockResolvedValue([licence])
+    communityService.getOffendersByNomsNumbers.mockResolvedValue([offenderDetail])
+    licenceService.searchPrisonersByNomsIds.mockResolvedValue([caseloadItem])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetail])
+
+    const result = await serviceUnderTest.getVaryApproverCaseloadByRegion(user, '')
+
+    expect(result).toStrictEqual([
+      {
+        crnNumber: 'X12348',
+        licenceId: 1,
+        licenceType: 'PSS',
+        name: 'Bob Smith',
+        releaseDate: '24 Jan 2023',
+        variationRequestDate: '12 January 2024',
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'Joe Bloggs',
+        },
+      },
+    ])
+  })
+
+  it('handles missing release date', async () => {
+    licenceService.getLicencesForVariationApproval.mockResolvedValue([licence])
+    communityService.getOffendersByNomsNumbers.mockResolvedValue([offenderDetail])
+    licenceService.searchPrisonersByNomsIds.mockResolvedValue([
+      { ...caseloadItem, prisoner: { ...caseloadItem.prisoner, releaseDate: undefined } },
+    ])
+    communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetail])
+
+    const result = await serviceUnderTest.getVaryApproverCaseload(user, '')
+
+    expect(result).toStrictEqual([
+      {
+        crnNumber: 'X12348',
+        licenceId: 1,
+        licenceType: 'PSS',
+        name: 'Bob Smith',
+        releaseDate: null,
+        variationRequestDate: '12 January 2024',
+        probationPractitioner: {
+          staffCode: 'X1234',
+          name: 'Joe Bloggs',
+        },
+      },
+    ])
+  })
+
+  describe('search', () => {
+    it('should successfully search by name', async () => {
+      licenceService.getLicencesForVariationApproval.mockResolvedValue([licence])
+      communityService.getOffendersByNomsNumbers.mockResolvedValue([offenderDetail])
+      licenceService.searchPrisonersByNomsIds.mockResolvedValue([caseloadItem])
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetail])
+
+      const result = await serviceUnderTest.getVaryApproverCaseload(user, 'bOB')
+
+      expect(result).toStrictEqual([
+        {
+          crnNumber: 'X12348',
+          licenceId: 1,
+          licenceType: 'PSS',
+          name: 'Bob Smith',
+          releaseDate: '24 Jan 2023',
+          variationRequestDate: '12 January 2024',
+          probationPractitioner: {
+            staffCode: 'X1234',
+            name: 'Joe Bloggs',
+          },
+        },
+      ])
+    })
+
+    it('should successfully search by crn', async () => {
+      licenceService.getLicencesForVariationApproval.mockResolvedValue([licence])
+      communityService.getOffendersByNomsNumbers.mockResolvedValue([offenderDetail])
+      licenceService.searchPrisonersByNomsIds.mockResolvedValue([caseloadItem])
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetail])
+
+      const result = await serviceUnderTest.getVaryApproverCaseload(user, 'x12348')
+
+      expect(result).toStrictEqual([
+        {
+          crnNumber: 'X12348',
+          licenceId: 1,
+          licenceType: 'PSS',
+          name: 'Bob Smith',
+          releaseDate: '24 Jan 2023',
+          variationRequestDate: '12 January 2024',
+          probationPractitioner: {
+            staffCode: 'X1234',
+            name: 'Joe Bloggs',
+          },
+        },
+      ])
+    })
+
+    it('should successfully search by crn', async () => {
+      licenceService.getLicencesForVariationApproval.mockResolvedValue([licence])
+      communityService.getOffendersByNomsNumbers.mockResolvedValue([offenderDetail])
+      licenceService.searchPrisonersByNomsIds.mockResolvedValue([caseloadItem])
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetail])
+
+      const result = await serviceUnderTest.getVaryApproverCaseload(user, 'lOg')
+
+      expect(result).toStrictEqual([
+        {
+          crnNumber: 'X12348',
+          licenceId: 1,
+          licenceType: 'PSS',
+          name: 'Bob Smith',
+          releaseDate: '24 Jan 2023',
+          variationRequestDate: '12 January 2024',
+          probationPractitioner: {
+            staffCode: 'X1234',
+            name: 'Joe Bloggs',
+          },
+        },
+      ])
+    })
+
+    it('should fail to find when no match', async () => {
+      licenceService.getLicencesForVariationApproval.mockResolvedValue([licence])
+      communityService.getOffendersByNomsNumbers.mockResolvedValue([offenderDetail])
+      licenceService.searchPrisonersByNomsIds.mockResolvedValue([caseloadItem])
+      communityService.getStaffDetailsByUsernameList.mockResolvedValue([staffDetail])
+
+      const result = await serviceUnderTest.getVaryApproverCaseload(user, 'XsXccssZx')
+
+      expect(result).toStrictEqual([])
+    })
   })
 })
