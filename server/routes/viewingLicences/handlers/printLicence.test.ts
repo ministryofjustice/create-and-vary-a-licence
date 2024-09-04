@@ -26,7 +26,7 @@ describe('Route - print a licence', () => {
     qrCodeService.getQrCode = jest.fn()
     licenceService.getExclusionZoneImageData = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
-    hdcService.getHdcInfo = jest.fn()
+    hdcService.getHdcLicenceData = jest.fn()
   })
 
   describe('GET', () => {
@@ -330,48 +330,37 @@ describe('Route - print a licence', () => {
         },
       } as unknown as Response
 
-      const exampleHdcInfo = {
-        curfewAddress: 'addressLineOne, addressLineTwo, addressTownOrCity, addressPostcode',
-        firstDayCurfewTimes: {
-          from: '09:00',
-          until: '17:00',
+      const exampleHdcLicenceData = {
+        curfewAddress: {
+          addressLine1: 'addressLineOne',
+          addressLine2: 'addressLineTwo',
+          addressTown: 'addressTownOrCity',
+          postcode: 'addressPostcode',
         },
-        weeklyCurfewTimes: {
-          monday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          tuesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          wednesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          thursday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          friday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          saturday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          sunday: {
-            from: '09:00',
-            until: '17:00',
-          },
+        firstNightCurfewHours: {
+          firstNightFrom: '09:00',
+          firstNightTo: '17:00',
         },
-        prisonTelephone: '0113 318 9547',
-        monitoringSupplierTelephone: '0800 137 291',
+        curfewHours: {
+          mondayFrom: '17:00',
+          mondayUntil: '09:00',
+          tuesdayFrom: '17:00',
+          tuesdayUntil: '09:00',
+          wednesdayFrom: '17:00',
+          wednesdayUntil: '09:00',
+          thursdayFrom: '17:00',
+          thursdayUntil: '09:00',
+          fridayFrom: '17:00',
+          fridayUntil: '09:00',
+          saturdayFrom: '17:00',
+          saturdayUntil: '09:00',
+          sundayFrom: '17:00',
+          sundayUntil: '09:00',
+        },
       }
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
-      hdcService.getHdcInfo.mockResolvedValue(exampleHdcInfo)
+      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       await handler.preview(req, res)
 
@@ -381,10 +370,10 @@ describe('Route - print a licence', () => {
         exclusionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
-        hdcInfo: exampleHdcInfo,
+        hdcInfo: exampleHdcLicenceData,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(hdcService.getHdcInfo).toHaveBeenCalled()
+      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
@@ -418,49 +407,39 @@ describe('Route - print a licence', () => {
 
       const filename = `${res.locals.licence.nomsId}.pdf`
       const footerHtml = handler.getPdfFooter(res.locals.licence)
-      const exampleHdcInfo = {
-        curfewAddress: 'addressLineOne, addressLineTwo, addressTownOrCity, addressPostcode',
-        firstDayCurfewTimes: {
-          from: '09:00',
-          until: '17:00',
+
+      const exampleHdcLicenceData = {
+        curfewAddress: {
+          addressLine1: 'addressLineOne',
+          addressLine2: 'addressLineTwo',
+          addressTown: 'addressTownOrCity',
+          postcode: 'addressPostcode',
         },
-        weeklyCurfewTimes: {
-          monday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          tuesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          wednesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          thursday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          friday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          saturday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          sunday: {
-            from: '09:00',
-            until: '17:00',
-          },
+        firstNightCurfewHours: {
+          firstNightFrom: '09:00',
+          firstNightTo: '17:00',
         },
-        prisonTelephone: '0113 318 9547',
-        monitoringSupplierTelephone: '0800 137 291',
+        curfewHours: {
+          mondayFrom: '17:00',
+          mondayUntil: '09:00',
+          tuesdayFrom: '17:00',
+          tuesdayUntil: '09:00',
+          wednesdayFrom: '17:00',
+          wednesdayUntil: '09:00',
+          thursdayFrom: '17:00',
+          thursdayUntil: '09:00',
+          fridayFrom: '17:00',
+          fridayUntil: '09:00',
+          saturdayFrom: '17:00',
+          saturdayUntil: '09:00',
+          sundayFrom: '17:00',
+          sundayUntil: '09:00',
+        },
       }
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
-      hdcService.getHdcInfo.mockResolvedValue(exampleHdcInfo)
+      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       await handler.renderPdf(req, res)
 
@@ -475,13 +454,13 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
-          hdcInfo: exampleHdcInfo,
+          hdcInfo: exampleHdcLicenceData,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(hdcService.getHdcInfo).toHaveBeenCalled()
+      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
       expect(footerHtml).toMatch(/Version No:.+1.4/)
     })

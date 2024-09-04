@@ -32,44 +32,33 @@ describe('Print a HDC AP licence', () => {
       qrCodesEnabled: false,
       singleItemConditions: [],
       multipleItemConditions: [],
-      hdcInfo: {
-        curfewAddress: 'addressLineOne, addressLineTwo, addressTownOrCity, addressPostcode',
-        firstDayCurfewTimes: {
-          from: '09:00',
-          until: '17:00',
+      hdcLicenceData: {
+        curfewAddress: {
+          addressLine1: 'addressLineOne',
+          addressLine2: 'addressLineTwo',
+          addressTown: 'addressTownOrCity',
+          postcode: 'addressPostcode',
         },
-        weeklyCurfewTimes: {
-          monday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          tuesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          wednesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          thursday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          friday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          saturday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          sunday: {
-            from: '09:00',
-            until: '17:00',
-          },
+        firstNightCurfewHours: {
+          firstNightFrom: '09:00',
+          firstNightTo: '17:00',
         },
-        prisonTelephone: '0113 318 9547',
-        monitoringSupplierTelephone: '0800 137 291',
+        curfewHours: {
+          mondayFrom: '17:00',
+          mondayUntil: '09:00',
+          tuesdayFrom: '17:00',
+          tuesdayUntil: '09:00',
+          wednesdayFrom: '17:00',
+          wednesdayUntil: '09:00',
+          thursdayFrom: '17:00',
+          thursdayUntil: '09:00',
+          fridayFrom: '17:00',
+          fridayUntil: '09:00',
+          saturdayFrom: '17:00',
+          saturdayUntil: '09:00',
+          sundayFrom: '17:00',
+          sundayUntil: '09:00',
+        },
       },
     })
 
