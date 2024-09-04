@@ -116,11 +116,6 @@ There are four services associated with this UI service:
 - gotenberg (generic-service)
 - generic-prometheus-alerts
 
-## Dependency Checks
-
-Some scheduled checks ensure that key dependencies are kept up to date.
-They are implemented via a scheduled job in CircleCI. See the `check_outdated` job in `.circleci/config.yml`
-
 ## Generating types from OpenAPI
 
 This service makes use of imported types generated from the openAPI definitions offered by each of the APIs.

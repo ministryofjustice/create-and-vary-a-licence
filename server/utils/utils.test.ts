@@ -18,7 +18,6 @@ import {
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
   groupingBy,
-  isReleaseDateOnOrBeforeCutOffDate,
   isAttentionNeeded,
   determineCaViewCasesTab,
   isInHardStopPeriod,
@@ -513,20 +512,6 @@ describe('Get prisoner release date from Nomis', () => {
         ],
       ])
     })
-  })
-})
-
-describe('Check if release date before cutoff date', () => {
-  it('should return true if release date is before cutoff date', () => {
-    expect(isReleaseDateOnOrBeforeCutOffDate(parseCvlDate('04/12/2023'), parseCvlDate('03/12/2023'))).toBeTruthy()
-  })
-
-  it('should return false if release date is after cutoff date', () => {
-    expect(isReleaseDateOnOrBeforeCutOffDate(parseCvlDate('04/12/2023'), parseCvlDate('05/12/2023'))).toBeFalsy()
-  })
-
-  it('should return true if release date is equal to cutoff date', () => {
-    expect(isReleaseDateOnOrBeforeCutOffDate(parseCvlDate('04/12/2023'), parseCvlDate('04/12/2023'))).toBeTruthy()
   })
 })
 

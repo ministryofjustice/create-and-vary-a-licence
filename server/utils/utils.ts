@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { isBefore, parse, isEqual, isValid, startOfDay, format } from 'date-fns'
+import { isBefore, parse, isValid, startOfDay, format } from 'date-fns'
 import AuthRole from '../enumeration/authRole'
 import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
@@ -231,10 +231,6 @@ const determineCaViewCasesTab = (
     : CaViewCasesTab.FUTURE_RELEASES
 }
 
-const isReleaseDateOnOrBeforeCutOffDate = (cutOffDate: Date, releaseDate: Date): boolean => {
-  return isBefore(releaseDate, cutOffDate) || isEqual(releaseDate, cutOffDate)
-}
-
 const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], keyField: K): T[][] => {
   const results = arr.reduce(
     (acc, c) => {
@@ -278,7 +274,6 @@ export {
   licenceIsTwoDaysToRelease,
   selectReleaseDate,
   groupingBy,
-  isReleaseDateOnOrBeforeCutOffDate,
   isInHardStopPeriod,
   isAttentionNeeded,
   determineCaViewCasesTab,
