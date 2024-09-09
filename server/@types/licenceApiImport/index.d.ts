@@ -4997,7 +4997,7 @@ export interface components {
       addressLine1: string
       addressLine2?: string
       addressTown: string
-      postcode: string
+      postCode: string
     }
     CurfewHours: {
       mondayFrom: string
@@ -5017,7 +5017,7 @@ export interface components {
     }
     FirstNight: {
       firstNightFrom: string
-      firstNightTo: string
+      firstNightUntil: string
     }
     HdcLicenceData: {
       curfewAddress?: components['schemas']['CurfewAddress']

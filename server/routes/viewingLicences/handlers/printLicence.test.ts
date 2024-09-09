@@ -56,7 +56,7 @@ describe('Route - print a licence', () => {
         exclusionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
-        hdcInfo: null,
+        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
@@ -88,7 +88,7 @@ describe('Route - print a licence', () => {
         exclusionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
-        hdcInfo: null,
+        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
@@ -111,6 +111,7 @@ describe('Route - print a licence', () => {
             pnc: 'PNC',
             version: '1.0',
             prisonCode: 'MDI',
+            prisonTelephone: '0114 2345232334',
             additionalLicenceConditions: [],
             additionalPssConditions: [],
             licenceVersion: '1.4',
@@ -120,6 +121,7 @@ describe('Route - print a licence', () => {
       } as unknown as Response
 
       const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+      const { monitoringSupplierTelephone } = config
 
       const filename = `${res.locals.licence.nomsId}.pdf`
       const footerHtml = handler.getPdfFooter(res.locals.licence)
@@ -140,7 +142,9 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
-          hdcInfo: null,
+          hdcLicenceData: null,
+          prisonTelephone: '0114 2345232334',
+          monitoringSupplierTelephone,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
@@ -193,6 +197,7 @@ describe('Route - print a licence', () => {
             pnc: 'PNC',
             version: '1.0',
             prisonCode: 'MDI',
+            prisonTelephone: '0114 2345232334',
             licenceVersion: '1.0',
             additionalLicenceConditions,
           },
@@ -201,6 +206,7 @@ describe('Route - print a licence', () => {
       } as unknown as Response
 
       const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+      const { monitoringSupplierTelephone } = config
 
       const filename = `${res.locals.licence.nomsId}.pdf`
       const footerHtml = handler.getPdfFooter(res.locals.licence)
@@ -249,7 +255,9 @@ describe('Route - print a licence', () => {
               mapData: 'base64 data',
             },
           ],
-          hdcInfo: null,
+          hdcLicenceData: null,
+          prisonTelephone: '0114 2345232334',
+          monitoringSupplierTelephone,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
@@ -275,6 +283,7 @@ describe('Route - print a licence', () => {
             pnc: 'PNC',
             version: '1.0',
             prisonCode: 'MDI',
+            prisonTelephone: '0114 2345232334',
             additionalLicenceConditions: [],
             additionalPssConditions: [],
             licenceVersion: '1.0',
@@ -284,6 +293,7 @@ describe('Route - print a licence', () => {
       } as unknown as Response
 
       const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+      const { monitoringSupplierTelephone } = config
 
       const filename = `${res.locals.licence.nomsId}.pdf`
       const footerHtml = handler.getPdfFooter(res.locals.licence)
@@ -304,7 +314,9 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
-          hdcInfo: null,
+          hdcLicenceData: null,
+          prisonTelephone: '0114 2345232334',
+          monitoringSupplierTelephone,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )
@@ -335,11 +347,11 @@ describe('Route - print a licence', () => {
           addressLine1: 'addressLineOne',
           addressLine2: 'addressLineTwo',
           addressTown: 'addressTownOrCity',
-          postcode: 'addressPostcode',
+          postCode: 'addressPostcode',
         },
         firstNightCurfewHours: {
           firstNightFrom: '09:00',
-          firstNightTo: '17:00',
+          firstNightUntil: '17:00',
         },
         curfewHours: {
           mondayFrom: '17:00',
@@ -370,7 +382,7 @@ describe('Route - print a licence', () => {
         exclusionZoneMapData: [],
         singleItemConditions: [],
         multipleItemConditions: [],
-        hdcInfo: exampleHdcLicenceData,
+        hdcLicenceData: exampleHdcLicenceData,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
@@ -395,6 +407,7 @@ describe('Route - print a licence', () => {
             pnc: 'PNC',
             version: '1.0',
             prisonCode: 'MDI',
+            prisonTelephone: '0114 2345232334',
             additionalLicenceConditions: [],
             additionalPssConditions: [],
             licenceVersion: '1.4',
@@ -404,6 +417,7 @@ describe('Route - print a licence', () => {
       } as unknown as Response
 
       const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+      const { monitoringSupplierTelephone } = config
 
       const filename = `${res.locals.licence.nomsId}.pdf`
       const footerHtml = handler.getPdfFooter(res.locals.licence)
@@ -413,11 +427,11 @@ describe('Route - print a licence', () => {
           addressLine1: 'addressLineOne',
           addressLine2: 'addressLineTwo',
           addressTown: 'addressTownOrCity',
-          postcode: 'addressPostcode',
+          postCode: 'addressPostcode',
         },
         firstNightCurfewHours: {
           firstNightFrom: '09:00',
-          firstNightTo: '17:00',
+          firstNightUntil: '17:00',
         },
         curfewHours: {
           mondayFrom: '17:00',
@@ -454,7 +468,9 @@ describe('Route - print a licence', () => {
           singleItemConditions: [],
           multipleItemConditions: [],
           exclusionZoneMapData: [],
-          hdcInfo: exampleHdcLicenceData,
+          hdcLicenceData: exampleHdcLicenceData,
+          prisonTelephone: '0114 2345232334',
+          monitoringSupplierTelephone,
         },
         { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
       )

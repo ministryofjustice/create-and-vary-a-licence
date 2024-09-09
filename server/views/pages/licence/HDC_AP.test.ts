@@ -37,11 +37,11 @@ describe('Print a HDC AP licence', () => {
           addressLine1: 'addressLineOne',
           addressLine2: 'addressLineTwo',
           addressTown: 'addressTownOrCity',
-          postcode: 'addressPostcode',
+          postCode: 'addressPostcode',
         },
         firstNightCurfewHours: {
           firstNightFrom: '09:00',
-          firstNightTo: '17:00',
+          firstNightUntil: '17:00',
         },
         curfewHours: {
           mondayFrom: '17:00',
@@ -60,11 +60,12 @@ describe('Print a HDC AP licence', () => {
           sundayUntil: '09:00',
         },
       },
+      prisonTelephone: '0114 2345232334',
     })
 
     expect($('title').text()).toContain('John Smith')
 
-    expect($('#details').text()).toContain('0113 318 9547')
+    expect($('#details').text()).toContain('0114 2345232334')
 
     expect($('#appointmentAddress').text()).toContain('The Square')
 
