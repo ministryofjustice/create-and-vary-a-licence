@@ -43,6 +43,7 @@ import type {
   CaCase,
   ComCase,
   TeamCaseloadRequest,
+  HdcLicenceData,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -682,5 +683,11 @@ export default class LicenceApiClient extends RestClient {
       path: `/caseload/com/team/vary-case-load`,
       data: teamCaseloadRequest,
     })) as Promise<ComCase[]>
+  }
+
+  async getHdcLicenceData(bookingId: number): Promise<HdcLicenceData> {
+    return (await this.get({
+      path: `/hdc/curfew/bookingId/${bookingId}`,
+    })) as Promise<HdcLicenceData>
   }
 }

@@ -46,584 +46,1616 @@ export interface paths {
      * @description Delete prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     delete: operations['deleteOmuContactByPrisonCode']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offender/nomisid/{nomsId}/update-offender-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Updates the offender's personal information on all of their licences.
      * @description Updates the name and date of birth stored on all licences associated with the given offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateOffenderDetails']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offender/crn/{crn}/responsible-com': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender.
      * @description Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateResponsibleCom']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offender/crn/{crn}/probation-team': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Updates in-flight licences associated with an offender with a new probation team.
      * @description Updates in-flight licences associated with an offender with a new probation team. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateProbationTeam']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/vlo-discussion': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Sets whether the variation has been discussed with a VLO.
      * @description Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateVloDiscussion']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/submit': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED.
      * @description Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['submitLicence']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Update the status of a licence.
      * @description Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateLicenceStatus']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/standard-conditions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Update the standard conditions for a licence.
      * @description Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateStandardConditions']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/spo-discussion': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Sets whether the variation has been discussed with an SPO.
      * @description Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateSpoDiscussion']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/sentence-dates': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Updates the sentence dates.
      * @description Updates the sentence dates. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateSentenceDates']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/refer-variation': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Updates a licence to referred and stores the reason provided.
      * @description Updates a licence to referred and stores the reason provided by the approver. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['referVariation']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/reason-for-variation': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Updates the reason for the licence variation.
      * @description Updates the reason for the licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateReasonForVariation']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/prison-information': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Updates the prison information.
      * @description Updates the prison information. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updatePrisonInformation']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/override/dates': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Override licence dates
      * @description Override the dates for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['changeDates']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/contact-number': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Update the officer contact number for a licence
      * @description Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateContactNumber']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/bespoke-conditions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Add or replace the bespoke conditions for a licence.
      * @description Add or replace the bespoke conditions on a licence with the content of this request. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateBespokeConditions']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/approve-variation': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Approves a licence variation.
      * @description Approves a licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['approveVariation']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/appointmentTime': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Update the appointment date and time
      * @description Update the date and time for the initial appointment. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateAppointmentTime']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/appointmentPerson': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Update the person to meet at the initial appointment
      * @description Update the person the person on probation will meet at the initial appointment Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateAppointmentPerson']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/appointment-address': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Update the address where the initial appointment will take place
      * @description Update the address where the initial appointment will take place. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateAppointmentAddress']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/additional-conditions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Update the set of additional conditions on the licence.
      * @description Update the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateAdditionalConditions']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/additional-conditions/condition/{additionalConditionId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Update the user entered data to accompany an additional condition template.
      * @description Update the user entered data to accompany an additional condition template. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateAdditionalConditionData']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/activate-variation': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Activates an approved variation. Inactivates previous licence.
      * @description Activates a variation. Inactivates previous licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['activateVariation']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/remove-upload': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Removes a previously uploaded exclusion zone file from an additional condition.
      * @description Removes a previously uploaded exclusion zone file. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['removeExclusionZoneFile']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/com/update': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Create/updates the details of a community offender manager.
      * @description Create/updates the details of a community offender manager (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     put: operations['updateComDetails']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/audit/save': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     /**
      * Records an auditable event.
      * @description Records an auditable event related to an action taken by a user or an automated in-service process. Requires ROLE_CVL_ADMIN.
      */
     put: operations['recordAuditEvent']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/run-time-out-job': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Triggers the time out licence job.
      * @description Triggers a job that causes licences with a status of IN_PROGRESS and a CRD or ARD less than two working days to be updated to TIMED_OUT. Requires ROLE_CVL_ADMIN.
      */
     post: operations['runTimeOutLicencesServiceJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/run-remove-expired-conditions-job': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Job to remove AP conditions.
      * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
      */
     post: operations['runRemoveExpiredConditionsJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/run-notify-attention-needed-licences-job': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Triggers the notify attention needed licences job.
      * @description Triggers a job that notifies licences with a status of APPROVED and a CRD or ARD in past or licences with a status of APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED with no release date. Requires ROLE_CVL_ADMIN.
      */
     post: operations['runNotifyAttentionNeededLicencesJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/run-hard-stop-licence-review-overdue-job': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Triggers the hard stop licence review overdue job.
      * @description Triggers a job that sends a notification when the COM has not reviewed a hard stop licence 5 days after activation. Requires ROLE_CVL_ADMIN.
      */
     post: operations['runHardStopLicenceReviewOverdueJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/run-expire-licences-job': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Triggers the licence expiry job.
      * @description Triggers a job that causes licences with an ACTIVE status to be deactivated if they are passed their TUSED (if present) or LED (if TUSED is null). Requires ROLE_CVL_ADMIN.
      */
     post: operations['runLicenceExpiryJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/run-deactivate-licences-past-release-date': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Deactivate licences which are past release date.
      * @description Deactivate licences from IN_PROGRESS and SUBMITTED status to INACTIVE where these are past release date already. Requires ROLE_CVL_ADMIN.
      */
     post: operations['runDeactivateLicencesJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/run-activation-job': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Triggers the licence activation job.
      * @description Triggers a job that causes licences with a status of APPROVED, a CRD or ARD of today, and that are either IS91 cases or have an NOMIS status beginning with 'INACTIVE' to be activated. Deactivates offenders with approved HDC licences. Requires ROLE_CVL_ADMIN.
      */
     post: operations['runLicenceActivationJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
-  '/prisoner-search/release-date-by-prison': {
+  '/release-date-by-prison': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Returns prisoners by release date and prison id
      * @description Match prisoners in a subset of prisons with a release date within a given range
      */
-    post: operations['findByNumber']
+    post: operations['findByReleaseDatePaginated']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisoner-search/release-date-by-prison': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Returns prisoners by release date and prison id
+     * @deprecated
+     * @description Match prisoners in a subset of prisons with a release date within a given range
+     */
+    post: operations['findByReleaseDate']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/prisoner-search/prisoner-numbers': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Returns enriched prisoners by prison number
      * @description Match prisoners by a list of prisoner numbers
      */
     post: operations['findByNumbers']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/notify-probation-of-unapproved-licences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Send an email to probation practitioner of any previously approved licences that have been edited but not re-approved by prisoners release date
      * @description Send email to probation practioner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['notifyProbationOfUnapprovedLicences']
-  }
-  '/licence/recently-approved': {
-    /**
-     * Get a list of recently approved licence summaries matching the supplied list of prisons.
-     * @description Get the recently approved licences matching the supplied list of prisons. Requires ROLE_CVL_ADMIN.
-     */
-    post: operations['getRecentlyApprovedLicences']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/match': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Get a list of licence summaries matching the supplied criteria.
      * @description Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN.
      */
     post: operations['getLicencesMatchingCriteria']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/inactivate-licences': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Inactivate licences in bulk
      * @description Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['inactivateLicences']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/review-with-no-variation-required': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Marks the HardStop / Time served licence as having been reviewed with no variation required.
      * @description Marks the HardStop / Time served licence as having been reviewed with no variation required. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['reviewWithNoVariationRequired']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/override/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Override a licence status
      * @description Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['changeStatus']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/edit': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Create a new version of an approved licence
      * @description Create a new version of an  approved licence. The new licence will have a new id and have status IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['editLicence']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/licence/id/{licenceId}/delete-additional-conditions-by-code': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Remove additional conditions from the licence.
+     * @description Remove any instances of the additional conditions with the supplied condition codes from the licence. This includes any existing accompanying data per condition. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    post: operations['deleteAdditionalConditionsByCode']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/deactivate-licence-and-variations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Deactivate an active licence and any associated variations
      * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['deactivateLicenceAndVariations']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/create-variation': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Create a variation of this licence
      * @description Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['createVariation']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/additional-condition/{conditionType}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Add additional condition to the licence.
      * @description Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['addAdditionalCondition']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/create': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Create a licence
      * @description Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['createLicence']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/file-upload': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Upload a multipart/form-data request containing a PDF exclusion zone file.
      * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['uploadExclusionZoneFile']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/com/prompt-licence-creation': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Notifies the COM of upcoming releases which they need to create a licence for.
      * @description Notifies the COM of upcoming releases which they need to create a licence for. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['notifyOfUpcomingReleasesRequiringLicence']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/com/case-search': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Search for offenders on a given staff member's caseload.
      * @description Search for offenders on a given staff member's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['searchForOffenderOnStaffCaseload']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/caseload/prison-approver/recently-approved': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Returns a caseload that has recently been approved
      * @description Returns an enriched list of cases which have recently been approved
      */
     post: operations['getRecentlyApproved']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/caseload/prison-approver/approval-needed': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Returns a caseload waiting for approval
      * @description Returns an enriched list of cases which are awaiting approval
      */
     post: operations['getApprovalNeeded']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/caseload/com/team/vary-case-load': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Returns the vary caseload for a team
      * @description Returns an enriched list of cases which can have a variation created for a team
      */
     post: operations['getTeamVaryCaseload']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/caseload/com/team/create-case-load': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Returns the create caseload for a team
      * @description Returns an enriched list of cases which require a licence to be created for a team
      */
     post: operations['getTeamCreateCaseload']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/caseload/case-admin/probation-view': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Returns a case admin caseload
      * @description Returns an enriched list of cases for people on probation
      */
     post: operations['getProbationView']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/caseload/case-admin/prison-view': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Returns a case admin caseload
      * @description Returns an enriched list of cases for people on prison
      */
     post: operations['getPrisonView']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/audit/retrieve': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Retrieves a list of auditable events matching the criteria provided.
      * @description Retrieves a list of auditable events matching the criteria provided. Requires ROLE_CVL_ADMIN.
      */
     post: operations['requestAuditEvents']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/subject-access-request': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get a list of licences and audits summaries matching the nomis Prison Reference Number(prn).
      * @description Returns a list of licences and audit details for the Prison Reference Number(prn). Requires ROLE_SAR_DATA_ACCESS or ROLE_CVL_ADMIN.
      */
     get: operations['getSarRecordsById']
-  }
-  '/queue-admin/get-dlq-messages/{dlqName}': {
-    get: operations['getDlqMessages']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/public/policy/{version}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get a policy by its version number
      * @description Returns a policy by its version number. Requires ROLE_VIEW_LICENCES.
      */
     get: operations['getPolicyByVersionNumber']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/public/policy/latest': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get latest policy.
      * @description Returns latest policy. Requires ROLE_VIEW_LICENCES.
      */
     get: operations['getLatestPolicy']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/public/licences/{licenceId}/conditions/{conditionId}/image-upload': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get an associated image upload for a specific licence and condition
      * @description Returns an associated image upload for a specified licence and condition. Requires ROLE_VIEW_LICENCES.
      */
     get: operations['getImageUpload']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/public/licences/id/{licenceId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get a licence by its licence id
      * @description Returns a single licence detail by its unique identifier. Requires ROLE_VIEW_LICENCES.
      */
     get: operations['getLicenceById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/public/licence-summaries/prison-number/{prisonNumber}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get a list of in flight licences by prison number
      * @description Returns a list of licence summaries by a person's prison number. Requires ROLE_VIEW_LICENCES.
      */
     get: operations['getLicencesByPrisonNumber']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/public/licence-summaries/crn/{crn}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get a list of in flight licences by CRN
      * @description Returns a list of licence summaries by a person's CRN. Requires ROLE_VIEW_LICENCES.
      */
     get: operations['getLicenceByCrn']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/prisoner-search/nomisid/{nomsId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Returns a single prisoner by prison number
      * @description Returns a single prisoner by prison number
      */
-    get: operations['findByNumber_1']
+    get: operations['findByNumber']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/offender/nomisid/{nomsId}/ineligibility-reasons': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Retrieve ineligibility reasons for offender
      * @description Returns ineligibility reasons for creating a licence for a specific prisoner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['getIneligibilityReasons']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/variations/submitted/area/{areaCode}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get a list of licence summaries for submitted variations by probation area.
      * @description Get a list of licence summaries for all submitted variations belonging to the specified probation area code. Requires ROLE_CVL_ADMIN.
      */
     get: operations['submittedVariations']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get a licence by its licence id
      * @description Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['getLicenceById_1']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence-policy/version/{version}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get licence policy be version number
      * @description Returns a single policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['getPolicyByVersion']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence-policy/compare/{version}/licence/{licenceId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get differences between saved licences conditions and new policy
      * @description Returns condition data saved against a licence no longer present within the new licence policyRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['compareLicence']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence-policy/active': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get the active licence policy
      * @description Returns the active policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['getCurrentPolicy']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence-policy/': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get all licence policy versions
      * @description Returns a list of policies, active and presentRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['getPolicies']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/hdc/curfew/bookingId/{bookingId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get curfew details from HDC.
+     * @description Get curfew details from HDC. Requires ROLE_CVL_ADMIN.
+     */
+    get: operations['getHdcLicenceData']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/full-size-image': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get the exclusion zone map image for a specified licence and condition
      * @description Get the exclusion zone map image. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['getExclusionZoneImage']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/events/match': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get a list of licence events that match the supplied criteria.
      * @description Get a list of licence events that match the supplied criteria. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getEventsMatchingCriteria']
-  }
-  '/current-hard-stop-cutoff-date': {
-    /**
-     * Get current hard stop cut-off date for licence to be timed out
-     * @description The last date that a probation practitioner can edit a licence by. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-     */
-    get: operations['currentHardStopCutoffDate']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/com/{staffIdentifier}/review-counts': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Retrieve the individual and team count of cases that the probation practitioner needs to review
      * @description Retrieve the individual and team count of cases that the probation practitioner needs to review. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['retrieveReviewCounts']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/caseload/com/staff/{deliusStaffIdentifier}/vary-case-load': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Returns the vary caseload for a member of staff
      * @description Returns an enriched list of cases which can have a variation created for a member of staff
      */
     get: operations['getStaffVaryCaseload']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/caseload/com/staff/{deliusStaffIdentifier}/create-case-load': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Returns the create caseload for a member of staff
      * @description Returns an enriched list of cases which require a licence to be created
      */
     get: operations['getStaffCreateCaseload']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/bank-holidays': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get the bank holiday dates for England and Wales
      * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['getBankHolidaysForEnglandAndWales']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/discard': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
     /**
      * Discards a licence record.
      * @description Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     delete: operations['discard']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/licence/id/{licenceId}/additional-condition/id/{conditionId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
     /**
      * Remove additional condition with specified condition Id
      * @description Remove additional condition from the licence list of additional conditions.All user submitted condition data will also be removed.
      */
     delete: operations['deleteAdditionalCondition']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
 }
-
 export type webhooks = Record<string, never>
-
 export interface components {
   schemas: {
-    DlqMessage: {
-      body: {
-        [key: string]: Record<string, never>
-      }
-      messageId: string
-    }
-    RetryDlqResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-      messages: components['schemas']['DlqMessage'][]
-    }
-    PurgeQueueResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-    }
     /** @description Request object for updating a prison case administrator */
     UpdatePrisonUserRequest: {
       /**
@@ -1168,8 +2200,8 @@ export interface components {
       /**
        * @description List of Prison Ids (can include OUT and TRN) to restrict the search by. Unrestricted if not supplied or null
        * @example [
-       *   "MDI"
-       * ]
+       *       "MDI"
+       *     ]
        */
       prisonIds?: string[]
     }
@@ -1429,8 +2461,8 @@ export interface components {
       /**
        * @description List of prisoner numbers to search by
        * @example [
-       *   "A1234AA"
-       * ]
+       *       "A1234AA"
+       *     ]
        */
       prisonerNumbers: string[]
     }
@@ -1467,125 +2499,6 @@ export interface components {
        */
       comEmail?: string
     }
-    /** @description Search Criteria for CA Caseload Search */
-    CaCaseloadSearch: {
-      /**
-       * @description Search text to filter caseload
-       * @example 2022-04-20
-       */
-      searchString?: string
-      /**
-       * @description List of Prison Ids (can include OUT and TRN) to restrict the search by. Unrestricted if not supplied or null
-       * @example [
-       *   "MDI"
-       * ]
-       */
-      prisonCodes: string[]
-    }
-    /** @description Describes an CA(OMU) case */
-    CaCase: {
-      /**
-       * @description Type of this licence
-       * @example CRD
-       * @enum {string}
-       */
-      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
-      /**
-       * Format: int64
-       * @description Unique identifier for this licence within the service
-       * @example 99999
-       */
-      licenceId?: number
-      /**
-       * Format: int64
-       * @description The version number of this licence
-       */
-      licenceVersionOf?: number
-      /**
-       * @description The full name of the person on licence
-       * @example John Doe
-       */
-      name: string
-      /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
-       */
-      prisonerNumber: string
-      probationPractitioner?: components['schemas']['ProbationPractitioner']
-      /**
-       * Format: date
-       * @description The date on which the prisoner leaves custody
-       */
-      releaseDate?: string
-      /**
-       * @description Label for release date
-       * @example Confirmed release date
-       */
-      releaseDateLabel?: string
-      /**
-       * @description The new status for this licence
-       * @example APPROVED
-       * @enum {string}
-       */
-      licenceStatus:
-        | 'IN_PROGRESS'
-        | 'SUBMITTED'
-        | 'APPROVED'
-        | 'ACTIVE'
-        | 'REJECTED'
-        | 'INACTIVE'
-        | 'RECALLED'
-        | 'VARIATION_IN_PROGRESS'
-        | 'VARIATION_SUBMITTED'
-        | 'VARIATION_REJECTED'
-        | 'VARIATION_APPROVED'
-        | 'NOT_STARTED'
-        | 'TIMED_OUT'
-        | 'OOS_BOTUS'
-        | 'OOS_RECALL'
-      /**
-       * @description The type of tab this licence has to be populated
-       * @example RELEASES_IN_NEXT_TWO_WORKING_DAYS
-       * @enum {string}
-       */
-      tabType?: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS' | 'FUTURE_RELEASES' | 'ATTENTION_NEEDED'
-      /**
-       * @description Legal Status
-       * @example SENTENCED
-       * @enum {string}
-       */
-      nomisLegalStatus?:
-        | 'RECALL'
-        | 'DEAD'
-        | 'INDETERMINATE_SENTENCE'
-        | 'SENTENCED'
-        | 'CONVICTED_UNSENTENCED'
-        | 'CIVIL_PRISONER'
-        | 'IMMIGRATION_DETAINEE'
-        | 'REMAND'
-        | 'UNKNOWN'
-        | 'OTHER'
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      lastWorkedOnBy?: string
-      /**
-       * @description Is the prisoner due for early release
-       * @example false
-       */
-      isDueForEarlyRelease?: boolean
-      /** @description Is the licence in the hard stop period? (Within two working days of release) */
-      isInHardStopPeriod: boolean
-    }
-    /** @description Request object for searching for recently approved licences */
-    RecentlyApprovedLicencesRequest: {
-      /**
-       * @description A list of prison codes
-       * @example ['PVI', 'BAI']
-       */
-      prisonCodes: string[]
-    }
     /** @description Request object for searching licences by field */
     MatchLicencesRequest: {
       /**
@@ -1615,9 +2528,9 @@ export interface components {
       /**
        * @description A list of staff identifiers - the responsible probation officer
        * @example [
-       *   1234,
-       *   4321
-       * ]
+       *       1234,
+       *       4321
+       *     ]
        */
       staffId?: number[]
       /**
@@ -1859,14 +2772,6 @@ export interface components {
        */
       updatedByFullName?: string
     }
-    /** @description Request object for searching for licences which are ready to approve */
-    ApproveLicencesRequest: {
-      /**
-       * @description A list of prison codes
-       * @example ['PVI', 'BAI']
-       */
-      prisonCodes?: string[]
-    }
     /** @description Request object for overriding a licence status */
     OverrideLicenceStatusRequest: {
       /**
@@ -1889,6 +2794,14 @@ export interface components {
         | 'TIMED_OUT'
       /** @description Reason for overriding the licence status */
       reason: string
+    }
+    /** @description A list of licence condition codes to be removed from a licence */
+    DeleteAdditionalConditionsByCodeRequest: {
+      /**
+       * @description List of condition codes
+       * @example a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5
+       */
+      conditionCodes: string[]
     }
     /** @description Request object for deactivating an active licence and its variations */
     DeactivateLicenceAndVariationsRequest: {
@@ -2038,6 +2951,17 @@ export interface components {
        * @enum {string}
        */
       type: 'CRD' | 'HARD_STOP' | 'HDC'
+    }
+    EntityAlreadyExistsResponse: {
+      /** Format: int32 */
+      status: number
+      /** Format: int32 */
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
+      /** Format: int64 */
+      existingResourceId: number
     }
     /** @description A reference to the created licence */
     LicenceCreationResponse: {
@@ -2297,17 +3221,17 @@ export interface components {
       /**
        * @description The probation team codes to get the case loads for
        * @example [
-       *   "teamA",
-       *   "teamC"
-       * ]
+       *       "teamA",
+       *       "teamC"
+       *     ]
        */
       probationTeamCodes: string[]
       /**
        * @description The teams linked to the user to get the case loads for
        * @example [
-       *   "teamA",
-       *   "teamC"
-       * ]
+       *       "teamA",
+       *       "teamC"
+       *     ]
        */
       teamSelected: string[]
     }
@@ -2403,6 +3327,115 @@ export interface components {
         | 'LICENCE_NOT_STARTED'
         | 'LICENCE_IN_PROGRESS'
     }
+    /** @description Search Criteria for CA Caseload Search */
+    CaCaseloadSearch: {
+      /**
+       * @description Search text to filter caseload
+       * @example 2022-04-20
+       */
+      searchString?: string
+      /**
+       * @description List of Prison Ids (can include OUT and TRN) to restrict the search by. Unrestricted if not supplied or null
+       * @example [
+       *       "MDI"
+       *     ]
+       */
+      prisonCodes: string[]
+    }
+    /** @description Describes an CA(OMU) case */
+    CaCase: {
+      /**
+       * @description Type of this licence
+       * @example CRD
+       * @enum {string}
+       */
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      licenceId?: number
+      /**
+       * Format: int64
+       * @description The version number of this licence
+       */
+      licenceVersionOf?: number
+      /**
+       * @description The full name of the person on licence
+       * @example John Doe
+       */
+      name: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      prisonerNumber: string
+      probationPractitioner?: components['schemas']['ProbationPractitioner']
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       */
+      releaseDate?: string
+      /**
+       * @description Label for release date
+       * @example Confirmed release date
+       */
+      releaseDateLabel?: string
+      /**
+       * @description The new status for this licence
+       * @example APPROVED
+       * @enum {string}
+       */
+      licenceStatus:
+        | 'IN_PROGRESS'
+        | 'SUBMITTED'
+        | 'APPROVED'
+        | 'ACTIVE'
+        | 'REJECTED'
+        | 'INACTIVE'
+        | 'RECALLED'
+        | 'VARIATION_IN_PROGRESS'
+        | 'VARIATION_SUBMITTED'
+        | 'VARIATION_REJECTED'
+        | 'VARIATION_APPROVED'
+        | 'NOT_STARTED'
+        | 'TIMED_OUT'
+      /**
+       * @description The type of tab this licence has to be populated
+       * @example RELEASES_IN_NEXT_TWO_WORKING_DAYS
+       * @enum {string}
+       */
+      tabType?: 'RELEASES_IN_NEXT_TWO_WORKING_DAYS' | 'FUTURE_RELEASES' | 'ATTENTION_NEEDED'
+      /**
+       * @description Legal Status
+       * @example SENTENCED
+       * @enum {string}
+       */
+      nomisLegalStatus?:
+        | 'RECALL'
+        | 'DEAD'
+        | 'INDETERMINATE_SENTENCE'
+        | 'SENTENCED'
+        | 'CONVICTED_UNSENTENCED'
+        | 'CIVIL_PRISONER'
+        | 'IMMIGRATION_DETAINEE'
+        | 'REMAND'
+        | 'UNKNOWN'
+        | 'OTHER'
+      /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      lastWorkedOnBy?: string
+      /**
+       * @description Is the prisoner due for early release
+       * @example false
+       */
+      isDueForEarlyRelease?: boolean
+      /** @description Is the licence in the hard stop period? (Within two working days of release) */
+      isInHardStopPeriod: boolean
+    }
     /** @description Describes an audit event request */
     AuditRequest: {
       /**
@@ -2426,15 +3459,6 @@ export interface components {
        * @description The end time to query for events (default is now)
        */
       endTime: string
-    }
-    ErrorResponse_SubjectAccessRequest: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
     }
     /** @description Describes the data entered for an additional condition */
     AdditionalConditionData_SubjectAccessRequest: {
@@ -2631,133 +3655,163 @@ export interface components {
       licencesEvents: components['schemas']['LicenceEvent_SubjectAccessRequest'][]
     }
     /** @description Describes a CRD licence within this service */
-    CrdLicence_SubjectAccessRequest: WithRequired<
-      {
-        kind: 'CRD'
-      } & Omit<components['schemas']['Licence_SubjectAccessRequest'], 'kind'> & {
-          /**
-           * @description Type of this licence
-           * @example CRD
-           * @enum {string}
-           */
-          kind?: 'CRD'
-          /**
-           * Format: date
-           * @description Date which the hard stop period will start
-           */
-          hardStopDate?: string
-          /**
-           * Format: date
-           * @description Date which to show the hard stop warning
-           */
-          hardStopWarningDate?: string
-          /** @description Is the licence in the hard stop period? (Within two working days of release) */
-          isInHardStopPeriod?: boolean
-          /** @description Is the prisoner due for early release */
-          isDueForEarlyRelease?: boolean
-          /** @description Is the prisoner due to be released in the next two working days */
-          isDueToBeReleasedInTheNextTwoWorkingDays?: boolean
-        },
-      | 'additionalLicenceConditions'
-      | 'additionalPssConditions'
-      | 'bespokeConditions'
-      | 'id'
-      | 'isDueForEarlyRelease'
-      | 'isDueToBeReleasedInTheNextTwoWorkingDays'
-      | 'isEligibleForEarlyRelease'
-      | 'isInHardStopPeriod'
-      | 'isReviewNeeded'
-      | 'isVariation'
-      | 'kind'
-      | 'typeCode'
-    >
+    CrdLicence_SubjectAccessRequest: Omit<
+      WithRequired<
+        components['schemas']['Licence_SubjectAccessRequest'],
+        | 'additionalLicenceConditions'
+        | 'additionalPssConditions'
+        | 'bespokeConditions'
+        | 'id'
+        | 'isEligibleForEarlyRelease'
+        | 'isReviewNeeded'
+        | 'isVariation'
+        | 'kind'
+        | 'typeCode'
+      >,
+      'kind'
+    > & {
+      /**
+       * @description Type of this licence
+       * @example CRD
+       * @enum {string}
+       */
+      kind: 'CRD'
+      /**
+       * Format: date
+       * @description Date which the hard stop period will start
+       */
+      hardStopDate?: string
+      /**
+       * Format: date
+       * @description Date which to show the hard stop warning
+       */
+      hardStopWarningDate?: string
+      /** @description Is the licence in the hard stop period? (Within two working days of release) */
+      isInHardStopPeriod: boolean
+      /** @description Is the prisoner due for early release */
+      isDueForEarlyRelease: boolean
+      /** @description Is the prisoner due to be released in the next two working days */
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'CRD'
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'CRD'
+    }
     /** @description Describes a licence that was created by a prison */
-    HardStopLicence_SubjectAccessRequest: WithRequired<
-      {
-        kind: 'HARD_STOP'
-      } & Omit<components['schemas']['Licence_SubjectAccessRequest'], 'kind'> & {
-          /**
-           * @description Type of this licence
-           * @example HARD_STOP
-           * @enum {string}
-           */
-          kind?: 'HARD_STOP'
-          /**
-           * Format: date-time
-           * @description The date time when the hardstop licence was reviewed by a probation practitioner
-           */
-          reviewDate?: string
-          /**
-           * Format: date
-           * @description Date which the hard stop period will start
-           */
-          hardStopDate?: string
-          /**
-           * Format: date
-           * @description Date which to show the hard stop warning
-           */
-          hardStopWarningDate?: string
-          /** @description Is the licence in the hard stop period? (Within two working days of release) */
-          isInHardStopPeriod?: boolean
-          /** @description Is the prisoner due for early release */
-          isDueForEarlyRelease?: boolean
-          /** @description Is the prisoner due to be released in the next two working days */
-          isDueToBeReleasedInTheNextTwoWorkingDays?: boolean
-        },
-      | 'additionalLicenceConditions'
-      | 'additionalPssConditions'
-      | 'bespokeConditions'
-      | 'id'
-      | 'isDueForEarlyRelease'
-      | 'isDueToBeReleasedInTheNextTwoWorkingDays'
-      | 'isEligibleForEarlyRelease'
-      | 'isInHardStopPeriod'
-      | 'isReviewNeeded'
-      | 'isVariation'
-      | 'kind'
-      | 'typeCode'
-    >
+    HardStopLicence_SubjectAccessRequest: Omit<
+      WithRequired<
+        components['schemas']['Licence_SubjectAccessRequest'],
+        | 'additionalLicenceConditions'
+        | 'additionalPssConditions'
+        | 'bespokeConditions'
+        | 'id'
+        | 'isEligibleForEarlyRelease'
+        | 'isReviewNeeded'
+        | 'isVariation'
+        | 'kind'
+        | 'typeCode'
+      >,
+      'kind'
+    > & {
+      /**
+       * @description Type of this licence
+       * @example HARD_STOP
+       * @enum {string}
+       */
+      kind: 'HARD_STOP'
+      /**
+       * Format: date-time
+       * @description The date time when the hardstop licence was reviewed by a probation practitioner
+       */
+      reviewDate?: string
+      /**
+       * Format: date
+       * @description Date which the hard stop period will start
+       */
+      hardStopDate?: string
+      /**
+       * Format: date
+       * @description Date which to show the hard stop warning
+       */
+      hardStopWarningDate?: string
+      /** @description Is the licence in the hard stop period? (Within two working days of release) */
+      isInHardStopPeriod: boolean
+      /** @description Is the prisoner due for early release */
+      isDueForEarlyRelease: boolean
+      /** @description Is the prisoner due to be released in the next two working days */
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'HARD_STOP'
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'HARD_STOP'
+    }
     /** @description Describes a HDC licence within this service */
-    HdcLicence_SubjectAccessRequest: WithRequired<
-      {
-        kind: 'HDC'
-      } & Omit<components['schemas']['Licence_SubjectAccessRequest'], 'kind'> & {
-          /**
-           * @description Type of this licence
-           * @example HDC
-           * @enum {string}
-           */
-          kind?: 'HDC'
-          /**
-           * Format: date
-           * @description Date which the hard stop period will start
-           */
-          hardStopDate?: string
-          /**
-           * Format: date
-           * @description Date which to show the hard stop warning
-           */
-          hardStopWarningDate?: string
-          /** @description Is the licence in the hard stop period? (Within two working days of release) */
-          isInHardStopPeriod?: boolean
-          /** @description Is the prisoner due for early release */
-          isDueForEarlyRelease?: boolean
-          /** @description Is the prisoner due to be released in the next two working days */
-          isDueToBeReleasedInTheNextTwoWorkingDays?: boolean
-        },
-      | 'additionalLicenceConditions'
-      | 'additionalPssConditions'
-      | 'bespokeConditions'
-      | 'id'
-      | 'isDueForEarlyRelease'
-      | 'isDueToBeReleasedInTheNextTwoWorkingDays'
-      | 'isEligibleForEarlyRelease'
-      | 'isInHardStopPeriod'
-      | 'isReviewNeeded'
-      | 'isVariation'
-      | 'kind'
-      | 'typeCode'
-    >
+    HdcLicence_SubjectAccessRequest: Omit<
+      WithRequired<
+        components['schemas']['Licence_SubjectAccessRequest'],
+        | 'additionalLicenceConditions'
+        | 'additionalPssConditions'
+        | 'bespokeConditions'
+        | 'id'
+        | 'isEligibleForEarlyRelease'
+        | 'isReviewNeeded'
+        | 'isVariation'
+        | 'kind'
+        | 'typeCode'
+      >,
+      'kind'
+    > & {
+      /**
+       * @description Type of this licence
+       * @example HDC
+       * @enum {string}
+       */
+      kind: 'HDC'
+      /**
+       * Format: date
+       * @description Date which the hard stop period will start
+       */
+      hardStopDate?: string
+      /**
+       * Format: date
+       * @description Date which to show the hard stop warning
+       */
+      hardStopWarningDate?: string
+      /** @description Is the licence in the hard stop period? (Within two working days of release) */
+      isInHardStopPeriod: boolean
+      /** @description Is the prisoner due for early release */
+      isDueForEarlyRelease: boolean
+      /** @description Is the prisoner due to be released in the next two working days */
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'HDC'
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'HDC'
+    }
     /** @description Describes an event that was related to a licence */
     LicenceEvent_SubjectAccessRequest: {
       /**
@@ -2829,6 +3883,26 @@ export interface components {
     }
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence_SubjectAccessRequest: {
+      /** @description The list of additional licence conditions on this licence */
+      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      /** @description The list of additional post sentence supervision conditions on this licence */
+      additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
+      /**
+       * @description The full name of the person who created licence or variation
+       * @example Gordon Sumner
+       */
+      createdByFullName?: string
+      /**
+       * Format: int64
+       * @description The nDELIUS staff identifier for the supervising probation officer
+       * @example 12345
+       */
+      comStaffId?: number
+      /**
+       * @description The full name of the supervising probation officer
+       * @example Jane Jones
+       */
+      responsibleComFullName?: string
       /**
        * Format: int64
        * @description Unique identifier for this licence within the service
@@ -2897,15 +3971,15 @@ export interface components {
        */
       crn?: string
       /**
-       * @description The prison identifier for the person on this licence
-       * @example A9999AA
-       */
-      nomsId?: string
-      /**
        * @description The first name of the person on licence
        * @example Michael
        */
       forename?: string
+      /**
+       * @description The prison identifier for the person on this licence
+       * @example A9999AA
+       */
+      nomsId?: string
       /**
        * Format: date
        * @description The actual release date (if set)
@@ -2971,8 +4045,6 @@ export interface components {
        * @example Cardiff South
        */
       probationTeamDescription?: string
-      /** @description The list of bespoke conditions on this licence */
-      bespokeConditions: components['schemas']['BespokeCondition_SubjectAccessRequest'][]
       /**
        * @description The middle names of the person on licence
        * @example John Peter
@@ -2989,16 +4061,25 @@ export interface components {
        * @example 989898
        */
       bookingId?: number
+      /** @description The list of bespoke conditions on this licence */
+      bespokeConditions: components['schemas']['BespokeCondition_SubjectAccessRequest'][]
+      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
+      isEligibleForEarlyRelease: boolean
+      /**
+       * @description The full name of the person who last submitted this licence
+       * @example Jane Jones
+       */
+      submittedByFullName?: string
       /**
        * @description The nDELIUS user name for the supervising probation officer
        * @example X32122
        */
       comUsername?: string
       /**
-       * @description The full name of the person who last submitted this licence
-       * @example Jane Jones
+       * Format: date-time
+       * @description The date and time that this licence was first created
        */
-      submittedByFullName?: string
+      dateCreated?: string
       /**
        * @description The full name of the person who approved the licence on behalf of the prison governor
        * @example John Smith
@@ -3010,17 +4091,30 @@ export interface components {
        */
       approvedDate?: string
       /**
+       * @description The full name of the person who last updated this licence
+       * @example Jane Jones
+       */
+      updatedByFullName?: string
+      /**
+       * @description Is a review of this licence is required
+       * @example true
+       */
+      isReviewNeeded: boolean
+      /**
        * @description The email address for the supervising probation officer
        * @example jane.jones@nps.gov.uk
        */
       comEmail?: string
-      /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
-      isEligibleForEarlyRelease: boolean
       /**
        * Format: date
        * @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it contains Earliest possible release date or ARD||CRD
        */
       earliestReleaseDate?: string
+      /**
+       * @description Who the person will meet at their initial appointment
+       * @example Duty officer
+       */
+      appointmentPerson?: string
       /**
        * @description The type of appointment time of the initial appointment
        * @example SPECIFIC_DATE_TIME
@@ -3043,11 +4137,6 @@ export interface components {
        * @enum {string}
        */
       appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /**
-       * @description Who the person will meet at their initial appointment
-       * @example Duty officer
-       */
-      appointmentPerson?: string
       /**
        * @description The address of initial appointment
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
@@ -3087,21 +4176,6 @@ export interface components {
       /** @deprecated */
       isVariation: boolean
       /**
-       * @description The full name of the supervising probation officer
-       * @example Jane Jones
-       */
-      responsibleComFullName?: string
-      /**
-       * @description The full name of the person who last updated this licence
-       * @example Jane Jones
-       */
-      updatedByFullName?: string
-      /**
-       * Format: date-time
-       * @description The date and time that this licence was first created
-       */
-      dateCreated?: string
-      /**
        * Format: date-time
        * @description The date and time that this licence was last updated
        */
@@ -3138,26 +4212,6 @@ export interface components {
       licenceVersion?: string
       /** @description Is this licence activated in PSS period?(LED < LAD <= TUSED) */
       isActivatedInPssPeriod?: boolean
-      /** @description The list of additional post sentence supervision conditions on this licence */
-      additionalPssConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
-      /**
-       * @description The full name of the person who created licence or variation
-       * @example Gordon Sumner
-       */
-      createdByFullName?: string
-      /**
-       * @description Is a review of this licence is required
-       * @example true
-       */
-      isReviewNeeded: boolean
-      /** @description The list of additional licence conditions on this licence */
-      additionalLicenceConditions: components['schemas']['AdditionalCondition_SubjectAccessRequest'][]
-      /**
-       * Format: int64
-       * @description The nDELIUS staff identifier for the supervising probation officer
-       * @example 12345
-       */
-      comStaffId?: number
       /**
        * @description The username which created this licence
        * @example X12333
@@ -3199,48 +4253,63 @@ export interface components {
       text?: string
     }
     /** @description Describes a licence within this service */
-    VariationLicence_SubjectAccessRequest: WithRequired<
-      {
-        kind: 'VARIATION'
-      } & Omit<components['schemas']['Licence_SubjectAccessRequest'], 'kind'> & {
-          /**
-           * @description Type of this licence
-           * @example VARIATION
-           * @enum {string}
-           */
-          kind?: 'VARIATION'
-          /**
-           * @description Have you have discussed this variation request with your SPO?
-           * @example Yes
-           */
-          spoDiscussion?: string
-          /**
-           * @description Have you consulted with the victim liaison officer (VLO) for this case?
-           * @example Yes
-           */
-          vloDiscussion?: string
-          /**
-           * Format: int64
-           * @description The licence Id which this licence is a variation of
-           */
-          variationOf?: number
-        },
-      | 'additionalLicenceConditions'
-      | 'additionalPssConditions'
-      | 'bespokeConditions'
-      | 'id'
-      | 'isEligibleForEarlyRelease'
-      | 'isReviewNeeded'
-      | 'isVariation'
-      | 'kind'
-      | 'typeCode'
-    >
-    GetDlqResult: {
+    VariationLicence_SubjectAccessRequest: Omit<
+      WithRequired<
+        components['schemas']['Licence_SubjectAccessRequest'],
+        | 'additionalLicenceConditions'
+        | 'additionalPssConditions'
+        | 'bespokeConditions'
+        | 'id'
+        | 'isEligibleForEarlyRelease'
+        | 'isReviewNeeded'
+        | 'isVariation'
+        | 'kind'
+        | 'typeCode'
+      >,
+      'kind'
+    > & {
+      /**
+       * @description Type of this licence
+       * @example VARIATION
+       * @enum {string}
+       */
+      kind: 'VARIATION'
+      /**
+       * @description Have you have discussed this variation request with your SPO?
+       * @example Yes
+       */
+      spoDiscussion?: string
+      /**
+       * @description Have you consulted with the victim liaison officer (VLO) for this case?
+       * @example Yes
+       */
+      vloDiscussion?: string
+      /**
+       * Format: int64
+       * @description The licence Id which this licence is a variation of
+       */
+      variationOf?: number
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'VARIATION'
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'VARIATION'
+    }
+    ErrorResponse_SubjectAccessRequest: {
       /** Format: int32 */
-      messagesFoundCount: number
+      status: number
       /** Format: int32 */
-      messagesReturnedCount: number
-      messages: components['schemas']['DlqMessage'][]
+      errorCode?: number
+      userMessage?: string
+      developerMessage?: string
+      moreInfo?: string
     }
     LicencePolicy: {
       version: string
@@ -3606,170 +4675,213 @@ export interface components {
       submittedByFullName?: string
     }
     /** @description Describes a CRD licence within this service */
-    CrdLicence: WithRequired<
-      {
-        kind: 'CRD'
-      } & Omit<components['schemas']['Licence'], 'kind'> & {
-          /**
-           * @description Type of this licence
-           * @example CRD
-           * @enum {string}
-           */
-          kind?: 'CRD'
-          /**
-           * Format: date
-           * @description Date which the hard stop period will start
-           */
-          hardStopDate?: string
-          /**
-           * Format: date
-           * @description Date which to show the hard stop warning
-           */
-          hardStopWarningDate?: string
-          /** @description Is the licence in the hard stop period? (Within two working days of release) */
-          isInHardStopPeriod?: boolean
-          /** @description Is the prisoner due for early release */
-          isDueForEarlyRelease?: boolean
-          /** @description Is the prisoner due to be released in the next two working days */
-          isDueToBeReleasedInTheNextTwoWorkingDays?: boolean
-        },
-      | 'additionalLicenceConditions'
-      | 'additionalPssConditions'
-      | 'bespokeConditions'
-      | 'id'
-      | 'isDueForEarlyRelease'
-      | 'isDueToBeReleasedInTheNextTwoWorkingDays'
-      | 'isEligibleForEarlyRelease'
-      | 'isInHardStopPeriod'
-      | 'isReviewNeeded'
-      | 'isVariation'
-      | 'kind'
-      | 'typeCode'
-    >
+    CrdLicence: Omit<
+      WithRequired<
+        components['schemas']['Licence'],
+        | 'additionalLicenceConditions'
+        | 'additionalPssConditions'
+        | 'bespokeConditions'
+        | 'id'
+        | 'isEligibleForEarlyRelease'
+        | 'isReviewNeeded'
+        | 'isVariation'
+        | 'kind'
+        | 'typeCode'
+      >,
+      'kind'
+    > & {
+      /**
+       * @description Type of this licence
+       * @example CRD
+       * @enum {string}
+       */
+      kind: 'CRD'
+      /**
+       * Format: date
+       * @description Date which the hard stop period will start
+       */
+      hardStopDate?: string
+      /**
+       * Format: date
+       * @description Date which to show the hard stop warning
+       */
+      hardStopWarningDate?: string
+      /** @description Is the licence in the hard stop period? (Within two working days of release) */
+      isInHardStopPeriod: boolean
+      /** @description Is the prisoner due for early release */
+      isDueForEarlyRelease: boolean
+      /** @description Is the prisoner due to be released in the next two working days */
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'CRD'
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'CRD'
+    }
     /** @description Describes a licence that was created by a prison */
-    HardStopLicence: WithRequired<
-      {
-        kind: 'HARD_STOP'
-      } & Omit<components['schemas']['Licence'], 'kind'> & {
-          /**
-           * @description Type of this licence
-           * @example HARD_STOP
-           * @enum {string}
-           */
-          kind?: 'HARD_STOP'
-          /**
-           * Format: date-time
-           * @description The date time when the hardstop licence was reviewed by a probation practitioner
-           */
-          reviewDate?: string
-          /**
-           * Format: date
-           * @description Date which the hard stop period will start
-           */
-          hardStopDate?: string
-          /**
-           * Format: date
-           * @description Date which to show the hard stop warning
-           */
-          hardStopWarningDate?: string
-          /** @description Is the licence in the hard stop period? (Within two working days of release) */
-          isInHardStopPeriod?: boolean
-          /** @description Is the prisoner due for early release */
-          isDueForEarlyRelease?: boolean
-          /** @description Is the prisoner due to be released in the next two working days */
-          isDueToBeReleasedInTheNextTwoWorkingDays?: boolean
-        },
-      | 'additionalLicenceConditions'
-      | 'additionalPssConditions'
-      | 'bespokeConditions'
-      | 'id'
-      | 'isDueForEarlyRelease'
-      | 'isDueToBeReleasedInTheNextTwoWorkingDays'
-      | 'isEligibleForEarlyRelease'
-      | 'isInHardStopPeriod'
-      | 'isReviewNeeded'
-      | 'isVariation'
-      | 'kind'
-      | 'typeCode'
-    >
+    HardStopLicence: Omit<
+      WithRequired<
+        components['schemas']['Licence'],
+        | 'additionalLicenceConditions'
+        | 'additionalPssConditions'
+        | 'bespokeConditions'
+        | 'id'
+        | 'isEligibleForEarlyRelease'
+        | 'isReviewNeeded'
+        | 'isVariation'
+        | 'kind'
+        | 'typeCode'
+      >,
+      'kind'
+    > & {
+      /**
+       * @description Type of this licence
+       * @example HARD_STOP
+       * @enum {string}
+       */
+      kind: 'HARD_STOP'
+      /**
+       * Format: date-time
+       * @description The date time when the hardstop licence was reviewed by a probation practitioner
+       */
+      reviewDate?: string
+      /**
+       * Format: date
+       * @description Date which the hard stop period will start
+       */
+      hardStopDate?: string
+      /**
+       * Format: date
+       * @description Date which to show the hard stop warning
+       */
+      hardStopWarningDate?: string
+      /** @description Is the licence in the hard stop period? (Within two working days of release) */
+      isInHardStopPeriod: boolean
+      /** @description Is the prisoner due for early release */
+      isDueForEarlyRelease: boolean
+      /** @description Is the prisoner due to be released in the next two working days */
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'HARD_STOP'
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'HARD_STOP'
+    }
     /** @description Describes a HDC licence within this service */
-    HdcLicence: WithRequired<
-      {
-        kind: 'HDC'
-      } & Omit<components['schemas']['Licence'], 'kind'> & {
-          /**
-           * @description Type of this licence
-           * @example HDC
-           * @enum {string}
-           */
-          kind?: 'HDC'
-          /**
-           * Format: date
-           * @description Date which the hard stop period will start
-           */
-          hardStopDate?: string
-          /**
-           * Format: date
-           * @description Date which to show the hard stop warning
-           */
-          hardStopWarningDate?: string
-          /** @description Is the licence in the hard stop period? (Within two working days of release) */
-          isInHardStopPeriod?: boolean
-          /** @description Is the prisoner due for early release */
-          isDueForEarlyRelease?: boolean
-          /** @description Is the prisoner due to be released in the next two working days */
-          isDueToBeReleasedInTheNextTwoWorkingDays?: boolean
-        },
-      | 'additionalLicenceConditions'
-      | 'additionalPssConditions'
-      | 'bespokeConditions'
-      | 'id'
-      | 'isDueForEarlyRelease'
-      | 'isDueToBeReleasedInTheNextTwoWorkingDays'
-      | 'isEligibleForEarlyRelease'
-      | 'isInHardStopPeriod'
-      | 'isReviewNeeded'
-      | 'isVariation'
-      | 'kind'
-      | 'typeCode'
-    >
+    HdcLicence: Omit<
+      WithRequired<
+        components['schemas']['Licence'],
+        | 'additionalLicenceConditions'
+        | 'additionalPssConditions'
+        | 'bespokeConditions'
+        | 'id'
+        | 'isEligibleForEarlyRelease'
+        | 'isReviewNeeded'
+        | 'isVariation'
+        | 'kind'
+        | 'typeCode'
+      >,
+      'kind'
+    > & {
+      /**
+       * @description Type of this licence
+       * @example HDC
+       * @enum {string}
+       */
+      kind: 'HDC'
+      /**
+       * Format: date
+       * @description Date which the hard stop period will start
+       */
+      hardStopDate?: string
+      /**
+       * Format: date
+       * @description Date which to show the hard stop warning
+       */
+      hardStopWarningDate?: string
+      /** @description Is the licence in the hard stop period? (Within two working days of release) */
+      isInHardStopPeriod: boolean
+      /** @description Is the prisoner due for early release */
+      isDueForEarlyRelease: boolean
+      /** @description Is the prisoner due to be released in the next two working days */
+      isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'HDC'
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'HDC'
+    }
     /** @description Describes a licence within this service */
-    VariationLicence: WithRequired<
-      {
-        kind: 'VARIATION'
-      } & Omit<components['schemas']['Licence'], 'kind'> & {
-          /**
-           * @description Type of this licence
-           * @example VARIATION
-           * @enum {string}
-           */
-          kind?: 'VARIATION'
-          /**
-           * @description Have you have discussed this variation request with your SPO?
-           * @example Yes
-           */
-          spoDiscussion?: string
-          /**
-           * @description Have you consulted with the victim liaison officer (VLO) for this case?
-           * @example Yes
-           */
-          vloDiscussion?: string
-          /**
-           * Format: int64
-           * @description The licence Id which this licence is a variation of
-           */
-          variationOf?: number
-        },
-      | 'additionalLicenceConditions'
-      | 'additionalPssConditions'
-      | 'bespokeConditions'
-      | 'id'
-      | 'isEligibleForEarlyRelease'
-      | 'isReviewNeeded'
-      | 'isVariation'
-      | 'kind'
-      | 'typeCode'
-    >
+    VariationLicence: Omit<
+      WithRequired<
+        components['schemas']['Licence'],
+        | 'additionalLicenceConditions'
+        | 'additionalPssConditions'
+        | 'bespokeConditions'
+        | 'id'
+        | 'isEligibleForEarlyRelease'
+        | 'isReviewNeeded'
+        | 'isVariation'
+        | 'kind'
+        | 'typeCode'
+      >,
+      'kind'
+    > & {
+      /**
+       * @description Type of this licence
+       * @example VARIATION
+       * @enum {string}
+       */
+      kind: 'VARIATION'
+      /**
+       * @description Have you have discussed this variation request with your SPO?
+       * @example Yes
+       */
+      spoDiscussion?: string
+      /**
+       * @description Have you consulted with the victim liaison officer (VLO) for this case?
+       * @example Yes
+       */
+      vloDiscussion?: string
+      /**
+       * Format: int64
+       * @description The licence Id which this licence is a variation of
+       */
+      variationOf?: number
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'VARIATION'
+    } & {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      kind: 'VARIATION'
+    }
     AddAnother: {
       label: string
     }
@@ -3881,6 +4993,37 @@ export interface components {
       code: string
       currentText: string
     }
+    CurfewAddress: {
+      addressLine1: string
+      addressLine2?: string
+      addressTown: string
+      postCode: string
+    }
+    CurfewHours: {
+      mondayFrom: string
+      mondayUntil: string
+      tuesdayFrom: string
+      tuesdayUntil: string
+      wednesdayFrom: string
+      wednesdayUntil: string
+      thursdayFrom: string
+      thursdayUntil: string
+      fridayFrom: string
+      fridayUntil: string
+      saturdayFrom: string
+      saturdayUntil: string
+      sundayFrom: string
+      sundayUntil: string
+    }
+    FirstNight: {
+      firstNightFrom: string
+      firstNightUntil: string
+    }
+    HdcLicenceData: {
+      curfewAddress?: components['schemas']['CurfewAddress']
+      firstNightCurfewHours?: components['schemas']['FirstNight']
+      curfewHours?: components['schemas']['CurfewHours']
+    }
     /** @description Describes an event that was related to a licence */
     LicenceEvent: {
       /**
@@ -3950,14 +5093,6 @@ export interface components {
        */
       eventTime?: string
     }
-    /** @description cutoff date for licence to be timed out */
-    HardStopCutoffDate: {
-      /**
-       * Format: date
-       * @description cutoff date for licence to be timed out
-       */
-      cutoffDate: string
-    }
     /** @description Describes the counts of cases needed for review by a Probation Practitioner */
     ComReviewCount: {
       /**
@@ -3990,57 +5125,15 @@ export interface components {
   headers: never
   pathItems: never
 }
-
 export type $defs = Record<string, never>
-
-export type external = Record<string, never>
-
 export interface operations {
-  retryDlq: {
-    parameters: {
-      path: {
-        dlqName: string
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          '*/*': components['schemas']['RetryDlqResult']
-        }
-      }
-    }
-  }
-  retryAllDlqs: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          '*/*': components['schemas']['RetryDlqResult'][]
-        }
-      }
-    }
-  }
-  purgeQueue: {
-    parameters: {
-      path: {
-        queueName: string
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          '*/*': components['schemas']['PurgeQueueResult']
-        }
-      }
-    }
-  }
-  /**
-   * Create/updates the details of a prison user.
-   * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updatePrisonUser: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['UpdatePrisonUserRequest']
@@ -4049,33 +5142,47 @@ export interface operations {
     responses: {
       /** @description The User was created/updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Create/updates the details of a prison user.
-   * @description Create/updates the details of a prison user (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updatePrisonUser_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['UpdatePrisonUserRequest']
@@ -4084,74 +5191,97 @@ export interface operations {
     responses: {
       /** @description The User was created/updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get OMU email address.
-   * @description Obtain prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   getOmuContactByPrisonCode: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         prisonCode: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description The OMU was found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['OmuContact']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Not found, the OMU email was not found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Updates the OMU email address.
-   * @description Updates the OMU email address used to contact members of a prison OMU. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateOmuEmail: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         prisonCode: string
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4161,68 +5291,88 @@ export interface operations {
     responses: {
       /** @description The OMU was updated */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['OmuContact']
         }
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Delete the OMU email address.
-   * @description Delete prison Offender Management Unit email address. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   deleteOmuContactByPrisonCode: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         prisonCode: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description The OMU email address was deleted */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Updates the offender's personal information on all of their licences.
-   * @description Updates the name and date of birth stored on all licences associated with the given offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateOffenderDetails: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         nomsId: string
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4232,37 +5382,48 @@ export interface operations {
     responses: {
       /** @description The offender details were updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender.
-   * @description Updates in-flight licences associated with an offender with the community offender manager who is responsible for that offender. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateResponsibleCom: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         crn: string
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4272,37 +5433,48 @@ export interface operations {
     responses: {
       /** @description The responsible COM was updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Updates in-flight licences associated with an offender with a new probation team.
-   * @description Updates in-flight licences associated with an offender with a new probation team. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateProbationTeam: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         crn: string
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4312,37 +5484,48 @@ export interface operations {
     responses: {
       /** @description The probation team was updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Sets whether the variation has been discussed with a VLO.
-   * @description Sets whether the variation has been discussed with a VLO. Either Yes or Not applicable. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateVloDiscussion: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4352,43 +5535,57 @@ export interface operations {
     responses: {
       /** @description VLO discussion updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED.
-   * @description Update the status of a licence to SUBMITTED or VARIATION_SUBMITTED, and record the details of the COM who submitted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   submitLicence: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody?: {
       content: {
@@ -4398,43 +5595,57 @@ export interface operations {
     responses: {
       /** @description Licence submitted for approval */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Update the status of a licence.
-   * @description Update the status of a licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateLicenceStatus: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4444,43 +5655,57 @@ export interface operations {
     responses: {
       /** @description Licence status updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Update the standard conditions for a licence.
-   * @description Replace the standard conditions against a licence if policy changes. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateStandardConditions: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4490,43 +5715,57 @@ export interface operations {
     responses: {
       /** @description Standard conditions updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Sets whether the variation has been discussed with an SPO.
-   * @description Sets whether the variation has been discussed with an SPO. Either Yes or No. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateSpoDiscussion: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4536,43 +5775,57 @@ export interface operations {
     responses: {
       /** @description SPO discussion updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Updates the sentence dates.
-   * @description Updates the sentence dates. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateSentenceDates: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4582,43 +5835,57 @@ export interface operations {
     responses: {
       /** @description Sentence dates updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Updates a licence to referred and stores the reason provided.
-   * @description Updates a licence to referred and stores the reason provided by the approver. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   referVariation: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4628,43 +5895,57 @@ export interface operations {
     responses: {
       /** @description Licence updated to referred and the referral reason stored */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Updates the reason for the licence variation.
-   * @description Updates the reason for the licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateReasonForVariation: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4674,43 +5955,57 @@ export interface operations {
     responses: {
       /** @description Reason for variation updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Updates the prison information.
-   * @description Updates the prison information. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updatePrisonInformation: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4720,43 +6015,57 @@ export interface operations {
     responses: {
       /** @description Prison information updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Override licence dates
-   * @description Override the dates for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   changeDates: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4766,47 +6075,64 @@ export interface operations {
     responses: {
       /** @description Licence dates have been updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Accepted */
       202: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Update the officer contact number for a licence
-   * @description Update the contact number for the officer related to this licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateContactNumber: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4816,43 +6142,57 @@ export interface operations {
     responses: {
       /** @description Contact number updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Add or replace the bespoke conditions for a licence.
-   * @description Add or replace the bespoke conditions on a licence with the content of this request. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateBespokeConditions: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4862,84 +6202,113 @@ export interface operations {
     responses: {
       /** @description Bespoke conditions added or replaced */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Approves a licence variation.
-   * @description Approves a licence variation. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   approveVariation: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Variation approved */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Update the appointment date and time
-   * @description Update the date and time for the initial appointment. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateAppointmentTime: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4949,43 +6318,57 @@ export interface operations {
     responses: {
       /** @description Appointment date and time updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Update the person to meet at the initial appointment
-   * @description Update the person the person on probation will meet at the initial appointment Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateAppointmentPerson: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -4995,43 +6378,57 @@ export interface operations {
     responses: {
       /** @description Appointment person updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Update the address where the initial appointment will take place
-   * @description Update the address where the initial appointment will take place. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateAppointmentAddress: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -5041,43 +6438,57 @@ export interface operations {
     responses: {
       /** @description Address updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Update the set of additional conditions on the licence.
-   * @description Update the set of additional conditions on the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence but which are not supplied to this endpoint will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateAdditionalConditions: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -5087,44 +6498,58 @@ export interface operations {
     responses: {
       /** @description Set of additional conditions updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Update the user entered data to accompany an additional condition template.
-   * @description Update the user entered data to accompany an additional condition template. Existing data for a condition which does not appear in this request will be deleted. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateAdditionalConditionData: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
         additionalConditionId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -5134,116 +6559,160 @@ export interface operations {
     responses: {
       /** @description Additional condition updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Activates an approved variation. Inactivates previous licence.
-   * @description Activates a variation. Inactivates previous licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   activateVariation: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Licence variation activated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Removes a previously uploaded exclusion zone file from an additional condition.
-   * @description Removes a previously uploaded exclusion zone file. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   removeExclusionZoneFile: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
         conditionId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description The exclusion zone file was removed */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Create/updates the details of a community offender manager.
-   * @description Create/updates the details of a community offender manager (e.g. email address). Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   updateComDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['UpdateComRequest']
@@ -5252,33 +6721,47 @@ export interface operations {
     responses: {
       /** @description The COM was create/updated */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Records an auditable event.
-   * @description Records an auditable event related to an action taken by a user or an automated in-service process. Requires ROLE_CVL_ADMIN.
-   */
   recordAuditEvent: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['AuditEvent']
@@ -5287,206 +6770,301 @@ export interface operations {
     responses: {
       /** @description The audit event was recorded */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Triggers the time out licence job.
-   * @description Triggers a job that causes licences with a status of IN_PROGRESS and a CRD or ARD less than two working days to be updated to TIMED_OUT. Requires ROLE_CVL_ADMIN.
-   */
   runTimeOutLicencesServiceJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Time out job executed. */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Job to remove AP conditions.
-   * @description Triggers a job that removes AP conditions for all licences that are in PSS period and status equal to 'VARIATION_IN_PROGRESS' or 'VARIATION_SUBMITTED' or 'VARIATION_REJECTED' or 'VARIATION_APPROVED'. Requires ROLE_CVL_ADMIN.
-   */
   runRemoveExpiredConditionsJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description run-remove-ap-conditions-job */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Triggers the notify attention needed licences job.
-   * @description Triggers a job that notifies licences with a status of APPROVED and a CRD or ARD in past or licences with a status of APPROVED, SUBMITTED, IN_PROGRESS, NOT_STARTED with no release date. Requires ROLE_CVL_ADMIN.
-   */
   runNotifyAttentionNeededLicencesJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Activation job executed. */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Triggers the hard stop licence review overdue job.
-   * @description Triggers a job that sends a notification when the COM has not reviewed a hard stop licence 5 days after activation. Requires ROLE_CVL_ADMIN.
-   */
   runHardStopLicenceReviewOverdueJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Hard stop licence review overdue job executed. */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Triggers the licence expiry job.
-   * @description Triggers a job that causes licences with an ACTIVE status to be deactivated if they are passed their TUSED (if present) or LED (if TUSED is null). Requires ROLE_CVL_ADMIN.
-   */
   runLicenceExpiryJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Expiry job executed. */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Deactivate licences which are past release date.
-   * @description Deactivate licences from IN_PROGRESS and SUBMITTED status to INACTIVE where these are past release date already. Requires ROLE_CVL_ADMIN.
-   */
   runDeactivateLicencesJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Deactivation request for licences past release date is processed successfully. */
       204: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Triggers the licence activation job.
-   * @description Triggers a job that causes licences with a status of APPROVED, a CRD or ARD of today, and that are either IS91 cases or have an NOMIS status beginning with 'INACTIVE' to be activated. Deactivates offenders with approved HDC licences. Requires ROLE_CVL_ADMIN.
-   */
   runLicenceActivationJob: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Activation job executed. */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Returns prisoners by release date and prison id
-   * @description Match prisoners in a subset of prisons with a release date within a given range
-   */
   findByReleaseDatePaginated: {
     parameters: {
       query?: {
         /** @description page of results to return (0 indexed), defaults to first page */
         page?: number
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -5496,30 +7074,40 @@ export interface operations {
     responses: {
       /** @description Returning A page of search results */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['SearchResultsPage']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Returns prisoners by release date and prison id
-   * @deprecated
-   * @description Match prisoners in a subset of prisons with a release date within a given range
-   */
   findByReleaseDate: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['ReleaseDateSearch']
@@ -5528,29 +7116,40 @@ export interface operations {
     responses: {
       /** @description Returning A list of prisoners */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['CaseloadItem'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Returns enriched prisoners by prison number
-   * @description Match prisoners by a list of prisoner numbers
-   */
   findByNumbers: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['PrisonerNumbers']
@@ -5559,60 +7158,80 @@ export interface operations {
     responses: {
       /** @description Returning A list of prisoners */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['CaseloadItem'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Send an email to probation practitioner of any previously approved licences that have been edited but not re-approved by prisoners release date
-   * @description Send email to probation practioner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   notifyProbationOfUnapprovedLicences: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Emails sent */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['UnapprovedLicence']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get a list of licence summaries matching the supplied criteria.
-   * @description Get the licences matching the supplied lists of status, prison, staffId, nomsId and PDU. Requires ROLE_CVL_ADMIN.
-   */
   getLicencesMatchingCriteria: {
     parameters: {
       query?: {
         sortBy?: string
         sortOrder?: string
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -5622,29 +7241,40 @@ export interface operations {
     responses: {
       /** @description Returned matching licence summary details - empty if no matches. */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceSummary'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Inactivate licences in bulk
-   * @description Set licence statuses to INACTIVE. Accepts a list of licence IDs. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   inactivateLicences: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': number[]
@@ -5653,78 +7283,104 @@ export interface operations {
     responses: {
       /** @description Inactivate Licences */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Marks the HardStop / Time served licence as having been reviewed with no variation required.
-   * @description Marks the HardStop / Time served licence as having been reviewed with no variation required. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   reviewWithNoVariationRequired: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Licence successfully marked as reviewed */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Override a licence status
-   * @description Override the status for an exising licence. Only to be used in exceptional circumstances. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   changeStatus: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -5734,80 +7390,166 @@ export interface operations {
     responses: {
       /** @description Status has been updated */
       202: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Create a new version of an approved licence
-   * @description Create a new version of an  approved licence. The new licence will have a new id and have status IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   editLicence: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Licence version created */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceSummary']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Deactivate an active licence and any associated variations
-   * @description Deactivate the supplied ACTIVE licence, and any variations of that licence. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
-  deactivateLicenceAndVariations: {
+  deleteAdditionalConditionsByCode: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DeleteAdditionalConditionsByCodeRequest']
+      }
+    }
+    responses: {
+      /** @description Set of additional conditions removed */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  deactivateLicenceAndVariations: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -5817,83 +7559,109 @@ export interface operations {
     responses: {
       /** @description Licence(s) deactivated */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceSummary']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Create a variation of this licence
-   * @description Create a variation of this licence. The new licence will have a new ID and have a status VARIATION_IN_PROGRESS. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   createVariation: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Licence variation created */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceSummary']
         }
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Add additional condition to the licence.
-   * @description Add additional condition to the licence. This does not include accompanying data per condition. Existing conditions which appear on the licence will be unaffected. More than one condition with the same code can be added Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   addAdditionalCondition: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
         conditionType: string
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -5903,41 +7671,58 @@ export interface operations {
     responses: {
       /** @description Set of additional conditions added */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdditionalCondition']
         }
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Create a licence
-   * @description Creates a licence with the default status IN_PROGRESS and populates with the details provided. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   createLicence: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['CreateLicenceRequest']
@@ -5946,34 +7731,51 @@ export interface operations {
     responses: {
       /** @description Licence created */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceCreationResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
+      /** @description Conflict, resource already exists */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EntityAlreadyExistsResponse']
+        }
+      }
     }
   }
-  /**
-   * Upload a multipart/form-data request containing a PDF exclusion zone file.
-   * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   uploadExclusionZoneFile: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
         conditionId: number
       }
+      cookie?: never
     }
     requestBody?: {
       content: {
@@ -5986,33 +7788,47 @@ export interface operations {
     responses: {
       /** @description The exclusion zone file was uploaded */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Notifies the COM of upcoming releases which they need to create a licence for.
-   * @description Notifies the COM of upcoming releases which they need to create a licence for. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   notifyOfUpcomingReleasesRequiringLicence: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['PromptLicenceCreationRequest'][]
@@ -6021,33 +7837,47 @@ export interface operations {
     responses: {
       /** @description The COM was notified */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Search for offenders on a given staff member's caseload.
-   * @description Search for offenders on a given staff member's caseload. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   searchForOffenderOnStaffCaseload: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['ProbationUserSearchRequest']
@@ -6056,35 +7886,49 @@ export interface operations {
     responses: {
       /** @description The query retrieved a set of enriched results */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ProbationSearchResult']
         }
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Returns a caseload that has recently been approved
-   * @description Returns an enriched list of cases which have recently been approved
-   */
   getRecentlyApproved: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': string[]
@@ -6093,29 +7937,40 @@ export interface operations {
     responses: {
       /** @description Returns a list of cases that have recently been approved */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ApprovalCase'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Returns a caseload waiting for approval
-   * @description Returns an enriched list of cases which are awaiting approval
-   */
   getApprovalNeeded: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': string[]
@@ -6124,29 +7979,208 @@ export interface operations {
     responses: {
       /** @description Returns a list of cases awaiting approval */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ApprovalCase'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Retrieves a list of auditable events matching the criteria provided.
-   * @description Retrieves a list of auditable events matching the criteria provided. Requires ROLE_CVL_ADMIN.
-   */
+  getTeamVaryCaseload: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TeamCaseloadRequest']
+      }
+    }
+    responses: {
+      /** @description Returns a list of cases that can have a variation created for a team */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ComCase'][]
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getTeamCreateCaseload: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['TeamCaseloadRequest']
+      }
+    }
+    responses: {
+      /** @description Returns a list of cases that require a licence to be created for a team */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ComCase'][]
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getProbationView: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CaCaseloadSearch']
+      }
+    }
+    responses: {
+      /** @description Returns a list of cases for people on probation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CaCase'][]
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getPrisonView: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CaCaseloadSearch']
+      }
+    }
+    responses: {
+      /** @description Returns a list of cases for people on prison */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CaCase'][]
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   requestAuditEvents: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['AuditRequest']
@@ -6155,104 +8189,114 @@ export interface operations {
     responses: {
       /** @description The a list of matching auditable events is returned. */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AuditEvent'][]
         }
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get a list of licences and audits summaries matching the nomis Prison Reference Number(prn).
-   * @description Returns a list of licences and audit details for the Prison Reference Number(prn). Requires ROLE_SAR_DATA_ACCESS or ROLE_CVL_ADMIN.
-   */
   getSarRecordsById: {
     parameters: {
       query?: {
         prn?: string
         crn?: string
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Records found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['SarContent_SubjectAccessRequest']
         }
       }
       /** @description Records for this prn was not found. */
       204: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': Record<string, never>
         }
       }
       /** @description Search by crn is not supported. */
       209: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
         }
       }
       /** @description Unexpected error occurred */
       500: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse_SubjectAccessRequest']
         }
       }
     }
   }
-  getDlqMessages: {
-    parameters: {
-      query?: {
-        maxMessages?: number
-      }
-      path: {
-        dlqName: string
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          '*/*': components['schemas']['GetDlqResult']
-        }
-      }
-    }
-  }
-  /**
-   * Get a policy by its version number
-   * @description Returns a policy by its version number. Requires ROLE_VIEW_LICENCES.
-   */
   getPolicyByVersionNumber: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The version of the licence policy
@@ -6260,144 +8304,192 @@ export interface operations {
          */
         version: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Policy found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicencePolicy']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The policy for this version was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get latest policy.
-   * @description Returns latest policy. Requires ROLE_VIEW_LICENCES.
-   */
   getLatestPolicy: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Policy found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicencePolicy']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token. */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role. */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get an associated image upload for a specific licence and condition
-   * @description Returns an associated image upload for a specified licence and condition. Requires ROLE_VIEW_LICENCES.
-   */
   getImageUpload: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /** @description This is the identifier for a licence */
         licenceId: number
         /** @description This is the internal identifier for a condition */
         conditionId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Image returned */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'image/jpeg': unknown
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description No image was found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get a licence by its licence id
-   * @description Returns a single licence detail by its unique identifier. Requires ROLE_VIEW_LICENCES.
-   */
   getLicenceById: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /** @description This is the identifier for a licence */
         licenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Licence found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['Licence']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get a list of in flight licences by prison number
-   * @description Returns a list of licence summaries by a person's prison number. Requires ROLE_VIEW_LICENCES.
-   */
   getLicencesByPrisonNumber: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The prison identifier for the person on the licence (also known as NOMS id)
@@ -6405,34 +8497,43 @@ export interface operations {
          */
         prisonNumber: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description A list of found licence summaries */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceSummary'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get a list of in flight licences by CRN
-   * @description Returns a list of licence summaries by a person's CRN. Requires ROLE_VIEW_LICENCES.
-   */
   getLicenceByCrn: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The case reference number (CRN) for the person on the licence
@@ -6440,333 +8541,491 @@ export interface operations {
          */
         crn: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description A list of found licence summaries */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceSummary'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Returns a single prisoner by prison number
-   * @description Returns a single prisoner by prison number
-   */
   findByNumber: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         nomsId: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Returning A list of prisoners */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['CaseloadItem'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Could not find prisoner with prison number */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Retrieve ineligibility reasons for offender
-   * @description Returns ineligibility reasons for creating a licence for a specific prisoner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   getIneligibilityReasons: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         nomsId: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description a list of ineligibility reasons */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': string
         }
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Could not find prisoner */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get a list of licence summaries for submitted variations by probation area.
-   * @description Get a list of licence summaries for all submitted variations belonging to the specified probation area code. Requires ROLE_CVL_ADMIN.
-   */
   submittedVariations: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         areaCode: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Returned matching licence summary details - empty if no matches. */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceSummary'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get a licence by its licence id
-   * @description Returns a single licence detail by its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   getLicenceById_1: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Licence found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['Licence']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get licence policy be version number
-   * @description Returns a single policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   getPolicyByVersion: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         version: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Licence Policy found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicencePolicy']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get differences between saved licences conditions and new policy
-   * @description Returns condition data saved against a licence no longer present within the new licence policyRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   compareLicence: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         version: string
         licenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceConditionChanges'][]
         }
       }
     }
   }
-  /**
-   * Get the active licence policy
-   * @description Returns the active policy using its unique identifier. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   getCurrentPolicy: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Licence Policy found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicencePolicy']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get all licence policy versions
-   * @description Returns a list of policies, active and presentRequires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   getPolicies: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Licence Policy found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicencePolicy']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get the exclusion zone map image for a specified licence and condition
-   * @description Get the exclusion zone map image. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
-  getExclusionZoneImage: {
+  getHdcLicenceData: {
     parameters: {
+      query?: never
+      header?: never
       path: {
-        licenceId: number
-        conditionId: number
+        bookingId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
-      /** @description Image returned */
+      /** @description The HDC curfew information was retrieved */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
-          'image/jpeg': unknown
+          'application/json': components['schemas']['HdcLicenceData']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** @description No image was found. */
+      /** @description The curfew details for this booking ID were not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get a list of licence events that match the supplied criteria.
-   * @description Get a list of licence events that match the supplied criteria. Requires ROLE_CVL_ADMIN.
-   */
+  getExclusionZoneImage: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+        conditionId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Image returned */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'image/jpeg': unknown
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description No image was found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getEventsMatchingCriteria: {
     parameters: {
       query?: {
@@ -6799,260 +9058,322 @@ export interface operations {
         sortBy?: string
         sortOrder?: string
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Returned matching licence events - empty if no matches. */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LicenceEvent'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get current hard stop cut-off date for licence to be timed out
-   * @description The last date that a probation practitioner can edit a licence by. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
-  currentHardStopCutoffDate: {
-    responses: {
-      /** @description returns cutoff date */
-      200: {
-        content: {
-          'application/json': components['schemas']['HardStopCutoffDate']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  /**
-   * Retrieve the individual and team count of cases that the probation practitioner needs to review
-   * @description Retrieve the individual and team count of cases that the probation practitioner needs to review. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   retrieveReviewCounts: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         staffIdentifier: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description The review counts were retrieved successfully */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ComReviewCount']
         }
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Returns the vary caseload for a member of staff
-   * @description Returns an enriched list of cases which can have a variation created for a member of staff
-   */
   getStaffVaryCaseload: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         deliusStaffIdentifier: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Returns a list of cases that can have a variation created */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ComCase'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Returns the create caseload for a member of staff
-   * @description Returns an enriched list of cases which require a licence to be created
-   */
   getStaffCreateCaseload: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         deliusStaffIdentifier: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Returns a list of cases that require a licence to be created */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ComCase'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Get the bank holiday dates for England and Wales
-   * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   getBankHolidaysForEnglandAndWales: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description Bank Holidays retrieved */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': string[]
         }
       }
       /** @description Unauthorised */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Bank holidays were not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Discards a licence record.
-   * @description Discards a licence record. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-   */
   discard: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Licence discarded */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Bad request, request body must be valid */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
-  /**
-   * Remove additional condition with specified condition Id
-   * @description Remove additional condition from the licence list of additional conditions.All user submitted condition data will also be removed.
-   */
   deleteAdditionalCondition: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         licenceId: number
         conditionId: number
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Condition has been removed from the licence */
       204: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Forbidden, requires an appropriate role */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The licence for this ID was not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
   }
+}
+type WithRequired<T, K extends keyof T> = T & {
+  [P in K]-?: T[P]
 }

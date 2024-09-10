@@ -44,7 +44,8 @@ export default class PrintLicenceRoutes {
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
 
-    const hdcInfo = licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcInfo() : null
+    const hdcLicenceData =
+      licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.bookingId) : null
 
     const licenceToPrint = {
       qrCode,
@@ -52,7 +53,7 @@ export default class PrintLicenceRoutes {
       singleItemConditions,
       multipleItemConditions,
       exclusionZoneMapData,
-      hdcInfo,
+      hdcLicenceData,
     }
 
     res.render(`pages/licence/${this.getTemplateForLicence(licence)}`, licenceToPrint)
@@ -80,7 +81,12 @@ export default class PrintLicenceRoutes {
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
 
-    const hdcInfo = licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcInfo() : null
+    const hdcLicenceData =
+      licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.bookingId) : null
+
+    const { monitoringSupplierTelephone } = config
+
+    const { prisonTelephone } = licence
 
     const licenceToPrint = {
       licencesUrl,
@@ -91,7 +97,9 @@ export default class PrintLicenceRoutes {
       singleItemConditions,
       multipleItemConditions,
       exclusionZoneMapData,
-      hdcInfo,
+      hdcLicenceData,
+      prisonTelephone,
+      monitoringSupplierTelephone,
     }
 
     res.renderPDF(`pages/licence/${this.getTemplateForLicence(licence)}`, licenceToPrint, {

@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import type { Licence } from '../../../@types/licenceApiClientTypes'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/licence/HDC_AP.njk').toString())
 
@@ -32,53 +33,73 @@ describe('Print a HDC AP licence', () => {
       qrCodesEnabled: false,
       singleItemConditions: [],
       multipleItemConditions: [],
-      hdcInfo: {
-        curfewAddress: 'addressLineOne, addressLineTwo, addressTownOrCity, addressPostcode',
-        firstDayCurfewTimes: {
-          from: '09:00',
-          until: '17:00',
+      hdcLicenceData: {
+        curfewAddress: {
+          addressLine1: 'addressLineOne',
+          addressLine2: 'addressLineTwo',
+          addressTown: 'addressTownOrCity',
+          postCode: 'addressPostcode',
         },
-        weeklyCurfewTimes: {
-          monday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          tuesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          wednesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          thursday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          friday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          saturday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          sunday: {
-            from: '09:00',
-            until: '17:00',
-          },
+        firstNightCurfewHours: {
+          firstNightFrom: '09:00',
+          firstNightUntil: '17:00',
         },
-        prisonTelephone: '0113 318 9547',
-        monitoringSupplierTelephone: '0800 137 291',
+        curfewHours: {
+          mondayFrom: '17:00',
+          mondayUntil: '09:00',
+          tuesdayFrom: '17:00',
+          tuesdayUntil: '09:00',
+          wednesdayFrom: '17:00',
+          wednesdayUntil: '09:00',
+          thursdayFrom: '17:00',
+          thursdayUntil: '09:00',
+          fridayFrom: '17:00',
+          fridayUntil: '09:00',
+          saturdayFrom: '17:00',
+          saturdayUntil: '09:00',
+          sundayFrom: '17:00',
+          sundayUntil: '09:00',
+        },
       },
+      prisonTelephone: '0114 2345232334',
     })
 
     expect($('title').text()).toContain('John Smith')
 
-    expect($('#details').text()).toContain('0113 318 9547')
+    expect($('#details').text()).toContain('0114 2345232334')
 
     expect($('#appointmentAddress').text()).toContain('The Square')
 
     expect($('#curfewAddress').text()).toContain('addressLineOne')
+  })
+
+  describe('Appointment date rendering', () => {
+    it('Should render specific date time', () => {
+      const $ = render({
+        licence: {
+          appointmentTimeType: 'SPECIFIC_DATE_TIME',
+          appointmentTime: '28/01/2023 10:30',
+        } as Licence,
+      })
+      expect($('[data-qa="appointment-time"]').text().trim()).toBe('On Saturday 28th January 2023 at 10:30 am')
+    })
+    it('Should render next working day', () => {
+      const $ = render({
+        licence: {
+          appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
+          appointmentTime: undefined,
+        } as Licence,
+      })
+      expect($('[data-qa="appointment-time"]').text().trim()).toBe('By 2pm on the next working day after your release')
+    })
+    it('Should render immediate upon release', () => {
+      const $ = render({
+        licence: {
+          appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
+          appointmentTime: undefined,
+        } as Licence,
+      })
+      expect($('[data-qa="appointment-time"]').text().trim()).toBe('Immediately after release')
+    })
   })
 })
