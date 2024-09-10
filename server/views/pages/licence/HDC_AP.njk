@@ -67,7 +67,15 @@
          {% for a in (licence.appointmentAddress | formatAddressAsList) %}
             <div id="appointmentAddress"><span class="bold line-space-after">{{ a }}</span></div>
          {% endfor %}
-         <br />At <span class="entry">{{ licence.appointmentTime | datetimeToDateWithDay or "MISSING - Appointment Time"}}</span> on <span class="entry">{{ licence.appointmentDate | datetimeTo12HourTime or "MISSING - Appointment Date"}}</span></li>
+         {% if licence.appointmentTimeType === 'SPECIFIC_DATE_TIME' %}
+            <p data-qa="appointment-time">On <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay or "MISSING - Appointment Time"}}</span> at <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime or "MISSING - Appointment Date"}}</span></p>
+         {% elif licence.appointmentTimeType === 'NEXT_WORKING_DAY_2PM' %}
+            <p data-qa="appointment-time"><span class="bold">By 2pm on the next working day after your release</span></p>
+         {% elif licence.appointmentTimeType === 'IMMEDIATE_UPON_RELEASE' %}
+            <p data-qa="appointment-time"><span class="bold">Immediately after release</span></p>
+         {% else %}
+            <p></p>
+         {% endif %}
    </ol>
    <div class="smallPaddingBottom"></div>
    <h2>Home Detention Curfew</h2>
