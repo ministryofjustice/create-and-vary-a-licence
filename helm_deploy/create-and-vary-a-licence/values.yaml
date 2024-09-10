@@ -60,7 +60,7 @@ generic-service:
     TOKEN_VERIFICATION_ENABLED: "true"
     COMMON_COMPONENTS_ENABLED: "true"
     SHOW_WHATS_NEW_BANNER: "true"
-    SERVICENOW_URL: 'https://mojprod.service-now.com/moj_sp?id%3Dsc_cat_item%26table%3Dsc_cat_item%26sys_id%3De389e8931b8bc65025dc6351f54bcb82%26recordUrl%3Dcom.glideapp.servicecatalog_cat_item_view.do%253Fv%253D1%26sysparm_id%3De389e8931b8bc65025dc6351f54bcb82&sa=D&source=docs&ust=1725979019789136&usg=AOvVaw2zJZYv1yliAZ94XL7--OPq'
+    SERVICE_NOW_URL: 'https://mojprod.service-now.com/moj_sp?id%3Dsc_cat_item%26table%3Dsc_cat_item%26sys_id%3De389e8931b8bc65025dc6351f54bcb82%26recordUrl%3Dcom.glideapp.servicecatalog_cat_item_view.do%253Fv%253D1%26sysparm_id%3De389e8931b8bc65025dc6351f54bcb82&sa=D&source=docs&ust=1725979019789136&usg=AOvVaw2zJZYv1yliAZ94XL7--OPq'
 
     # HDC
     MONITORING_SUPPLIER_TELEPHONE: "0800 137 291"
