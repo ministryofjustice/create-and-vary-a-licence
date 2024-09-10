@@ -59,8 +59,8 @@
          manage your return into the community. You will also be under the supervision of a nominated officer. The
          objectives of this supervision are to (a) protect the public, (b) prevent re-offending and (c) help you to
          resettle successfully into the community.</li>
-      <li>Your Home Detention Curfew commences on <span class="entry">{{ licence.homeDetentionCurfewApprovedDate | datetimeToDate or "MISSING - HDC Approved Date"}}</span> and expires on <span class="entry">{{ licence.actualReleaseDate | datetimeToDate or licence.conditionalReleaseDate | datetimeToDate or "MISSING - Actual Release Date"}}</span></li>
-      <li>Your supervision commences on <span class="entry">{{ licence.homeDetentionCurfewApprovedDate | datetimeToDate or "MISSING - HDC Approved Date"}}</span> and expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate or "MISSING - Licence expiry date" }}</span> unless this licence is previously revoked.</li>
+      <li>Your Home Detention Curfew commences on <span class="entry">{{ licence.actualReleaseDate | datetimeToDate or "MISSING - HDC Approved Date/Actual Release Date"}}</span> and expires on <span class="entry">{{ licence.conditionalReleaseDate | datetimeToDate or "MISSING - Conditional Release Date"}}</span></li>
+      <li>Your supervision commences on <span class="entry">{{ licence.actualReleaseDate | datetimeToDate or "MISSING - HDC Approved Date/Actual Release Date"}}</span> and expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate or "MISSING - Licence Expiry Date" }}</span> unless this licence is previously revoked.</li>
       <li>On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
          during the currency of your licence, whether or not leave has been granted for you to remain in the United
          Kingdom), unless otherwise directed by your supervising officer, you must report without delay to:<br /><br /><span class="entry">{{ licence.appointmentPerson }}</span><br />
@@ -225,7 +225,7 @@
       <p>Releasing establishment: <span class="entry">{{ prisonTelephone or "MISSING - prisonTelephone"}}</span></p><br />
    </div>
    <div class="box">
-      <p>Name: <span class="entry">{{ licence.approvedByName or "MISSING - ApprovedByName"}}</span></p>
+      <p>Name: <span class="entry">{{ licence.approvedByName or "MISSING - Approved By Name"}}</span></p>
       <p>Date: <span class="entry">{{ licence.approvedDate | datetimeToDate or "MISSING - Approved Date"}}</span></p>
       <p>for the Secretary of State for Justice.</p><br />
       <p>This licence has been given to me and its requirements have been explained.</p>
