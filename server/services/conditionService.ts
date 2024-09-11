@@ -43,6 +43,22 @@ import ElectronicTagPeriod from '../routes/manageConditions/types/additionalCond
 import { AdditionalConditionAp, AdditionalConditionPss, AdditionalConditionsConfig } from '../@types/LicencePolicy'
 import { User } from '../@types/CvlUserDetails'
 import LicenceStatus from '../enumeration/licenceStatus'
+import RegisterForServices from '../routes/manageConditions/types/additionalConditionInputs/registerForServices'
+import UsageHistory from '../routes/manageConditions/types/additionalConditionInputs/usageHistory'
+import TypesOfWebsites from '../routes/manageConditions/types/additionalConditionInputs/typesOfWebsites'
+import WebsiteAccess from '../routes/manageConditions/types/additionalConditionInputs/websiteAccess'
+import SubstanceMisuse from '../routes/manageConditions/types/additionalConditionInputs/substanceMisuse'
+import CashInPossession from '../routes/manageConditions/types/additionalConditionInputs/cashInPossession'
+import ValueOfAssets from '../routes/manageConditions/types/additionalConditionInputs/valueOfAssets'
+import BankAccountDetails from '../routes/manageConditions/types/additionalConditionInputs/bankAccountDetails'
+import DigitalServices from '../routes/manageConditions/types/additionalConditionInputs/digitalServices'
+import EvidenceOfIncome from '../routes/manageConditions/types/additionalConditionInputs/evidenceOfIncome'
+import OutOfBoundsEvent from '../routes/manageConditions/types/additionalConditionInputs/outOfBoundsEvent'
+import OutOfBoundsRegionPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/outOfBoundsRegionPolicyV3'
+import ReportToApprovedPremisesPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/reportToApprovedPremisesPolicyV3'
+import RestrictionOfResidencyPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/restrictionOfResidencyPolicyV3'
+import UnsupervisedContactPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/unsupervisedContactPolicyV3'
+import WorkingWithChildrenPolicyV3 from '../routes/manageConditions/types/additionalConditionInputs/workingWithChildrenPolicyV3'
 
 export type PolicyAdditionalCondition = AdditionalConditionAp | AdditionalConditionPss
 
@@ -229,6 +245,54 @@ export default class ConditionService {
           break
         case 'ElectronicTagPeriod':
           validator = ElectronicTagPeriod
+          break
+        case 'RegisterForServices':
+          validator = RegisterForServices
+          break
+        case 'UsageHistory':
+          validator = UsageHistory
+          break
+        case 'TypesOfWebsites':
+          validator = TypesOfWebsites
+          break
+        case 'WebsiteAccess':
+          validator = WebsiteAccess
+          break
+        case 'SubstanceMisuse':
+          validator = SubstanceMisuse
+          break
+        case 'CashInPossession':
+          validator = CashInPossession
+          break
+        case 'ValueOfAssets':
+          validator = ValueOfAssets
+          break
+        case 'BankAccountDetails':
+          validator = BankAccountDetails
+          break
+        case 'EvidenceOfIncome':
+          validator = EvidenceOfIncome
+          break
+        case 'DigitalServices':
+          validator = DigitalServices
+          break
+        case 'OutOfBoundsEvent':
+          validator = OutOfBoundsEvent
+          break
+        case 'OutOfBoundsRegionPolicyV3':
+          validator = OutOfBoundsRegionPolicyV3
+          break
+        case 'ReportToApprovedPremisesPolicyV3':
+          validator = ReportToApprovedPremisesPolicyV3
+          break
+        case 'RestrictionOfResidencyPolicyV3':
+          validator = RestrictionOfResidencyPolicyV3
+          break
+        case 'UnsupervisedContactPolicyV3':
+          validator = UnsupervisedContactPolicyV3
+          break
+        case 'WorkingWithChildrenPolicyV3':
+          validator = WorkingWithChildrenPolicyV3
           break
         default: {
           // silently ignore
