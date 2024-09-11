@@ -1,58 +1,52 @@
 import HdcService from './hdcService'
-import { LicenceApiClient } from '../data'
+import LicenceApiClient from '../data/licenceApiClient'
 
-describe('HDC service', () => {
+jest.mock('../data/licenceApiClient')
+
+describe('HDC Service', () => {
   const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const hdcService = new HdcService(licenceApiClient)
+
+  const exampleHdcLicenceData = {
+    curfewAddress: {
+      addressLine1: 'addressLineOne',
+      addressLine2: 'addressLineTwo',
+      addressTown: 'addressTownOrCity',
+      postCode: 'addressPostcode',
+    },
+    firstNightCurfewHours: {
+      firstNightFrom: '09:00',
+      firstNightUntil: '17:00',
+    },
+    curfewHours: {
+      mondayFrom: '17:00',
+      mondayUntil: '09:00',
+      tuesdayFrom: '17:00',
+      tuesdayUntil: '09:00',
+      wednesdayFrom: '17:00',
+      wednesdayUntil: '09:00',
+      thursdayFrom: '17:00',
+      thursdayUntil: '09:00',
+      fridayFrom: '17:00',
+      fridayUntil: '09:00',
+      saturdayFrom: '17:00',
+      saturdayUntil: '09:00',
+      sundayFrom: '17:00',
+      sundayUntil: '09:00',
+    },
+  }
 
   afterEach(() => {
     jest.clearAllMocks()
   })
 
   describe('Get HDC information', () => {
-    it('retrieves the HDC information', async () => {
-      const exampleHdcInfo = {
-        curfewAddress: 'addressLineOne, addressLineTwo, addressTownOrCity, addressPostcode',
-        firstDayCurfewTimes: {
-          from: '09:00',
-          until: '17:00',
-        },
-        weeklyCurfewTimes: {
-          monday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          tuesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          wednesday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          thursday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          friday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          saturday: {
-            from: '09:00',
-            until: '17:00',
-          },
-          sunday: {
-            from: '09:00',
-            until: '17:00',
-          },
-        },
-        prisonTelephone: '0113 318 9547',
-        monitoringSupplierTelephone: '0800 137 291',
-      }
+    it('Should retrieve HDC information', async () => {
+      licenceApiClient.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
-      const result = await hdcService.getHdcInfo()
-      expect(result).toEqual(exampleHdcInfo)
+      const result = await hdcService.getHdcLicenceData(1)
+      expect(result).toEqual(exampleHdcLicenceData)
+      expect(licenceApiClient.getHdcLicenceData).toHaveBeenCalledWith(1)
     })
   })
 })

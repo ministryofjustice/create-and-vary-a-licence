@@ -1,55 +1,18 @@
-import { HdcFirstDayCurfewFromUntil, HdcInfo, HdcWeeklyCurfewFromUntil } from '../@types/HdcLicence'
-import config from '../config'
+import { HdcLicenceData } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 
 export default class HdcService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
-  async getHdcInfo(): Promise<HdcInfo> {
-    const curfewAddress: string = 'addressLineOne, addressLineTwo, addressTownOrCity, addressPostcode'
+  async getHdcLicenceData(bookingId: number): Promise<HdcLicenceData> {
+    const hdcLicenceData = await this.licenceApiClient.getHdcLicenceData(bookingId)
 
-    const firstDayCurfewTimes: HdcFirstDayCurfewFromUntil = {
-      from: '09:00',
-      until: '17:00',
-    }
-    const weeklyCurfewTimes: HdcWeeklyCurfewFromUntil = {
-      monday: {
-        from: '09:00',
-        until: '17:00',
-      },
-      tuesday: {
-        from: '09:00',
-        until: '17:00',
-      },
-      wednesday: {
-        from: '09:00',
-        until: '17:00',
-      },
-      thursday: {
-        from: '09:00',
-        until: '17:00',
-      },
-      friday: {
-        from: '09:00',
-        until: '17:00',
-      },
-      saturday: {
-        from: '09:00',
-        until: '17:00',
-      },
-      sunday: {
-        from: '09:00',
-        until: '17:00',
-      },
-    }
-    const prisonTelephone = '0113 318 9547'
-    const { monitoringSupplierTelephone } = config
+    const { curfewAddress, firstNightCurfewHours, curfewHours } = hdcLicenceData
+
     return {
       curfewAddress,
-      firstDayCurfewTimes,
-      weeklyCurfewTimes,
-      prisonTelephone,
-      monitoringSupplierTelephone,
+      firstNightCurfewHours,
+      curfewHours,
     }
   }
 }
