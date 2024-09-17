@@ -1,0 +1,88 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "formBuilder.njk" import formBuilder %}
+
+{% set pageTitle = applicationName + " - Create a licence - Additional Conditions" %}
+{% set pageId = "additional-condition-input-page" %}
+{% set fromReview = "?fromReview=true" if fromReview %}
+{% set fromReviewAppend = "&fromReview=true" if fromReview %}
+
+{% set fromPolicyReviewQuery = "?fromPolicyReview=true" if fromPolicyReview %}
+{% set fromPolicyReviewAppend = "&fromPolicyReview=true" if fromPolicyReview %}
+
+{% if fromPolicyReview %}
+  {% set backLinkHref = "/licence/vary/id/" + licence.id + "/policy-changes/input/callback/"+ (policyReview.policyChangeInputCounter - 1)%}
+  {% set noJsBackLink = true%}
+{% else %}
+  {% set backLinkHref = "/licence/create/id/" + licence.id + "/additional-licence-conditions" %}
+{% endif %}
+
+{% block content %}
+    {% if fromPolicyReview %}
+        <span class="govuk-caption-l">Change {{policyReview.conditionCounter}} of {{policyReview.policyChangesCount}}</span>
+    {% endif %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Complete the licence condition</h1>
+        </div>
+    </div>
+
+
+    {% set fileUploadPresent = additionalCondition.uploadSummary.length > 0 %}
+    
+    {# Alter the form encoding to multi-part formdata and supply csrf token in query params for file upload conditions #}
+    <div class="govuk-button-group">
+        <form method="POST"
+            encType="multipart/form-data"
+            action="/licence/create/id/{{licence.id}}/additional-licence-conditions/condition/{{additionalCondition.id}}/file-upload?_csrf={{ csrfToken }}{{ fromReviewAppend }}{{ fromPolicyReviewAppend }}">
+
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" name="code" value="{{ config.code }}">
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <p class="govuk-body">
+                        {{ config.text }}
+                    </p>
+                    {% if config.subtext %}
+                        <div class="govuk-hint">{{ config.subtext }}</div>
+                    {% endif %}
+
+                    {{ formBuilder(licence.id, config, additionalCondition, validationErrors, formResponses, csrfToken) }}
+                    {% if not fileUploadPresent %}
+                        <h2 class="govuk-heading-m govuk-!-padding-top-8">Help with this licence condition</h2>
+                        {{ govukDetails({
+                            summaryText: "If you do not have a map",
+                            html: "You can create one on <a class='govuk-link govuk-link--no-visited-state govuk-!-margin-right-0' href='https://mapmaker.field-dynamics.co.uk/moj/map/default' target='_blank'>Map Maker</a>.",
+                            classes: 'govuk-!-margin-bottom-3'
+                        }) }}
+                    {% endif %}
+                    <div class="govuk-button-group">
+                        {{ govukButton({
+                            text: "Continue",
+                            type: "submit",
+                            classes: 'govuk-!-margin-top-6',
+                            attributes: { 'data-qa': 'continue' },
+                            preventDoubleClick: true
+                        }) }}
+                        
+                        {{ govukButton({
+                            text: "Delete this condition",
+                            href: "/licence/create/id/" + licence.id + "/additional-licence-conditions/condition/" + additionalCondition.id + "/delete" + fromReview + fromPolicyReviewQuery,
+                            classes: 'govuk-button--secondary',
+                            attributes: { 'data-qa': 'delete' },
+                            preventDoubleClick: true
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/assets/js/conditions/addAnother.js"></script>
+{% endblock %}
+
