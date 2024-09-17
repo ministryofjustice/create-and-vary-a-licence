@@ -1,6 +1,7 @@
 import Page from './page'
 import AdditionalConditionsInputPage from './additionalConditionInput'
 import { Context } from '../support/context'
+import ExclusionZoneConditionInputPage from './exclusionZoneConditionInput'
 
 export default class AdditionalConditionsPage extends Page {
   private continueButtonId = '[data-qa=continue]'
@@ -27,5 +28,13 @@ export default class AdditionalConditionsPage extends Page {
     cy.task('stubGetLicenceWithConditionToComplete', this.context?.additionalConditions.shift())
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AdditionalConditionsInputPage)
+  }
+
+  clickContinueToMez = (): ExclusionZoneConditionInputPage => {
+    cy.task('stubPutAdditionalConditions')
+    cy.task('stubPutAdditionalConditionData')
+    cy.task('stubGetLicenceWithConditionToComplete', this.context?.additionalConditions.shift())
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(ExclusionZoneConditionInputPage)
   }
 }

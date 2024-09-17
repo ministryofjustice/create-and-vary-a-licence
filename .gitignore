@@ -128,4 +128,5 @@ integration_tests/screenshots/
 */*.iml
 **/Chart.lock
 .localstack
+/uploads/*
 
