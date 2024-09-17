@@ -92,6 +92,21 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads`
+      )
+    })
+
+    it('should redirect to the MEZ page from review if the flag is set', async () => {
+      req = {
+        params: {
+          licenceId: '1',
+          conditionId: '1',
+        },
+        body: { confirmRemoval: 'Yes' },
+        query: { fromReview: true },
+      } as unknown as Request
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(
         `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromReview=true`
       )
     })

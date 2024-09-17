@@ -93,7 +93,9 @@ export default class FileUploadListRoutes {
       )
     }
     return res.redirect(
-      `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${conditionResult.id}?fromReview=true`
+      `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${conditionResult.id}${
+        req.query?.fromReview ? '?fromReview=true' : ''
+      }`
     )
   }
 }

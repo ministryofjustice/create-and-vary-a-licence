@@ -6,7 +6,7 @@ import CheckAnswersPage from './checkAnswers'
 import PolicyChangesPage from './policyChangesPage'
 
 export default class AdditionalConditionsInputPage extends Page {
-  private continueButtonId = '[data-qa=continue]'
+  protected continueButtonId = '[data-qa=continue]'
 
   private skipButtonId = '[data-qa=skip]'
 
