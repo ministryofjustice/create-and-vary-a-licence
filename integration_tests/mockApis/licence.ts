@@ -7,6 +7,7 @@ import policyV2_0 from './polices/v2-0'
 // eslint-disable-next-line camelcase
 import policyV2_1 from './polices/v2-1'
 import LicenceCreationType from '../../server/enumeration/licenceCreationType'
+import { AdditionalCondition } from '../../server/@types/licenceApiClientTypes'
 
 const ACTIVE_POLICY_VERSION = '2.1'
 
@@ -177,6 +178,23 @@ export default {
     })
   },
 
+  stubGetEmptyLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/licence/id/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          additionalLicenceConditions: [],
+        },
+      },
+    })
+  },
+
   stubGetPssLicence: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -271,6 +289,7 @@ export default {
     appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
     isInHardStopPeriod: boolean
     kind: 'CRD' | 'VARIATION' | 'HARD_STOP'
+    conditions: AdditionalCondition[]
   }): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -295,7 +314,7 @@ export default {
           hardStopDate: options.isInHardStopPeriod
             ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
             : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
-          additionalLicenceConditions: [
+          additionalLicenceConditions: options.conditions || [
             {
               id: 1,
               code: '5db26ab3-9b6f-4bee-b2aa-53aa3f3be7dd',
@@ -2177,11 +2196,39 @@ export default {
     })
   },
 
+  stubDeleteAdditionalConditionById: () => {
+    return stubFor({
+      request: {
+        method: 'DELETE',
+        urlPattern: `/licences-api/licence/id/(\\d)*/additional-condition/id/(\\d)`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
   stubDeleteAdditionalConditionsByCode: () => {
     return stubFor({
       request: {
         method: 'POST',
         urlPattern: `/licences-api/licence/id/(\\d)*/delete-additional-conditions-by-code`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
+  stubPostExclusionZone: () => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/exclusion-zone/id/(\\d)/condition/id/(\\d)/file-upload`,
       },
       response: {
         status: 200,
