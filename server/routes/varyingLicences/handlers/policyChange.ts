@@ -15,16 +15,9 @@ export default class PolicyChangeRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licenceId, changeCounter } = req.params
-    const { licence } = res.locals
+    const { licence, user } = res.locals
 
     const conditionCounter = +changeCounter
-    const policyChangesCount = req.session.changedConditions.length
-    const condition = req.session.changedConditions[conditionCounter - 1]
-
-    let conditionHintText
-    if (condition && policyChangeHintText[condition.code]) {
-      conditionHintText = policyChangeHintText[condition.code][this.formatVersionNumber('2.1')]
-    }
 
     // Overriding session changeCounter for when the back link is clicked
     req.session.changedConditionsCounter = conditionCounter
@@ -32,6 +25,17 @@ export default class PolicyChangeRoutes {
     if (conditionCounter === 0) {
       return res.redirect(`/licence/vary/id/${licenceId}/policy-changes`)
     }
+
+    const policyChangesCount = req.session.changedConditions.length
+    const condition = req.session.changedConditions[conditionCounter - 1]
+
+    const parentLicence = await this.licenceService.getParentLicenceOrSelf(licence.id, user)
+
+    const conditionHintText =
+      condition &&
+      policyChangeHintText.find(
+        change => change.code === condition.code && change.fromVersions.includes(parentLicence.version)
+      )
 
     let replacements: AdditionalConditionAp[] | AdditionalConditionPss[] = []
     if (condition.suggestions) {
@@ -118,7 +122,7 @@ export default class PolicyChangeRoutes {
       // Add replacement conditions
       if (req.body.additionalConditions?.length > 0) {
         await Promise.all(
-          await req.body.additionalConditions.map(async (code: string) => {
+          req.body.additionalConditions.map(async (code: string) => {
             const conditionToAdd = await this.conditionService.getAdditionalConditionByCode(code, licence.version)
 
             if (!licenceConditionCodes.includes(code)) {
