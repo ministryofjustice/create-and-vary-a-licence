@@ -9,6 +9,7 @@ import type { Services } from '../../../../services'
 import FileUploadInputRoutes from './fileUploadInputRoutes'
 import FileUploadListRoutes from './fileUploadListRoutes'
 import FileUploadRemovalRoutes from './fileUploadRemovalRoutes'
+import FileUploadType from '../../../../enumeration/fileUploadType'
 
 const upload = multer({ dest: 'uploads/' })
 
@@ -53,14 +54,14 @@ export default function Index({ licenceService, conditionService }: Services): R
 
   {
     // upload/delete files from input page for multi-instance conditions (eg MEZ)
-    const controller = new FileUploadInputRoutes(licenceService, true)
+    const controller = new FileUploadInputRoutes(licenceService, FileUploadType.multiInstance)
     postWithFileUpload('/additional-licence-conditions/condition/:conditionId/file-upload-input', controller.POST)
     get('/additional-licence-conditions/condition/:conditionId/file-upload-delete', controller.DELETE)
   }
 
   {
     // upload/delete files from input page for single-instance conditions
-    const controller = new FileUploadInputRoutes(licenceService, false)
+    const controller = new FileUploadInputRoutes(licenceService, FileUploadType.singleInstance)
     postWithFileUpload('/additional-licence-conditions/condition/:conditionId/file-upload', controller.POST)
     get('/additional-licence-conditions/condition/:conditionId/delete', controller.DELETE)
   }
