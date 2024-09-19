@@ -40,7 +40,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
   })
 
   describe('Multi-instance upload condition', () => {
-    const handler = new FileUploadInputRoutes(licenceService, FileUploadType.multiInstance)
+    const handler = new FileUploadInputRoutes(licenceService, FileUploadType.MULTI_INSTANCE)
     describe('POST', () => {
       beforeEach(() => {
         licenceService.updateAdditionalConditionData = jest.fn()
@@ -185,7 +185,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
   })
 
   describe('Single-instance upload condition', () => {
-    const handler = new FileUploadInputRoutes(licenceService, FileUploadType.singleInstance)
+    const handler = new FileUploadInputRoutes(licenceService, FileUploadType.SINGLE_INSTANCE)
     describe('POST', () => {
       beforeEach(() => {
         licenceService.updateAdditionalConditionData = jest.fn()

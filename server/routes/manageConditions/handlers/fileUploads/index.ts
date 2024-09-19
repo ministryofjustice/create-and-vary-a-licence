@@ -54,14 +54,14 @@ export default function Index({ licenceService, conditionService }: Services): R
 
   {
     // upload/delete files from input page for multi-instance conditions (eg MEZ)
-    const controller = new FileUploadInputRoutes(licenceService, FileUploadType.multiInstance)
+    const controller = new FileUploadInputRoutes(licenceService, FileUploadType.MULTI_INSTANCE)
     postWithFileUpload('/additional-licence-conditions/condition/:conditionId/file-upload-input', controller.POST)
     get('/additional-licence-conditions/condition/:conditionId/file-upload-delete', controller.DELETE)
   }
 
   {
     // upload/delete files from input page for single-instance conditions
-    const controller = new FileUploadInputRoutes(licenceService, FileUploadType.singleInstance)
+    const controller = new FileUploadInputRoutes(licenceService, FileUploadType.SINGLE_INSTANCE)
     postWithFileUpload('/additional-licence-conditions/condition/:conditionId/file-upload', controller.POST)
     get('/additional-licence-conditions/condition/:conditionId/delete', controller.DELETE)
   }

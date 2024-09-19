@@ -1,6 +1,6 @@
 enum FileUploadType {
-  multiInstance = 'multiInstance',
-  singleInstance = 'singleInstance',
+  MULTI_INSTANCE = 'multiInstance',
+  SINGLE_INSTANCE = 'singleInstance',
 }
 
 export default FileUploadType

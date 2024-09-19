@@ -17,7 +17,7 @@ export default class fileUploadInputRoutes {
 
     let redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/callback`
 
-    if (this.fileUploadType === FileUploadType.multiInstance) {
+    if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
       redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads`
     }
 
@@ -53,7 +53,7 @@ export default class fileUploadInputRoutes {
       append += '?fromReview=true'
     }
 
-    if (this.fileUploadType === FileUploadType.multiInstance) {
+    if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
       return res.redirect(
         `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads${append}`
       )
