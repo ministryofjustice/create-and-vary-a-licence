@@ -30,7 +30,7 @@ context('Approve a licence', () => {
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubGetPrisonerImage')
-    cy.task('stubGetStaffDetailByUsername')
+    cy.task('stubGetStaffDetails')
     cy.task('stubFeComponents')
   })
 

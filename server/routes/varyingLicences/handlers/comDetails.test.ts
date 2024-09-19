@@ -1,12 +1,13 @@
 import { Request, Response } from 'express'
 
 import ComDetailsRoutes from './comDetails'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
+import { DeliusStaff } from '../../../@types/deliusClientTypes'
 
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 
 describe('Route Handlers - COM Details', () => {
-  const handler = new ComDetailsRoutes(communityService)
+  const handler = new ComDetailsRoutes(probationService)
   let req: Request
   let res: Response
 
@@ -26,22 +27,22 @@ describe('Route Handlers - COM Details', () => {
       },
     } as unknown as Response
 
-    communityService.getStaffDetailByUsername = jest.fn()
+    probationService.getStaffDetailByUsername = jest.fn()
   })
 
   describe('GET', () => {
     it('should render com details view', async () => {
-      communityService.getStaffDetailByUsername.mockResolvedValue({
-        staff: {
-          forenames: 'Joe',
+      probationService.getStaffDetailByUsername.mockResolvedValue({
+        name: {
+          forename: 'Joe',
           surname: 'Rogan',
         },
         telephoneNumber: '07892387162',
         email: 'jrogan@probation.gov.uk',
-      })
+      } as DeliusStaff)
 
       await handler.GET(req, res)
-      expect(communityService.getStaffDetailByUsername).toHaveBeenCalledWith('jrogan')
+      expect(probationService.getStaffDetailByUsername).toHaveBeenCalledWith('jrogan')
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
         returnLink: req.session.returnToCase,
         name: 'Joe Rogan',

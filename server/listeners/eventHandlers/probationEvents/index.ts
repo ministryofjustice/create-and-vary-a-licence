@@ -4,8 +4,8 @@ import { ProbationEventMessage } from '../../../@types/events'
 import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHandler'
 import { Services } from '../../../services'
 
-export default function buildEventHandler({ communityService, licenceService }: Services) {
-  const offenderManagerChangedHandler = new OffenderManagerChangedEventHandler(communityService, licenceService)
+export default function buildEventHandler({ probationService, licenceService }: Services) {
+  const offenderManagerChangedHandler = new OffenderManagerChangedEventHandler(probationService, licenceService)
 
   return async (messages: Message[]) => {
     messages.forEach(message => {

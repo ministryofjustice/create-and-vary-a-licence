@@ -15,7 +15,7 @@ import ComDetailsRoutes from './handlers/comDetails'
 export default function Index({
   licenceService,
   approvedCaseloadService,
-  communityService,
+  probationService,
   prisonerService,
   conditionService,
 }: Services): Router {
@@ -39,10 +39,10 @@ export default function Index({
       asyncMiddleware(handler)
     )
 
-  const comDetailsHandler = new ComDetailsRoutes(communityService)
+  const comDetailsHandler = new ComDetailsRoutes(probationService)
   const approvalCasesHandler = new ApprovalCaseRoutes(approvedCaseloadService, prisonerService)
-  const approvalViewHandler = new ApprovalViewRoutes(licenceService, communityService)
-  const approvalConfirmedHandler = new ConfirmApprovedRoutes(communityService)
+  const approvalViewHandler = new ApprovalViewRoutes(licenceService, probationService)
+  const approvalConfirmedHandler = new ConfirmApprovedRoutes(probationService)
   const approvalRejectedHandler = new ConfirmRejectedRoutes()
 
   get('/cases', approvalCasesHandler.GET)

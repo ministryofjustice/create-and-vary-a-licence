@@ -1,4 +1,4 @@
-import CommunityService from '../communityService'
+import ProbationService from '../probationService'
 import PrisonerService from '../prisonerService'
 import LicenceService from '../licenceService'
 import LicenceStatus from '../../enumeration/licenceStatus'
@@ -29,7 +29,7 @@ type DeliusRecord = {
 export default class PromptListService {
   constructor(
     private readonly prisonerService: PrisonerService,
-    private readonly communityService: CommunityService,
+    private readonly probationService: ProbationService,
     private readonly licenceService: LicenceService
   ) {}
 
@@ -109,47 +109,27 @@ export default class PromptListService {
   }
 
   private getDeliusRecords = async (prisonerNumbers: Array<string>): Promise<Record<string, DeliusRecord>> => {
-    const deliusRecords = await this.communityService.getOffendersByNomsNumbers(prisonerNumbers)
-
-    const prisonerNumbersToDeliusRecords = Object.fromEntries(
-      deliusRecords.map(r => [
-        r.otherIds.nomsNumber,
-        {
-          om: r.offenderManagers.find(om => om.active),
-          probationAreaCode: r.offenderManagers.find(om => om.active).probationArea.code,
-          crn: r.otherIds?.crn,
-        },
-      ])
+    const deliusRecords = await this.probationService.getOffendersByNomsNumbers(prisonerNumbers)
+    const deliusCrns = deliusRecords.map(r => r.otherIds.crn)
+    const comEmails = Object.fromEntries(
+      (await this.probationService.getManagerEmailAddresses(deliusCrns)).map(r => [r.code, r.email])
     )
-
-    const staffCodesToLookup = new Set(
-      Object.values(prisonerNumbersToDeliusRecords)
-        .map(record => record.om.staff?.code)
-        .filter(s => s)
-    )
-
-    const staff = await this.communityService.getStaffDetailByStaffCodeList(Array.from(staffCodesToLookup))
-    const staffCodeToStaff = Object.fromEntries(staff.map(s => [s.staffCode, s]))
 
     return Object.fromEntries(
-      prisonerNumbers
-        .filter(prisoner => prisonerNumbersToDeliusRecords[prisoner])
-        .map(prisoner => {
-          const { om, crn } = prisonerNumbersToDeliusRecords[prisoner]
-          const staff = staffCodeToStaff[om.staff.code]
-
-          return [
-            prisoner,
-            {
-              crn,
-              comStaffCode: om.staff.code,
-              comEmail: staff.email,
-              comName: `${om.staff.forenames} ${om.staff.surname}`,
-              comAllocationDate: om.fromDate,
-              comProbationAreaCode: om.probationArea.code,
-            },
-          ]
-        })
+      deliusRecords.map(r => {
+        const om = r.offenderManagers.find(om => om.active)
+        return [
+          r.otherIds.nomsNumber,
+          {
+            crn: r.otherIds.crn,
+            comStaffCode: om.staff.code,
+            comEmail: comEmails[om.staff.code],
+            comName: `${om.staff.forenames} ${om.staff.surname}`,
+            comAllocationDate: om.fromDate,
+            comProbationAreaCode: om.probationArea.code,
+          },
+        ]
+      })
     )
   }
 

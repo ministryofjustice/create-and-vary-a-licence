@@ -2,14 +2,14 @@ import { Request, Response } from 'express'
 import _ from 'lodash'
 import { PrisonerSearchCriteria } from '../../../@types/prisonerSearchApiClientTypes'
 import PrisonerService from '../../../services/prisonerService'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { convertToTitleCase } from '../../../utils/utils'
 
 export default class OffenderSearchRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
-    private readonly communityService: CommunityService
+    private readonly probationService: ProbationService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -24,7 +24,7 @@ export default class OffenderSearchRoutes {
     let deliusRecords: OffenderDetail[]
     let nomisRecords
     if (!_.isEmpty(crn)) {
-      deliusRecords = await this.communityService.getOffendersByCrn([crn])
+      deliusRecords = await this.probationService.getOffendersByCrn([crn])
       nomisRecords = await this.prisonerService
         .searchPrisoners(
           {
@@ -44,7 +44,7 @@ export default class OffenderSearchRoutes {
           user
         )
         .catch(() => [])
-      deliusRecords = await this.communityService.getOffendersByNomsNumbers(nomisRecords.map(o => o.prisonerNumber))
+      deliusRecords = await this.probationService.getOffendersByNomsNumbers(nomisRecords.map(o => o.prisonerNumber))
     }
 
     const searchResults = nomisRecords

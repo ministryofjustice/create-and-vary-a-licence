@@ -3,7 +3,7 @@ import request from 'supertest'
 import LicenceService from '../../services/licenceService'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { CaseloadItem, CvlPrisoner, Licence, OmuContact } from '../../@types/licenceApiClientTypes'
-import CommunityService from '../../services/communityService'
+import ProbationService from '../../services/probationService'
 import ConditionService from '../../services/conditionService'
 import { AdditionalConditionAp } from '../../@types/LicencePolicy'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
@@ -14,11 +14,11 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const bankHolidayRetriever: BankHolidayRetriever = async () => []
 const ukBankHolidayFeedService = new UkBankHolidayFeedService(bankHolidayRetriever)
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 
 jest.mock('../../services/licenceService')
 jest.mock('../../services/conditionService')
-jest.mock('../../services/communityService')
+jest.mock('../../services/probationService')
 
 const licence = {
   nomsId: 'A1234BC',
@@ -30,7 +30,9 @@ const licence = {
 } as Licence
 
 beforeEach(() => {
-  app = appWithAllRoutes({ services: { licenceService, conditionService, ukBankHolidayFeedService, communityService } })
+  app = appWithAllRoutes({
+    services: { licenceService, conditionService, ukBankHolidayFeedService, probationService },
+  })
   licenceService.getOmuEmail.mockResolvedValue({ email: 'test@test.test' } as OmuContact)
   licenceService.getParentLicenceOrSelf.mockResolvedValue(licence)
   licenceService.createLicence.mockResolvedValue({ licenceId: 1 })

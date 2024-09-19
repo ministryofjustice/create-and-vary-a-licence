@@ -40,7 +40,7 @@ generic-service:
     GOTENBERG_API_URL: 'http://create-and-vary-a-licence-gotenberg'
 
     # A temporary reference to a local container which provides a stubbed Delius caseload
-    COMMUNITY_API_URL: 'https://cvl-probation-mock.hmpps.service.justice.gov.uk'
+    DELIUS_API_URL: 'https://cvl-probation-mock.hmpps.service.justice.gov.uk'
     PROBATION_SEARCH_API_URL: 'https://cvl-probation-mock.hmpps.service.justice.gov.uk'
 
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)

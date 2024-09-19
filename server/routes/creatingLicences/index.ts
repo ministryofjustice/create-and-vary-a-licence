@@ -28,7 +28,7 @@ import UserType from '../../enumeration/userType'
 export default function Index({
   licenceService,
   comCaseloadService,
-  communityService,
+  probationService,
   conditionService,
 }: Services): Router {
   const router = Router()
@@ -83,12 +83,12 @@ export default function Index({
   }
 
   {
-    const controller = new ComDetailsRoutes(communityService)
+    const controller = new ComDetailsRoutes(probationService)
     get('/probation-practitioner/staffCode/:staffCode', controller.GET)
   }
 
   {
-    const controller = new ConfirmCreateRoutes(communityService, licenceService)
+    const controller = new ConfirmCreateRoutes(probationService, licenceService)
     get('/nomisId/:nomisId/confirm', controller.GET)
     post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
   }
@@ -133,7 +133,7 @@ export default function Index({
   }
 
   {
-    const controller = new PrisonWillCreateThisLicenceRoutes(licenceService, communityService)
+    const controller = new PrisonWillCreateThisLicenceRoutes(licenceService, probationService)
     get('/nomisId/:nomisId/prison-will-create-this-licence', controller.GET)
   }
 

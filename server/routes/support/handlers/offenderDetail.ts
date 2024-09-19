@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import _ from 'lodash'
 import moment from 'moment'
 import PrisonerService from '../../../services/prisonerService'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
@@ -29,7 +29,7 @@ type CvlCom = {
 export default class OffenderDetailRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
-    private readonly communityService: CommunityService,
+    private readonly probationService: ProbationService,
     private readonly licenceService: LicenceService
   ) {}
 
@@ -37,10 +37,10 @@ export default class OffenderDetailRoutes {
     const { user } = res.locals
     const { nomsId } = req.params
     const { prisoner: prisonerDetail, cvl: hardStopDetails } = await this.licenceService.getPrisonerDetail(nomsId, user)
-    const deliusRecord = _.head(await this.communityService.searchProbationers({ nomsNumber: nomsId }))
+    const deliusRecord = _.head(await this.probationService.searchProbationers({ nomsNumber: nomsId }))
     const probationPractitioner = deliusRecord?.offenderManagers.find(com => com.active)
     const probationPractitionerContact = probationPractitioner
-      ? await this.communityService.getStaffDetailByStaffCode(probationPractitioner?.staff.code)
+      ? await this.probationService.getStaffDetailByStaffCode(probationPractitioner?.staff.code)
       : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
     const conditionalReleaseDate = this.formatNomisDate(prisonerDetail.conditionalReleaseDate)
@@ -83,7 +83,7 @@ export default class OffenderDetailRoutes {
         name: probationPractitioner
           ? `${probationPractitioner.staff.forenames} ${probationPractitioner.staff.surname}`
           : '',
-        staffCode: probationPractitionerContact?.staffCode,
+        staffCode: probationPractitionerContact?.code,
         email: probationPractitionerContact?.email,
         telephone: probationPractitionerContact?.telephoneNumber,
         team: probationPractitioner?.team?.description,

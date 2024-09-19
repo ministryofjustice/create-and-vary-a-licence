@@ -1,18 +1,19 @@
 import { Request, Response } from 'express'
-import type CommunityService from '../../../services/communityService'
+import type ProbationService from '../../../services/probationService'
+import { nameToString } from '../../../data/deliusClient'
 
 export default class ComDetailsRoutes {
-  constructor(private readonly communityService: CommunityService) {}
+  constructor(private readonly probationService: ProbationService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { staffCode } = req.params
-    const staffDetails = await this.communityService.getStaffDetailByStaffCode(staffCode)
+    const staffDetails = await this.probationService.getStaffDetailByStaffCode(staffCode)
 
     res.render('pages/support/comDetails', {
-      name: `${staffDetails.staff?.forenames} ${staffDetails.staff?.surname}`.trim(),
+      name: nameToString(staffDetails.name),
       telephone: staffDetails.telephoneNumber,
       email: staffDetails.email,
-      staffCode: staffDetails.staffCode,
+      staffCode: staffDetails.code,
     })
   }
 }

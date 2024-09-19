@@ -6,102 +6,19 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/community-api/secure/staff/username/(.)*`,
+        urlPattern: `/delius-api/staff/.*`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
-          staffIdentifier: 2000,
-          staffCode: 'X12345',
-          staff: {
-            forenames: 'John',
+          id: 2000,
+          code: 'X12345',
+          name: {
+            forename: 'John',
             surname: 'Smith',
           },
-          probationArea: {
-            code: 'N01',
-            description: 'Area N01',
-          },
-          teams: [
-            {
-              code: 'A',
-              description: 'Team A',
-              borough: {
-                code: 'PDU1',
-                description: 'PDU one',
-              },
-              district: {
-                code: 'LAU1',
-                description: 'LAU one',
-              },
-            },
-            {
-              code: 'B',
-              description: 'Team B',
-              borough: {
-                code: 'PDU1',
-                description: 'PDU one',
-              },
-              district: {
-                code: 'LAU1',
-                description: 'LAU one',
-              },
-            },
-          ],
-          telephoneNumber: '07786 989777',
-          email: 'jsmith@probation.com',
-        },
-      },
-    })
-  },
-
-  stubGetUserDetailsByUsername: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/community-api/secure/users/(.)*/details`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          roles: [],
-        },
-      },
-    })
-  },
-
-  stubAssignRole: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'PUT',
-        urlPattern: `/community-api/secure/users/(.)*/roles/(.)*`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {},
-      },
-    })
-  },
-
-  stubGetStaffDetailsByStaffId: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/community-api/secure/staff/staffIdentifier/(\\d)*`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          staffIdentifier: 2000,
-          staffCode: 'X12345',
-          staff: {
-            forenames: 'John',
-            surname: 'Smith',
-          },
-          probationArea: {
+          provider: {
             code: 'N01',
             description: 'Area N01',
           },
@@ -143,19 +60,19 @@ export default {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/community-api/secure/staff/staffCode/(.)*`,
+        urlPattern: `/delius-api/staff/bycode/(.)*`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
-          staffIdentifier: 2000,
-          staffCode: 'X12345',
-          staff: {
-            forenames: 'John',
+          id: 2000,
+          code: 'X12345',
+          name: {
+            forename: 'John',
             surname: 'Smith',
           },
-          probationArea: {
+          provider: {
             code: 'N01',
             description: 'Area N01',
           },
@@ -197,20 +114,20 @@ export default {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/community-api/secure/staff/list`,
+        urlPattern: `/delius-api/staff`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            staffIdentifier: 2000,
-            staffCode: 'X12345',
-            staff: {
-              forenames: 'John',
+            id: 2000,
+            code: 'X12345',
+            name: {
+              forename: 'John',
               surname: 'Smith',
             },
-            probationArea: {
+            provider: {
               code: 'N01',
               description: 'Area N01',
             },
@@ -249,11 +166,25 @@ export default {
     })
   },
 
+  stubAssignRole: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'PUT',
+        urlPattern: `/delius-api/users/(.)*/roles`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {},
+      },
+    })
+  },
+
   stubGetPduHeads: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/community-api/secure/staff/pduHeads/(.)*`,
+        urlPathPattern: `/delius-api/staff/.*/pdu-head`,
       },
       response: {
         status: 200,
@@ -263,93 +194,51 @@ export default {
     })
   },
 
-  stubGetAnOffendersManagers: (): SuperAgentRequest => {
+  stubGetResponsibleCommunityManager: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: `/community-api/secure/offenders/crn/(.)*/allOffenderManagers`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            isResponsibleOfficer: true,
-            staffId: 2000,
-            staffCode: 'X12345',
-            probationArea: {
-              code: 'N01',
-              description: 'Area N01',
-            },
-            team: {
-              code: 'A',
-              description: 'Team A',
-              borough: {
-                code: 'PDU1',
-                description: 'PDU one',
-              },
-              district: {
-                code: 'LAU1',
-                description: 'LAU one',
-              },
-            },
-          },
-        ],
-      },
-    })
-  },
-
-  stubGetSingleOffenderByCrn: (): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/community-api/secure/offenders/crn/(.)*/all`,
+        urlPathPattern: `/delius-api/probation-case/(.*)/responsible-community-manager`,
       },
       response: {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {
-          otherIds: {
-            crn: 'X2345',
-            pncNumber: '1234/12345',
-            croNumber: '1/12345',
+          id: 2000,
+          code: 'X12345',
+          name: {
+            forename: 'John',
+            surname: 'Smith',
           },
-          offenderManagers: [
-            {
-              active: true,
-              staff: {
-                code: 'X12345',
-                forenames: 'Joe',
-                surname: 'Bloggs',
-              },
-              probationArea: {
-                code: 'N01',
-                description: 'Area N01',
-              },
-              team: {
-                code: 'A',
-                description: 'Team A',
-                borough: {
-                  code: 'PDU1',
-                  description: 'PDU one',
-                },
-                district: {
-                  code: 'LAU1',
-                  description: 'LAU one',
-                },
-              },
+          provider: {
+            code: 'N01',
+            description: 'Area N01',
+          },
+          team: {
+            code: 'A',
+            description: 'Team A',
+            borough: {
+              code: 'PDU1',
+              description: 'PDU one',
             },
-          ],
+            district: {
+              code: 'LAU1',
+              description: 'LAU one',
+            },
+          },
+          username: 'jsmith',
+          email: 'jsmith@probation.com',
+          unallocated: false,
         },
       },
     })
   },
 
-  stubGetStaffDetailByUsername: (): SuperAgentRequest => {
+  stubGetManagerEmailAddresses: (): SuperAgentRequest => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/community-api/secure/staff/username/(.)*`,
+        urlPattern: `/delius-api/probation-case/responsible-community-manager`,
       },
       response: {
         status: 200,
@@ -363,7 +252,7 @@ export default {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/community-api/health/ping',
+        urlPattern: '/delius-api/health/ping',
       },
       response: {
         status: 200,
