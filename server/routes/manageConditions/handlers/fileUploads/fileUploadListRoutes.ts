@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import { AddAdditionalConditionRequest } from '../../../../@types/licenceApiClientTypes'
-import conditionType from '../../../../enumeration/conditionType'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import ConditionService from '../../../../services/conditionService'
 
@@ -25,13 +24,14 @@ export default class FileUploadListRoutes {
           }`
         )
       }
-      return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions/callback?fromReview=true`)
+      return res.redirect(
+        `/licence/create/id/${licence.id}/additional-licence-conditions/callback${req.query?.fromReview ? '?fromReview=true' : ''}`
+      )
     }
 
     return res.render('pages/manageConditions/fileUploads/list', {
       conditions,
       licenceId,
-      conditionType,
       displayMessage: null,
     })
   }
@@ -50,7 +50,6 @@ export default class FileUploadListRoutes {
       return res.render('pages/manageConditions/fileUploads/list', {
         conditions,
         licenceId,
-        conditionType,
         displayMessage,
       })
     }
@@ -87,15 +86,14 @@ export default class FileUploadListRoutes {
 
     const conditionResult = await this.licenceService.addAdditionalCondition(licenceId, type, request, user)
 
+    let redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${conditionResult.id}`
+
     if (req.query?.fromPolicyReview) {
-      return res.redirect(
-        `/licence/vary/id/${licenceId}/policy-changes/input/callback/${+req.session.changedConditionsInputsCounter + 1}`
-      )
+      redirect += '?fromPolicyReview=true'
+    } else if (req.query?.fromReview) {
+      redirect += '?fromReview=true'
     }
-    return res.redirect(
-      `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${conditionResult.id}${
-        req.query?.fromReview ? '?fromReview=true' : ''
-      }`
-    )
+
+    return res.redirect(redirect)
   }
 }

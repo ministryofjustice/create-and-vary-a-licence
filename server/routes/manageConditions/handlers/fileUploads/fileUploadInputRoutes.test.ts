@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import FileUploadInputRoutes from './fileUploadInputRoutes'
 import LicenceService from '../../../../services/licenceService'
 import type { Licence } from '../../../../@types/licenceApiClientTypes'
+import FileUploadType from '../../../../enumeration/fileUploadType'
 
 jest.mock('../../../../services/licenceService')
 
@@ -39,7 +40,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
   })
 
   describe('Multi-instance upload condition', () => {
-    const handler = new FileUploadInputRoutes(licenceService, true)
+    const handler = new FileUploadInputRoutes(licenceService, FileUploadType.MULTI_INSTANCE)
     describe('POST', () => {
       beforeEach(() => {
         licenceService.updateAdditionalConditionData = jest.fn()
@@ -75,6 +76,14 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
           '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromReview=true'
+        )
+      })
+
+      it('should redirect to the policy callback function with query parameter if fromPolicyReview flag is true', async () => {
+        req.query.fromPolicyReview = 'true'
+        await handler.POST(req, res)
+        expect(res.redirect).toHaveBeenCalledWith(
+          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromPolicyReview=true'
         )
       })
     })
@@ -176,7 +185,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
   })
 
   describe('Single-instance upload condition', () => {
-    const handler = new FileUploadInputRoutes(licenceService, false)
+    const handler = new FileUploadInputRoutes(licenceService, FileUploadType.SINGLE_INSTANCE)
     describe('POST', () => {
       beforeEach(() => {
         licenceService.updateAdditionalConditionData = jest.fn()
@@ -206,6 +215,14 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       })
 
       it('should redirect to the callback function with query parameter if fromReview flag is true', async () => {
+        req.query.fromReview = 'true'
+        await handler.POST(req, res)
+        expect(res.redirect).toHaveBeenCalledWith(
+          '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+        )
+      })
+
+      it('should redirect to the policy callback function with query parameter if fromReview flag is true', async () => {
         req.query.fromReview = 'true'
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(

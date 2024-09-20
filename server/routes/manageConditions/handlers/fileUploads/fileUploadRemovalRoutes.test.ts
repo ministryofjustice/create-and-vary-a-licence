@@ -111,6 +111,21 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       )
     })
 
+    it('should redirect to the MEZ page from policy review if the flag is set', async () => {
+      req = {
+        params: {
+          licenceId: '1',
+          conditionId: '1',
+        },
+        body: { confirmRemoval: 'Yes' },
+        query: { fromPolicyReview: true },
+      } as unknown as Request
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(
+        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromPolicyReview=true`
+      )
+    })
+
     it('should not call delete condition for submitted conditionId', async () => {
       req = {
         params: {
