@@ -49,10 +49,14 @@ export default class FileUploadRemovalRoutes {
 
     const condition = this.getLicenceCondition(parseInt(conditionId, 10), licence)
 
-    return res.redirect(
-      `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads${
-        req.query?.fromReview ? '?fromReview=true' : ''
-      }`
-    )
+    let redirect = `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
+
+    if (req.query?.fromPolicyReview) {
+      redirect += '?fromPolicyReview=true'
+    } else if (req.query?.fromReview) {
+      redirect += '?fromReview=true'
+    }
+
+    return res.redirect(redirect)
   }
 }
