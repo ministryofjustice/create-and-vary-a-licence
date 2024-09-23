@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
+import FileUploadType from '../../../../enumeration/fileUploadType'
 
 export default class fileUploadInputRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly isMultiInstance: boolean
+    private readonly fileUploadType: FileUploadType
   ) {}
 
   POST = async (req: Request, res: Response): Promise<void> => {
@@ -16,7 +17,7 @@ export default class fileUploadInputRoutes {
 
     let redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/callback`
 
-    if (this.isMultiInstance) {
+    if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
       redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/file-uploads`
     }
 
@@ -44,16 +45,20 @@ export default class fileUploadInputRoutes {
 
     await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)
 
-    if (this.isMultiInstance) {
+    let append = ''
+
+    if (req.query?.fromPolicyReview) {
+      append = '?fromPolicyReview=true'
+    } else if (req.query?.fromReview) {
+      append += '?fromReview=true'
+    }
+
+    if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
       return res.redirect(
-        `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads`
+        `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads${append}`
       )
     }
 
-    return res.redirect(
-      `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
-        req.query?.fromReview ? '?fromReview=true' : ''
-      }`
-    )
+    return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions/callback${append}`)
   }
 }

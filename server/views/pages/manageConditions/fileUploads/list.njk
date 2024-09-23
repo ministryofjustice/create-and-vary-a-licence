@@ -25,12 +25,12 @@
             actions: {
                 items: [
                     {
-                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" | addQueryParam('fromReview', fromReview),
+                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" | addQueryParam('fromReview', fromReview) | addQueryParam('fromPolicyReview', fromPolicyReview),
                         text: "Change details",
                         visuallyHiddenText: condition.uploadSummary[0].fileName
                     },
                     {
-                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/file-upload-removal" | addQueryParam('fromReview', fromReview),
+                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/file-upload-removal" | addQueryParam('fromReview', fromReview) | addQueryParam('fromPolicyReview', fromPolicyReview),
                         text: "Delete",
                         visuallyHiddenText: condition.uploadSummary[0].filename,
                         attributes: { "data-qa": "delete-map-" + loop.index0 + "-link" }
