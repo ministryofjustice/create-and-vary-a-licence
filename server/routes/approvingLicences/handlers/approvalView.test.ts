@@ -3,18 +3,19 @@ import { Request, Response } from 'express'
 import ApprovalViewRoutes from './approvalView'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
+import { DeliusStaff } from '../../../@types/deliusClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const deliusStaff = new ProbationService(null, null) as jest.Mocked<ProbationService>
 
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
 
-jest.mock('../../../services/communityService')
+jest.mock('../../../services/probationService')
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ApprovalViewRoutes(licenceService, communityService)
+  const handler = new ApprovalViewRoutes(licenceService, deliusStaff)
   let req: Request
   let res: Response
 
@@ -30,16 +31,16 @@ describe('Route - view and approve a licence', () => {
   })
 
   describe('GET', () => {
-    communityService.getStaffDetailByUsername.mockResolvedValue({
-      staffIdentifier: 3000,
+    deliusStaff.getStaffDetailByUsername.mockResolvedValue({
+      id: 3000,
       username: 'joebloggs',
       email: 'joebloggs@probation.gov.uk',
       telephoneNumber: '07777777777',
-      staff: {
-        forenames: 'Joe',
+      name: {
+        forename: 'Joe',
         surname: 'Bloggs',
       },
-    })
+    } as DeliusStaff)
     it('should check status is SUBMITTED else redirect to case list', async () => {
       res = {
         render: jest.fn(),
@@ -63,7 +64,7 @@ describe('Route - view and approve a licence', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/licence/approve/cases')
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
-      expect(communityService.getStaffDetailByUsername).not.toHaveBeenCalled()
+      expect(deliusStaff.getStaffDetailByUsername).not.toHaveBeenCalled()
     })
 
     it('should render a single licence view for approval', async () => {
@@ -99,7 +100,7 @@ describe('Route - view and approve a licence', () => {
         isDueForEarlyRelease: false,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
-      expect(communityService.getStaffDetailByUsername).toHaveBeenCalled()
+      expect(deliusStaff.getStaffDetailByUsername).toHaveBeenCalled()
     })
 
     it('should set isDueForEarlyRelease to true when the licence is not a variation and the flag is true', async () => {

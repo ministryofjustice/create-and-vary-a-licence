@@ -1,4 +1,4 @@
-import CommunityService from '../communityService'
+import ProbationService from '../probationService'
 import LicenceService from '../licenceService'
 import { DeliusRecord, ManagedCase } from '../../@types/managedCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
@@ -7,10 +7,11 @@ import { User } from '../../@types/CvlUserDetails'
 import type { LicenceSummary } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
 import { parseCvlDate } from '../../utils/utils'
+import { nameToString } from '../../data/deliusClient'
 
 export default class CaseloadService {
   constructor(
-    private readonly communityService: CommunityService,
+    private readonly probationService: ProbationService,
     private readonly licenceService: LicenceService
   ) {}
 
@@ -50,7 +51,7 @@ export default class CaseloadService {
 
   private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<ManagedCase[]> => {
     const nomisIds = licences.map(l => l.nomisId)
-    const deliusRecords = await this.communityService.getOffendersByNomsNumbers(nomisIds)
+    const deliusRecords = await this.probationService.getOffendersByNomsNumbers(nomisIds)
     const offenders = await this.pairDeliusRecordsWithNomis(deliusRecords, user)
     return offenders.map(offender => {
       return {
@@ -89,7 +90,7 @@ export default class CaseloadService {
       )
       .filter(comUsername => comUsername)
 
-    const coms = await this.communityService.getStaffDetailsByUsernameList(comUsernames)
+    const coms = await this.probationService.getStaffDetailsByUsernameList(comUsernames)
 
     return caseload.map(offender => {
       const responsibleCom = coms.find(
@@ -104,13 +105,14 @@ export default class CaseloadService {
         return {
           ...offender,
           probationPractitioner: {
-            staffCode: responsibleCom.staffCode,
-            name: `${responsibleCom.staff.forenames} ${responsibleCom.staff.surname}`.trim(),
+            staffCode: responsibleCom.code,
+            name: nameToString(responsibleCom.name),
           },
         }
       }
 
-      if (!offender.deliusRecord.staff || offender.deliusRecord.staff.unallocated) {
+      const com = offender.deliusRecord.offenderManagers.find(om => om.active)
+      if (!com || com.staff.unallocated) {
         return {
           ...offender,
         }
@@ -119,8 +121,8 @@ export default class CaseloadService {
       return {
         ...offender,
         probationPractitioner: {
-          staffCode: offender.deliusRecord.staff.code,
-          name: `${offender.deliusRecord.staff.forenames} ${offender.deliusRecord.staff.surname}`.trim(),
+          staffCode: com.staff.code,
+          name: `${com.staff.forenames} ${com.staff.surname}`.trim(),
         },
       }
     })

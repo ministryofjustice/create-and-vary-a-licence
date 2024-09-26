@@ -3,7 +3,7 @@ import type { User } from '../../@types/CvlUserDetails'
 import ApproverCaseloadService from './approverCaseloadService'
 import type { ApprovalCase } from '../../@types/licenceApiClientTypes'
 
-jest.mock('../communityService')
+jest.mock('../probationService')
 jest.mock('../licenceService')
 jest.mock('../../data/licenceApiClient')
 

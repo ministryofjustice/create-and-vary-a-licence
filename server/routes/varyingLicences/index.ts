@@ -39,7 +39,7 @@ function alterResObject() {
 export default function Index({
   licenceService,
   comCaseloadService,
-  communityService,
+  probationService,
   conditionService,
   timelineService,
 }: Services): Router {
@@ -72,7 +72,7 @@ export default function Index({
     )
 
   const caseloadHandler = new CaseloadRoutes(comCaseloadService)
-  const comDetailsHandler = new ComDetailsRoutes(communityService)
+  const comDetailsHandler = new ComDetailsRoutes(probationService)
   const timelineHandler = new TimelineRoutes(licenceService, timelineService)
   const viewLicenceHandler = new ViewVariationRoutes(licenceService, conditionService)
   const viewActiveLicenceHandler = new ViewActiveLicenceRoutes(conditionService)
@@ -83,7 +83,7 @@ export default function Index({
   const confirmDiscardVariationHandler = new ConfirmDiscardVariationRoutes(licenceService)
   const reviewLicenceHandler = new ReviewLicenceRoutes(licenceService)
   const reasonForVariationHandler = new ReasonForVariationRoutes(licenceService)
-  const variationSummaryHandler = new VariationSummaryRoutes(licenceService, communityService)
+  const variationSummaryHandler = new VariationSummaryRoutes(licenceService, probationService)
   const confirmationHandler = new ConfirmationRoutes()
   const policyChangesNoticeHandler = new PolicyChangesNoticeRoutes(licenceService)
   const policyChangesCallbackHandler = new PolicyChangesCallbackRoutes()

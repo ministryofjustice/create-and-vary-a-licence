@@ -1,13 +1,14 @@
 import { Request, Response } from 'express'
 
 import ComDetailsRoutes from './comDetails'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
+import { DeliusStaff } from '../../../@types/deliusClientTypes'
 
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-jest.mock('../../../services/communityService')
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+jest.mock('../../../services/probationService')
 
 describe('Route Handlers - COM Details', () => {
-  const handler = new ComDetailsRoutes(communityService)
+  const handler = new ComDetailsRoutes(probationService)
   let req: Request
   let res: Response
 
@@ -25,17 +26,17 @@ describe('Route Handlers - COM Details', () => {
 
   describe('GET', () => {
     it('should render com details view', async () => {
-      communityService.getStaffDetailByStaffCode.mockResolvedValue({
-        staff: {
-          forenames: 'Joe',
+      probationService.getStaffDetailByStaffCode.mockResolvedValue({
+        name: {
+          forename: 'Joe',
           surname: 'Bloggs',
         },
         telephoneNumber: '07892387162',
         email: 'joebloggs@probation.gov.uk',
-      })
+      } as DeliusStaff)
 
       await handler.GET(req, res)
-      expect(communityService.getStaffDetailByStaffCode).toHaveBeenCalledWith('X12345')
+      expect(probationService.getStaffDetailByStaffCode).toHaveBeenCalledWith('X12345')
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
         returnLink: '/licence/view/cases',
         name: 'Joe Bloggs',
@@ -53,17 +54,17 @@ describe('Route Handlers - COM Details', () => {
           activeTab: 'future-releases',
         },
       } as unknown as Request
-      communityService.getStaffDetailByStaffCode.mockResolvedValue({
-        staff: {
-          forenames: 'Joe',
+      probationService.getStaffDetailByStaffCode.mockResolvedValue({
+        name: {
+          forename: 'Joe',
           surname: 'Bloggs',
         },
         telephoneNumber: '07892387162',
         email: 'joebloggs@probation.gov.uk',
-      })
+      } as DeliusStaff)
 
       await handler.GET(req, res)
-      expect(communityService.getStaffDetailByStaffCode).toHaveBeenCalledWith('X12345')
+      expect(probationService.getStaffDetailByStaffCode).toHaveBeenCalledWith('X12345')
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
         returnLink: '/licence/view/cases#future-releases',
         name: 'Joe Bloggs',

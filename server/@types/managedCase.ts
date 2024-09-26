@@ -1,11 +1,10 @@
 import { type OffenderDetail } from './probationSearchApiClientTypes'
-import { type CommunityApiManagedOffender } from './communityClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import LicenceKind from '../enumeration/LicenceKind'
-import type { CvlPrisoner, CvlFields } from './licenceApiClientTypes'
+import type { CvlFields, CvlPrisoner } from './licenceApiClientTypes'
 
-export type DeliusRecord = OffenderDetail & CommunityApiManagedOffender
+export type DeliusRecord = OffenderDetail
 
 export type ProbationPractitioner = {
   staffCode?: string

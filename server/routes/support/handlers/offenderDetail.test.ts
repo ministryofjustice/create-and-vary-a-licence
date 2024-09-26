@@ -1,22 +1,23 @@
 import { Request, Response } from 'express'
 import PrisonerService from '../../../services/prisonerService'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 import OffenderDetailRoutes from './offenderDetail'
 import type { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import type { LicenceSummary, Licence, CaseloadItem } from '../../../@types/licenceApiClientTypes'
 import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
+import { DeliusStaff } from '../../../@types/deliusClientTypes'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 jest.mock('../../../services/prisonerService')
-jest.mock('../../../services/communityService')
+jest.mock('../../../services/probationService')
 jest.mock('../../../services/licenceService')
 
 describe('Route Handlers - Offender detail', () => {
-  const handler = new OffenderDetailRoutes(prisonerService, communityService, licenceService)
+  const handler = new OffenderDetailRoutes(prisonerService, probationService, licenceService)
   let req: Request
   let res: Response
 
@@ -61,7 +62,7 @@ describe('Route Handlers - Offender detail', () => {
       } as CaseloadItem
       licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-      communityService.searchProbationers.mockResolvedValue([
+      probationService.searchProbationers.mockResolvedValue([
         {
           otherIds: {
             crn: 'X1234',
@@ -102,10 +103,10 @@ describe('Route Handlers - Offender detail', () => {
         } as HdcStatus,
       ])
 
-      communityService.getStaffDetailByStaffCode.mockResolvedValue({
+      probationService.getStaffDetailByStaffCode.mockResolvedValue({
         email: 'mr.t@probation.gov.uk',
         telephoneNumber: '078929482994',
-      })
+      } as DeliusStaff)
 
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
@@ -191,7 +192,7 @@ describe('Route Handlers - Offender detail', () => {
     } as CaseloadItem
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    communityService.searchProbationers.mockResolvedValue([
+    probationService.searchProbationers.mockResolvedValue([
       {
         otherIds: {
           crn: 'X1234',
@@ -232,10 +233,10 @@ describe('Route Handlers - Offender detail', () => {
       } as HdcStatus,
     ])
 
-    communityService.getStaffDetailByStaffCode.mockResolvedValue({
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
       email: 'mr.g@probation.gov.uk',
       telephoneNumber: '078929482994',
-    })
+    } as DeliusStaff)
 
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
@@ -313,7 +314,7 @@ describe('Route Handlers - Offender detail', () => {
     } as CaseloadItem
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    communityService.searchProbationers.mockResolvedValue([
+    probationService.searchProbationers.mockResolvedValue([
       {
         otherIds: {
           crn: 'X1234',
@@ -354,10 +355,10 @@ describe('Route Handlers - Offender detail', () => {
       } as HdcStatus,
     ])
 
-    communityService.getStaffDetailByStaffCode.mockResolvedValue({
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
       email: 'mr.g@probation.gov.uk',
       telephoneNumber: '078929482994',
-    })
+    } as DeliusStaff)
 
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
@@ -443,7 +444,7 @@ describe('Route Handlers - Offender detail', () => {
     } as CaseloadItem
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    communityService.searchProbationers.mockResolvedValue([
+    probationService.searchProbationers.mockResolvedValue([
       {
         otherIds: {
           crn: 'X1234',
@@ -484,10 +485,10 @@ describe('Route Handlers - Offender detail', () => {
       } as HdcStatus,
     ])
 
-    communityService.getStaffDetailByStaffCode.mockResolvedValue({
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
       email: 'mr.g@probation.gov.uk',
       telephoneNumber: '078929482994',
-    })
+    } as DeliusStaff)
 
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
@@ -589,7 +590,7 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    communityService.searchProbationers.mockResolvedValue([
+    probationService.searchProbationers.mockResolvedValue([
       {
         otherIds: {
           crn: 'X1234',
@@ -630,10 +631,10 @@ describe('Route Handlers - Offender detail', () => {
       } as HdcStatus,
     ])
 
-    communityService.getStaffDetailByStaffCode.mockResolvedValue({
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
       email: 'mr.g@probation.gov.uk',
       telephoneNumber: '078929482994',
-    })
+    } as DeliusStaff)
 
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,

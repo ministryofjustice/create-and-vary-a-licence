@@ -1,32 +1,24 @@
 import LicenceService from '../../../services/licenceService'
 import { ProbationEventMessage } from '../../../@types/events'
 import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHandler'
-import CommunityService from '../../../services/communityService'
-import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
-import { CommunityApiOffenderManager, CommunityApiUserDetails } from '../../../@types/communityClientTypes'
+import ProbationService from '../../../services/probationService'
+import { DeliusManager } from '../../../@types/deliusClientTypes'
 
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/communityService')
+jest.mock('../../../services/probationService')
 
 describe('Offender manager changed event handler', () => {
-  beforeEach(() => {
-    communityService.getUserDetailsByUsername.mockResolvedValue({
-      roles: [{ name: 'LHDCBT002' }],
-    } as CommunityApiUserDetails)
-  })
-
   afterEach(() => {
     jest.resetAllMocks()
   })
 
-  const handler = new OffenderManagerChangedEventHandler(communityService, licenceService)
+  const handler = new OffenderManagerChangedEventHandler(probationService, licenceService)
 
   it('should handle case where the offender has no managers allocated', async () => {
-    communityService.getAnOffendersManagers.mockResolvedValue([])
-    communityService.getSingleOffenderByCrn.mockResolvedValue({ offenderManagers: [] } as OffenderDetail)
+    probationService.getResponsibleCommunityManager.mockResolvedValue(undefined)
 
     const event = {
       crn: 'X1234',
@@ -34,41 +26,24 @@ describe('Offender manager changed event handler', () => {
 
     await handler.handle(event)
 
-    expect(communityService.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
-    expect(communityService.getStaffDetailByStaffIdentifier).not.toHaveBeenCalled()
+    expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledWith('X1234')
     expect(licenceService.updateResponsibleCom).not.toHaveBeenCalled()
   })
 
   it('should update the responsible COM to the current RO in delius', async () => {
-    communityService.getSingleOffenderByCrn.mockResolvedValue({
-      offenderManagers: [
-        {
-          active: true,
-          staff: {
-            code: 'X12345',
-          },
-        },
-      ],
-    } as OffenderDetail)
-    communityService.getAnOffendersManagers.mockResolvedValue([
-      {
-        staffCode: 'X12344',
-        staffId: 2000,
-      },
-      {
-        staffCode: 'X12345',
-        staffId: 3000,
-      },
-    ])
-    communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({
-      staffIdentifier: 3000,
+    probationService.getResponsibleCommunityManager.mockResolvedValue({
+      code: 'X12344',
+      id: 3000,
       username: 'joebloggs',
       email: 'joebloggs@probation.gov.uk',
-      staff: {
-        forenames: 'Joe',
+      name: {
+        forename: 'Joe',
         surname: 'Bloggs',
       },
-    })
+      provider: {
+        code: 'P1',
+      },
+    } as DeliusManager)
 
     const event = {
       crn: 'X1234',
@@ -76,8 +51,7 @@ describe('Offender manager changed event handler', () => {
 
     await handler.handle(event)
 
-    expect(communityService.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
-    expect(communityService.getStaffDetailByStaffIdentifier).toHaveBeenCalledWith(3000)
+    expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledWith('X1234')
     expect(licenceService.updateResponsibleCom).toHaveBeenCalledWith('X1234', {
       staffIdentifier: 3000,
       staffUsername: 'joebloggs',
@@ -88,41 +62,32 @@ describe('Offender manager changed event handler', () => {
   })
 
   it('should update the probation team', async () => {
-    communityService.getSingleOffenderByCrn.mockResolvedValue({
-      offenderManagers: [
-        {
-          active: true,
-          staff: {
-            code: 'X12345',
-          },
-        },
-      ],
-    } as OffenderDetail)
-    communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({
+    probationService.getResponsibleCommunityManager.mockResolvedValue({
+      code: 'X12344',
+      id: 2000,
       username: 'joebloggs',
-    })
-    communityService.getAnOffendersManagers.mockResolvedValue([
-      {
-        staffCode: 'X12345',
-        staffId: 3000,
-        probationArea: {
-          code: 'N02',
-          description: 'N02 Region',
+      email: 'joebloggs@probation.gov.uk',
+      name: {
+        forename: 'Joe',
+        surname: 'Bloggs',
+      },
+      provider: {
+        code: 'N02',
+        description: 'N02 Region',
+      },
+      team: {
+        code: 'Team2',
+        description: 'Team2 Description',
+        borough: {
+          code: 'PDU2',
+          description: 'PDU2 Description',
         },
-        team: {
-          code: 'Team2',
-          description: 'Team2 Description',
-          borough: {
-            code: 'PDU2',
-            description: 'PDU2 Description',
-          },
-          district: {
-            code: 'LAU2',
-            description: 'LAU2 Description',
-          },
+        district: {
+          code: 'LAU2',
+          description: 'LAU2 Description',
         },
-      } as unknown as CommunityApiOffenderManager,
-    ])
+      },
+    } as DeliusManager)
 
     const event = {
       crn: 'X1234',
@@ -130,8 +95,6 @@ describe('Offender manager changed event handler', () => {
 
     await handler.handle(event)
 
-    expect(communityService.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
-    expect(communityService.getStaffDetailByStaffIdentifier).toHaveBeenCalledWith(3000)
     expect(licenceService.updateProbationTeam).toHaveBeenCalledWith('X1234', {
       probationAreaCode: 'N02',
       probationAreaDescription: 'N02 Region',
@@ -145,30 +108,10 @@ describe('Offender manager changed event handler', () => {
   })
 
   it('should not update the responsible COM if the COM does not have a username', async () => {
-    communityService.getSingleOffenderByCrn.mockResolvedValue({
-      offenderManagers: [
-        {
-          active: true,
-          staff: {
-            code: 'X12345',
-          },
-        },
-      ],
-    } as OffenderDetail)
-    communityService.getAnOffendersManagers.mockResolvedValue([
-      {
-        staffCode: 'X12344',
-        staffId: 2000,
-      },
-      {
-        staffCode: 'X12345',
-        staffId: 3000,
-      },
-    ])
-    communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({
-      staffIdentifier: 3000,
-      email: 'joebloggs@probation.gov.uk',
-    })
+    probationService.getResponsibleCommunityManager.mockResolvedValue({
+      code: 'X12344',
+      id: 2000,
+    } as DeliusManager)
 
     const event = {
       crn: 'X1234',
@@ -176,23 +119,11 @@ describe('Offender manager changed event handler', () => {
 
     await handler.handle(event)
 
-    expect(communityService.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
-    expect(communityService.getStaffDetailByStaffIdentifier).toHaveBeenCalledWith(3000)
     expect(licenceService.updateResponsibleCom).not.toHaveBeenCalled()
   })
 
   it('should not update the responsible COM if no offenderManagers', async () => {
-    communityService.getSingleOffenderByCrn.mockResolvedValue({} as OffenderDetail)
-    communityService.getAnOffendersManagers.mockResolvedValue([
-      {
-        staffCode: 'X12344',
-        staffId: 2000,
-      },
-      {
-        staffCode: 'X12345',
-        staffId: 3000,
-      },
-    ])
+    probationService.getResponsibleCommunityManager.mockResolvedValue(undefined)
 
     const event = {
       crn: 'X1234',
@@ -200,34 +131,11 @@ describe('Offender manager changed event handler', () => {
 
     await handler.handle(event)
 
-    expect(communityService.getAnOffendersManagers).toHaveBeenCalledWith('X1234')
-    expect(communityService.getStaffDetailByStaffIdentifier).not.toHaveBeenCalled()
     expect(licenceService.updateResponsibleCom).not.toHaveBeenCalled()
   })
 
   it('should assign the COM to a role if they do not have it already', async () => {
-    communityService.getSingleOffenderByCrn.mockResolvedValue({
-      offenderManagers: [
-        {
-          active: true,
-          staff: {
-            code: 'X12345',
-          },
-        },
-      ],
-    } as OffenderDetail)
-    communityService.getAnOffendersManagers.mockResolvedValue([
-      {
-        staffCode: 'X12345',
-        staffId: 3000,
-      },
-    ])
-    communityService.getStaffDetailByStaffIdentifier.mockResolvedValue({
-      staffIdentifier: 3000,
-      username: 'joebloggs',
-      email: 'joebloggs@probation.gov.uk',
-    })
-    communityService.getUserDetailsByUsername.mockResolvedValue({ roles: [] } as CommunityApiUserDetails)
+    probationService.getResponsibleCommunityManager.mockResolvedValue({ username: 'joebloggs' } as DeliusManager)
 
     const event = {
       crn: 'X1234',
@@ -235,6 +143,6 @@ describe('Offender manager changed event handler', () => {
 
     await handler.handle(event)
 
-    expect(communityService.assignDeliusRole).toHaveBeenCalledWith('JOEBLOGGS', 'LHDCBT002')
+    expect(probationService.assignDeliusRole).toHaveBeenCalledWith('JOEBLOGGS')
   })
 })
