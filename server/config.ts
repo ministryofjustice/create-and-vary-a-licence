@@ -146,14 +146,14 @@ export default {
       },
       agent: new AgentConfig(Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000))),
     },
-    communityApi: {
-      url: get('COMMUNITY_API_URL', 'http://localhost:8088', requiredInProduction),
+    delius: {
+      url: get('DELIUS_API_URL', 'http://localhost:8088', requiredInProduction),
       healthPath: '/health/ping',
       timeout: {
-        response: Number(get('COMMUNITY_API_TIMEOUT_RESPONSE', 30000)),
-        deadline: Number(get('COMMUNITY_API_TIMEOUT_DEADLINE', 30000)),
+        response: Number(get('DELIUS_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('DELIUS_API_TIMEOUT_DEADLINE', 30000)),
       },
-      agent: new AgentConfig(Number(get('COMMUNITY_API_TIMEOUT_RESPONSE', 30000))),
+      agent: new AgentConfig(Number(get('DELIUS_API_TIMEOUT_RESPONSE', 30000))),
     },
     gotenberg: {
       url: get('GOTENBERG_API_URL', 'http://localhost:3002', requiredInProduction),

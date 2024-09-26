@@ -14,7 +14,7 @@ This service requires instances of these dependent services:
 - `hmpps-auth` - authorisation and authentication
 - `redis` - session store and token caching
 - `prison-api` - prison data
-- `community-api` - probation data
+- `create-and-vary-a-licence-and-delius` - probation data
 - `create-and-vary-a-licence-api` - licence data
 - `prisoner-offender-search` - prisoner search
 - `probation-offender-search` - probation search
@@ -124,7 +124,7 @@ The types are committed into Git.
 
 Scripts are provided to generate these types from the development instances:
 
-`generate-community-api-types.sh` - Re-run when Community API types change
+`generate-delius-api-types.sh` - Re-run when Probation Integration API types change
 
 `generate-licence-api-types.sh` - Re-run when create and vary a licence API types change from dev
 `generate-licence-api-types.sh --local` - Re-run when create and vary a licence API types change from locally running API

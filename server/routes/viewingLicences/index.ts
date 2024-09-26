@@ -12,7 +12,7 @@ import ComDetailsRoutes from './handlers/comDetails'
 export default function Index({
   licenceService,
   prisonerService,
-  communityService,
+  probationService,
   caCaseloadService,
   qrCodeService,
   hdcService,
@@ -31,7 +31,7 @@ export default function Index({
   const viewCasesHandler = new ViewAndPrintCaseRoutes(caCaseloadService, prisonerService)
   const viewLicenceHandler = new ViewAndPrintLicenceRoutes(licenceService)
   const printHandler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService, hdcService)
-  const comDetailsHandler = new ComDetailsRoutes(communityService)
+  const comDetailsHandler = new ComDetailsRoutes(probationService)
 
   get('/cases', viewCasesHandler.GET)
   get('/probation-practitioner/staffCode/:staffCode', comDetailsHandler.GET)

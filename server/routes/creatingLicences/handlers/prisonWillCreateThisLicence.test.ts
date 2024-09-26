@@ -3,16 +3,16 @@ import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 
 import PrisonWillCreateThisLicenceRoutes from './prisonWillCreateThisLicence'
 import LicenceService from '../../../services/licenceService'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 import { CaseloadItem } from '../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/communityService')
+jest.mock('../../../services/probationService')
 
 describe('Route Handlers - Create Licence - Prison will create licence', () => {
-  const handler = new PrisonWillCreateThisLicenceRoutes(licenceService, communityService)
+  const handler = new PrisonWillCreateThisLicenceRoutes(licenceService, probationService)
   let req: Request
   let res: Response
 
@@ -62,7 +62,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
         },
         cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
       } as CaseloadItem)
-      communityService.getProbationer.mockResolvedValue({
+      probationService.getProbationer.mockResolvedValue({
         otherIds: {
           crn: 'X1234',
         },

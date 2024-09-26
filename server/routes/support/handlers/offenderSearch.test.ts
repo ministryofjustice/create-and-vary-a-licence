@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
 import OffenderSearchRoutes from './offenderSearch'
 import PrisonerService from '../../../services/prisonerService'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { Prisoner } from '../../../@types/prisonerSearchApiClientTypes'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 jest.mock('../../../services/prisonerService')
-jest.mock('../../../services/communityService')
+jest.mock('../../../services/probationService')
 
 describe('Route Handlers - Offender search', () => {
-  const handler = new OffenderSearchRoutes(prisonerService, communityService)
+  const handler = new OffenderSearchRoutes(prisonerService, probationService)
   let req: Request
   let res: Response
 
@@ -38,7 +38,7 @@ describe('Route Handlers - Offender search', () => {
         crn: 'X1234',
       }
 
-      communityService.getOffendersByCrn.mockResolvedValue([
+      probationService.getOffendersByCrn.mockResolvedValue([
         {
           otherIds: {
             crn: 'X1234',
@@ -77,7 +77,7 @@ describe('Route Handlers - Offender search', () => {
           lastName: 'Pepper',
         } as unknown as Prisoner,
       ])
-      communityService.getOffendersByNomsNumbers.mockResolvedValue([
+      probationService.getOffendersByNomsNumbers.mockResolvedValue([
         {
           otherIds: {
             crn: 'X1234',

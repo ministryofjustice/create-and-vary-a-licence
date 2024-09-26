@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import moment from 'moment'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 import { convertToTitleCase } from '../../../utils/utils'
 import YesOrNo from '../../../enumeration/yesOrNo'
 import LicenceService from '../../../services/licenceService'
@@ -9,7 +9,7 @@ import logger from '../../../../logger'
 
 export default class ConfirmCreateRoutes {
   constructor(
-    private readonly communityService: CommunityService,
+    private readonly probationService: ProbationService,
     private readonly licenceService: LicenceService
   ) {}
 
@@ -20,7 +20,7 @@ export default class ConfirmCreateRoutes {
 
     const [nomisRecord, deliusRecord] = await Promise.all([
       this.licenceService.getPrisonerDetail(nomisId, user),
-      this.communityService.getProbationer({ nomsNumber: nomisId }),
+      this.probationService.getProbationer({ nomsNumber: nomisId }),
     ])
 
     if (nomisRecord.cvl.isInHardStopPeriod) {

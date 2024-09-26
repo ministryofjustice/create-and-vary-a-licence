@@ -1,28 +1,28 @@
 import UserService from './userService'
-import ManageUsersApiClient, { PrisonUserEmail, PrisonUserDetails } from '../data/manageUsersApiClient'
+import ManageUsersApiClient, { PrisonUserDetails, PrisonUserEmail } from '../data/manageUsersApiClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
-import CommunityService from './communityService'
-import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
+import ProbationService from './probationService'
+import { DeliusStaff } from '../@types/deliusClientTypes'
 import { User } from '../@types/CvlUserDetails'
 
 jest.mock('../data/manageUsersApiClient')
 jest.mock('../data/prisonApiClient')
-jest.mock('./communityService')
+jest.mock('./probationService')
 
 const user = { token: 'some token' } as User
 
 describe('User service', () => {
   let manageUsersApiClient: jest.Mocked<ManageUsersApiClient>
   let prisonApiClient: jest.Mocked<PrisonApiClient>
-  let communityService: jest.Mocked<CommunityService>
+  let probationService: jest.Mocked<ProbationService>
   let userService: UserService
 
   beforeEach(() => {
     manageUsersApiClient = new ManageUsersApiClient(null) as jest.Mocked<ManageUsersApiClient>
     prisonApiClient = new PrisonApiClient(null) as jest.Mocked<PrisonApiClient>
-    communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
-    userService = new UserService(manageUsersApiClient, prisonApiClient, communityService)
+    probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+    userService = new UserService(manageUsersApiClient, prisonApiClient, probationService)
   })
 
   describe('getUser', () => {
@@ -134,27 +134,27 @@ describe('User service', () => {
 
   describe('getProbationUser', () => {
     it('Retrieves probation user details', async () => {
-      communityService.getStaffDetailByUsername.mockResolvedValue({
+      probationService.getStaffDetailByUsername.mockResolvedValue({
         email: 'test@test.com',
-        staff: { forenames: 'Test test', surname: 'Test' },
-        staffCode: 'X400',
-        staffIdentifier: 1234,
+        name: { forename: 'Test test', surname: 'Test' },
+        code: 'X400',
+        id: 1234,
         telephoneNumber: '0111 1111111',
         username: 'TestUserNPS',
-      } as CommunityApiStaffDetails)
+      } as DeliusStaff)
 
       const result = await userService.getProbationUser(user)
 
       expect(result.email).toEqual('test@test.com')
-      expect(result.staff.forenames).toEqual('Test test')
-      expect(result.staff.surname).toEqual('Test')
-      expect(result.staffIdentifier).toEqual(1234)
+      expect(result.name.forename).toEqual('Test test')
+      expect(result.name.surname).toEqual('Test')
+      expect(result.id).toEqual(1234)
       expect(result.username).toEqual('TestUserNPS')
-      expect(communityService.getStaffDetailByUsername).toHaveBeenCalled()
+      expect(probationService.getStaffDetailByUsername).toHaveBeenCalled()
     })
 
     it('Propagates any errors', async () => {
-      communityService.getStaffDetailByUsername.mockRejectedValue(new Error('some error'))
+      probationService.getStaffDetailByUsername.mockRejectedValue(new Error('some error'))
       await expect(() => userService.getProbationUser(user)).rejects.toThrow('some error')
     })
   })
