@@ -27,11 +27,22 @@ describe('Print a HDC AP licence', () => {
           { code: '6', text: 'Standard 6' },
           { code: '7', text: 'Standard 7' },
         ],
-        additionalLicenceConditions: [],
+        additionalLicenceConditions: [
+          {
+            expandedText:
+              'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohol problems.',
+          },
+        ],
         bespokeConditions: [],
       },
       qrCodesEnabled: false,
-      singleItemConditions: [],
+      singleItemConditions: [
+        {
+          expandedText:
+            'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohol problems.',
+          uploadSummary: [],
+        },
+      ],
       multipleItemConditions: [],
       hdcLicenceData: {
         curfewAddress: {
@@ -71,6 +82,9 @@ describe('Print a HDC AP licence', () => {
     expect($('#appointmentAddress').text()).toContain('The Square')
 
     expect($('#curfewAddress').text()).toContain('addressLineOne')
+
+    // Should be 7 standard and 1 additional = 8 in total
+    expect($('#ap-conditions > .condition').length).toBe(8)
   })
 
   describe('Appointment date rendering', () => {
