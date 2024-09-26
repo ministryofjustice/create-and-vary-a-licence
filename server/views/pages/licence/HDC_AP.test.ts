@@ -33,7 +33,7 @@ describe('Print a HDC AP licence', () => {
               'To comply with any requirements specified by your supervising officer for the purpose of ensuring that you address your drug and alcohol problems.',
           },
         ],
-        bespokeConditions: [],
+        bespokeConditions: [{ text: 'Bespoke condition 1' }],
       },
       qrCodesEnabled: false,
       singleItemConditions: [
@@ -83,8 +83,8 @@ describe('Print a HDC AP licence', () => {
 
     expect($('#curfewAddress').text()).toContain('addressLineOne')
 
-    // Should be 7 standard and 1 additional = 8 in total
-    expect($('#ap-conditions > .condition').length).toBe(8)
+    // Should be 7 standard, 1 additional and 1 bespoke conditions = 9 in total
+    expect($('#ap-conditions > .condition').length).toBe(9)
   })
 
   describe('Appointment date rendering', () => {
