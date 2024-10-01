@@ -58,20 +58,17 @@ export default function populateCurrentUser(userService: UserService, licenceSer
               lastName: prisonUser.lastName,
             })
           } else if (user.authSource === 'delius') {
-            // Assemble user information from Delius via community API
+            // Assemble user information from Delius
             const probationUser = await userService.getProbationUser(user)
 
-            cvlUser.firstName = probationUser?.staff?.forenames
-            cvlUser.lastName = probationUser?.staff?.surname
-            cvlUser.displayName = convertToTitleCase(
-              `${probationUser?.staff?.forenames} ${probationUser?.staff?.surname}`
-            )
-            cvlUser.deliusStaffIdentifier = probationUser?.staffIdentifier
-            cvlUser.deliusStaffCode = probationUser?.staffCode
+            cvlUser.firstName = probationUser.name.forename
+            cvlUser.lastName = probationUser.name.surname
+            cvlUser.displayName = convertToTitleCase(`${cvlUser.firstName} ${cvlUser.lastName}`)
+            cvlUser.deliusStaffIdentifier = probationUser?.id
+            cvlUser.deliusStaffCode = probationUser?.code
             cvlUser.emailAddress = probationUser?.email
-            cvlUser.telephoneNumber = probationUser?.telephoneNumber
-            cvlUser.probationAreaCode = probationUser?.probationArea?.code
-            cvlUser.probationAreaDescription = probationUser?.probationArea?.description
+            cvlUser.probationAreaCode = probationUser?.provider?.code
+            cvlUser.probationAreaDescription = probationUser?.provider?.description
             const teams = probationUser?.teams?.filter(t => !t.endDate || parseIsoDate(t.endDate) > new Date()) || []
             cvlUser.probationPduCodes = Array.from(new Set(teams.map(team => team?.borough?.code)))
             cvlUser.probationLauCodes = Array.from(new Set(teams.map(team => team?.district?.code)))
@@ -85,11 +82,11 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             )
 
             await licenceService.updateComDetails({
-              staffIdentifier: probationUser?.staffIdentifier,
+              staffIdentifier: probationUser?.id,
               staffUsername: user.username,
               staffEmail: probationUser?.email,
-              firstName: probationUser?.staff?.forenames,
-              lastName: probationUser?.staff?.surname,
+              firstName: probationUser?.name?.forename,
+              lastName: probationUser?.name?.surname,
             })
           } else {
             // Assemble basic user information from hmpps-auth

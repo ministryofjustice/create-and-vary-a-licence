@@ -7,7 +7,7 @@ import { convertDateFormat } from '../../utils/utils'
 import { LicenceApiClient } from '../../data'
 
 jest.mock('../prisonerService')
-jest.mock('../communityService')
+jest.mock('../probationService')
 
 describe('COM Caseload Service', () => {
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')

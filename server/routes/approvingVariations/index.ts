@@ -15,7 +15,7 @@ import ReasonForReferral from '../creatingLicences/types/reasonForReferral'
 export default function Index({
   licenceService,
   caseloadService,
-  communityService,
+  probationService,
   conditionService,
 }: Services): Router {
   const router = Router()
@@ -53,7 +53,7 @@ export default function Index({
   const approveConfirmHandler = new VaryApproveConfirmRoutes()
   const referHandler = new VaryReferRoutes(licenceService)
   const referConfirmHandler = new VaryReferConfirmRoutes()
-  const comDetailsHandler = new ComDetailsRoutes(communityService)
+  const comDetailsHandler = new ComDetailsRoutes(probationService)
 
   // Define the URLs and handler method for variation approvals
   get('/list', listHandler.GET)

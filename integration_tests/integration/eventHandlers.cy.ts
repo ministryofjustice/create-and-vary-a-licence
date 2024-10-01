@@ -82,10 +82,8 @@ context('Event handlers', () => {
 
   describe('Probation events', () => {
     it('should listen to the offender manager changed event and call endpoint to update responsible COM', () => {
-      cy.task('stubGetSingleOffenderByCrn')
-      cy.task('stubGetAnOffendersManagers')
-      cy.task('stubGetStaffDetailsByStaffId')
-      cy.task('stubGetUserDetailsByUsername')
+      cy.task('stubGetResponsibleCommunityManager')
+      cy.task('stubGetStaffDetails')
       cy.task('stubAssignRole')
       cy.task('stubUpdateResponsibleCom')
       cy.task('stubUpdateProbationTeam')
@@ -105,7 +103,7 @@ context('Event handlers', () => {
 
       cy.task('verifyEndpointCalled', {
         verb: 'PUT',
-        path: '/community-api/secure/users/JSMITH/roles/LHDCBT002',
+        path: '/delius-api/users/JSMITH/roles',
         times: 1,
       })
       cy.task('verifyEndpointCalled', {

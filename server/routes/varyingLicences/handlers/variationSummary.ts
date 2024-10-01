@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
+import { nameToString } from '../../../data/deliusClient'
 
 export default class VariationSummaryRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly communityService: CommunityService
+    private readonly probationService: ProbationService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -26,10 +27,10 @@ export default class VariationSummaryRoutes {
     const { licenceId } = req.params
     const { user, licence } = res.locals
 
-    const pduHeads = await this.communityService.getPduHeads(licence.probationPduCode).then(p =>
+    const pduHeads = await this.probationService.getPduHeads(licence.probationPduCode).then(p =>
       p.map(c => {
         return {
-          name: `${c.staff.forenames} ${c.staff.surname}`,
+          name: nameToString(c.name),
           email: c.email,
         }
       })

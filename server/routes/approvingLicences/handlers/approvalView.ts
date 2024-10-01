@@ -1,14 +1,15 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 import { groupingBy } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import { nameToString } from '../../../data/deliusClient'
 
 export default class ApprovalViewRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly communityService: CommunityService
+    private readonly probationService: ProbationService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -26,14 +27,14 @@ export default class ApprovalViewRoutes {
         user
       )
 
-      const comDetails = await this.communityService.getStaffDetailByUsername(comUsername)
+      const comDetails = await this.probationService.getStaffDetailByUsername(comUsername)
 
       const returnPath = encodeURIComponent(`/licence/approve/id/${licence.id}/view`)
 
       res.render('pages/approve/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         staffDetails: {
-          name: `${comDetails?.staff?.forenames} ${comDetails?.staff?.surname}`.trim(),
+          name: nameToString(comDetails.name),
           telephone: comDetails?.telephoneNumber,
           email: comDetails?.email,
         },

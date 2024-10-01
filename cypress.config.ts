@@ -6,7 +6,7 @@ import { resetStubs, verifyEndpointCalled } from './integration_tests/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import licence from './integration_tests/mockApis/licence'
-import community from './integration_tests/mockApis/community'
+import delius from './integration_tests/mockApis/delius'
 import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import prison from './integration_tests/mockApis/prison'
 import probationSearch from './integration_tests/mockApis/probationSearch'
@@ -130,16 +130,14 @@ export default defineConfig({
         stubDeleteAdditionalConditionsByCode: licence.stubDeleteAdditionalConditionsByCode,
         stubPostExclusionZone: licence.stubPostExclusionZone,
 
-        stubGetPduHeads: community.stubGetPduHeads,
-        stubGetStaffDetails: community.stubGetStaffDetails,
-        stubGetStaffDetailsByStaffId: community.stubGetStaffDetailsByStaffId,
-        stubGetStaffDetailsByStaffCode: community.stubGetStaffDetailsByStaffCode,
-        stubGetStaffDetailsByList: community.stubGetStaffDetailsByList,
-        stubGetAnOffendersManagers: community.stubGetAnOffendersManagers,
-        stubGetUserDetailsByUsername: community.stubGetUserDetailsByUsername,
-        stubAssignRole: community.stubAssignRole,
-        stubGetSingleOffenderByCrn: community.stubGetSingleOffenderByCrn,
-        stubCommunityApiPing: community.stubPing,
+        stubGetStaffDetails: delius.stubGetStaffDetails,
+        stubGetStaffDetailsByStaffCode: delius.stubGetStaffDetailsByStaffCode,
+        stubGetStaffDetailsByList: delius.stubGetStaffDetailsByList,
+        stubAssignRole: delius.stubAssignRole,
+        stubGetPduHeads: delius.stubGetPduHeads,
+        stubGetResponsibleCommunityManager: delius.stubGetResponsibleCommunityManager,
+        stubGetManagerEmailAddresses: delius.stubGetManagerEmailAddresses,
+        stubDeliusPing: delius.stubPing,
 
         searchPrisonersByNomisIds: licence.searchPrisonersByNomisIds,
         searchPssPrisonersByNomisIds: licence.searchPssPrisonersByNomisIds,
@@ -150,7 +148,6 @@ export default defineConfig({
         stubGetPrisonUserDetails: prison.stubGetUserDetails,
         stubGetPrisonUserCaseloads: prison.stubGetUserCaseloads,
         stubGetPrisonerImage: prison.stubGetPrisonerImage,
-        stubGetStaffDetailByUsername: community.stubGetStaffDetailByUsername,
         stubGetPrisonerDetail: prison.stubGetPrisonerDetail,
         stubGetRecalledPrisonerDetail: prison.stubGetRecalledPrisonerDetail,
         stubGetPrisonerSentencesAndOffences: prison.stubGetPrisonerSentencesAndOffences,

@@ -1,13 +1,14 @@
 import { Request, Response } from 'express'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 import ComDetailsRoutes from './comDetails'
+import { DeliusStaff } from '../../../@types/deliusClientTypes'
 
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const deliusService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 
-jest.mock('../../../services/communityService')
+jest.mock('../../../services/probationService')
 
 describe('Route Handlers - Create Licence - Com Details', () => {
-  const handler = new ComDetailsRoutes(communityService)
+  const handler = new ComDetailsRoutes(deliusService)
   let req: Request
   let res: Response
 
@@ -34,13 +35,7 @@ describe('Route Handlers - Create Licence - Com Details', () => {
     })
 
     it('should deny page load if requested staff is not in same team as user', async () => {
-      communityService.getStaffDetailByStaffCode.mockResolvedValue({
-        teams: [
-          {
-            code: 'teamB',
-          },
-        ],
-      })
+      deliusService.getStaffDetailByStaffCode.mockResolvedValue({ teams: [{ code: 'teamB' }] } as DeliusStaff)
 
       await handler.GET(req, res)
 
@@ -48,19 +43,15 @@ describe('Route Handlers - Create Licence - Com Details', () => {
     })
 
     it('should load page and display staff details of requested staff member', async () => {
-      communityService.getStaffDetailByStaffCode.mockResolvedValue({
-        teams: [
-          {
-            code: 'teamA',
-          },
-        ],
-        staff: {
-          forenames: 'Joe',
+      deliusService.getStaffDetailByStaffCode.mockResolvedValue({
+        teams: [{ code: 'teamA' }],
+        name: {
+          forename: 'Joe',
           surname: 'Rogan',
         },
         telephoneNumber: '07892486128',
         email: 'jrogan@probation.gov.uk',
-      })
+      } as DeliusStaff)
 
       await handler.GET(req, res)
 

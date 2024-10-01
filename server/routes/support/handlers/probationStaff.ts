@@ -1,15 +1,16 @@
 import { Request, Response } from 'express'
 import { format } from 'date-fns'
 import statusConfig from '../../../licences/licenceStatus'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 import ComCaseloadService from '../../../services/lists/comCaseloadService'
 import { parseCvlDate } from '../../../utils/utils'
 import LicenceStatus from '../../../enumeration/licenceStatus'
+import { nameToString } from '../../../data/deliusClient'
 
 export default class ProbationTeamRoutes {
   constructor(
     private readonly comCaseloadService: ComCaseloadService,
-    private readonly communityService: CommunityService
+    private readonly probationService: ProbationService
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -22,17 +23,17 @@ export default class ProbationTeamRoutes {
 
     const { user } = res.locals
 
-    const staff = await this.communityService.getStaffDetailByStaffCode(staffCode)
+    const staff = await this.probationService.getStaffDetailByStaffCode(staffCode)
 
     const caseload = (
       view === 'prison'
         ? await this.comCaseloadService.getStaffCreateCaseload({
             ...user,
-            deliusStaffIdentifier: staff.staffIdentifier,
+            deliusStaffIdentifier: staff.id,
           })
         : await this.comCaseloadService.getStaffVaryCaseload({
             ...user,
-            deliusStaffIdentifier: staff.staffIdentifier,
+            deliusStaffIdentifier: staff.id,
           })
     )
       .map(comCase => {
@@ -52,7 +53,7 @@ export default class ProbationTeamRoutes {
       caseload,
       statusConfig,
       view,
-      staffName: `${staff.staff.forenames} ${staff.staff.surname} (${staff.staffCode})`,
+      staffName: `${nameToString(staff.name)} (${staff.code})`,
     })
   }
 }

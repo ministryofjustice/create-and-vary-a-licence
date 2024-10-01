@@ -1,6 +1,6 @@
 import { addDays, format } from 'date-fns'
 import CaseloadService from './caseloadService'
-import CommunityService from '../communityService'
+import ProbationService from '../probationService'
 import LicenceService from '../licenceService'
 import { User } from '../../@types/CvlUserDetails'
 import { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
@@ -8,13 +8,13 @@ import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { CaseloadItem } from '../../@types/licenceApiClientTypes'
 
-jest.mock('../communityService')
+jest.mock('../probationService')
 
 describe('Caseload Service', () => {
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
-  const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+  const deliusService = new ProbationService(null, null) as jest.Mocked<ProbationService>
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-  const serviceUnderTest = new CaseloadService(communityService, licenceService)
+  const serviceUnderTest = new CaseloadService(deliusService, licenceService)
   const user = {
     deliusStaffIdentifier: 2000,
     probationTeamCodes: ['teamA', 'teamB'],
@@ -45,7 +45,7 @@ describe('Caseload Service', () => {
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
-    communityService.getOffendersByNomsNumbers.mockResolvedValue([
+    deliusService.getOffendersByNomsNumbers.mockResolvedValue([
       {
         otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
         offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
@@ -61,12 +61,13 @@ describe('Caseload Service', () => {
         cvl: {},
       } as CaseloadItem,
     ])
-    communityService.getStaffDetailsByUsernameList.mockResolvedValue([
+    deliusService.getStaffDetailsByUsernameList.mockResolvedValue([
       {
+        id: 1,
         username: 'joebloggs',
-        staffCode: 'X1234',
-        staff: {
-          forenames: 'Joe',
+        code: 'X1234',
+        name: {
+          forename: 'Joe',
           surname: 'Bloggs',
         },
       },

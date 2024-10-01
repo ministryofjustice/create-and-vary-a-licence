@@ -5,15 +5,15 @@ import VariationSummaryRoutes from './variationSummary'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { VariedConditions } from '../../../utils/licenceComparator'
 import ApprovalComment from '../../../@types/ApprovalComment'
-import CommunityService from '../../../services/communityService'
+import ProbationService from '../../../services/probationService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 jest.mock('../../../services/licenceService')
-jest.mock('../../../services/communityService')
+jest.mock('../../../services/probationService')
 
 describe('Route Handlers - Vary Licence - Variation summary', () => {
-  const handler = new VariationSummaryRoutes(licenceService, communityService)
+  const handler = new VariationSummaryRoutes(licenceService, probationService)
   let req: Request
   let res: Response
 
@@ -77,11 +77,11 @@ describe('Route Handlers - Vary Licence - Variation summary', () => {
 
   describe('POST', () => {
     it('should submit the variation response and redirect to the confirmation page', async () => {
-      communityService.getPduHeads.mockResolvedValue([
+      probationService.getPduHeads.mockResolvedValue([
         {
           email: 'jbloggs@probation.gov.uk',
-          staff: {
-            forenames: 'Joe',
+          name: {
+            forename: 'Joe',
             surname: 'Bloggs',
           },
         },
