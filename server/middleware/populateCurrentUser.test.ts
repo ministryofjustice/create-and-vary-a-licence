@@ -5,7 +5,7 @@ import populateCurrentUser from './populateCurrentUser'
 import UserService from '../services/userService'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
 import { PrisonUserDetails, PrisonUserEmail } from '../data/manageUsersApiClient'
-import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
+import { DeliusStaff } from '../@types/deliusClientTypes'
 import LicenceService from '../services/licenceService'
 import { User } from '../@types/CvlUserDetails'
 import AuthRole from '../enumeration/authRole'
@@ -212,14 +212,15 @@ describe('populateCurrentUser', () => {
     res.locals.user.authSource = 'delius'
 
     userServiceMock.getProbationUser.mockResolvedValue({
-      staffIdentifier: 2000,
+      id: 2000,
+      code: 'ABC',
       email: 'jbloggs@probation.gov.uk',
-      probationArea: {
+      provider: {
         code: 'areaCode',
         description: 'areaDesc',
       },
-      staff: {
-        forenames: 'Joseph',
+      name: {
+        forename: 'Joseph',
         surname: 'Bloggs',
       },
       teams: [
@@ -264,7 +265,7 @@ describe('populateCurrentUser', () => {
           endDate: undefined,
         },
       ],
-    } as CommunityApiStaffDetails)
+    } as DeliusStaff)
 
     await middleware(req, res, next)
 

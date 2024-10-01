@@ -14,7 +14,7 @@
 {% set pageTitle = offenderName %}
 
 {% block content %}
-   <div id = "details" class="details">
+   <div id="details" class="details">
       <p>
       <h1>LICENCE</h1>
       <h3>Criminal Justice Act 2003</h3>
@@ -22,7 +22,7 @@
       <h2>{{ prisonTelephone or "MISSING - Prison Telephone" }}</h2>
       </p>
    </div>
-   <div id = "offender" class="offender">
+   <div id="offender" class="offender">
       {% include "pages/licence/partials/headshot.njk" %}
       <table class="wide">
          <tr>
@@ -79,7 +79,7 @@
    </ol>
    <div class="smallPaddingBottom"></div>
    <h2>Home Detention Curfew</h2>
-   <ol id = "curfewAddress" class="continue">
+   <ol id="curfewAddress">
       <li>The address(es) to which you are curfewed are:<br /><br /><span class="pre entry">
          {% if hdcLicenceData.curfewAddress %}
             <div id="curfewAddressLine1"><span class="bold line-space-after">{{ hdcLicenceData.curfewAddress.addressLine1 }}</span></div>
@@ -96,7 +96,7 @@
          licence to confirm your identity. Your curfew will then run until the curfew finish time the following morning.
          On your last day of curfew the contractor will visit you to remove the tag and monitoring equipment. This will
          take place in the last two hours of your last curfew period; i.e. between 10pm and midnight.</li>
-      <li class="no-break">After your day of release, you are required to remain at your place of curfew during the following hours:<br><br>
+      <li>After your day of release, you are required to remain at your place of curfew during the following hours:<br><br>
          <table class="compact">
             <tr>
                <td>Monday</td>
@@ -164,7 +164,7 @@
          present, and provide access to, the curfew address at the notified time to allow installation to take place.
          The installation will normally take place during standard working hours and is fully paid for by the
          supplier.</li>
-      <li class="no-break">While on Home Detention Curfew you may be liable to recall to prison if you breach the condition of this
+      <li>While on Home Detention Curfew you may be liable to recall to prison if you breach the condition of this
          licence relating to the curfew. You will be in breach of this condition if:<ol class="roman start">
             <li>You are absent from your curfew address during the specified curfew hours;</li>
             <li>You commit violence against or threaten the contractor or any of his staff with violence;</li>
@@ -185,26 +185,10 @@
    </ol>
    <div class="smallPaddingBottom"></div>
    <h3>Probation Supervision</h3>
-   <ol class="continue">
+   <ol>
       <li>You must place yourself under the supervision of whichever supervising officer or social worker is nominated
          for this purpose from time to time.</li>
-      <li class="no-break">While under supervision you must:<ol class="roman start">
-            <li>Be of good behaviour and not behave in a way which undermines the purpose of the licence period;</li>
-            <li>Not commit any offence;</li>
-            <li>Keep in touch with the supervising officer in accordance with instructions given by the supervising officer;</li>
-            <li>Receive visits from the supervising officer in accordance with instructions given by the supervising officer;</li>
-            <li>Reside permanently at an address approved by the supervising officer and obtain the prior permission
-               of the supervising officer for any stay of one or more nights at a different address;</li>
-            <li> Not undertake work, or a particular type of work, unless it is approved by the supervising officer
-               and notify the supervising officer in advance of any proposal to undertake work or a particular type of work;</li>
-            <li>Not travel outside the United Kingdom, the Channel Islands or the Isle of Man, except with the
-               prior permission of the supervising officer or for the purposes of immigration deportation or removal;</li>
-            <li>Tell your supervising officer if you use a name which is different to the name or names which appear on your licence</li>
-            <li>Tell your supervising officer if you change or add any contact details, including phone number or email</li>
-            <div class="pre conditions"><br /></div>
-         </ol>
-      </li>
-      <div class="pagebreak"></div>
+      <li>{% include "pages/licence/partials/apConditions.njk" %}</li>
       <li>The Secretary of State may vary or cancel any of the above conditions, in accordance with Section 250(4) of
          the Criminal Justice Act 2003.</li>
       <li>If you fail to submit yourself to a recall to custody following either a notification of the revocation of
@@ -219,7 +203,7 @@
       <li>Your licence expires on <span class="entry">{{ licence.licenceExpiryDate | datetimeToDate or "MISSING - Licence Expiry Date" }}</span></li>
       <li>Your sentence expires on <span class="entry">{{ licence.sentenceEndDate | datetimeToDate or "MISSING - Sentence End Date"}}</span></li>
    </ol>
-   <div class="no-break">
+   <div>
       <h3>Contact Points</h3>
       <p>Monitoring Supplier: <span class="entry">{{ monitoringSupplierTelephone or "MISSING - monitoringSupplierTelephone" }}</span></p>
       <p>Releasing establishment: <span class="entry">{{ prisonTelephone or "MISSING - prisonTelephone"}}</span></p><br />

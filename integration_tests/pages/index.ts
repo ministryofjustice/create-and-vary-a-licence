@@ -27,7 +27,7 @@ export default class IndexPage extends Page {
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
-    cy.task('stubGetAnOffendersManagers')
+    cy.task('stubGetResponsibleCommunityManager')
     cy.task('stubGetStaffCreateCaseload', {
       licenceStatus: LicenceStatus.NOT_STARTED,
       licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,
@@ -41,7 +41,7 @@ export default class IndexPage extends Page {
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
-    cy.task('stubGetAnOffendersManagers')
+    cy.task('stubGetResponsibleCommunityManager')
     cy.task('stubGetStaffDetailsByList')
     cy.task('stubGetStaffCreateCaseload', {
       licenceId: 1,
@@ -58,7 +58,7 @@ export default class IndexPage extends Page {
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
-    cy.task('stubGetAnOffendersManagers')
+    cy.task('stubGetResponsibleCommunityManager')
 
     cy.get(this.createLicenceTileId).click()
     return Page.verifyOnPage(CaseloadPage)
@@ -69,7 +69,7 @@ export default class IndexPage extends Page {
     cy.task('stubGetProbationer')
     cy.task('stubGetPrisonInformation')
     cy.task('stubGetHdcStatus')
-    cy.task('stubGetAnOffendersManagers')
+    cy.task('stubGetResponsibleCommunityManager')
     cy.task('stubGetStaffCreateCaseload', {
       licenceStatus: LicenceStatus.NOT_STARTED,
       licenceCreationType: LicenceCreationType.LICENCE_NOT_STARTED,

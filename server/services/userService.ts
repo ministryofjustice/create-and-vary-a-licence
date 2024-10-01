@@ -1,15 +1,15 @@
 import ManageUsersApiClient, { PrisonUserDetails, PrisonUserEmail } from '../data/manageUsersApiClient'
 import PrisonApiClient from '../data/prisonApiClient'
 import { PrisonApiCaseload, PrisonApiUserDetail } from '../@types/prisonApiClientTypes'
-import CommunityService from './communityService'
-import { CommunityApiStaffDetails } from '../@types/communityClientTypes'
+import ProbationService from './probationService'
+import { DeliusStaff } from '../@types/deliusClientTypes'
 import { User } from '../@types/CvlUserDetails'
 
 export default class UserService {
   constructor(
     private readonly manageUsersApiClient: ManageUsersApiClient,
     private readonly prisonApiClient: PrisonApiClient,
-    private readonly communityService: CommunityService
+    private readonly probationService: ProbationService
   ) {}
 
   async getUser(user: User): Promise<PrisonUserDetails> {
@@ -28,7 +28,7 @@ export default class UserService {
     return this.prisonApiClient.getUserCaseloads(user)
   }
 
-  async getProbationUser(user: User): Promise<CommunityApiStaffDetails> {
-    return this.communityService.getStaffDetailByUsername(user.username)
+  async getProbationUser(user: User): Promise<DeliusStaff> {
+    return this.probationService.getStaffDetailByUsername(user.username)
   }
 }

@@ -1,7 +1,7 @@
 import UserService from './userService'
 import PrisonerService from './prisonerService'
 import LicenceService from './licenceService'
-import CommunityService from './communityService'
+import ProbationService from './probationService'
 import QrCodeService from './qrCodeService'
 import CaseloadService from './lists/caseloadService'
 import UkBankHolidayFeedService from './ukBankHolidayFeedService'
@@ -23,7 +23,7 @@ const {
   manageUsersApiClient,
   prisonApiClient,
   prisonerSearchApiClient,
-  communityApiClient,
+  deliusClient,
   probationSearchApiClient,
   licenceApiClient,
   prisonRegisterApiClient,
@@ -32,15 +32,15 @@ const {
 
 const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
-const communityService = new CommunityService(communityApiClient, probationSearchApiClient)
-const userService = new UserService(manageUsersApiClient, prisonApiClient, communityService)
+const probationService = new ProbationService(deliusClient, probationSearchApiClient)
+const userService = new UserService(manageUsersApiClient, prisonApiClient, probationService)
 const conditionService = new ConditionService(licenceApiClient)
 const licenceService = new LicenceService(licenceApiClient, conditionService)
 const ukBankHolidayFeedService = new UkBankHolidayFeedService()
-const caseloadService = new CaseloadService(communityService, licenceService)
+const caseloadService = new CaseloadService(probationService, licenceService)
 const caCaseloadService = new CaCaseloadService(licenceApiClient)
 const comCaseloadService = new ComCaseloadService(licenceService, licenceApiClient)
-const promptListService = new PromptListService(prisonerService, communityService, licenceService)
+const promptListService = new PromptListService(prisonerService, probationService, licenceService)
 const approvedCaseloadService = new ApproverCaseloadService(licenceApiClient)
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
 const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
@@ -58,7 +58,7 @@ export const services = {
   comCaseloadService,
   caseloadService,
   prisonerService,
-  communityService,
+  probationService,
   qrCodeService,
   ukBankHolidayFeedService,
   prisonRegisterService,

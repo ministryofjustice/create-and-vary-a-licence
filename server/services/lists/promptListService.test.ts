@@ -1,21 +1,20 @@
 import { add, endOfISOWeek, startOfISOWeek } from 'date-fns'
 import PrisonerService from '../prisonerService'
-import CommunityService from '../communityService'
+import ProbationService from '../probationService'
 import LicenceService from '../licenceService'
 import PromptListService from './promptListService'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import { CaseloadItem, LicenceSummary } from '../../@types/licenceApiClientTypes'
 import { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
-import { CommunityApiStaffDetails } from '../../@types/communityClientTypes'
 
 jest.mock('../prisonerService')
-jest.mock('../communityService')
+jest.mock('../probationService')
 
 describe('PromptList Service', () => {
   const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-  const communityService = new CommunityService(null, null) as jest.Mocked<CommunityService>
+  const deliusService = new ProbationService(null, null) as jest.Mocked<ProbationService>
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-  const serviceUnderTest = new PromptListService(prisonerService, communityService, licenceService)
+  const serviceUnderTest = new PromptListService(prisonerService, deliusService, licenceService)
 
   beforeEach(() => {
     prisonerService.getHdcStatuses.mockResolvedValue([])
@@ -46,7 +45,7 @@ describe('PromptList Service', () => {
       cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
     } as CaseloadItem
     licenceService.searchPrisonersByReleaseDate.mockResolvedValue([prisonerDetails])
-    communityService.getOffendersByNomsNumbers.mockResolvedValue([
+    deliusService.getOffendersByNomsNumbers.mockResolvedValue([
       {
         firstName: 'Joe',
         surname: 'Bloggs',
@@ -71,13 +70,7 @@ describe('PromptList Service', () => {
         ],
       } as OffenderDetail,
     ])
-    communityService.getStaffDetailByStaffCodeList.mockResolvedValue([
-      {
-        staffIdentifier: 2000,
-        staffCode: 'X12345',
-        email: 'comEmail@example.com',
-      },
-    ] as CommunityApiStaffDetails[])
+    deliusService.getManagerEmailAddresses.mockResolvedValue([{ code: 'X12345', email: 'comEmail@example.com' }])
 
     const response = await serviceUnderTest.getListForDates(
       startOfISOWeek(new Date()),
@@ -121,13 +114,8 @@ describe('PromptList Service', () => {
       cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
     } as CaseloadItem
     licenceService.searchPrisonersByReleaseDate.mockResolvedValue([prisonerDetails])
-    communityService.getOffendersByNomsNumbers.mockResolvedValue([])
-    communityService.getStaffDetailByStaffCodeList.mockResolvedValue([
-      {
-        staffIdentifier: 2000,
-        staffCode: 'X12345',
-      },
-    ] as CommunityApiStaffDetails[])
+    deliusService.getOffendersByNomsNumbers.mockResolvedValue([])
+    deliusService.getManagerEmailAddresses.mockResolvedValue([{ code: 'X12345', email: 'someone@justice.gov.uk' }])
 
     const response = await serviceUnderTest.getListForDates(
       startOfISOWeek(new Date()),
@@ -157,7 +145,7 @@ describe('PromptList Service', () => {
         cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, isInHardStopPeriod: true },
       } as CaseloadItem
 
-      communityService.getOffendersByNomsNumbers.mockResolvedValue([
+      deliusService.getOffendersByNomsNumbers.mockResolvedValue([
         {
           firstName: 'Joe',
           surname: 'Bloggs',
@@ -178,13 +166,7 @@ describe('PromptList Service', () => {
           ],
         } as OffenderDetail,
       ])
-
-      communityService.getStaffDetailByStaffCodeList.mockResolvedValue([
-        {
-          staffIdentifier: 2000,
-          staffCode: 'X12345',
-        },
-      ] as CommunityApiStaffDetails[])
+      deliusService.getManagerEmailAddresses.mockResolvedValue([{ code: 'X12345', email: 'someone@justice.gov.uk' }])
 
       licenceService.searchPrisonersByReleaseDate.mockResolvedValue([prisonerDetails])
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([])
@@ -217,7 +199,7 @@ describe('PromptList Service', () => {
         cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
       } as CaseloadItem
 
-      communityService.getOffendersByNomsNumbers.mockResolvedValue([
+      deliusService.getOffendersByNomsNumbers.mockResolvedValue([
         {
           firstName: 'Joe',
           surname: 'Bloggs',
@@ -242,15 +224,7 @@ describe('PromptList Service', () => {
           ],
         } as OffenderDetail,
       ])
-
-      communityService.getStaffDetailByStaffCodeList.mockResolvedValue([
-        {
-          staffIdentifier: 2000,
-          staffCode: 'X12345',
-          email: 'someone@justice.gov.uk',
-        },
-      ] as CommunityApiStaffDetails[])
-
+      deliusService.getManagerEmailAddresses.mockResolvedValue([{ code: 'X12345', email: 'someone@justice.gov.uk' }])
       licenceService.searchPrisonersByReleaseDate.mockResolvedValue([prisonerDetails])
       licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
         { licenceId: 1, nomisId: 'G4169UO', isReviewNeeded: true } as LicenceSummary,

@@ -17,9 +17,6 @@ export default class CvlUserDetails {
   // Prison staff id in Nomis
   nomisStaffId?: number
 
-  // Delius telephone number
-  telephoneNumber?: string
-
   // Probation staffIdentifier in nDelius e.g. 120003434
   deliusStaffIdentifier?: number
 

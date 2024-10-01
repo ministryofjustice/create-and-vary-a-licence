@@ -22,7 +22,7 @@ import ComDetailsRoutes from './handlers/comDetails'
 import PromptCasesRoutes from './handlers/promptCases'
 
 export default function Index({
-  communityService,
+  probationService,
   prisonerService,
   licenceService,
   prisonRegisterService,
@@ -45,16 +45,16 @@ export default function Index({
       asyncMiddleware(handler)
     )
   const supportHomeHandler = new SupportHomeRoutes()
-  const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, communityService)
-  const offenderDetailHandler = new OffenderDetailRoutes(prisonerService, communityService, licenceService)
+  const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, probationService)
+  const offenderDetailHandler = new OffenderDetailRoutes(prisonerService, probationService, licenceService)
   const offenderLicenceHandler = new OffenderLicencesRoutes(licenceService)
   const offenderAuditHandler = new OffenderAuditRoutes(licenceService)
   const manageOmuEmailAddressHandler = new ManageOmuEmailAddressHandler(licenceService, prisonRegisterService)
   const offenderLicenceStatusHandler = new OffenderLicenceStatusRoutes(licenceService, licenceOverrideService)
   const offenderLicenceDatesHandler = new OffenderLicenceDatesRoutes(licenceService, licenceOverrideService)
   const probationTeamHandler = new ProbationTeamRoutes(comCaseloadService)
-  const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, communityService)
-  const comDetailsHandler = new ComDetailsRoutes(communityService)
+  const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, probationService)
+  const comDetailsHandler = new ComDetailsRoutes(probationService)
   const promptCasesHandler = new PromptCasesRoutes(promptLicenceCreationService)
 
   get('/', supportHomeHandler.GET)

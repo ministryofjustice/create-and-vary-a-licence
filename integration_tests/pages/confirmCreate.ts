@@ -23,7 +23,6 @@ export default class ConfirmCreatePage extends Page {
   }
 
   clickContinue = (): AppointmentPersonPage => {
-    cy.task('stubGetStaffDetailsByStaffId')
     cy.get(this.continueButtonId).click()
     return Page.verifyOnPage(AppointmentPersonPage)
   }
