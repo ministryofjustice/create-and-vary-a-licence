@@ -41,6 +41,15 @@ describe('Route handlers', () => {
     suggestions: [{ code: 'code 6', currentText: 'Condition 6' }],
   } as LicenceConditionChange
 
+  const condition4 = {
+    changeType: 'REMOVED_NO_REPLACEMENTS',
+    code: 'code4',
+    sequence: 4,
+    previousText: 'Condition 4 current text',
+    dataChanges: [],
+    suggestions: [],
+  } as LicenceConditionChange
+
   beforeEach(() => {
     req = {
       params: {
@@ -62,22 +71,22 @@ describe('Route handlers', () => {
       },
     } as unknown as Response
 
-    licenceService.getPolicyChanges.mockResolvedValue([condition1, condition2, condition3])
+    licenceService.getPolicyChanges.mockResolvedValue([condition1, condition2, condition3, condition4])
   })
 
   describe('GET', () => {
     it('sets the changedConditions in storage to be the sorted policy changes', async () => {
       await handler.GET(req, res)
-      expect(req.session.changedConditions).toEqual([condition3, condition1, condition2])
+      expect(req.session.changedConditions).toEqual([condition4, condition3, condition1, condition2])
     })
 
     it('renders the policy changes notice screen', async () => {
       await handler.GET(req, res)
 
       // Should have a param of the written form of the number of changes
-      expect(req.session.changedConditions.length).toEqual(3)
+      expect(req.session.changedConditions.length).toEqual(4)
       expect(res.render).toHaveBeenCalledWith('pages/vary/policyChanges', {
-        numberOfChanges: 'Three',
+        numberOfChanges: 'Four',
       })
     })
 

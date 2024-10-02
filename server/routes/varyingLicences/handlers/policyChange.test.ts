@@ -52,6 +52,15 @@ describe('Route handlers', () => {
     suggestions: [{ code: 'code 6', currentText: 'Condition 6' }],
   } as LicenceConditionChange
 
+  const condition5 = {
+    changeType: 'REMOVED_NO_REPLACEMENTS',
+    code: 'code5',
+    sequence: 5,
+    previousText: 'Condition 5 text',
+    dataChanges: [],
+    suggestions: [],
+  } as LicenceConditionChange
+
   beforeEach(() => {
     jest.resetAllMocks()
     licenceService.getParentLicenceOrSelf.mockResolvedValue({
@@ -75,7 +84,7 @@ describe('Route handlers', () => {
       },
       query: {},
       session: {
-        changedConditions: [condition1, condition2, condition3, condition4],
+        changedConditions: [condition1, condition2, condition3, condition4, condition5],
         changedConditionsCounter: '2',
         changedConditionInputs: [],
       },
@@ -119,7 +128,7 @@ describe('Route handlers', () => {
           conditionCounter: 1,
           conditionHintText: undefined,
           licenceId: '1',
-          policyChangesCount: 4,
+          policyChangesCount: 5,
           replacements: [condition],
         })
       })
@@ -133,7 +142,7 @@ describe('Route handlers', () => {
           conditionCounter: 2,
           conditionHintText: undefined,
           licenceId: '1',
-          policyChangesCount: 4,
+          policyChangesCount: 5,
         })
       })
 
@@ -146,7 +155,7 @@ describe('Route handlers', () => {
           conditionCounter: 3,
           conditionHintText: undefined,
           licenceId: '1',
-          policyChangesCount: 4,
+          policyChangesCount: 5,
         })
       })
 
@@ -161,8 +170,21 @@ describe('Route handlers', () => {
           conditionCounter: 4,
           conditionHintText: undefined,
           licenceId: '1',
-          policyChangesCount: 4,
+          policyChangesCount: 5,
           replacements: [condition],
+        })
+      })
+
+      it('should redirect to the removed without replacements page when the condition change type is REMOVED_NO_REPLACEMENTS', async () => {
+        req.params.changeCounter = '5'
+        await handler.GET(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('pages/vary/policyConditionRemovedNoReplacements', {
+          condition: condition5,
+          conditionCounter: 5,
+          conditionHintText: undefined,
+          licenceId: '1',
+          policyChangesCount: 5,
         })
       })
     })

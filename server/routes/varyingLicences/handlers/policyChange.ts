@@ -65,6 +65,14 @@ export default class PolicyChangeRoutes {
           conditionHintText,
           replacements,
         })
+      case conditionChangeType.REMOVED_NO_REPLACEMENTS:
+        return res.render('pages/vary/policyConditionRemovedNoReplacements', {
+          licenceId,
+          conditionCounter,
+          policyChangesCount,
+          conditionHintText,
+          condition,
+        })
       case conditionChangeType.NEW_OPTIONS:
         return res.render('pages/vary/policyNewOptions', {
           licenceId,

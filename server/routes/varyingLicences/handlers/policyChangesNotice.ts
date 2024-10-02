@@ -20,7 +20,7 @@ export default class PolicyChangesNoticeRoutes {
     const numberOfChanges = convertToTitleCase(Converter.toWords(changedConditions.length))
 
     req.session.changedConditions = changedConditions.sort((a: LicenceConditionChange, b: LicenceConditionChange) => {
-      if (['REPLACED', 'DELETED'].includes(a.changeType)) {
+      if (['REPLACED', 'DELETED', 'REMOVED_NO_REPLACEMENTS'].includes(a.changeType)) {
         return -1
       }
       return a.sequence > b.sequence ? 1 : -1
