@@ -8,6 +8,12 @@ const policyChangeHints: HintText[] = [
     bulletpoints: [],
   },
   {
+    code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
+    fromVersions: ['2.1'],
+    description: ['Requirement to select a substance this person needs support with added.'],
+    bulletpoints: [],
+  },
+  {
     code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
     fromVersions: ['1.0', '2.0'],
     description: ['Course and centre name removed.'],
@@ -136,12 +142,6 @@ const policyChangeHints: HintText[] = [
       'The wording of this licence condition will stay the same.',
       'If you need to, you can set a more precise age restriction on the next page.',
     ],
-    bulletpoints: [],
-  },
-  {
-    code: 'f1d2888b-be86-4732-8874-44cb867865c2',
-    fromVersions: ['2.1'],
-    description: ['Requirement to select a substance this person needs support with added.'],
     bulletpoints: [],
   },
   {
