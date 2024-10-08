@@ -4,8 +4,11 @@ const policyChangeHints: HintText[] = [
   {
     code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
     fromVersions: ['1.0', '2.0'],
-    description: ['Details of appointment time, date and location removed.'],
-    bulletpoints: [],
+    description: [],
+    bulletpoints: [
+      'Details of appointment time, date and location removed.',
+      'Requirement to select a substance this person needs support with added.',
+    ],
   },
   {
     code: 'a7c57e4e-30fe-4797-9fe7-70a35dbd7b65',
@@ -15,13 +18,7 @@ const policyChangeHints: HintText[] = [
   },
   {
     code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
-    fromVersions: ['1.0', '2.0'],
-    description: ['Course and centre name removed.'],
-    bulletpoints: [],
-  },
-  {
-    code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
-    fromVersions: ['2.1'],
+    fromVersions: ['1.0', '2.0', '2.1'],
     description: [
       'If this person needs support with something not mentioned directly in the conditions below, you can:',
     ],
@@ -31,7 +28,10 @@ const policyChangeHints: HintText[] = [
     code: 'db2d7e24-b130-4c7e-a1bf-6bb5f3036c02',
     fromVersions: ['1.0', '2.0'],
     description: [],
-    bulletpoints: ['Details of relationship type removed', 'Requirement to report the ending of relationships added'],
+    bulletpoints: [
+      'Requirement to select gender removed',
+      'More detailed description of relationship changes to report added',
+    ],
   },
   {
     code: 'db2d7e24-b130-4c7e-a1bf-6bb5f3036c02',
@@ -61,8 +61,8 @@ const policyChangeHints: HintText[] = [
     code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
     fromVersions: ['1.0', '2.0'],
     description: [
-      'The wording of this licence condition will stay the same.',
-      'If you need to, you can now add more precise reporting times on the next page.',
+      'More precise options for reporting times added – you can use these on the next page if you need to',
+      'Option to select “the Approved Premises where you reside” added',
     ],
     bulletpoints: [],
   },
@@ -96,7 +96,7 @@ const policyChangeHints: HintText[] = [
   {
     code: 'b72fdbf2-0dc9-4e7f-81e4-c2ccb5d1bc90',
     fromVersions: ['1.0', '2.0'],
-    description: ['Requirement to select a psychiatrist, psychologist or medical practitioner removed.'],
+    description: [],
     bulletpoints: [],
   },
   {
@@ -117,7 +117,16 @@ const policyChangeHints: HintText[] = [
   {
     code: '2d67f68a-8adf-47a9-a68d-a6fc9f2c4556',
     fromVersions: ['1.0', '2.0'],
-    description: ['Reference to supervising officer and police officer removed.'],
+    description: [],
+    bulletpoints: [
+      'Reference to supervising officer and police officer removed.',
+      'You can now select which devices should be covered by this licence condition.',
+    ],
+  },
+  {
+    code: '2d67f68a-8adf-47a9-a68d-a6fc9f2c4556',
+    fromVersions: ['2.1'],
+    description: ['You can now select which devices should be covered by this licence condition.'],
     bulletpoints: [],
   },
   {
@@ -127,12 +136,6 @@ const policyChangeHints: HintText[] = [
       'The wording of this licence condition will stay the same.',
       'If you need to, you can set a more precise age restriction on the next page.',
     ],
-    bulletpoints: [],
-  },
-  {
-    code: '2d67f68a-8adf-47a9-a68d-a6fc9f2c4556',
-    fromVersions: ['2.1'],
-    description: ['You can now select which devices should be covered by this licence condition.'],
     bulletpoints: [],
   },
   {
