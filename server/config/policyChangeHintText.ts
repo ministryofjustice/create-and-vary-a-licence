@@ -16,8 +16,10 @@ const policyChangeHints: HintText[] = [
   {
     code: '89e656ec-77e8-4832-acc4-6ec05d3e9a98',
     fromVersions: ['2.1'],
-    description: [],
-    bulletpoints: [],
+    description: [
+      'If this person needs support with something not mentioned directly in the conditions below, you can:',
+    ],
+    bulletpoints: ['apply the first condition and then', 'select the “offending behaviour” option'],
   },
   {
     code: 'db2d7e24-b130-4c7e-a1bf-6bb5f3036c02',
