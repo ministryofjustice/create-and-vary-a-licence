@@ -14,30 +14,52 @@
 
     {% set items = [] %}
     {% for condition in conditions %}
-        {% set items = (items.push({
-            key: {
-                html: 'Name of area: <br/> File name:'
-            },
-            value: {
-                html:  condition.data[0].value + '<br/>' + condition.uploadSummary[0].filename
-            },
-            classes: 'govuk-summary-list__row--file-upload',
-            actions: {
-                items: [
-                    {
-                        href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" | addQueryParam('fromReview', fromReview) | addQueryParam('fromPolicyReview', fromPolicyReview),
-                        text: "Change details",
-                        visuallyHiddenText: condition.uploadSummary[0].fileName
-                    },
-                    {
-                        href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/file-upload-removal" | addQueryParam('fromReview', fromReview) | addQueryParam('fromPolicyReview', fromPolicyReview),
-                        text: "Delete",
-                        visuallyHiddenText: condition.uploadSummary[0].filename,
-                        attributes: { "data-qa": "delete-map-" + loop.index0 + "-link" }
-                    }
-                ]
-            }
-        }), items) %}
+        {% if condition.data[0].field == 'outOfBoundArea' %}
+            {% set items = (items.push({
+                key: {
+                    html: 'Name of area: <br/> File name:'
+                },
+                value: {
+                    html:  condition.data[0].value + '<br/>' + condition.uploadSummary[0].filename
+                },
+                classes: 'govuk-summary-list__row--file-upload',
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/create/id/" + licenceId + "/additional-licence-conditions/condition/" + condition.id + "?fromUpload=true" | addQueryParam('fromReview', fromReview) | addQueryParam('fromPolicyReview', fromPolicyReview),
+                            text: "Change details",
+                            visuallyHiddenText: condition.uploadSummary[0].fileName
+                        },
+                        {
+                            href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/file-upload-removal" | addQueryParam('fromReview', fromReview) | addQueryParam('fromPolicyReview', fromPolicyReview),
+                            text: "Delete",
+                            visuallyHiddenText: condition.uploadSummary[0].filename,
+                            attributes: { "data-qa": "delete-map-" + loop.index0 + "-link" }
+                        }
+                    ]
+                }
+            }), items) %}
+        {% else %}
+            {% set items = (items.push({
+                key: {
+                    html: 'File name:'
+                },
+                value: {
+                    html:  condition.uploadSummary[0].filename + ' (' + condition.uploadSummary[0].fileSize | humanReadableFileSize+ ')'
+                },
+                classes: 'govuk-summary-list__row--file-upload',
+                actions: {
+                    items: [
+                        {
+                            href: "/licence/create/id/"+ licenceId + "/additional-licence-conditions/condition/"+ condition.id +"/file-upload-removal" | addQueryParam('fromReview', fromReview) | addQueryParam('fromPolicyReview', fromPolicyReview),
+                            text: "Delete",
+                            visuallyHiddenText: condition.uploadSummary[0].filename,
+                            attributes: { "data-qa": "delete-map-" + loop.index0 + "-link" }
+                        }
+                    ]
+                }
+            }), items) %}
+        {% endif %}
     {% endfor %}
 
 
