@@ -45,10 +45,12 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       beforeEach(() => {
         licenceService.updateAdditionalConditionData = jest.fn()
         res.locals.licence = {
+          version: '3.0',
           additionalLicenceConditions: [
             {
               id: 1,
               code: 'code1',
+              data: [],
             },
           ],
         } as Licence
@@ -58,7 +60,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         await handler.POST(req, res)
         expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
           '1',
-          { code: 'code1', id: 1 },
+          { code: 'code1', id: 1, data: [] },
           {},
           { username: 'joebloggs' }
         )
@@ -81,6 +83,64 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
 
       it('should redirect to the policy callback function with query parameter if fromPolicyReview flag is true', async () => {
         req.query.fromPolicyReview = 'true'
+        await handler.POST(req, res)
+        expect(res.redirect).toHaveBeenCalledWith(
+          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromPolicyReview=true'
+        )
+      })
+
+      it('should redirect to the input page of the next map if it has a name and is in the upgrade journey to policy v3', async () => {
+        req.query.fromPolicyReview = 'true'
+        res.locals.licence = {
+          version: '3.0',
+          additionalLicenceConditions: [
+            {
+              id: 1,
+              code: 'code1',
+              data: [{ id: 1, field: 'outOfBoundArea', value: 'Area1' }],
+            },
+            {
+              id: 2,
+              code: 'code1',
+              data: [{ id: 1, field: 'outOfBoundArea', value: 'Area1' }],
+            },
+            {
+              id: 3,
+              code: 'code1',
+              data: [{ id: 1, field: 'outOfBoundArea', value: 'Area1' }],
+            },
+          ],
+        } as Licence
+
+        await handler.POST(req, res)
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/licence/create/id/1/additional-licence-conditions/condition/2?fromPolicyReview=true`
+        )
+      })
+
+      it('should redirect to the policy callback function with query parameter if it has a name but is in the upgrade journey to policy v2.1', async () => {
+        req.query.fromPolicyReview = 'true'
+        res.locals.licence = {
+          version: '2.1',
+          additionalLicenceConditions: [
+            {
+              id: 1,
+              code: 'code1',
+              data: [{ id: 1, field: 'outOfBoundArea', value: 'Area1' }],
+            },
+            {
+              id: 2,
+              code: 'code1',
+              data: [{ id: 1, field: 'outOfBoundArea', value: 'Area1' }],
+            },
+            {
+              id: 3,
+              code: 'code1',
+              data: [{ id: 1, field: 'outOfBoundArea', value: 'Area1' }],
+            },
+          ],
+        } as Licence
+
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
           '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromPolicyReview=true'
@@ -117,6 +177,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
               id: 1,
               code: 'outOfBoundsRegion',
               expandedText: 'expanded text',
+              data: [],
             },
           ],
         } as Licence
@@ -129,7 +190,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         })
         expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
           '1',
-          { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
+          { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text', data: [] },
           { outOfBoundFilename: 'test.txt' },
           { username: 'joebloggs' }
         )
@@ -142,7 +203,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         expect(licenceService.uploadExclusionZoneFile).not.toHaveBeenCalledWith()
         expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
           '1',
-          { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
+          { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text', data: [] },
           { outOfBoundFilename: 'test.txt' },
           { username: 'joebloggs' }
         )
@@ -160,11 +221,13 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
               id: 1,
               code: 'code1',
               expandedText: 'expanded text',
+              data: [],
             },
             {
               id: 2,
               code: 'code2',
               expandedText: 'more expanded text',
+              data: [],
             },
           ],
         } as Licence
@@ -194,6 +257,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
             {
               id: 1,
               code: 'code1',
+              data: [],
             },
           ],
         } as Licence
@@ -203,7 +267,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         await handler.POST(req, res)
         expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
           '1',
-          { code: 'code1', id: 1 },
+          { code: 'code1', id: 1, data: [] },
           {},
           { username: 'joebloggs' }
         )
@@ -260,6 +324,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
               id: 1,
               code: 'outOfBoundsRegion',
               expandedText: 'expanded text',
+              data: [],
             },
           ],
         } as Licence
@@ -272,7 +337,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         })
         expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
           '1',
-          { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
+          { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text', data: [] },
           { outOfBoundFilename: 'test.txt' },
           { username: 'joebloggs' }
         )
@@ -285,7 +350,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         expect(licenceService.uploadExclusionZoneFile).not.toHaveBeenCalledWith()
         expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
           '1',
-          { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
+          { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text', data: [] },
           { outOfBoundFilename: 'test.txt' },
           { username: 'joebloggs' }
         )
@@ -303,11 +368,13 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
               id: 1,
               code: 'code1',
               expandedText: 'expanded text',
+              data: [],
             },
             {
               id: 2,
               code: 'code2',
               expandedText: 'more expanded text',
+              data: [],
             },
           ],
         } as Licence
