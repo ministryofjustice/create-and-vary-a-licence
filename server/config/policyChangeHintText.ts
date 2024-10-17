@@ -189,6 +189,15 @@ const policyChangeHints: HintText[] = [
     description: [],
     bulletpoints: [],
   },
+  {
+    code: '42f71b40-84cd-446d-8647-f00bbb6c079c',
+    fromVersions: ['1.0', '2.0'],
+    description: [
+      'The wording of this licence condition will stay the same.',
+      'On the next page, you will need to choose from more specific options and then re-enter the information.',
+    ],
+    bulletpoints: [],
+  },
 ]
 
 export default policyChangeHints
