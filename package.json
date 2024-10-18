@@ -117,7 +117,7 @@
     "express-session": "^1.18.0",
     "filesize": "^10.1.4",
     "govuk-frontend": "^5.5.0",
-    "helmet": "^7.1.0",
+    "helmet": "^8.0.0",
     "http-errors": "^2.0.0",
     "jquery": "^3.7.1",
     "jquery-ui-dist": "^1.13.3",
