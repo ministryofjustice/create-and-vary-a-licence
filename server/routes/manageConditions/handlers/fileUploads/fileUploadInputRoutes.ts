@@ -1,10 +1,12 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import FileUploadType from '../../../../enumeration/fileUploadType'
+import ConditionService from '../../../../services/conditionService'
 
-export default class fileUploadInputRoutes {
+export default class FileUploadInputRoutes {
   constructor(
     private readonly licenceService: LicenceService,
+    private readonly conditionService: ConditionService,
     private readonly fileUploadType: FileUploadType
   ) {}
 
@@ -25,9 +27,10 @@ export default class fileUploadInputRoutes {
       // This hijacks the policy review loop to allow users to review the removal of multiple MEZ map names.
       // Perhaps more importantly, it also results in the removal of the map names from the database.
       // It's pretty gross, but I couldn't think of another way to trigger removal of the names without a near-complete rewrite of the callback logic.
-      if (this.fileUploadType === FileUploadType.MULTI_INSTANCE && licence.version === '3.0') {
+      if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
+        const activePoliceVersion = await this.conditionService.getPolicyVersion()
         const instanceWithName = licence.additionalLicenceConditions.find(c => {
-          return c.code === code && c.data[0]?.field === 'outOfBoundArea' && c.id.toString() !== conditionId
+          return c.code === code && c.version !== activePoliceVersion && c.id.toString() !== conditionId
         })
         if (instanceWithName) {
           redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${instanceWithName.id}`
