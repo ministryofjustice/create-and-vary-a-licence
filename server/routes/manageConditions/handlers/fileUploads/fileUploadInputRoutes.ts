@@ -6,7 +6,6 @@ import ConditionService from '../../../../services/conditionService'
 export default class FileUploadInputRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService,
     private readonly fileUploadType: FileUploadType
   ) {}
 
@@ -26,9 +25,9 @@ export default class FileUploadInputRoutes {
     if (req.query?.fromPolicyReview) {
       // This hijacks the policy review loop to allow users to review each instance of a changed multi-instance upload condition.
       if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
-        const activePoliceVersion = await this.conditionService.getPolicyVersion()
         const instanceToReview = licence.additionalLicenceConditions.find(c => {
-          return c.code === code && c.version !== activePoliceVersion && c.id.toString() !== conditionId
+          // licence.version gets update to the latest policy version when the variation is created, so this is essentially a proxy check
+          return c.code === code && c.version !== licence.version && c.id.toString() !== conditionId
         })
         if (instanceToReview) {
           redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${instanceToReview.id}`

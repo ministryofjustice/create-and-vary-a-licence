@@ -7,10 +7,8 @@ import FileUploadType from '../../../../enumeration/fileUploadType'
 import ConditionService from '../../../../services/conditionService'
 
 jest.mock('../../../../services/licenceService')
-jest.mock('../../../../services/conditionService')
 
-const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
-const licenceService = new LicenceService(null, conditionService) as jest.Mocked<LicenceService>
+const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 describe('Route Handlers - Create Licence - file upload input routes', () => {
   let req: Request
@@ -33,19 +31,17 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       locals: {
         licence: {
           additionalLicenceConditions: [],
-          version: 'version',
+          version: '3.0',
         },
         user: {
           username: 'joebloggs',
         },
       },
     } as unknown as Response
-
-    conditionService.getPolicyVersion.mockResolvedValue('3.0')
   })
 
   describe('Multi-instance upload condition', () => {
-    const handler = new FileUploadInputRoutes(licenceService, conditionService, FileUploadType.MULTI_INSTANCE)
+    const handler = new FileUploadInputRoutes(licenceService, FileUploadType.MULTI_INSTANCE)
     describe('POST', () => {
       beforeEach(() => {
         licenceService.updateAdditionalConditionData = jest.fn()
@@ -141,6 +137,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
               version: '3.0',
             },
           ],
+          version: '3.0',
         } as Licence
 
         await handler.POST(req, res)
@@ -247,7 +244,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
   })
 
   describe('Single-instance upload condition', () => {
-    const handler = new FileUploadInputRoutes(licenceService, conditionService, FileUploadType.SINGLE_INSTANCE)
+    const handler = new FileUploadInputRoutes(licenceService, FileUploadType.SINGLE_INSTANCE)
     describe('POST', () => {
       beforeEach(() => {
         licenceService.updateAdditionalConditionData = jest.fn()
