@@ -4,7 +4,6 @@ import FileUploadInputRoutes from './fileUploadInputRoutes'
 import LicenceService from '../../../../services/licenceService'
 import type { Licence } from '../../../../@types/licenceApiClientTypes'
 import FileUploadType from '../../../../enumeration/fileUploadType'
-import ConditionService from '../../../../services/conditionService'
 
 jest.mock('../../../../services/licenceService')
 
@@ -29,10 +28,6 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       redirect: jest.fn(),
       status: jest.fn(),
       locals: {
-        licence: {
-          additionalLicenceConditions: [],
-          version: '3.0',
-        },
         user: {
           username: 'joebloggs',
         },

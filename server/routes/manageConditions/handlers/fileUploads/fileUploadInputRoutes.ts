@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import FileUploadType from '../../../../enumeration/fileUploadType'
-import ConditionService from '../../../../services/conditionService'
 
 export default class FileUploadInputRoutes {
   constructor(
@@ -26,7 +25,6 @@ export default class FileUploadInputRoutes {
       // This hijacks the policy review loop to allow users to review each instance of a changed multi-instance upload condition.
       if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
         const instanceToReview = licence.additionalLicenceConditions.find(c => {
-          // licence.version gets update to the latest policy version when the variation is created, so this is essentially a proxy check
           return c.code === code && c.version !== licence.version && c.id.toString() !== conditionId
         })
         if (instanceToReview) {
