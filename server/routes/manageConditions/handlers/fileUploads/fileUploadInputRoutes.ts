@@ -26,7 +26,6 @@ export default class FileUploadInputRoutes {
     if (req.query?.fromPolicyReview) {
       // This hijacks the policy review loop to allow users to review the removal of multiple MEZ map names.
       // Perhaps more importantly, it also results in the removal of the map names from the database.
-      // It's pretty gross, but I couldn't think of another way to trigger removal of the names without a near-complete rewrite of the callback logic.
       if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
         const activePoliceVersion = await this.conditionService.getPolicyVersion()
         const instanceWithName = licence.additionalLicenceConditions.find(c => {
