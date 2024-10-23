@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import FileUploadType from '../../../../enumeration/fileUploadType'
 
-export default class fileUploadInputRoutes {
+export default class FileUploadInputRoutes {
   constructor(
     private readonly licenceService: LicenceService,
     private readonly fileUploadType: FileUploadType
@@ -22,6 +22,15 @@ export default class fileUploadInputRoutes {
     }
 
     if (req.query?.fromPolicyReview) {
+      // This hijacks the policy review loop to allow users to review each instance of a changed multi-instance upload condition.
+      if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
+        const instanceToReview = licence.additionalLicenceConditions.find(c => {
+          return c.code === code && c.version !== licence.version && c.id.toString() !== conditionId
+        })
+        if (instanceToReview) {
+          redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${instanceToReview.id}`
+        }
+      }
       redirect += '?fromPolicyReview=true'
     } else if (req.query?.fromReview) {
       redirect += '?fromReview=true'

@@ -28,10 +28,6 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       redirect: jest.fn(),
       status: jest.fn(),
       locals: {
-        licence: {
-          additionalLicenceConditions: [],
-          version: 'version',
-        },
         user: {
           username: 'joebloggs',
         },
@@ -45,6 +41,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       beforeEach(() => {
         licenceService.updateAdditionalConditionData = jest.fn()
         res.locals.licence = {
+          version: '3.0',
           additionalLicenceConditions: [
             {
               id: 1,
@@ -81,6 +78,63 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
 
       it('should redirect to the policy callback function with query parameter if fromPolicyReview flag is true', async () => {
         req.query.fromPolicyReview = 'true'
+        await handler.POST(req, res)
+        expect(res.redirect).toHaveBeenCalledWith(
+          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromPolicyReview=true'
+        )
+      })
+
+      it('should redirect to the input page of the next map if it is in the upgrade journey and has not already been updated to the latest version', async () => {
+        req.query.fromPolicyReview = 'true'
+        res.locals.licence = {
+          additionalLicenceConditions: [
+            {
+              id: 1,
+              code: 'code1',
+              version: '2.1',
+            },
+            {
+              id: 2,
+              code: 'code1',
+              version: '2.1',
+            },
+            {
+              id: 3,
+              code: 'code1',
+              version: '2.1',
+            },
+          ],
+        } as Licence
+
+        await handler.POST(req, res)
+        expect(res.redirect).toHaveBeenCalledWith(
+          `/licence/create/id/1/additional-licence-conditions/condition/2?fromPolicyReview=true`
+        )
+      })
+
+      it('should redirect to the policy callback function with query parameter if it is in the upgrade journey but has already been updated to the latest version', async () => {
+        req.query.fromPolicyReview = 'true'
+        res.locals.licence = {
+          additionalLicenceConditions: [
+            {
+              id: 1,
+              code: 'code1',
+              version: '3.0',
+            },
+            {
+              id: 2,
+              code: 'code1',
+              version: '3.0',
+            },
+            {
+              id: 3,
+              code: 'code1',
+              version: '3.0',
+            },
+          ],
+          version: '3.0',
+        } as Licence
+
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
           '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromPolicyReview=true'
