@@ -142,6 +142,9 @@ export default class PolicyChangeRoutes {
             }
           })
         )
+      } else {
+        // if there are no replacement conditions, treat as a deletion
+        return res.redirect(`/licence/vary/id/${licenceId}/policy-changes/condition/${conditionCounter}/delete`)
       }
     } else if (
       condition.changeType === conditionChangeType.NEW_OPTIONS ||
