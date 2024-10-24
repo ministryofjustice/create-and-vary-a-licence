@@ -23,7 +23,7 @@
                     </legend>
                     <br>
                     <p>
-                        This licence condition has been removed from policy
+                        This licence condition has been removed from policy.
                     </p>
                     <p>
                         Before you can continue varying this licence, you must review the condition that is no longer in use.
@@ -38,7 +38,7 @@
                             {{condition.previousText}}
                         </p>
                         <h2 class="govuk-heading-m govuk-!-margin-top-6">
-                            Licence conditions to use instead
+                            Licence {{"conditions" if replacements | length > 1 else "condition"}} to use instead
                         </h2>
                         {% if conditionHintText.description.length > 0 %}
                             <p class="govuk-hint">
