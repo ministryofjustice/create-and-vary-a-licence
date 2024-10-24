@@ -217,6 +217,13 @@ describe('Route handlers', () => {
       expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledTimes(1)
       expect(licenceService.addAdditionalCondition).toHaveBeenCalledTimes(1)
     })
+
+    it('should redirect to delete routing if a deleted condition has no selected replacements', async () => {
+      req.body = {}
+      req.session.changedConditions = [condition1]
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/policy-changes/condition/1/delete')
+    })
   })
 
   describe('DELETE', () => {
