@@ -110,7 +110,7 @@ const policyChangeHints: HintText[] = [
     fromVersions: ['1.0', '2.0', '2.1'],
     description: [
       'The previous condition has been removed.',
-      'If you still need this restriction, you can select the following licence condition.',
+      'If you still need this restriction, you can use the following licence condition.',
     ],
     bulletpoints: [],
   },
@@ -158,7 +158,7 @@ const policyChangeHints: HintText[] = [
     fromVersions: ['1.0', '2.0', '2.1'],
     description: [
       'The previous condition has been removed.',
-      'If you still need this restriction, you can select the following licence condition. You can then specify that the item they cannot own is a mobile phone with a photographic function on the next screen.',
+      'If you still need this restriction, you can use the following licence condition. You can then specify that the item they cannot own is a mobile phone with a photographic function on the next screen.',
     ],
     bulletpoints: [],
   },
@@ -167,7 +167,7 @@ const policyChangeHints: HintText[] = [
     fromVersions: ['1.0', '2.0', '2.1'],
     description: [
       'The previous condition has been removed.',
-      'If you still need this restriction, you can select the following licence condition. You can then specify that the item they cannot own is a camera on the next screen.',
+      'If you still need this restriction, you can use the following licence condition. You can then specify that the item they cannot own is a camera on the next screen.',
     ],
     bulletpoints: [],
   },
