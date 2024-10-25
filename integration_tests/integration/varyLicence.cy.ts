@@ -62,8 +62,12 @@ context('Vary a licence', () => {
 
     const checkAnswersPage = policyChangesPage
       .clickNextChange()
-      .clickNextChange()
-      .clickNextChange()
+      .clickNextChangeNoReplacement()
+      .selectRadio('yes')
+      .clickContinue()
+      .clickNextChangeNoReplacement()
+      .selectRadio('yes')
+      .clickContinue()
       .clickNextInput(false) // Hidden fields cause Axe to fail
       .enterText('The Approved Premises', 'approvedPremises')
       .selectRadio('Daily')
@@ -95,8 +99,12 @@ context('Vary a licence', () => {
 
     const checkAnswersPage = policyChangesPage
       .clickNextChange()
-      .clickNextChange()
-      .clickNextChange()
+      .clickNextChangeNoReplacement()
+      .selectRadio('yes')
+      .clickContinue()
+      .clickNextChangeNoReplacement()
+      .selectRadio('yes')
+      .clickContinue()
       .clickDeleteCondition()
       .selectRadio('no')
       .clickContinue()

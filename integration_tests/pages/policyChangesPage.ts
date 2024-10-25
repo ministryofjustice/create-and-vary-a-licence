@@ -40,4 +40,11 @@ export default class PolicyChangesPage extends Page {
     cy.get(this.deleteButtonId).click()
     return Page.verifyOnPage(DeleteConditionPage)
   }
+
+  clickNextChangeNoReplacement = (): DeleteConditionPage => {
+    cy.task('stubPutAdditionalConditions')
+    cy.task('stubPutAdditionalConditionData')
+    cy.get(this.continueButtonId).click()
+    return Page.verifyOnPage(DeleteConditionPage)
+  }
 }
