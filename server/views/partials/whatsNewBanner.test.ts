@@ -9,13 +9,13 @@ describe('Whats new banner', () => {
     const $ = render({
       showCommsBanner: true,
     })
-    expect($('body').text()).toContain('Licences for SDS40 releases')
+    expect($('body').text()).toContain('Updates to additional licence conditions')
   })
 
   it('Hide whats new banner if showCommsBanner is true', () => {
     const $ = render({
       showCommsBanner: false,
     })
-    expect($('body').text()).not.toContain('Licences for SDS40 releases')
+    expect($('body').text()).not.toContain('Updates to additional licence conditions')
   })
 })
