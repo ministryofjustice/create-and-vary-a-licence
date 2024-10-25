@@ -60,11 +60,11 @@ const policyChangeHints: HintText[] = [
   {
     code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
     fromVersions: ['1.0', '2.0'],
-    description: [
+    description: [],
+    bulletpoints: [
       'More precise options for reporting times added – you can use these on the next page if you need to',
       'Option to select “the Approved Premises where you reside” added',
     ],
-    bulletpoints: [],
   },
   {
     code: '4673ebe4-9fc0-4e48-87c9-eb17d5280867',
