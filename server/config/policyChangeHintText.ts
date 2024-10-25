@@ -110,7 +110,7 @@ const policyChangeHints: HintText[] = [
     fromVersions: ['1.0', '2.0', '2.1'],
     description: [
       'The previous condition has been removed.',
-      'If you still need this restriction, you can select the following licence condition.',
+      'If you still need this restriction, you can use the following licence condition.',
     ],
     bulletpoints: [],
   },
@@ -161,7 +161,7 @@ const policyChangeHints: HintText[] = [
     fromVersions: ['1.0', '2.0', '2.1'],
     description: [
       'The previous condition has been removed.',
-      'If you still need this restriction, you can select the following licence condition. You can then specify that the item they cannot own is a mobile phone with a photographic function on the next screen.',
+      'If you still need this restriction, you can use the following licence condition. You can then specify that the item they cannot own is a mobile phone with a photographic function on the next screen.',
     ],
     bulletpoints: [],
   },
@@ -170,7 +170,7 @@ const policyChangeHints: HintText[] = [
     fromVersions: ['1.0', '2.0', '2.1'],
     description: [
       'The previous condition has been removed.',
-      'If you still need this restriction, you can select the following licence condition. You can then specify that the item they cannot own is a camera on the next screen.',
+      'If you still need this restriction, you can use the following licence condition. You can then specify that the item they cannot own is a camera on the next screen.',
     ],
     bulletpoints: [],
   },
@@ -190,6 +190,15 @@ const policyChangeHints: HintText[] = [
     code: 'bb401b88-2137-4154-be4a-5e05c168638a',
     fromVersions: ['1.0', '2.0', '2.1'],
     description: [],
+    bulletpoints: [],
+  },
+  {
+    code: '42f71b40-84cd-446d-8647-f00bbb6c079c',
+    fromVersions: ['1.0', '2.0'],
+    description: [
+      'The wording of this licence condition will stay the same.',
+      'On the next page, you will need to choose from more specific options and then re-enter the information.',
+    ],
     bulletpoints: [],
   },
 ]
