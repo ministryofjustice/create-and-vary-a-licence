@@ -9,7 +9,6 @@ export default class OutOfBoundsPremisesInputRoutes {
     const { conditionId } = req.params
     const { user, licence } = res.locals
 
-    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const { code } = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
 
     let redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${code}/outofbounds-premises`
@@ -19,7 +18,6 @@ export default class OutOfBoundsPremisesInputRoutes {
       redirect += '?fromReview=true'
     }
 
-    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
@@ -31,7 +29,6 @@ export default class OutOfBoundsPremisesInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
-    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
 
     await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)

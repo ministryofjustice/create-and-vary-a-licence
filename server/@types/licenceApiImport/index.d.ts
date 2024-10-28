@@ -4739,12 +4739,7 @@ export interface components {
        * @example Gordon Sumner
        */
       createdByFullName?: string
-    } & (
-      | components['schemas']['CrdLicence']
-      | components['schemas']['VariationLicence']
-      | components['schemas']['HardStopLicence']
-      | components['schemas']['HdcLicence']
-    )
+    }
     /** @description Describes a CRD licence within this service */
     CrdLicence: Omit<
       WithRequired<

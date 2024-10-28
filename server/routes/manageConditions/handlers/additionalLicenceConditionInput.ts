@@ -14,7 +14,6 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { licence } = res.locals
     const { conditionId } = req.params
 
-    // @ts-expect-error suppress parameter 'condition' implicitly has an 'any' type
     const additionalCondition = licence.additionalLicenceConditions.find(condition => condition.id === +conditionId)
 
     if (!additionalCondition) {
@@ -57,7 +56,6 @@ export default class AdditionalLicenceConditionInputRoutes {
         req.query?.fromReview ? '?fromReview=true' : ''
       }`
     }
-    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const condition = licence.additionalLicenceConditions.find(c => c.id === +conditionId)
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
@@ -89,7 +87,6 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { user, licence } = res.locals
     const { conditionId } = req.params
 
-    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
     const conditionData = { conditionSkipped: '[DATE REQUIRED]' }
     await this.licenceService.updateAdditionalConditionData(licence.id.toString(), condition, conditionData, user)
