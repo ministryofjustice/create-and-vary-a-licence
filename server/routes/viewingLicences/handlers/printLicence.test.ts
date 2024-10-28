@@ -6,6 +6,7 @@ import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import config from '../../../config'
 import HdcService from '../../../services/hdcService'
+import { HdcLicenceData } from '../../../@types/licenceApiClientTypes'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const qrCodeService = new QrCodeService() as jest.Mocked<QrCodeService>
@@ -18,6 +19,70 @@ describe('Route - print a licence', () => {
   const handler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService, hdcService)
   let req: Request
   let res: Response
+
+  const exampleHdcLicenceData = {
+    curfewAddress: {
+      addressLine1: 'addressLineOne',
+      addressLine2: 'addressLineTwo',
+      addressTown: 'addressTownOrCity',
+      postCode: 'addressPostcode',
+    },
+    firstNightCurfewHours: {
+      firstNightFrom: '09:00',
+      firstNightUntil: '17:00',
+    },
+    curfewTimes: [
+      {
+        curfewTimesSequence: 1,
+        fromDay: 'MONDAY',
+        fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+        untilDay: 'TUESDAY',
+        untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+      },
+      {
+        curfewTimesSequence: 2,
+        fromDay: 'TUESDAY',
+        fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+        untilDay: 'WEDNESDAY',
+        untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+      },
+      {
+        curfewTimesSequence: 3,
+        fromDay: 'WEDNESDAY',
+        fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+        untilDay: 'THURSDAY',
+        untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+      },
+      {
+        curfewTimesSequence: 4,
+        fromDay: 'THURSDAY',
+        fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+        untilDay: 'FRIDAY',
+        untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+      },
+      {
+        curfewTimesSequence: 5,
+        fromDay: 'FRIDAY',
+        fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+        untilDay: 'SATURDAY',
+        untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+      },
+      {
+        curfewTimesSequence: 6,
+        fromDay: 'SATURDAY',
+        fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+        untilDay: 'SUNDAY',
+        untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+      },
+      {
+        curfewTimesSequence: 7,
+        fromDay: 'MONDAY',
+        fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+        untilDay: 'SUNDAY',
+        untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+      },
+    ],
+  } as HdcLicenceData
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -342,35 +407,6 @@ describe('Route - print a licence', () => {
         },
       } as unknown as Response
 
-      const exampleHdcLicenceData = {
-        curfewAddress: {
-          addressLine1: 'addressLineOne',
-          addressLine2: 'addressLineTwo',
-          addressTown: 'addressTownOrCity',
-          postCode: 'addressPostcode',
-        },
-        firstNightCurfewHours: {
-          firstNightFrom: '09:00',
-          firstNightUntil: '17:00',
-        },
-        curfewHours: {
-          mondayFrom: '17:00',
-          mondayUntil: '09:00',
-          tuesdayFrom: '17:00',
-          tuesdayUntil: '09:00',
-          wednesdayFrom: '17:00',
-          wednesdayUntil: '09:00',
-          thursdayFrom: '17:00',
-          thursdayUntil: '09:00',
-          fridayFrom: '17:00',
-          fridayUntil: '09:00',
-          saturdayFrom: '17:00',
-          saturdayUntil: '09:00',
-          sundayFrom: '17:00',
-          sundayUntil: '09:00',
-        },
-      }
-
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
@@ -421,35 +457,6 @@ describe('Route - print a licence', () => {
 
       const filename = `${res.locals.licence.nomsId}.pdf`
       const footerHtml = handler.getPdfFooter(res.locals.licence)
-
-      const exampleHdcLicenceData = {
-        curfewAddress: {
-          addressLine1: 'addressLineOne',
-          addressLine2: 'addressLineTwo',
-          addressTown: 'addressTownOrCity',
-          postCode: 'addressPostcode',
-        },
-        firstNightCurfewHours: {
-          firstNightFrom: '09:00',
-          firstNightUntil: '17:00',
-        },
-        curfewHours: {
-          mondayFrom: '17:00',
-          mondayUntil: '09:00',
-          tuesdayFrom: '17:00',
-          tuesdayUntil: '09:00',
-          wednesdayFrom: '17:00',
-          wednesdayUntil: '09:00',
-          thursdayFrom: '17:00',
-          thursdayUntil: '09:00',
-          fridayFrom: '17:00',
-          fridayUntil: '09:00',
-          saturdayFrom: '17:00',
-          saturdayUntil: '09:00',
-          sundayFrom: '17:00',
-          sundayUntil: '09:00',
-        },
-      }
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')

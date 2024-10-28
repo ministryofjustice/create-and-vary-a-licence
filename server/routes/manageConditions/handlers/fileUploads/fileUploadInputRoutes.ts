@@ -13,6 +13,7 @@ export default class FileUploadInputRoutes {
     const { conditionId } = req.params
     const { user, licence } = res.locals
 
+    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const { code } = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
 
     let redirect = `/licence/create/id/${licenceId}/additional-licence-conditions/callback`
@@ -24,6 +25,7 @@ export default class FileUploadInputRoutes {
     if (req.query?.fromPolicyReview) {
       // This hijacks the policy review loop to allow users to review each instance of a changed multi-instance upload condition.
       if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
+        // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
         const instanceToReview = licence.additionalLicenceConditions.find(c => {
           return c.code === code && c.version !== licence.version && c.id.toString() !== conditionId
         })
@@ -39,6 +41,7 @@ export default class FileUploadInputRoutes {
     if (req.file) {
       await this.licenceService.uploadExclusionZoneFile(licenceId, conditionId, req.file, user)
     }
+    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
@@ -50,6 +53,7 @@ export default class FileUploadInputRoutes {
     const { conditionId } = req.params
     const { user } = res.locals
 
+    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
 
     await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)

@@ -16,6 +16,7 @@ export default class OutOfBoundsPremisesListRoutes {
     const { licenceId, conditionCode } = req.params
     const { licence } = res.locals
 
+    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)
 
     if (conditions.length === 0) {
@@ -49,6 +50,7 @@ export default class OutOfBoundsPremisesListRoutes {
 
     if (!addAnotherLocation) {
       const displayMessage = { text: 'Select yes or no' }
+      // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
       const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)
       const conditionsData = this.getConditionsData(conditions)
       return res.render('pages/manageConditions/outOfBoundsPremises/list', {

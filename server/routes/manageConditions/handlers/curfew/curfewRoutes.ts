@@ -15,9 +15,12 @@ export default class CurfewRoutes {
     const { conditionCode } = req.params
     const { licence } = res.locals
 
+    // @ts-expect-error suppress parameter 'condition' implicitly has an 'any' type
     const additionalCondition = licence.additionalLicenceConditions.find(condition => condition.code === conditionCode)
     const conditionInstances = licence.additionalLicenceConditions
+      // @ts-expect-error suppress parameter 'condition' implicitly has an 'any' type
       .filter(condition => condition.code === conditionCode)
+      // @ts-expect-error suppress parameters 'a' and 'b' implicitly have an 'any' type
       .sort((a, b) => a.id - b.id)
     const config = await this.conditionService.getAdditionalConditionByCode(conditionCode, licence.version)
 
@@ -30,7 +33,9 @@ export default class CurfewRoutes {
     }
 
     const formResponses = Object.fromEntries(
+      // @ts-expect-error suppress parameters 'instance' and 'index' implicitly have an 'any' type
       conditionInstances.flatMap((instance, index) =>
+        // @ts-expect-error suppress parameter 'conditionData' implicitly has an 'any' type
         instance.data.map(conditionData => {
           const key = index === 0 ? conditionData.field : `${conditionData.field}${index + 1}`
           return [key, conditionData.value]

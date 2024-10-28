@@ -14,6 +14,7 @@ export default class FileUploadListRoutes {
     const { licenceId, conditionCode } = req.params
     const { licence } = res.locals
 
+    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)
 
     if (conditions.length === 0) {
@@ -46,6 +47,7 @@ export default class FileUploadListRoutes {
 
     if (!uploadFile) {
       const displayMessage = { text: 'Select yes or no' }
+      // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
       const conditions = licence.additionalLicenceConditions.filter(c => c.code === conditionCode)
       return res.render('pages/manageConditions/fileUploads/list', {
         conditions,

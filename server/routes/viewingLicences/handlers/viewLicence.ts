@@ -5,7 +5,7 @@ import { ValidationError, validate } from 'class-validator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
 import { groupingBy, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
-import { Licence } from '../../../@types/licenceApiClientTypes'
+import { Licence, AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
 
@@ -61,8 +61,10 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
+      const additionalLicenceConditions = licence.additionalLicenceConditions as AdditionalCondition[]
+
       res.render('pages/view/view', {
-        additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
+        additionalConditions: groupingBy(additionalLicenceConditions, 'code'),
         warningMessage,
         isEditableByPrison: licence.statusCode !== LicenceStatus.ACTIVE && isInHardStopPeriod(licence),
         isPrisonUser: user.authSource === 'nomis',

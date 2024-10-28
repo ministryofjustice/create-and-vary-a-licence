@@ -64,6 +64,7 @@ export default class AdditionalPssConditionInputRoutes {
     const { user, licence } = res.locals
     const { conditionId } = req.params
 
+    // @ts-expect-error suppress parameter 'c' implicitly has an 'any' type
     const condition = licence.additionalPssConditions.find(c => c.id === parseInt(conditionId, 10))
     const conditionData = { conditionSkipped: '[DATE REQUIRED]' }
     await this.licenceService.updateAdditionalConditionData(licence.id.toString(), condition, conditionData, user)
