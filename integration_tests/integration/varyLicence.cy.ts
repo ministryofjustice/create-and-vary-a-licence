@@ -69,6 +69,7 @@ context('Vary a licence', () => {
       .selectRadio('yes')
       .clickContinue()
       .clickNextInput(false) // Hidden fields cause Axe to fail
+      .selectRadio('Name of approved premises')
       .enterText('The Approved Premises', 'approvedPremises')
       .selectRadio('Daily')
       .selectRadio('Once a day')
