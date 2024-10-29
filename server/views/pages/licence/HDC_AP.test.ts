@@ -107,16 +107,13 @@ describe('Print a HDC AP licence', () => {
           },
         ],
       },
-      prisonTelephone: '0114 2345232334',
     })
 
     expect($('title').text()).toContain('John Smith')
 
-    expect($('#details').text()).toContain('0114 2345232334')
+    expect($('#meeting-details').text()).toContain('The Square')
 
-    expect($('#appointmentAddress').text()).toContain('The Square')
-
-    expect($('#curfewAddress').text()).toContain('addressLineOne')
+    expect($('#curfew-address').text()).toContain('addressLineOne')
 
     // Should be 7 standard, 1 additional and 1 bespoke conditions = 9 in total
     expect($('#ap-conditions > .condition').length).toBe(9)

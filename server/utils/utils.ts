@@ -127,6 +127,11 @@ const jsonDtTo12HourTime = (dt: string): string => {
   return momentTime.isValid() ? momentTime.format('hh:mm a') : null
 }
 
+const json24HourTimeTo12HourTime = (dt: string): string => {
+  const momentTime = moment(dt, 'HH:mm:ss')
+  return momentTime.isValid() ? momentTime.format('hh:mm a') : null
+}
+
 const parseIsoDate = (date: string) => {
   return date ? parse(date, 'yyyy-MM-dd', new Date()) : null
 }
@@ -263,6 +268,7 @@ export {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   jsonDtTo12HourTime,
+  json24HourTimeTo12HourTime,
   parseCvlDate,
   parseCvlDateTime,
   parseIsoDate,
