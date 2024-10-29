@@ -59,51 +59,51 @@ describe('Print a HDC AP licence', () => {
           {
             curfewTimesSequence: 1,
             fromDay: 'MONDAY',
-            fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+            fromTime: '17:00:00',
             untilDay: 'TUESDAY',
-            untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+            untilTime: '09:00:00',
           },
           {
             curfewTimesSequence: 2,
             fromDay: 'TUESDAY',
-            fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+            fromTime: '17:00:00',
             untilDay: 'WEDNESDAY',
-            untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+            untilTime: '09:00:00',
           },
           {
             curfewTimesSequence: 3,
             fromDay: 'WEDNESDAY',
-            fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+            fromTime: '17:00:00',
             untilDay: 'THURSDAY',
-            untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+            untilTime: '09:00:00',
           },
           {
             curfewTimesSequence: 4,
             fromDay: 'THURSDAY',
-            fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+            fromTime: '17:00:00',
             untilDay: 'FRIDAY',
-            untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+            untilTime: '09:00:00',
           },
           {
             curfewTimesSequence: 5,
             fromDay: 'FRIDAY',
-            fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+            fromTime: '17:00:00',
             untilDay: 'SATURDAY',
-            untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+            untilTime: '09:00:00',
           },
           {
             curfewTimesSequence: 6,
             fromDay: 'SATURDAY',
-            fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+            fromTime: '17:00:00',
             untilDay: 'SUNDAY',
-            untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+            untilTime: '09:00:00',
           },
           {
             curfewTimesSequence: 7,
             fromDay: 'MONDAY',
-            fromTime: { hour: 17, minute: 0, second: 0, nano: 0 },
+            fromTime: '17:00:00',
             untilDay: 'SUNDAY',
-            untilTime: { hour: 9, minute: 0, second: 0, nano: 0 },
+            untilTime: '09:00:00',
           },
         ],
       },
@@ -114,6 +114,11 @@ describe('Print a HDC AP licence', () => {
     expect($('#meeting-details').text()).toContain('The Square')
 
     expect($('#curfew-address').text()).toContain('addressLineOne')
+
+    expect($('#curfew-times').text()).toContain('05:00 pm')
+    expect($('#curfew-times').text()).toContain('on Monday')
+    expect($('#curfew-times').text()).toContain('09:00 am')
+    expect($('#curfew-times').text()).toContain('on Tuesday')
 
     // Should be 7 standard, 1 additional and 1 bespoke conditions = 9 in total
     expect($('#ap-conditions > .condition').length).toBe(9)
