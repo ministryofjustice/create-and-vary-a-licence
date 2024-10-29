@@ -56,6 +56,7 @@ export default class AdditionalLicenceConditionInputRoutes {
         req.query?.fromReview ? '?fromReview=true' : ''
       }`
     }
+
     const condition = licence.additionalLicenceConditions.find(c => c.id === +conditionId)
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
