@@ -9,6 +9,7 @@ import {
   simpleDateTimeToJson,
   stringToAddressObject,
   jsonDtTo12HourTime,
+  json24HourTimeTo12HourTime,
   jsonDtToDate,
   removeDuplicates,
   filterCentralCaseload,
@@ -219,6 +220,25 @@ test.each`
   ${'null'}             | ${'null'}
 `('convert JSON datetime to 12 hour time value', ({ jsonDateTime, time12Hour }) => {
   const timeValue = jsonDtTo12HourTime(jsonDateTime)
+  if (isDefined(timeValue)) {
+    expect(timeValue).toEqual(time12Hour)
+  } else {
+    expect(timeValue).toBeNull()
+  }
+})
+
+test.each`
+  time24Hour    | time12Hour
+  ${'23:15:00'} | ${'11:15 pm'}
+  ${'12:01:00'} | ${'12:01 pm'}
+  ${'12:00:00'} | ${'12:00 pm'}
+  ${'00:00:00'} | ${'12:00 am'}
+  ${'01:01:00'} | ${'01:01 am'}
+  ${'14:23:00'} | ${'02:23 pm'}
+  ${'14:23:00'} | ${'02:23 pm'}
+  ${'null'}     | ${'null'}
+`('convert JSON 24 hour time to 12 hour time value', ({ time24Hour, time12Hour }) => {
+  const timeValue = json24HourTimeTo12HourTime(time24Hour)
   if (isDefined(timeValue)) {
     expect(timeValue).toEqual(time12Hour)
   } else {

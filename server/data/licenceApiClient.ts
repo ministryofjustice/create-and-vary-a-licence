@@ -685,9 +685,9 @@ export default class LicenceApiClient extends RestClient {
     })) as Promise<ComCase[]>
   }
 
-  async getHdcLicenceData(bookingId: number): Promise<HdcLicenceData> {
+  async getHdcLicenceData(licenceId: number): Promise<HdcLicenceData> {
     return (await this.get({
-      path: `/hdc/curfew/bookingId/${bookingId}`,
+      path: `/hdc/curfew/licenceId/${licenceId}`,
     })) as Promise<HdcLicenceData>
   }
 }

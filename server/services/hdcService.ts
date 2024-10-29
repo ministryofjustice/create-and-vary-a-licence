@@ -4,15 +4,15 @@ import LicenceApiClient from '../data/licenceApiClient'
 export default class HdcService {
   constructor(private readonly licenceApiClient: LicenceApiClient) {}
 
-  async getHdcLicenceData(bookingId: number): Promise<HdcLicenceData> {
-    const hdcLicenceData = await this.licenceApiClient.getHdcLicenceData(bookingId)
+  async getHdcLicenceData(licenceId: number): Promise<HdcLicenceData> {
+    const hdcLicenceData = await this.licenceApiClient.getHdcLicenceData(licenceId)
 
-    const { curfewAddress, firstNightCurfewHours, curfewHours } = hdcLicenceData
+    const { curfewAddress, firstNightCurfewHours, curfewTimes } = hdcLicenceData
 
     return {
       curfewAddress,
       firstNightCurfewHours,
-      curfewHours,
+      curfewTimes,
     }
   }
 }
