@@ -22,18 +22,12 @@
          <p>
             Date of birth: <span class="bold">{{ licence.dateOfBirth | datetimeToDate }}</span>
          </p>
-         {% if licence.licenceExpiryDate == licence.sentenceEndDate %}
-               <p>
-                  Your licence and sentence expire on: <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
-               </p>
-         {% else %}
-               <p>
-                  Your licence expires on: <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
-               </p>
-               <p>
-                  Your sentence expires on: <span class="bold">{{ licence.sentenceEndDate | datetimeToDate }}</span>
-               </p>
-         {% endif %}
+            <p>
+               Your licence ends on: <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
+            </p>
+            <p>
+               Your sentence ends on: <span class="bold">{{ licence.sentenceEndDate | datetimeToDate }}</span>
+            </p>
       </div>
    </div>
 
@@ -61,7 +55,25 @@
    </div>
 
    {% include "pages/licence/partials/apDates.njk" %}
-   {% include "pages/licence/partials/induction.njk" %}
+   
+   <div id="induction" class="section">
+      <p>
+         On release from prison (including, if applicable, any release from detention under the Immigration Act 1971
+         during the currency of your licence, whether or not leave has been granted for you to remain in the United Kingdom),
+         unless otherwise directed by your supervising officer, you must report without delay to:
+      </p>
+      <div id="meeting-details">
+         <p>
+               <span data-qa="appointment-person" class="bold line-space-after">{{ appointmentPerson }}</span>
+               {% for a in (licence.appointmentAddress | formatAddressAsList) %}
+                  <span class="bold line-space-after">{{ a }}</span>
+               {% endfor %}
+         </p>
+         <p data-qa="appointment-time">On <span class="bold">{{ licence.appointmentTime | datetimeToDateWithDay }}</span> at <span class="bold">{{ licence.appointmentTime | datetimeTo12HourTime }}</span></p>
+         <p>Contact telephone number: <span class="bold">{{ licence.appointmentContact }}</span></p>
+      </div>
+   </div>
+
 
    <div class="smallPaddingBottom"></div>
    <p><span class="bold">Home Detention Curfew</span></p>
@@ -86,7 +98,7 @@
          midnight during this period in order to fit you with the tag. You must show the contractor this copy of the
          licence to confirm your identity. Your curfew will then run until the curfew finish time the following morning.
          On your last day of curfew the contractor will visit you to remove the tag and monitoring equipment. This will
-         take place in the last two hours of your last curfew period - i.e. between 10:00 pm and midnight.
+         take place in the last two hours of your last curfew period – i.e. between 10:00 pm and midnight.
       </p>
    </div>
 
@@ -144,7 +156,7 @@
          licence relating to the curfew. You will be in breach of this condition if:
          <ol type="i">
             <li>You are absent from your curfew address during the specified curfew hours</li>
-            <li>You commit violence against or threaten the contractor or any of his staff with violence</li>
+            <li>You commit violence against or threaten the contractor or any of their staff with violence</li>
             <li>You damage or tamper with the monitoring equipment</li>
             <li>You withdraw your consent to the monitoring arrangements</li>
          </ol>
@@ -176,7 +188,7 @@
    </div>
 
    <div class="smallPaddingBottom"></div>
-   <p><span class="bold">Probation Supervision</span></p>
+   <p><span class="bold">Probation supervision</span></p>
 
    <div class="section">
       <p>

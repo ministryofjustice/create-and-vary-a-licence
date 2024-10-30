@@ -92,7 +92,7 @@ describe('Print an AP licence', () => {
     })
 
     expect($('#offender > div > p:nth-child(2)').text().trim()).toBe(
-      'Your licence and sentence expire on 9th February 2022'
+      'Your licence and sentence expire on 9 February 2022'
     )
   })
 
@@ -104,8 +104,8 @@ describe('Print an AP licence', () => {
       },
     })
 
-    expect($('#offender > div > p:nth-child(2)').text().trim()).toBe('Your licence expires on 8th February 2022')
-    expect($('#offender > div > p:nth-child(3)').text().trim()).toBe('Your sentence expires on 9th February 2022')
+    expect($('#offender > div > p:nth-child(2)').text().trim()).toBe('Your licence expires on 8 February 2022')
+    expect($('#offender > div > p:nth-child(3)').text().trim()).toBe('Your sentence expires on 9 February 2022')
   })
   describe('Appointment date rendering', () => {
     it('Should render specific date time', () => {
@@ -115,7 +115,7 @@ describe('Print an AP licence', () => {
           appointmentTime: '28/01/2023 10:30',
         } as Licence,
       })
-      expect($('[data-qa="appointment-time"]').text().trim()).toBe('On Saturday 28th January 2023 at 10:30 am')
+      expect($('[data-qa="appointment-time"]').text().trim()).toBe('On Saturday 28 January 2023 at 10:30 am')
     })
     it('Should render next working day', () => {
       const $ = render({
