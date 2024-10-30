@@ -26,7 +26,7 @@ const licence = {
   kind: 'CRD',
   id: 1,
   statusCode: 'IN_PROGRESS',
-  version: '2.1',
+  version: '3.0',
 } as Licence
 
 beforeEach(() => {

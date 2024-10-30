@@ -91,17 +91,17 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
             {
               id: 1,
               code: 'code1',
-              version: '2.1',
+              version: '3.0',
             },
             {
               id: 2,
               code: 'code1',
-              version: '2.1',
+              version: '3.0',
             },
             {
               id: 3,
               code: 'code1',
-              version: '2.1',
+              version: '3.0',
             },
           ],
         } as Licence

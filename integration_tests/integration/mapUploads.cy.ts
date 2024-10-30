@@ -52,7 +52,6 @@ context('Create a licence', () => {
         .clickContinueToMez()
 
       const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .enterText('Test Map', 'outOfBoundArea')
         .uploadFile()
         .clickContinueForMez([
           {
@@ -113,7 +112,6 @@ context('Create a licence', () => {
         .clickContinueToMez()
 
       const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .enterText('Test Map', 'outOfBoundArea')
         .uploadFile()
         .clickContinueForMez([
           {
@@ -133,7 +131,6 @@ context('Create a licence', () => {
         ])
         .selectYes()
         .clickContinueCallbackLoop()
-        .enterText('Test Map', 'outOfBoundArea')
         .uploadFile()
         .clickContinueForMez([
           {
@@ -208,7 +205,6 @@ context('Create a licence', () => {
         .clickContinueToMez()
 
       const exclusionZoneMapList = additionalConditionsInputPage
-        .enterText('Test Map', 'outOfBoundArea')
         .uploadFile()
         .clickContinueForMez([
           {
@@ -228,7 +224,6 @@ context('Create a licence', () => {
         ])
         .selectYes()
         .clickContinueCallbackLoop()
-        .enterText('Test Map', 'outOfBoundArea')
         .uploadFile()
         .clickContinueForMez([
           {
@@ -329,7 +324,6 @@ context('Create a licence', () => {
         .clickContinueToMez()
 
       const bespokeConditionsQuestionPage = additionalConditionsInputPage
-        .enterText('Test Map', 'outOfBoundArea')
         .uploadFile()
         .clickContinueForMez([
           {
@@ -349,7 +343,6 @@ context('Create a licence', () => {
         ])
         .selectYes()
         .clickContinueCallbackLoop()
-        .enterText('Test Map', 'outOfBoundArea')
         .uploadFile()
         .clickContinueForMez([
           {
