@@ -1,5 +1,6 @@
 import HdcService from './hdcService'
 import LicenceApiClient from '../data/licenceApiClient'
+import { HdcLicenceData } from '../@types/licenceApiClientTypes'
 
 jest.mock('../data/licenceApiClient')
 
@@ -18,23 +19,58 @@ describe('HDC Service', () => {
       firstNightFrom: '09:00',
       firstNightUntil: '17:00',
     },
-    curfewHours: {
-      mondayFrom: '17:00',
-      mondayUntil: '09:00',
-      tuesdayFrom: '17:00',
-      tuesdayUntil: '09:00',
-      wednesdayFrom: '17:00',
-      wednesdayUntil: '09:00',
-      thursdayFrom: '17:00',
-      thursdayUntil: '09:00',
-      fridayFrom: '17:00',
-      fridayUntil: '09:00',
-      saturdayFrom: '17:00',
-      saturdayUntil: '09:00',
-      sundayFrom: '17:00',
-      sundayUntil: '09:00',
-    },
-  }
+    curfewTimes: [
+      {
+        curfewTimesSequence: 1,
+        fromDay: 'MONDAY',
+        fromTime: '17:00:00',
+        untilDay: 'TUESDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 2,
+        fromDay: 'TUESDAY',
+        fromTime: '17:00:00',
+        untilDay: 'WEDNESDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 3,
+        fromDay: 'WEDNESDAY',
+        fromTime: '17:00:00',
+        untilDay: 'THURSDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 4,
+        fromDay: 'THURSDAY',
+        fromTime: '17:00:00',
+        untilDay: 'FRIDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 5,
+        fromDay: 'FRIDAY',
+        fromTime: '17:00:00',
+        untilDay: 'SATURDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 6,
+        fromDay: 'SATURDAY',
+        fromTime: '17:00:00',
+        untilDay: 'SUNDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 7,
+        fromDay: 'MONDAY',
+        fromTime: '17:00:00',
+        untilDay: 'SUNDAY',
+        untilTime: '09:00:00',
+      },
+    ],
+  } as HdcLicenceData
 
   afterEach(() => {
     jest.clearAllMocks()

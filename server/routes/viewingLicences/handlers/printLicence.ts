@@ -44,8 +44,7 @@ export default class PrintLicenceRoutes {
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
 
-    const hdcLicenceData =
-      licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.bookingId) : null
+    const hdcLicenceData = licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
 
     const licenceToPrint = {
       qrCode,
@@ -81,8 +80,7 @@ export default class PrintLicenceRoutes {
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
 
-    const hdcLicenceData =
-      licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.bookingId) : null
+    const hdcLicenceData = licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
 
     const { monitoringSupplierTelephone } = config
 

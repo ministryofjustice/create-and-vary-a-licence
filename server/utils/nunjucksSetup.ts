@@ -12,6 +12,7 @@ import {
   CaViewCasesTab,
   formatAddress,
   jsonDtTo12HourTime,
+  json24HourTimeTo12HourTime,
   jsonDtToDate,
   jsonDtToDateShort,
   jsonDtToDateWithDay,
@@ -173,6 +174,10 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('datetimeTo12HourTime', (dt: string) => {
     return jsonDtTo12HourTime(dt)
+  })
+
+  njkEnv.addFilter('format24HourTimeTo12HourTime', (dt: string) => {
+    return json24HourTimeTo12HourTime(dt)
   })
 
   njkEnv.addFilter('formatAddress', formatAddress)

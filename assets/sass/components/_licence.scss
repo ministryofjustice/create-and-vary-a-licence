@@ -174,3 +174,43 @@ span #hidden-version {
 span #hidden-licence-type {
   string-set: licence-type content();
 }
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  empty-cells: show;
+}
+
+table.wide {
+  width: 100%;
+}
+
+tr {
+  line-height: 25px;
+}
+
+table.compact tr {
+  line-height: 15px;
+}
+
+table.signature {
+  border: 1px solid grey;
+}
+
+td {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+td.nopad {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+table.noLeftPad td {
+  padding-left: 0;
+}
+
+table.lined td {
+  border: 1px solid grey;
+}
