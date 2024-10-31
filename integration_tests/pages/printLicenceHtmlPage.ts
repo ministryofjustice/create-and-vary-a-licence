@@ -9,7 +9,7 @@ export default class PrintLicenceHtmlPage extends Page {
   checkPrintTemplate = (): PrintLicenceHtmlPage => {
     // Verify the structure and key details of the licence document
     cy.get('#title').should('contain', 'Licence and post sentence supervision order for Bob Zimmer')
-    cy.get('#offender').should('be.visible').should('contain', '12th February 1980')
+    cy.get('#offender').should('be.visible').should('contain', '12 February 1980')
     cy.get('#offender-image').should('be.visible')
     cy.get('#purposes').should('be.visible')
     cy.get('#ap-dates').should('be.visible')
