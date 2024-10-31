@@ -248,14 +248,14 @@ test.each`
 
 test.each`
   jsonDateTime          | dateFull
-  ${'12/12/2021 23:15'} | ${'12th December 2021'}
-  ${'31/01/2022 12:01'} | ${'31st January 2022'}
-  ${'31/12/2022 12:00'} | ${'31st December 2022'}
-  ${'31/12/2022 00:00'} | ${'31st December 2022'}
-  ${'01/01/2022 01:01'} | ${'1st January 2022'}
-  ${'22/10/2024 14:23'} | ${'22nd October 2024'}
-  ${'22/10/24 14:23'}   | ${'22nd October 2024'}
-  ${'22/10/24'}         | ${'22nd October 2024'}
+  ${'12/12/2021 23:15'} | ${'12 December 2021'}
+  ${'31/01/2022 12:01'} | ${'31 January 2022'}
+  ${'31/12/2022 12:00'} | ${'31 December 2022'}
+  ${'31/12/2022 00:00'} | ${'31 December 2022'}
+  ${'01/01/2022 01:01'} | ${'1 January 2022'}
+  ${'22/10/2024 14:23'} | ${'22 October 2024'}
+  ${'22/10/24 14:23'}   | ${'22 October 2024'}
+  ${'22/10/24'}         | ${'22 October 2024'}
   ${'null'}             | ${'null'}
 `('convert JSON datetime to long date', ({ jsonDateTime, dateFull }) => {
   const dateValue = jsonDtToDate(jsonDateTime)
@@ -268,9 +268,9 @@ test.each`
 
 test.each`
   jsonDateTime          | dateFull
-  ${'12/12/2021 23:15'} | ${'Sunday 12th December 2021'}
-  ${'31/01/2022 12:01'} | ${'Monday 31st January 2022'}
-  ${'31/12/2022 12:00'} | ${'Saturday 31st December 2022'}
+  ${'12/12/2021 23:15'} | ${'Sunday 12 December 2021'}
+  ${'31/01/2022 12:01'} | ${'Monday 31 January 2022'}
+  ${'31/12/2022 12:00'} | ${'Saturday 31 December 2022'}
   ${'null'}             | ${'null'}
 `('convert JSON datetime to date with full day', ({ jsonDateTime, dateFull }) => {
   const dateValue = jsonDtToDateWithDay(jsonDateTime)
