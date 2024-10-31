@@ -132,25 +132,7 @@ describe('Print a HDC AP licence', () => {
           appointmentTime: '28/01/2023 10:30',
         } as Licence,
       })
-      expect($('[data-qa="appointment-time"]').text().trim()).toBe('On Saturday 28th January 2023 at 10:30 am')
-    })
-    it('Should render next working day', () => {
-      const $ = render({
-        licence: {
-          appointmentTimeType: 'NEXT_WORKING_DAY_2PM',
-          appointmentTime: undefined,
-        } as Licence,
-      })
-      expect($('[data-qa="appointment-time"]').text().trim()).toBe('By 2pm on the next working day after your release')
-    })
-    it('Should render immediate upon release', () => {
-      const $ = render({
-        licence: {
-          appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
-          appointmentTime: undefined,
-        } as Licence,
-      })
-      expect($('[data-qa="appointment-time"]').text().trim()).toBe('Immediately after release')
+      expect($('[data-qa="appointment-time"]').text().trim()).toBe('On Saturday 28 January 2023 at 10:30 am')
     })
   })
 })

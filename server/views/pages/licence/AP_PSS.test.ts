@@ -151,7 +151,7 @@ describe('Print an AP_PSS licence', () => {
           appointmentTime: '28/01/2023 10:30',
         } as Licence,
       })
-      expect($('[data-qa="appointment-time"]').text().trim()).toBe('On Saturday 28th January 2023 at 10:30 am')
+      expect($('[data-qa="appointment-time"]').text().trim()).toBe('On Saturday 28 January 2023 at 10:30 am')
     })
     it('Should render next working day', () => {
       const $ = render({
