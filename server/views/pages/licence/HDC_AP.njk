@@ -50,11 +50,15 @@
 
    <div id="home-detention-curfew" class="section">
       <p>
-         Your Home Detention Curfew starts on <span class="bold">{{ licence.actualReleaseDate | datetimeToDate or "MISSING - HDC Approved Date/Actual Release Date"}}</span>  and ends on <span class="bold">{{ licence.conditionalReleaseDate | datetimeToDate or "MISSING - Conditional Release Date"}}</span> 
+         Your Home Detention Curfew starts on <span class="bold">{{ licence.homeDetentionCurfewActualDate | datetimeToDate }}</span>  and ends on <span class="bold">{{ licence.conditionalReleaseDate | datetimeToDate }}</span> 
       </p>
    </div>
 
-   {% include "pages/licence/partials/apDates.njk" %}
+   <div id="ap-dates" class="section">
+      <p data-qa="hdcad-time">
+         Your supervision on licence starts on <span class="bold">{{ licence.homeDetentionCurfewActualDate | datetimeToDate }}</span> and ends on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span> unless this licence is revoked.
+      </p>
+   </div>
    
    <div id="induction" class="section">
       <p>
@@ -64,7 +68,7 @@
       </p>
       <div id="meeting-details">
          <p>
-               <span data-qa="appointment-person" class="bold line-space-after">{{ appointmentPerson }}</span>
+               <span data-qa="appointment-person" class="bold line-space-after">{{ licence.appointmentPerson }}</span>
                {% for a in (licence.appointmentAddress | formatAddressAsList) %}
                   <span class="bold line-space-after">{{ a }}</span>
                {% endfor %}
@@ -80,21 +84,17 @@
    <div id="curfew-address" class="section">
       <p>
          The address(es) to which you are curfewed are:<br>
-         {% if hdcLicenceData.curfewAddress %}
-            <div id="curfewAddressLine1"><span class="bold">{{ hdcLicenceData.curfewAddress.addressLine1 }}</span></div>
-            <div id="curfewAddressLine2"><span class="bold">{{ hdcLicenceData.curfewAddress.addressLine2 }}</span></div>
-            <div id="curfewAddressTown"><span class="bold">{{ hdcLicenceData.curfewAddress.addressTown }}</span></div>
-            <div id="curfewAddressPostCode"><span class="bold">{{ hdcLicenceData.curfewAddress.postCode }}</span></div>
-         {% else %}
-            "MISSING - Curfew Address"
-         {% endif%}
+         <div id="curfewAddressLine1"><span class="bold">{{ hdcLicenceData.curfewAddress.addressLine1 }}</span></div>
+         <div id="curfewAddressLine2"><span class="bold">{{ hdcLicenceData.curfewAddress.addressLine2 }}</span></div>
+         <div id="curfewAddressTown"><span class="bold">{{ hdcLicenceData.curfewAddress.addressTown }}</span></div>
+         <div id="curfewAddressPostCode"><span class="bold">{{ hdcLicenceData.curfewAddress.postCode }}</span></div>
       </p>
    </div>
 
    <div id="first-night" class="section">
       <p>
-         On the day of your release, you will be subject to curfew at your curfew address from <span class="bold">{{ hdcLicenceData.firstNightCurfewHours.firstNightFrom | format24HourTimeTo12HourTime or "MISSING - firstDayCurfewTimes From"  }}</span> 
-         until <span class="bold">{{ hdcLicenceData.firstNightCurfewHours.firstNightUntil | format24HourTimeTo12HourTime or "MISSING - firstDayCurfewTimes Until"  }}</span>. The monitoring contractor will visit you at this address before
+         On the day of your release, you will be subject to curfew at your curfew address from <span class="bold">{{ hdcLicenceData.firstNightCurfewHours.firstNightFrom | format24HourTimeTo12HourTime }}</span> 
+         until <span class="bold">{{ hdcLicenceData.firstNightCurfewHours.firstNightUntil | format24HourTimeTo12HourTime }}</span>. The monitoring contractor will visit you at this address before
          midnight during this period in order to fit you with the tag. You must show the contractor this copy of the
          licence to confirm your identity. Your curfew will then run until the curfew finish time the following morning.
          On your last day of curfew the contractor will visit you to remove the tag and monitoring equipment. This will
