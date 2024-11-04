@@ -5,7 +5,7 @@ import type { Licence } from '../../../@types/licenceApiClientTypes'
 const render = templateRenderer(fs.readFileSync('server/views/pages/licence/HDC_AP.njk').toString())
 
 describe('Print a HDC AP licence', () => {
-  it('verify render of an AP licence', () => {
+  it('verify render of an HDC AP licence', () => {
     const $ = render({
       licence: {
         id: 1,
@@ -15,6 +15,8 @@ describe('Print a HDC AP licence', () => {
         typeCode: 'AP',
         version: '1.0',
         prisonCode: 'MDI',
+        licenceExpiryDate: '08/02/2023',
+        homeDetentionCurfewActualDate: '08/02/2022',
         appointmentPerson: 'Jack Frost',
         appointmentAddress: 'The Square, Area, Town, County, S12 3QD',
         comTelephone: '07878 234566',
@@ -110,6 +112,10 @@ describe('Print a HDC AP licence', () => {
     })
 
     expect($('title').text()).toContain('John Smith')
+
+    expect($('#ap-dates').text().trim()).toContain(
+      'Your supervision on licence starts on 8 February 2022 and ends on 8 February 2023 unless this licence is revoked.'
+    )
 
     expect($('#meeting-details').text()).toContain('The Square')
 
