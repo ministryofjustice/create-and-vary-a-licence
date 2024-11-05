@@ -7,7 +7,6 @@ import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTy
 import { User } from '../../../@types/CvlUserDetails'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import HdcService from '../../../services/hdcService'
-import LicenceType from '../../../enumeration/licenceType'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
