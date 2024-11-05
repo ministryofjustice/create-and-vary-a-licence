@@ -7,6 +7,7 @@ import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTy
 import { User } from '../../../@types/CvlUserDetails'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import HdcService from '../../../services/hdcService'
+import LicenceType from '../../../enumeration/licenceType'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
@@ -178,7 +179,7 @@ export default class PrintLicenceRoutes {
     const licenceKind = licence.kind
     const licenceType = licence.typeCode
     if (licenceKind === LicenceKind.HDC) {
-      return 'HDC_AP_PSS'
+      return `${licenceKind}_${licenceType}`
     }
     return licenceType
   }
