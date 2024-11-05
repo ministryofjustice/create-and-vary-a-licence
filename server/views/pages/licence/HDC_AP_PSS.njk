@@ -26,7 +26,10 @@
             Your Home Detention Curfew ends on: <span class="bold">{{ licence.conditionalReleaseDate | datetimeToDate }}</span>
         </p>
         <p>
-            Your licence and sentence ends on: <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
+            Your licence ends on: <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span>
+        </p>
+        <p>
+            Your sentence ends on: <span class="bold">{{ licence.sentenceEndDate | datetimeToDate }}</span>
         </p>
         <p>
             Your post sentence supervision period ends on: <span class="bold">{{ licence.topupSupervisionExpiryDate | datetimeToDate }}</span>
@@ -34,21 +37,24 @@
       </div>
    </div>
 
-   <div id="objectives" class="section">
+   <div class="section">
       <p>
-         Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on Home Detention Curfew and post sentence supervision. The relevant purposes of each type of supervision are explained in the sections below.
+         Under the provisions of Chapter 6 of the Criminal Justice Act 2003 you are being released on Home Detention Curfew and post sentence supervision.
+      </p>
+      <p>
+         The relevant purposes of each type of supervision are explained in the sections below.
       </p>
    </div>
 
    <div id="home-detention-curfew" class="section">
       <p>
-         Your Home Detention Curfew starts on <span class="bold">{{ licence.homeDetentionCurfewActualDate | datetimeToDate }}</span>  and ends on <span class="bold">{{ licence.conditionalReleaseDate | datetimeToDate }}</span> 
+         Your Home Detention Curfew starts on <span class="bold">{{ licence.homeDetentionCurfewActualDate | datetimeToDate }}</span> and ends on <span class="bold">{{ licence.conditionalReleaseDate | datetimeToDate }}</span> 
       </p>
    </div>
 
    <div id="ap-dates" class="section">
       <p data-qa="hdcad-time">
-         Your supervision starts on <span class="bold">{{ licence.homeDetentionCurfewActualDate | datetimeToDate }}</span> and ends on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span> unless this licence is revoked.
+         Your supervision starts on <span class="bold">{{ licence.homeDetentionCurfewActualDate | datetimeToDate }}</span> and ends on <span class="bold">{{ licence.licenceExpiryDate | datetimeToDate }}</span> unless this licence is previously revoked.
       </p>
    </div>
 
@@ -82,7 +88,7 @@
 
    <div id="curfew-address" class="section">
       <p>
-        The address(es) to which you are curfewed are:<br>
+        The address/es to which you are curfewed are:<br>
         <div id="curfewAddressLine1"><span class="bold">{{ hdcLicenceData.curfewAddress.addressLine1 }}</span></div>
         <div id="curfewAddressLine2"><span class="bold">{{ hdcLicenceData.curfewAddress.addressLine2 }}</span></div>
         <div id="curfewAddressTown"><span class="bold">{{ hdcLicenceData.curfewAddress.addressTown }}</span></div>
@@ -186,9 +192,17 @@
       </p>
    </div>
 
-   <p><span class="bold">Probation supervision</span></p>
+   <p><span class="bold">Licence period</span></p>
 
-   <div class="section">
+   <div id="objectives" class="section">
+      <p>
+         The objectives of this supervision are to:
+      </p>
+      <ul class="bullet-point">
+         <li>protect the public</li>
+         <li>prevent re-offending</li>
+         <li>help you to resettle into the community</li>
+      </ul>
       <p>
          You must place yourself under the supervision of whichever supervising officer or social worker is nominated for this purpose. 
          You must also attend appointments with them from time to time.
@@ -197,27 +211,43 @@
 
    {% include "pages/licence/partials/apConditions.njk" %}
 
+   <div id="cancellation-ap" class="section">
+      <p>
+         The Secretary of State may vary or cancel any of the above conditions, in accordance with Section 250(4) of
+         the Criminal Justice Act 2003.
+      </p>
+   </div>
+
+   {% include "pages/licence/partials/recall.njk" %}
+
+   <div id="failure-to-comply-ap" class="section">
+      <p>
+         If you fail to comply with any requirement of your licence period (set out in paragraphs 17 and 18 above) or
+         if you otherwise pose a risk to the public, you will be liable to have this licence revoked and be recalled to
+         custody until the date on which your licence would have otherwise ended. If you are sent back to prison and are
+         re-released before the end of your licence, you will still be subject to licence conditions until the end of
+         your sentence.
+      </p>
+   </div>
+
    <p><span class="bold">Post sentence supervision</span></p>
 
    <div class="section">
       <p>The objective of your post sentence supervision period is to encourage your rehabilitation in the community.</p>
-    </div>
-
-    <div class="section">
       <p>You must place yourself under the supervision of whichever supervising officer or social worker is nominated for this purpose. You must also attend appointments with them from time to time.</p>
     </div>
 
    {% include "pages/licence/partials/pssConditions.njk" %}
 
-   <div id="cancellation" class="section">
+   <div id="cancellation-pss" class="section">
       <p>
          The Secretary of State may vary or cancel any of the above conditions, in accordance with Section 256AB(4), 256D and 256E of the Criminal Justice Act 2003.
       </p>
    </div>
 
-   <div id="failure-to-comply" class="section">
+   <div id="failure-to-comply-pss" class="section">
       <p>
-         If you fail to comply with any requirement of your supervision (set out above) 
+         If you fail to comply with any requirement of your supervision (set out in paragraphs 22 and 23 above) 
          under section 256AB, 256D and 256E of the Criminal Justice Act 2003 
          you will be liable to be summoned to appear before a court. The court may order you to be detained for up to 
          14 days, or impose further sanctions such as unpaid work or electronic location monitoring.

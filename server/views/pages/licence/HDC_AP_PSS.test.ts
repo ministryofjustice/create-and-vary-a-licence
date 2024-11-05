@@ -4,7 +4,7 @@ import type { Licence } from '../../../@types/licenceApiClientTypes'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/licence/HDC_AP_PSS.njk').toString())
 
-describe('Print a HDC AP licence', () => {
+describe('Print a HDC AP_PSS licence', () => {
   it('verify render of an HDC AP licence', () => {
     const $ = render({
       licence: {
@@ -36,6 +36,21 @@ describe('Print a HDC AP licence', () => {
           },
         ],
         bespokeConditions: [{ text: 'Bespoke condition 1' }],
+        standardPssConditions: [
+          { code: '1', text: 'Standard 1' },
+          { code: '2', text: 'Standard 2' },
+          { code: '3', text: 'Standard 3' },
+          { code: '4', text: 'Standard 4' },
+          { code: '5', text: 'Standard 5' },
+          { code: '6', text: 'Standard 6' },
+          { code: '7', text: 'Standard 7' },
+          { code: '8', text: 'STandard 8' },
+        ],
+        additionalPssConditions: [
+          {
+            expandedText: 'Additional PSS Condition',
+          },
+        ],
       },
       qrCodesEnabled: false,
       singleItemConditions: [
@@ -123,7 +138,7 @@ describe('Print a HDC AP licence', () => {
     // Check the supervision section is present with 2 bold dates
     expect($('#ap-dates > p > .bold').length).toBe(2)
     expect($('#ap-dates').text().trim()).toContain(
-      'Your supervision starts on 8 February 2022 and ends on 8 February 2023 unless this licence is revoked.'
+      'Your supervision starts on 8 February 2022 and ends on 8 February 2023 unless this licence is previously revoked.'
     )
 
     // Check the induction appointment is present with 3 paragraphs
@@ -138,13 +153,23 @@ describe('Print a HDC AP licence', () => {
     expect($('#curfew-times').text()).toContain('on Tuesday')
 
     // Check the release to other text is present
-    expect($('#cancellation').text()).toContain('Criminal Justice Act 2003')
+    expect($('#cancellation-ap').text()).toContain('Criminal Justice Act 2003')
+
+    expect($('#cancellation-pss').text()).toContain('Criminal Justice Act 2003')
 
     // Should be 7 standard, 1 additional and 1 bespoke conditions = 9 in total
     expect($('#ap-conditions > .condition').length).toBe(9)
 
+    // Should be 8 standard and 1 additional = 9 in total
+    expect($('#pss-conditions > .condition').length).toBe(9)
+
+    // Check the recall text is present
+    expect($('#recall').text()).toContain('Criminal Justice Act 2003')
+
     // Check the failure to comply text is present
-    expect($('#failure-to-comply').text()).toContain('fail to comply')
+    expect($('#failure-to-comply-ap').text()).toContain('fail to comply')
+
+    expect($('#failure-to-comply-pss').text()).toContain('Criminal Justice Act 2003')
 
     // Check the signature box and content are present
     expect($('.boxed > .signatures > p').length).toBe(6)
