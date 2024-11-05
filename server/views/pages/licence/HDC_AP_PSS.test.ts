@@ -2,7 +2,7 @@ import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import type { Licence } from '../../../@types/licenceApiClientTypes'
 
-const render = templateRenderer(fs.readFileSync('server/views/pages/licence/HDC_AP.njk').toString())
+const render = templateRenderer(fs.readFileSync('server/views/pages/licence/HDC_AP_PSS.njk').toString())
 
 describe('Print a HDC AP licence', () => {
   it('verify render of an HDC AP licence', () => {
@@ -120,10 +120,6 @@ describe('Print a HDC AP licence', () => {
     // Check the offender image is present
     expect($('#offender > #offender-image').length).toBe(1)
 
-    // Check the objectives section is present - 3 paragraphs, 1 bullet-point list
-    expect($('#objectives > p').length).toBe(3)
-    expect($('#objectives > .bullet-point').length).toBe(1)
-
     // Check the supervision section is present with 2 bold dates
     expect($('#ap-dates > p > .bold').length).toBe(2)
     expect($('#ap-dates').text().trim()).toContain(
@@ -132,7 +128,6 @@ describe('Print a HDC AP licence', () => {
 
     // Check the induction appointment is present with 3 paragraphs
     expect($('#induction > #meeting-details > p').length).toBe(3)
-
     expect($('#meeting-details').text()).toContain('The Square')
 
     expect($('#curfew-address').text()).toContain('addressLineOne')
@@ -142,17 +137,14 @@ describe('Print a HDC AP licence', () => {
     expect($('#curfew-times').text()).toContain('09:00 am')
     expect($('#curfew-times').text()).toContain('on Tuesday')
 
+    // Check the release to other text is present
+    expect($('#cancellation').text()).toContain('Criminal Justice Act 2003')
+
     // Should be 7 standard, 1 additional and 1 bespoke conditions = 9 in total
     expect($('#ap-conditions > .condition').length).toBe(9)
 
-    // Check the cancellation text is present
-    expect($('#cancellation').text()).toContain('Criminal Justice Act 2003')
-
-    // Check the recall text is present
-    expect($('#recall').text()).toContain('Criminal Justice Act 2003')
-
     // Check the failure to comply text is present
-    expect($('#failure-to-comply').text()).toContain('licence revoked')
+    expect($('#failure-to-comply').text()).toContain('fail to comply')
 
     // Check the signature box and content are present
     expect($('.boxed > .signatures > p').length).toBe(6)

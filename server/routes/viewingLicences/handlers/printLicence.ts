@@ -178,7 +178,7 @@ export default class PrintLicenceRoutes {
     const licenceKind = licence.kind
     const licenceType = licence.typeCode
     if (licenceKind === LicenceKind.HDC) {
-      return 'HDC_AP'
+      return 'HDC_AP_PSS'
     }
     return licenceType
   }

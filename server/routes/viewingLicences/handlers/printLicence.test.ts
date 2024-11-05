@@ -412,7 +412,7 @@ describe('Route - print a licence', () => {
 
       await handler.preview(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('pages/licence/HDC_AP', {
+      expect(res.render).toHaveBeenCalledWith('pages/licence/HDC_AP_PSS', {
         qrCode: null,
         htmlPrint: true,
         exclusionZoneMapData: [],
@@ -425,7 +425,7 @@ describe('Route - print a licence', () => {
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
-    it('should render a PDF view of a HDC AP licence', async () => {
+    it('should render a PDF view of a HDC licence', async () => {
       res = {
         render: jest.fn(),
         renderPDF: jest.fn(),
@@ -465,7 +465,7 @@ describe('Route - print a licence', () => {
       await handler.renderPdf(req, res)
 
       expect(res.renderPDF).toHaveBeenCalledWith(
-        'pages/licence/HDC_AP',
+        'pages/licence/HDC_AP_PSS',
         {
           licencesUrl,
           imageData: '-- base64 image data --',
