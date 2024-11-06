@@ -585,5 +585,41 @@ describe('Route - print a licence', () => {
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
       expect(footerHtml).toMatch(/Version No:.+1.4/)
     })
+
+    it('should throw an error if the HDC licence is of type PSS', async () => {
+      res = {
+        render: jest.fn(),
+        renderPDF: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username },
+          licence: {
+            id: '1',
+            kind: 'HDC',
+            typeCode: 'PSS',
+            nomsId: 'A1234AA',
+            lastName: 'Bloggs',
+            cro: 'CRO',
+            bookingNo: 'BOOKING',
+            pnc: 'PNC',
+            version: '1.0',
+            prisonCode: 'MDI',
+            prisonTelephone: '0114 2345232334',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            licenceVersion: '1.4',
+          },
+          qrCodesEnabled: false,
+        },
+      } as unknown as Response
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
+      prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
+      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
+
+      expect(async () => {
+        await handler.renderPdf(req, res)
+      }).rejects.toThrowError('HDC Licence with ID 1 can not be of type PSS')
+    })
   })
 })
