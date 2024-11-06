@@ -390,7 +390,7 @@ describe('Route - print a licence', () => {
       expect(qrCodeService.getQrCode).toHaveBeenCalled()
     })
 
-    it('should render a HTML view of a HDC licence', async () => {
+    it('should render a HTML view of a HDC AP licence', async () => {
       res = {
         render: jest.fn(),
         redirect: jest.fn(),
@@ -400,6 +400,104 @@ describe('Route - print a licence', () => {
             id: 1,
             kind: 'HDC',
             typeCode: 'AP',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+          },
+          qrCodesEnabled: false,
+        },
+      } as unknown as Response
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
+      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
+
+      await handler.preview(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/licence/HDC_AP', {
+        qrCode: null,
+        htmlPrint: true,
+        exclusionZoneMapData: [],
+        singleItemConditions: [],
+        multipleItemConditions: [],
+        hdcLicenceData: exampleHdcLicenceData,
+      })
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
+      expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
+    })
+
+    it('should render a PDF view of a HDC AP licence', async () => {
+      res = {
+        render: jest.fn(),
+        renderPDF: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username },
+          licence: {
+            id: '1',
+            kind: 'HDC',
+            typeCode: 'AP',
+            nomsId: 'A1234AA',
+            lastName: 'Bloggs',
+            cro: 'CRO',
+            bookingNo: 'BOOKING',
+            pnc: 'PNC',
+            version: '1.0',
+            prisonCode: 'MDI',
+            prisonTelephone: '0114 2345232334',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            licenceVersion: '1.4',
+          },
+          qrCodesEnabled: false,
+        },
+      } as unknown as Response
+
+      const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+      const { monitoringSupplierTelephone } = config
+
+      const filename = `${res.locals.licence.nomsId}.pdf`
+      const footerHtml = handler.getPdfFooter(res.locals.licence)
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
+      prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
+      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
+
+      await handler.renderPdf(req, res)
+
+      expect(res.renderPDF).toHaveBeenCalledWith(
+        'pages/licence/HDC_AP',
+        {
+          licencesUrl,
+          imageData: '-- base64 image data --',
+          qrCode: null,
+          htmlPrint: false,
+          watermark,
+          singleItemConditions: [],
+          multipleItemConditions: [],
+          exclusionZoneMapData: [],
+          hdcLicenceData: exampleHdcLicenceData,
+          prisonTelephone: '0114 2345232334',
+          monitoringSupplierTelephone,
+        },
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
+      )
+
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
+      expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
+      expect(footerHtml).toMatch(/Version No:.+1.4/)
+    })
+
+    it('should render a HTML view of a HDC AP_PSS licence', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username },
+          licence: {
+            id: 1,
+            kind: 'HDC',
+            typeCode: 'AP_PSS',
             additionalLicenceConditions: [],
             additionalPssConditions: [],
           },
@@ -425,7 +523,7 @@ describe('Route - print a licence', () => {
       expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
     })
 
-    it('should render a PDF view of a HDC licence', async () => {
+    it('should render a PDF view of a HDC AP_PSS licence', async () => {
       res = {
         render: jest.fn(),
         renderPDF: jest.fn(),
@@ -435,7 +533,7 @@ describe('Route - print a licence', () => {
           licence: {
             id: '1',
             kind: 'HDC',
-            typeCode: 'AP',
+            typeCode: 'AP_PSS',
             nomsId: 'A1234AA',
             lastName: 'Bloggs',
             cro: 'CRO',
