@@ -6,6 +6,7 @@ import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import config from '../../../config'
 import HdcService from '../../../services/hdcService'
+import { HdcLicenceData } from '../../../@types/licenceApiClientTypes'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const qrCodeService = new QrCodeService() as jest.Mocked<QrCodeService>
@@ -18,6 +19,70 @@ describe('Route - print a licence', () => {
   const handler = new PrintLicenceRoutes(prisonerService, qrCodeService, licenceService, hdcService)
   let req: Request
   let res: Response
+
+  const exampleHdcLicenceData = {
+    curfewAddress: {
+      addressLine1: 'addressLineOne',
+      addressLine2: 'addressLineTwo',
+      addressTown: 'addressTownOrCity',
+      postCode: 'addressPostcode',
+    },
+    firstNightCurfewHours: {
+      firstNightFrom: '09:00',
+      firstNightUntil: '17:00',
+    },
+    curfewTimes: [
+      {
+        curfewTimesSequence: 1,
+        fromDay: 'MONDAY',
+        fromTime: '17:00:00',
+        untilDay: 'TUESDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 2,
+        fromDay: 'TUESDAY',
+        fromTime: '17:00:00',
+        untilDay: 'WEDNESDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 3,
+        fromDay: 'WEDNESDAY',
+        fromTime: '17:00:00',
+        untilDay: 'THURSDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 4,
+        fromDay: 'THURSDAY',
+        fromTime: '17:00:00',
+        untilDay: 'FRIDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 5,
+        fromDay: 'FRIDAY',
+        fromTime: '17:00:00',
+        untilDay: 'SATURDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 6,
+        fromDay: 'SATURDAY',
+        fromTime: '17:00:00',
+        untilDay: 'SUNDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 7,
+        fromDay: 'MONDAY',
+        fromTime: '17:00:00',
+        untilDay: 'SUNDAY',
+        untilTime: '09:00:00',
+      },
+    ],
+  } as HdcLicenceData
 
   beforeEach(() => {
     jest.resetAllMocks()
@@ -325,7 +390,7 @@ describe('Route - print a licence', () => {
       expect(qrCodeService.getQrCode).toHaveBeenCalled()
     })
 
-    it('should render a HTML view of a HDC licence', async () => {
+    it('should render a HTML view of a HDC AP licence', async () => {
       res = {
         render: jest.fn(),
         redirect: jest.fn(),
@@ -341,35 +406,6 @@ describe('Route - print a licence', () => {
           qrCodesEnabled: false,
         },
       } as unknown as Response
-
-      const exampleHdcLicenceData = {
-        curfewAddress: {
-          addressLine1: 'addressLineOne',
-          addressLine2: 'addressLineTwo',
-          addressTown: 'addressTownOrCity',
-          postCode: 'addressPostcode',
-        },
-        firstNightCurfewHours: {
-          firstNightFrom: '09:00',
-          firstNightUntil: '17:00',
-        },
-        curfewHours: {
-          mondayFrom: '17:00',
-          mondayUntil: '09:00',
-          tuesdayFrom: '17:00',
-          tuesdayUntil: '09:00',
-          wednesdayFrom: '17:00',
-          wednesdayUntil: '09:00',
-          thursdayFrom: '17:00',
-          thursdayUntil: '09:00',
-          fridayFrom: '17:00',
-          fridayUntil: '09:00',
-          saturdayFrom: '17:00',
-          saturdayUntil: '09:00',
-          sundayFrom: '17:00',
-          sundayUntil: '09:00',
-        },
-      }
 
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
@@ -422,35 +458,6 @@ describe('Route - print a licence', () => {
       const filename = `${res.locals.licence.nomsId}.pdf`
       const footerHtml = handler.getPdfFooter(res.locals.licence)
 
-      const exampleHdcLicenceData = {
-        curfewAddress: {
-          addressLine1: 'addressLineOne',
-          addressLine2: 'addressLineTwo',
-          addressTown: 'addressTownOrCity',
-          postCode: 'addressPostcode',
-        },
-        firstNightCurfewHours: {
-          firstNightFrom: '09:00',
-          firstNightUntil: '17:00',
-        },
-        curfewHours: {
-          mondayFrom: '17:00',
-          mondayUntil: '09:00',
-          tuesdayFrom: '17:00',
-          tuesdayUntil: '09:00',
-          wednesdayFrom: '17:00',
-          wednesdayUntil: '09:00',
-          thursdayFrom: '17:00',
-          thursdayUntil: '09:00',
-          fridayFrom: '17:00',
-          fridayUntil: '09:00',
-          saturdayFrom: '17:00',
-          saturdayUntil: '09:00',
-          sundayFrom: '17:00',
-          sundayUntil: '09:00',
-        },
-      }
-
       qrCodeService.getQrCode.mockResolvedValue('a QR code')
       prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
       hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
@@ -459,6 +466,104 @@ describe('Route - print a licence', () => {
 
       expect(res.renderPDF).toHaveBeenCalledWith(
         'pages/licence/HDC_AP',
+        {
+          licencesUrl,
+          imageData: '-- base64 image data --',
+          qrCode: null,
+          htmlPrint: false,
+          watermark,
+          singleItemConditions: [],
+          multipleItemConditions: [],
+          exclusionZoneMapData: [],
+          hdcLicenceData: exampleHdcLicenceData,
+          prisonTelephone: '0114 2345232334',
+          monitoringSupplierTelephone,
+        },
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
+      )
+
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
+      expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
+      expect(footerHtml).toMatch(/Version No:.+1.4/)
+    })
+
+    it('should render a HTML view of a HDC AP_PSS licence', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username },
+          licence: {
+            id: 1,
+            kind: 'HDC',
+            typeCode: 'AP_PSS',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+          },
+          qrCodesEnabled: false,
+        },
+      } as unknown as Response
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
+      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
+
+      await handler.preview(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/licence/HDC_AP_PSS', {
+        qrCode: null,
+        htmlPrint: true,
+        exclusionZoneMapData: [],
+        singleItemConditions: [],
+        multipleItemConditions: [],
+        hdcLicenceData: exampleHdcLicenceData,
+      })
+      expect(licenceService.recordAuditEvent).toHaveBeenCalled()
+      expect(hdcService.getHdcLicenceData).toHaveBeenCalled()
+      expect(qrCodeService.getQrCode).not.toHaveBeenCalled()
+    })
+
+    it('should render a PDF view of a HDC AP_PSS licence', async () => {
+      res = {
+        render: jest.fn(),
+        renderPDF: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username },
+          licence: {
+            id: '1',
+            kind: 'HDC',
+            typeCode: 'AP_PSS',
+            nomsId: 'A1234AA',
+            lastName: 'Bloggs',
+            cro: 'CRO',
+            bookingNo: 'BOOKING',
+            pnc: 'PNC',
+            version: '1.0',
+            prisonCode: 'MDI',
+            prisonTelephone: '0114 2345232334',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            licenceVersion: '1.4',
+          },
+          qrCodesEnabled: false,
+        },
+      } as unknown as Response
+
+      const { licencesUrl, pdfOptions, watermark } = config.apis.gotenberg
+      const { monitoringSupplierTelephone } = config
+
+      const filename = `${res.locals.licence.nomsId}.pdf`
+      const footerHtml = handler.getPdfFooter(res.locals.licence)
+
+      qrCodeService.getQrCode.mockResolvedValue('a QR code')
+      prisonerService.getPrisonerImageData.mockResolvedValue('-- base64 image data --')
+      hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
+
+      await handler.renderPdf(req, res)
+
+      expect(res.renderPDF).toHaveBeenCalledWith(
+        'pages/licence/HDC_AP_PSS',
         {
           licencesUrl,
           imageData: '-- base64 image data --',

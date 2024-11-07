@@ -9,6 +9,7 @@ import {
   simpleDateTimeToJson,
   stringToAddressObject,
   jsonDtTo12HourTime,
+  json24HourTimeTo12HourTime,
   jsonDtToDate,
   removeDuplicates,
   filterCentralCaseload,
@@ -227,15 +228,34 @@ test.each`
 })
 
 test.each`
+  time24Hour    | time12Hour
+  ${'23:15:00'} | ${'11:15 pm'}
+  ${'12:01:00'} | ${'12:01 pm'}
+  ${'12:00:00'} | ${'12:00 pm'}
+  ${'00:00:00'} | ${'12:00 am'}
+  ${'01:01:00'} | ${'01:01 am'}
+  ${'14:23:00'} | ${'02:23 pm'}
+  ${'14:23:00'} | ${'02:23 pm'}
+  ${'null'}     | ${'null'}
+`('convert JSON 24 hour time to 12 hour time value', ({ time24Hour, time12Hour }) => {
+  const timeValue = json24HourTimeTo12HourTime(time24Hour)
+  if (isDefined(timeValue)) {
+    expect(timeValue).toEqual(time12Hour)
+  } else {
+    expect(timeValue).toBeNull()
+  }
+})
+
+test.each`
   jsonDateTime          | dateFull
-  ${'12/12/2021 23:15'} | ${'12th December 2021'}
-  ${'31/01/2022 12:01'} | ${'31st January 2022'}
-  ${'31/12/2022 12:00'} | ${'31st December 2022'}
-  ${'31/12/2022 00:00'} | ${'31st December 2022'}
-  ${'01/01/2022 01:01'} | ${'1st January 2022'}
-  ${'22/10/2024 14:23'} | ${'22nd October 2024'}
-  ${'22/10/24 14:23'}   | ${'22nd October 2024'}
-  ${'22/10/24'}         | ${'22nd October 2024'}
+  ${'12/12/2021 23:15'} | ${'12 December 2021'}
+  ${'31/01/2022 12:01'} | ${'31 January 2022'}
+  ${'31/12/2022 12:00'} | ${'31 December 2022'}
+  ${'31/12/2022 00:00'} | ${'31 December 2022'}
+  ${'01/01/2022 01:01'} | ${'1 January 2022'}
+  ${'22/10/2024 14:23'} | ${'22 October 2024'}
+  ${'22/10/24 14:23'}   | ${'22 October 2024'}
+  ${'22/10/24'}         | ${'22 October 2024'}
   ${'null'}             | ${'null'}
 `('convert JSON datetime to long date', ({ jsonDateTime, dateFull }) => {
   const dateValue = jsonDtToDate(jsonDateTime)
@@ -248,9 +268,9 @@ test.each`
 
 test.each`
   jsonDateTime          | dateFull
-  ${'12/12/2021 23:15'} | ${'Sunday 12th December 2021'}
-  ${'31/01/2022 12:01'} | ${'Monday 31st January 2022'}
-  ${'31/12/2022 12:00'} | ${'Saturday 31st December 2022'}
+  ${'12/12/2021 23:15'} | ${'Sunday 12 December 2021'}
+  ${'31/01/2022 12:01'} | ${'Monday 31 January 2022'}
+  ${'31/12/2022 12:00'} | ${'Saturday 31 December 2022'}
   ${'null'}             | ${'null'}
 `('convert JSON datetime to date with full day', ({ jsonDateTime, dateFull }) => {
   const dateValue = jsonDtToDateWithDay(jsonDateTime)

@@ -6,10 +6,12 @@ import LicenceStatus from '../../server/licences/licenceStatus'
 import policyV2_0 from './polices/v2-0'
 // eslint-disable-next-line camelcase
 import policyV2_1 from './polices/v2-1'
+// eslint-disable-next-line camelcase
+import policyV3_0 from './polices/v3-0'
 import LicenceCreationType from '../../server/enumeration/licenceCreationType'
 import { AdditionalCondition } from '../../server/@types/licenceApiClientTypes'
 
-const ACTIVE_POLICY_VERSION = '2.1'
+const ACTIVE_POLICY_VERSION = '3.0'
 
 const licencePlaceholder = {
   id: 1,
@@ -1372,9 +1374,13 @@ export default {
         // eslint-disable-next-line camelcase
         policy = policyV2_1
         break
+      case '3.0':
+        // eslint-disable-next-line camelcase
+        policy = policyV3_0
+        break
       default:
         // eslint-disable-next-line camelcase
-        policy = policyV2_1
+        policy = policyV3_0
         break
     }
     return stubFor({
@@ -1400,7 +1406,7 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         // eslint-disable-next-line camelcase
-        jsonBody: policyV2_1,
+        jsonBody: policyV3_0,
       },
     })
   },

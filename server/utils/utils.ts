@@ -109,7 +109,7 @@ const stringToAddressObject = (address: string): Address => {
 
 const jsonDtToDate = (dt: string): string => {
   const momentDate = moment(dt, 'DD/MM/YYYY HH:mm')
-  return momentDate.isValid() ? momentDate.format('Do MMMM YYYY') : null
+  return momentDate.isValid() ? momentDate.format('D MMMM YYYY') : null
 }
 
 const jsonDtToDateShort = (dt: string): string => {
@@ -119,11 +119,16 @@ const jsonDtToDateShort = (dt: string): string => {
 
 const jsonDtToDateWithDay = (dt: string): string => {
   const momentDate = moment(dt, 'DD/MM/YYYY HH:mm')
-  return momentDate.isValid() ? momentDate.format('dddd Do MMMM YYYY') : null
+  return momentDate.isValid() ? momentDate.format('dddd D MMMM YYYY') : null
 }
 
 const jsonDtTo12HourTime = (dt: string): string => {
   const momentTime = moment(dt, 'DD/MM/YYYY HH:mm')
+  return momentTime.isValid() ? momentTime.format('hh:mm a') : null
+}
+
+const json24HourTimeTo12HourTime = (dt: string): string => {
+  const momentTime = moment(dt, 'HH:mm:ss')
   return momentTime.isValid() ? momentTime.format('hh:mm a') : null
 }
 
@@ -263,6 +268,7 @@ export {
   jsonDtToDateShort,
   jsonDtToDateWithDay,
   jsonDtTo12HourTime,
+  json24HourTimeTo12HourTime,
   parseCvlDate,
   parseCvlDateTime,
   parseIsoDate,

@@ -160,7 +160,7 @@ describe('Nunjucks Filters', () => {
       const $ = renderTemplate(template, {
         testDateTime: '23/12/2021 11:15',
       })
-      expect($('body').text()).toBe('23rd December 2021')
+      expect($('body').text()).toBe('23 December 2021')
     })
 
     it('should format a date and time with short GOVUK format', () => {
@@ -172,7 +172,7 @@ describe('Nunjucks Filters', () => {
     it('should format a date and time with full day', () => {
       const template = '{{ testDateTime | datetimeToDateWithDay }}'
       const $ = renderTemplate(template, { testDateTime: '23/12/2021 11:15' })
-      expect($('body').text()).toBe('Thursday 23rd December 2021')
+      expect($('body').text()).toBe('Thursday 23 December 2021')
     })
 
     it('should format a date and time to a 12-hour time', () => {
