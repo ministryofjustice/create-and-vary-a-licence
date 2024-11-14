@@ -1961,6 +1961,11 @@ export interface components {
        * @description The date when a person is recalled to prison, after being released on a license
        */
       postRecallReleaseDate?: string
+      /**
+       * Format: date
+       * @description The person's actual home detention curfew date
+       */
+      homeDetentionCurfewActualDate?: string
     }
     /** @description Request object for referring a licence variation */
     ReferVariationRequest: {
@@ -2037,6 +2042,11 @@ export interface components {
        * @description The release date after being recalled
        */
       postRecallReleaseDate?: string
+      /**
+       * Format: date
+       * @description The person's actual home detention curfew date
+       */
+      homeDetentionCurfewActualDate?: string
       /** @description Reason for overriding the licence dates */
       reason: string
     }
@@ -2973,15 +2983,6 @@ export interface components {
        */
       type: 'CRD' | 'HARD_STOP' | 'HDC'
     }
-    /** @description A reference to the created licence */
-    LicenceCreationResponse: {
-      /**
-       * Format: int64
-       * @description Internal identifier for this licence generated within this service
-       * @example 123344
-       */
-      licenceId: number
-    }
     EntityAlreadyExistsResponse: {
       /** Format: int32 */
       status: number
@@ -2992,6 +2993,15 @@ export interface components {
       moreInfo?: string
       /** Format: int64 */
       existingResourceId: number
+    }
+    /** @description A reference to the created licence */
+    LicenceCreationResponse: {
+      /**
+       * Format: int64
+       * @description Internal identifier for this licence generated within this service
+       * @example 123344
+       */
+      licenceId: number
     }
     /** @description Describes a prisoner due for release */
     PrisonerForRelease: {
@@ -3807,14 +3817,14 @@ export interface components {
       curfewTimesSequence?: number
       /**
        * @description The day on which this curfew starts for this curfew time
-       * @example MONDAY
+       * @example 01:00:00
        * @enum {string}
        */
       fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
       fromTime?: components['schemas']['LocalTime_SubjectAccessRequest']
       /**
        * @description The day on which this curfew ends for this curfew time
-       * @example MONDAY
+       * @example 01:00:00
        * @enum {string}
        */
       untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
@@ -3842,6 +3852,11 @@ export interface components {
        * @enum {string}
        */
       kind: 'HDC'
+      /**
+       * Format: date
+       * @description The offender’s actual home detention curfew date
+       */
+      homeDetentionCurfewActualDate?: string
       curfewTimes?: components['schemas']['HdcCurfewTimes_SubjectAccessRequest']
       /**
        * Format: date
@@ -3945,6 +3960,11 @@ export interface components {
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence_SubjectAccessRequest: {
       /**
+       * Format: date
+       * @description The sentence end date
+       */
+      sentenceEndDate?: string
+      /**
        * Format: int64
        * @description Unique identifier for this licence within the service
        * @example 99999
@@ -3986,11 +4006,6 @@ export interface components {
        */
       surname?: string
       kind: string
-      /**
-       * Format: date
-       * @description The sentence end date
-       */
-      sentenceEndDate?: string
       /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
@@ -4152,6 +4167,17 @@ export interface components {
        */
       earliestReleaseDate?: string
       /**
+       * @description The type of appointment with for the initial appointment
+       * @example SPECIFIC_PERSON
+       * @enum {string}
+       */
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      /**
+       * @description Who the person will meet at their initial appointment
+       * @example Duty officer
+       */
+      appointmentPerson?: string
+      /**
        * @description The type of appointment time of the initial appointment
        * @example SPECIFIC_DATE_TIME
        * @enum {string}
@@ -4172,17 +4198,6 @@ export interface components {
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
       appointmentAddress?: string
-      /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /**
-       * @description Who the person will meet at their initial appointment
-       * @example Duty officer
-       */
-      appointmentPerson?: string
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
@@ -4406,6 +4421,11 @@ export interface components {
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
       /**
+       * Format: date
+       * @description The sentence end date
+       */
+      sentenceEndDate?: string
+      /**
        * Format: int64
        * @description Unique identifier for this licence within the service
        * @example 99999
@@ -4447,11 +4467,6 @@ export interface components {
        */
       surname?: string
       kind: string
-      /**
-       * Format: date
-       * @description The sentence end date
-       */
-      sentenceEndDate?: string
       /**
        * Format: date
        * @description The earliest conditional release date of the person on licence
@@ -4613,6 +4628,17 @@ export interface components {
        */
       earliestReleaseDate?: string
       /**
+       * @description The type of appointment with for the initial appointment
+       * @example SPECIFIC_PERSON
+       * @enum {string}
+       */
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
+      /**
+       * @description Who the person will meet at their initial appointment
+       * @example Duty officer
+       */
+      appointmentPerson?: string
+      /**
        * @description The type of appointment time of the initial appointment
        * @example SPECIFIC_DATE_TIME
        * @enum {string}
@@ -4633,17 +4659,6 @@ export interface components {
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
       appointmentAddress?: string
-      /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /**
-       * @description Who the person will meet at their initial appointment
-       * @example Duty officer
-       */
-      appointmentPerson?: string
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
@@ -4863,14 +4878,14 @@ export interface components {
       curfewTimesSequence?: number
       /**
        * @description The day on which this curfew starts for this curfew time
-       * @example MONDAY
+       * @example 01:00:00
        * @enum {string}
        */
       fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
       fromTime?: components['schemas']['LocalTime']
       /**
        * @description The day on which this curfew ends for this curfew time
-       * @example MONDAY
+       * @example 01:00:00
        * @enum {string}
        */
       untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
@@ -4898,6 +4913,11 @@ export interface components {
        * @enum {string}
        */
       kind: 'HDC'
+      /**
+       * Format: date
+       * @description The offender’s actual home detention curfew date
+       */
+      homeDetentionCurfewActualDate?: string
       curfewTimes?: components['schemas']['HdcCurfewTimes']
       /**
        * Format: date
