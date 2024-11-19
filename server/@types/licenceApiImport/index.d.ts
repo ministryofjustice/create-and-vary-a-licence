@@ -2983,6 +2983,15 @@ export interface components {
        */
       type: 'CRD' | 'HARD_STOP' | 'HDC'
     }
+    /** @description A reference to the created licence */
+    LicenceCreationResponse: {
+      /**
+       * Format: int64
+       * @description Internal identifier for this licence generated within this service
+       * @example 123344
+       */
+      licenceId: number
+    }
     EntityAlreadyExistsResponse: {
       /** Format: int32 */
       status: number
@@ -2993,15 +3002,6 @@ export interface components {
       moreInfo?: string
       /** Format: int64 */
       existingResourceId: number
-    }
-    /** @description A reference to the created licence */
-    LicenceCreationResponse: {
-      /**
-       * Format: int64
-       * @description Internal identifier for this licence generated within this service
-       * @example 123344
-       */
-      licenceId: number
     }
     /** @description Describes a prisoner due for release */
     PrisonerForRelease: {
@@ -3817,14 +3817,14 @@ export interface components {
       curfewTimesSequence?: number
       /**
        * @description The day on which this curfew starts for this curfew time
-       * @example 01:00:00
+       * @example MONDAY
        * @enum {string}
        */
       fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
       fromTime?: components['schemas']['LocalTime_SubjectAccessRequest']
       /**
        * @description The day on which this curfew ends for this curfew time
-       * @example 01:00:00
+       * @example MONDAY
        * @enum {string}
        */
       untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
@@ -3960,11 +3960,6 @@ export interface components {
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence_SubjectAccessRequest: {
       /**
-       * Format: date
-       * @description The sentence end date
-       */
-      sentenceEndDate?: string
-      /**
        * Format: int64
        * @description Unique identifier for this licence within the service
        * @example 99999
@@ -4048,6 +4043,11 @@ export interface components {
       sentenceStartDate?: string
       /**
        * Format: date
+       * @description The sentence end date
+       */
+      sentenceEndDate?: string
+      /**
+       * Format: date
        * @description The date that the licence will expire
        */
       licenceExpiryDate?: string
@@ -4061,6 +4061,11 @@ export interface components {
        * @description The date when the post sentence supervision period ends, from prison services
        */
       topupSupervisionExpiryDate?: string
+      /**
+       * @description The middle names of the person on licence
+       * @example John Peter
+       */
+      middleNames?: string
       /**
        * @description The team code that is supervising this licence
        * @example Cardiff-A
@@ -4101,11 +4106,6 @@ export interface components {
        * @example Cardiff South
        */
       probationTeamDescription?: string
-      /**
-       * @description The middle names of the person on licence
-       * @example John Peter
-       */
-      middleNames?: string
       /**
        * Format: date
        * @description The date of birth of the person on licence
@@ -4167,12 +4167,6 @@ export interface components {
        */
       earliestReleaseDate?: string
       /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
@@ -4198,6 +4192,12 @@ export interface components {
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
       appointmentAddress?: string
+      /**
+       * @description The type of appointment with for the initial appointment
+       * @example SPECIFIC_PERSON
+       * @enum {string}
+       */
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition_SubjectAccessRequest'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
@@ -4421,11 +4421,6 @@ export interface components {
     /** @description Describes a licence within this service, A discriminator exists to distinguish between different types of licence */
     Licence: {
       /**
-       * Format: date
-       * @description The sentence end date
-       */
-      sentenceEndDate?: string
-      /**
        * Format: int64
        * @description Unique identifier for this licence within the service
        * @example 99999
@@ -4509,6 +4504,11 @@ export interface components {
       sentenceStartDate?: string
       /**
        * Format: date
+       * @description The sentence end date
+       */
+      sentenceEndDate?: string
+      /**
+       * Format: date
        * @description The date that the licence will expire
        */
       licenceExpiryDate?: string
@@ -4522,6 +4522,11 @@ export interface components {
        * @description The date when the post sentence supervision period ends, from prison services
        */
       topupSupervisionExpiryDate?: string
+      /**
+       * @description The middle names of the person on licence
+       * @example John Peter
+       */
+      middleNames?: string
       /**
        * @description The team code that is supervising this licence
        * @example Cardiff-A
@@ -4562,11 +4567,6 @@ export interface components {
        * @example Cardiff South
        */
       probationTeamDescription?: string
-      /**
-       * @description The middle names of the person on licence
-       * @example John Peter
-       */
-      middleNames?: string
       /**
        * Format: date
        * @description The date of birth of the person on licence
@@ -4628,12 +4628,6 @@ export interface components {
        */
       earliestReleaseDate?: string
       /**
-       * @description The type of appointment with for the initial appointment
-       * @example SPECIFIC_PERSON
-       * @enum {string}
-       */
-      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
-      /**
        * @description Who the person will meet at their initial appointment
        * @example Duty officer
        */
@@ -4659,6 +4653,12 @@ export interface components {
        * @example Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN
        */
       appointmentAddress?: string
+      /**
+       * @description The type of appointment with for the initial appointment
+       * @example SPECIFIC_PERSON
+       * @enum {string}
+       */
+      appointmentPersonType?: 'DUTY_OFFICER' | 'RESPONSIBLE_COM' | 'SPECIFIC_PERSON'
       /** @description The list of standard licence conditions on this licence */
       standardLicenceConditions?: components['schemas']['StandardCondition'][]
       /** @description The list of standard post sentence supervision conditions on this licence */
@@ -4878,14 +4878,14 @@ export interface components {
       curfewTimesSequence?: number
       /**
        * @description The day on which this curfew starts for this curfew time
-       * @example 01:00:00
+       * @example MONDAY
        * @enum {string}
        */
       fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
       fromTime?: components['schemas']['LocalTime']
       /**
        * @description The day on which this curfew ends for this curfew time
-       * @example 01:00:00
+       * @example MONDAY
        * @enum {string}
        */
       untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
