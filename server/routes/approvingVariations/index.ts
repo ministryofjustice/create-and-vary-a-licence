@@ -34,7 +34,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_ACO']),
       fetchLicence(licenceService),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   // Setup middleware processing for POST
@@ -44,7 +44,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_ACO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   // Define route handlers for variation approvals

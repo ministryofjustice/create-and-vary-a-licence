@@ -15,7 +15,7 @@ describe('Validators - ValidSimpleTime', () => {
         minute: '59',
         ampm: 'am',
       },
-      { excludeExtraneousValues: true }
+      { excludeExtraneousValues: true },
     )
   })
 

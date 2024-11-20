@@ -15,7 +15,7 @@ export default class VaryApproveViewRoutes {
         `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
         licence?.id,
         new Date(),
-        user
+        user,
       )
 
       // Get the COM/ACO conversation so far and the differences from the original licence

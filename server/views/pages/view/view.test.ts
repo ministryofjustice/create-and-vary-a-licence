@@ -127,23 +127,23 @@ describe('View and print - single licence view', () => {
     // Check the actual conditions
     expect($('#additionalLicenceConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
     expect($('#additionalLicenceConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe(
-      'Template 1'
+      'Template 1',
     )
     expect($('#additionalLicenceConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe(
-      'Data 1'
+      'Data 1',
     )
 
     expect($('#additionalLicenceConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
     expect($('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
-      'Template 2'
+      'Template 2',
     )
     expect(
-      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
+      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim(),
     ).toBe('Data 2A, Data 2B')
 
     // Check contributesToLicence filters out false values from rendering
     expect(
-      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
+      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim(),
     ).not.toBe('Data 2C')
 
     // Check the additional pss conditions are rendered correctly
@@ -324,7 +324,7 @@ describe('View and print - single standard licence view', () => {
     expect($('ul.standard-conditions li:nth-child(1)').text().trim()).toBe('standard conditions')
     expect($('ul.standard-conditions li:nth-child(2)').text().trim()).toBe('the following additional condition:')
     expect($('.govuk-inset-text').text().trim()).toBe(
-      'Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer.'
+      'Not to approach or communicate with any victims of your offences without the prior approval of your supervising officer.',
     )
 
     // Check the existence of the print and return to case list buttons
@@ -350,7 +350,7 @@ describe('View and print - single standard licence view', () => {
     expect($('h2').text()).toContain('Licence conditions')
 
     expect($('p').text()).toContain(
-      'This licence contains standard post sentence supervision requirements only by default.'
+      'This licence contains standard post sentence supervision requirements only by default.',
     )
   })
 

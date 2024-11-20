@@ -17,7 +17,7 @@ const { PRINT_TO_ACTIVATE, EDIT, VIEW_OR_VARY, REVIEW } = CallToActionType
 export default class TimelineRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly timelineService: TimelineService
+    private readonly timelineService: TimelineService,
   ) {}
 
   getCtaType = (licence: Licence): CallToActionType => {

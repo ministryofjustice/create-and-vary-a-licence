@@ -46,7 +46,7 @@ describe('Route Handlers - Vary Licence - Spo discussion', () => {
       expect(licenceService.updateSpoDiscussion).toHaveBeenCalledWith(
         1,
         { spoDiscussion: 'Yes' },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/vlo-discussion')
     })

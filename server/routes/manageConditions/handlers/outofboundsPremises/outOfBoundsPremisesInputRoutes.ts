@@ -34,7 +34,7 @@ export default class OutOfBoundsPremisesInputRoutes {
     await this.licenceService.deleteAdditionalCondition(parseInt(conditionId, 10), licence.id, user)
 
     return res.redirect(
-      `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/outofbounds-premises`
+      `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/outofbounds-premises`,
     )
   }
 }

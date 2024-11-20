@@ -127,7 +127,7 @@ describe('Print a HDC AP licence', () => {
     // Check the supervision section is present with 2 bold dates
     expect($('#ap-dates > p > .bold').length).toBe(2)
     expect($('#ap-dates').text().trim()).toContain(
-      'Your supervision starts on 8 February 2022 and ends on 8 February 2023 unless this licence is revoked.'
+      'Your supervision starts on 8 February 2022 and ends on 8 February 2023 unless this licence is revoked.',
     )
 
     // Check the induction appointment is present with 3 paragraphs

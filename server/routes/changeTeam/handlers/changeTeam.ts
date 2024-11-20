@@ -4,7 +4,7 @@ import ComCaseloadService from '../../../services/lists/comCaseloadService'
 export default class ChangeTeamRoutes {
   constructor(
     private readonly comCaseloadService: ComCaseloadService,
-    private readonly section: string
+    private readonly section: string,
   ) {
     this.section = section
   }

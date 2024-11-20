@@ -151,7 +151,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         { nomsId: 'ABC123', type: 'CRD' },
         {
           username: 'joebloggs',
-        }
+        },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/initial-meeting-name')
     })

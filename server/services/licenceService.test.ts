@@ -85,12 +85,12 @@ describe('Licence Service', () => {
         contactName: 'Joe Bloggs',
         appointmentPersonType: 'SPECIFIC_PERSON',
       },
-      user
+      user,
     )
     expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
       '1',
       { appointmentPerson: 'Joe Bloggs', appointmentPersonType: 'SPECIFIC_PERSON' },
-      user
+      user,
     )
   })
 
@@ -101,12 +101,12 @@ describe('Licence Service', () => {
         contactName: '',
         appointmentPersonType: 'DUTY_OFFICER',
       },
-      user
+      user,
     )
     expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
       '1',
       { appointmentPerson: '', appointmentPersonType: 'DUTY_OFFICER' },
-      user
+      user,
     )
   })
 
@@ -117,12 +117,12 @@ describe('Licence Service', () => {
         contactName: '',
         appointmentPersonType: 'DUTY_OFFICER',
       },
-      user
+      user,
     )
     expect(licenceApiClient.updateAppointmentPerson).toHaveBeenCalledWith(
       '1',
       { appointmentPerson: '', appointmentPersonType: 'DUTY_OFFICER' },
-      user
+      user,
     )
   })
 
@@ -135,12 +135,12 @@ describe('Licence Service', () => {
         time: { hour: '12', minute: '20', ampm: 'pm' },
         appointmentTimeType: 'SPECIFIC_DATE_TIME',
       } as DateTime,
-      user
+      user,
     )
     expect(licenceApiClient.updateAppointmentTime).toHaveBeenCalledWith(
       '1',
       { appointmentTime: '22/12/2022 12:20', appointmentTimeType: 'SPECIFIC_DATE_TIME' },
-      user
+      user,
     )
     expect(timeConverter).toHaveBeenCalledWith({
       date: { calendarDate: '22/12/2022' },
@@ -158,12 +158,12 @@ describe('Licence Service', () => {
         time: null,
         appointmentTimeType: 'IMMEDIATE_UPON_RELEASE',
       } as DateTime,
-      user
+      user,
     )
     expect(licenceApiClient.updateAppointmentTime).toHaveBeenCalledWith(
       '1',
       { appointmentTime: null, appointmentTimeType: 'IMMEDIATE_UPON_RELEASE' },
-      user
+      user,
     )
     expect(timeConverter).not.toHaveBeenCalled()
   })
@@ -176,12 +176,12 @@ describe('Licence Service', () => {
         addressLine1: '123 Fake Street',
         addressTown: 'Fakestown',
       } as Address,
-      user
+      user,
     )
     expect(licenceApiClient.updateAppointmentAddress).toHaveBeenCalledWith(
       '1',
       { appointmentAddress: '123 Fake Street, Fakestown' },
-      user
+      user,
     )
     expect(addressConverter).toHaveBeenCalledWith({
       addressLine1: '123 Fake Street',
@@ -200,7 +200,7 @@ describe('Licence Service', () => {
       expect(licenceApiClient.updateAdditionalConditions).toHaveBeenCalledWith(
         1,
         { additionalConditions: [], conditionType: 'AP' },
-        user
+        user,
       )
     })
 
@@ -225,7 +225,7 @@ describe('Licence Service', () => {
         LicenceType.AP,
         { additionalConditions: ['code1', 'code2'] },
         user,
-        'version'
+        'version',
       )
       expect(licenceApiClient.updateAdditionalConditions).toHaveBeenCalledWith(
         1,
@@ -246,7 +246,7 @@ describe('Licence Service', () => {
           ],
           conditionType: 'AP',
         },
-        user
+        user,
       )
       expect(conditionService.getAdditionalConditionByCode).toHaveBeenCalledTimes(2)
       expect(conditionService.getAdditionalConditionByCode).toHaveBeenNthCalledWith(1, 'code1', 'version')
@@ -271,7 +271,7 @@ describe('Licence Service', () => {
         '1',
         { id: 2, text: 'condition' } as AdditionalCondition,
         formData,
-        user
+        user,
       )
       expect(licenceApiClient.updateAdditionalConditionData).toHaveBeenCalledWith('1', '2', { data: [] }, user)
     })
@@ -287,7 +287,7 @@ describe('Licence Service', () => {
         '1',
         { id: 2, text: 'condition' } as AdditionalCondition,
         formData,
-        user
+        user,
       )
       expect(licenceApiClient.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
@@ -316,7 +316,7 @@ describe('Licence Service', () => {
             },
           ],
         },
-        user
+        user,
       )
     })
 
@@ -329,7 +329,7 @@ describe('Licence Service', () => {
         '1',
         { id: 2, text: 'condition' } as AdditionalCondition,
         formData,
-        user
+        user,
       )
       expect(licenceApiClient.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
@@ -343,7 +343,7 @@ describe('Licence Service', () => {
             },
           ],
         },
-        user
+        user,
       )
     })
   })
@@ -352,7 +352,7 @@ describe('Licence Service', () => {
     await licenceService.updateBespokeConditions(
       '1',
       { conditions: [undefined, null, '', 'condition1'] } as BespokeConditions,
-      user
+      user,
     )
     expect(licenceApiClient.updateBespokeConditions).toHaveBeenCalledWith('1', { conditions: ['condition1'] }, user)
   })
@@ -363,7 +363,7 @@ describe('Licence Service', () => {
       expect(licenceApiClient.updateLicenceStatus).toHaveBeenCalledWith(
         1,
         { status: 'APPROVED', username: 'joebloggs', fullName: 'Joe Bloggs' },
-        user
+        user,
       )
     })
 
@@ -372,7 +372,7 @@ describe('Licence Service', () => {
       expect(licenceApiClient.updateLicenceStatus).toHaveBeenCalledWith(
         1,
         { status: 'APPROVED', username: 'SYSTEM', fullName: 'SYSTEM' },
-        undefined
+        undefined,
       )
     })
   })
@@ -402,7 +402,7 @@ describe('Licence Service', () => {
       null,
       null,
       null,
-      user
+      user,
     )
   })
 
@@ -417,7 +417,7 @@ describe('Licence Service', () => {
       ['A'],
       'conditionalReleaseDate',
       null,
-      approver
+      approver,
     )
   })
 
@@ -434,7 +434,7 @@ describe('Licence Service', () => {
       null,
       'conditionalReleaseDate',
       null,
-      user
+      user,
     )
     expect(result).toEqual([{ licenceId: 1 }])
   })
@@ -455,7 +455,7 @@ describe('Licence Service', () => {
       null,
       'conditionalReleaseDate',
       null,
-      user
+      user,
     )
     expect(result).toEqual([{ licenceId: 1 }, { licenceId: 2 }])
   })
@@ -556,7 +556,7 @@ describe('Licence Service', () => {
         prisonDescription: 'Pentonville (HMP)',
         prisonTelephone: '+44 276 54545',
       },
-      user
+      user,
     )
     expect(licenceApiClient.updatePrisonInformation).toHaveBeenCalledWith(
       '1',
@@ -565,7 +565,7 @@ describe('Licence Service', () => {
         prisonDescription: 'Pentonville (HMP)',
         prisonTelephone: '+44 276 54545',
       } as UpdatePrisonInformationRequest,
-      user
+      user,
     )
   })
 
@@ -582,7 +582,7 @@ describe('Licence Service', () => {
         topupSupervisionStartDate: '09/09/2023',
         topupSupervisionExpiryDate: '09/09/2024',
       },
-      user
+      user,
     )
     expect(licenceApiClient.updateSentenceDates).toHaveBeenCalledWith(
       '1',
@@ -596,7 +596,7 @@ describe('Licence Service', () => {
         topupSupervisionStartDate: '09/09/2023',
         topupSupervisionExpiryDate: '09/09/2024',
       } as UpdateSentenceDatesRequest,
-      user
+      user,
     )
   })
 
@@ -622,7 +622,7 @@ describe('Licence Service', () => {
       {
         id: 1,
       },
-      { id: 2, kind: 'VARIATION', variationOf: 1 }
+      { id: 2, kind: 'VARIATION', variationOf: 1 },
     )
   })
 
@@ -633,7 +633,7 @@ describe('Licence Service', () => {
       [LicenceEventType.VARIATION_SUBMITTED_REASON.valueOf(), LicenceEventType.VARIATION_REFERRED.valueOf()],
       'eventTime',
       'DESC',
-      user
+      user,
     )
   })
 
@@ -692,7 +692,7 @@ describe('Licence Service', () => {
           summary: 'Summary',
           detail: 'Detail',
         },
-        user
+        user,
       )
     })
 
@@ -705,7 +705,7 @@ describe('Licence Service', () => {
           startTime: format(eventStart, 'dd/MM/yyyy HH:mm:ss'),
           endTime: format(eventEnd, 'dd/MM/yyyy HH:mm:ss'),
         },
-        user
+        user,
       )
     })
 
@@ -718,7 +718,7 @@ describe('Licence Service', () => {
           startTime: format(eventStart, 'dd/MM/yyyy HH:mm:ss'),
           endTime: format(eventEnd, 'dd/MM/yyyy HH:mm:ss'),
         },
-        user
+        user,
       )
     })
   })
@@ -748,7 +748,7 @@ describe('Licence Service', () => {
       null,
       null,
       null,
-      undefined
+      undefined,
     )
   })
 
@@ -839,7 +839,7 @@ describe('Licence Service', () => {
       endDate,
       ['MDI'],
       0,
-      user
+      user,
     )
     expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenNthCalledWith(
       2,
@@ -847,7 +847,7 @@ describe('Licence Service', () => {
       endDate,
       ['MDI'],
       1,
-      user
+      user,
     )
     expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenNthCalledWith(
       3,
@@ -855,7 +855,7 @@ describe('Licence Service', () => {
       endDate,
       ['MDI'],
       2,
-      user
+      user,
     )
 
     expect(licenceApiClient.searchPrisonersByReleaseDate).toHaveBeenCalledTimes(3)

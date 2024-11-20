@@ -123,7 +123,7 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions Callback',
       await handler.GET(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/1/additional-pss-conditions/condition/1?fromReview=true`
+        `/licence/create/id/1/additional-pss-conditions/condition/1?fromReview=true`,
       )
     })
 

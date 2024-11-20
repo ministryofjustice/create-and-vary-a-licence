@@ -53,7 +53,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
       expect(licenceService.updateVloDiscussion).toHaveBeenCalledWith(
         1,
         { vloDiscussion: 'Yes' },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
@@ -67,7 +67,7 @@ describe('Route Handlers - Vary Licence - Vlo discussion', () => {
       expect(licenceService.updateVloDiscussion).toHaveBeenCalledWith(
         1,
         { vloDiscussion: 'Yes' },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/policy-changes')
     })

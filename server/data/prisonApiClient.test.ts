@@ -6,7 +6,7 @@ import { User } from '../@types/CvlUserDetails'
 import { InMemoryTokenStore } from './tokenStore'
 
 const prisonApiClient = new PrisonApiClient(
-  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
 )
 
 describe('Prison Api client tests', () => {
@@ -31,7 +31,7 @@ describe('Prison Api client tests', () => {
 
     expect(stream).toHaveBeenCalledWith(
       { path: '/api/bookings/offenderNo/ABC1234/image/data' },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result.read()).toEqual('image')
   })
@@ -43,7 +43,7 @@ describe('Prison Api client tests', () => {
 
     expect(get).toHaveBeenCalledWith(
       { path: '/api/bookings/offenderNo/ABC1234/image/data', responseType: 'image/jpeg' },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result.toString()).toEqual('image')
   })
@@ -67,7 +67,7 @@ describe('Prison Api client tests', () => {
 
     expect(get).toHaveBeenCalledWith(
       { path: `/api/offender-sentences/booking/${bookingId}/sentences-and-offences` },
-      user
+      user,
     )
     expect(result).toEqual(sentencesAndOffences)
   })
@@ -88,7 +88,7 @@ describe('Prison Api client tests', () => {
 
     expect(get).toHaveBeenCalledWith(
       { path: '/api/offender-sentences/booking/1234/home-detention-curfews/latest', return404: true },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result).toEqual({ approvalStatus: 'APPROVED' })
   })
@@ -100,7 +100,7 @@ describe('Prison Api client tests', () => {
 
     expect(get).toHaveBeenCalledWith(
       { path: '/api/offender-sentences/booking/1234/home-detention-curfews/latest', return404: true },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result).toEqual(null)
   })
@@ -112,7 +112,7 @@ describe('Prison Api client tests', () => {
 
     expect(post).toHaveBeenCalledWith(
       { path: '/api/offender-sentences/home-detention-curfews/latest', data: [1234] },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result).toEqual([{ approvalStatus: 'APPROVED' }])
   })

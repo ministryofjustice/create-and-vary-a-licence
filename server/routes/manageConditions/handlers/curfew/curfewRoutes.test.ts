@@ -162,7 +162,7 @@ describe('Route handlers - Curfew routes', () => {
       expect(licenceService.deleteAdditionalConditionsByCode).toHaveBeenCalledWith(
         [CURFEW_CONDITION_CODE],
         res.locals.licence.id,
-        res.locals.user
+        res.locals.user,
       )
     })
 
@@ -184,7 +184,7 @@ describe('Route handlers - Curfew routes', () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
       )
     })
   })
@@ -222,7 +222,7 @@ describe('Route handlers - Curfew routes', () => {
         CURFEW_CONDITION_CODE,
         inputs.curfewStart2,
         inputs.curfewEnd2,
-        inputs
+        inputs,
       )
       expect(licenceService.addAdditionalCondition).toHaveBeenCalledWith('1', 'AP', request, res.locals.user)
     })
@@ -245,13 +245,13 @@ describe('Route handlers - Curfew routes', () => {
         CURFEW_CONDITION_CODE,
         inputs.curfewStart2,
         inputs.curfewEnd2,
-        inputs
+        inputs,
       )
       expect(licenceService.updateAdditionalConditionData).toHaveBeenCalledWith(
         '1',
         licenceCondition,
         expectedSubmission,
-        res.locals.user
+        res.locals.user,
       )
     })
   })

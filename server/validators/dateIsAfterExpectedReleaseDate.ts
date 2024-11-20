@@ -12,8 +12,8 @@ export default function DateIsAfterExpectedReleaseDate(validationOptions?: Valid
       throw new Error(
         `Date to compare is not in a valid date format: EarliestReleaseDate - ${_.get(
           object,
-          'licence.earliestReleaseDate'
-        )}`
+          'licence.earliestReleaseDate',
+        )}`,
       )
     }
 

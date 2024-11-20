@@ -63,7 +63,7 @@ describe('Route Handlers - Create Licence - file upload list routes', () => {
       await handler.GET(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
       )
     })
 
@@ -121,7 +121,7 @@ describe('Route Handlers - Create Licence - file upload list routes', () => {
         await handler.POST(req, res)
 
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+          '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
         )
       })
 
@@ -176,7 +176,7 @@ describe('Route Handlers - Create Licence - file upload list routes', () => {
         req.query.fromReview = 'true'
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/condition/3?fromReview=true'
+          '/licence/create/id/1/additional-licence-conditions/condition/3?fromReview=true',
         )
       })
 
@@ -184,7 +184,7 @@ describe('Route Handlers - Create Licence - file upload list routes', () => {
         req.query.fromPolicyReview = 'true'
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/condition/3?fromPolicyReview=true'
+          '/licence/create/id/1/additional-licence-conditions/condition/3?fromPolicyReview=true',
         )
       })
     })

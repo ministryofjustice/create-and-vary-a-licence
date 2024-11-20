@@ -95,7 +95,7 @@ describe('Route Handlers - Create Licence - Out Of Bounds Premises Removal Route
       } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/1/additional-licence-conditions/condition/${OUT_OF_BOUNDS_PREMISES_CONDITION_CODE}/outofbounds-premises?fromReview=true`
+        `/licence/create/id/1/additional-licence-conditions/condition/${OUT_OF_BOUNDS_PREMISES_CONDITION_CODE}/outofbounds-premises?fromReview=true`,
       )
     })
 

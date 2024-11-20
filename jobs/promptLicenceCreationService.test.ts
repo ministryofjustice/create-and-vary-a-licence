@@ -52,7 +52,7 @@ describe('prompt licence creation service ', () => {
     it('out of rollout areas are excluded', () => {
       const result = promptLicenceCreationService.buildEmailGroups(
         [],
-        [createPrompt({ comProbationAreaCode: 'Some made up area' })]
+        [createPrompt({ comProbationAreaCode: 'Some made up area' })],
       )
       expect(result).toStrictEqual([])
     })

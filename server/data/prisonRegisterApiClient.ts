@@ -15,7 +15,7 @@ export default class PrisonRegisterApiClient extends RestClient {
         {
           path: `/prisons/id/${agencyId}`,
         },
-        { username: user.username }
+        { username: user.username },
       )) as Promise<PrisonDto>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error

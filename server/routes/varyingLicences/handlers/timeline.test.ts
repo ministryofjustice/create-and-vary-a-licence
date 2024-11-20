@@ -74,7 +74,7 @@ describe('Route Handlers - Timeline', () => {
 
       expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_IN_PROGRESS, isReviewNeeded: false },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
@@ -121,7 +121,7 @@ describe('Route Handlers - Timeline', () => {
 
       expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_APPROVED, isReviewNeeded: false },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
@@ -168,7 +168,7 @@ describe('Route Handlers - Timeline', () => {
 
       expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_REJECTED, isReviewNeeded: false },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
@@ -207,7 +207,7 @@ describe('Route Handlers - Timeline', () => {
 
       expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.REVIEW_NEEDED, isReviewNeeded: true },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
@@ -246,7 +246,7 @@ describe('Route Handlers - Timeline', () => {
 
       expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.ACTIVE, isReviewNeeded: false },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {

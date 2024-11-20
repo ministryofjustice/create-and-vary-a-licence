@@ -5,7 +5,7 @@ import { User } from '../@types/CvlUserDetails'
 import { InMemoryTokenStore } from './tokenStore'
 
 const prisonRegisterApiClient = new PrisonRegisterApiClient(
-  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
 )
 
 describe('Prison Register Api client tests', () => {

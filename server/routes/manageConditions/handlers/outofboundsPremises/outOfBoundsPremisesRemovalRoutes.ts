@@ -58,7 +58,7 @@ export default class OutOfBoundsPremisesRemovalRoutes {
     const condition = this.getLicenceCondition(parseInt(conditionId, 10), licence)
 
     return res.redirect(
-      `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/outofbounds-premises?fromReview=true`
+      `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/outofbounds-premises?fromReview=true`,
     )
   }
 }

@@ -57,7 +57,7 @@ export default function setUpWebSecurity(): Router {
           formAction,
         },
       },
-    })
+    }),
   )
   return router
 }

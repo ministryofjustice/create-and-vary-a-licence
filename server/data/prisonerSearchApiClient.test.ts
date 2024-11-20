@@ -5,7 +5,7 @@ import { User } from '../@types/CvlUserDetails'
 import { InMemoryTokenStore } from './tokenStore'
 
 const prisonerSearchApiClient = new PrisonerSearchApiClient(
-  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
 )
 
 describe('Prisoner Search Api client tests', () => {
@@ -24,12 +24,12 @@ describe('Prisoner Search Api client tests', () => {
 
     const result = await prisonerSearchApiClient.searchPrisoners(
       { lastName: 'Bloggs' } as PrisonerSearchCriteria,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(post).toHaveBeenCalledWith(
       { path: '/prisoner-search/match-prisoners', data: { lastName: 'Bloggs' } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
   })
@@ -41,7 +41,7 @@ describe('Prisoner Search Api client tests', () => {
 
     expect(post).not.toHaveBeenCalledWith(
       { path: '/prisoner-search/booking-ids', data: { bookingIds: [] } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result).toEqual([])
   })
@@ -55,7 +55,7 @@ describe('Prisoner Search Api client tests', () => {
 
     expect(post).toHaveBeenCalledWith(
       { path: '/prisoner-search/booking-ids', data: { bookingIds: [1234] } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result).toEqual([{ firstName: 'Joe', lastName: 'Bloggs' }])
   })

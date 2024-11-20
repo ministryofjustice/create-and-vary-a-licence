@@ -75,7 +75,7 @@ describe('PromptList Service', () => {
     const response = await serviceUnderTest.getListForDates(
       startOfISOWeek(new Date()),
       endOfISOWeek(add(new Date(), { weeks: 3 })),
-      [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS]
+      [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS],
     )
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledTimes(1)
     expect(prisonerService.getHdcStatuses).toHaveBeenCalledTimes(1)
@@ -120,7 +120,7 @@ describe('PromptList Service', () => {
     const response = await serviceUnderTest.getListForDates(
       startOfISOWeek(new Date()),
       endOfISOWeek(add(new Date(), { weeks: 3 })),
-      [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS]
+      [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS],
     )
     expect(response).toStrictEqual([])
   })
@@ -238,7 +238,7 @@ describe('PromptList Service', () => {
       const result = await serviceUnderTest.getListForDates(
         startOfISOWeek(new Date()),
         endOfISOWeek(add(new Date(), { weeks: 3 })),
-        [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS]
+        [LicenceStatus.NOT_STARTED, LicenceStatus.IN_PROGRESS],
       )
 
       expect(result).toHaveLength(1)

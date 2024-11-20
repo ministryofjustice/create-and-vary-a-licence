@@ -350,7 +350,7 @@ describe('Route - view and approve a licence', () => {
       expect(res.redirect).toHaveBeenCalledWith('back')
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        '[{"field":"appointmentPersonType","message":"Select \'Change\' to go back and add who to meet"},{"field":"appointmentAddress","message":"Select \'Change\' to go back and add appointment address"},{"field":"appointmentContact","message":"Select \'Change\' to go back and add appointment telephone number"},{"field":"appointmentTimeType","message":"Select \'Change\' to go back and add appointment date and time"}]'
+        '[{"field":"appointmentPersonType","message":"Select \'Change\' to go back and add who to meet"},{"field":"appointmentAddress","message":"Select \'Change\' to go back and add appointment address"},{"field":"appointmentContact","message":"Select \'Change\' to go back and add appointment telephone number"},{"field":"appointmentTimeType","message":"Select \'Change\' to go back and add appointment date and time"}]',
       )
     })
 
@@ -387,7 +387,7 @@ describe('Route - view and approve a licence', () => {
       expect(res.redirect).toHaveBeenCalledWith('back')
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        '[{"field":"appointmentPerson","message":"Select \'Change\' to go back and add who to meet"}]'
+        '[{"field":"appointmentPerson","message":"Select \'Change\' to go back and add who to meet"}]',
       )
     })
   })

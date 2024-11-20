@@ -111,7 +111,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         '1',
         { code: 'code1', id: 1 },
         {},
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
     })
 
@@ -124,7 +124,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       req.query.fromReview = 'true'
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
       )
     })
   })
@@ -162,7 +162,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       req.query.fromReview = 'true'
       await handler.DELETE(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
       )
     })
   })
@@ -186,7 +186,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
         '1',
         { code: 'code1', id: 1 },
         { conditionSkipped: '[DATE REQUIRED]' },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
     })
 
@@ -199,7 +199,7 @@ describe('Route Handlers - Create Licence - Additional Licence Condition Input',
       req.query.fromReview = 'true'
       await handler.SKIP(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
       )
     })
   })

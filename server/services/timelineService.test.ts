@@ -170,7 +170,7 @@ describe('Timeline Service', () => {
         ['HARD_STOP_REVIEWED_WITHOUT_VARIATION'],
         'eventTime',
         'DESC',
-        user
+        user,
       )
     })
 
@@ -223,7 +223,7 @@ describe('Timeline Service', () => {
         ['HARD_STOP_REVIEWED_WITHOUT_VARIATION'],
         'eventTime',
         'DESC',
-        user
+        user,
       )
     })
   })

@@ -54,7 +54,7 @@ describe('ConditionService', () => {
       }
 
       expect(
-        await conditionService.getAdditionalConditionByCode('355700a9-6184-40c0-9759-0dfed1994e1e', version)
+        await conditionService.getAdditionalConditionByCode('355700a9-6184-40c0-9759-0dfed1994e1e', version),
       ).toEqual(expectedCondition)
     })
   })
@@ -63,13 +63,13 @@ describe('ConditionService', () => {
     const version = '2.0'
     it('returns `AP` for AP conditions', async () => {
       expect(
-        await conditionService.getAdditionalConditionType('355700a9-6184-40c0-9759-0dfed1994e1e', version)
+        await conditionService.getAdditionalConditionType('355700a9-6184-40c0-9759-0dfed1994e1e', version),
       ).toEqual('AP')
     })
 
     it('returns `PSS` for PSS conditions', async () => {
       expect(
-        await conditionService.getAdditionalConditionType('fda24aa9-a2b0-4d49-9c87-23b0a7be4013', version)
+        await conditionService.getAdditionalConditionType('fda24aa9-a2b0-4d49-9c87-23b0a7be4013', version),
       ).toEqual('PSS')
     })
 

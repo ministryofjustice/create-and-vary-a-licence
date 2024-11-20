@@ -24,7 +24,7 @@ const compareLicenceConditions = (originalLicence: Licence, variation: Licence):
     variedAdditionalLicenceConditions = compareAdditionalConditionSet(
       originalLicence.additionalLicenceConditions,
       variation.additionalLicenceConditions,
-      ConditionType.AP
+      ConditionType.AP,
     )
     variedBespokeConditions = compareBespokeConditionSet(originalLicence.bespokeConditions, variation.bespokeConditions)
   }
@@ -32,13 +32,13 @@ const compareLicenceConditions = (originalLicence: Licence, variation: Licence):
   const variedAdditionalPssConditions = compareAdditionalConditionSet(
     originalLicence.additionalPssConditions,
     variation.additionalPssConditions,
-    ConditionType.PSS
+    ConditionType.PSS,
   )
 
   const combinedLicenceConditions = _.mergeWith(
     variedAdditionalLicenceConditions,
     variedBespokeConditions,
-    (objValue, srcValue) => objValue.concat(srcValue)
+    (objValue, srcValue) => objValue.concat(srcValue),
   )
 
   return _.merge(combinedLicenceConditions, variedAdditionalPssConditions)
@@ -47,7 +47,7 @@ const compareLicenceConditions = (originalLicence: Licence, variation: Licence):
 const compareAdditionalConditionSet = (
   originalConditionSet: AdditionalCondition[],
   variedConditionSet: AdditionalCondition[],
-  conditionType: ConditionType
+  conditionType: ConditionType,
 ): VariedConditions => {
   const variedConditionsBuilder = new VariedConditionsBuilder(conditionType)
 
@@ -98,7 +98,7 @@ const compareAdditionalConditionSet = (
 
 const compareBespokeConditionSet = (
   originalConditionSet: BespokeCondition[],
-  variedConditionSet: BespokeCondition[]
+  variedConditionSet: BespokeCondition[],
 ): VariedConditions => {
   const variedConditionsBuilder = new VariedConditionsBuilder(ConditionType.BESPOKE)
   const sortedOriginalConditionSet = sortBespokeConditionSet(originalConditionSet)

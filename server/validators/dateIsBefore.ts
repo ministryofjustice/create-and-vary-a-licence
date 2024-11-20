@@ -11,7 +11,7 @@ export default function DateIsBefore(fieldToCompare: string, validationOptions?:
 
     if (!dateToCompare.isValid()) {
       throw new Error(
-        `Date to compare is not in a valid date format: ${fieldToCompare} - ${_.get(object, fieldToCompare)}`
+        `Date to compare is not in a valid date format: ${fieldToCompare} - ${_.get(object, fieldToCompare)}`,
       )
     }
 

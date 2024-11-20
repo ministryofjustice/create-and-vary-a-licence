@@ -7,7 +7,7 @@ import UserType from '../../../../enumeration/userType'
 export default class InitialMeetingNameRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly path: PathType
+    private readonly path: PathType,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

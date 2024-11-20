@@ -9,7 +9,7 @@ import { nameToString } from '../../../data/deliusClient'
 export default class ApprovalViewRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly probationService: ProbationService
+    private readonly probationService: ProbationService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -24,7 +24,7 @@ export default class ApprovalViewRoutes {
         `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
         licence.id,
         new Date(),
-        user
+        user,
       )
 
       const comDetails = await this.probationService.getStaffDetailByUsername(comUsername)

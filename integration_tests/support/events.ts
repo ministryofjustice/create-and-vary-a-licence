@@ -32,7 +32,7 @@ const purgeQueues = (): unknown => {
         // eslint-disable-next-line no-console
         console.log('Error', err)
       }
-    }
+    },
   )
   sqs.purgeQueue(
     { QueueUrl: 'http://localhost:4566/000000000000/create_and_vary_a_licence_prison_events_queue' },
@@ -41,7 +41,7 @@ const purgeQueues = (): unknown => {
         // eslint-disable-next-line no-console
         console.log('Error', err)
       }
-    }
+    },
   )
   sqs.purgeQueue(
     { QueueUrl: 'http://localhost:4566/000000000000/create_and_vary_a_licence_probation_events_queue' },
@@ -50,7 +50,7 @@ const purgeQueues = (): unknown => {
         // eslint-disable-next-line no-console
         console.log('Error', err)
       }
-    }
+    },
   )
   return null
 }

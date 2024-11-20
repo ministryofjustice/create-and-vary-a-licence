@@ -8,7 +8,7 @@ import LicenceOverrideService from '../../../services/licenceOverrideService'
 export default class OffenderLicenceStatusRoutes {
   constructor(
     private licenceService: LicenceService,
-    private licenceOverrideService: LicenceOverrideService
+    private licenceOverrideService: LicenceOverrideService,
   ) {}
 
   private async getLicenceData(nomsId: string, licenceId: string, user: User) {

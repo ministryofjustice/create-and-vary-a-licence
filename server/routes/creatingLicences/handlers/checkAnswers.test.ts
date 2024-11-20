@@ -236,7 +236,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           { field: 'appointmentAddress', message: "Select 'Change' to go back and add appointment address" },
           { field: 'appointmentContact', message: "Select 'Change' to go back and add appointment telephone number" },
           { field: 'appointmentTimeType', message: "Select 'Change' to go back and add appointment date and time" },
-        ])
+        ]),
       )
       expect(res.redirect).toHaveBeenCalledWith('back')
     })
@@ -269,7 +269,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
-        JSON.stringify([{ field: 'appointmentPerson', message: "Select 'Change' to go back and add who to meet" }])
+        JSON.stringify([{ field: 'appointmentPerson', message: "Select 'Change' to go back and add who to meet" }]),
       )
       expect(res.redirect).toHaveBeenCalledWith('back')
     })

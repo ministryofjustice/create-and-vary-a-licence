@@ -47,7 +47,7 @@ export default class CaseloadRoutes {
         createLink: this.findCreateLinkToDisplay(
           comCase.licenceCreationType,
           comCase.licenceId,
-          comCase.prisonerNumber
+          comCase.prisonerNumber,
         ),
         releaseDate: comCase.releaseDate && format(parseCvlDate(comCase.releaseDate), 'dd MMM yyyy'),
         hardStopDate: comCase.hardStopDate && format(parseCvlDate(comCase.hardStopDate), 'dd/MM/yyyy'),

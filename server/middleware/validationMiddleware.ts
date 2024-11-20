@@ -29,7 +29,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       const validationScope = plainToInstance(
         classType,
         { ...req.body, licence, uploadFile: req.file },
-        { excludeExtraneousValues: false }
+        { excludeExtraneousValues: false },
       )
 
       const errors: ValidationError[] = await validate(validationScope)
@@ -43,7 +43,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         error: ValidationError,
         constraints: {
           [type: string]: string
-        }
+        },
       ): FieldValidationError => ({
         field: error.property,
         message: Object.values(constraints)[Object.values(constraints).length - 1],
@@ -65,7 +65,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       return next(
         new Error(`Failed to validate licence details for: ${req.params.nomisId}`, {
           cause: error,
-        })
+        }),
       )
     }
   }

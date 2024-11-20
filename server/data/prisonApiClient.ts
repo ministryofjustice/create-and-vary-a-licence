@@ -24,7 +24,7 @@ export default class PrisonApiClient extends RestClient {
       {
         path: `/api/bookings/offenderNo/${nomsId}/image/data`,
       },
-      { username: user.username }
+      { username: user.username },
     )) as Promise<Readable>
   }
 
@@ -35,28 +35,28 @@ export default class PrisonApiClient extends RestClient {
         path: `/api/bookings/offenderNo/${nomsId}/image/data`,
         responseType: 'image/jpeg',
       },
-      { username: user.username }
+      { username: user.username },
     )) as Promise<Buffer>
   }
 
   async getPrisonerDetail(nomsId: string, user?: User): Promise<PrisonApiPrisoner> {
     return (await this.get(
       { path: `/api/offenders/${nomsId}` },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<PrisonApiPrisoner>
   }
 
   async getPrisonerSentenceAndOffences(bookingId: number, user?: User): Promise<OffenderSentenceAndOffences[]> {
     return (await this.get(
       { path: `/api/offender-sentences/booking/${bookingId}/sentences-and-offences` },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<OffenderSentenceAndOffences[]>
   }
 
   async getPrisonInformation(prisonId: string, user?: User): Promise<PrisonInformation> {
     return (await this.get(
       { path: `/api/agencies/prison/${prisonId}` },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<PrisonInformation>
   }
 
@@ -70,7 +70,7 @@ export default class PrisonApiClient extends RestClient {
         path: `/api/offender-sentences/booking/${bookingId}/home-detention-curfews/latest`,
         return404: true,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<HomeDetentionCurfew>
   }
 
@@ -80,7 +80,7 @@ export default class PrisonApiClient extends RestClient {
         path: `/api/offender-sentences/home-detention-curfews/latest`,
         data: bookingIds,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<HomeDetentionCurfew[]>
   }
 
@@ -89,7 +89,7 @@ export default class PrisonApiClient extends RestClient {
       {
         path: '/api/users/me',
       },
-      { token: user.token }
+      { token: user.token },
     )) as Promise<PrisonApiUserDetail>
   }
 
@@ -98,7 +98,7 @@ export default class PrisonApiClient extends RestClient {
       {
         path: '/api/users/me/caseLoads',
       },
-      { token: user.token }
+      { token: user.token },
     )) as Promise<PrisonApiCaseload[]>
   }
 }

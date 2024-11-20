@@ -12,14 +12,14 @@ export default class DeleteConditionsByCodeHandler {
       return res.redirect(
         `/licence/vary/id/${licence.id}/policy-changes/input/callback/${
           +req.session.changedConditionsInputsCounter + 1
-        }`
+        }`,
       )
     }
 
     return res.redirect(
       `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
-      }`
+      }`,
     )
   }
 }

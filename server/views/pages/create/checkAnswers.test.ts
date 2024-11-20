@@ -162,24 +162,24 @@ describe('Create a Licence Views - Check Answers', () => {
     // Check actual condition wording - 1st
     expect($('#additionalLicenceConditions > div:nth-child(1) > dt').text().trim()).toBe('Category 1')
     expect($('#additionalLicenceConditions > div:nth-child(1) > dd > div:nth-child(1)').text().trim()).toBe(
-      'Template 1'
+      'Template 1',
     )
     expect($('#additionalLicenceConditions > div:nth-child(1) > dd > div:nth-child(2) > span').text().trim()).toBe(
-      'Data 1'
+      'Data 1',
     )
 
     // Check actual condition wording - 2nd
     expect($('#additionalLicenceConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
     expect($('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe(
-      'Template 2'
+      'Template 2',
     )
     expect(
-      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
+      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim(),
     ).toBe('Data 2A, Data 2B')
 
     // Check contributesToLicence filters out false values from rendering
     expect(
-      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
+      $('#additionalLicenceConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim(),
     ).not.toBe('Data 2C')
   })
 
@@ -217,10 +217,10 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#additionalPssConditions > div:nth-child(2) > dt').text().trim()).toBe('Category 2')
     expect($('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(1)').text().trim()).toBe('Template 2')
     expect(
-      $('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim()
+      $('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(1)').text().trim(),
     ).toBe('Data 2A, Data 2B')
     expect(
-      $('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim()
+      $('#additionalPssConditions > div:nth-child(2) > dd > div:nth-child(2) > span:nth-child(2)').text().trim(),
     ).toBe('Data 2C')
   })
 
@@ -233,10 +233,10 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#bespoke-conditions-heading').text()).toBe('Bespoke licence conditions (2)')
 
     expect($('#bespoke-conditions-details > div:nth-child(1) > .govuk-summary-list__value').text().trim()).toBe(
-      'Bespoke condition 1'
+      'Bespoke condition 1',
     )
     expect($('#bespoke-conditions-details > div:nth-child(2) > .govuk-summary-list__value').text().trim()).toBe(
-      'Bespoke condition 2'
+      'Bespoke condition 2',
     )
   })
 

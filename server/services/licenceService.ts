@@ -56,7 +56,7 @@ import ConditionService from './conditionService'
 export default class LicenceService {
   constructor(
     private readonly licenceApiClient: LicenceApiClient,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   async createLicence(licence: CreateLicenceRequest, user: User): Promise<LicenceCreationResponse> {
@@ -104,7 +104,7 @@ export default class LicenceService {
     licenceId: string,
     conditionType: LicenceType,
     formData: AddAdditionalConditionRequest,
-    user: User
+    user: User,
   ) {
     return this.licenceApiClient.addAdditionalCondition(licenceId, conditionType, formData, user)
   }
@@ -122,13 +122,13 @@ export default class LicenceService {
     conditionType: LicenceType,
     formData: AdditionalConditions,
     user: User,
-    licenceVersion: string
+    licenceVersion: string,
   ): Promise<void> {
     const additionalConditions =
       formData.additionalConditions?.map(async (conditionCode, index) => {
         const additionalConditionConfig = await this.conditionService.getAdditionalConditionByCode(
           conditionCode,
-          licenceVersion
+          licenceVersion,
         )
         return {
           code: conditionCode,
@@ -150,7 +150,7 @@ export default class LicenceService {
     licenceId: string,
     condition: AdditionalCondition,
     formData: Record<string, unknown>,
-    user: User
+    user: User,
   ): Promise<void> {
     let sequenceNumber = -1
 
@@ -195,7 +195,7 @@ export default class LicenceService {
     additionalConditionId: string,
     fileToUpload: Express.Multer.File,
     user: User,
-    testMode = false
+    testMode = false,
   ): Promise<void> {
     await this.licenceApiClient.uploadExclusionZoneFile(licenceId, additionalConditionId, user, fileToUpload)
     if (!testMode) {
@@ -252,7 +252,7 @@ export default class LicenceService {
   async getLicencesByNomisIdsAndStatus(
     nomisIds: string[],
     statuses: LicenceStatus[],
-    user?: User
+    user?: User,
   ): Promise<LicenceSummary[]> {
     return this.licenceApiClient.matchLicences(statuses, null, null, nomisIds, null, null, null, user)
   }
@@ -260,7 +260,7 @@ export default class LicenceService {
   async getLatestLicenceByNomisIdsAndStatus(
     nomisIds: string[],
     statuses: LicenceStatus[],
-    user?: User
+    user?: User,
   ): Promise<LicenceSummary | null | undefined> {
     const licences = await this.licenceApiClient.matchLicences(statuses, null, null, nomisIds, null, null, null, user)
     return _.head(licences)
@@ -284,7 +284,7 @@ export default class LicenceService {
       null,
       'conditionalReleaseDate',
       null,
-      user
+      user,
     )
   }
 
@@ -304,7 +304,7 @@ export default class LicenceService {
       null,
       'conditionalReleaseDate',
       null,
-      user
+      user,
     )
   }
 
@@ -322,7 +322,7 @@ export default class LicenceService {
       user?.probationPduCodes,
       'conditionalReleaseDate',
       null,
-      user
+      user,
     )
   }
 
@@ -365,7 +365,7 @@ export default class LicenceService {
   async updateReasonForVariation(
     licenceId: string,
     reasonForVariation: UpdateReasonForVariationRequest,
-    user: User
+    user: User,
   ): Promise<void> {
     return this.licenceApiClient.updateReasonForVariation(licenceId, reasonForVariation, user)
   }
@@ -380,7 +380,7 @@ export default class LicenceService {
     // eslint-disable-next-line default-param-last
     licenceId: number = null,
     eventTime: Date,
-    user: User = null
+    user: User = null,
   ): Promise<void> {
     const requestBody = {
       username: user.username,
@@ -402,7 +402,7 @@ export default class LicenceService {
     forUsername: string = null,
     startTime: Date,
     endTime: Date,
-    user: User
+    user: User,
   ): Promise<AuditEvent[]> {
     const requestBody = {
       username: forUsername || null,
@@ -417,7 +417,7 @@ export default class LicenceService {
   async updatePrisonInformation(
     licenceId: string,
     prisonInformation: UpdatePrisonInformationRequest,
-    user?: User
+    user?: User,
   ): Promise<void> {
     return this.licenceApiClient.updatePrisonInformation(licenceId, prisonInformation, user)
   }
@@ -453,7 +453,7 @@ export default class LicenceService {
       conversationEventTypes,
       'eventTime',
       'DESC',
-      user
+      user,
     )
 
     const conversation = licenceEvents?.map(event => {
@@ -488,7 +488,7 @@ export default class LicenceService {
         LicenceStatus.VARIATION_SUBMITTED,
         LicenceStatus.VARIATION_REJECTED,
         LicenceStatus.VARIATION_APPROVED,
-      ]
+      ],
     )
   }
 
@@ -521,7 +521,7 @@ export default class LicenceService {
     earliestReleaseDate: Date,
     latestReleaseDate: Date,
     prisonIds: string[],
-    user?: User
+    user?: User,
   ): Promise<CaseloadItem[]> {
     let pageNumber = 0
     let results: CaseloadItem[] = []
@@ -533,7 +533,7 @@ export default class LicenceService {
         latestReleaseDate,
         prisonIds,
         pageNumber,
-        user
+        user,
       )
       pageNumber = pageNumber < page.totalPages - 1 ? pageNumber + 1 : -1
       results = results.concat(content)

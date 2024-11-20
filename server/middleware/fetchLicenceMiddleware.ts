@@ -15,7 +15,7 @@ export default function fetchLicence(licenceService: LicenceService): RequestHan
           if (user?.nomisStaffId) {
             if (!user.prisonCaseload.includes(licence.prisonCode)) {
               logger.info(
-                `Prison caseload ${user?.prisonCaseload} denied access to licence ID ${licence.id} ${licence.prisonCode}`
+                `Prison caseload ${user?.prisonCaseload} denied access to licence ID ${licence.id} ${licence.prisonCode}`,
               )
               return res.redirect('/access-denied')
             }
@@ -32,7 +32,7 @@ export default function fetchLicence(licenceService: LicenceService): RequestHan
             !user.probationTeamCodes?.includes(licence.probationTeamCode)
           ) {
             logger.info(
-              `Probation teams ${user?.probationTeamCodes} denies access to licence ID ${licence.id} ${licence.probationTeamCode}`
+              `Probation teams ${user?.probationTeamCodes} denies access to licence ID ${licence.id} ${licence.probationTeamCode}`,
             )
 
             return res.redirect('/access-denied')

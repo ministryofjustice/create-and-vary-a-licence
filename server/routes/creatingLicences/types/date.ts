@@ -23,7 +23,7 @@ class SimpleDate extends Stringable {
     return moment(
       [this.year, this.month, this.day].join('-'),
       ['YY-MM-D', 'YYYY-MM-D', 'YYYY-M-DD', 'YYYY-MM-DD', 'YY-M-D', 'YYYY-M-D'],
-      true
+      true,
     )
   }
 

@@ -43,13 +43,13 @@ function gatherCheckInfo(aggregateStatus: Record<string, unknown>, currentStatus
 }
 
 const apiChecks = Object.entries(config.apis).map(([name, api]) =>
-  service(name, `${api.url}${api.healthPath}`, api.agent)
+  service(name, `${api.url}${api.healthPath}`, api.agent),
 )
 
 export default function healthCheck(
   applicationInfo: ApplicationInfo,
   callback: HealthCheckCallback,
-  checks = apiChecks
+  checks = apiChecks,
 ): void {
   Promise.all(checks.map(fn => fn())).then(checkResults => {
     const allOk = checkResults.every(item => item.status === 'UP') ? 'UP' : 'DOWN'

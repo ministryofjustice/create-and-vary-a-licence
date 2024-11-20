@@ -14,7 +14,7 @@ export default class TimelineEvent {
     private readonly statusCode: string,
     private readonly createdBy: string,
     private readonly licenceId: number,
-    private readonly lastUpdate: string
+    private readonly lastUpdate: string,
   ) {}
 
   getSortTime() {

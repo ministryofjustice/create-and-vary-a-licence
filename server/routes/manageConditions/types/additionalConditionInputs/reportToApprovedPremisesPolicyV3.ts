@@ -11,7 +11,9 @@ class ReportToApprovedPremisesPolicyV3 {
   @Expose()
   @IsNotEmpty({ message: 'Enter name of approved premises' })
   @Transform(({ obj, value }) =>
-    obj.addressOrGeneric === 'The approved premises where you reside' ? 'the approved premises where you reside' : value
+    obj.addressOrGeneric === 'The approved premises where you reside'
+      ? 'the approved premises where you reside'
+      : value,
   )
   approvedPremises: string
 

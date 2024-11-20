@@ -11,7 +11,7 @@ import { CaCase } from '../../../@types/licenceApiClientTypes'
 export default class ViewAndPrintCaseRoutes {
   constructor(
     private readonly caseloadService: CaCaseloadService,
-    private readonly prisonerService: PrisonerService
+    private readonly prisonerService: PrisonerService,
   ) {}
 
   nonViewableStatuses = [
@@ -82,7 +82,7 @@ export default class ViewAndPrintCaseRoutes {
         <LicenceKind>licence.kind,
         <LicenceStatus>licence.licenceStatus,
         licence.isInHardStopPeriod,
-        licence.tabType
+        licence.tabType,
       )
     ) {
       return null
@@ -109,7 +109,7 @@ export default class ViewAndPrintCaseRoutes {
     kind: LicenceKind,
     licenceStatus: LicenceStatus,
     isInHardStopPeriod: boolean,
-    tabType: string
+    tabType: string,
   ): boolean => {
     if (tabType === 'ATTENTION_NEEDED') {
       return false

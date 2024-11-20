@@ -19,7 +19,7 @@ import { CvlPrisoner } from '../@types/licenceApiClientTypes'
 export default class PrisonerService {
   constructor(
     private readonly prisonApiClient: PrisonApiClient,
-    private readonly prisonerSearchApiClient: PrisonerSearchApiClient
+    private readonly prisonerSearchApiClient: PrisonerSearchApiClient,
   ) {}
 
   // For streaming into HTML templates directly
@@ -52,7 +52,7 @@ export default class PrisonerService {
   async getPrisonerLatestSentenceStartDate(bookingId: number, user?: User): Promise<Date> {
     const sentenceAndOffenceDetails: OffenderSentenceAndOffences[] = await this.getPrisonerSentenceAndOffenceDetails(
       bookingId,
-      user
+      user,
     )
     const sentenceStartDates: Date[] = sentenceAndOffenceDetails.map(details => parseIsoDate(details.sentenceDate))
     return new Date(Math.max(...sentenceStartDates.map(date => date.getTime())))
@@ -110,7 +110,7 @@ export default class PrisonerService {
           bookingId: h.bookingId.toString(),
           approvalStatus: h?.approvalStatus || 'Not found',
           checksPassed: h?.passed || false,
-        }
+        },
     )
   }
 

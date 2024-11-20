@@ -7,7 +7,7 @@ import flashInitialApptUpdatedMessage from './initialMeetingUpdatedFlashMessage'
 export default class InitialMeetingPlaceRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly userType: UserType
+    private readonly userType: UserType,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

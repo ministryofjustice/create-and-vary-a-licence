@@ -10,7 +10,7 @@ describe('Hardstop Confirmation', () => {
       licence: { comEmail: undefined },
     })
     expect($('#sent-to').text().toString()).toContain(
-      'Once this licence has been approved, you will need to notify the probation team. We do not have their contact details to do this automatically.'
+      'Once this licence has been approved, you will need to notify the probation team. We do not have their contact details to do this automatically.',
     )
     expect($('.govuk-panel__body').length).toEqual(1)
     expect($('.govuk-panel__body').text().toString()).toContain('You still need to contact the probation team')
@@ -21,7 +21,7 @@ describe('Hardstop Confirmation', () => {
       licence: { comEmail: 'some@email.com' },
     })
     expect($('#sent-to').text().toString()).toContain(
-      'Once the licence has been approved, we will automatically email the probation team to tell them.'
+      'Once the licence has been approved, we will automatically email the probation team to tell them.',
     )
     expect($('.govuk-panel__body').length).toEqual(0)
   })

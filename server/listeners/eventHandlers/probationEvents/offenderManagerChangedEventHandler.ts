@@ -6,7 +6,7 @@ import LicenceService from '../../../services/licenceService'
 export default class OffenderManagerChangedEventHandler {
   constructor(
     private readonly probationService: ProbationService,
-    private readonly licenceService: LicenceService
+    private readonly licenceService: LicenceService,
   ) {}
 
   handle = async (event: ProbationEventMessage): Promise<void> => {

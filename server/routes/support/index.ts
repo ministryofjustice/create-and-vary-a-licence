@@ -42,7 +42,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
   const supportHomeHandler = new SupportHomeRoutes()
   const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, probationService)

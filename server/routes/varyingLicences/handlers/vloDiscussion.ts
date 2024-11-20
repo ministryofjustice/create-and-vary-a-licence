@@ -5,7 +5,7 @@ import LicenceService from '../../../services/licenceService'
 export default class VloDiscussionRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

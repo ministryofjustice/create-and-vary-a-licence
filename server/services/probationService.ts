@@ -13,7 +13,7 @@ import {
 export default class ProbationService {
   constructor(
     private readonly deliusClient: DeliusClient,
-    private readonly probationSearchApiClient: ProbationSearchApiClient
+    private readonly probationSearchApiClient: ProbationSearchApiClient,
   ) {}
 
   async getStaffDetailByUsername(username: string): Promise<DeliusStaff> {

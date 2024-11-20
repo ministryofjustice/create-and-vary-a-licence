@@ -22,8 +22,8 @@ export default function buildEventHandler({ probationService, licenceService }: 
             logger.error(
               new Error(`${error} OFFENDER_MANAGER_CHANGED event unsuccessful for crn: ${eventMessage.crn}`, {
                 cause: error,
-              })
-            )
+              }),
+            ),
           )
           break
         default: {

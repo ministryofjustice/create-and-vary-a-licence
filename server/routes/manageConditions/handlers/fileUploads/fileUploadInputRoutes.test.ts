@@ -57,14 +57,14 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           '1',
           { code: 'code1', id: 1 },
           {},
-          { username: 'joebloggs' }
+          { username: 'joebloggs' },
         )
       })
 
       it('should redirect to the list view', async () => {
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads'
+          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads',
         )
       })
 
@@ -72,7 +72,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         req.query.fromReview = 'true'
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromReview=true'
+          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromReview=true',
         )
       })
 
@@ -80,7 +80,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         req.query.fromPolicyReview = 'true'
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromPolicyReview=true'
+          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromPolicyReview=true',
         )
       })
 
@@ -108,7 +108,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
 
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          `/licence/create/id/1/additional-licence-conditions/condition/2?fromPolicyReview=true`
+          `/licence/create/id/1/additional-licence-conditions/condition/2?fromPolicyReview=true`,
         )
       })
 
@@ -137,7 +137,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
 
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromPolicyReview=true'
+          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads?fromPolicyReview=true',
         )
       })
     })
@@ -185,7 +185,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           '1',
           { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
           { outOfBoundFilename: 'test.txt' },
-          { username: 'joebloggs' }
+          { username: 'joebloggs' },
         )
       })
 
@@ -198,7 +198,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           '1',
           { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
           { outOfBoundFilename: 'test.txt' },
-          { username: 'joebloggs' }
+          { username: 'joebloggs' },
         )
       })
     })
@@ -232,7 +232,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       it('should redirect to the area list view', async () => {
         await handler.DELETE(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads'
+          '/licence/create/id/1/additional-licence-conditions/condition/code1/file-uploads',
         )
       })
     })
@@ -259,7 +259,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           '1',
           { code: 'code1', id: 1 },
           {},
-          { username: 'joebloggs' }
+          { username: 'joebloggs' },
         )
       })
 
@@ -272,7 +272,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         req.query.fromReview = 'true'
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+          '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
         )
       })
 
@@ -280,7 +280,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         req.query.fromReview = 'true'
         await handler.POST(req, res)
         expect(res.redirect).toHaveBeenCalledWith(
-          '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+          '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
         )
       })
     })
@@ -328,7 +328,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           '1',
           { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
           { outOfBoundFilename: 'test.txt' },
-          { username: 'joebloggs' }
+          { username: 'joebloggs' },
         )
       })
 
@@ -341,7 +341,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
           '1',
           { code: 'outOfBoundsRegion', id: 1, expandedText: 'expanded text' },
           { outOfBoundFilename: 'test.txt' },
-          { username: 'joebloggs' }
+          { username: 'joebloggs' },
         )
       })
     })

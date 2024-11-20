@@ -12,7 +12,7 @@ import { nameToString } from '../../data/deliusClient'
 export default class CaseloadService {
   constructor(
     private readonly probationService: ProbationService,
-    private readonly licenceService: LicenceService
+    private readonly licenceService: LicenceService,
   ) {}
 
   async getVaryApproverCaseload(user: User): Promise<ManagedCase[]> {
@@ -86,7 +86,7 @@ export default class CaseloadService {
     const comUsernames = caseload
       .map(
         offender =>
-          offender.licences.find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE).comUsername
+          offender.licences.find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE).comUsername,
       )
       .filter(comUsername => comUsername)
 
@@ -98,7 +98,7 @@ export default class CaseloadService {
           com.username?.toLowerCase() ===
           offender.licences
             .find(l => offender.licences.length === 1 || l.status !== LicenceStatus.ACTIVE)
-            .comUsername?.toLowerCase()
+            .comUsername?.toLowerCase(),
       )
 
       if (responsibleCom) {

@@ -81,7 +81,7 @@ export default class CaseloadRoutes {
 
   prioritiseReviewNeeded(
     a: { isReviewNeeded: boolean; releaseDate: string },
-    b: { isReviewNeeded: boolean; releaseDate: string }
+    b: { isReviewNeeded: boolean; releaseDate: string },
   ) {
     const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
     const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()

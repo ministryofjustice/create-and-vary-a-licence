@@ -219,7 +219,7 @@ const isAttentionNeeded = (status: LicenceStatus, licenceStartDate: Date, releas
 const determineCaViewCasesTab = (
   nomisRecord: CvlPrisoner,
   cvlFields: CvlFields,
-  licence?: LicenceSummary
+  licence?: LicenceSummary,
 ): CaViewCasesTab => {
   const releaseDate =
     parseCvlDate(licence?.actualReleaseDate || licence?.conditionalReleaseDate) || selectReleaseDate(nomisRecord)
@@ -244,7 +244,7 @@ const groupingBy = <T extends Record<K, unknown>, K extends keyof T>(arr: T[], k
       acc[key] = [...existingValues, c]
       return acc
     },
-    {} as Record<string, T[]>
+    {} as Record<string, T[]>,
   )
 
   return Object.values(results)

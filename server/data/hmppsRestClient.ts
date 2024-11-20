@@ -68,14 +68,14 @@ export default class HmppsRestClient {
   constructor(
     private readonly tokenStore: TokenStore,
     private readonly name: string,
-    private readonly apiConfig: ApiConfig
+    private readonly apiConfig: ApiConfig,
   ) {
     this.agent = apiConfig.url.startsWith('https') ? new HttpsAgent(apiConfig.agent) : new Agent(apiConfig.agent)
   }
 
   async get(
     { path = null, query = {}, headers = {}, responseType = '', raw = false, return404 = false }: GetRequest,
-    signedWithMethod?: SignedWithMethod
+    signedWithMethod?: SignedWithMethod,
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
@@ -116,7 +116,7 @@ export default class HmppsRestClient {
       raw = false,
       returnBodyOnErrorIfPredicate,
     }: PostRequest,
-    signedWithMethod?: SignedWithMethod
+    signedWithMethod?: SignedWithMethod,
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
@@ -146,7 +146,7 @@ export default class HmppsRestClient {
 
   async put(
     { path = null, headers = {}, responseType = '', data = {}, raw = false }: PutRequest,
-    signedWithMethod?: SignedWithMethod
+    signedWithMethod?: SignedWithMethod,
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 
@@ -204,7 +204,7 @@ export default class HmppsRestClient {
 
   async postMultiPart(
     { path = null, headers = {}, responseType = '', fileToUpload }: PostMultiPartRequest,
-    signedWithMethod?: SignedWithMethod
+    signedWithMethod?: SignedWithMethod,
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
     logger.info(`PostMultiPartRequest using admin client credentials: calling ${this.name}: ${path}`)
@@ -232,7 +232,7 @@ export default class HmppsRestClient {
 
   async delete(
     { path = null, headers = {}, responseType = '', raw = false }: DeleteRequest,
-    signedWithMethod?: SignedWithMethod
+    signedWithMethod?: SignedWithMethod,
   ): Promise<unknown> {
     const signedWith = signedWithMethod?.token || (await this.tokenStore.getSystemToken(signedWithMethod?.username))
 

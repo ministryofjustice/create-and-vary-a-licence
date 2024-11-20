@@ -54,7 +54,7 @@ describe('Route Handlers - Create Licence - Delete Conditions By Code Handler Ha
       })
 
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/123/additional-licence-conditions/callback?fromReview=true`
+        `/licence/create/id/123/additional-licence-conditions/callback?fromReview=true`,
       )
     })
   })

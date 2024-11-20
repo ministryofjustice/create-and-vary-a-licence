@@ -13,7 +13,7 @@ describe('Validators - ValidDateString', () => {
     date = plainToInstance(
       DateString,
       { calendarDate: format(addDays(new Date(), 1), 'dd/MM/yyyy') },
-      { excludeExtraneousValues: true }
+      { excludeExtraneousValues: true },
     )
   })
 

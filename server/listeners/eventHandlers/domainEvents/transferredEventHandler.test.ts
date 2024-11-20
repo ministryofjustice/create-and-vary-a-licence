@@ -56,7 +56,7 @@ describe('Transferred event handler', () => {
 
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC1234'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED']
+      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED'],
     )
     expect(licenceService.updatePrisonInformation).not.toHaveBeenCalled()
   })

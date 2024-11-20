@@ -13,7 +13,7 @@ import LicenceKind from '../../../enumeration/LicenceKind'
 export default class CheckAnswersRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -28,7 +28,7 @@ export default class CheckAnswersRoutes {
         `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
         licence.id,
         new Date(),
-        user
+        user,
       )
     }
 

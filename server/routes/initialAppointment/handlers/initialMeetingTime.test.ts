@@ -105,28 +105,28 @@ describe('Route - create licence - initial meeting date and time', () => {
       it('should redirect to the additional licence conditions question page if licence type is AP', async () => {
         res.locals.licence.typeCode = 'AP'
         expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
-          '/licence/create/id/1/additional-licence-conditions-question'
+          '/licence/create/id/1/additional-licence-conditions-question',
         )
       })
 
       it('should redirect to the additional licence conditions question page if licence type is AP_PSS', async () => {
         res.locals.licence.typeCode = 'AP_PSS'
         expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
-          '/licence/create/id/1/additional-licence-conditions-question'
+          '/licence/create/id/1/additional-licence-conditions-question',
         )
       })
 
       it('should redirect to the additional pss conditions question page if licence type is PSS', async () => {
         res.locals.licence.typeCode = 'PSS'
         expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
-          '/licence/create/id/1/additional-pss-conditions-question'
+          '/licence/create/id/1/additional-pss-conditions-question',
         )
       })
 
       it('should redirect to the check your answers page if fromReview flag is set', async () => {
         req.query.fromReview = 'true'
         expect(handler.getNextPage('1', res.locals.licence.typeCode, req)).toBe(
-          '/licence/create/id/1/check-your-answers'
+          '/licence/create/id/1/check-your-answers',
         )
       })
     })

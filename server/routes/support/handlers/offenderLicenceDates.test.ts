@@ -90,7 +90,7 @@ describe('Route handlers - Licence dates override', () => {
         { ...licenceDates, reason: dateChangeReason },
         {
           username: 'bob',
-        }
+        },
       )
 
       expect(res.redirect).toHaveBeenCalledWith(`/support/offender/ABC123/licences`)

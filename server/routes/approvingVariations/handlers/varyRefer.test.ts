@@ -50,7 +50,7 @@ describe('Route - refer a licence variation', () => {
 
       expect(licenceService.compareVariationToOriginal).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_SUBMITTED },
-        { username, displayName }
+        { username, displayName },
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/vary-approve/request-changes', {

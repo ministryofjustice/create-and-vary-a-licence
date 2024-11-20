@@ -30,7 +30,7 @@ export default class OffenderDetailRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly probationService: ProbationService,
-    private readonly licenceService: LicenceService
+    private readonly licenceService: LicenceService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

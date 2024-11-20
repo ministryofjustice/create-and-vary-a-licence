@@ -56,7 +56,7 @@ describe('Release event handler', () => {
 
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC1234'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED', 'TIMED_OUT']
+      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED', 'TIMED_OUT'],
     )
   })
 

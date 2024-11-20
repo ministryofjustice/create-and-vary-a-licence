@@ -9,7 +9,7 @@ export default class UserService {
   constructor(
     private readonly manageUsersApiClient: ManageUsersApiClient,
     private readonly prisonApiClient: PrisonApiClient,
-    private readonly probationService: ProbationService
+    private readonly probationService: ProbationService,
   ) {}
 
   async getUser(user: User): Promise<PrisonUserDetails> {

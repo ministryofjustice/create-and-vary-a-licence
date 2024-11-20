@@ -17,7 +17,7 @@ export default class FeComponentsClient extends RestClient {
 
   async getComponents<T extends AvailableComponent[]>(
     components: T,
-    token: string
+    token: string,
   ): Promise<Record<T[number], Component>> {
     return (await this.get({
       path: `/components?component=${components.join('&component=')}`,

@@ -36,7 +36,7 @@ import logger from '../../logger'
 import { parseCvlDate } from '../utils/utils'
 
 const licenceApiClient = new LicenceApiClient(
-  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
 )
 
 jest.mock('../../logger')
@@ -69,7 +69,7 @@ describe('Licence API client tests', () => {
 
     expect(post).toHaveBeenCalledWith(
       { path: '/licence/create', data: creationRequest, returnBodyOnErrorIfPredicate: expect.any(Function) },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result).toEqual({ licenceId: 1 })
   })
@@ -82,7 +82,7 @@ describe('Licence API client tests', () => {
 
     expect(post).toHaveBeenCalledWith(
       { path: '/licence/create', data: creationRequest, returnBodyOnErrorIfPredicate: expect.any(Function) },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
     expect(result).toEqual({ licenceId: 3 })
   })
@@ -100,12 +100,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateAppointmentPerson(
       '1',
       { appointmentPerson: 'Joe Bloggs' } as AppointmentPersonRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/appointmentPerson', data: { appointmentPerson: 'Joe Bloggs' } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -113,12 +113,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateAppointmentTime(
       '1',
       { appointmentTime: '12:30pm' } as AppointmentTimeRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/appointmentTime', data: { appointmentTime: '12:30pm' } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -126,12 +126,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateAppointmentAddress(
       '1',
       { appointmentAddress: '123 Fake Street' } as AppointmentAddressRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/appointment-address', data: { appointmentAddress: '123 Fake Street' } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -139,12 +139,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateContactNumber(
       '1',
       { telephone: '0112877368' } as ContactNumberRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/contact-number', data: { telephone: '0112877368' } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -152,12 +152,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateBespokeConditions(
       '1',
       { conditions: ['Not to enter any shopping centres'] } as BespokeConditionsRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/bespoke-conditions', data: { conditions: ['Not to enter any shopping centres'] } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -165,12 +165,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateAdditionalConditions(
       1,
       { additionalConditions: [{ code: 'condition1' }] } as AdditionalConditionsRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/additional-conditions', data: { additionalConditions: [{ code: 'condition1' }] } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -179,12 +179,12 @@ describe('Licence API client tests', () => {
       '1',
       '2',
       { data: [{ value: 'condition1' }] } as UpdateAdditionalConditionDataRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/additional-conditions/condition/2', data: { data: [{ value: 'condition1' }] } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -192,12 +192,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateLicenceStatus(
       1,
       { status: 'IN_PROGRESS' } as StatusUpdateRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/status', data: { status: 'IN_PROGRESS' } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -209,7 +209,7 @@ describe('Licence API client tests', () => {
         path: '/licence/id/1/submit',
         data: [],
       },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -225,7 +225,7 @@ describe('Licence API client tests', () => {
         [],
         'conditionalReleaseDate',
         'DESC',
-        { username: 'joebloggs' } as User
+        { username: 'joebloggs' } as User,
       )
 
       expect(post).toHaveBeenCalledWith(
@@ -243,7 +243,7 @@ describe('Licence API client tests', () => {
             sortOrder: 'DESC',
           },
         },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
     })
@@ -259,7 +259,7 @@ describe('Licence API client tests', () => {
         [],
         null,
         null,
-        { username: 'joebloggs' } as User
+        { username: 'joebloggs' } as User,
       )
 
       expect(post).toHaveBeenCalledWith(
@@ -274,7 +274,7 @@ describe('Licence API client tests', () => {
           },
           query: {},
         },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(result).toEqual([{ licenceId: 1, prisonCode: 'MDI' }])
     })
@@ -289,7 +289,7 @@ describe('Licence API client tests', () => {
           prisonerNumbers: ['A1234AA'],
         },
       },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -306,7 +306,7 @@ describe('Licence API client tests', () => {
       1,
       {
         username: 'joebloggs',
-      } as User
+      } as User,
     )
     expect(post).toHaveBeenCalledWith(
       {
@@ -318,7 +318,7 @@ describe('Licence API client tests', () => {
           prisonIds: ['MDI'],
         },
       },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
   it('Search prisoners by release date is not called with no prison ids', async () => {
@@ -432,12 +432,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateSpoDiscussion(
       '1',
       { spoDiscussion: 'Yes' } as UpdateSpoDiscussionRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/spo-discussion', data: { spoDiscussion: 'Yes' } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -445,12 +445,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateVloDiscussion(
       '1',
       { vloDiscussion: 'Yes' } as UpdateVloDiscussionRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/vlo-discussion', data: { vloDiscussion: 'Yes' } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -458,12 +458,12 @@ describe('Licence API client tests', () => {
     await licenceApiClient.updateReasonForVariation(
       '1',
       { reasonForVariation: 'Reason' } as UpdateReasonForVariationRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
       { path: '/licence/id/1/reason-for-variation', data: { reasonForVariation: 'Reason' } },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -481,7 +481,7 @@ describe('Licence API client tests', () => {
         prisonDescription: 'Pentonville (HMP)',
         prisonTelephone: '+44 276 54545',
       } as UpdatePrisonInformationRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
@@ -493,7 +493,7 @@ describe('Licence API client tests', () => {
           prisonTelephone: '+44 276 54545',
         },
       },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -510,7 +510,7 @@ describe('Licence API client tests', () => {
         topupSupervisionStartDate: '09/09/2023',
         topupSupervisionExpiryDate: '09/09/2024',
       } as UpdateSentenceDatesRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
 
     expect(put).toHaveBeenCalledWith(
@@ -527,7 +527,7 @@ describe('Licence API client tests', () => {
           topupSupervisionExpiryDate: '09/09/2024',
         },
       },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -540,14 +540,14 @@ describe('Licence API client tests', () => {
     await licenceApiClient.referVariation(
       '1',
       { reasonForReferral: 'reason' } as ReferVariationRequest,
-      { username: 'joebloggs' } as User
+      { username: 'joebloggs' } as User,
     )
     expect(put).toHaveBeenCalledWith(
       {
         path: '/licence/id/1/refer-variation',
         data: { reasonForReferral: 'reason' },
       },
-      { username: 'joebloggs' }
+      { username: 'joebloggs' },
     )
   })
 
@@ -568,7 +568,7 @@ describe('Licence API client tests', () => {
         path: `/licence/id/1/override/status`,
         data: { reason: 'Test Reason', statusCode: LicenceStatus.APPROVED },
       },
-      { username: 'bob' }
+      { username: 'bob' },
     )
   })
 
@@ -592,7 +592,7 @@ describe('Licence API client tests', () => {
         path: `/licence/id/1/override/dates`,
         data: { ...dates, reason: 'Test Reason' },
       },
-      { username: 'bob' }
+      { username: 'bob' },
     )
   })
 
@@ -604,7 +604,7 @@ describe('Licence API client tests', () => {
       {
         path: `/licence/id/1/review-with-no-variation-required`,
       },
-      { username: 'bob' }
+      { username: 'bob' },
     )
   })
 
@@ -619,7 +619,7 @@ describe('Licence API client tests', () => {
       await licenceApiClient.uploadExclusionZoneFile('1', '1', { username: 'joebloggs' } as User, myUpload)
       expect(postMultiPart).toHaveBeenCalledWith(
         { path: '/exclusion-zone/id/1/condition/id/1/file-upload', fileToUpload: myUpload },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
     })
 
@@ -627,7 +627,7 @@ describe('Licence API client tests', () => {
       await licenceApiClient.removeExclusionZoneFile('1', '1', { username: 'joebloggs' } as User)
       expect(put).toHaveBeenCalledWith(
         { path: `/exclusion-zone/id/1/condition/id/1/remove-upload` },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
     })
 
@@ -636,7 +636,7 @@ describe('Licence API client tests', () => {
       const result = await licenceApiClient.getExclusionZoneImage('1', '1', { username: 'joebloggs' } as User)
       expect(stream).toHaveBeenCalledWith(
         { path: '/exclusion-zone/id/1/condition/id/1/full-size-image' },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(result.read()).toEqual('image')
     })
@@ -646,7 +646,7 @@ describe('Licence API client tests', () => {
       const result = await licenceApiClient.getExclusionZoneImageData('1', '1', { username: 'joebloggs' } as User)
       expect(get).toHaveBeenCalledWith(
         { path: '/exclusion-zone/id/1/condition/id/1/full-size-image', responseType: 'image/jpeg' },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(result.toString()).toEqual('image')
     })
@@ -694,7 +694,7 @@ describe('Licence API client tests', () => {
             sortOrder: undefined,
           },
         },
-        { username: 'USER' }
+        { username: 'USER' },
       )
     })
 
@@ -714,7 +714,7 @@ describe('Licence API client tests', () => {
             sortOrder: 'DESC',
           },
         },
-        { username: 'USER' }
+        { username: 'USER' },
       )
     })
   })
@@ -732,7 +732,7 @@ describe('Licence API client tests', () => {
         {
           path: `/com/2000/review-counts`,
         },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
     })
 
@@ -754,7 +754,7 @@ describe('Licence API client tests', () => {
           path: '/caseload/prison-approver/approval-needed',
           data: ['PRI'],
         },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
     })
 
@@ -765,7 +765,7 @@ describe('Licence API client tests', () => {
           path: '/caseload/prison-approver/recently-approved',
           data: ['PRI'],
         },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
     })
   })
@@ -781,7 +781,7 @@ describe('Licence API client tests', () => {
       await licenceApiClient.getProbationOmuCaseload(data, { username: 'joebloggs' } as User)
       expect(post).toHaveBeenCalledWith(
         { path: '/caseload/case-admin/probation-view', data },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
     })
   })

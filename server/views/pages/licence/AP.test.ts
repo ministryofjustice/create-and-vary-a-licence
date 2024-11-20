@@ -92,7 +92,7 @@ describe('Print an AP licence', () => {
     })
 
     expect($('#offender > div > p:nth-child(2)').text().trim()).toBe(
-      'Your licence and sentence expire on 9 February 2022'
+      'Your licence and sentence expire on 9 February 2022',
     )
   })
 

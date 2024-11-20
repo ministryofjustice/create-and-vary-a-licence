@@ -8,7 +8,7 @@ import { InMemoryTokenStore } from './tokenStore'
 const restClient = new HmppsRestClient(
   new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
   'Rest Client',
-  { url: 'http://localhost:8080' } as ApiConfig
+  { url: 'http://localhost:8080' } as ApiConfig,
 )
 
 describe('Hmpps Rest Client tests', () => {
@@ -69,7 +69,7 @@ describe('Hmpps Rest Client tests', () => {
           query: { query1: 'value1' },
           headers: { header1: 'headerValue1' },
         },
-        { token: 'user token', username: 'joebloggs' }
+        { token: 'user token', username: 'joebloggs' },
       )
 
       expect(result).toEqual({ success: true })
@@ -87,7 +87,7 @@ describe('Hmpps Rest Client tests', () => {
           path: '/test',
           query: { query1: 'value1' },
           headers: { header1: 'headerValue1' },
-        })
+        }),
       ).rejects.toThrow('Not Found')
     })
 
@@ -104,7 +104,7 @@ describe('Hmpps Rest Client tests', () => {
           query: { query1: 'value1' },
           headers: { header1: 'headerValue1' },
           return404: true,
-        })
+        }),
       ).resolves.toStrictEqual(null)
     })
 
@@ -123,7 +123,7 @@ describe('Hmpps Rest Client tests', () => {
         restClient.get({
           path: '/test',
           headers: { header1: 'headerValue1' },
-        })
+        }),
       ).resolves.toStrictEqual({ testData1: 'testValue1' })
     })
   })
@@ -144,7 +144,7 @@ describe('Hmpps Rest Client tests', () => {
             testData1: 'testValue1',
           },
           raw: true,
-        })
+        }),
       ).resolves.toMatchObject({
         req: { method: 'POST' },
         status: 200,
@@ -185,7 +185,7 @@ describe('Hmpps Rest Client tests', () => {
             testData1: 'testValue1',
           },
         },
-        { token: 'user token', username: 'joebloggs' }
+        { token: 'user token', username: 'joebloggs' },
       )
 
       expect(result).toEqual({ success: true })
@@ -205,7 +205,7 @@ describe('Hmpps Rest Client tests', () => {
           data: {
             testData1: 'testValue1',
           },
-        })
+        }),
       ).rejects.toThrow('Not Found')
     })
 
@@ -224,7 +224,7 @@ describe('Hmpps Rest Client tests', () => {
             testData1: 'testValue1',
           },
           returnBodyOnErrorIfPredicate: e => e.response.status === 409,
-        })
+        }),
       ).resolves.toStrictEqual({ result: 'not successful' })
     })
 
@@ -243,7 +243,7 @@ describe('Hmpps Rest Client tests', () => {
             testData1: 'testValue1',
           },
           returnBodyOnErrorIfPredicate: e => e.response.status === 409,
-        })
+        }),
       ).rejects.toThrow('Proxy Authentication Required')
     })
 
@@ -258,7 +258,7 @@ describe('Hmpps Rest Client tests', () => {
         restClient.post({
           path: '/test',
           headers: { header1: 'headerValue1' },
-        })
+        }),
       ).rejects.toThrow('Internal Server Error')
 
       expect(nock.isDone()).toBe(true)
@@ -281,7 +281,7 @@ describe('Hmpps Rest Client tests', () => {
             testData1: 'testValue1',
           },
           raw: true,
-        })
+        }),
       ).resolves.toMatchObject({
         req: { method: 'PUT' },
         status: 200,
@@ -303,7 +303,7 @@ describe('Hmpps Rest Client tests', () => {
           data: {
             testData1: 'testValue1',
           },
-        })
+        }),
       ).resolves.toEqual({ success: true })
     })
 
@@ -322,7 +322,7 @@ describe('Hmpps Rest Client tests', () => {
             testData1: 'testValue1',
           },
         },
-        { token: 'user token', username: 'joebloggs' }
+        { token: 'user token', username: 'joebloggs' },
       )
 
       expect(result).toEqual({ success: true })
@@ -342,7 +342,7 @@ describe('Hmpps Rest Client tests', () => {
           data: {
             testData1: 'testValue1',
           },
-        })
+        }),
       ).rejects.toThrowError('Not Found')
     })
   })
@@ -372,7 +372,7 @@ describe('Hmpps Rest Client tests', () => {
           path: '/test',
           headers: { header1: 'headerValue1' },
         },
-        { token: 'user token', username: 'joebloggs' }
+        { token: 'user token', username: 'joebloggs' },
       )) as Readable
 
       expect(result.read()).toEqual([1, 2, 3])
@@ -389,7 +389,7 @@ describe('Hmpps Rest Client tests', () => {
         restClient.stream({
           path: '/test',
           headers: { header1: 'headerValue1' },
-        })
+        }),
       ).rejects.toThrow('Not Found')
     })
   })
@@ -433,7 +433,7 @@ describe('Hmpps Rest Client tests', () => {
           path: '/test',
           headers: { header1: 'headerValue1' },
           fileToUpload: null,
-        })
+        }),
       ).rejects.toThrow("Cannot read properties of null (reading 'path')")
 
       expect(nock.isDone()).toBe(false)
@@ -453,7 +453,7 @@ describe('Hmpps Rest Client tests', () => {
           path: '/test',
           headers: { header1: 'headerValue1' },
           fileToUpload: multiPartFile,
-        })
+        }),
       ).rejects.toThrow('Not Found')
 
       await fs.unlinkSync('test-file.txt')
@@ -508,7 +508,7 @@ describe('Hmpps Rest Client tests', () => {
           path: '/test',
           headers: { header1: 'headerValue1' },
         },
-        { token: 'user token', username: 'joebloggs' }
+        { token: 'user token', username: 'joebloggs' },
       )
 
       expect(result).toEqual({ success: true })
@@ -525,7 +525,7 @@ describe('Hmpps Rest Client tests', () => {
         restClient.delete({
           path: '/test',
           headers: { header1: 'headerValue1' },
-        })
+        }),
       ).rejects.toThrow('Not Found')
     })
   })

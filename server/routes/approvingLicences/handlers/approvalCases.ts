@@ -7,7 +7,7 @@ import { parseCvlDate, parseCvlDateTime } from '../../../utils/utils'
 export default class ApprovalCaseRoutes {
   constructor(
     private readonly approverCaseloadService: ApproverCaseloadService,
-    private readonly prisonerService: PrisonerService
+    private readonly prisonerService: PrisonerService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

@@ -7,7 +7,7 @@ import ConditionService from '../../../../services/conditionService'
 export default class FileUploadListRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -21,11 +21,11 @@ export default class FileUploadListRoutes {
         return res.redirect(
           `/licence/vary/id/${licenceId}/policy-changes/input/callback/${
             +req.session.changedConditionsInputsCounter + 1
-          }`
+          }`,
         )
       }
       return res.redirect(
-        `/licence/create/id/${licence.id}/additional-licence-conditions/callback${req.query?.fromReview ? '?fromReview=true' : ''}`
+        `/licence/create/id/${licence.id}/additional-licence-conditions/callback${req.query?.fromReview ? '?fromReview=true' : ''}`,
       )
     }
 
@@ -59,20 +59,20 @@ export default class FileUploadListRoutes {
         return res.redirect(
           `/licence/vary/id/${licenceId}/policy-changes/input/callback/${
             +req.session.changedConditionsInputsCounter + 1
-          }`
+          }`,
         )
       }
 
       return res.redirect(
         `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
           req.query?.fromReview ? '?fromReview=true' : ''
-        }`
+        }`,
       )
     }
 
     const sequence = this.conditionService.currentOrNextSequenceForCondition(
       licence.additionalLicenceConditions,
-      conditionCode
+      conditionCode,
     )
 
     const request = {

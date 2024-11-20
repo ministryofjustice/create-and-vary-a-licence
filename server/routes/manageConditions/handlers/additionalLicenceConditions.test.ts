@@ -72,7 +72,7 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
         LicenceType.AP,
         {},
         { username: 'joebloggs' },
-        'version'
+        'version',
       )
     })
 
@@ -85,7 +85,7 @@ describe('Route Handlers - Create Licence - Additional Licence Conditions', () =
       req.query.fromReview = 'true'
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true'
+        '/licence/create/id/1/additional-licence-conditions/callback?fromReview=true',
       )
     })
   })

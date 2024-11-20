@@ -36,7 +36,7 @@ export default function Index({ licenceService, conditionService }: Services): R
       fetchLicence(licenceService),
       licenceKindCheckMiddleware(LicenceKind.VARIATION),
       hardStopCheckMiddleware(userType),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -46,7 +46,7 @@ export default function Index({ licenceService, conditionService }: Services): R
       fetchLicence(licenceService),
       licenceKindCheckMiddleware(LicenceKind.VARIATION),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   {
