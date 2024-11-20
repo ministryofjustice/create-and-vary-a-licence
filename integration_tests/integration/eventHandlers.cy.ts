@@ -25,7 +25,7 @@ context('Event handlers', () => {
                 "Value": "prisoner-offender-search.prisoner.released"
               }
             }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/status', times: 1 })
@@ -45,7 +45,7 @@ context('Event handlers', () => {
               "Value": "prisoner-offender-search.prisoner.updated"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', {
@@ -69,7 +69,7 @@ context('Event handlers', () => {
               "Value": "prisoner-offender-search.prisoner.updated"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', {
@@ -98,7 +98,7 @@ context('Event handlers', () => {
               "Value": "OFFENDER_MANAGER_CHANGED"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', {
@@ -137,7 +137,7 @@ context('Event handlers', () => {
               "Value": "SENTENCE_DATES-CHANGED"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 1 })
@@ -160,7 +160,7 @@ context('Event handlers', () => {
               "Value": "SENTENCE_DATES-CHANGED"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', {
@@ -188,7 +188,7 @@ context('Event handlers', () => {
               "Value": "SENTENCE_DATES-CHANGED"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', {
@@ -216,7 +216,7 @@ context('Event handlers', () => {
               "Value": "SENTENCE_DATES-CHANGED"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', {
@@ -244,7 +244,7 @@ context('Event handlers', () => {
               "Value": "SENTENCE_DATES-CHANGED"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', {
@@ -272,7 +272,7 @@ context('Event handlers', () => {
               "Value": "SENTENCE_DATES-CHANGED"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', {
@@ -301,7 +301,7 @@ context('Event handlers', () => {
               "Value": "CONFIRMED_RELEASE_DATE-CHANGED"
             }
           }
-         }`
+         }`,
       )
 
       cy.task('verifyEndpointCalled', { verb: 'PUT', path: '/licences-api/licence/id/1/sentence-dates', times: 1 })

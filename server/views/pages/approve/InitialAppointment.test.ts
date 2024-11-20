@@ -2,7 +2,7 @@ import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 
 const render = templateRenderer(
-  '{% from "pages/approve/InitialAppointment.njk" import InitialAppointment %}{{ InitialAppointment(options)}}'
+  '{% from "pages/approve/InitialAppointment.njk" import InitialAppointment %}{{ InitialAppointment(options)}}',
 )
 
 const licence = {

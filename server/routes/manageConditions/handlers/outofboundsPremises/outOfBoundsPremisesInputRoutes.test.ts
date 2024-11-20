@@ -58,14 +58,14 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
         '1',
         { code: 'code1', id: 1 },
         { nameOfPremises: 'name of premises' },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
     })
 
     it('should redirect to the list view', async () => {
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/condition/code1/outofbounds-premises'
+        '/licence/create/id/1/additional-licence-conditions/condition/code1/outofbounds-premises',
       )
     })
 
@@ -73,7 +73,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/condition/code1/outofbounds-premises?fromReview=true'
+        '/licence/create/id/1/additional-licence-conditions/condition/code1/outofbounds-premises?fromReview=true',
       )
     })
   })
@@ -107,7 +107,7 @@ describe('Route Handlers - Create Licence - file upload input routes', () => {
     it('should redirect to the area list view', async () => {
       await handler.DELETE(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/condition/code1/outofbounds-premises'
+        '/licence/create/id/1/additional-licence-conditions/condition/code1/outofbounds-premises',
       )
     })
   })

@@ -58,7 +58,7 @@ describe('Route Handlers - Create Licence - Licence changes not approved in time
         dateLastUpdated: '2023-12-12T10:21:48.860Z',
       })
       conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue(
-        res.locals.licence.additionalLicenceConditions
+        res.locals.licence.additionalLicenceConditions,
       )
     })
 

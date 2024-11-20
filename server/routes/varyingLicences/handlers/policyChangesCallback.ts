@@ -12,7 +12,7 @@ export default class PolicyChangesCallbackRoutes {
     }
 
     return res.redirect(
-      `/licence/vary/id/${licenceId}/policy-changes/condition/${req.session.changedConditionsCounter}`
+      `/licence/vary/id/${licenceId}/policy-changes/condition/${req.session.changedConditionsCounter}`,
     )
   }
 }

@@ -7,7 +7,7 @@ import { templateRenderer } from '../../../../utils/__testutils/templateTestUtil
 import LicenceKind from '../../../../enumeration/LicenceKind'
 
 const render = templateRenderer(
-  fs.readFileSync('server/views/pages/search/probationSearch/probationSearch.njk').toString()
+  fs.readFileSync('server/views/pages/search/probationSearch/probationSearch.njk').toString(),
 )
 
 describe('View Probation Search Results', () => {
@@ -55,7 +55,7 @@ describe('View Probation Search Results', () => {
     expect($('#licence-type-1').text().trim()).toBe('Standard determinate')
     expect($('#probation-practitioner-1').text()).toBe('Test Staff')
     expect($('#probation-practitioner-1 > .govuk-link').attr('href').trim()).toBe(
-      '/licence/create/probation-practitioner/staffCode/3000'
+      '/licence/create/probation-practitioner/staffCode/3000',
     )
     expect($('#team-name-1').text()).toBe('Test Team')
     expect($('#release-date-1').text()).toBe('CRD: 16 Aug 2023')
@@ -106,7 +106,7 @@ describe('View Probation Search Results', () => {
     expect($('#licence-type-1').text().trim()).toBe('Standard determinate')
     expect($('#probation-practitioner-1').text()).toBe('Test Staff')
     expect($('#probation-practitioner-1 > .govuk-link').attr('href').trim()).toBe(
-      '/licence/create/probation-practitioner/staffCode/3000'
+      '/licence/create/probation-practitioner/staffCode/3000',
     )
     expect($('#team-name-1').text()).toBe('Test Team')
     expect($('#release-date-1').text()).toBe('CRD: 16 Aug 2023')

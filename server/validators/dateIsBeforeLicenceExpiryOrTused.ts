@@ -23,7 +23,7 @@ export default function DateIsBeforeLicenceExpiryOrTused(validationOptions?: Val
       throw new Error('Unable to find LED or TUSED for dateIsBeforeLicenceExpiryOrTused comparison')
     } else if (!dateToCompare.isValid()) {
       throw new Error(
-        `Date to compare is not in a valid date format: ${fieldToCompare} - ${_.get(object, fieldToCompare)}`
+        `Date to compare is not in a valid date format: ${fieldToCompare} - ${_.get(object, fieldToCompare)}`,
       )
     }
 

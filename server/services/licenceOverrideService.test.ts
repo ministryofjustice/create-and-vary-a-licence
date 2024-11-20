@@ -18,7 +18,7 @@ describe('Licence Override Service', () => {
         statusCode: LicenceStatus.IN_PROGRESS,
         reason: 'Test Reason',
       },
-      user
+      user,
     )
   })
 

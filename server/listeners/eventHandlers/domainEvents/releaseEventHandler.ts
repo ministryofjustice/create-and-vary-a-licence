@@ -7,7 +7,7 @@ import PrisonerService from '../../../services/prisonerService'
 export default class ReleaseEventHandler {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly prisonerService: PrisonerService
+    private readonly prisonerService: PrisonerService,
   ) {}
 
   handle = async (event: DomainEventMessage): Promise<void> => {
@@ -22,7 +22,7 @@ export default class ReleaseEventHandler {
         LicenceStatus.REJECTED,
         LicenceStatus.APPROVED,
         LicenceStatus.TIMED_OUT,
-      ]
+      ],
     )
 
     if (!licences?.length) {

@@ -932,7 +932,7 @@ export default {
     options: { status: string; versionOf?: number; kind?: string } = {
       status: 'IN_PROGRESS',
       kind: 'CRD',
-    }
+    },
   ): SuperAgentRequest => {
     return stubFor({
       request: {

@@ -6,7 +6,7 @@ import { nameToString } from '../../../data/deliusClient'
 export default class VariationSummaryRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly probationService: ProbationService
+    private readonly probationService: ProbationService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -33,7 +33,7 @@ export default class VariationSummaryRoutes {
           name: nameToString(c.name),
           email: c.email,
         }
-      })
+      }),
     )
     await this.licenceService.submitVariation(licenceId, pduHeads, user)
 

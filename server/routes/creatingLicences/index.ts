@@ -46,7 +46,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const getWithHardStopCheck = (path: string, handler: RequestHandler) =>
@@ -55,7 +55,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       hardStopCheckMiddleware(UserType.PROBATION),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -64,7 +64,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const postWithHardStopCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -74,7 +74,7 @@ export default function Index({
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(UserType.PROBATION),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   {
@@ -99,7 +99,7 @@ export default function Index({
     postWithHardStopCheck(
       '/id/:licenceId/additional-licence-conditions-question',
       controller.POST,
-      AdditionalConditionsYesOrNo
+      AdditionalConditionsYesOrNo,
     )
   }
 

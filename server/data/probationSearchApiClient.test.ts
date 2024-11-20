@@ -4,7 +4,7 @@ import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import { InMemoryTokenStore } from './tokenStore'
 
 const probationSearchApiClient = new ProbationSearchApiClient(
-  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
 )
 
 describe('Probation Search Api client tests', () => {

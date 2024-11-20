@@ -30,13 +30,13 @@ export default class PromptListService {
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly probationService: ProbationService,
-    private readonly licenceService: LicenceService
+    private readonly licenceService: LicenceService,
   ) {}
 
   getListForDates = async (
     earliestReleaseDate: Date,
     latestReleaseDate: Date,
-    licenceStatus: LicenceStatus[]
+    licenceStatus: LicenceStatus[],
   ): Promise<PromptCase[]> => {
     const prisonCodes = config.rollout.prisons
 
@@ -47,7 +47,7 @@ export default class PromptListService {
       .then(prisoners =>
         prisoners
           .filter(offender => licenceStatus.some(status => offender.licenceStatuses.find(l => l === status)))
-          .map(({ licenceStatuses, ...rest }) => rest)
+          .map(({ licenceStatuses, ...rest }) => rest),
       )
   }
 
@@ -100,11 +100,11 @@ export default class PromptListService {
           prisonerNumber,
           licences.length > 0
             ? licences.map(licence =>
-                licence.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : <LicenceStatus>licence.licenceStatus
+                licence.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : <LicenceStatus>licence.licenceStatus,
               )
             : [LicenceStatus.NOT_STARTED],
         ]
-      })
+      }),
     )
   }
 
@@ -112,7 +112,7 @@ export default class PromptListService {
     const deliusRecords = await this.probationService.getOffendersByNomsNumbers(prisonerNumbers)
     const deliusCrns = deliusRecords.map(r => r.otherIds.crn)
     const comEmails = Object.fromEntries(
-      (await this.probationService.getManagerEmailAddresses(deliusCrns)).map(r => [r.code, r.email])
+      (await this.probationService.getManagerEmailAddresses(deliusCrns)).map(r => [r.code, r.email]),
     )
 
     return Object.fromEntries(
@@ -129,7 +129,7 @@ export default class PromptListService {
             comProbationAreaCode: om.probationArea.code,
           },
         ]
-      })
+      }),
     )
   }
 
@@ -147,8 +147,8 @@ export default class PromptListService {
           offender.prisoner.paroleEligibilityDate,
           offender.prisoner.conditionalReleaseDate,
           offender.prisoner.confirmedReleaseDate,
-          offender.prisoner.actualParoleDate
-        )
+          offender.prisoner.actualParoleDate,
+        ),
       )
 
     if (!eligibleOffenders.length) return eligibleOffenders

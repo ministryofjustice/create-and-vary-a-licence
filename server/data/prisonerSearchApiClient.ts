@@ -17,7 +17,7 @@ export default class PrisonerSearchApiClient extends RestClient {
         path: '/prisoner-search/match-prisoners',
         data: prisonerSearchCriteria,
       },
-      { username: user.username }
+      { username: user.username },
     )) as Promise<Prisoner[]>
   }
 
@@ -31,7 +31,7 @@ export default class PrisonerSearchApiClient extends RestClient {
         path: '/prisoner-search/booking-ids',
         data: bookingIdsToSearch,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<Prisoner[]>
   }
 }

@@ -59,7 +59,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       alterResObject(),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -68,7 +68,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const caseloadHandler = new CaseloadRoutes(comCaseloadService)

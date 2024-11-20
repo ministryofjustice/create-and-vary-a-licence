@@ -6,7 +6,7 @@ import { groupingBy } from '../../../utils/utils'
 export default class LicenceChangesNotApprovedInTimeRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

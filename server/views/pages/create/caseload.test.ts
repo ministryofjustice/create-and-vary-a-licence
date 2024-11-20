@@ -65,7 +65,7 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#name-1 > .caseload-offender-name > a').text()).toBe('Adam Balasaravika')
     expect($('#probation-practitioner-1').text()).toBe('Joe Bloggs')
     expect($('#probation-practitioner-1 > a').attr('href')).toBe(
-      '/licence/create/probation-practitioner/staffCode/X12345'
+      '/licence/create/probation-practitioner/staffCode/X12345',
     )
 
     expect($('#name-2 > .caseload-offender-name > a').text()).toBe('John Smith')
@@ -240,7 +240,7 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#release-date-1').text()).toBe('03 August 2022')
     expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Not started')
     expect($('#name-1 > .caseload-offender-name > a').attr('href').trim()).toBe(
-      '/licence/create/nomisId/ABC123/confirm'
+      '/licence/create/nomisId/ABC123/confirm',
     )
 
     expect($('#name-2 > .caseload-offender-name > a').text()).toBe('John Smith')
@@ -248,7 +248,7 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#release-date-2').text()).toBe('01 September 2022')
     expect($('#licence-status-2 > .status-badge').text().trim()).toBe('In progress')
     expect($('#name-2 > .caseload-offender-name > a').attr('href').trim()).toBe(
-      '/licence/create/id/1/check-your-answers'
+      '/licence/create/id/1/check-your-answers',
     )
   })
 })

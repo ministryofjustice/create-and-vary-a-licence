@@ -27,7 +27,7 @@ export default function Index({
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_DM']),
       fetchLicence(licenceService),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -36,7 +36,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_DM']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const comDetailsHandler = new ComDetailsRoutes(probationService)

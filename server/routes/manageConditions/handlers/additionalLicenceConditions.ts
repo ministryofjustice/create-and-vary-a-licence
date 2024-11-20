@@ -6,14 +6,14 @@ import ConditionService from '../../../services/conditionService'
 export default class AdditionalLicenceConditionsRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
     const additionalConditions = await this.conditionService.getGroupedAdditionalConditions(
       LicenceType.AP,
-      licence.version
+      licence.version,
     )
     return res.render('pages/manageConditions/additionalLicenceConditions', { additionalConditions })
   }
@@ -28,13 +28,13 @@ export default class AdditionalLicenceConditionsRoutes {
       LicenceType.AP,
       req.body,
       user,
-      licence.version
+      licence.version,
     )
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
-      }`
+      }`,
     )
   }
 }

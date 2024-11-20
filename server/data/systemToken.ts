@@ -10,7 +10,7 @@ export type SystemTokenSupplier = (username?: string) => Promise<SystemToken>
 
 const authHeaderValue = generateOauthClientToken(
   config.apis.hmppsAuth.systemClientId,
-  config.apis.hmppsAuth.systemClientSecret
+  config.apis.hmppsAuth.systemClientSecret,
 )
 
 export const getSystemToken: SystemTokenSupplier = async (username?: string): Promise<SystemToken> => {
@@ -19,7 +19,7 @@ export const getSystemToken: SystemTokenSupplier = async (username?: string): Pr
     : querystring.stringify({ grant_type: 'client_credentials' })
 
   logger.info(
-    `HMPPS Auth request '${authRequest}' for client id '${config.apis.hmppsAuth.systemClientId}' and user '${username}'`
+    `HMPPS Auth request '${authRequest}' for client id '${config.apis.hmppsAuth.systemClientId}' and user '${username}'`,
   )
 
   const response = await superagent

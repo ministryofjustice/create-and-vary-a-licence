@@ -77,7 +77,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     {
       autoescape: true,
       express: app,
-    }
+    },
   )
 
   // Expose the google tag manager container ID to the nunjucks environment
@@ -128,7 +128,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('filterByTabType', (licences: Record<string, unknown>[], type: CaViewCasesTab) =>
-    licences.filter(c => c.tabType === type)
+    licences.filter(c => c.tabType === type),
   )
 
   njkEnv.addFilter('fillFormResponse', (defaultValue: unknown, overrideValue: unknown) => {
@@ -142,7 +142,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     'additionalConditionChecked',
     (conditionId: string, additionalConditions: Record<string, unknown>[]) => {
       return additionalConditions?.find(c => c.code === conditionId) !== undefined
-    }
+    },
   )
 
   njkEnv.addFilter('getValuesFromSimpleDates', (formValues: unknown[], index = 0) => {
@@ -263,7 +263,7 @@ export function registerNunjucks(app?: express.Express): Environment {
             : [],
         },
       }
-    }
+    },
   )
 
   njkEnv.addFilter('map', (array, f) => {
@@ -289,7 +289,7 @@ export function registerNunjucks(app?: express.Express): Environment {
         text: item[textKey],
         checked: values.includes(item[valueKey]),
       }))
-    }
+    },
   )
 
   njkEnv.addFilter('sortConditionsBySequence', (array: AdditionalCondition[]) => {
@@ -301,7 +301,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   })
 
   njkEnv.addFilter('humanReadableFileSize', (numberOfBytes: number) =>
-    filesize(numberOfBytes || 0, { base: 2, standard: 'jedec' })
+    filesize(numberOfBytes || 0, { base: 2, standard: 'jedec' }),
   )
 
   njkEnv.addFilter('humanReadableMimeType', (mimeType: string) => {
@@ -408,7 +408,7 @@ export function registerNunjucks(app?: express.Express): Environment {
         parseCvlDate(licence.hardStopWarningDate) <= now &&
         now < parseCvlDate(licence.hardStopDate)
       )
-    }
+    },
   )
 
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)

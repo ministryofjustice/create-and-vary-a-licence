@@ -4,7 +4,7 @@ import { DeliusManager, DeliusPDUHead, DeliusStaff, DeliusStaffName } from '../@
 import { InMemoryTokenStore } from './tokenStore'
 
 const deliusClient = new DeliusClient(
-  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+  new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
 )
 
 describe('Delius client tests', () => {

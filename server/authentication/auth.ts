@@ -37,7 +37,7 @@ function init(): void {
         authSource: params.auth_source,
         userRoles: params.authorities,
       })
-    }
+    },
   )
 
   passport.use(strategy)

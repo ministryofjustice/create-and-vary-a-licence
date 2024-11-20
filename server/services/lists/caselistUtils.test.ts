@@ -32,7 +32,7 @@ describe('#isEligibleEDS', () => {
   })
   it('returns true if past PED and ARD is within 4 days of CRD', () => {
     expect(
-      CaseListUtils.isEligibleEDS(yesterday, tenDaysFromNow, format(addDays(new Date(), 6), 'yyyy-MM-dd'), null)
+      CaseListUtils.isEligibleEDS(yesterday, tenDaysFromNow, format(addDays(new Date(), 6), 'yyyy-MM-dd'), null),
     ).toBe(true)
   })
   it('returns true if past PED and ARD is equal to CRD', () => {
@@ -40,7 +40,7 @@ describe('#isEligibleEDS', () => {
   })
   it('returns false if past PED and ARD is more than 4 days before CRD', () => {
     expect(
-      CaseListUtils.isEligibleEDS(yesterday, tenDaysFromNow, format(addDays(new Date(), 5), 'yyyy-MM-dd'), null)
+      CaseListUtils.isEligibleEDS(yesterday, tenDaysFromNow, format(addDays(new Date(), 5), 'yyyy-MM-dd'), null),
     ).toBe(false)
   })
   it('returns true if past PED and ARD not set', () => {

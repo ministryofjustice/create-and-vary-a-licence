@@ -7,7 +7,7 @@ import { User } from '../../../@types/CvlUserDetails'
 export default class OmuEmailAddressRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly prisonRegisterService: PrisonRegisterService
+    private readonly prisonRegisterService: PrisonRegisterService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

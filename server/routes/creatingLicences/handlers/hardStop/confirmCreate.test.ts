@@ -84,7 +84,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         { nomsId: 'ABC123', type: 'HARD_STOP' },
         {
           username: 'joebloggs',
-        }
+        },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-name')
     })

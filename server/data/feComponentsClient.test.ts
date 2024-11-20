@@ -13,7 +13,7 @@ describe('feComponentsClient', () => {
   beforeEach(() => {
     fakeComponentsApi = nock(config.apis.frontendComponents.url)
     componentsClient = new FeComponentsClient(
-      new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+      new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
     )
   })
 

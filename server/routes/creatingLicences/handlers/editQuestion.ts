@@ -13,7 +13,7 @@ export default class EditQuestionRoutes {
     if (
       isInHardStopPeriod(licence) ||
       ![LicenceStatus.APPROVED, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED].includes(
-        licence.statusCode as LicenceStatus
+        licence.statusCode as LicenceStatus,
       )
     ) {
       return res.redirect(`/licence/create/id/${licenceId}/check-your-answers`)

@@ -7,14 +7,14 @@ import ConditionService from '../../../services/conditionService'
 export default class AdditionalPssConditionInputRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence } = res.locals
     const { conditionId } = req.params
     const additionalCondition = licence.additionalPssConditions.find(
-      (condition: AdditionalCondition) => condition.id === +conditionId
+      (condition: AdditionalCondition) => condition.id === +conditionId,
     )
 
     const config = await this.conditionService.getAdditionalConditionByCode(additionalCondition.code, licence.version)
@@ -32,7 +32,7 @@ export default class AdditionalPssConditionInputRoutes {
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-pss-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
-      }`
+      }`,
     )
   }
 
@@ -50,13 +50,13 @@ export default class AdditionalPssConditionInputRoutes {
       LicenceType.PSS,
       { additionalConditions: additionalConditionCodes },
       user,
-      licence.version
+      licence.version,
     )
 
     return res.redirect(
       `/licence/create/id/${licence.id}/additional-pss-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
-      }`
+      }`,
     )
   }
 
@@ -71,7 +71,7 @@ export default class AdditionalPssConditionInputRoutes {
     return res.redirect(
       `/licence/create/id/${licence.id}/additional-pss-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
-      }`
+      }`,
     )
   }
 }

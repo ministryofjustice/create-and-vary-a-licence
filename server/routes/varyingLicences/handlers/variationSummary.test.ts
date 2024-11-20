@@ -55,12 +55,12 @@ describe('Route Handlers - Vary Licence - Variation summary', () => {
 
       expect(licenceService.compareVariationToOriginal).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_IN_PROGRESS },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
 
       expect(licenceService.getApprovalConversation).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_IN_PROGRESS },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
 
       expect(res.render).toHaveBeenCalledWith('pages/vary/variationSummary', {
@@ -92,7 +92,7 @@ describe('Route Handlers - Vary Licence - Variation summary', () => {
       expect(licenceService.submitVariation).toHaveBeenCalledWith(
         1,
         [{ name: 'Joe Bloggs', email: 'jbloggs@probation.gov.uk' }],
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/confirmation')
     })

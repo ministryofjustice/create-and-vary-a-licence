@@ -211,7 +211,7 @@ describe('Route - print a licence', () => {
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
-        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -324,7 +324,7 @@ describe('Route - print a licence', () => {
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
-        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -383,7 +383,7 @@ describe('Route - print a licence', () => {
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
-        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -479,7 +479,7 @@ describe('Route - print a licence', () => {
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
-        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -577,7 +577,7 @@ describe('Route - print a licence', () => {
           prisonTelephone: '0114 2345232334',
           monitoringSupplierTelephone,
         },
-        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } }
+        { filename, pdfOptions: { headerHtml: null, footerHtml, ...pdfOptions } },
       )
 
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()

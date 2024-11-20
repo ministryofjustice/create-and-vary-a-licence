@@ -92,7 +92,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads`
+        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads`,
       )
     })
 
@@ -107,7 +107,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromReview=true`
+        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromReview=true`,
       )
     })
 
@@ -122,7 +122,7 @@ describe('Route Handlers - Create Licence - File Upload Removal Routes Handler',
       } as unknown as Request
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromPolicyReview=true`
+        `/licence/create/id/1/additional-licence-conditions/condition/${MEZ_CONDITION_CODE}/file-uploads?fromPolicyReview=true`,
       )
     })
 

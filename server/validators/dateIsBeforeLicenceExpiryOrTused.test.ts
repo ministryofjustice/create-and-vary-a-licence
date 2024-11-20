@@ -144,7 +144,7 @@ describe('dateIsBeforeLicenceExpiryOrTused', () => {
       await validate(value)
     } catch (e) {
       expect(e.message).toEqual(
-        'Date to compare is not in a valid date format: licence.topupSupervisionExpiryDate - null'
+        'Date to compare is not in a valid date format: licence.topupSupervisionExpiryDate - null',
       )
     }
   })

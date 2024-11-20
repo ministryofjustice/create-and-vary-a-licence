@@ -138,7 +138,7 @@ describe('Prisoner Service', () => {
     expect(actualResult).toEqual(expectedResult)
     expect(prisonerSearchApiClient.searchPrisoners).toHaveBeenCalledWith(
       { lastName: 'Bloggs' } as PrisonerSearchCriteria,
-      user
+      user,
     )
   })
 
@@ -168,7 +168,7 @@ describe('Prisoner Service', () => {
     it('should return empty list if no booking ids are available', async () => {
       const actualResult = await prisonerService.getHdcStatuses(
         [{ firstName: 'Joe', lastName: 'Bloggs' } as CvlPrisoner],
-        user
+        user,
       )
       expect(actualResult).toEqual([])
       expect(prisonApiClient.getLatestHdcStatusBatch).not.toHaveBeenCalled()
@@ -188,7 +188,7 @@ describe('Prisoner Service', () => {
             homeDetentionCurfewEligibilityDate: '26/12/2021',
           } as CvlPrisoner,
         ],
-        user
+        user,
       )
 
       expect(actualResult).toEqual([

@@ -15,7 +15,7 @@ describe('Validators - ValidOptionalSimpleDate', () => {
         month: '12',
         year: new Date().getFullYear().toString(),
       },
-      { excludeExtraneousValues: true }
+      { excludeExtraneousValues: true },
     )
   })
 

@@ -8,7 +8,7 @@ import PathType from '../../../../enumeration/pathType'
 export default class InitialMeetingPlaceRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly path: PathType
+    private readonly path: PathType,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

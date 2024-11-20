@@ -19,7 +19,7 @@ export default function Index({ userService, conditionService }: Services): Rout
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_DM']),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
   const locationHandler = new ChangeLocationRoutes(userService)
 

@@ -5,7 +5,7 @@ import FileUploadType from '../../../../enumeration/fileUploadType'
 export default class FileUploadInputRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly fileUploadType: FileUploadType
+    private readonly fileUploadType: FileUploadType,
   ) {}
 
   POST = async (req: Request, res: Response): Promise<void> => {
@@ -64,7 +64,7 @@ export default class FileUploadInputRoutes {
 
     if (this.fileUploadType === FileUploadType.MULTI_INSTANCE) {
       return res.redirect(
-        `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads${append}`
+        `/licence/create/id/${licence.id}/additional-licence-conditions/condition/${condition.code}/file-uploads${append}`,
       )
     }
 

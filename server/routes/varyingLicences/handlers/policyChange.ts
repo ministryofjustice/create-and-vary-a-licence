@@ -10,7 +10,7 @@ import { AdditionalConditionAp, AdditionalConditionPss } from '../../../@types/L
 export default class PolicyChangeRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -34,15 +34,15 @@ export default class PolicyChangeRoutes {
     const conditionHintText =
       condition &&
       policyChangeHintText.find(
-        change => change.code === condition.code && change.fromVersions.includes(parentLicence.version)
+        change => change.code === condition.code && change.fromVersions.includes(parentLicence.version),
       )
 
     let replacements: AdditionalConditionAp[] | AdditionalConditionPss[] = []
     if (condition.suggestions) {
       replacements = await Promise.all(
         condition.suggestions?.map(async (replacement: { code: string }) =>
-          this.conditionService.getAdditionalConditionByCode(replacement.code, licence.version)
-        )
+          this.conditionService.getAdditionalConditionByCode(replacement.code, licence.version),
+        ),
       )
     }
 
@@ -101,7 +101,7 @@ export default class PolicyChangeRoutes {
     const condition = req.session.changedConditions[conditionCounter - 1]
     const conditionType: LicenceType = await this.conditionService.getAdditionalConditionType(
       condition.code,
-      (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version
+      (await this.licenceService.getParentLicenceOrSelf(parseInt(licenceId, 10), user)).version,
     )
 
     let additionalLicenceConditions: AdditionalCondition[] = []
@@ -140,7 +140,7 @@ export default class PolicyChangeRoutes {
             if (conditionToAdd.requiresInput) {
               inputs.push(conditionToAdd.code)
             }
-          })
+          }),
         )
       } else {
         // if there are no replacement conditions, treat as a deletion
@@ -164,7 +164,7 @@ export default class PolicyChangeRoutes {
           licenceId,
           additionalLicenceConditions.find((c: AdditionalCondition) => c.code === condition.code),
           {},
-          user
+          user,
         )
       }
 
@@ -174,7 +174,7 @@ export default class PolicyChangeRoutes {
         conditionType,
         { additionalConditions: licenceConditionCodes },
         user,
-        licence.version
+        licence.version,
       )
     }
 
@@ -182,7 +182,7 @@ export default class PolicyChangeRoutes {
       conditionsToAdd.map(async (conditionToAdd: PolicyAdditionalCondition) => {
         const sequence = this.conditionService.currentOrNextSequenceForCondition(
           licence.additionalLicenceConditions,
-          conditionToAdd.code
+          conditionToAdd.code,
         )
         const type = await this.conditionService.getAdditionalConditionType(conditionToAdd.code, licence.version)
 
@@ -196,7 +196,7 @@ export default class PolicyChangeRoutes {
         } as AddAdditionalConditionRequest
 
         return this.licenceService.addAdditionalCondition(licenceId, type, request, user)
-      })
+      }),
     )
 
     req.session.changedConditionsInputs = inputs

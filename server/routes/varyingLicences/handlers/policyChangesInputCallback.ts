@@ -17,7 +17,7 @@ export default class PolicyChangeInputCallbackRoutes {
 
     if (inputCounter === 0) {
       return res.redirect(
-        `/licence/vary/id/${licenceId}/policy-changes/condition/${req.session.changedConditionsCounter}`
+        `/licence/vary/id/${licenceId}/policy-changes/condition/${req.session.changedConditionsCounter}`,
       )
     }
     if (inputCounter > changedConditionInputs.length) {
@@ -31,17 +31,17 @@ export default class PolicyChangeInputCallbackRoutes {
 
     if (conditionType === 'AP') {
       return res.redirect(
-        `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${condition.id}?fromPolicyReview=true`
+        `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${condition.id}?fromPolicyReview=true`,
       )
     }
     if (conditionType === 'PSS') {
       return res.redirect(
-        `/licence/create/id/${licenceId}/additional-pss-conditions/condition/${condition.id}?fromPolicyReview=true`
+        `/licence/create/id/${licenceId}/additional-pss-conditions/condition/${condition.id}?fromPolicyReview=true`,
       )
     }
     // If somehow the condition is neither AP nor PSS, skip it.
     return res.redirect(
-      `/licence/vary/id/${licenceId}/policy-changes/input/callback/${+req.session.changedConditionsInputsCounter + 1}`
+      `/licence/vary/id/${licenceId}/policy-changes/input/callback/${+req.session.changedConditionsInputsCounter + 1}`,
     )
   }
 }

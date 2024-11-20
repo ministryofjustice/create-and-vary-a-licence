@@ -18,7 +18,7 @@ export default class TimelineService {
       conversationEventTypes,
       'eventTime',
       'DESC',
-      user
+      user,
     )
     return events.map(
       e =>
@@ -28,8 +28,8 @@ export default class TimelineService {
           licence.statusCode,
           convertToTitleCase(`${e.forenames} ${e.surname}`),
           licence.id,
-          e.eventTime
-        )
+          e.eventTime,
+        ),
     )
   }
 
@@ -71,7 +71,7 @@ export default class TimelineService {
           licence.statusCode,
           creator,
           licence.id,
-          licence.dateLastUpdated
+          licence.dateLastUpdated,
         )
 
       case LicenceStatus.VARIATION_SUBMITTED:
@@ -81,7 +81,7 @@ export default class TimelineService {
           licence.statusCode,
           creator,
           licence.id,
-          licence.dateLastUpdated
+          licence.dateLastUpdated,
         )
 
       case LicenceStatus.VARIATION_REJECTED:
@@ -91,7 +91,7 @@ export default class TimelineService {
           licence.statusCode,
           creator,
           licence.id,
-          licence.dateLastUpdated
+          licence.dateLastUpdated,
         )
 
       case LicenceStatus.VARIATION_APPROVED:
@@ -101,7 +101,7 @@ export default class TimelineService {
           licence.statusCode,
           creator,
           licence.id,
-          licence.dateLastUpdated
+          licence.dateLastUpdated,
         )
 
       case LicenceStatus.ACTIVE:
@@ -115,7 +115,7 @@ export default class TimelineService {
               licence.statusCode,
               creator,
               licence.id,
-              licence.dateLastUpdated
+              licence.dateLastUpdated,
             )
           : new TimelineEvent(
               TimelineEventType.CREATION,
@@ -123,7 +123,7 @@ export default class TimelineService {
               licence.statusCode,
               `${creator}${licence.kind === LicenceKind.HARD_STOP ? `, ${prisonName}` : ''}`,
               licence.id,
-              licence.dateCreated
+              licence.dateCreated,
             )
       }
     }

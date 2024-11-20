@@ -67,7 +67,7 @@ describe('Route handlers', () => {
       conditionService.getAdditionalConditionType.mockResolvedValue(LicenceType.AP)
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-licence-conditions/condition/1?fromPolicyReview=true'
+        '/licence/create/id/1/additional-licence-conditions/condition/1?fromPolicyReview=true',
       )
     })
 
@@ -75,7 +75,7 @@ describe('Route handlers', () => {
       conditionService.getAdditionalConditionType.mockResolvedValue(LicenceType.PSS)
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-pss-conditions/condition/1?fromPolicyReview=true'
+        '/licence/create/id/1/additional-pss-conditions/condition/1?fromPolicyReview=true',
       )
     })
   })

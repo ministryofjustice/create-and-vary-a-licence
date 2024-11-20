@@ -6,7 +6,7 @@ import PrisonerService from '../../../services/prisonerService'
 export default class TransferredEventHandler {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly prisonerService: PrisonerService
+    private readonly prisonerService: PrisonerService,
   ) {}
 
   handle = async (event: DomainEventMessage): Promise<void> => {
@@ -14,7 +14,7 @@ export default class TransferredEventHandler {
       const nomisId = event.additionalInformation.nomsNumber
       const licences = await this.licenceService.getLicencesByNomisIdsAndStatus(
         [nomisId],
-        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED]
+        [LicenceStatus.IN_PROGRESS, LicenceStatus.SUBMITTED, LicenceStatus.REJECTED, LicenceStatus.APPROVED],
       )
 
       if (!licences.length) return
@@ -34,7 +34,7 @@ export default class TransferredEventHandler {
               .filter(n => n)
               .join(' '),
           })
-        })
+        }),
       )
     }
   }

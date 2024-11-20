@@ -15,7 +15,7 @@ export default class AdditionalPssConditionsCallbackRoutes {
           ?.requiresInput
           ? condition.code
           : undefined
-      })
+      }),
     )
 
     const requiringInput = licence.additionalPssConditions
@@ -27,7 +27,7 @@ export default class AdditionalPssConditionsCallbackRoutes {
       return res.redirect(
         `/licence/create/id/${licenceId}/additional-pss-conditions/condition/${requiringInput.id}${
           req.query?.fromReview ? '?fromReview=true' : ''
-        }`
+        }`,
       )
     }
 

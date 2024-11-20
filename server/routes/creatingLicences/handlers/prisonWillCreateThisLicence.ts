@@ -7,7 +7,7 @@ import ProbationService from '../../../services/probationService'
 export default class PrisonWillCreateThisLicenceRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly probationService: ProbationService
+    private readonly probationService: ProbationService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

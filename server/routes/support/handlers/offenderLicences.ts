@@ -18,7 +18,7 @@ export default class OffenderLicencesRoutes {
         `/licence/view/id/${licence.licenceId}/pdf-print`,
         licence.licenceId,
         licence.licenceStatus,
-        user.username
+        user.username,
       )
       return {
         ...licence,

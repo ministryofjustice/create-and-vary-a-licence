@@ -6,7 +6,7 @@ import { convertDateFormat, convertToTitleCase } from '../../../utils/utils'
 export default class OffenderDetailsChangedEventHandler {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly prisonerService: PrisonerService
+    private readonly prisonerService: PrisonerService,
   ) {}
 
   handle = async (event: DomainEventMessage) => {

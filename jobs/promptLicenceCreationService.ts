@@ -12,7 +12,7 @@ import PromptListService, { type PromptCase } from '../server/services/lists/pro
 export default class PromptLicenceCreationService {
   constructor(
     private readonly promptListService: PromptListService,
-    private readonly licenceApiClient: LicenceApiClient
+    private readonly licenceApiClient: LicenceApiClient,
   ) {}
 
   buildEmailGroups(urgentPromptCases: PromptCase[], initialPromptCases: PromptCase[]): EmailContact[] {

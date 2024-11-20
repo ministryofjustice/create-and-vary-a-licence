@@ -10,7 +10,7 @@ import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
 export default class DatesChangedEventHandler {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly prisonerService: PrisonerService
+    private readonly prisonerService: PrisonerService,
   ) {}
 
   handle = async (event: PrisonEventMessage): Promise<void> => {
@@ -22,7 +22,7 @@ export default class DatesChangedEventHandler {
 
     const activeLicence = await this.licenceService.getLatestLicenceByNomisIdsAndStatus(
       [nomisId],
-      [LicenceStatus.ACTIVE]
+      [LicenceStatus.ACTIVE],
     )
 
     const prisoner = await this.prisonerService.getPrisonerDetail(nomisId)
@@ -39,13 +39,13 @@ export default class DatesChangedEventHandler {
           LicenceStatus.REJECTED,
           LicenceStatus.APPROVED,
           LicenceStatus.TIMED_OUT,
-        ]
+        ],
       )
 
       await Promise.all(
         licences.map(licence => {
           return this.updateLicenceSentenceDates(licence, prisoner)
-        })
+        }),
       )
     }
   }

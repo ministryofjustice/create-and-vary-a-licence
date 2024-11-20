@@ -28,7 +28,7 @@ describe('Healthcheck', () => {
               details: 'some message',
             },
           },
-        })
+        }),
       )
       done()
     }
@@ -53,7 +53,7 @@ describe('Healthcheck', () => {
               details: 'some error',
             },
           },
-        })
+        }),
       )
       done()
     }

@@ -6,7 +6,7 @@ import { LicenceApiClient } from '../../data'
 export default class ComCaseloadService {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly licenceApiClient: LicenceApiClient
+    private readonly licenceApiClient: LicenceApiClient,
   ) {}
 
   public async getStaffCreateCaseload(user: User): Promise<ComCase[]> {

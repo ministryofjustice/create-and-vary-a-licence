@@ -6,7 +6,7 @@ import { getConfigForCondition } from '../../../utils/conditionRoutes'
 export default class AdditionalLicenceConditionInputRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -20,7 +20,7 @@ export default class AdditionalLicenceConditionInputRoutes {
       return res.redirect(
         `/licence/create/id/${licenceId}/additional-licence-conditions${
           req.query?.fromReview ? '?fromReview=true' : ''
-        }`
+        }`,
       )
     }
 
@@ -95,7 +95,7 @@ export default class AdditionalLicenceConditionInputRoutes {
     return res.redirect(
       `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
-      }`
+      }`,
     )
   }
 }

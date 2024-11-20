@@ -70,7 +70,7 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions', () => {
         LicenceType.PSS,
         {},
         { username: 'joebloggs' },
-        'version'
+        'version',
       )
     })
 
@@ -83,7 +83,7 @@ describe('Route Handlers - Create Licence - Additional Pss Conditions', () => {
       req.query.fromReview = 'true'
       await handler.POST(req, res)
       expect(res.redirect).toHaveBeenCalledWith(
-        '/licence/create/id/1/additional-pss-conditions/callback?fromReview=true'
+        '/licence/create/id/1/additional-pss-conditions/callback?fromReview=true',
       )
     })
   })

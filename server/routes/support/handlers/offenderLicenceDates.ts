@@ -10,7 +10,7 @@ import LicenceDatesAndReason from '../types/licenceDatesAndReason'
 export default class OffenderLicenceDatesRoutes {
   constructor(
     private licenceService: LicenceService,
-    private licenceOverrideService: LicenceOverrideService
+    private licenceOverrideService: LicenceOverrideService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -35,7 +35,7 @@ export default class OffenderLicenceDatesRoutes {
       await this.licenceOverrideService.overrideDates(
         parseInt(licenceId, 10),
         { ...updatedDates, reason: dateChangeReason },
-        user
+        user,
       )
       res.redirect(`/support/offender/${nomsId}/licences`)
       return

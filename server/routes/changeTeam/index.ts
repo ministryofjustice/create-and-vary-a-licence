@@ -18,7 +18,7 @@ export default function Index({ conditionService, comCaseloadService }: Services
       path,
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const createTeamHandler = new ChangeTeamsLocation(comCaseloadService, 'create')

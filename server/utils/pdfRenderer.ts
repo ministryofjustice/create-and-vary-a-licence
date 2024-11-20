@@ -19,7 +19,7 @@ export default function pdfRenderer(client: GotenbergClient) {
       // Define the pageData as - { url: string, licence: Licence, otherData: type? }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       pageData: any,
-      options: { filename: string; pdfOptions: PdfOptions } = { filename: 'document.pdf', pdfOptions: {} }
+      options: { filename: string; pdfOptions: PdfOptions } = { filename: 'document.pdf', pdfOptions: {} },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ): any => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

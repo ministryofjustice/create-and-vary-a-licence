@@ -8,7 +8,7 @@ import { User } from '../../../../@types/CvlUserDetails'
 export default class CurfewRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -25,7 +25,7 @@ export default class CurfewRoutes {
       return res.redirect(
         `/licence/create/id/${licence.id}/additional-licence-conditions${
           req.query?.fromReview ? '?fromReview=true' : ''
-        }`
+        }`,
       )
     }
 
@@ -34,8 +34,8 @@ export default class CurfewRoutes {
         instance.data.map(conditionData => {
           const key = index === 0 ? conditionData.field : `${conditionData.field}${index + 1}`
           return [key, conditionData.value]
-        })
-      )
+        }),
+      ),
     )
 
     return res.render('pages/manageConditions/curfew/input', { additionalCondition, config, formResponses })
@@ -59,7 +59,7 @@ export default class CurfewRoutes {
     return res.redirect(
       `/licence/create/id/${licence.id}/additional-licence-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
-      }`
+      }`,
     )
   }
 
@@ -69,14 +69,14 @@ export default class CurfewRoutes {
     conditionCode: string,
     startDate: SimpleTime,
     endDate: SimpleTime,
-    inputs: Record<string, string | SimpleTime>
+    inputs: Record<string, string | SimpleTime>,
   ): Promise<void> => {
     const condition = await this.conditionService.getAdditionalConditionByCode(conditionCode, licence.version)
     const type = await this.conditionService.getAdditionalConditionType(conditionCode, licence.version)
 
     const sequence = this.conditionService.currentOrNextSequenceForCondition(
       licence.additionalLicenceConditions,
-      conditionCode
+      conditionCode,
     )
 
     const request = {
@@ -92,7 +92,7 @@ export default class CurfewRoutes {
       licence.id.toString(),
       type,
       request,
-      user
+      user,
     )
 
     const conditionData = {
@@ -107,7 +107,7 @@ export default class CurfewRoutes {
       licence.id.toString(),
       licenceCondition,
       conditionData,
-      user
+      user,
     )
   }
 }

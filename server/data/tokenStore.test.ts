@@ -16,7 +16,7 @@ describe('tokenStore', () => {
   beforeEach(() => {
     tokenStore = new RedisTokenStore(
       async _username => ({ token: 'token-1', expiresIn: 1234 }),
-      redisClient as unknown as RedisClient
+      redisClient as unknown as RedisClient,
     )
   })
 

@@ -22,7 +22,7 @@ export default class PrintLicenceRoutes {
     private readonly prisonerService: PrisonerService,
     private readonly qrCodeService: QrCodeService,
     private readonly licenceService: LicenceService,
-    private readonly hdcService: HdcService
+    private readonly hdcService: HdcService,
   ) {}
 
   preview = async (req: Request, res: Response): Promise<void> => {
@@ -39,7 +39,7 @@ export default class PrintLicenceRoutes {
       `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
       licence.id,
       new Date(),
-      user
+      user,
     )
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
@@ -75,7 +75,7 @@ export default class PrintLicenceRoutes {
       `ID ${licence?.id} type ${licence?.typeCode} status ${licence?.statusCode} version ${licence?.version}`,
       licence.id,
       new Date(),
-      user
+      user,
     )
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
@@ -156,7 +156,7 @@ export default class PrintLicenceRoutes {
           description,
           dataValue,
         }
-      })
+      }),
     )
   }
 

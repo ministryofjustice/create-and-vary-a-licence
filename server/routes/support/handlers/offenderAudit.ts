@@ -16,7 +16,7 @@ export default class OffenderAuditRoutes {
       null,
       subYears(new Date(), 2),
       new Date(),
-      user
+      user,
     )
 
     res.render('pages/support/offenderAudit', {

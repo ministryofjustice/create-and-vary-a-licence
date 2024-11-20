@@ -111,7 +111,7 @@ describe('Convert Address to comma-separated string', () => {
       addressPostcode: 'SP1 3DN',
     } as unknown as Address
     expect(addressObjectToString(address)).toBe(
-      'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN'
+      'Manchester Probation Service, Unit 4, Smith Street, Stockport, SP1 3DN',
     )
   })
 
@@ -426,7 +426,7 @@ describe('Check empty object', () => {
         field1: '',
         field2: null,
         field3: undefined,
-      })
+      }),
     ).toBe(true)
   })
 
@@ -436,7 +436,7 @@ describe('Check empty object', () => {
         field1: 'populated',
         field2: null,
         field3: undefined,
-      })
+      }),
     ).toBe(false)
   })
 })
@@ -610,7 +610,7 @@ describe('Get Case Tab Type', () => {
 
   it('should not choose attention needed if no licence', () => {
     expect(
-      determineCaViewCasesTab(nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields, undefined)
+      determineCaViewCasesTab(nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields, undefined),
     ).toEqual(CaViewCasesTab.FUTURE_RELEASES)
   })
 
@@ -620,7 +620,7 @@ describe('Get Case Tab Type', () => {
         ...licence,
         licenceStatus: LicenceStatus.APPROVED,
         licenceStartDate: toCvlDate(past),
-      })
+      }),
     ).toEqual(CaViewCasesTab.ATTENTION_NEEDED)
   })
 
@@ -629,8 +629,8 @@ describe('Get Case Tab Type', () => {
       determineCaViewCasesTab(
         { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null },
         {} as CvlFields,
-        licence
-      )
+        licence,
+      ),
     ).toEqual(CaViewCasesTab.ATTENTION_NEEDED)
   })
 
@@ -639,13 +639,13 @@ describe('Get Case Tab Type', () => {
       determineCaViewCasesTab(nomisRecord, {} as CvlFields, {
         ...licence,
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
-      })
+      }),
     ).toEqual(CaViewCasesTab.FUTURE_RELEASES)
   })
 
   it('should choose future releases tab when missing licence and cvl fields say no release in next 2 days', () => {
     expect(
-      determineCaViewCasesTab(nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields, undefined)
+      determineCaViewCasesTab(nomisRecord, { isDueToBeReleasedInTheNextTwoWorkingDays: false } as CvlFields, undefined),
     ).toEqual(CaViewCasesTab.FUTURE_RELEASES)
   })
 
@@ -654,7 +654,7 @@ describe('Get Case Tab Type', () => {
       determineCaViewCasesTab(nomisRecord, {} as CvlFields, {
         ...licence,
         isDueToBeReleasedInTheNextTwoWorkingDays: true,
-      })
+      }),
     ).toEqual(CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)
   })
 
@@ -665,8 +665,8 @@ describe('Get Case Tab Type', () => {
         {
           isDueToBeReleasedInTheNextTwoWorkingDays: true,
         } as CvlFields,
-        undefined
-      )
+        undefined,
+      ),
     ).toEqual(CaViewCasesTab.RELEASES_IN_NEXT_TWO_WORKING_DAYS)
   })
 })

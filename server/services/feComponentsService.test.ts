@@ -13,7 +13,7 @@ describe('Components service', () => {
   describe('getComponent', () => {
     beforeEach(() => {
       componentsClient = new FeComponentsClient(
-        new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 }))
+        new InMemoryTokenStore(async _username => ({ token: 'token-1', expiresIn: 1234 })),
       ) as jest.Mocked<FeComponentsClient>
       componentsService = new FeComponentsService(componentsClient)
     })

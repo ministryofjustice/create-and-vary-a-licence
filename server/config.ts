@@ -56,21 +56,21 @@ export default {
       queueUrl: get(
         'SQS_PRISON_EVENTS_QUEUE_URL',
         'http://sqs.eu-west-2.localhost.localstack.cloud:4566/000000000000/create_and_vary_a_licence_prison_events_queue',
-        requiredInProduction
+        requiredInProduction,
       ),
     },
     probationEvents: {
       queueUrl: get(
         'SQS_PROBATION_EVENTS_QUEUE_URL',
         'http://sqs.eu-west-2.localhost.localstack.cloud:4566/000000000000/create_and_vary_a_licence_probation_events_queue',
-        requiredInProduction
+        requiredInProduction,
       ),
     },
     domainEvents: {
       queueUrl: get(
         'SQS_DOMAIN_EVENTS_QUEUE_URL',
         'http://sqs.eu-west-2.localhost.localstack.cloud:4566/000000000000/create_and_vary_a_licence_domain_events_queue',
-        requiredInProduction
+        requiredInProduction,
       ),
     },
     pollingWaitTimeMs: Number(get('SQS_POLLING_WAIT_TIME_MS', 10000)),
@@ -334,7 +334,7 @@ export default {
   fridayReleasePolicy: get(
     'FRIDAY_RELEASE_POLICY',
     'https://www.gov.uk/government/publications/discretionary-fridaypre-bank-holiday-release-scheme-policy-framework',
-    requiredInProduction
+    requiredInProduction,
   ),
   monitoringSupplierTelephone: get('MONITORING_SUPPLIER_TELEPHONE', '0800 137 291', requiredInProduction),
 }

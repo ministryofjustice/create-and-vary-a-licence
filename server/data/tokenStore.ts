@@ -27,7 +27,7 @@ export class RedisTokenStore extends TokenStore {
 
   constructor(
     systemTokenSupplier: SystemTokenSupplier,
-    private readonly client: RedisClient
+    private readonly client: RedisClient,
   ) {
     super(systemTokenSupplier)
     client.on('error', error => {
@@ -55,7 +55,7 @@ export class RedisTokenStore extends TokenStore {
 export class InMemoryTokenStore extends TokenStore {
   constructor(
     systemTokenSupplier: SystemTokenSupplier,
-    private readonly tokenMap: Map<string, string> = new Map()
+    private readonly tokenMap: Map<string, string> = new Map(),
   ) {
     super(systemTokenSupplier)
   }

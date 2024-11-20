@@ -116,7 +116,7 @@ export default function getUrlAccessByStatus(
   path: string,
   licenceId: number,
   licenceStatus: string,
-  username: string
+  username: string,
 ): boolean {
   let result = false
   const rules = allowedPaths.filter(allowed => allowed.status === licenceStatus)

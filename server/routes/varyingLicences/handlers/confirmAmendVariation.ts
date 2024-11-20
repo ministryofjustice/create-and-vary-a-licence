@@ -8,7 +8,7 @@ import ConditionService from '../../../services/conditionService'
 export default class ConfirmAmendVariationRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

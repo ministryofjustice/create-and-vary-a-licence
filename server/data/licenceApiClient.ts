@@ -62,7 +62,7 @@ export default class LicenceApiClient extends RestClient {
     try {
       return (await this.get(
         { path: `/omu/${prisonId}/contact/email` },
-        { username: user.username }
+        { username: user.username },
       )) as Promise<OmuContact>
     } catch (error) {
       logger.error(`Error when fetching OMU email for prisonId: ${prisonId}`)
@@ -74,7 +74,7 @@ export default class LicenceApiClient extends RestClient {
     try {
       return (await this.put(
         { path: `/omu/${prisonId}/contact/email`, data: omuEmail },
-        { username: user.username }
+        { username: user.username },
       )) as Promise<OmuContact>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
@@ -85,7 +85,7 @@ export default class LicenceApiClient extends RestClient {
     try {
       return (await this.delete(
         { path: `/omu/${prisonId}/contact/email` },
-        { username: user.username }
+        { username: user.username },
       )) as Promise<void>
     } catch (error) {
       return error.status >= 400 && error.status < 500 ? null : error
@@ -99,7 +99,7 @@ export default class LicenceApiClient extends RestClient {
         data: licence,
         returnBodyOnErrorIfPredicate: e => e.response.status === 409,
       },
-      { username: user.username }
+      { username: user.username },
     )) as Record<string, unknown>
 
     return response.status === 409
@@ -114,47 +114,47 @@ export default class LicenceApiClient extends RestClient {
   async updateAppointmentPerson(
     licenceId: string,
     appointmentPerson: AppointmentPersonRequest,
-    user: User
+    user: User,
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/appointmentPerson`, data: appointmentPerson },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
   async updateAppointmentTime(licenceId: string, appointmentTime: AppointmentTimeRequest, user: User): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/appointmentTime`, data: appointmentTime },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
   async updateAppointmentAddress(
     licenceId: string,
     appointmentAddress: AppointmentAddressRequest,
-    user: User
+    user: User,
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/appointment-address`, data: appointmentAddress },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
   async updateContactNumber(licenceId: string, contactNumber: ContactNumberRequest, user: User): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/contact-number`, data: contactNumber },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
   async updateBespokeConditions(
     licenceId: string,
     bespokeConditions: BespokeConditionsRequest,
-    user: User
+    user: User,
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/bespoke-conditions`, data: bespokeConditions },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
@@ -162,47 +162,47 @@ export default class LicenceApiClient extends RestClient {
     licenceId: string,
     type: LicenceType,
     additionalCondition: AddAdditionalConditionRequest,
-    user: User
+    user: User,
   ): Promise<AdditionalCondition> {
     return (await this.post(
       { path: `/licence/id/${licenceId}/additional-condition/${type}`, data: additionalCondition },
-      { username: user.username }
+      { username: user.username },
     )) as Promise<AdditionalCondition>
   }
 
   async deleteAdditionalCondition(conditionId: number, licenceId: number, user: User) {
     await this.delete(
       { path: `/licence/id/${licenceId}/additional-condition/id/${conditionId}` },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
   async deleteAdditionalConditionsByCode(conditionCodes: string[], licenceId: number, user: User) {
     await this.post(
       { path: `/licence/id/${licenceId}/delete-additional-conditions-by-code`, data: { conditionCodes } },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
   async updateAdditionalConditions(
     licenceId: number,
     additionalConditions: AdditionalConditionsRequest,
-    user: User
+    user: User,
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/additional-conditions`, data: additionalConditions },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
   async updateStandardConditions(
     licenceId: string,
     standardConditions: UpdateStandardConditionDataRequest,
-    user: User
+    user: User,
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/standard-conditions`, data: standardConditions },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
@@ -210,14 +210,14 @@ export default class LicenceApiClient extends RestClient {
     licenceId: string,
     additionalConditionId: string,
     additionalConditionData: UpdateAdditionalConditionDataRequest,
-    user: User
+    user: User,
   ): Promise<void> {
     await this.put(
       {
         path: `/licence/id/${licenceId}/additional-conditions/condition/${additionalConditionId}`,
         data: additionalConditionData,
       },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
@@ -238,7 +238,7 @@ export default class LicenceApiClient extends RestClient {
     sortBy?: string,
     sortOrder?: string,
     user?: User,
-    probationAreaCodes?: string[]
+    probationAreaCodes?: string[],
   ): Promise<LicenceSummary[]> {
     return (await this.post(
       {
@@ -256,7 +256,7 @@ export default class LicenceApiClient extends RestClient {
           sortOrder: sortOrder || undefined,
         },
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as LicenceSummary[]
   }
 
@@ -265,7 +265,7 @@ export default class LicenceApiClient extends RestClient {
       {
         path: `/com/${user.deliusStaffIdentifier}/review-counts`,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as ComReviewCount
   }
 
@@ -277,14 +277,14 @@ export default class LicenceApiClient extends RestClient {
     licenceId: string,
     conditionId: string,
     user: User,
-    file: Express.Multer.File
+    file: Express.Multer.File,
   ): Promise<void> {
     return (await this.postMultiPart(
       {
         path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/file-upload`,
         fileToUpload: file,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as void
   }
 
@@ -293,7 +293,7 @@ export default class LicenceApiClient extends RestClient {
       {
         path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/remove-upload`,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as void
   }
 
@@ -303,7 +303,7 @@ export default class LicenceApiClient extends RestClient {
       {
         path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/full-size-image`,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<Readable>
   }
 
@@ -314,7 +314,7 @@ export default class LicenceApiClient extends RestClient {
         path: `/exclusion-zone/id/${licenceId}/condition/id/${conditionId}/full-size-image`,
         responseType: 'image/jpeg',
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<Buffer>
   }
 
@@ -337,14 +337,14 @@ export default class LicenceApiClient extends RestClient {
   async editLicence(licenceId: string, user: User) {
     return (await this.post(
       { path: `/licence/id/${licenceId}/edit` },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<LicenceSummary>
   }
 
   async createVariation(licenceId: string, user: User): Promise<LicenceSummary> {
     return (await this.post(
       { path: `/licence/id/${licenceId}/create-variation` },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<LicenceSummary>
   }
 
@@ -353,7 +353,7 @@ export default class LicenceApiClient extends RestClient {
       {
         path: `/licence/variations/submitted/area/${probationAreaCode}`,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as LicenceSummary[]
   }
 
@@ -368,11 +368,11 @@ export default class LicenceApiClient extends RestClient {
   async updateReasonForVariation(
     licenceId: string,
     request: UpdateReasonForVariationRequest,
-    user: User
+    user: User,
   ): Promise<void> {
     await this.put(
       { path: `/licence/id/${licenceId}/reason-for-variation`, data: request },
-      { username: user?.username }
+      { username: user?.username },
     )
   }
 
@@ -390,14 +390,14 @@ export default class LicenceApiClient extends RestClient {
         path: '/audit/retrieve',
         data: auditRequest,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<AuditEvent[]>
   }
 
   async updatePrisonInformation(
     licenceId: string,
     request: UpdatePrisonInformationRequest,
-    user?: User
+    user?: User,
   ): Promise<void> {
     await this.put({ path: `/licence/id/${licenceId}/prison-information`, data: request }, { username: user?.username })
   }
@@ -428,7 +428,7 @@ export default class LicenceApiClient extends RestClient {
     eventTypes: string[] = [],
     sortBy?: string,
     sortOrder?: string,
-    user?: User
+    user?: User,
   ): Promise<LicenceEvent[]> {
     return (await this.get(
       {
@@ -440,7 +440,7 @@ export default class LicenceApiClient extends RestClient {
           sortOrder: sortOrder || undefined,
         },
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as LicenceEvent[]
   }
 
@@ -556,14 +556,14 @@ export default class LicenceApiClient extends RestClient {
       {
         path: `/licence/id/${licenceId}/review-with-no-variation-required`,
       },
-      { username: user.username }
+      { username: user.username },
     )
   }
 
   async getPrisonerDetail(nomsId: string, user: User): Promise<CaseloadItem> {
     return (await this.get(
       { path: `/prisoner-search/nomisid/${nomsId}` },
-      { username: user.username }
+      { username: user.username },
     )) as Promise<CaseloadItem>
   }
 
@@ -576,7 +576,7 @@ export default class LicenceApiClient extends RestClient {
         path: '/prisoner-search/prisoner-numbers',
         data: { prisonerNumbers },
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<CaseloadItem[]>
   }
 
@@ -585,7 +585,7 @@ export default class LicenceApiClient extends RestClient {
     latestReleaseDate: Date,
     prisonIds: string[],
     page: number,
-    user?: User
+    user?: User,
   ): Promise<SearchResultsPage> {
     if (prisonIds.length < 1) {
       return null
@@ -600,7 +600,7 @@ export default class LicenceApiClient extends RestClient {
           prisonIds,
         },
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<SearchResultsPage>
   }
 
@@ -622,7 +622,7 @@ export default class LicenceApiClient extends RestClient {
         path: `/caseload/prison-approver/approval-needed`,
         data: prisons,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<ApprovalCase[]>
   }
 
@@ -635,7 +635,7 @@ export default class LicenceApiClient extends RestClient {
         path: `/caseload/prison-approver/recently-approved`,
         data: prisons,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<ApprovalCase[]>
   }
 
@@ -645,7 +645,7 @@ export default class LicenceApiClient extends RestClient {
         path: `/caseload/case-admin/prison-view`,
         data: caCaseloadSearch,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<CaCase[]>
   }
 
@@ -655,7 +655,7 @@ export default class LicenceApiClient extends RestClient {
         path: `/caseload/case-admin/probation-view`,
         data: caCaseloadSearch,
       },
-      { username: user?.username }
+      { username: user?.username },
     )) as Promise<CaCase[]>
   }
 

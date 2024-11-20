@@ -3,7 +3,7 @@ import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 
 const render = templateRenderer(
-  fs.readFileSync('server/views/pages/manageConditions/additionalLicenceConditions.njk').toString()
+  fs.readFileSync('server/views/pages/manageConditions/additionalLicenceConditions.njk').toString(),
 )
 
 describe('Create a Licence Views - Additional Conditions', () => {

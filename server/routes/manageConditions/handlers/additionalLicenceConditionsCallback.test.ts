@@ -125,7 +125,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       await handler.GET(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/1/additional-licence-conditions/condition/1?fromReview=true`
+        `/licence/create/id/1/additional-licence-conditions/condition/1?fromReview=true`,
       )
     })
 
@@ -151,7 +151,7 @@ describe('Route Handlers - Create Licence - Additional Conditions Callback', () 
       await handler.GET(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        `/licence/create/id/1/additional-licence-conditions/condition/${CURFEW_CONDITION_CODE}/curfew`
+        `/licence/create/id/1/additional-licence-conditions/condition/${CURFEW_CONDITION_CODE}/curfew`,
       )
     })
 

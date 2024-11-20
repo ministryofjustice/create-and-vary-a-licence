@@ -9,7 +9,7 @@ import { stringToAddressObject } from '../../../../utils/utils'
 export default class OutOfBoundsPremisesListRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -23,7 +23,7 @@ export default class OutOfBoundsPremisesListRoutes {
         return res.redirect(
           `/licence/vary/id/${licenceId}/policy-changes/input/callback/${
             +req.session.changedConditionsInputsCounter + 1
-          }`
+          }`,
         )
       }
       return res.redirect(`/licence/create/id/${licence.id}/additional-licence-conditions/callback?fromReview=true`)
@@ -65,20 +65,20 @@ export default class OutOfBoundsPremisesListRoutes {
         return res.redirect(
           `/licence/vary/id/${licenceId}/policy-changes/input/callback/${
             +req.session.changedConditionsInputsCounter + 1
-          }`
+          }`,
         )
       }
 
       return res.redirect(
         `/licence/create/id/${licenceId}/additional-licence-conditions/callback${
           req.query?.fromReview ? '?fromReview=true' : ''
-        }`
+        }`,
       )
     }
 
     const sequence = this.conditionService.currentOrNextSequenceForCondition(
       licence.additionalLicenceConditions,
-      conditionCode
+      conditionCode,
     )
 
     const request = {
@@ -94,11 +94,11 @@ export default class OutOfBoundsPremisesListRoutes {
 
     if (req.query?.fromPolicyReview) {
       return res.redirect(
-        `/licence/vary/id/${licenceId}/policy-changes/input/callback/${+req.session.changedConditionsInputsCounter + 1}`
+        `/licence/vary/id/${licenceId}/policy-changes/input/callback/${+req.session.changedConditionsInputsCounter + 1}`,
       )
     }
     return res.redirect(
-      `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${conditionResult.id}?fromReview=true`
+      `/licence/create/id/${licenceId}/additional-licence-conditions/condition/${conditionResult.id}?fromReview=true`,
     )
   }
 

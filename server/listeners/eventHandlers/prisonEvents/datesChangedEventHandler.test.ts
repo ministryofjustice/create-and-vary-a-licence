@@ -69,7 +69,7 @@ describe('Sentence dates changed event handler', () => {
 
     expect(licenceService.getLicencesByNomisIdsAndStatus).toHaveBeenCalledWith(
       ['ABC123'],
-      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED', 'TIMED_OUT']
+      ['IN_PROGRESS', 'SUBMITTED', 'REJECTED', 'APPROVED', 'TIMED_OUT'],
     )
     expect(licenceService.updateSentenceDates).not.toHaveBeenCalled()
   })

@@ -8,7 +8,7 @@ export default abstract class Page {
   protected constructor(
     private readonly pageId: string,
     private readonly axeTest = true,
-    private readonly rules: RuleObject = {}
+    private readonly rules: RuleObject = {},
   ) {
     this.checkOnPage()
     if (axeTest) {

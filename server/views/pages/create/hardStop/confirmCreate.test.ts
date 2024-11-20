@@ -21,7 +21,7 @@ describe('Caseload', () => {
       },
     })
     expect($('.licence-conditions').text().toString()).toContain(
-      'This licence contains standard post sentence supervision requirements only by default.'
+      'This licence contains standard post sentence supervision requirements only by default.',
     )
   })
 })

@@ -208,7 +208,7 @@ describe('Route handlers - View and print case list', () => {
       expect(caseloadService.getPrisonOmuCaseload).toHaveBeenCalledWith(
         { username: 'joebloggs', activeCaseload: 'BAI', prisonCaseload: ['BAI'] },
         ['BAI'],
-        ''
+        '',
       )
       expect(res.render).toHaveBeenCalledWith('pages/view/cases', {
         cases: [

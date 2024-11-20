@@ -47,7 +47,7 @@ describe('Route Handlers - Vary Licence - Reason for variation', () => {
 
       expect(licenceService.compareVariationToOriginal).toHaveBeenCalledWith(
         { id: 1, statusCode: LicenceStatus.VARIATION_IN_PROGRESS },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(res.render).toHaveBeenCalledWith('pages/vary/reasonForVariation', {
         conditionComparison: {
@@ -65,7 +65,7 @@ describe('Route Handlers - Vary Licence - Reason for variation', () => {
       expect(licenceService.updateReasonForVariation).toHaveBeenCalledWith(
         '1',
         { reasonForVariation: 'Reason' },
-        { username: 'joebloggs' }
+        { username: 'joebloggs' },
       )
       expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/summary')
     })

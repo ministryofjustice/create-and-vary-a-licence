@@ -28,7 +28,7 @@ describe('Initial appointment updated flash message', () => {
       flashInitialApptUpdatedMessage(
         req,
         { ...licence, statusCode: statusCode as Licence['statusCode'] },
-        UserType.PROBATION
+        UserType.PROBATION,
       )
     })
 

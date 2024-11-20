@@ -47,7 +47,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
             cvlUser.prisonCaseload = removeDuplicates(prisonUserCaseload.map(cs => cs.caseLoadId))
 
             logger.info(
-              `Prison user session : username ${prisonUser?.username} name ${cvlUser?.displayName} caseload ${cvlUser?.prisonCaseload}`
+              `Prison user session : username ${prisonUser?.username} name ${cvlUser?.displayName} caseload ${cvlUser?.prisonCaseload}`,
             )
 
             const { email } = await userService.getUserEmail(user)
@@ -78,7 +78,7 @@ export default function populateCurrentUser(userService: UserService, licenceSer
               .sort((a, b) => (a.label > b.label ? 1 : -1))
 
             logger.info(
-              `Probation user session : username ${user?.username} name ${cvlUser?.displayName} area ${cvlUser?.probationAreaCode} teams ${cvlUser?.probationTeamCodes}`
+              `Probation user session : username ${user?.username} name ${cvlUser?.displayName} area ${cvlUser?.probationAreaCode} teams ${cvlUser?.probationTeamCodes}`,
             )
 
             await licenceService.updateComDetails({

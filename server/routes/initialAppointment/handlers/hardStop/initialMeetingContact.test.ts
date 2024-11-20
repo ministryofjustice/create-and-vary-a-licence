@@ -74,7 +74,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         expect(licenceService.updateContactNumber).toHaveBeenCalledWith(
           1,
           { telephone: '0114 2556556' },
-          { username: 'joebloggs' }
+          { username: 'joebloggs' },
         )
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/create/id/1/initial-meeting-time')
       })
@@ -92,7 +92,7 @@ describe('Route Handlers - Create Licence - Initial Meeting Contact', () => {
         expect(licenceService.updateContactNumber).toHaveBeenCalledWith(
           1,
           { telephone: '0114 2556556' },
-          { username: 'joebloggs' }
+          { username: 'joebloggs' },
         )
         expect(res.redirect).toHaveBeenCalledWith('/licence/hard-stop/id/1/check-your-answers')
       })

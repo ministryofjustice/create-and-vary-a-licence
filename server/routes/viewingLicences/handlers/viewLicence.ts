@@ -57,7 +57,7 @@ export default class ViewAndPrintLicenceRoutes {
           `ID ${licence.id} type ${licence.typeCode} status ${licence.statusCode} version ${licence.version}`,
           licence.id,
           new Date(),
-          user
+          user,
         )
       }
 

@@ -6,7 +6,7 @@ import ConditionService from '../../../services/conditionService'
 export default class AdditionalPssConditionsRoutes {
   constructor(
     private readonly licenceService: LicenceService,
-    private readonly conditionService: ConditionService
+    private readonly conditionService: ConditionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -14,7 +14,7 @@ export default class AdditionalPssConditionsRoutes {
 
     const additionalConditions = await this.conditionService.getGroupedAdditionalConditions(
       LicenceType.PSS,
-      licence.version
+      licence.version,
     )
     return res.render('pages/manageConditions/additionalPssConditions', { additionalConditions })
   }
@@ -28,13 +28,13 @@ export default class AdditionalPssConditionsRoutes {
       LicenceType.PSS,
       req.body,
       user,
-      licence.version
+      licence.version,
     )
 
     return res.redirect(
       `/licence/create/id/${licenceId}/additional-pss-conditions/callback${
         req.query?.fromReview ? '?fromReview=true' : ''
-      }`
+      }`,
     )
   }
 }

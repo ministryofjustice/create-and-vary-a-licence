@@ -37,7 +37,7 @@ export default function Index(services: Services): Router {
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -46,7 +46,7 @@ export default function Index(services: Services): Router {
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler)
+      asyncMiddleware(handler),
     )
 
   {

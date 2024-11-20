@@ -10,7 +10,7 @@ import { nameToString } from '../../../data/deliusClient'
 export default class ProbationTeamRoutes {
   constructor(
     private readonly comCaseloadService: ComCaseloadService,
-    private readonly probationService: ProbationService
+    private readonly probationService: ProbationService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {

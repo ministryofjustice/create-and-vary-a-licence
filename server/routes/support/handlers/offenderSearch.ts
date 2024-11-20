@@ -9,7 +9,7 @@ import { convertToTitleCase } from '../../../utils/utils'
 export default class OffenderSearchRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
-    private readonly probationService: ProbationService
+    private readonly probationService: ProbationService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -30,7 +30,7 @@ export default class OffenderSearchRoutes {
           {
             prisonerIdentifier: deliusRecords[0]?.otherIds?.nomsNumber,
           } as PrisonerSearchCriteria,
-          user
+          user,
         )
         .catch(() => [])
     } else {
@@ -41,7 +41,7 @@ export default class OffenderSearchRoutes {
             lastName,
             prisonerIdentifier: nomisId || null,
           } as PrisonerSearchCriteria,
-          user
+          user,
         )
         .catch(() => [])
       deliusRecords = await this.probationService.getOffendersByNomsNumbers(nomisRecords.map(o => o.prisonerNumber))

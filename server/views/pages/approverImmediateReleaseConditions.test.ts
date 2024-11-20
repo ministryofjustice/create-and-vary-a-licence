@@ -1,7 +1,7 @@
 import { templateRenderer } from '../../utils/__testutils/templateTestUtils'
 
 const render = templateRenderer(
-  '{% from "pages/approverImmediateReleaseConditions.njk" import approverImmediateReleaseConditions %}{{ approverImmediateReleaseConditions(options)}}'
+  '{% from "pages/approverImmediateReleaseConditions.njk" import approverImmediateReleaseConditions %}{{ approverImmediateReleaseConditions(options)}}',
 )
 
 describe('Caseload', () => {
@@ -26,7 +26,7 @@ describe('Caseload', () => {
       },
     })
     expect($('.licence-conditions').text().toString()).toContain(
-      'This licence contains standard post sentence supervision requirements only by default.'
+      'This licence contains standard post sentence supervision requirements only by default.',
     )
     expect($('p').text().toString()).not.toContain('No other additional or bespoke licence conditions can be added.')
   })

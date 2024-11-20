@@ -16,7 +16,7 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
           ?.requiresInput
           ? condition.code
           : undefined
-      })
+      }),
     )
 
     const requiringInput = licence.additionalLicenceConditions
@@ -31,7 +31,7 @@ export default class AdditionalLicenceConditionsCallbackRoutes {
           conditionId: requiringInput.id,
           conditionCode: requiringInput.code,
           fromReview: !!req.query?.fromReview,
-        })
+        }),
       )
     }
 
