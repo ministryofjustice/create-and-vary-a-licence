@@ -63,23 +63,6 @@
   <script src="/assets/js/jquery-ui.min.js"></script>
   <link href="/assets/stylesheets/jquery-ui.min.css" rel="stylesheet">
 
-  <script type="module" src="/assets/ext/day.js"></script>
-  <script type="module" src="/assets/ext/dayjs/plugin/customParseFormat.js"></script>
-  <script type="module" src="/assets/ext/chart.js"></script>
-  <script type="module" src="/assets/ext/chartjs-datalabels.js"></script>  
-
-  <!-- Govuk Lib -->
-  <script type="module" src="/assets/govuk/all.js"></script>
-  <script type="module" src="/assets/govukInit.js"></script>
-
-  <!-- MoJ Lib -->
-  <script src="/assets/moj/all.js"></script>
-  <script type="module" src="/assets/mojInit.js"></script>
-
-  <!-- DPR Lib -->
-  <script type="module" src="/assets/dpr/js/all.mjs"></script>
-  <script type="module" src="/assets/js/dprInit.mjs"></script>
-
 {% endblock %}
 
 {% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
@@ -138,8 +121,22 @@
 
 {% block bodyEnd %}
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
-  <script type="module" src="/assets/govukFrontendInit.js"></script>
+  <script type="module" src="/assets/ext/day.js"></script>
+  <script type="module" src="/assets/ext/dayjs/plugin/customParseFormat.js"></script>
+  <script type="module" src="/assets/ext/chart.js"></script>
+  <script type="module" src="/assets/ext/chartjs-datalabels.js"></script>  
+
+  <!-- Govuk Lib -->
+  <script type="module" src="/assets/govuk/all.js"></script>
+  <script type="module" src="/assets/js/govukInit.mjs"></script>
+
+  <!-- MoJ Lib -->
   <script src="/assets/moj/all.js"></script>
-  <script src="/assets/mojFrontendInit.js"></script>
+  <script type="module" src="/assets/js/mojInit.mjs"></script>
+
+  <!-- DPR Lib -->
+  <script type="module" src="/assets/dpr/js/all.mjs"></script>
+  <script type="module" src="/assets/js/dprInit.mjs"></script>
+
   {% block pageScripts %}{% endblock %}
 {% endblock %}
