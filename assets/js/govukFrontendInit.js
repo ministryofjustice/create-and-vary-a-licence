@@ -10,3 +10,4 @@ $('[class$=js-backlink]').on('click', e => {
     window.history.go(-1)
   }
 })
+
