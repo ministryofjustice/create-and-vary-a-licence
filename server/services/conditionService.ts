@@ -151,7 +151,6 @@ export default class ConditionService {
     return conditionsBySequence.length ? conditionsBySequence.pop().sequence + 1 : 1
   }
 
-  /* eslint-disable no-param-reassign */
   parseResponse = (additionalConditionsResponse: AdditionalConditionsResponse): AdditionalConditionsConfig => {
     const mappedConditions: AdditionalConditionsConfig = { AP: [], PSS: [] }
     mappedConditions.AP = additionalConditionsResponse.AP.map(condition => {
@@ -320,7 +319,6 @@ export default class ConditionService {
     })
     return mappedConditions
   }
-  /* eslint-disable no-param-reassign */
 
   async getAdditionalAPConditionsForSummaryAndPdf(licence: Licence, user: User): Promise<AdditionalCondition[]> {
     const conditionDataToExcludeFromSummary = ['nameTypeAndOrAddress']

@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import path from 'path'
 import nunjucks, { Environment } from 'nunjucks'
 import { isToday, isYesterday, format, startOfDay } from 'date-fns'
@@ -111,7 +110,7 @@ export function registerNunjucks(app?: express.Express): Environment {
     }))
   })
 
-  // eslint-disable-next-line no-use-before-define,default-param-last
+  // eslint-disable-next-line default-param-last
   njkEnv.addFilter('findError', (array: FieldValidationError[] = [], formFieldId: string) => {
     const item = array.find(error => error.field === formFieldId)
     if (item) {

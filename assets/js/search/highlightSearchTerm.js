@@ -10,7 +10,7 @@ window.onload = function () {
     return
   }
 
-  for (let result of searchResults) {
+  for (const result of searchResults) {
     result.innerHTML = caseInsensitiveHighlighting(result.innerHTML, searchTerm)
   }
 }
@@ -18,6 +18,6 @@ window.onload = function () {
 function caseInsensitiveHighlighting(html, searchTerm) {
   const reg = new RegExp(searchTerm, 'gi')
   return html.replace(reg, function (str) {
-    return '<mark>' + str + '</mark>'
+    return `<mark>${str}</mark>`
   })
 }

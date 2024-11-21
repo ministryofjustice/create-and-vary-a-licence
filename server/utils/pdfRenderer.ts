@@ -12,7 +12,6 @@ import logger from '../../logger'
 
 // TODO: Revisit to fully define these types for the "any" placeholders
 export default function pdfRenderer(client: GotenbergClient) {
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
   return (req: Request, res: Response, next: NextFunction) => {
     res.renderPDF = (
       view: string,
