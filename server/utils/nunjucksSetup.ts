@@ -5,6 +5,7 @@ import { isToday, isYesterday, format, startOfDay } from 'date-fns'
 import express from 'express'
 import moment from 'moment'
 import { filesize } from 'filesize'
+import setUpNunjucksFilters from '@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/setUpNunjucksFilters'
 import { FieldValidationError } from '../middleware/validationMiddleware'
 import config from '../config'
 import type { ApplicationInfo } from '../applicationInfo'
@@ -63,7 +64,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
       return next()
     })
   }
-
   registerNunjucks(app)
 }
 
@@ -73,12 +73,15 @@ export function registerNunjucks(app?: express.Express): Environment {
       path.join(__dirname, '../views'),
       'node_modules/govuk-frontend/dist/',
       'node_modules/@ministryofjustice/frontend/',
+      'node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/',
+      'node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/components/',
     ],
     {
       autoescape: true,
       express: app,
     },
   )
+  setUpNunjucksFilters(njkEnv)
 
   // Expose the google tag manager container ID to the nunjucks environment
   const {
