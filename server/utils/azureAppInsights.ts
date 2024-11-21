@@ -33,7 +33,7 @@ export const addUserDataToRequests: TelemetryProcessor = (envelope, contextObjec
     const user = contextObjects?.['http.ServerRequest']?.res?.locals?.user
     if (user) {
       const { properties } = envelope.data.baseData
-      // eslint-disable-next-line no-param-reassign
+
       envelope.data.baseData.properties = { ...getUserDetails(user), ...properties }
     }
   }

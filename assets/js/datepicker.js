@@ -367,7 +367,7 @@ Datepicker.prototype.setCurrentDate = function (focus = true) {
 
 Datepicker.prototype.selectDate = function (date) {
   this.$calendarButton.querySelector('span').innerText = `Choose date. Selected date is ${this.formattedDateHuman(
-    date
+    date,
   )}`
   this.$input.value = this.formattedDateFromDate(date)
 
@@ -572,11 +572,9 @@ DSCalendarDay.prototype.keyPress = function (event) {
       this.picker.focusLastDayOfWeek()
       break
     case this.picker.keycodes.pageup:
-      // eslint-disable-next-line no-unused-expressions
       event.shiftKey ? this.picker.focusPreviousYear(event) : this.picker.focusPreviousMonth(event)
       break
     case this.picker.keycodes.pagedown:
-      // eslint-disable-next-line no-unused-expressions
       event.shiftKey ? this.picker.focusNextYear(event) : this.picker.focusNextMonth(event)
       break
     case this.picker.keycodes.esc:

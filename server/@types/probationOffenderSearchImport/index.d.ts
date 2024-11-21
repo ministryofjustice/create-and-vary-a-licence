@@ -7,7 +7,6 @@
  *   - replace semi-colons with blank
  */
 
-/* eslint-disable camelcase */
 export interface paths {
   '/crns': {
     /** Requires ROLE_COMMUNITY role */
@@ -741,5 +740,4 @@ export interface operations {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface external {}

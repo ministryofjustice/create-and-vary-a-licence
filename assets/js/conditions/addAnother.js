@@ -4,7 +4,7 @@ window.onload = function () {
 
   MOJFrontend.AddAnother.prototype.createRemoveButton = function (item) {
     item.append(
-      '<button type="button" class="govuk-button govuk-button--warning moj-add-another__remove-button">Remove</button>'
+      '<button type="button" class="govuk-button govuk-button--warning moj-add-another__remove-button">Remove</button>',
     )
   }
 
