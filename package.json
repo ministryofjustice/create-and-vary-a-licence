@@ -101,6 +101,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.691.0",
     "@ministryofjustice/frontend": "2.2",
+    "@ministryofjustice/hmpps-monitoring": "^0.0.1-alpha.6",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.6",
     "body-parser": "^1.20.2",
