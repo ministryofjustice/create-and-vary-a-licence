@@ -20,8 +20,13 @@ export default function setUpWebSecurity(): Router {
     'www.google-analytics.com',
     "'sha256-GUQ5ad8JK5KmEWmROf3LZd9ge94daqNvd8xy9YS1iDw='",
   ]
-  const styleSrc = ["'self'", 'code.jquery.com']
-  const fontSrc = ["'self'"]
+  const styleSrc = [
+    "'self'",
+    (_req: IncomingMessage, res: Response) => `'nonce-${res.locals.cspNonce}'`,
+    'code.jquery.com',
+    'fonts.googleapis.com',
+  ]
+  const fontSrc = ["'self'", 'fonts.gstatic.com']
   const imgSrc = [
     "'self'",
     'https://www.googletagmanager.com',
