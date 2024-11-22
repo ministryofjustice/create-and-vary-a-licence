@@ -1,4 +1,4 @@
-import { initAll } from '/assets/govuk/all.js'
+import { initAll } from '../../../../../assets/govuk/all.js'
 
 initAll()
 // Initiate the back links
