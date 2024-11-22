@@ -37,6 +37,30 @@ export default function setUpStaticResources(): Router {
   ;['/node_modules/jquery-ui-dist/jquery-ui.min.css'].forEach(dir => {
     router.use('/assets/stylesheets/jquery-ui.min.css', express.static(path.join(process.cwd(), dir), cacheControl))
   })
+  ;['/node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/assets'].forEach(dir => {
+    router.use('/assets/dpr', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
+  ;['/node_modules/chart.js/dist/chart.umd.js'].forEach(dir => {
+    router.use('/assets/ext/chart.js', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
+  ;['/node_modules/chart.js/dist/chart.umd.js.map'].forEach(dir => {
+    router.use('/assets/ext/chart.umd.js.map', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
+  ;['/node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js'].forEach(dir => {
+    router.use('/assets/ext/chartjs-datalabels.js', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
+  ;['/node_modules/dayjs/dayjs.min.js'].forEach(dir => {
+    router.use('/assets/ext/day.js', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
+  ;['/node_modules/dayjs/plugin/customParseFormat.js'].forEach(dir => {
+    router.use(
+      '/assets/ext/dayjs/plugin/customParseFormat.js',
+      express.static(path.join(process.cwd(), dir), cacheControl),
+    )
+  })
+  ;['/node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js'].forEach(dir => {
+    router.use('/assets/govuk/all.js', express.static(path.join(process.cwd(), dir), cacheControl))
+  })
   router.use('/favicon.ico', express.static(path.join(process.cwd(), '/assets/images/favicon.ico'), cacheControl))
 
   // Don't cache dynamic resources
