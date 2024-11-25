@@ -90,11 +90,11 @@
     "ext": "js,json,html,njk"
   },
   "lint-staged": {
-    "*.{ts,js,css}": [
+    "*.{ts,js,css,mjs}": [
       "prettier --write",
       "eslint --fix"
     ],
-    "*.json": [
+    "*.{json}": [
       "prettier --write"
     ]
   },
