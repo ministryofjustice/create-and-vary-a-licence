@@ -123,14 +123,11 @@
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
   <!-- Govuk Lib -->
   <script type="module" src="/assets/govukFrontendInit.js"></script>
-  <script type="module" src="/assets/js/govukInit.mjs"></script>
-
   <!-- MoJ Lib -->
   <script src="/assets/moj/all.js"></script>
-  <script type="module" src="/assets/js/mojInit.mjs"></script>
+  <script type="module" src="/assets/mojInit.mjs"></script>
 
   <!-- DPR Lib -->
   <script type="module" src="/assets/dpr/js/all.mjs"></script>
-  <script type="module" src="/assets/js/dprInit.mjs"></script>
   {% block pageScripts %}{% endblock %}
 {% endblock %}
