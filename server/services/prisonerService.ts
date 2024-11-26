@@ -33,7 +33,7 @@ export default class PrisonerService {
     try {
       const image = await this.prisonApiClient.getPrisonerImageData(nomsId, user)
       base64String = image.toString('base64')
-    } catch (error) {
+    } catch (_error) {
       logger.info(`No image data found for ${nomsId} - sending placeholder image`)
       const content = fs.readFileSync('assets/images/image-missing.png')
       base64String = content.toString('base64')
