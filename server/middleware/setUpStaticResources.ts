@@ -48,29 +48,6 @@ export default function setUpStaticResources(): Router {
       cacheControl,
     ),
   )
-  router.use(
-    '/assets/ext/chart.js',
-    express.static(path.join(process.cwd(), '/node_modules/chart.js/dist/chart.umd.js'), cacheControl),
-  )
-  router.use(
-    '/assets/ext/chart.umd.js.map',
-    express.static(path.join(process.cwd(), '/node_modules/chart.js/dist/chart.umd.js.map'), cacheControl),
-  )
-  router.use(
-    '/assets/ext/chartjs-datalabels.js',
-    express.static(
-      path.join(process.cwd(), '/node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js'),
-      cacheControl,
-    ),
-  )
-  router.use(
-    '/assets/ext/day.js',
-    express.static(path.join(process.cwd(), '/node_modules/dayjs/dayjs.min.js'), cacheControl),
-  )
-  router.use(
-    '/assets/ext/dayjs/plugin/customParseFormat.js',
-    express.static(path.join(process.cwd(), '/node_modules/dayjs/plugin/customParseFormat.js'), cacheControl),
-  )
   router.use('/favicon.ico', express.static(path.join(process.cwd(), '/assets/images/favicon.ico'), cacheControl))
 
   // Don't cache dynamic resources

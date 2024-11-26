@@ -121,13 +121,8 @@
 
 {% block bodyEnd %}
   {# Run JavaScript at end of the <body>, to avoid blocking the initial render. #}
-  <script type="module" src="/assets/ext/day.js"></script>
-  <script type="module" src="/assets/ext/dayjs/plugin/customParseFormat.js"></script>
-  <script type="module" src="/assets/ext/chart.js"></script>
-  <script type="module" src="/assets/ext/chartjs-datalabels.js"></script>  
-
   <!-- Govuk Lib -->
-  <script type="module" src="/assets/govuk/all.js"></script>
+  <script type="module" src="/assets/govukFrontendInit.js"></script>
   <script type="module" src="/assets/js/govukInit.mjs"></script>
 
   <!-- MoJ Lib -->
