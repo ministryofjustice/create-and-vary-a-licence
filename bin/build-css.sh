@@ -8,6 +8,7 @@
      --load-path=. \
      --load-path=node_modules/govuk-frontend/dist \
      --load-path=node_modules/@ministryofjustice/frontend \
+     --load-path=node_modules/@ministryofjustice/hmpps-digital-prison-reporting-frontend/dpr/all \
      ./assets/sass/application.sass:./assets/stylesheets/application.css \
      --style compressed
 

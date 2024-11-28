@@ -101,6 +101,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.691.0",
     "@ministryofjustice/frontend": "2.2",
+    "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^3",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1-alpha.6",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.6",
@@ -155,6 +156,7 @@
     "@types/node": "^20.17.6",
     "@types/number-to-words": "^1.2.3",
     "@types/nunjucks": "^3.2.6",
+    "@types/nunjucks-date": "^0.0.10",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.4.17",
     "@types/qrcode": "^1.5.5",
