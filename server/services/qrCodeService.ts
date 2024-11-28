@@ -1,4 +1,4 @@
-import QRCode from 'qrcode'
+import { toDataURL } from 'qrcode'
 import { Licence } from '../@types/licenceApiClientTypes'
 
 export default class QrCodeService {
@@ -12,7 +12,7 @@ export default class QrCodeService {
       start: `${licence.licenceStartDate}`,
       end: `${licence.licenceExpiryDate}`,
     }
-    const qrCode = await QRCode.toDataURL(JSON.stringify(qrCodeData))
+    const qrCode = await toDataURL(JSON.stringify(qrCodeData))
     return qrCode
   }
 }
