@@ -94,7 +94,7 @@
       "prettier --write",
       "eslint --fix"
     ],
-    "*.{json}": [
+    "*.json": [
       "prettier --write"
     ]
   },
