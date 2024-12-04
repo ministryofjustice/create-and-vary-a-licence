@@ -54,6 +54,7 @@ export default defineConfig({
         stubUpdateProbationTeam: licence.stubUpdateProbationTeam,
         stubUpdatePrisonUserDetails: licence.stubUpdatePrisonUserDetails,
         stubGetLicence: licence.stubGetLicence,
+        stubGetHdcLicence: licence.stubGetHdcLicence,
         stubGetEmptyLicence: licence.stubGetEmptyLicence,
         stubGetPssLicence: licence.stubGetPssLicence,
         stubPostLicence: licence.stubPostLicence,
@@ -110,6 +111,7 @@ export default defineConfig({
         stubGetComReviewCount: licence.stubGetComReviewCount,
         stubGetCaseloadItem: licence.stubGetCaseloadItem,
         stubGetCaseloadItemInHardStop: licence.stubGetCaseloadItemInHardStop,
+        stubGetHdcCaseloadItem: licence.stubGetHdcCaseloadItem,
         stubGetPreviouslyApprovedAndTimedOutLicencesCaseload:
           licence.stubGetPreviouslyApprovedAndTimedOutLicencesCaseload,
         stubGetHardStopAndTimedOutLicencesCaseload: licence.stubGetHardStopAndTimedOutLicencesCaseload,
