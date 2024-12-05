@@ -28,22 +28,27 @@
                         classes: "govuk-fieldset__legend--l",
                         isPageHeading: true
                     }
-                    }) %}
-
-                    {% if licence.isEligibleForEarlyRelease %}
-                        {{ govukWarningText({
-                            html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
-                            iconFallbackText: "Warning"
-                        }) }}
-                    {% endif %}
-
-                    {% set dateTimeHtml %}
+                }) %}
+                    {% if licence.kind == "HDC"%}
                         {% call govukFieldset({
+                            classes:"govuk-!-margin-top-3",
+
                             legend: {
                                 text: "Date",
                                 classes: "govuk-visually-hidden",
                                 isPageHeading: false}
                             }) %}
+
+                            {{ govukRadios({
+                                id: "appointment-time-type",
+                                name: "appointmentTimeType",
+                                value: SPECIFIC_DATE_TIME,
+                                items: [{
+                                    value: SPECIFIC_DATE_TIME,
+                                    text: "Specific date and time"
+                                }],
+                                classes: "govuk-visually-hidden"
+                            }) }}
 
                             {{ hmppsDatePicker({
                                 id: "date-calendarDate",
@@ -61,7 +66,7 @@
                             }) }}
                         {% endcall %}
                         {% call govukFieldset({
-                            classes:"govuk-!-margin-top-7",
+                            classes:"govuk-!-margin-top-2",
 
                             legend: {
                                 text: "Time",
@@ -82,26 +87,79 @@
                                 formResponses: formResponses.time or formDate.time
                             }) }}
                         {% endcall %}
-                    {% endset %}
+                    {% else %}
+                        {% set dateTimeHtml %}
+                            {% call govukFieldset({
+                                legend: {
+                                    text: "Date",
+                                    classes: "govuk-visually-hidden",
+                                    isPageHeading: false}
+                                }) %}
 
-                    {% set appointmentTimeTypeOptions = [] %}
-                    {% for value, text in appointmentTimeType %}
-                        {% set appointmentTimeTypeOptions = (appointmentTimeTypeOptions.push(
-                            {   value: value, 
-                                text: text,
-                                conditional: {
-                                html: dateTimeHtml
-                                } if value === SPECIFIC_DATE_TIME
-                            }), appointmentTimeTypeOptions) %}
-                    {% endfor %}
+                                {{ hmppsDatePicker({
+                                    id: "date-calendarDate",
+                                    name: "date[calendarDate]",
+                                    label: {
+                                        text: "Date"
+                                    },
+                                    hint: {
+                                        id: "date-hint",
+                                        text: "For example, 12/11/2024"
+                                    },
+                                    errorMessage: validationErrors | findError('date'),
+                                    classes: 'hmpps-datepicker--fixed-width',
+                                    value: formResponses.date.calendarDate or formDate.date.calendarDate
+                                }) }}
+                            {% endcall %}
+                            {% call govukFieldset({
+                                classes:"govuk-!-margin-top-7",
 
-                    {{ govukRadios({
-                    id: "appointment-time-type",
-                    name: "appointmentTimeType",
-                    value: (formResponses.appointmentTimeType or licence.appointmentTimeType) or SPECIFIC_DATE_TIME,
-                    items: appointmentTimeTypeOptions
-                }) }}
+                                legend: {
+                                    text: "Time",
+                                    classes: "govuk-visually-hidden",
+                                    isPageHeading: false}
+                                }) %}
+                            
+                                {{ timePicker({
+                                    id: "time",
+                                    label: {
+                                        text: "Time"
+                                    },
+                                    hint: {
+                                        id: "time-hint",
+                                        text: "For example, 9:30am or 2:55pm"
+                                    },
+                                    errorMessage: validationErrors | findError('time'),
+                                    formResponses: formResponses.time or formDate.time
+                                }) }}
+                            {% endcall %}
+                        {% endset %}
 
+                        {% if licence.isEligibleForEarlyRelease %}
+                            {{ govukWarningText({
+                                html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
+                                iconFallbackText: "Warning"
+                            }) }}
+                        {% endif %}
+
+                        {% set appointmentTimeTypeOptions = [] %}
+                        {% for value, text in appointmentTimeType %}
+                            {% set appointmentTimeTypeOptions = (appointmentTimeTypeOptions.push(
+                                {   value: value, 
+                                    text: text,
+                                    conditional: {
+                                    html: dateTimeHtml
+                                    } if value === SPECIFIC_DATE_TIME
+                                }), appointmentTimeTypeOptions) %}
+                        {% endfor %}
+
+                        {{ govukRadios({
+                            id: "appointment-time-type",
+                            name: "appointmentTimeType",
+                            value: (formResponses.appointmentTimeType or licence.appointmentTimeType) or SPECIFIC_DATE_TIME,
+                            items: appointmentTimeTypeOptions
+                        }) }}
+                    {% endif %}
                 {% endcall %}
                 <div class="govuk-button-group">
                     {{ govukButton({
