@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import _ from 'lodash'
-import { PrisonerSearchCriteria } from '../../../@types/prisonerSearchApiClientTypes'
+import { Prisoner, PrisonerSearchCriteria } from '../../../@types/prisonerSearchApiClientTypes'
 import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
 import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
@@ -32,7 +32,7 @@ export default class OffenderSearchRoutes {
           } as PrisonerSearchCriteria,
           user,
         )
-        .catch(() => [])
+        .catch((): Prisoner[] => [])
     } else {
       nomisRecords = await this.prisonerService
         .searchPrisoners(
@@ -43,7 +43,7 @@ export default class OffenderSearchRoutes {
           } as PrisonerSearchCriteria,
           user,
         )
-        .catch(() => [])
+        .catch((): Prisoner[] => [])
       deliusRecords = await this.probationService.getOffendersByNomsNumbers(nomisRecords.map(o => o.prisonerNumber))
     }
 
