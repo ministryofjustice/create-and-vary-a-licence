@@ -96,7 +96,7 @@ export default class HmppsRestClient {
       .then(response => {
         return raw ? response : response.body
       })
-      .catch(error => {
+      .catch((error): void => {
         if (return404 && error.status === 404) {
           return null
         }
