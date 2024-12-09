@@ -6,15 +6,14 @@
   - formDate - is an object containing the current values from the API (if any) for inductionDate, inductionTime
 #}
 
-{% from "../../partials/timePicker.njk" import timePicker %}
-{% from "customComponents/datePicker/macro.njk" import hmppsDatePicker %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "partials/hdc/hdcInitialMeetingTimeInputs.njk" import hdcInitialMeetingTimeInputs %}
+{% from "partials/initialMeetingTimeInputs.njk" import initialMeetingTimeInputs %}
+
 
 
 {% set pageTitle = applicationName + " - Create a licence - When is the initial appointment?" %}
 {% set pageId = "appointment-time-page" %}
 {% set backLinkHref = "/licence/create/id/" + licence.id + "/initial-meeting-contact" %}
-{% set SPECIFIC_DATE_TIME = "SPECIFIC_DATE_TIME" %}
 
 {% block content %}
     <form method="POST">
@@ -30,111 +29,8 @@
                     }
                 }) %}
                     {% if licence.kind == "HDC"%}
-                        {% call govukFieldset({
-                            classes:"govuk-!-margin-top-3",
-
-                            legend: {
-                                text: "Date",
-                                classes: "govuk-visually-hidden",
-                                isPageHeading: false}
-                            }) %}
-
-                            {{ govukRadios({
-                                id: "appointment-time-type",
-                                name: "appointmentTimeType",
-                                value: SPECIFIC_DATE_TIME,
-                                items: [{
-                                    value: SPECIFIC_DATE_TIME,
-                                    text: "Specific date and time"
-                                }],
-                                classes: "govuk-visually-hidden"
-                            }) }}
-
-                            {{ hmppsDatePicker({
-                                id: "date-calendarDate",
-                                name: "date[calendarDate]",
-                                label: {
-                                    text: "Date"
-                                },
-                                hint: {
-                                    id: "date-hint",
-                                    text: "For example, 12/11/2024"
-                                },
-                                errorMessage: validationErrors | findError('date'),
-                                classes: 'hmpps-datepicker--fixed-width',
-                                value: formResponses.date.calendarDate or formDate.date.calendarDate
-                            }) }}
-                        {% endcall %}
-                        {% call govukFieldset({
-                            classes:"govuk-!-margin-top-2",
-
-                            legend: {
-                                text: "Time",
-                                classes: "govuk-visually-hidden",
-                                isPageHeading: false}
-                            }) %}
-                        
-                            {{ timePicker({
-                                id: "time",
-                                label: {
-                                    text: "Time"
-                                },
-                                hint: {
-                                    id: "time-hint",
-                                    text: "For example, 9:30am or 2:55pm"
-                                },
-                                errorMessage: validationErrors | findError('time'),
-                                formResponses: formResponses.time or formDate.time
-                            }) }}
-                        {% endcall %}
+                        {{ hdcInitialMeetingTimeInputs(formResponses, formDate, validationErrors) }}
                     {% else %}
-                        {% set dateTimeHtml %}
-                            {% call govukFieldset({
-                                legend: {
-                                    text: "Date",
-                                    classes: "govuk-visually-hidden",
-                                    isPageHeading: false}
-                                }) %}
-
-                                {{ hmppsDatePicker({
-                                    id: "date-calendarDate",
-                                    name: "date[calendarDate]",
-                                    label: {
-                                        text: "Date"
-                                    },
-                                    hint: {
-                                        id: "date-hint",
-                                        text: "For example, 12/11/2024"
-                                    },
-                                    errorMessage: validationErrors | findError('date'),
-                                    classes: 'hmpps-datepicker--fixed-width',
-                                    value: formResponses.date.calendarDate or formDate.date.calendarDate
-                                }) }}
-                            {% endcall %}
-                            {% call govukFieldset({
-                                classes:"govuk-!-margin-top-7",
-
-                                legend: {
-                                    text: "Time",
-                                    classes: "govuk-visually-hidden",
-                                    isPageHeading: false}
-                                }) %}
-                            
-                                {{ timePicker({
-                                    id: "time",
-                                    label: {
-                                        text: "Time"
-                                    },
-                                    hint: {
-                                        id: "time-hint",
-                                        text: "For example, 9:30am or 2:55pm"
-                                    },
-                                    errorMessage: validationErrors | findError('time'),
-                                    formResponses: formResponses.time or formDate.time
-                                }) }}
-                            {% endcall %}
-                        {% endset %}
-
                         {% if licence.isEligibleForEarlyRelease %}
                             {{ govukWarningText({
                                 html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
@@ -142,23 +38,7 @@
                             }) }}
                         {% endif %}
 
-                        {% set appointmentTimeTypeOptions = [] %}
-                        {% for value, text in appointmentTimeType %}
-                            {% set appointmentTimeTypeOptions = (appointmentTimeTypeOptions.push(
-                                {   value: value, 
-                                    text: text,
-                                    conditional: {
-                                    html: dateTimeHtml
-                                    } if value === SPECIFIC_DATE_TIME
-                                }), appointmentTimeTypeOptions) %}
-                        {% endfor %}
-
-                        {{ govukRadios({
-                            id: "appointment-time-type",
-                            name: "appointmentTimeType",
-                            value: (formResponses.appointmentTimeType or licence.appointmentTimeType) or SPECIFIC_DATE_TIME,
-                            items: appointmentTimeTypeOptions
-                        }) }}
+                        {{ initialMeetingTimeInputs(formResponses, formDate, licence, appointmentTimeType, validationErrors) }}
                     {% endif %}
                 {% endcall %}
                 <div class="govuk-button-group">
