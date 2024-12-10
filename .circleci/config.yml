@@ -3,15 +3,12 @@ orbs:
   hmpps: ministryofjustice/hmpps@8
   codecov: codecov/codecov@3.2.5
 parameters:
-  alerts-slack-channel:
-    type: string
-    default: cvl_alerts_security
   releases-slack-channel:
     type: string
     default: the_elephants_devs
   node-version:
     type: string
-    default: 20.11-browsers
+    default: 22.12-browsers
 executors:
   integration-tests:
     docker:
