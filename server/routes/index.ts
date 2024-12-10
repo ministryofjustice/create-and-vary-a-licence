@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import csrf from '../middleware/csrfMiddleware'
 import { Services } from '../services'
 import createLicenceRoutes from './creatingLicences'
 import createHardStopLicenceRoutes from './creatingLicences/handlers/hardStop'
@@ -30,7 +29,6 @@ export default function Index(services: Services): Router {
 
   router.use(auth.authenticationMiddleware(tokenVerifier))
   router.use(populateCurrentUser(services.userService, services.licenceService))
-  router.use(csrf())
   router.use(flashMessages())
   router.use(fromReviewMiddleware())
 
