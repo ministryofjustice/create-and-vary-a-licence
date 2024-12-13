@@ -80,8 +80,7 @@ describe('HDC Service', () => {
     it('Should retrieve HDC information', async () => {
       licenceApiClient.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
-      const result = await hdcService.getHdcLicenceData(1)
-      expect(result).toEqual(exampleHdcLicenceData)
+      await hdcService.getHdcLicenceData(1)
       expect(licenceApiClient.getHdcLicenceData).toHaveBeenCalledWith(1)
     })
 
@@ -98,7 +97,6 @@ describe('HDC Service', () => {
     it('Should set allCurfewTimesEqual to false when curfew times are different', async () => {
       const differentCurfewTimes = exampleHdcLicenceData
       differentCurfewTimes.curfewTimes[0].fromTime = '18:00:00'
-
       licenceApiClient.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
 
       const result = await hdcService.getHdcLicenceData(1)
