@@ -545,4 +545,8 @@ export default class LicenceService {
   async deactivateActiveAndVariationLicences(licenceId: number, reason: string): Promise<void> {
     return this.licenceApiClient.deactivateActiveAndVariationLicences(licenceId, reason)
   }
+
+  async getIneligibilityReasons(nomsId: string): Promise<string[]> {
+    return this.licenceApiClient.getIneligibilityReasons(nomsId)
+  }
 }
