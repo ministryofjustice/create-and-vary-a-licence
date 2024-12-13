@@ -108,6 +108,8 @@ describe('Route Handlers - Offender detail', () => {
         telephoneNumber: '078929482994',
       } as DeliusStaff)
 
+      licenceService.getIneligibilityReasons.mockResolvedValue([])
+
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
         prisonerDetail: {
@@ -159,6 +161,7 @@ describe('Route Handlers - Offender detail', () => {
           tused: 'Not found',
           tussd: 'Not found',
         },
+        ineligibilityReasons: [],
       })
     })
   })
@@ -238,6 +241,8 @@ describe('Route Handlers - Offender detail', () => {
       telephoneNumber: '078929482994',
     } as DeliusStaff)
 
+    licenceService.getIneligibilityReasons.mockResolvedValue([])
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -289,6 +294,7 @@ describe('Route Handlers - Offender detail', () => {
         tused: 'Not found',
         tussd: 'Not found',
       },
+      ineligibilityReasons: [],
     })
   })
   it('Should render all offender information with NULL sentence dates', async () => {
@@ -360,6 +366,8 @@ describe('Route Handlers - Offender detail', () => {
       telephoneNumber: '078929482994',
     } as DeliusStaff)
 
+    licenceService.getIneligibilityReasons.mockResolvedValue([])
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -411,6 +419,7 @@ describe('Route Handlers - Offender detail', () => {
         tused: 'Not found',
         tussd: 'Not found',
       },
+      ineligibilityReasons: [],
     })
   })
 
@@ -505,6 +514,8 @@ describe('Route Handlers - Offender detail', () => {
       topupSupervisionExpiryDate: '07/01/2022',
     } as Partial<Licence> as Licence)
 
+    licenceService.getIneligibilityReasons.mockResolvedValue([])
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -556,6 +567,7 @@ describe('Route Handlers - Offender detail', () => {
         tused: '07 Jan 2022',
         tussd: '06 Jan 2022',
       },
+      ineligibilityReasons: [],
     })
   })
 
@@ -650,6 +662,8 @@ describe('Route Handlers - Offender detail', () => {
       probationAreaDescription: 'Region 1',
     } as Licence)
 
+    licenceService.getIneligibilityReasons.mockResolvedValue([])
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -701,6 +715,155 @@ describe('Route Handlers - Offender detail', () => {
         tused: 'Not found',
         tussd: 'Not found',
       },
+      ineligibilityReasons: [],
+    })
+  })
+
+  it('Should render ineligibility reasons if the offender is ineligible for CVL', async () => {
+    req.params = {
+      nomsId: 'ABC123',
+    }
+
+    const expectedPrisonerDetail = {
+      prisoner: {
+        firstName: 'Peter',
+        lastName: 'Pepper',
+        conditionalReleaseDate: '2022-06-01',
+        confirmedReleaseDate: '2022-06-01',
+        postRecallReleaseDate: '2022-05-01',
+        topupSupervisionExpiryDate: '2023-05-01',
+        homeDetentionCurfewEligibilityDate: '2022-05-01',
+        sentenceExpiryDate: '2022-06-01',
+        licenceExpiryDate: '2022-06-01',
+        paroleEligibilityDate: '2022-01-01',
+        indeterminateSentence: false,
+        dateOfBirth: '1970-01-01',
+        recall: true,
+      },
+      cvl: {
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: false,
+        hardStopDate: '03/02/2023',
+        hardStopWarningDate: '01/02/2023',
+      },
+    } as CaseloadItem
+    licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
+
+    probationService.searchProbationers.mockResolvedValue([
+      {
+        otherIds: {
+          crn: 'X1234',
+        },
+        offenderManagers: [
+          {
+            active: true,
+            staff: {
+              code: 'X123',
+              forenames: 'Mr',
+              surname: 'T',
+            },
+            team: {
+              description: 'The A Team',
+              localDeliveryUnit: {
+                description: 'LDU A',
+              },
+              district: {
+                description: 'LAU A',
+              },
+              borough: {
+                description: 'PDU A',
+              },
+            },
+            probationArea: {
+              description: 'Wales',
+            },
+          },
+        ],
+      } as unknown as OffenderDetail,
+    ])
+
+    prisonerService.getHdcStatuses.mockResolvedValue([
+      {
+        bookingId: '1',
+        approvalStatus: 'PENDING',
+        checksPassed: true,
+      } as HdcStatus,
+    ])
+
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
+      email: 'mr.t@probation.gov.uk',
+      telephoneNumber: '078929482994',
+    } as DeliusStaff)
+
+    licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
+      licenceId: 1,
+    } as LicenceSummary)
+
+    licenceService.getLicence.mockResolvedValue({
+      id: 1,
+      comEmail: 'test@probation.gov.uk',
+      comUsername: 'AB123C',
+      probationTeamDescription: 'Team 1',
+      probationLauDescription: 'LAU 1',
+      probationPduDescription: 'PDU 1',
+      probationAreaDescription: 'Region 1',
+      probationTeamCode: 'Test',
+    } as Licence)
+
+    licenceService.getIneligibilityReasons.mockResolvedValue(['Reason1', 'Reason2'])
+
+    await handler.GET(req, res)
+    expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
+      prisonerDetail: {
+        ...expectedPrisonerDetail.prisoner,
+        conditionalReleaseDate: '01 Jun 2022',
+        confirmedReleaseDate: '01 Jun 2022',
+        crn: 'X1234',
+        determinate: 'Yes',
+        dob: '01 Jan 1970',
+        hdcStatus: 'PENDING',
+        hdced: '01 May 2022',
+        licenceExpiryDate: '01 Jun 2022',
+        name: 'Peter Pepper',
+        paroleEligibilityDate: '01 Jan 2022',
+        postRecallReleaseDate: '01 May 2022',
+        sentenceExpiryDate: '01 Jun 2022',
+        tused: '01 May 2023',
+        recall: 'Yes',
+        hardStop: {
+          cutoffDate: '03/02/2023',
+          isInHardStopPeriod: false,
+          warningDate: '01/02/2023',
+        },
+      },
+      probationPractitioner: {
+        email: 'mr.t@probation.gov.uk',
+        lau: 'LAU A',
+        ldu: 'LDU A',
+        name: 'Mr T',
+        pdu: 'PDU A',
+        region: 'Wales',
+        team: 'The A Team',
+        telephone: '078929482994',
+      },
+      cvlCom: {
+        email: 'test@probation.gov.uk',
+        lau: 'LAU 1',
+        pdu: 'PDU 1',
+        region: 'Region 1',
+        team: 'Team 1',
+        username: 'AB123C',
+      },
+      licence: {
+        led: 'Not found',
+        ssd: 'Not found',
+        crd: 'Not found',
+        ard: 'Not found',
+        sed: 'Not found',
+        tused: 'Not found',
+        tussd: 'Not found',
+      },
+      ineligibilityReasons: ['Reason1', 'Reason2'],
     })
   })
 })

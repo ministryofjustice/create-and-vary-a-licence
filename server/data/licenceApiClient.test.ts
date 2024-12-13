@@ -785,4 +785,11 @@ describe('Licence API client tests', () => {
       )
     })
   })
+
+  describe('Ineligibility Reasons: ', () => {
+    it('should get ineligibility reasons', async () => {
+      await licenceApiClient.getIneligibilityReasons('A1234AA')
+      expect(get).toHaveBeenCalledWith({ path: '/offender/nomisid/A1234AA/ineligibility-reasons' })
+    })
+  })
 })
