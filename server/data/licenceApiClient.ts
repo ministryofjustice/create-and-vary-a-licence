@@ -690,4 +690,10 @@ export default class LicenceApiClient extends RestClient {
       path: `/hdc/curfew/licenceId/${licenceId}`,
     })) as Promise<HdcLicenceData>
   }
+
+  async getIneligibilityReasons(nomisId: string): Promise<string[]> {
+    return (await this.get({
+      path: `/offender/nomisid/${nomisId}/ineligibility-reasons`,
+    })) as Promise<string[]>
+  }
 }

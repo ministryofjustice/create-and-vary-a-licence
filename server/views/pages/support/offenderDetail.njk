@@ -261,6 +261,27 @@
             </table>
         </div>
     </div>
+
+    {% if ineligibilityReasons | length %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <table class="govuk-table">
+                    <caption class="govuk-table__caption govuk-table__caption--m">Ineligibility Reasons</caption>
+                    <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">Reason</th>
+                        <td class="govuk-table__cell">
+                            {% for reason in ineligibilityReasons %}
+                                <li>{{reason}}</li>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
     
     <div class="govuk-button-group">
         {{ govukButton({
