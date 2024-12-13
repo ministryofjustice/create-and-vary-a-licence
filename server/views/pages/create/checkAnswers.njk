@@ -2,11 +2,13 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "partials/inductionMeetingDetailsSummary.njk" import inductionMeetingDetails %}
+{% from "pages/licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
 {% from "partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/variationSummary.njk" import variationSummary %}
 {% from "moj/components/banner/macro.njk" import mojBanner %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
@@ -97,6 +99,13 @@
                 {{ inductionMeetingDetails(licence, canEditInitialAppt, validationErrors, contactForChangeText) }}
             {% endif %}
 
+            {% if licence.kind === 'HDC' %}
+                {{ hdcCurfewTimes(hdcLicenceData) }}
+                {{ govukDetails({
+                    summaryText: "How do I change the HDC curfew details?",
+                    html: "You need to email <a href='mailto:createandvaryalicence@digital.justice.gov.uk'>createandvaryalicence@digital.justice.gov.uk</a> to change the HDC curfew details."
+                }) }}
+            {% endif %}
 
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}

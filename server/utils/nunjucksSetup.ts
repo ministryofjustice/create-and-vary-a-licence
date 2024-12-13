@@ -414,6 +414,18 @@ export function registerNunjucks(app?: express.Express): Environment {
     },
   )
 
+  njkEnv.addFilter('localTimeTo12h', (time: string): string => {
+    if (!time) {
+      return undefined
+    }
+    const [hour, minute] = time.split(':')
+    const hourInt = parseInt(hour, 10)
+    if (hourInt > 12) {
+      return `${hourInt - 12}${minute === '00' ? '' : `:${minute}`}pm`
+    }
+    return `${hourInt}${minute === '00' ? '' : `:${minute}`}am`
+  })
+
   njkEnv.addGlobal('dpsUrl', config.dpsUrl)
   njkEnv.addGlobal('serviceNowUrl', config.serviceNowUrl)
   njkEnv.addGlobal('serviceName', config.serviceName)

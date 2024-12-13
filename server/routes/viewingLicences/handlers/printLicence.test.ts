@@ -5,8 +5,7 @@ import PrisonerService from '../../../services/prisonerService'
 import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import config from '../../../config'
-import HdcService from '../../../services/hdcService'
-import { HdcLicenceData } from '../../../@types/licenceApiClientTypes'
+import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const qrCodeService = new QrCodeService() as jest.Mocked<QrCodeService>
@@ -82,7 +81,8 @@ describe('Route - print a licence', () => {
         untilTime: '09:00:00',
       },
     ],
-  } as HdcLicenceData
+    allCurfewTimesEqual: true,
+  } as CvlHdcLicenceData
 
   beforeEach(() => {
     jest.resetAllMocks()
