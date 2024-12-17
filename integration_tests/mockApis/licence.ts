@@ -180,6 +180,24 @@ export default {
     })
   },
 
+  stubGetHdcLicence: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/licence/id/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          ...licencePlaceholder,
+          kind: 'HDC',
+          homeDetentionCurfewActualDate: '01/03/2021',
+        },
+      },
+    })
+  },
+
   stubGetEmptyLicence: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -1728,6 +1746,36 @@ export default {
             conditionalReleaseDate: '2022-11-10',
           },
           cvl: { licenceType: 'PSS', hardStopDate: null, hardStopWarningDate: null, isInhardStopPeriod: false },
+        },
+      },
+    }),
+
+  stubGetHdcCaseloadItem: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/prisoner-search/nomisid/.*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          prisoner: {
+            prisonerNumber: 'G9786GC',
+            firstName: 'Patrick',
+            lastName: 'Holmes',
+            dateOfBirth: '1960-11-10',
+            status: 'ACTIVE IN',
+            prisonId: 'BAI',
+            sentenceStartDate: '2017-03-01',
+            releaseDate: '2024-07-19',
+            confirmedReleaseDate: '2022-11-10',
+            sentenceExpiryDate: '2028-08-31',
+            licenceExpiryDate: '2028-08-31',
+            conditionalReleaseDate: '2022-11-10',
+            homeDetentionCurfewActualDate: '2024-07-09',
+          },
+          cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, isInhardStopPeriod: false },
         },
       },
     }),
