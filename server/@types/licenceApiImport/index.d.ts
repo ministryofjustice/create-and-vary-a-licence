@@ -4882,14 +4882,14 @@ export interface components {
        * @enum {string}
        */
       fromDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      fromTime?: components['schemas']['LocalTime']
+      fromTime?: string
       /**
        * @description The day on which this curfew ends for this curfew time
        * @example MONDAY
        * @enum {string}
        */
       untilDay?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      untilTime?: components['schemas']['LocalTime']
+      untilTime?: string
     }
     /** @description Describes a HDC licence within this service */
     HdcLicence: Omit<
