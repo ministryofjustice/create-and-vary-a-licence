@@ -1,7 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% macro hdcCurfewTimes(curfewTimes) %}
-    {% set addressLine2Html = curfewTimes.curfewAddress.addressLine2 | escape + "<br>" if curfewTimes.curfewAddress.addressLine2 | length%}
+    {% set addressLine2Html = curfewTimes.curfewAddress.addressLine2 | escape + ", " if curfewTimes.curfewAddress.addressLine2 | length%}
 
     <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
     {{ govukSummaryList({
@@ -10,9 +10,9 @@
             {
                 key: {text: 'Address'}, 
                 value: {
-                    html: "<p>" + curfewTimes.curfewAddress.addressLine1 | escape + "<br>" + 
+                    html: "<p>" + curfewTimes.curfewAddress.addressLine1 | escape + ", " + 
                           addressLine2Html + 
-                          curfewTimes.curfewAddress.addressTown | escape + "<br>" + 
+                          curfewTimes.curfewAddress.addressTown | escape + ", " + 
                           curfewTimes.curfewAddress.postCode | escape + "</p>"
                 }
             },
