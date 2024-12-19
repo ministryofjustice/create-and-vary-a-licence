@@ -3222,6 +3222,11 @@ export interface components {
        */
       isDueForEarlyRelease?: boolean
       probationPractitioner?: components['schemas']['ProbationPractitioner']
+      /**
+       * @description Type of this licence
+       * @enum {string}
+       */
+      kind?: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
     }
     /** @description Describes a probation practitioner on an approval case */
     ProbationPractitioner: {
