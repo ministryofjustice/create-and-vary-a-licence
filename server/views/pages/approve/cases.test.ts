@@ -34,7 +34,7 @@ describe('View and print a licence - case list', () => {
     expect($('#release-date-2').text()).toBe('1 Sep 2022')
   })
 
-  it('should display HDC release warning label when kind is HDC', () => {
+  it('should display HDC release warning label when kind is HDC and approval is needed', () => {
     const $ = render({
       cases: [
         {
@@ -45,6 +45,21 @@ describe('View and print a licence - case list', () => {
         },
       ],
       approvalNeededView: true,
+    })
+    expect($('#release-date-1').text()).toBe('3 Aug 2022HDC release')
+  })
+
+  it('should display HDC release warning label when kind is HDC and recently approved', () => {
+    const $ = render({
+      cases: [
+        {
+          name: 'John Smith',
+          prisonerNumber: 'A1234AC',
+          releaseDate: '3 Aug 2022',
+          kind: LicenceKind.HDC,
+        },
+      ],
+      approvalNeededView: false,
     })
     expect($('#release-date-1').text()).toBe('3 Aug 2022HDC release')
   })
