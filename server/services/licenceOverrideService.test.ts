@@ -38,4 +38,12 @@ describe('Licence Override Service', () => {
     overrideStatus.overrideDates(1, { ...dates, reason }, user)
     expect(licenceApiClient.overrideLicenceDates).toHaveBeenCalledWith(1, { ...dates, reason }, user)
   })
+
+  it('Updates licence type', () => {
+    const licenceType = 'AP'
+    const reason = 'reason to update dates'
+
+    overrideStatus.overrideType(1, { licenceType, reason }, user)
+    expect(licenceApiClient.overrideLicenceType).toHaveBeenCalledWith(1, { licenceType, reason }, user)
+  })
 })

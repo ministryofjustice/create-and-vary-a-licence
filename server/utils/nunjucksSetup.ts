@@ -91,6 +91,12 @@ export function registerNunjucks(app?: express.Express): Environment {
   // Needs to trim - in case of newline in value
   njkEnv.addGlobal('tagManagerContainerId', tagManagerContainerId?.trim())
 
+  // To aid development, this can be used to inspect the structure of an object in a template
+  njkEnv.addFilter(
+    'dumpJson',
+    (val: string) => new nunjucks.runtime.SafeString(`<pre>${JSON.stringify(val, null, 2)}</pre>`),
+  )
+
   njkEnv.addFilter('initialiseName', (fullName: string) => {
     // this check is for the authError page
     if (!fullName) {
