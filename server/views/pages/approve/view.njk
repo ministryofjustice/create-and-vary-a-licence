@@ -4,6 +4,7 @@
 {% from "govuk/components/accordion/macro.njk" import govukAccordion %}
 {% from "./prisonerSummaryDetails.njk" import prisonerSummaryDetails %}
 {% from "./keyDates.njk" import keyDates %}
+{% from "../licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
 {% from "./InitialAppointment.njk" import InitialAppointment %}
 {% from "./ProbationPractitionerDetails.njk" import ProbationPractitionerDetails %}
 {% from "../../partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
@@ -49,11 +50,12 @@
 
         <div class="govuk-grid-row govuk-!-padding-bottom-4">
             <h2 class="govuk-heading-l govuk-!-margin-top-9">Review details</h2>
+                {% set datesHeading = "HDC and licence dates" if licence.kind === 'HDC' else "Key dates" %}
 
                 {% set items = [
                         {
                             heading: {
-                                text: "Key dates"
+                                text: datesHeading
                             },
                             content: {
                                 html: keyDates(licence, isDueForEarlyRelease),
@@ -63,6 +65,21 @@
                         }
                     ]
                 %}
+
+                {% if licence.kind === 'HDC' %}
+                    {% set items = (items.push(
+                        {
+                            heading: {
+                                text: "HDC curfew details"
+                            },
+                            content: {
+                                    html: hdcCurfewTimes(hdcLicenceData)       
+                            },
+                            expanded: true
+                        }
+                    ), items) %}
+                {% endif %}
+
 
                 {% if licence.kind === 'HARD_STOP' %}
                     {% set items = (items.push(
@@ -168,7 +185,7 @@
             {% if licence.kind === "HARD_STOP" %}
                 <p>Contact {{ licence.submittedByFullName }} if you need more information about something.<br>They will only be able to change the initial appointment.</p>
             {% else %}    
-                <p>Contact the probation practitioner directly if you need more information about something.</p>
+                <p>Contact the probation practitioner if you need more information.</p>
             {% endif %}
         </div>
         <div class="govuk-grid-row govuk-button-group govuk-!-padding-top-2">

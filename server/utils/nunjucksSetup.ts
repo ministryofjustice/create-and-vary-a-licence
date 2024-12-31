@@ -15,6 +15,7 @@ import {
   json24HourTimeTo12HourTime,
   jsonDtToDate,
   jsonDtToDateShort,
+  jsonDtToDateShortMinusDay,
   jsonDtToDateWithDay,
   parseCvlDate,
   toIsoDate,
@@ -175,6 +176,10 @@ export function registerNunjucks(app?: express.Express): Environment {
 
   njkEnv.addFilter('datetimeToDateShort', (dt: string) => {
     return jsonDtToDateShort(dt)
+  })
+
+  njkEnv.addFilter('datetimeToDateShortMinusDay', (dt: string) => {
+    return jsonDtToDateShortMinusDay(dt)
   })
 
   njkEnv.addFilter('datetimeToDateWithDay', (dt: string) => {

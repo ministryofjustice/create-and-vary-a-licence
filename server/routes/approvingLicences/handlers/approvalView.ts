@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ProbationService from '../../../services/probationService'
+import HdcService from '../../../services/hdcService'
 import { groupingBy } from '../../../utils/utils'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import { nameToString } from '../../../data/deliusClient'
@@ -10,6 +11,7 @@ export default class ApprovalViewRoutes {
   constructor(
     private readonly licenceService: LicenceService,
     private readonly probationService: ProbationService,
+    private readonly hdcService: HdcService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -27,6 +29,9 @@ export default class ApprovalViewRoutes {
         user,
       )
 
+      const hdcLicenceData =
+        licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
+
       const comDetails = await this.probationService.getStaffDetailByUsername(comUsername)
 
       const returnPath = encodeURIComponent(`/licence/approve/id/${licence.id}/view`)
@@ -40,6 +45,7 @@ export default class ApprovalViewRoutes {
         },
         returnPath,
         isDueForEarlyRelease: licence.kind !== LicenceKind.VARIATION && licence.isDueForEarlyRelease,
+        hdcLicenceData,
       })
     } else {
       res.redirect(`/licence/approve/cases`)

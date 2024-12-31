@@ -11,6 +11,7 @@ import {
   jsonDtTo12HourTime,
   json24HourTimeTo12HourTime,
   jsonDtToDate,
+  jsonDtToDateShortMinusDay,
   removeDuplicates,
   filterCentralCaseload,
   jsonDtToDateWithDay,
@@ -259,6 +260,26 @@ test.each`
   ${'null'}             | ${'null'}
 `('convert JSON datetime to long date', ({ jsonDateTime, dateFull }) => {
   const dateValue = jsonDtToDate(jsonDateTime)
+  if (isDefined(dateValue)) {
+    expect(dateValue).toEqual(dateFull)
+  } else {
+    expect(dateValue).toBeNull()
+  }
+})
+
+test.each`
+  jsonDateTime          | dateFull
+  ${'12/12/2021 23:15'} | ${'11 Dec 2021'}
+  ${'31/01/2022 12:01'} | ${'30 Jan 2022'}
+  ${'31/12/2022 12:00'} | ${'30 Dec 2022'}
+  ${'31/12/2022 00:00'} | ${'30 Dec 2022'}
+  ${'01/01/2022 01:01'} | ${'31 Dec 2021'}
+  ${'22/10/2024 14:23'} | ${'21 Oct 2024'}
+  ${'22/10/24 14:23'}   | ${'21 Oct 2024'}
+  ${'22/10/24'}         | ${'21 Oct 2024'}
+  ${'null'}             | ${'null'}
+`('convert JSON datetime to long date', ({ jsonDateTime, dateFull }) => {
+  const dateValue = jsonDtToDateShortMinusDay(jsonDateTime)
   if (isDefined(dateValue)) {
     expect(dateValue).toEqual(dateFull)
   } else {

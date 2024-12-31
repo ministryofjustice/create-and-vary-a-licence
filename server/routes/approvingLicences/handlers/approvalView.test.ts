@@ -4,20 +4,54 @@ import ApprovalViewRoutes from './approvalView'
 import LicenceService from '../../../services/licenceService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import ProbationService from '../../../services/probationService'
+import HdcService, { CvlHdcLicenceData } from '../../../services/hdcService'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const deliusStaff = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 const username = 'joebloggs'
 const displayName = 'Joe Bloggs'
 
 jest.mock('../../../services/probationService')
+jest.mock('../../../services/hdcService')
 
 describe('Route - view and approve a licence', () => {
-  const handler = new ApprovalViewRoutes(licenceService, deliusStaff)
+  const handler = new ApprovalViewRoutes(licenceService, deliusStaff, hdcService)
   let req: Request
   let res: Response
+
+  const exampleHdcLicenceData = {
+    curfewAddress: {
+      addressLine1: 'addressLineOne',
+      addressLine2: 'addressLineTwo',
+      addressTown: 'addressTownOrCity',
+      postCode: 'addressPostcode',
+    },
+    firstNightCurfewHours: {
+      firstNightFrom: '09:00',
+      firstNightUntil: '17:00',
+    },
+    curfewTimes: [
+      {
+        curfewTimesSequence: 1,
+        fromDay: 'MONDAY',
+        fromTime: '17:00:00',
+        untilDay: 'TUESDAY',
+        untilTime: '09:00:00',
+      },
+      {
+        curfewTimesSequence: 2,
+        fromDay: 'TUESDAY',
+        fromTime: '17:00:00',
+        untilDay: 'WEDNESDAY',
+        untilTime: '09:00:00',
+      },
+    ],
+    allCurfewTimesEqual: true,
+  } as CvlHdcLicenceData
 
   beforeEach(() => {
     req = {
@@ -28,6 +62,7 @@ describe('Route - view and approve a licence', () => {
 
     licenceService.updateStatus = jest.fn()
     licenceService.recordAuditEvent = jest.fn()
+    hdcService.getHdcLicenceData.mockResolvedValue(exampleHdcLicenceData)
   })
 
   describe('GET', () => {
@@ -41,6 +76,7 @@ describe('Route - view and approve a licence', () => {
         surname: 'Bloggs',
       },
     } as DeliusStaff)
+
     it('should check status is SUBMITTED else redirect to case list', async () => {
       res = {
         render: jest.fn(),
@@ -98,9 +134,46 @@ describe('Route - view and approve a licence', () => {
         },
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
+        hdcLicenceData: null,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(deliusStaff.getStaffDetailByUsername).toHaveBeenCalled()
+    })
+
+    it('should pass through HDC licence data for HDC licences', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user: { username, displayName },
+          licence: {
+            id: 1,
+            statusCode: LicenceStatus.SUBMITTED,
+            kind: LicenceKind.HDC,
+            surname: 'Bobson',
+            forename: 'Bob',
+            appointmentTime: '12/12/2022 14:16',
+            additionalLicenceConditions: [],
+            additionalPssConditions: [],
+            bespokeConditions: [],
+            isDueForEarlyRelease: false,
+          },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/approve/view', {
+        additionalConditions: [],
+        staffDetails: {
+          email: 'joebloggs@probation.gov.uk',
+          name: 'Joe Bloggs',
+          telephone: '07777777777',
+        },
+        returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
+        isDueForEarlyRelease: false,
+        hdcLicenceData: exampleHdcLicenceData,
+      })
     })
 
     it('should set isDueForEarlyRelease to true when the licence is not a variation and the flag is true', async () => {
@@ -118,7 +191,7 @@ describe('Route - view and approve a licence', () => {
             additionalLicenceConditions: [],
             additionalPssConditions: [],
             bespokeConditions: [],
-            kind: 'CRD',
+            kind: LicenceKind.CRD,
             isDueForEarlyRelease: true,
           },
         },
@@ -135,6 +208,7 @@ describe('Route - view and approve a licence', () => {
         },
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: true,
+        hdcLicenceData: null,
       })
     })
 
@@ -153,7 +227,7 @@ describe('Route - view and approve a licence', () => {
             additionalLicenceConditions: [],
             additionalPssConditions: [],
             bespokeConditions: [],
-            kind: 'VARIATION',
+            kind: LicenceKind.VARIATION,
             isDueForEarlyRelease: true,
           },
         },
@@ -170,6 +244,7 @@ describe('Route - view and approve a licence', () => {
         },
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
+        hdcLicenceData: null,
       })
     })
 
@@ -188,7 +263,7 @@ describe('Route - view and approve a licence', () => {
             additionalLicenceConditions: [],
             additionalPssConditions: [],
             bespokeConditions: [],
-            kind: 'CRD',
+            kind: LicenceKind.CRD,
             isDueForEarlyRelease: false,
           },
         },
@@ -205,6 +280,7 @@ describe('Route - view and approve a licence', () => {
         },
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
+        hdcLicenceData: null,
       })
     })
   })
