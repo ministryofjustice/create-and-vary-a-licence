@@ -4,6 +4,7 @@
 {% from "govuk/components/accordion/macro.njk" import govukAccordion %}
 {% from "./prisonerSummaryDetails.njk" import prisonerSummaryDetails %}
 {% from "./keyDates.njk" import keyDates %}
+{% from "../licence/partials/hdcCurfewTimes.njk" import hdcCurfewTimes %}
 {% from "./InitialAppointment.njk" import InitialAppointment %}
 {% from "./ProbationPractitionerDetails.njk" import ProbationPractitionerDetails %}
 {% from "../../partials/additionalLicenceConditionsSummary.njk" import additionalLicenceConditions %}
@@ -64,6 +65,21 @@
                         }
                     ]
                 %}
+
+                {% if licence.kind === 'HDC' %}
+                    {% set items = (items.push(
+                        {
+                            heading: {
+                                text: "HDC curfew details"
+                            },
+                            content: {
+                                    html: hdcCurfewTimes(hdcLicenceData)       
+                            },
+                            expanded: true
+                        }
+                    ), items) %}
+                {% endif %}
+
 
                 {% if licence.kind === 'HARD_STOP' %}
                     {% set items = (items.push(
