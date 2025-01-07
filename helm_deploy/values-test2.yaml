@@ -63,3 +63,4 @@ gotenberg:
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts-non-prod
+  businessHoursOnly: true
