@@ -12,13 +12,15 @@
                     html: "<p>" + curfewTimes.curfewAddress.addressLine1 | escape + ", " + 
                           addressLine2Html + 
                           curfewTimes.curfewAddress.addressTown | escape + ", " + 
-                          curfewTimes.curfewAddress.postCode | escape + "</p>"
+                          curfewTimes.curfewAddress.postCode | escape + "</p>",
+                    classes: "curfew-address"
                 }
             },
             {
                 key: { text: 'First night curfew hours' }, 
                 value: {
-                    text: curfewTimes.firstNightCurfewHours.firstNightFrom | localTimeTo12h + " to " + curfewTimes.firstNightCurfewHours.firstNightUntil | localTimeTo12h
+                    text: curfewTimes.firstNightCurfewHours.firstNightFrom | localTimeTo12h + " to " + curfewTimes.firstNightCurfewHours.firstNightUntil | localTimeTo12h,
+                    classes: "first-night-curfew-hours"
                 }
             },
             {
@@ -28,7 +30,8 @@
                 },
                 value: {
                     html: curfewTimes.curfewTimes[0].fromDay | titlecase | escape + " to " + curfewTimes.curfewTimes[6].fromDay | titlecase | escape + "<br>" + 
-                          curfewTimes.curfewTimes[0].fromTime  | localTimeTo12h + " to " + curfewTimes.curfewTimes[0].untilTime | localTimeTo12h
+                          curfewTimes.curfewTimes[0].fromTime  | localTimeTo12h + " to " + curfewTimes.curfewTimes[0].untilTime | localTimeTo12h,
+                    classes: "curfew-hours"
                 }
             } if curfewTimes.allCurfewTimesEqual
         ]

@@ -14,7 +14,7 @@
 
     {% set dateRows = [
             {
-                key: { text: releaseDateHeading },
+                key: { text: releaseDateHeading, classes: "release-date-heading" },
                 value: { html: releaseDateHtml }
             }
         ]
@@ -24,11 +24,11 @@
         {% set dateRows = (dateRows.push(
                  {
                     key: { text: "HDC end date" },
-                    value: { text: licence.conditionalReleaseDate | datetimeToDateShortMinusDay }
+                    value: { text: licence.conditionalReleaseDate | datetimeToDateShortMinusDay, classes: "hdc-end-date" }
                 },
                 {
                     key: { text: "Conditional release date" },
-                    value: { text: licence.conditionalReleaseDate | datetimeToDateShort }
+                    value: { text: licence.conditionalReleaseDate | datetimeToDateShort, classes: "conditional-release-date" }
                 }
         ), dateRows) %}
     {% endif %}

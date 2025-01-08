@@ -41,6 +41,7 @@ const licencePlaceholder = {
   topupSupervisionExpiryDate: '26/06/2060',
   hardStopDate: '29/04/2021',
   hardStopWarningDate: '29/04/2021',
+  homeDetentionCurfewActualDate: null,
   comFirstName: 'John',
   comLastName: 'Smith',
   comUsername: 'jsmith',
@@ -198,6 +199,90 @@ export default {
     })
   },
 
+  stubGetHdcLicenceData: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/licences-api/hdc/curfew/licenceId/(\\d)*`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          licenceId: 1,
+          curfewAddress: {
+            addressLine1: '1 The Street',
+            addressLine2: 'Avenue',
+            addressTown: 'Some Town',
+            postCode: 'A1 2BC',
+          },
+          firstNightCurfewHours: {
+            firstNightFrom: '17:00',
+            firstNightUntil: '07:00',
+          },
+          curfewTimes: [
+            {
+              id: 1,
+              curfewTimesSequence: 1,
+              fromDay: 'MONDAY',
+              fromTime: '17:00',
+              untilDay: 'TUESDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 2,
+              fromDay: 'TUESDAY',
+              fromTime: '17:00',
+              untilDay: 'WEDNESDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 3,
+              fromDay: 'WEDNESDAY',
+              fromTime: '17:00',
+              untilDay: 'THURSDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 4,
+              fromDay: 'THURSDAY',
+              fromTime: '17:00',
+              untilDay: 'FRIDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 5,
+              fromDay: 'FRIDAY',
+              fromTime: '17:00',
+              untilDay: 'SATURDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 6,
+              fromDay: 'SATURDAY',
+              fromTime: '17:00',
+              untilDay: 'SUNDAY',
+              untilTime: '07:00',
+            },
+            {
+              id: 1,
+              curfewTimesSequence: 7,
+              fromDay: 'SUNDAY',
+              fromTime: '17:00',
+              untilDay: 'MONDAY',
+              untilTime: '07:00',
+            },
+          ],
+        },
+      },
+    })
+  },
+
   stubGetEmptyLicence: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -308,7 +393,8 @@ export default {
     typeCode: 'AP_PSS' | 'AP' | 'PSS'
     appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
     isInHardStopPeriod: boolean
-    kind: 'CRD' | 'VARIATION' | 'HARD_STOP'
+    homeDetentionCurfewActualDate: string | null
+    kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
     conditions: AdditionalCondition[]
   }): SuperAgentRequest => {
     return stubFor({
@@ -334,6 +420,7 @@ export default {
           hardStopDate: options.isInHardStopPeriod
             ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
             : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
+          homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate,
           additionalLicenceConditions: options.conditions || [
             {
               id: 1,
