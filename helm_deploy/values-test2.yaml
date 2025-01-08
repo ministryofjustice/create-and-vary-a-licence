@@ -47,6 +47,9 @@ generic-service:
     COMPONENT_API_URL: 'https://frontend-components-dev.hmpps.service.justice.gov.uk'
     MANAGE_USERS_API_URL: 'https://manage-users-api-dev.hmpps.service.justice.gov.uk'
 
+  scheduledDowntime:
+    enabled: true
+
 gotenberg:
   replicaCount: 1
 
@@ -55,5 +58,9 @@ gotenberg:
     DISABLE_UNOCONV: 1
     DEFAULT_WAIT_TIMEOUT: 30
 
+  scheduledDowntime:
+    enabled: true
+
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts-non-prod
+  businessHoursOnly: true
