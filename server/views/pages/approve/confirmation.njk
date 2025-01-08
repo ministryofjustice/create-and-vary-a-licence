@@ -18,17 +18,28 @@
             <p class="govuk-body">
                 {{ confirmationMessage }}
                 {% if isComEmailAvailable %}
+                    <br>
                     <br>We will email the probation practitioner automatically to tell them this licence has been approved.
                 {% else %}
+                    <br>
                     <br>A case administrator still needs to notify the probation team that this licence has been approved. We do not have their contact details to do this automatically.
                 {% endif %}
             </p>
 
             <h2 class="govuk-heading-m">If changes are made</h2>
+            {% if licence.kind === 'HDC' %}
+                 <p class="govuk-body">
+                    The probation practitioner can make changes to reporting instructions through the Create and vary a licence service. These changes do not need to be reapproved by the prison, but a case administrator may need to reprint the licence.
+                </p>
+                <p class="govuk-body">
+                    To change the curfew address, curfew hours or first night curfew hours the probation practitioner should email createandvaryalicence@digital.justice.gov.uk.
+                </p>
+            {% else %}
             <p class="govuk-body">
                     Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details. 
                     Other changes must be made after release. Probation practitioners can continue to work on licences for people being released early after the 2-day point.
             </p>
+            {% endif %}
 
             <p class="govuk-body">
                 {{ govukButton({

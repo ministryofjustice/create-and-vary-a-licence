@@ -22,6 +22,18 @@ export default class ApprovalViewPage extends Page {
 
   public accordionSectionHeading = '.govuk-accordion__section-heading-text-focus'
 
+  public hdcEndDate = '.hdc-end-date'
+
+  public conditionalReleaseDate = '.conditional-release-date'
+
+  public releaseDateHeading = '.release-date-heading'
+
+  public curfewAddress = '.curfew-address'
+
+  public firstNightCurfewHours = '.first-night-curfew-hours'
+
+  public curfewHours = '.curfew-hours'
+
   getHideAllSection = () => {
     return cy.get('.govuk-accordion__show-all-text')
   }

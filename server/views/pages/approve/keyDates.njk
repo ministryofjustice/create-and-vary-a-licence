@@ -2,7 +2,7 @@
 
 {% macro keyDates(licence, isDueForEarlyRelease) %}
 
-    {% set releaseDate = licence.actualReleaseDate | datetimeToDateShort or licence.conditionalReleaseDate | datetimeToDateShort %}
+    {% set releaseDate = '<span class="urgent-highlight">' + licence.homeDetentionCurfewActualDate | datetimeToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' if licence.kind === 'HDC' else licence.actualReleaseDate | datetimeToDateShort or licence.conditionalReleaseDate | datetimeToDateShort %}
 
     {% if isDueForEarlyRelease %}
         {% set releaseDateHtml = '<span class="urgent-highlight">' + releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
@@ -10,13 +10,28 @@
         {% set releaseDateHtml = '<p>' + releaseDate + '</p>' %}
     {% endif %}
 
+    {% set releaseDateHeading = "Release date/HDC start date" if licence.kind === 'HDC' else "Release date" %}
+
     {% set dateRows = [
             {
-                key: { text: "Release date" },
+                key: { text: releaseDateHeading, classes: "release-date-heading" },
                 value: { html: releaseDateHtml }
             }
         ]
      %}
+
+    {% if licence.kind === 'HDC' %}
+        {% set dateRows = (dateRows.push(
+                 {
+                    key: { text: "HDC end date" },
+                    value: { text: licence.conditionalReleaseDate | datetimeToDateShortMinusDay, classes: "hdc-end-date" }
+                },
+                {
+                    key: { text: "Conditional release date" },
+                    value: { text: licence.conditionalReleaseDate | datetimeToDateShort, classes: "conditional-release-date" }
+                }
+        ), dateRows) %}
+    {% endif %}
 
      {% if licence.typeCode === 'AP_PSS' or licence.typeCode === 'AP' %}
         {% set dateRows = (dateRows.push(
