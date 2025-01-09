@@ -117,11 +117,6 @@ const jsonDtToDateShort = (dt: string): string => {
   return momentDate.isValid() ? momentDate.format('D MMM YYYY') : null
 }
 
-const jsonDtToDateShortMinusDay = (dt: string): string => {
-  const momentDate = moment(dt, 'DD/MM/YYYY HH:mm').subtract(1, 'days')
-  return momentDate.isValid() ? momentDate.format('D MMM YYYY') : null
-}
-
 const jsonDtToDateWithDay = (dt: string): string => {
   const momentDate = moment(dt, 'DD/MM/YYYY HH:mm')
   return momentDate.isValid() ? momentDate.format('dddd D MMMM YYYY') : null
@@ -271,7 +266,6 @@ export {
   stringToAddressObject,
   jsonDtToDate,
   jsonDtToDateShort,
-  jsonDtToDateShortMinusDay,
   jsonDtToDateWithDay,
   jsonDtTo12HourTime,
   json24HourTimeTo12HourTime,

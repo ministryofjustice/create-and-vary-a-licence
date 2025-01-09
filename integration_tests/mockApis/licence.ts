@@ -394,6 +394,7 @@ export default {
     appointmentTimeType?: 'IMMEDIATE_UPON_RELEASE' | 'NEXT_WORKING_DAY_2PM' | 'SPECIFIC_DATE_TIME'
     isInHardStopPeriod: boolean
     homeDetentionCurfewActualDate: string | null
+    homeDetentionCurfewEndDate: string | null
     kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
     conditions: AdditionalCondition[]
   }): SuperAgentRequest => {
@@ -421,6 +422,7 @@ export default {
             ? format(subDays(new Date(), 1), 'dd/MM/yyyy')
             : format(addDays(new Date(), 1), 'dd/MM/yyyy'),
           homeDetentionCurfewActualDate: options.homeDetentionCurfewActualDate,
+          homeDetentionCurfewEndDate: options.homeDetentionCurfewEndDate,
           additionalLicenceConditions: options.conditions || [
             {
               id: 1,

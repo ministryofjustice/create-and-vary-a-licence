@@ -24,7 +24,7 @@
         {% set dateRows = (dateRows.push(
                  {
                     key: { text: "HDC end date" },
-                    value: { text: licence.conditionalReleaseDate | datetimeToDateShortMinusDay, classes: "hdc-end-date" }
+                    value: { text: licence.homeDetentionCurfewEndDate | datetimeToDateShort, classes: "hdc-end-date" }
                 },
                 {
                     key: { text: "Conditional release date" },

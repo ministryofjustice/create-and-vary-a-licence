@@ -22,6 +22,7 @@ const prisoner = {
     topupSupervisionStartDate: '2023-09-09',
     topupSupervisionExpiryDate: '2024-09-09',
     homeDetentionCurfewActualDate: '2023-09-09',
+    homeDetentionCurfewEndDate: '2023-09-10',
   },
 } as PrisonApiPrisoner
 
@@ -116,6 +117,7 @@ describe('Sentence dates changed event handler', () => {
       topupSupervisionExpiryDate: '09/09/2024',
       postRecallReleaseDate: undefined,
       homeDetentionCurfewActualDate: '09/09/2023',
+      homeDetentionCurfewEndDate: '10/09/2023',
     } as Record<string, string>
 
     expect(licenceService.updateSentenceDates).toHaveBeenCalledWith('1', newDates)
@@ -163,6 +165,7 @@ describe('Sentence dates changed event handler', () => {
       topupSupervisionExpiryDate: '13/09/2022',
       postRecallReleaseDate: '02/05/2024',
       homeDetentionCurfewActualDate: '09/09/2023',
+      homeDetentionCurfewEndDate: '10/09/2023',
     })
   })
 
@@ -204,6 +207,7 @@ describe('Sentence dates changed event handler', () => {
       topupSupervisionExpiryDate: '09/09/2024',
       postRecallReleaseDate: undefined,
       homeDetentionCurfewActualDate: '09/09/2023',
+      homeDetentionCurfewEndDate: '10/09/2023',
     })
   })
 
@@ -240,6 +244,7 @@ describe('Sentence dates changed event handler', () => {
       topupSupervisionStartDate: '09/09/2023',
       topupSupervisionExpiryDate: '09/09/2024',
       homeDetentionCurfewActualDate: '09/09/2023',
+      homeDetentionCurfewEndDate: '10/09/2023',
     })
   })
 
