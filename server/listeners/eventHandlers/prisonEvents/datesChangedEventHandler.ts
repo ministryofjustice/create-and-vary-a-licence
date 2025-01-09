@@ -101,6 +101,7 @@ export default class DatesChangedEventHandler {
         convertDateFormat(prisoner.sentenceDetail?.postRecallReleaseOverrideDate) ||
         convertDateFormat(prisoner.sentenceDetail?.postRecallReleaseDate),
       homeDetentionCurfewActualDate: convertDateFormat(prisoner.sentenceDetail?.homeDetentionCurfewActualDate),
+      homeDetentionCurfewEndDate: convertDateFormat(prisoner.sentenceDetail?.homeDetentionCurfewEndDate),
     })
   }
 }

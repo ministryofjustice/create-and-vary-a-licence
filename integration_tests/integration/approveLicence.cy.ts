@@ -130,6 +130,7 @@ context('Approve a licence', () => {
       typeCode: 'AP',
       kind: 'HDC',
       homeDetentionCurfewActualDate: '09/09/2023',
+      homeDetentionCurfewEndDate: '12/03/2021',
     })
     cy.task('stubGetHdcLicenceData')
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
