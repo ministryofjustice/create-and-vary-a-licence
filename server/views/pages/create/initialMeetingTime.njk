@@ -19,11 +19,11 @@
     <form method="POST">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
+            <div class="govuk-grid-column-two-thirds">
 
                 {% call govukFieldset({
                     legend: {
-                        text: "When do they need to go to their initial appointment?",
+                        text: "When does this person need to go to their initial appointment?",
                         classes: "govuk-fieldset__legend--l",
                         isPageHeading: true
                     }
