@@ -9,8 +9,9 @@
     {% set dateTimeHtml %}
         {% call govukFieldset({
             legend: {
-                text: "Appointment date and time",
-                classes: "govuk-visually-hidden"
+                text: "When does this person need to go to their initial appointment?",
+                classes: "govuk-fieldset__legend--l",
+                isPageHeading: true
             }
             }) %}
 
@@ -41,7 +42,6 @@
                 errorMessage: validationErrors | findError('time'),
                 formResponses: formResponses.time or formDate.time
             }) }}
-            
         {% endcall %}
     {% endset %}
 
