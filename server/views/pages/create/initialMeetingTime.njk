@@ -27,17 +27,17 @@
                         isPageHeading: true
                     }
                 }) %}
-                {% if licence.kind == "HDC"%}
-                    {{ hdcInitialMeetingTimeInputs(formResponses, formDate, validationErrors) }}
-                {% else %}
-                    {% if licence.isEligibleForEarlyRelease %}
-                        {{ govukWarningText({
-                            html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
-                            iconFallbackText: "Warning"
-                        }) }}
+                    {% if licence.kind == "HDC"%}
+                        {{ hdcInitialMeetingTimeInputs(formResponses, formDate, validationErrors) }}
+                    {% else %}
+                        {% if licence.isEligibleForEarlyRelease %}
+                            {{ govukWarningText({
+                                html: "This person is eligible for an earlier release. It may affect their initial appointment. Find more information <br> in the <a class='govuk-link' rel='noreferrer noopener' target='_blank' href="+ fridayReleasePolicy +">Friday or pre-bank holiday release policy framework (opens in new tab).</a>",
+                                iconFallbackText: "Warning"
+                            }) }}
+                        {% endif %}
+                        {{ initialMeetingTimeInputs(formResponses, formDate, licence, appointmentTimeType, validationErrors) }}
                     {% endif %}
-                    {{ initialMeetingTimeInputs(formResponses, formDate, licence, appointmentTimeType, validationErrors) }}
-                {% endif %}
                 {% endcall %}
                 <div class="govuk-button-group">
                     {{ govukButton({
