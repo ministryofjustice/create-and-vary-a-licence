@@ -8,9 +8,9 @@
 
     {% call govukFieldset({
         legend: {
-            text: "Date",
-            classes: "govuk-visually-hidden",
-            isPageHeading: false}
+            text: "Appointment date and time",
+            classes: "govuk-visually-hidden"
+        }
         }) %}
 
         {{ govukRadios({
@@ -38,15 +38,6 @@
             classes: 'hmpps-datepicker--fixed-width',
             value: formResponses.date.calendarDate or formDate.date.calendarDate
         }) }}
-    {% endcall %}
-    {% call govukFieldset({
-        classes:"govuk-!-margin-top-2",
-
-        legend: {
-            text: "Time",
-            classes: "govuk-visually-hidden",
-            isPageHeading: false}
-        }) %}
 
         {{ timePicker({
             id: "time",
