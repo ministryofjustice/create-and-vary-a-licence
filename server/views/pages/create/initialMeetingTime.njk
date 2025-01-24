@@ -20,6 +20,7 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
+
                 {% call govukFieldset({
                     legend: {
                         text: "When does this person need to go to their initial appointment?",
@@ -36,6 +37,7 @@
                                 iconFallbackText: "Warning"
                             }) }}
                         {% endif %}
+                        
                         {{ initialMeetingTimeInputs(formResponses, formDate, licence, appointmentTimeType, validationErrors) }}
                     {% endif %}
                 {% endcall %}
