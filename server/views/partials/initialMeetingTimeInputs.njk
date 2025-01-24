@@ -7,42 +7,33 @@
     {% set SPECIFIC_DATE_TIME = "SPECIFIC_DATE_TIME" %}
 
     {% set dateTimeHtml %}
-        {% call govukFieldset({
-            legend: {
-                text: "When does this person need to go to their initial appointment?",
-                classes: "govuk-fieldset__legend--l",
-                isPageHeading: true
-            }
-            }) %}
-
-            {{ hmppsDatePicker({
-                id: "date-calendarDate",
-                name: "date[calendarDate]",
-                label: {
-                    text: "Date"
-                },
-                hint: {
-                    id: "date-hint",
-                    text: "For example, 12/11/2024"
-                },
-                errorMessage: validationErrors | findError('date'),
-                classes: 'hmpps-datepicker--fixed-width',
-                value: formResponses.date.calendarDate or formDate.date.calendarDate
-            }) }}
-            
-            {{ timePicker({
-                id: "time",
-                label: {
-                    text: "Time"
-                },
-                hint: {
-                    id: "time-hint",
-                    text: "For example, 9:30am or 2:55pm"
-                },
-                errorMessage: validationErrors | findError('time'),
-                formResponses: formResponses.time or formDate.time
-            }) }}
-        {% endcall %}
+        {{ hmppsDatePicker({
+            id: "date-calendarDate",
+            name: "date[calendarDate]",
+            label: {
+                text: "Date"
+            },
+            hint: {
+                id: "date-hint",
+                text: "For example, 12/11/2024"
+            },
+            errorMessage: validationErrors | findError('date'),
+            classes: 'hmpps-datepicker--fixed-width',
+            value: formResponses.date.calendarDate or formDate.date.calendarDate
+        }) }}
+        
+        {{ timePicker({
+            id: "time",
+            label: {
+                text: "Time"
+            },
+            hint: {
+                id: "time-hint",
+                text: "For example, 9:30am or 2:55pm"
+            },
+            errorMessage: validationErrors | findError('time'),
+            formResponses: formResponses.time or formDate.time
+        }) }}
     {% endset %}
 
     {% set appointmentTimeTypeOptions = [] %}

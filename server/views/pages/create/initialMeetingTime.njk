@@ -20,6 +20,13 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
+                {% call govukFieldset({
+                    legend: {
+                        text: "When does this person need to go to their initial appointment?",
+                        classes: "govuk-fieldset__legend--l",
+                        isPageHeading: true
+                    }
+                }) %}
                 {% if licence.kind == "HDC"%}
                     {{ hdcInitialMeetingTimeInputs(formResponses, formDate, validationErrors) }}
                 {% else %}
@@ -31,6 +38,7 @@
                     {% endif %}
                     {{ initialMeetingTimeInputs(formResponses, formDate, licence, appointmentTimeType, validationErrors) }}
                 {% endif %}
+                {% endcall %}
                 <div class="govuk-button-group">
                     {{ govukButton({
                         text: continueOrSave,
