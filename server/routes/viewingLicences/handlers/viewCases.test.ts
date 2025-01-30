@@ -227,6 +227,7 @@ describe('Route handlers - View and print case list', () => {
             nomisLegalStatus: 'SENTENCED',
             lastWorkedOnBy: 'Test Updater',
             isDueForEarlyRelease: false,
+            kind: LicenceKind.CRD,
           },
           {
             link: '/licence/view/id/2/show',
@@ -243,6 +244,7 @@ describe('Route handlers - View and print case list', () => {
             lastWorkedOnBy: 'Test Updater',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             link: null,
@@ -259,6 +261,7 @@ describe('Route handlers - View and print case list', () => {
             nomisLegalStatus: 'SENTENCED',
             isDueForEarlyRelease: false,
             lastWorkedOnBy: 'Test Updater',
+            kind: LicenceKind.CRD,
           },
           {
             link: '/licence/view/id/4/show',
@@ -275,6 +278,7 @@ describe('Route handlers - View and print case list', () => {
             nomisLegalStatus: 'SENTENCED',
             isDueForEarlyRelease: true,
             lastWorkedOnBy: 'Test Updater',
+            kind: LicenceKind.CRD,
           },
         ],
         CaViewCasesTab,
@@ -315,6 +319,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 Jul 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             isDueForEarlyRelease: true,
@@ -339,6 +344,7 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
+            kind: LicenceKind.HARD_STOP,
           },
           {
             isDueForEarlyRelease: false,
@@ -391,6 +397,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             isDueForEarlyRelease: false,
@@ -407,6 +414,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             isDueForEarlyRelease: false,
@@ -423,6 +431,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             isDueForEarlyRelease: true,
@@ -439,6 +448,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
         ],
         CaViewCasesTab,
@@ -479,6 +489,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 Jul 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             isDueForEarlyRelease: true,
@@ -503,6 +514,7 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
+            kind: LicenceKind.HARD_STOP,
           },
           {
             isDueForEarlyRelease: false,
@@ -587,6 +599,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             isDueForEarlyRelease: true,
+            kind: LicenceKind.HARD_STOP,
           },
         ],
         CaViewCasesTab,
@@ -627,6 +640,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 Jul 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             isDueForEarlyRelease: true,
@@ -651,6 +665,7 @@ describe('Route handlers - View and print case list', () => {
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
+            kind: LicenceKind.HARD_STOP,
           },
           {
             isDueForEarlyRelease: false,
@@ -703,6 +718,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             isDueForEarlyRelease: false,
@@ -719,6 +735,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             isDueForEarlyRelease: false,
@@ -735,6 +752,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
           {
             isDueForEarlyRelease: true,
@@ -751,6 +769,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
             tabType: 'releasesInNextTwoWorkingDays',
+            kind: LicenceKind.CRD,
           },
         ],
         CaViewCasesTab,
@@ -793,6 +812,7 @@ describe('Route handlers - View and print case list', () => {
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
             tabType: 'attentionNeeded',
+            kind: LicenceKind.CRD,
           },
         ],
         CaViewCasesTab,

@@ -117,6 +117,8 @@
 
         {% if case.isDueForEarlyRelease %}
             {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
+        {% elseif case.kind == 'HDC' %}
+            {% set releaseDate = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
         {% else %}
             {% set releaseDate = '<p>' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</p>' %}
         {% endif %}
