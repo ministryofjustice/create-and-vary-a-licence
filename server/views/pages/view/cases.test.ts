@@ -256,4 +256,32 @@ describe('View and print a licence - case list', () => {
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
   })
+
+  it('should highlight a HDC licence with a HDC release warning label in probation view', () => {
+    const search = ''
+    const prisonsToDisplay = ''
+    const probationView = true
+    const $ = render({
+      cases: [
+        {
+          name: 'Adam Balasaravika',
+          prisonerNumber: 'A1234AA',
+          releaseDate: '3 Aug 2022',
+          releaseDateLabel: 'HDCAD',
+          tabType: 'releasesInNextTwoWorkingDays',
+          kind: LicenceKind.HDC,
+        },
+      ],
+      showAttentionNeededTab: false,
+      CaViewCasesTab,
+      statusConfig,
+      search,
+      prisonsToDisplay,
+      probationView,
+    })
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
+    expect($('#nomis-id-1').text()).toBe('A1234AA')
+    expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
+  })
 })
