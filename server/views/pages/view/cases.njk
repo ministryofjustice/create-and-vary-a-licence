@@ -53,6 +53,12 @@
         }, statusConfig) %}
     {% endif %}
 
+    {% if case.kind == 'HDC' %}
+        {% set releaseDateHtml = '<span class="urgent-highlight">' + case.releaseDateLabel + ': <br>' + case.releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+    {% else %}
+        {% set releaseDateHtml = '<p>' + (case.releaseDateLabel + ': <br>' if not probationView) + case.releaseDate + '</p>' %}
+    {% endif %}
+
     {% set licences = (licences.push([
         {
             attributes: {
@@ -83,7 +89,7 @@
                 id: 'release-date-' + loop.index,
                 "data-sort-value": case.releaseDate | dateToUnix
             },
-            html: '<p>' + (case.releaseDateLabel + ': <br>' if not probationView)  + case.releaseDate + '</p>' 
+            html: releaseDateHtml 
         },
         {
             attributes: {
