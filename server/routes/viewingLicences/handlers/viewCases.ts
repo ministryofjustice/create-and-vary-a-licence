@@ -60,6 +60,7 @@ export default class ViewAndPrintCaseRoutes {
           isDueForEarlyRelease: c.isDueForEarlyRelease,
           link,
           licenceStatus,
+          kind: c.kind,
         }
       }),
       CaViewCasesTab,

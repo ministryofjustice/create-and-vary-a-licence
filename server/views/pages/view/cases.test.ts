@@ -2,6 +2,7 @@ import fs from 'fs'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import statusConfig from '../../../licences/licenceStatus'
 import { CaViewCasesTab } from '../../../utils/utils'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/view/cases.njk').toString())
 
@@ -198,5 +199,61 @@ describe('View and print a licence - case list', () => {
     expect($('.govuk-tabs__list a').text()).toContain('Releases in next 2 working days (0 results)')
     expect($('.govuk-tabs__list a').text()).toContain('Future releases (1 result)')
     expect($('.govuk-tabs__list a').text()).toContain('Attention needed (1 result)')
+  })
+
+  it('should highlight a HDC licence with a HDC release warning label in prison view', () => {
+    const search = ''
+    const prisonsToDisplay = ''
+    const probationView = false
+    const $ = render({
+      cases: [
+        {
+          name: 'Adam Balasaravika',
+          prisonerNumber: 'A1234AA',
+          releaseDate: '3 Aug 2022',
+          releaseDateLabel: 'HDCAD',
+          tabType: 'releasesInNextTwoWorkingDays',
+          kind: LicenceKind.HDC,
+        },
+      ],
+      showAttentionNeededTab: false,
+      CaViewCasesTab,
+      statusConfig,
+      search,
+      prisonsToDisplay,
+      probationView,
+    })
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
+    expect($('#nomis-id-1').text()).toBe('A1234AA')
+    expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
+  })
+
+  it('should highlight a HDC licence with a HDC release warning label in prison view for the attention needed tab', () => {
+    const search = ''
+    const prisonsToDisplay = ''
+    const probationView = false
+    const $ = render({
+      cases: [
+        {
+          name: 'Adam Balasaravika',
+          prisonerNumber: 'A1234AA',
+          releaseDate: '3 Aug 2022',
+          releaseDateLabel: 'HDCAD',
+          tabType: 'releasesInNextTwoWorkingDays',
+          kind: LicenceKind.HDC,
+        },
+      ],
+      showAttentionNeededTab: true,
+      CaViewCasesTab,
+      statusConfig,
+      search,
+      prisonsToDisplay,
+      probationView,
+    })
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
+    expect($('#nomis-id-1').text()).toBe('A1234AA')
+    expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
   })
 })
