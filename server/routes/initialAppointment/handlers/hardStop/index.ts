@@ -17,7 +17,7 @@ import ViewAndPrintLicenceRoutes from '../../../viewingLicences/handlers/viewLic
 import ConfirmationRoutes from '../../../creatingLicences/handlers/hardStop/confirmation'
 import PathType from '../../../../enumeration/pathType'
 
-export default function Index({ licenceService, conditionService }: Services): Router {
+export default function Index({ licenceService, conditionService, hdcService }: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hard-stop${path}`
@@ -85,7 +85,7 @@ export default function Index({ licenceService, conditionService }: Services): R
     post('/edit/id/:licenceId/initial-meeting-time', controller.POST, DateTime)
   }
   {
-    const controller = new ViewAndPrintLicenceRoutes(licenceService)
+    const controller = new ViewAndPrintLicenceRoutes(licenceService, hdcService)
     get('/id/:licenceId/check-your-answers', controller.GET)
     post('/id/:licenceId/check-your-answers', controller.POST)
   }

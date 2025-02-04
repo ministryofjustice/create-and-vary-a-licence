@@ -8,9 +8,14 @@ import { groupingBy, isInHardStopPeriod, parseCvlDateTime } from '../../../utils
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
+import HdcService from '../../../services/hdcService'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ViewAndPrintLicenceRoutes {
-  constructor(private readonly licenceService: LicenceService) {}
+  constructor(
+    private readonly licenceService: LicenceService,
+    private readonly hdcService: HdcService,
+  ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { licence, user } = res.locals
@@ -61,12 +66,16 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
+      const hdcLicenceData =
+        licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
+
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),
         warningMessage,
         isEditableByPrison: licence.statusCode !== LicenceStatus.ACTIVE && isInHardStopPeriod(licence),
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
+        hdcLicenceData,
       })
     } else {
       res.redirect(`/licence/view/cases`)
