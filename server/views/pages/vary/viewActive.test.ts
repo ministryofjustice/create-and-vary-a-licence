@@ -2,6 +2,7 @@ import fs from 'fs'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/vary/viewActive.njk').toString())
 
@@ -113,5 +114,19 @@ describe('ViewActive', () => {
       additionalConditions: additionalConditionInputs,
     })
     expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
+  })
+
+  it('should not display vary buttons for a HDC licence', () => {
+    const $ = render({
+      licence: {
+        ...licence,
+        typeCode: 'AP',
+        isInPssPeriod: false,
+        isActivatedInPssPeriod: true,
+        statusCode: LicenceStatus.ACTIVE,
+        kind: LicenceKind.HDC,
+      },
+    })
+    expect($('[data-qa="vary-licence"]').length).toBe(0)
   })
 })

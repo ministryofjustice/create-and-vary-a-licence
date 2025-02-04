@@ -50,10 +50,10 @@
                     preventDoubleClick: true
                 }) }}
                 {{ govukButton ({
-    text: "Return to case list",
-                        classes: "govuk-button--secondary",
-                        href: "/licence/vary/caseload",
-                        attributes: { 'data-qa': 'return-to-caselist' }
+                    text: "Return to case list",
+                    classes: "govuk-button--secondary",
+                    href: "/licence/vary/caseload",
+                    attributes: { 'data-qa': 'return-to-caselist' }
                 }) }}
             
             {% case 'VIEW_OR_VARY' %}
@@ -62,6 +62,20 @@
                     classes: "govuk-button--primary govuk-!-margin-right-1",
                     href: '/licence/vary/id/' + licence.id + '/view-active',
                     attributes: { 'data-qa': 'view-or-vary-licence' }
+                }) }}
+                {{ govukButton ({
+                    text: "Return to case list",
+                    classes: "govuk-button--secondary",
+                    href: "/licence/vary/caseload",
+                    attributes: { 'data-qa': 'return-to-caselist' }
+                }) }}
+
+            {% case 'VIEW' %}
+                {{ govukButton({
+                    text: "View licence",
+                    classes: "govuk-button--primary govuk-!-margin-right-1",
+                    href: '/licence/vary/id/' + licence.id + '/view-active',
+                    attributes: { 'data-qa': 'view-licence' }
                 }) }}
                 {{ govukButton ({
                     text: "Return to case list",
