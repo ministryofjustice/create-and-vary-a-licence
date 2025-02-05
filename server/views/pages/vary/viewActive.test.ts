@@ -116,6 +116,14 @@ describe('ViewActive', () => {
     expect($('#conditions-expired').text()).not.toBe('Conditions from expired licence')
   })
 
+  it('should not render the HDC curfew details for non HDC licences', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'CRD' },
+    })
+
+    expect($('[data-qa=hdc-curfew-details]').length).toBe(0)
+  })
+
   it('should not display vary buttons for a HDC licence', () => {
     const $ = render({
       licence: {
@@ -128,5 +136,33 @@ describe('ViewActive', () => {
       },
     })
     expect($('[data-qa="vary-licence"]').length).toBe(0)
+  })
+
+  it('should render the HDC curfew details if the licence kind is HDC', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+    })
+
+    expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
+  })
+
+  it('should render the curfew time summary if all the curfew times are equal', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      hdcLicenceData: { allCurfewTimesEqual: true },
+    })
+
+    expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
+    expect($('.all-curfew-times-equal').length).toBe(1)
+  })
+
+  it('should render the individual curfew times if any of the curfew times are different', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+    })
+
+    expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
+    expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
   })
 })
