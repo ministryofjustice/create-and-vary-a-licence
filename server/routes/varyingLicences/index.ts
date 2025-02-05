@@ -42,6 +42,7 @@ export default function Index({
   probationService,
   conditionService,
   timelineService,
+  hdcService,
 }: Services): Router {
   const router = Router()
 
@@ -75,7 +76,7 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(probationService)
   const timelineHandler = new TimelineRoutes(licenceService, timelineService)
   const viewLicenceHandler = new ViewVariationRoutes(licenceService, conditionService)
-  const viewActiveLicenceHandler = new ViewActiveLicenceRoutes(conditionService)
+  const viewActiveLicenceHandler = new ViewActiveLicenceRoutes(conditionService, hdcService)
   const confirmVaryActionHandler = new ConfirmVaryActionRoutes(licenceService)
   const spoDiscussionHandler = new SpoDiscussionRoutes(licenceService)
   const vloDiscussionHandler = new VloDiscussionRoutes(licenceService, conditionService)
