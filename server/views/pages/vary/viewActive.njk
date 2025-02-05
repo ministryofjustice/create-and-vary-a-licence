@@ -25,7 +25,9 @@
         </div>
     </div>
 
-    {{ activeCta(callToActions, licence) }}
+    {% if licence.kind !== 'HDC' %} 
+        {{ activeCta(callToActions, licence) }}
+    {% endif %}
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
@@ -60,6 +62,8 @@
         </div>
     </div>
 
-    {{ activeCta(callToActions, licence) }}
+    {% if licence.kind !== 'HDC' %} 
+        {{ activeCta(callToActions, licence) }}
+    {% endif %}
 
 {% endblock %}
