@@ -55,6 +55,7 @@ export default class CaseloadRoutes {
           comCase.hardStopWarningDate && format(parseCvlDate(comCase.hardStopWarningDate), 'dd/MM/yyyy'),
         isClickable: comCase.probationPractitioner !== undefined,
         sortDate: comCase.releaseDate && parseCvlDate(comCase.releaseDate),
+        kind: comCase.kind,
       }
     })
 
