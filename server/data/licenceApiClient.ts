@@ -45,6 +45,7 @@ import type {
   TeamCaseloadRequest,
   HdcLicenceData,
   OverrideLicenceTypeRequest,
+  Com,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -421,6 +422,10 @@ export default class LicenceApiClient extends RestClient {
 
   async notifyComsToPromptEmailCreation(request: EmailContact[]): Promise<void> {
     await this.post({ path: `/com/prompt-licence-creation`, data: request })
+  }
+
+  async getComsToPrompt(): Promise<Com[]> {
+    return (await this.get({ path: `/jobs/prompt-com` })) as Promise<Com[]>
   }
 
   async matchLicenceEvents(
