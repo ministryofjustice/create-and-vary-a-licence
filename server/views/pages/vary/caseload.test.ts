@@ -99,4 +99,37 @@ describe('Caseload', () => {
     expect($('.status-badge').text().toString()).toContain('Review needed')
     expect($('.urgent-highlight-message').text().toString()).toEqual('Timed out')
   })
+
+  it('should highlight a HDC licence with a HDC release warning label', () => {
+    const $ = render({
+      caseload: [
+        {
+          licenceId: 3,
+          name: 'Biydaav Griya',
+          crnNumber: 'Z882661',
+          licenceType: 'AP',
+          releaseDate: '13 Feb 2023',
+          licenceStatus: 'ACTIVE',
+          probationPractitioner: { staffCode: 'X12342', name: 'CVL COM' },
+          kind: 'HDC',
+        },
+      ],
+      statusConfig: {
+        ACTIVE: {
+          label: 'Active',
+          description: 'Approved by the prison and is now the currently active licence',
+          colour: 'turquoise',
+        },
+        VARIATION_IN_PROGRESS: {
+          label: 'Variation in progress',
+          description: 'Variation in progress',
+          colour: 'blue',
+        },
+      },
+    })
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('.status-badge').text().toString()).toContain('Active')
+    expect($('#release-date-1').text()).toBe('13 Feb 2023HDC release')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+  })
 })

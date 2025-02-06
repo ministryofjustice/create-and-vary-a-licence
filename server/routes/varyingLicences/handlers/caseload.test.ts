@@ -154,7 +154,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
               name: 'Walter White',
             },
             isDueForEarlyRelease: false,
-            kind: 'CRD',
+            kind: LicenceKind.CRD,
             isReviewNeeded: true,
           },
           {
@@ -169,7 +169,7 @@ describe('Route Handlers - Vary Licence - Caseload', () => {
               name: 'Walter White',
             },
             isDueForEarlyRelease: false,
-            kind: 'CRD',
+            kind: LicenceKind.CRD,
             isReviewNeeded: false,
           },
         ],

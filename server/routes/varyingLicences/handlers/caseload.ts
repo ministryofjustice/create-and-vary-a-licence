@@ -25,6 +25,7 @@ export default class CaseloadRoutes {
         ...comCase,
         releaseDate,
         licenceStatus: comCase.isReviewNeeded ? LicenceStatus.REVIEW_NEEDED : comCase.licenceStatus,
+        kind: comCase.kind,
       }
     })
 
