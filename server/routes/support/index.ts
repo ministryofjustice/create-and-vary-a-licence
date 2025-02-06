@@ -31,7 +31,7 @@ export default function Index({
   conditionService,
   licenceOverrideService,
   comCaseloadService,
-  promptLicenceCreationService,
+  licenceApiClient,
 }: Services): Router {
   const router = Router()
   const routePrefix = (path: string) => `/support${path}`
@@ -58,7 +58,7 @@ export default function Index({
   const probationTeamHandler = new ProbationTeamRoutes(comCaseloadService)
   const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, probationService)
   const comDetailsHandler = new ComDetailsRoutes(probationService)
-  const promptCasesHandler = new PromptCasesRoutes(promptLicenceCreationService)
+  const promptCasesHandler = new PromptCasesRoutes(licenceApiClient)
 
   get('/', supportHomeHandler.GET)
   get('/prompt-cases', promptCasesHandler.GET)
