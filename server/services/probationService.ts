@@ -2,13 +2,7 @@ import _ from 'lodash'
 import DeliusClient from '../data/deliusClient'
 import ProbationSearchApiClient from '../data/probationSearchApiClient'
 import { OffenderDetail, SearchDto } from '../@types/probationSearchApiClientTypes'
-import {
-  DeliusManager,
-  DeliusPDUHead,
-  DeliusStaff,
-  DeliusStaffEmail,
-  DeliusStaffName,
-} from '../@types/deliusClientTypes'
+import { DeliusManager, DeliusPDUHead, DeliusStaff, DeliusStaffName } from '../@types/deliusClientTypes'
 
 export default class ProbationService {
   constructor(
@@ -67,19 +61,6 @@ export default class ProbationService {
       return offenderDetails.flat()
     }
     return []
-  }
-
-  async getManagerEmailAddresses(crns: string[]): Promise<DeliusStaffEmail[]> {
-    const managerEmailAddresses = []
-    if (crns.length > 0) {
-      /* eslint-disable */
-      for (const nomsNums of _.chunk(crns, 500)) {
-        const partResult = await this.deliusClient.getManagerEmailAddresses(nomsNums)
-        managerEmailAddresses.push(partResult)
-      }
-      /* eslint-enable */
-    }
-    return managerEmailAddresses.flat()
   }
 
   // Has slower lookup than probation offender search /crns, but also has no lag-time after Community API event raised

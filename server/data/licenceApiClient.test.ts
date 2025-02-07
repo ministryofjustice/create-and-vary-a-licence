@@ -10,7 +10,6 @@ import {
   AuditRequest,
   BespokeConditionsRequest,
   ContactNumberRequest,
-  EmailContact,
   Licence,
   LicenceSummary,
   ReferVariationRequest,
@@ -549,14 +548,6 @@ describe('Licence API client tests', () => {
       },
       { username: 'joebloggs' },
     )
-  })
-
-  it('Notify com with create licence prompt', async () => {
-    await licenceApiClient.notifyComsToPromptEmailCreation([{ email: 'exampleEmail' }] as EmailContact[])
-    expect(post).toHaveBeenCalledWith({
-      path: '/com/prompt-licence-creation',
-      data: [{ email: 'exampleEmail' }],
-    })
   })
 
   it('Override licence status code', async () => {

@@ -13,9 +13,7 @@ import SearchService from './searchService'
 import FeComponentsService from './feComponentsService'
 import ApproverCaseloadService from './lists/approverCaseloadService'
 import TimelineService from './timelineService'
-import PromptLicenceCreationService from '../../jobs/promptLicenceCreationService'
 import CaCaseloadService from './lists/caCaseloadService'
-import PromptListService from './lists/promptListService'
 import ComCaseloadService from './lists/comCaseloadService'
 import HdcService from './hdcService'
 
@@ -40,14 +38,12 @@ const ukBankHolidayFeedService = new UkBankHolidayFeedService()
 const caseloadService = new CaseloadService(probationService, licenceService)
 const caCaseloadService = new CaCaseloadService(licenceApiClient)
 const comCaseloadService = new ComCaseloadService(licenceService, licenceApiClient)
-const promptListService = new PromptListService(prisonerService, probationService, licenceService)
 const approvedCaseloadService = new ApproverCaseloadService(licenceApiClient)
 const prisonRegisterService = new PrisonRegisterService(prisonRegisterApiClient)
 const licenceOverrideService = new LicenceOverrideService(licenceApiClient)
 const searchService = new SearchService(licenceApiClient)
 const timelineService = new TimelineService(licenceApiClient)
 const feComponentsService = new FeComponentsService(feComponentsClient)
-const promptLicenceCreationService = new PromptLicenceCreationService(promptListService, licenceApiClient)
 const hdcService = new HdcService(licenceApiClient)
 
 export const services = {
@@ -68,7 +64,6 @@ export const services = {
   licenceApiClient,
   feComponentsService,
   timelineService,
-  promptLicenceCreationService,
   hdcService,
 }
 
