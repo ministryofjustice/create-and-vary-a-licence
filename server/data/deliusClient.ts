@@ -1,12 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
-import {
-  DeliusManager,
-  DeliusPDUHead,
-  DeliusStaff,
-  DeliusStaffEmail,
-  DeliusStaffName,
-} from '../@types/deliusClientTypes'
+import { DeliusManager, DeliusPDUHead, DeliusStaff, DeliusStaffName } from '../@types/deliusClientTypes'
 import type { TokenStore } from './tokenStore'
 import { components } from '../@types/deliusApiImport'
 
@@ -41,12 +35,6 @@ export default class DeliusClient extends RestClient {
 
   async getResponsibleCommunityManager(crn: string): Promise<DeliusManager> {
     return (await this.get({ path: `/probation-case/${crn}/responsible-community-manager` })) as Promise<DeliusManager>
-  }
-
-  async getManagerEmailAddresses(crns: string[]): Promise<DeliusStaffEmail[]> {
-    return (await this.post({ path: `/probation-case/responsible-community-manager`, data: crns })) as Promise<
-      DeliusStaffEmail[]
-    >
   }
 }
 
