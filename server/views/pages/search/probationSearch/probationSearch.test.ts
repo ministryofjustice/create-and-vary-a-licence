@@ -470,4 +470,82 @@ describe('View Probation Search Results', () => {
     })
     expect($('#name-button-1').attr('href')).toBe('/licence/create/id/3/check-your-answers')
   })
+
+  it('should highlight a HDC licence with a HDC release warning label in the people in prison tab', () => {
+    const $ = render({
+      statusConfig,
+      searchResponse: {
+        results: [
+          {
+            name: 'Test Person',
+            crn: 'A123456',
+            nomisId: 'A1234BC',
+            comName: 'Test Staff',
+            comStaffCode: '3000',
+            teamName: 'Test Team',
+            releaseDate: '20/12/2025',
+            licenceId: 1,
+            licenceType: 'AP',
+            licenceStatus: LicenceStatus.IN_PROGRESS,
+            isOnProbation: false,
+            isDueForEarlyRelease: false,
+            releaseDateLabel: 'HDCAD',
+            kind: LicenceKind.HDC,
+          },
+        ],
+        inPrisonCount: 1,
+        onProbationCount: 0,
+      },
+      tabParameters: {
+        activeTab: '#people-in-prison',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'Test',
+    })
+
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
+    expect($('#release-date-1').text()).toBe('HDCAD: 20 Dec 2025HDC release')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+  })
+
+  it('should highlight a HDC licence with a HDC release warning label in the people on probation tab', () => {
+    const $ = render({
+      statusConfig,
+      searchResponse: {
+        results: [
+          {
+            name: 'Test Person',
+            crn: 'A123456',
+            nomisId: 'A1234BC',
+            comName: 'Test Staff',
+            comStaffCode: '3000',
+            teamName: 'Test Team',
+            releaseDate: '20/12/2025',
+            licenceId: 1,
+            licenceType: 'AP',
+            licenceStatus: LicenceStatus.ACTIVE,
+            isOnProbation: true,
+            isDueForEarlyRelease: false,
+            releaseDateLabel: 'HDCAD',
+            kind: LicenceKind.HDC,
+          },
+        ],
+        inPrisonCount: 0,
+        onProbationCount: 1,
+      },
+      tabParameters: {
+        activeTab: '#people-on-probation',
+        prisonTabId: 'tab-heading-prison',
+        probationTabId: 'tab-heading-probation',
+      },
+      queryTerm: 'Test',
+    })
+
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('Active')
+    expect($('#release-date-1').text()).toBe('HDCAD: 20 Dec 2025HDC release')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+  })
 })
