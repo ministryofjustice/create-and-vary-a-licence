@@ -170,6 +170,14 @@
                         <td class="govuk-table__cell">{{ prisonerDetail.hdced }}</td>
                     </tr>
                     <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDCAD</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.hdcad }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDC end date</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.hdcEndDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">HDC status</th>
                         <td class="govuk-table__cell">{{ prisonerDetail.hdcStatus }}</td>
                     </tr>
@@ -197,6 +205,8 @@
             </table>
         </div>
     </div>
+
+    {{ licence | dump }}
 
     <details class="govuk-details" data-module="govuk-details">
       <summary class="govuk-details__summary">
