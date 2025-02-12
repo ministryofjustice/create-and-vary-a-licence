@@ -7,6 +7,7 @@ import type { LicenceSummary, Licence, CaseloadItem } from '../../../@types/lice
 import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
@@ -164,6 +165,8 @@ describe('Route Handlers - Offender detail', () => {
           sed: 'Not found',
           tused: 'Not found',
           tussd: 'Not found',
+          hdcad: 'Not found',
+          hdcEndDate: 'Not found',
         },
         ineligibilityReasons: [],
       })
@@ -301,6 +304,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: 'Not found',
         tused: 'Not found',
         tussd: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
     })
@@ -428,6 +433,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: 'Not found',
         tused: 'Not found',
         tussd: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
     })
@@ -517,6 +524,7 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getLicence.mockResolvedValue({
       id: 1,
+      kind: LicenceKind.HDC,
       conditionalReleaseDate: '01/01/2022',
       actualReleaseDate: '02/01/2022',
       sentenceStartDate: '03/01/2022',
@@ -524,6 +532,8 @@ describe('Route Handlers - Offender detail', () => {
       licenceExpiryDate: '05/01/2022',
       topupSupervisionStartDate: '06/01/2022',
       topupSupervisionExpiryDate: '07/01/2022',
+      homeDetentionCurfewActualDate: '01/01/2022',
+      homeDetentionCurfewEndDate: '05/01/2022',
     } as Partial<Licence> as Licence)
 
     licenceService.getIneligibilityReasons.mockResolvedValue([])
@@ -580,6 +590,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: '04 Jan 2022',
         tused: '07 Jan 2022',
         tussd: '06 Jan 2022',
+        hdcad: '01 Jan 2022',
+        hdcEndDate: '05 Jan 2022',
       },
       ineligibilityReasons: [],
     })
@@ -732,6 +744,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: 'Not found',
         tused: 'Not found',
         tussd: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
     })
@@ -884,6 +898,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: 'Not found',
         tused: 'Not found',
         tussd: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
       },
       ineligibilityReasons: ['Reason1', 'Reason2'],
     })
