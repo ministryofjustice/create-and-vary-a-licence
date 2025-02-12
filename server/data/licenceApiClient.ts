@@ -420,7 +420,7 @@ export default class LicenceApiClient extends RestClient {
   }
 
   async getComsToPrompt(): Promise<Com[]> {
-    return (await this.get({ path: `/jobs/prompt-com` })) as Promise<Com[]>
+    return (await this.get({ path: `/coms-to-prompt` })) as Promise<Com[]>
   }
 
   async matchLicenceEvents(
