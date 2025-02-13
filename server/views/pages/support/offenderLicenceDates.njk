@@ -179,6 +179,40 @@
                         }) }}
                     </td>
                 </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Home detention curfew actual date</th>
+                    <td class="govuk-table__cell">
+                        {% if licence.homeDetentionCurfewActualDate %}
+                            {{ licence.homeDetentionCurfewActualDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "hdcad",
+                            errorMessage: validationErrors | findError('hdcad'),
+                            formResponses: formResponses.hdcad or licenceDates.hdcad
+                        }) }}
+                    </td>
+                </tr>
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Home detention curfew end date</th>
+                    <td class="govuk-table__cell">
+                        {% if licence.homeDetentionCurfewEndDate %}
+                            {{ licence.homeDetentionCurfewEndDate | datetimeToDateShort }}
+                        {% else %}
+                            Not found
+                        {% endif %}
+                    </td>
+                    <td class="govuk-table__cell">
+                        {{ datePicker({
+                            id: "hdcEndDate",
+                            errorMessage: validationErrors | findError('hdcEndDate'),
+                            formResponses: formResponses.hdcEndDate or licenceDates.hdcEndDate
+                        }) }}
+                    </td>
+                </tr>
             </tbody>
         </table>
 

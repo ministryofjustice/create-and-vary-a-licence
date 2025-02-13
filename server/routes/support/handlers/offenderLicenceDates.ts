@@ -6,6 +6,7 @@ import { dateStringToSimpleDate } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import SimpleDate from '../../creatingLicences/types/date'
 import LicenceDatesAndReason from '../types/licenceDatesAndReason'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class OffenderLicenceDatesRoutes {
   constructor(
@@ -61,6 +62,10 @@ export default class OffenderLicenceDatesRoutes {
       led: dateStringToSimpleDate(licence.licenceExpiryDate),
       tussd: dateStringToSimpleDate(licence.topupSupervisionStartDate),
       tused: dateStringToSimpleDate(licence.topupSupervisionExpiryDate),
+      hdcad:
+        licence.kind === LicenceKind.HDC ? dateStringToSimpleDate(licence.homeDetentionCurfewActualDate) : undefined,
+      hdcEndDate:
+        licence.kind === LicenceKind.HDC ? dateStringToSimpleDate(licence.homeDetentionCurfewEndDate) : undefined,
     }
   }
 
@@ -74,6 +79,8 @@ export default class OffenderLicenceDatesRoutes {
       licenceExpiryDate: this.simpleDateToLicenceDate(formData.led),
       topupSupervisionStartDate: this.simpleDateToLicenceDate(formData.tussd),
       topupSupervisionExpiryDate: this.simpleDateToLicenceDate(formData.tused),
+      homeDetentionCurfewActualDate: this.simpleDateToLicenceDate(formData.hdcad),
+      homeDetentionCurfewEndDate: this.simpleDateToLicenceDate(formData.hdcEndDate),
     }
   }
 
