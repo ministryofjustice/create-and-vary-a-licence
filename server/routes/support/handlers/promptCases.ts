@@ -7,9 +7,9 @@ export default class PromptCasesRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const coms = await this.licenceApiClient.getComsToPrompt()
 
-    const header = ['ComName', 'Email', 'Type', 'Casename', 'Crn', 'Release Date']
+    const header = ['ComName', 'Email', 'Casename', 'Crn', 'Release Date']
     const csv = coms
-      .flatMap(com => com.subjects.map(s => [com.comName, com.email, s.prisonerNumber, s.crn, s.name, s.releaseDate]))
+      .flatMap(com => com.subjects.map(s => [com.comName, com.email, s.name, s.crn, s.releaseDate]))
       .map(row => row.join(','))
       .join('\n')
 
