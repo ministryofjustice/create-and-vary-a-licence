@@ -4,6 +4,7 @@ import LicenceOverrideService from '../../../services/licenceOverrideService'
 import type { Licence } from '../../../@types/licenceApiClientTypes'
 import OffenderLicenceDatesRoutes from './offenderLicenceDates'
 import { dateStringToSimpleDate } from '../../../utils/utils'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const overrideService = new LicenceOverrideService(null) as jest.Mocked<LicenceOverrideService>
@@ -37,9 +38,27 @@ describe('Route handlers - Licence dates override', () => {
     tused: dateStringToSimpleDate(licenceDates.topupSupervisionExpiryDate),
   }
 
+  const hdcLicenceDates = {
+    homeDetentionCurfewActualDate: '01/01/2022',
+    homeDetentionCurfewEndDate: '05/01/2022',
+    ...licenceDates,
+  }
+
+  const hdcLicenceSimpleDates = {
+    hdcad: dateStringToSimpleDate(hdcLicenceDates.homeDetentionCurfewActualDate),
+    hdcEndDate: dateStringToSimpleDate(hdcLicenceDates.homeDetentionCurfewEndDate),
+    ...licenceSimpleDates,
+  }
+
   const licence = {
     id: 1,
     ...licenceDates,
+  } as Licence
+
+  const hdcLicence = {
+    id: 1,
+    kind: LicenceKind.HDC,
+    ...hdcLicenceDates,
   } as Licence
 
   beforeEach(() => {
@@ -68,6 +87,22 @@ describe('Route handlers - Licence dates override', () => {
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderLicenceDates', {
         licence,
         licenceDates: licenceSimpleDates,
+      })
+    })
+
+    it('Renders the override HDC licence dates view', async () => {
+      licenceService.getLicence.mockResolvedValue(hdcLicence)
+
+      req.params = {
+        licenceId: '1',
+        nomsId: 'ABC123',
+      }
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/support/offenderLicenceDates', {
+        licence: hdcLicence,
+        licenceDates: hdcLicenceSimpleDates,
       })
     })
   })

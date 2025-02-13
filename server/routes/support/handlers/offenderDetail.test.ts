@@ -7,6 +7,7 @@ import type { LicenceSummary, Licence, CaseloadItem } from '../../../@types/lice
 import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
@@ -46,6 +47,8 @@ describe('Route Handlers - Offender detail', () => {
           postRecallReleaseDate: '2022-05-01',
           topupSupervisionExpiryDate: '2023-05-01',
           homeDetentionCurfewEligibilityDate: '2022-05-01',
+          homeDetentionCurfewActualDate: '2022-05-01',
+          homeDetentionCurfewEndDate: '2023-05-01',
           sentenceExpiryDate: '2022-06-01',
           licenceExpiryDate: '2022-06-01',
           paroleEligibilityDate: '2022-01-01',
@@ -121,6 +124,8 @@ describe('Route Handlers - Offender detail', () => {
           dob: '01 Jan 1970',
           hdcStatus: 'PENDING',
           hdced: '01 May 2022',
+          hdcad: '01 May 2022',
+          hdcEndDate: '01 May 2023',
           licenceExpiryDate: '01 Jun 2022',
           name: 'Peter Pepper',
           paroleEligibilityDate: '01 Jan 2022',
@@ -160,6 +165,8 @@ describe('Route Handlers - Offender detail', () => {
           sed: 'Not found',
           tused: 'Not found',
           tussd: 'Not found',
+          hdcad: 'Not found',
+          hdcEndDate: 'Not found',
         },
         ineligibilityReasons: [],
       })
@@ -179,6 +186,8 @@ describe('Route Handlers - Offender detail', () => {
         postRecallReleaseDate: '2022-05-01',
         topupSupervisionExpiryDate: '2023-05-01',
         homeDetentionCurfewEligibilityDate: '2022-05-01',
+        homeDetentionCurfewActualDate: '2022-05-01',
+        homeDetentionCurfewEndDate: '2023-05-01',
         sentenceExpiryDate: '2022-06-01',
         licenceExpiryDate: '2022-06-01',
         paroleEligibilityDate: '2022-01-01',
@@ -254,6 +263,8 @@ describe('Route Handlers - Offender detail', () => {
         dob: '05 Mar 1995',
         hdcStatus: 'APPROVED',
         hdced: '01 May 2022',
+        hdcad: '01 May 2022',
+        hdcEndDate: '01 May 2023',
         licenceExpiryDate: '01 Jun 2022',
         name: 'David Pepper',
         paroleEligibilityDate: '01 Jan 2022',
@@ -293,6 +304,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: 'Not found',
         tused: 'Not found',
         tussd: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
     })
@@ -379,6 +392,8 @@ describe('Route Handlers - Offender detail', () => {
         dob: '05 Mar 1995',
         hdcStatus: 'APPROVED',
         hdced: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
         licenceExpiryDate: 'Not found',
         name: 'David Pepper',
         paroleEligibilityDate: 'Not found',
@@ -418,6 +433,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: 'Not found',
         tused: 'Not found',
         tussd: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
     })
@@ -437,6 +454,8 @@ describe('Route Handlers - Offender detail', () => {
         postRecallReleaseDate: '2022-05-01',
         topupSupervisionExpiryDate: '2023-05-01',
         homeDetentionCurfewEligibilityDate: '2022-05-01',
+        homeDetentionCurfewActualDate: '2022-05-01',
+        homeDetentionCurfewEndDate: '2023-05-01',
         sentenceExpiryDate: '2022-06-01',
         licenceExpiryDate: '2022-06-01',
         paroleEligibilityDate: '2022-01-01',
@@ -505,6 +524,7 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getLicence.mockResolvedValue({
       id: 1,
+      kind: LicenceKind.HDC,
       conditionalReleaseDate: '01/01/2022',
       actualReleaseDate: '02/01/2022',
       sentenceStartDate: '03/01/2022',
@@ -512,6 +532,8 @@ describe('Route Handlers - Offender detail', () => {
       licenceExpiryDate: '05/01/2022',
       topupSupervisionStartDate: '06/01/2022',
       topupSupervisionExpiryDate: '07/01/2022',
+      homeDetentionCurfewActualDate: '01/01/2022',
+      homeDetentionCurfewEndDate: '05/01/2022',
     } as Partial<Licence> as Licence)
 
     licenceService.getIneligibilityReasons.mockResolvedValue([])
@@ -527,6 +549,8 @@ describe('Route Handlers - Offender detail', () => {
         dob: '05 Mar 1995',
         hdcStatus: 'APPROVED',
         hdced: '01 May 2022',
+        hdcad: '01 May 2022',
+        hdcEndDate: '01 May 2023',
         licenceExpiryDate: '01 Jun 2022',
         name: 'David Pepper',
         paroleEligibilityDate: '01 Jan 2022',
@@ -566,6 +590,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: '04 Jan 2022',
         tused: '07 Jan 2022',
         tussd: '06 Jan 2022',
+        hdcad: '01 Jan 2022',
+        hdcEndDate: '05 Jan 2022',
       },
       ineligibilityReasons: [],
     })
@@ -585,6 +611,8 @@ describe('Route Handlers - Offender detail', () => {
         postRecallReleaseDate: '2022-05-01',
         topupSupervisionExpiryDate: '2023-05-01',
         homeDetentionCurfewEligibilityDate: '2022-05-01',
+        homeDetentionCurfewActualDate: '2022-05-01',
+        homeDetentionCurfewEndDate: '2023-05-01',
         sentenceExpiryDate: '2022-06-01',
         licenceExpiryDate: '2022-06-01',
         paroleEligibilityDate: '2022-01-01',
@@ -675,6 +703,8 @@ describe('Route Handlers - Offender detail', () => {
         dob: '05 Mar 1995',
         hdcStatus: 'APPROVED',
         hdced: '01 May 2022',
+        hdcad: '01 May 2022',
+        hdcEndDate: '01 May 2023',
         licenceExpiryDate: '01 Jun 2022',
         name: 'David Pepper',
         paroleEligibilityDate: '01 Jan 2022',
@@ -714,6 +744,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: 'Not found',
         tused: 'Not found',
         tussd: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
     })
@@ -733,6 +765,8 @@ describe('Route Handlers - Offender detail', () => {
         postRecallReleaseDate: '2022-05-01',
         topupSupervisionExpiryDate: '2023-05-01',
         homeDetentionCurfewEligibilityDate: '2022-05-01',
+        homeDetentionCurfewActualDate: '2022-05-01',
+        homeDetentionCurfewEndDate: '2023-05-01',
         sentenceExpiryDate: '2022-06-01',
         licenceExpiryDate: '2022-06-01',
         paroleEligibilityDate: '2022-01-01',
@@ -823,6 +857,8 @@ describe('Route Handlers - Offender detail', () => {
         dob: '01 Jan 1970',
         hdcStatus: 'PENDING',
         hdced: '01 May 2022',
+        hdcad: '01 May 2022',
+        hdcEndDate: '01 May 2023',
         licenceExpiryDate: '01 Jun 2022',
         name: 'Peter Pepper',
         paroleEligibilityDate: '01 Jan 2022',
@@ -862,6 +898,8 @@ describe('Route Handlers - Offender detail', () => {
         sed: 'Not found',
         tused: 'Not found',
         tussd: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
       },
       ineligibilityReasons: ['Reason1', 'Reason2'],
     })

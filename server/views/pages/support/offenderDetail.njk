@@ -170,6 +170,14 @@
                         <td class="govuk-table__cell">{{ prisonerDetail.hdced }}</td>
                     </tr>
                     <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDCAD</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.hdcad }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDC end date</th>
+                        <td class="govuk-table__cell">{{ prisonerDetail.hdcEndDate }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
                         <th scope="row" class="govuk-table__header">HDC status</th>
                         <td class="govuk-table__cell">{{ prisonerDetail.hdcStatus }}</td>
                     </tr>
@@ -235,6 +243,14 @@
                         <th scope="row" class="govuk-table__header">TUSED</th>
                         <td class="govuk-table__cell">{{ licence.tused }}</td>
                     </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDCAD</th>
+                        <td class="govuk-table__cell">{{ licence.hdcad }}</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">HDC end date</th>
+                        <td class="govuk-table__cell">{{ licence.hdcEndDate }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -262,25 +278,27 @@
         </div>
     </div>
 
-    {% if ineligibilityReasons | length %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <table class="govuk-table">
-                    <caption class="govuk-table__caption govuk-table__caption--m">Ineligibility Reasons</caption>
-                    <tbody class="govuk-table__body">
-                    <tr class="govuk-table__row">
-                        <th scope="row" class="govuk-table__header">Reason</th>
-                        <td class="govuk-table__cell">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">Ineligibility Reasons</caption>
+                <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">Reason</th>
+                    <td class="govuk-table__cell">
+                        {% if ineligibilityReasons | length %}
                             {% for reason in ineligibilityReasons %}
                                 <li>{{reason}}</li>
                             {% endfor %}
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    {% endif %}
+    </div>
 
     
     <div class="govuk-button-group">

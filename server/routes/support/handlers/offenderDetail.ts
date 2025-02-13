@@ -6,6 +6,7 @@ import ProbationService from '../../../services/probationService'
 import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 type LicenceDates = {
   crd: string
@@ -15,6 +16,8 @@ type LicenceDates = {
   led: string
   tussd: string
   tused: string
+  hdcad: string
+  hdcEndDate: string
 }
 
 type CvlCom = {
@@ -48,6 +51,8 @@ export default class OffenderDetailRoutes {
     const postRecallReleaseDate = this.formatNomisDate(prisonerDetail.postRecallReleaseDate)
     const tused = this.formatNomisDate(prisonerDetail.topupSupervisionExpiryDate)
     const hdced = this.formatNomisDate(prisonerDetail.homeDetentionCurfewEligibilityDate)
+    const hdcad = this.formatNomisDate(prisonerDetail.homeDetentionCurfewActualDate)
+    const hdcEndDate = this.formatNomisDate(prisonerDetail.homeDetentionCurfewEndDate)
     const sentenceExpiryDate = this.formatNomisDate(prisonerDetail.sentenceExpiryDate)
     const licenceExpiryDate = this.formatNomisDate(prisonerDetail.licenceExpiryDate)
     const paroleEligibilityDate = this.formatNomisDate(prisonerDetail.paroleEligibilityDate)
@@ -67,6 +72,8 @@ export default class OffenderDetailRoutes {
         prisonId: prisonerDetail.prisonId !== 'OUT' ? prisonerDetail.prisonId : licence?.prisonCode,
         tused,
         hdced,
+        hdcad,
+        hdcEndDate,
         sentenceExpiryDate,
         licenceExpiryDate,
         paroleEligibilityDate,
@@ -132,6 +139,8 @@ export default class OffenderDetailRoutes {
         led: 'Not found',
         tussd: 'Not found',
         tused: 'Not found',
+        hdcad: 'Not found',
+        hdcEndDate: 'Not found',
       }
     }
 
@@ -143,6 +152,10 @@ export default class OffenderDetailRoutes {
       led: this.formatLicenceDate(licence.licenceExpiryDate),
       tussd: this.formatLicenceDate(licence.topupSupervisionStartDate),
       tused: this.formatLicenceDate(licence.topupSupervisionExpiryDate),
+      hdcad:
+        licence.kind === LicenceKind.HDC ? this.formatLicenceDate(licence.homeDetentionCurfewActualDate) : 'Not found',
+      hdcEndDate:
+        licence.kind === LicenceKind.HDC ? this.formatLicenceDate(licence.homeDetentionCurfewEndDate) : 'Not found',
     }
   }
 

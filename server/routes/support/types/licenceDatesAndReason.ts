@@ -45,6 +45,16 @@ class LicenceDatesAndReason {
   tused: SimpleDate
 
   @Expose()
+  @Type(() => SimpleDate)
+  @Validate(ValidOptionalSimpleDate)
+  hdcad: SimpleDate
+
+  @Expose()
+  @Type(() => SimpleDate)
+  @Validate(ValidOptionalSimpleDate)
+  hdcEndDate: SimpleDate
+
+  @Expose()
   @IsNotEmpty({ message: 'You must enter a reason' })
   dateChangeReason: string
 }
