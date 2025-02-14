@@ -201,6 +201,10 @@
                         <th scope="row" class="govuk-table__header">Recall</th>
                         <td class="govuk-table__cell">{{ prisonerDetail.recall }}</td>
                     </tr>
+                    <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">IS-91 status</th>
+                        <td class="govuk-table__cell">{{ "Yes" if is91Status else "No" }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
