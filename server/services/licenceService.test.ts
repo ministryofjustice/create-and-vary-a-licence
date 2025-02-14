@@ -862,4 +862,9 @@ describe('Licence Service', () => {
 
     expect(result).toEqual([prisonerDetails, prisonerDetails, prisonerDetails])
   })
+
+  it('Get IS-91 status', async () => {
+    await licenceService.getIS91Status('ABC123')
+    expect(licenceApiClient.getIS91Status).toHaveBeenCalledWith('ABC123')
+  })
 })

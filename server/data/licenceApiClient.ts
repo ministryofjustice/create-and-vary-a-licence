@@ -714,9 +714,9 @@ export default class LicenceApiClient extends RestClient {
     })) as Promise<string[]>
   }
 
-  async getIS91Status(nomisId: string): Promise<string[]> {
+  async getIS91Status(nomisId: string): Promise<boolean> {
     return (await this.get({
       path: `/offender/nomisid/${nomisId}/is-91-status`,
-    })) as Promise<string[]>
+    })) as Promise<boolean>
   }
 }
