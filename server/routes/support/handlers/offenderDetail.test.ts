@@ -113,6 +113,8 @@ describe('Route Handlers - Offender detail', () => {
 
       licenceService.getIneligibilityReasons.mockResolvedValue([])
 
+      licenceService.getIS91Status.mockResolvedValue(false)
+
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
         prisonerDetail: {
@@ -169,6 +171,7 @@ describe('Route Handlers - Offender detail', () => {
           hdcEndDate: 'Not found',
         },
         ineligibilityReasons: [],
+        is91Status: false,
       })
     })
   })
@@ -252,6 +255,8 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getIneligibilityReasons.mockResolvedValue([])
 
+    licenceService.getIS91Status.mockResolvedValue(false)
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -308,6 +313,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
+      is91Status: false,
     })
   })
   it('Should render all offender information with NULL sentence dates', async () => {
@@ -381,6 +387,8 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getIneligibilityReasons.mockResolvedValue([])
 
+    licenceService.getIS91Status.mockResolvedValue(false)
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -437,6 +445,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
+      is91Status: false,
     })
   })
 
@@ -538,6 +547,8 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getIneligibilityReasons.mockResolvedValue([])
 
+    licenceService.getIS91Status.mockResolvedValue(false)
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -594,6 +605,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: '05 Jan 2022',
       },
       ineligibilityReasons: [],
+      is91Status: false,
     })
   })
 
@@ -692,6 +704,8 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getIneligibilityReasons.mockResolvedValue([])
 
+    licenceService.getIS91Status.mockResolvedValue(false)
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -748,6 +762,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
+      is91Status: false,
     })
   })
 
@@ -846,6 +861,8 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getIneligibilityReasons.mockResolvedValue(['Reason1', 'Reason2'])
 
+    licenceService.getIS91Status.mockResolvedValue(false)
+
     await handler.GET(req, res)
     expect(res.render).toHaveBeenCalledWith('pages/support/offenderDetail', {
       prisonerDetail: {
@@ -902,6 +919,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: 'Not found',
       },
       ineligibilityReasons: ['Reason1', 'Reason2'],
+      is91Status: false,
     })
   })
 })

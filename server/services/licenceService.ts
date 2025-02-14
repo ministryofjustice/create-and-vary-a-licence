@@ -549,4 +549,8 @@ export default class LicenceService {
   async getIneligibilityReasons(nomsId: string): Promise<string[]> {
     return this.licenceApiClient.getIneligibilityReasons(nomsId)
   }
+
+  async getIS91Status(nomsId: string): Promise<boolean> {
+    return this.licenceApiClient.getIS91Status(nomsId)
+  }
 }
