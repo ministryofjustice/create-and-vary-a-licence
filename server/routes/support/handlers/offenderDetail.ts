@@ -105,7 +105,7 @@ export default class OffenderDetailRoutes {
       cvlCom: this.getCvlComDetails(licence),
       licence: this.getLicenceDates(licence),
       ineligibilityReasons,
-      is91Status,
+      is91Status: is91Status ? 'Yes' : 'No',
     })
   }
 
