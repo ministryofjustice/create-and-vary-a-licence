@@ -171,7 +171,7 @@ describe('Route Handlers - Offender detail', () => {
           hdcEndDate: 'Not found',
         },
         ineligibilityReasons: [],
-        is91Status: false,
+        is91Status: 'No',
       })
     })
   })
@@ -313,7 +313,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
-      is91Status: false,
+      is91Status: 'No',
     })
   })
   it('Should render all offender information with NULL sentence dates', async () => {
@@ -445,7 +445,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
-      is91Status: false,
+      is91Status: 'No',
     })
   })
 
@@ -605,7 +605,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: '05 Jan 2022',
       },
       ineligibilityReasons: [],
-      is91Status: false,
+      is91Status: 'No',
     })
   })
 
@@ -762,7 +762,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: 'Not found',
       },
       ineligibilityReasons: [],
-      is91Status: false,
+      is91Status: 'No',
     })
   })
 
@@ -919,7 +919,7 @@ describe('Route Handlers - Offender detail', () => {
         hdcEndDate: 'Not found',
       },
       ineligibilityReasons: ['Reason1', 'Reason2'],
-      is91Status: false,
+      is91Status: 'No',
     })
   })
 })
