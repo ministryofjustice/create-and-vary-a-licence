@@ -60,7 +60,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
           licenceExpiryDate: '2028-08-31',
           conditionalReleaseDate: '2022-11-21',
         },
-        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, licenceStartDate: '19/11/2022' },
       } as CaseloadItem)
       probationService.getProbationer.mockResolvedValue({
         otherIds: {
@@ -80,8 +80,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/prisonWillCreateThisLicence', {
         licence: {
-          conditionalReleaseDate: '21/11/2022',
-          actualReleaseDate: '20/11/2022',
+          licenceStartDate: '19/11/2022',
           crn: 'X1234',
           dateOfBirth: '10/11/1960',
           forename: 'Patrick',
@@ -104,8 +103,7 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
       await handler.GET(reqWithEmptySession, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/prisonWillCreateThisLicence', {
         licence: {
-          conditionalReleaseDate: '21/11/2022',
-          actualReleaseDate: '20/11/2022',
+          licenceStartDate: '19/11/2022',
           crn: 'X1234',
           dateOfBirth: '10/11/1960',
           forename: 'Patrick',
@@ -113,33 +111,6 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
         },
         omuEmail: 'moorland@prison.gov.uk',
         backLink: '/licence/create/caseload',
-        licenceType: 'AP',
-      })
-    })
-
-    it('actualReleaseDate should be undefined if confirmedReleaseDate does not exist', async () => {
-      licenceService.getPrisonerDetail.mockResolvedValue({
-        prisoner: {
-          firstName: 'Patrick',
-          lastName: 'Holmes',
-          dateOfBirth: '1960-11-10',
-          conditionalReleaseDate: '2022-11-20',
-        },
-        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
-      } as CaseloadItem)
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/prisonWillCreateThisLicence', {
-        licence: {
-          conditionalReleaseDate: '20/11/2022',
-          actualReleaseDate: undefined,
-          crn: 'X1234',
-          dateOfBirth: '10/11/1960',
-          forename: 'Patrick',
-          surname: 'Holmes',
-        },
-        omuEmail: 'moorland@prison.gov.uk',
-        backLink: req.session.returnToCase,
         licenceType: 'AP',
       })
     })

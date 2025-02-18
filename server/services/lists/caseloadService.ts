@@ -59,7 +59,7 @@ export default class CaseloadService {
         licences: licences
           .filter(l => l.nomisId === offender.nomisRecord.prisonerNumber)
           .map(l => {
-            const releaseDate = l.actualReleaseDate || l.conditionalReleaseDate
+            const releaseDate = l.licenceStartDate
             return {
               id: l.licenceId,
               type: <LicenceType>l.licenceType,

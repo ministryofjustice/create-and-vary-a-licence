@@ -56,15 +56,14 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           conditionalReleaseDate: '2022-09-01',
           dateOfBirth: '1992-12-06',
         },
-        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null },
+        cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, licenceStartDate: '18/07/2024' },
       } as CaseloadItem
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmCreate', {
         licence: {
           nomsId: 'ABC123',
-          actualReleaseDate: '19/07/2024',
-          conditionalReleaseDate: '01/09/2022',
+          licenceStartDate: '18/07/2024',
           dateOfBirth: '06/12/1992',
           forename: 'Emajinhany',
           surname: 'Elysasha',

@@ -55,6 +55,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       cvl: {
         isInHardStopPeriod: false,
         isEligibleForEarlyRelease: true,
+        licenceStartDate: '19/11/2022',
       },
     } as CaseloadItem)
   })
@@ -76,8 +77,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
         licence: {
-          conditionalReleaseDate: '21/11/2022',
-          actualReleaseDate: '20/11/2022',
+          licenceStartDate: '19/11/2022',
           crn: 'X1234',
           dateOfBirth: '10/11/1960',
           forename: 'Patrick',
@@ -100,8 +100,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       await handler.GET(reqWithEmptySession, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
         licence: {
-          conditionalReleaseDate: '21/11/2022',
-          actualReleaseDate: '20/11/2022',
+          licenceStartDate: '19/11/2022',
           crn: 'X1234',
           dateOfBirth: '10/11/1960',
           forename: 'Patrick',
@@ -109,35 +108,6 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           isEligibleForEarlyRelease: true,
         },
         backLink: '/licence/create/caseload',
-      })
-    })
-
-    it('actualReleaseDate should be undefined if confirmedReleaseDate does not exist', async () => {
-      licenceService.getPrisonerDetail.mockResolvedValue({
-        prisoner: {
-          conditionalReleaseDate: '2022-11-20',
-          dateOfBirth: '1960-11-10',
-          firstName: 'Patrick',
-          lastName: 'Holmes',
-        } as CvlPrisoner,
-        cvl: {
-          isInHardStopPeriod: false,
-          isEligibleForEarlyRelease: false,
-        },
-      } as CaseloadItem)
-
-      await handler.GET(req, res)
-      expect(res.render).toHaveBeenCalledWith('pages/create/confirmCreate', {
-        licence: {
-          conditionalReleaseDate: '20/11/2022',
-          actualReleaseDate: undefined,
-          crn: 'X1234',
-          dateOfBirth: '10/11/1960',
-          forename: 'Patrick',
-          surname: 'Holmes',
-          isEligibleForEarlyRelease: false,
-        },
-        backLink: req.session.returnToCase,
       })
     })
   })
