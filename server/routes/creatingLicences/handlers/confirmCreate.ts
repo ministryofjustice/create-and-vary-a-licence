@@ -28,7 +28,6 @@ export default class ConfirmCreateRoutes {
       return res.redirect('/access-denied')
     }
 
-    // TODO: Might need to add LSD endpoint
     return res.render('pages/create/confirmCreate', {
       licence: {
         crn: deliusRecord?.otherIds?.crn,
