@@ -263,7 +263,8 @@ export default class LicenceService {
     user?: User,
   ): Promise<LicenceSummary | null | undefined> {
     const licences = await this.licenceApiClient.matchLicences(statuses, null, null, nomisIds, null, null, null, user)
-    return _.head(licences)
+    const licencesSortedDesc = licences.sort((a, b) => a.licenceId - b.licenceId)
+    return _.last(licencesSortedDesc)
   }
 
   async getPreReleaseAndActiveLicencesForOmu(user: User, prisonCaseload: string[]): Promise<LicenceSummary[]> {
