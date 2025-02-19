@@ -12,7 +12,7 @@
                         {% if isVaryJourney %}
                             {{ licence | dateToDisplay }} 
                         {% else %} 
-                            Release date: {{ licence.actualReleaseDate | datetimeToDateShort or licence.conditionalReleaseDate | datetimeToDateShort }}
+                            Release date: {{ licence.licenceStartDate | datetimeToDateShort }}
                         {% endif %}
                     </span>
                 <span class="pipe-separated__item">Date of birth: {{ licence.dateOfBirth | datetimeToDateShort }}</span>

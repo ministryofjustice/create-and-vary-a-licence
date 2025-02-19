@@ -448,17 +448,17 @@ describe('Check licence is close to release', () => {
     })
   })
 
-  it('should return false if CRD is greater than 2 days from now', () => {
+  it('should return false if LSD is greater than 2 days from now', () => {
     const licence = {
-      conditionalReleaseDate: '04/05/2021',
+      licenceStartDate: '04/05/2021',
       statusCode: LicenceStatus.APPROVED,
     } as Licence
     expect(licenceIsTwoDaysToRelease(licence)).toBeFalsy()
   })
 
-  it('should return true if CRD is 2 days or less from now', () => {
+  it('should return true if LSD is 2 days or less from now', () => {
     const licence = {
-      conditionalReleaseDate: '03/05/2021',
+      licenceStartDate: '03/05/2021',
       statusCode: LicenceStatus.APPROVED,
     } as Licence
     expect(licenceIsTwoDaysToRelease(licence)).toBeTruthy()
@@ -629,7 +629,7 @@ describe('Get Case Tab Type', () => {
       determineCaViewCasesTab(
         { ...nomisRecord, confirmedReleaseDate: null, conditionalReleaseDate: null },
         {} as CvlFields,
-        licence,
+        { ...licence, licenceStartDate: null },
       ),
     ).toEqual(CaViewCasesTab.ATTENTION_NEEDED)
   })

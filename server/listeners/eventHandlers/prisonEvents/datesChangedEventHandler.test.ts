@@ -248,7 +248,7 @@ describe('Sentence dates changed event handler', () => {
     })
   })
 
-  it('should not deactivate an active licence if the sentence start date is before the licence CRD', async () => {
+  it('should not deactivate an active licence if the sentence start date is before the licence LSD', async () => {
     const event = {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
@@ -256,7 +256,7 @@ describe('Sentence dates changed event handler', () => {
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
       licenceStatus: 'ACTIVE',
-      conditionalReleaseDate: '20/02/2022',
+      licenceStartDate: '20/02/2022',
     } as LicenceSummary)
 
     await handler.handle(event)
@@ -264,7 +264,7 @@ describe('Sentence dates changed event handler', () => {
     expect(licenceService.deactivateActiveAndVariationLicences).not.toHaveBeenCalled()
   })
 
-  it('should deactivate an active licence if the sentence start date is after the licence CRD', async () => {
+  it('should deactivate an active licence if the sentence start date is after the licence LSD', async () => {
     const event = {
       offenderIdDisplay: 'ABC123',
     } as PrisonEventMessage
@@ -272,7 +272,7 @@ describe('Sentence dates changed event handler', () => {
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
       licenceStatus: 'ACTIVE',
-      conditionalReleaseDate: '08/09/2021',
+      licenceStartDate: '08/09/2021',
     } as LicenceSummary)
 
     await handler.handle(event)
