@@ -406,6 +406,16 @@ describe('Licence Service', () => {
     )
   })
 
+  it('Get latest licence by nomis ids and statuses', async () => {
+    licenceApiClient.matchLicences.mockResolvedValue([
+      { licenceId: 1 } as LicenceSummary,
+      { licenceId: 2 } as LicenceSummary,
+    ])
+    const result = await licenceService.getLatestLicenceByNomisIdsAndStatus(['ABC1234'], [], user)
+    expect(licenceApiClient.matchLicences).toHaveBeenCalledWith([], null, null, ['ABC1234'], null, null, null, user)
+    expect(result).toEqual({ licenceId: 2 })
+  })
+
   it('Get licences for variation approval', async () => {
     const approver = { ...user, probationPduCodes: ['A'] }
     await licenceService.getLicencesForVariationApproval(approver)
