@@ -191,7 +191,7 @@ const formatAddress = (address?: string) => {
 }
 
 const licenceIsTwoDaysToRelease = (licence: Licence) =>
-  moment(licence.conditionalReleaseDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
+  moment(licence.licenceStartDate, 'DD/MM/YYYY').diff(moment(), 'days') <= 2
 
 const selectReleaseDate = (nomisRecord: CvlPrisoner) => {
   const dateString = nomisRecord.confirmedReleaseDate || nomisRecord.conditionalReleaseDate
@@ -221,8 +221,7 @@ const determineCaViewCasesTab = (
   cvlFields: CvlFields,
   licence?: LicenceSummary,
 ): CaViewCasesTab => {
-  const releaseDate =
-    parseCvlDate(licence?.actualReleaseDate || licence?.conditionalReleaseDate) || selectReleaseDate(nomisRecord)
+  const releaseDate = parseCvlDate(licence?.licenceStartDate) || selectReleaseDate(nomisRecord)
 
   if (
     licence &&
