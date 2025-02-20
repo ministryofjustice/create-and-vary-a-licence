@@ -13,6 +13,7 @@ type LicenceDates = {
   ard: string
   ssd: string
   sed: string
+  lsd: string
   led: string
   tussd: string
   tused: string
@@ -138,6 +139,7 @@ export default class OffenderDetailRoutes {
         ard: 'Not found',
         ssd: 'Not found',
         sed: 'Not found',
+        lsd: 'Not found',
         led: 'Not found',
         tussd: 'Not found',
         tused: 'Not found',
@@ -151,6 +153,7 @@ export default class OffenderDetailRoutes {
       ard: this.formatLicenceDate(licence.actualReleaseDate),
       ssd: this.formatLicenceDate(licence.sentenceStartDate),
       sed: this.formatLicenceDate(licence.sentenceEndDate),
+      lsd: this.formatLicenceDate(licence.licenceStartDate),
       led: this.formatLicenceDate(licence.licenceExpiryDate),
       tussd: this.formatLicenceDate(licence.topupSupervisionStartDate),
       tused: this.formatLicenceDate(licence.topupSupervisionExpiryDate),
