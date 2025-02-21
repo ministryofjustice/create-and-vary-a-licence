@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress'
 import 'reflect-metadata'
 import moment, { Moment } from 'moment/moment'
-import { resetStubs, verifyEndpointCalled } from './integration_tests/wiremock'
+import { resetStubs, verifyEndpointCalled, verifyEndpointCalledWith } from './integration_tests/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import licence from './integration_tests/mockApis/licence'
@@ -34,6 +34,7 @@ export default defineConfig({
         ...tokenVerification,
         reset: resetStubs,
         verifyEndpointCalled,
+        verifyEndpointCalledWith,
 
         getSignInUrl: auth.getSignInUrl,
         stubPrisonSignIn: auth.stubPrisonSignIn,
@@ -92,7 +93,6 @@ export default defineConfig({
         stubApproveVariation: licence.stubApproveVariation,
         stubReferVariation: licence.stubReferVariation,
         stubUpdateStandardConditions: licence.stubUpdateStandardConditions,
-        stubGetHdcLicencesForOffender: licence.stubGetHdcLicencesForOffender,
         stubGetVariationsSubmittedByRegionForOffender: licence.stubGetVariationsSubmittedByRegionForOffender,
         stubGetLicencePolicyConditions: licence.stubGetLicencePolicyConditions,
         stubGetActivePolicyConditions: licence.stubGetActivePolicyConditions,
@@ -158,6 +158,7 @@ export default defineConfig({
         stubGetHdcStatus: prison.stubGetHdcStatus,
         stubGetPrisons: prison.stubGetPrisons,
         stubPrisonApiPing: prison.stubPing,
+        stubGetHdcLicencesForOffender: prison.stubGetHdcLicencesForOffender,
 
         stubPrisonRegisterApiPing: prisonRegister.stubPing,
 

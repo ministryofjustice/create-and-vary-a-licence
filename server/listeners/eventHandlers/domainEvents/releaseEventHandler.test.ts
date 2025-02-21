@@ -4,6 +4,7 @@ import { DomainEventMessage } from '../../../@types/events'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import PrisonerService from '../../../services/prisonerService'
+import LicenceKind from '../../../enumeration/LicenceKind'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/licenceService')
@@ -161,6 +162,33 @@ describe('Release event handler', () => {
     await handler.handle(event)
 
     expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.INACTIVE)
+  })
+
+  it('should update the HDC licence to ACTIVE if the licence for the offender is APPROVED regardless of HDC status', async () => {
+    const event = {
+      additionalInformation: {
+        reason: 'RELEASED',
+        nomsNumber: 'ABC1234',
+      },
+    } as DomainEventMessage
+    licenceService.getLicencesByNomisIdsAndStatus.mockResolvedValue([
+      {
+        licenceId: 1,
+        kind: LicenceKind.HDC,
+        licenceStatus: 'APPROVED',
+      },
+    ] as LicenceSummary[])
+    prisonerService.searchPrisoners.mockResolvedValue([
+      {
+        bookingId: '111',
+        restrictedPatient: false,
+      },
+    ])
+    prisonerService.isHdcApproved.mockResolvedValue(true)
+
+    await handler.handle(event)
+
+    expect(licenceService.updateStatus).toHaveBeenCalledWith(1, LicenceStatus.ACTIVE)
   })
 
   it('should update the licence to ACTIVE if the licence for the offender is APPROVED and HDC status is NOT APPROVED', async () => {
