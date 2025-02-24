@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: email-probation-practioner
+  name: email-probation-practitioner
 spec:
   schedule:  {{ .Values.cronjobs.email_probation_practioner }}
   concurrencyPolicy: Replace
