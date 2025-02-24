@@ -1,7 +1,7 @@
 ---
 cronjobs:
   activate_licences: "0 3,9,12,15,18 * * *" # 3am, 9am, 12pm, 3pm, and 6pm every day
-  email_probation_practioner: "0 2 * * *" # 2am every day
+  email_probation_practitioner: "0 2 * * *" # 2am every day
   remove_expired_conditions: "0 3 * * *" # 3am every day
   time_out_licences:
     enabled: true
