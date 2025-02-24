@@ -1,9 +1,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: email-probation-practioner
+  name: email-probation-practitioner
 spec:
-  schedule:  {{ .Values.cronjobs.email_probation_practioner }}
+  schedule:  {{ .Values.cronjobs.email_probation_practitioner }}
   concurrencyPolicy: Replace
   failedJobsHistoryLimit: 5
   startingDeadlineSeconds: 43200
