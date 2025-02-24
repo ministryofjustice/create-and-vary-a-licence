@@ -20,6 +20,6 @@ licenceApiClient
     flush({ callback: () => process.exit() }, 'success')
   })
   .catch((error: Error) => {
-    logger.error(error, 'Problem occurred while emailing the probation practioner')
+    logger.error(error, 'Problem occurred while emailing the probation practitioner')
     flush({ callback: () => process.exit(1) }, 'failure')
   })
