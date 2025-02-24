@@ -714,7 +714,7 @@ export default {
                 actualReleaseDate: '23/03/2022',
                 comUsername: 'jsmith',
                 bookingId: options.bookingId,
-                conditionalReleaseDate: '13/04/2023',
+                licenceStartDate: '13/04/2023',
                 dateCreated: '01/03/2021 10:15',
                 hardStopDate: '05/12/2023',
                 hardStopWarningDate: '03/12/2023',

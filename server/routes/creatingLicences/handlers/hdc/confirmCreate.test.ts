@@ -53,7 +53,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         homeDetentionCurfewActualDate: '2024-07-19',
         dateOfBirth: '1992-12-06',
       },
-      cvl: { isInHardStopPeriod: false },
+      cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
     } as CaseloadItem
     licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
   })
@@ -67,8 +67,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       await handler.GET(req, res)
       expect(res.render).toHaveBeenCalledWith('pages/create/hdc/confirmCreate', {
         licence: {
-          actualReleaseDate: '19/07/2024',
-          conditionalReleaseDate: '01/09/2022',
+          licenceStartDate: '18/07/2024',
           dateOfBirth: '06/12/1992',
           forename: 'Emajinhany',
           surname: 'Elysasha',
@@ -88,7 +87,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           homeDetentionCurfewActualDate: '2024-07-19',
           dateOfBirth: '1992-12-06',
         },
-        cvl: { isInHardStopPeriod: true },
+        cvl: { isInHardStopPeriod: true, licenceStartDate: '18/07/2024' },
       } as CaseloadItem
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.GET(req, res)
@@ -106,7 +105,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           homeDetentionCurfewActualDate: null,
           dateOfBirth: '1992-12-06',
         },
-        cvl: { isInHardStopPeriod: false },
+        cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
       } as CaseloadItem
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
       await handler.GET(req, res)

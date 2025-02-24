@@ -1013,6 +1013,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/jobs/prompt-licence-creation': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Notifies the COM of upcoming releases which they need to create a licence for.
+     * @description Notifies the COM of upcoming releases which they need to create a licence for.
+     */
+    post: operations['runJob']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/exclusion-zone/id/{licenceId}/condition/id/{conditionId}/file-upload': {
     parameters: {
       query?: never
@@ -1027,26 +1047,6 @@ export interface paths {
      * @description Uploads a PDF file containing an exclusion zone map and description. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     post: operations['uploadExclusionZoneFile']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/com/prompt-licence-creation': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Notifies the COM of upcoming releases which they need to create a licence for.
-     * @description Notifies the COM of upcoming releases which they need to create a licence for. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
-     */
-    post: operations['notifyOfUpcomingReleasesRequiringLicence']
     delete?: never
     options?: never
     head?: never
@@ -1373,6 +1373,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/offender/nomisid/{nomsId}/is-91-status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve IS-91 status for offender
+     * @description Returns IS-91 status for creating a licence for a specific prisoner. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    get: operations['getIS91Status']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/offender/nomisid/{nomsId}/ineligibility-reasons': {
     parameters: {
       query?: never
@@ -1513,26 +1533,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/jobs/prompt-com': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve a list of cases that we will send an email for.
-     * @description Retrieve a list of cases that we have identified to encourage them to progress cases. Requires ROLE_CVL_ADMIN.
-     */
-    get: operations['run']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/hdc/curfew/licenceId/{licenceId}': {
     parameters: {
       query?: never
@@ -1585,6 +1585,26 @@ export interface paths {
      * @description Get a list of licence events that match the supplied criteria. Requires ROLE_CVL_ADMIN.
      */
     get: operations['getEventsMatchingCriteria']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/coms-to-prompt': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve a list of cases that we will send an email for.
+     * @description Retrieve a list of cases that we have identified to encourage them to progress cases. Requires ROLE_CVL_ADMIN.
+     */
+    get: operations['run']
     put?: never
     post?: never
     delete?: never
@@ -2317,6 +2337,11 @@ export interface components {
       isDueForEarlyRelease: boolean
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+      /**
+       * Format: date
+       * @description Date that the licence is due to activate
+       */
+      licenceStartDate?: string
     }
     PageMetadata: {
       /** Format: int64 */
@@ -3080,41 +3105,6 @@ export interface components {
        * @example 123344
        */
       licenceId: number
-    }
-    /** @description Describes a prisoner due for release */
-    PrisonerForRelease: {
-      /**
-       * @description The full name of the prisoner
-       * @example John Smith
-       */
-      name: string
-      /**
-       * @description The case reference number (CRN) for the person on this licence
-       * @example X12444
-       */
-      crn: string
-      /**
-       * Format: date
-       * @description The date on which the prisoner leaves custody
-       */
-      releaseDate: string
-    }
-    /** @description Describes a COM's contact details and the upcoming releases that they must consider for licence creation */
-    PromptLicenceCreationRequest: {
-      /**
-       * @description The email address of the COM
-       * @example jbloggs@probation.gov.uk
-       */
-      email: string
-      /**
-       * @description The full name of the COM
-       * @example Joseph Bloggs
-       */
-      comName: string
-      /** @description The list of prisoners for whom the COM should be notified of needing a licence */
-      initialPromptCases: components['schemas']['PrisonerForRelease'][]
-      /** @description The list of prisoners for whom the COM should be notified of needing a licence urgently */
-      urgentPromptCases: components['schemas']['PrisonerForRelease'][]
     }
     /** @description A list of fields to sort by along with the sort direction for each */
     ProbationSearchSortBy: {
@@ -3983,16 +3973,16 @@ export interface components {
       /** @description If ARD||CRD falls on Friday/Bank holiday/Weekend then it is eligible for early release) */
       isEligibleForEarlyRelease: boolean
       /**
+       * Format: date
+       * @description The date that the licence will start
+       */
+      licenceStartDate?: string
+      /**
        * Format: int64
        * @description The prison internal booking ID for the person on this licence
        * @example 989898
        */
       bookingId?: number
-      /**
-       * Format: date
-       * @description The date that the licence will start
-       */
-      licenceStartDate?: string
       /**
        * @description The username who approved the licence on behalf of the prison governor
        * @example X33221
@@ -4664,6 +4654,30 @@ export interface components {
        * @description The date and time of the event
        */
       eventTime?: string
+    }
+    /** @description Describes a prisoner due for release */
+    Case: {
+      /**
+       * @description The full name of the prisoner
+       * @example John Smith
+       */
+      name: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crn: string
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       */
+      releaseDate: string
+    }
+    PromptComNotification: {
+      email: string
+      comName: string
+      initialPromptCases: components['schemas']['Case'][]
+      urgentPromptCases: components['schemas']['Case'][]
     }
     /** @description Describes the counts of cases needed for review by a Probation Practitioner */
     ComReviewCount: {
@@ -7399,27 +7413,17 @@ export interface operations {
       }
     }
   }
-  uploadExclusionZoneFile: {
+  runJob: {
     parameters: {
       query?: never
       header?: never
-      path: {
-        licenceId: number
-        conditionId: number
-      }
+      path?: never
       cookie?: never
     }
-    requestBody?: {
-      content: {
-        'multipart/form-data': {
-          /** Format: binary */
-          file: string
-        }
-      }
-    }
+    requestBody?: never
     responses: {
-      /** @description The exclusion zone file was uploaded */
-      200: {
+      /** @description The job ran successfully */
+      204: {
         headers: {
           [name: string]: unknown
         }
@@ -7454,20 +7458,26 @@ export interface operations {
       }
     }
   }
-  notifyOfUpcomingReleasesRequiringLicence: {
+  uploadExclusionZoneFile: {
     parameters: {
       query?: never
       header?: never
-      path?: never
+      path: {
+        licenceId: number
+        conditionId: number
+      }
       cookie?: never
     }
-    requestBody: {
+    requestBody?: {
       content: {
-        'application/json': components['schemas']['PromptLicenceCreationRequest'][]
+        'multipart/form-data': {
+          /** Format: binary */
+          file: string
+        }
       }
     }
     responses: {
-      /** @description The COM was notified */
+      /** @description The exclusion zone file was uploaded */
       200: {
         headers: {
           [name: string]: unknown
@@ -8255,6 +8265,64 @@ export interface operations {
       }
     }
   }
+  getIS91Status: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        nomsId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description a boolean for IS-91 status */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': boolean
+        }
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Could not find prisoner */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getIneligibilityReasons: {
     parameters: {
       query?: never
@@ -8559,44 +8627,6 @@ export interface operations {
       }
     }
   }
-  run: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description list of COMs we'll send email to */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Com'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   getHdcLicenceData: {
     parameters: {
       query?: never
@@ -8742,6 +8772,44 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['LicenceEvent'][]
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  run: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description list of COMs we'll send email to */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PromptComNotification'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */

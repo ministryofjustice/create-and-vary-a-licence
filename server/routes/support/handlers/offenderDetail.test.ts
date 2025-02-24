@@ -160,6 +160,7 @@ describe('Route Handlers - Offender detail', () => {
           region: 'Not found',
         },
         licence: {
+          lsd: 'Not found',
           led: 'Not found',
           ssd: 'Not found',
           crd: 'Not found',
@@ -302,6 +303,7 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Not found',
       },
       licence: {
+        lsd: 'Not found',
         led: 'Not found',
         ssd: 'Not found',
         crd: 'Not found',
@@ -434,6 +436,7 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Not found',
       },
       licence: {
+        lsd: 'Not found',
         led: 'Not found',
         ssd: 'Not found',
         crd: 'Not found',
@@ -538,6 +541,7 @@ describe('Route Handlers - Offender detail', () => {
       actualReleaseDate: '02/01/2022',
       sentenceStartDate: '03/01/2022',
       sentenceEndDate: '04/01/2022',
+      licenceStartDate: '01/01/2022',
       licenceExpiryDate: '05/01/2022',
       topupSupervisionStartDate: '06/01/2022',
       topupSupervisionExpiryDate: '07/01/2022',
@@ -594,6 +598,7 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Not found',
       },
       licence: {
+        lsd: '01 Jan 2022',
         led: '05 Jan 2022',
         ssd: '03 Jan 2022',
         crd: '01 Jan 2022',
@@ -751,6 +756,7 @@ describe('Route Handlers - Offender detail', () => {
         region: 'Region 1',
       },
       licence: {
+        lsd: 'Not found',
         led: 'Not found',
         ssd: 'Not found',
         crd: 'Not found',
@@ -908,6 +914,7 @@ describe('Route Handlers - Offender detail', () => {
         username: 'AB123C',
       },
       licence: {
+        lsd: 'Not found',
         led: 'Not found',
         ssd: 'Not found',
         crd: 'Not found',

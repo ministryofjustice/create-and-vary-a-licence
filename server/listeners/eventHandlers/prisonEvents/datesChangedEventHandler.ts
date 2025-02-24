@@ -53,9 +53,9 @@ export default class DatesChangedEventHandler {
   deactivateLicencesIfPrisonerResentenced = async (licence: LicenceSummary, bookingId: number) => {
     const ssd = await this.prisonerService.getPrisonerLatestSentenceStartDate(bookingId)
 
-    const crd = licence.conditionalReleaseDate ? parseCvlDate(licence.conditionalReleaseDate) : null
+    const lsd = licence.licenceStartDate ? parseCvlDate(licence.licenceStartDate) : null
 
-    if (ssd && crd && isAfter(ssd, crd)) {
+    if (ssd && lsd && isAfter(ssd, lsd)) {
       await this.licenceService.deactivateActiveAndVariationLicences(licence.licenceId, 'RESENTENCED')
     }
   }
@@ -86,6 +86,7 @@ export default class DatesChangedEventHandler {
       sentenceEndDate:
         convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryOverrideDate) ||
         convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryDate),
+      // LSD calculated here is now unused, should be refactored out
       licenceStartDate:
         convertDateFormat(prisoner.sentenceDetail?.confirmedReleaseDate) ||
         convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||

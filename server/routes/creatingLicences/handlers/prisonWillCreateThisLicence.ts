@@ -16,8 +16,8 @@ export default class PrisonWillCreateThisLicenceRoutes {
 
     const [
       {
-        cvl: { licenceType },
-        prisoner: { prisonId, confirmedReleaseDate, conditionalReleaseDate, dateOfBirth, firstName, lastName },
+        cvl: { licenceType, licenceStartDate },
+        prisoner: { prisonId, dateOfBirth, firstName, lastName },
       },
       deliusRecord,
     ] = await Promise.all([
@@ -31,8 +31,7 @@ export default class PrisonWillCreateThisLicenceRoutes {
     return res.render('pages/create/prisonWillCreateThisLicence', {
       licence: {
         crn: deliusRecord?.otherIds?.crn,
-        actualReleaseDate: confirmedReleaseDate ? moment(confirmedReleaseDate).format('DD/MM/YYYY') : undefined,
-        conditionalReleaseDate: moment(conditionalReleaseDate).format('DD/MM/YYYY'),
+        licenceStartDate,
         dateOfBirth: moment(dateOfBirth).format('DD/MM/YYYY'),
         forename: convertToTitleCase(firstName),
         surname: convertToTitleCase(lastName),
