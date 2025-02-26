@@ -726,7 +726,7 @@ export default {
   },
 
   stubGetLicencesForOffender: (options: {
-    kind: 'CRD' | 'VARIATION' | 'HARD_STOP'
+    kind: 'CRD' | 'VARIATION' | 'HARD_STOP' | 'HDC'
     nomisId: string
     status: string
     bookingId: number
@@ -830,27 +830,6 @@ export default {
             dateCreated: '01/03/2021 10:15',
           },
         ],
-      },
-    })
-  },
-
-  stubGetHdcLicencesForOffender: (options: { bookingId: number; status: string }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: '/licences-api/api/offender-sentences/booking/(\\d)*/home-detention-curfews/latest',
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: {
-          approvalStatus: options.status,
-          approvalStatusDate: null,
-          bookingId: options.bookingId,
-          checksPassedDate: null,
-          passed: true,
-          refusedReason: '',
-        },
       },
     })
   },

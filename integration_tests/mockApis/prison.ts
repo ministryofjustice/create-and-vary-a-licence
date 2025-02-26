@@ -359,4 +359,25 @@ export default {
       },
     })
   },
+
+  stubGetHdcLicencesForOffender: (options: { bookingId: number; status: string }): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/prison-api/api/offender-sentences/booking/(\\d)*/home-detention-curfews/latest',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          approvalStatus: options.status,
+          approvalStatusDate: null,
+          bookingId: options.bookingId,
+          checksPassedDate: null,
+          passed: true,
+          refusedReason: '',
+        },
+      },
+    })
+  },
 }
