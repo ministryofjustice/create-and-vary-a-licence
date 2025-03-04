@@ -467,44 +467,8 @@ export default class LicenceApiClient extends RestClient {
     >
   }
 
-  async notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd(): Promise<void> {
-    await this.post({
-      path: '/notify-probation-of-unapproved-licences',
-    })
-  }
-
   async overrideStatusCode(licenceId: number, request: { reason: string; statusCode: LicenceStatus }, user: User) {
     await this.post({ path: `/licence/id/${licenceId}/override/status`, data: request }, { username: user?.username })
-  }
-
-  async runLicenceActivationJob() {
-    await this.post({
-      path: '/run-activation-job',
-    })
-  }
-
-  async runRemoveExpiredConditionsJob() {
-    await this.post({
-      path: '/run-remove-expired-conditions-job',
-    })
-  }
-
-  async runLicenceTimeOutJob() {
-    await this.post({
-      path: '/run-time-out-job',
-    })
-  }
-
-  async runHardStopLicencesReviewOverdueJob() {
-    await this.post({
-      path: '/run-hard-stop-licence-review-overdue-job',
-    })
-  }
-
-  async runNotifyAttentionNeededLicencesJob() {
-    await this.post({
-      path: '/run-notify-attention-needed-licences-job',
-    })
   }
 
   async overrideLicenceDates(licenceId: number, request: OverrideLicenceDatesRequest, user: User) {
@@ -554,18 +518,6 @@ export default class LicenceApiClient extends RestClient {
     return (await this.get({
       path: '/bank-holidays',
     })) as Promise<string[]>
-  }
-
-  async runLicenceExpiryJob(): Promise<void> {
-    await this.post({
-      path: '/run-expire-licences-job',
-    })
-  }
-
-  async runDeactivateReleaseDatePassedLicencesJob(): Promise<void> {
-    await this.post({
-      path: '/run-deactivate-licences-past-release-date',
-    })
   }
 
   async reviewWithoutVariation(licenceId: number, user: User): Promise<void> {
