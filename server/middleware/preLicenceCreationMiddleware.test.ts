@@ -40,15 +40,23 @@ afterEach(() => {
 describe('preLicenceCreationMiddleware', () => {
   it('should not run pre licence creation check if nomisId is not populated', async () => {
     req.params = {}
-    await middleware(req, res, next)
-    expect(probationService.getProbationer).not.toHaveBeenCalled()
-    expect(next).toHaveBeenCalledTimes(1)
+    await expect(middleware(req, res, next)).rejects.toThrow('No nomisId has been provided')
   })
 
-  it('should populate delius record from probation service', async () => {
+  it('should return early if there is no delius staff identifier', async () => {
+    probationService.getProbationer.mockResolvedValue(null)
     await middleware(req, res, next)
     expect(probationService.getProbationer).toHaveBeenCalledTimes(1)
-    expect(next).toHaveBeenCalledTimes(1)
+    expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(0)
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+  })
+
+  it('should return early if there is no delius record', async () => {
+    res.locals.user.deliusStaffIdentifier = null
+    await middleware(req, res, next)
+    expect(probationService.getProbationer).toHaveBeenCalledTimes(1)
+    expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(0)
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
   })
 
   it('should handle error from probation service', async () => {
