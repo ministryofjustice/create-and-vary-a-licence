@@ -6,35 +6,36 @@ import { DeliusManager } from '../@types/deliusClientTypes'
 
 jest.mock('../services/probationService')
 
-const req = {
-  path: '/licence/create/nomisId/A1234BC/confirm',
-} as Request
+let req: Request
+let res: Response
 const next = jest.fn()
-
-const res = {
-  locals: {
-    user: {
-      username: 'YY',
-      deliusStaffIdentifier: 123,
-      probationAreaCode: 'N55',
-      probationTeamCodes: ['Team2'],
-      userRoles: ['ROLE_LICENCE_RO'],
-    },
-    licence: undefined,
-  },
-  redirect: jest.fn(),
-} as unknown as Response
 
 const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 
 const middleware = preLicenceCreationMiddleware(probationService)
 
 beforeEach(() => {
-  req.params = { nomisId: 'A1234BC' }
-})
-
-afterEach(() => {
   jest.resetAllMocks()
+  req = {
+    params: {
+      nomisId: 'A1234BC',
+    },
+    path: '/licence/create/nomisId/A1234BC/confirm',
+  } as unknown as Request
+
+  res = {
+    locals: {
+      user: {
+        username: 'YY',
+        deliusStaffIdentifier: 123,
+        probationAreaCode: 'N55',
+        probationTeamCodes: ['Team2'],
+        userRoles: ['ROLE_LICENCE_RO'],
+      },
+      licence: undefined,
+    },
+    redirect: jest.fn(),
+  } as unknown as Response
 })
 
 describe('preLicenceCreationMiddleware', () => {
@@ -44,7 +45,7 @@ describe('preLicenceCreationMiddleware', () => {
   })
 
   it('should return early if there is no delius staff identifier', async () => {
-    probationService.getProbationer.mockResolvedValue(null)
+    probationService.getProbationer.mockResolvedValue(undefined)
     await middleware(req, res, next)
     expect(probationService.getProbationer).toHaveBeenCalledTimes(1)
     expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(0)
@@ -52,7 +53,7 @@ describe('preLicenceCreationMiddleware', () => {
   })
 
   it('should return early if there is no delius record', async () => {
-    res.locals.user.deliusStaffIdentifier = null
+    res.locals.user.deliusStaffIdentifier = undefined
     await middleware(req, res, next)
     expect(probationService.getProbationer).toHaveBeenCalledTimes(1)
     expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(0)
