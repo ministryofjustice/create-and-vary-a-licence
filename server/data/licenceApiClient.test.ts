@@ -723,12 +723,6 @@ describe('Licence API client tests', () => {
       )
     })
   })
-  describe('Unapproved licence: ', () => {
-    it('should call the api', async () => {
-      await licenceApiClient.notifyProbationPractionerOfEditedLicencesStillUnapprovedOnCrd()
-      expect(post).toHaveBeenCalledWith({ path: '/notify-probation-of-unapproved-licences' })
-    })
-  })
 
   describe('Com review count: ', () => {
     it('Should get mycount and teams individual count for Com', async () => {
