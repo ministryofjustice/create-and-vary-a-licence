@@ -7,6 +7,9 @@ import ProbationService from '../../services/probationService'
 import ConditionService from '../../services/conditionService'
 import { AdditionalConditionAp } from '../../@types/LicencePolicy'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
+import { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
+import { DeliusManager } from '../../@types/deliusClientTypes'
+import { User } from '../../@types/CvlUserDetails'
 
 let app: Express
 
@@ -29,9 +32,17 @@ const licence = {
   version: '3.0',
 } as Licence
 
+const user = {
+  username: 'joebloggs',
+  deliusStaffIdentifier: 2000,
+  probationTeamCodes: ['ABC123'],
+  userRoles: ['ROLE_LICENCE_RO'],
+} as User
+
 beforeEach(() => {
   app = appWithAllRoutes({
     services: { licenceService, conditionService, ukBankHolidayFeedService, probationService },
+    userSupplier: () => user,
   })
   licenceService.getOmuEmail.mockResolvedValue({ email: 'test@test.test' } as OmuContact)
   licenceService.getParentLicenceOrSelf.mockResolvedValue(licence)
@@ -39,6 +50,38 @@ beforeEach(() => {
 
   conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([])
   conditionService.getAdditionalConditionByCode.mockResolvedValue({ validatorType: null } as AdditionalConditionAp)
+
+  probationService.getProbationer.mockResolvedValue({
+    otherIds: {
+      crn: 'X12345',
+    },
+  } as OffenderDetail)
+  probationService.getResponsibleCommunityManager.mockResolvedValue({
+    code: 'X12345',
+    id: 2000,
+    username: 'joebloggs',
+    email: 'joebloggs@probation.gov.uk',
+    name: {
+      forename: 'Joe',
+      surname: 'Bloggs',
+    },
+    provider: {
+      code: 'N02',
+      description: 'N02 Region',
+    },
+    team: {
+      code: 'ABC123',
+      description: 'Team2 Description',
+      borough: {
+        code: 'PDU2',
+        description: 'PDU2 Description',
+      },
+      district: {
+        code: 'LAU2',
+        description: 'LAU2 Description',
+      },
+    },
+  } as DeliusManager)
 })
 
 afterEach(() => {
