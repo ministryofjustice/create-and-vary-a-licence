@@ -69,15 +69,6 @@ export default function Index({
       asyncMiddleware(handler),
     )
 
-  const post = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      fetchLicence(licenceService),
-      validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
-    )
-
   const postWithHardStopCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
@@ -85,6 +76,16 @@ export default function Index({
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(UserType.PROBATION),
+      asyncMiddleware(handler),
+    )
+
+  const postWithPreLicenceCreationCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
+    router.post(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      fetchLicence(licenceService),
+      preLicenceCreationMiddleware(probationService),
+      validationMiddleware(conditionService, type),
       asyncMiddleware(handler),
     )
 
@@ -101,7 +102,7 @@ export default function Index({
   {
     const controller = new ConfirmCreateRoutes(probationService, licenceService)
     getWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.GET)
-    post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
+    postWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
   }
 
   {

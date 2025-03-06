@@ -5,15 +5,18 @@ import LicenceService from '../../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import { CaseloadItem, LicenceSummary } from '../../../../@types/licenceApiClientTypes'
 import ProbationService from '../../../../services/probationService'
+import PrisonerService from '../../../../services/prisonerService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../../../../services/licenceService')
 jest.mock('../../../../services/probationService')
+jest.mock('../../../../services/prisonerService')
 
 describe('Route Handlers - Create Licence - Confirm Create', () => {
-  const handler = new ConfirmCreateRoutes(probationService, licenceService)
+  const handler = new ConfirmCreateRoutes(probationService, licenceService, prisonerService)
   let req: Request
   let res: Response
 
@@ -51,11 +54,13 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         confirmedReleaseDate: '2024-07-19',
         conditionalReleaseDate: '2022-09-01',
         homeDetentionCurfewActualDate: '2024-07-19',
+        homeDetentionCurfewEligibilityDate: '2024-07-19',
         dateOfBirth: '1992-12-06',
       },
       cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
     } as CaseloadItem
     licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+    prisonerService.isHdcApproved.mockResolvedValue(true)
   })
 
   afterEach(() => {
@@ -85,11 +90,32 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           confirmedReleaseDate: '2024-07-19',
           conditionalReleaseDate: '2022-09-01',
           homeDetentionCurfewActualDate: '2024-07-19',
+          homeDetentionCurfewEligibilityDate: '2024-07-19',
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: true, licenceStartDate: '18/07/2024' },
       } as CaseloadItem
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+    })
+
+    it('should redirect to access denied if the case is not approved for HDC', async () => {
+      const prisonerDetails = {
+        prisoner: {
+          prisonerNumber: 'G4169UO',
+          firstName: 'EMAJINHANY',
+          lastName: 'ELYSASHA',
+          confirmedReleaseDate: '2024-07-19',
+          conditionalReleaseDate: '2022-09-01',
+          homeDetentionCurfewActualDate: '2024-07-19',
+          homeDetentionCurfewEligibilityDate: '2024-07-19',
+          dateOfBirth: '1992-12-06',
+        },
+        cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
+      } as CaseloadItem
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      prisonerService.isHdcApproved.mockResolvedValue(false)
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     })
@@ -103,11 +129,33 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           confirmedReleaseDate: '2024-07-19',
           conditionalReleaseDate: '2022-09-01',
           homeDetentionCurfewActualDate: null,
+          homeDetentionCurfewEligibilityDate: '2024-07-19',
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
       } as CaseloadItem
       licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      prisonerService.isHdcApproved.mockResolvedValue(true)
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+    })
+
+    it('should redirect to access denied if the case does not have an HDCED', async () => {
+      const prisonerDetails = {
+        prisoner: {
+          prisonerNumber: 'G4169UO',
+          firstName: 'EMAJINHANY',
+          lastName: 'ELYSASHA',
+          confirmedReleaseDate: '2024-07-19',
+          conditionalReleaseDate: '2022-09-01',
+          homeDetentionCurfewActualDate: '2024-07-19',
+          homeDetentionCurfewEligibilityDate: null,
+          dateOfBirth: '1992-12-06',
+        },
+        cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
+      } as CaseloadItem
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      prisonerService.isHdcApproved.mockResolvedValue(true)
       await handler.GET(req, res)
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     })
@@ -160,6 +208,26 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     })
 
+    it('should redirect to access denied if the case is not approved for HDC', async () => {
+      const prisonerDetails = {
+        prisoner: {
+          prisonerNumber: 'G4169UO',
+          firstName: 'EMAJINHANY',
+          lastName: 'ELYSASHA',
+          confirmedReleaseDate: '2024-07-19',
+          conditionalReleaseDate: '2022-09-01',
+          homeDetentionCurfewActualDate: '2024-07-19',
+          homeDetentionCurfewEligibilityDate: '2024-07-19',
+          dateOfBirth: '1992-12-06',
+        },
+        cvl: { isInHardStopPeriod: false },
+      } as CaseloadItem
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      prisonerService.isHdcApproved.mockResolvedValue(false)
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+    })
+
     it('should redirect to access denied if the case does not have an HDCAD', async () => {
       const prisonerDetails = {
         prisoner: {
@@ -169,6 +237,25 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           confirmedReleaseDate: '2024-07-19',
           conditionalReleaseDate: '2022-09-01',
           homeDetentionCurfewActualDate: null,
+          dateOfBirth: '1992-12-06',
+        },
+        cvl: { isInHardStopPeriod: false },
+      } as CaseloadItem
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/access-denied')
+    })
+
+    it('should redirect to access denied if the case does not have an HDCED', async () => {
+      const prisonerDetails = {
+        prisoner: {
+          prisonerNumber: 'G4169UO',
+          firstName: 'EMAJINHANY',
+          lastName: 'ELYSASHA',
+          confirmedReleaseDate: '2024-07-19',
+          conditionalReleaseDate: '2022-09-01',
+          homeDetentionCurfewActualDate: '2024-07-19',
+          homeDetentionCurfewEligibilityDate: null,
           dateOfBirth: '1992-12-06',
         },
         cvl: { isInHardStopPeriod: false },
