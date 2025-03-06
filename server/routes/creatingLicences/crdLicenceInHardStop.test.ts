@@ -66,19 +66,19 @@ beforeEach(() => {
       surname: 'Bloggs',
     },
     provider: {
-      code: 'N02',
-      description: 'N02 Region',
+      code: 'N01',
+      description: 'N01 Region',
     },
     team: {
       code: 'ABC123',
-      description: 'Team2 Description',
+      description: 'ABC123 Description',
       borough: {
-        code: 'PDU2',
-        description: 'PDU2 Description',
+        code: 'PDU1',
+        description: 'PDU1 Description',
       },
       district: {
-        code: 'LAU2',
-        description: 'LAU2 Description',
+        code: 'LAU1',
+        description: 'LAU1 Description',
       },
     },
   } as DeliusManager)
