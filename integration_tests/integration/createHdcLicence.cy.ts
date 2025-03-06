@@ -12,6 +12,7 @@ context('Create an HDC licence', () => {
     cy.task('stubGetHdcCaseloadItem')
     cy.task('stubGetHdcLicence')
     cy.task('stubGetProbationer')
+    cy.task('stubGetResponsibleCommunityManager')
     cy.task('stubUpdateStandardConditions')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetLicencePolicyConditions')
