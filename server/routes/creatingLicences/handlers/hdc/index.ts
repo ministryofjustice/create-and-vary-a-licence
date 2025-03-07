@@ -8,8 +8,14 @@ import { Services } from '../../../../services'
 
 import YesOrNoQuestion from '../../types/yesOrNo'
 import ConfirmCreateRoutes from './confirmCreate'
+import preLicenceCreationMiddleware from '../../../../middleware/preLicenceCreationMiddleware'
 
-export default function Index({ licenceService, conditionService, probationService }: Services): Router {
+export default function Index({
+  licenceService,
+  conditionService,
+  probationService,
+  prisonerService,
+}: Services): Router {
   const router = Router()
 
   const routePrefix = (path: string) => `/licence/hdc${path}`
@@ -25,6 +31,7 @@ export default function Index({ licenceService, conditionService, probationServi
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
+      preLicenceCreationMiddleware(probationService),
       asyncMiddleware(handler),
     )
 
@@ -37,7 +44,7 @@ export default function Index({ licenceService, conditionService, probationServi
       asyncMiddleware(handler),
     )
   {
-    const controller = new ConfirmCreateRoutes(probationService, licenceService)
+    const controller = new ConfirmCreateRoutes(probationService, licenceService, prisonerService)
     get('/create/nomisId/:nomisId/confirm', controller.GET)
     post('/create/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
   }
