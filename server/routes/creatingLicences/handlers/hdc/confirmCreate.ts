@@ -6,11 +6,13 @@ import YesOrNo from '../../../../enumeration/yesOrNo'
 import LicenceService from '../../../../services/licenceService'
 import LicenceKind from '../../../../enumeration/LicenceKind'
 import logger from '../../../../../logger'
+import PrisonerService from '../../../../services/prisonerService'
 
 export default class ConfirmCreateRoutes {
   constructor(
     private readonly probationService: ProbationService,
     private readonly licenceService: LicenceService,
+    private readonly prisonerService: PrisonerService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -28,8 +30,20 @@ export default class ConfirmCreateRoutes {
       return res.redirect('/access-denied')
     }
 
+    const isHdcApproved = await this.prisonerService.isHdcApproved(parseInt(nomisRecord.prisoner.bookingId, 10))
+
+    if (!isHdcApproved) {
+      logger.error('Access denied to HDC licence creation GET as not approved for HDC')
+      return res.redirect('/access-denied')
+    }
+
     if (!nomisRecord.prisoner.homeDetentionCurfewActualDate) {
-      logger.error('Access denied to HDC licence creation GET due to not having an HDCAD')
+      logger.error('Access denied to HDC licence creation GET due to not having a HDCAD')
+      return res.redirect('/access-denied')
+    }
+
+    if (!nomisRecord.prisoner.homeDetentionCurfewEligibilityDate) {
+      logger.error('Access denied to HDC licence creation GET due to not having a HDCED')
       return res.redirect('/access-denied')
     }
 
@@ -57,8 +71,20 @@ export default class ConfirmCreateRoutes {
       return res.redirect('/access-denied')
     }
 
+    const isHdcApproved = await this.prisonerService.isHdcApproved(parseInt(nomisRecord.prisoner.bookingId, 10))
+
+    if (!isHdcApproved) {
+      logger.error('Access denied to HDC licence creation POST as not approved for HDC')
+      return res.redirect('/access-denied')
+    }
+
     if (!nomisRecord.prisoner.homeDetentionCurfewActualDate) {
-      logger.error('Access denied to HDC licence creation POST due to not having an HDCAD')
+      logger.error('Access denied to HDC licence creation POST due to not having a HDCAD')
+      return res.redirect('/access-denied')
+    }
+
+    if (!nomisRecord.prisoner.homeDetentionCurfewEligibilityDate) {
+      logger.error('Access denied to HDC licence creation POST due to not having a HDCED')
       return res.redirect('/access-denied')
     }
 

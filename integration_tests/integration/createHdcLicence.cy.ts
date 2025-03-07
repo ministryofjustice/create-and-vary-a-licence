@@ -13,6 +13,8 @@ context('Create an HDC licence', () => {
     cy.task('stubGetHdcLicence')
     cy.task('stubGetProbationer')
     cy.task('stubGetResponsibleCommunityManager')
+    cy.task('searchPrisonersByBookingIds', '2024-07-09')
+    cy.task('stubGetHdcLicencesForOffender', { status: 'APPROVED', bookingId: 1201102 })
     cy.task('stubUpdateStandardConditions')
     cy.task('stubRecordAuditEvent')
     cy.task('stubGetLicencePolicyConditions')
