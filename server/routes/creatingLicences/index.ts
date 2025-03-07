@@ -24,6 +24,7 @@ import LicenceCreatedByPrisonRoutes from './handlers/licenceCreatedByPrison'
 import LicenceChangesNotApprovedInTimeRoutes from './handlers/licenceChangesNotApprovedInTime'
 import hardStopCheckMiddleware from '../../middleware/hardStopCheckMiddleware'
 import UserType from '../../enumeration/userType'
+import preLicenceCreationMiddleware from '../../middleware/preLicenceCreationMiddleware'
 
 export default function Index({
   licenceService,
@@ -59,12 +60,12 @@ export default function Index({
       asyncMiddleware(handler),
     )
 
-  const post = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(
+  const getWithPreLicenceCreationCheck = (path: string, handler: RequestHandler) =>
+    router.get(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
-      validationMiddleware(conditionService, type),
+      preLicenceCreationMiddleware(probationService),
       asyncMiddleware(handler),
     )
 
@@ -75,6 +76,16 @@ export default function Index({
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(UserType.PROBATION),
+      asyncMiddleware(handler),
+    )
+
+  const postWithPreLicenceCreationCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
+    router.post(
+      routePrefix(path),
+      roleCheckMiddleware(['ROLE_LICENCE_RO']),
+      fetchLicence(licenceService),
+      preLicenceCreationMiddleware(probationService),
+      validationMiddleware(conditionService, type),
       asyncMiddleware(handler),
     )
 
@@ -90,8 +101,8 @@ export default function Index({
 
   {
     const controller = new ConfirmCreateRoutes(probationService, licenceService)
-    get('/nomisId/:nomisId/confirm', controller.GET)
-    post('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
+    getWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.GET)
+    postWithPreLicenceCreationCheck('/nomisId/:nomisId/confirm', controller.POST, YesOrNoQuestion)
   }
 
   {

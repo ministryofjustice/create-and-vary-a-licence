@@ -47,7 +47,7 @@ Then:
 There is a single integration test to verify that the Gotenberg container can support the
 conversion of HTML to PDF documents. To run this, follow these instructions:
 
-`$ docker-compose up -d`
+`$ docker compose up -d`
 
 This runs local redis and gotenberg containers.
 
@@ -63,9 +63,9 @@ NOTE: This test is not currently run in CI.
 
 Pull images and start dependent services:
 
-`$ docker-compose -f docker-compose-test.yml pull`
+`$ docker compose -f docker-compose-test.yml pull`
 
-`$ docker-compose -f docker-compose-test.yml up -d`
+`$ docker compose -f docker-compose-test.yml up -d`
 
 In a different terminal:
 

@@ -1830,6 +1830,7 @@ export default {
         jsonBody: {
           prisoner: {
             prisonerNumber: 'G9786GC',
+            bookingId: '1201102',
             firstName: 'Patrick',
             lastName: 'Holmes',
             dateOfBirth: '1960-11-10',
@@ -1842,6 +1843,7 @@ export default {
             licenceExpiryDate: '2028-08-31',
             conditionalReleaseDate: '2022-11-10',
             homeDetentionCurfewActualDate: '2024-07-09',
+            homeDetentionCurfewEligibilityDate: '2024-07-09',
           },
           cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, isInhardStopPeriod: false },
         },
