@@ -3,18 +3,16 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import TimelineService from '../../../services/timelineService'
 import LicenceService from '../../../services/licenceService'
 import type { Licence } from '../../../@types/licenceApiClientTypes'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 enum CallToActionType {
   PRINT_TO_ACTIVATE = 'PRINT_TO_ACTIVATE',
   EDIT = 'EDIT',
   REVIEW = 'REVIEW',
   VIEW_OR_VARY = 'VIEW_OR_VARY',
-  VIEW = 'VIEW',
 }
 
 const { VARIATION_APPROVED, ACTIVE, VARIATION_IN_PROGRESS, VARIATION_REJECTED, VARIATION_SUBMITTED } = LicenceStatus
-const { PRINT_TO_ACTIVATE, EDIT, VIEW_OR_VARY, REVIEW, VIEW } = CallToActionType
+const { PRINT_TO_ACTIVATE, EDIT, VIEW_OR_VARY, REVIEW } = CallToActionType
 
 export default class TimelineRoutes {
   constructor(
@@ -26,12 +24,8 @@ export default class TimelineRoutes {
     if (licence.statusCode === VARIATION_APPROVED) {
       return PRINT_TO_ACTIVATE
     }
-    if (licence.statusCode === ACTIVE && !licence.isReviewNeeded && licence.kind !== LicenceKind.HDC) {
+    if (licence.statusCode === ACTIVE && !licence.isReviewNeeded) {
       return VIEW_OR_VARY
-    }
-
-    if (licence.statusCode === ACTIVE && !licence.isReviewNeeded && licence.kind === LicenceKind.HDC) {
-      return VIEW
     }
 
     if ([VARIATION_IN_PROGRESS, VARIATION_SUBMITTED, VARIATION_REJECTED].includes(<LicenceStatus>licence.statusCode)) {

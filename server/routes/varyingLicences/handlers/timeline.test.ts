@@ -256,46 +256,6 @@ describe('Route Handlers - Timeline', () => {
         callToAction: 'VIEW_OR_VARY',
       })
     })
-
-    it('should render view call to action', async () => {
-      res = {
-        ...commonRes,
-        locals: {
-          licence: {
-            id: 1,
-            kind: LicenceKind.HDC,
-            statusCode: LicenceStatus.ACTIVE,
-            isReviewNeeded: false,
-          },
-          user: commonUser,
-        },
-      } as unknown as Response
-
-      const timelineEvents = [
-        {
-          eventType: 'CREATION',
-          title: 'Licence created',
-          statusCode: 'ACTIVE',
-          createdBy: 'X Y',
-          licenceId: 1,
-          lastUpdate: '12/11/2022 10:04:00',
-        },
-      ] as unknown as TimelineEvent[]
-
-      timelineService.getTimelineEvents.mockResolvedValue(timelineEvents)
-
-      await handler.GET(req, res)
-
-      expect(timelineService.getTimelineEvents).toHaveBeenCalledWith(
-        { id: 1, statusCode: LicenceStatus.ACTIVE, isReviewNeeded: false, kind: LicenceKind.HDC },
-        { username: 'joebloggs' },
-      )
-
-      expect(res.render).toHaveBeenCalledWith('pages/vary/timeline', {
-        timelineEvents,
-        callToAction: 'VIEW',
-      })
-    })
   })
 
   describe('POST', () => {

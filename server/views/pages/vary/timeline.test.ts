@@ -1,7 +1,6 @@
 import fs from 'fs'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/vary/timeline.njk').toString())
 
@@ -44,26 +43,5 @@ describe('Timeline', () => {
     })
     expect($('[data-qa=date]').text()).not.toContain('Release date: ')
     expect($('[data-qa=date]').text()).toContain('Licence end date:')
-  })
-
-  it('should display the View licence button for HDC licences', () => {
-    const $ = render({
-      timelineEvents: [],
-      callToAction: 'VIEW',
-    })
-    expect($('[data-qa=view-licence]').length).toBe(1)
-    expect($('[data-qa=view-licence]').text().trim()).toContain('View licence')
-  })
-
-  it('should display the How do I vary the licence component for HDC licences', () => {
-    const $ = render({
-      licence: { kind: LicenceKind.HDC },
-      timelineEvents: [],
-      callToAction: 'VIEW',
-    })
-    expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain('How do I vary this licence?')
-    expect($('[data-qa=hdc-vary-licence]').text().trim()).toContain(
-      'Email createandvaryalicence@digital.justice.gov.uk to vary this licence.',
-    )
   })
 })
