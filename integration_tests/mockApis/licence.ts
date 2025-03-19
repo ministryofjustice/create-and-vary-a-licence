@@ -214,7 +214,7 @@ export default {
             addressLine1: '1 The Street',
             addressLine2: 'Avenue',
             townOrCity: 'Some Town',
-            county: 'Some county',
+            county: 'Some County',
             postcode: 'A1 2BC',
           },
           firstNightCurfewHours: {
