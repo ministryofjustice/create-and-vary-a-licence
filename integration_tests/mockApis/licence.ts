@@ -213,8 +213,9 @@ export default {
           curfewAddress: {
             addressLine1: '1 The Street',
             addressLine2: 'Avenue',
-            addressTown: 'Some Town',
-            postCode: 'A1 2BC',
+            townOrCity: 'Some Town',
+            county: 'Some county',
+            postcode: 'A1 2BC',
           },
           firstNightCurfewHours: {
             firstNightFrom: '17:00',
