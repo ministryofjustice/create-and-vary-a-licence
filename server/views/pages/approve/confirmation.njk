@@ -6,6 +6,7 @@
 {% set pageTitle = applicationName + " - licence approved" %}
 {% set pageId = "confirm-approve-page" %}
 {% set hideLicenceBanner = true %}
+{% set hdcIntegrationMvp2 = hdcIntegrationMvp2Enabled %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -27,18 +28,34 @@
             </p>
 
             <h2 class="govuk-heading-m">If changes are made</h2>
-            {% if licence.kind === 'HDC' %}
-                 <p class="govuk-body">
-                    Changes to HDC curfew hours and licence conditions need to be reapproved.
-                </p>
+            {% if hdcIntegrationMvp2 %}
+                {% if licence.kind === 'HDC' %}
+                    <p class="govuk-body">
+                        Changes to HDC curfew hours and licence conditions need to be reapproved.
+                    </p>
+                    <p class="govuk-body">
+                        Changes to reporting instructions do not need to be reapproved, but a case administrator might need to reprint the licence.
+                    </p>
+                {% else %}
                 <p class="govuk-body">
-                    Changes to reporting instructions do not need to be reapproved, but a case administrator might need to reprint the licence.
+                        Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details. 
+                        Other changes must be made after release. Probation practitioners can continue to work on licences for people being released early after the 2-day point.
                 </p>
+                {% endif %}
             {% else %}
-            <p class="govuk-body">
-                    Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details. 
-                    Other changes must be made after release. Probation practitioners can continue to work on licences for people being released early after the 2-day point.
-            </p>
+                {% if licence.kind === 'HDC' %}
+                    <p class="govuk-body">
+                        The probation practitioner can change reporting instructions and curfew details.
+                    </p>
+                    <p class="govuk-body">
+                        These changes do not need to be reapproved, but a case administrator might need to reprint the licence.
+                    </p>
+                {% else %}
+                <p class="govuk-body">
+                        Probation practitioners can make changes up to 2 days before a standard release. After this, they can only ask the prison to change the initial appointment details. 
+                        Other changes must be made after release. Probation practitioners can continue to work on licences for people being released early after the 2-day point.
+                </p>
+                {% endif %}
             {% endif %}
 
             <p class="govuk-body">
