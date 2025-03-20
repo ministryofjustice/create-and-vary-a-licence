@@ -42,8 +42,9 @@ describe('Route - view and approve a licence', () => {
     curfewAddress: {
       addressLine1: 'addressLineOne',
       addressLine2: 'addressLineTwo',
-      addressTown: 'addressTownOrCity',
-      postCode: 'addressPostcode',
+      townOrCity: 'addressTownOrCity',
+      county: 'county',
+      postcode: 'addressPostcode',
     },
     firstNightCurfewHours: {
       firstNightFrom: '09:00',
