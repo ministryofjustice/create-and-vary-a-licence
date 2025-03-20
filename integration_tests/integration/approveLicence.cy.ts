@@ -146,7 +146,7 @@ context('Approve a licence', () => {
     approvalViewPage.getValue(approvalViewPage.accordionSectionHeading).should('contain.text', 'HDC curfew details')
     approvalViewPage
       .getValue(approvalViewPage.curfewAddress)
-      .should('contain.text', '1 The Street, Avenue, Some Town, A1 2BC')
+      .should('contain.text', '1 The Street, Avenue, Some Town, Some County, A1 2BC')
     approvalViewPage.getValue(approvalViewPage.firstNightCurfewHours).should('contain.text', '5pm to 7am')
     approvalViewPage.getValue(approvalViewPage.curfewHours).should('contain.text', 'Monday to Sunday')
     approvalViewPage.getValue(approvalViewPage.curfewHours).should('contain.text', '5pm to 7am')

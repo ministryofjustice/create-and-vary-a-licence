@@ -4563,8 +4563,9 @@ export interface components {
     CurfewAddress: {
       addressLine1: string
       addressLine2?: string
-      addressTown: string
-      postCode: string
+      townOrCity: string
+      county?: string
+      postcode: string
     }
     FirstNight: {
       /**
