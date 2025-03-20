@@ -437,6 +437,7 @@ export function registerNunjucks(app?: express.Express): Environment {
   njkEnv.addGlobal('serviceName', config.serviceName)
   njkEnv.addGlobal('showWhatsNewBanner', config.showWhatsNewBanner)
   njkEnv.addGlobal('fridayReleasePolicy', config.fridayReleasePolicy)
+  njkEnv.addGlobal('hdcIntegrationMvp2Enabled', config.hdcIntegrationMvp2Enabled)
 
   return njkEnv
 }
