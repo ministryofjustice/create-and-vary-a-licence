@@ -12,6 +12,7 @@
     or licence.statusCode == 'VARIATION_REJECTED' or licence.statusCode == 'VARIATION_APPROVED' %}
 {% set pageId = "view-active-licence-page" %}
 {% set backLinkHref = "/licence/vary/caseload" %}
+{% set hdcIntegrationMvp2 = hdcIntegrationMvp2Enabled %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -26,7 +27,13 @@
         </div>
     </div>
 
-    {{ activeCta(callToActions, licence) }}
+    {% if hdcIntegrationMvp2 %}
+        {{ activeCta(callToActions, licence) }}
+    {% else %}
+        {% if licence.kind !== 'HDC' %} 
+            {{ activeCta(callToActions, licence) }}
+        {% endif %}
+    {% endif %}
 
     {% if licence.kind === 'HDC' %}
         <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
@@ -66,6 +73,12 @@
         </div>
     </div>
 
-    {{ activeCta(callToActions, licence) }}
+    {% if hdcIntegrationMvp2 %}
+        {{ activeCta(callToActions, licence) }}
+    {% else %}
+        {% if licence.kind !== 'HDC' %} 
+            {{ activeCta(callToActions, licence) }}
+        {% endif %}
+    {% endif %}
 
 {% endblock %}
