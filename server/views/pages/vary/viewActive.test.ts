@@ -3,6 +3,7 @@ import LicenceStatus from '../../../enumeration/licenceStatus'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import config from '../../../config'
 
 const render = templateRenderer(fs.readFileSync('server/views/pages/vary/viewActive.njk').toString())
 
@@ -30,8 +31,15 @@ describe('ViewActive', () => {
     ],
   ]
 
+  const existingConfig = config
+
+  beforeEach(() => {
+    config.hdcIntegrationMvp2Enabled = true
+  })
+
   afterEach(() => {
     jest.resetAllMocks()
+    config.hdcIntegrationMvp2Enabled = existingConfig.hdcIntegrationMvp2Enabled
   })
 
   it('should display expired section if licence type is AP_PSS, is in pss period, isActivatedInPssPeriod with additional conditions', () => {
@@ -124,7 +132,9 @@ describe('ViewActive', () => {
     expect($('[data-qa=hdc-curfew-details]').length).toBe(0)
   })
 
-  it('should not display vary buttons for a HDC licence', () => {
+  it('should not display vary buttons for a HDC licence if hdcIntegrationMvp2Enabled is false', () => {
+    config.hdcIntegrationMvp2Enabled = false
+    const hdcIntegrationMvp2 = config.hdcIntegrationMvp2Enabled
     const $ = render({
       licence: {
         ...licence,
@@ -134,8 +144,28 @@ describe('ViewActive', () => {
         statusCode: LicenceStatus.ACTIVE,
         kind: LicenceKind.HDC,
       },
+      hdcIntegrationMvp2,
+      callToActions: { shouldShowVaryButton: true },
     })
     expect($('[data-qa="vary-licence"]').length).toBe(0)
+  })
+
+  it('should display vary buttons for a HDC licence if hdcIntegrationMvp2Enabled is true', () => {
+    config.hdcIntegrationMvp2Enabled = true
+    const hdcIntegrationMvp2 = config.hdcIntegrationMvp2Enabled
+    const $ = render({
+      licence: {
+        ...licence,
+        typeCode: 'AP',
+        isInPssPeriod: false,
+        isActivatedInPssPeriod: true,
+        statusCode: LicenceStatus.ACTIVE,
+        kind: LicenceKind.HDC,
+      },
+      hdcIntegrationMvp2,
+      callToActions: { shouldShowVaryButton: true },
+    })
+    expect($('[data-qa="vary-licence"]').length).toBe(2)
   })
 
   it('should render the HDC curfew details if the licence kind is HDC', () => {
