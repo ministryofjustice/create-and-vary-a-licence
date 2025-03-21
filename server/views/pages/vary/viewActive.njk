@@ -12,7 +12,6 @@
     or licence.statusCode == 'VARIATION_REJECTED' or licence.statusCode == 'VARIATION_APPROVED' %}
 {% set pageId = "view-active-licence-page" %}
 {% set backLinkHref = "/licence/vary/caseload" %}
-{% set hdcIntegrationMvp2 = hdcIntegrationMvp2Enabled %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -27,7 +26,7 @@
         </div>
     </div>
 
-    {% if hdcIntegrationMvp2 %}
+    {% if hdcIntegrationMvp2Enabled %}
         {{ activeCta(callToActions, licence) }}
     {% else %}
         {% if licence.kind !== 'HDC' %} 
@@ -73,7 +72,7 @@
         </div>
     </div>
 
-    {% if hdcIntegrationMvp2 %}
+    {% if hdcIntegrationMvp2Enabled %}
         {{ activeCta(callToActions, licence) }}
     {% else %}
         {% if licence.kind !== 'HDC' %} 
