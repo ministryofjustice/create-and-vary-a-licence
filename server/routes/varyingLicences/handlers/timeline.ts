@@ -4,6 +4,7 @@ import TimelineService from '../../../services/timelineService'
 import LicenceService from '../../../services/licenceService'
 import type { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
+import config from '../../../config'
 
 enum CallToActionType {
   PRINT_TO_ACTIVATE = 'PRINT_TO_ACTIVATE',
@@ -26,12 +27,18 @@ export default class TimelineRoutes {
     if (licence.statusCode === VARIATION_APPROVED) {
       return PRINT_TO_ACTIVATE
     }
-    if (licence.statusCode === ACTIVE && !licence.isReviewNeeded && licence.kind !== LicenceKind.HDC) {
-      return VIEW_OR_VARY
-    }
+    if (config.hdcIntegrationMvp2Enabled) {
+      if (licence.statusCode === ACTIVE && !licence.isReviewNeeded) {
+        return VIEW_OR_VARY
+      }
+    } else {
+      if (licence.statusCode === ACTIVE && !licence.isReviewNeeded && licence.kind !== LicenceKind.HDC) {
+        return VIEW_OR_VARY
+      }
 
-    if (licence.statusCode === ACTIVE && !licence.isReviewNeeded && licence.kind === LicenceKind.HDC) {
-      return VIEW
+      if (licence.statusCode === ACTIVE && !licence.isReviewNeeded && licence.kind === LicenceKind.HDC) {
+        return VIEW
+      }
     }
 
     if ([VARIATION_IN_PROGRESS, VARIATION_SUBMITTED, VARIATION_REJECTED].includes(<LicenceStatus>licence.statusCode)) {

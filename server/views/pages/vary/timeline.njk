@@ -23,12 +23,15 @@
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             {{ timelineCta(callToAction, licence) }}
             {{ currentLicenceEvents(timelineEvents) }}
-            {% if licence.kind === 'HDC' %}
-                {{ govukDetails({
-                    summaryText: "How do I vary this licence?",
-                    html: "Email createandvaryalicence@digital.justice.gov.uk to vary this licence.",
-                    attributes: { 'data-qa': 'hdc-vary-licence' }
-                }) }}
+
+            {% if not hdcIntegrationMvp2Enabled %}
+                {% if licence.kind === 'HDC' %}
+                    {{ govukDetails({
+                        summaryText: "How do I vary this licence?",
+                        html: "Email createandvaryalicence@digital.justice.gov.uk to vary this licence.",
+                        attributes: { 'data-qa': 'hdc-vary-licence' }
+                    }) }}
+                {% endif %}
             {% endif %}
         </form>
     {% endset -%}
@@ -70,7 +73,7 @@
                     {# Show content specific to each status/event type #}
                     {% if event.statusCode === 'VARIATION_APPROVED' %}
                         {{ variationApproved(event, viewLink) }}
-                    {% elseif (event.statusCode === 'ACTIVE'or event.statusCode == 'INACTIVE') and event.eventType === 'VARIATION' %}
+                    {% elseif (event.statusCode === 'ACTIVE' or event.statusCode == 'INACTIVE') and event.eventType === 'VARIATION' %}
                         {{ variationComplete(event, viewLink, printLink) }}
                     {% elseif (event.statusCode === 'ACTIVE' or event.statusCode === 'INACTIVE') and event.eventType === 'CREATION' %}
                        {{ originalLicence(event, printLink) }}
