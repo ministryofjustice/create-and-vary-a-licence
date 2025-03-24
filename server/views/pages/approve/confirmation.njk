@@ -6,7 +6,6 @@
 {% set pageTitle = applicationName + " - licence approved" %}
 {% set pageId = "confirm-approve-page" %}
 {% set hideLicenceBanner = true %}
-{% set hdcIntegrationMvp2 = hdcIntegrationMvp2Enabled %}
 
 {% block content %}
     <div class="govuk-grid-row">
@@ -28,7 +27,7 @@
             </p>
 
             <h2 class="govuk-heading-m">If changes are made</h2>
-            {% if hdcIntegrationMvp2 %}
+            {% if hdcIntegrationMvp2Enabled %}
                 {% if licence.kind === 'HDC' %}
                     <p class="govuk-body">
                         Changes to HDC curfew hours and licence conditions need to be reapproved.
