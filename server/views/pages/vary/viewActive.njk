@@ -26,8 +26,12 @@
         </div>
     </div>
 
-    {% if licence.kind !== 'HDC' %} 
+    {% if hdcIntegrationMvp2Enabled %}
         {{ activeCta(callToActions, licence) }}
+    {% else %}
+        {% if licence.kind !== 'HDC' %} 
+            {{ activeCta(callToActions, licence) }}
+        {% endif %}
     {% endif %}
 
     {% if licence.kind === 'HDC' %}
@@ -35,7 +39,7 @@
         {{ hdcCurfewTimes(hdcLicenceData) }}
     {% endif %}
 
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
         <div class="govuk-grid-column-full">
             {% if ( licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS') 
                 and (not licence.isInPssPeriod or (licence.isInPssPeriod and (not isInVariation and not licence.isActivatedInPssPeriod))) %}
@@ -68,8 +72,12 @@
         </div>
     </div>
 
-    {% if licence.kind !== 'HDC' %} 
+    {% if hdcIntegrationMvp2Enabled %}
         {{ activeCta(callToActions, licence) }}
+    {% else %}
+        {% if licence.kind !== 'HDC' %} 
+            {{ activeCta(callToActions, licence) }}
+        {% endif %}
     {% endif %}
 
 {% endblock %}
