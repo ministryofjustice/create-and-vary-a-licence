@@ -30,13 +30,6 @@ export default class ConfirmCreateRoutes {
       return res.redirect('/access-denied')
     }
 
-    const isHdcApproved = await this.prisonerService.isHdcApproved(parseInt(nomisRecord.prisoner.bookingId, 10))
-
-    if (!isHdcApproved) {
-      logger.error('Access denied to HDC licence creation GET as not approved for HDC')
-      return res.redirect('/access-denied')
-    }
-
     if (!nomisRecord.prisoner.homeDetentionCurfewActualDate) {
       logger.error('Access denied to HDC licence creation GET due to not having a HDCAD')
       return res.redirect('/access-denied')
@@ -44,6 +37,13 @@ export default class ConfirmCreateRoutes {
 
     if (!nomisRecord.prisoner.homeDetentionCurfewEligibilityDate) {
       logger.error('Access denied to HDC licence creation GET due to not having a HDCED')
+      return res.redirect('/access-denied')
+    }
+
+    const isHdcApproved = await this.prisonerService.isHdcApproved(parseInt(nomisRecord.prisoner.bookingId, 10))
+
+    if (!isHdcApproved) {
+      logger.error('Access denied to HDC licence creation GET as not approved for HDC')
       return res.redirect('/access-denied')
     }
 
@@ -71,13 +71,6 @@ export default class ConfirmCreateRoutes {
       return res.redirect('/access-denied')
     }
 
-    const isHdcApproved = await this.prisonerService.isHdcApproved(parseInt(nomisRecord.prisoner.bookingId, 10))
-
-    if (!isHdcApproved) {
-      logger.error('Access denied to HDC licence creation POST as not approved for HDC')
-      return res.redirect('/access-denied')
-    }
-
     if (!nomisRecord.prisoner.homeDetentionCurfewActualDate) {
       logger.error('Access denied to HDC licence creation POST due to not having a HDCAD')
       return res.redirect('/access-denied')
@@ -85,6 +78,13 @@ export default class ConfirmCreateRoutes {
 
     if (!nomisRecord.prisoner.homeDetentionCurfewEligibilityDate) {
       logger.error('Access denied to HDC licence creation POST due to not having a HDCED')
+      return res.redirect('/access-denied')
+    }
+
+    const isHdcApproved = await this.prisonerService.isHdcApproved(parseInt(nomisRecord.prisoner.bookingId, 10))
+
+    if (!isHdcApproved) {
+      logger.error('Access denied to HDC licence creation POST as not approved for HDC')
       return res.redirect('/access-denied')
     }
 
