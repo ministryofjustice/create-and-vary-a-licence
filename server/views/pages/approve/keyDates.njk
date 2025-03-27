@@ -2,9 +2,11 @@
 
 {% macro keyDates(licence, isDueForEarlyRelease) %}
 
-    {% set releaseDate = '<span class="urgent-highlight">' + licence.homeDetentionCurfewActualDate | datetimeToDateShort + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' if licence.kind === 'HDC' else licence.licenceStartDate | datetimeToDateShort %}
+    {% set releaseDate = licence.licenceStartDate | datetimeToDateShort %}
 
-    {% if isDueForEarlyRelease %}
+    {% if licence.kind === 'HDC' %}
+        {% set releaseDateHtml = '<span class="urgent-highlight">' + releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">HDC release</span>' %}
+    {% elseif isDueForEarlyRelease %}
         {% set releaseDateHtml = '<span class="urgent-highlight">' + releaseDate + '</span><span class="urgent-highlight urgent-highlight-message">Early release</span>' %}
     {% else %}
         {% set releaseDateHtml = '<p>' + releaseDate + '</p>' %}
