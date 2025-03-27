@@ -42,3 +42,6 @@ gotenberg:
 
 generic-prometheus-alerts:
   alertSeverity: cvl-alerts
+  sqsAlertsQueueNames:
+    - "Digital-Prison-Services-prod-cvl_domain_events_queue"
+    - "Digital-Prison-Services-prod-cvl_domain_events_dl"
