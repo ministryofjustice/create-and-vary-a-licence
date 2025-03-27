@@ -41,4 +41,14 @@ describe('Hdc Confirmation', () => {
       'You can make changes to reporting instructions through the Create and vary a licence service. These changes do not need to be reapproved by the prison, but a case administrator may need to reprint the licence.',
     )
   })
+
+  it('should show correct message when kind is HDC and hdcIntegrationMvp2Enabled is enabled', () => {
+    const $ = render({
+      kind: 'HDC',
+      hdcIntegrationMvp2Enabled: true,
+    })
+    expect($('#change-message').text().toString()).toContain(
+      'To request a change to the curfew address or first night curfew hours, email createandvaryalicence@digital.justice.gov.uk',
+    )
+  })
 })
