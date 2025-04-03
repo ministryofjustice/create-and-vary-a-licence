@@ -86,16 +86,6 @@
 {% endblock %}
 
 {% block beforeContent %}
-    {{ govukPhaseBanner({
-      attributes: {
-        role: "complementary"
-      },
-      tag: {
-        text: phaseName,
-        classes: phaseNameColour
-      },
-      html: 'This is a new service – your <a class="govuk-link" rel="noreferrer noopener" target="_blank" href="'+ phaseBannerLink +'">feedback</a> will help us to improve it.'
-    }) }}
   {% if backLinkHref %}
     <nav>
       {{ govukBackLink({
