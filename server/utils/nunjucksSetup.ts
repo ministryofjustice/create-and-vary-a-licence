@@ -42,9 +42,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.locals.asset_path = '/assets/'
   app.locals.applicationName = 'Create and vary a licence'
 
-  // Set the values for the exit survey link from config
-  app.locals.exitSurveyLink = config.exitSurveyLink
-
   // Set the value of the auth home link from config
   app.locals.authHome = config.apis.hmppsAuth.url
 
