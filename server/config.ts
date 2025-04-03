@@ -200,7 +200,6 @@ export default {
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
-  exitSurveyLink: get('EXIT_SURVEY_LINK', 'https://exit-survey-placeholder-link', requiredInProduction),
   qrCodesEnabled: get('QR_CODES_ENABLED', 'false') === 'true',
   analytics: {
     tagManagerContainerId: get('TAG_MANAGER_CONTAINER_ID', ''),
