@@ -14,7 +14,7 @@ describe('Get help alert banner', () => {
 
   it('Not show help banner if showGetHelpAlert is false', () => {
     const $ = render({
-      showCommsBanner: false,
+      showGetHelpAlert: false,
     })
     expect($('body').text()).not.toContain('The quickest way to get help using this service')
   })
