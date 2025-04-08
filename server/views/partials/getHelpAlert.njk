@@ -1,11 +1,5 @@
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 
-{% if showCommsBanner %}
-    {% set classes = 'govuk-!-margin-bottom-0' %}
-{% else %}
-    {% set classes = '' %}
-{% endif %}
-
 {% if showGetHelpAlert %}
     <div class="govuk-grid-column-three-quarters govuk-!-margin-top-5">
         {{ mojAlert({
