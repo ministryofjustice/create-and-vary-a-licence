@@ -352,5 +352,21 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         deliusStaffIdentifier: 123,
       })
     })
+
+    it('should redirect to the reason-for-variation page if the licence is a variation', async () => {
+      res.locals.licence.kind = LicenceKind.VARIATION
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/reason-for-variation')
+    })
+
+    it('should redirect to the reason-for-variation page if the licence is an HDC variation', async () => {
+      res.locals.licence.kind = LicenceKind.HDC_VARIATION
+      licenceService.getParentLicenceOrSelf.mockResolvedValue({ version: '2.0' } as Licence)
+      conditionService.getPolicyVersion.mockResolvedValue('2.0')
+      await handler.POST(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/licence/vary/id/1/reason-for-variation')
+    })
   })
 })
