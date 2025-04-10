@@ -17,6 +17,7 @@ export type CreateLicenceRequest = components['schemas']['CreateLicenceRequest']
 export type LicenceCreationResponse = components['schemas']['LicenceCreationResponse']
 export type LicenceSummary = components['schemas']['LicenceSummary']
 export type Licence =
+  | components['schemas']['HdcVariationLicence']
   | components['schemas']['VariationLicence']
   | components['schemas']['HardStopLicence']
   | components['schemas']['CrdLicence']
