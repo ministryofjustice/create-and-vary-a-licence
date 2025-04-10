@@ -1,15 +1,6 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "partials/viewCases.njk" import viewCases %}
 
-{% set supportFormUrl = (
-  "https://mojprod.service-now.com/moj_sp?" +
-  "id=sc_cat_item&" +
-  "table=sc_cat_item&" +
-  "sys_id=e389e8931b8bc65025dc6351f54bcb82&" +
-  "recordUrl=com.glideapp.servicecatalog_cat_item_view.do%3Fv%3D1&" +
-  "sysparm_id=e389e8931b8bc65025dc6351f54bcb82"
-) %}
-
 {%  macro attentionNeededTabDescription(params) %}
     <h2 class="govuk-heading-l">Attention needed</h2>
     {% if params.count !== 0 %}
@@ -23,7 +14,7 @@
         <h3 class="govuk-heading-m" style="padding-top: 10px;">If legal status is remand or convicted unsentenced</h3>
         <ul class="govuk-list govuk-list--bullet">
             <li>If their charges are dropped, they are found not guilty or get a non-custodial sentence, 
-                <a class="govuk-link" href="{{ supportFormUrl }}">
+                <a class="govuk-link" href="{{ serviceNowUrl }}">
                     contact the help desk using this form
                 </a>
                 for support immediately
@@ -32,7 +23,7 @@
         </ul>
         <h3 class="govuk-heading-m">Any other legal status</h3>
         <p class="govuk-body" style="padding-bottom: 20px;">
-            <a class="govuk-link" href="{{ supportFormUrl }}">
+            <a class="govuk-link" href="{{ serviceNowUrl }}">
                 Contact the help desk using this form
             </a>
             for support immediately.
