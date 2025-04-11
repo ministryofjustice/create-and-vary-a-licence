@@ -685,6 +685,11 @@ describe('isInHardStopPeriod', () => {
     expect(isInHardStopPeriod(licence)).toBe(false)
   })
 
+  it('returns false if the licence is an HDC variation', () => {
+    licence.kind = LicenceKind.HDC_VARIATION
+    expect(isInHardStopPeriod(licence)).toBe(false)
+  })
+
   it('returns false if the licence is not in the hard stop period', () => {
     licence = { kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
     expect(isInHardStopPeriod(licence)).toBe(false)
