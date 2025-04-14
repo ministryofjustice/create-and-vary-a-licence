@@ -86,11 +86,6 @@ export default class DatesChangedEventHandler {
       sentenceEndDate:
         convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryOverrideDate) ||
         convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryDate),
-      // LSD calculated here is now unused, should be refactored out
-      licenceStartDate:
-        convertDateFormat(prisoner.sentenceDetail?.confirmedReleaseDate) ||
-        convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
-        convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseDate),
       licenceExpiryDate:
         convertDateFormat(prisoner.sentenceDetail?.licenceExpiryOverrideDate) ||
         convertDateFormat(prisoner.sentenceDetail?.licenceExpiryDate),

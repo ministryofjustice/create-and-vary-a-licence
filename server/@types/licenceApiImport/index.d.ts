@@ -2208,12 +2208,6 @@ export interface components {
        * @description The licence start date, from prison services
        * @example 06/05/2021
        */
-      licenceStartDate?: string
-      /**
-       * Format: date
-       * @description The licence end date, from prison services
-       * @example 06/05/2023
-       */
       licenceExpiryDate?: string
       /**
        * Format: date
