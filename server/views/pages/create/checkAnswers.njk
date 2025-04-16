@@ -8,7 +8,6 @@
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/variationSummary.njk" import variationSummary %}
 {% from "moj/components/banner/macro.njk" import mojBanner %}
-{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitle = applicationName + " - Create a licence - Check your answers" %}
 {% set pageId = "check-answers-page" %}
@@ -102,11 +101,6 @@
             {% if licence.kind === 'HDC' %}
                 <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
                 {{ hdcCurfewTimes(hdcLicenceData) }}
-                {# Only show the link here if it's valid to do so: #}
-                {{ govukDetails({
-                    summaryText: "How do I change the HDC first night curfew hours and address?",
-                    html: "Email createandvaryalicence@digital.justice.gov.uk to request a change to first night curfew hours and address."
-                }) }}
             {% endif %}
 
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 

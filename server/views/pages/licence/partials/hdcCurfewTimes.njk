@@ -1,4 +1,5 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% macro hdcCurfewTimes(hdcLicenceData) %}
     {% set addressLine2Html = hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if hdcLicenceData.curfewAddress.addressLine2 | length%}
@@ -47,6 +48,11 @@
                 }
             } if hdcLicenceData.allCurfewTimesEqual
         ]
+    }) }}
+
+    {{ govukDetails({
+        summaryText: "How do I change the HDC first night curfew hours and address?",
+        html: "Email createandvaryalicence@digital.justice.gov.uk to request a change to first night curfew hours and address."
     }) }}
 
     {% if not hdcLicenceData.allCurfewTimesEqual %}
