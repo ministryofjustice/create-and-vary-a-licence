@@ -35,6 +35,15 @@
                     html: hdcLicenceData.curfewTimes[0].fromDay | titlecase | escape + " to " + hdcLicenceData.curfewTimes[6].fromDay | titlecase | escape + "<br>" + 
                           hdcLicenceData.curfewTimes[0].fromTime  | localTimeTo12h + " to " + hdcLicenceData.curfewTimes[0].untilTime | localTimeTo12h,
                     classes: "curfew-hours"
+                },
+                actions: {
+                    items: [
+                        {
+                            href: "#",
+                            text: "Change",
+                            visuallyHiddenText: "curfew hours"
+                        }
+                    ]
                 }
             } if hdcLicenceData.allCurfewTimesEqual
         ]

@@ -102,9 +102,10 @@
             {% if licence.kind === 'HDC' %}
                 <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
                 {{ hdcCurfewTimes(hdcLicenceData) }}
+                {# Only show the link here if it's valid to do so: #}
                 {{ govukDetails({
-                    summaryText: "How do I change the HDC curfew details?",
-                    html: "Email createandvaryalicence@digital.justice.gov.uk to change the HDC curfew details."
+                    summaryText: "How do I change the HDC first night curfew hours and address?",
+                    html: "Email createandvaryalicence@digital.justice.gov.uk to request a change to first night curfew hours and address."
                 }) }}
             {% endif %}
 
