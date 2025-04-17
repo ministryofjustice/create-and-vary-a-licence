@@ -7,7 +7,7 @@
     {% set countyHtml = hdcLicenceData.curfewAddress.county | escape + ", " if hdcLicenceData.curfewAddress.county | length%}
 
 
-    {% if not canChooseToEdit %}
+    {% if (not canChooseToEdit) and hdcIntegrationMvp2Enabled %}
         {% set summaryListAction = {
             items: [
                 {
@@ -59,34 +59,65 @@
         ]
     }) }}
 
-    {{ govukDetails({
-        summaryText: "How do I change the HDC first night curfew hours and address?",
-        html: "Email createandvaryalicence@digital.justice.gov.uk to request a change to first night curfew hours and address."
-    }) }}
+    {% if hdcIntegrationMvp2Enabled %}
+        {{ govukDetails({
+            summaryText: "How do I change the HDC first night curfew hours and address?",
+            html: "Email createandvaryalicence@digital.justice.gov.uk to request a change to first night curfew hours and address."
+        }) }}
 
-    {% if not hdcLicenceData.allCurfewTimesEqual %}
-        <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-7 govuk-heading-m">Curfew hours</h3>
+        {% if not hdcLicenceData.allCurfewTimesEqual %}
+            <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-7 govuk-heading-m">Curfew hours</h3>
 
-        {% set curfewRows = [] %}
-        {% for curfewTime in hdcLicenceData.curfewTimes %}
-        {% set curfewRows = (curfewRows.push([
-            { text: curfewTime.fromTime | localTimeTo12h + " on " + curfewTime.fromDay | titlecase },
-            { text: curfewTime.untilTime | localTimeTo12h + " on " + curfewTime.untilDay | titlecase },
-            {}
-        ]), curfewRows) %}
-        {% endfor %}
+            {% set curfewRows = [] %}
+            {% for curfewTime in hdcLicenceData.curfewTimes %}
+            {% set curfewRows = (curfewRows.push([
+                { text: curfewTime.fromTime | localTimeTo12h + " on " + curfewTime.fromDay | titlecase },
+                { text: curfewTime.untilTime | localTimeTo12h + " on " + curfewTime.untilDay | titlecase },
+                {}
+            ]), curfewRows) %}
+            {% endfor %}
 
-        {{ govukTable({
-            attributes: { 'data-qa': 'curfew-times-not-equal' },
-            head: [
-                { text: "Start time" },
-                { text: "End time" },
-                {
-                    html: tableActionHtml,
-                    classes: tableActionClasses
-                }
-            ],
-            rows: curfewRows
+            {{ govukTable({
+                attributes: { 'data-qa': 'curfew-times-not-equal' },
+                head: [
+                    { text: "Start time" },
+                    { text: "End time" },
+                    {
+                        html: tableActionHtml,
+                        classes: tableActionClasses
+                    }
+                ],
+                rows: curfewRows
+            }) }}
+        {% endif %}
+    {% else %}
+        {% if not hdcLicenceData.allCurfewTimesEqual %}
+            {% set curfewRows = []%}
+            {% for curfewTime in hdcLicenceData.curfewTimes %} 
+                {% set curfewRows = (curfewRows.push(
+                    {
+                        key: {
+                            text: curfewTime.fromDay | titlecase
+                        }, 
+                        value: {
+                            text: curfewTime.fromTime | localTimeTo12h + " to " + curfewTime.untilTime | localTimeTo12h
+                        }
+                    }
+                ), curfewRows) %}
+            {% endfor %}
+
+            <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-7 govuk-heading-m">Curfew hours</h3>
+
+            {{ govukSummaryList({
+                attributes: {'data-qa': 'curfew-times-not-equal'},
+                rows: curfewRows
+            }) }}
+        {% endif %}
+
+        {{ govukDetails({
+            summaryText: "How do I change the HDC curfew details?",
+            html: "Email createandvaryalicence@digital.justice.gov.uk to change the HDC curfew details."
         }) }}
     {% endif %}
+
 {% endmacro %}
