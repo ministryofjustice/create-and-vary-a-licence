@@ -68,13 +68,23 @@
     {% if canChooseToEdit or canChooseToPrint %}
         <div class="govuk-button-group">
             {% if canChooseToEdit %}
-                {{ govukButton({
-                    text: "Edit licence conditions",
-                    href: '/licence/create/id/' + licence.id + '/edit',
-                    attributes: {
-                        id: 'edit-licence-button'
-                    }
-                }) }}
+                {% if hdcIntegrationMvp2Enabled %}
+                    {{ govukButton({
+                        text: "Edit licence",
+                        href: '/licence/create/id/' + licence.id + '/edit',
+                        attributes: {
+                            id: 'edit-licence-button'
+                        }
+                    }) }}
+                {% else %}
+                    {{ govukButton({
+                        text: "Edit licence conditions",
+                        href: '/licence/create/id/' + licence.id + '/edit',
+                        attributes: {
+                            id: 'edit-licence-button'
+                        }
+                    }) }}
+                {% endif %}
             {% endif %}
 
             {% if canChooseToPrint %}
@@ -101,7 +111,7 @@
 
             {% if licence.kind === 'HDC' %}
                 <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
-                {{ hdcCurfewTimes(hdcLicenceData) }}
+                {{ hdcCurfewTimes(hdcLicenceData, canChooseToEdit) }}
             {% endif %}
 
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 

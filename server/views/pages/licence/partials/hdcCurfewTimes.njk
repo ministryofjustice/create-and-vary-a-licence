@@ -2,10 +2,26 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro hdcCurfewTimes(hdcLicenceData) %}
+{% macro hdcCurfewTimes(hdcLicenceData, canChooseToEdit) %}
     {% set addressLine2Html = hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if hdcLicenceData.curfewAddress.addressLine2 | length%}
     {% set countyHtml = hdcLicenceData.curfewAddress.county | escape + ", " if hdcLicenceData.curfewAddress.county | length%}
 
+
+    {% if not canChooseToEdit %}
+        {% set summaryListAction = {
+            items: [
+                {
+                    href: "#",
+                    text: "Change",
+                    visuallyHiddenText: "curfew hours"
+                }
+            ]
+        } %}
+        {% set tableActionHtml = '<a href="#" class="govuk-link govuk-link--no-visited-state">Change</a><span class="govuk-visually-hidden">curfew hours</span>'%}
+        {% set tableActionClasses = "govuk-table__cell govuk-!-font-weight-regular govuk-!-text-align-right"%}
+    {% else %}
+        {% set actions = null %}
+    {% endif %}
 
     {{ govukSummaryList({
         attributes: {'data-qa': 'hdc-curfew-details'},
@@ -38,15 +54,7 @@
                           hdcLicenceData.curfewTimes[0].fromTime  | localTimeTo12h + " to " + hdcLicenceData.curfewTimes[0].untilTime | localTimeTo12h,
                     classes: "curfew-hours"
                 },
-                actions: {
-                    items: [
-                        {
-                            href: "#",
-                            text: "Change",
-                            visuallyHiddenText: "curfew hours"
-                        }
-                    ]
-                }
+                actions: summaryListAction
             } if hdcLicenceData.allCurfewTimesEqual
         ]
     }) }}
@@ -74,9 +82,8 @@
                 { text: "Start time" },
                 { text: "End time" },
                 {
-                    html: '<a href="#" class="govuk-link govuk-link--no-visited-state">Change</a>' +
-                          '<span class="govuk-visually-hidden"> curfew hours</span>',
-                    classes: "govuk-table__cell govuk-!-font-weight-regular govuk-!-text-align-right"
+                    html: tableActionHtml,
+                    classes: tableActionClasses
                 }
             ],
             rows: curfewRows
