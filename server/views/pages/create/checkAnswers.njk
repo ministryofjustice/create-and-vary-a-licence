@@ -157,7 +157,7 @@
                     {% endif %}
 
                     {% if canChooseToEdit %}
-                        {% if hdcIntegrationMvp2Enabled %}
+                        {% if hdcIntegrationMvp2Enabled and licence.kind === 'HDC'%}
                             {{ govukButton({
                                 text: "Edit licence",
                                 href: '/licence/create/id/' + licence.id + '/edit',
