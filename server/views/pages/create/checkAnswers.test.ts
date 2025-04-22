@@ -5,9 +5,17 @@ import { Licence } from '../../../@types/licenceApiClientTypes'
 
 import { templateRenderer } from '../../../utils/__testutils/templateTestUtils'
 
+import config from '../../../config'
+
 const render = templateRenderer(fs.readFileSync('server/views/pages/create/checkAnswers.njk').toString())
 
 describe('Create a Licence Views - Check Answers', () => {
+  const existingConfig = config
+
+  afterEach(() => {
+    config.hdcIntegrationMvp2Enabled = existingConfig.hdcIntegrationMvp2Enabled
+  })
+
   const licence = {
     id: 1,
     typeCode: 'AP_PSS',
@@ -522,6 +530,78 @@ describe('Create a Licence Views - Check Answers', () => {
     })
 
     expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
+  })
+
+  it('should render the mvp2 individual curfew times with a change link if curfew times are different and status is IN_PROGRESS', () => {
+    config.hdcIntegrationMvp2Enabled = true
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+      statusCode: 'IN_PROGRESS',
+      user: {
+        authSource: 'delius',
+      },
+      hdcIntegrationMvp2Enabled,
+    })
+    expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
+    expect($('.all-curfew-times-equal').length).toBe(0)
+    expect($('[data-qa=curfew-times-not-equal]').first().html()).toContain('Change')
+  })
+
+  it('should render the mvp2 individual curfew times without a change link if curfew times are different and status is not IN_PROGRESS', () => {
+    config.hdcIntegrationMvp2Enabled = true
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      hdcLicenceData: { allCurfewTimesEqual: false },
+      statusCode: 'SUBMITTED',
+      user: {
+        authSource: 'delius',
+      },
+      hdcIntegrationMvp2Enabled,
+    })
+    expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
+    expect($('.all-curfew-times-equal').length).toBe(0)
+    expect($('[data-qa=curfew-times-not-equal]').first().html()).not.toContain('Change')
+  })
+
+  it('should render the mvp2 curfew time summary with a change link if all the curfew times are equal and status is IN_PROGRESS', () => {
+    config.hdcIntegrationMvp2Enabled = true
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      statusCode: 'IN_PROGRESS',
+      user: {
+        authSource: 'delius',
+      },
+      hdcLicenceData: { allCurfewTimesEqual: true },
+      hdcIntegrationMvp2Enabled,
+    })
+
+    expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
+    expect($('[data-qa=curfew-times-not-equal]').length).toBe(0)
+    expect($('[data-qa=hdc-curfew-details]').first().html()).toContain('Change')
+    expect($('.all-curfew-times-equal').length).toBe(1)
+  })
+
+  it('should render the mvp2 curfew time summary without a change link if all the curfew times are equal and status is not IN_PROGRESS', () => {
+    config.hdcIntegrationMvp2Enabled = true
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      statusCode: 'SUBMITTED',
+      user: {
+        authSource: 'delius',
+      },
+      hdcLicenceData: { allCurfewTimesEqual: true },
+      hdcIntegrationMvp2Enabled,
+    })
+
+    expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
+    expect($('[data-qa=curfew-times-not-equal]').length).toBe(0)
+    expect($('[data-qa=hdc-curfew-details]').first().html()).not.toContain('Change')
+    expect($('.all-curfew-times-equal').length).toBe(1)
   })
 
   it('should render the curfew time summary if all the curfew times are equal', () => {
