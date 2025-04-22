@@ -157,13 +157,23 @@
                     {% endif %}
 
                     {% if canChooseToEdit %}
-                        {{ govukButton({
-                            text: "Edit licence conditions",
-                            href: '/licence/create/id/' + licence.id + '/edit',
-                            attributes: {
-                                id: 'edit-licence-button-2'
-                            }
-                        }) }}
+                        {% if hdcIntegrationMvp2Enabled %}
+                            {{ govukButton({
+                                text: "Edit licence",
+                                href: '/licence/create/id/' + licence.id + '/edit',
+                                attributes: {
+                                    id: 'edit-licence-button-22'
+                                }
+                            }) }}
+                        {% else %}
+                            {{ govukButton({
+                                text: "Edit licence conditions",
+                                href: '/licence/create/id/' + licence.id + '/edit',
+                                attributes: {
+                                    id: 'edit-licence-button-2'
+                                }
+                            }) }}
+                        {% endif %}
                     {% endif %}
 
                     {% if canChooseToPrint %}
@@ -188,7 +198,7 @@
                             }) }}
                     {% endif %}
 
-                    {% if isInHardStopPeriod%}
+                    {% if isInHardStopPeriod %}
                         {{ govukButton({
                             text: "Return to caselist",
                             classes: "govuk-button--primary" if statusCode === 'SUBMITTED' else "govuk-button--secondary",
