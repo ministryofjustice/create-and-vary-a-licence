@@ -621,6 +621,36 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('#edit-licence-button-2').first().html().trim()).toBe('Edit licence')
   })
 
+  it('should render the email detail component when the curfew times are editable', () => {
+    config.hdcIntegrationMvp2Enabled = true
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      statusCode: 'IN_PROGRESS',
+      user: {
+        authSource: 'delius',
+      },
+      hdcIntegrationMvp2Enabled,
+    })
+
+    expect($('[data-qa=hdc-curfew-email-detail]').length).toBe(1)
+  })
+
+  it('should not render the email detail component when the curfew times are not editable', () => {
+    config.hdcIntegrationMvp2Enabled = true
+    const { hdcIntegrationMvp2Enabled } = config
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      statusCode: 'SUBMITTED',
+      user: {
+        authSource: 'delius',
+      },
+      hdcIntegrationMvp2Enabled,
+    })
+
+    expect($('[data-qa=hdc-curfew-email-detail]').length).toBe(0)
+  })
+
   it('should render the curfew time summary if all the curfew times are equal', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
