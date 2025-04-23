@@ -604,6 +604,23 @@ describe('Create a Licence Views - Check Answers', () => {
     expect($('.all-curfew-times-equal').length).toBe(1)
   })
 
+  it('should show mvp2 edit licence button when status is SUBMITTED and kind is HDC', () => {
+    config.hdcIntegrationMvp2Enabled = true
+    const { hdcIntegrationMvp2Enabled } = config
+
+    const $ = render({
+      licence: { ...licence, kind: 'HDC' },
+      statusCode: 'SUBMITTED',
+      isInHardStopPeriod: false,
+      hdcIntegrationMvp2Enabled,
+    })
+
+    expect($('#edit-licence-button').length).toBe(1)
+    expect($('#edit-licence-button-2').length).toBe(1)
+    expect($('#edit-licence-button').first().html().trim()).toBe('Edit licence')
+    expect($('#edit-licence-button-2').first().html().trim()).toBe('Edit licence')
+  })
+
   it('should render the curfew time summary if all the curfew times are equal', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
