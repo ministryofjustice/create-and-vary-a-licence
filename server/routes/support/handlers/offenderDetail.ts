@@ -7,7 +7,6 @@ import { convertToTitleCase } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
-import { nameToString } from '../../../data/deliusClient'
 
 type LicenceDates = {
   crd: string
@@ -42,7 +41,11 @@ export default class OffenderDetailRoutes {
     const { user } = res.locals
     const { nomsId } = req.params
     const { prisoner: prisonerDetail, cvl: hardStopDetails } = await this.licenceService.getPrisonerDetail(nomsId, user)
-    const probationPractitioner = await this.probationService.getResponsibleCommunityManager(nomsId)
+    const deliusRecord = _.head(await this.probationService.searchProbationers({ nomsNumber: nomsId }))
+    const probationPractitioner = deliusRecord?.offenderManagers.find(com => com.active)
+    const probationPractitionerContact = probationPractitioner
+      ? await this.probationService.getStaffDetailByStaffCode(probationPractitioner?.staff.code)
+      : undefined
     const hdcStatus = _.head(await this.prisonerService.getHdcStatuses([prisonerDetail], user))
     const conditionalReleaseDate = this.formatNomisDate(prisonerDetail.conditionalReleaseDate)
     const confirmedReleaseDate = this.formatNomisDate(prisonerDetail.confirmedReleaseDate)
@@ -64,7 +67,7 @@ export default class OffenderDetailRoutes {
       prisonerDetail: {
         ...prisonerDetail,
         name: (!!prisonerDetail && convertToTitleCase(`${prisonerDetail.firstName} ${prisonerDetail.lastName}`)) || '',
-        crn: probationPractitioner.case.crn,
+        crn: deliusRecord?.otherIds.crn,
         conditionalReleaseDate,
         confirmedReleaseDate,
         postRecallReleaseDate,
@@ -87,16 +90,18 @@ export default class OffenderDetailRoutes {
         recall: prisonerDetail.recall ? 'Yes' : 'No',
       },
       probationPractitioner: {
-        name: probationPractitioner ? nameToString(probationPractitioner.name) : '',
-        staffCode: probationPractitioner?.code,
-        email: probationPractitioner?.email,
-        telephone: probationPractitioner?.telephoneNumber,
+        name: probationPractitioner
+          ? `${probationPractitioner.staff.forenames} ${probationPractitioner.staff.surname}`
+          : '',
+        staffCode: probationPractitionerContact?.code,
+        email: probationPractitionerContact?.email,
+        telephone: probationPractitionerContact?.telephoneNumber,
         team: probationPractitioner?.team?.description,
         teamCode: probationPractitioner?.team?.code,
-        ldu: probationPractitioner?.team?.district?.description,
+        ldu: probationPractitioner?.team?.localDeliveryUnit?.description,
         lau: probationPractitioner?.team?.district?.description,
         pdu: probationPractitioner?.team?.borough?.description,
-        region: probationPractitioner?.provider?.description,
+        region: probationPractitioner?.probationArea?.description,
       },
       cvlCom: this.getCvlComDetails(licence),
       licence: this.getLicenceDates(licence),

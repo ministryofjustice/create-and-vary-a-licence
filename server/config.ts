@@ -137,6 +137,15 @@ export default {
       },
       agent: new AgentConfig(Number(get('PRISON_REGISTER_API_TIMEOUT_RESPONSE', 30000))),
     },
+    probationSearchApi: {
+      url: get('PROBATION_SEARCH_API_URL', 'http://localhost:8091', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000)),
+        deadline: Number(get('PROBATION_SEARCH_API_TIMEOUT_DEADLINE', 30000)),
+      },
+      agent: new AgentConfig(Number(get('PROBATION_SEARCH_API_TIMEOUT_RESPONSE', 30000))),
+    },
     delius: {
       url: get('DELIUS_API_URL', 'http://localhost:8088', requiredInProduction),
       healthPath: '/health/ping',

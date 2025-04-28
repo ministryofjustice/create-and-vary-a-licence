@@ -3,6 +3,7 @@ import CaseloadService from './caseloadService'
 import ProbationService from '../probationService'
 import LicenceService from '../licenceService'
 import { User } from '../../@types/CvlUserDetails'
+import { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { CaseloadItem } from '../../@types/licenceApiClientTypes'
@@ -11,7 +12,7 @@ jest.mock('../probationService')
 
 describe('Caseload Service', () => {
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
-  const deliusService = new ProbationService(null) as jest.Mocked<ProbationService>
+  const deliusService = new ProbationService(null, null) as jest.Mocked<ProbationService>
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
   const serviceUnderTest = new CaseloadService(deliusService, licenceService)
   const user = {
@@ -44,7 +45,12 @@ describe('Caseload Service', () => {
         isDueToBeReleasedInTheNextTwoWorkingDays: false,
       },
     ])
-    deliusService.getProbationers.mockResolvedValue([{ nomisId: 'AB1234E', crn: 'X12348' }])
+    deliusService.getOffendersByNomsNumbers.mockResolvedValue([
+      {
+        otherIds: { nomsNumber: 'AB1234E', crn: 'X12348' },
+        offenderManagers: [{ active: true, staff: { forenames: 'Joe', surname: 'Bloggs', code: 'X1234' } }],
+      } as OffenderDetail,
+    ])
     licenceService.searchPrisonersByNomsIds.mockResolvedValue([
       {
         prisoner: {
@@ -72,8 +78,10 @@ describe('Caseload Service', () => {
     expect(result).toMatchObject([
       {
         deliusRecord: {
-          nomisId: 'AB1234E',
-          crn: 'X12348',
+          otherIds: {
+            nomsNumber: 'AB1234E',
+            crn: 'X12348',
+          },
         },
         nomisRecord: {
           prisonerNumber: 'AB1234E',

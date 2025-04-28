@@ -8,6 +8,7 @@ import licence from './integration_tests/mockApis/licence'
 import delius from './integration_tests/mockApis/delius'
 import prisonerSearch from './integration_tests/mockApis/prisonerSearch'
 import prison from './integration_tests/mockApis/prison'
+import probationSearch from './integration_tests/mockApis/probationSearch'
 import events from './integration_tests/support/events'
 import feComponent from './integration_tests/mockApis/feComponent'
 import manageUsersApi from './integration_tests/mockApis/manageUsers'
@@ -131,15 +132,13 @@ export default defineConfig({
         stubDeleteAdditionalConditionsByCode: licence.stubDeleteAdditionalConditionsByCode,
         stubPostExclusionZone: licence.stubPostExclusionZone,
 
-        stubGetProbationer: delius.stubGetProbationer,
-        stubGetProbationers: delius.stubGetProbationers,
         stubGetStaffDetails: delius.stubGetStaffDetails,
         stubGetStaffDetailsByStaffCode: delius.stubGetStaffDetailsByStaffCode,
         stubGetStaffDetailsByList: delius.stubGetStaffDetailsByList,
         stubAssignRole: delius.stubAssignRole,
         stubGetPduHeads: delius.stubGetPduHeads,
         stubGetResponsibleCommunityManager: delius.stubGetResponsibleCommunityManager,
-        stubGetResponsibleCommunityManagers: delius.stubGetResponsibleCommunityManagers,
+        stubGetManagerEmailAddresses: delius.stubGetManagerEmailAddresses,
         stubDeliusPing: delius.stubPing,
 
         searchPrisonersByNomisIds: licence.searchPrisonersByNomisIds,
@@ -162,6 +161,11 @@ export default defineConfig({
         stubGetHdcLicencesForOffender: prison.stubGetHdcLicencesForOffender,
 
         stubPrisonRegisterApiPing: prisonRegister.stubPing,
+
+        stubGetProbationer: probationSearch.stubGetProbationer,
+        stubGetOffendersByCrn: probationSearch.stubGetOffendersByCrn,
+        stubGetOffendersByNomsNumber: probationSearch.stubGetOffendersByNomsNumber,
+        stubProbationSearchPing: probationSearch.stubPing,
 
         stubGotenbergApiPing: gotenbergApi.stubPing,
 
