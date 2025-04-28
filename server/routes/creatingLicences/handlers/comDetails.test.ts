@@ -3,7 +3,7 @@ import ProbationService from '../../../services/probationService'
 import ComDetailsRoutes from './comDetails'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
 
-const deliusService = new ProbationService(null) as jest.Mocked<ProbationService>
+const deliusService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 
 jest.mock('../../../services/probationService')
 

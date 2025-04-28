@@ -11,11 +11,13 @@ export default function preLicenceCreationMiddleware(probationService: Probation
       const { user } = res.locals
       const { nomisId } = req.params
 
-      const responsibleCom = await probationService.getResponsibleCommunityManager(nomisId)
-      if (!responsibleCom || !user?.deliusStaffIdentifier) {
+      const deliusRecord = await probationService.getProbationer({ nomsNumber: nomisId })
+
+      if (!deliusRecord || !user?.deliusStaffIdentifier) {
         logger.info(`Access denied to create licence for ${nomisId}`)
         return res.redirect('/authError')
       }
+      const responsibleCom = await probationService.getResponsibleCommunityManager(deliusRecord.otherIds.crn)
       if (!user.probationTeamCodes?.includes(responsibleCom.team.code)) {
         logger.info(
           `Access denied to create licence for ${nomisId} as ${responsibleCom.team.code} team not present in user probation teams ${user?.probationTeamCodes}`,

@@ -4,7 +4,7 @@ import ComDetailsRoutes from './comDetails'
 import ProbationService from '../../../services/probationService'
 import { DeliusStaff } from '../../../@types/deliusClientTypes'
 
-const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 
 describe('Route Handlers - COM Details', () => {
   const handler = new ComDetailsRoutes(probationService)

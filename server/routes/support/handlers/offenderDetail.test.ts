@@ -2,14 +2,15 @@ import { Request, Response } from 'express'
 import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
 import OffenderDetailRoutes from './offenderDetail'
+import type { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import type { LicenceSummary, Licence, CaseloadItem } from '../../../@types/licenceApiClientTypes'
 import HdcStatus from '../../../@types/HdcStatus'
 import LicenceService from '../../../services/licenceService'
-import { DeliusManager } from '../../../@types/deliusClientTypes'
+import { DeliusStaff } from '../../../@types/deliusClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
-const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 jest.mock('../../../services/prisonerService')
@@ -64,34 +65,38 @@ describe('Route Handlers - Offender detail', () => {
       } as CaseloadItem
       licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-      probationService.getResponsibleCommunityManager.mockResolvedValue({
-        id: 2000,
-        case: { crn: 'X1234' },
-        code: 'X12345',
-        username: 'joebloggs',
-        email: 'mr.t@probation.gov.uk',
-        telephoneNumber: '078929482994',
-        name: {
-          forename: 'Mr',
-          surname: 'T',
-        },
-        provider: {
-          code: 'N03',
-          description: 'Wales',
-        },
-        team: {
-          code: 'TEAMA',
-          description: 'The A Team',
-          borough: {
-            code: 'PDUA',
-            description: 'PDU A',
+      probationService.searchProbationers.mockResolvedValue([
+        {
+          otherIds: {
+            crn: 'X1234',
           },
-          district: {
-            code: 'LAUA',
-            description: 'LAU A',
-          },
-        },
-      } as DeliusManager)
+          offenderManagers: [
+            {
+              active: true,
+              staff: {
+                code: 'X123',
+                forenames: 'Mr',
+                surname: 'T',
+              },
+              team: {
+                description: 'The A Team',
+                localDeliveryUnit: {
+                  description: 'LDU A',
+                },
+                district: {
+                  description: 'LAU A',
+                },
+                borough: {
+                  description: 'PDU A',
+                },
+              },
+              probationArea: {
+                description: 'Wales',
+              },
+            },
+          ],
+        } as unknown as OffenderDetail,
+      ])
 
       prisonerService.getHdcStatuses.mockResolvedValue([
         {
@@ -100,6 +105,11 @@ describe('Route Handlers - Offender detail', () => {
           checksPassed: true,
         } as HdcStatus,
       ])
+
+      probationService.getStaffDetailByStaffCode.mockResolvedValue({
+        email: 'mr.t@probation.gov.uk',
+        telephoneNumber: '078929482994',
+      } as DeliusStaff)
 
       licenceService.getIneligibilityReasons.mockResolvedValue([])
 
@@ -132,14 +142,12 @@ describe('Route Handlers - Offender detail', () => {
           },
         },
         probationPractitioner: {
-          staffCode: 'X12345',
           email: 'mr.t@probation.gov.uk',
           lau: 'LAU A',
-          ldu: 'LAU A',
+          ldu: 'LDU A',
           name: 'Mr T',
           pdu: 'PDU A',
           region: 'Wales',
-          teamCode: 'TEAMA',
           team: 'The A Team',
           telephone: '078929482994',
         },
@@ -200,34 +208,38 @@ describe('Route Handlers - Offender detail', () => {
     } as CaseloadItem
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    probationService.getResponsibleCommunityManager.mockResolvedValue({
-      id: 2000,
-      case: { crn: 'X1234' },
-      code: 'X12345',
-      username: 'joebloggs',
-      email: 'mr.g@probation.gov.uk',
-      telephoneNumber: '078929482994',
-      name: {
-        forename: 'Mr',
-        surname: 'T',
-      },
-      provider: {
-        code: 'N03',
-        description: 'Wales',
-      },
-      team: {
-        code: 'TEAMA',
-        description: 'The A Team',
-        borough: {
-          code: 'PDUA',
-          description: 'PDU A',
+    probationService.searchProbationers.mockResolvedValue([
+      {
+        otherIds: {
+          crn: 'X1234',
         },
-        district: {
-          code: 'LAUA',
-          description: 'LAU A',
-        },
-      },
-    } as DeliusManager)
+        offenderManagers: [
+          {
+            active: true,
+            staff: {
+              code: 'X123',
+              forenames: 'Mr',
+              surname: 'T',
+            },
+            team: {
+              description: 'The A Team',
+              localDeliveryUnit: {
+                description: 'LDU A',
+              },
+              district: {
+                description: 'LAU A',
+              },
+              borough: {
+                description: 'PDU A',
+              },
+            },
+            probationArea: {
+              description: 'Wales',
+            },
+          },
+        ],
+      } as unknown as OffenderDetail,
+    ])
 
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
@@ -236,6 +248,11 @@ describe('Route Handlers - Offender detail', () => {
         checksPassed: true,
       } as HdcStatus,
     ])
+
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
+      email: 'mr.g@probation.gov.uk',
+      telephoneNumber: '078929482994',
+    } as DeliusStaff)
 
     licenceService.getIneligibilityReasons.mockResolvedValue([])
 
@@ -268,14 +285,12 @@ describe('Route Handlers - Offender detail', () => {
         },
       },
       probationPractitioner: {
-        staffCode: 'X12345',
         email: 'mr.g@probation.gov.uk',
         lau: 'LAU A',
-        ldu: 'LAU A',
+        ldu: 'LDU A',
         name: 'Mr T',
         pdu: 'PDU A',
         region: 'Wales',
-        teamCode: 'TEAMA',
         team: 'The A Team',
         telephone: '078929482994',
       },
@@ -326,34 +341,38 @@ describe('Route Handlers - Offender detail', () => {
     } as CaseloadItem
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    probationService.getResponsibleCommunityManager.mockResolvedValue({
-      id: 2000,
-      case: { crn: 'X1234' },
-      code: 'X12345',
-      username: 'joebloggs',
-      email: 'mr.g@probation.gov.uk',
-      telephoneNumber: '078929482994',
-      name: {
-        forename: 'Mr',
-        surname: 'T',
-      },
-      provider: {
-        code: 'N03',
-        description: 'Wales',
-      },
-      team: {
-        code: 'TEAMA',
-        description: 'The A Team',
-        borough: {
-          code: 'PDUA',
-          description: 'PDU A',
+    probationService.searchProbationers.mockResolvedValue([
+      {
+        otherIds: {
+          crn: 'X1234',
         },
-        district: {
-          code: 'LAUA',
-          description: 'LAU A',
-        },
-      },
-    } as DeliusManager)
+        offenderManagers: [
+          {
+            active: true,
+            staff: {
+              code: 'X123',
+              forenames: 'Mr',
+              surname: 'T',
+            },
+            team: {
+              description: 'The A Team',
+              localDeliveryUnit: {
+                description: 'LDU A',
+              },
+              district: {
+                description: 'LAU A',
+              },
+              borough: {
+                description: 'PDU A',
+              },
+            },
+            probationArea: {
+              description: 'Wales',
+            },
+          },
+        ],
+      } as unknown as OffenderDetail,
+    ])
 
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
@@ -362,6 +381,11 @@ describe('Route Handlers - Offender detail', () => {
         checksPassed: true,
       } as HdcStatus,
     ])
+
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
+      email: 'mr.g@probation.gov.uk',
+      telephoneNumber: '078929482994',
+    } as DeliusStaff)
 
     licenceService.getIneligibilityReasons.mockResolvedValue([])
 
@@ -394,14 +418,12 @@ describe('Route Handlers - Offender detail', () => {
         },
       },
       probationPractitioner: {
-        staffCode: 'X12345',
         email: 'mr.g@probation.gov.uk',
         lau: 'LAU A',
-        ldu: 'LAU A',
+        ldu: 'LDU A',
         name: 'Mr T',
         pdu: 'PDU A',
         region: 'Wales',
-        teamCode: 'TEAMA',
         team: 'The A Team',
         telephone: '078929482994',
       },
@@ -462,34 +484,38 @@ describe('Route Handlers - Offender detail', () => {
     } as CaseloadItem
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    probationService.getResponsibleCommunityManager.mockResolvedValue({
-      id: 2000,
-      case: { crn: 'X1234' },
-      code: 'X123',
-      username: 'joebloggs',
-      email: 'mr.g@probation.gov.uk',
-      telephoneNumber: '078929482994',
-      name: {
-        forename: 'Mr',
-        surname: 'T',
-      },
-      provider: {
-        code: 'N03',
-        description: 'Wales',
-      },
-      team: {
-        code: 'TEAMA',
-        description: 'The A Team',
-        borough: {
-          code: 'PDUA',
-          description: 'PDU A',
+    probationService.searchProbationers.mockResolvedValue([
+      {
+        otherIds: {
+          crn: 'X1234',
         },
-        district: {
-          code: 'LAUA',
-          description: 'LAU A',
-        },
-      },
-    } as DeliusManager)
+        offenderManagers: [
+          {
+            active: true,
+            staff: {
+              code: 'X123',
+              forenames: 'Mr',
+              surname: 'T',
+            },
+            team: {
+              description: 'The A Team',
+              localDeliveryUnit: {
+                description: 'LDU A',
+              },
+              district: {
+                description: 'LAU A',
+              },
+              borough: {
+                description: 'PDU A',
+              },
+            },
+            probationArea: {
+              description: 'Wales',
+            },
+          },
+        ],
+      } as unknown as OffenderDetail,
+    ])
 
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
@@ -498,6 +524,11 @@ describe('Route Handlers - Offender detail', () => {
         checksPassed: true,
       } as HdcStatus,
     ])
+
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
+      email: 'mr.g@probation.gov.uk',
+      telephoneNumber: '078929482994',
+    } as DeliusStaff)
 
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
@@ -549,14 +580,12 @@ describe('Route Handlers - Offender detail', () => {
         },
       },
       probationPractitioner: {
-        staffCode: 'X123',
         email: 'mr.g@probation.gov.uk',
         lau: 'LAU A',
-        ldu: 'LAU A',
+        ldu: 'LDU A',
         name: 'Mr T',
         pdu: 'PDU A',
         region: 'Wales',
-        teamCode: 'TEAMA',
         team: 'The A Team',
         telephone: '078929482994',
       },
@@ -618,34 +647,38 @@ describe('Route Handlers - Offender detail', () => {
 
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    probationService.getResponsibleCommunityManager.mockResolvedValue({
-      id: 2000,
-      case: { crn: 'X1234' },
-      code: 'X123',
-      username: 'joebloggs',
-      email: 'mr.g@probation.gov.uk',
-      telephoneNumber: '078929482994',
-      name: {
-        forename: 'Mr',
-        surname: 'T',
-      },
-      provider: {
-        code: 'N03',
-        description: 'Wales',
-      },
-      team: {
-        code: 'TEAMA',
-        description: 'The A Team',
-        borough: {
-          code: 'PDUA',
-          description: 'PDU A',
+    probationService.searchProbationers.mockResolvedValue([
+      {
+        otherIds: {
+          crn: 'X1234',
         },
-        district: {
-          code: 'LAUA',
-          description: 'LAU A',
-        },
-      },
-    } as DeliusManager)
+        offenderManagers: [
+          {
+            active: true,
+            staff: {
+              code: 'X123',
+              forenames: 'Mr',
+              surname: 'T',
+            },
+            team: {
+              description: 'The A Team',
+              localDeliveryUnit: {
+                description: 'LDU A',
+              },
+              district: {
+                description: 'LAU A',
+              },
+              borough: {
+                description: 'PDU A',
+              },
+            },
+            probationArea: {
+              description: 'Wales',
+            },
+          },
+        ],
+      } as unknown as OffenderDetail,
+    ])
 
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
@@ -654,6 +687,11 @@ describe('Route Handlers - Offender detail', () => {
         checksPassed: true,
       } as HdcStatus,
     ])
+
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
+      email: 'mr.g@probation.gov.uk',
+      telephoneNumber: '078929482994',
+    } as DeliusStaff)
 
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
@@ -700,14 +738,12 @@ describe('Route Handlers - Offender detail', () => {
         },
       },
       probationPractitioner: {
-        staffCode: 'X123',
         email: 'mr.g@probation.gov.uk',
         lau: 'LAU A',
-        ldu: 'LAU A',
+        ldu: 'LDU A',
         name: 'Mr T',
         pdu: 'PDU A',
         region: 'Wales',
-        teamCode: 'TEAMA',
         team: 'The A Team',
         telephone: '078929482994',
       },
@@ -768,34 +804,38 @@ describe('Route Handlers - Offender detail', () => {
     } as CaseloadItem
     licenceService.getPrisonerDetail.mockResolvedValue(expectedPrisonerDetail)
 
-    probationService.getResponsibleCommunityManager.mockResolvedValue({
-      id: 2000,
-      case: { crn: 'X1234' },
-      code: 'X123',
-      username: 'joebloggs',
-      email: 'mr.g@probation.gov.uk',
-      telephoneNumber: '078929482994',
-      name: {
-        forename: 'Mr',
-        surname: 'T',
-      },
-      provider: {
-        code: 'N03',
-        description: 'Wales',
-      },
-      team: {
-        code: 'TEAMA',
-        description: 'The A Team',
-        borough: {
-          code: 'PDUA',
-          description: 'PDU A',
+    probationService.searchProbationers.mockResolvedValue([
+      {
+        otherIds: {
+          crn: 'X1234',
         },
-        district: {
-          code: 'LAUA',
-          description: 'LAU A',
-        },
-      },
-    } as DeliusManager)
+        offenderManagers: [
+          {
+            active: true,
+            staff: {
+              code: 'X123',
+              forenames: 'Mr',
+              surname: 'T',
+            },
+            team: {
+              description: 'The A Team',
+              localDeliveryUnit: {
+                description: 'LDU A',
+              },
+              district: {
+                description: 'LAU A',
+              },
+              borough: {
+                description: 'PDU A',
+              },
+            },
+            probationArea: {
+              description: 'Wales',
+            },
+          },
+        ],
+      } as unknown as OffenderDetail,
+    ])
 
     prisonerService.getHdcStatuses.mockResolvedValue([
       {
@@ -804,6 +844,11 @@ describe('Route Handlers - Offender detail', () => {
         checksPassed: true,
       } as HdcStatus,
     ])
+
+    probationService.getStaffDetailByStaffCode.mockResolvedValue({
+      email: 'mr.t@probation.gov.uk',
+      telephoneNumber: '078929482994',
+    } as DeliusStaff)
 
     licenceService.getLatestLicenceByNomisIdsAndStatus.mockResolvedValue({
       licenceId: 1,
@@ -851,14 +896,12 @@ describe('Route Handlers - Offender detail', () => {
         },
       },
       probationPractitioner: {
-        staffCode: 'X123',
-        email: 'mr.g@probation.gov.uk',
+        email: 'mr.t@probation.gov.uk',
         lau: 'LAU A',
-        ldu: 'LAU A',
+        ldu: 'LDU A',
         name: 'Mr T',
         pdu: 'PDU A',
         region: 'Wales',
-        teamCode: 'TEAMA',
         team: 'The A Team',
         telephone: '078929482994',
       },

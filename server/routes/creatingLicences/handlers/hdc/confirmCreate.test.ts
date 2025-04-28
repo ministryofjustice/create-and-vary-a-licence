@@ -8,7 +8,7 @@ import ProbationService from '../../../../services/probationService'
 import PrisonerService from '../../../../services/prisonerService'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 const prisonerService = new PrisonerService(null, null) as jest.Mocked<PrisonerService>
 
 jest.mock('../../../../services/licenceService')

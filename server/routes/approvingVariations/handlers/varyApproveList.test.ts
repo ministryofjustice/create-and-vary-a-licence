@@ -4,8 +4,8 @@ import VaryApproveListRoutes from './varyApproveList'
 import CaseloadService from '../../../services/lists/caseloadService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import LicenceType from '../../../enumeration/licenceType'
+import type { DeliusRecord } from '../../../@types/managedCase'
 import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
-import { DeliusRecord } from '../../../@types/deliusClientTypes'
 
 const caseloadService = new CaseloadService(null, null) as jest.Mocked<CaseloadService>
 jest.mock('../../../services/lists/caseloadService')
@@ -57,7 +57,9 @@ describe('Route Handlers - Variation approval list', () => {
           releaseDate: '2022-05-01',
         } as CvlPrisoner,
         deliusRecord: {
-          crn: 'X12345',
+          otherIds: {
+            crn: 'X12345',
+          },
         } as DeliusRecord,
         probationPractitioner: {
           name: 'Walter White',

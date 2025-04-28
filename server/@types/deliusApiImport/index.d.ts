@@ -36,22 +36,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/probation-case': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['findCases']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/probation-case/responsible-community-manager': {
     parameters: {
       query?: never
@@ -164,39 +148,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/staff/bycode/{code}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['findStaffByCode']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/probation-case/{crnOrNomisId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['findCase']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/probation-case/{crnOrNomisId}/responsible-community-manager': {
+  '/probation-case/{crn}/responsible-community-manager': {
     parameters: {
       query?: never
       header?: never
@@ -244,9 +196,9 @@ export interface components {
       code: string
       username?: string
     }
-    ProbationCase: {
-      crn: string
-      nomisId?: string
+    StaffEmail: {
+      code: string
+      email?: string
     }
     Borough: {
       code: string
@@ -257,18 +209,13 @@ export interface components {
       description: string
       borough: components['schemas']['Borough']
     }
-    Manager: {
-      /** Format: int64 */
-      id: number
-      case: components['schemas']['ProbationCase']
-      code: string
+    ManagedOffender: {
+      crn: string
       name: components['schemas']['Name']
-      provider: components['schemas']['Provider']
-      team: components['schemas']['Team']
-      username?: string
-      email?: string
-      telephoneNumber?: string
-      unallocated: boolean
+      /** Format: date */
+      allocationDate?: string
+      staff: components['schemas']['Staff']
+      team?: components['schemas']['Team']
     }
     OfficeAddress: {
       officeName: string
@@ -290,6 +237,18 @@ export interface components {
       code: string
       description: string
     }
+    Staff: {
+      /** Format: int64 */
+      id: number
+      code: string
+      name: components['schemas']['Name']
+      teams: components['schemas']['Team'][]
+      provider: components['schemas']['Provider']
+      username?: string
+      email?: string
+      telephoneNumber?: string
+      unallocated: boolean
+    }
     Team: {
       code: string
       description: string
@@ -303,29 +262,20 @@ export interface components {
       /** Format: date */
       endDate?: string
     }
-    ManagedOffender: {
-      crn: string
+    PDUHead: {
       name: components['schemas']['Name']
-      /** Format: date */
-      allocationDate?: string
-      staff: components['schemas']['Staff']
-      team?: components['schemas']['Team']
+      email?: string
     }
-    Staff: {
+    Manager: {
       /** Format: int64 */
       id: number
       code: string
       name: components['schemas']['Name']
-      teams: components['schemas']['Team'][]
       provider: components['schemas']['Provider']
+      team: components['schemas']['Team']
       username?: string
       email?: string
-      telephoneNumber?: string
       unallocated: boolean
-    }
-    PDUHead: {
-      name: components['schemas']['Name']
-      email?: string
     }
   }
   responses: never
@@ -400,30 +350,6 @@ export interface operations {
       }
     }
   }
-  findCases: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': string[]
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ProbationCase'][]
-        }
-      }
-    }
-  }
   findCommunityManagerEmails: {
     parameters: {
       query?: never
@@ -443,7 +369,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['Manager'][]
+          'application/json': components['schemas']['StaffEmail'][]
         }
       }
     }
@@ -580,56 +506,12 @@ export interface operations {
       }
     }
   }
-  findStaffByCode: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        code: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Staff']
-        }
-      }
-    }
-  }
-  findCase: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        crnOrNomisId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ProbationCase']
-        }
-      }
-    }
-  }
   findCommunityManager: {
     parameters: {
       query?: never
       header?: never
       path: {
-        crnOrNomisId: string
+        crn: string
       }
       cookie?: never
     }

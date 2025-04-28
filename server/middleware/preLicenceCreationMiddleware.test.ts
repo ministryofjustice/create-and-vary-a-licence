@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ProbationService from '../services/probationService'
 import preLicenceCreationMiddleware from './preLicenceCreationMiddleware'
+import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import { DeliusManager } from '../@types/deliusClientTypes'
 
 jest.mock('../services/probationService')
@@ -9,7 +10,7 @@ let req: Request
 let res: Response
 const next = jest.fn()
 
-const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
 
 const middleware = preLicenceCreationMiddleware(probationService)
 
@@ -43,13 +44,34 @@ describe('preLicenceCreationMiddleware', () => {
     await expect(middleware(req, res, next)).rejects.toThrow('No nomisId has been provided')
   })
 
+  it('should return early if there is no delius staff identifier', async () => {
+    probationService.getProbationer.mockResolvedValue(undefined)
+    await middleware(req, res, next)
+    expect(probationService.getProbationer).toHaveBeenCalledTimes(1)
+    expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(0)
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+  })
+
+  it('should return early if there is no delius record', async () => {
+    res.locals.user.deliusStaffIdentifier = undefined
+    await middleware(req, res, next)
+    expect(probationService.getProbationer).toHaveBeenCalledTimes(1)
+    expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(0)
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+  })
+
   it('should handle error from probation service', async () => {
-    probationService.getResponsibleCommunityManager.mockRejectedValue('Error')
+    probationService.getProbationer.mockRejectedValue('Error')
     await middleware(req, res, next)
     expect(next).toHaveBeenCalledWith('Error')
   })
 
   it('should allow access for a probation user based on teams', async () => {
+    probationService.getProbationer.mockResolvedValue({
+      otherIds: {
+        crn: 'X12345',
+      },
+    } as OffenderDetail)
     probationService.getResponsibleCommunityManager.mockResolvedValue({
       code: 'X12345',
       id: 2000,
@@ -77,11 +99,17 @@ describe('preLicenceCreationMiddleware', () => {
       },
     } as DeliusManager)
     await middleware(req, res, next)
+    expect(probationService.getProbationer).toHaveBeenCalledTimes(1)
     expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(1)
     expect(next).toHaveBeenCalledTimes(1)
   })
 
   it('should deny access for a probation user based on teams', async () => {
+    probationService.getProbationer.mockResolvedValue({
+      otherIds: {
+        crn: 'X12345',
+      },
+    } as OffenderDetail)
     probationService.getResponsibleCommunityManager.mockResolvedValue({
       code: 'X12345',
       id: 2000,
@@ -109,6 +137,7 @@ describe('preLicenceCreationMiddleware', () => {
       },
     } as DeliusManager)
     await middleware(req, res, next)
+    expect(probationService.getProbationer).toHaveBeenCalledTimes(1)
     expect(probationService.getResponsibleCommunityManager).toHaveBeenCalledTimes(1)
     expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     expect(next).not.toHaveBeenCalled()

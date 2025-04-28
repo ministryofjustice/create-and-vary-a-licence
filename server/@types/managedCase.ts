@@ -1,8 +1,10 @@
-import { type DeliusRecord } from './deliusClientTypes'
+import { type OffenderDetail } from './probationSearchApiClientTypes'
 import LicenceStatus from '../enumeration/licenceStatus'
 import LicenceType from '../enumeration/licenceType'
 import LicenceKind from '../enumeration/LicenceKind'
 import type { CvlFields, CvlPrisoner } from './licenceApiClientTypes'
+
+export type DeliusRecord = OffenderDetail
 
 export type ProbationPractitioner = {
   staffCode?: string

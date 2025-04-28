@@ -22,6 +22,7 @@ const {
   prisonApiClient,
   prisonerSearchApiClient,
   deliusClient,
+  probationSearchApiClient,
   licenceApiClient,
   prisonRegisterApiClient,
   feComponentsClient,
@@ -29,7 +30,7 @@ const {
 
 const qrCodeService = new QrCodeService()
 const prisonerService = new PrisonerService(prisonApiClient, prisonerSearchApiClient)
-const probationService = new ProbationService(deliusClient)
+const probationService = new ProbationService(deliusClient, probationSearchApiClient)
 const userService = new UserService(manageUsersApiClient, prisonApiClient, probationService)
 const conditionService = new ConditionService(licenceApiClient)
 const licenceService = new LicenceService(licenceApiClient, conditionService)

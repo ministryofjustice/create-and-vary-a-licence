@@ -1,6 +1,6 @@
 import ProbationService from '../probationService'
 import LicenceService from '../licenceService'
-import { ManagedCase } from '../../@types/managedCase'
+import { DeliusRecord, ManagedCase } from '../../@types/managedCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
@@ -8,7 +8,6 @@ import type { LicenceSummary } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
 import { parseCvlDate } from '../../utils/utils'
 import { nameToString } from '../../data/deliusClient'
-import { DeliusRecord } from '../../@types/deliusClientTypes'
 
 export default class CaseloadService {
   constructor(
@@ -31,14 +30,16 @@ export default class CaseloadService {
   }
 
   private pairDeliusRecordsWithNomis = async (managedOffenders: DeliusRecord[], user: User): Promise<ManagedCase[]> => {
-    const caseloadNomisIds = managedOffenders.filter(offender => offender.nomisId).map(offender => offender.nomisId)
+    const caseloadNomisIds = managedOffenders
+      .filter(offender => offender.otherIds?.nomsNumber)
+      .map(offender => offender.otherIds?.nomsNumber)
 
     const nomisRecords = await this.licenceService.searchPrisonersByNomsIds(caseloadNomisIds, user)
 
     return managedOffenders
       .map(offender => {
         const { prisoner, cvl: cvlFields } =
-          nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.nomisId) || {}
+          nomisRecords.find(({ prisoner }) => prisoner.prisonerNumber === offender.otherIds?.nomsNumber) || {}
         return {
           deliusRecord: offender,
           nomisRecord: prisoner,
@@ -50,7 +51,7 @@ export default class CaseloadService {
 
   private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<ManagedCase[]> => {
     const nomisIds = licences.map(l => l.nomisId)
-    const deliusRecords = await this.probationService.getProbationers(nomisIds)
+    const deliusRecords = await this.probationService.getOffendersByNomsNumbers(nomisIds)
     const offenders = await this.pairDeliusRecordsWithNomis(deliusRecords, user)
     return offenders.map(offender => {
       return {
@@ -89,13 +90,10 @@ export default class CaseloadService {
       )
       .filter(comUsername => comUsername)
 
-    const deliusStaffNames = await this.probationService.getStaffDetailsByUsernameList(comUsernames)
-    const coms = await this.probationService.getResponsibleCommunityManagers(
-      caseload.map(o => o.deliusRecord.crn).filter(crn => crn),
-    )
+    const coms = await this.probationService.getStaffDetailsByUsernameList(comUsernames)
 
     return caseload.map(offender => {
-      const responsibleCom = deliusStaffNames.find(
+      const responsibleCom = coms.find(
         com =>
           com.username?.toLowerCase() ===
           offender.licences
@@ -113,8 +111,8 @@ export default class CaseloadService {
         }
       }
 
-      const com = coms.find(com => com.case.crn === offender.deliusRecord.crn)
-      if (!com || com.unallocated) {
+      const com = offender.deliusRecord.offenderManagers.find(om => om.active)
+      if (!com || com.staff.unallocated) {
         return {
           ...offender,
         }
@@ -123,8 +121,8 @@ export default class CaseloadService {
       return {
         ...offender,
         probationPractitioner: {
-          staffCode: com.code,
-          name: nameToString(com.name),
+          staffCode: com.staff.code,
+          name: `${com.staff.forenames} ${com.staff.surname}`.trim(),
         },
       }
     })

@@ -3,8 +3,8 @@ import _ from 'lodash'
 import { Prisoner, PrisonerSearchCriteria } from '../../../@types/prisonerSearchApiClientTypes'
 import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
+import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { convertToTitleCase } from '../../../utils/utils'
-import { DeliusRecord } from '../../../@types/deliusClientTypes'
 
 export default class OffenderSearchRoutes {
   constructor(
@@ -21,14 +21,14 @@ export default class OffenderSearchRoutes {
       return res.render('pages/support/offenderSearch')
     }
 
-    let deliusRecords: DeliusRecord[]
+    let deliusRecords: OffenderDetail[]
     let nomisRecords
     if (!_.isEmpty(crn)) {
-      deliusRecords = [await this.probationService.getProbationer(crn)]
+      deliusRecords = await this.probationService.getOffendersByCrn([crn])
       nomisRecords = await this.prisonerService
         .searchPrisoners(
           {
-            prisonerIdentifier: deliusRecords[0]?.nomisId,
+            prisonerIdentifier: deliusRecords[0]?.otherIds?.nomsNumber,
           } as PrisonerSearchCriteria,
           user,
         )
@@ -44,7 +44,7 @@ export default class OffenderSearchRoutes {
           user,
         )
         .catch((): Prisoner[] => [])
-      deliusRecords = await this.probationService.getProbationers(nomisRecords.map(o => o.prisonerNumber))
+      deliusRecords = await this.probationService.getOffendersByNomsNumbers(nomisRecords.map(o => o.prisonerNumber))
     }
 
     const searchResults = nomisRecords
@@ -53,7 +53,7 @@ export default class OffenderSearchRoutes {
           name: convertToTitleCase(`${o.firstName} ${o.lastName}`),
           prison: o.prisonName,
           nomisId: o.prisonerNumber,
-          crn: deliusRecords.find(d => d.nomisId === o.prisonerNumber)?.crn,
+          crn: deliusRecords.find(d => d.otherIds.nomsNumber === o.prisonerNumber)?.otherIds.crn,
         }
       })
       .sort((a, b) => {
