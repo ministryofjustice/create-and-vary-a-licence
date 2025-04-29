@@ -1,13 +1,11 @@
 import { Request, Response } from 'express'
-import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
-
 import PrisonWillCreateThisLicenceRoutes from './prisonWillCreateThisLicence'
 import LicenceService from '../../../services/licenceService'
 import ProbationService from '../../../services/probationService'
 import { CaseloadItem } from '../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/probationService')
 
@@ -63,10 +61,8 @@ describe('Route Handlers - Create Licence - Prison will create licence', () => {
         cvl: { licenceType: 'AP', hardStopDate: null, hardStopWarningDate: null, licenceStartDate: '19/11/2022' },
       } as CaseloadItem)
       probationService.getProbationer.mockResolvedValue({
-        otherIds: {
-          crn: 'X1234',
-        },
-      } as OffenderDetail)
+        crn: 'X1234',
+      })
       licenceService.getOmuEmail.mockResolvedValue({
         id: 1,
         prisonCode: 'MDI',

@@ -16,7 +16,6 @@ generic-service:
     PRISON_API_URL: 'https://prison-api-dev.prison.service.justice.gov.uk'
     LICENCE_API_URL: 'https://create-and-vary-a-licence-api-test2.hmpps.service.justice.gov.uk'
     PRISONER_SEARCH_API_URL: 'https://prisoner-search-dev.prison.service.justice.gov.uk'
-    # PROBATION_SEARCH_API_URL: "https://probation-offender-search-dev.hmpps.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: 'https://prison-register-dev.hmpps.service.justice.gov.uk'
 
     # A reference to the Gotenberg service - to submit HTML to PDF conversions (internal within namespace)
@@ -24,7 +23,6 @@ generic-service:
 
     # A temporary reference to a local container which provides a stubbed Delius caseload
     DELIUS_API_URL: 'https://create-and-vary-a-licence-and-delius-dev.hmpps.service.justice.gov.uk'
-    PROBATION_SEARCH_API_URL: 'https://probation-offender-search-dev.hmpps.service.justice.gov.uk'
 
     # A reference to the CVL service - for links in HTML to get images/stylesheets (internal within namespace)
     LICENCES_URL: 'http://create-and-vary-a-licence'
