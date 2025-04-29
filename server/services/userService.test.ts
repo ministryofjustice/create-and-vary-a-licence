@@ -21,7 +21,7 @@ describe('User service', () => {
   beforeEach(() => {
     manageUsersApiClient = new ManageUsersApiClient(null) as jest.Mocked<ManageUsersApiClient>
     prisonApiClient = new PrisonApiClient(null) as jest.Mocked<PrisonApiClient>
-    probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+    probationService = new ProbationService(null) as jest.Mocked<ProbationService>
     userService = new UserService(manageUsersApiClient, prisonApiClient, probationService)
   })
 

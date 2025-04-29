@@ -5,7 +5,6 @@ import { RedisTokenStore } from './tokenStore'
 import PrisonApiClient from './prisonApiClient'
 import PrisonerSearchApiClient from './prisonerSearchApiClient'
 import DeliusClient from './deliusClient'
-import ProbationSearchApiClient from './probationSearchApiClient'
 import LicenceApiClient from './licenceApiClient'
 import PrisonRegisterApiClient from './prisonRegisterApiClient'
 import { getSystemToken } from './systemToken'
@@ -21,7 +20,6 @@ export const dataAccess = () => {
   const prisonApiClient = new PrisonApiClient(tokenStore)
   const prisonerSearchApiClient = new PrisonerSearchApiClient(tokenStore)
   const deliusClient = new DeliusClient(tokenStore)
-  const probationSearchApiClient = new ProbationSearchApiClient(tokenStore)
   const licenceApiClient = new LicenceApiClient(tokenStore)
   const prisonRegisterApiClient = new PrisonRegisterApiClient(tokenStore)
   const feComponentsClient = new FeComponentsClient(tokenStore)
@@ -32,7 +30,6 @@ export const dataAccess = () => {
     prisonApiClient,
     prisonerSearchApiClient,
     deliusClient,
-    probationSearchApiClient,
     licenceApiClient,
     prisonRegisterApiClient,
     feComponentsClient,
@@ -44,7 +41,6 @@ export {
   LicenceApiClient,
   PrisonApiClient,
   PrisonerSearchApiClient,
-  ProbationSearchApiClient,
   PrisonRegisterApiClient,
   DeliusClient,
   ManageUsersApiClient,
