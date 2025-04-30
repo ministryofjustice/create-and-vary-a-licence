@@ -20,7 +20,7 @@ export default class ConfirmCreateRoutes {
 
     const [nomisRecord, deliusRecord] = await Promise.all([
       this.licenceService.getPrisonerDetail(nomisId, user),
-      this.probationService.getProbationer({ nomsNumber: nomisId }),
+      this.probationService.getProbationer(nomisId),
     ])
 
     if (nomisRecord.cvl.isInHardStopPeriod) {
@@ -30,7 +30,7 @@ export default class ConfirmCreateRoutes {
 
     return res.render('pages/create/confirmCreate', {
       licence: {
-        crn: deliusRecord?.otherIds?.crn,
+        crn: deliusRecord?.crn,
         licenceStartDate: nomisRecord.cvl.licenceStartDate,
         dateOfBirth: moment(nomisRecord.prisoner.dateOfBirth).format('DD/MM/YYYY'),
         forename: convertToTitleCase(nomisRecord.prisoner.firstName),

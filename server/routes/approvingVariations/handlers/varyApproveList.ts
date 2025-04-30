@@ -32,7 +32,7 @@ export default class VaryApproveListRoutes {
         return {
           licenceId: licence.id,
           name: convertToTitleCase(`${c.nomisRecord.firstName} ${c.nomisRecord.lastName}`.trim()),
-          crnNumber: c.deliusRecord.otherIds.crn,
+          crnNumber: c.deliusRecord.crn,
           licenceType: licence.type,
           variationRequestDate,
           releaseDate,
