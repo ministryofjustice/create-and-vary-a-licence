@@ -4,7 +4,7 @@ import OffenderManagerChangedEventHandler from './offenderManagerChangedEventHan
 import ProbationService from '../../../services/probationService'
 import { DeliusManager } from '../../../@types/deliusClientTypes'
 
-const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 
 jest.mock('../../../services/licenceService')

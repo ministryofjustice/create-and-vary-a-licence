@@ -3,11 +3,10 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import ConfirmCreateRoutes from './confirmCreate'
 import ProbationService from '../../../services/probationService'
-import { OffenderDetail } from '../../../@types/probationSearchApiClientTypes'
 import { CaseloadItem, CvlPrisoner, LicenceSummary } from '../../../@types/licenceApiClientTypes'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 
 jest.mock('../../../services/licenceService')
 jest.mock('../../../services/probationService')
@@ -67,10 +66,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   describe('GET', () => {
     beforeEach(() => {
       probationService.getProbationer.mockResolvedValue({
-        otherIds: {
-          crn: 'X1234',
-        },
-      } as OffenderDetail)
+        crn: 'X1234',
+      })
     })
 
     it('should render view', async () => {

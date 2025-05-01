@@ -9,7 +9,7 @@ import { DeliusStaff } from '../../../@types/deliusClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-const deliusStaff = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const deliusStaff = new ProbationService(null) as jest.Mocked<ProbationService>
 const hdcService = new HdcService(null) as jest.Mocked<HdcService>
 
 const username = 'joebloggs'
