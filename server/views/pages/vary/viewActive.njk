@@ -36,7 +36,7 @@
 
     {% if licence.kind === 'HDC' %}
         <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
-        {{ hdcCurfewTimes(hdcLicenceData) }}
+        {{ hdcCurfewTimes(hdcLicenceData, isPPUser, statusCode) }}
     {% endif %}
 
     <div class="govuk-grid-row govuk-!-margin-bottom-3">

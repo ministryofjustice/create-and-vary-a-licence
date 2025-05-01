@@ -113,6 +113,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         hdcLicenceData: null,
+        isPPUser: true,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -135,6 +136,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         hdcLicenceData: null,
+        isPPUser: true,
       })
     })
 
@@ -161,6 +163,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         hdcLicenceData: null,
+        isPPUser: true,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -179,6 +182,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         hdcLicenceData: null,
+        isPPUser: true,
       })
     })
 
@@ -196,6 +200,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         hdcLicenceData: null,
+        isPPUser: true,
       })
     })
 
@@ -219,6 +224,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         isInHardStopPeriod: false,
         statusCode: 'IN_PROGRESS',
         hdcLicenceData: exampleHdcLicenceData,
+        isPPUser: true,
       })
     })
 
@@ -237,6 +243,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isInHardStopPeriod: false,
           statusCode: 'IN_PROGRESS',
           hdcLicenceData: null,
+          isPPUser: true,
         })
       })
 
@@ -254,6 +261,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           isInHardStopPeriod: true,
           statusCode: 'IN_PROGRESS',
           hdcLicenceData: null,
+          isPPUser: true,
         })
       })
 
@@ -273,6 +281,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           statusCode: 'IN_PROGRESS',
           omuEmail: 'test@test.test',
           hdcLicenceData: null,
+          isPPUser: true,
         })
       })
     })

@@ -539,9 +539,7 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: { ...licence, kind: 'HDC' },
       hdcLicenceData: { allCurfewTimesEqual: false },
       statusCode: 'IN_PROGRESS',
-      user: {
-        authSource: 'delius',
-      },
+      isPPUser: true,
       hdcIntegrationMvp2Enabled,
     })
     expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
@@ -556,9 +554,7 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: { ...licence, kind: 'HDC' },
       hdcLicenceData: { allCurfewTimesEqual: false },
       statusCode: 'SUBMITTED',
-      user: {
-        authSource: 'delius',
-      },
+      isPPUser: true,
       hdcIntegrationMvp2Enabled,
     })
     expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
@@ -572,9 +568,7 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       statusCode: 'IN_PROGRESS',
-      user: {
-        authSource: 'delius',
-      },
+      isPPUser: true,
       hdcLicenceData: { allCurfewTimesEqual: true },
       hdcIntegrationMvp2Enabled,
     })
@@ -591,9 +585,7 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       statusCode: 'SUBMITTED',
-      user: {
-        authSource: 'delius',
-      },
+      isPPUser: true,
       hdcLicenceData: { allCurfewTimesEqual: true },
       hdcIntegrationMvp2Enabled,
     })
@@ -627,9 +619,7 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       statusCode: 'IN_PROGRESS',
-      user: {
-        authSource: 'delius',
-      },
+      isPPUser: true,
       hdcIntegrationMvp2Enabled,
     })
 
@@ -642,9 +632,7 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       statusCode: 'SUBMITTED',
-      user: {
-        authSource: 'delius',
-      },
+      isPPUser: true,
       hdcIntegrationMvp2Enabled,
     })
 

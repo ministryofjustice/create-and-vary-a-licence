@@ -17,7 +17,6 @@
 {% set isInVariation = statusCode == 'VARIATION_IN_PROGRESS' or statusCode == 'VARIATION_SUBMITTED' 
     or statusCode == 'VARIATION_REJECTED' or statusCode == 'VARIATION_APPROVED' %}
 {% set canChooseToEdit = (statusCode == 'APPROVED' or statusCode == 'SUBMITTED') and (not isInHardStopPeriod) %}
-{% set canChooseToEditCurfewTimes = user.authSource == 'delius' and statusCode == 'IN_PROGRESS' %}
 {% set canChooseToPrint = statusCode == 'APPROVED' %}
 {% if licence.kind === 'VARIATION' %} 
   {% set submitButtonText = 'View summary and add notes' %}
@@ -112,7 +111,7 @@
 
             {% if licence.kind === 'HDC' %}
                 <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
-                {{ hdcCurfewTimes(hdcLicenceData, canChooseToEditCurfewTimes) }}
+                {{ hdcCurfewTimes(hdcLicenceData, isPPUser, statusCode) }}
             {% endif %}
 
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 

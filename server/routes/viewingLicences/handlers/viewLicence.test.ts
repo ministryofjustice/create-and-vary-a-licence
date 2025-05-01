@@ -99,6 +99,8 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: true,
         hdcLicenceData: null,
+        isPPUser: false,
+        statusCode: licence.statusCode,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -120,6 +122,8 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: true,
         hdcLicenceData: null,
+        isPPUser: false,
+        statusCode: LicenceStatus.APPROVED,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
     })
@@ -166,6 +170,8 @@ describe('Route - view and approve a licence', () => {
           "This is the last approved version of this person's licence.<br />Another version was started on 15 December 2022.<br />" +
           'You can print the most recent version once it has been approved.',
         hdcLicenceData: null,
+        isPPUser: false,
+        statusCode: licence.statusCode,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -203,6 +209,8 @@ describe('Route - view and approve a licence', () => {
           'Once this version is approved, you can print it.<br /><a href="/licence/view/id/1/pdf-print" target="_blank">' +
           'You can also view and print the last approved version of this licence</a>.',
         hdcLicenceData: null,
+        isPPUser: false,
+        statusCode: LicenceStatus.IN_PROGRESS,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -240,6 +248,8 @@ describe('Route - view and approve a licence', () => {
           isEditableByPrison: true,
           isPrisonUser: true,
           hdcLicenceData: null,
+          isPPUser: false,
+          statusCode: LicenceStatus.APPROVED,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -261,6 +271,8 @@ describe('Route - view and approve a licence', () => {
           isEditableByPrison: false,
           isPrisonUser: true,
           hdcLicenceData: null,
+          isPPUser: false,
+          statusCode: licence.statusCode,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -282,6 +294,8 @@ describe('Route - view and approve a licence', () => {
           isEditableByPrison: false,
           isPrisonUser: true,
           hdcLicenceData: null,
+          isPPUser: false,
+          statusCode: licence.statusCode,
         })
         expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
       })
@@ -325,6 +339,8 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: false,
         hdcLicenceData: null,
+        isPPUser: false,
+        statusCode: licence.statusCode,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
@@ -346,6 +362,8 @@ describe('Route - view and approve a licence', () => {
         isEditableByPrison: false,
         isPrisonUser: true,
         hdcLicenceData: exampleHdcLicenceData,
+        isPPUser: false,
+        statusCode: LicenceStatus.ACTIVE,
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
