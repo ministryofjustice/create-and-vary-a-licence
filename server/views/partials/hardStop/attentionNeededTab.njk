@@ -14,18 +14,18 @@
         <h3 class="govuk-heading-m" style="padding-top: 10px;">If legal status is ‘remand’ or ‘convicted unsentenced’</h3>
         <ul class="govuk-list govuk-list--bullet">
             <li>If someone has their charges dropped, is found not guilty, or receives a non-custodial sentence, you must
-                <a class="govuk-link" href="{{ serviceNowUrl }}">
+                <a class="govuk-link govuk-link--no-visited-state" href="{{ serviceNowUrl }}">
                     contact the help desk for immediate support
-                </a>
+                </a>.
             </li>
-            <li>If someone receives a new custodial sentence, you do not need to do anything</li>
+            <li>If someone receives a new custodial sentence, you do not need to do anything.</li>
         </ul>
         <h3 class="govuk-heading-m">Any other legal status</h3>
         <p class="govuk-body" style="padding-bottom: 20px;">
             For example, the legal status could be ‘immigration detainee’.
-            <a class="govuk-link" href="{{ serviceNowUrl }}">
-                Contact the help desk for immediate support.
-            </a>
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ serviceNowUrl }}">
+                Contact the help desk for immediate support
+            </a>.
         </p>
     {% endif %}
 {% endmacro %}
