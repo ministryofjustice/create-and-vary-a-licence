@@ -1,16 +1,12 @@
 import ProbationService from './probationService'
 import DeliusClient from '../data/deliusClient'
-import ProbationSearchApiClient from '../data/probationSearchApiClient'
-import { OffenderDetail } from '../@types/probationSearchApiClientTypes'
 import { DeliusStaff } from '../@types/deliusClientTypes'
 
 jest.mock('../data/deliusClient')
-jest.mock('../data/probationSearchApiClient')
 
 describe('Probation Service', () => {
   const deliusClient = new DeliusClient(null) as jest.Mocked<DeliusClient>
-  const probationSearchApiClient = new ProbationSearchApiClient(null) as jest.Mocked<ProbationSearchApiClient>
-  const probationService = new ProbationService(deliusClient, probationSearchApiClient)
+  const probationService = new ProbationService(deliusClient)
 
   it('Get Staff Detail', async () => {
     const expectedResponse = {
@@ -71,100 +67,36 @@ describe('Probation Service', () => {
     expect(deliusClient.getPduHeads).toHaveBeenCalledWith('X1234')
   })
 
-  it('Search probationers', async () => {
-    const expectedResponse = [
-      {
-        firstName: 'Joe',
-        surname: 'Bloggs',
-      },
-    ] as OffenderDetail[]
-
-    probationSearchApiClient.searchProbationer.mockResolvedValue(expectedResponse)
-
-    const actualResult = await probationService.searchProbationers({ nomsNumber: 'ABC1234' })
-
-    expect(actualResult).toEqual(expectedResponse)
-    expect(probationSearchApiClient.searchProbationer).toHaveBeenCalledWith({ nomsNumber: 'ABC1234' })
-  })
-
   describe('Get probationers', () => {
     it('should throw error when no delius records are found', async () => {
-      probationSearchApiClient.searchProbationer.mockResolvedValue([])
+      deliusClient.getCase.mockResolvedValue(null)
 
-      await expect(probationService.getProbationer({ nomsNumber: 'ABC1234' })).rejects.toThrow('No delius record found')
-      expect(probationSearchApiClient.searchProbationer).toHaveBeenCalledWith({ nomsNumber: 'ABC1234' })
+      await expect(probationService.getProbationer('ABC1234')).rejects.toThrow('No delius record found')
+      expect(deliusClient.getCase).toHaveBeenCalledWith('ABC1234')
     })
 
     it('should return the first delius record found', async () => {
-      probationSearchApiClient.searchProbationer.mockResolvedValue([
-        {
-          firstName: 'Joe',
-          surname: 'Bloggs',
-        },
-        {
-          firstName: 'John',
-          surname: 'Smith',
-        },
-      ] as OffenderDetail[])
+      deliusClient.getCase.mockResolvedValue({ crn: 'X123456' })
 
-      const actualResult = await probationService.getProbationer({ nomsNumber: 'ABC1234' })
+      const actualResult = await probationService.getProbationer('ABC1234')
 
-      expect(actualResult).toEqual({ firstName: 'Joe', surname: 'Bloggs' })
-      expect(probationSearchApiClient.searchProbationer).toHaveBeenCalledWith({ nomsNumber: 'ABC1234' })
+      expect(actualResult).toEqual({ crn: 'X123456' })
+      expect(deliusClient.getCase).toHaveBeenCalledWith('ABC1234')
     })
   })
 
-  it('should call api client to search by crns', async () => {
-    probationSearchApiClient.getOffendersByCrn.mockResolvedValue([
-      {
-        firstName: 'Joe',
-        surname: 'Bloggs',
-      },
-      {
-        firstName: 'John',
-        surname: 'Smith',
-      },
-    ] as OffenderDetail[])
+  it('should call api client to search multiple cases', async () => {
+    deliusClient.getCases.mockResolvedValue([
+      { crn: 'X1234', nomisId: 'A' },
+      { crn: 'X4321', nomisId: 'B' },
+    ])
 
-    const actualResult = await probationService.getOffendersByCrn(['X1234', 'X4321'])
+    const actualResult = await probationService.getProbationers(['X1234', 'X4321'])
 
     expect(actualResult).toEqual([
-      {
-        firstName: 'Joe',
-        surname: 'Bloggs',
-      },
-      {
-        firstName: 'John',
-        surname: 'Smith',
-      },
+      { crn: 'X1234', nomisId: 'A' },
+      { crn: 'X4321', nomisId: 'B' },
     ])
-    expect(probationSearchApiClient.getOffendersByCrn).toHaveBeenCalledWith(['X1234', 'X4321'])
-  })
-
-  it('should call api client to search by nomsNumbers', async () => {
-    probationSearchApiClient.getOffendersByNomsNumbers.mockResolvedValue([
-      {
-        firstName: 'Joe',
-        surname: 'Bloggs',
-      },
-      {
-        firstName: 'John',
-        surname: 'Smith',
-      },
-    ] as OffenderDetail[])
-
-    const actualResult = await probationService.getOffendersByNomsNumbers(['B123445', 'C123535'])
-
-    expect(actualResult).toEqual([
-      {
-        firstName: 'Joe',
-        surname: 'Bloggs',
-      },
-      {
-        firstName: 'John',
-        surname: 'Smith',
-      },
-    ])
-    expect(probationSearchApiClient.getOffendersByNomsNumbers).toHaveBeenCalledWith(['B123445', 'C123535'])
+    expect(deliusClient.getCases).toHaveBeenCalledWith(['X1234', 'X4321'])
   })
 })

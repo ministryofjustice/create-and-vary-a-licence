@@ -1,6 +1,6 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './hmppsRestClient'
-import { DeliusManager, DeliusPDUHead, DeliusStaff, DeliusStaffName } from '../@types/deliusClientTypes'
+import { DeliusManager, DeliusPDUHead, DeliusRecord, DeliusStaff, DeliusStaffName } from '../@types/deliusClientTypes'
 import type { TokenStore } from './tokenStore'
 import { components } from '../@types/deliusApiImport'
 
@@ -33,8 +33,25 @@ export default class DeliusClient extends RestClient {
     return (await this.get({ path: `/staff/${pduCode}/pdu-head` })) as Promise<DeliusPDUHead[]>
   }
 
-  async getResponsibleCommunityManager(crn: string): Promise<DeliusManager> {
-    return (await this.get({ path: `/probation-case/${crn}/responsible-community-manager` })) as Promise<DeliusManager>
+  async getCases(crnOrNomisIds: string[]): Promise<DeliusRecord[]> {
+    return (await this.post({ path: '/probation-case', data: crnOrNomisIds })) as Promise<DeliusRecord[]>
+  }
+
+  async getCase(crnOrNomisId: string): Promise<DeliusRecord> {
+    return (await this.get({ path: `/probation-case/${crnOrNomisId}`, return404: true })) as Promise<DeliusRecord>
+  }
+
+  async getResponsibleCommunityManager(crnOrNomisId: string): Promise<DeliusManager> {
+    return (await this.get({
+      path: `/probation-case/${crnOrNomisId}/responsible-community-manager`,
+    })) as Promise<DeliusManager>
+  }
+
+  async getResponsibleCommunityManagers(crnOrNomisIds: string[]): Promise<DeliusManager[]> {
+    return (await this.post({
+      path: `/probation-case/responsible-community-manager`,
+      data: crnOrNomisIds,
+    })) as Promise<DeliusManager[]>
   }
 }
 

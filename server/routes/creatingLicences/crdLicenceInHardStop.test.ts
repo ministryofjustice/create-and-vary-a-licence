@@ -7,7 +7,6 @@ import ProbationService from '../../services/probationService'
 import ConditionService from '../../services/conditionService'
 import { AdditionalConditionAp } from '../../@types/LicencePolicy'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
-import { OffenderDetail } from '../../@types/probationSearchApiClientTypes'
 import { DeliusManager } from '../../@types/deliusClientTypes'
 import { User } from '../../@types/CvlUserDetails'
 
@@ -17,7 +16,7 @@ const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceServ
 const conditionService = new ConditionService(null) as jest.Mocked<ConditionService>
 const bankHolidayRetriever: BankHolidayRetriever = async () => []
 const ukBankHolidayFeedService = new UkBankHolidayFeedService(bankHolidayRetriever)
-const probationService = new ProbationService(null, null) as jest.Mocked<ProbationService>
+const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
 
 jest.mock('../../services/licenceService')
 jest.mock('../../services/conditionService')
@@ -52,10 +51,8 @@ beforeEach(() => {
   conditionService.getAdditionalConditionByCode.mockResolvedValue({ validatorType: null } as AdditionalConditionAp)
 
   probationService.getProbationer.mockResolvedValue({
-    otherIds: {
-      crn: 'X12345',
-    },
-  } as OffenderDetail)
+    crn: 'X12345',
+  })
   probationService.getResponsibleCommunityManager.mockResolvedValue({
     code: 'X12345',
     id: 2000,
