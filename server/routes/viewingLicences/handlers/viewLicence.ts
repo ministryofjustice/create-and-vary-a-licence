@@ -76,7 +76,6 @@ export default class ViewAndPrintLicenceRoutes {
         isPrisonUser: user.authSource === 'nomis',
         initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
         hdcLicenceData,
-        isPPUser: false,
         statusCode: licence.statusCode,
       })
     } else {

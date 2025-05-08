@@ -539,7 +539,6 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: { ...licence, kind: 'HDC' },
       hdcLicenceData: { allCurfewTimesEqual: false },
       statusCode: 'IN_PROGRESS',
-      isPPUser: true,
       hdcIntegrationMvp2Enabled,
     })
     expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
@@ -554,7 +553,6 @@ describe('Create a Licence Views - Check Answers', () => {
       licence: { ...licence, kind: 'HDC' },
       hdcLicenceData: { allCurfewTimesEqual: false },
       statusCode: 'SUBMITTED',
-      isPPUser: true,
       hdcIntegrationMvp2Enabled,
     })
     expect($('[data-qa=curfew-times-not-equal]').length).toBe(1)
@@ -568,7 +566,6 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       statusCode: 'IN_PROGRESS',
-      isPPUser: true,
       hdcLicenceData: { allCurfewTimesEqual: true },
       hdcIntegrationMvp2Enabled,
     })
@@ -585,7 +582,6 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       statusCode: 'SUBMITTED',
-      isPPUser: true,
       hdcLicenceData: { allCurfewTimesEqual: true },
       hdcIntegrationMvp2Enabled,
     })
@@ -619,7 +615,6 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       statusCode: 'IN_PROGRESS',
-      isPPUser: true,
       hdcIntegrationMvp2Enabled,
     })
 
@@ -632,7 +627,6 @@ describe('Create a Licence Views - Check Answers', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
       statusCode: 'SUBMITTED',
-      isPPUser: true,
       hdcIntegrationMvp2Enabled,
     })
 

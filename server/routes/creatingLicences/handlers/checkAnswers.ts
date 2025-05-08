@@ -50,7 +50,6 @@ export default class CheckAnswersRoutes {
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
       hdcLicenceData,
-      isPPUser: true,
     })
   }
 

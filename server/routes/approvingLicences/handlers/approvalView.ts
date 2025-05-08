@@ -49,7 +49,6 @@ export default class ApprovalViewRoutes {
           licence.kind !== LicenceKind.HDC_VARIATION &&
           licence.isDueForEarlyRelease,
         hdcLicenceData,
-        isPPUser: false,
         statusCode: licence.statusCode,
       })
     } else {

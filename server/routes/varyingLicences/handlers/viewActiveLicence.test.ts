@@ -111,7 +111,6 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
           ],
         ],
         hdcLicenceData: null,
-        isPPUser: false,
         statusCode: LicenceStatus.ACTIVE,
       })
     })
@@ -170,7 +169,6 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
           ],
         ],
         hdcLicenceData: exampleHdcLicenceData,
-        isPPUser: false,
         statusCode: LicenceStatus.ACTIVE,
       })
     })

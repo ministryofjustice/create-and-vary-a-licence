@@ -111,7 +111,7 @@
 
             {% if licence.kind === 'HDC' %}
                 <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
-                {{ hdcCurfewTimes(hdcLicenceData, isPPUser, statusCode) }}
+                {{ hdcCurfewTimes(hdcLicenceData, true, statusCode) }}
             {% endif %}
 
             {% if (licence.typeCode === 'AP' or licence.typeCode === 'AP_PSS' ) 

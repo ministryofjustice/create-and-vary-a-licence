@@ -136,7 +136,6 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: null,
-        isPPUser: false,
         statusCode: LicenceStatus.SUBMITTED,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
@@ -176,7 +175,6 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: exampleHdcLicenceData,
-        isPPUser: false,
         statusCode: LicenceStatus.SUBMITTED,
       })
     })
@@ -214,7 +212,6 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: true,
         hdcLicenceData: null,
-        isPPUser: false,
         statusCode: LicenceStatus.SUBMITTED,
       })
     })
@@ -252,7 +249,6 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: null,
-        isPPUser: false,
         statusCode: LicenceStatus.SUBMITTED,
       })
     })
@@ -290,7 +286,6 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: null,
-        isPPUser: false,
         statusCode: LicenceStatus.SUBMITTED,
       })
     })
@@ -328,7 +323,6 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: null,
-        isPPUser: false,
         statusCode: LicenceStatus.SUBMITTED,
       })
     })
