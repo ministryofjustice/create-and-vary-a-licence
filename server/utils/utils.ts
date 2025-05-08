@@ -5,7 +5,15 @@ import SimpleDateTime from '../routes/creatingLicences/types/simpleDateTime'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import SimpleTime, { AmPm } from '../routes/creatingLicences/types/time'
 import type Address from '../routes/initialAppointment/types/address'
-import type { CvlFields, CvlPrisoner, Licence, LicenceSummary } from '../@types/licenceApiClientTypes'
+import type {
+  CvlFields,
+  CvlPrisoner,
+  HdcLicence,
+  HdcVariationLicence,
+  Licence,
+  LicenceSummary,
+  VariationLicence,
+} from '../@types/licenceApiClientTypes'
 import LicenceKind from '../enumeration/LicenceKind'
 import LicenceStatus from '../enumeration/licenceStatus'
 
@@ -255,6 +263,14 @@ const isInHardStopPeriod = (licence: Licence): boolean => {
   )
 }
 
+function isVariation(licence: Licence): licence is VariationLicence | HdcVariationLicence {
+  return licence.isVariation
+}
+
+function isHdcLicence(licence: Licence): licence is HdcLicence | HdcVariationLicence {
+  return licence.kind === LicenceKind.HDC || licence.kind === LicenceKind.HDC_VARIATION
+}
+
 export {
   convertToTitleCase,
   hasRole,
@@ -285,4 +301,6 @@ export {
   isAttentionNeeded,
   determineCaViewCasesTab,
   toIsoDate,
+  isVariation,
+  isHdcLicence,
 }
