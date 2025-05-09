@@ -42,7 +42,7 @@ export default function createApp(services: Services, applicationInfo: Applicati
   app.use(trimRequestBody())
   app.use(authorisationMiddleware)
   app.use(setUpCsrf())
-  app.get('*', getFrontendComponents(services))
+  app.get(/(.*)/, getFrontendComponents(services))
   app.use(setupRoutes(services))
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler())
