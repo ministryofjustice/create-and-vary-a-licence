@@ -67,7 +67,7 @@
 
                 {% if licence.kind === 'HDC' %}
                     <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
-                    {{ hdcCurfewTimes(hdcLicenceData) }}
+                    {{ hdcCurfewTimes(hdcLicenceData, isPPUser, statusCode) }}
                     {{ govukDetails({
                         summaryText: "How do I change the HDC curfew details?",
                         html: "Email createandvaryalicence@digital.justice.gov.uk to change the HDC curfew details."

@@ -49,6 +49,7 @@ export default class ApprovalViewRoutes {
           licence.kind !== LicenceKind.HDC_VARIATION &&
           licence.isDueForEarlyRelease,
         hdcLicenceData,
+        statusCode: licence.statusCode,
       })
     } else {
       res.redirect(`/licence/approve/cases`)

@@ -32,6 +32,7 @@ export default class ViewActiveLicenceRoutes {
       bespokeConditionsToDisplay,
       callToActions: { shouldShowVaryButton },
       hdcLicenceData,
+      statusCode: licence.statusCode,
     })
   }
 }

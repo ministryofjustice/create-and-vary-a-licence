@@ -1,9 +1,26 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro hdcCurfewTimes(hdcLicenceData) %}
+{% macro hdcCurfewTimes(hdcLicenceData, isPPUser, statusCode) %}
     {% set addressLine2Html = hdcLicenceData.curfewAddress.addressLine2 | escape + ", " if hdcLicenceData.curfewAddress.addressLine2 | length%}
     {% set countyHtml = hdcLicenceData.curfewAddress.county | escape + ", " if hdcLicenceData.curfewAddress.county | length%}
+    {% set canChooseToEditCurfewTimes = isPPUser and statusCode == "IN_PROGRESS" %}
 
+
+    {% if canChooseToEditCurfewTimes and hdcIntegrationMvp2Enabled %}
+        {% set summaryListAction = {
+            items: [
+                {
+                    href: "#",
+                    text: "Change",
+                    visuallyHiddenText: "curfew hours"
+                }
+            ]
+        } %}
+        {% set tableActionHtml = '<a href="#" class="govuk-link govuk-link--no-visited-state">Change</a><span class="govuk-visually-hidden">curfew hours</span>'%}
+        {% set tableActionClasses = "govuk-table__cell govuk-!-font-weight-regular govuk-!-text-align-right"%}
+    {% endif %}
 
     {{ govukSummaryList({
         attributes: {'data-qa': 'hdc-curfew-details'},
@@ -35,31 +52,75 @@
                     html: hdcLicenceData.curfewTimes[0].fromDay | titlecase | escape + " to " + hdcLicenceData.curfewTimes[6].fromDay | titlecase | escape + "<br>" + 
                           hdcLicenceData.curfewTimes[0].fromTime  | localTimeTo12h + " to " + hdcLicenceData.curfewTimes[0].untilTime | localTimeTo12h,
                     classes: "curfew-hours"
-                }
+                },
+                actions: summaryListAction
             } if hdcLicenceData.allCurfewTimesEqual
         ]
     }) }}
 
-    {% if not hdcLicenceData.allCurfewTimesEqual %}
-        {% set curfewRows = []%}
-        {% for curfewTime in hdcLicenceData.curfewTimes %} 
-            {% set curfewRows = (curfewRows.push(
-                {
-                    key: {
-                        text: curfewTime.fromDay | titlecase
-                    }, 
-                    value: {
-                        text: curfewTime.fromTime | localTimeTo12h + " to " + curfewTime.untilTime | localTimeTo12h
+    {% if hdcIntegrationMvp2Enabled %}
+
+        {% if canChooseToEditCurfewTimes %}
+            {{ govukDetails({
+                summaryText: "How do I change the HDC first night curfew hours and address?",
+                html: "Email createandvaryalicence@digital.justice.gov.uk to request a change to first night curfew hours and address.",
+                attributes: {'data-qa': 'hdc-curfew-email-detail'}
+            }) }}
+        {% endif %}
+
+        {% if not hdcLicenceData.allCurfewTimesEqual %}
+            <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-7 govuk-heading-m">Curfew hours</h3>
+
+            {% set curfewRows = [] %}
+            {% for curfewTime in hdcLicenceData.curfewTimes %}
+            {% set curfewRows = (curfewRows.push([
+                { text: curfewTime.fromTime | localTimeTo12h + " on " + curfewTime.fromDay | titlecase },
+                { text: curfewTime.untilTime | localTimeTo12h + " on " + curfewTime.untilDay | titlecase },
+                {}
+            ]), curfewRows) %}
+            {% endfor %}
+
+            {{ govukTable({
+                attributes: { 'data-qa': 'curfew-times-not-equal' },
+                head: [
+                    { text: "Start time" },
+                    { text: "End time" },
+                    {
+                        html: tableActionHtml,
+                        classes: tableActionClasses
                     }
-                }
-            ), curfewRows) %}
-        {% endfor %}
+                ],
+                rows: curfewRows
+            }) }}
+        {% endif %}
+    {% else %}
+        {% if not hdcLicenceData.allCurfewTimesEqual %}
+            {% set curfewRows = []%}
+            {% for curfewTime in hdcLicenceData.curfewTimes %} 
+                {% set curfewRows = (curfewRows.push(
+                    {
+                        key: {
+                            text: curfewTime.fromDay | titlecase
+                        }, 
+                        value: {
+                            text: curfewTime.fromTime | localTimeTo12h + " to " + curfewTime.untilTime | localTimeTo12h
+                        }
+                    }
+                ), curfewRows) %}
+            {% endfor %}
 
-        <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-7 govuk-heading-m">Curfew hours</h3>
+            <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-7 govuk-heading-m">Curfew hours</h3>
 
-        {{ govukSummaryList({
-            attributes: {'data-qa': 'curfew-times-not-equal'},
-            rows: curfewRows
+            {{ govukSummaryList({
+                attributes: {'data-qa': 'curfew-times-not-equal'},
+                rows: curfewRows
+            }) }}
+        {% endif %}
+
+        {{ govukDetails({
+            summaryText: "How do I change the HDC curfew details?",
+            html: "Email createandvaryalicence@digital.justice.gov.uk to change the HDC curfew details."
         }) }}
     {% endif %}
+
 {% endmacro %}

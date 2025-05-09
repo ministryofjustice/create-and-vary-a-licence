@@ -136,6 +136,7 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: null,
+        statusCode: LicenceStatus.SUBMITTED,
       })
       expect(licenceService.recordAuditEvent).toHaveBeenCalled()
       expect(deliusStaff.getStaffDetailByUsername).toHaveBeenCalled()
@@ -174,6 +175,7 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: exampleHdcLicenceData,
+        statusCode: LicenceStatus.SUBMITTED,
       })
     })
 
@@ -210,6 +212,7 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: true,
         hdcLicenceData: null,
+        statusCode: LicenceStatus.SUBMITTED,
       })
     })
 
@@ -246,6 +249,7 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: null,
+        statusCode: LicenceStatus.SUBMITTED,
       })
     })
 
@@ -282,6 +286,7 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: null,
+        statusCode: LicenceStatus.SUBMITTED,
       })
     })
 
@@ -318,6 +323,7 @@ describe('Route - view and approve a licence', () => {
         returnPath: encodeURIComponent(`/licence/approve/id/${res.locals.licence.id}/view`),
         isDueForEarlyRelease: false,
         hdcLicenceData: null,
+        statusCode: LicenceStatus.SUBMITTED,
       })
     })
   })

@@ -111,6 +111,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
           ],
         ],
         hdcLicenceData: null,
+        statusCode: LicenceStatus.ACTIVE,
       })
     })
 
@@ -168,6 +169,7 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
           ],
         ],
         hdcLicenceData: exampleHdcLicenceData,
+        statusCode: LicenceStatus.ACTIVE,
       })
     })
   })
