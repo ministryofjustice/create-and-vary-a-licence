@@ -626,13 +626,16 @@ describe('Licence Service', () => {
       id: 1,
     } as Licence)
 
-    await licenceService.compareVariationToOriginal({ id: 2, kind: 'VARIATION', variationOf: 1 } as Licence, user)
+    await licenceService.compareVariationToOriginal(
+      { id: 2, kind: 'VARIATION', variationOf: 1, isVariation: true } as Licence,
+      user,
+    )
 
     expect(licenceCompatatorSpy).toHaveBeenCalledWith(
       {
         id: 1,
       },
-      { id: 2, kind: 'VARIATION', variationOf: 1 },
+      { id: 2, kind: 'VARIATION', variationOf: 1, isVariation: true },
     )
   })
 

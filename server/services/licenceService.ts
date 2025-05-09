@@ -41,7 +41,7 @@ import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
 import Telephone from '../routes/initialAppointment/types/telephone'
 import Address from '../routes/initialAppointment/types/address'
-import { addressObjectToString, filterCentralCaseload, objectIsEmpty } from '../utils/utils'
+import { addressObjectToString, filterCentralCaseload, isVariation, objectIsEmpty } from '../utils/utils'
 import BespokeConditions from '../routes/manageConditions/types/bespokeConditions'
 import LicenceStatus from '../enumeration/licenceStatus'
 import AdditionalConditions from '../routes/manageConditions/types/additionalConditions'
@@ -436,7 +436,7 @@ export default class LicenceService {
   }
 
   async compareVariationToOriginal(variation: Licence, user: User): Promise<VariedConditions> {
-    if (variation.kind === 'VARIATION') {
+    if (isVariation(variation)) {
       const originalLicence = await this.getLicence(variation.variationOf, user)
       return compareLicenceConditions(originalLicence, variation)
     }

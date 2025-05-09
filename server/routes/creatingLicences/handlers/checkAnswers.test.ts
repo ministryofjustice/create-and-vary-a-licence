@@ -183,7 +183,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should not allow PPs to edit initial appointment details for variations', async () => {
-      res.locals.licence.kind = LicenceKind.VARIATION
+      res.locals.licence = { ...res.locals.licence, kind: LicenceKind.VARIATION, isVariation: true }
 
       await handler.GET(req, res)
 
