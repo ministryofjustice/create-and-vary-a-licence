@@ -54,6 +54,7 @@ describe('Timeline Service', () => {
         variationOf: 1,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:45:00',
+        isVariation: true,
       } as Licence
 
       const variationApproved = {
@@ -79,6 +80,7 @@ describe('Timeline Service', () => {
         variationOf: 1,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:45:00',
+        isVariation: true,
       } as Licence
 
       const variationSubmitted = {
@@ -104,6 +106,7 @@ describe('Timeline Service', () => {
         variationOf: 1,
         createdByFullName: 'James Brown',
         dateLastUpdated: '12/11/2022 10:45:00',
+        isVariation: true,
       } as Licence
 
       const variationRejected = {
