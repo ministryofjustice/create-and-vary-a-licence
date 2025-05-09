@@ -53,6 +53,7 @@ import LicenceType from '../enumeration/licenceType'
 import LicenceStatus from '../enumeration/licenceStatus'
 import type { TokenStore } from './tokenStore'
 import logger from '../../logger'
+import { isVariation } from '../utils/utils'
 
 export default class LicenceApiClient extends RestClient {
   constructor(tokenStore: TokenStore) {
@@ -507,7 +508,7 @@ export default class LicenceApiClient extends RestClient {
 
   async getParentLicenceOrSelf(licenceId: number, user: User): Promise<Licence> {
     const licence = await this.getLicenceById(licenceId, user)
-    if (licence.kind !== 'VARIATION') {
+    if (!isVariation(licence)) {
       return licence
     }
 
