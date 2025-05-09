@@ -201,6 +201,14 @@ describe('View and print - single licence view', () => {
     expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
   })
 
+  it('should render the HDC curfew details if the licence kind is HDC_VARIATION', () => {
+    const $ = render({
+      licence: { ...licence, kind: 'HDC_VARIATION' },
+    })
+
+    expect($('[data-qa=hdc-curfew-details]').length).toBe(1)
+  })
+
   it('should render the curfew time summary if all the curfew times are equal', () => {
     const $ = render({
       licence: { ...licence, kind: 'HDC' },
