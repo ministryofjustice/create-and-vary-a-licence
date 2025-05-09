@@ -7,9 +7,8 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
-import { groupingBy, isHdcLicence, isInHardStopPeriod } from '../../../utils/utils'
+import { groupingBy, isHdcLicence, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 import HdcService from '../../../services/hdcService'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class CheckAnswersRoutes {
   constructor(
@@ -45,7 +44,7 @@ export default class CheckAnswersRoutes {
       bespokeConditionsToDisplay,
       backLink,
       initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
-      canEditInitialAppt: licence.kind !== LicenceKind.VARIATION && !isInHardStopPeriod(licence),
+      canEditInitialAppt: !isVariation(licence) && !isInHardStopPeriod(licence),
       statusCode: licence.statusCode,
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,
