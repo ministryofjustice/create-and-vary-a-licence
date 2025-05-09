@@ -2,11 +2,10 @@ import { Request, Response } from 'express'
 import moment from 'moment/moment'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
 import LicenceService from '../../../services/licenceService'
-import { dateStringToSimpleDate } from '../../../utils/utils'
+import { dateStringToSimpleDate, isHdcLicence } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import SimpleDate from '../../creatingLicences/types/date'
 import LicenceDatesAndReason from '../types/licenceDatesAndReason'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class OffenderLicenceDatesRoutes {
   constructor(
@@ -62,10 +61,8 @@ export default class OffenderLicenceDatesRoutes {
       led: dateStringToSimpleDate(licence.licenceExpiryDate),
       tussd: dateStringToSimpleDate(licence.topupSupervisionStartDate),
       tused: dateStringToSimpleDate(licence.topupSupervisionExpiryDate),
-      hdcad:
-        licence.kind === LicenceKind.HDC ? dateStringToSimpleDate(licence.homeDetentionCurfewActualDate) : undefined,
-      hdcEndDate:
-        licence.kind === LicenceKind.HDC ? dateStringToSimpleDate(licence.homeDetentionCurfewEndDate) : undefined,
+      hdcad: isHdcLicence(licence) ? dateStringToSimpleDate(licence.homeDetentionCurfewActualDate) : undefined,
+      hdcEndDate: isHdcLicence(licence) ? dateStringToSimpleDate(licence.homeDetentionCurfewEndDate) : undefined,
     }
   }
 

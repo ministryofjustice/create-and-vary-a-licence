@@ -65,7 +65,7 @@
                     {{ inductionMeetingDetails(licence, isEditableByPrison, [], null, isPrisonUser) }}
                 {% endif %}
 
-                {% if licence.kind === 'HDC' %}
+                {% if licence.kind === 'HDC' or offender.kind === 'HDC_VARIATION' %}
                     <h2 class="govuk-!-margin-bottom-3 govuk-!-margin-top-3 govuk-heading-m">HDC curfew details</h2>
                     {{ hdcCurfewTimes(hdcLicenceData) }}
                     {{ govukDetails({
