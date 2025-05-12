@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { IsIn, IsNotEmpty, ValidateNested } from 'class-validator'
+import { IsIn, IsNotEmpty, IsString, ValidateNested } from 'class-validator'
 import { Expose, Type } from 'class-transformer'
 import validationMiddleware from './validationMiddleware'
 
@@ -47,6 +47,7 @@ describe('validationMiddleware', () => {
 
     class DummyAddress {
       @Expose()
+      @IsString()
       addressLine: string
     }
 

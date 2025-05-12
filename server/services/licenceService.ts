@@ -451,10 +451,10 @@ export default class LicenceService {
 
     const licenceEvents = await this.licenceApiClient.matchLicenceEvents(
       `${variation.id}`,
-      conversationEventTypes,
       'eventTime',
       'DESC',
       user,
+      conversationEventTypes,
     )
 
     const conversation = licenceEvents?.map(event => {
