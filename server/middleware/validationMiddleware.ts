@@ -25,7 +25,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       // Build an object which is used by validators to check things against
       const validationScope = plainToInstance(
         classType,
-        { ...req.body, licence: res.locals.licence, uploadFile: req.file },
+        { ...req.body, licence, uploadFile: req.file },
         { excludeExtraneousValues: false },
       )
 
