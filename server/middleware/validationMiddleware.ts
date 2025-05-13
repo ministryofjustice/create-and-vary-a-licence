@@ -12,12 +12,10 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
   return async (req, res, next) => {
     try {
       const { licence } = res.locals
-      console.log('licence', licence)
 
       const version = licence?.version
       const condition = await conditionService.getAdditionalConditionByCode(req.body.code, version)
       const classType = condition?.validatorType || type
-      console.log('classType', classType)
 
       if (classType) {
         // Cater for file uploads on specific forms - in this case to setup the filename in the req.body
@@ -32,14 +30,10 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
           { excludeExtraneousValues: false },
         )
 
-        console.log('validationScope', JSON.stringify(validationScope))
-
         const errors: ValidationError[] = await validate(validationScope)
-        console.log('errors', JSON.stringify(errors))
 
         if (errors.length === 0) {
           req.body = plainToInstance(classType, req.body, { excludeExtraneousValues: true })
-          console.log('req.body', req.body)
           return next()
         }
 

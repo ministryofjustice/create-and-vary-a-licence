@@ -35,7 +35,6 @@
     {# Alter the form encoding to multi-part formdata and supply csrf token in query params for file upload conditions #}
     <div class="govuk-button-group">
         <form method="POST"
-            encType="multipart/form-data"
             action="/licence/create/id/{{licence.id}}/additional-licence-conditions/condition/{{additionalCondition.id}}/file-upload-input?_csrf={{ csrfToken }}{{ fromReviewAppend }}{{ fromPolicyReviewAppend }}">
 
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
