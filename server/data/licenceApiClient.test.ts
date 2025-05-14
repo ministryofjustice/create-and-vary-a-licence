@@ -25,6 +25,7 @@ import {
   UpdateVloDiscussionRequest,
   CaCaseloadSearch,
   LicenceCreationResponse,
+  OverrideLicencePrisonerDetailsRequest,
 } from '../@types/licenceApiClientTypes'
 import HmppsRestClient from './hmppsRestClient'
 import LicenceStatus from '../enumeration/licenceStatus'
@@ -582,6 +583,26 @@ describe('Licence API client tests', () => {
       {
         path: `/licence/id/1/override/dates`,
         data: { ...dates, reason: 'Test Reason' },
+      },
+      { username: 'bob' },
+    )
+  })
+
+  it('Override licence prisoner details', async () => {
+    const details: OverrideLicencePrisonerDetailsRequest = {
+      forename: 'foo',
+      middleNames: 'fizz',
+      surname: 'bar',
+      dateOfBirth: '01/01/1995',
+      reason: 'test',
+    }
+
+    await licenceApiClient.overrideLicencePrisonerDetails(1, details, { username: 'bob' } as User)
+
+    expect(post).toHaveBeenCalledWith(
+      {
+        path: `/licence/id/1/override/prisoner-details`,
+        data: details,
       },
       { username: 'bob' },
     )
