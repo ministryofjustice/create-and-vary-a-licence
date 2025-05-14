@@ -279,4 +279,31 @@ describe('Create a Licence Views - Caseload', () => {
     expect($('#release-date-1').text()).toBe('20 December 2025HDC release')
     expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
   })
+
+  it('should highlight a HDC variation with a HDC release warning label', () => {
+    const $ = render({
+      statusConfig,
+      caseload: [
+        {
+          name: 'Test Person',
+          crnNumber: 'A123456',
+          prisonerNumber: 'ABC123',
+          releaseDate: '20 December 2025',
+          probationPractitioner: {
+            name: 'Joe Bloggs',
+            staffId: 2000,
+          },
+          isClickable: true,
+          licenceStatus: LicenceStatus.IN_PROGRESS,
+          createLink: '/licence/create/nomisId/ABC123/confirm',
+          kind: LicenceKind.HDC_VARIATION,
+        },
+      ],
+    })
+
+    expect($('tbody .govuk-table__row').length).toBe(1)
+    expect($('#licence-status-1 > .status-badge').text().trim()).toBe('In progress')
+    expect($('#release-date-1').text()).toBe('20 December 2025HDC release')
+    expect($('.urgent-highlight-message').text().toString()).toEqual('HDC release')
+  })
 })
