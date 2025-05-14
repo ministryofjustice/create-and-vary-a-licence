@@ -46,7 +46,7 @@ describe('Route Handlers - Variation approval list', () => {
   describe('GET', () => {
     it('should render list of variations for approval', async () => {
       await handler.GET(req, res)
-      expect(caseloadService.getVaryApproverCaseload).toHaveBeenCalledWith(res.locals.user)
+      expect(caseloadService.getVaryApproverCaseload).toHaveBeenCalledWith(res.locals.user, undefined)
       expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
         caseload: [
           {
