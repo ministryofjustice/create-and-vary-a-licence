@@ -5,8 +5,8 @@ import QrCodeService from '../../../services/qrCodeService'
 import LicenceService from '../../../services/licenceService'
 import { AdditionalCondition, Licence } from '../../../@types/licenceApiClientTypes'
 import { User } from '../../../@types/CvlUserDetails'
-import LicenceKind from '../../../enumeration/LicenceKind'
 import HdcService from '../../../services/hdcService'
+import { isHdcLicence } from '../../../utils/utils'
 
 const pdfHeaderFooterStyle =
   'font-family: Arial; ' +
@@ -44,7 +44,7 @@ export default class PrintLicenceRoutes {
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
 
-    const hdcLicenceData = licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
+    const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
 
     const licenceToPrint = {
       qrCode,
@@ -80,7 +80,7 @@ export default class PrintLicenceRoutes {
 
     const { singleItemConditions, multipleItemConditions } = this.groupConditions(licence)
 
-    const hdcLicenceData = licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
+    const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
 
     const { monitoringSupplierTelephone } = config
 
@@ -175,10 +175,9 @@ export default class PrintLicenceRoutes {
   }
 
   getTemplateForLicence(licence: Licence): string {
-    const licenceKind = licence.kind
     const licenceType = licence.typeCode
-    if (licenceKind === LicenceKind.HDC) {
-      return `${licenceKind}_${licenceType}`
+    if (isHdcLicence(licence)) {
+      return `HDC_${licenceType}`
     }
     return licenceType
   }

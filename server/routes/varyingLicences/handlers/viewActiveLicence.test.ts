@@ -170,5 +170,45 @@ describe('Route Handlers - Vary Licence - View active licence', () => {
         hdcLicenceData: exampleHdcLicenceData,
       })
     })
+
+    it('should pass through the HDC licence data when it is a HDC variation', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          ...res.locals,
+          licence: {
+            ...licence,
+            kind: LicenceKind.HDC_VARIATION,
+          },
+        },
+      } as unknown as Response
+
+      conditionService.getAdditionalAPConditionsForSummaryAndPdf.mockResolvedValue([
+        {
+          text: 'Condition 1',
+          code: 'CON1',
+          data: [],
+          uploadSummary: [],
+        },
+      ])
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/vary/viewActive', {
+        callToActions: { shouldShowVaryButton: true },
+        additionalConditions: [
+          [
+            {
+              text: 'Condition 1',
+              code: 'CON1',
+              data: [],
+              uploadSummary: [],
+            },
+          ],
+        ],
+        hdcLicenceData: exampleHdcLicenceData,
+      })
+    })
   })
 })
