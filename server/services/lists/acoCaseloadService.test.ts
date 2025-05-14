@@ -104,7 +104,7 @@ describe('Caseload Service', () => {
     licenceService.searchPrisonersByNomsIds.mockResolvedValue([
       {
         prisoner: {
-          prisonerNumber: 'AB1234E',
+          prisonerNumber: 'AB1234F',
           firstName: 'Gary',
           lastName: 'Pittard',
           releaseDate: tenDaysFromNow,
