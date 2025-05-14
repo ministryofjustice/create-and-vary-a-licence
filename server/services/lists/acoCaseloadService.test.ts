@@ -84,4 +84,49 @@ describe('Caseload Service', () => {
       },
     ])
   })
+
+  it('should return empty caseload if search does not match', async () => {
+    licenceService.getLicencesForVariationApproval.mockResolvedValue([
+      {
+        kind: 'VARIATION',
+        nomisId: 'AB1234F',
+        licenceId: 1,
+        licenceType: LicenceType.PSS,
+        licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
+        comUsername: 'joebloggs',
+        isReviewNeeded: false,
+        isDueForEarlyRelease: false,
+        isInHardStopPeriod: false,
+        isDueToBeReleasedInTheNextTwoWorkingDays: false,
+      },
+    ])
+    deliusService.getProbationers.mockResolvedValue([{ nomisId: 'AB1234E', crn: 'X12348' }])
+    licenceService.searchPrisonersByNomsIds.mockResolvedValue([
+      {
+        prisoner: {
+          prisonerNumber: 'AB1234E',
+          firstName: 'Gary',
+          lastName: 'Pittard',
+          releaseDate: tenDaysFromNow,
+          status: 'INACTIVE OUT',
+        },
+        cvl: {},
+      } as CaseloadItem,
+    ])
+    deliusService.getStaffDetailsByUsernameList.mockResolvedValue([
+      {
+        id: 1,
+        username: 'joebloggs',
+        code: 'X1234',
+        name: {
+          forename: 'Joe',
+          surname: 'Bloggs',
+        },
+      },
+    ])
+
+    const result = await serviceUnderTest.getVaryApproverCaseload(user, 'XXX')
+
+    expect(result).toEqual([])
+  })
 })

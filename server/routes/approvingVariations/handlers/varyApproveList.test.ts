@@ -129,17 +129,5 @@ describe('Route Handlers - Variation approval list', () => {
         search: 'white',
       })
     })
-
-    it('should return empty caseload if search does not match', async () => {
-      req.query.search = 'XXX'
-
-      await handler.GET(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('pages/vary-approve/cases', {
-        caseload: [],
-        search: 'XXX',
-        regionCases: false,
-      })
-    })
   })
 })
