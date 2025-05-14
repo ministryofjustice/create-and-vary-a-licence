@@ -168,9 +168,13 @@ describe('Timeline Service', () => {
 
       const timelineEvents = await timelineService.getTimelineEvents(standardLicence, user)
       expect(timelineEvents).toEqual(expected)
-      expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith('2', 'eventTime', 'DESC', user, [
-        'HARD_STOP_REVIEWED_WITHOUT_VARIATION',
-      ])
+      expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith(
+        '2',
+        ['HARD_STOP_REVIEWED_WITHOUT_VARIATION'],
+        'eventTime',
+        'DESC',
+        user,
+      )
     })
 
     it('will handle missing dates', async () => {
@@ -217,9 +221,13 @@ describe('Timeline Service', () => {
 
       const timelineEvents = await timelineService.getTimelineEvents(standardLicence, user)
       expect(timelineEvents).toEqual(expected)
-      expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith('2', 'eventTime', 'DESC', user, [
-        'HARD_STOP_REVIEWED_WITHOUT_VARIATION',
-      ])
+      expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith(
+        '2',
+        ['HARD_STOP_REVIEWED_WITHOUT_VARIATION'],
+        'eventTime',
+        'DESC',
+        user,
+      )
     })
   })
 })

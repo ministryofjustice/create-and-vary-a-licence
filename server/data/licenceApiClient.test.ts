@@ -688,7 +688,7 @@ describe('Licence API client tests', () => {
 
   describe('Licence events', () => {
     it('Match licence events licence', async () => {
-      await licenceApiClient.matchLicenceEvents('1', undefined, undefined, { username: 'USER' } as User, [])
+      await licenceApiClient.matchLicenceEvents('1', [], undefined, undefined, { username: 'USER' } as User)
       expect(get).toHaveBeenCalledWith(
         {
           path: '/events/match',
@@ -708,7 +708,7 @@ describe('Licence API client tests', () => {
         LicenceEventType.VARIATION_SUBMITTED_REASON.valueOf(),
         LicenceEventType.VARIATION_REFERRED.valueOf(),
       ]
-      await licenceApiClient.matchLicenceEvents('1', 'eventTime', 'DESC', { username: 'USER' } as User, eventTypes)
+      await licenceApiClient.matchLicenceEvents('1', eventTypes, 'eventTime', 'DESC', { username: 'USER' } as User)
       expect(get).toHaveBeenCalledWith(
         {
           path: '/events/match',

@@ -641,10 +641,13 @@ describe('Licence Service', () => {
 
   it('should get variation approval conversation', async () => {
     await licenceService.getApprovalConversation({ id: 1 } as Licence, user)
-    expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith('1', 'eventTime', 'DESC', user, [
-      LicenceEventType.VARIATION_SUBMITTED_REASON.valueOf(),
-      LicenceEventType.VARIATION_REFERRED.valueOf(),
-    ])
+    expect(licenceApiClient.matchLicenceEvents).toHaveBeenCalledWith(
+      '1',
+      [LicenceEventType.VARIATION_SUBMITTED_REASON.valueOf(), LicenceEventType.VARIATION_REFERRED.valueOf()],
+      'eventTime',
+      'DESC',
+      user,
+    )
   })
 
   it('should review a licence with no variation required', async () => {

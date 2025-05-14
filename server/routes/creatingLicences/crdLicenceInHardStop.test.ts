@@ -1,7 +1,5 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import { Expose } from 'class-transformer'
-import { IsOptional } from 'class-validator'
 import LicenceService from '../../services/licenceService'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { CaseloadItem, CvlPrisoner, Licence, OmuContact } from '../../@types/licenceApiClientTypes'
@@ -11,7 +9,6 @@ import { AdditionalConditionAp } from '../../@types/LicencePolicy'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
 import { DeliusManager } from '../../@types/deliusClientTypes'
 import { User } from '../../@types/CvlUserDetails'
-import { MEZ_CONDITION_CODE } from '../../utils/conditionRoutes'
 
 let app: Express
 
@@ -40,11 +37,6 @@ const user = {
   probationTeamCodes: ['ABC123'],
   userRoles: ['ROLE_LICENCE_RO'],
 } as User
-class DummyAddress {
-  @Expose()
-  @IsOptional()
-  addressLine: string
-}
 
 beforeEach(() => {
   app = appWithAllRoutes({
@@ -179,20 +171,8 @@ describe('createLicenceRoutes', () => {
       })
 
       it('should redirect to access-denied when trying to submit a licence via CYA page', () => {
-        conditionService.getAdditionalConditionByCode.mockResolvedValue({
-          validatorType: DummyAddress,
-        } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
-          .send({
-            code: MEZ_CONDITION_CODE,
-            addressLine: 'valid',
-            category: 'Freedom of movement',
-            text: 'MEZ text',
-            tpl: 'MEZ tpl',
-            requiresInput: true,
-            type: 'AP',
-          })
           .expect(302)
           .expect('Location', '/access-denied')
       })
@@ -309,12 +289,8 @@ describe('createLicenceRoutes', () => {
       })
 
       it('should redirect to confirmation page when submitting a licence via CYA page', () => {
-        conditionService.getAdditionalConditionByCode.mockResolvedValue({
-          validatorType: DummyAddress,
-        } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
-          .send({})
           .expect(302)
           .expect('Location', '/licence/create/id/1/confirmation')
       })

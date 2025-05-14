@@ -15,10 +15,10 @@ export default class TimelineService {
     const conversationEventTypes = [LicenceEventType.HARD_STOP_REVIEWED_WITHOUT_VARIATION.valueOf()]
     const events = await this.licenceApiClient.matchLicenceEvents(
       `${licence.id}`,
+      conversationEventTypes,
       'eventTime',
       'DESC',
       user,
-      conversationEventTypes,
     )
     return events.map(
       e =>

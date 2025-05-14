@@ -426,10 +426,10 @@ export default class LicenceApiClient extends RestClient {
 
   async matchLicenceEvents(
     licenceId: string,
+    eventTypes: string[] = [],
     sortBy?: string,
     sortOrder?: string,
     user?: User,
-    eventTypes: string[] = [],
   ): Promise<LicenceEvent[]> {
     return (await this.get(
       {
