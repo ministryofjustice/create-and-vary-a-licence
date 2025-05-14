@@ -73,7 +73,7 @@ context('Vary a licence', () => {
       .enterText('The Approved Premises', 'approvedPremises')
       .selectRadio('Daily')
       .selectRadio('Once a day')
-      .enterTime('reportingTime', '9', '30')
+      .enterTime('9', '30', 'reportingTime')
       .selectRadio('Monthly')
       .clickNextChange()
       .clickNextInput()
