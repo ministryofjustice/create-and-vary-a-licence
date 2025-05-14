@@ -14,7 +14,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       const { licence } = res.locals
 
       const version = licence?.version
-      const condition = await conditionService.getAdditionalConditionByCode(req.body.code, version)
+      const condition = await conditionService.getAdditionalConditionByCode(req.body?.code, version)
       const classType = condition?.validatorType || type
 
       if (classType) {

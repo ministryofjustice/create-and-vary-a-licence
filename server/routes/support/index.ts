@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import SupportHomeRoutes from './handlers/supportHome'
 import { Services } from '../../services'
@@ -37,14 +36,14 @@ export default function Index({
   const routePrefix = (path: string) => `/support${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']), asyncMiddleware(handler))
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
   const supportHomeHandler = new SupportHomeRoutes()
   const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, probationService)

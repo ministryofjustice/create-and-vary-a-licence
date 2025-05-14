@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import ChangeTeamsLocation from './handlers/changeTeam'
@@ -11,15 +10,10 @@ export default function Index({ conditionService, comCaseloadService }: Services
 
   const router = Router()
   const get = (path: string, handler: RequestHandler) =>
-    router.get(path, roleCheckMiddleware(['ROLE_LICENCE_RO']), asyncMiddleware(handler))
+    router.get(path, roleCheckMiddleware(['ROLE_LICENCE_RO']), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
-    router.post(
-      path,
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
-    )
+    router.post(path, roleCheckMiddleware(['ROLE_LICENCE_RO']), validationMiddleware(conditionService, type), handler)
 
   const createTeamHandler = new ChangeTeamsLocation(comCaseloadService, 'create')
   get(createPrefix('/change-team'), createTeamHandler.GET())

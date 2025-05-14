@@ -1,7 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import { Expose } from 'class-transformer'
-import { IsString } from 'class-validator'
+import { IsOptional } from 'class-validator'
 import LicenceService from '../../services/licenceService'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { CaseloadItem, CvlPrisoner, Licence, OmuContact } from '../../@types/licenceApiClientTypes'
@@ -42,7 +42,7 @@ const user = {
 } as User
 class DummyAddress {
   @Expose()
-  @IsString()
+  @IsOptional()
   addressLine: string
 }
 
@@ -314,15 +314,7 @@ describe('createLicenceRoutes', () => {
         } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
-          .send({
-            code: MEZ_CONDITION_CODE,
-            addressLine: 'valid',
-            category: 'Freedom of movement',
-            text: 'MEZ text',
-            tpl: 'MEZ tpl',
-            requiresInput: true,
-            type: 'AP',
-          })
+          .send({})
           .expect(302)
           .expect('Location', '/licence/create/id/1/confirmation')
       })

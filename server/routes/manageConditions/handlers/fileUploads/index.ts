@@ -1,6 +1,5 @@
 import { RequestHandler, Router } from 'express'
 import multer from 'multer'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 import fetchLicence from '../../../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
@@ -19,12 +18,7 @@ export default function Index({ licenceService, conditionService }: Services): R
   const routePrefix = (path: string) => `/licence/create/id/:licenceId${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      fetchLicence(licenceService),
-      asyncMiddleware(handler),
-    )
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), fetchLicence(licenceService), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
@@ -32,7 +26,7 @@ export default function Index({ licenceService, conditionService }: Services): R
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const postWithFileUpload = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -42,7 +36,7 @@ export default function Index({ licenceService, conditionService }: Services): R
       fetchLicence(licenceService),
       upload.single('outOfBoundFilename'),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
 
   {

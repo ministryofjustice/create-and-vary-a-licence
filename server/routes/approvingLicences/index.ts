@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -24,12 +23,7 @@ export default function Index({
   const routePrefix = (path: string) => `/licence/approve${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_DM']),
-      fetchLicence(licenceService),
-      asyncMiddleware(handler),
-    )
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_DM']), fetchLicence(licenceService), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
@@ -37,7 +31,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_DM']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const comDetailsHandler = new ComDetailsRoutes(probationService)
