@@ -1,36 +1,74 @@
+import _ from 'lodash'
+import { format } from 'date-fns'
+import moment from 'moment/moment'
 import ProbationService from '../probationService'
 import LicenceService from '../licenceService'
-import { ManagedCase } from '../../@types/managedCase'
+import { AcoCaseView } from '../../@types/acoCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
-import type { LicenceSummary } from '../../@types/licenceApiClientTypes'
+import type { CvlFields, CvlPrisoner, LicenceSummary } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
-import { parseCvlDate } from '../../utils/utils'
+import { convertToTitleCase, parseCvlDate, parseCvlDateTime, parseIsoDate } from '../../utils/utils'
 import { nameToString } from '../../data/deliusClient'
 import { DeliusRecord } from '../../@types/deliusClientTypes'
 
-export default class CaseloadService {
+type Licence = {
+  id?: number
+  status: LicenceStatus
+  kind?: LicenceKind
+  type: LicenceType
+  crn?: string
+  nomisId?: string
+  name?: string
+  comUsername?: string
+  dateCreated?: string
+  approvedBy?: string
+  approvedDate?: string
+  versionOf?: number
+  updatedByFullName?: string
+  hardStopWarningDate?: Date
+  hardStopDate?: Date
+  licenceStartDate?: string
+  releaseDate: Date
+  isDueToBeReleasedInTheNextTwoWorkingDays: boolean
+}
+
+type AcoCase = {
+  deliusRecord?: DeliusRecord
+  nomisRecord?: CvlPrisoner
+  licences?: Licence[]
+  probationPractitioner?: string
+  cvlFields: CvlFields
+}
+
+export default class AcoCaseloadService {
   constructor(
     private readonly probationService: ProbationService,
     private readonly licenceService: LicenceService,
   ) {}
 
-  async getVaryApproverCaseload(user: User): Promise<ManagedCase[]> {
+  async getVaryApproverCaseload(user: User, searchTerm: string): Promise<AcoCaseView[]> {
     return this.licenceService
       .getLicencesForVariationApproval(user)
       .then(licences => this.mapLicencesToOffenders(licences))
       .then(caseload => this.mapResponsibleComsToCases(caseload))
+      .then(caseload => caseload.map(this.mapAcoCaseToView))
+      .then(caseload => caseload.filter(acoCase => this.applySearchFilter(acoCase, searchTerm)))
+      .then(caseload => caseload.sort((a, b) => this.sortByCrd(a, b)))
   }
 
-  async getVaryApproverCaseloadByRegion(user: User): Promise<ManagedCase[]> {
+  async getVaryApproverCaseloadByRegion(user: User, searchTerm: string): Promise<AcoCaseView[]> {
     return this.licenceService
       .getLicencesForVariationApprovalByRegion(user)
       .then(licences => this.mapLicencesToOffenders(licences))
       .then(caseload => this.mapResponsibleComsToCases(caseload))
+      .then(caseload => caseload.map(this.mapAcoCaseToView))
+      .then(caseload => caseload.filter(acoCase => this.applySearchFilter(acoCase, searchTerm)))
+      .then(caseload => caseload.sort((a, b) => this.sortByCrd(a, b)))
   }
 
-  private pairDeliusRecordsWithNomis = async (managedOffenders: DeliusRecord[], user: User): Promise<ManagedCase[]> => {
+  private pairDeliusRecordsWithNomis = async (managedOffenders: DeliusRecord[], user: User): Promise<AcoCase[]> => {
     const caseloadNomisIds = managedOffenders.filter(offender => offender.nomisId).map(offender => offender.nomisId)
 
     const nomisRecords = await this.licenceService.searchPrisonersByNomsIds(caseloadNomisIds, user)
@@ -48,7 +86,7 @@ export default class CaseloadService {
       .filter(offender => offender.nomisRecord, 'unable to find prison record')
   }
 
-  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<ManagedCase[]> => {
+  private mapLicencesToOffenders = async (licences: LicenceSummary[], user?: User): Promise<AcoCase[]> => {
     const nomisIds = licences.map(l => l.nomisId)
     const deliusRecords = await this.probationService.getProbationers(nomisIds)
     const offenders = await this.pairDeliusRecordsWithNomis(deliusRecords, user)
@@ -81,7 +119,7 @@ export default class CaseloadService {
     })
   }
 
-  private async mapResponsibleComsToCases(caseload: ManagedCase[]): Promise<ManagedCase[]> {
+  private async mapResponsibleComsToCases(caseload: AcoCase[]): Promise<AcoCase[]> {
     const comUsernames = caseload
       .map(
         offender =>
@@ -106,10 +144,7 @@ export default class CaseloadService {
       if (responsibleCom) {
         return {
           ...offender,
-          probationPractitioner: {
-            staffCode: responsibleCom.code,
-            name: nameToString(responsibleCom.name),
-          },
+          probationPractitioner: nameToString(responsibleCom.name),
         }
       }
 
@@ -122,11 +157,46 @@ export default class CaseloadService {
 
       return {
         ...offender,
-        probationPractitioner: {
-          staffCode: com.code,
-          name: nameToString(com.name),
-        },
+        probationPractitioner: nameToString(com.name),
       }
     })
+  }
+
+  private mapAcoCaseToView(acoCase: AcoCase): AcoCaseView {
+    const licence = _.head(acoCase.licences)
+
+    const releaseDate = acoCase.nomisRecord.releaseDate
+      ? format(parseIsoDate(acoCase.nomisRecord.releaseDate), 'dd MMM yyyy')
+      : null
+
+    const variationRequestDate = licence.dateCreated
+      ? format(parseCvlDateTime(licence.dateCreated, { withSeconds: false }), 'dd MMMM yyyy')
+      : null
+
+    return {
+      licenceId: licence.id,
+      name: convertToTitleCase(`${acoCase.nomisRecord.firstName} ${acoCase.nomisRecord.lastName}`.trim()),
+      crnNumber: acoCase.deliusRecord.crn,
+      licenceType: licence.type,
+      variationRequestDate,
+      releaseDate,
+      probationPractitioner: acoCase.probationPractitioner,
+    }
+  }
+
+  private applySearchFilter(acoCase: AcoCaseView, search: string): boolean {
+    const searchString = search?.toLowerCase().trim()
+    if (!searchString) return true
+    return (
+      acoCase.crnNumber?.toLowerCase().includes(searchString) ||
+      acoCase.name.toLowerCase().includes(searchString) ||
+      acoCase.probationPractitioner.toLowerCase().includes(searchString)
+    )
+  }
+
+  private sortByCrd(a: AcoCaseView, b: AcoCaseView): number {
+    const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
+    const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
+    return crd1 - crd2
   }
 }

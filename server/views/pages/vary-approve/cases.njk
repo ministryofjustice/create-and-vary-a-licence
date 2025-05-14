@@ -1,8 +1,6 @@
 {% extends "layout.njk" %}
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "partials/statusBadge.njk" import statusBadge %}
 {% from "partials/licenceDescription.njk" import licenceDescription %}
 
 {% set pageTitle = applicationName + " - Approve a variation" %}
@@ -24,39 +22,39 @@
     {% set licences = (licences.push([
         {
             attributes: {
-            id: 'name-' + loop.index,
-            "data-sort-value": offender.name
-        },
+                id: 'name-' + loop.index,
+                "data-sort-value": offender.name
+            },
             classes: "max-width max-width-220",
             html: offenderName(offender.name, offender.crnNumber, offender.licenceId, loop.index)
         },
         {
             attributes: {
-            id: 'licence-type-' + loop.index
-        },
+                id: 'licence-type-' + loop.index
+            },
             html: licenceDescription(offender.licenceType)
         },
         {
             attributes: {
-            id: 'probation-practitioner-' + loop.index,
-            "data-sort-value": offender.probationPractitioner.name
-        },
+                id: 'probation-practitioner-' + loop.index,
+                "data-sort-value": offender.probationPractitioner
+            },
             classes: "max-width max-width-200",
-            html: '<a class="govuk-link" href="/licence/vary-approve/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner.name + '</a>'
+            html: '<a class="govuk-link" href="/licence/vary-approve/id/' + offender.licenceId + '/probation-practitioner">' + offender.probationPractitioner + '</a>'
         },
         {
             attributes: {
-            id: 'variation-request-date-' + loop.index,
-            "data-sort-value": offender.variationRequestDate
-        },
+                id: 'variation-request-date-' + loop.index,
+                "data-sort-value": offender.variationRequestDate
+            },
             classes: "max-width max-width-200",
             html: offender.variationRequestDate
         },
         {
             attributes: {
-            id: 'release-date-' + loop.index,
-            "data-sort-value": offender.releaseDate | dateToUnix
-        },
+                id: 'release-date-' + loop.index,
+                "data-sort-value": offender.releaseDate | dateToUnix
+            },
             text: offender.releaseDate
         }
     ]), licences) %}
@@ -111,8 +109,8 @@
                 {
                     text: "Name",
                     attributes: {
-                    "aria-sort": "none"
-                }
+                        "aria-sort": "none"
+                    }
                 },
                 {
                     text: "Licence type"
@@ -120,20 +118,20 @@
                 {
                     text: "Probation practitioner",
                     attributes: {
-                    "aria-sort": "none"
-                }
+                        "aria-sort": "none"
+                    }
                 },
                 {
                     text: "Variation request date",
                     attributes: {
-                    "aria-sort": "descending"
-                }
+                       "aria-sort": "descending"
+                    }
                 },
                 {
                     text: "Release date",
                     attributes: {
-                    "aria-sort": "ascending"
-                }
+                        "aria-sort": "ascending"
+                    }
                 }
             ],
             rows: licences

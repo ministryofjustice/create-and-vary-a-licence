@@ -1,11 +1,12 @@
 import { addDays, format } from 'date-fns'
-import CaseloadService from './caseloadService'
+import AcoCaseloadService from './acoCaseloadService'
 import ProbationService from '../probationService'
 import LicenceService from '../licenceService'
 import { User } from '../../@types/CvlUserDetails'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { CaseloadItem } from '../../@types/licenceApiClientTypes'
+import { parseIsoDate } from '../../utils/utils'
 
 jest.mock('../probationService')
 
@@ -13,7 +14,7 @@ describe('Caseload Service', () => {
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
   const deliusService = new ProbationService(null) as jest.Mocked<ProbationService>
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-  const serviceUnderTest = new CaseloadService(deliusService, licenceService)
+  const serviceUnderTest = new AcoCaseloadService(deliusService, licenceService)
   const user = {
     deliusStaffIdentifier: 2000,
     probationTeamCodes: ['teamA', 'teamB'],
@@ -49,7 +50,9 @@ describe('Caseload Service', () => {
       {
         prisoner: {
           prisonerNumber: 'AB1234E',
-          confirmedReleaseDate: tenDaysFromNow,
+          firstName: 'Gary',
+          lastName: 'Pittard',
+          releaseDate: tenDaysFromNow,
           status: 'INACTIVE OUT',
         },
         cvl: {},
@@ -67,30 +70,17 @@ describe('Caseload Service', () => {
       },
     ])
 
-    const result = await serviceUnderTest.getVaryApproverCaseload(user)
+    const result = await serviceUnderTest.getVaryApproverCaseload(user, undefined)
 
     expect(result).toMatchObject([
       {
-        deliusRecord: {
-          nomisId: 'AB1234E',
-          crn: 'X12348',
-        },
-        nomisRecord: {
-          prisonerNumber: 'AB1234E',
-          confirmedReleaseDate: tenDaysFromNow,
-        },
-        licences: [
-          {
-            id: 1,
-            type: 'PSS',
-            status: 'VARIATION_SUBMITTED',
-            comUsername: 'joebloggs',
-          },
-        ],
-        probationPractitioner: {
-          staffCode: 'X1234',
-          name: 'Joe Bloggs',
-        },
+        licenceId: 1,
+        name: 'Gary Pittard',
+        crnNumber: 'X12348',
+        licenceType: 'PSS',
+        variationRequestDate: null,
+        releaseDate: format(parseIsoDate(tenDaysFromNow), 'dd MMM yyyy'),
+        probationPractitioner: 'Joe Bloggs',
       },
     ])
   })

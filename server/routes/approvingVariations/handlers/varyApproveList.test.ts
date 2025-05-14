@@ -1,14 +1,11 @@
 import { Request, Response } from 'express'
 
 import VaryApproveListRoutes from './varyApproveList'
-import CaseloadService from '../../../services/lists/caseloadService'
-import LicenceStatus from '../../../enumeration/licenceStatus'
+import AcoCaseloadService from '../../../services/lists/acoCaseloadService'
 import LicenceType from '../../../enumeration/licenceType'
-import type { CvlPrisoner } from '../../../@types/licenceApiClientTypes'
-import { DeliusRecord } from '../../../@types/deliusClientTypes'
 
-const caseloadService = new CaseloadService(null, null) as jest.Mocked<CaseloadService>
-jest.mock('../../../services/lists/caseloadService')
+const caseloadService = new AcoCaseloadService(null, null) as jest.Mocked<AcoCaseloadService>
+jest.mock('../../../services/lists/acoCaseloadService')
 
 describe('Route Handlers - Variation approval list', () => {
   const handler = new VaryApproveListRoutes(caseloadService)
@@ -31,37 +28,13 @@ describe('Route Handlers - Variation approval list', () => {
 
     caseloadService.getVaryApproverCaseload.mockResolvedValue([
       {
-        licences: [
-          {
-            id: 1,
-            type: LicenceType.AP,
-            status: LicenceStatus.VARIATION_SUBMITTED,
-            dateCreated: '01/05/2022 10:15',
-            isDueToBeReleasedInTheNextTwoWorkingDays: true,
-            releaseDate: null,
-          },
-        ],
-        cvlFields: {
-          licenceType: 'AP',
-          hardStopDate: '03/01/2023',
-          hardStopWarningDate: '01/01/2023',
-          isInHardStopPeriod: true,
-          isDueForEarlyRelease: true,
-          isDueToBeReleasedInTheNextTwoWorkingDays: true,
-          isEligibleForEarlyRelease: false,
-        },
-        nomisRecord: {
-          firstName: 'Bob',
-          lastName: 'Smith',
-          prisonerNumber: 'A1234AA',
-          releaseDate: '2022-05-01',
-        } as CvlPrisoner,
-        deliusRecord: {
-          crn: 'X12345',
-        } as DeliusRecord,
-        probationPractitioner: {
-          name: 'Walter White',
-        },
+        licenceId: 1,
+        name: 'Bob Smith',
+        crnNumber: 'X12345',
+        licenceType: LicenceType.AP,
+        releaseDate: '01 May 2022',
+        variationRequestDate: '01 May 2022',
+        probationPractitioner: 'Walter White',
       },
     ])
   })
@@ -83,9 +56,7 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
+            probationPractitioner: 'Walter White',
           },
         ],
         regionCases: false,
@@ -107,9 +78,7 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
+            probationPractitioner: 'Walter White',
           },
         ],
         regionCases: false,
@@ -131,9 +100,7 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
+            probationPractitioner: 'Walter White',
           },
         ],
         regionCases: false,
@@ -155,9 +122,7 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: {
-              name: 'Walter White',
-            },
+            probationPractitioner: 'Walter White',
           },
         ],
         regionCases: false,
