@@ -60,7 +60,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       req.flash('validationErrors', JSON.stringify(flattenErrors(errors)))
       req.flash('formResponses', JSON.stringify(req.body))
 
-      return res.redirect('back')
+      return res.redirect(req.get('Referer') || 'pages/error')
     } catch (error) {
       return next(
         new Error(`Failed to validate licence details for: ${req.params.nomisId}`, {

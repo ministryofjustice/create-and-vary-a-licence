@@ -1,5 +1,7 @@
 import type { Express } from 'express'
 import request from 'supertest'
+import { Expose } from 'class-transformer'
+import { IsString } from 'class-validator'
 import LicenceService from '../../services/licenceService'
 import { appWithAllRoutes } from '../__testutils/appSetup'
 import { CaseloadItem, CvlPrisoner, Licence, OmuContact } from '../../@types/licenceApiClientTypes'
@@ -38,6 +40,12 @@ const user = {
   probationTeamCodes: ['ABC123'],
   userRoles: ['ROLE_LICENCE_RO'],
 } as User
+
+class DummyAddress {
+  @Expose()
+  @IsString()
+  addressLine: string
+}
 
 beforeEach(() => {
   app = appWithAllRoutes({
@@ -300,6 +308,27 @@ describe('createLicenceRoutes', () => {
           .post('/licence/create/id/1/check-your-answers')
           .expect(302)
           .expect('Location', '/licence/create/id/1/confirmation')
+      })
+
+      it('should redirect to error page if no Refere is set on validation failure', () => {
+        conditionService.getAdditionalConditionByCode.mockResolvedValue({
+          validatorType: DummyAddress,
+        } as AdditionalConditionAp)
+        return request(app)
+          .post('/licence/create/id/1/check-your-answers')
+          .expect(302)
+          .expect('Location', '/pages/error')
+      })
+
+      it('should redirect back on validation failure', () => {
+        conditionService.getAdditionalConditionByCode.mockResolvedValue({
+          validatorType: DummyAddress,
+        } as AdditionalConditionAp)
+        return request(app)
+          .post('/licence/create/id/1/check-your-answers')
+          .set('Referer', '/validation-error-page')
+          .expect(302)
+          .expect('Location', '/validation-error-page')
       })
     })
   })

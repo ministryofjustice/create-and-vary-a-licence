@@ -11,8 +11,8 @@ export default class ApprovalCaseRoutes {
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const search = req.query.search as string
-    const approvalNeededView = req.query.approval !== 'recently'
+    const search = req.query?.search as string
+    const approvalNeededView = req.query?.approval !== 'recently'
     const { user } = res.locals
     const { caseloadsSelected = [] } = req.session
     const hasMultipleCaseloadsInNomis = user.prisonCaseload.length > 1
