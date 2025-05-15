@@ -410,6 +410,7 @@ export function registerNunjucks(app?: express.Express): Environment {
       const now = startOfDay(new Date())
       return (
         licence.kind !== LicenceKind.VARIATION &&
+        licence.kind !== LicenceKind.HDC_VARIATION &&
         parseCvlDate(licence.hardStopWarningDate) <= now &&
         now < parseCvlDate(licence.hardStopDate)
       )

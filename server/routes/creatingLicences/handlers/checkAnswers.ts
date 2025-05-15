@@ -7,8 +7,7 @@ import LicenceToSubmit from '../types/licenceToSubmit'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import LicenceType from '../../../enumeration/licenceType'
 import ConditionService from '../../../services/conditionService'
-import { groupingBy, isInHardStopPeriod } from '../../../utils/utils'
-import LicenceKind from '../../../enumeration/LicenceKind'
+import { groupingBy, isHdcLicence, isInHardStopPeriod, isVariation } from '../../../utils/utils'
 import HdcService from '../../../services/hdcService'
 
 export default class CheckAnswersRoutes {
@@ -38,14 +37,14 @@ export default class CheckAnswersRoutes {
     const bespokeConditionsToDisplay = await this.conditionService.getbespokeConditionsForSummaryAndPdf(licence, user)
     const omuEmail = (await this.licenceService.getOmuEmail(licence.prisonCode, user))?.email
 
-    const hdcLicenceData = licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
+    const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
 
     res.render('pages/create/checkAnswers', {
       additionalConditions: groupingBy(conditionsToDisplay, 'code'),
       bespokeConditionsToDisplay,
       backLink,
       initialApptUpdatedMessage: req.flash('initialApptUpdated')?.[0],
-      canEditInitialAppt: licence.kind !== LicenceKind.VARIATION && !isInHardStopPeriod(licence),
+      canEditInitialAppt: !isVariation(licence) && !isInHardStopPeriod(licence),
       statusCode: licence.statusCode,
       isInHardStopPeriod: isInHardStopPeriod(licence),
       omuEmail,

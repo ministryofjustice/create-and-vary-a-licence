@@ -5,6 +5,7 @@ import LicenceService from '../../../services/licenceService'
 import type { Licence } from '../../../@types/licenceApiClientTypes'
 import LicenceKind from '../../../enumeration/LicenceKind'
 import config from '../../../config'
+import { isVariation } from '../../../utils/utils'
 
 enum CallToActionType {
   PRINT_TO_ACTIVATE = 'PRINT_TO_ACTIVATE',
@@ -67,7 +68,7 @@ export default class TimelineRoutes {
     const { user, licence } = res.locals
 
     // The POST is the trigger to set the approved variation to ACTIVE and varied licence to INACTIVE
-    if (licence.kind === 'VARIATION' && licence.statusCode === LicenceStatus.VARIATION_APPROVED) {
+    if (isVariation(licence) && licence.statusCode === LicenceStatus.VARIATION_APPROVED) {
       await this.licenceService.activateVariation(licence.id, user)
     }
 

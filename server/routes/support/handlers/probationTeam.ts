@@ -9,7 +9,7 @@ export default class ProbationTeamRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const view = req.query.view as string
+    const view = req.query?.view as string
     const { teamCode } = req.params
 
     if (!view) {

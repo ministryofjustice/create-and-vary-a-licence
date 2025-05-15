@@ -4,12 +4,11 @@ import { plainToInstance } from 'class-transformer'
 import { ValidationError, validate } from 'class-validator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
-import { groupingBy, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
+import { groupingBy, isHdcLicence, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
 import HdcService from '../../../services/hdcService'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(
@@ -22,7 +21,7 @@ export default class ViewAndPrintLicenceRoutes {
     let warningMessage
 
     if (req.query?.latestVersion) {
-      const latestLicenceVersion = req.query.latestVersion as string
+      const latestLicenceVersion = req.query?.latestVersion as string
       const latestLicence = await this.licenceService.getLicence(parseInt(latestLicenceVersion, 10), user)
       const statusMessage = latestLicence.statusCode === LicenceStatus.IN_PROGRESS ? 'started' : 'submitted'
       const date = this.getFormattedLicenceDate(latestLicence)
@@ -34,7 +33,7 @@ export default class ViewAndPrintLicenceRoutes {
     }
 
     if (req.query?.lastApprovedVersion) {
-      const lastApprovedLicenceVersion = req.query.lastApprovedVersion as string
+      const lastApprovedLicenceVersion = req.query?.lastApprovedVersion as string
       const lastApprovedLicence = await this.licenceService.getLicence(parseInt(lastApprovedLicenceVersion, 10), user)
       const date = this.getFormattedLicenceDate(licence)
       warningMessage = 'This is the most recent version of this licence'
@@ -66,8 +65,7 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
-      const hdcLicenceData =
-        licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
+      const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
 
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),

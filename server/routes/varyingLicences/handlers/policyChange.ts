@@ -123,14 +123,14 @@ export default class PolicyChangeRoutes {
       // Previously selected replacements removed to allow user to go back and unselect or reselect erroneous changes
       const conditionsToDelete = licenceConditionCodes
         .filter(code => code === condition.code || replacedByCodes.includes(code))
-        .filter(code => !req.body.additionalConditions?.includes(code))
+        .filter(code => !req.body?.additionalConditions?.includes(code))
 
       this.licenceService.deleteAdditionalConditionsByCode(conditionsToDelete, licence.id, user)
 
       // Add replacement conditions
-      if (req.body.additionalConditions?.length > 0) {
+      if (req.body?.additionalConditions?.length > 0) {
         await Promise.all(
-          req.body.additionalConditions.map(async (code: string) => {
+          req.body?.additionalConditions.map(async (code: string) => {
             const conditionToAdd = await this.conditionService.getAdditionalConditionByCode(code, licence.version)
 
             if (!licenceConditionCodes.includes(code)) {

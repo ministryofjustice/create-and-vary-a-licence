@@ -11,7 +11,7 @@ export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const teamView = req.query.view === 'team'
+    const teamView = req.query?.view === 'team'
     const { user } = res.locals
 
     logger.info(`GET caseload for ${user?.username} with roles ${user?.userRoles} team view: ${teamView}`)

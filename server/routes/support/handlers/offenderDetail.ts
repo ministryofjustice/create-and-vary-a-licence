@@ -3,10 +3,9 @@ import _ from 'lodash'
 import moment from 'moment'
 import PrisonerService from '../../../services/prisonerService'
 import ProbationService from '../../../services/probationService'
-import { convertToTitleCase } from '../../../utils/utils'
+import { convertToTitleCase, isHdcLicence } from '../../../utils/utils'
 import LicenceService from '../../../services/licenceService'
 import { Licence } from '../../../@types/licenceApiClientTypes'
-import LicenceKind from '../../../enumeration/LicenceKind'
 import { nameToString } from '../../../data/deliusClient'
 
 type LicenceDates = {
@@ -152,10 +151,8 @@ export default class OffenderDetailRoutes {
       led: this.formatLicenceDate(licence.licenceExpiryDate),
       tussd: this.formatLicenceDate(licence.topupSupervisionStartDate),
       tused: this.formatLicenceDate(licence.topupSupervisionExpiryDate),
-      hdcad:
-        licence.kind === LicenceKind.HDC ? this.formatLicenceDate(licence.homeDetentionCurfewActualDate) : 'Not found',
-      hdcEndDate:
-        licence.kind === LicenceKind.HDC ? this.formatLicenceDate(licence.homeDetentionCurfewEndDate) : 'Not found',
+      hdcad: isHdcLicence(licence) ? this.formatLicenceDate(licence.homeDetentionCurfewActualDate) : 'Not found',
+      hdcEndDate: isHdcLicence(licence) ? this.formatLicenceDate(licence.homeDetentionCurfewEndDate) : 'Not found',
     }
   }
 

@@ -14,7 +14,7 @@ export default class ProbationTeamRoutes {
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const view = req.query.view as string
+    const view = req.query?.view as string
     const { staffCode } = req.params
 
     if (!view) {

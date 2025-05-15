@@ -11,8 +11,8 @@ export default class CaseloadRoutes {
   constructor(private readonly comCaseloadService: ComCaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const teamView = req.query.view === 'team'
-    const search = req.query.search as string
+    const teamView = req.query?.view === 'team'
+    const search = req.query?.search as string
     const { user } = res.locals
 
     const cases = (
