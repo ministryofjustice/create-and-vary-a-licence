@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
 import { OverrideLicencePrisonerDetailsRequest } from '../../../@types/licenceApiClientTypes'
-import logger from '../../../../logger'
 
 export default class LicencePrisonerDetailsRoutes {
   constructor(
@@ -19,7 +18,6 @@ export default class LicencePrisonerDetailsRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId } = req.params
-    logger.info(res.locals)
 
     if (res.locals.formResponses) {
       res.render('pages/support/licencePrisonerDetails', {
