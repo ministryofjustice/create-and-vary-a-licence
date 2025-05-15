@@ -9,6 +9,7 @@ import { AdditionalConditionAp } from '../../@types/LicencePolicy'
 import UkBankHolidayFeedService, { BankHolidayRetriever } from '../../services/ukBankHolidayFeedService'
 import { DeliusManager } from '../../@types/deliusClientTypes'
 import { User } from '../../@types/CvlUserDetails'
+import AppointmentTimeAndPlace from '../manageConditions/types/additionalConditionInputs/appointmentTimeAndPlace'
 
 let app: Express
 
@@ -171,6 +172,9 @@ describe('createLicenceRoutes', () => {
       })
 
       it('should redirect to access-denied when trying to submit a licence via CYA page', () => {
+        conditionService.getAdditionalConditionByCode.mockResolvedValue({
+          validatorType: AppointmentTimeAndPlace,
+        } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
           .expect(302)
@@ -289,6 +293,9 @@ describe('createLicenceRoutes', () => {
       })
 
       it('should redirect to confirmation page when submitting a licence via CYA page', () => {
+        conditionService.getAdditionalConditionByCode.mockResolvedValue({
+          validatorType: AppointmentTimeAndPlace,
+        } as AdditionalConditionAp)
         return request(app)
           .post('/licence/create/id/1/check-your-answers')
           .expect(302)
