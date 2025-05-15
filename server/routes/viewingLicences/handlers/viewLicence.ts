@@ -21,7 +21,7 @@ export default class ViewAndPrintLicenceRoutes {
     let warningMessage
 
     if (req.query?.latestVersion) {
-      const latestLicenceVersion = req.query.latestVersion as string
+      const latestLicenceVersion = req.query?.latestVersion as string
       const latestLicence = await this.licenceService.getLicence(parseInt(latestLicenceVersion, 10), user)
       const statusMessage = latestLicence.statusCode === LicenceStatus.IN_PROGRESS ? 'started' : 'submitted'
       const date = this.getFormattedLicenceDate(latestLicence)
@@ -33,7 +33,7 @@ export default class ViewAndPrintLicenceRoutes {
     }
 
     if (req.query?.lastApprovedVersion) {
-      const lastApprovedLicenceVersion = req.query.lastApprovedVersion as string
+      const lastApprovedLicenceVersion = req.query?.lastApprovedVersion as string
       const lastApprovedLicence = await this.licenceService.getLicence(parseInt(lastApprovedLicenceVersion, 10), user)
       const date = this.getFormattedLicenceDate(licence)
       warningMessage = 'This is the most recent version of this licence'

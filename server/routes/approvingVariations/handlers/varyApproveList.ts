@@ -5,7 +5,7 @@ export default class VaryApproveListRoutes {
   constructor(private readonly caseloadService: AcoCaseloadService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const search = req.query.search as string
+    const search = req.query?.search as string
     const regionCases = req.query?.view === 'region'
     const { user } = res.locals
 

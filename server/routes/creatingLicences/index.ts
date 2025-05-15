@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
@@ -44,12 +43,7 @@ export default function Index({
    * to explicitly inject the licence data into their individual view contexts.
    */
   const get = (path: string, handler: RequestHandler) =>
-    router.get(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_RO']),
-      fetchLicence(licenceService),
-      asyncMiddleware(handler),
-    )
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_RO']), fetchLicence(licenceService), handler)
 
   const getWithHardStopCheck = (path: string, handler: RequestHandler) =>
     router.get(
@@ -57,7 +51,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       hardStopCheckMiddleware(UserType.PROBATION),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const getWithPreLicenceCreationCheck = (path: string, handler: RequestHandler) =>
@@ -66,7 +60,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       preLicenceCreationMiddleware(probationService),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const postWithHardStopCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -76,7 +70,7 @@ export default function Index({
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
       hardStopCheckMiddleware(UserType.PROBATION),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const postWithPreLicenceCreationCheck = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -86,7 +80,7 @@ export default function Index({
       fetchLicence(licenceService),
       preLicenceCreationMiddleware(probationService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
 
   {
