@@ -357,6 +357,7 @@ describe('Route Handlers - Timeline', () => {
             kind: 'VARIATION',
             statusCode: LicenceStatus.VARIATION_APPROVED,
             variationOf: 1,
+            isVariation: true,
           },
           user: commonUser,
         },

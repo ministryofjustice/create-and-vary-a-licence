@@ -349,6 +349,27 @@ describe('Route - view and approve a licence', () => {
       })
       expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
     })
+
+    it('should pass through the HDC licence data when it is a HDC variation', async () => {
+      res = {
+        render: jest.fn(),
+        redirect: jest.fn(),
+        locals: {
+          user,
+          licence: { ...licence, kind: LicenceKind.HDC_VARIATION },
+        },
+      } as unknown as Response
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/view/view', {
+        additionalConditions: [],
+        isEditableByPrison: false,
+        isPrisonUser: true,
+        hdcLicenceData: exampleHdcLicenceData,
+      })
+      expect(licenceService.recordAuditEvent).not.toHaveBeenCalled()
+    })
   })
 
   describe('POST', () => {

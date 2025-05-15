@@ -48,7 +48,6 @@ export default class AdditionalConditionsInputPage extends Page {
     return this
   }
 
-  // eslint-disable-next-line default-param-last
   enterTime = (hour = '11', minute = '30', fieldId?: string): AdditionalConditionsInputPage => {
     if (fieldId) {
       cy.get(`#${fieldId}-hour`).type(hour)

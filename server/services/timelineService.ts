@@ -1,6 +1,6 @@
 import type { Licence } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
-import { convertToTitleCase } from '../utils/utils'
+import { convertToTitleCase, isVariation } from '../utils/utils'
 import LicenceStatus from '../enumeration/licenceStatus'
 import { User } from '../@types/CvlUserDetails'
 import LicenceEventType from '../enumeration/licenceEventType'
@@ -39,7 +39,7 @@ export default class TimelineService {
     licences.push(thisLicence)
 
     // Get the trail of variations back to the original licence
-    while (thisLicence.kind === 'VARIATION') {
+    while (isVariation(thisLicence)) {
       // eslint-disable-next-line no-await-in-loop
       thisLicence = await this.licenceApiClient.getLicenceById(thisLicence?.variationOf, user)
       if (thisLicence) {
@@ -61,7 +61,7 @@ export default class TimelineService {
   }
 
   private static getTimelineEvent(licence: Licence): TimelineEvent {
-    const varyOf = licence.kind === 'VARIATION' ? licence.variationOf : undefined
+    const varyOf = isVariation(licence) ? licence.variationOf : undefined
     const creator = convertToTitleCase(licence.createdByFullName)
     switch (licence.statusCode) {
       case LicenceStatus.VARIATION_IN_PROGRESS:

@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
@@ -30,12 +29,7 @@ export default function Index({
 
   // Setup middleware processing for GET
   const get = (path: string, handler: RequestHandler) =>
-    router.get(
-      routePrefix(path),
-      roleCheckMiddleware(['ROLE_LICENCE_ACO']),
-      fetchLicence(licenceService),
-      asyncMiddleware(handler),
-    )
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_ACO']), fetchLicence(licenceService), handler)
 
   // Setup middleware processing for POST
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -44,7 +38,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_ACO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
 
   // Define route handlers for variation approvals

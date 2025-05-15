@@ -183,7 +183,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should not allow PPs to edit initial appointment details for variations', async () => {
-      res.locals.licence.kind = LicenceKind.VARIATION
+      res.locals.licence = { ...res.locals.licence, kind: LicenceKind.VARIATION, isVariation: true }
 
       await handler.GET(req, res)
 
@@ -207,6 +207,23 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
 
     it('should pass through HDC licence data for HDC licences', async () => {
       res.locals.licence.kind = LicenceKind.HDC
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        hdcLicenceData: exampleHdcLicenceData,
+      })
+    })
+
+    it('should pass through HDC licence data for HDC variations', async () => {
+      res.locals.licence.kind = LicenceKind.HDC_VARIATION
 
       await handler.GET(req, res)
 

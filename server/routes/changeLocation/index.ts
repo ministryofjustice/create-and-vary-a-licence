@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import validationMiddleware from '../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import ChangeLocationRoutes from './handlers/changeLocation'
@@ -12,14 +11,14 @@ export default function Index({ userService, conditionService }: Services): Rout
 
   const router = Router()
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_DM']), asyncMiddleware(handler))
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_DM']), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_LICENCE_CA', 'ROLE_LICENCE_DM']),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
   const locationHandler = new ChangeLocationRoutes(userService)
 

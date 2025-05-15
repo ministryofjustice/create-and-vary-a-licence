@@ -1,5 +1,4 @@
 import { NextFunction, Request, RequestHandler, Response, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import fetchLicence from '../../middleware/fetchLicenceMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 
@@ -60,7 +59,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       alterResObject(),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -69,7 +68,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const caseloadHandler = new CaseloadRoutes(comCaseloadService)

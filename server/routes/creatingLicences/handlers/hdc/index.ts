@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../../../middleware/asyncMiddleware'
 import fetchLicence from '../../../../middleware/fetchLicenceMiddleware'
 import validationMiddleware from '../../../../middleware/validationMiddleware'
 import roleCheckMiddleware from '../../../../middleware/roleCheckMiddleware'
@@ -32,7 +31,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       preLicenceCreationMiddleware(probationService),
-      asyncMiddleware(handler),
+      handler,
     )
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
@@ -41,7 +40,7 @@ export default function Index({
       roleCheckMiddleware(['ROLE_LICENCE_RO']),
       fetchLicence(licenceService),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
   {
     const controller = new ConfirmCreateRoutes(probationService, licenceService, prisonerService)
