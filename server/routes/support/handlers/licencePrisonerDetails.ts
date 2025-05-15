@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import LicenceOverrideService from '../../../services/licenceOverrideService'
 import { OverrideLicencePrisonerDetailsRequest } from '../../../@types/licenceApiClientTypes'
+import logger from '../../../../logger'
 
 export default class LicencePrisonerDetailsRoutes {
   constructor(
@@ -18,10 +19,18 @@ export default class LicencePrisonerDetailsRoutes {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
     const { licenceId } = req.params
+    logger.info(res.locals)
 
-    res.render('pages/support/licencePrisonerDetails', {
-      ...(await this.getLicenceAndDob(licenceId, user)),
-    })
+    if (res.locals.formResponses) {
+      res.render('pages/support/licencePrisonerDetails', {
+        licence: res.locals.formResponses,
+        dateOfBirth: res.locals.formResponses.dateOfBirth,
+      })
+    } else {
+      res.render('pages/support/licencePrisonerDetails', {
+        ...(await this.getLicenceAndDob(licenceId, user)),
+      })
+    }
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
