@@ -4,12 +4,11 @@ import { plainToInstance } from 'class-transformer'
 import { ValidationError, validate } from 'class-validator'
 import LicenceStatus from '../../../enumeration/licenceStatus'
 import type LicenceService from '../../../services/licenceService'
-import { groupingBy, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
+import { groupingBy, isHdcLicence, isInHardStopPeriod, parseCvlDateTime } from '../../../utils/utils'
 import { Licence } from '../../../@types/licenceApiClientTypes'
 import { FieldValidationError } from '../../../middleware/validationMiddleware'
 import HardStopLicenceToSubmit from '../../creatingLicences/types/hardStopLicenceToSubmit'
 import HdcService from '../../../services/hdcService'
-import LicenceKind from '../../../enumeration/LicenceKind'
 
 export default class ViewAndPrintLicenceRoutes {
   constructor(
@@ -66,8 +65,7 @@ export default class ViewAndPrintLicenceRoutes {
         )
       }
 
-      const hdcLicenceData =
-        licence.kind === LicenceKind.HDC ? await this.hdcService.getHdcLicenceData(licence.id) : null
+      const hdcLicenceData = isHdcLicence(licence) ? await this.hdcService.getHdcLicenceData(licence.id) : null
 
       res.render('pages/view/view', {
         additionalConditions: groupingBy(licence.additionalLicenceConditions, 'code'),

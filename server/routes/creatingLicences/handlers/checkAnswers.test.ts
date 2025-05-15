@@ -222,6 +222,23 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
       })
     })
 
+    it('should pass through HDC licence data for HDC variations', async () => {
+      res.locals.licence.kind = LicenceKind.HDC_VARIATION
+
+      await handler.GET(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create/checkAnswers', {
+        additionalConditions: [],
+        bespokeConditionsToDisplay: [],
+        backLink: req.session.returnToCase,
+        initialApptUpdatedMessage: undefined,
+        canEditInitialAppt: true,
+        isInHardStopPeriod: false,
+        statusCode: 'IN_PROGRESS',
+        hdcLicenceData: exampleHdcLicenceData,
+      })
+    })
+
     describe('when hard stop is enabled', () => {
       it('should allow PPs to edit initial appointment details for non-variations that are not in the hard stop period', async () => {
         res.locals.licence = { ...res.locals.licence, kind: LicenceKind.CRD, isInHardStopPeriod: false } as Licence
