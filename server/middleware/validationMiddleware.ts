@@ -33,7 +33,6 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       )
 
       const errors: ValidationError[] = await validate(validationScope)
-
       if (errors.length === 0) {
         req.body = plainToInstance(classType, req.body, { excludeExtraneousValues: true })
         return next()
@@ -60,7 +59,9 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
       req.flash('validationErrors', JSON.stringify(flattenErrors(errors)))
       req.flash('formResponses', JSON.stringify(req.body))
 
-      return res.redirect(req.get('Referer') || 'pages/error')
+      const referer = req.get('Referer')
+      if (!referer) return next(new Error('Missing Referer header'))
+      return res.redirect(referer)
     } catch (error) {
       return next(
         new Error(`Failed to validate licence details for: ${req.params.nomisId}`, {

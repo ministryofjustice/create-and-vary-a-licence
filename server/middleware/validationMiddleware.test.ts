@@ -70,6 +70,10 @@ describe('validationMiddleware', () => {
         params: {
           conditionId: '1',
         },
+        get: (header: string) => {
+          if (header === 'Referer') return '/validation-error-page'
+          return undefined
+        },
         flash: jest.fn(),
         body: {
           code: 'condition1',
@@ -106,6 +110,10 @@ describe('validationMiddleware', () => {
       const next = jest.fn()
       req = {
         params: {},
+        get: (header: string) => {
+          if (header === 'Referer') return '/validation-error-page'
+          return undefined
+        },
         flash: jest.fn(),
         body: {
           id: '',
@@ -127,6 +135,10 @@ describe('validationMiddleware', () => {
       const next = jest.fn()
       req = {
         params: {},
+        get: (header: string) => {
+          if (header === 'Referer') return '/validation-error-page'
+          return undefined
+        },
         flash: jest.fn(),
         body: {
           id: 'abc',
@@ -196,6 +208,22 @@ describe('validationMiddleware', () => {
           cause: 'Error',
         }),
       )
+    })
+
+    it('should handle redirection if no referer set to header', async () => {
+      const next = jest.fn()
+      req = {
+        params: {},
+        get: jest.fn().mockReturnValue(undefined),
+        flash: jest.fn(),
+        body: {
+          id: 'abc',
+          child: { name: '' },
+        },
+      } as unknown as Request
+
+      await validationMiddleware(conditionService, DummyForm)(req, res, next)
+      expect(next).toHaveBeenCalledWith(new Error('Missing Referer header'))
     })
   })
 })

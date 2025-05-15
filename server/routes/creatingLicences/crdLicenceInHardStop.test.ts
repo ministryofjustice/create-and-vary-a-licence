@@ -310,16 +310,6 @@ describe('createLicenceRoutes', () => {
           .expect('Location', '/licence/create/id/1/confirmation')
       })
 
-      it('should redirect to error page if no Refere is set on validation failure', () => {
-        conditionService.getAdditionalConditionByCode.mockResolvedValue({
-          validatorType: DummyAddress,
-        } as AdditionalConditionAp)
-        return request(app)
-          .post('/licence/create/id/1/check-your-answers')
-          .expect(302)
-          .expect('Location', '/pages/error')
-      })
-
       it('should redirect back on validation failure', () => {
         conditionService.getAdditionalConditionByCode.mockResolvedValue({
           validatorType: DummyAddress,
