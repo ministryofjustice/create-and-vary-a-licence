@@ -5,6 +5,7 @@ import { convertToTitleCase } from '../../../../utils/utils'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import LicenceService from '../../../../services/licenceService'
 import LicenceKind from '../../../../enumeration/LicenceKind'
+import config from '../../../../config'
 import logger from '../../../../../logger'
 import PrisonerService from '../../../../services/prisonerService'
 
@@ -24,6 +25,11 @@ export default class ConfirmCreateRoutes {
       this.licenceService.getPrisonerDetail(nomisId, user),
       this.probationService.getProbationer(nomisId),
     ])
+
+    if (config.hdcLicenceCreationBlockEnabled) {
+      logger.error('Access denied to HDC licence creation GET due HDC licence not to be breated in CVL')
+      return res.redirect('/access-denied')
+    }
 
     if (nomisRecord.cvl.isInHardStopPeriod) {
       logger.error('Access denied to HDC licence creation GET due to being in hard stop period')
