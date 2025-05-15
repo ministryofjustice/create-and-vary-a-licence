@@ -91,7 +91,7 @@ context('Approve a licence', () => {
     cy.url().should('eq', 'http://localhost:3007/licence/approve/id/1/view')
   })
 
-  it('should check if review details accordian is open', () => {
+  it('should check if review details accordion is open', () => {
     cy.task('stubGetPrisonUserCaseloads', singleCaseload)
     cy.signIn()
     const indexPage = Page.verifyOnPage(IndexPage)
