@@ -12,6 +12,7 @@ jest.mock('../probationService')
 
 describe('Caseload Service', () => {
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
+  const tenDaysFromNowCvlFormat = format(addDays(new Date(), 10), 'dd/MM/yyyy')
   const deliusService = new ProbationService(null) as jest.Mocked<ProbationService>
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
   const serviceUnderTest = new AcoCaseloadService(deliusService, licenceService)
@@ -38,6 +39,7 @@ describe('Caseload Service', () => {
         licenceId: 1,
         licenceType: LicenceType.PSS,
         licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
+        licenceStartDate: tenDaysFromNowCvlFormat,
         comUsername: 'joebloggs',
         isReviewNeeded: false,
         isDueForEarlyRelease: false,

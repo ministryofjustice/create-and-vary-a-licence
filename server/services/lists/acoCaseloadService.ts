@@ -9,7 +9,7 @@ import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
 import type { CvlFields, CvlPrisoner, LicenceSummary } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
-import { convertToTitleCase, parseCvlDate, parseCvlDateTime, parseIsoDate } from '../../utils/utils'
+import { convertToTitleCase, parseCvlDate, parseCvlDateTime } from '../../utils/utils'
 import { nameToString } from '../../data/deliusClient'
 import { DeliusRecord } from '../../@types/deliusClientTypes'
 
@@ -55,7 +55,7 @@ export default class AcoCaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
       .then(caseload => caseload.map(this.mapAcoCaseToView))
       .then(caseload => caseload.filter(acoCase => this.applySearchFilter(acoCase, searchTerm)))
-      .then(caseload => caseload.sort((a, b) => this.sortByCrd(a, b)))
+      .then(caseload => caseload.sort((a, b) => this.sortByReleaseDate(a, b)))
   }
 
   async getVaryApproverCaseloadByRegion(user: User, searchTerm: string): Promise<AcoCaseView[]> {
@@ -65,7 +65,7 @@ export default class AcoCaseloadService {
       .then(caseload => this.mapResponsibleComsToCases(caseload))
       .then(caseload => caseload.map(this.mapAcoCaseToView))
       .then(caseload => caseload.filter(acoCase => this.applySearchFilter(acoCase, searchTerm)))
-      .then(caseload => caseload.sort((a, b) => this.sortByCrd(a, b)))
+      .then(caseload => caseload.sort((a, b) => this.sortByReleaseDate(a, b)))
   }
 
   private pairDeliusRecordsWithNomis = async (managedOffenders: DeliusRecord[], user: User): Promise<AcoCase[]> => {
@@ -165,10 +165,7 @@ export default class AcoCaseloadService {
   private mapAcoCaseToView(acoCase: AcoCase): AcoCaseView {
     const licence = _.head(acoCase.licences)
 
-    const releaseDate = acoCase.nomisRecord.releaseDate
-      ? format(parseIsoDate(acoCase.nomisRecord.releaseDate), 'dd MMM yyyy')
-      : null
-
+    const releaseDate = licence.licenceStartDate ? format(parseCvlDate(licence.licenceStartDate), 'dd MMM yyyy') : null
     const variationRequestDate = licence.dateCreated
       ? format(parseCvlDateTime(licence.dateCreated, { withSeconds: false }), 'dd MMMM yyyy')
       : null
@@ -194,9 +191,9 @@ export default class AcoCaseloadService {
     )
   }
 
-  private sortByCrd(a: AcoCaseView, b: AcoCaseView): number {
-    const crd1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
-    const crd2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
-    return crd1 - crd2
+  private sortByReleaseDate(a: AcoCaseView, b: AcoCaseView): number {
+    const releaseDate1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
+    const releaseDate2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
+    return releaseDate1 - releaseDate2
   }
 }
