@@ -32,7 +32,7 @@ function validationMiddleware(conditionService: ConditionService, type?: new () 
         { excludeExtraneousValues: false },
       )
 
-      const errors: ValidationError[] = await validate(validationScope)
+      const errors: ValidationError[] = await validate(validationScope, { forbidUnknownValues: false })
       if (errors.length === 0) {
         req.body = plainToInstance(classType, req.body, { excludeExtraneousValues: true })
         return next()
