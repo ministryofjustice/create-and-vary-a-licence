@@ -27,7 +27,7 @@ export default class ConfirmCreateRoutes {
     ])
 
     if (config.hdcLicenceCreationBlockEnabled) {
-      logger.error('Access denied to HDC licence creation GET due HDC licence not to be breated in CVL')
+      logger.error('Access denied to HDC licence creation GET due HDC licence not to be created in CVL')
       return res.redirect('/access-denied')
     }
 
