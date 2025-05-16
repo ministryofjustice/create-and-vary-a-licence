@@ -1,4 +1,5 @@
 import { plainToInstance } from 'class-transformer'
+import { ValidationArguments } from 'class-validator'
 import SimpleDate from '../routes/creatingLicences/types/date'
 import ValidSimpleDate from './simpleDateValidator'
 
@@ -75,6 +76,24 @@ describe('Validators - ValidSimpleDate', () => {
     date.year = yesterday.getFullYear().toString()
     expect(validator.validate(date)).toBe(false)
     expect(validator.defaultMessage()).toBe('Enter a date in the future')
+  })
+
+  it("should pass validation with yesterday's date if past dates are explicitly allowed", () => {
+    const today = new Date('2020-03-1')
+    const yesterday = new Date(today)
+    yesterday.setDate(yesterday.getDate() - 1)
+
+    date.day = yesterday.getDate().toString()
+    date.month = (yesterday.getMonth() + 1).toString()
+    date.year = yesterday.getFullYear().toString()
+    const validationArguments: ValidationArguments = {
+      value: null,
+      constraints: [{ pastAllowed: true }],
+      targetName: '',
+      object: undefined,
+      property: '',
+    }
+    expect(validator.validate(date, validationArguments)).toBe(true)
   })
 
   it("should pass validation with today's date", () => {

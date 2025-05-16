@@ -1,0 +1,72 @@
+{% extends "layout.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "../../partials/datePicker.njk" import datePicker %}
+
+{% set pageTitle = applicationName + " - Prisoner Details Override" %}
+
+{% block content %}
+
+    <div class="govuk-width-container">
+
+        <span class="govuk-caption-xl">Licence ID {{ licence.id }}</span>
+        <h1 class="govuk-heading-l">Override Prisoner Details</h1>
+
+        <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+            {{ govukInput({
+                label: { text: "First name", classes: "govuk-label--m" },
+                id: "forename",
+                name: "forename",
+                value: licence.forename,
+                errorMessage: validationErrors | findError('forename')
+            }) }}
+
+            {{ govukInput({
+                label: { text: "Middle names", classes: "govuk-label--m" },
+                id: "middleNames",
+                name: "middleNames",
+                value: licence.middleNames,
+                errorMessage: validationErrors | findError('middleNames')
+            }) }}
+
+            {{ govukInput({
+                label: { text: "Surname", classes: "govuk-label--m" },
+                id: "surname",
+                name: "surname",
+                value: licence.surname,
+                errorMessage: validationErrors | findError('surname')
+            }) }}
+
+            {{ datePicker({
+                id: "dateOfBirth",
+                namePrefix: "dateOfBirth",
+                label: { text: "Date of birth", classes: "govuk-fieldset__legend--m" },
+                errorMessage: validationErrors | findError('dateOfBirth'),
+                formResponses: dateOfBirth
+            }) }}
+
+            {{ govukCharacterCount({
+                name: "reason",
+                id: "reason",
+                value: reason,
+                maxlength: 512,
+                rows: 3,
+                label: {
+                    text: "Reason for overriding prisoner details",
+                    classes: "govuk-label--m"
+                },
+                errorMessage : validationErrors | findError('reason')
+            }) }}
+
+            <div class="govuk-button-group">
+                <button class="govuk-button" data-module="govuk-button">Submit</button>
+                <a class="govuk-button govuk-button--secondary" href="/support">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
+
+{% endblock %}
