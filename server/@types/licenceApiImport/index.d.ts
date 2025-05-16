@@ -2510,6 +2510,12 @@ export interface components {
        * @example Updated a bespoke condition
        */
       detail?: string
+      /**
+       * @description The changes that were made based on the action taken
+       */
+      changes?: {
+        [key: string]: Record<string, never>
+      }
     }
     /** @description Search Criteria for Release Date Search */
     ReleaseDateSearch: {
