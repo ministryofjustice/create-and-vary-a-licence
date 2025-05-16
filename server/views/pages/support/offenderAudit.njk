@@ -6,6 +6,7 @@
 {% set pageTitle = applicationName + " - prisoner audit" %}
 {% set backLinkHref = "/support/offender-search" %}
 
+
 {% block content %}
     <div class="govuk-width-container">
         <span class="govuk-caption-xl">{{ prisonerDetail.name }}</span>
@@ -18,12 +19,14 @@
 
         {% for record in audit %}
 
+            {% set auditSummaryHtml = '<a class="govuk-link" href="/support/offender/' + prisonerDetail.id + '/licence/' + record.licenceId + '/audit/' + record.id + '">' + record.id + '</a>' %}
+
             {% set auditList = (auditList.push([
                 {
                     attributes: {
                     "data-sort-value": record.id
                 },
-                    text: record.id
+                    html: auditSummaryHtml
                 },
                 {
                     attributes: {

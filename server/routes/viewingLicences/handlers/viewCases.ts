@@ -26,8 +26,8 @@ export default class ViewAndPrintCaseRoutes {
   ]
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const search = req.query.search as string
-    const view = req.query.view || 'prison'
+    const search = req.query?.search as string
+    const view = req.query?.view || 'prison'
     const probationView = view === 'probation'
     const { user } = res.locals
     const { caseloadsSelected = [] } = req.session

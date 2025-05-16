@@ -17,7 +17,7 @@ export default class ChangeTeamRoutes {
 
   public POST(): RequestHandler {
     return async (req, res) => {
-      const teamCode = req.body.teams
+      const teamCode = req.body?.teams
 
       if (Array.isArray(teamCode) && teamCode.length > 0) {
         req.session.teamSelection = teamCode

@@ -427,7 +427,6 @@ export default class LicenceApiClient extends RestClient {
 
   async matchLicenceEvents(
     licenceId: string,
-    // eslint-disable-next-line default-param-last
     eventTypes: string[] = [],
     sortBy?: string,
     sortOrder?: string,

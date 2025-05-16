@@ -1,5 +1,4 @@
 import { RequestHandler, Router } from 'express'
-import asyncMiddleware from '../../middleware/asyncMiddleware'
 import roleCheckMiddleware from '../../middleware/roleCheckMiddleware'
 import SupportHomeRoutes from './handlers/supportHome'
 import { Services } from '../../services'
@@ -24,6 +23,7 @@ import PromptCasesRoutes from './handlers/promptCases'
 import LicenceTypeChange from './types/licenceTypeChange'
 import LicencePrisonerDetails from './types/licencePrisonerDetails'
 import LicencePrisonerDetailsRoutes from './handlers/licencePrisonerDetails'
+import AuditDetailsRoutes from './handlers/auditDetails'
 
 export default function Index({
   probationService,
@@ -39,14 +39,14 @@ export default function Index({
   const routePrefix = (path: string) => `/support${path}`
 
   const get = (path: string, handler: RequestHandler) =>
-    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']), asyncMiddleware(handler))
+    router.get(routePrefix(path), roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']), handler)
 
   const post = (path: string, handler: RequestHandler, type?: new () => object) =>
     router.post(
       routePrefix(path),
       roleCheckMiddleware(['ROLE_NOMIS_BATCHLOAD']),
       validationMiddleware(conditionService, type),
-      asyncMiddleware(handler),
+      handler,
     )
   const supportHomeHandler = new SupportHomeRoutes()
   const offenderSearchHandler = new OffenderSearchRoutes(prisonerService, probationService)
@@ -62,6 +62,7 @@ export default function Index({
   const comDetailsHandler = new ComDetailsRoutes(probationService)
   const promptCasesHandler = new PromptCasesRoutes(licenceApiClient)
   const licencePrisonerDetailsHandler = new LicencePrisonerDetailsRoutes(licenceService, licenceOverrideService)
+  const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
 
   get('/', supportHomeHandler.GET)
   get('/prompt-cases', promptCasesHandler.GET)
@@ -74,6 +75,7 @@ export default function Index({
   get('/offender/:nomsId/detail', offenderDetailHandler.GET)
   get('/offender/:nomsId/licences', offenderLicenceHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/audit', offenderAuditHandler.GET)
+  get('/offender/:nomsId/licence/:licenceId/audit/:auditEventId', auditDetailsHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
   get('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.GET)
