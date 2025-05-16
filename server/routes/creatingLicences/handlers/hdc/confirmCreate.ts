@@ -21,15 +21,15 @@ export default class ConfirmCreateRoutes {
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/create/caseload'
 
-    const [nomisRecord, deliusRecord] = await Promise.all([
-      this.licenceService.getPrisonerDetail(nomisId, user),
-      this.probationService.getProbationer(nomisId),
-    ])
-
     if (config.hdcLicenceCreationBlockEnabled) {
       logger.error('Access denied to HDC licence creation GET due HDC licence not to be created in CVL')
       return res.redirect('/access-denied')
     }
+
+    const [nomisRecord, deliusRecord] = await Promise.all([
+      this.licenceService.getPrisonerDetail(nomisId, user),
+      this.probationService.getProbationer(nomisId),
+    ])
 
     if (nomisRecord.cvl.isInHardStopPeriod) {
       logger.error('Access denied to HDC licence creation GET due to being in hard stop period')
