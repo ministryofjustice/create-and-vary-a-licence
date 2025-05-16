@@ -21,6 +21,7 @@ import ProbationUserRoutes from './handlers/probationStaff'
 import ComDetailsRoutes from './handlers/comDetails'
 import PromptCasesRoutes from './handlers/promptCases'
 import LicenceTypeChange from './types/licenceTypeChange'
+import AuditDetailsRoutes from './handlers/auditDetails'
 
 export default function Index({
   probationService,
@@ -58,6 +59,7 @@ export default function Index({
   const probationStaffHandler = new ProbationUserRoutes(comCaseloadService, probationService)
   const comDetailsHandler = new ComDetailsRoutes(probationService)
   const promptCasesHandler = new PromptCasesRoutes(licenceApiClient)
+  const auditDetailsHandler = new AuditDetailsRoutes(licenceService)
 
   get('/', supportHomeHandler.GET)
   get('/prompt-cases', promptCasesHandler.GET)
@@ -70,6 +72,7 @@ export default function Index({
   get('/offender/:nomsId/detail', offenderDetailHandler.GET)
   get('/offender/:nomsId/licences', offenderLicenceHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/audit', offenderAuditHandler.GET)
+  get('/offender/:nomsId/licence/:licenceId/audit/:auditEventId', auditDetailsHandler.GET)
   get('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/status', offenderLicenceStatusHandler.POST)
   get('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.GET)

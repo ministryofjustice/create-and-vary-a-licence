@@ -1,0 +1,65 @@
+{% extends "layout.njk" %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set pageTitle = applicationName + " - Support - view event details" %}
+{% set pageId = "audit-event-details-page" %}
+{% set hideLicenceBanner = true %}
+{% set backLinkHref = "/" %}
+
+{% set eventDetails = [
+    {
+        key: { text: "Event ID" },
+        value: { text: auditEvent.id  }
+    },
+    {
+        key: { text: "Licence ID" },
+        value: { text: auditEvent.licenceId  }
+    },
+    {
+        key: { text: "Event Time" },
+        value: { text: auditEvent.eventTime  }
+    },
+    {
+        key: { text: "Username" },
+        value: { text: auditEvent.username  }
+    },
+    {
+        key: { text: "Summary" },
+        value: { text: auditEvent.summary  }
+    },
+    {
+        key: { text: "Detail" },
+        value: { text: auditEvent.detail  }
+    }
+]
+%}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">Audit Summary</h1>
+        </div>
+
+        <div class="govuk-grid-column-one-half">
+            {{ govukSummaryList({
+                card: {
+                    title: {
+                        text: "Details"
+                    }
+                },
+                rows: eventDetails
+            }) }}
+        </div>
+
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-m">Changes:</h1>
+            {% if auditEvent.changes %}
+                {{ auditEvent.changes | dumpJson }}
+            {% else %}
+                <p class='govuk-body'>None available</p>
+            {% endif %}
+        </div>
+    </div>
+    
+{% endblock %}
