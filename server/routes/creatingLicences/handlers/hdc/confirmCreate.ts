@@ -5,6 +5,7 @@ import { convertToTitleCase } from '../../../../utils/utils'
 import YesOrNo from '../../../../enumeration/yesOrNo'
 import LicenceService from '../../../../services/licenceService'
 import LicenceKind from '../../../../enumeration/LicenceKind'
+import config from '../../../../config'
 import logger from '../../../../../logger'
 import PrisonerService from '../../../../services/prisonerService'
 
@@ -19,6 +20,11 @@ export default class ConfirmCreateRoutes {
     const { nomisId } = req.params
     const { user } = res.locals
     const backLink = req.session?.returnToCase || '/licence/create/caseload'
+
+    if (config.hdcLicenceCreationBlockEnabled) {
+      logger.error('Access denied to HDC licence creation GET due HDC licence not to be created in CVL')
+      return res.redirect('/access-denied')
+    }
 
     const [nomisRecord, deliusRecord] = await Promise.all([
       this.licenceService.getPrisonerDetail(nomisId, user),

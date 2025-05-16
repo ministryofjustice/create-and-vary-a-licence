@@ -6,6 +6,7 @@ import ConfirmCreateRoutes from './confirmCreate'
 import { CaseloadItem, LicenceSummary } from '../../../../@types/licenceApiClientTypes'
 import ProbationService from '../../../../services/probationService'
 import PrisonerService from '../../../../services/prisonerService'
+import config from '../../../../config'
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const probationService = new ProbationService(null) as jest.Mocked<ProbationService>
@@ -20,7 +21,10 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
   let req: Request
   let res: Response
 
+  const existingConfig = config
+
   beforeEach(() => {
+    config.hdcLicenceCreationBlockEnabled = false
     req = {
       body: {
         answer: null,
@@ -65,6 +69,7 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
+    config.hdcLicenceCreationBlockEnabled = existingConfig.hdcLicenceCreationBlockEnabled
   })
 
   describe('GET', () => {
@@ -79,6 +84,26 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
         },
         backLink: req.session?.returnToCase,
       })
+    })
+
+    it('should redirect to access-denied if hdc licence block is enabled', async () => {
+      config.hdcLicenceCreationBlockEnabled = true
+      const prisonerDetails = {
+        prisoner: {
+          prisonerNumber: 'G4169UO',
+          firstName: 'EMAJINHANY',
+          lastName: 'ELYSASHA',
+          confirmedReleaseDate: '2024-07-19',
+          conditionalReleaseDate: '2022-09-01',
+          homeDetentionCurfewActualDate: '2024-07-19',
+          homeDetentionCurfewEligibilityDate: '2024-07-19',
+          dateOfBirth: '1992-12-06',
+        },
+        cvl: { isInHardStopPeriod: false, licenceStartDate: '18/07/2024' },
+      } as CaseloadItem
+      licenceService.getPrisonerDetail.mockResolvedValue(prisonerDetails)
+      await handler.GET(req, res)
+      expect(res.redirect).toHaveBeenCalledWith('/access-denied')
     })
 
     it('should redirect to access-denied if the licence is in the hard stop period', async () => {
