@@ -1,5 +1,0 @@
-{
-  "GHSA-p8p7-x288-28g6": "GHSA ID is acceptable for Server-Side Request Forgery in Request",
-  "GHSA-72xf-g2v4-qvf3": "GHSA ID is acceptable for tough-cookie Prototype Pollution vulnerability",
-  "GHSA-78xj-cgh5-2h22": "GHSA ID is acceptable for NPM IP package incorrectly identifies some private IP addresses as public"
-}
