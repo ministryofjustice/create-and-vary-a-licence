@@ -23,7 +23,7 @@ describe('Caseload Service', () => {
   const caCase = {
     kind: 'CRD',
     licenceId: 2,
-    name: 'Steve Cena',
+    name: 'Another Person',
     prisonerNumber: 'AB1234E',
     probationPractitioner,
     releaseDate: format(addDays(new Date(), 2), 'dd MMM yyy'),

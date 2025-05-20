@@ -32,7 +32,7 @@ describe('Route Handlers - COM Details', () => {
           surname: 'Bloggs',
         },
         code: 'X12345',
-        telephoneNumber: '07892387162',
+        telephoneNumber: '00000000000',
         email: 'joebloggs@probation.gov.uk',
       } as DeliusStaff)
 
@@ -40,7 +40,7 @@ describe('Route Handlers - COM Details', () => {
       expect(probationService.getStaffDetailByStaffCode).toHaveBeenCalledWith('X12345')
       expect(res.render).toHaveBeenCalledWith('pages/support/comDetails', {
         name: 'Joe Bloggs',
-        telephone: '07892387162',
+        telephone: '00000000000',
         staffCode: 'X12345',
         email: 'joebloggs@probation.gov.uk',
       })

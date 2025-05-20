@@ -21,7 +21,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
       {
         crnNumber: 'X381306',
-        name: 'John Roberts',
+        name: 'Test Person',
         releaseDate: '12/10/2022',
         prisonerNumber: '123',
         licenceId: 1,
@@ -40,7 +40,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
     comCaseloadService.getTeamCreateCaseload.mockResolvedValue([
       {
         crnNumber: 'X381306',
-        name: 'John Roberts',
+        name: 'Test Person',
         releaseDate: '12/10/2022',
         prisonerNumber: '123',
         licenceId: 1,
@@ -50,7 +50,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         hardStopWarningDate: '10/10/2022',
         kind: LicenceKind.CRD,
         probationPractitioner: {
-          name: 'Sherlock Holmes',
+          name: 'Test Com',
           staffIdentifier: 3000,
         },
         isClickable: true,
@@ -58,7 +58,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       },
       {
         crnNumber: 'X381307',
-        name: 'Dr Who',
+        name: 'Another Person',
         releaseDate: '12/10/2022',
         prisonerNumber: '124',
         licenceId: 2,
@@ -70,7 +70,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       },
       {
         crnNumber: 'X381308',
-        name: 'Mabel Moorhouse',
+        name: 'Person Three',
         releaseDate: '12/10/2022',
         prisonerNumber: '125',
         licenceId: 3,
@@ -82,7 +82,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       },
       {
         crnNumber: 'X381309',
-        name: 'Ronald Recall',
+        name: 'Recall Person',
         releaseDate: '12/10/2022',
         prisonerNumber: '126',
         licenceId: 4,
@@ -135,7 +135,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
           {
-            name: 'John Roberts',
+            name: 'Test Person',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             hardStopDate: '10/10/2022',
@@ -170,7 +170,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create/caseload', {
         caseload: [
           {
-            name: 'John Roberts',
+            name: 'Test Person',
             crnNumber: 'X381306',
             releaseDate: '12 Oct 2022',
             hardStopDate: '10/10/2022',
@@ -181,7 +181,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             licenceStatus: LicenceStatus.IN_PROGRESS,
             licenceType: LicenceType.AP,
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Test Com',
               staffIdentifier: 3000,
             },
             isClickable: true,
@@ -189,7 +189,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             sortDate: parseIsoDate('2022-10-12'),
           },
           {
-            name: 'Dr Who',
+            name: 'Another Person',
             crnNumber: 'X381307',
             releaseDate: '12 Oct 2022',
             hardStopDate: '10/10/2022',
@@ -204,7 +204,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             isClickable: false,
           },
           {
-            name: 'Mabel Moorhouse',
+            name: 'Person Three',
             crnNumber: 'X381308',
             releaseDate: '12 Oct 2022',
             hardStopDate: '10/10/2022',
@@ -219,7 +219,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
             isClickable: false,
           },
           {
-            name: 'Ronald Recall',
+            name: 'Recall Person',
             crnNumber: 'X381309',
             releaseDate: '12 Oct 2022',
             hardStopDate: '10/10/2022',
@@ -264,7 +264,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
       comCaseloadService.getStaffCreateCaseload.mockResolvedValue([
         {
           crnNumber: 'X381306',
-          name: 'John Roberts',
+          name: 'Test Person',
           releaseDate: '12/10/2022',
           sortDate: '12/10/2022',
           prisonerNumber: '123',
@@ -287,7 +287,7 @@ describe('Route Handlers - Create Licence - Caseload', () => {
         caseload: [
           {
             licenceId: 2,
-            name: 'John Roberts',
+            name: 'Test Person',
             crnNumber: 'X381306',
             prisonerNumber: '123',
             releaseDate: '12 Oct 2022',

@@ -46,20 +46,20 @@ describe('Route Handlers - Create Licence - Com Details', () => {
       deliusService.getStaffDetailByStaffCode.mockResolvedValue({
         teams: [{ code: 'teamA' }],
         name: {
-          forename: 'Joe',
-          surname: 'Rogan',
+          forename: 'Test',
+          surname: 'Com',
         },
-        telephoneNumber: '07892486128',
-        email: 'jrogan@probation.gov.uk',
+        telephoneNumber: '00000000000',
+        email: 'tcom@probation.gov.uk',
       } as DeliusStaff)
 
       await handler.GET(req, res)
 
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
         returnLink: req.session.returnToCase,
-        name: 'Joe Rogan',
-        telephone: '07892486128',
-        email: 'jrogan@probation.gov.uk',
+        name: 'Test Com',
+        telephone: '00000000000',
+        email: 'tcom@probation.gov.uk',
       })
     })
   })
