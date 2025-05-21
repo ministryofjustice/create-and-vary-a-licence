@@ -33,8 +33,8 @@ describe('Route Handlers - Offender licences', () => {
 
       const expectedPrisonerDetail = {
         prisonerNumber: 'ABC123',
-        firstName: 'Peter',
-        lastName: 'Pepper',
+        firstName: 'Test',
+        lastName: 'Person',
         conditionalReleaseDate: '2022-06-01',
         confirmedReleaseDate: '2022-06-01',
         postRecallReleaseDate: '2022-05-01',
@@ -62,7 +62,7 @@ describe('Route Handlers - Offender licences', () => {
         actualReleaseDate: null,
         crn: 'test crn',
         dateOfBirth: '2000-02-05',
-        comUsername: 'Kate Jones',
+        comUsername: 'Test Com',
         viewable: true,
         isReviewNeeded: false,
         isDueForEarlyRelease: false,

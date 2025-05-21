@@ -31,15 +31,15 @@ context('Create an HDC licence', () => {
     const confirmCreatePage = new ConfirmCreatePage()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -85,7 +85,7 @@ context('Create an HDC licence', () => {
         .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
         .checkDeleteTheseConditions() // for multiple Bespoke Condition
         .clickAddAnother()
-        .enterBespokeCondition(2, 'A third bespoke condition must surely be be a mistake')
+        .enterBespokeCondition(2, 'A final third bespoke condition')
         .checkDeleteTheseConditions() // for multiple Bespoke Condition
         .clickContinue()
 

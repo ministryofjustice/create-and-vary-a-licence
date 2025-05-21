@@ -50,8 +50,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
       const prisonerDetails = {
         prisoner: {
           prisonerNumber: 'G4169UO',
-          firstName: 'EMAJINHANY',
-          lastName: 'ELYSASHA',
+          firstName: 'TEST',
+          lastName: 'PERSON',
           confirmedReleaseDate: '2024-07-19',
           conditionalReleaseDate: '2022-09-01',
           dateOfBirth: '1992-12-06',
@@ -65,8 +65,8 @@ describe('Route Handlers - Create Licence - Confirm Create', () => {
           nomsId: 'ABC123',
           licenceStartDate: '18/07/2024',
           dateOfBirth: '06/12/1992',
-          forename: 'Emajinhany',
-          surname: 'Elysasha',
+          forename: 'Test',
+          surname: 'Person',
           licenceType: 'AP',
         },
         backLink: req.session?.returnToCase,

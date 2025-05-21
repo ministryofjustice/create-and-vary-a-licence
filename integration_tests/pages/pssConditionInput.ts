@@ -40,8 +40,8 @@ export default class PssConditionsInputPage extends Page {
   enterAddress = (): PssConditionsInputPage => {
     cy.get("input[name*='addressLine1']").type('123 Fake Street')
     cy.get("input[name*='addressTown']").type('Fakestown')
-    cy.get("input[name*='addressCounty']").type('London')
-    cy.get("input[name*='addressPostcode']").type('SW2 5XF')
+    cy.get("input[name*='addressCounty']").type('Fakeshire')
+    cy.get("input[name*='addressPostcode']").type('FA1 1KE')
     return this
   }
 

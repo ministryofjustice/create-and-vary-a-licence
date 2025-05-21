@@ -64,7 +64,7 @@ describe('COM Caseload Service', () => {
         licenceType: 'AP_PSS',
         probationPractitioner: {
           staffCode: 'X54321',
-          name: 'Sherlock Holmes',
+          name: 'Test Com',
         },
         isDueForEarlyRelease: false,
         isReviewNeeded: false,
@@ -100,7 +100,7 @@ describe('COM Caseload Service', () => {
         licenceType: 'PSS',
         probationPractitioner: {
           staffCode: 'X54321',
-          name: 'Sherlock Holmes',
+          name: 'Test Com',
         },
         isDueForEarlyRelease: false,
         isReviewNeeded: false,
@@ -123,7 +123,7 @@ describe('COM Caseload Service', () => {
         licenceType: 'AP',
         probationPractitioner: {
           staffCode: 'X54321',
-          name: 'Sherlock Holmes',
+          name: 'Test Com',
         },
         isDueForEarlyRelease: false,
         isReviewNeeded: false,
@@ -159,7 +159,7 @@ describe('COM Caseload Service', () => {
         licenceType: 'AP',
         probationPractitioner: {
           staffCode: 'X54321',
-          name: 'Sherlock Holmes',
+          name: 'Test Com',
         },
         isDueForEarlyRelease: false,
         isReviewNeeded: false,

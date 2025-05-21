@@ -43,7 +43,7 @@ context('Vary a licence', () => {
     const checkAnswersPage = vloDiscussionPage.selectYes().clickContinue()
     const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
     const variationSummaryPage = reasonForVariationPage
-      .enterReason('In December Mr Zimmer failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
+      .enterReason('In December Mr Person failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
       .clickContinue()
     const confirmationPage = variationSummaryPage.clickSendForApproval()
 
@@ -81,7 +81,7 @@ context('Vary a licence', () => {
 
     const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
     const variationSummaryPage = reasonForVariationPage
-      .enterReason('In December Mr Zimmer failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
+      .enterReason('In December Mr Person failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
       .clickContinue()
     const confirmationPage = variationSummaryPage.clickSendForApproval()
 
@@ -117,7 +117,7 @@ context('Vary a licence', () => {
 
     const reasonForVariationPage = checkAnswersPage.clickAddVariationNotes()
     const variationSummaryPage = reasonForVariationPage
-      .enterReason('In December Mr Zimmer failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
+      .enterReason('In December Mr Person failed a drug test at Drug Rehab Clinic and tested positive for cocaine.')
       .clickContinue()
     const confirmationPage = variationSummaryPage.clickSendForApproval()
 

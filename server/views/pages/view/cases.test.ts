@@ -17,7 +17,7 @@ describe('View and print a licence - case list', () => {
     const $ = render({
       cases: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '3 Aug 2022',
           releaseDateLabel: 'Confirmed release date',
@@ -39,7 +39,7 @@ describe('View and print a licence - case list', () => {
       probationView,
     })
     expect($('tbody .govuk-table__row').length).toBe(2)
-    expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('Confirmed release date: 3 Aug 2022')
     expect($('#name-2 > div > span').text()).toBe('John Smith')
@@ -54,7 +54,7 @@ describe('View and print a licence - case list', () => {
     const $ = render({
       cases: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '3 Aug 2022',
           releaseDateLabel: 'Confirmed release date',
@@ -76,7 +76,7 @@ describe('View and print a licence - case list', () => {
       probationView,
     })
     expect($('tbody .govuk-table__row').length).toBe(2)
-    expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('3 Aug 2022')
     expect($('#name-2 > div > span').text()).toBe('John Smith')
@@ -91,7 +91,7 @@ describe('View and print a licence - case list', () => {
     const $ = render({
       cases: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '3 Aug 2022',
           releaseDateLabel: 'Confirmed release date',
@@ -105,14 +105,14 @@ describe('View and print a licence - case list', () => {
           tabType: 'futureReleases',
         },
         {
-          name: 'John Deer',
+          name: 'Joe Bloggs',
           prisonerNumber: 'A1234AC',
           releaseDate: '10 Sep 2022',
           releaseDateLabel: 'CRD',
           tabType: 'attentionNeeded',
         },
         {
-          name: 'John Deer',
+          name: 'Joe Bloggs',
           prisonerNumber: 'A1234AC',
           releaseDate: '10 Sep 2022',
           releaseDateLabel: 'CRD',
@@ -140,7 +140,7 @@ describe('View and print a licence - case list', () => {
     const $ = render({
       cases: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '3 Aug 2022',
           releaseDateLabel: 'Confirmed release date',
@@ -181,7 +181,7 @@ describe('View and print a licence - case list', () => {
           tabType: 'futureReleases',
         },
         {
-          name: 'John Deer',
+          name: 'Joe Bloggs',
           prisonerNumber: 'A1234AC',
           releaseDate: '10 Sep 2022',
           releaseDateLabel: 'CRD',
@@ -208,7 +208,7 @@ describe('View and print a licence - case list', () => {
     const $ = render({
       cases: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '3 Aug 2022',
           releaseDateLabel: 'HDCAD',
@@ -224,7 +224,7 @@ describe('View and print a licence - case list', () => {
       probationView,
     })
     expect($('tbody .govuk-table__row').length).toBe(1)
-    expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
   })
@@ -236,7 +236,7 @@ describe('View and print a licence - case list', () => {
     const $ = render({
       cases: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '3 Aug 2022',
           releaseDateLabel: 'HDCAD',
@@ -252,7 +252,7 @@ describe('View and print a licence - case list', () => {
       probationView,
     })
     expect($('tbody .govuk-table__row').length).toBe(1)
-    expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
   })
@@ -264,7 +264,7 @@ describe('View and print a licence - case list', () => {
     const $ = render({
       cases: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '3 Aug 2022',
           releaseDateLabel: 'HDCAD',
@@ -280,7 +280,7 @@ describe('View and print a licence - case list', () => {
       probationView,
     })
     expect($('tbody .govuk-table__row').length).toBe(1)
-    expect($('#name-1 > div > span').text()).toBe('Adam Balasaravika')
+    expect($('#name-1 > div > span').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('HDCAD: 3 Aug 2022HDC release')
   })
