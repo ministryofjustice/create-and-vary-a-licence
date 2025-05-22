@@ -32,8 +32,8 @@ describe('Route Handlers - Offender audit', () => {
 
       const expectedPrisonerDetail = {
         prisonerNumber: 'ABC123',
-        firstName: 'Peter',
-        lastName: 'Pepper',
+        firstName: 'Test',
+        lastName: 'Person',
         conditionalReleaseDate: '2022-06-01',
         confirmedReleaseDate: '2022-06-01',
         postRecallReleaseDate: '2022-05-01',
@@ -52,8 +52,8 @@ describe('Route Handlers - Offender audit', () => {
         id: 1,
         licenceId: 1,
         eventTime: '2022-06-01',
-        username: 'dave_jones',
-        fullName: 'Dave Jones',
+        username: 'test_staff',
+        fullName: 'Test Staff',
         eventType: 'USER_EVENT',
         summary: 'Audit Summary 1',
         detail: 'ID 2 changed event data',

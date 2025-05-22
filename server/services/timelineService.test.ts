@@ -30,7 +30,7 @@ describe('Timeline Service', () => {
       id: 1,
       kind: 'CRD',
       statusCode: LicenceStatus.ACTIVE,
-      createdByFullName: 'Jackson Browne',
+      createdByFullName: 'John Smith',
       dateLastUpdated: '10/11/2022 11:00:00',
       dateCreated: '10/11/2022 10:00:00',
     } as Licence
@@ -40,7 +40,7 @@ describe('Timeline Service', () => {
         eventType: 'CREATION',
         title: 'Licence created',
         statusCode: 'ACTIVE',
-        createdBy: 'Jackson Browne',
+        createdBy: 'John Smith',
         licenceId: 1,
         lastUpdate: '10/11/2022 10:00:00',
       },
@@ -52,7 +52,7 @@ describe('Timeline Service', () => {
         kind: 'VARIATION',
         statusCode: LicenceStatus.VARIATION_APPROVED,
         variationOf: 1,
-        createdByFullName: 'James Brown',
+        createdByFullName: 'Other User',
         dateLastUpdated: '12/11/2022 10:45:00',
         isVariation: true,
       } as Licence
@@ -61,7 +61,7 @@ describe('Timeline Service', () => {
         eventType: 'VARIATION',
         title: 'Licence varied',
         statusCode: 'VARIATION_APPROVED',
-        createdBy: 'James Brown',
+        createdBy: 'Other User',
         licenceId: 2,
         lastUpdate: '12/11/2022 10:45:00',
       }
@@ -78,7 +78,7 @@ describe('Timeline Service', () => {
         kind: 'VARIATION',
         statusCode: LicenceStatus.VARIATION_SUBMITTED,
         variationOf: 1,
-        createdByFullName: 'James Brown',
+        createdByFullName: 'Other User',
         dateLastUpdated: '12/11/2022 10:45:00',
         isVariation: true,
       } as Licence
@@ -87,7 +87,7 @@ describe('Timeline Service', () => {
         eventType: 'SUBMITTED',
         title: 'Variation submitted',
         statusCode: 'VARIATION_SUBMITTED',
-        createdBy: 'James Brown',
+        createdBy: 'Other User',
         licenceId: 2,
         lastUpdate: '12/11/2022 10:45:00',
       }
@@ -104,7 +104,7 @@ describe('Timeline Service', () => {
         kind: 'VARIATION',
         statusCode: LicenceStatus.VARIATION_REJECTED,
         variationOf: 1,
-        createdByFullName: 'James Brown',
+        createdByFullName: 'Other User',
         dateLastUpdated: '12/11/2022 10:45:00',
         isVariation: true,
       } as Licence
@@ -113,7 +113,7 @@ describe('Timeline Service', () => {
         eventType: 'REJECTED',
         title: 'Variation rejected',
         statusCode: 'VARIATION_REJECTED',
-        createdBy: 'James Brown',
+        createdBy: 'Other User',
         licenceId: 2,
         lastUpdate: '12/11/2022 10:45:00',
       }
@@ -129,7 +129,7 @@ describe('Timeline Service', () => {
         id: 2,
         kind: 'HARD_STOP',
         statusCode: LicenceStatus.ACTIVE,
-        createdByFullName: 'JAMES BROWN',
+        createdByFullName: 'OTHER USER',
         dateLastUpdated: '12/11/2022 10:00:00',
         prisonDescription: 'Moorland (hmp)',
         dateCreated: '10/11/2022 11:00:00',
@@ -139,9 +139,9 @@ describe('Timeline Service', () => {
         {
           licenceId: 2,
           eventType: LicenceEventType.HARD_STOP_REVIEWED_WITHOUT_VARIATION,
-          username: 'TIM_USER',
-          forenames: 'Tim',
-          surname: 'Smith',
+          username: 'TEST_USER',
+          forenames: 'Test',
+          surname: 'User',
           eventTime: '12/11/2022 12:30:00',
           eventDescription: `Licence reviewed without being varied for Jack Walker`,
         },
@@ -149,7 +149,7 @@ describe('Timeline Service', () => {
 
       const expected = [
         {
-          createdBy: 'Tim Smith',
+          createdBy: 'Test User',
           eventType: 'REVIEWED_WITHOUT_VARIATION',
           lastUpdate: '12/11/2022 12:30:00',
           licenceId: 2,
@@ -157,7 +157,7 @@ describe('Timeline Service', () => {
           title: 'Licence reviewed without being varied',
         },
         {
-          createdBy: 'James Brown, Moorland (HMP)',
+          createdBy: 'Other User, Moorland (HMP)',
           eventType: 'CREATION',
           lastUpdate: '10/11/2022 11:00:00',
           licenceId: 2,
@@ -182,7 +182,7 @@ describe('Timeline Service', () => {
         id: 2,
         kind: 'HARD_STOP',
         statusCode: LicenceStatus.ACTIVE,
-        createdByFullName: 'JAMES BROWN',
+        createdByFullName: 'OTHER USER',
         dateLastUpdated: '12/11/2022 10:00:00',
         prisonDescription: 'Moorland (hmp)',
         dateCreated: undefined,
@@ -192,9 +192,9 @@ describe('Timeline Service', () => {
         {
           licenceId: 2,
           eventType: LicenceEventType.HARD_STOP_REVIEWED_WITHOUT_VARIATION,
-          username: 'TIM_USER',
-          forenames: 'Tim',
-          surname: 'Smith',
+          username: 'TEST_USER',
+          forenames: 'Test',
+          surname: 'User',
           eventTime: undefined,
           eventDescription: `Licence reviewed without being varied for Jack Walker`,
         },
@@ -202,7 +202,7 @@ describe('Timeline Service', () => {
 
       const expected = [
         {
-          createdBy: 'James Brown, Moorland (HMP)',
+          createdBy: 'Other User, Moorland (HMP)',
           eventType: 'CREATION',
           lastUpdate: undefined as string,
           licenceId: 2,
@@ -210,7 +210,7 @@ describe('Timeline Service', () => {
           title: 'Licence created',
         },
         {
-          createdBy: 'Tim Smith',
+          createdBy: 'Test User',
           eventType: 'REVIEWED_WITHOUT_VARIATION',
           lastUpdate: undefined as string,
           licenceId: 2,

@@ -9,7 +9,7 @@ describe('QR Code Service', () => {
     licence = {
       id: '1',
       typeCode: 'AP',
-      forename: 'John',
+      forename: 'Joe',
       surname: 'Bloggs',
       dateOfBirth: '21/10/1990',
       crn: 'CRN',

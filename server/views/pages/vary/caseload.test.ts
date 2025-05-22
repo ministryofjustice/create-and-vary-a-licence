@@ -10,7 +10,7 @@ describe('Caseload', () => {
       caseload: [
         {
           licenceId: 3,
-          name: 'Biydaav Griya',
+          name: 'Test Person',
           crnNumber: 'Z882661',
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
@@ -40,7 +40,7 @@ describe('Caseload', () => {
       caseload: [
         {
           licenceId: 3,
-          name: 'Biydaav Griya',
+          name: 'Test Person',
           crnNumber: 'Z882661',
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
@@ -70,7 +70,7 @@ describe('Caseload', () => {
       caseload: [
         {
           licenceId: 3,
-          name: 'Biydaav Griya',
+          name: 'Test Person',
           crnNumber: 'Z882661',
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
@@ -105,7 +105,7 @@ describe('Caseload', () => {
       caseload: [
         {
           licenceId: 3,
-          name: 'Biydaav Griya',
+          name: 'Test Person',
           crnNumber: 'Z882661',
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
@@ -138,7 +138,7 @@ describe('Caseload', () => {
       caseload: [
         {
           licenceId: 3,
-          name: 'Biydaav Griya',
+          name: 'Test Person',
           crnNumber: 'Z882661',
           licenceType: 'AP',
           releaseDate: '13 Feb 2023',
