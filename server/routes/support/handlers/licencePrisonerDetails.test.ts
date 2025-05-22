@@ -9,6 +9,7 @@ jest.mock('../../../services/licenceOverrideService')
 
 const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
 const overrideService = new LicenceOverrideService(null) as jest.Mocked<LicenceOverrideService>
+const username = 'admin-user'
 
 describe('Route handlers - Licence prisoner details override', () => {
   const handler = new LicencePrisonerDetailsRoutes(licenceService, overrideService)
@@ -24,7 +25,7 @@ describe('Route handlers - Licence prisoner details override', () => {
     jest.resetAllMocks()
     res = {
       locals: {
-        user: { username: 'bob' },
+        user: { username },
       },
       render: jest.fn(),
     } as unknown as Response
@@ -69,7 +70,7 @@ describe('Route handlers - Licence prisoner details override', () => {
           dateOfBirth: '25/12/1995',
           reason: 'test',
         },
-        { username: 'bob' },
+        { username },
       )
 
       expect(res.render).toHaveBeenCalled()
