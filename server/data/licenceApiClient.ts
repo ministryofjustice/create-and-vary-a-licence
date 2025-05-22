@@ -45,6 +45,7 @@ import type {
   HdcLicenceData,
   OverrideLicenceTypeRequest,
   Com,
+  OverrideLicencePrisonerDetailsRequest,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -489,6 +490,13 @@ export default class LicenceApiClient extends RestClient {
       { username: user?.username },
     )) as Record<string, unknown>
     return response.status === 400 ? (response.fieldErrors as Record<string, string>) : null
+  }
+
+  async overrideLicencePrisonerDetails(licenceId: number, request: OverrideLicencePrisonerDetailsRequest, user: User) {
+    await this.post(
+      { path: `/licence/id/${licenceId}/override/prisoner-details`, data: request },
+      { username: user?.username },
+    )
   }
 
   async updateOffenderDetails(nomisId: string, offenderDetails: UpdateOffenderDetailsRequest) {
