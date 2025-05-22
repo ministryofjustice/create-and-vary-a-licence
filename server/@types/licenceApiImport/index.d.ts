@@ -380,6 +380,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/licence/id/{licenceId}/curfew-times': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Update the curfew times for a HDC licence.
+     * @description Replace the curfew times against a HDC licence if curfew times change. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    put: operations['updateCurfewTimes']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/licence/id/{licenceId}/contact-number': {
     parameters: {
       query?: never
@@ -1879,6 +1899,66 @@ export interface paths {
      * @description Returns a list of bank holiday dates for England and Wales. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
      */
     get: operations['getBankHolidaysForEnglandAndWales']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/address/search/by/text/{searchQuery}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Searches for addresses that match the given search text
+     * @description Searches for addresses that match the given search text
+     */
+    get: operations['searchForAddresses']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/address/search/by/reference/{reference}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Gets an address by it's reference
+     * @description Gets an address by it's reference (Unique Property Reference Number)
+     */
+    get: operations['searchForAddressByReference']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/address/search/by/postcode/{postcode}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Searches for addresses that match the given postcode
+     * @description Searches for addresses that match the given postcode
+     */
+    get: operations['searchForAddressesByPostcode']
     put?: never
     post?: never
     delete?: never
@@ -4733,6 +4813,10 @@ export interface components {
        */
       untilTime?: string
     }
+    UpdateCurfewTimesRequest: {
+      /** @description The list of hdc licence curfew times from service configuration */
+      curfewTimes: components['schemas']['HdcCurfewTimes'][]
+    }
     /** @description Describes a HDC licence within this service */
     HdcLicence: Omit<
       WithRequired<
@@ -5034,13 +5118,6 @@ export interface components {
       comName: string
       subjects: components['schemas']['Subject'][]
     }
-    Subject: {
-      prisonerNumber: string
-      crn: string
-      name: string
-      /** Format: date */
-      releaseDate: string
-    }
     CurfewAddress: {
       addressLine1: string
       addressLine2?: string
@@ -5063,7 +5140,7 @@ export interface components {
     HdcLicenceData: {
       /** Format: int64 */
       licenceId?: number
-      curfewAddress?: components['schemas']['CurfewAddress']
+      curfewAddress?: components['schemas']['HdcCurfewAddress']
       firstNightCurfewHours?: components['schemas']['FirstNight']
       curfewTimes?: components['schemas']['HdcCurfewTimes'][]
     }
@@ -5108,13 +5185,6 @@ export interface components {
         | 'VERSION_CREATED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
-        | 'HDC_CREATED'
-        | 'HDC_VERSION_CREATED'
-        | 'HDC_SUBMITTED'
-        | 'HDC_VARIATION_CREATED'
-        | 'HDC_VARIATION_SUBMITTED'
-        | 'HDC_VARIATION_APPROVED'
-        | 'HDC_VARIATION_REFERRED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -5355,6 +5425,44 @@ export interface components {
        * @example 42
        */
       count: number
+    }
+    /** @description Response object which describes an result from a address search */
+    AddressSearchResponse: {
+      /**
+       * @description The address's Unique Property Reference Number
+       * @example 200010019924
+       */
+      reference: string
+      /**
+       * @description The address's first line
+       * @example 34
+       */
+      firstLine: string
+      /**
+       * @description The address's second line
+       * @example Urchfont
+       */
+      secondLine?: string
+      /**
+       * @description The address's Town or City
+       * @example Chippenham
+       */
+      townOrCity: string
+      /**
+       * @description The address's county
+       * @example Shropshire
+       */
+      county: string
+      /**
+       * @description The address's postcode
+       * @example RG13HS
+       */
+      postcode: string
+      /**
+       * @description The address's country
+       * @example Wales
+       */
+      country: string
     }
   }
   responses: never
@@ -6816,6 +6924,84 @@ export interface operations {
       }
       /** @description Accepted */
       202: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateCurfewTimes: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateCurfewTimesRequest']
+      }
+    }
+    responses: {
+      /** @description Curfew times updated */
+      200: {
         headers: {
           [name: string]: unknown
         }
@@ -11772,13 +11958,6 @@ export interface operations {
           | 'VERSION_CREATED'
           | 'NOT_STARTED'
           | 'TIMED_OUT'
-          | 'HDC_CREATED'
-          | 'HDC_VERSION_CREATED'
-          | 'HDC_SUBMITTED'
-          | 'HDC_VARIATION_CREATED'
-          | 'HDC_VARIATION_SUBMITTED'
-          | 'HDC_VARIATION_APPROVED'
-          | 'HDC_VARIATION_REFERRED'
         )[]
         sortBy?: string
         sortOrder?: string
@@ -12374,6 +12553,207 @@ export interface operations {
       }
       /** @description Bank holidays were not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForAddresses: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        searchQuery: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns addresses matching the given search text */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressSearchResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForAddressByReference: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        reference: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns the address with the provided reference */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressSearchResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForAddressesByPostcode: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        postcode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns addresses matching the given search text */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressSearchResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
         headers: {
           [name: string]: unknown
         }
