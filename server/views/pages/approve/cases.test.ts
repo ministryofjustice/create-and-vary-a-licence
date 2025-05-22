@@ -10,7 +10,7 @@ describe('View and print a licence - case list', () => {
     const $ = render({
       cases: [
         {
-          name: 'Adam Balasaravika',
+          name: 'Test Person',
           prisonerNumber: 'A1234AA',
           releaseDate: '3 Aug 2022',
           releaseDateLabel: 'Confirmed release date',
@@ -26,7 +26,7 @@ describe('View and print a licence - case list', () => {
     })
 
     expect($('tbody .govuk-table__row').length).toBe(2)
-    expect($('#name-1').text()).toBe('Adam Balasaravika')
+    expect($('#name-1').text()).toBe('Test Person')
     expect($('#nomis-id-1').text()).toBe('A1234AA')
     expect($('#release-date-1').text()).toBe('3 Aug 2022')
     expect($('#name-2').text()).toBe('John Smith')

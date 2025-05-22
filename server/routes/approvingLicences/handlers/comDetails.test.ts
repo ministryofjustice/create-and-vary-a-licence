@@ -16,7 +16,7 @@ describe('Route Handlers - COM Details', () => {
       render: jest.fn(),
       locals: {
         licence: {
-          comUsername: 'jrogan',
+          comUsername: 'tcom',
         },
       },
     } as unknown as Response
@@ -28,20 +28,20 @@ describe('Route Handlers - COM Details', () => {
     it('should render com details view', async () => {
       probationService.getStaffDetailByUsername.mockResolvedValue({
         name: {
-          forename: 'Joe',
-          surname: 'Rogan',
+          forename: 'Test',
+          surname: 'Com',
         },
-        telephoneNumber: '07892387162',
-        email: 'jrogan@probation.gov.uk',
+        telephoneNumber: '00000000000',
+        email: 'tcom@probation.gov.uk',
       } as DeliusStaff)
 
       await handler.GET(req, res)
-      expect(probationService.getStaffDetailByUsername).toHaveBeenCalledWith('jrogan')
+      expect(probationService.getStaffDetailByUsername).toHaveBeenCalledWith('tcom')
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
         returnLink: '/licence/approve/cases',
-        name: 'Joe Rogan',
-        telephone: '07892387162',
-        email: 'jrogan@probation.gov.uk',
+        name: 'Test Com',
+        telephone: '00000000000',
+        email: 'tcom@probation.gov.uk',
       })
     })
   })

@@ -72,7 +72,7 @@ describe('Route handlers - View and print case list', () => {
       name: 'Bob Smith',
       prisonerNumber: 'A1234AA',
       probationPractitioner: {
-        name: 'Sherlock Holmes',
+        name: 'Other Com',
       },
       releaseDate: '01/05/2022',
       releaseDateLabel: 'Confirmed release date',
@@ -86,10 +86,10 @@ describe('Route handlers - View and print case list', () => {
     {
       kind: LicenceKind.CRD,
       licenceId: 2,
-      name: 'Stephen Rowe',
+      name: 'Test Person',
       prisonerNumber: 'A1234AE',
       probationPractitioner: {
-        name: 'Larry Johnson',
+        name: 'Test Com',
       },
       releaseDate: '10/06/2022',
       releaseDateLabel: 'Confirmed release date',
@@ -103,10 +103,10 @@ describe('Route handlers - View and print case list', () => {
     {
       kind: LicenceKind.CRD,
       licenceId: 3,
-      name: 'Harvey Smith',
+      name: 'Person Two',
       prisonerNumber: 'A1234AC',
       probationPractitioner: {
-        name: 'Walter White',
+        name: 'Com Four',
       },
       releaseDate: '01/05/2022',
       releaseDateLabel: 'Confirmed release date',
@@ -120,10 +120,10 @@ describe('Route handlers - View and print case list', () => {
     {
       kind: LicenceKind.CRD,
       licenceId: 4,
-      name: 'Harold Lloyd',
+      name: 'Person Three',
       prisonerNumber: 'A1234AD',
       probationPractitioner: {
-        name: 'Harry Goldman',
+        name: 'Com Five',
       },
       releaseDate: '01/05/2022',
       releaseDateLabel: 'CRD',
@@ -148,7 +148,7 @@ describe('Route handlers - View and print case list', () => {
         releaseDate: '01/07/2022',
         releaseDateLabel: 'Confirmed release date',
         probationPractitioner: {
-          name: 'Sherlock Holmes',
+          name: 'Other Com',
         },
         name: 'Bob Smith',
         prisonerNumber: 'A1234AA',
@@ -166,7 +166,7 @@ describe('Route handlers - View and print case list', () => {
         releaseDateLabel: 'Confirmed release date',
         prisonerNumber: 'A1234AB',
         probationPractitioner: {
-          name: 'Thor',
+          name: 'Com Three',
         },
       },
       {
@@ -180,7 +180,7 @@ describe('Route handlers - View and print case list', () => {
         releaseDateLabel: 'Confirmed release date',
         prisonerNumber: 'A1234AC',
         probationPractitioner: {
-          name: 'Walter White',
+          name: 'Com Four',
         },
       },
       {
@@ -193,7 +193,7 @@ describe('Route handlers - View and print case list', () => {
         releaseDateLabel: 'Confirmed release date',
         prisonerNumber: 'A1234AD',
         probationPractitioner: {
-          name: 'Harry Goldman',
+          name: 'Com Five',
         },
       },
     ] as CaCase[]
@@ -219,7 +219,7 @@ describe('Route handlers - View and print case list', () => {
             name: 'Bob Smith',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Other Com',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -233,10 +233,10 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/view/id/2/show',
             licenceId: 2,
             licenceStatus: 'APPROVED',
-            name: 'Stephen Rowe',
+            name: 'Test Person',
             prisonerNumber: 'A1234AE',
             probationPractitioner: {
-              name: 'Larry Johnson',
+              name: 'Test Com',
             },
             releaseDate: '10 Jun 2022',
             nomisLegalStatus: 'SENTENCED',
@@ -250,10 +250,10 @@ describe('Route handlers - View and print case list', () => {
             link: null,
             licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
-            name: 'Harvey Smith',
+            name: 'Person Two',
             prisonerNumber: 'A1234AC',
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Com Four',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -267,10 +267,10 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/view/id/4/show',
             licenceId: 4,
             licenceStatus: 'SUBMITTED',
-            name: 'Harold Lloyd',
+            name: 'Person Three',
             prisonerNumber: 'A1234AD',
             probationPractitioner: {
-              name: 'Harry Goldman',
+              name: 'Com Five',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
@@ -314,7 +314,7 @@ describe('Route handlers - View and print case list', () => {
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Other Com',
             },
             releaseDate: '01 Jul 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -328,7 +328,7 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
             prisonerNumber: 'A1234AB',
             probationPractitioner: {
-              name: 'Thor',
+              name: 'Com Three',
             },
             releaseDate: '01 Jun 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -340,7 +340,7 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/hard-stop/id/7/check-your-answers',
             prisonerNumber: 'A1234AC',
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Com Four',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -353,7 +353,7 @@ describe('Route handlers - View and print case list', () => {
             link: null,
             prisonerNumber: 'A1234AD',
             probationPractitioner: {
-              name: 'Harry Goldman',
+              name: 'Com Five',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -392,7 +392,7 @@ describe('Route handlers - View and print case list', () => {
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Other Com',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -405,11 +405,11 @@ describe('Route handlers - View and print case list', () => {
             licenceId: 2,
             licenceStatus: 'APPROVED',
             link: '/licence/view/id/2/show',
-            name: 'Stephen Rowe',
+            name: 'Test Person',
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AE',
             probationPractitioner: {
-              name: 'Larry Johnson',
+              name: 'Test Com',
             },
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -422,11 +422,11 @@ describe('Route handlers - View and print case list', () => {
             licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
             link: null,
-            name: 'Harvey Smith',
+            name: 'Person Two',
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AC',
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Com Four',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -439,11 +439,11 @@ describe('Route handlers - View and print case list', () => {
             licenceId: 4,
             licenceStatus: 'SUBMITTED',
             link: '/licence/view/id/4/show',
-            name: 'Harold Lloyd',
+            name: 'Person Three',
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AD',
             probationPractitioner: {
-              name: 'Harry Goldman',
+              name: 'Com Five',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
@@ -484,7 +484,7 @@ describe('Route handlers - View and print case list', () => {
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Other Com',
             },
             releaseDate: '01 Jul 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -498,7 +498,7 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
             prisonerNumber: 'A1234AB',
             probationPractitioner: {
-              name: 'Thor',
+              name: 'Com Three',
             },
             releaseDate: '01 Jun 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -510,7 +510,7 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/hard-stop/id/7/check-your-answers',
             prisonerNumber: 'A1234AC',
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Com Four',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -523,7 +523,7 @@ describe('Route handlers - View and print case list', () => {
             link: null,
             prisonerNumber: 'A1234AD',
             probationPractitioner: {
-              name: 'Harry Goldman',
+              name: 'Com Five',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -558,7 +558,7 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
             prisonerNumber: 'A1234AB',
             probationPractitioner: {
-              name: 'Thor',
+              name: 'Com Three',
             },
             releaseDate: '01 Jun 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -594,7 +594,7 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/hard-stop/id/7/check-your-answers',
             prisonerNumber: 'A1234AC',
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Com Four',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -635,7 +635,7 @@ describe('Route handlers - View and print case list', () => {
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Other Com',
             },
             releaseDate: '01 Jul 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -649,7 +649,7 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/hard-stop/create/nomisId/A1234AB/confirm',
             prisonerNumber: 'A1234AB',
             probationPractitioner: {
-              name: 'Thor',
+              name: 'Com Three',
             },
             releaseDate: '01 Jun 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -661,7 +661,7 @@ describe('Route handlers - View and print case list', () => {
             link: '/licence/hard-stop/id/7/check-your-answers',
             prisonerNumber: 'A1234AC',
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Com Four',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -674,7 +674,7 @@ describe('Route handlers - View and print case list', () => {
             link: null,
             prisonerNumber: 'A1234AD',
             probationPractitioner: {
-              name: 'Harry Goldman',
+              name: 'Com Five',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -713,7 +713,7 @@ describe('Route handlers - View and print case list', () => {
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Other Com',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -726,11 +726,11 @@ describe('Route handlers - View and print case list', () => {
             licenceId: 2,
             licenceStatus: 'APPROVED',
             link: '/licence/view/id/2/show',
-            name: 'Stephen Rowe',
+            name: 'Test Person',
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AE',
             probationPractitioner: {
-              name: 'Larry Johnson',
+              name: 'Test Com',
             },
             releaseDate: '10 Jun 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -743,11 +743,11 @@ describe('Route handlers - View and print case list', () => {
             licenceId: 3,
             licenceStatus: 'IN_PROGRESS',
             link: null,
-            name: 'Harvey Smith',
+            name: 'Person Two',
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AC',
             probationPractitioner: {
-              name: 'Walter White',
+              name: 'Com Four',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',
@@ -760,11 +760,11 @@ describe('Route handlers - View and print case list', () => {
             licenceId: 4,
             licenceStatus: 'SUBMITTED',
             link: '/licence/view/id/4/show',
-            name: 'Harold Lloyd',
+            name: 'Person Three',
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AD',
             probationPractitioner: {
-              name: 'Harry Goldman',
+              name: 'Com Five',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'CRD',
@@ -807,7 +807,7 @@ describe('Route handlers - View and print case list', () => {
             nomisLegalStatus: 'SENTENCED',
             prisonerNumber: 'A1234AA',
             probationPractitioner: {
-              name: 'Sherlock Holmes',
+              name: 'Other Com',
             },
             releaseDate: '01 May 2022',
             releaseDateLabel: 'Confirmed release date',

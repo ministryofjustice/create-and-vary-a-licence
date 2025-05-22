@@ -31,7 +31,7 @@ describe('Route Handlers - COM Details', () => {
           forename: 'Joe',
           surname: 'Bloggs',
         },
-        telephoneNumber: '07892387162',
+        telephoneNumber: '00000000000',
         email: 'joebloggs@probation.gov.uk',
       } as DeliusStaff)
 
@@ -40,7 +40,7 @@ describe('Route Handlers - COM Details', () => {
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
         returnLink: '/licence/view/cases',
         name: 'Joe Bloggs',
-        telephone: '07892387162',
+        telephone: '00000000000',
         email: 'joebloggs@probation.gov.uk',
       })
     })
@@ -59,7 +59,7 @@ describe('Route Handlers - COM Details', () => {
           forename: 'Joe',
           surname: 'Bloggs',
         },
-        telephoneNumber: '07892387162',
+        telephoneNumber: '00000000000',
         email: 'joebloggs@probation.gov.uk',
       } as DeliusStaff)
 
@@ -68,7 +68,7 @@ describe('Route Handlers - COM Details', () => {
       expect(res.render).toHaveBeenCalledWith('pages/comDetails', {
         returnLink: '/licence/view/cases#future-releases',
         name: 'Joe Bloggs',
-        telephone: '07892387162',
+        telephone: '00000000000',
         email: 'joebloggs@probation.gov.uk',
       })
     })

@@ -27,8 +27,8 @@ const licencePlaceholder = {
   cro: '12345',
   prisonCode: 'LEI',
   prisonDescription: 'Leeds (HMP)',
-  forename: 'Bob',
-  surname: 'Zimmer',
+  forename: 'Test',
+  surname: 'Person',
   dateOfBirth: '12/02/1980',
   conditionalReleaseDate: '13/03/2021',
   actualReleaseDate: '01/04/2021',
@@ -413,10 +413,10 @@ export default {
           statusCode: options.statusCode, // Overrides licencePlaceHolder status
           typeCode: options.typeCode, // Overrides licence status code
           appointmentPersonType: 'SPECIFIC_PERSON',
-          appointmentPerson: 'Isaac Newton',
-          appointmentAddress: 'Down the road, over there',
-          appointmentContact: '07891245678',
-          appointmentTime: '01/12/2021 00:34',
+          appointmentPerson: 'Duty Officer',
+          appointmentAddress: 'Some address, Some town',
+          appointmentContact: '00000000000',
+          appointmentTime: '01/12/2021 12:34',
           appointmentTimeType: options.appointmentTimeType || 'SPECIFIC_DATE_TIME',
           isInHardStopPeriod: options.isInHardStopPeriod || false,
           hardStopDate: options.isInHardStopPeriod
@@ -575,13 +575,13 @@ export default {
               sequence: 0,
               text: 'Attend [INSERT APPOINTMENT TIME DATE AND ADDRESS], as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
               expandedText:
-                'Attend 123 Fake Street, Fakestown, London, SW2 5XF, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
+                'Attend 123 Fake Street, Fakestown, Fakeshire, FA1 1KE, as directed, to address your dependency on, or propensity to misuse, a controlled drug.',
               data: [
                 {
                   id: 1,
                   sequence: 0,
                   field: 'appointmentAddress',
-                  value: '123 Fake Street, , Fakestown, London, SW2 5XF',
+                  value: '123 Fake Street, , Fakestown, Fakeshire, FA1 1KE',
                 },
               ],
               readyToSubmit: true,
@@ -597,7 +597,7 @@ export default {
                   id: 1,
                   sequence: 0,
                   field: 'address',
-                  value: '123 Fake Street, , Fakestown, London, SW2 5XF',
+                  value: '123 Fake Street, , Fakestown, Fakeshire, FA1 1KE',
                 },
               ],
               readyToSubmit: true,
@@ -708,8 +708,8 @@ export default {
                 licenceId: 1,
                 nomisId: options.nomisId,
                 licenceStatus: options.status,
-                forename: 'Bob',
-                surname: 'Zimmer',
+                forename: 'Test',
+                surname: 'Person',
                 crn: 'X12345',
                 licenceType: 'AP',
                 actualReleaseDate: '23/03/2022',
@@ -747,8 +747,8 @@ export default {
             licenceId: 1,
             nomisId: options.nomisId,
             licenceStatus: options.status,
-            forename: 'Bob',
-            surname: 'Zimmer',
+            forename: 'Test',
+            surname: 'Person',
             crn: 'X12345',
             licenceType: 'AP',
             actualReleaseDate: '23/03/2022',
@@ -786,8 +786,8 @@ export default {
             licenceId: 1,
             nomisId: options.nomisId,
             licenceStatus: options.status,
-            forename: 'Bob',
-            surname: 'Zimmer',
+            forename: 'Test',
+            surname: 'Person',
             crn: 'X12345',
             licenceType: 'PSS',
             actualReleaseDate: '23/03/2022',
@@ -821,8 +821,8 @@ export default {
             licenceId: 1,
             nomisId: options.nomisId,
             licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
-            forename: 'Bob',
-            surname: 'Zimmer',
+            forename: 'Test',
+            surname: 'Person',
             crn: 'X12345',
             licenceType: 'AP',
             actualReleaseDate: '23/03/2022',
@@ -1115,7 +1115,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Bob Zimmer',
+            name: 'Test Person',
             crnNumber: 'X12345',
             prisonerNumber: 'G9786GC',
             releaseDate: '13/03/2021',
@@ -1143,7 +1143,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Bob Zimmer',
+            name: 'Test Person',
             crnNumber: 'X12345',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/04/2021',
@@ -1171,7 +1171,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Bob Zimmer',
+            name: 'Test Person',
             crnNumber: 'X12345',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/04/2021',
@@ -1387,9 +1387,9 @@ export default {
             id: 1,
             licenceId: 2,
             eventType: 'VARIATION_SUBMITTED_REASON',
-            username: 'smills',
-            forenames: 'Stephen',
-            surname: 'Mills',
+            username: 'tcom',
+            forenames: 'Test',
+            surname: 'Com',
             eventDescription: 'Reason varied',
             eventTime: '12/06/2021 10:46:40',
           },
@@ -1397,9 +1397,9 @@ export default {
             id: 2,
             licenceId: 2,
             eventType: 'VARIATION_REJECTED',
-            username: 'smills',
-            forenames: 'Stephen',
-            surname: 'Mills',
+            username: 'tcom',
+            forenames: 'Test',
+            surname: 'Com',
             eventDescription: 'Reason rejected',
             eventTime: '12/06/2021 10:47:40',
           },
@@ -1772,8 +1772,8 @@ export default {
         jsonBody: {
           prisoner: {
             prisonerNumber: 'G4169UO',
-            firstName: 'Patrick',
-            lastName: 'Holmes',
+            firstName: 'Test',
+            lastName: 'Person',
             dateOfBirth: '1960-11-10',
             status: 'ACTIVE IN',
             prisonId: 'BAI',
@@ -1801,8 +1801,8 @@ export default {
         jsonBody: {
           prisoner: {
             prisonerNumber: 'G4169UO',
-            firstName: 'Patrick',
-            lastName: 'Holmes',
+            firstName: 'Test',
+            lastName: 'Person',
             dateOfBirth: '1960-11-10',
             status: 'ACTIVE IN',
             prisonId: 'BAI',
@@ -1832,8 +1832,8 @@ export default {
           prisoner: {
             prisonerNumber: 'G9786GC',
             bookingId: '1201102',
-            firstName: 'Patrick',
-            lastName: 'Holmes',
+            firstName: 'Test',
+            lastName: 'Person',
             dateOfBirth: '1960-11-10',
             status: 'ACTIVE IN',
             prisonId: 'BAI',
@@ -1873,8 +1873,8 @@ export default {
               prisonerNumber: 'G9786GC',
               bookingId: '1201102',
               bookNumber: '38518A',
-              firstName: 'DOUGAL',
-              lastName: 'MCGUIRE',
+              firstName: 'TEST',
+              lastName: 'PERSON',
               dateOfBirth: '1940-12-20',
               gender: 'Male',
               youthOffender: false,
@@ -1888,11 +1888,11 @@ export default {
               dateCreated: '2022-07-05 10:30:00',
               aliases: [
                 {
-                  firstName: 'DOUGLAS',
-                  lastName: 'ADORNO',
+                  firstName: 'OTHER',
+                  lastName: 'NAME',
                   dateOfBirth: '1939-11-19',
                   gender: 'Male',
-                  ethnicity: 'Asian/Asian British: Indian',
+                  ethnicity: 'Some ethnicity',
                 },
               ],
               alerts: [
@@ -1940,8 +1940,8 @@ export default {
               prisonerNumber: 'G9786GC',
               bookingId: '1201102',
               bookNumber: '38518A',
-              firstName: 'DOUGAL',
-              lastName: 'MCGUIRE',
+              firstName: 'TEST',
+              lastName: 'PERSON',
               dateOfBirth: '1940-12-20',
               gender: 'Male',
               youthOffender: false,
@@ -1955,11 +1955,11 @@ export default {
               dateCreated: '2022-07-05 10:30:00',
               aliases: [
                 {
-                  firstName: 'DOUGLAS',
-                  lastName: 'ADORNO',
+                  firstName: 'OTHER',
+                  lastName: 'NAME',
                   dateOfBirth: '1939-11-19',
                   gender: 'Male',
-                  ethnicity: 'Asian/Asian British: Indian',
+                  ethnicity: 'Some ethnicity',
                 },
               ],
               alerts: [
@@ -2013,8 +2013,8 @@ export default {
               prisonerNumber: 'G9786GC',
               bookingId: '1',
               bookNumber: '38518A',
-              firstName: 'BOB',
-              lastName: 'ZIMMER',
+              firstName: 'TEST',
+              lastName: 'PERSON',
               dateOfBirth: '1940-12-20',
               gender: 'Male',
               youthOffender: false,
@@ -2027,11 +2027,11 @@ export default {
               cellLocation: 'RECP',
               aliases: [
                 {
-                  firstName: 'DOUGLAS',
-                  lastName: 'ADORNO',
+                  firstName: 'OTHER',
+                  lastName: 'NAME',
                   dateOfBirth: '1939-11-19',
                   gender: 'Male',
-                  ethnicity: 'Asian/Asian British: Indian',
+                  ethnicity: 'Some ethnicity',
                 },
               ],
               alerts: [
@@ -2069,8 +2069,8 @@ export default {
         jsonBody: {
           prisoner: {
             prisonerNumber: 'G9786GC',
-            firstName: 'DOUGAL',
-            lastName: 'MCGUIRE',
+            firstName: 'Test',
+            lastName: 'Person',
             dateOfBirth: '1940-12-20',
             status: 'ACTIVE IN',
             prisonId: 'MDI',
@@ -2172,7 +2172,7 @@ export default {
           {
             kind: 'CRD',
             licenceId: 1,
-            name: 'Steve Cena',
+            name: 'Another Person',
             prisonerNumber: 'AB1234E',
             probationPractitioner: {
               name: 'John Smith',
@@ -2204,7 +2204,7 @@ export default {
           {
             kind: 'CRD',
             licenceId: 2,
-            name: 'Steve Cena',
+            name: 'Another Person',
             prisonerNumber: 'AB1234E',
             probationPractitioner: {
               name: 'Joe Bloggs',
@@ -2238,7 +2238,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Dougal Mcguire',
+            name: 'Test Person',
             crnNumber: 'X344165',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/09/2024',
@@ -2270,7 +2270,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Dougal Mcguire',
+            name: 'Test Person',
             crnNumber: 'X344165',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/09/2024',
@@ -2303,7 +2303,7 @@ export default {
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: [
           {
-            name: 'Dougal Mcguire',
+            name: 'Test Person',
             crnNumber: 'X344165',
             prisonerNumber: 'G9786GC',
             releaseDate: '01/09/2024',

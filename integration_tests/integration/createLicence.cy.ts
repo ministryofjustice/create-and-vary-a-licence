@@ -29,15 +29,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -84,7 +84,7 @@ context('Create a licence', () => {
         .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
         .checkDeleteTheseConditions() // for multiple Bespoke Condition
         .clickAddAnother()
-        .enterBespokeCondition(2, 'A third bespoke condition must surely be be a mistake')
+        .enterBespokeCondition(2, 'A final third bespoke condition')
         .checkDeleteTheseConditions() // for multiple Bespoke Condition
         .clickContinue()
 
@@ -116,15 +116,15 @@ context('Create a licence', () => {
     const caseloadPage = indexPage.clickCreateAPssLicence()
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const pssConditionsQuestionPage = appointmentTimePage
@@ -161,15 +161,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(() => {
       const checkAnswersPage = appointmentTimePage
@@ -191,15 +191,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -236,15 +236,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(() => {
       const additionalConditionsPage = appointmentTimePage
@@ -289,7 +289,7 @@ context('Create a licence', () => {
         .enterBespokeCondition(1, 'Another unusual and unlikely bespoke condition')
         .checkDeleteTheseConditions() // for multiple Bespoke Condition
         .clickAddAnother()
-        .enterBespokeCondition(2, 'A third bespoke condition must surely be be a mistake')
+        .enterBespokeCondition(2, 'A final third bespoke condition')
         .checkDeleteTheseConditions() // for multiple Bespoke Condition
         .clickContinue()
 
@@ -321,15 +321,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(() => {
       const checkAnswersPage = appointmentTimePage
@@ -352,15 +352,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const checkAnswersPage = appointmentTimePage
@@ -386,15 +386,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -433,15 +433,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
     appointmentTimePage.getRadioByValue('SPECIFIC_DATE_TIME').should('be.checked')
   })
 })

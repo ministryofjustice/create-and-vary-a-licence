@@ -28,15 +28,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -88,15 +88,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -181,15 +181,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage
@@ -300,15 +300,15 @@ context('Create a licence', () => {
     const confirmCreatePage = caseloadPage.clickNameToCreateLicence()
 
     const appointmentPersonPage = confirmCreatePage.selectYes().clickContinue()
-    const appointmentPlacePage = appointmentPersonPage.enterPerson('Freddie Mercury').clickContinue()
+    const appointmentPlacePage = appointmentPersonPage.enterPerson('Duty Officer').clickContinue()
     const appointmentContactPage = appointmentPlacePage
       .enterAddressLine1('123 Fake Street')
       .enterTown('Fakestown')
-      .enterCounty('Durham')
-      .enterPostcode('DH11AF')
+      .enterCounty('Fakeshire')
+      .enterPostcode('FA11KE')
       .clickContinue()
 
-    const appointmentTimePage = appointmentContactPage.enterTelephone('07892123456').clickContinue()
+    const appointmentTimePage = appointmentContactPage.enterTelephone('00000000000').clickContinue()
 
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       const additionalConditionsPage = appointmentTimePage

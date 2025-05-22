@@ -1,7 +1,11 @@
 import type { User } from '../@types/CvlUserDetails'
 import LicenceApiClient from '../data/licenceApiClient'
 import LicenceStatus from '../enumeration/licenceStatus'
-import { OverrideLicenceDatesRequest, OverrideLicenceTypeRequest } from '../@types/licenceApiClientTypes'
+import {
+  OverrideLicenceDatesRequest,
+  OverrideLicenceTypeRequest,
+  OverrideLicencePrisonerDetailsRequest,
+} from '../@types/licenceApiClientTypes'
 
 export default class LicenceOverrideService {
   constructor(private licenceApiClient: LicenceApiClient) {}
@@ -24,5 +28,9 @@ export default class LicenceOverrideService {
     user: User,
   ): Promise<Record<string, string>> {
     return this.licenceApiClient.overrideLicenceType(licenceId, request, user)
+  }
+
+  async overrideLicencePrisonerDetails(licenceId: number, request: OverrideLicencePrisonerDetailsRequest, user: User) {
+    await this.licenceApiClient.overrideLicencePrisonerDetails(licenceId, request, user)
   }
 }

@@ -1,4 +1,4 @@
-import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator'
+import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator'
 import moment from 'moment'
 import SimpleDate from '../routes/creatingLicences/types/date'
 
@@ -6,15 +6,18 @@ import SimpleDate from '../routes/creatingLicences/types/date'
 export default class ValidSimpleDate implements ValidatorConstraintInterface {
   private date: SimpleDate
 
-  validate(simpleDate: SimpleDate): boolean {
+  private pastAllowed: boolean = false
+
+  validate(simpleDate: SimpleDate, args?: ValidationArguments): boolean {
     this.date = simpleDate
+    this.pastAllowed = args?.constraints?.[0]?.pastAllowed ?? false
     return (
       !this.isBlank() &&
       this.isValidDay() &&
       this.isValidMonth() &&
       this.isValidYear() &&
       this.isValidDate() &&
-      this.isOnOrAfterToday()
+      (this.isOnOrAfterToday() || this.pastAllowed)
     )
   }
 
@@ -24,7 +27,7 @@ export default class ValidSimpleDate implements ValidatorConstraintInterface {
     if (!this.isValidMonth()) return 'Enter a valid month'
     if (!this.isValidYear()) return 'Enter a valid year'
     if (!this.isValidDate()) return 'Enter a valid date'
-    if (!this.isOnOrAfterToday()) return 'Enter a date in the future'
+    if (!this.isOnOrAfterToday() && !this.pastAllowed) return 'Enter a date in the future'
     return null
   }
 

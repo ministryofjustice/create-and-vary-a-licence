@@ -3242,6 +3242,32 @@ export interface components {
       /** @description Reason for overriding the licence status */
       reason: string
     }
+    /** @description Request object for overriding prisoner details */
+    OverrideLicencePrisonerDetailsRequest: {
+      /**
+       * @description The prisoner's forename
+       * @example John
+       */
+      forename: string
+      /**
+       * @description The prisoner's middle names
+       * @example James Micheal
+       */
+      middleNames?: string
+      /**
+       * @description The prisoner's surname
+       * @example Smith
+       */
+      surname: string
+      /**
+       * Format: date
+       * @description The prisoner's date of birth
+       * @example 15/04/1985
+       */
+      dateOfBirth: string
+      /** @description Reason for overriding the prisoner details */
+      reason: string
+    }
     /** @description A list of licence condition codes to be removed from a licence */
     DeleteAdditionalConditionsByCodeRequest: {
       /**
