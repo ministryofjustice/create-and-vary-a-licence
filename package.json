@@ -100,7 +100,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.812.0",
-    "@ministryofjustice/frontend": "3.7",
+    "@ministryofjustice/frontend": "3.7.2",
     "@ministryofjustice/hmpps-digital-prison-reporting-frontend": "^4.3.0",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
     "agentkeepalive": "^4.6.0",
@@ -177,7 +177,7 @@
     "jest-junit": "^16.0.0",
     "jsonwebtoken": "^9.0.2",
     "lint-staged": "^15.5.2",
-    "mocha": "^11.3.0",
+    "mocha": "^11.4.0",
     "mocha-junit-reporter": "^2.2.1",
     "nock": "^14.0.4",
     "nodemon": "^3.1.10",
@@ -191,6 +191,6 @@
     "typescript": "^5.8.3"
   },
   "overrides": {
-    "semver": "^7.5.3"
+    "semver": "^7.7.2"
   }
 }
