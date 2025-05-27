@@ -7,6 +7,7 @@ import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { CaseloadItem } from '../../@types/licenceApiClientTypes'
 import { parseIsoDate } from '../../utils/utils'
+import { LicenceApiClient } from '../../data'
 
 jest.mock('../probationService')
 
@@ -14,8 +15,9 @@ describe('Caseload Service', () => {
   const tenDaysFromNow = format(addDays(new Date(), 10), 'yyyy-MM-dd')
   const tenDaysFromNowCvlFormat = format(addDays(new Date(), 10), 'dd/MM/yyyy')
   const deliusService = new ProbationService(null) as jest.Mocked<ProbationService>
+  const licenceApiClient = new LicenceApiClient(null) as jest.Mocked<LicenceApiClient>
   const licenceService = new LicenceService(null, null) as jest.Mocked<LicenceService>
-  const serviceUnderTest = new AcoCaseloadService(deliusService, licenceService)
+  const serviceUnderTest = new AcoCaseloadService(deliusService, licenceApiClient, licenceService)
   const user = {
     deliusStaffIdentifier: 2000,
     probationTeamCodes: ['teamA', 'teamB'],

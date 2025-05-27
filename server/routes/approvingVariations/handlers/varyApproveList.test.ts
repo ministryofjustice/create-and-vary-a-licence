@@ -4,7 +4,7 @@ import VaryApproveListRoutes from './varyApproveList'
 import AcoCaseloadService from '../../../services/lists/acoCaseloadService'
 import LicenceType from '../../../enumeration/licenceType'
 
-const caseloadService = new AcoCaseloadService(null, null) as jest.Mocked<AcoCaseloadService>
+const caseloadService = new AcoCaseloadService(null, null, null) as jest.Mocked<AcoCaseloadService>
 jest.mock('../../../services/lists/acoCaseloadService')
 
 describe('Route Handlers - Variation approval list', () => {

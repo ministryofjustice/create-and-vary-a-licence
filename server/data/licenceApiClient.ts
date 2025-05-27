@@ -46,6 +46,8 @@ import type {
   OverrideLicenceTypeRequest,
   Com,
   OverrideLicencePrisonerDetailsRequest,
+  VaryApproverCaseloadSearchRequest,
+  VaryApproverCase,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -660,6 +662,15 @@ export default class LicenceApiClient extends RestClient {
       path: `/caseload/com/team/vary-case-load`,
       data: teamCaseloadRequest,
     })) as Promise<ComCase[]>
+  }
+
+  async getVaryApproverCaseload(
+    varyApproverCaseloadRequest: VaryApproverCaseloadSearchRequest,
+  ): Promise<VaryApproverCase[]> {
+    return (await this.post({
+      path: `/caseload/vary-approver`,
+      data: varyApproverCaseloadRequest,
+    })) as Promise<VaryApproverCase[]>
   }
 
   async getHdcLicenceData(licenceId: number): Promise<HdcLicenceData> {

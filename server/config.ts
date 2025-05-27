@@ -328,4 +328,5 @@ export default {
   monitoringSupplierTelephone: get('MONITORING_SUPPLIER_TELEPHONE', '0800 137 291', requiredInProduction),
   hdcIntegrationMvp2Enabled: get('HDC_INTEGRATION_MVP2_ENABLED', 'false', requiredInProduction) === 'true',
   hdcLicenceCreationBlockEnabled: get('HDC_LICENCE_CREATION_BLOCK', 'false', requiredInProduction) === 'true',
+  getAcoCaseloadFromBackEnd: get('ACO_CASELOAD_BACKEND_ENABLED', 'false', requiredInProduction) === 'true',
 }

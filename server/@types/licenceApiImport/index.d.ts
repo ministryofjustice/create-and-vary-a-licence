@@ -3622,6 +3622,65 @@ export interface components {
        */
       onProbationCount: number
     }
+    /** @description Search criteria for vary approver caseload search */
+    VaryApproverCaseloadSearchRequest: {
+      /**
+       * @description The probation delivery units where the the licence is supervised
+       * @example [
+       *       "N55PDV"
+       *     ]
+       */
+      probationPduCodes?: string[]
+      /**
+       * @description The probation region where the licence is supervised
+       * @example N01
+       */
+      probationAreaCode?: string
+      /**
+       * @description Search text to filter caseload
+       * @example 2022-04-20
+       */
+      searchTerm?: string
+    }
+    /** @description Describes a vary approver case */
+    VaryApproverCase: {
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      licenceId?: number
+      /**
+       * @description The full name of the person on licence
+       * @example An offender
+       */
+      name?: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crnNumber: string
+      /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      licenceType?: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * Format: date
+       * @description The date on which the licence variation was created
+       * @example 30/11/2022
+       */
+      variationRequestDate?: string
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       * @example 30/11/2022
+       */
+      releaseDate?: string
+      /** @description The details for the active supervising probation officer */
+      probationPractitioner?: string
+    }
     /** @description Describes an approval case */
     ApprovalCase: {
       /**
@@ -4674,12 +4733,6 @@ export interface components {
        * @enum {string}
        */
       kind: 'CRD'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'CRD'
     }
     /** @description Describes a licence that was created by a prison */
     HardStopLicence: Omit<
@@ -4727,12 +4780,6 @@ export interface components {
       isDueForEarlyRelease: boolean
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HARD_STOP'
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -4879,12 +4926,6 @@ export interface components {
        * @enum {string}
        */
       kind: 'HDC'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HDC'
     }
     /** @description Describes a HDC licence variation within this service */
     HdcVariationLicence: Omit<
@@ -4945,12 +4986,6 @@ export interface components {
        * @enum {string}
        */
       kind: 'HDC_VARIATION'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HDC_VARIATION'
     }
     /** @description Describes a licence variation within this service */
     VariationLicence: Omit<
@@ -4989,12 +5024,6 @@ export interface components {
        * @description The licence Id which this licence is a variation of
        */
       variationOf?: number
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'VARIATION'
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -5471,7 +5500,6 @@ export interface components {
   headers: never
   pathItems: never
 }
-export type $defs = Record<string, never>
 export interface operations {
   retryDlq: {
     parameters: {
