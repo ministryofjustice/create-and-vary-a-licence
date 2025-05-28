@@ -92,7 +92,7 @@ export default defineConfig({
         stubApproveVariation: licence.stubApproveVariation,
         stubReferVariation: licence.stubReferVariation,
         stubUpdateStandardConditions: licence.stubUpdateStandardConditions,
-        stubGetVariationsSubmittedByRegionForOffender: licence.stubGetVariationsSubmittedByRegionForOffender,
+        stubGetVaryApproverCaseload: licence.stubGetVaryApproverCaseload,
         stubGetLicencePolicyConditions: licence.stubGetLicencePolicyConditions,
         stubGetActivePolicyConditions: licence.stubGetActivePolicyConditions,
         stubGetPolicyChanges: licence.stubGetPolicyChanges,

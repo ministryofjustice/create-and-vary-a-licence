@@ -9,11 +9,17 @@ import policyV2_1 from './polices/v2-1'
 // eslint-disable-next-line camelcase
 import policyV3_0 from './polices/v3-0'
 import LicenceCreationType from '../../server/enumeration/licenceCreationType'
-import { AdditionalCondition } from '../../server/@types/licenceApiClientTypes'
+import { AdditionalCondition, Licence, LicencePolicyResponse } from '../../server/@types/licenceApiClientTypes'
 
 const ACTIVE_POLICY_VERSION = '3.0'
 
-const licencePlaceholder = {
+const licencePlaceholder: Licence = {
+  isDueForEarlyRelease: false,
+  isDueToBeReleasedInTheNextTwoWorkingDays: false,
+  isEligibleForEarlyRelease: false,
+  isInHardStopPeriod: false,
+  isReviewNeeded: false,
+  isVariation: false,
   id: 1,
   typeCode: 'AP_PSS',
   kind: 'CRD',
@@ -21,7 +27,7 @@ const licencePlaceholder = {
   statusCode: 'IN_PROGRESS',
   nomsId: 'G9786GC',
   bookingNo: '123456',
-  bookingId: '54321',
+  bookingId: 54321,
   crn: 'X12345',
   pnc: '2019/123445',
   cro: '12345',
@@ -41,13 +47,9 @@ const licencePlaceholder = {
   topupSupervisionExpiryDate: '26/06/2060',
   hardStopDate: '29/04/2021',
   hardStopWarningDate: '29/04/2021',
-  homeDetentionCurfewActualDate: null,
-  comFirstName: 'John',
-  comLastName: 'Smith',
   comUsername: 'jsmith',
-  comStaffId: '12345',
+  comStaffId: 12345,
   comEmail: 'john.smith@nps.gov.uk',
-  comTelephone: '08002345557',
   probationAreaCode: 'N01',
   probationAreaDescription: 'Wales',
   probationPduCode: 'PDU1',
@@ -85,6 +87,7 @@ const licencePlaceholder = {
           sequence: 0,
           field: 'probationRegion',
           value: 'London',
+          contributesToLicence: true,
         },
       ],
       uploadSummary: [],
@@ -98,7 +101,15 @@ const licencePlaceholder = {
       text: 'Report to staff at [NAME OF APPROVED PREMISES] at [TIME / DAILY], unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a [WEEKLY / MONTHLY / ETC] basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
       expandedText:
         'Report to staff at The Approved Premises at 9:30AM Daily, unless otherwise authorised by your supervising officer. This condition will be reviewed by your supervising officer on a Monthly basis and may be amended or removed if it is felt that the level of risk you present has reduced appropriately.',
-      data: [{}],
+      data: [
+        {
+          id: 1,
+          sequence: 0,
+          field: 'approvedPremises',
+          value: 'The Approved Premises',
+          contributesToLicence: true,
+        },
+      ],
       uploadSummary: [],
       readyToSubmit: true,
     },
@@ -804,37 +815,6 @@ export default {
     })
   },
 
-  stubGetVariationsSubmittedByRegionForOffender: (options: {
-    nomisId: string
-    bookingId: number
-  }): SuperAgentRequest => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: `/licences-api/licence/variations/submitted/area/(\\w)*`,
-      },
-      response: {
-        status: 200,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        jsonBody: [
-          {
-            licenceId: 1,
-            nomisId: options.nomisId,
-            licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
-            forename: 'Test',
-            surname: 'Person',
-            crn: 'X12345',
-            licenceType: 'AP',
-            actualReleaseDate: '23/03/2022',
-            comUsername: 'jsmith',
-            bookingId: options.bookingId,
-            dateCreated: '01/03/2021 10:15',
-          },
-        ],
-      },
-    })
-  },
-
   stubPutAppointmentPerson: (): SuperAgentRequest => {
     return stubFor({
       request: {
@@ -1451,7 +1431,7 @@ export default {
   },
 
   stubGetLicencePolicyConditions: (version = ACTIVE_POLICY_VERSION): SuperAgentRequest => {
-    let policy
+    let policy: LicencePolicyResponse
     switch (version) {
       case '2.0':
         // eslint-disable-next-line camelcase
@@ -2359,6 +2339,31 @@ export default {
         status: 200,
         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
         jsonBody: {},
+      },
+    })
+  },
+
+  stubGetVaryApproverCaseload: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: `/licences-api/caseload/vary-approver`,
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: [
+          {
+            licenceId: 1,
+            licenceStatus: LicenceStatus.VARIATION_SUBMITTED,
+            name: 'Test Person',
+            crnNumber: 'X12345',
+            licenceType: 'AP',
+            releaseDate: '23/03/2022',
+            variationRequestedDate: '01/03/2021',
+            probationPractitioner: 'jsmith',
+          },
+        ],
       },
     })
   },

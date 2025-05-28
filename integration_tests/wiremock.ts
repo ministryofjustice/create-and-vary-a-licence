@@ -39,7 +39,7 @@ const verifyEndpointCalledWith = async (options: {
       urlPath: options.path,
     })
     .then(response => response.body.requests)
-    .then(requests => {
+    .then((requests: Response[]) => {
       if (requests.length < 1) throw new Error(`No ${options.verb} requests made to ${options.path}`)
       return requests.filter(request => {
         const json = JSON.parse(request.body)

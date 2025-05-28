@@ -6,19 +6,10 @@ context('ACO review a licence variation', () => {
     cy.task('reset')
     cy.task('stubProbationAcoSignIn')
     cy.task('stubGetStaffDetails')
-    cy.task('stubGetLicencesForOffender', { nomisId: 'G9786GC', kind: 'VARIATION', status: 'VARIATION_SUBMITTED' })
-    cy.task('stubGetVariationsSubmittedByRegionForOffender', {
-      nomisId: 'G9786GC',
-      status: 'VARIATION_SUBMITTED',
-    })
+    cy.task('stubGetVaryApproverCaseload')
     cy.task('stubGetCompletedLicence', { statusCode: 'VARIATION_SUBMITTED', typeCode: 'AP' })
-    cy.task('stubGetProbationers')
-    cy.task('stubGetResponsibleCommunityManagers')
-    cy.task('searchPrisonersByNomisIds')
-    cy.task('stubGetStaffDetailsByList')
     cy.task('stubRecordAuditEvent')
     cy.task('stubMatchLicenceEvents')
-    cy.task('stubUpdateLicenceStatus')
     cy.task('stubGetLicencePolicyConditions')
     cy.task('stubGetActivePolicyConditions')
     cy.task('stubFeComponents')
