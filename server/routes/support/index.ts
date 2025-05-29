@@ -82,8 +82,12 @@ export default function Index({
   post('/offender/:nomsId/licence/:licenceId/dates', offenderLicenceDatesHandler.POST, LicenceDatesAndReason)
   get('/offender/:nomsId/licence/:licenceId/type', offenderLicenceTypeHandler.GET)
   post('/offender/:nomsId/licence/:licenceId/type', offenderLicenceTypeHandler.POST, LicenceTypeChange)
-  get('/licence/:licenceId/prisoner-details', licencePrisonerDetailsHandler.GET)
-  post('/licence/:licenceId/prisoner-details', licencePrisonerDetailsHandler.POST, LicencePrisonerDetails)
+  get('/offender/:nomsId/licence/:licenceId/prisoner-details', licencePrisonerDetailsHandler.GET)
+  post(
+    '/offender/:nomsId/licence/:licenceId/prisoner-details',
+    licencePrisonerDetailsHandler.POST,
+    LicencePrisonerDetails,
+  )
   get('/probation-teams/:teamCode/caseload', probationTeamHandler.GET)
   get('/probation-practitioner/:staffCode', comDetailsHandler.GET)
   get('/probation-practitioner/:staffCode/caseload', probationStaffHandler.GET)
