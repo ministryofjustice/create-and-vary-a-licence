@@ -139,7 +139,7 @@
     "qrcode": "^1.5.4",
     "redis": "^4.7.1",
     "reflect-metadata": "^0.2.2",
-    "sqs-consumer": "^11.6.0",
+    "sqs-consumer": "^12.0.0",
     "superagent": "^10.2.1",
     "uuid": "^11.1.0"
   },
