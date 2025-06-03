@@ -64,6 +64,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         returnToCase: 'some-back-link',
       },
       flash: jest.fn(),
+      get: jest.fn().mockReturnValue('/previous-page'),
     } as unknown as Request
 
     res = {
@@ -317,7 +318,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
           { field: 'appointmentTimeType', message: "Select 'Change' to go back and add appointment date and time" },
         ]),
       )
-      expect(res.redirect).toHaveBeenCalledWith('back')
+      expect(res.redirect).toHaveBeenCalledWith('/previous-page')
     })
 
     it('should call the licence API to submit the licence for approval', async () => {
@@ -338,6 +339,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
     })
 
     it('should redirect back with error messages in flash if appointment person field is empty', async () => {
+      req.get = jest.fn().mockReturnValue(undefined) // Simulate no referer
       res.locals.licence = {
         ...res.locals.licence,
         appointmentPersonType: 'SPECIFIC_PERSON',
@@ -350,7 +352,7 @@ describe('Route Handlers - Create Licence - Check Answers', () => {
         'validationErrors',
         JSON.stringify([{ field: 'appointmentPerson', message: "Select 'Change' to go back and add who to meet" }]),
       )
-      expect(res.redirect).toHaveBeenCalledWith('back')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/create/id/1/check-your-answers')
     })
 
     it('should not redirect back with error messages in flash if appointment person field is empty', async () => {

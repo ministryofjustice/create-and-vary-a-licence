@@ -414,6 +414,7 @@ describe('Route - view and approve a licence', () => {
         },
         flash: jest.fn(),
         query: {},
+        get: jest.fn().mockReturnValue('/previous-page'),
       } as unknown as Request
 
       res = {
@@ -432,7 +433,7 @@ describe('Route - view and approve a licence', () => {
 
       await handler.POST(req, res)
 
-      expect(res.redirect).toHaveBeenCalledWith('back')
+      expect(res.redirect).toHaveBeenCalledWith('/previous-page')
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
         '[{"field":"appointmentPersonType","message":"Select \'Change\' to go back and add who to meet"},{"field":"appointmentAddress","message":"Select \'Change\' to go back and add appointment address"},{"field":"appointmentContact","message":"Select \'Change\' to go back and add appointment telephone number"},{"field":"appointmentTimeType","message":"Select \'Change\' to go back and add appointment date and time"}]',
@@ -446,6 +447,7 @@ describe('Route - view and approve a licence', () => {
         },
         flash: jest.fn(),
         query: {},
+        get: jest.fn().mockReturnValue(undefined), // Simulate no referer
       } as unknown as Request
 
       res = {
@@ -469,7 +471,7 @@ describe('Route - view and approve a licence', () => {
 
       await handler.POST(req, res)
 
-      expect(res.redirect).toHaveBeenCalledWith('back')
+      expect(res.redirect).toHaveBeenCalledWith('/licence/view/id/1/show')
       expect(req.flash).toHaveBeenCalledWith(
         'validationErrors',
         '[{"field":"appointmentPerson","message":"Select \'Change\' to go back and add who to meet"}]',
