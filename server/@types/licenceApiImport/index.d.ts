@@ -380,6 +380,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/licence/id/{licenceId}/curfew-times': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Update the curfew times for a HDC licence.
+     * @description Replace the curfew times against a HDC licence if curfew times change. Requires ROLE_SYSTEM_USER or ROLE_CVL_ADMIN.
+     */
+    put: operations['updateCurfewTimes']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/licence/id/{licenceId}/contact-number': {
     parameters: {
       query?: never
@@ -1887,6 +1907,66 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/address/search/by/text/{searchQuery}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Searches for addresses that match the given search text
+     * @description Searches for addresses that match the given search text
+     */
+    get: operations['searchForAddresses']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/address/search/by/reference/{reference}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Gets an address by it's reference
+     * @description Gets an address by it's reference (Unique Property Reference Number)
+     */
+    get: operations['searchForAddressByReference']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/address/search/by/postcode/{postcode}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Searches for addresses that match the given postcode
+     * @description Searches for addresses that match the given postcode
+     */
+    get: operations['searchForAddressesByPostcode']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/licence/id/{licenceId}/discard': {
     parameters: {
       query?: never
@@ -3162,6 +3242,32 @@ export interface components {
       /** @description Reason for overriding the licence status */
       reason: string
     }
+    /** @description Request object for overriding prisoner details */
+    OverrideLicencePrisonerDetailsRequest: {
+      /**
+       * @description The prisoner's forename
+       * @example John
+       */
+      forename: string
+      /**
+       * @description The prisoner's middle names
+       * @example James Micheal
+       */
+      middleNames?: string
+      /**
+       * @description The prisoner's surname
+       * @example Smith
+       */
+      surname: string
+      /**
+       * Format: date
+       * @description The prisoner's date of birth
+       * @example 15/04/1985
+       */
+      dateOfBirth: string
+      /** @description Reason for overriding the prisoner details */
+      reason: string
+    }
     /** @description A list of licence condition codes to be removed from a licence */
     DeleteAdditionalConditionsByCodeRequest: {
       /**
@@ -3515,6 +3621,65 @@ export interface components {
        * @example 10
        */
       onProbationCount: number
+    }
+    /** @description Search criteria for vary approver caseload search */
+    VaryApproverCaseloadSearchRequest: {
+      /**
+       * @description The probation delivery units where the the licence is supervised
+       * @example [
+       *       "N55PDV"
+       *     ]
+       */
+      probationPduCodes?: string[]
+      /**
+       * @description The probation region where the licence is supervised
+       * @example N01
+       */
+      probationAreaCode?: string
+      /**
+       * @description Search text to filter caseload
+       * @example 2022-04-20
+       */
+      searchTerm?: string
+    }
+    /** @description Describes a vary approver case */
+    VaryApproverCase: {
+      /**
+       * Format: int64
+       * @description Unique identifier for this licence within the service
+       * @example 99999
+       */
+      licenceId?: number
+      /**
+       * @description The full name of the person on licence
+       * @example An offender
+       */
+      name?: string
+      /**
+       * @description The case reference number (CRN) for the person on this licence
+       * @example X12444
+       */
+      crnNumber: string
+      /**
+       * @description The licence type code
+       * @example AP
+       * @enum {string}
+       */
+      licenceType?: 'AP' | 'AP_PSS' | 'PSS'
+      /**
+       * Format: date
+       * @description The date on which the licence variation was created
+       * @example 30/11/2022
+       */
+      variationRequestDate?: string
+      /**
+       * Format: date
+       * @description The date on which the prisoner leaves custody
+       * @example 30/11/2022
+       */
+      releaseDate?: string
+      /** @description The details for the active supervising probation officer */
+      probationPractitioner?: string
     }
     /** @description Describes an approval case */
     ApprovalCase: {
@@ -4568,12 +4733,6 @@ export interface components {
        * @enum {string}
        */
       kind: 'CRD'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'CRD'
     }
     /** @description Describes a licence that was created by a prison */
     HardStopLicence: Omit<
@@ -4621,12 +4780,6 @@ export interface components {
       isDueForEarlyRelease: boolean
       /** @description Is the prisoner due to be released in the next two working days */
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HARD_STOP'
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -4707,6 +4860,10 @@ export interface components {
        */
       untilTime?: string
     }
+    UpdateCurfewTimesRequest: {
+      /** @description The list of hdc licence curfew times from service configuration */
+      curfewTimes: components['schemas']['HdcCurfewTimes'][]
+    }
     /** @description Describes a HDC licence within this service */
     HdcLicence: Omit<
       WithRequired<
@@ -4763,12 +4920,6 @@ export interface components {
       isDueToBeReleasedInTheNextTwoWorkingDays: boolean
       /** @description The curfew address for this licence */
       curfewAddress?: components['schemas']['HdcCurfewAddress']
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HDC'
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -4835,12 +4986,6 @@ export interface components {
        * @enum {string}
        */
       kind: 'HDC_VARIATION'
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'HDC_VARIATION'
     }
     /** @description Describes a licence variation within this service */
     VariationLicence: Omit<
@@ -4879,12 +5024,6 @@ export interface components {
        * @description The licence Id which this licence is a variation of
        */
       variationOf?: number
-    } & {
-      /**
-       * @description discriminator enum property added by openapi-typescript
-       * @enum {string}
-       */
-      kind: 'VARIATION'
     } & {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -5008,13 +5147,6 @@ export interface components {
       comName: string
       subjects: components['schemas']['Subject'][]
     }
-    Subject: {
-      prisonerNumber: string
-      crn: string
-      name: string
-      /** Format: date */
-      releaseDate: string
-    }
     CurfewAddress: {
       addressLine1: string
       addressLine2?: string
@@ -5037,7 +5169,7 @@ export interface components {
     HdcLicenceData: {
       /** Format: int64 */
       licenceId?: number
-      curfewAddress?: components['schemas']['CurfewAddress']
+      curfewAddress?: components['schemas']['HdcCurfewAddress']
       firstNightCurfewHours?: components['schemas']['FirstNight']
       curfewTimes?: components['schemas']['HdcCurfewTimes'][]
     }
@@ -5082,13 +5214,6 @@ export interface components {
         | 'VERSION_CREATED'
         | 'NOT_STARTED'
         | 'TIMED_OUT'
-        | 'HDC_CREATED'
-        | 'HDC_VERSION_CREATED'
-        | 'HDC_SUBMITTED'
-        | 'HDC_VARIATION_CREATED'
-        | 'HDC_VARIATION_SUBMITTED'
-        | 'HDC_VARIATION_APPROVED'
-        | 'HDC_VARIATION_REFERRED'
       /**
        * @description The username related to this event or SYSTEM if an automated event
        * @example X63533
@@ -5330,6 +5455,44 @@ export interface components {
        */
       count: number
     }
+    /** @description Response object which describes an result from a address search */
+    AddressSearchResponse: {
+      /**
+       * @description The address's Unique Property Reference Number
+       * @example 200010019924
+       */
+      reference: string
+      /**
+       * @description The address's first line
+       * @example 34
+       */
+      firstLine: string
+      /**
+       * @description The address's second line
+       * @example Urchfont
+       */
+      secondLine?: string
+      /**
+       * @description The address's Town or City
+       * @example Chippenham
+       */
+      townOrCity: string
+      /**
+       * @description The address's county
+       * @example Shropshire
+       */
+      county: string
+      /**
+       * @description The address's postcode
+       * @example RG13HS
+       */
+      postcode: string
+      /**
+       * @description The address's country
+       * @example Wales
+       */
+      country: string
+    }
   }
   responses: never
   parameters: never
@@ -5337,7 +5500,6 @@ export interface components {
   headers: never
   pathItems: never
 }
-export type $defs = Record<string, never>
 export interface operations {
   retryDlq: {
     parameters: {
@@ -6790,6 +6952,84 @@ export interface operations {
       }
       /** @description Accepted */
       202: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad request, request body must be valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The licence for this ID was not found. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateCurfewTimes: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        licenceId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateCurfewTimesRequest']
+      }
+    }
+    responses: {
+      /** @description Curfew times updated */
+      200: {
         headers: {
           [name: string]: unknown
         }
@@ -11746,13 +11986,6 @@ export interface operations {
           | 'VERSION_CREATED'
           | 'NOT_STARTED'
           | 'TIMED_OUT'
-          | 'HDC_CREATED'
-          | 'HDC_VERSION_CREATED'
-          | 'HDC_SUBMITTED'
-          | 'HDC_VARIATION_CREATED'
-          | 'HDC_VARIATION_SUBMITTED'
-          | 'HDC_VARIATION_APPROVED'
-          | 'HDC_VARIATION_REFERRED'
         )[]
         sortBy?: string
         sortOrder?: string
@@ -12348,6 +12581,207 @@ export interface operations {
       }
       /** @description Bank holidays were not found. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForAddresses: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        searchQuery: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns addresses matching the given search text */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressSearchResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForAddressByReference: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        reference: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns the address with the provided reference */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressSearchResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Internal Server Error */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchForAddressesByPostcode: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        postcode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns addresses matching the given search text */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AddressSearchResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
         headers: {
           [name: string]: unknown
         }

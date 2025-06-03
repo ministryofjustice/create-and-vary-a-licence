@@ -184,7 +184,7 @@ context('View and print licence', () => {
     let viewLicencePage: ViewALicencePage = viewCasesList.clickALicence()
     viewLicencePage = viewLicencePage.clickChangePersonLink().enterPerson('Joe Bloggs').clickContinueToReturn()
     viewLicencePage = viewLicencePage.clickChangeAddressLink().enterDefaultAddress().clickContinueToReturn()
-    viewLicencePage = viewLicencePage.clickChangeTelephoneLink().enterTelephone('01234567890').clickContinueToReturn()
+    viewLicencePage = viewLicencePage.clickChangeTelephoneLink().enterTelephone('00000000000').clickContinueToReturn()
     cy.task('getNextWorkingDay', dates).then(appointmentDate => {
       viewLicencePage = viewLicencePage
         .clickChangeDateLink()

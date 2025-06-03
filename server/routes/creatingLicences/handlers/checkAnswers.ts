@@ -59,7 +59,8 @@ export default class CheckAnswersRoutes {
     const errors = await this.validateLicence(licence)
     if (errors.length > 0) {
       req.flash('validationErrors', JSON.stringify(errors))
-      return res.redirect('back')
+      const referer = req.get('Referer') || `/licence/create/id/${licenceId}/check-your-answers`
+      return res.redirect(referer)
     }
 
     /**

@@ -45,6 +45,9 @@ import type {
   HdcLicenceData,
   OverrideLicenceTypeRequest,
   Com,
+  OverrideLicencePrisonerDetailsRequest,
+  VaryApproverCaseloadSearchRequest,
+  VaryApproverCase,
 } from '../@types/licenceApiClientTypes'
 import config, { ApiConfig } from '../config'
 import { User } from '../@types/CvlUserDetails'
@@ -491,6 +494,13 @@ export default class LicenceApiClient extends RestClient {
     return response.status === 400 ? (response.fieldErrors as Record<string, string>) : null
   }
 
+  async overrideLicencePrisonerDetails(licenceId: number, request: OverrideLicencePrisonerDetailsRequest, user: User) {
+    await this.post(
+      { path: `/licence/id/${licenceId}/override/prisoner-details`, data: request },
+      { username: user?.username },
+    )
+  }
+
   async updateOffenderDetails(nomisId: string, offenderDetails: UpdateOffenderDetailsRequest) {
     await this.put({
       path: `/offender/nomisid/${nomisId}/update-offender-details`,
@@ -652,6 +662,15 @@ export default class LicenceApiClient extends RestClient {
       path: `/caseload/com/team/vary-case-load`,
       data: teamCaseloadRequest,
     })) as Promise<ComCase[]>
+  }
+
+  async getVaryApproverCaseload(
+    varyApproverCaseloadRequest: VaryApproverCaseloadSearchRequest,
+  ): Promise<VaryApproverCase[]> {
+    return (await this.post({
+      path: `/caseload/vary-approver`,
+      data: varyApproverCaseloadRequest,
+    })) as Promise<VaryApproverCase[]>
   }
 
   async getHdcLicenceData(licenceId: number): Promise<HdcLicenceData> {

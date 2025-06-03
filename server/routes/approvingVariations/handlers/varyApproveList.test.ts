@@ -4,7 +4,7 @@ import VaryApproveListRoutes from './varyApproveList'
 import AcoCaseloadService from '../../../services/lists/acoCaseloadService'
 import LicenceType from '../../../enumeration/licenceType'
 
-const caseloadService = new AcoCaseloadService(null, null) as jest.Mocked<AcoCaseloadService>
+const caseloadService = new AcoCaseloadService(null, null, null) as jest.Mocked<AcoCaseloadService>
 jest.mock('../../../services/lists/acoCaseloadService')
 
 describe('Route Handlers - Variation approval list', () => {
@@ -34,7 +34,7 @@ describe('Route Handlers - Variation approval list', () => {
         licenceType: LicenceType.AP,
         releaseDate: '01 May 2022',
         variationRequestDate: '01 May 2022',
-        probationPractitioner: 'Walter White',
+        probationPractitioner: 'Com Four',
       },
     ])
   })
@@ -56,7 +56,7 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: 'Walter White',
+            probationPractitioner: 'Com Four',
           },
         ],
         regionCases: false,
@@ -78,7 +78,7 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: 'Walter White',
+            probationPractitioner: 'Com Four',
           },
         ],
         regionCases: false,
@@ -100,7 +100,7 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: 'Walter White',
+            probationPractitioner: 'Com Four',
           },
         ],
         regionCases: false,
@@ -109,7 +109,7 @@ describe('Route Handlers - Variation approval list', () => {
     })
 
     it('should successfully search by probation practitioner', async () => {
-      req.query.search = 'white'
+      req.query.search = 'four'
 
       await handler.GET(req, res)
 
@@ -122,11 +122,11 @@ describe('Route Handlers - Variation approval list', () => {
             licenceType: 'AP',
             releaseDate: '01 May 2022',
             variationRequestDate: '01 May 2022',
-            probationPractitioner: 'Walter White',
+            probationPractitioner: 'Com Four',
           },
         ],
         regionCases: false,
-        search: 'white',
+        search: 'four',
       })
     })
   })

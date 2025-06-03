@@ -19,8 +19,8 @@ export default {
             prisonerNumber: 'G9786GC',
             bookingId: '1201102',
             bookNumber: '38518A',
-            firstName: 'DOUGAL',
-            lastName: 'MCGUIRE',
+            firstName: 'TEST',
+            lastName: 'PERSON',
             dateOfBirth: '1940-12-20',
             gender: 'Male',
             youthOffender: false,
@@ -34,11 +34,11 @@ export default {
             dateCreated: '2022-07-05 10:30:00',
             aliases: [
               {
-                firstName: 'DOUGLAS',
-                lastName: 'ADORNO',
+                firstName: 'OTHER',
+                lastName: 'NAME',
                 dateOfBirth: '1939-11-19',
                 gender: 'Male',
-                ethnicity: 'Asian/Asian British: Indian',
+                ethnicity: 'Some ethnicity',
               },
             ],
             alerts: [
@@ -77,8 +77,8 @@ export default {
             prisonerNumber: 'G9786GC',
             bookingId: '1201102',
             bookNumber: '38518A',
-            firstName: 'DOUGAL',
-            lastName: 'MCGUIRE',
+            firstName: 'TEST',
+            lastName: 'PERSON',
             dateOfBirth: '1940-12-20',
             gender: 'Male',
             youthOffender: false,
@@ -91,11 +91,11 @@ export default {
             cellLocation: 'RECP',
             aliases: [
               {
-                firstName: 'DOUGLAS',
-                lastName: 'ADORNO',
+                firstName: 'OTHER',
+                lastName: 'NAME',
                 dateOfBirth: '1939-11-19',
                 gender: 'Male',
-                ethnicity: 'Asian/Asian British: Indian',
+                ethnicity: 'Some ethnicity',
               },
             ],
             alerts: [

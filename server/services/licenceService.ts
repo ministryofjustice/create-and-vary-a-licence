@@ -3,6 +3,7 @@ import fs from 'fs'
 import _ from 'lodash'
 import { format } from 'date-fns'
 import type {
+  AddAdditionalConditionRequest,
   AdditionalCondition,
   AdditionalConditionsRequest,
   AppointmentAddressRequest,
@@ -11,31 +12,28 @@ import type {
   AuditEvent,
   AuditRequest,
   BespokeConditionsRequest,
+  ComReviewCount,
   ContactNumberRequest,
   CreateLicenceRequest,
   Licence,
+  LicenceConditionChange,
+  LicenceCreationResponse,
   LicenceSummary,
   NotifyRequest,
   ReferVariationRequest,
   StatusUpdateRequest,
   UpdateAdditionalConditionDataRequest,
   UpdateComRequest,
-  UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
+  UpdatePrisonUserRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
   UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
   UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
-  OmuContact,
-  AddAdditionalConditionRequest,
-  LicenceConditionChange,
-  UpdateOffenderDetailsRequest,
-  ComReviewCount,
-  CaseloadItem,
-  LicenceCreationResponse,
 } from '../@types/licenceApiClientTypes'
+import { CaseloadItem, OmuContact, UpdateOffenderDetailsRequest } from '../@types/licenceApiClientTypes'
 import LicenceApiClient from '../data/licenceApiClient'
 import PersonName from '../routes/initialAppointment/types/personName'
 import DateTime from '../routes/initialAppointment/types/dateTime'
@@ -423,8 +421,12 @@ export default class LicenceService {
     return this.licenceApiClient.updatePrisonInformation(licenceId, prisonInformation, user)
   }
 
-  async updateSentenceDates(licenceId: string, sentenceDates: UpdateSentenceDatesRequest, user?: User): Promise<void> {
-    return this.licenceApiClient.updateSentenceDates(licenceId, sentenceDates, user)
+  async updateSentenceDates(
+    licenceId: string,
+    updateSentenceDatesRequest: UpdateSentenceDatesRequest,
+    user?: User,
+  ): Promise<void> {
+    return this.licenceApiClient.updateSentenceDates(licenceId, updateSentenceDatesRequest, user)
   }
 
   async approveVariation(licenceId: string, user: User): Promise<void> {

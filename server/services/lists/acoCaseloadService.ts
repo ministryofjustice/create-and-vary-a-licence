@@ -3,15 +3,16 @@ import { format } from 'date-fns'
 import moment from 'moment/moment'
 import ProbationService from '../probationService'
 import LicenceService from '../licenceService'
-import { AcoCaseView } from '../../@types/acoCase'
 import LicenceStatus from '../../enumeration/licenceStatus'
 import LicenceType from '../../enumeration/licenceType'
 import { User } from '../../@types/CvlUserDetails'
-import type { CvlFields, CvlPrisoner, LicenceSummary } from '../../@types/licenceApiClientTypes'
+import type { CvlFields, CvlPrisoner, LicenceSummary, VaryApproverCase } from '../../@types/licenceApiClientTypes'
 import LicenceKind from '../../enumeration/LicenceKind'
 import { convertToTitleCase, parseCvlDate, parseCvlDateTime } from '../../utils/utils'
 import { nameToString } from '../../data/deliusClient'
 import { DeliusRecord } from '../../@types/deliusClientTypes'
+import config from '../../config'
+import { LicenceApiClient } from '../../data'
 
 type Licence = {
   id?: number
@@ -45,10 +46,18 @@ type AcoCase = {
 export default class AcoCaseloadService {
   constructor(
     private readonly probationService: ProbationService,
+    private readonly licenceApiClient: LicenceApiClient,
     private readonly licenceService: LicenceService,
   ) {}
 
-  async getVaryApproverCaseload(user: User, searchTerm: string): Promise<AcoCaseView[]> {
+  async getVaryApproverCaseload(user: User, searchTerm: string): Promise<VaryApproverCase[]> {
+    const { getAcoCaseloadFromBackEnd } = config
+    if (getAcoCaseloadFromBackEnd) {
+      return this.licenceApiClient.getVaryApproverCaseload({
+        probationPduCodes: user.probationPduCodes,
+        searchTerm,
+      })
+    }
     return this.licenceService
       .getLicencesForVariationApproval(user)
       .then(licences => this.mapLicencesToOffenders(licences))
@@ -58,7 +67,15 @@ export default class AcoCaseloadService {
       .then(caseload => caseload.sort((a, b) => this.sortByReleaseDate(a, b)))
   }
 
-  async getVaryApproverCaseloadByRegion(user: User, searchTerm: string): Promise<AcoCaseView[]> {
+  async getVaryApproverCaseloadByRegion(user: User, searchTerm: string): Promise<VaryApproverCase[]> {
+    const { getAcoCaseloadFromBackEnd } = config
+    if (getAcoCaseloadFromBackEnd) {
+      return this.licenceApiClient.getVaryApproverCaseload({
+        probationAreaCode: user.probationAreaCode,
+        searchTerm,
+      })
+    }
+
     return this.licenceService
       .getLicencesForVariationApprovalByRegion(user)
       .then(licences => this.mapLicencesToOffenders(licences))
@@ -162,7 +179,7 @@ export default class AcoCaseloadService {
     })
   }
 
-  private mapAcoCaseToView(acoCase: AcoCase): AcoCaseView {
+  private mapAcoCaseToView(acoCase: AcoCase): VaryApproverCase {
     const licence = _.head(acoCase.licences)
 
     const releaseDate = licence.licenceStartDate ? format(parseCvlDate(licence.licenceStartDate), 'dd MMM yyyy') : null
@@ -181,7 +198,7 @@ export default class AcoCaseloadService {
     }
   }
 
-  private applySearchFilter(acoCase: AcoCaseView, search: string): boolean {
+  private applySearchFilter(acoCase: VaryApproverCase, search: string): boolean {
     const searchString = search?.toLowerCase().trim()
     if (!searchString) return true
     return (
@@ -191,7 +208,7 @@ export default class AcoCaseloadService {
     )
   }
 
-  private sortByReleaseDate(a: AcoCaseView, b: AcoCaseView): number {
+  private sortByReleaseDate(a: VaryApproverCase, b: VaryApproverCase): number {
     const releaseDate1 = moment(a.releaseDate, 'DD MMM YYYY').unix()
     const releaseDate2 = moment(b.releaseDate, 'DD MMM YYYY').unix()
     return releaseDate1 - releaseDate2

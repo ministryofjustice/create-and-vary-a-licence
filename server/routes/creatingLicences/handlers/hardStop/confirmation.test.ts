@@ -11,8 +11,8 @@ describe('Route Handlers - Confirmation', () => {
       render: jest.fn(),
       locals: {
         licence: {
-          forename: 'Bobby',
-          surname: 'Zamora',
+          forename: 'Test',
+          surname: 'Person',
           prisonDescription: `Leeds (HMP)`,
         },
       },
@@ -36,7 +36,7 @@ describe('Route Handlers - Confirmation', () => {
 
         await handler.GET(reqWithEmptySession, res)
         expect(res.render).toHaveBeenCalledWith('pages/create/hardStop/confirmation', {
-          titleText: 'Licence conditions for Bobby Zamora sent',
+          titleText: 'Licence conditions for Test Person sent',
           backLink: '/licence/view/cases',
         })
       })
