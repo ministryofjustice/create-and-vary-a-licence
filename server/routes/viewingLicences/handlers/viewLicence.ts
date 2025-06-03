@@ -87,7 +87,8 @@ export default class ViewAndPrintLicenceRoutes {
     const errors = await this.validateLicence(licence)
     if (errors.length > 0) {
       req.flash('validationErrors', JSON.stringify(errors))
-      return res.redirect('back')
+      const referer = req.get('Referer') || `/licence/view/id/${licenceId}/show`
+      return res.redirect(referer)
     }
 
     await this.licenceService.submitLicence(licenceId, user)
