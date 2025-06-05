@@ -7,6 +7,7 @@
 {% from "partials/additionalPssConditionsSummary.njk" import additionalPssConditions %}
 {% from "partials/bespokeConditionsSummary.njk" import bespokeConditions %}
 {% from "partials/variationSummary.njk" import variationSummary %}
+{% from "partials/additionalInformationSummary.njk" import additionalInformationSummary %}
 {% from "moj/components/banner/macro.njk" import mojBanner %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
@@ -138,7 +139,7 @@
                 </div>
             {% endif %}
 
-            
+            {{ additionalInformationSummary(licence, isInProgress) }}
 
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
