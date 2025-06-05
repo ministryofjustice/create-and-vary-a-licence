@@ -1,0 +1,36 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro additionalInformationSummary(licence, isEditable) %}
+    {% if not licence.isVariation %}
+        {% set additionalInformationRows = []%}
+
+        {# Placeholder #}
+        {% set yesNo = "Yes" | escape %}
+        {% set pathfinderName = "Example name" | escape%}
+
+        {% set pathfinderResponses = yesNo + "<br><br>" + pathfinderName %}
+
+        <div id="additional-information" class="govuk-!-padding-top-9">
+            <h2 class="govuk-heading-m">Additional information</h2>
+            <p>This information will not appear on the licence.</p>
+            {{ 
+                govukSummaryList({
+                    attributes: { id: "additionalInformationSummaryList" },
+                    rows: [{
+                        key: { text: "Are they being tagged as a part of a pathfinder or programme?" },
+                        value: { html: pathfinderResponses },
+                        actions: {
+                            items: [
+                                {
+                                    href: "#",
+                                    text: 'Change',
+                                    visuallyHiddenText: 'if they are being tagged as part of a pathfinder or programme.'
+                                }
+                            ] if isEditable else []
+                        }
+                    }]
+                })
+            }}
+        </div>
+    {% endif %}
+{% endmacro %}
