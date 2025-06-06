@@ -20,7 +20,6 @@ import {
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
-  UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
   UpdateVloDiscussionRequest,
   CaCaseloadSearch,
@@ -498,34 +497,11 @@ describe('Licence API client tests', () => {
   })
 
   it('Update sentence dates', async () => {
-    await licenceApiClient.updateSentenceDates(
-      '1',
-      {
-        conditionalReleaseDate: '09/09/2022',
-        actualReleaseDate: '09/09/2022',
-        sentenceStartDate: '09/09/2021',
-        sentenceEndDate: '09/09/2023',
-        licenceStartDate: '09/09/2022',
-        licenceExpiryDate: '09/09/2023',
-        topupSupervisionStartDate: '09/09/2023',
-        topupSupervisionExpiryDate: '09/09/2024',
-      } as UpdateSentenceDatesRequest,
-      { username: 'joebloggs' } as User,
-    )
+    await licenceApiClient.updateSentenceDates('1', { username: 'joebloggs' } as User)
 
     expect(put).toHaveBeenCalledWith(
       {
         path: '/licence/id/1/sentence-dates',
-        data: {
-          conditionalReleaseDate: '09/09/2022',
-          actualReleaseDate: '09/09/2022',
-          sentenceStartDate: '09/09/2021',
-          sentenceEndDate: '09/09/2023',
-          licenceStartDate: '09/09/2022',
-          licenceExpiryDate: '09/09/2023',
-          topupSupervisionStartDate: '09/09/2023',
-          topupSupervisionExpiryDate: '09/09/2024',
-        },
       },
       { username: 'joebloggs' },
     )
