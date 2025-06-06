@@ -40,7 +40,9 @@ describe('Licence Service', () => {
   conditionService.getStandardConditions.mockResolvedValue({} as StandardCondition[])
   conditionService.getAdditionalConditions.mockResolvedValue({} as AdditionalConditionsConfig)
 
-  conditionService.getStandardConditions.mockResolvedValue([{ text: 'fake standard condition', code: 'fake1' }])
+  conditionService.getStandardConditions.mockResolvedValue([
+    { id: 1, text: 'fake standard condition', code: 'fake1', sequence: 1 },
+  ])
 
   const user = {
     username: 'joebloggs',

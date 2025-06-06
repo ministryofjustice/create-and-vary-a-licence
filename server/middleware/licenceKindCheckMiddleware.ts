@@ -6,7 +6,7 @@ export default function licenceKindCheckMiddleware(kindsToExclude: LicenceKind[]
   return async (req, res, next) => {
     const { licence } = res.locals
 
-    if (kindsToExclude.includes(LicenceKind[licence.kind])) {
+    if (kindsToExclude.includes(LicenceKind[licence.kind as LicenceKind])) {
       logger.error(`Access denied due to licence kind middleware, blocking kind: ${licence.kind}`)
       return res.redirect('/access-denied')
     }

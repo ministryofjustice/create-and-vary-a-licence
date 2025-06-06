@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import LicenceService from '../../../services/licenceService'
 import ConditionService from '../../../services/conditionService'
 import { getConfigForCondition } from '../../../utils/conditionRoutes'
+import { AdditionalCondition } from '../../../@types/licenceApiClientTypes'
 
 export default class AdditionalLicenceConditionInputRoutes {
   constructor(
@@ -14,7 +15,9 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { licence } = res.locals
     const { conditionId } = req.params
 
-    const additionalCondition = licence.additionalLicenceConditions.find(condition => condition.id === +conditionId)
+    const additionalCondition = licence.additionalLicenceConditions.find(
+      (condition: AdditionalCondition) => condition.id === +conditionId,
+    )
 
     if (!additionalCondition) {
       return res.redirect(
@@ -57,7 +60,7 @@ export default class AdditionalLicenceConditionInputRoutes {
       }`
     }
 
-    const condition = licence.additionalLicenceConditions.find(c => c.id === +conditionId)
+    const condition = licence.additionalLicenceConditions.find((c: AdditionalCondition) => c.id === +conditionId)
     await this.licenceService.updateAdditionalConditionData(licenceId, condition, req.body, user)
 
     return res.redirect(redirect)
@@ -88,7 +91,9 @@ export default class AdditionalLicenceConditionInputRoutes {
     const { user, licence } = res.locals
     const { conditionId } = req.params
 
-    const condition = licence.additionalLicenceConditions.find(c => c.id === parseInt(conditionId, 10))
+    const condition = licence.additionalLicenceConditions.find(
+      (c: AdditionalCondition) => c.id === parseInt(conditionId, 10),
+    )
     const conditionData = { conditionSkipped: '[DATE REQUIRED]' }
     await this.licenceService.updateAdditionalConditionData(licence.id.toString(), condition, conditionData, user)
 
