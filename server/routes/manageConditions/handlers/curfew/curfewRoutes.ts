@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import LicenceService from '../../../../services/licenceService'
 import ConditionService from '../../../../services/conditionService'
-import { AddAdditionalConditionRequest, Licence } from '../../../../@types/licenceApiClientTypes'
+import { AddAdditionalConditionRequest, AdditionalCondition, Licence } from '../../../../@types/licenceApiClientTypes'
 import { SimpleTime } from '../../types'
 import { User } from '../../../../@types/CvlUserDetails'
 
@@ -15,8 +15,10 @@ export default class CurfewRoutes {
     const { conditionCode } = req.params
     const { licence } = res.locals
 
-    const additionalCondition = licence.additionalLicenceConditions.find(condition => condition.code === conditionCode)
-    const conditionInstances = licence.additionalLicenceConditions
+    const additionalCondition = licence.additionalLicenceConditions.find(
+      (condition: AdditionalCondition) => condition.code === conditionCode,
+    )
+    const conditionInstances = (licence.additionalLicenceConditions as AdditionalCondition[])
       .filter(condition => condition.code === conditionCode)
       .sort((a, b) => a.id - b.id)
     const config = await this.conditionService.getAdditionalConditionByCode(conditionCode, licence.version)
