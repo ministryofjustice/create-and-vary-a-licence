@@ -28,7 +28,6 @@ import type {
   UpdatePrisonUserRequest,
   UpdateProbationTeamRequest,
   UpdateReasonForVariationRequest,
-  UpdateSentenceDatesRequest,
   UpdateSpoDiscussionRequest,
   UpdateStandardConditionDataRequest,
   UpdateVloDiscussionRequest,
@@ -421,12 +420,8 @@ export default class LicenceService {
     return this.licenceApiClient.updatePrisonInformation(licenceId, prisonInformation, user)
   }
 
-  async updateSentenceDates(
-    licenceId: string,
-    updateSentenceDatesRequest: UpdateSentenceDatesRequest,
-    user?: User,
-  ): Promise<void> {
-    return this.licenceApiClient.updateSentenceDates(licenceId, updateSentenceDatesRequest, user)
+  async updateSentenceDates(licenceId: string, user?: User): Promise<void> {
+    return this.licenceApiClient.updateSentenceDates(licenceId, user)
   }
 
   async approveVariation(licenceId: string, user: User): Promise<void> {
