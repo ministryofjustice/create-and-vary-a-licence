@@ -2,7 +2,7 @@ import { format, isAfter, startOfDay } from 'date-fns'
 import LicenceService from '../../../services/licenceService'
 import PrisonerService from '../../../services/prisonerService'
 import LicenceStatus from '../../../enumeration/licenceStatus'
-import { convertDateFormat, parseCvlDate, parseIsoDate } from '../../../utils/utils'
+import { parseCvlDate, parseIsoDate } from '../../../utils/utils'
 import { LicenceSummary } from '../../../@types/licenceApiClientTypes'
 import { PrisonEventMessage } from '../../../@types/events'
 import { PrisonApiPrisoner } from '../../../@types/prisonApiClientTypes'
@@ -42,11 +42,7 @@ export default class DatesChangedEventHandler {
         ],
       )
 
-      await Promise.all(
-        licences.map(licence => {
-          return this.updateLicenceSentenceDates(licence, prisoner)
-        }),
-      )
+      await Promise.all(licences.map(licence => this.licenceService.updateSentenceDates(licence.licenceId.toString())))
     }
   }
 
@@ -72,37 +68,5 @@ export default class DatesChangedEventHandler {
         await this.licenceService.deactivateActiveAndVariationLicences(licence.licenceId, 'RECALLED')
       }
     }
-  }
-
-  updateLicenceSentenceDates = async (licence: LicenceSummary, prisoner: PrisonApiPrisoner) => {
-    const sentenceStartDate = await this.prisonerService.getPrisonerLatestSentenceStartDate(prisoner.bookingId)
-
-    await this.licenceService.updateSentenceDates(licence.licenceId.toString(), {
-      conditionalReleaseDate:
-        convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
-        convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseDate),
-      actualReleaseDate: convertDateFormat(prisoner.sentenceDetail?.confirmedReleaseDate),
-      sentenceStartDate: format(sentenceStartDate, 'dd/MM/yyyy'),
-      sentenceEndDate:
-        convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryOverrideDate) ||
-        convertDateFormat(prisoner.sentenceDetail?.sentenceExpiryDate),
-      // LSD calculated here is now unused, should be refactored out
-      licenceStartDate:
-        convertDateFormat(prisoner.sentenceDetail?.confirmedReleaseDate) ||
-        convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseOverrideDate) ||
-        convertDateFormat(prisoner.sentenceDetail?.conditionalReleaseDate),
-      licenceExpiryDate:
-        convertDateFormat(prisoner.sentenceDetail?.licenceExpiryOverrideDate) ||
-        convertDateFormat(prisoner.sentenceDetail?.licenceExpiryDate),
-      topupSupervisionStartDate: convertDateFormat(prisoner.sentenceDetail?.topupSupervisionStartDate),
-      topupSupervisionExpiryDate:
-        convertDateFormat(prisoner.sentenceDetail?.topupSupervisionExpiryOverrideDate) ||
-        convertDateFormat(prisoner.sentenceDetail?.topupSupervisionExpiryDate),
-      postRecallReleaseDate:
-        convertDateFormat(prisoner.sentenceDetail?.postRecallReleaseOverrideDate) ||
-        convertDateFormat(prisoner.sentenceDetail?.postRecallReleaseDate),
-      homeDetentionCurfewActualDate: convertDateFormat(prisoner.sentenceDetail?.homeDetentionCurfewActualDate),
-      homeDetentionCurfewEndDate: convertDateFormat(prisoner.sentenceDetail?.homeDetentionCurfewEndDate),
-    })
   }
 }

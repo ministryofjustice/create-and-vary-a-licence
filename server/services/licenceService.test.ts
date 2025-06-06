@@ -21,7 +21,6 @@ import {
   UpdatePrisonUserRequest,
   UpdatePrisonInformationRequest,
   UpdateProbationTeamRequest,
-  UpdateSentenceDatesRequest,
   CaseloadItem,
 } from '../@types/licenceApiClientTypes'
 import { VariedConditions } from '../utils/licenceComparator'
@@ -580,34 +579,8 @@ describe('Licence Service', () => {
   })
 
   it('should update sentence dates', async () => {
-    await licenceService.updateSentenceDates(
-      '1',
-      {
-        conditionalReleaseDate: '09/09/2022',
-        actualReleaseDate: '09/09/2022',
-        sentenceStartDate: '09/09/2021',
-        sentenceEndDate: '09/09/2023',
-        licenceStartDate: '09/09/2022',
-        licenceExpiryDate: '09/09/2023',
-        topupSupervisionStartDate: '09/09/2023',
-        topupSupervisionExpiryDate: '09/09/2024',
-      },
-      user,
-    )
-    expect(licenceApiClient.updateSentenceDates).toHaveBeenCalledWith(
-      '1',
-      {
-        conditionalReleaseDate: '09/09/2022',
-        actualReleaseDate: '09/09/2022',
-        sentenceStartDate: '09/09/2021',
-        sentenceEndDate: '09/09/2023',
-        licenceStartDate: '09/09/2022',
-        licenceExpiryDate: '09/09/2023',
-        topupSupervisionStartDate: '09/09/2023',
-        topupSupervisionExpiryDate: '09/09/2024',
-      } as UpdateSentenceDatesRequest,
-      user,
-    )
+    await licenceService.updateSentenceDates('1', user)
+    expect(licenceApiClient.updateSentenceDates).toHaveBeenCalledWith('1', user)
   })
 
   it('should approve a licence variation', async () => {

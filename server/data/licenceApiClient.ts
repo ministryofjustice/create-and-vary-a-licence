@@ -20,7 +20,6 @@ import type {
   UpdateVloDiscussionRequest,
   UpdateReasonForVariationRequest,
   UpdatePrisonInformationRequest,
-  UpdateSentenceDatesRequest,
   ReferVariationRequest,
   UpdateProbationTeamRequest,
   NotifyRequest,
@@ -407,8 +406,8 @@ export default class LicenceApiClient extends RestClient {
     await this.put({ path: `/licence/id/${licenceId}/prison-information`, data: request }, { username: user?.username })
   }
 
-  async updateSentenceDates(licenceId: string, request: UpdateSentenceDatesRequest, user?: User): Promise<void> {
-    await this.put({ path: `/licence/id/${licenceId}/sentence-dates`, data: request }, { username: user?.username })
+  async updateSentenceDates(licenceId: string, user?: User): Promise<void> {
+    await this.put({ path: `/licence/id/${licenceId}/sentence-dates` }, { username: user?.username })
   }
 
   async approveVariation(licenceId: string, user: User): Promise<void> {
