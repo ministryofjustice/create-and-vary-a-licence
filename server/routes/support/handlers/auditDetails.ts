@@ -7,7 +7,7 @@ export default class AuditDetailsRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
-    const { licenceId, auditEventId } = req.params
+    const { nomsId, licenceId, auditEventId } = req.params
     const audit = await this.licenceService.getAuditEvents(
       parseInt(licenceId, 10),
       null,
@@ -19,6 +19,7 @@ export default class AuditDetailsRoutes {
     const auditEvent = audit.find(a => a.id.toString() === auditEventId)
 
     res.render('pages/support/auditDetails', {
+      nomsId,
       auditEvent,
     })
   }
